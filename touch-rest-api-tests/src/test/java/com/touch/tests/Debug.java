@@ -57,13 +57,13 @@ public class Debug extends BaseTestClass {
         TenantResponse tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
         String tenantId1 = tenant1.getId();
         String tenantId2 = tenant2.getId();
-        GpsRequest gpsRequest1 = new GpsRequest(1000f, 1000f);
-        GpsRequest gpsRequest2 = new GpsRequest(1100f, 1100f);
+        GpsRequest gpsRequest1 = new GpsRequest(60f, 60f);
+        GpsRequest gpsRequest2 = new GpsRequest(70f, 70f);
         String addressId1 = tenant1.getTenantAddresses().get(0).getId();
         String addressId2 = tenant2.getTenantAddresses().get(0).getId();
         tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1);
         tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2);
-        List<TenantResponse> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "200");
+        List<TenantResponse> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000");
         List<TenantResponse> newTenantsList = Arrays.asList(tenant1, tenant2);
         Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList));
 
