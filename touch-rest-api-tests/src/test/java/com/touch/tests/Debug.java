@@ -38,10 +38,9 @@ public class Debug extends BaseTestClass {
         }
     }
 
-    //    @Test
+        @Test
     public void deleteAllTestTenants() {
         List<TenantResponse> tenantsList = tenantActions.getTenantsList();
-
         for (TenantResponse tenant : tenantsList) {
             if (tenant.getTenantOrgName().contains("Test") || tenant.getTenantOrgName().contains("test"))
                 tenantActions.deleteTenant(tenant.getId());
@@ -49,7 +48,7 @@ public class Debug extends BaseTestClass {
     }
 
 
-    @Test
+//    @Test
     public void getNotExistingTenantFlow() throws IOException {
         TenantRequest tenantRequest = new TenantRequest();
         TenantResponse tenant1 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
