@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  *
- * Licensed under the Apache License, VersionFlow 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * UserProfileResponse
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-09-06T15:43:34.475Z")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-10-20T12:15:53.907Z")
 public class UserProfileResponse {
   @SerializedName("id")
   private String id = null;
@@ -53,8 +53,11 @@ public class UserProfileResponse {
   @SerializedName("gender")
   private String gender = null;
 
-  @SerializedName("ages")
-  private String ages = null;
+  @SerializedName("age")
+  private String age = null;
+
+  @SerializedName("birthdate")
+  private String birthdate = null;
 
   @SerializedName("country")
   private String country = null;
@@ -176,22 +179,40 @@ public class UserProfileResponse {
     this.gender = gender;
   }
 
-  public UserProfileResponse ages(String ages) {
-    this.ages = ages;
+  public UserProfileResponse age(String age) {
+    this.age = age;
     return this;
   }
 
    /**
-   * Get ages
-   * @return ages
+   * Get age
+   * @return age
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getAges() {
-    return ages;
+  public String getAge() {
+    return age;
   }
 
-  public void setAges(String ages) {
-    this.ages = ages;
+  public void setAge(String age) {
+    this.age = age;
+  }
+
+  public UserProfileResponse birthdate(String birthdate) {
+    this.birthdate = birthdate;
+    return this;
+  }
+
+   /**
+   * Get birthdate
+   * @return birthdate
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getBirthdate() {
+    return birthdate;
+  }
+
+  public void setBirthdate(String birthdate) {
+    this.birthdate = birthdate;
   }
 
   public UserProfileResponse country(String country) {
@@ -282,7 +303,8 @@ public class UserProfileResponse {
         Objects.equals(this.email, userProfileResponse.email) &&
         Objects.equals(this.contactPhone, userProfileResponse.contactPhone) &&
         Objects.equals(this.gender, userProfileResponse.gender) &&
-        Objects.equals(this.ages, userProfileResponse.ages) &&
+        Objects.equals(this.age, userProfileResponse.age) &&
+        Objects.equals(this.birthdate, userProfileResponse.birthdate) &&
         Objects.equals(this.country, userProfileResponse.country) &&
         Objects.equals(this.city, userProfileResponse.city) &&
         Objects.equals(this.address, userProfileResponse.address) &&
@@ -291,7 +313,7 @@ public class UserProfileResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, surname, email, contactPhone, gender, ages, country, city, address, imageUrl);
+    return Objects.hash(id, name, surname, email, contactPhone, gender, age, birthdate, country, city, address, imageUrl);
   }
 
   @Override
@@ -305,7 +327,8 @@ public class UserProfileResponse {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    contactPhone: ").append(toIndentedString(contactPhone)).append("\n");
     sb.append("    gender: ").append(toIndentedString(gender)).append("\n");
-    sb.append("    ages: ").append(toIndentedString(ages)).append("\n");
+    sb.append("    age: ").append(toIndentedString(age)).append("\n");
+    sb.append("    birthdate: ").append(toIndentedString(birthdate)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
     sb.append("    city: ").append(toIndentedString(city)).append("\n");
     sb.append("    address: ").append(toIndentedString(address)).append("\n");

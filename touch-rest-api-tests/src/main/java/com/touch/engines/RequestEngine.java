@@ -1,8 +1,10 @@
 package com.touch.engines;
 
+import com.touch.models.MessageResponse;
 import com.touch.utils.ConfigApp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
@@ -12,9 +14,11 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.config.EncoderConfig.encoderConfig;
 
 
 public class RequestEngine {
@@ -25,35 +29,17 @@ public class RequestEngine {
             .log(LogDetail.ALL)
             .setContentType(ContentType.JSON)
             .build();
-
+    public RequestSpecification requestSpecificationForMultipart = new RequestSpecBuilder()
+            .addHeader("Accept", "text/plain")
+            .addHeader("Content-Type", "multipart/form-data")
+            .setBaseUri(ConfigApp.BASE_API_URL)
+            .log(LogDetail.ALL)
+            .build();
     public RequestEngine() {
-
+//        RestAssured.config().encoderConfig(encoderConfig().encodeContentTypeAs("multipart/form-data", ContentType.TEXT));
     }
 
-    //    public Response postRequestWithParameters(String endpoint,String id, Map<String, Object> parameters) {
-//        RequestSpecification rs = given(requestSpecification);
-//
-//        String parametersString="?";
-//        int parametersAmount=parameters.size();
-//        for(String key: parameters.keySet()){
-//            parametersString+=key+"="+parameters.get(key);
-//            parametersAmount--;
-//            if(parametersAmount>0){
-//                parametersString+="&";
-//            }
-//        }
-//        Response responce = null;
-//      if (id != null) {
-//          responce = rs.post(endpoint+parametersString, id);
-//      }else{
-//          responce = rs.post(endpoint);
-//      }
-//        return responce
-//                .then()
-//                .log().all()
-//                .extract()
-//                .response();
-//    }
+
     public Response postRequestWithQueryParameters(String endpoint, String id, Map<String, Object> formParameters) {
         RequestSpecification rs = given(requestSpecification).queryParams(formParameters);
         Response responce = null;
@@ -69,16 +55,16 @@ public class RequestEngine {
                 .response();
     }
 
-    public Response postRequestWithFormParametersT(String endpoint, String id) {
-
-        RequestSpecification rs = given(requestSpecification);
-//        for(int i=0;i+1<parameters.length;i=i+2){
-//            rs.queryParam(parameters[i],parameters[i+1]);
-//        }
-
+    public Response postRequestWithFormParametersAndFile(String endpoint, String id, Map<String, Object> formParameters, File file) {
+        RequestSpecification rs = null;
+        if (file != null){
+            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file",file).formParams(formParameters);
+        }else{
+            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file","").formParams(formParameters);
+        }
         Response responce = null;
         if (id != null) {
-            responce = rs.post(endpoint + "?name=test1&value=test2", id);
+            responce = rs.post(endpoint, id);
         } else {
             responce = rs.post(endpoint);
         }
@@ -295,8 +281,25 @@ public class RequestEngine {
                 .response();
     }
 
-    public com.touch.models.MessageResponse putRequest(String endpoint, String id, String body) {
-        return putRequest(endpoint, id, null, body).as(com.touch.models.MessageResponse.class);
+    public Response putFile(String endpoint, String id, File file) {
+        RequestSpecification rs = given(requestSpecification)
+                .multiPart(file)
+                .when()
+                .contentType("multipart/form-data");
+        Response response = null;
+
+        if (id != null) {
+            response = rs.put(endpoint, id);
+        } else {
+            response = rs.put(endpoint);
+        }
+        return response
+                .then()
+                .log()
+                .all()
+                .extract()
+                .response();
+
     }
 
     public Response putRequest(String endpoint, String id, Object body) {

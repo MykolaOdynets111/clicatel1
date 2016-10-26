@@ -41,15 +41,15 @@ public class UserProfileRequest {
   }
 
   public UserProfileRequest(String name, String surname, String email, String contactPhone, String gender, String birthdate, String country, String city, String address) {
-    this.name = "Test"+StringUtils.generateRandomString(6);
-    this.surname = "surname"+StringUtils.generateRandomString(6);
-    this.email = StringUtils.generateRandomString(6)+"@gmail.com";
-    this.contactPhone = "07700 900039";
-    this.gender = "male";
-    this.birthdate = "19901231";
-    this.country = "Ukraine";
-    this.city = "Lviv";
-    this.address = "addressTest";
+    this.name = name;
+    this.surname = surname;
+    this.email = email;
+    this.contactPhone = contactPhone;
+    this.gender = gender;
+    this.birthdate = birthdate;
+    this.country = country;
+    this.city = city;
+    this.address = address;
   }
 
   @SerializedName("name")
