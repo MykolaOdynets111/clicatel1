@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  *
- * Licensed under the Apache License, VersionFlow 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,7 +23,7 @@
  */
 
 
-package com.touch.models.touch.tenant;
+package com.touch.models.touch.agent;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
@@ -33,26 +33,8 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * AgentNoDepartmentsResponse
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-09-06T15:43:34.475Z")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-10-20T12:15:53.907Z")
 public class AgentNoDepartmentsResponse {
-
-  public AgentNoDepartmentsResponse() {
-  }
-
-  public AgentNoDepartmentsResponse(String id, Long createdDate, Long modifiedDate, String tenantJid, String name, String nick, String email, String agentJid, String workPhone, String tenantId, Integer sessionsCapacity) {
-    this.id = id;
-    this.createdDate = createdDate;
-    this.modifiedDate = modifiedDate;
-    this.tenantJid = tenantJid;
-    this.name = name;
-    this.nick = nick;
-    this.email = email;
-    this.agentJid = agentJid;
-    this.workPhone = workPhone;
-    this.tenantId = tenantId;
-    this.sessionsCapacity = sessionsCapacity;
-  }
-
   @SerializedName("id")
   private String id = null;
 
@@ -62,14 +44,14 @@ public class AgentNoDepartmentsResponse {
   @SerializedName("modifiedDate")
   private Long modifiedDate = null;
 
-  @SerializedName("tenantJid")
-  private String tenantJid = null;
+  @SerializedName("tenantId")
+  private String tenantId = null;
 
   @SerializedName("name")
   private String name = null;
 
-  @SerializedName("nick")
-  private String nick = null;
+  @SerializedName("surname")
+  private String surname = null;
 
   @SerializedName("email")
   private String email = null;
@@ -77,14 +59,11 @@ public class AgentNoDepartmentsResponse {
   @SerializedName("agentJid")
   private String agentJid = null;
 
-  @SerializedName("workPhone")
-  private String workPhone = null;
+  @SerializedName("maxChats")
+  private Integer maxChats = null;
 
-  @SerializedName("tenantId")
-  private String tenantId = null;
-
-  @SerializedName("sessionsCapacity")
-  private Integer sessionsCapacity = null;
+  @SerializedName("imageUrl")
+  private String imageUrl = null;
 
   public AgentNoDepartmentsResponse id(String id) {
     this.id = id;
@@ -140,22 +119,22 @@ public class AgentNoDepartmentsResponse {
     this.modifiedDate = modifiedDate;
   }
 
-  public AgentNoDepartmentsResponse tenantJid(String tenantJid) {
-    this.tenantJid = tenantJid;
+  public AgentNoDepartmentsResponse tenantId(String tenantId) {
+    this.tenantId = tenantId;
     return this;
   }
 
    /**
-   * Get tenantJid
-   * @return tenantJid
+   * Get tenantId
+   * @return tenantId
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getTenantJid() {
-    return tenantJid;
+  public String getTenantId() {
+    return tenantId;
   }
 
-  public void setTenantJid(String tenantJid) {
-    this.tenantJid = tenantJid;
+  public void setTenantId(String tenantId) {
+    this.tenantId = tenantId;
   }
 
   public AgentNoDepartmentsResponse name(String name) {
@@ -176,22 +155,22 @@ public class AgentNoDepartmentsResponse {
     this.name = name;
   }
 
-  public AgentNoDepartmentsResponse nick(String nick) {
-    this.nick = nick;
+  public AgentNoDepartmentsResponse surname(String surname) {
+    this.surname = surname;
     return this;
   }
 
    /**
-   * Get nick
-   * @return nick
+   * Get surname
+   * @return surname
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getNick() {
-    return nick;
+  public String getSurname() {
+    return surname;
   }
 
-  public void setNick(String nick) {
-    this.nick = nick;
+  public void setSurname(String surname) {
+    this.surname = surname;
   }
 
   public AgentNoDepartmentsResponse email(String email) {
@@ -230,58 +209,40 @@ public class AgentNoDepartmentsResponse {
     this.agentJid = agentJid;
   }
 
-  public AgentNoDepartmentsResponse workPhone(String workPhone) {
-    this.workPhone = workPhone;
+  public AgentNoDepartmentsResponse maxChats(Integer maxChats) {
+    this.maxChats = maxChats;
     return this;
   }
 
    /**
-   * Get workPhone
-   * @return workPhone
+   * Get maxChats
+   * @return maxChats
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getWorkPhone() {
-    return workPhone;
+  public Integer getMaxChats() {
+    return maxChats;
   }
 
-  public void setWorkPhone(String workPhone) {
-    this.workPhone = workPhone;
+  public void setMaxChats(Integer maxChats) {
+    this.maxChats = maxChats;
   }
 
-  public AgentNoDepartmentsResponse tenantId(String tenantId) {
-    this.tenantId = tenantId;
+  public AgentNoDepartmentsResponse imageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
     return this;
   }
 
    /**
-   * Get tenantId
-   * @return tenantId
+   * Get imageUrl
+   * @return imageUrl
   **/
   @ApiModelProperty(example = "null", value = "")
-  public String getTenantId() {
-    return tenantId;
+  public String getImageUrl() {
+    return imageUrl;
   }
 
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
-
-  public AgentNoDepartmentsResponse sessionsCapacity(Integer sessionsCapacity) {
-    this.sessionsCapacity = sessionsCapacity;
-    return this;
-  }
-
-   /**
-   * Get sessionsCapacity
-   * @return sessionsCapacity
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Integer getSessionsCapacity() {
-    return sessionsCapacity;
-  }
-
-  public void setSessionsCapacity(Integer sessionsCapacity) {
-    this.sessionsCapacity = sessionsCapacity;
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 
 
@@ -297,19 +258,18 @@ public class AgentNoDepartmentsResponse {
     return Objects.equals(this.id, agentNoDepartmentsResponse.id) &&
         Objects.equals(this.createdDate, agentNoDepartmentsResponse.createdDate) &&
         Objects.equals(this.modifiedDate, agentNoDepartmentsResponse.modifiedDate) &&
-        Objects.equals(this.tenantJid, agentNoDepartmentsResponse.tenantJid) &&
+        Objects.equals(this.tenantId, agentNoDepartmentsResponse.tenantId) &&
         Objects.equals(this.name, agentNoDepartmentsResponse.name) &&
-        Objects.equals(this.nick, agentNoDepartmentsResponse.nick) &&
+        Objects.equals(this.surname, agentNoDepartmentsResponse.surname) &&
         Objects.equals(this.email, agentNoDepartmentsResponse.email) &&
         Objects.equals(this.agentJid, agentNoDepartmentsResponse.agentJid) &&
-        Objects.equals(this.workPhone, agentNoDepartmentsResponse.workPhone) &&
-        Objects.equals(this.tenantId, agentNoDepartmentsResponse.tenantId) &&
-        Objects.equals(this.sessionsCapacity, agentNoDepartmentsResponse.sessionsCapacity);
+        Objects.equals(this.maxChats, agentNoDepartmentsResponse.maxChats) &&
+        Objects.equals(this.imageUrl, agentNoDepartmentsResponse.imageUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, createdDate, modifiedDate, tenantJid, name, nick, email, agentJid, workPhone, tenantId, sessionsCapacity);
+    return Objects.hash(id, createdDate, modifiedDate, tenantId, name, surname, email, agentJid, maxChats, imageUrl);
   }
 
   @Override
@@ -320,14 +280,13 @@ public class AgentNoDepartmentsResponse {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdDate: ").append(toIndentedString(createdDate)).append("\n");
     sb.append("    modifiedDate: ").append(toIndentedString(modifiedDate)).append("\n");
-    sb.append("    tenantJid: ").append(toIndentedString(tenantJid)).append("\n");
+    sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    nick: ").append(toIndentedString(nick)).append("\n");
+    sb.append("    surname: ").append(toIndentedString(surname)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    agentJid: ").append(toIndentedString(agentJid)).append("\n");
-    sb.append("    workPhone: ").append(toIndentedString(workPhone)).append("\n");
-    sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
-    sb.append("    sessionsCapacity: ").append(toIndentedString(sessionsCapacity)).append("\n");
+    sb.append("    maxChats: ").append(toIndentedString(maxChats)).append("\n");
+    sb.append("    imageUrl: ").append(toIndentedString(imageUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }

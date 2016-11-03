@@ -68,6 +68,7 @@ public class TenantTests extends BaseTestClass {
         Assert.assertNotNull(tenant.getAccountId());
         //Verify get tenant request
         Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), TenantResponse.class), newTenant);
+
         /*
         post conditions
          */
@@ -204,7 +205,7 @@ public class TenantTests extends BaseTestClass {
         TenantResponse newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
         //add new resource to not exist tenant
         Assert.assertEquals(tenantActions.addResource("000000005700325001571e3e40b80281", resourceName, new File(file), Integer.class), 404);
-//        Assert.assertTrue(tenantActions.addResource(newTenant.getId(), resourceName, new File(file), ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+//        Assert.assertTrue(tenantActions.addResource(newTenant.getChatroomJid(), resourceName, new File(file), ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
 
         //delete tenant
         Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
@@ -306,8 +307,9 @@ public class TenantTests extends BaseTestClass {
 
     @Test
     public void getNotExistingCommonFlow() throws IOException {
-        String regExpErrorMessage = "CommonTopic with id .* not found";
-        Assert.assertTrue(tenantActions.getCommonFlow("notexisting", ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        String regExpErrorMessage = "Flow with name .* not found.";
+        String actualErrorMessage = tenantActions.getCommonFlow("notexisting", ErrorMessage.class).getErrorMessage();
+        Assert.assertTrue(actualErrorMessage.matches(regExpErrorMessage));
     }
 
     @Test

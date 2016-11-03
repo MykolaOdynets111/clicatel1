@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  *
- * Licensed under the Apache License, VersionFlow 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,20 +23,25 @@
  */
 
 
-package com.touch.models.touch.tenant;
+package com.touch.models.touch.department;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 
 /**
  * DepartmentDto
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-09-06T15:43:34.475Z")
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-10-20T12:15:53.907Z")
 public class DepartmentDto   {
 
   public DepartmentDto() {
+    this.tenantId = "";
+    this.name = "Test";
+    this.description = "Test description";
+    this.sessionsCapacity = 5;
   }
 
   public DepartmentDto(String tenantId, String name, String description, Integer sessionsCapacity) {
@@ -45,6 +50,7 @@ public class DepartmentDto   {
     this.description = description;
     this.sessionsCapacity = sessionsCapacity;
   }
+
 
   @SerializedName("tenantId")
   private String tenantId = null;

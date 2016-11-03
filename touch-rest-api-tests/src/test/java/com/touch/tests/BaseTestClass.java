@@ -1,8 +1,6 @@
 package com.touch.tests;
 
-import com.touch.actions.TenantActions;
-import com.touch.actions.UserMC2Actions;
-import com.touch.actions.UserProfileActions;
+import com.touch.actions.*;
 import com.touch.models.EndPointsClass;
 import com.touch.utils.reporter.CustomReport;
 import io.restassured.response.Response;
@@ -25,6 +23,9 @@ public class BaseTestClass {
     UserMC2Actions userActions = new UserMC2Actions(requestEngineMC2);
     UserProfileActions userProfileActions = new UserProfileActions(requestEngine);
     TenantActions tenantActions = new TenantActions(requestEngine);
+    AgentActions agentActions = new AgentActions(requestEngine);
+    DepartmentActions departmentActions = new DepartmentActions(requestEngine);
+    ChatsActions chatsActions = new ChatsActions(requestEngine);
 
 
     @BeforeSuite(alwaysRun = true)

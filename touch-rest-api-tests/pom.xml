@@ -110,7 +110,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>touch-rest-api-test</id>
+                        <chatroomJid>touch-rest-api-test</chatroomJid>
                         <configuration>
                             <!--<test>*</test>-->
                             <parallel>false</parallel>

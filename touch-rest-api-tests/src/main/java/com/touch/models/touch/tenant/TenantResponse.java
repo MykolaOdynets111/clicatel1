@@ -27,6 +27,7 @@ package com.touch.models.touch.tenant;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.touch.models.touch.department.DepartmentResponse;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;

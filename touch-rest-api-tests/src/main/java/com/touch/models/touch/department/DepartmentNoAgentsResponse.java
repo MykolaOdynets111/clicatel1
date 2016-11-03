@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  *
- * Licensed under the Apache License, VersionFlow 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,42 +23,18 @@
  */
 
 
-package com.touch.models.touch.tenant;
+package com.touch.models.touch.department;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
 
 /**
- * DepartmentResponse
+ * DepartmentNoAgentsResponse
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-09-06T15:43:34.475Z")
-public class DepartmentResponse {
-  public DepartmentResponse() {
-    this.tenantId = tenantId;
-    this.name = name;
-    this.description = description;
-    this.sessionsCapacity = sessionsCapacity;
-    this.id = id;
-    this.createdDate = createdDate;
-    this.modifiedDate = modifiedDate;
-    this.agents = new ArrayList<AgentNoDepartmentsResponse>();
-  }
-
-  public DepartmentResponse(String tenantId, String name, String description, Integer sessionsCapacity, String id, Long createdDate, Long modifiedDate, List<AgentNoDepartmentsResponse> agents) {
-    this.tenantId = tenantId;
-    this.name = name;
-    this.description = description;
-    this.sessionsCapacity = sessionsCapacity;
-    this.id = id;
-    this.createdDate = createdDate;
-    this.modifiedDate = modifiedDate;
-    this.agents = agents;
-  }
-
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-10-20T12:15:53.907Z")
+public class DepartmentNoAgentsResponse {
   @SerializedName("tenantId")
   private String tenantId = null;
 
@@ -67,9 +43,6 @@ public class DepartmentResponse {
 
   @SerializedName("description")
   private String description = null;
-
-  @SerializedName("sessionsCapacity")
-  private Integer sessionsCapacity = null;
 
   @SerializedName("id")
   private String id = null;
@@ -80,10 +53,10 @@ public class DepartmentResponse {
   @SerializedName("modifiedDate")
   private Long modifiedDate = null;
 
-  @SerializedName("agents")
-  private List<AgentNoDepartmentsResponse> agents = new ArrayList<AgentNoDepartmentsResponse>();
+  @SerializedName("sessionsCapacity")
+  private Integer sessionsCapacity = null;
 
-  public DepartmentResponse tenantId(String tenantId) {
+  public DepartmentNoAgentsResponse tenantId(String tenantId) {
     this.tenantId = tenantId;
     return this;
   }
@@ -101,7 +74,7 @@ public class DepartmentResponse {
     this.tenantId = tenantId;
   }
 
-  public DepartmentResponse name(String name) {
+  public DepartmentNoAgentsResponse name(String name) {
     this.name = name;
     return this;
   }
@@ -119,7 +92,7 @@ public class DepartmentResponse {
     this.name = name;
   }
 
-  public DepartmentResponse description(String description) {
+  public DepartmentNoAgentsResponse description(String description) {
     this.description = description;
     return this;
   }
@@ -137,25 +110,7 @@ public class DepartmentResponse {
     this.description = description;
   }
 
-  public DepartmentResponse sessionsCapacity(Integer sessionsCapacity) {
-    this.sessionsCapacity = sessionsCapacity;
-    return this;
-  }
-
-   /**
-   * Get sessionsCapacity
-   * @return sessionsCapacity
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Integer getSessionsCapacity() {
-    return sessionsCapacity;
-  }
-
-  public void setSessionsCapacity(Integer sessionsCapacity) {
-    this.sessionsCapacity = sessionsCapacity;
-  }
-
-  public DepartmentResponse id(String id) {
+  public DepartmentNoAgentsResponse id(String id) {
     this.id = id;
     return this;
   }
@@ -173,7 +128,7 @@ public class DepartmentResponse {
     this.id = id;
   }
 
-  public DepartmentResponse createdDate(Long createdDate) {
+  public DepartmentNoAgentsResponse createdDate(Long createdDate) {
     this.createdDate = createdDate;
     return this;
   }
@@ -191,7 +146,7 @@ public class DepartmentResponse {
     this.createdDate = createdDate;
   }
 
-  public DepartmentResponse modifiedDate(Long modifiedDate) {
+  public DepartmentNoAgentsResponse modifiedDate(Long modifiedDate) {
     this.modifiedDate = modifiedDate;
     return this;
   }
@@ -209,27 +164,22 @@ public class DepartmentResponse {
     this.modifiedDate = modifiedDate;
   }
 
-  public DepartmentResponse agents(List<AgentNoDepartmentsResponse> agents) {
-    this.agents = agents;
-    return this;
-  }
-
-  public DepartmentResponse addAgentsItem(AgentNoDepartmentsResponse agentsItem) {
-    this.agents.add(agentsItem);
+  public DepartmentNoAgentsResponse sessionsCapacity(Integer sessionsCapacity) {
+    this.sessionsCapacity = sessionsCapacity;
     return this;
   }
 
    /**
-   * Get agents
-   * @return agents
+   * Get sessionsCapacity
+   * @return sessionsCapacity
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<AgentNoDepartmentsResponse> getAgents() {
-    return agents;
+  public Integer getSessionsCapacity() {
+    return sessionsCapacity;
   }
 
-  public void setAgents(List<AgentNoDepartmentsResponse> agents) {
-    this.agents = agents;
+  public void setSessionsCapacity(Integer sessionsCapacity) {
+    this.sessionsCapacity = sessionsCapacity;
   }
 
 
@@ -241,35 +191,33 @@ public class DepartmentResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DepartmentResponse departmentResponse = (DepartmentResponse) o;
-    return Objects.equals(this.tenantId, departmentResponse.tenantId) &&
-        Objects.equals(this.name, departmentResponse.name) &&
-        Objects.equals(this.description, departmentResponse.description) &&
-        Objects.equals(this.sessionsCapacity, departmentResponse.sessionsCapacity) &&
-        Objects.equals(this.id, departmentResponse.id) &&
-        Objects.equals(this.createdDate, departmentResponse.createdDate) &&
-        Objects.equals(this.modifiedDate, departmentResponse.modifiedDate) &&
-        Objects.equals(this.agents, departmentResponse.agents);
+    DepartmentNoAgentsResponse departmentNoAgentsResponse = (DepartmentNoAgentsResponse) o;
+    return Objects.equals(this.tenantId, departmentNoAgentsResponse.tenantId) &&
+        Objects.equals(this.name, departmentNoAgentsResponse.name) &&
+        Objects.equals(this.description, departmentNoAgentsResponse.description) &&
+        Objects.equals(this.id, departmentNoAgentsResponse.id) &&
+        Objects.equals(this.createdDate, departmentNoAgentsResponse.createdDate) &&
+        Objects.equals(this.modifiedDate, departmentNoAgentsResponse.modifiedDate) &&
+        Objects.equals(this.sessionsCapacity, departmentNoAgentsResponse.sessionsCapacity);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tenantId, name, description, sessionsCapacity, id, createdDate, modifiedDate, agents);
+    return Objects.hash(tenantId, name, description, id, createdDate, modifiedDate, sessionsCapacity);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DepartmentResponse {\n");
+    sb.append("class DepartmentNoAgentsResponse {\n");
     
     sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    sessionsCapacity: ").append(toIndentedString(sessionsCapacity)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    createdDate: ").append(toIndentedString(createdDate)).append("\n");
     sb.append("    modifiedDate: ").append(toIndentedString(modifiedDate)).append("\n");
-    sb.append("    agents: ").append(toIndentedString(agents)).append("\n");
+    sb.append("    sessionsCapacity: ").append(toIndentedString(sessionsCapacity)).append("\n");
     sb.append("}");
     return sb.toString();
   }
