@@ -50,8 +50,8 @@ public class TenantUpdateDto extends Tenant{
     this.state = state;
     this.description = description;
     this.shortDescription = shortDescription;
-    this.tenantJid = tenantJid;
-    this.tenantBotJid = tenantBotJid;
+    this.tenantJName = tenantJid;
+    this.tenantJBotName = tenantBotJid;
     this.category = category;
     this.tenantTags = tenantTags;
     this.sessionsCapacity = sessionsCapacity;
@@ -174,7 +174,7 @@ public class TenantUpdateDto extends Tenant{
   }
 
   public TenantUpdateDto tenantJid(String tenantJid) {
-    this.tenantJid = tenantJid;
+    this.tenantJName = tenantJid;
     return this;
   }
 
@@ -184,15 +184,15 @@ public class TenantUpdateDto extends Tenant{
   **/
   @ApiModelProperty(example = "null", value = "")
   public String getTenantJid() {
-    return tenantJid;
+    return tenantJName;
   }
 
   public void setTenantJid(String tenantJid) {
-    this.tenantJid = tenantJid;
+    this.tenantJName = tenantJid;
   }
 
   public TenantUpdateDto tenantBotJid(String tenantBotJid) {
-    this.tenantBotJid = tenantBotJid;
+    this.tenantJBotName = tenantBotJid;
     return this;
   }
 
@@ -202,11 +202,11 @@ public class TenantUpdateDto extends Tenant{
   **/
   @ApiModelProperty(example = "null", value = "")
   public String getTenantBotJid() {
-    return tenantBotJid;
+    return tenantJBotName;
   }
 
   public void setTenantBotJid(String tenantBotJid) {
-    this.tenantBotJid = tenantBotJid;
+    this.tenantJBotName = tenantBotJid;
   }
 
   public TenantUpdateDto category(String category) {
@@ -306,8 +306,8 @@ public class TenantUpdateDto extends Tenant{
             Objects.equals(this.state, tenantUpdate.state) &&
             Objects.equals(this.description, tenantUpdate.description) &&
             Objects.equals(this.shortDescription, tenantUpdate.shortDescription) &&
-            Objects.equals(this.tenantJid, tenantUpdate.tenantJid) &&
-            Objects.equals(this.tenantBotJid, tenantUpdate.tenantBotJid) &&
+            Objects.equals(this.tenantJName, tenantUpdate.tenantJName) &&
+            Objects.equals(this.tenantJBotName, tenantUpdate.tenantJBotName) &&
             Objects.equals(this.category, tenantUpdate.category) &&
             Objects.equals(this.tenantTags, tenantUpdate.tenantTags) &&
             Objects.equals(this.sessionsCapacity, tenantUpdate.sessionsCapacity);
@@ -315,7 +315,7 @@ public class TenantUpdateDto extends Tenant{
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, tenantOrgName, contactEmail, state, description, shortDescription, tenantJid, tenantBotJid, category, tenantTags, sessionsCapacity, tenantAddresses);
+    return Objects.hash(id, tenantOrgName, contactEmail, state, description, shortDescription, tenantJName, tenantJBotName, category, tenantTags, sessionsCapacity, tenantAddresses);
   }
 
   @Override
@@ -329,8 +329,8 @@ public class TenantUpdateDto extends Tenant{
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    shortDescription: ").append(toIndentedString(shortDescription)).append("\n");
-    sb.append("    tenantJid: ").append(toIndentedString(tenantJid)).append("\n");
-    sb.append("    tenantBotJid: ").append(toIndentedString(tenantBotJid)).append("\n");
+    sb.append("    tenantJid: ").append(toIndentedString(tenantJName)).append("\n");
+    sb.append("    tenantBotJid: ").append(toIndentedString(tenantJBotName)).append("\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
     sb.append("    tenantTags: ").append(toIndentedString(tenantTags)).append("\n");
     sb.append("    sessionsCapacity: ").append(toIndentedString(sessionsCapacity)).append("\n");

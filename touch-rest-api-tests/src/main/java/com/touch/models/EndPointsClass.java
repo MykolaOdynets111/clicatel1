@@ -45,6 +45,12 @@ public class EndPointsClass {
     public static final String CHATS_SESSIONS = ConfigApp.API_VERSION+"/chats/sessions";
     public static final String CHATS_SESSION = CHATS_SESSIONS+"/{sessionId}";
     public static final String CHATS_SESSION_TERMINATE = CHATS_SESSION+"/terminate";
+    //business-blp endpoints
+    public static final String INTEGRATIONS = "/v6/business-blp/integrations";
+    public static final String INTEGRATION = INTEGRATIONS+"/{name}";
+    public static final String INTEGRATION_ARTIFACT = INTEGRATION+"/artifact";
+    public static final String INTEGRATION_CALL = INTEGRATION+"/{action}/call";
+
 
     public static String generateQueryPath(Map<String, String> map) {
         String path = "?";

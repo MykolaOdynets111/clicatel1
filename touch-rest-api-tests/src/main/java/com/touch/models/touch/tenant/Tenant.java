@@ -47,11 +47,11 @@ public abstract class Tenant {
     @SerializedName("shortDescription")
     protected String shortDescription = null;
 
-    @SerializedName("tenantJid")
-    protected String tenantJid = null;
+    @SerializedName("tenantJName")
+    protected String tenantJName = null;
 
-    @SerializedName("tenantBotJid")
-    protected String tenantBotJid = null;
+    @SerializedName("tenantJBotName")
+    protected String tenantJBotName = null;
 
     @SerializedName("category")
     protected String category = null;

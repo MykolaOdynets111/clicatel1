@@ -21,25 +21,41 @@ public class ConfigApp {
             case "qa": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "qa");
                 DB_URL = String.format(DB_URL_PATTERN, "qa", "qa_mc2_touch");
+                TestingEnvProperties.setPropertiesFile("qa.properties");
                 break;
             }
             case "dev": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "dev");
                 DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_touch");
+                TestingEnvProperties.setPropertiesFile("dev.properties");
                 break;
             }
             case "demo": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "demo");
                 DB_URL = String.format(DB_URL_PATTERN, "qa", "demo_mc2_touch");
+                TestingEnvProperties.setPropertiesFile("demo.properties");
                 break;
             }
             case "testing": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "testing");
                 DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_touch");
+                TestingEnvProperties.setPropertiesFile("testing.properties");
+                break;
+            }
+            case "integration": {
+                BASE_API_URL = String.format(BASE_URL_PATTERN, "integration");
+                DB_URL = String.format(DB_URL_PATTERN, "integration", "mc2_touch");
+                TestingEnvProperties.setPropertiesFile("qa.properties");
+                break;
+            }
+            case "prod": {
+                BASE_API_URL = "https://touch.clickatelllabs.com";
+                DB_URL = String.format(DB_URL_PATTERN, "prod", "mc2_touch");
+                TestingEnvProperties.setPropertiesFile("prod.properties");
                 break;
             }
             default: {
-                System.out.println("Please set 'tests.env' variable!\nPossible values are:\nqa\ndev\ndemo");
+                System.out.println("Please set 'tests.env' variable!\nPossible values are:\nqa\ndev\ndemo11");
                 System.exit(0);
             }
         }

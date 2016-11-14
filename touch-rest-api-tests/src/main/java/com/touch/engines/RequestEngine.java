@@ -35,6 +35,7 @@ public class RequestEngine {
             .setBaseUri(ConfigApp.BASE_API_URL)
             .log(LogDetail.ALL)
             .build();
+
     public RequestEngine() {
 //        RestAssured.config().encoderConfig(encoderConfig().encodeContentTypeAs("multipart/form-data", ContentType.TEXT));
     }
@@ -55,12 +56,33 @@ public class RequestEngine {
                 .response();
     }
 
+    public Response postRequestWithFormParameters(String endpoint, String id1, String id2, Map<String, Object> formParameters, String contentType) {
+        RequestSpecification rs = given(requestSpecification).formParams(formParameters);
+        if (contentType != null)
+            rs = rs.contentType(contentType);
+        Response response = null;
+        if (id1 == null && id2 == null) {
+            response = rs.post(endpoint);
+        } else if (id1 != null) {
+            if (id2 != null) {
+                response = rs.post(endpoint, id1, id2);
+            } else {
+                response = rs.post(endpoint, id1);
+            }
+        }
+        return response
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
+
     public Response postRequestWithFormParametersAndFile(String endpoint, String id, Map<String, Object> formParameters, File file) {
         RequestSpecification rs = null;
-        if (file != null){
-            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file",file).formParams(formParameters);
-        }else{
-            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file","").formParams(formParameters);
+        if (file != null) {
+            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", file).formParams(formParameters);
+        } else {
+            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", "").formParams(formParameters);
         }
         Response responce = null;
         if (id != null) {
@@ -75,24 +97,24 @@ public class RequestEngine {
                 .response();
     }
 
-    /**
-     * Make POST request with form parameters
-     *
-     * @param endpoint       endpoint for POST request
-     * @param paramName      first parameter name (required)
-     * @param paramValue     first parameter value (required)
-     * @param formParameters other form parameters for request(optional)
-     * @return {@link Response} object
-     */
-    public Response postRequestWithFormParameters(String endpoint, String paramName, Object paramValue, Object... formParameters) {
-        return given(requestSpecification)
-                .formParams(paramName, paramValue, formParameters)
-                .post(endpoint)
-                .then()
-                .log().all()
-                .extract()
-                .response();
-    }
+//    /**
+//     * Make POST request with form parameters
+//     *
+//     * @param endpoint       endpoint for POST request
+//     * @param paramName      first parameter name (required)
+//     * @param paramValue     first parameter value (required)
+//     * @param formParameters other form parameters for request(optional)
+//     * @return {@link Response} object
+//     */
+//    public Response postRequestWithFormParameters(String endpoint, String paramName, Object paramValue, Object... formParameters) {
+//        return given(requestSpecification)
+//                .formParams(paramName, paramValue, formParameters)
+//                .post(endpoint)
+//                .then()
+//                .log().all()
+//                .extract()
+//                .response();
+//    }
 
     public Response postRequest(String endpoint, Object body) {
         return postRequest(endpoint, null, null, body);

@@ -76,11 +76,6 @@ public class ChatsTests extends BaseTestClass {
     public void getNewChatRoomWithWrongData() {
         // verify error message when we try to get chat room for not existing tenant
         Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1").as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
-        // verify error message when we try to get chat room for new tenant without TBOt connected
-        TenantRequest tenantRequest = new TenantRequest();
-        TenantResponse newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
-        Assert.assertTrue(chatsActions.getChatRoom(newTenant.getId(), "testclient1@clickatelllabs.com", "test1").as(ErrorMessage.class).getErrorMessage().matches("Field tbotPassword type:STRING pos:2 does not accept null values"));
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
     }
 
 

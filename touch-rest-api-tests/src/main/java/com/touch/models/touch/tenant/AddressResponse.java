@@ -62,7 +62,7 @@ public class AddressResponse {
   private List<AddressBusinessHourDto> businessHours = new ArrayList<AddressBusinessHourDto>();
 
   @SerializedName("phones")
-  private List<AddressPhoneDto> phones = new ArrayList<AddressPhoneDto>();
+  private List<Phone> phones = new ArrayList<Phone>();
 
   @SerializedName("id")
   private String id = null;
@@ -216,12 +216,12 @@ public class AddressResponse {
     this.businessHours = businessHours;
   }
 
-  public AddressResponse phones(List<AddressPhoneDto> phones) {
+  public AddressResponse phones(List<Phone> phones) {
     this.phones = phones;
     return this;
   }
 
-  public AddressResponse addPhonesItem(AddressPhoneDto phonesItem) {
+  public AddressResponse addPhonesItem(Phone phonesItem) {
     this.phones.add(phonesItem);
     return this;
   }
@@ -231,11 +231,11 @@ public class AddressResponse {
    * @return phones
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<AddressPhoneDto> getPhones() {
+  public List<Phone> getPhones() {
     return phones;
   }
 
-  public void setPhones(List<AddressPhoneDto> phones) {
+  public void setPhones(List<Phone> phones) {
     this.phones = phones;
   }
 

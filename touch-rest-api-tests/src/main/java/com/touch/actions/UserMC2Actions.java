@@ -1,9 +1,8 @@
 package com.touch.actions;
 
 import com.clickatell.actions.AuthActions;
-import com.clickatell.actions.UserActions;
-import com.clickatell.actions.UserProfilesActions;
 import com.clickatell.engines.RequestEngine;
+import com.clickatell.models.MessageResponse;
 import com.clickatell.models.accounts.Account;
 import com.clickatell.models.user_profiles.UserProfile;
 import com.clickatell.models.users.request.newuser.UserSignupRequest;
@@ -38,7 +37,9 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         UserSignupRequest userSignupRequest = new UserSignupRequest();
         AuthActions authActions = new AuthActions(this.requestEngine);
         UserSignupResponse userSignupResponse = authActions.createNewUser(userSignupRequest);
-        (new AuthActions(this.requestEngine)).activateAccount(MySQLConnector.getDbConnection().getAccountActivationId(userSignupResponse.getAccountId()));
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(userSignupResponse.getAccountId()), MessageResponse.class);
         User user = new User(userSignupRequest);
         user.setId(userSignupResponse.getUserId());
         user.setMainAccount(new Account(userSignupResponse.getAccountId(), userSignupRequest.getAccountName(), Boolean.valueOf(true)));
@@ -57,7 +58,9 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         UserSignupRequest userSignupRequest = new UserSignupRequest(accountName, email, firstName, lastName, password, solutions);
         AuthActions authActions = new AuthActions(this.requestEngine);
         UserSignupResponse userSignupResponse = authActions.createNewUser(userSignupRequest);
-        (new AuthActions(this.requestEngine)).activateAccount(MySQLConnector.getDbConnection().getAccountActivationId(userSignupResponse.getAccountId()));
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(userSignupResponse.getAccountId()), MessageResponse.class);
         User user = new User(userSignupRequest);
         user.setId(userSignupResponse.getUserId());
         user.setMainAccount(new Account(userSignupResponse.getAccountId(), userSignupRequest.getAccountName(), Boolean.valueOf(true)));
