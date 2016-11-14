@@ -118,13 +118,13 @@
                          </property>-->
                         <property>
                             <name>listener</name>
-                            <value>com.clickatell.utils.reporter.CustomReport</value>
+                            <value>com.touch.utils.reporter.CustomReport</value>
                         </property>
                     </properties>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>touch-rest-api-test</id>
+                        <id>touch-rest-api-tests</id>
                         <configuration>
                             <!--<test>*</test>-->
                             <parallel>false</parallel>

@@ -25,7 +25,7 @@ public class CustomReport implements IReporter {
     private static String timeZone = "GMT-7";
     private static SimpleDateFormat sdfdate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
     private static SimpleDateFormat sdftime = new SimpleDateFormat("HH:mm:ss a");
-    private static String outFilename = "MC2_Platform_Integration_Tests_Report.html";
+    private static String outFilename = "Touch_Platform_Integration_Tests_Report.html";
     private static NumberFormat integerFormat = NumberFormat.getIntegerInstance();
     private static NumberFormat decimalFormat = NumberFormat.getNumberInstance();
     protected PrintWriter writer;
