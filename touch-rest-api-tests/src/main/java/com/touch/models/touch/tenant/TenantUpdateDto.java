@@ -297,7 +297,7 @@ public class TenantUpdateDto extends Tenant{
     if (this == o) {
       return true;
     }
-    if (o == null || (getClass() != o.getClass() && TenantRequest.class != o.getClass() && TenantResponse.class != o.getClass())) {
+    if (o == null || (getClass() != o.getClass() && TenantRequest.class != o.getClass() && TenantResponseV4.class != o.getClass())) {
       return false;
     }
     Tenant tenantUpdate = (Tenant) o;

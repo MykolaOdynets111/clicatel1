@@ -92,10 +92,16 @@
         </dependency>
         <dependency>
             <groupId>sample1</groupId>
-            <artifactId>com.sample1</artifactId>
+            <artifactId>tbot-client</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/tbot-client.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

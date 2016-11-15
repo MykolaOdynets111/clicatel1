@@ -1,23 +1,10 @@
 package com.touch.tests;
 
 import com.clickatell.touch.tbot.xmpp.XmppClient;
-import com.clickatell.touch.xmpp.XmppStanzas;
-import com.touch.models.ErrorMessage;
 import com.touch.models.touch.chats.ChatRoomResponse;
-import com.touch.models.touch.chats.ChatSessionResponse;
-import com.touch.models.touch.chats.ListChatSessionResponse;
-import com.touch.models.touch.integration.IntegrationResponse;
 import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
-import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponse;
 import com.touch.utils.ApplicationProperties;
-import com.touch.utils.StringUtils;
-import io.restassured.response.Response;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 import tigase.jaxmpp.core.client.BareJID;
-import tigase.jaxmpp.core.client.JID;
-import tigase.jaxmpp.core.client.xml.XMLException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,8 +68,8 @@ public class Debug extends BaseTestClass {
 
 //        @Test
 //    public void deleteAllTestTenants() {
-//        List<TenantResponse> tenantsList = tenantActions.getTenantsList();
-//        for (TenantResponse tenant : tenantsList) {
+//        List<TenantResponseV4> tenantsList = tenantActions.getTenantsList();
+//        for (TenantResponseV4 tenant : tenantsList) {
 //            if (tenant.getTenantOrgName().contains("Test") || tenant.getTenantOrgName().contains("test"))
 //                tenantActions.deleteTenant(tenant.getChatroomJid());
 //        }

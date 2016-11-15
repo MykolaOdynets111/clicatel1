@@ -28,10 +28,10 @@ public class TenantActions {
         return requestEngine.deleteRequest(EndPointsClass.TENANT, tenantId).statusCode();
     }
 
-    public List<TenantResponse> getTenantsList() {
+    public List<TenantResponseV4> getTenantsList() {
         return requestEngine.getRequest(EndPointsClass.TENANTS).as(ListTenantResponse.class).getTenants();
     }
-    public List<TenantResponse> getNearestTenantsList(String lat, String lon, String radius) {
+    public List<TenantResponseV4> getNearestTenantsList(String lat, String lon, String radius) {
         return requestEngine.getRequest(EndPointsClass.TENANTS_NEW+"?lat="+lat+"&lon="+lon+"&radius="+radius).as(ListTenantResponse.class).getTenants();
     }
     public <T> T getTenant(String tenantId, Class<T> clazz) {

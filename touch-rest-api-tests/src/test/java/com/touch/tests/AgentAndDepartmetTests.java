@@ -8,11 +8,7 @@ import com.touch.models.touch.agent.ListAgentResponse;
 import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponse;
-import com.touch.models.touch.user_profile.ListUserProfilesResponse;
-import com.touch.models.touch.user_profile.UserProfileRequest;
-import com.touch.models.touch.user_profile.UserProfileResponse;
-import com.touch.utils.StringUtils;
+import com.touch.models.touch.tenant.TenantResponseV4;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -21,9 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -47,7 +41,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponse newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
+        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
         List<AgentResponse> agentsList = agentActions.getListOfAgents(null,null,ListAgentResponse.class).getAgents();
@@ -76,7 +70,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponse newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
+        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
         List<AgentResponse> agentsList = agentActions.getListOfAgents(null,null,ListAgentResponse.class).getAgents();
@@ -138,7 +132,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponse newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
+        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
         List<AgentResponse> agentsList = agentActions.getListOfAgents(null, null, ListAgentResponse.class).getAgents();

@@ -1,27 +1,15 @@
 package com.touch.tests;
 
-import com.clickatell.models.user_profiles.UserProfile;
 import com.touch.models.ErrorMessage;
-import com.touch.models.touch.agent.AgentCredentialsDto;
-import com.touch.models.touch.agent.AgentResponse;
-import com.touch.models.touch.agent.ListAgentResponse;
 import com.touch.models.touch.chats.ChatRoomResponse;
 import com.touch.models.touch.chats.ChatSessionResponse;
 import com.touch.models.touch.chats.ListChatSessionResponse;
-import com.touch.models.touch.department.DepartmentDto;
-import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponse;
+import com.touch.models.touch.tenant.TenantResponseV4;
 import com.touch.utils.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -44,7 +32,7 @@ public class ChatsTests extends BaseTestClass {
     public void getNewSessionAndSessionList() {
         String sessionId = "testSession" + StringUtils.generateRandomString(10);
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponse newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponse.class);
+        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
         ListChatSessionResponse listSessionBeforeAddingNew = chatsActions.getListOfSessions(null, null).as(ListChatSessionResponse.class);
         ChatSessionResponse session = chatsActions.addNewSession(sessionId, newTenant.getId(), "testClientId").as(ChatSessionResponse.class);
         ListChatSessionResponse listSessionAfterAddingNew = chatsActions.getListOfSessions(null, null).as(ListChatSessionResponse.class);

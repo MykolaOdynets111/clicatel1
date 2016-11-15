@@ -38,21 +38,21 @@ import java.util.List;
 @javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-09-02T11:18:28.144Z")
 public class ListTenantResponse {
   @SerializedName("tenants")
-  private List<TenantResponse> tenants = new ArrayList<TenantResponse>();
+  private List<TenantResponseV4> tenants = new ArrayList<TenantResponseV4>();
 
   public ListTenantResponse() {
   }
 
-  public ListTenantResponse(List<TenantResponse> tenants) {
+  public ListTenantResponse(List<TenantResponseV4> tenants) {
     this.tenants = tenants;
   }
 
-  public ListTenantResponse tenants(List<TenantResponse> tenants) {
+  public ListTenantResponse tenants(List<TenantResponseV4> tenants) {
     this.tenants = tenants;
     return this;
   }
 
-  public ListTenantResponse addTenantsItem(TenantResponse tenantsItem) {
+  public ListTenantResponse addTenantsItem(TenantResponseV4 tenantsItem) {
     this.tenants.add(tenantsItem);
     return this;
   }
@@ -62,11 +62,11 @@ public class ListTenantResponse {
    * @return tenants
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<TenantResponse> getTenants() {
+  public List<TenantResponseV4> getTenants() {
     return tenants;
   }
 
-  public void setTenants(List<TenantResponse> tenants) {
+  public void setTenants(List<TenantResponseV4> tenants) {
     this.tenants = tenants;
   }
 

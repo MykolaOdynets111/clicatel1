@@ -1,12 +1,6 @@
 package com.touch.tests;
 
-import com.touch.models.ErrorMessage;
 import com.touch.models.touch.chats.ChatRoomResponse;
-import com.touch.models.touch.chats.ChatSessionResponse;
-import com.touch.models.touch.chats.ListChatSessionResponse;
-import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponse;
-import com.touch.utils.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
