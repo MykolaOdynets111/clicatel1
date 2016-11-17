@@ -8,6 +8,7 @@ import com.touch.models.touch.user_profile.UserProfileRequest;
 import com.touch.models.touch.user_profile.UserProfileResponse;
 import com.touch.utils.StringUtils;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -168,6 +169,15 @@ public class UserProfileTests extends BaseTestClass {
         Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
 //        update photo for not existing user-profile
         Assert.assertEquals(userProfileActions.deleteUserProfileImage(id), 404);
+    }
+
+    @AfterClass
+    public void afterClass() {
+        ListUserProfilesResponse allUserProfiles = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class);
+        for (UserProfileResponse userProfile : allUserProfiles.getUserProfiles()) {
+            if (userProfile.getName()==null||userProfile.getName().contains("Test"))
+                userProfileActions.deleteUserProfile(userProfile.getId());
+        }
     }
 
     private String getFullPathToFile(String pathToFile) {

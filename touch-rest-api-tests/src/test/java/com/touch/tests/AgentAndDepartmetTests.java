@@ -9,6 +9,7 @@ import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV4;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -147,7 +148,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file)).getStatusCode(), 200);
         Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId).asInputStream(), new FileInputStream(new File(file))));
 //        delete image and verify that status code was return correct
-        Assert.assertEquals(agentActions.deleteAgentImage(agentId), 200);
+        Assert.assertEquals(agentActions.deleteAgentImage(agentId).getStatusCode(), 200);
 //            delete agent
         Assert.assertEquals(agentActions.deleteAgent(agentId).getStatusCode(), 200);
 //            delete tenant

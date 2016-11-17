@@ -9,7 +9,7 @@ import com.clickatell.models.users.request.newuser.UserSignupRequest;
 import com.clickatell.models.users.request.sign_in.UserSignInRequest;
 import com.clickatell.models.users.response.getallusers.User;
 import com.clickatell.models.users.response.newuser.UserSignupResponse;
-import com.clickatell.utils.MySQLConnector;
+import com.touch.utils.MySQLConnector;
 import com.touch.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
 
     public UserProfile createNewUser(){
         String accountName = "accountname_" + StringUtils.generateRandomString(10);
-        String email = "email" + StringUtils.generateRandomString(10) + "@fake.perfectial.com";
+        String email = "email" + StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
         String firstName = "FirstName_" + StringUtils.generateRandomString(8);
         String lastName = "LastName_" + StringUtils.generateRandomString(8);
         String password = "12345678";

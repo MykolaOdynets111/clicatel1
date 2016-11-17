@@ -68,7 +68,7 @@ public class TenantRequest {
     public TenantRequest() {
         this.accountId = "2c9f830756e0e99f0156e13ed4ed003d";
         this.tenantOrgName = StringUtils.generateRandomString(10) + "Test1";
-        this.contactEmail = StringUtils.generateRandomString(10) + "@fake.perfectial.com";
+        this.contactEmail = StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
         this.state = "ACTIVE";
         this.description = StringUtils.generateRandomString(10);
         this.shortDescription = StringUtils.generateRandomString(10);
@@ -433,8 +433,17 @@ public class TenantRequest {
         if (other == this) {
             return true;
         }
-        if ((other instanceof TenantRequest) == false) {
+        if ((other instanceof TenantRequest||other instanceof TenantResponseV4) == false) {
             return false;
+        }
+        if (other instanceof TenantResponseV4){
+            TenantResponseV4 rhs = ((TenantResponseV4) other);
+            return new EqualsBuilder().append(accountId, rhs.getAccountId()).append(tenantOrgName, rhs.getTenantOrgName()).
+                            append(contactEmail, rhs.getContactEmail()).append(state, rhs.getState().toString()).append(description, rhs.getDescription()).
+                            append(shortDescription, rhs.getShortDescription()).append(tenantJName, rhs.getTenantJid().split("@")[0]).append(tenantJBotName, rhs.getTenantBotJid().split("@")[0]).
+                            append(category, rhs.getCategory()).append(tenantTags, rhs.getTenantTags()).append(tenantFaqs, rhs.getTenantFaqs()).
+                            append(tenantColours, rhs.getTenantColours()).isEquals();
+
         }
         TenantRequest rhs = ((TenantRequest) other);
         return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantJName, rhs.tenantJName).append(tenantJBotName, rhs.tenantJBotName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantColours, rhs.tenantColours).append(tenantAddresses, rhs.tenantAddresses).append(mc2AccountRequest, rhs.mc2AccountRequest).isEquals();

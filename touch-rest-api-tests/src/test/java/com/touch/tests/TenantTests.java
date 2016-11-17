@@ -3,15 +3,15 @@ package com.touch.tests;
 import com.clickatell.models.users.response.getallusers.User;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.tenant.*;
+import org.springframework.util.CollectionUtils;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,6 +63,8 @@ public class TenantTests extends BaseTestClass {
         Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
         //get tenant from DB
         TenantResponseV4 tenant = tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class);
+        //add generated accountId to our request to verify other fields
+        tenantRequest.setAccountId(newTenant.getAccountId());
         Assert.assertTrue(tenantRequest.equals(tenant));
         Assert.assertNotNull(tenant.getAccountId());
         //Verify get tenant request
@@ -93,7 +95,7 @@ public class TenantTests extends BaseTestClass {
         TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
         Assert.assertTrue(tenantRequest.equals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class)));
         // prepare new dada for update tenant
-        TenantUpdateDto tenantUpdateDto = new TenantUpdateDto();
+        TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
         tenantUpdateDto.setId(newTenant.getId());
         tenantUpdateDto.setCategory("New Bussines");
         tenantUpdateDto.setContactEmail("newFake@fake.perfectial.com");
@@ -112,7 +114,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateNotExistingTenantWithCorrectData() {
         String regExpErrorMessage = "Tenant with id .* not found";
-        TenantUpdateDto tenantUpdateDto = new TenantUpdateDto();
+        TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
         tenantUpdateDto.setId("fakeID0057003250015709bf1afe0208");
         tenantUpdateDto.setCategory("New Bussines");
         tenantUpdateDto.setContactEmail("newFake@fake.perfectial.com");
@@ -245,27 +247,27 @@ public class TenantTests extends BaseTestClass {
         Assert.assertEquals(tenantActions.deleteResource("000000005700325001571e3e40b80281", "not_existing"), 404);
     }
 
-//    @Test(dataProvider = "changeAddress")
-//    public void addNewAddressesToTenant(String tenantId, String addressId, Boolean positiveTest) {
-//        TenantRequest tenantRequest = new TenantRequest();
-//        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-//        // add new address to tenant
-//        /*
-//
-//        TO DO
-//        we need update this test cases when response body will be added to that type requests
-//        */
-//        GpsRequest gpsRequest = new GpsRequest(10f, 10f);
-//        if (tenantId.isEmpty())
-//            tenantId = newTenant.getId();
-//        if (addressId.isEmpty())
-//            addressId = newTenant.getTenantAddresses().get(0);
-//        int statusCode = tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId, addressId, gpsRequest);
-//        Assert.assertTrue((statusCode == 200) == positiveTest);
-//
-//        //delete tenant
-//        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
-//    }
+    @Test(dataProvider = "changeAddress")
+    public void addNewAddressesToTenant(String tenantId, String addressId, Boolean positiveTest) {
+        TenantRequest tenantRequest = new TenantRequest();
+        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        // add new address to tenant
+        /*
+
+        TO DO
+        we need update this test cases when response body will be added to that type requests
+        */
+        GpsRequest gpsRequest = new GpsRequest(10f, 10f);
+        if (tenantId.isEmpty())
+            tenantId = newTenant.getId();
+        if (addressId.isEmpty())
+            addressId = newTenant.getTenantAddresses().get(0).getId();
+        int statusCode = tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId, addressId, gpsRequest);
+        Assert.assertTrue((statusCode == 200) == positiveTest);
+
+        //delete tenant
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+    }
 
     @Test
     public void addNewCommonFlow() throws IOException {
@@ -371,38 +373,48 @@ public class TenantTests extends BaseTestClass {
     }
 
 
-    // Here is Bug
-    // TODO rewrite test cases when bug will be fixed https://clickatell.atlassian.net/browse/TPLAT-466
     @Test
     public void getNotExistingTenantFlow() throws IOException {
         TenantRequest tenantRequest = new TenantRequest();
         TenantResponseV4 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
         String teantId = tenant2.getId();
-        String regExpErrorMessage="TenantTopic with id "+teantId+" : .* not found topic";
-        Assert.assertTrue(tenantActions.getTanentFlow(teantId, "notexisting", ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        String notExistingFlow = "notexisting";
+        String regExpErrorMessage = "Flow with name " + notExistingFlow + ", tenant id " + teantId + " not found.";
+        Assert.assertTrue(tenantActions.getTanentFlow(teantId, notExistingFlow, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
         Assert.assertEquals(tenantActions.deleteTenant(teantId), 200);
     }
-//    @Test
-//    public void getNearestTenants() throws IOException {
-//        TenantRequest tenantRequest = new TenantRequest();
-//        TenantResponseV4 tenant1 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-//        tenantRequest = new TenantRequest();
-//        TenantResponseV4 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-//        String tenantId1 = tenant1.getId();
-//        String tenantId2 = tenant2.getId();
-//        GpsRequest gpsRequest1 = new GpsRequest(60f, 60f);
-//        GpsRequest gpsRequest2 = new GpsRequest(70f, 70f);
-//        String addressId1 = tenant1.getTenantAddresses().get(0).getId();
-//        String addressId2 = tenant2.getTenantAddresses().get(0).getId();
-//        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1);
-//        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2);
-//        List<TenantResponseV4> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000");
-//        List<TenantResponseV4> newTenantsList = Arrays.asList(tenant1, tenant2);
-//        Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList));
-//
-//        Assert.assertEquals(tenantActions.deleteTenant(tenantId1), 200);
-//        Assert.assertEquals(tenantActions.deleteTenant(tenantId2), 200);
-//    }
+
+    @Test
+    public void getNearestTenants() throws IOException {
+        TenantRequest tenantRequest = new TenantRequest();
+        TenantResponseV4 tenant1 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        tenantRequest = new TenantRequest();
+        TenantResponseV4 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        String tenantId1 = tenant1.getId();
+        String tenantId2 = tenant2.getId();
+        GpsRequest gpsRequest1 = new GpsRequest(60f, 60f);
+        GpsRequest gpsRequest2 = new GpsRequest(70f, 70f);
+        String addressId1 = tenant1.getTenantAddresses().get(0).getId();
+        String addressId2 = tenant2.getTenantAddresses().get(0).getId();
+        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1);
+        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2);
+        tenant1 = tenantActions.getTenant(tenantId1,TenantResponseV4.class);
+        tenant2 = tenantActions.getTenant(tenantId2,TenantResponseV4.class);
+        List<TenantResponseV4> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000");
+        List<TenantResponseV4> newTenantsList = Arrays.asList(tenant1, tenant2);
+        Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenets are not in nearest tenants list");
+        Assert.assertEquals(tenantActions.deleteTenant(tenantId1), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(tenantId2), 200);
+    }
+
+    @AfterClass
+    public void afterClass() {
+        List<TenantResponseV4> tenantsList = tenantActions.getTenantsList();
+        for (TenantResponseV4 tenant : tenantsList) {
+            if (tenant.getTenantOrgName().contains("Test") || tenant.getTenantOrgName().contains("test"))
+                tenantActions.deleteTenant(tenant.getId());
+        }
+    }
 
     private String getFullPathToFile(String pathToFile) {
         return Debug.class.getClassLoader().getResource(pathToFile).getPath();

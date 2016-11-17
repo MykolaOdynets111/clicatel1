@@ -20,7 +20,7 @@ public class TenantActions {
         this.requestEngine = requestEngine;
     }
 
-    public <T> T updateTenant(TenantUpdateDto tenant, Class<T> clazz) {
+    public <T> T updateTenant(TenantUpdateDtoV5 tenant, Class<T> clazz) {
         return requestEngine.putRequest(EndPointsClass.TENANTS, tenant).as(clazz);
     }
 
