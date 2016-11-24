@@ -1,6 +1,5 @@
 package com.touch.utils;
 
-import com.clickatell.utils.*;
 
 /**
  * Created by sbryt on 7/13/2016.
@@ -55,7 +54,7 @@ public class ConfigApp {
                 break;
             }
             case "prod": {
-                BASE_API_URL = "https://touch.clickatelllabs.com";
+                BASE_API_URL = "https://touch.clickatell.com";
                 DB_URL = String.format(DB_URL_PATTERN, "prod", "mc2_touch");
                 TestingEnvProperties.setPropertiesFile("prod.properties");
                 break;
