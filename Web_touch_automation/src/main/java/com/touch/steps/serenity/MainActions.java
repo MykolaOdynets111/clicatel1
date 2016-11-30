@@ -2,9 +2,7 @@ package com.touch.steps.serenity;
 
 import com.touch.pages.ChatRoomPage;
 import com.touch.pages.LoginPageWeb;
-import com.touch.pages.cards.NewTicketCard;
-import com.touch.pages.cards.Ticket;
-import com.touch.pages.cards.TicketsCard;
+import com.touch.pages.cards.*;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
 
@@ -19,6 +17,9 @@ public class MainActions extends ScenarioSteps {
     LoginPageWeb loginPage;
     NewTicketCard newTicketCard;
     TicketsCard openTickets;
+    OpenAccountCard openAccount;
+    CreditCardSelectionCard selectCreditCard;
+    CalendarCardElement calendarCardElement;
 
     @Step
     public void openMainPage() {
@@ -38,9 +39,15 @@ public class MainActions extends ScenarioSteps {
     }
 
     @Step
+    public void selectGenbankTenant() {
+        loginPage.clickOnGenbankRB();
+    }
+
+    @Step
     public void openChatRoom() {
         loginPage.clickOnOpenChatRoomButton();
     }
+
     @Step
     public void closeAndOpenChatRoom() {
         loginPage.clickOnCloseChatRoomButton();
@@ -82,10 +89,12 @@ public class MainActions extends ScenarioSteps {
     public List<String> getListOfButtonsNameFromPreviousCard() {
         return chatRoomPage.getListOfButtonsNameFromPreviousCard();
     }
+
     @Step
     public List<String> getListOfButtonsNameFromCardWithNumberFromEnd(int number) {
         return chatRoomPage.getListOfButtonsNameFromCardWithNumberFromEnd(number);
     }
+
     @Step
     public List<String> getListOfInformationRowsFromLastCard() {
         return chatRoomPage.getListOfInformationRowsFromLastCard();
@@ -95,10 +104,12 @@ public class MainActions extends ScenarioSteps {
     public List<String> getListOfInformationRowsFromPreviousCard() {
         return chatRoomPage.getListOfInformationRowsFromPreviousCard();
     }
+
     @Step
     public List<String> getListOfInformationRowsFromCardWithNumberFromEnd(int number) {
         return chatRoomPage.getListOfInformationRowsFromCardWithNumberFromEnd(number);
     }
+
     @Step
     public String getTitleOfLastCard() {
         return chatRoomPage.getTitleFromLastCard();
@@ -108,6 +119,7 @@ public class MainActions extends ScenarioSteps {
     public String getTitleFromCardWithNumberFromEnd(int number) {
         return chatRoomPage.getTitleFromCardWithNumberFromEnd(number);
     }
+
     @Step
     public String getTitleOfPreviousCard() {
         return chatRoomPage.getTitleFromPreviousCard();
@@ -163,8 +175,31 @@ public class MainActions extends ScenarioSteps {
     public void setMessageToChatAndClickEnter(String value) {
         chatRoomPage.setMessageToChatAndClickEnter(value);
     }
+
     @Step
-    public List<Ticket> getTicketsFromCard(int number){
+    public List<Ticket> getTicketsFromCard(int number) {
         return openTickets.getTicketListFromCardWithNumberFromEnd(number);
+    }
+
+    @Step
+    public void setDataAndOpenNewAccount(String name, String surname, String email, String phone) {
+        if (!name.isEmpty())
+            openAccount.setNameInput(name);
+        if (!surname.isEmpty())
+            openAccount.setSurnameInput(surname);
+        if (!email.isEmpty())
+            openAccount.setEmailInput(email);
+        if (!phone.isEmpty())
+            openAccount.setContactNumberInput(phone);
+        openAccount.clickOnSubmitButton();
+    }
+    @Step
+    public void selectCreditCardAndBlockIt(int number){
+        selectCreditCard.selectCreditCardWithNumbeInList(number);
+        selectCreditCard.clickOnBlockButton();
+    }
+    @Step
+    public void clickOnDayInCalenderElementInCard(String dayNumber){
+        calendarCardElement.clickOnDay(dayNumber);
     }
 }

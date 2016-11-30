@@ -9,7 +9,6 @@ import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV4;
-import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -156,7 +155,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     }
 
     private String getFullPathToFile(String pathToFile) {
-        return Debug.class.getClassLoader().getResource(pathToFile).getPath();
+        return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
 
     private boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {

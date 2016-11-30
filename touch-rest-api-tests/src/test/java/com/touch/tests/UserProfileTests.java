@@ -181,7 +181,7 @@ public class UserProfileTests extends BaseTestClass {
     }
 
     private String getFullPathToFile(String pathToFile) {
-        return Debug.class.getClassLoader().getResource(pathToFile).getPath();
+        return UserProfileTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
 
 

@@ -67,14 +67,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: sample1:tbot-client:1.0">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/tbot-client.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>

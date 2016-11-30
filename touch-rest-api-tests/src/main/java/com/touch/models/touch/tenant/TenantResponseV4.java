@@ -26,9 +26,7 @@ package com.touch.models.touch.tenant;
 
 import java.util.Objects;
 
-import com.clickatell.touch.xmpp.agentmanager.Department;
 import com.google.gson.annotations.SerializedName;
-import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
 import io.swagger.annotations.ApiModelProperty;
 

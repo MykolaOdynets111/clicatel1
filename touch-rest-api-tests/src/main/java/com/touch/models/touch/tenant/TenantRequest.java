@@ -43,10 +43,8 @@ public class TenantRequest {
     private String description;
     @JsonProperty("shortDescription")
     private String shortDescription;
-    @JsonProperty("tenantJName")
-    private String tenantJName;
-    @JsonProperty("tenantJBotName")
-    private String tenantJBotName;
+    @JsonProperty("tenantName")
+    private String tenantName;
     @JsonProperty("category")
     private String category;
     @JsonProperty("tenantTags")
@@ -72,8 +70,7 @@ public class TenantRequest {
         this.state = "ACTIVE";
         this.description = StringUtils.generateRandomString(10);
         this.shortDescription = StringUtils.generateRandomString(10);
-        this.tenantJName = "Test"+StringUtils.generateRandomString(7);
-        this.tenantJBotName = "Test"+StringUtils.generateRandomString(7);
+        this.tenantName = "Test"+StringUtils.generateRandomString(7);
         this.category = "Banking";
         this.tenantTags = new ArrayList<>();
         this.sessionsCapacity = 5;
@@ -85,15 +82,14 @@ public class TenantRequest {
         this.mc2AccountRequest = new Mc2AccountRequest();
     }
 
-    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantJName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, Mc2AccountRequest mc2AccountRequest) {
+    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, Mc2AccountRequest mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
         this.state = state;
         this.description = description;
         this.shortDescription = shortDescription;
-        this.tenantJName = tenantJName;
-        this.tenantJBotName = tenantJBotName;
+        this.tenantName = tenantName;
         this.category = category;
         this.tenantTags = tenantTags;
         this.sessionsCapacity = sessionsCapacity;
@@ -230,46 +226,26 @@ public class TenantRequest {
     }
 
     /**
-     * @return The tenantJName
+     * @return The tenantName
      */
-    @JsonProperty("tenantJName")
-    public String getTenantJName() {
-        return tenantJName;
+    @JsonProperty("tenantName")
+    public String getTenantName() {
+        return tenantName;
     }
 
     /**
-     * @param tenantJName The tenantJName
+     * @param tenantName The tenantName
      */
-    @JsonProperty("tenantJName")
-    public void setTenantJName(String tenantJName) {
-        this.tenantJName = tenantJName;
+    @JsonProperty("tenantName")
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
     }
 
     public TenantRequest withTenantJName(String tenantJName) {
-        this.tenantJName = tenantJName;
+        this.tenantName = tenantJName;
         return this;
     }
 
-    /**
-     * @return The tenantJBotName
-     */
-    @JsonProperty("tenantJBotName")
-    public String getTenantJBotName() {
-        return tenantJBotName;
-    }
-
-    /**
-     * @param tenantJBotName The tenantJBotName
-     */
-    @JsonProperty("tenantJBotName")
-    public void setTenantJBotName(String tenantJBotName) {
-        this.tenantJBotName = tenantJBotName;
-    }
-
-    public TenantRequest withTenantJBotName(String tenantJBotName) {
-        this.tenantJBotName = tenantJBotName;
-        return this;
-    }
 
     /**
      * @return The category
@@ -425,7 +401,7 @@ public class TenantRequest {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(accountId).append(tenantOrgName).append(contactEmail).append(state).append(description).append(shortDescription).append(tenantJName).append(tenantJBotName).append(category).append(tenantTags).append(sessionsCapacity).append(tenantFaqs).append(tenantColours).append(tenantAddresses).append(mc2AccountRequest).toHashCode();
+        return new HashCodeBuilder().append(accountId).append(tenantOrgName).append(contactEmail).append(state).append(description).append(shortDescription).append(tenantName).append(category).append(tenantTags).append(sessionsCapacity).append(tenantFaqs).append(tenantColours).append(tenantAddresses).append(mc2AccountRequest).toHashCode();
     }
 
     @Override
@@ -440,13 +416,13 @@ public class TenantRequest {
             TenantResponseV4 rhs = ((TenantResponseV4) other);
             return new EqualsBuilder().append(accountId, rhs.getAccountId()).append(tenantOrgName, rhs.getTenantOrgName()).
                             append(contactEmail, rhs.getContactEmail()).append(state, rhs.getState().toString()).append(description, rhs.getDescription()).
-                            append(shortDescription, rhs.getShortDescription()).append(tenantJName, rhs.getTenantJid().split("@")[0]).append(tenantJBotName, rhs.getTenantBotJid().split("@")[0]).
+                            append(shortDescription, rhs.getShortDescription()).append(tenantName, rhs.getTenantJid().split("@")[0]).
                             append(category, rhs.getCategory()).append(tenantTags, rhs.getTenantTags()).append(tenantFaqs, rhs.getTenantFaqs()).
                             append(tenantColours, rhs.getTenantColours()).isEquals();
 
         }
         TenantRequest rhs = ((TenantRequest) other);
-        return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantJName, rhs.tenantJName).append(tenantJBotName, rhs.tenantJBotName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantColours, rhs.tenantColours).append(tenantAddresses, rhs.tenantAddresses).append(mc2AccountRequest, rhs.mc2AccountRequest).isEquals();
+        return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantName, rhs.tenantName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantColours, rhs.tenantColours).append(tenantAddresses, rhs.tenantAddresses).append(mc2AccountRequest, rhs.mc2AccountRequest).isEquals();
     }
 
 }

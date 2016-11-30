@@ -1,6 +1,7 @@
 package com.touch.pages;
 
 import com.thoughtworks.selenium.webdriven.commands.WaitForPageToLoad;
+import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
@@ -31,7 +32,12 @@ public class LoginPageWeb extends PageObject {
 		clickatellRB.waitUntilClickable();
 		clickatellRB.click();
 	}
-
+	public void clickOnGenbankRB(){
+		generalBankRB.click();
+	}
+	public void clickOnTenantRBWithName(String name){
+		find(By.xpath("//p[text()='"+name+"']/input")).click();
+	}
 	public void clickOnOpenChatRoomButton(){
 		openChatRoomButton.waitUntilClickable();
 		openChatRoomButton.click();

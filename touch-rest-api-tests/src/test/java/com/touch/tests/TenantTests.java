@@ -3,7 +3,6 @@ package com.touch.tests;
 import com.clickatell.models.users.response.getallusers.User;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.tenant.*;
-import org.springframework.util.CollectionUtils;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -33,7 +32,7 @@ public class TenantTests extends BaseTestClass {
         int amountTenantsAfterAddNew = tenantsListAfterAddNewTenant.size();
         Assert.assertEquals(amountTenantsBeforeAddNew + 1, amountTenantsAfterAddNew);
         Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
-//        Assert.assertTrue(tenantRequest.equals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class)));
+        Assert.assertTrue(tenantRequest.equals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class)));
         //Verify get tenant request
         Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class), newTenant);
         /*
@@ -417,7 +416,7 @@ public class TenantTests extends BaseTestClass {
     }
 
     private String getFullPathToFile(String pathToFile) {
-        return Debug.class.getClassLoader().getResource(pathToFile).getPath();
+        return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
 
     private boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {

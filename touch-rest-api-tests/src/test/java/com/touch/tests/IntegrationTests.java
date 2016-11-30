@@ -1,13 +1,11 @@
 package com.touch.tests;
 
-import com.touch.models.touch.chats.ChatRoomResponse;
 import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import tigase.jaxmpp.core.client.BareJID;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.

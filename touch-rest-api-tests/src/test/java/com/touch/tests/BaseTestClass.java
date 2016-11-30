@@ -1,9 +1,7 @@
 package com.touch.tests;
 
-import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.actions.*;
 import com.touch.models.EndPointsClass;
-import com.touch.utils.ApplicationProperties;
 import com.touch.utils.reporter.CustomReport;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterSuite;
@@ -20,7 +18,6 @@ import java.util.List;
 
 @Listeners(value = CustomReport.class)
 public class BaseTestClass {
-    XmppClient xmppClient = new XmppClient(ApplicationProperties.getInstance().getPropertyByName("xmpp.host"), 5222, ApplicationProperties.getInstance().getPropertyByName("xmpp.domain"), 30000, null);
     RequestEngine requestEngine = new RequestEngine();
     com.clickatell.engines.RequestEngine requestEngineMC2 = new com.clickatell.engines.RequestEngine();
     UserMC2Actions userActions = new UserMC2Actions(requestEngineMC2);

@@ -1,4 +1,4 @@
-Feature: Clickatell flow
+Feature: Clickatell Flows
   We verify different clickatell flow
 
 Scenario: Clickatell -> Product Support -> Clickatell Touch flow
