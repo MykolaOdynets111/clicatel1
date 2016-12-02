@@ -40,7 +40,7 @@ public class ChatRoomPage extends PageObject {
         button.click();
         new WaitForPageToLoad().setDefaultTimeout(30000);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
