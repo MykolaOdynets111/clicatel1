@@ -42,6 +42,10 @@ public class MainActions extends ScenarioSteps {
     public void selectGenbankTenant() {
         loginPage.clickOnGenbankRB();
     }
+    @Step
+    public void clickOnTenantRBWithName(String name){
+        loginPage.clickOnTenantRBWithName(name);
+    }
 
     @Step
     public void openChatRoom() {

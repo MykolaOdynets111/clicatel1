@@ -39,6 +39,11 @@ public class FlowSteps {
         mainSteps.selectClickatellTenant();
         mainSteps.openChatRoom();
     }
+    @Given("Select '$tenant' tenant and open chat")
+    public void selectTenantAndOpenChatRoom(String tenant) {
+        mainSteps.clickOnTenantRBWithName(tenant);
+        mainSteps.openChatRoom();
+    }
     @Given("Select Genbank tenant and open chat")
     public void selectGenbankAndOpenChatRoom() {
         mainSteps.selectGenbankTenant();
@@ -111,7 +116,32 @@ public class FlowSteps {
         if (expectedButtons.size() != 0)
             verification.verifyThatListsContainsSameElements(expectedButtons, mainSteps.getListOfButtonsNameFromLastCard());
     }
-
+    @Then("Verify that last Card info match with data:$data")
+    public void verifyLastTCardContentMatched(ExamplesTable data) {
+        List<String> expectedButtons = new ArrayList<>();
+        List<String> expectedInfos = new ArrayList<>();
+        for (int i=0;i<data.getRowCount();i++){
+            String type =data.getRowAsParameters(i, true).valueAs("type", String.class);
+            String value = data.getRowAsParameters(i, true).valueAs("value", String.class);
+            switch (type) {
+                case "title":
+                    verification.verifyThatValuesAreEqual(value, mainSteps.getTitleOfLastCard());
+                    break;
+                case "info":
+                    expectedInfos.add(value);
+                    break;
+                case "button":
+                    expectedButtons.add(value);
+                    break;
+                default:
+                    Assert.assertTrue("User or add other type in CardModel", false);
+            }
+        }
+        if (expectedInfos.size() != 0)
+            verification.verifyThatListsContainsSameElements(expectedInfos, mainSteps.getListOfInformationRowsFromLastCard());
+        if (expectedButtons.size() != 0)
+            verification.verifyThatListsContainsSameElements(expectedButtons, mainSteps.getListOfButtonsNameFromLastCard());
+    }
     @When("Add new ticket:$data")
     public void addNewTicket(ExamplesTable data) {
         for (int i=0;i<data.getRowCount();i++) {
@@ -159,6 +189,30 @@ public class FlowSteps {
             switch (type) {
                 case "title":
                     verification.verifyThatValuesAreEqual(value, mainSteps.getTitleOfPreviousCard());
+                    break;
+                case "info":
+                    expectedInfos.add(value);
+                    break;
+                case "button":
+                    expectedButtons.add(value);
+                    break;
+                default:
+                    Assert.assertTrue("User or add other type in CardModel", false);
+            }
+        }
+        verification.verifyThatListsContainsSameElements(expectedInfos, mainSteps.getListOfInformationRowsFromCardWithNumberFromEnd(Integer.valueOf(number)));
+        verification.verifyThatListsContainsSameElements(expectedButtons, mainSteps.getListOfButtonsNameFromCardWithNumberFromEnd(Integer.valueOf(number)));
+    }
+    @Then("Verify that card with number: '$number' from the end is matching data:$data")
+    public void verifyPreviousTCardContentMatching(ExamplesTable data, String number) {
+        List<String> expectedButtons = new ArrayList<>();
+        List<String> expectedInfos = new ArrayList<>();
+        for (int i=0;i<data.getRowCount();i++) {
+            String type = data.getRowAsParameters(i, true).valueAs("type", String.class);
+            String value = data.getRowAsParameters(i, true).valueAs("value", String.class);
+            switch (type) {
+                case "title":
+                    verification.verifyThatValuesAreMatching(value, mainSteps.getTitleOfPreviousCard());
                     break;
                 case "info":
                     expectedInfos.add(value);
