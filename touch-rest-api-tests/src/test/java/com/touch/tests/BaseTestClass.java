@@ -9,7 +9,7 @@ import com.touch.utils.reporter.CustomReport;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import com.touch.engines.RequestEngine;
 
@@ -34,19 +34,26 @@ public class BaseTestClass {
     String token;
 
 
-    @BeforeSuite(alwaysRun = true)
-
-    public void beforeSuite() {
-        IntegrationUserLoginMC2Response response = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2Login", "--context_param parameters={\"password\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.password") + "\", \"email\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.login") + "\"}").as(IntegrationUserLoginMC2Response.class);
-        Response signInResponse = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2SignIn", "--context_param parameters={\"token\":\"" + response.getResponseJson().getToken() + "\",\"accountId\":\"" + response.getResponseJson().getAccounts().get(0).getId() + "\"}");
-        token = signInResponse.jsonPath().getString("responseJson.token");
-
-    }
+//    @BeforeSuite(alwaysRun = true)
+//
+//    public void beforeSuite() {
+//        IntegrationUserLoginMC2Response response = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2Login", "--context_param parameters={\"password\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.password") + "\", \"email\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.login") + "\"}").as(IntegrationUserLoginMC2Response.class);
+//        Response signInResponse = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2SignIn", "--context_param parameters={\"token\":\"" + response.getResponseJson().getToken() + "\",\"accountId\":\"" + response.getResponseJson().getAccounts().get(0).getId() + "\"}");
+//        token = signInResponse.jsonPath().getString("responseJson.token");
+//
+//    }
+//    @BeforeClass
+//    public void beforeClass() {
+//        IntegrationUserLoginMC2Response response = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2Login", "--context_param parameters={\"password\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.password") + "\", \"email\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.login") + "\"}").as(IntegrationUserLoginMC2Response.class);
+//        Response signInResponse = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2SignIn", "--context_param parameters={\"token\":\"" + response.getResponseJson().getToken() + "\",\"accountId\":\"" + response.getResponseJson().getAccounts().get(0).getId() + "\"}");
+//        token = signInResponse.jsonPath().getString("responseJson.token");
+//
+//    }
 
     @AfterSuite(alwaysRun = true)
     public void afterSuite() {
 
-        Response response = requestEngine.getRequest(EndPointsClass.APP_CONFIG_PROFILE, new Header("Authorization", token));
+        Response response = requestEngine.getRequest(EndPointsClass.APP_CONFIG_PROFILE, new Header("Authorization", getToken()));
         List<String> lines = new ArrayList<String>();
         lines.add(response.getBody().jsonPath().getString("version"));
         // lines.add("   " + response.getBody().jsonPath().getString("profile"));
@@ -57,6 +64,11 @@ public class BaseTestClass {
             e.printStackTrace();
         }
         removeAllTestTenants();
+    }
+    public String getToken(){
+        IntegrationUserLoginMC2Response response = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2Login", "--context_param parameters={\"password\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.password") + "\", \"email\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.login") + "\"}").as(IntegrationUserLoginMC2Response.class);
+        Response signInResponse = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2SignIn", "--context_param parameters={\"token\":\"" + response.getResponseJson().getToken() + "\",\"accountId\":\"" + response.getResponseJson().getAccounts().get(0).getId() + "\"}");
+        return signInResponse.jsonPath().getString("responseJson.token");
     }
 
     public void removeAllTestTenants() {

@@ -19,7 +19,11 @@ import org.testng.annotations.Test;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class ChatsTests extends BaseTestClass {
-
+    String token;
+    @BeforeClass
+    public void beforeClass() {
+        token = getToken();
+    }
     @Test
     public void getNewChatRoom() {
         String tenantWithBot = "20a9c80d53fb11e6a0280626baf6c11d";

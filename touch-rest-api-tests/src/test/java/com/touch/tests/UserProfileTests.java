@@ -26,10 +26,10 @@ import java.util.Map;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class UserProfileTests extends BaseTestClass {
-
+    String token;
     @BeforeClass
     public void beforeClass() {
-
+        token = getToken();
     }
 
     @Test

@@ -30,11 +30,14 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     String expectedMessage = "Agent with id "+agentId+" not found";
     String fileName = "tenant_logo.jpg";
     String file = getFullPathToFile("TenantResources/" + fileName);
-
+    String token;
+    @BeforeClass
+    public void beforeClass() {
+        token = getToken();
+    }
 
     @Test
     public void createAndDeleteNewAgent() {
-        int agentListSizeBefore = agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents().size();
 //            create new user profile and sign in with it
         UserProfile userProfile = userActions.createNewUser();
         String token = userActions.loginWithNewUserAndReturnToken(userProfile);
@@ -44,19 +47,17 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
-        List<AgentResponse> agentsList = agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents();
+        AgentResponse agent = agentActions.getListOfAgents(credentials.getJid(), token, AgentResponse.class);
 //            verify that we have one more a new agent in agents list
-        Assert.assertEquals(agentListSizeBefore + 1, agentsList.size());
-        String agentId = "";
-        for (AgentResponse agent : agentsList) {
-            if (agent.getAgentJid().equals(credentials.getJid()))
-                agentId = agent.getId();
-        }
+//        String agentId = "";
+//        for (AgentResponse agent : agentsList) {
+//            if (agent.getAgentJid().equals(credentials.getJid()))
+//                agentId = agent.getId();
+//        }
 
 //            delete agent
         Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);
 //        verify that agent have been deleted successful;
-        Assert.assertEquals(agentListSizeBefore, agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents().size());
 //            delete tenant
         Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
 
