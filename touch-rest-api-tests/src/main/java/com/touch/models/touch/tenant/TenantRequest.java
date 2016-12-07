@@ -58,8 +58,8 @@ public class TenantRequest {
     private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
     @JsonProperty("tenantAddresses")
     private List<TenantAddress> tenantAddresses = new ArrayList<>();
-    @JsonProperty("M2AccountRequest")
-    private M2AccountRequest M2AccountRequest;
+    @JsonProperty("MC2AccountRequest")
+    private MC2AccountRequest MC2AccountRequest;
 
     /**
      * No args constructor for use in serialization
@@ -80,10 +80,10 @@ public class TenantRequest {
         this.tenantFaqs = new ArrayList<>();
         this.tenantColours = new ArrayList<>();
         tenantColours.add(new TenantColour());
-        this.M2AccountRequest = new M2AccountRequest();
+        this.MC2AccountRequest = new MC2AccountRequest();
     }
 
-    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, M2AccountRequest M2AccountRequest) {
+    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, MC2AccountRequest MC2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
@@ -97,7 +97,7 @@ public class TenantRequest {
         this.tenantFaqs = tenantFaqs;
         this.tenantColours = tenantColours;
         this.tenantAddresses = tenantAddresses;
-        this.M2AccountRequest = M2AccountRequest;
+        this.MC2AccountRequest = MC2AccountRequest;
     }
 
     /**
@@ -375,23 +375,23 @@ public class TenantRequest {
     }
 
     /**
-     * @return The M2AccountRequest
+     * @return The MC2AccountRequest
      */
-    @JsonProperty("M2AccountRequest")
-    public M2AccountRequest getM2AccountRequest() {
-        return M2AccountRequest;
+    @JsonProperty("MC2AccountRequest")
+    public MC2AccountRequest getMC2AccountRequest() {
+        return MC2AccountRequest;
     }
 
     /**
-     * @param m2AccountRequest The M2AccountRequest
+     * @param MC2AccountRequest The MC2AccountRequest
      */
-    @JsonProperty("M2AccountRequest")
-    public void setM2AccountRequest(M2AccountRequest m2AccountRequest) {
-        this.M2AccountRequest = m2AccountRequest;
+    @JsonProperty("MC2AccountRequest")
+    public void setMC2AccountRequest(MC2AccountRequest MC2AccountRequest) {
+        this.MC2AccountRequest = MC2AccountRequest;
     }
 
-    public TenantRequest withMc2AccountRequest(M2AccountRequest M2AccountRequest) {
-        this.M2AccountRequest = M2AccountRequest;
+    public TenantRequest withMc2AccountRequest(MC2AccountRequest MC2AccountRequest) {
+        this.MC2AccountRequest = MC2AccountRequest;
         return this;
     }
 
@@ -402,7 +402,7 @@ public class TenantRequest {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(accountId).append(tenantOrgName).append(contactEmail).append(state).append(description).append(shortDescription).append(tenantName).append(category).append(tenantTags).append(sessionsCapacity).append(tenantFaqs).append(tenantColours).append(tenantAddresses).append(M2AccountRequest).toHashCode();
+        return new HashCodeBuilder().append(accountId).append(tenantOrgName).append(contactEmail).append(state).append(description).append(shortDescription).append(tenantName).append(category).append(tenantTags).append(sessionsCapacity).append(tenantFaqs).append(tenantColours).append(tenantAddresses).append(MC2AccountRequest).toHashCode();
     }
 
     @Override
@@ -426,7 +426,7 @@ public class TenantRequest {
 
         }
         TenantRequest rhs = ((TenantRequest) other);
-        return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantName, rhs.tenantName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantColours, rhs.tenantColours).append(tenantAddresses, rhs.tenantAddresses).append(M2AccountRequest, rhs.M2AccountRequest).isEquals();
+        return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantName, rhs.tenantName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantColours, rhs.tenantColours).append(tenantAddresses, rhs.tenantAddresses).append(MC2AccountRequest, rhs.MC2AccountRequest).isEquals();
     }
 
 }
