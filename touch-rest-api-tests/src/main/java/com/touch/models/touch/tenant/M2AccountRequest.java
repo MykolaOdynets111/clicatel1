@@ -28,14 +28,12 @@ package com.touch.models.touch.tenant;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.touch.utils.StringUtils;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * MC2AccountRequest
+ * M2AccountRequest
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-12-06T14:49:12.583Z")
-public class MC2AccountRequest {
+public class M2AccountRequest {
   @SerializedName("firstName")
   private String firstName = null;
 
@@ -48,21 +46,21 @@ public class MC2AccountRequest {
   @SerializedName("password")
   private String password = null;
 
-  public MC2AccountRequest() {
+  public M2AccountRequest() {
     this.firstName = "firstName"+ StringUtils.generateRandomString(3);
     this.lastName = "lastName"+StringUtils.generateRandomString(3);
     this.email = StringUtils.generateRandomString(10) + "@sink.sendgrid.net";;
     this.password = "password"+StringUtils.generateRandomString(8);
   }
 
-  public MC2AccountRequest(String firstName, String lastName, String email, String password) {
+  public M2AccountRequest(String firstName, String lastName, String email, String password) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
   }
 
-  public MC2AccountRequest firstName(String firstName) {
+  public M2AccountRequest firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -80,7 +78,7 @@ public class MC2AccountRequest {
     this.firstName = firstName;
   }
 
-  public MC2AccountRequest lastName(String lastName) {
+  public M2AccountRequest lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -98,7 +96,7 @@ public class MC2AccountRequest {
     this.lastName = lastName;
   }
 
-  public MC2AccountRequest email(String email) {
+  public M2AccountRequest email(String email) {
     this.email = email;
     return this;
   }
@@ -116,7 +114,7 @@ public class MC2AccountRequest {
     this.email = email;
   }
 
-  public MC2AccountRequest password(String password) {
+  public M2AccountRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -143,11 +141,11 @@ public class MC2AccountRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MC2AccountRequest mc2AccountRequest = (MC2AccountRequest) o;
-    return Objects.equals(this.firstName, mc2AccountRequest.firstName) &&
-        Objects.equals(this.lastName, mc2AccountRequest.lastName) &&
-        Objects.equals(this.email, mc2AccountRequest.email) &&
-        Objects.equals(this.password, mc2AccountRequest.password);
+    M2AccountRequest M2AccountRequest = (M2AccountRequest) o;
+    return Objects.equals(this.firstName, M2AccountRequest.firstName) &&
+        Objects.equals(this.lastName, M2AccountRequest.lastName) &&
+        Objects.equals(this.email, M2AccountRequest.email) &&
+        Objects.equals(this.password, M2AccountRequest.password);
   }
 
   @Override
@@ -159,7 +157,7 @@ public class MC2AccountRequest {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MC2AccountRequest {\n");
+    sb.append("class M2AccountRequest {\n");
     
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
