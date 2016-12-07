@@ -31,9 +31,9 @@ import com.touch.utils.StringUtils;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * MC2AccountRequest
+ * Mc2AccountRequest
  */
-public class MC2AccountRequest {
+public class Mc2AccountRequest {
   @SerializedName("firstName")
   private String firstName = null;
 
@@ -46,21 +46,21 @@ public class MC2AccountRequest {
   @SerializedName("password")
   private String password = null;
 
-  public MC2AccountRequest() {
+  public Mc2AccountRequest() {
     this.firstName = "firstName"+ StringUtils.generateRandomString(3);
     this.lastName = "lastName"+StringUtils.generateRandomString(3);
     this.email = StringUtils.generateRandomString(10) + "@sink.sendgrid.net";;
     this.password = "password"+StringUtils.generateRandomString(8);
   }
 
-  public MC2AccountRequest(String firstName, String lastName, String email, String password) {
+  public Mc2AccountRequest(String firstName, String lastName, String email, String password) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
   }
 
-  public MC2AccountRequest firstName(String firstName) {
+  public Mc2AccountRequest firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -78,7 +78,7 @@ public class MC2AccountRequest {
     this.firstName = firstName;
   }
 
-  public MC2AccountRequest lastName(String lastName) {
+  public Mc2AccountRequest lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -96,7 +96,7 @@ public class MC2AccountRequest {
     this.lastName = lastName;
   }
 
-  public MC2AccountRequest email(String email) {
+  public Mc2AccountRequest email(String email) {
     this.email = email;
     return this;
   }
@@ -114,7 +114,7 @@ public class MC2AccountRequest {
     this.email = email;
   }
 
-  public MC2AccountRequest password(String password) {
+  public Mc2AccountRequest password(String password) {
     this.password = password;
     return this;
   }
@@ -141,11 +141,11 @@ public class MC2AccountRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    MC2AccountRequest MC2AccountRequest = (MC2AccountRequest) o;
-    return Objects.equals(this.firstName, MC2AccountRequest.firstName) &&
-        Objects.equals(this.lastName, MC2AccountRequest.lastName) &&
-        Objects.equals(this.email, MC2AccountRequest.email) &&
-        Objects.equals(this.password, MC2AccountRequest.password);
+    Mc2AccountRequest Mc2AccountRequest = (Mc2AccountRequest) o;
+    return Objects.equals(this.firstName, Mc2AccountRequest.firstName) &&
+        Objects.equals(this.lastName, Mc2AccountRequest.lastName) &&
+        Objects.equals(this.email, Mc2AccountRequest.email) &&
+        Objects.equals(this.password, Mc2AccountRequest.password);
   }
 
   @Override
@@ -157,7 +157,7 @@ public class MC2AccountRequest {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class MC2AccountRequest {\n");
+    sb.append("class Mc2AccountRequest {\n");
     
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");

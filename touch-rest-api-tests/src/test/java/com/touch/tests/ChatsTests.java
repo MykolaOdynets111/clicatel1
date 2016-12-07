@@ -40,7 +40,7 @@ public class ChatsTests extends BaseTestClass {
     public void getNewSessionAndSessionList() {
         String sessionId = "testSession" + StringUtils.generateRandomString(10);
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
+            TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         ListChatSessionResponse listSessionBeforeAddingNew = chatsActions.getListOfSessions(null, null, token).as(ListChatSessionResponse.class);
         ChatSessionResponse session = chatsActions.addNewSession(sessionId, newTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
         ListChatSessionResponse listSessionAfterAddingNew = chatsActions.getListOfSessions(null, null, token).as(ListChatSessionResponse.class);
