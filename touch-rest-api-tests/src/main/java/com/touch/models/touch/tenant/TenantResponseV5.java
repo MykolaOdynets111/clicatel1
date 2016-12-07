@@ -20,6 +20,9 @@ public class TenantResponseV5 {
   @SerializedName("tenantOrgName")
   private String tenantOrgName = null;
 
+  @SerializedName("tenantJid")
+  private String tenantJid = null;
+
   @SerializedName("contactEmail")
   private String contactEmail = null;
 
@@ -117,11 +120,29 @@ public class TenantResponseV5 {
     this.tenantOrgName = tenantOrgName;
   }
 
+  public TenantResponseV5 tenantJid(String tenantJid) {
+    this.tenantJid = tenantJid;
+    return this;
+  }
+
+  /**
+   * Get tenantJid
+   * @return tenantJid
+   **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getTenantJid() {
+    return tenantJid;
+  }
+
+  public void setTenantJid(String tenantJid) {
+    this.tenantJid = tenantJid;
+  }
+
+
   public TenantResponseV5 contactEmail(String contactEmail) {
     this.contactEmail = contactEmail;
     return this;
   }
-
    /**
    * Get contactEmail
    * @return contactEmail
