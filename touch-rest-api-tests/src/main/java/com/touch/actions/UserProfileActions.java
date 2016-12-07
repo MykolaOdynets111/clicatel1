@@ -3,6 +3,7 @@ package com.touch.actions;
 import com.touch.models.EndPointsClass;
 import com.touch.models.touch.user_profile.UserProfileRequest;
 import com.touch.utils.StringUtils;
+import io.restassured.http.Header;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,13 +19,13 @@ public class UserProfileActions {
         this.requestEngine = requestEngine;
     }
 
-    public <T> T addUserProfile(Map<String, Object> data, File file, Class<T> clazz) {
-        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, data, file).as(clazz);
+    public <T> T addUserProfile(Map<String, Object> data, File file, String token, Class<T> clazz) {
+        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, data, file, new Header("Authorization", token)).as(clazz);
     }
-    public int addUserProfile(Map<String, Object> data, File file) {
-        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, data, file).getStatusCode();
+    public int addUserProfile(Map<String, Object> data, File file, String token) {
+        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, data, file, new Header("Authorization", token)).getStatusCode();
     }
-    public int addDefaultUserProfile(String id) {
+    public int addDefaultUserProfile(String id, String token) {
         String name = "Test"+ StringUtils.generateRandomString(6);
         String surname = "surname"+StringUtils.generateRandomString(6);
         String email = StringUtils.generateRandomString(6)+"@gmail.com";
@@ -47,25 +48,25 @@ public class UserProfileActions {
         userProfileData.put("country",country);
         userProfileData.put("city",city);
         userProfileData.put("address",address);
-        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, userProfileData, new File(file)).getStatusCode();
+        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, userProfileData, new File(file), new Header("Authorization", token)).getStatusCode();
     }
-    public int updateUserProfile(String profileId, UserProfileRequest userData) {
-        return requestEngine.putRequest(EndPointsClass.TOUCH_USER_PROFILE,profileId, userData).getStatusCode();
+    public int updateUserProfile(String profileId, UserProfileRequest userData, String token) {
+        return requestEngine.putRequest(EndPointsClass.TOUCH_USER_PROFILE,profileId, null, userData, new Header("Authorization", token)).getStatusCode();
     }
-    public <T> T getUserProfile(String profileId, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILE, profileId).as(clazz);
+    public <T> T getUserProfile(String profileId, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILE, profileId, new Header("Authorization", token)).as(clazz);
     }
-    public <T> T getAllUserProfiles(Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILES).as(clazz);
+    public <T> T getAllUserProfiles(String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILES, new Header("Authorization", token)).as(clazz);
     }
-    public int deleteUserProfile(String userProfileId){
-        return  requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE, userProfileId).getStatusCode();
+    public int deleteUserProfile(String userProfileId, String token){
+        return  requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE, userProfileId, null, new Header("Authorization", token)).getStatusCode();
     }
-    public int updateUserProfileImage(String profileId, File file) {
-        return requestEngine.putFile(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId,file).getStatusCode();
+    public int updateUserProfileImage(String profileId, File file, String token) {
+        return requestEngine.putFile(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId,file, new Header("Authorization", token)).getStatusCode();
     }
-    public int deleteUserProfileImage(String profileId) {
-        return requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId).getStatusCode();
+    public int deleteUserProfileImage(String profileId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId,null, new Header("Authorization", token)).getStatusCode();
     }
     private String getFullPathToFile(String pathToFile) {
         return UserProfileActions.class.getClassLoader().getResource(pathToFile).getPath();

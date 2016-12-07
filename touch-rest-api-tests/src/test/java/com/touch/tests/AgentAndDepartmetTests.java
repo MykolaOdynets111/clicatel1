@@ -7,8 +7,11 @@ import com.touch.models.touch.agent.AgentResponse;
 import com.touch.models.touch.agent.ListAgentResponse;
 import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
+import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
 import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponseV4;
+import com.touch.models.touch.tenant.TenantResponseV5;
+import com.touch.utils.TestingEnvProperties;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -28,23 +31,20 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     String fileName = "tenant_logo.jpg";
     String file = getFullPathToFile("TenantResources/" + fileName);
 
-    @BeforeClass
-    public void beforeClass() {
-    }
 
     @Test
     public void createAndDeleteNewAgent() {
-        int agentListSizeBefore = agentActions.getListOfAgents(null,null,ListAgentResponse.class).getAgents().size();
+        int agentListSizeBefore = agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents().size();
 //            create new user profile and sign in with it
         UserProfile userProfile = userActions.createNewUser();
         String token = userActions.loginWithNewUserAndReturnToken(userProfile);
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
-        List<AgentResponse> agentsList = agentActions.getListOfAgents(null,null,ListAgentResponse.class).getAgents();
+        List<AgentResponse> agentsList = agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents();
 //            verify that we have one more a new agent in agents list
         Assert.assertEquals(agentListSizeBefore + 1, agentsList.size());
         String agentId = "";
@@ -54,11 +54,11 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         }
 
 //            delete agent
-        Assert.assertEquals(agentActions.deleteAgent(agentId).getStatusCode(), 200);
+        Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);
 //        verify that agent have been deleted successful;
-        Assert.assertEquals(agentListSizeBefore, agentActions.getListOfAgents(null,null,ListAgentResponse.class).getAgents().size());
+        Assert.assertEquals(agentListSizeBefore, agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents().size());
 //            delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
 
     }
 
@@ -70,10 +70,10 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
-        List<AgentResponse> agentsList = agentActions.getListOfAgents(null,null,ListAgentResponse.class).getAgents();
+        List<AgentResponse> agentsList = agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents();
 //        create new department and connect it with new tenant
         DepartmentDto department = new DepartmentDto();
         department.setTenantId(newTenant.getId());
@@ -87,18 +87,18 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         //        Assign agent to new department and verify that it returns correct status code
         Assert.assertEquals(departmentActions.putAgentInDepartment(newDepartment.getId(), agentId), 201);
 //        get max chart value and verify it's correctness
-        Assert.assertEquals(agentActions.getAgentMaxChats(agentId, newDepartment.getId()), 5);
+        Assert.assertEquals(agentActions.getAgentMaxChats(agentId, token, newDepartment.getId()), 5);
 
 //            delete agent
-        Assert.assertEquals(agentActions.deleteAgent(agentId).getStatusCode(), 200);
+        Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);
 //            delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
 
     }
 
     @Test
     public void getAgentsListWithNotExistingAgentId() {
-        Assert.assertTrue(agentActions.getListOfAgents(agentId,null,ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.getListOfAgents(agentId, token, ErrorMessage.class).getErrorMessage().matches(expectedMessage));
     }
 //TODO
 //    @Test
@@ -109,18 +109,18 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     @Test
     public void deleteNotExistingAgent() {
 
-        Assert.assertTrue(agentActions.deleteAgent(agentId).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.deleteAgent(agentId, token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
     }
 
     @Test
     public void getImageForNotExistingAgent() {
-        Assert.assertTrue(agentActions.getAgentImage(agentId).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.getAgentImage(agentId, token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
     }
 
     @Test
     public void addAndDeleteImageForNotExistingAgent() {
-        Assert.assertTrue(agentActions.updateAgentImage(agentId, new File(file)).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
-        Assert.assertTrue(agentActions.deleteAgentImage(agentId).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.updateAgentImage(agentId, new File(file), token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.deleteAgentImage(agentId, token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
 
     }
 
@@ -132,10 +132,10 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
-        List<AgentResponse> agentsList = agentActions.getListOfAgents(null, null, ListAgentResponse.class).getAgents();
+        List<AgentResponse> agentsList = agentActions.getListOfAgents( null, token, ListAgentResponse.class).getAgents();
 //            verify that we have one more a new agent in agents list
         String jid = credentials.getJid();
         String agentId = "";
@@ -144,14 +144,14 @@ public class AgentAndDepartmetTests extends BaseTestClass {
                 agentId = agent.getId();
         }
 //            add new image and very that it is correct
-        Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file)).getStatusCode(), 200);
-        Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId).asInputStream(), new FileInputStream(new File(file))));
+        Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file), token).getStatusCode(), 200);
+        Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId, token).asInputStream(), new FileInputStream(new File(file))));
 //        delete image and verify that status code was return correct
-        Assert.assertEquals(agentActions.deleteAgentImage(agentId).getStatusCode(), 200);
+        Assert.assertEquals(agentActions.deleteAgentImage(agentId, token).getStatusCode(), 200);
 //            delete agent
-        Assert.assertEquals(agentActions.deleteAgent(agentId).getStatusCode(), 200);
+        Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);
 //            delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     private String getFullPathToFile(String pathToFile) {

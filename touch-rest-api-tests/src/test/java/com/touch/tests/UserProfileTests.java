@@ -35,28 +35,28 @@ public class UserProfileTests extends BaseTestClass {
     @Test
     public void addNewUserProfile() {
         String id = "test" + StringUtils.generateRandomString(3);
-        int userAmountBefore = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles().size();
+        int userAmountBefore = userProfileActions.getAllUserProfiles(token,ListUserProfilesResponse.class).getUserProfiles().size();
         //Verify that we add new user-profile successful
-        Assert.assertEquals(userProfileActions.addDefaultUserProfile(id), 201);
+        Assert.assertEquals(userProfileActions.addDefaultUserProfile(id, token), 201);
 //        Verify that we have new user-profile in user-profile list
-        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles();
+        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles();
         Assert.assertEquals(userAmountBefore + 1, userProfiles.size());
         // we will add additional verification step when we have response for POST action for user-profile
 //        TODO add changes when this bug will be fixed https://clickatell.atlassian.net/browse/TPLAT-486
-        Assert.assertTrue(userProfiles.contains(userProfileActions.getUserProfile(id, UserProfileResponse.class)));
+        Assert.assertTrue(userProfiles.contains(userProfileActions.getUserProfile(id, token, UserProfileResponse.class)));
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, token), 200);
     }
 
     @Test
     public void addExitingUserProfile() {
         String id = "test" + StringUtils.generateRandomString(3);
 //        create new user-profile
-        userProfileActions.addDefaultUserProfile(id);
+        userProfileActions.addDefaultUserProfile(id, token);
         //Try to create user-profile with same Id and verify that we get correct response
-        Assert.assertEquals(userProfileActions.addDefaultUserProfile(id), 409);
+        Assert.assertEquals(userProfileActions.addDefaultUserProfile(id, token), 409);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, token), 200);
     }
 
     @Test
@@ -84,10 +84,10 @@ public class UserProfileTests extends BaseTestClass {
         userProfileData.put("country", country);
         userProfileData.put("city", city);
         userProfileData.put("address", address);
-        int userAmountBefore = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles().size();
+        int userAmountBefore = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles().size();
         String regExpErrorMessage = "Text '" + birthdate + "' could not be parsed at index 0";
-        Assert.assertTrue(userProfileActions.addUserProfile(userProfileData, new File(file), ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
-        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles();
+        Assert.assertTrue(userProfileActions.addUserProfile(userProfileData, new File(file), token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles();
         Assert.assertEquals(userAmountBefore, userProfiles.size());
 
     }
@@ -95,22 +95,22 @@ public class UserProfileTests extends BaseTestClass {
     @Test
     public void addUserProfileWithoutData() {
         Map<String, Object> userProfileData = new HashMap<>();
-        int userAmountBefore = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles().size();
+        int userAmountBefore = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles().size();
 //        Verify that we can create user-profile with empty fields
-        Assert.assertEquals(userProfileActions.addUserProfile(userProfileData, null), 201);
+        Assert.assertEquals(userProfileActions.addUserProfile(userProfileData, null, token), 201);
 //        TODO add verification that Id id not empty in this case and was auto generated
-        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles();
+        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles();
         Assert.assertEquals(userAmountBefore + 1, userProfiles.size());
     }
 
     @Test
     public void deleteUserProfile() {
         String id = "test" + StringUtils.generateRandomString(3);
-        userProfileActions.addDefaultUserProfile(id);
-        int userAmountBefore = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles().size();
+        userProfileActions.addDefaultUserProfile(id, token);
+        int userAmountBefore = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles().size();
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
-        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class).getUserProfiles();
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, token), 200);
+        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles();
         Assert.assertEquals(userAmountBefore - 1, userProfiles.size());
     }
 
@@ -119,16 +119,16 @@ public class UserProfileTests extends BaseTestClass {
         String newName = "New name";
         String id = "test" + StringUtils.generateRandomString(3);
 //        create new user-profile
-        userProfileActions.addDefaultUserProfile(id);
+        userProfileActions.addDefaultUserProfile(id, token);
 //        create userProfile for updating existing user-profile
         UserProfileRequest userProfile = new UserProfileRequest();
 //        update name in userProfile
         userProfile.setName(newName);
 //        update name for existing user-profile and verify that update have been done successful
-        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile), 200);
-        Assert.assertEquals(userProfileActions.getUserProfile(id, UserProfileResponse.class).getName(), newName);
+        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile, token), 200);
+        Assert.assertEquals(userProfileActions.getUserProfile(id, token, UserProfileResponse.class).getName(), newName);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, token), 200);
     }
 
     @Test
@@ -140,43 +140,43 @@ public class UserProfileTests extends BaseTestClass {
 //        update name in userProfile
         userProfile.setName(newName);
 //        update name for not existing user-profile and verify that update have been done successful
-        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile), 404);
+        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile, token), 404);
     }
 
     @Test
     public void addPhotoToUserProfile() {
         String id = "test" + StringUtils.generateRandomString(3);
 //        create new user-profile
-        userProfileActions.addDefaultUserProfile(id);
+        userProfileActions.addDefaultUserProfile(id, token);
         String fileName = "bg_chat_image.jpg";
         String file = getFullPathToFile("TenantResources/" + fileName);
 //        update photo for existing user-profile
-        Assert.assertEquals(userProfileActions.updateUserProfileImage(id, new File(file)), 200);
+        Assert.assertEquals(userProfileActions.updateUserProfileImage(id, new File(file), token), 200);
 //        update photo for not existing user-profile
-        Assert.assertEquals(userProfileActions.updateUserProfileImage("not existing", new File(file)), 404);
+        Assert.assertEquals(userProfileActions.updateUserProfileImage("not existing", new File(file), token), 404);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, token), 200);
     }
 
     @Test
     public void deletePhotoFromUserProfile() {
         String id = "test" + StringUtils.generateRandomString(3);
 //        create new user-profile
-        userProfileActions.addDefaultUserProfile(id);
+        userProfileActions.addDefaultUserProfile(id, token);
 //        update photo for existing user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id, token), 200);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, token), 200);
 //        update photo for not existing user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id), 404);
+        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id, token), 404);
     }
 
     @AfterClass
     public void afterClass() {
-        ListUserProfilesResponse allUserProfiles = userProfileActions.getAllUserProfiles(ListUserProfilesResponse.class);
+        ListUserProfilesResponse allUserProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class);
         for (UserProfileResponse userProfile : allUserProfiles.getUserProfiles()) {
             if (userProfile.getName()==null||userProfile.getName().contains("Test"))
-                userProfileActions.deleteUserProfile(userProfile.getId());
+                userProfileActions.deleteUserProfile(userProfile.getId(), token);
         }
     }
 

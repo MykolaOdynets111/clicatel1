@@ -2,6 +2,8 @@ package com.touch.actions;
 
 import com.touch.models.EndPointsClass;
 import com.touch.models.touch.tenant.*;
+import com.touch.utils.TestingEnvProperties;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 
 import java.io.File;
@@ -20,102 +22,102 @@ public class TenantActions {
         this.requestEngine = requestEngine;
     }
 
-    public <T> T updateTenant(TenantUpdateDtoV5 tenant, Class<T> clazz) {
-        return requestEngine.putRequest(EndPointsClass.TENANTS, tenant).as(clazz);
+    public <T> T updateTenant(TenantUpdateDtoV5 tenant, String token, Class<T> clazz) {
+        return requestEngine.putRequest(EndPointsClass.TENANTS, tenant,new Header("Authorization", token)).as(clazz);
     }
 
-    public int deleteTenant(String tenantId) {
-        return requestEngine.deleteRequest(EndPointsClass.TENANT, tenantId).statusCode();
+    public int deleteTenant(String tenantId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.TENANT, tenantId, null, new Header("Authorization", token)).statusCode();
     }
 
-    public List<TenantResponseV4> getTenantsList() {
-        return requestEngine.getRequest(EndPointsClass.TENANTS).as(ListTenantResponse.class).getTenants();
+    public List<TenantResponseV5> getTenantsList(String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANTS, new Header("Authorization", token)).as(ListTenantResponse.class).getTenants();
     }
-    public List<TenantResponseV4> getNearestTenantsList(String lat, String lon, String radius) {
-        return requestEngine.getRequest(EndPointsClass.TENANTS_NEW+"?lat="+lat+"&lon="+lon+"&radius="+radius).as(ListTenantResponse.class).getTenants();
+    public List<TenantResponseV5> getNearestTenantsList(String lat, String lon, String radius, String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANTS+"?lat="+lat+"&lon="+lon+"&radius="+radius,new Header("Authorization", token)).as(ListTenantResponse.class).getTenants();
     }
-    public <T> T getTenant(String tenantId, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.TENANT, tenantId).as(clazz);
+    public <T> T getTenant(String tenantId,String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.TENANT, tenantId,new Header("Authorization", token)).as(clazz);
     }
 
 
-    public int updateTenantAddressLongitudeAndLatitude(String tenantId, String addressId, GpsRequest gpsRequest) {
-        return requestEngine.putRequest(EndPointsClass.ADDRESS, tenantId, addressId, gpsRequest).getStatusCode();
+    public int updateTenantAddressLongitudeAndLatitude(String tenantId, String addressId, GpsRequest gpsRequest, String token) {
+        return requestEngine.putRequest(EndPointsClass.ADDRESS, tenantId, addressId, gpsRequest,new Header("Authorization", token)).getStatusCode();
     }
 
     /*
     colours part
      */
-    public List<TenantColourDto> getColoursForTenant(String tenantId) {
-        return requestEngine.getRequest(EndPointsClass.COLOURS, tenantId).as(TenantColours.class).getTenantColours();
+    public List<TenantColourDto> getColoursForTenant(String tenantId, String token) {
+        return requestEngine.getRequest(EndPointsClass.COLOURS, tenantId,new Header("Authorization", token)).as(TenantColours.class).getTenantColours();
     }
 
     //I have to check this ability because this post request has parameters and values for them, however, we don't<>
     // have any body, that it why may be we need some special approach for that </>
-    public <T> T addColour(String tenantId, String name, String value, Class<T> clazz) {
+    public <T> T addColour(String tenantId, String name, String value, String token, Class<T> clazz) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name",name);
         paramMap.put("value",value);
-        return requestEngine.postRequestWithQueryParameters(EndPointsClass.COLOURS,tenantId, paramMap).as(clazz);
+        return requestEngine.postRequestWithQueryParameters(EndPointsClass.COLOURS,tenantId, paramMap,new Header("Authorization", token)).as(clazz);
     }
 
     // same issue here
-    public int deleteColour(String tenantId, String name) {
+    public int deleteColour(String tenantId, String name, String token) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name",name);
-        return requestEngine.deleteRequestWithQueryParameters(EndPointsClass.COLOURS, tenantId, paramMap).getStatusCode();
+        return requestEngine.deleteRequestWithQueryParameters(EndPointsClass.COLOURS, tenantId, paramMap, new Header("Authorization", token)).getStatusCode();
     }
     /*
     resources part
     we need verify all these methods
     */
-    public <T> T getResourceForTenant(String tenantId, String name, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.RESOURCES, tenantId, name, null).as(clazz);
+    public <T> T getResourceForTenant(String tenantId, String name, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.RESOURCES, tenantId, name, null, new Header("Authorization", token)).as(clazz);
     }
-    public InputStream getResourceAsInputStreamForTenant(String tenantId, String name) {
-        return requestEngine.getRequest(EndPointsClass.RESOURCES, tenantId, name, null).asInputStream();
+    public InputStream getResourceAsInputStreamForTenant(String tenantId, String name, String token) {
+        return requestEngine.getRequest(EndPointsClass.RESOURCES, tenantId, name, null, new Header("Authorization", token)).asInputStream();
     }
-    public <T> int addResource(String tenantId, String name, File file, Class<T> clazz) {
-        return requestEngine.postRequestWithFile(EndPointsClass.RESOURCES, tenantId, name, file).getStatusCode();
+    public <T> int addResource(String tenantId, String name, File file, String token, Class<T> clazz) {
+        return requestEngine.postRequestWithFile(EndPointsClass.RESOURCES, tenantId, name, file, new Header("Authorization", token)).getStatusCode();
     }
-    public int deleteResource(String tenantId, String name) {
-        return requestEngine.deleteRequest(EndPointsClass.RESOURCES, tenantId, name).getStatusCode();
+    public int deleteResource(String tenantId, String name, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.RESOURCES, tenantId, name, new Header("Authorization", token)).getStatusCode();
     }
 
         //not working till this issue will not be fixed in Touch project
-    public <T> T createNewTenantInTouchSide(TenantRequest tenantRequest, Class<T> clazz) {
-        Response response = requestEngine.postRequest(EndPointsClass.TENANTS, tenantRequest);
+    public <T> T createNewTenantInTouchSide(TenantRequest tenantRequest, String token, Class<T> clazz) {
+        Response response = requestEngine.postRequest(EndPointsClass.TENANTS,null,null, tenantRequest,new Header("Authorization", token));
 //        response.then().assertThat().statusCode(201);
         return response.as(clazz);
     }
-    public InputStream getCommonFlowAsInputStream(String name) {
-        return requestEngine.getRequest(EndPointsClass.COMMON_FLOW, name).asInputStream();
+    public InputStream getCommonFlowAsInputStream(String name, String token) {
+        return requestEngine.getRequest(EndPointsClass.COMMON_FLOW, name, new Header("Authorization", token)).asInputStream();
     }
-    public <T> T getCommonFlow(String name, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.COMMON_FLOW, name).as(clazz);
+    public <T> T getCommonFlow(String name, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.COMMON_FLOW, name, new Header("Authorization", token)).as(clazz);
     }
-    public ListFlowResponse getAllCommonFlows() {
-        return requestEngine.getRequest(EndPointsClass.COMMON_FLOWS).as(ListFlowResponse.class);
+    public ListFlowResponse getAllCommonFlows(String token) {
+        return requestEngine.getRequest(EndPointsClass.COMMON_FLOWS,new Header("Authorization", token)).as(ListFlowResponse.class);
     }
-    public int addCommonFlow(File file) {
-        return requestEngine.postRequestWithFile(EndPointsClass.COMMON_FLOWS, null, null, file).getStatusCode();
+    public int addCommonFlow(File file, String token) {
+        return requestEngine.postRequestWithFile(EndPointsClass.COMMON_FLOWS, null, null, file, new Header("Authorization", token)).getStatusCode();
     }
-    public int deleteCommonFlow(String name) {
-        return requestEngine.deleteRequest(EndPointsClass.DELETE_COMMON_FLOW, name).getStatusCode();
+    public int deleteCommonFlow(String name, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.DELETE_COMMON_FLOW, name, null, new Header("Authorization", token)).getStatusCode();
     }
-    public InputStream getTanentFlowAsInputStream(String tenantId, String name) {
-        return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null).asInputStream();
+    public InputStream getTanentFlowAsInputStream(String tenantId, String name, String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null, new Header("Authorization", token)).asInputStream();
     }
-    public <T> T getTanentFlow(String tenantId, String name, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null).as(clazz);
+    public <T> T getTanentFlow(String tenantId, String name, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null, new Header("Authorization", token)).as(clazz);
     }
-    public ListFlowResponse getAllTanentFlows(String tenantId) {
-        return requestEngine.getRequest(EndPointsClass.TENANT_FLOWS, tenantId).as(ListFlowResponse.class);
+    public ListFlowResponse getAllTanentFlows(String tenantId, String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_FLOWS, tenantId, new Header("Authorization", token)).as(ListFlowResponse.class);
     }
-    public int addTanentFlow(String tenantId, File file) {
-        return requestEngine.postRequestWithFile(EndPointsClass.TENANT_FLOWS, tenantId, null, file).getStatusCode();
+    public int addTanentFlow(String tenantId, File file, String token) {
+        return requestEngine.postRequestWithFile(EndPointsClass.TENANT_FLOWS, tenantId, null, file, new Header("Authorization", token)).getStatusCode();
     }
-    public int deleteTanentFlow(String tenantId, String name) {
-        return requestEngine.deleteRequest(EndPointsClass.DELETE_TENANT_FLOW, tenantId, name).getStatusCode();
+    public int deleteTanentFlow(String tenantId, String name, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.DELETE_TENANT_FLOW, tenantId, name, new Header("Authorization", token)).getStatusCode();
     }
 }

@@ -1,6 +1,8 @@
 package com.touch.actions;
 
 import com.touch.models.EndPointsClass;
+import com.touch.utils.TestingEnvProperties;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 
 import java.io.File;
@@ -37,33 +39,33 @@ public class ChatsActions {
         return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId);
     }
 
-    public Response getChatRoom(String tenantId, String clientJid, String clientId) {
-        return requestEngine.getRequest(EndPointsClass.CHATS_ROOMS + "?tenantId=" + tenantId + "&clientJid=" + clientJid + "&clientId=" + clientId);
+    public Response getChatRoom(String tenantId, String clientJid, String clientId, String token) {
+        return requestEngine.getRequest(EndPointsClass.CHATS_ROOMS + "?tenantId=" + tenantId + "&clientJid=" + clientJid + "&clientId=" + clientId, new Header("Authorization", token));
     }
 
-    public Response getListOfSessions(String tenantId, String clientId) {
+    public Response getListOfSessions(String tenantId, String clientId, String token) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("tenantId", tenantId);
         parameters.put("clientId", clientId);
-        return requestEngine.getRequest(EndPointsClass.CHATS_SESSIONS + EndPointsClass.generateQueryPath(parameters));
+        return requestEngine.getRequest(EndPointsClass.CHATS_SESSIONS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
 
-    public Response addNewSession(String sessionId, String tenantId, String clientId) {
+    public Response addNewSession(String sessionId, String tenantId, String clientId, String token) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("sessionId", sessionId);
         parameters.put("tenantId", tenantId);
         parameters.put("clientId", clientId);
-       return requestEngine.postRequestWithQueryParameters(EndPointsClass.CHATS_SESSIONS, null, parameters);
+       return requestEngine.postRequestWithQueryParameters(EndPointsClass.CHATS_SESSIONS, null, parameters, new Header("Authorization", token));
 
     }
 
-    public Response deleteSession(String sessionId) {
-        return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId);
+    public Response deleteSession(String sessionId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId, null, new Header("Authorization", token));
 
     }
 
-    public Response getSession(String sessionId) {
-        return requestEngine.getRequest(EndPointsClass.CHATS_SESSION, sessionId);
+    public Response getSession(String sessionId, String token) {
+        return requestEngine.getRequest(EndPointsClass.CHATS_SESSION, sessionId, new Header("Authorization", token));
     }
 
     public Response terminateSession(String sessionId) {

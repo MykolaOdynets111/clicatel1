@@ -55,7 +55,25 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
-
+    public Response postRequestWithQueryParameters(String endpoint, String id, Map<String, Object> formParameters,Header... header) {
+        RequestSpecification rs = given(requestSpecification).queryParams(formParameters);
+        Response responce = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        if (id != null) {
+            responce = rs.post(endpoint, id);
+        } else {
+            responce = rs.post(endpoint);
+        }
+        return responce
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
     public Response postRequestWithFormParameters(String endpoint, String id1, String id2, Map<String, Object> formParameters, String contentType) {
         RequestSpecification rs = given(requestSpecification).formParams(formParameters);
         if (contentType != null)
@@ -77,7 +95,7 @@ public class RequestEngine {
                 .response();
     }
 
-    public Response postRequestWithFormParametersAndFile(String endpoint, String id, Map<String, Object> formParameters, File file) {
+    public Response postRequestWithFormParametersAndFile(String endpoint, String id, Map<String, Object> formParameters, File file ,Header... header) {
         RequestSpecification rs = null;
         if (file != null) {
             rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", file).formParams(formParameters);
@@ -85,6 +103,11 @@ public class RequestEngine {
             rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", "").formParams(formParameters);
         }
         Response responce = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
         if (id != null) {
             responce = rs.post(endpoint, id);
         } else {
@@ -172,12 +195,17 @@ public class RequestEngine {
                 .response();
     }
 
-    public Response postRequestWithFile(String endpoint, String id, String id1, File file) {
+    public Response postRequestWithFile(String endpoint, String id, String id1, File file, Header... header) {
         RequestSpecification rs = given(requestSpecification)
                 .multiPart(file)
                 .when()
                 .contentType("multipart/form-data");
         Response response = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
         if (id == null && id1 == null) {
             response = rs.post(endpoint);
         } else if (id != null) {
@@ -303,12 +331,17 @@ public class RequestEngine {
                 .response();
     }
 
-    public Response putFile(String endpoint, String id, File file) {
+    public Response putFile(String endpoint, String id, File file, Header... header) {
         RequestSpecification rs = given(requestSpecification)
                 .multiPart(file)
                 .when()
                 .contentType("multipart/form-data");
         Response response = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
 
         if (id != null) {
             response = rs.put(endpoint, id);
@@ -350,6 +383,25 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+    public Response deleteRequestWithQueryParameters(String endpoint, String id, Map<String, Object> parameters, Header... header) {
+        RequestSpecification rs = given(requestSpecification).queryParams(parameters);
+        Response responce = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        if (id != null) {
+            responce = rs.delete(endpoint, id);
+        } else {
+            responce = rs.delete(endpoint);
+        }
+        return responce
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
 
     public Response deleteRequest(String endpoint, String... id) {
         RequestSpecification rs = given(requestSpecification).header(new Header("Solution", "PLATFORM")).when();
@@ -364,6 +416,31 @@ public class RequestEngine {
             case 2:
                 response = rs.delete(endpoint, id[0], id[1]);
         }
+        return response
+                .then()
+                .log()
+                .all()
+                .extract()
+                .response();
+    }
+    public Response deleteRequest(String endpoint, String id, String id1, Header... header) {
+        RequestSpecification rs = given(requestSpecification);
+        Response response = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        if (id == null && id1 == null) {
+            response = rs.delete(endpoint);
+        } else if (id != null) {
+            if (id1 != null) {
+                response = rs.delete(endpoint, id, id1);
+            } else {
+                response = rs.delete(endpoint, id);
+            }
+        }
+
         return response
                 .then()
                 .log()

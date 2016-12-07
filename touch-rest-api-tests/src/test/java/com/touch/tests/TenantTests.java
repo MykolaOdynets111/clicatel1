@@ -20,26 +20,24 @@ public class TenantTests extends BaseTestClass {
 
     @BeforeClass
     public void beforeClass() {
-
     }
 
     @Test
     public void createNewTenant() {
         TenantRequest tenantRequest = new TenantRequest();
-        int amountTenantsBeforeAddNew = tenantActions.getTenantsList().size();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-        List<TenantResponseV4> tenantsListAfterAddNewTenant = tenantActions.getTenantsList();
+        int amountTenantsBeforeAddNew = tenantActions.getTenantsList(token).size();
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
         int amountTenantsAfterAddNew = tenantsListAfterAddNewTenant.size();
         Assert.assertEquals(amountTenantsBeforeAddNew + 1, amountTenantsAfterAddNew);
         Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
-        Assert.assertTrue(tenantRequest.equals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class)));
         //Verify get tenant request
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class), newTenant);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
         /*
         post conditions
          */
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
-        tenantsListAfterAddNewTenant = tenantActions.getTenantsList();
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
+        tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
         // Verify that tenant was deleted after test
         Assert.assertEquals(amountTenantsBeforeAddNew, tenantsListAfterAddNewTenant.size());
     }
@@ -47,9 +45,9 @@ public class TenantTests extends BaseTestClass {
     //it is not actual now, nevertheless, it will be useful in future releases
     //@Test
     public void createNewTenantFromMC2() {
-        int size1 = tenantActions.getTenantsList().size();
+        int size1 = tenantActions.getTenantsList(token).size();
         User userAndLogin = userActions.createUserAndLogin();
-        int size2 = tenantActions.getTenantsList().size();
+        int size2 = tenantActions.getTenantsList(token).size();
 
     }
 
@@ -57,42 +55,42 @@ public class TenantTests extends BaseTestClass {
     public void createNewTenantWithoutAccount() {
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(null);
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-        List<TenantResponseV4> tenantsListAfterAddNewTenant = tenantActions.getTenantsList();
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
         Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
         //get tenant from DB
-        TenantResponseV4 tenant = tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class);
+        TenantResponseV5 tenant = tenantActions.getTenant(newTenant.getId(),token, TenantResponseV5.class);
         //add generated accountId to our request to verify other fields
         tenantRequest.setAccountId(newTenant.getAccountId());
-        Assert.assertTrue(tenantRequest.equals(tenant));
+        Assert.assertEquals(tenantRequest,tenant);
         Assert.assertNotNull(tenant.getAccountId());
         //Verify get tenant request
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class), newTenant);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(),token, TenantResponseV5.class), newTenant);
 
         /*
         post conditions
          */
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
     public void addExistingTenant() {
         TenantRequest tenantRequest = new TenantRequest();
         String regExpErrorMessage = "Tenant with .* already exists";
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
         // Verify that when we add one more Tenant with same data we get errorMessage;
-        Assert.assertTrue(tenantActions.createNewTenantInTouchSide(tenantRequest, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertTrue(tenantActions.createNewTenantInTouchSide(tenantRequest,token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
         /*
         post conditions
          */
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
     public void updateTenantWithCorrectData() {
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-        Assert.assertTrue(tenantRequest.equals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class)));
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class),newTenant);
         // prepare new dada for update tenant
         TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
         tenantUpdateDto.setId(newTenant.getId());
@@ -100,13 +98,13 @@ public class TenantTests extends BaseTestClass {
         tenantUpdateDto.setContactEmail("newFake@fake.perfectial.com");
         tenantUpdateDto.setDescription("New test description");
         tenantUpdateDto.setShortDescription("testShort");
-        TenantResponseV4 updatedTenant = tenantActions.updateTenant(tenantUpdateDto, TenantResponseV4.class);
+        TenantResponseV5 updatedTenant = tenantActions.updateTenant(tenantUpdateDto, token, TenantResponseV5.class);
         Assert.assertTrue(tenantUpdateDto.getCategory().equals(tenantUpdateDto.getCategory()));
         Assert.assertTrue(tenantUpdateDto.getContactEmail().equals(tenantUpdateDto.getContactEmail()));
         Assert.assertTrue(tenantUpdateDto.getDescription().equals(tenantUpdateDto.getDescription()));
         Assert.assertTrue(tenantUpdateDto.getShortDescription().equals(tenantUpdateDto.getShortDescription()));
-        Assert.assertTrue(updatedTenant.equals(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class)));
-        Assert.assertEquals(tenantActions.deleteTenant(updatedTenant.getId()), 200);
+        Assert.assertTrue(updatedTenant.equals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class)));
+        Assert.assertEquals(tenantActions.deleteTenant(updatedTenant.getId(), token), 200);
 
     }
 
@@ -119,7 +117,7 @@ public class TenantTests extends BaseTestClass {
         tenantUpdateDto.setContactEmail("newFake@fake.perfectial.com");
         tenantUpdateDto.setDescription("New test description");
         tenantUpdateDto.setShortDescription("testShort");
-        Assert.assertTrue(tenantActions.updateTenant(tenantUpdateDto, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertTrue(tenantActions.updateTenant(tenantUpdateDto, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
 
     }
 
@@ -127,12 +125,17 @@ public class TenantTests extends BaseTestClass {
     public void deleteTenant() {
         String regExpErrorMessage = "Tenant with id .* not found";
         TenantRequest tenantRequest = new TenantRequest();
-        int amountTenantsBefore = tenantActions.getTenantsList().size();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-        Assert.assertTrue(tenantActions.getTenant(newTenant.getId(), TenantResponseV4.class).equals(newTenant));
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
-        Assert.assertEquals(amountTenantsBefore, tenantActions.getTenantsList().size());
-        Assert.assertTrue(tenantActions.getTenant(newTenant.getId(), ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        int amountTenantsBefore = tenantActions.getTenantsList(token).size();
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class),newTenant);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
+        Assert.assertEquals(amountTenantsBefore, tenantActions.getTenantsList(token).size());
+        Assert.assertTrue(tenantActions.getTenant(newTenant.getId(), token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+    }
+
+    @Test
+    public void deleteNotExistingTenant() {
+        Assert.assertEquals(tenantActions.deleteTenant("not_existing_tenant", token), 404);
     }
 
     @Test
@@ -140,12 +143,12 @@ public class TenantTests extends BaseTestClass {
         String testColourName = "test21";
         String testColourValue = "test22";
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-        tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, TenantColourDto.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
+        tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, token, TenantColourDto.class);
         //Verify that new colour was added to tenant - we use get colour request for tenant
-        Assert.assertTrue(tenantActions.getColoursForTenant(newTenant.getId()).contains(new TenantColourDto(testColourName, testColourValue)));
+        Assert.assertTrue(tenantActions.getColoursForTenant(newTenant.getId(), token).contains(new TenantColourDto(testColourName, testColourValue)));
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
@@ -154,11 +157,11 @@ public class TenantTests extends BaseTestClass {
         String testColourName = "test21";
         String testColourValue = "test888888888";
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         // verify that we get error message when we try to add to long colour
-        Assert.assertTrue(tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertTrue(tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
@@ -166,35 +169,35 @@ public class TenantTests extends BaseTestClass {
         String testColourName = "test21";
         String testColourValue = "test22";
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         //add colour
-        tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, TenantColourDto.class);
+        tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, token, TenantColourDto.class);
         //Verify that new colour was added to tenant - we use get colour request for tenant
-        Assert.assertTrue(tenantActions.getColoursForTenant(newTenant.getId()).contains(new TenantColourDto(testColourName, testColourValue)));
+        Assert.assertTrue(tenantActions.getColoursForTenant(newTenant.getId(), token).contains(new TenantColourDto(testColourName, testColourValue)));
         //delete colour
-        Assert.assertEquals(tenantActions.deleteColour(newTenant.getId(), testColourName), 200);
+        Assert.assertEquals(tenantActions.deleteColour(newTenant.getId(), testColourName, token), 200);
         //verify that deleted colour is not still available for tenant
-        Assert.assertFalse(tenantActions.getColoursForTenant(newTenant.getId()).contains(new TenantColourDto(testColourName, testColourValue)));
+        Assert.assertFalse(tenantActions.getColoursForTenant(newTenant.getId(), token).contains(new TenantColourDto(testColourName, testColourValue)));
         //delete colour in not existing tenant
-        Assert.assertEquals(tenantActions.deleteColour("notReal", testColourName), 404);
+        Assert.assertEquals(tenantActions.deleteColour("notReal", testColourName, token), 404);
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test(dataProvider = "resourcesList")
     public void addNewResourceToTenant(String filePath, String resourceName) throws IOException {
         String file = getFullPathToFile(filePath);
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         //add new resource
-        Assert.assertEquals(tenantActions.addResource(newTenant.getId(), resourceName, new File(file), Integer.class), 201);
+        Assert.assertEquals(tenantActions.addResource(newTenant.getId(), resourceName, new File(file), token, Integer.class), 201);
         //get new resource and convert it to InputStream
-        InputStream actualImage = tenantActions.getResourceAsInputStreamForTenant(newTenant.getId(), resourceName);
+        InputStream actualImage = tenantActions.getResourceAsInputStreamForTenant(newTenant.getId(), resourceName, token);
         InputStream expectedImage = new FileInputStream(new File(file));
         Assert.assertTrue(isEqualInputStreams(actualImage, expectedImage));
 
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test(dataProvider = "resourcesList")
@@ -202,54 +205,54 @@ public class TenantTests extends BaseTestClass {
         String regExpErrorMessage = "Tenant with id .* not found";
         String file = getFullPathToFile(filePath);
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         //add new resource to not exist tenant
-        Assert.assertEquals(tenantActions.addResource("000000005700325001571e3e40b80281", resourceName, new File(file), Integer.class), 404);
+        Assert.assertEquals(tenantActions.addResource("000000005700325001571e3e40b80281", resourceName, new File(file), token, Integer.class), 404);
 //        Assert.assertTrue(tenantActions.addResource(newTenant.getChatroomJid(), resourceName, new File(file), ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
 
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test(dataProvider = "resourcesList")
     public void deleteResourceFromTenant(String filePath, String resourceName) throws IOException {
         String file = getFullPathToFile(filePath);
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         //add new resource
-        Assert.assertEquals(tenantActions.addResource(newTenant.getId(), resourceName, new File(file), Integer.class), 201);
+        Assert.assertEquals(tenantActions.addResource(newTenant.getId(), resourceName, new File(file), token, Integer.class), 201);
         //delete new resource from tenant
         /*to do  - we need to add verification of message not status code*/
-        Assert.assertEquals(tenantActions.deleteResource(newTenant.getId(), resourceName), 200);
+        Assert.assertEquals(tenantActions.deleteResource(newTenant.getId(), resourceName, token), 200);
 
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
     public void deleteNotExistingResourceFromTenant() throws IOException {
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
 
         //delete not existing resource from tenant
         /*to do  - we need to add verification of message not status code*/
-        Assert.assertEquals(tenantActions.deleteResource(newTenant.getId(), "not_existing"), 200);
+        Assert.assertEquals(tenantActions.deleteResource(newTenant.getId(), "not_existing", token), 200);
 
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
     public void deleteNotExistingResourceFromNotExistingTenant() throws IOException {
         //delete not existing resource from not existing tenant
         /*to do  - we need to add verification of message not status code*/
-        Assert.assertEquals(tenantActions.deleteResource("000000005700325001571e3e40b80281", "not_existing"), 404);
+        Assert.assertEquals(tenantActions.deleteResource("000000005700325001571e3e40b80281", "not_existing", token), 404);
     }
 
     @Test(dataProvider = "changeAddress")
     public void addNewAddressesToTenant(String tenantId, String addressId, Boolean positiveTest) {
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         // add new address to tenant
         /*
 
@@ -261,11 +264,11 @@ public class TenantTests extends BaseTestClass {
             tenantId = newTenant.getId();
         if (addressId.isEmpty())
             addressId = newTenant.getTenantAddresses().get(0).getId();
-        int statusCode = tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId, addressId, gpsRequest);
+        int statusCode = tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId, addressId, gpsRequest, token);
         Assert.assertTrue((statusCode == 200) == positiveTest);
 
         //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
@@ -273,9 +276,9 @@ public class TenantTests extends BaseTestClass {
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
 // Verify that new common flow was added successful
-        Assert.assertEquals(tenantActions.addCommonFlow(new File(file)), 201);
+        Assert.assertEquals(tenantActions.addCommonFlow(new File(file), token), 201);
         boolean isCommonFlowAdded = false;
-        for (FlowResponse flow : tenantActions.getAllCommonFlows().getFlows()) {
+        for (FlowResponse flow : tenantActions.getAllCommonFlows(token).getFlows()) {
             if (flow.getFileName().equals(fileName)) {
                 isCommonFlowAdded = true;
                 break;
@@ -284,31 +287,31 @@ public class TenantTests extends BaseTestClass {
 
         Assert.assertTrue(isCommonFlowAdded);
 //        //get new common flow and convert it to InputStream
-        InputStream actualImage = tenantActions.getCommonFlowAsInputStream(fileName);
+        InputStream actualImage = tenantActions.getCommonFlowAsInputStream(fileName, token);
         InputStream expectedImage = new FileInputStream(new File(file));
         Assert.assertTrue(isEqualInputStreams(actualImage, expectedImage));
 //
 //        //delete common flow
-        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName), 200);
+        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName, token), 200);
     }
 
     @Test
     public void deleteCommonFlow() throws IOException {
 // try to delete not existing common flow
 // TODO        we need to add verification of error message when response for deleting will for each cases
-        Assert.assertEquals(tenantActions.deleteCommonFlow("notexisting"), 404);
+        Assert.assertEquals(tenantActions.deleteCommonFlow("notexisting", token), 404);
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
 //        add common flow
-        tenantActions.addCommonFlow(new File(file));
+        tenantActions.addCommonFlow(new File(file), token);
 //        //delete common flow
-        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName), 200);
+        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName, token), 200);
     }
 
     @Test
     public void getNotExistingCommonFlow() throws IOException {
         String regExpErrorMessage = "Flow with name .* not found.";
-        String actualErrorMessage = tenantActions.getCommonFlow("notexisting", ErrorMessage.class).getErrorMessage();
+        String actualErrorMessage = tenantActions.getCommonFlow("notexisting", token, ErrorMessage.class).getErrorMessage();
         Assert.assertTrue(actualErrorMessage.matches(regExpErrorMessage));
     }
 
@@ -318,15 +321,15 @@ public class TenantTests extends BaseTestClass {
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
 //        try to create tenant flow with not existing tenant
-        Assert.assertEquals(tenantActions.addTanentFlow("notExisting", new File(file)), 404);
+        Assert.assertEquals(tenantActions.addTanentFlow("notExisting", new File(file), token), 404);
 //        create tenant for test further test case
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
 // Verify that new tenant flow was added successful
         String tenantId = newTenant.getId();
-        Assert.assertEquals(tenantActions.addTanentFlow(tenantId, new File(file)), 201);
+        Assert.assertEquals(tenantActions.addTanentFlow(tenantId, new File(file), token), 201);
         boolean isCommonFlowAdded = false;
-        for (FlowResponse flow : tenantActions.getAllTanentFlows(tenantId).getFlows()) {
+        for (FlowResponse flow : tenantActions.getAllTanentFlows(tenantId, token).getFlows()) {
             if (flow.getFileName().equals(fileName)) {
                 isCommonFlowAdded = true;
                 break;
@@ -335,13 +338,13 @@ public class TenantTests extends BaseTestClass {
 
         Assert.assertTrue(isCommonFlowAdded);
 //        //get new common flow and convert it to InputStream
-        InputStream actualImage = tenantActions.getTanentFlowAsInputStream(tenantId, fileName);
+        InputStream actualImage = tenantActions.getTanentFlowAsInputStream(tenantId, fileName, token);
         InputStream expectedImage = new FileInputStream(new File(file));
         Assert.assertTrue(isEqualInputStreams(actualImage, expectedImage));
 //
 //        //delete common flow
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName), 200);
-        Assert.assertEquals(tenantActions.deleteTenant(tenantId), 200);
+        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName, token), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(tenantId, token), 200);
     }
 
     @Test
@@ -349,69 +352,69 @@ public class TenantTests extends BaseTestClass {
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         String tenantId = newTenant.getId();
 //      add tenant flow
-        tenantActions.addTanentFlow(tenantId, new File(file));
+        tenantActions.addTanentFlow(tenantId, new File(file), token);
 // try to delete not existing tenant flow with not existing tenant
 // TODO        we need to add verification of error message when response for deleting will for each cases
-        Assert.assertEquals(tenantActions.deleteTanentFlow("notexisting", "notexisting"), 404);
+        Assert.assertEquals(tenantActions.deleteTanentFlow("notexisting", "notexisting", token), 404);
 //   try to delete not existing tenant flow in existing tenant
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, "notexisting"), 404);
+        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, "notexisting", token), 404);
 //        try to delete existing tenant flow in not existing tenant
-        Assert.assertEquals(tenantActions.deleteTanentFlow("notexisting", fileName), 404);
+        Assert.assertEquals(tenantActions.deleteTanentFlow("notexisting", fileName, token), 404);
 //  try to delete tenant flow from tenant without any flows
         tenantRequest = new TenantRequest();
-        TenantResponseV4 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenant2.getId(), fileName), 404);
+        TenantResponseV5 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
+        Assert.assertEquals(tenantActions.deleteTanentFlow(tenant2.getId(), fileName, token), 404);
 
 //     delete tenant flow
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName), 200);
-        Assert.assertEquals(tenantActions.deleteTenant(tenantId), 200);
-        Assert.assertEquals(tenantActions.deleteTenant(tenant2.getId()), 200);
+        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName, token), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(tenantId, token), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(tenant2.getId(), token), 200);
     }
 
 
     @Test
     public void getNotExistingTenantFlow() throws IOException {
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         String teantId = tenant2.getId();
         String notExistingFlow = "notexisting";
         String regExpErrorMessage = "Flow with name " + notExistingFlow + ", tenant id " + teantId + " not found.";
-        Assert.assertTrue(tenantActions.getTanentFlow(teantId, notExistingFlow, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
-        Assert.assertEquals(tenantActions.deleteTenant(teantId), 200);
+        Assert.assertTrue(tenantActions.getTanentFlow(teantId, notExistingFlow, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertEquals(tenantActions.deleteTenant(teantId, token), 200);
     }
 
     @Test
     public void getNearestTenants() throws IOException {
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV4 tenant1 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 tenant1 = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         tenantRequest = new TenantRequest();
-        TenantResponseV4 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, TenantResponseV4.class);
+        TenantResponseV5 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         String tenantId1 = tenant1.getId();
         String tenantId2 = tenant2.getId();
         GpsRequest gpsRequest1 = new GpsRequest(60f, 60f);
         GpsRequest gpsRequest2 = new GpsRequest(70f, 70f);
         String addressId1 = tenant1.getTenantAddresses().get(0).getId();
         String addressId2 = tenant2.getTenantAddresses().get(0).getId();
-        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1);
-        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2);
-        tenant1 = tenantActions.getTenant(tenantId1,TenantResponseV4.class);
-        tenant2 = tenantActions.getTenant(tenantId2,TenantResponseV4.class);
-        List<TenantResponseV4> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000");
-        List<TenantResponseV4> newTenantsList = Arrays.asList(tenant1, tenant2);
+        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1, token);
+        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2, token);
+        TenantResponseV5 ten1 = tenantActions.getTenant(tenantId1, token, TenantResponseV5.class);
+        TenantResponseV5  ten2 = tenantActions.getTenant(tenantId2, token, TenantResponseV5.class);
+        List<TenantResponseV5> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000", token);
+        List<TenantResponseV5> newTenantsList = Arrays.asList(ten1, ten2);
         Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenets are not in nearest tenants list");
-        Assert.assertEquals(tenantActions.deleteTenant(tenantId1), 200);
-        Assert.assertEquals(tenantActions.deleteTenant(tenantId2), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(tenantId1, token), 200);
+        Assert.assertEquals(tenantActions.deleteTenant(tenantId2, token), 200);
     }
 
     @AfterClass
     public void afterClass() {
-        List<TenantResponseV4> tenantsList = tenantActions.getTenantsList();
-        for (TenantResponseV4 tenant : tenantsList) {
+        List<TenantResponseV5> tenantsList = tenantActions.getTenantsList(token);
+        for (TenantResponseV5 tenant : tenantsList) {
             if (tenant.getTenantOrgName().contains("Test") || tenant.getTenantOrgName().contains("test"))
-                tenantActions.deleteTenant(tenant.getId());
+                tenantActions.deleteTenant(tenant.getId(), token);
         }
     }
 

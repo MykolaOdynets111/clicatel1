@@ -46,7 +46,6 @@ public class IntegrationTests extends BaseTestClass {
     public void doMC2LoginTestForMC2() {
         Response loginResponse = integrationActions.callGivenAction(env, "doMC2Login", "--context_param parameters={\"password\": \""+password+"\", \"email\": \""+login+"\"}");
         Assert.assertEquals(loginResponse.getStatusCode(), 200);
-        String s = loginResponse.asString();
         response = loginResponse.as(IntegrationUserLoginMC2Response.class);
         Assert.assertTrue(response.getResponseJson().getToken()!=null&&!response.getResponseJson().getToken().equals("null"),"Token == null");
     }

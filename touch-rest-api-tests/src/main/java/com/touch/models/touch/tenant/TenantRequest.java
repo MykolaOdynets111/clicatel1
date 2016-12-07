@@ -2,6 +2,7 @@ package com.touch.models.touch.tenant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
@@ -58,7 +59,7 @@ public class TenantRequest {
     @JsonProperty("tenantAddresses")
     private List<TenantAddress> tenantAddresses = new ArrayList<>();
     @JsonProperty("mc2AccountRequest")
-    private Mc2AccountRequest mc2AccountRequest;
+    private MC2AccountRequest mc2AccountRequest;
 
     /**
      * No args constructor for use in serialization
@@ -79,10 +80,10 @@ public class TenantRequest {
         this.tenantFaqs = new ArrayList<>();
         this.tenantColours = new ArrayList<>();
         tenantColours.add(new TenantColour());
-        this.mc2AccountRequest = new Mc2AccountRequest();
+        this.mc2AccountRequest = new MC2AccountRequest();
     }
 
-    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, Mc2AccountRequest mc2AccountRequest) {
+    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, MC2AccountRequest mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
@@ -377,7 +378,7 @@ public class TenantRequest {
      * @return The mc2AccountRequest
      */
     @JsonProperty("mc2AccountRequest")
-    public Mc2AccountRequest getMc2AccountRequest() {
+    public MC2AccountRequest getMc2AccountRequest() {
         return mc2AccountRequest;
     }
 
@@ -385,11 +386,11 @@ public class TenantRequest {
      * @param mc2AccountRequest The mc2AccountRequest
      */
     @JsonProperty("mc2AccountRequest")
-    public void setMc2AccountRequest(Mc2AccountRequest mc2AccountRequest) {
+    public void setMc2AccountRequest(MC2AccountRequest mc2AccountRequest) {
         this.mc2AccountRequest = mc2AccountRequest;
     }
 
-    public TenantRequest withMc2AccountRequest(Mc2AccountRequest mc2AccountRequest) {
+    public TenantRequest withMc2AccountRequest(MC2AccountRequest mc2AccountRequest) {
         this.mc2AccountRequest = mc2AccountRequest;
         return this;
     }
@@ -409,16 +410,19 @@ public class TenantRequest {
         if (other == this) {
             return true;
         }
-        if ((other instanceof TenantRequest||other instanceof TenantResponseV4) == false) {
+        if ((other instanceof TenantRequest||other instanceof TenantResponseV5) == false) {
             return false;
         }
-        if (other instanceof TenantResponseV4){
-            TenantResponseV4 rhs = ((TenantResponseV4) other);
-            return new EqualsBuilder().append(accountId, rhs.getAccountId()).append(tenantOrgName, rhs.getTenantOrgName()).
-                            append(contactEmail, rhs.getContactEmail()).append(state, rhs.getState().toString()).append(description, rhs.getDescription()).
-                            append(shortDescription, rhs.getShortDescription()).append(tenantName, rhs.getTenantJid().split("@")[0]).
-                            append(category, rhs.getCategory()).append(tenantTags, rhs.getTenantTags()).append(tenantFaqs, rhs.getTenantFaqs()).
-                            append(tenantColours, rhs.getTenantColours()).isEquals();
+
+        if (other instanceof TenantResponseV5){
+            TenantResponseV5 rhs = ((TenantResponseV5) other);
+            return Objects.equals(this.accountId, rhs.getAccountId()) &&
+                    Objects.equals(this.tenantOrgName, rhs.getTenantOrgName()) &&
+                    Objects.equals(this.contactEmail, rhs.getContactEmail()) &&
+                    Objects.equals(this.description, rhs.getDescription()) &&
+                    Objects.equals(this.shortDescription, rhs.getShortDescription()) &&
+                    Objects.equals(this.category, rhs.getCategory()) &&
+                    Objects.equals(this.sessionsCapacity, rhs.getSessionsCapacity());
 
         }
         TenantRequest rhs = ((TenantRequest) other);

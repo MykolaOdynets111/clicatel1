@@ -13,7 +13,6 @@ public class EndPointsClass {
 // TOUCH END POINTS
     //Tenants endpoint
     public final static String TENANTS =  ConfigApp.API_VERSION+"/tenants";
-    public final static String TENANTS_NEW =  "/v6/tenants";
     public final static String TENANT =  TENANTS+"/{tenantId}";
     public final static String ADDRESS =  TENANT+"/address/{addressId}";
     public final static String COLOURS =  TENANT+"/colours";

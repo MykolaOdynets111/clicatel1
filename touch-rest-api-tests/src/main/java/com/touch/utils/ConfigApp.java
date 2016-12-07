@@ -24,19 +24,19 @@ public class ConfigApp {
         switch (environment) {
             case "qa": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "qa");
-                DB_URL = String.format(DB_URL_PATTERN, "qa", "qa_mc2_touch");
+                DB_URL = String.format(DB_URL_PATTERN, "qa", "mc2_platform");
                 TestingEnvProperties.setPropertiesFile("qa.properties");
                 break;
             }
             case "dev": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "dev");
-                DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_touch");
+                DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_platform");
                 TestingEnvProperties.setPropertiesFile("dev.properties");
                 break;
             }
             case "demo": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "demo");
-                DB_URL = String.format(DB_URL_PATTERN, "qa", "demo_mc2_touch");
+                DB_URL = String.format(DB_URL_PATTERN, "qa", "demo_mc2_platform");
                 TestingEnvProperties.setPropertiesFile("demo.properties");
                 break;
             }
@@ -49,13 +49,13 @@ public class ConfigApp {
             }
             case "integration": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "integration");
-                DB_URL = String.format(DB_URL_PATTERN, "integration", "mc2_touch");
+                DB_URL = DB_URL_PATTERN_TESTING;
                 TestingEnvProperties.setPropertiesFile("qa.properties");
                 break;
             }
             case "prod": {
                 BASE_API_URL = "https://touch.clickatell.com";
-                DB_URL = String.format(DB_URL_PATTERN, "prod", "mc2_touch");
+                DB_URL = DB_URL_PATTERN_TESTING;
                 TestingEnvProperties.setPropertiesFile("prod.properties");
                 break;
             }
