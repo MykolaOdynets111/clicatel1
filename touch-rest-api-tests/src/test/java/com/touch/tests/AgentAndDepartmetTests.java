@@ -47,16 +47,10 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
+        //fetch new agent and if it exist we get if not we get error message
         AgentResponse agent = agentActions.getListOfAgents(credentials.getJid(), token, AgentResponse.class);
-//            verify that we have one more a new agent in agents list
-//        String agentId = "";
-//        for (AgentResponse agent : agentsList) {
-//            if (agent.getAgentJid().equals(credentials.getJid()))
-//                agentId = agent.getId();
-//        }
-
 //            delete agent
-        Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);
+        Assert.assertEquals(agentActions.deleteAgent(agent.getId(), token).getStatusCode(), 200);
 //        verify that agent have been deleted successful;
 //            delete tenant
         Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
@@ -98,8 +92,8 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     }
 
     @Test
-    public void getAgentsListWithNotExistingAgentId() {
-        Assert.assertTrue(agentActions.getListOfAgents(agentId, token, ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+    public void getAgentWithNotExistingJid() {
+        Assert.assertTrue(agentActions.getListOfAgents("not_existing_jid", token, ErrorMessage.class).getErrorMessage().matches("Agent with jabber id not_existing_jid not found"));
     }
 //TODO
 //    @Test
@@ -136,14 +130,8 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
-        List<AgentResponse> agentsList = agentActions.getListOfAgents( null, token, ListAgentResponse.class).getAgents();
-//            verify that we have one more a new agent in agents list
-        String jid = credentials.getJid();
-        String agentId = "";
-        for (AgentResponse agent : agentsList) {
-            if (agent.getAgentJid().equals(credentials.getJid()))
-                agentId = agent.getId();
-        }
+        AgentResponse agent = agentActions.getListOfAgents(credentials.getJid(), token, AgentResponse.class);
+String agentId = agent.getId();
 //            add new image and very that it is correct
         Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file), token).getStatusCode(), 200);
         Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId, token).asInputStream(), new FileInputStream(new File(file))));

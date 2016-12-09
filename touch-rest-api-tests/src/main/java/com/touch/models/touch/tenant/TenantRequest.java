@@ -66,7 +66,7 @@ public class TenantRequest {
      */
     public TenantRequest() {
         this.accountId = "2c9f830756e0e99f0156e13ed4ed003d";
-        this.tenantOrgName = StringUtils.generateRandomString(10) + "Test1";
+        this.tenantOrgName = StringUtils.generateRandomString(10) + "test1";
         this.contactEmail = StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
         this.state = "ACTIVE";
         this.description = StringUtils.generateRandomString(10);

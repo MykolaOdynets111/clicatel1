@@ -9,12 +9,14 @@ import com.clickatell.models.users.request.newuser.UserSignupRequest;
 import com.clickatell.models.users.request.sign_in.UserSignInRequest;
 import com.clickatell.models.users.response.getallusers.User;
 import com.clickatell.models.users.response.newuser.UserSignupResponse;
+import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.utils.MySQLConnector;
 import com.touch.utils.StringUtils;
+import com.touch.utils.TestingEnvProperties;
+import io.restassured.http.Header;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by kmakohoniuk on 10/20/2016.
@@ -68,8 +70,37 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
     }
 
     public String loginWithNewUserAndReturnToken(UserProfile userProfile){
+
         String accountId = userProfile.getAccounts().get(0).getId();
         AuthActions authActions = new AuthActions(this.requestEngine);
         return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), accountId)).jsonPath().getString("token");
+    }
+    public String loginAsAdminUserAndReturnToken(){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("mc2.user.admin.login"), null, null, TestingEnvProperties.getPropertyByName("mc2.user.admin.password"), null);
+        User user = new User(userSignupRequest);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        int accountIndex =0;
+        List<Account> accounts = userProfile.getAccounts();
+        for(int i=0; i<accounts.size();i++){
+            if(accounts.get(i).getName().equals("Clickatell")){
+                accountIndex=i;
+                break;
+            }
+        }
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
+    public String signUpAndLoginWitthNewUser(String accountId, String accountName, String email, String firstName, String lastName, String password){
+        UserSignupRequest userSignedUp = new UserSignupRequest(accountName, email, firstName, lastName, password, null);
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(accountId), MessageResponse.class);
+        User user = new User(userSignedUp);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), accountId)).jsonPath().getString("token");
+    }
+    public AccountInfoResponse getAccountInfo(String accountId, String token){
+            return requestEngine.getRequest(com.clickatell.models.EndPointsClass.ADMIN_ACCOUNT,accountId, new Header("Authorization", token)).as(AccountInfoResponse.class);
     }
 }

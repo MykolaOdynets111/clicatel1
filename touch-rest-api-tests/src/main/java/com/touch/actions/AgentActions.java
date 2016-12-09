@@ -19,9 +19,9 @@ public class AgentActions {
         this.requestEngine = requestEngine;
     }
 
-    public <T> T getListOfAgents(String jabberId, String token, Class<T> clazz) {
+    public <T> T getListOfAgents(String jid, String token, Class<T> clazz) {
         HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("jabberId",jabberId);
+        parameters.put("jid",jid);
         return requestEngine.getRequest(EndPointsClass.AGENTS+EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token)).as(clazz);
     }
     public <T> T getCredentials(String token,Class<T> clazz) {

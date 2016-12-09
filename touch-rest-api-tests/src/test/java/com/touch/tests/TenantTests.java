@@ -2,6 +2,7 @@ package com.touch.tests;
 
 import com.clickatell.models.users.response.getallusers.User;
 import com.touch.models.ErrorMessage;
+import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.models.touch.tenant.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -55,6 +56,10 @@ String token;
     @Test
     public void createNewTenantWithoutAccount() {
         TenantRequest tenantRequest = new TenantRequest();
+        String email = tenantRequest.getMc2AccountRequest().getEmail();
+        String firstName = tenantRequest.getMc2AccountRequest().getFirstName();
+        String lastName = tenantRequest.getMc2AccountRequest().getLastName();
+        String password = tenantRequest.getMc2AccountRequest().getPassword();
         tenantRequest.setAccountId(null);
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
         List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
@@ -67,6 +72,13 @@ String token;
         Assert.assertNotNull(tenant.getAccountId());
         //Verify get tenant request
         Assert.assertEquals(tenantActions.getTenant(newTenant.getId(),token, TenantResponseV5.class), newTenant);
+        //activate new user in mc2
+        userActions.signUpAndLoginWitthNewUser(newTenant.getAccountId(), newTenant.getTenantOrgName(), email, firstName, lastName, password);
+        // get admin token
+        String mc2AdminToken = userActions.loginAsAdminUserAndReturnToken();
+        // get account in mc2 and verify that information is correct 
+        AccountInfoResponse accountInfo = userActions.getAccountInfo(newTenant.getAccountId(), mc2AdminToken);
+        Assert.assertEquals(accountInfo,new AccountInfoResponse(newTenant.getTenantOrgName(),"ACTIVE" , newTenant.getAccountId(), null));
 
         /*
         post conditions
