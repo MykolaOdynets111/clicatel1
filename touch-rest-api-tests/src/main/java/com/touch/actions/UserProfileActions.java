@@ -60,13 +60,13 @@ public class UserProfileActions {
         return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILES, new Header("Authorization", token)).as(clazz);
     }
     public int deleteUserProfile(String userProfileId, String token){
-        return  requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE, userProfileId, null, new Header("Authorization", token)).getStatusCode();
+        return  requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE, userProfileId,  new Header("Authorization", token)).getStatusCode();
     }
     public int updateUserProfileImage(String profileId, File file, String token) {
         return requestEngine.putFile(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId,file, new Header("Authorization", token)).getStatusCode();
     }
     public int deleteUserProfileImage(String profileId, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId,null, new Header("Authorization", token)).getStatusCode();
+        return requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE_IMAGE,profileId, new Header("Authorization", token)).getStatusCode();
     }
     private String getFullPathToFile(String pathToFile) {
         return UserProfileActions.class.getClassLoader().getResource(pathToFile).getPath();

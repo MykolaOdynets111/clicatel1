@@ -31,8 +31,8 @@ public class ChatsActions {
         return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.CHATS_ATTACHMENTS, null, formParameters, file);
     }
 
-    public int deleteAttachment(String attachmentId) {
-        return requestEngine.deleteRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId).getStatusCode();
+    public int deleteAttachment(String attachmentId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId,  new Header("Authorization", token)).getStatusCode();
     }
 
     public Response getAttachment(String attachmentId) {
@@ -60,7 +60,7 @@ public class ChatsActions {
     }
 
     public Response deleteSession(String sessionId, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId, null, new Header("Authorization", token));
+        return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId,  new Header("Authorization", token));
 
     }
 

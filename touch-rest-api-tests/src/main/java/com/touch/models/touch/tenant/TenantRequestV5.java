@@ -92,13 +92,13 @@ public class TenantRequestV5 {
     private Integer sessionsCapacity = null;
 
     @SerializedName("tenantFaqs")
-    private List<TenantFaqDto> tenantFaqs = new ArrayList<TenantFaqDto>();
+    private List<TenantFaqRequest> tenantFaqs = new ArrayList<TenantFaqRequest>();
 
     @SerializedName("tenantColours")
-    private List<TenantColourDto> tenantColours = new ArrayList<TenantColourDto>();
+    private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
 
     @SerializedName("tenantAddresses")
-    private List<AddressDtoV3> tenantAddresses = new ArrayList<AddressDtoV3>();
+    private List<AddressRequest> tenantAddresses = new ArrayList<AddressRequest>();
 
     @SerializedName("mc2AccountRequest")
     private Mc2AccountRequest mc2AccountRequest = null;
@@ -115,14 +115,14 @@ public class TenantRequestV5 {
         this.tenantTags = new ArrayList<>();
         this.sessionsCapacity = 5;
         this.tenantAddresses = new ArrayList<>();
-        tenantAddresses.add(new AddressDtoV3());
+        tenantAddresses.add(new AddressRequest());
         this.tenantFaqs = new ArrayList<>();
         this.tenantColours = new ArrayList<>();
-        tenantColours.add(new TenantColourDto());
+        tenantColours.add(new TenantColour());
         this.mc2AccountRequest = new Mc2AccountRequest();
     }
 
-    public TenantRequestV5(String accountId, String tenantOrgName, String contactEmail, StateEnum state, String description, String shortDescription, String tenantName, String category, List<String> tenantTags, Integer sessionsCapacity, List<TenantFaqDto> tenantFaqs, List<TenantColourDto> tenantColours, List<AddressDtoV3> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
+    public TenantRequestV5(String accountId, String tenantOrgName, String contactEmail, StateEnum state, String description, String shortDescription, String tenantName, String category, List<String> tenantTags, Integer sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantColour> tenantColours, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
@@ -334,12 +334,12 @@ public class TenantRequestV5 {
         this.sessionsCapacity = sessionsCapacity;
     }
 
-    public TenantRequestV5 tenantFaqs(List<TenantFaqDto> tenantFaqs) {
+    public TenantRequestV5 tenantFaqs(List<TenantFaqRequest> tenantFaqs) {
         this.tenantFaqs = tenantFaqs;
         return this;
     }
 
-    public TenantRequestV5 addTenantFaqsItem(TenantFaqDto tenantFaqsItem) {
+    public TenantRequestV5 addTenantFaqsItem(TenantFaqRequest tenantFaqsItem) {
         this.tenantFaqs.add(tenantFaqsItem);
         return this;
     }
@@ -350,20 +350,20 @@ public class TenantRequestV5 {
      * @return tenantFaqs
      **/
     @ApiModelProperty(example = "null", value = "")
-    public List<TenantFaqDto> getTenantFaqs() {
+    public List<TenantFaqRequest> getTenantFaqs() {
         return tenantFaqs;
     }
 
-    public void setTenantFaqs(List<TenantFaqDto> tenantFaqs) {
+    public void setTenantFaqs(List<TenantFaqRequest> tenantFaqs) {
         this.tenantFaqs = tenantFaqs;
     }
 
-    public TenantRequestV5 tenantColours(List<TenantColourDto> tenantColours) {
+    public TenantRequestV5 tenantColours(List<TenantColour> tenantColours) {
         this.tenantColours = tenantColours;
         return this;
     }
 
-    public TenantRequestV5 addTenantColoursItem(TenantColourDto tenantColoursItem) {
+    public TenantRequestV5 addTenantColoursItem(TenantColour tenantColoursItem) {
         this.tenantColours.add(tenantColoursItem);
         return this;
     }
@@ -374,20 +374,20 @@ public class TenantRequestV5 {
      * @return tenantColours
      **/
     @ApiModelProperty(example = "null", value = "")
-    public List<TenantColourDto> getTenantColours() {
+    public List<TenantColour> getTenantColours() {
         return tenantColours;
     }
 
-    public void setTenantColours(List<TenantColourDto> tenantColours) {
+    public void setTenantColours(List<TenantColour> tenantColours) {
         this.tenantColours = tenantColours;
     }
 
-    public TenantRequestV5 tenantAddresses(List<AddressDtoV3> tenantAddresses) {
+    public TenantRequestV5 tenantAddresses(List<AddressRequest> tenantAddresses) {
         this.tenantAddresses = tenantAddresses;
         return this;
     }
 
-    public TenantRequestV5 addTenantAddressesItem(AddressDtoV3 tenantAddressesItem) {
+    public TenantRequestV5 addTenantAddressesItem(AddressRequest tenantAddressesItem) {
         this.tenantAddresses.add(tenantAddressesItem);
         return this;
     }
@@ -398,11 +398,11 @@ public class TenantRequestV5 {
      * @return tenantAddresses
      **/
     @ApiModelProperty(example = "null", value = "")
-    public List<AddressDtoV3> getTenantAddresses() {
+    public List<AddressRequest> getTenantAddresses() {
         return tenantAddresses;
     }
 
-    public void setTenantAddresses(List<AddressDtoV3> tenantAddresses) {
+    public void setTenantAddresses(List<AddressRequest> tenantAddresses) {
         this.tenantAddresses = tenantAddresses;
     }
 

@@ -4,6 +4,7 @@ import com.touch.models.EndPointsClass;
 import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.department.ListDepartmentResponse;
+import io.restassured.http.Header;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -50,8 +51,8 @@ public class DepartmentActions {
         return requestEngine.putRequest(path, id).getStatusCode();
     }
 
-    public int deleteDepartment(String departmentId) {
-        return requestEngine.deleteRequest(EndPointsClass.DEPARTMENT, departmentId).getStatusCode();
+    public int deleteDepartment(String departmentId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.DEPARTMENT, departmentId, new Header("Authorization", token)).getStatusCode();
     }
 
     public int putAgentInDepartment(String departmentId, String agentId) {

@@ -39,9 +39,9 @@ public class AgentActions {
         return  requestEngine.putFile(EndPointsClass.AGENT_IMAGE, agentId, file, new Header("Authorization", token));
     }
     public Response deleteAgent(String agentId, String token){
-        return  requestEngine.deleteRequest(EndPointsClass.AGENT, agentId, null, new Header("Authorization", token));
+        return  requestEngine.deleteRequest(EndPointsClass.AGENT, agentId,  new Header("Authorization", token));
     }
     public Response deleteAgentImage(String agentId, String token){
-        return  requestEngine.deleteRequest(EndPointsClass.AGENT_IMAGE, agentId, null, new Header("Authorization", token));
+        return  requestEngine.deleteRequest(EndPointsClass.AGENT_IMAGE, agentId,  new Header("Authorization", token));
     }
 }

@@ -27,31 +27,43 @@ package com.touch.models.touch.tenant;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * AddressPhoneDtoV2
+ * AddressPhoneEntity
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-12-06T14:49:12.583Z")
-public class AddressPhoneDtoV2 {
+@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-12-14T07:50:07.337Z")
+public class AddressPhoneEntity {
+  @SerializedName("id")
+  private String id = null;
+
   @SerializedName("phone")
   private String phone = null;
 
-  public AddressPhoneDtoV2 phone(String phone) {
+  public AddressPhoneEntity id(String id) {
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public AddressPhoneEntity phone(String phone) {
     this.phone = phone;
     return this;
   }
 
-  public AddressPhoneDtoV2(String phone) {
-    this.phone = phone;
-  }
-
-  public AddressPhoneDtoV2() {
-    this.phone = "111";
-  }
-
-  /**
+   /**
    * Get phone
    * @return phone
   **/
@@ -73,21 +85,23 @@ public class AddressPhoneDtoV2 {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AddressPhoneDtoV2 addressPhoneDtoV2 = (AddressPhoneDtoV2) o;
-    return Objects.equals(this.phone, addressPhoneDtoV2.phone);
+    AddressPhoneEntity addressPhoneEntity = (AddressPhoneEntity) o;
+    return Objects.equals(this.id, addressPhoneEntity.id) &&
+        Objects.equals(this.phone, addressPhoneEntity.phone);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(phone);
+    return Objects.hash(id, phone);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AddressPhoneDtoV2 {\n");
+    sb.append("class AddressPhoneEntity {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
     sb.append("}");
     return sb.toString();

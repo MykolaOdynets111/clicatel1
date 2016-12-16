@@ -53,11 +53,11 @@ public class TenantRequest {
     @JsonProperty("sessionsCapacity")
     private int sessionsCapacity;
     @JsonProperty("tenantFaqs")
-    private List<TenantFaq> tenantFaqs = new ArrayList<TenantFaq>();
+    private List<TenantFaqRequest> tenantFaqs = new ArrayList<TenantFaqRequest>();
     @JsonProperty("tenantColours")
     private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
     @JsonProperty("tenantAddresses")
-    private List<TenantAddress> tenantAddresses = new ArrayList<>();
+    private List<AddressRequest> tenantAddresses = new ArrayList<>();
     @JsonProperty("mc2AccountRequest")
     private Mc2AccountRequest mc2AccountRequest;
 
@@ -75,15 +75,14 @@ public class TenantRequest {
         this.category = "Banking";
         this.tenantTags = new ArrayList<>();
         this.sessionsCapacity = 5;
-        this.tenantAddresses = new ArrayList<>();
-        tenantAddresses.add(new TenantAddress());
+        this.tenantAddresses.add(new AddressRequest());
         this.tenantFaqs = new ArrayList<>();
         this.tenantColours = new ArrayList<>();
         tenantColours.add(new TenantColour());
         this.mc2AccountRequest = new Mc2AccountRequest();
     }
 
-    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaq> tenantFaqs, List<TenantColour> tenantColours, List<TenantAddress> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
+    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantColour> tenantColours, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
@@ -315,7 +314,7 @@ public class TenantRequest {
      * @return The tenantFaqs
      */
     @JsonProperty("tenantFaqs")
-    public List<TenantFaq> getTenantFaqs() {
+    public List<TenantFaqRequest> getTenantFaqs() {
         return tenantFaqs;
     }
 
@@ -323,11 +322,11 @@ public class TenantRequest {
      * @param tenantFaqs The tenantFaqs
      */
     @JsonProperty("tenantFaqs")
-    public void setTenantFaqs(List<TenantFaq> tenantFaqs) {
+    public void setTenantFaqs(List<TenantFaqRequest> tenantFaqs) {
         this.tenantFaqs = tenantFaqs;
     }
 
-    public TenantRequest withTenantFaqs(List<TenantFaq> tenantFaqs) {
+    public TenantRequest withTenantFaqs(List<TenantFaqRequest> tenantFaqs) {
         this.tenantFaqs = tenantFaqs;
         return this;
     }
@@ -357,7 +356,7 @@ public class TenantRequest {
      * @return The tenantAddresses
      */
     @JsonProperty("tenantAddresses")
-    public List<TenantAddress> getTenantAddresses() {
+    public List<AddressRequest> getTenantAddresses() {
         return tenantAddresses;
     }
 
@@ -365,11 +364,11 @@ public class TenantRequest {
      * @param tenantAddresses The tenantAddresses
      */
     @JsonProperty("tenantAddresses")
-    public void setTenantAddresses(List<TenantAddress> tenantAddresses) {
+    public void setTenantAddresses(List<AddressRequest> tenantAddresses) {
         this.tenantAddresses = tenantAddresses;
     }
 
-    public TenantRequest withTenantAddresses(List<TenantAddress> tenantAddresses) {
+    public TenantRequest withTenantAddresses(List<AddressRequest> tenantAddresses) {
         this.tenantAddresses = tenantAddresses;
         return this;
     }

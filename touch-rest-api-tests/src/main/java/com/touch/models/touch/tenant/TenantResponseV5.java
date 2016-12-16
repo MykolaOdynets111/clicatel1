@@ -67,10 +67,10 @@ public class TenantResponseV5 {
   private Integer sessionsCapacity = null;
 
   @SerializedName("tenantFaqs")
-  private List<TenantFaqDto> tenantFaqs = new ArrayList<TenantFaqDto>();
+  private List<TenantFaqResponse> tenantFaqs = new ArrayList<TenantFaqResponse>();
 
   @SerializedName("tenantColours")
-  private List<TenantColourDto> tenantColours = new ArrayList<TenantColourDto>();
+  private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
 
   @SerializedName("tenantAddresses")
   private List<AddressResponse> tenantAddresses = new ArrayList<AddressResponse>();
@@ -269,12 +269,12 @@ public class TenantResponseV5 {
     this.sessionsCapacity = sessionsCapacity;
   }
 
-  public TenantResponseV5 tenantFaqs(List<TenantFaqDto> tenantFaqs) {
+  public TenantResponseV5 tenantFaqs(List<TenantFaqResponse> tenantFaqs) {
     this.tenantFaqs = tenantFaqs;
     return this;
   }
 
-  public TenantResponseV5 addTenantFaqsItem(TenantFaqDto tenantFaqsItem) {
+  public TenantResponseV5 addTenantFaqsItem(TenantFaqResponse tenantFaqsItem) {
     this.tenantFaqs.add(tenantFaqsItem);
     return this;
   }
@@ -284,20 +284,20 @@ public class TenantResponseV5 {
    * @return tenantFaqs
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<TenantFaqDto> getTenantFaqs() {
+  public List<TenantFaqResponse> getTenantFaqs() {
     return tenantFaqs;
   }
 
-  public void setTenantFaqs(List<TenantFaqDto> tenantFaqs) {
+  public void setTenantFaqs(List<TenantFaqResponse> tenantFaqs) {
     this.tenantFaqs = tenantFaqs;
   }
 
-  public TenantResponseV5 tenantColours(List<TenantColourDto> tenantColours) {
+  public TenantResponseV5 tenantColours(List<TenantColour> tenantColours) {
     this.tenantColours = tenantColours;
     return this;
   }
 
-  public TenantResponseV5 addTenantColoursItem(TenantColourDto tenantColoursItem) {
+  public TenantResponseV5 addTenantColoursItem(TenantColour tenantColoursItem) {
     this.tenantColours.add(tenantColoursItem);
     return this;
   }
@@ -307,11 +307,11 @@ public class TenantResponseV5 {
    * @return tenantColours
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<TenantColourDto> getTenantColours() {
+  public List<TenantColour> getTenantColours() {
     return tenantColours;
   }
 
-  public void setTenantColours(List<TenantColourDto> tenantColours) {
+  public void setTenantColours(List<TenantColour> tenantColours) {
     this.tenantColours = tenantColours;
   }
 

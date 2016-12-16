@@ -2,7 +2,6 @@ package com.touch.actions;
 
 import com.touch.models.EndPointsClass;
 import com.touch.models.touch.tenant.*;
-import com.touch.utils.TestingEnvProperties;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 
@@ -22,12 +21,12 @@ public class TenantActions {
         this.requestEngine = requestEngine;
     }
 
-    public <T> T updateTenant(TenantUpdateDtoV5 tenant, String token, Class<T> clazz) {
-        return requestEngine.putRequest(EndPointsClass.TENANTS, tenant,new Header("Authorization", token)).as(clazz);
+    public <T> T updateTenant(String tenantId, TenantUpdateDtoV5 tenant, String token, Class<T> clazz) {
+        return requestEngine.putRequest(EndPointsClass.TENANT, tenantId, null, tenant,new Header("Authorization", token)).as(clazz);
     }
 
     public int deleteTenant(String tenantId, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.TENANT, tenantId, null, new Header("Authorization", token)).statusCode();
+        return requestEngine.deleteRequest(EndPointsClass.TENANT, tenantId, new Header("Authorization", token)).statusCode();
     }
 
     public List<TenantResponseV5> getTenantsList(String token) {
@@ -39,17 +38,35 @@ public class TenantActions {
     public <T> T getTenant(String tenantId,String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.TENANT, tenantId,new Header("Authorization", token)).as(clazz);
     }
-
-
+    public <T> T getBussinesHoursFromAddress(String tenantId, String addressId, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId,null, new Header("Authorization", token)).as(clazz);
+    }
+    public <T> T getBussinesHoursFromTenant(String tenantId, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_TENANT, tenantId, new Header("Authorization", token)).as(clazz);
+    }
+    public <T> T getFAQs(String tenantId, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_FAQS, tenantId, new Header("Authorization", token)).as(clazz);
+    }
+    public <T> T getTAGs(String tenantId, String token, Class<T> clazz) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_TAGS, tenantId, new Header("Authorization", token)).as(clazz);
+    }
     public int updateTenantAddressLongitudeAndLatitude(String tenantId, String addressId, GpsRequest gpsRequest, String token) {
         return requestEngine.putRequest(EndPointsClass.ADDRESS, tenantId, addressId, gpsRequest,new Header("Authorization", token)).getStatusCode();
     }
-
+    public int updateBussinesHoursForAddress(String tenantId, String addressId, String hoursId, BusinessHourRequest bussinesHours, String token) {
+        return requestEngine.putRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_ADDRESS, tenantId, addressId, hoursId, bussinesHours,new Header("Authorization", token)).getStatusCode();
+    }
+    public int updateBussinesHoursForTenant(String tenantId, String hoursId, BusinessHourRequest bussinesHours, String token) {
+        return requestEngine.putRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_TENANT, tenantId, hoursId, bussinesHours,new Header("Authorization", token)).getStatusCode();
+    }
+    public int updateFAQ(String tenantId, String faqId, TenantFaqRequest faqBody, String token) {
+        return requestEngine.putRequest(EndPointsClass.TENANT_FAQ, tenantId, faqId, faqBody,new Header("Authorization", token)).getStatusCode();
+    }
     /*
     colours part
      */
-    public List<TenantColourDto> getColoursForTenant(String tenantId, String token) {
-        return requestEngine.getRequest(EndPointsClass.COLOURS, tenantId,new Header("Authorization", token)).as(TenantColours.class).getTenantColours();
+    public List<TenantColour> getColoursForTenant(String tenantId, String token) {
+        return requestEngine.getRequest(EndPointsClass.COLOURS, tenantId,new Header("Authorization", token)).as(ListTenantColours.class).getTenantColours();
     }
 
     //I have to check this ability because this post request has parameters and values for them, however, we don't<>
@@ -60,7 +77,18 @@ public class TenantActions {
         paramMap.put("value",value);
         return requestEngine.postRequestWithQueryParameters(EndPointsClass.COLOURS,tenantId, paramMap,new Header("Authorization", token)).as(clazz);
     }
-
+    public Response addBussinesHoursForAddress(String tenantId, String addressId, BusinessHourRequest bussinesHours, String token) {
+        return requestEngine.postRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId, bussinesHours,new Header("Authorization", token),new Header("Accept", "application/json"));
+    }
+    public <T> T addBussinesHoursForTenant(String tenantId, BusinessHourRequest bussinesHours, String token, Class<T> clazz) {
+        return requestEngine.postRequest(EndPointsClass.BUSINESS_HOURS_FOR_TENANT, tenantId, null, bussinesHours,new Header("Authorization", token)).as(clazz);
+    }
+    public Response addFAQs(String tenantId, TenantFaqRequest faqs, String token) {
+        return requestEngine.postRequest(EndPointsClass.TENANT_FAQS, tenantId, null, faqs,new Header("Authorization", token));
+    }
+    public <T> T addTag(String tenantId, String tag, String token, Class<T> clazz) {
+        return requestEngine.postRequest(EndPointsClass.TENANT_TAGS, tenantId, null, "{\"tag\": \""+tag+"\"}",new Header("Authorization", token)).as(clazz);
+    }
     // same issue here
     public int deleteColour(String tenantId, String name, String token) {
         HashMap<String, Object> paramMap = new HashMap<>();
@@ -103,7 +131,7 @@ public class TenantActions {
         return requestEngine.postRequestWithFile(EndPointsClass.COMMON_FLOWS, null, null, file, new Header("Authorization", token)).getStatusCode();
     }
     public int deleteCommonFlow(String name, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.DELETE_COMMON_FLOW, name, null, new Header("Authorization", token)).getStatusCode();
+        return requestEngine.deleteRequest(EndPointsClass.DELETE_COMMON_FLOW, name, new Header("Authorization", token)).getStatusCode();
     }
     public InputStream getTanentFlowAsInputStream(String tenantId, String name, String token) {
         return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null, new Header("Authorization", token)).asInputStream();
@@ -119,5 +147,17 @@ public class TenantActions {
     }
     public int deleteTanentFlow(String tenantId, String name, String token) {
         return requestEngine.deleteRequest(EndPointsClass.DELETE_TENANT_FLOW, tenantId, name, new Header("Authorization", token)).getStatusCode();
+    }
+    public int deleteBussinesHoursForAddress(String tenantId, String addressId, String hoursId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_ADDRESS, tenantId, addressId, hoursId, new Header("Authorization", token)).getStatusCode();
+    }
+    public int deleteBussinesHoursForTenant(String tenantId, String hoursId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_TENANT, tenantId, hoursId, new Header("Authorization", token)).getStatusCode();
+    }
+    public int deleteFAQs(String tenantId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.TENANT_FAQS, tenantId, new Header("Authorization", token)).getStatusCode();
+    }
+    public int deleteTAGs(String tenantId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.TENANT_TAGS, tenantId, new Header("Authorization", token)).getStatusCode();
     }
 }

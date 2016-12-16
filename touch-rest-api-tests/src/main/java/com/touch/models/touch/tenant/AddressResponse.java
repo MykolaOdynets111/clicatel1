@@ -59,13 +59,29 @@ public class AddressResponse {
   private Float lng = null;
 
   @SerializedName("businessHours")
-  private List<AddressBusinessHourDto> businessHours = new ArrayList<AddressBusinessHourDto>();
+  private List<AddressBusinessHourResponse> businessHours = new ArrayList<AddressBusinessHourResponse>();
 
   @SerializedName("phones")
   private List<Phone> phones = new ArrayList<Phone>();
 
   @SerializedName("id")
   private String id = null;
+
+  public AddressResponse() {
+  }
+
+  public AddressResponse(String firstAddressLine, String secondAddressLine, String city, String stateOrProvince, String postalCode, Float lat, Float lng, List<AddressBusinessHourResponse> businessHours, List<Phone> phones, String id) {
+    this.firstAddressLine = firstAddressLine;
+    this.secondAddressLine = secondAddressLine;
+    this.city = city;
+    this.stateOrProvince = stateOrProvince;
+    this.postalCode = postalCode;
+    this.lat = lat;
+    this.lng = lng;
+    this.businessHours = businessHours;
+    this.phones = phones;
+    this.id = id;
+  }
 
   public AddressResponse firstAddressLine(String firstAddressLine) {
     this.firstAddressLine = firstAddressLine;
@@ -193,12 +209,12 @@ public class AddressResponse {
     this.lng = lng;
   }
 
-  public AddressResponse businessHours(List<AddressBusinessHourDto> businessHours) {
+  public AddressResponse businessHours(List<AddressBusinessHourResponse> businessHours) {
     this.businessHours = businessHours;
     return this;
   }
 
-  public AddressResponse addBusinessHoursItem(AddressBusinessHourDto businessHoursItem) {
+  public AddressResponse addBusinessHoursItem(AddressBusinessHourResponse businessHoursItem) {
     this.businessHours.add(businessHoursItem);
     return this;
   }
@@ -208,11 +224,11 @@ public class AddressResponse {
    * @return businessHours
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<AddressBusinessHourDto> getBusinessHours() {
+  public List<AddressBusinessHourResponse> getBusinessHours() {
     return businessHours;
   }
 
-  public void setBusinessHours(List<AddressBusinessHourDto> businessHours) {
+  public void setBusinessHours(List<AddressBusinessHourResponse> businessHours) {
     this.businessHours = businessHours;
   }
 

@@ -330,6 +330,42 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+    public Response putRequest(String endpoint, String id, String id1, String id2, Object body, Header... header) {
+        RequestSpecification rs = given(requestSpecification);
+        if (body != null && !(body instanceof String)) {
+            try {
+                rs.body(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(body));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else if (body instanceof String) {
+            rs.body(body);
+        }
+        Response response = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        if (id == null && id1 == null) {
+            response = rs.put(endpoint);
+        } else if (id != null) {
+            if (id2 != null) {
+                response = rs.put(endpoint, id, id1, id2);
+            } else if(id1 != null) {
+                response = rs.put(endpoint, id, id1);
+            }else{
+
+                response = rs.put(endpoint, id);
+            }
+        }
+        return response
+                .then()
+                .log()
+                .all()
+                .extract()
+                .response();
+    }
 
     public Response putFile(String endpoint, String id, File file, Header... header) {
         RequestSpecification rs = given(requestSpecification)
@@ -438,6 +474,56 @@ public class RequestEngine {
                 response = rs.delete(endpoint, id, id1);
             } else {
                 response = rs.delete(endpoint, id);
+            }
+        }
+
+        return response
+                .then()
+                .log()
+                .all()
+                .extract()
+                .response();
+    }
+    public Response deleteRequest(String endpoint, String id, Header... header) {
+        RequestSpecification rs = given(requestSpecification);
+        Response response = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        if (id == null ) {
+            response = rs.delete(endpoint);
+        } else {
+
+                response = rs.delete(endpoint, id);
+        }
+
+        return response
+                .then()
+                .log()
+                .all()
+                .extract()
+                .response();
+    }
+    public Response deleteRequest(String endpoint, String id, String id1, String id2,Header... header) {
+        RequestSpecification rs = given(requestSpecification);
+        Response response = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        if (id == null && id1 == null&& id2 == null) {
+            response = rs.put(endpoint);
+        } else if (id != null) {
+            if (id2 != null) {
+                response = rs.put(endpoint, id, id1, id2);
+            } else if(id1 != null) {
+                response = rs.put(endpoint, id, id1);
+            }else{
+
+                response = rs.put(endpoint, id);
             }
         }
 
