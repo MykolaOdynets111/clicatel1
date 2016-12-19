@@ -79,7 +79,7 @@ String token;
         //activate new user in mc2
         userActions.signUpAndLoginWitthNewUser(newTenant.getAccountId(), newTenant.getTenantOrgName(), email, firstName, lastName, password);
         // get admin token
-        String mc2AdminToken = userActions.loginAsAdminUserAndReturnToken();
+        String mc2AdminToken = userActions.loginAsMC2AdminUserAndReturnToken();
         // get account in mc2 and verify that information is correct 
         AccountInfoResponse accountInfo = userActions.getAccountInfo(newTenant.getAccountId(), mc2AdminToken);
         Assert.assertEquals(accountInfo,new AccountInfoResponse(newTenant.getTenantOrgName(),"ACTIVE" , newTenant.getAccountId(), null));
@@ -426,17 +426,17 @@ String token;
         Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(),addressId, token, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().contains(addBussinesHoursResponce.as(AddressBusinessHourResponse.class)));
 
     }
-//    @Test
-//    public void getBussinesHoursForAddressByNotExistingTenant(){
-//        String addressId = testTenant.getTenantAddresses().get(0).getId();
-//        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress("not_existing",addressId, token, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
-//
-//    }
-//    @Test
-//    public void getBussinesHoursForAddressByNotExistingAddress(){
-//        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(),"not_existing", token, ErrorMessage.class).getErrorMessage().matches("Address with id .* not found"));
-//
-//    }
+    @Test
+    public void getBussinesHoursForAddressByNotExistingTenant(){
+        String addressId = testTenant.getTenantAddresses().get(0).getId();
+        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress("not_existing",addressId, token, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
+
+    }
+    @Test
+    public void getBussinesHoursForAddressByNotExistingAddress(){
+        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(),"not_existing", token, ErrorMessage.class).getErrorMessage().matches("Address with id .* not found"));
+
+    }
 //    @Test
 //    public void updateBussinesHoursForAddress(){
 //
