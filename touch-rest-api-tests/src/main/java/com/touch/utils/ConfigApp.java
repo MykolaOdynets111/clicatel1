@@ -50,7 +50,7 @@ public class ConfigApp {
             case "integration": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "integration");
                 DB_URL = DB_URL_PATTERN_TESTING;
-                TestingEnvProperties.setPropertiesFile("qa.properties");
+                TestingEnvProperties.setPropertiesFile("integration.properties");
                 break;
             }
             case "prod": {
