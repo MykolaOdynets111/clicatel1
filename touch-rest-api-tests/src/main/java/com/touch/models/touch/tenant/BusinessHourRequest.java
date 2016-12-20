@@ -157,8 +157,14 @@ public class BusinessHourRequest {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (o == null || (o instanceof BusinessHourRequest||o instanceof BusinessHourResponse) == false) {
       return false;
+    }
+    if(o instanceof BusinessHourResponse){
+      BusinessHourResponse businessHour = (BusinessHourResponse) o;
+      return Objects.equals(this.dayOfWeek, businessHour.getDayOfWeek()) &&
+              Objects.equals(this.startWorkTime, businessHour.getStartWorkTime()) &&
+              Objects.equals(this.endWorkTime, businessHour.getEndWorkTime());
     }
     BusinessHourRequest businessHourRequestV1 = (BusinessHourRequest) o;
     return Objects.equals(this.dayOfWeek, businessHourRequestV1.dayOfWeek) &&

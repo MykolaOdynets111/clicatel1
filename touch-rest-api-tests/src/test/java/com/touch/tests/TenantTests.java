@@ -2,6 +2,8 @@ package com.touch.tests;
 
 import com.clickatell.models.users.response.getallusers.User;
 import com.touch.models.ErrorMessage;
+import com.touch.models.Message;
+import com.touch.models.MessageResponse;
 import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.models.touch.tenant.*;
 import io.restassured.response.Response;
@@ -19,12 +21,13 @@ import java.util.List;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class TenantTests extends BaseTestClass {
-String token;
+    String token;
     TenantResponseV5 testTenant;
+
     @BeforeClass
     public void beforeClass() {
         token = getToken();
-        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(),token, TenantResponseV5.class);
+        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
     }
 
 
@@ -32,7 +35,7 @@ String token;
     public void createNewTenant() {
         TenantRequest tenantRequest = new TenantRequest();
         int amountTenantsBeforeAddNew = tenantActions.getTenantsList(token).size();
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
         int amountTenantsAfterAddNew = tenantsListAfterAddNewTenant.size();
         Assert.assertEquals(amountTenantsBeforeAddNew + 1, amountTenantsAfterAddNew);
@@ -65,24 +68,24 @@ String token;
         String lastName = tenantRequest.getMc2AccountRequest().getLastName();
         String password = tenantRequest.getMc2AccountRequest().getPassword();
         tenantRequest.setAccountId(null);
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
         Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
         //get tenant from DB
-        TenantResponseV5 tenant = tenantActions.getTenant(newTenant.getId(),token, TenantResponseV5.class);
+        TenantResponseV5 tenant = tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class);
         //add generated accountId to our request to verify other fields
         tenantRequest.setAccountId(newTenant.getAccountId());
-        Assert.assertEquals(tenantRequest,tenant);
+        Assert.assertEquals(tenantRequest, tenant);
         Assert.assertNotNull(tenant.getAccountId());
         //Verify get tenant request
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(),token, TenantResponseV5.class), newTenant);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
         //activate new user in mc2
         userActions.signUpAndLoginWitthNewUser(newTenant.getAccountId(), newTenant.getTenantOrgName(), email, firstName, lastName, password);
         // get admin token
         String mc2AdminToken = userActions.loginAsMC2AdminUserAndReturnToken();
         // get account in mc2 and verify that information is correct 
         AccountInfoResponse accountInfo = userActions.getAccountInfo(newTenant.getAccountId(), mc2AdminToken);
-        Assert.assertEquals(accountInfo,new AccountInfoResponse(newTenant.getTenantOrgName(),"ACTIVE" , newTenant.getAccountId(), null));
+        Assert.assertEquals(accountInfo, new AccountInfoResponse(newTenant.getTenantOrgName(), "ACTIVE", newTenant.getAccountId(), null));
 
         /*
         post conditions
@@ -94,9 +97,9 @@ String token;
     public void addExistingTenant() {
         TenantRequest tenantRequest = new TenantRequest();
         String regExpErrorMessage = "Tenant with .* already exists";
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         // Verify that when we add one more Tenant with same data we get errorMessage;
-        Assert.assertTrue(tenantActions.createNewTenantInTouchSide(tenantRequest,token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertTrue(tenantActions.createNewTenantInTouchSide(tenantRequest, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
         /*
         post conditions
          */
@@ -106,8 +109,8 @@ String token;
     @Test
     public void updateTenantWithCorrectData() {
         TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class),newTenant);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
         // prepare new dada for update tenant
         TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
         TenantUpdateDtoV5 updatedTenant = tenantActions.updateTenant(newTenant.getId(), tenantUpdateDto, token, TenantUpdateDtoV5.class);
@@ -123,7 +126,7 @@ String token;
     public void updateNotExistingTenantWithCorrectData() {
         String regExpErrorMessage = "Tenant with id .* not found";
         TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
-        Assert.assertTrue(tenantActions.updateTenant("not_existing_tenant",tenantUpdateDto, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertTrue(tenantActions.updateTenant("not_existing_tenant", tenantUpdateDto, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
 
     }
 
@@ -133,7 +136,7 @@ String token;
         TenantRequest tenantRequest = new TenantRequest();
         int amountTenantsBefore = tenantActions.getTenantsList(token).size();
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class),newTenant);
+        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
         Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
         Assert.assertEquals(amountTenantsBefore, tenantActions.getTenantsList(token).size());
         Assert.assertTrue(tenantActions.getTenant(newTenant.getId(), token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
@@ -407,7 +410,7 @@ String token;
         tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1, token);
         tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2, token);
         TenantResponseV5 ten1 = tenantActions.getTenant(tenantId1, token, TenantResponseV5.class);
-        TenantResponseV5  ten2 = tenantActions.getTenant(tenantId2, token, TenantResponseV5.class);
+        TenantResponseV5 ten2 = tenantActions.getTenant(tenantId2, token, TenantResponseV5.class);
         List<TenantResponseV5> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000", token);
         List<TenantResponseV5> newTenantsList = Arrays.asList(ten1, ten2);
         Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenets are not in nearest tenants list");
@@ -416,90 +419,208 @@ String token;
     }
 
     @Test
-    public void addBussinesHoursForAddress(){
+    public void addBussinesHoursForAddress() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "10:00", "19:00");
 //        add new bussines hours
         Response addBussinesHoursResponce = tenantActions.addBussinesHoursForAddress(testTenant.getId(), addressId, businessHourRequest, token);
 //        Verify status code and that new Bussines hours have been added to tenant address
-        Assert.assertEquals(addBussinesHoursResponce.getStatusCode(),200);
-        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(),addressId, token, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().contains(addBussinesHoursResponce.as(AddressBusinessHourResponse.class)));
+        Assert.assertEquals(addBussinesHoursResponce.getStatusCode(), 200);
+        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(), addressId, token, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().contains(addBussinesHoursResponce.as(AddressBusinessHourResponse.class)));
 
     }
+
     @Test
-    public void getBussinesHoursForAddressByNotExistingTenant(){
+    public void getBussinesHoursForAddressByNotExistingTenant() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress("not_existing",addressId, token, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
+        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress("not_existing", addressId, token, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
+
+    }
+
+    @Test
+    public void getBussinesHoursForAddressByNotExistingAddress() {
+        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(), "not_existing", token, ErrorMessage.class).getErrorMessage().matches("Address with id .* not found"));
+
+    }
+
+    @Test
+    public void updateBussinesHoursForAddress() {
+        String addressId = testTenant.getTenantAddresses().get(0).getId();
+        String hoursId = testTenant.getTenantAddresses().get(0).getBusinessHours().get(0).getId();
+        AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
+        businessHourRequest.setStartWorkTime("11:00");
+        Response response = tenantActions.updateBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, businessHourRequest, token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(businessHourRequest.getStartWorkTime(), response.as(AddressBusinessHourResponse.class).getStartWorkTime());
+
+
+    }
+
+    @Test
+    public void deleteBussinesHoursForAddress() {
+        String addressId = testTenant.getTenantAddresses().get(0).getId();
+        String hoursId = testTenant.getTenantAddresses().get(0).getBusinessHours().get(0).getId();
+        Assert.assertEquals(tenantActions.deleteBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, token), 200);
+
+    }
+
+    @Test(dataProvider = "businessHoursFalseCombination")
+    public void updateBussinesHoursForAddressWithWrongData(String tenantId, String addressId, String hoursId, int status, String message) {
+        if (tenantId.equals("correct")) {
+            tenantId = testTenant.getId();
+        }
+        if (addressId.equals("correct")) {
+            addressId = testTenant.getTenantAddresses().get(0).getId();
+        }
+        if (hoursId.equals("correct")) {
+            hoursId = testTenant.getTenantAddresses().get(0).getBusinessHours().get(0).getId();
+        }
+        AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
+        Response response = tenantActions.updateBussinesHoursForAddress(tenantId, addressId, hoursId, businessHourRequest, token);
+        Assert.assertEquals(response.getStatusCode(), status);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches(message));
+
+    }
+
+    //    TODO do we really need so huge response ???
+    @Test
+    public void addBussinesHoursForTenant() {
+        //        TODO add test cases when this functionality will be fixed
+        Assert.assertTrue(false);
+        BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "10:00", "19:00");
+        Response response = tenantActions.addBussinesHoursForTenant(testTenant.getId(), businessHourRequest, token);
+        BusinessHourResponse as = response.as(BusinessHourResponse.class);
+        Assert.assertEquals(response.getStatusCode(), 201);
+        Assert.assertEquals(businessHourRequest, response.as(BusinessHourResponse.class));
+    }
+
+    @Test
+    public void updateBussinesHoursForTenant() {
+        //        TODO add test cases when this functionality will be fixed
+        Assert.assertTrue(false);
+        BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
+
+        Response response = tenantActions.updateBussinesHoursForTenant(testTenant.getId(), testTenant.getTenantAddresses().get(0).getBusinessHours().get(0).getId(), businessHourRequest, token);
+        BusinessHourResponse as = response.as(BusinessHourResponse.class);
+        Assert.assertEquals(response.getStatusCode(), 201);
+        Assert.assertEquals(businessHourRequest, response.as(BusinessHourResponse.class));
+
+
+    }
+
+    //
+    @Test
+    public void updateBussinesHoursForTenantWithWrongData(){
+//        TODO add test cases when this functionality will be fixed
+        Assert.assertTrue(false);
 
     }
     @Test
-    public void getBussinesHoursForAddressByNotExistingAddress(){
-        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(),"not_existing", token, ErrorMessage.class).getErrorMessage().matches("Address with id .* not found"));
+    public void addFaqs() {
+        TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
+        // add new faq
+        Response response = tenantActions.addFAQs(testTenant.getId(), faq, token);
+//        verify that we get correct status code and new faq was added to tenant
+        Assert.assertEquals(response.getStatusCode(), 201);
+        Assert.assertEquals(faq, response.as(TenantFaqResponse.class));
+        Assert.assertTrue(tenantActions.getFAQs(testTenant.getId(), token, ListTenantFaqsResponse.class).getFaqs().contains(response.as(TenantFaqResponse.class)));
+    }
+
+    @Test
+    public void addAndDeleteAndUpdateFaqsWithWrongData() {
+        TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
+//        add new faq with not existing tenantId
+        Response response = tenantActions.addFAQs("not_existing", faq, token);
+        Assert.assertEquals(response.getStatusCode(), 404);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+//
+        TenantFaqResponse faqResponse = tenantActions.addFAQs(testTenant.getId(), faq, token).as(TenantFaqResponse.class);
+        String faqId = faqResponse.getId();
+//        delete faqs with not existing tenantId
+        response = tenantActions.deleteFAQs("not_existing", faqId, token);
+        Assert.assertEquals(response.getStatusCode(), 404);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+//        update faqs with not existing tenantId
+        response = tenantActions.updateFAQ("not_existing", faqId, faq, token);
+        Assert.assertEquals(response.getStatusCode(), 404);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+//        update faqs with not existing faqsId
+        response = tenantActions.updateFAQ(testTenant.getId(), "not_existing", faq, token);
+        Assert.assertEquals(response.getStatusCode(), 500);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("No value present"));
+    }
+
+    @Test
+    public void updateFaqs() {
+        TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
+        TenantFaqResponse faqResponse = tenantActions.addFAQs(testTenant.getId(), faq, token).as(TenantFaqResponse.class);
+        String faqId = faqResponse.getId();
+        faq = new TenantFaqRequest("test question1", "test answer1");
+//        update faq
+        Response response = tenantActions.updateFAQ(testTenant.getId(), faqId, faq, token);
+        Assert.assertEquals(response.getStatusCode(), 202);
+        Assert.assertEquals(faq, response.as(TenantFaqResponse.class));
+        Assert.assertTrue(tenantActions.getFAQs(testTenant.getId(), token, ListTenantFaqsResponse.class).getFaqs().contains(response.as(TenantFaqResponse.class)));
+
 
     }
-//    @Test
-//    public void updateBussinesHoursForAddress(){
-//
-//
-//    }
-//    @Test
-//    public void deleteBussinesHoursForAddress(){
-//
-//    }
-//    @Test
-//    public void updateBussinesHoursForAddressWithWrongData(){
-//
-//    }
-//    @Test
-//    public void addBussinesHoursForTenant(){
-//
-//    }
-//    @Test
-//    public void updateBussinesHoursForTenant(){
-//
-//    }
-//
-//    @Test
-//    public void updateBussinesHoursForTenantWithWrongData(){
-//
-//    }
-//    @Test
-//    public void addFaqs(){
-//        TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
-//        // add new faq
-//        Response response = tenantActions.addFAQs(testTenant.getId(), faq, token);
-////        verify that we get correct status code and new faq was added to tenant
-//        Assert.assertEquals(response.getStatusCode(),201);
-//        Assert.assertTrue(tenantActions.getFAQs(testTenant.getId(),token, TenantFaqRequest.class).equals(""));
-//
-//
-//
-//
-//    }
-//    @Test
-//    public void addAndDeleteAndUpdateFaqsWithWrongData(){
-//
-//    }
-//    @Test
-//    public void updateFaqs(){
-//
-//    }
-//    @Test
-//    public void deleteFaqs(){
-//
-//    }
-//    @Test
-//    public void addTags(){
-//
-//    }
-//    @Test
-//    public void deleteTags(){
-//
-//    }
-//    @Test
-//    public void deleteAndUpdateTagsWithWrongData(){
-//
-//    }
+
+    @Test
+    public void deleteFaqs() {
+        TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
+        TenantFaqResponse faqResponse = tenantActions.addFAQs(testTenant.getId(), faq, token).as(TenantFaqResponse.class);
+        String faqId = faqResponse.getId();
+//        delete faqs
+        Response response = tenantActions.deleteFAQs(testTenant.getId(), faqId, token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+
+    }
+
+    @Test
+    public void addTags() {
+        TenantTagRequest tenantTagRequest = new TenantTagRequest("test");
+//        add tag
+        Response response = tenantActions.addTag(testTenant.getId(), tenantTagRequest, token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.as(Message.class).getMessage(), "Tag added.");
+//        get available tag for test tenant
+        Response getTagsResponse = tenantActions.getTAGs(testTenant.getId(), token);
+        Assert.assertEquals(getTagsResponse.getStatusCode(), 200);
+        Assert.assertTrue(getTagsResponse.as(ListTenantTagsResponse.class).getTenantTags().contains(tenantTagRequest.getTag()));
+
+    }
+
+    @Test
+    public void deleteTags() {
+        TenantTagRequest tenantTagRequest = new TenantTagRequest("test");
+//        add tag
+        tenantActions.addTag(testTenant.getId(), tenantTagRequest, token);
+//        delete tag
+        Response deleteResponse = tenantActions.deleteTAGs(testTenant.getId(), tenantTagRequest.getTag(), token);
+        Assert.assertEquals(deleteResponse.getStatusCode(), 200);
+        Assert.assertEquals(deleteResponse.as(Message.class).getMessage(), "Tag removed.");
+        Response getTagsResponse = tenantActions.getTAGs(testTenant.getId(), token);
+        Assert.assertFalse(getTagsResponse.as(ListTenantTagsResponse.class).getTenantTags().contains(tenantTagRequest.getTag()));
+
+    }
+
+    @Test
+    public void deleteTagsWithWrongData() {
+        TenantTagRequest tenantTagRequest = new TenantTagRequest("test");
+        //        add tag
+        tenantActions.addTag(testTenant.getId(), tenantTagRequest, token);
+        //        delete tag for not existing tenant
+        Response response = tenantActions.deleteTAGs("not_existing", tenantTagRequest.getTag(), token);
+        Assert.assertEquals(response.getStatusCode(), 404);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+        //        delete not existing tag for test tenant
+        response = tenantActions.deleteTAGs(testTenant.getId(), "not_existing", token);
+        Assert.assertEquals(response.getStatusCode(), 404);
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+
+    }
+
+
 
     @AfterClass
     public void afterClass() {
@@ -555,5 +676,19 @@ String token;
                 {"0000000057003250015703cc06cc1111", "0000000057003250015703cc06cc1111", false}
         };
     }
+
+    @DataProvider
+    private static Object[][] businessHoursFalseCombination() {
+        return new Object[][]{
+                {"", "", "", 404, "HTTP 404 Not Found"},
+                {"correct", "", "", 404, "HTTP 404 Not Found"},
+                {"correct", "correct", "", 405, "HTTP 405 Method Not Allowed"},
+                {"correct", "", "correct", 404, "HTTP 404 Not Found"},
+                {"correct", "test", "correct", 404, "Address with id .+ not found"},
+                {"correct", "test", "test", 404, "Address with id .+ not found"},
+                {"test", "test", "test", 404, "Tenant with id test .+ found"}
+        };
+    }
+
 
 }

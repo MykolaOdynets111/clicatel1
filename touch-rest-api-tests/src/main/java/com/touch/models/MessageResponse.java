@@ -1,8 +1,6 @@
 package com.touch.models;
 
-/**
- * Created by sbryt on 6/7/2016.
- */
+
 public class MessageResponse {
     protected String message = "";
     protected int statusCode;

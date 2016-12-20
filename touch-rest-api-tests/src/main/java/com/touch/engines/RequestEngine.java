@@ -515,15 +515,15 @@ public class RequestEngine {
             rs.headers(new Headers(header));
         }
         if (id == null && id1 == null&& id2 == null) {
-            response = rs.put(endpoint);
+            response = rs.delete(endpoint);
         } else if (id != null) {
             if (id2 != null) {
-                response = rs.put(endpoint, id, id1, id2);
+                response = rs.delete(endpoint, id, id1, id2);
             } else if(id1 != null) {
-                response = rs.put(endpoint, id, id1);
+                response = rs.delete(endpoint, id, id1);
             }else{
 
-                response = rs.put(endpoint, id);
+                response = rs.delete(endpoint, id);
             }
         }
 

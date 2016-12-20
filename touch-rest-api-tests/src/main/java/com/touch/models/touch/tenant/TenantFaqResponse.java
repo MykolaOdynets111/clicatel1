@@ -32,7 +32,6 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * TenantFaqResponse
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-12-14T10:04:47.705Z")
 public class TenantFaqResponse {
   @SerializedName("id")
   private String id = null;
@@ -43,8 +42,6 @@ public class TenantFaqResponse {
   @SerializedName("answer")
   private String answer = null;
 
-  @SerializedName("tenantId")
-  private String tenantId = null;
 
   public TenantFaqResponse id(String id) {
     this.id = id;
@@ -100,23 +97,6 @@ public class TenantFaqResponse {
     this.answer = answer;
   }
 
-  public TenantFaqResponse tenantId(String tenantId) {
-    this.tenantId = tenantId;
-    return this;
-  }
-
-   /**
-   * Get tenantId
-   * @return tenantId
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
 
 
   @Override
@@ -124,19 +104,24 @@ public class TenantFaqResponse {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (o == null || (o instanceof TenantFaqRequest||o instanceof TenantFaqResponse) == false) {
       return false;
+    }
+    if (o instanceof TenantFaqRequest){
+      TenantFaqRequest rhs = ((TenantFaqRequest) o);
+      return Objects.equals(this.question, rhs.getQuestion()) &&
+              Objects.equals(this.answer, rhs.getAnswer());
+
     }
     TenantFaqResponse tenantFaqResponse = (TenantFaqResponse) o;
     return Objects.equals(this.id, tenantFaqResponse.id) &&
         Objects.equals(this.question, tenantFaqResponse.question) &&
-        Objects.equals(this.answer, tenantFaqResponse.answer) &&
-        Objects.equals(this.tenantId, tenantFaqResponse.tenantId);
+        Objects.equals(this.answer, tenantFaqResponse.answer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, question, answer, tenantId);
+    return Objects.hash(id, question, answer);
   }
 
 
@@ -148,7 +133,6 @@ public class TenantFaqResponse {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    question: ").append(toIndentedString(question)).append("\n");
     sb.append("    answer: ").append(toIndentedString(answer)).append("\n");
-    sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

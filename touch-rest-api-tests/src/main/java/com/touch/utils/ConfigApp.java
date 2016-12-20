@@ -49,7 +49,7 @@ public class ConfigApp {
             }
             case "integration": {
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "integration");
-                DB_URL = DB_URL_PATTERN_TESTING;
+                DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_platform");
                 TestingEnvProperties.setPropertiesFile("integration.properties");
                 break;
             }

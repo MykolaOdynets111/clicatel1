@@ -183,8 +183,14 @@ public class BusinessHourResponse {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (o == null || (o instanceof BusinessHourRequest||o instanceof BusinessHourResponse) == false) {
       return false;
+    }
+    if(o instanceof BusinessHourRequest){
+      BusinessHourRequest businessHour = (BusinessHourRequest) o;
+      return Objects.equals(this.dayOfWeek, businessHour.getDayOfWeek()) &&
+              Objects.equals(this.startWorkTime, businessHour.getStartWorkTime()) &&
+              Objects.equals(this.endWorkTime, businessHour.getEndWorkTime());
     }
     BusinessHourResponse businessHourResponse = (BusinessHourResponse) o;
     return Objects.equals(this.id, businessHourResponse.id) &&

@@ -93,8 +93,14 @@ public class TenantFaqRequest {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (o == null || (o instanceof TenantFaqRequest||o instanceof TenantFaqResponse) == false) {
       return false;
+    }
+    if (o instanceof TenantFaqResponse){
+      TenantFaqResponse rhs = ((TenantFaqResponse) o);
+      return Objects.equals(this.question, rhs.getQuestion()) &&
+              Objects.equals(this.answer, rhs.getAnswer());
+
     }
     TenantFaqRequest tenantFaqRequest = (TenantFaqRequest) o;
     return Objects.equals(this.question, tenantFaqRequest.question) &&
