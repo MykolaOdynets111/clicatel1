@@ -425,21 +425,13 @@ public class TenantResponseV5 {
 
     }
     TenantResponseV5 tenantResponseV5 = (TenantResponseV5) o;
-    return Objects.equals(this.accountId, tenantResponseV5.accountId) &&
-        Objects.equals(this.tenantOrgName, tenantResponseV5.tenantOrgName) &&
-        Objects.equals(this.contactEmail, tenantResponseV5.contactEmail) &&
-        Objects.equals(this.state, tenantResponseV5.state) &&
-        Objects.equals(this.description, tenantResponseV5.description) &&
-        Objects.equals(this.shortDescription, tenantResponseV5.shortDescription) &&
-        Objects.equals(this.category, tenantResponseV5.category) &&
-        Objects.equals(this.tenantTags, tenantResponseV5.tenantTags) &&
-        Objects.equals(this.sessionsCapacity, tenantResponseV5.sessionsCapacity) &&
-        Objects.equals(this.tenantFaqs, tenantResponseV5.tenantFaqs) &&
-        Objects.equals(this.tenantProperties, tenantResponseV5.tenantProperties) &&
-        Objects.equals(this.tenantAddresses, tenantResponseV5.tenantAddresses) &&
-        Objects.equals(this.id, tenantResponseV5.id) &&
-        Objects.equals(this.tenantResources, tenantResponseV5.tenantResources) &&
-        Objects.equals(this.departments, tenantResponseV5.departments);
+    return Objects.equals(this.accountId, tenantResponseV5.getAccountId()) &&
+            Objects.equals(this.tenantOrgName, tenantResponseV5.getTenantOrgName()) &&
+            Objects.equals(this.contactEmail, tenantResponseV5.getContactEmail()) &&
+            Objects.equals(this.description, tenantResponseV5.getDescription()) &&
+            Objects.equals(this.shortDescription, tenantResponseV5.getShortDescription()) &&
+            Objects.equals(this.category, tenantResponseV5.getCategory()) &&
+            Objects.equals(this.sessionsCapacity, tenantResponseV5.getSessionsCapacity());
   }
 
   @Override
