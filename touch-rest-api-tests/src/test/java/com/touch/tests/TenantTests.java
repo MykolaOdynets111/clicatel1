@@ -60,10 +60,11 @@ public class TenantTests extends BaseTestClass {
     }
 
     @Test
-    public void getTenantListSortedByAccountId() {
+    public void getTenantListFilteredByAccountId() {
         Response response = tenantActions.getTenantsList(testTenant.getAccountId(), token);
+        TenantResponseV5 tenant = testTenant;
         Assert.assertEquals(response.getStatusCode(),200);
-        Assert.assertTrue(response.as(ListTenantResponse.class).getTenants().contains(testTenant));
+        Assert.assertTrue(response.as(ListTenantResponse.class).getTenants().contains(tenant));
     }
 
     @Test
