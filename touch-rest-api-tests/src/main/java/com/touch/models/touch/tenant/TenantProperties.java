@@ -1,21 +1,13 @@
 
 package com.touch.models.touch.tenant;
 
-import javax.annotation.Generated;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "name",
-    "value"
-})
-public class TenantColour {
+
+public class TenantProperties {
 
     @JsonProperty("name")
     private String name;
@@ -26,7 +18,7 @@ public class TenantColour {
      * No args constructor for use in serialization
      * 
      */
-    public TenantColour() {
+    public TenantProperties() {
         this.name = "primary";
         this.value = "075EAD";
     }
@@ -35,7 +27,7 @@ public class TenantColour {
      * @param name
      * @param value
      */
-    public TenantColour(String name, String value) {
+    public TenantProperties(String name, String value) {
         this.name = name;
         this.value = value;
     }
@@ -60,7 +52,7 @@ public class TenantColour {
         this.name = name;
     }
 
-    public TenantColour withName(String name) {
+    public TenantProperties withName(String name) {
         this.name = name;
         return this;
     }
@@ -85,7 +77,7 @@ public class TenantColour {
         this.value = value;
     }
 
-    public TenantColour withValue(String value) {
+    public TenantProperties withValue(String value) {
         this.value = value;
         return this;
     }
@@ -105,10 +97,10 @@ public class TenantColour {
         if (other == this) {
             return true;
         }
-        if ((other instanceof TenantColour) == false) {
+        if ((other instanceof TenantProperties) == false) {
             return false;
         }
-        TenantColour rhs = ((TenantColour) other);
+        TenantProperties rhs = ((TenantProperties) other);
         return new EqualsBuilder().append(name, rhs.name).append(value, rhs.value).isEquals();
     }
 

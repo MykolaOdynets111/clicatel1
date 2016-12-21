@@ -94,8 +94,8 @@ public class TenantRequestV5 {
     @SerializedName("tenantFaqs")
     private List<TenantFaqRequest> tenantFaqs = new ArrayList<TenantFaqRequest>();
 
-    @SerializedName("tenantColours")
-    private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
+    @SerializedName("tenantProperties")
+    private List<TenantProperties> tenantProperties = new ArrayList<TenantProperties>();
 
     @SerializedName("tenantAddresses")
     private List<AddressRequest> tenantAddresses = new ArrayList<AddressRequest>();
@@ -117,12 +117,12 @@ public class TenantRequestV5 {
         this.tenantAddresses = new ArrayList<>();
         tenantAddresses.add(new AddressRequest());
         this.tenantFaqs = new ArrayList<>();
-        this.tenantColours = new ArrayList<>();
-        tenantColours.add(new TenantColour());
+        this.tenantProperties = new ArrayList<>();
+        tenantProperties.add(new TenantProperties());
         this.mc2AccountRequest = new Mc2AccountRequest();
     }
 
-    public TenantRequestV5(String accountId, String tenantOrgName, String contactEmail, StateEnum state, String description, String shortDescription, String tenantName, String category, List<String> tenantTags, Integer sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantColour> tenantColours, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
+    public TenantRequestV5(String accountId, String tenantOrgName, String contactEmail, StateEnum state, String description, String shortDescription, String tenantName, String category, List<String> tenantTags, Integer sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantProperties> tenantProperties, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
@@ -134,7 +134,7 @@ public class TenantRequestV5 {
         this.tenantTags = tenantTags;
         this.sessionsCapacity = sessionsCapacity;
         this.tenantFaqs = tenantFaqs;
-        this.tenantColours = tenantColours;
+        this.tenantProperties = tenantProperties;
         this.tenantAddresses = tenantAddresses;
         this.mc2AccountRequest = Mc2AccountRequest;
     }
@@ -358,28 +358,28 @@ public class TenantRequestV5 {
         this.tenantFaqs = tenantFaqs;
     }
 
-    public TenantRequestV5 tenantColours(List<TenantColour> tenantColours) {
-        this.tenantColours = tenantColours;
+    public TenantRequestV5 tenantColours(List<TenantProperties> tenantProperties) {
+        this.tenantProperties = tenantProperties;
         return this;
     }
 
-    public TenantRequestV5 addTenantColoursItem(TenantColour tenantColoursItem) {
-        this.tenantColours.add(tenantColoursItem);
+    public TenantRequestV5 addTenantColoursItem(TenantProperties tenantColoursItem) {
+        this.tenantProperties.add(tenantColoursItem);
         return this;
     }
 
     /**
-     * Get tenantColours
+     * Get tenantProperties
      *
-     * @return tenantColours
+     * @return tenantProperties
      **/
     @ApiModelProperty(example = "null", value = "")
-    public List<TenantColour> getTenantColours() {
-        return tenantColours;
+    public List<TenantProperties> getTenantProperties() {
+        return tenantProperties;
     }
 
-    public void setTenantColours(List<TenantColour> tenantColours) {
-        this.tenantColours = tenantColours;
+    public void setTenantProperties(List<TenantProperties> tenantProperties) {
+        this.tenantProperties = tenantProperties;
     }
 
     public TenantRequestV5 tenantAddresses(List<AddressRequest> tenantAddresses) {
@@ -446,14 +446,14 @@ public class TenantRequestV5 {
                 Objects.equals(this.tenantTags, tenantRequestV5.tenantTags) &&
                 Objects.equals(this.sessionsCapacity, tenantRequestV5.sessionsCapacity) &&
                 Objects.equals(this.tenantFaqs, tenantRequestV5.tenantFaqs) &&
-                Objects.equals(this.tenantColours, tenantRequestV5.tenantColours) &&
+                Objects.equals(this.tenantProperties, tenantRequestV5.tenantProperties) &&
                 Objects.equals(this.tenantAddresses, tenantRequestV5.tenantAddresses) &&
                 Objects.equals(this.mc2AccountRequest, tenantRequestV5.mc2AccountRequest);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, tenantOrgName, contactEmail, state, description, shortDescription, tenantName, category, tenantTags, sessionsCapacity, tenantFaqs, tenantColours, tenantAddresses, mc2AccountRequest);
+        return Objects.hash(accountId, tenantOrgName, contactEmail, state, description, shortDescription, tenantName, category, tenantTags, sessionsCapacity, tenantFaqs, tenantProperties, tenantAddresses, mc2AccountRequest);
     }
 
 
@@ -473,7 +473,7 @@ public class TenantRequestV5 {
         sb.append("    tenantTags: ").append(toIndentedString(tenantTags)).append("\n");
         sb.append("    sessionsCapacity: ").append(toIndentedString(sessionsCapacity)).append("\n");
         sb.append("    tenantFaqs: ").append(toIndentedString(tenantFaqs)).append("\n");
-        sb.append("    tenantColours: ").append(toIndentedString(tenantColours)).append("\n");
+        sb.append("    tenantProperties: ").append(toIndentedString(tenantProperties)).append("\n");
         sb.append("    tenantAddresses: ").append(toIndentedString(tenantAddresses)).append("\n");
         sb.append("    mc2AccountRequest: ").append(toIndentedString(mc2AccountRequest)).append("\n");
         sb.append("}");

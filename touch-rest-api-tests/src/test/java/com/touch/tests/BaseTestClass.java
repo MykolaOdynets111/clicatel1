@@ -32,6 +32,7 @@ public class BaseTestClass {
     DepartmentActions departmentActions = new DepartmentActions(requestEngine);
     ChatsActions chatsActions = new ChatsActions(requestEngine);
     IntegrationActions integrationActions = new IntegrationActions(requestEngine);
+    AuthActions authActions= new AuthActions(requestEngine);
 
 
 

@@ -84,15 +84,23 @@ public class BusinessHourResponse {
   @SerializedName("endWorkTime")
   private LocalTime endWorkTime = null;
 
-  @SerializedName("tenantId")
-  private String tenantId = null;
 
   public BusinessHourResponse id(String id) {
     this.id = id;
     return this;
   }
 
-   /**
+  public BusinessHourResponse(String id, DayOfWeekEnum dayOfWeek, LocalTime startWorkTime, LocalTime endWorkTime) {
+    this.id = id;
+    this.dayOfWeek = dayOfWeek;
+    this.startWorkTime = startWorkTime;
+    this.endWorkTime = endWorkTime;
+  }
+
+  public BusinessHourResponse() {
+  }
+
+  /**
    * Get id
    * @return id
   **/
@@ -159,23 +167,6 @@ public class BusinessHourResponse {
     this.endWorkTime = endWorkTime;
   }
 
-  public BusinessHourResponse tenantId(String tenantId) {
-    this.tenantId = tenantId;
-    return this;
-  }
-
-   /**
-   * Get tenantId
-   * @return tenantId
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getTenantId() {
-    return tenantId;
-  }
-
-  public void setTenantId(String tenantId) {
-    this.tenantId = tenantId;
-  }
 
 
   @Override
@@ -196,13 +187,12 @@ public class BusinessHourResponse {
     return Objects.equals(this.id, businessHourResponse.id) &&
         Objects.equals(this.dayOfWeek, businessHourResponse.dayOfWeek) &&
         Objects.equals(this.startWorkTime, businessHourResponse.startWorkTime) &&
-        Objects.equals(this.endWorkTime, businessHourResponse.endWorkTime) &&
-        Objects.equals(this.tenantId, businessHourResponse.tenantId);
+        Objects.equals(this.endWorkTime, businessHourResponse.endWorkTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dayOfWeek, startWorkTime, endWorkTime, tenantId);
+    return Objects.hash(id, dayOfWeek, startWorkTime, endWorkTime);
   }
 
 
@@ -215,7 +205,6 @@ public class BusinessHourResponse {
     sb.append("    dayOfWeek: ").append(toIndentedString(dayOfWeek)).append("\n");
     sb.append("    startWorkTime: ").append(toIndentedString(startWorkTime)).append("\n");
     sb.append("    endWorkTime: ").append(toIndentedString(endWorkTime)).append("\n");
-    sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

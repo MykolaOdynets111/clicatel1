@@ -69,8 +69,8 @@ public class TenantResponseV5 {
   @SerializedName("tenantFaqs")
   private List<TenantFaqResponse> tenantFaqs = new ArrayList<TenantFaqResponse>();
 
-  @SerializedName("tenantColours")
-  private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
+  @SerializedName("tenantProperties")
+  private List<TenantProperties> tenantProperties = new ArrayList<TenantProperties>();
 
   @SerializedName("tenantAddresses")
   private List<AddressResponse> tenantAddresses = new ArrayList<AddressResponse>();
@@ -292,27 +292,27 @@ public class TenantResponseV5 {
     this.tenantFaqs = tenantFaqs;
   }
 
-  public TenantResponseV5 tenantColours(List<TenantColour> tenantColours) {
-    this.tenantColours = tenantColours;
+  public TenantResponseV5 tenantColours(List<TenantProperties> tenantProperties) {
+    this.tenantProperties = tenantProperties;
     return this;
   }
 
-  public TenantResponseV5 addTenantColoursItem(TenantColour tenantColoursItem) {
-    this.tenantColours.add(tenantColoursItem);
+  public TenantResponseV5 addTenantColoursItem(TenantProperties tenantColoursItem) {
+    this.tenantProperties.add(tenantColoursItem);
     return this;
   }
 
    /**
-   * Get tenantColours
-   * @return tenantColours
+   * Get tenantProperties
+   * @return tenantProperties
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<TenantColour> getTenantColours() {
-    return tenantColours;
+  public List<TenantProperties> getTenantProperties() {
+    return tenantProperties;
   }
 
-  public void setTenantColours(List<TenantColour> tenantColours) {
-    this.tenantColours = tenantColours;
+  public void setTenantProperties(List<TenantProperties> tenantProperties) {
+    this.tenantProperties = tenantProperties;
   }
 
   public TenantResponseV5 tenantAddresses(List<AddressResponse> tenantAddresses) {
@@ -435,7 +435,7 @@ public class TenantResponseV5 {
         Objects.equals(this.tenantTags, tenantResponseV5.tenantTags) &&
         Objects.equals(this.sessionsCapacity, tenantResponseV5.sessionsCapacity) &&
         Objects.equals(this.tenantFaqs, tenantResponseV5.tenantFaqs) &&
-        Objects.equals(this.tenantColours, tenantResponseV5.tenantColours) &&
+        Objects.equals(this.tenantProperties, tenantResponseV5.tenantProperties) &&
         Objects.equals(this.tenantAddresses, tenantResponseV5.tenantAddresses) &&
         Objects.equals(this.id, tenantResponseV5.id) &&
         Objects.equals(this.tenantResources, tenantResponseV5.tenantResources) &&
@@ -444,7 +444,7 @@ public class TenantResponseV5 {
 
   @Override
   public int hashCode() {
-    return Objects.hash(accountId, tenantOrgName, contactEmail, state, description, shortDescription, category, tenantTags, sessionsCapacity, tenantFaqs, tenantColours, tenantAddresses, id, tenantResources, departments);
+    return Objects.hash(accountId, tenantOrgName, contactEmail, state, description, shortDescription, category, tenantTags, sessionsCapacity, tenantFaqs, tenantProperties, tenantAddresses, id, tenantResources, departments);
   }
 
 
@@ -463,7 +463,7 @@ public class TenantResponseV5 {
     sb.append("    tenantTags: ").append(toIndentedString(tenantTags)).append("\n");
     sb.append("    sessionsCapacity: ").append(toIndentedString(sessionsCapacity)).append("\n");
     sb.append("    tenantFaqs: ").append(toIndentedString(tenantFaqs)).append("\n");
-    sb.append("    tenantColours: ").append(toIndentedString(tenantColours)).append("\n");
+    sb.append("    tenantProperties: ").append(toIndentedString(tenantProperties)).append("\n");
     sb.append("    tenantAddresses: ").append(toIndentedString(tenantAddresses)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    tenantResources: ").append(toIndentedString(tenantResources)).append("\n");

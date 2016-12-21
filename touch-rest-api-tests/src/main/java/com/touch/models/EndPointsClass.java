@@ -22,7 +22,7 @@ public class EndPointsClass {
     public final static String TENANT_FAQS = TENANT+"/faqs";
     public final static String TENANT_FAQ = TENANT_FAQS+"/{faq-id}";
     public final static String TENANT_TAGS = TENANT+"/tags";
-    public final static String COLOURS =  TENANT+"/colours";
+    public final static String TENANT_PROPERTIES =  TENANT+"/properties";
     public final static String RESOURCES =  TENANT+"/resources/{name}";
     public final static String COMMON_FLOWS =  TENANTS+"/common/flows";
     public final static String COMMON_FLOW =  COMMON_FLOWS+"/files/{flow-name}";
@@ -56,6 +56,9 @@ public class EndPointsClass {
     public static final String INTEGRATION = INTEGRATIONS+"/{name}";
     public static final String INTEGRATION_ARTIFACT = INTEGRATION+"/artifact";
     public static final String INTEGRATION_CALL = INTEGRATION+"/{action}/call";
+
+    //Auth endpoints
+    public static final String AUTH_TOCKEN = "/v5/auth/token";
 
 
     public static String generateQueryPath(Map<String, String> map) {

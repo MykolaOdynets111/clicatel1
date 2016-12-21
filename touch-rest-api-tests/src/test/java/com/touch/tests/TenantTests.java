@@ -3,7 +3,6 @@ package com.touch.tests;
 import com.clickatell.models.users.response.getallusers.User;
 import com.touch.models.ErrorMessage;
 import com.touch.models.Message;
-import com.touch.models.MessageResponse;
 import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.models.touch.tenant.*;
 import io.restassured.response.Response;
@@ -58,6 +57,13 @@ public class TenantTests extends BaseTestClass {
         User userAndLogin = userActions.createUserAndLogin();
         int size2 = tenantActions.getTenantsList(token).size();
 
+    }
+
+    @Test
+    public void getTenantListSortedByAccountId() {
+        Response response = tenantActions.getTenantsList(testTenant.getAccountId(), token);
+        Assert.assertEquals(response.getStatusCode(),200);
+        Assert.assertTrue(response.as(ListTenantResponse.class).getTenants().contains(testTenant));
     }
 
     @Test
@@ -148,45 +154,32 @@ public class TenantTests extends BaseTestClass {
     }
 
     @Test
-    public void addColourToTenant() {
+    public void addPropertyToTenant() {
         String testColourName = "test21";
         String testColourValue = "test22";
         TenantRequest tenantRequest = new TenantRequest();
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, token, TenantColour.class);
+        tenantActions.addProperty(newTenant.getId(), testColourName, testColourValue, token, TenantProperties.class);
         //Verify that new colour was added to tenant - we use get colour request for tenant
-        Assert.assertTrue(tenantActions.getColoursForTenant(newTenant.getId(), token).contains(new TenantColour(testColourName, testColourValue)));
+        Assert.assertTrue(tenantActions.getPropertiesForTenant(newTenant.getId(), token).contains(new TenantProperties(testColourName, testColourValue)));
         //delete tenant
         Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
 
     @Test
-    public void addColourWithTooBigLengthToTenant() {
-        String regExpErrorMessage = "could not execute statement; SQL \\[n/a\\]; nested exception is .*";
-        String testColourName = "test21";
-        String testColourValue = "test888888888";
-        TenantRequest tenantRequest = new TenantRequest();
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        // verify that we get error message when we try to add to long colour
-        Assert.assertTrue(tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
-        //delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
-    }
-
-    @Test
-    public void deleteColourToTenant() {
+    public void deletePropertyToTenant() {
         String testColourName = "test21";
         String testColourValue = "test22";
         TenantRequest tenantRequest = new TenantRequest();
         TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
         //add colour
-        tenantActions.addColour(newTenant.getId(), testColourName, testColourValue, token, TenantColour.class);
+        tenantActions.addProperty(newTenant.getId(), testColourName, testColourValue, token, TenantProperties.class);
         //Verify that new colour was added to tenant - we use get colour request for tenant
-        Assert.assertTrue(tenantActions.getColoursForTenant(newTenant.getId(), token).contains(new TenantColour(testColourName, testColourValue)));
+        Assert.assertTrue(tenantActions.getPropertiesForTenant(newTenant.getId(), token).contains(new TenantProperties(testColourName, testColourValue)));
         //delete colour
         Assert.assertEquals(tenantActions.deleteColour(newTenant.getId(), testColourName, token), 200);
         //verify that deleted colour is not still available for tenant
-        Assert.assertFalse(tenantActions.getColoursForTenant(newTenant.getId(), token).contains(new TenantColour(testColourName, testColourValue)));
+        Assert.assertFalse(tenantActions.getPropertiesForTenant(newTenant.getId(), token).contains(new TenantProperties(testColourName, testColourValue)));
         //delete colour in not existing tenant
         Assert.assertEquals(tenantActions.deleteColour("notReal", testColourName, token), 404);
         //delete tenant
@@ -452,8 +445,6 @@ public class TenantTests extends BaseTestClass {
         Response response = tenantActions.updateBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, businessHourRequest, token);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(businessHourRequest.getStartWorkTime(), response.as(AddressBusinessHourResponse.class).getStartWorkTime());
-
-
     }
 
     @Test
@@ -482,39 +473,46 @@ public class TenantTests extends BaseTestClass {
 
     }
 
-    //    TODO do we really need so huge response ???
     @Test
     public void addBussinesHoursForTenant() {
-        //        TODO add test cases when this functionality will be fixed
-        Assert.assertTrue(false);
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "10:00", "19:00");
         Response response = tenantActions.addBussinesHoursForTenant(testTenant.getId(), businessHourRequest, token);
-        BusinessHourResponse as = response.as(BusinessHourResponse.class);
         Assert.assertEquals(response.getStatusCode(), 201);
-        Assert.assertEquals(businessHourRequest, response.as(BusinessHourResponse.class));
+        Assert.assertEquals(response.as(BusinessHourDtoIdV5.class), businessHourRequest);
+        Response getBussinesHoursResponse = tenantActions.getBussinesHoursFromTenant(testTenant.getId(), token);
+        Assert.assertEquals(response.getStatusCode(), 201);
+        Assert.assertTrue(getBussinesHoursResponse.as(ListTenantBusinessHoursResponse.class).getBusinessHours().contains(businessHourRequest));
     }
 
     @Test
-    public void updateBussinesHoursForTenant() {
-        //        TODO add test cases when this functionality will be fixed
-        Assert.assertTrue(false);
+    public void updateBusinessHoursForTenant() {
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
-
-        Response response = tenantActions.updateBussinesHoursForTenant(testTenant.getId(), testTenant.getTenantAddresses().get(0).getBusinessHours().get(0).getId(), businessHourRequest, token);
-        BusinessHourResponse as = response.as(BusinessHourResponse.class);
-        Assert.assertEquals(response.getStatusCode(), 201);
-        Assert.assertEquals(businessHourRequest, response.as(BusinessHourResponse.class));
+        String hoursId = tenantActions.addBussinesHoursForTenant(testTenant.getId(), businessHourRequest, token).as(BusinessHourDtoIdV5.class).getId();
+        businessHourRequest.setStartWorkTime("13:00");
+        Response response = tenantActions.updateBussinesHoursForTenant(testTenant.getId(), hoursId, businessHourRequest, token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.as(BusinessHourDtoIdV5.class), businessHourRequest);
 
 
     }
 
     //
     @Test
-    public void updateBussinesHoursForTenantWithWrongData(){
-//        TODO add test cases when this functionality will be fixed
-        Assert.assertTrue(false);
+    public void updateBusinessHoursForTenantWithNotExistTenant() {
+        BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
+        Response response = tenantActions.updateBussinesHoursForTenant("not_exist", testTenant.getTenantAddresses().get(0).getBusinessHours().get(0).getId(), businessHourRequest, token);
+        Assert.assertEquals(response.getStatusCode(), 404);
 
     }
+
+    @Test
+    public void updateBusinessHoursForTenantWithNotExistBusinessHoursId() {
+        BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
+        Response response = tenantActions.updateBussinesHoursForTenant(testTenant.getId(), "not_exist", businessHourRequest, token);
+        Assert.assertEquals(response.getStatusCode(), 404);
+
+    }
+
     @Test
     public void addFaqs() {
         TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
@@ -616,10 +614,9 @@ public class TenantTests extends BaseTestClass {
         //        delete not existing tag for test tenant
         response = tenantActions.deleteTAGs(testTenant.getId(), "not_existing", token);
         Assert.assertEquals(response.getStatusCode(), 404);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tag .+ not found"));
 
     }
-
 
 
     @AfterClass

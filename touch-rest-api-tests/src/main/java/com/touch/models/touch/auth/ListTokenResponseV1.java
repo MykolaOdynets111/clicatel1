@@ -23,42 +23,39 @@
  */
 
 
-package com.touch.models.touch.tenant;
+package com.touch.models.touch.auth;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * ListTenantBusinessHoursResponse
- */
-public class ListTenantBusinessHoursResponse {
-  @SerializedName("businessHours")
-  private List<BusinessHourDtoIdV5> businessHours = new ArrayList<BusinessHourDtoIdV5>();
+public class ListTokenResponseV1 {
+  @SerializedName("tokens")
+  private List<TokenResponseV1> tokens = new ArrayList<TokenResponseV1>();
 
-  public ListTenantBusinessHoursResponse businessHours(List<BusinessHourDtoIdV5> businessHours) {
-    this.businessHours = businessHours;
+  public ListTokenResponseV1 tokens(List<TokenResponseV1> tokens) {
+    this.tokens = tokens;
     return this;
   }
 
-  public ListTenantBusinessHoursResponse addBusinessHoursItem(BusinessHourDtoIdV5 businessHoursItem) {
-    this.businessHours.add(businessHoursItem);
+  public ListTokenResponseV1 addTokensItem(TokenResponseV1 tokensItem) {
+    this.tokens.add(tokensItem);
     return this;
   }
 
    /**
-   * Get businessHours
-   * @return businessHours
+   * Get tokens
+   * @return tokens
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<BusinessHourDtoIdV5> getBusinessHours() {
-    return businessHours;
+  public List<TokenResponseV1> getTokens() {
+    return tokens;
   }
 
-  public void setBusinessHours(List<BusinessHourDtoIdV5> businessHours) {
-    this.businessHours = businessHours;
+  public void setTokens(List<TokenResponseV1> tokens) {
+    this.tokens = tokens;
   }
 
 
@@ -70,22 +67,22 @@ public class ListTenantBusinessHoursResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ListTenantBusinessHoursResponse listTenantBusinessHoursResponse = (ListTenantBusinessHoursResponse) o;
-    return Objects.equals(this.businessHours, listTenantBusinessHoursResponse.businessHours);
+    ListTokenResponseV1 listTokenResponseV1 = (ListTokenResponseV1) o;
+    return Objects.equals(this.tokens, listTokenResponseV1.tokens);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(businessHours);
+    return Objects.hash(tokens);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ListTenantBusinessHoursResponse {\n");
+    sb.append("class ListTokenResponseV1 {\n");
     
-    sb.append("    businessHours: ").append(toIndentedString(businessHours)).append("\n");
+    sb.append("    tokens: ").append(toIndentedString(tokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }

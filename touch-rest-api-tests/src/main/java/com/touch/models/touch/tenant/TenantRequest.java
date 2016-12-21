@@ -54,8 +54,8 @@ public class TenantRequest {
     private int sessionsCapacity;
     @JsonProperty("tenantFaqs")
     private List<TenantFaqRequest> tenantFaqs = new ArrayList<TenantFaqRequest>();
-    @JsonProperty("tenantColours")
-    private List<TenantColour> tenantColours = new ArrayList<TenantColour>();
+    @JsonProperty("tenantProperties")
+    private List<TenantProperties> tenantProperties = new ArrayList<TenantProperties>();
     @JsonProperty("tenantAddresses")
     private List<AddressRequest> tenantAddresses = new ArrayList<>();
     @JsonProperty("mc2AccountRequest")
@@ -77,12 +77,12 @@ public class TenantRequest {
         this.sessionsCapacity = 5;
         this.tenantAddresses.add(new AddressRequest());
         this.tenantFaqs = new ArrayList<>();
-        this.tenantColours = new ArrayList<>();
-        tenantColours.add(new TenantColour());
+        this.tenantProperties = new ArrayList<>();
+        tenantProperties.add(new TenantProperties());
         this.mc2AccountRequest = new Mc2AccountRequest();
     }
 
-    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantColour> tenantColours, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
+    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantProperties> tenantProperties, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
@@ -94,7 +94,7 @@ public class TenantRequest {
         this.tenantTags = tenantTags;
         this.sessionsCapacity = sessionsCapacity;
         this.tenantFaqs = tenantFaqs;
-        this.tenantColours = tenantColours;
+        this.tenantProperties = tenantProperties;
         this.tenantAddresses = tenantAddresses;
         this.mc2AccountRequest = Mc2AccountRequest;
     }
@@ -332,23 +332,23 @@ public class TenantRequest {
     }
 
     /**
-     * @return The tenantColours
+     * @return The tenantProperties
      */
-    @JsonProperty("tenantColours")
-    public List<TenantColour> getTenantColours() {
-        return tenantColours;
+    @JsonProperty("tenantProperties")
+    public List<TenantProperties> getTenantProperties() {
+        return tenantProperties;
     }
 
     /**
-     * @param tenantColours The tenantColours
+     * @param tenantProperties The tenantProperties
      */
-    @JsonProperty("tenantColours")
-    public void setTenantColours(List<TenantColour> tenantColours) {
-        this.tenantColours = tenantColours;
+    @JsonProperty("tenantProperties")
+    public void setTenantProperties(List<TenantProperties> tenantProperties) {
+        this.tenantProperties = tenantProperties;
     }
 
-    public TenantRequest withTenantColours(List<TenantColour> tenantColours) {
-        this.tenantColours = tenantColours;
+    public TenantRequest withTenantColours(List<TenantProperties> tenantProperties) {
+        this.tenantProperties = tenantProperties;
         return this;
     }
 
@@ -401,7 +401,7 @@ public class TenantRequest {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(accountId).append(tenantOrgName).append(contactEmail).append(state).append(description).append(shortDescription).append(tenantName).append(category).append(tenantTags).append(sessionsCapacity).append(tenantFaqs).append(tenantColours).append(tenantAddresses).append(mc2AccountRequest).toHashCode();
+        return new HashCodeBuilder().append(accountId).append(tenantOrgName).append(contactEmail).append(state).append(description).append(shortDescription).append(tenantName).append(category).append(tenantTags).append(sessionsCapacity).append(tenantFaqs).append(tenantProperties).append(tenantAddresses).append(mc2AccountRequest).toHashCode();
     }
 
     @Override
@@ -425,7 +425,7 @@ public class TenantRequest {
 
         }
         TenantRequest rhs = ((TenantRequest) other);
-        return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantName, rhs.tenantName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantColours, rhs.tenantColours).append(tenantAddresses, rhs.tenantAddresses).append(mc2AccountRequest, rhs.mc2AccountRequest).isEquals();
+        return new EqualsBuilder().append(accountId, rhs.accountId).append(tenantOrgName, rhs.tenantOrgName).append(contactEmail, rhs.contactEmail).append(state, rhs.state).append(description, rhs.description).append(shortDescription, rhs.shortDescription).append(tenantName, rhs.tenantName).append(category, rhs.category).append(tenantTags, rhs.tenantTags).append(sessionsCapacity, rhs.sessionsCapacity).append(tenantFaqs, rhs.tenantFaqs).append(tenantProperties, rhs.tenantProperties).append(tenantAddresses, rhs.tenantAddresses).append(mc2AccountRequest, rhs.mc2AccountRequest).isEquals();
     }
 
 }

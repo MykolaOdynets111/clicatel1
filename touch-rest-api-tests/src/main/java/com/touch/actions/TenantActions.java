@@ -32,17 +32,23 @@ public class TenantActions {
     public List<TenantResponseV5> getTenantsList(String token) {
         return requestEngine.getRequest(EndPointsClass.TENANTS, new Header("Authorization", token)).as(ListTenantResponse.class).getTenants();
     }
+    public Response getTenantsList(String accountId, String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANTS+"?accountId="+accountId, new Header("Authorization", token));
+    }
     public List<TenantResponseV5> getNearestTenantsList(String lat, String lon, String radius, String token) {
         return requestEngine.getRequest(EndPointsClass.TENANTS+"?lat="+lat+"&lon="+lon+"&radius="+radius,new Header("Authorization", token)).as(ListTenantResponse.class).getTenants();
     }
     public <T> T getTenant(String tenantId,String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.TENANT, tenantId,new Header("Authorization", token)).as(clazz);
     }
+    public Response getTenant(String tenantId,String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANT, tenantId,new Header("Authorization", token));
+    }
     public <T> T getBussinesHoursFromAddress(String tenantId, String addressId, String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId,null, new Header("Authorization", token)).as(clazz);
     }
-    public <T> T getBussinesHoursFromTenant(String tenantId, String token, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_TENANT, tenantId, new Header("Authorization", token)).as(clazz);
+    public Response getBussinesHoursFromTenant(String tenantId, String token) {
+        return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_TENANT, tenantId, new Header("Authorization", token));
     }
     public <T> T getFAQs(String tenantId, String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.TENANT_FAQS, tenantId, new Header("Authorization", token)).as(clazz);
@@ -65,17 +71,17 @@ public class TenantActions {
     /*
     colours part
      */
-    public List<TenantColour> getColoursForTenant(String tenantId, String token) {
-        return requestEngine.getRequest(EndPointsClass.COLOURS, tenantId,new Header("Authorization", token)).as(ListTenantColours.class).getTenantColours();
+    public List<TenantProperties> getPropertiesForTenant(String tenantId, String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_PROPERTIES, tenantId,new Header("Authorization", token)).as(ListTenantProperties.class).getTenantProperties();
     }
 
     //I have to check this ability because this post request has parameters and values for them, however, we don't<>
     // have any body, that it why may be we need some special approach for that </>
-    public <T> T addColour(String tenantId, String name, String value, String token, Class<T> clazz) {
+    public <T> T addProperty(String tenantId, String name, String value, String token, Class<T> clazz) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name",name);
         paramMap.put("value",value);
-        return requestEngine.postRequestWithQueryParameters(EndPointsClass.COLOURS,tenantId, paramMap,new Header("Authorization", token)).as(clazz);
+        return requestEngine.postRequestWithQueryParameters(EndPointsClass.TENANT_PROPERTIES,tenantId, paramMap,new Header("Authorization", token)).as(clazz);
     }
     public Response addBussinesHoursForAddress(String tenantId, String addressId, BusinessHourRequest bussinesHours, String token) {
         return requestEngine.postRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId, bussinesHours,new Header("Authorization", token),new Header("Accept", "application/json"));
@@ -93,7 +99,7 @@ public class TenantActions {
     public int deleteColour(String tenantId, String name, String token) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name",name);
-        return requestEngine.deleteRequestWithQueryParameters(EndPointsClass.COLOURS, tenantId, paramMap, new Header("Authorization", token)).getStatusCode();
+        return requestEngine.deleteRequestWithQueryParameters(EndPointsClass.TENANT_PROPERTIES, tenantId, paramMap, new Header("Authorization", token)).getStatusCode();
     }
     /*
     resources part
