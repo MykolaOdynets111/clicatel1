@@ -393,9 +393,9 @@ public class RequestEngine {
 
     }
 
-    public Response putRequest(String endpoint, String id, Object body) {
-        return putRequest(endpoint, id, null, body);
-    }
+//    public Response putRequest(String endpoint, String id, Object body) {
+//        return putRequest(endpoint, id, null, body);
+//    }
 
     public Response putRequest(String endpoint, Object body, Header... header) {
         return putRequest(endpoint, null, null, body, header);

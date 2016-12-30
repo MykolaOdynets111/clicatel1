@@ -3,17 +3,16 @@ package com.touch.tests;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.auth.ListTokenResponseV1;
 import com.touch.models.touch.auth.TokenResponseV1;
-import com.touch.models.touch.chats.ChatRoomResponse;
-import com.touch.models.touch.chats.ChatSessionResponse;
-import com.touch.models.touch.chats.ListChatSessionResponse;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
-import com.touch.utils.StringUtils;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -89,6 +88,40 @@ public class AuthTockenTests extends BaseTestClass {
                 {"test", "correct", 400},
                 {"ANDROID", "test", 200}
 
+        };
+    }
+    private String getFullPathToFile(String pathToFile) {
+        return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
+    }
+
+    private boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {
+
+        try {
+            // do the compare
+            while (true) {
+                int fr = i1.read();
+                int tr = i2.read();
+
+                if (fr != tr)
+                    return false;
+
+                if (fr == -1)
+                    return true;
+            }
+
+        } finally {
+            if (i1 != null)
+                i1.close();
+            if (i2 != null)
+                i2.close();
+        }
+    }
+
+    @DataProvider
+    private static Object[][] resourcesList() {
+        return new Object[][]{
+                {"TenantResources/tenant_logo.jpg", "new_logo"},
+                {"TenantResources/bg_chat_image.jpg", "new_bg_chat_image"}
         };
     }
 }
