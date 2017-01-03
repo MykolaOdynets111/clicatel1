@@ -39,8 +39,13 @@ public class ChatsActions {
         return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId);
     }
 
-    public Response getChatRoom(String tenantId, String clientJid, String clientId, String token) {
-        return requestEngine.getRequest(EndPointsClass.CHATS_ROOMS + "?tenantId=" + tenantId + "&clientJid=" + clientJid + "&clientId=" + clientId, new Header("Authorization", token));
+    public Response getChatRoom(String tenantId, String clientJid, String clientId,String app, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("tenantId", tenantId);
+        parameters.put("clientId", clientId);
+        parameters.put("clientJid", clientJid);
+        parameters.put("app", app);
+        return requestEngine.getRequest(EndPointsClass.CHATS_ROOMS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
 
     public Response getListOfSessions(String tenantId, String clientId, String token) {

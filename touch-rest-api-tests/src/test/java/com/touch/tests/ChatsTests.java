@@ -27,13 +27,13 @@ public class ChatsTests extends BaseTestClass {
     @Test
     public void getNewChatRoom() {
         String tenantWithBot = "20a9c80d53fb11e6a0280626baf6c11d";
-        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1", token).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1","Android", token).as(ChatRoomResponse.class);
         Assert.assertTrue(chatRoom.getChatroomJid().matches(".{32}@muc.clickatelllabs.com"));
 
     }
     @Test(dataProvider = "chatRoomsParameters")
     public void tryToGetNewChatRoomWithDifferentData(String tenantId, String clientJid, String clientId, int statusCode) {
-        Assert.assertEquals(chatsActions.getChatRoom(tenantId, clientJid, clientId, token).getStatusCode(),statusCode);
+        Assert.assertEquals(chatsActions.getChatRoom(tenantId, clientJid, clientId,"Android", token).getStatusCode(),statusCode);
 
     }
     @Test
@@ -71,7 +71,7 @@ public class ChatsTests extends BaseTestClass {
     @Test
     public void getNewChatRoomWithWrongData() {
         // verify error message when we try to get chat room for not existing tenant
-        Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1",token).as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+        Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1","Android",token).as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
     }
     @DataProvider
     private static Object[][] chatRoomsParameters() {
