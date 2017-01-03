@@ -181,10 +181,8 @@ Assert.assertEquals(cardsActions.updateCardInfo(name, platform, version, width, 
     @DataProvider
     private static Object[][] getCardListOptions() {
         return new Object[][]{
-                {"", "", 200, true},
                 {"test", "test", 200, true},
                 {"test", "", 200, true},
-                {"", "test", 200, true},
                 {"notExist", "", 404, false},
                 {"", "notExist", 404, false},
                 {"notExist", "notExist", 404, false},
