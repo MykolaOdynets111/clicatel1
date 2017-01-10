@@ -27,7 +27,7 @@ public class CardsTests extends BaseTestClass {
         token = getToken();
 //        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
 //        add new test card
-        cardsActions.addCard("web", "testCard", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
+        cardsActions.addCard("ios", "testCard", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
         cardsActions.addCard("android", "testAndroid", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
     }
 
@@ -38,7 +38,7 @@ public class CardsTests extends BaseTestClass {
             name = "testCard";
         if (platform.equals("test"))
 //            platform = testCard.getPlatforms().get(0).getPlatform();
-            platform = "web";
+            platform = "ios";
         Response response = cardsActions.getAllCards(name, platform, token);
         Assert.assertEquals(response.getStatusCode(), code);
         Assert.assertEquals(!response.as(ListCardsPlatformsResponseV4.class).getCards().isEmpty(), positiveTest);
@@ -84,8 +84,8 @@ public class CardsTests extends BaseTestClass {
     @Test
     public void deleteCard() {
         //add new test card
-        cardsActions.addCard("web", "test", "testDescription", "testTenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
-        List<TouchCardResponseV4> cards = cardsActions.getAllCards("test", "web", token).as(ListCardsPlatformsResponseV4.class).getCards();
+        cardsActions.addCard("ios", "test", "testDescription", "testTenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
+        List<TouchCardResponseV4> cards = cardsActions.getAllCards("test", "ios", token).as(ListCardsPlatformsResponseV4.class).getCards();
         for (PlatformDtoV4 platform : cards.get(0).getPlatforms()) {
             Assert.assertEquals(cardsActions.deleteCard(cards.get(0).getCardName(), platform.getPlatform(), platform.getVersion(), token).getStatusCode(), 200);
         }
@@ -215,8 +215,8 @@ public class CardsTests extends BaseTestClass {
 
     @AfterClass
     public void afterClass() {
-        deleteTestCard("testCard", "web");
-        deleteTestCard("111", "web");
+        deleteTestCard("testCard", "ios");
+        deleteTestCard("111", "ios");
         deleteTestCard("testAndroid", "android");
     }
 
