@@ -2,6 +2,8 @@ package com.touch.actions;
 
 import com.touch.engines.RequestEngine;
 import com.touch.models.EndPointsClass;
+import com.touch.models.touch.auth.TokenBase;
+import com.touch.models.touch.auth.TokenDto;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 
@@ -24,13 +26,12 @@ public class AuthActions {
         return requestEngine.getRequest(EndPointsClass.AUTH_TOCKEN,new Header("Authorization", token));
     }
 
-    public Response addTocken(String device, String tenantId, String token) {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("device", device);
-        parameters.put("tenantId", tenantId);
-        return requestEngine.postRequest(EndPointsClass.AUTH_TOCKEN+ EndPointsClass.generateQueryPath(parameters),null,null,new Header("Authorization", token));
+    public Response addTocken(TokenDto tokenDto, String token) {
+        return requestEngine.postRequest(EndPointsClass.AUTH_TOCKEN, null, null, tokenDto, new Header("Authorization", token));
     }
-
+    public Response authentificateTocken(TokenBase tokenBase, String token) {
+        return requestEngine.postRequest(EndPointsClass.AUTH_AUTHENTICATED, null, null, tokenBase, new Header("Authorization", token));
+    }
 
 
 

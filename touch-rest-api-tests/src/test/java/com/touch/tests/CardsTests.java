@@ -28,6 +28,7 @@ public class CardsTests extends BaseTestClass {
 //        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
 //        add new test card
         cardsActions.addCard("web", "testCard", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
+        cardsActions.addCard("android", "testAndroid", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
     }
 
     @Test(dataProvider = "getCardListOptions")
@@ -44,13 +45,16 @@ public class CardsTests extends BaseTestClass {
     }
 
     @Test(dataProvider = "addNewCardOptions")
-    public void addNewCard(String cardName, String platform, String description, String tenantId, String width, String height, int status) {
+    public void addNewCard(String cardName, String platform, String description, String tenantId, String width, String height, int status) throws IOException {
         Response response = cardsActions.addCard(platform, cardName, description, tenantId, width, height, new File(getFullPathToFile("cards/test-navigation-card")), token);
         Assert.assertEquals(response.getStatusCode(), status);
 
-//        if(status==201){
-//            //        TODO we need to add steps with verification that new card wa added successful
-//            Assert.assertTrue(false);
+//        if (status == 200) {
+//            Response responseGetCard = cardsActions.getCard(cardName, platform, "1", token);
+//            InputStream  newCardInputStream = responseGetCard.asInputStream();
+//            InputStream actualInputStream = response.asInputStream();
+////        verify that new card contains same data which was added when we create it
+//            Assert.assertTrue(isEqualInputStreams(actualInputStream, newCardInputStream));
 //        }
 
     }
@@ -93,12 +97,15 @@ public class CardsTests extends BaseTestClass {
     }
 
     @Test (dataProvider = "updateCardOptions")
-    public void updateCardInfo(String name, String platform, String version, String width, String height, int statusCode) {
-
-Assert.assertEquals(cardsActions.updateCardInfo(name, platform, version, width, height,token).getStatusCode(),statusCode);
-//        if (status == 201) {
-//            //        TODO we need to add steps with verification that new card wa added successful
-//            Assert.assertTrue(false);
+    public void updateCardInfo(String name, String platform, String version, String width, String height, int statusCode) throws IOException {
+        Response responseUpdate = cardsActions.updateCardInfo(name, platform, version, width, height, token);
+        Assert.assertEquals(responseUpdate.getStatusCode(),statusCode);
+//        if (statusCode == 200) {
+//            Response response = cardsActions.getCard(name, platform, version, token);
+//            InputStream  newCardInputStream = response.asInputStream();
+//            InputStream actualInputStream = responseUpdate.asInputStream();
+////        verify that new card contains same data which was added when we create it
+//            Assert.assertTrue(isEqualInputStreams(actualInputStream, newCardInputStream));
 //        }
 
     }
@@ -183,6 +190,7 @@ Assert.assertEquals(cardsActions.updateCardInfo(name, platform, version, width, 
         return new Object[][]{
                 {"test", "test", 200, true},
                 {"test", "", 200, true},
+                {"testAndroid", "", 200, true},
                 {"notExist", "", 404, false},
                 {"", "notExist", 404, false},
                 {"notExist", "notExist", 404, false},
@@ -209,6 +217,7 @@ Assert.assertEquals(cardsActions.updateCardInfo(name, platform, version, width, 
     public void afterClass() {
         deleteTestCard("testCard", "web");
         deleteTestCard("111", "web");
+        deleteTestCard("testAndroid", "android");
     }
 
     private void deleteTestCard(String cardName, String platformName) {

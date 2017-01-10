@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
 import com.touch.models.touch.agent.AgentNoDepartmentsResponse;
+import com.touch.models.touch.tenant.TenantRequest;
 import io.swagger.annotations.ApiModelProperty;
 
 
@@ -216,6 +217,14 @@ public class DepartmentResponse {
   public boolean equals(Object o) {
     if (this == o) {
       return true;
+    }
+    if (o instanceof DepartmentDto){
+      DepartmentDto rhs = ((DepartmentDto) o);
+      return Objects.equals(this.tenantId, rhs.getTenantId()) &&
+              Objects.equals(this.name, rhs.getName()) &&
+              Objects.equals(this.description, rhs.getDescription()) &&
+              Objects.equals(this.sessionsCapacity, rhs.getSessionsCapacity());
+
     }
     if (o == null || getClass() != o.getClass()) {
       return false;

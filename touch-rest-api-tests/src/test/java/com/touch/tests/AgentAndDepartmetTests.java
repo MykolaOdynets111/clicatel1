@@ -72,17 +72,17 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //        create new department and connect it with new tenant
         DepartmentDto department = new DepartmentDto();
         department.setTenantId(newTenant.getId());
-        DepartmentResponse newDepartment = departmentActions.addDepartment(department);
-
-        String agentId = "";
-        for (AgentResponse agent : agentsList) {
-            if (agent.getAgentJid().equals(credentials.getJid()))
-                agentId = agent.getId();
-        }
-        //        Assign agent to new department and verify that it returns correct status code
-        Assert.assertEquals(departmentActions.putAgentInDepartment(newDepartment.getId(), agentId), 201);
+//        DepartmentResponse newDepartment = departmentActions.addDepartment(department,token);
+//
+//        String agentId = "";
+//        for (AgentResponse agent : agentsList) {
+//            if (agent.getAgentJid().equals(credentials.getJid()))
+//                agentId = agent.getId();
+//        }
+//        //        Assign agent to new department and verify that it returns correct status code
+//        Assert.assertEquals(departmentActions.putAgentInDepartment(newDepartment.getId(), agentId), 201);
 //        get max chart value and verify it's correctness
-        Assert.assertEquals(agentActions.getAgentMaxChats(agentId, token, newDepartment.getId()), 5);
+//        Assert.assertEquals(agentActions.getAgentMaxChats(agentId, token, newDepartment.getId()), 5);
 
 //            delete agent
         Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);

@@ -30,10 +30,9 @@ import com.google.gson.annotations.SerializedName;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * TokenResponseV1
+ * TokenDto
  */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2017-01-06T08:05:43.285Z")
-public class TokenResponseV1 {
+public class TokenDto {
   @SerializedName("tenantId")
   private String tenantId = null;
 
@@ -43,17 +42,19 @@ public class TokenResponseV1 {
   @SerializedName("description")
   private String description = null;
 
-  @SerializedName("token")
-  private String token = null;
 
-  @SerializedName("createdDate")
-  private Long createdDate = null;
+  public TokenDto() {
+  }
 
-  @SerializedName("createdBy")
-  private String createdBy = null;
-
-  public TokenResponseV1 tenantId(String tenantId) {
+  public TokenDto(String tenantId, String domain, String description) {
     this.tenantId = tenantId;
+    this.domain = domain;
+    this.description = description;
+  }
+
+  public TokenDto tenantId(String tenantId) {
+    this.tenantId = tenantId;
+
     return this;
   }
 
@@ -70,7 +71,7 @@ public class TokenResponseV1 {
     this.tenantId = tenantId;
   }
 
-  public TokenResponseV1 domain(String domain) {
+  public TokenDto domain(String domain) {
     this.domain = domain;
     return this;
   }
@@ -88,7 +89,7 @@ public class TokenResponseV1 {
     this.domain = domain;
   }
 
-  public TokenResponseV1 description(String description) {
+  public TokenDto description(String description) {
     this.description = description;
     return this;
   }
@@ -106,60 +107,6 @@ public class TokenResponseV1 {
     this.description = description;
   }
 
-  public TokenResponseV1 token(String token) {
-    this.token = token;
-    return this;
-  }
-
-   /**
-   * Get token
-   * @return token
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getToken() {
-    return token;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
-
-  public TokenResponseV1 createdDate(Long createdDate) {
-    this.createdDate = createdDate;
-    return this;
-  }
-
-   /**
-   * Get createdDate
-   * @return createdDate
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public Long getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(Long createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public TokenResponseV1 createdBy(String createdBy) {
-    this.createdBy = createdBy;
-    return this;
-  }
-
-   /**
-   * Get createdBy
-   * @return createdBy
-  **/
-  @ApiModelProperty(example = "null", value = "")
-  public String getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -169,32 +116,26 @@ public class TokenResponseV1 {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TokenResponseV1 tokenResponseV1 = (TokenResponseV1) o;
-    return Objects.equals(this.tenantId, tokenResponseV1.tenantId) &&
-        Objects.equals(this.domain, tokenResponseV1.domain) &&
-        Objects.equals(this.description, tokenResponseV1.description) &&
-        Objects.equals(this.token, tokenResponseV1.token) &&
-        Objects.equals(this.createdDate, tokenResponseV1.createdDate) &&
-        Objects.equals(this.createdBy, tokenResponseV1.createdBy);
+    TokenDto tokenDto = (TokenDto) o;
+    return Objects.equals(this.tenantId, tokenDto.tenantId) &&
+        Objects.equals(this.domain, tokenDto.domain) &&
+        Objects.equals(this.description, tokenDto.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tenantId, domain, description, token, createdDate, createdBy);
+    return Objects.hash(tenantId, domain, description);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class TokenResponseV1 {\n");
+    sb.append("class TokenDto {\n");
     
     sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    token: ").append(toIndentedString(token)).append("\n");
-    sb.append("    createdDate: ").append(toIndentedString(createdDate)).append("\n");
-    sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
     sb.append("}");
     return sb.toString();
   }

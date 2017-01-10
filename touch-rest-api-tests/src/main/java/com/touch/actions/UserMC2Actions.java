@@ -90,6 +90,21 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         }
         return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
     }
+    public String loginUserToMC2AndReturnToken(String login,String password){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", login, null, null, password, null);
+        User user = new User(userSignupRequest);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        int accountIndex =0;
+        List<Account> accounts = userProfile.getAccounts();
+        for(int i=0; i<accounts.size();i++){
+            if(accounts.get(i).getName().equals("Clickatell")){
+                accountIndex=i;
+                break;
+            }
+        }
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
     public String loginAsMC2AdminUserAndReturnToken(){
         AuthActions authActions = new AuthActions(this.requestEngine);
         UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("mc2.user.admin.login"), null, null, TestingEnvProperties.getPropertyByName("mc2.user.admin.password"), null);
@@ -105,7 +120,7 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         }
         return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
     }
-    public String signUpAndLoginWitthNewUser(String accountId, String accountName, String email, String firstName, String lastName, String password){
+    public String signUpAndLoginWithNewUser(String accountId, String accountName, String email, String firstName, String lastName, String password){
         UserSignupRequest userSignedUp = new UserSignupRequest(accountName, email, firstName, lastName, password, null);
         AuthActions authActions = new AuthActions(this.requestEngine);
         new AuthActions(this.requestEngine).activateAccount(

@@ -27,6 +27,7 @@ package com.touch.models.touch.department;
 
 import java.util.Objects;
 import com.google.gson.annotations.SerializedName;
+import com.touch.utils.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -39,7 +40,7 @@ public class DepartmentDto   {
 
   public DepartmentDto() {
     this.tenantId = "";
-    this.name = "Test";
+    this.name = "Test"+ StringUtils.generateRandomString(4);
     this.description = "Test description";
     this.sessionsCapacity = 5;
   }
@@ -141,6 +142,14 @@ public class DepartmentDto   {
   public boolean equals(Object o) {
     if (this == o) {
       return true;
+    }
+    if (o instanceof DepartmentResponse){
+      DepartmentResponse rhs = ((DepartmentResponse) o);
+      return Objects.equals(this.tenantId, rhs.getTenantId()) &&
+              Objects.equals(this.name, rhs.getName()) &&
+              Objects.equals(this.description, rhs.getDescription()) &&
+              Objects.equals(this.sessionsCapacity, rhs.getSessionsCapacity());
+
     }
     if (o == null || getClass() != o.getClass()) {
       return false;

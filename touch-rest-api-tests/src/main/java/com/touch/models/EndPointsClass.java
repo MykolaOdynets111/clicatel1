@@ -41,13 +41,11 @@ public class EndPointsClass {
     public static final String AGENT = AGENTS + "/{agentId}";
     public static final String AGENT_IMAGE = AGENTS + "/{agentId}/image";
     //Departments endpoints
-    public static final String DEPARTMENTS = ConfigApp.API_VERSION + "/departments";
-    ;
+    public static final String DEPARTMENTS ="/v5/departments";
     public static final String DEPARTMENTS_AGENTS = DEPARTMENTS + "/agents";
     public static final String DEPARTMENT = DEPARTMENTS + "/{id}";
     //Chats endpoints
     public static final String CHATS_ATTACHMENTS = ConfigApp.API_VERSION + "/chats/attachments";
-    ;
     public static final String CHATS_ATTACHMENT = CHATS_ATTACHMENTS + "/{attachment-id}";
     public static final String CHATS_ROOMS = ConfigApp.API_VERSION + "/chats/rooms";
     public static final String CHATS_SESSIONS = ConfigApp.API_VERSION + "/chats/sessions";
@@ -63,9 +61,10 @@ public class EndPointsClass {
     public static final String CARD = CARDS + "/{name}";
     public static final String CARD_BUNDLE = CARD + "/bundle";
 
+
     //Auth endpoints
     public static final String AUTH_TOCKEN = "/v5/auth/token";
-
+    public static final String AUTH_AUTHENTICATED = "/v5/auth/authenticated";
 
     public static String generateQueryPath(Map<String, String> map) {
         String path = "?";

@@ -2,9 +2,11 @@ package com.touch.actions;
 
 import com.touch.models.EndPointsClass;
 import com.touch.models.touch.department.DepartmentDto;
-import com.touch.models.touch.department.DepartmentResponse;
-import com.touch.models.touch.department.ListDepartmentResponse;
 import io.restassured.http.Header;
+import io.restassured.response.Response;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -17,48 +19,44 @@ public class DepartmentActions {
         this.requestEngine = requestEngine;
     }
 
-    public ListDepartmentResponse getListOfDepartments() {
-        return requestEngine.getRequest(EndPointsClass.DEPARTMENTS).as(ListDepartmentResponse.class);
+    public Response getListOfDepartments(String token) {
+        return requestEngine.getRequest(EndPointsClass.DEPARTMENTS, new Header("Authorization", token));
     }
 
-    public DepartmentResponse addDepartment(DepartmentDto department) {
-        return requestEngine.postRequest(EndPointsClass.DEPARTMENTS, department).as(DepartmentResponse.class);
+    public Response addDepartment(Object department, String token) {
+        return requestEngine.postRequest(EndPointsClass.DEPARTMENTS, null,null,department, new Header("Authorization", token));
     }
-    public DepartmentResponse getDepartment(String departmentId) {
-        return requestEngine.getRequest(EndPointsClass.DEPARTMENT, departmentId).as(DepartmentResponse.class);
-    }
-//    here is mistake in creating path - TODO rewrite this method
-    public int updateDepartment(String id, String name, String description, String sessionId) {
-        int count = 0;
-        String path = EndPointsClass.DEPARTMENT;
-        if (!(name == null) || !(description == null) || !(sessionId == null))
-            path += "?";
-        if (!(name == null)) {
-            path += name;
-            count++;
-        }
-        if (!(description == null)) {
-            if (count > 0)
-                path += "&";
-            path += description;
-            count++;
-        }
-        if (!(sessionId == null)) {
-            if (count > 0)
-                path += "&";
-            path += sessionId;
-        }
-        return requestEngine.putRequest(path, id).getStatusCode();
+    public Response getDepartment(String departmentId, String token) {
+        return requestEngine.getRequest(EndPointsClass.DEPARTMENT, departmentId, new Header("Authorization", token));
     }
 
-    public int deleteDepartment(String departmentId, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.DEPARTMENT, departmentId, new Header("Authorization", token)).getStatusCode();
+    public Response updateDepartment(String id, String name, String description, String sessionCapacity, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(!name.isEmpty())
+        parameters.put("name", name);
+        if(!description.isEmpty())
+        parameters.put("description", description);
+        if(!sessionCapacity.isEmpty())
+        parameters.put("sessionCapacity", sessionCapacity);
+        return requestEngine.putRequest(EndPointsClass.DEPARTMENT + EndPointsClass.generateQueryPath(parameters), id, new Header("Authorization", token));
     }
 
-    public int putAgentInDepartment(String departmentId, String agentId) {
-        return requestEngine.putRequest(EndPointsClass.DEPARTMENTS_AGENTS+"?departmentIds="+departmentId+"&agentIds="+agentId, null).getStatusCode();
+    public Response deleteDepartment(String departmentId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.DEPARTMENT, departmentId, new Header("Authorization", token));
     }
-    public int deleteAgentInDepartment(String departmentId, String agentId) {
-        return requestEngine.deleteRequest(EndPointsClass.DEPARTMENTS_AGENTS+"?departmentIds="+departmentId+"&agentIds="+agentId).getStatusCode();
+
+    public Response putAgentInDepartment(String departmentId, String agentId, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(!departmentId.isEmpty())
+        parameters.put("departmentIds", departmentId);
+        if(!agentId.isEmpty())
+        parameters.put("agentIds", agentId);
+        return requestEngine.putRequest(EndPointsClass.DEPARTMENTS_AGENTS+ EndPointsClass.generateQueryPath(parameters), null, new Header("Authorization", token));
+    }
+    public Response deleteAgentInDepartment(String departmentId, String agentId, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("departmentIds", departmentId);
+        parameters.put("agentIds", agentId);
+        return requestEngine.deleteRequest(EndPointsClass.DEPARTMENTS_AGENTS+ EndPointsClass.generateQueryPath(parameters), null, new Header("Authorization", token));
     }
 }

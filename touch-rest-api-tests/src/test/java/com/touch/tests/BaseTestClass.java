@@ -56,7 +56,6 @@ public class BaseTestClass {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        removeAllTestTenants(token);
     }
     public String getToken(){
 //        IntegrationUserLoginMC2Response response = integrationActions.callGivenAction(TestingEnvProperties.getPropertyByName("integration.mc2.name"), "doMC2Login", "--context_param parameters={\"password\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.password") + "\", \"email\": \"" + TestingEnvProperties.getPropertyByName("integration.mc2.login") + "\"}").as(IntegrationUserLoginMC2Response.class);
@@ -64,7 +63,9 @@ public class BaseTestClass {
 //        return signInResponse.jsonPath().getString("responseJson.token");
         return userActions.loginAsAdminUserAndReturnToken();
     }
-
+    public String getToken(String login, String password){
+        return userActions.loginUserToMC2AndReturnToken(login,password);
+    }
     public void removeAllTestTenants(String token) {
         List<TenantResponseV5> tenantsList = tenantActions.getTenantsList(token);
         for (TenantResponseV5 tenant : tenantsList) {

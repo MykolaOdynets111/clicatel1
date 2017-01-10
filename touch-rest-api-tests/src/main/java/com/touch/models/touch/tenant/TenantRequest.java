@@ -82,7 +82,7 @@ public class TenantRequest {
         this.mc2AccountRequest = new Mc2AccountRequest();
     }
 
-    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String tenantJBotName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantProperties> tenantProperties, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
+    public TenantRequest(String accountId, String tenantOrgName, String contactEmail, String state, String description, String shortDescription, String tenantName, String category, List<String> tenantTags, int sessionsCapacity, List<TenantFaqRequest> tenantFaqs, List<TenantProperties> tenantProperties, List<AddressRequest> tenantAddresses, Mc2AccountRequest Mc2AccountRequest) {
         this.accountId = accountId;
         this.tenantOrgName = tenantOrgName;
         this.contactEmail = contactEmail;
