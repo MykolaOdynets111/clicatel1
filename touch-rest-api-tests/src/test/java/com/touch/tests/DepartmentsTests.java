@@ -37,6 +37,7 @@ public class DepartmentsTests extends BaseTestClass {
     public void beforeClass() {
         token = getToken();
         testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
+        deleteTestDepartmnets();
     }
 
     // here is a bug
@@ -129,22 +130,30 @@ public class DepartmentsTests extends BaseTestClass {
             List<AgentNoDepartmentsResponse> agents = departmentActions.getDepartment(departmentId, token).as(DepartmentResponse.class).getAgents();
             Assert.assertEquals(agents.get(0),agent);
         }
-        if (departmentId.equals("correct")){
+        Response departmentResponse = departmentActions.getDepartment(departmentId, token);
+        if (departmentResponse.getStatusCode()==200&&!departmentId.isEmpty()){
             Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(),200);
         }
     }
 
-    @Test(dataProvider = "addAgentsOptions")
+    @Test(dataProvider = "deleteAgentsOptions")
     public void deleteAgentForDepartment(String departmentId, String agentId, int statusCode) {
+        boolean addAgentTriger=false;
         if (departmentId.equals("correct")){
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
             departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            addAgentTriger=true;
         }
         String jid = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid();
         AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
         if (agentId.equals("correct")){
             agentId = agent.getId();
+        }else{
+            addAgentTriger=false;
+        }
+        if(addAgentTriger){
+            departmentActions.putAgentInDepartment(departmentId, agentId, token);
         }
         Response response = departmentActions.deleteAgentInDepartment(departmentId, agentId, token);
         Assert.assertEquals(response.getStatusCode(),statusCode);
@@ -193,10 +202,21 @@ public class DepartmentsTests extends BaseTestClass {
                 {"","correct", 400},
                 {"test","correct", 404},
                 {"test","test", 404},
-                {"","", 405}
+                {"","", 400}
         };
     }
-
+    @DataProvider
+    private static Object[][] deleteAgentsOptions() {
+        return new Object[][]{
+                {"correct","correct", 200},
+                {"correct","test", 404},
+                {"correct","", 404},
+                {"","correct", 404},
+                {"test","correct", 404},
+                {"test","test", 404},
+                {"","", 404}
+        };
+    }
 
     @AfterClass
     public void afterClass() {

@@ -251,6 +251,19 @@ public class AgentNoDepartmentsResponse {
     if (this == o) {
       return true;
     }
+    if(o instanceof AgentResponse){
+      AgentResponse agentResponse = (AgentResponse) o;
+      return Objects.equals(this.id, agentResponse.getId()) &&
+              Objects.equals(this.createdDate, agentResponse.getCreatedDate()) &&
+              Objects.equals(this.modifiedDate, agentResponse.getModifiedDate()) &&
+              Objects.equals(this.tenantId, agentResponse.getTenantId()) &&
+              Objects.equals(this.name, agentResponse.getName()) &&
+              Objects.equals(this.surname, agentResponse.getSurname()) &&
+              Objects.equals(this.email, agentResponse.getEmail()) &&
+              Objects.equals(this.agentJid, agentResponse.getAgentJid()) &&
+              Objects.equals(this.maxChats, agentResponse.getMaxChats()) &&
+              Objects.equals(this.imageUrl, agentResponse.getImageUrl());
+    }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
