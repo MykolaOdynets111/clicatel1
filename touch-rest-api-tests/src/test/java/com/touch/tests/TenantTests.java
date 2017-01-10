@@ -60,7 +60,7 @@ public class TenantTests extends BaseTestClass {
 
     @Test
     public void getTenantListFilteredByAccountId() {
-        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
+        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
         Response response = tenantActions.getTenantsList(tenant.getAccountId(), token);
         Assert.assertEquals(response.getStatusCode(),200);
         Assert.assertTrue(response.as(ListTenantResponse.class).getTenants().contains(tenant));
