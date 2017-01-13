@@ -31,12 +31,22 @@ import java.util.List;
  */
 public class DepartmentsTests extends BaseTestClass {
     String token;
+    String testToken;
     TenantResponseV5 testTenant;
+    TenantRequest testTenantRequest=new TenantRequest();
 
     @BeforeClass
     public void beforeClass() {
         token = getToken();
-        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
+        testTenantRequest.setAccountId(null);
+        testTenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
+        String accountId=testTenant.getAccountId();
+        String accountName=testTenant.getTenantOrgName();
+        String email = testTenantRequest.getMc2AccountRequest().getEmail();
+        String firstName = testTenantRequest.getMc2AccountRequest().getFirstName();
+        String lastName = testTenantRequest.getMc2AccountRequest().getLastName();
+        String password = testTenantRequest.getMc2AccountRequest().getPassword();
+        testToken = userActions.signUpAndLoginWithNewUser(accountId, accountName, email,firstName , lastName, password);
         deleteTestDepartmnets();
     }
 
@@ -119,7 +129,7 @@ public class DepartmentsTests extends BaseTestClass {
             departmentDto.setTenantId(testTenant.getId());
             departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
         }
-        String jid = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid();
+        String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
         AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
         if (agentId.equals("correct")){
             agentId = agent.getId();
@@ -145,7 +155,7 @@ public class DepartmentsTests extends BaseTestClass {
             departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
             addAgentTriger=true;
         }
-        String jid = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid();
+        String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
         AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
         if (agentId.equals("correct")){
             agentId = agent.getId();
