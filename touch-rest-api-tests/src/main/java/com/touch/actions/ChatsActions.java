@@ -45,7 +45,7 @@ public class ChatsActions {
         parameters.put("clientId", clientId);
         parameters.put("clientJid", clientJid);
         parameters.put("app", app);
-        return requestEngine.getRequest(EndPointsClass.CHATS_ROOMS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+        return requestEngine.postRequest(EndPointsClass.CHATS_ROOMS + EndPointsClass.generateQueryPath(parameters), null, null, new Header("Authorization", token));
     }
 
     public Response getListOfSessions(String tenantId, String clientId, String token) {

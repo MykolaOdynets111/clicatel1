@@ -191,12 +191,12 @@ public class CardsTests extends BaseTestClass {
                 {"test", "test", 200, true},
                 {"test", "", 200, true},
                 {"testAndroid", "", 200, true},
-                {"notExist", "", 404, false},
-                {"", "notExist", 404, false},
-                {"notExist", "notExist", 404, false},
-                {"11", "", 404, false},
-                {"", "11", 404, false},
-                {"11", "11", 404, false}
+                {"notExist", "", 200, false},
+                {"", "notExist", 200, false},
+                {"notExist", "notExist", 200, false},
+                {"11", "", 200, false},
+                {"", "11", 200, false},
+                {"11", "11", 200, false}
         };
     }
 

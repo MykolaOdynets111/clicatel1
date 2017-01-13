@@ -35,7 +35,7 @@ public class EndPointsClass {
     public static final String TOUCH_USER_PROFILE = TOUCH_USER_PROFILES + "/{profileId}";
     public static final String TOUCH_USER_PROFILE_IMAGE = TOUCH_USER_PROFILE + "/image";
     //Agents endpoints
-    public static final String AGENTS = "/v6/agents";
+    public static final String AGENTS = ConfigApp.API_VERSION + "/agents";
     public static final String AGENTS_CREDENTIALS = AGENTS + "/credentials";
     public static final String AGENTS_MAX_CHATS = AGENTS + "/max-chats";
     public static final String AGENT = AGENTS + "/{agentId}";
@@ -52,7 +52,7 @@ public class EndPointsClass {
     public static final String CHATS_SESSION = CHATS_SESSIONS + "/{sessionId}";
     public static final String CHATS_SESSION_TERMINATE = CHATS_SESSION + "/terminate";
     //business-blp endpoints
-    public static final String INTEGRATIONS = "/v6/business-blp/integrations";
+    public static final String INTEGRATIONS = ConfigApp.API_VERSION +"/business-blp/integrations";
     public static final String INTEGRATION = INTEGRATIONS + "/{name}";
     public static final String INTEGRATION_ARTIFACT = INTEGRATION + "/artifact";
     public static final String INTEGRATION_CALL = INTEGRATION + "/{action}/call";

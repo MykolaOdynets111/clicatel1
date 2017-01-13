@@ -1,7 +1,6 @@
 package com.touch.actions;
 
 import com.touch.models.EndPointsClass;
-import com.touch.models.touch.agent.AgentMaxChatsResponse;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 
@@ -28,8 +27,11 @@ public class AgentActions {
         return requestEngine.getRequest(EndPointsClass.AGENTS_CREDENTIALS,new Header("Authorization", token)).as(clazz);
     }
 
-    public AgentMaxChatsResponse getAgentMaxChats(String agentId, String departmentId, String token) {
-        return requestEngine.getRequest(EndPointsClass.AGENTS_MAX_CHATS+"?agentId="+agentId+"&departmentId="+departmentId, new Header("Authorization", token)).as(AgentMaxChatsResponse.class);
+    public Response getAgentMaxChats(String agentId, String departmentId, String token) {
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("agentId",agentId);
+        parameters.put("departmentId",departmentId);
+        return requestEngine.getRequest(EndPointsClass.AGENTS_MAX_CHATS+EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
 
     public Response getAgentImage(String agentId, String token) {

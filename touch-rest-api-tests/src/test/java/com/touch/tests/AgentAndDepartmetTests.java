@@ -2,9 +2,7 @@ package com.touch.tests;
 
 import com.clickatell.models.user_profiles.UserProfile;
 import com.touch.models.ErrorMessage;
-import com.touch.models.touch.agent.AgentCredentialsDto;
-import com.touch.models.touch.agent.AgentResponse;
-import com.touch.models.touch.agent.ListAgentResponse;
+import com.touch.models.touch.agent.*;
 import com.touch.models.touch.department.DepartmentDto;
 import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
@@ -13,7 +11,9 @@ import com.touch.models.touch.tenant.TenantResponseV5;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -26,14 +26,17 @@ import java.util.List;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class AgentAndDepartmetTests extends BaseTestClass {
-    String agentId="wrong_agentId";
-    String expectedMessage = "Agent with id "+agentId+" not found";
+    String agentId = "wrong_agentId";
+    String expectedMessage = "Agent with id " + agentId + " not found";
     String fileName = "tenant_logo.jpg";
     String file = getFullPathToFile("TenantResources/" + fileName);
     String token;
+    TenantResponseV5 testTenant;
+
     @BeforeClass
     public void beforeClass() {
         token = getToken();
+        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
     }
 
     @Test
@@ -44,7 +47,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            create new tenant
         TenantRequest tenantRequest = new TenantRequest();
         tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
+        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
         //fetch new agent and if it exist we get if not we get error message
@@ -57,48 +60,44 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 
     }
 
-    // TODO here we have bug with departments we can't get info
-    //    @Test
+    @Test
     public void verifyMaxChatsRoomForAgent() {
-        UserProfile userProfile = userActions.createNewUser();
-        String token = userActions.loginWithNewUserAndReturnToken(userProfile);
-//            create new tenant
-        TenantRequest tenantRequest = new TenantRequest();
-        tenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest,token, TenantResponseV5.class);
-//            get agent credential
-        AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
-        List<AgentResponse> agentsList = agentActions.getListOfAgents(null, token, ListAgentResponse.class).getAgents();
-//        create new department and connect it with new tenant
-        DepartmentDto department = new DepartmentDto();
-        department.setTenantId(newTenant.getId());
-//        DepartmentResponse newDepartment = departmentActions.addDepartment(department,token);
-//
-//        String agentId = "";
-//        for (AgentResponse agent : agentsList) {
-//            if (agent.getAgentJid().equals(credentials.getJid()))
-//                agentId = agent.getId();
-//        }
-//        //        Assign agent to new department and verify that it returns correct status code
-//        Assert.assertEquals(departmentActions.putAgentInDepartment(newDepartment.getId(), agentId), 201);
-//        get max chart value and verify it's correctness
-//        Assert.assertEquals(agentActions.getAgentMaxChats(agentId, token, newDepartment.getId()), 5);
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setTenantId(testTenant.getId());
+        String departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+        String jid = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid();
+        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        String agentId = agent.getId();
+        departmentActions.putAgentInDepartment(departmentId, agentId, token);
+        Response agentMaxChatsResponse = agentActions.getAgentMaxChats(agentId, departmentId, token);
+        Assert.assertEquals(agentMaxChatsResponse.getStatusCode(), 200);
+        Assert.assertEquals(agentMaxChatsResponse.as(AgentMaxChatsResponse.class).getMaxChats(), departmentDto.getSessionsCapacity().toString());
 
-//            delete agent
-        Assert.assertEquals(agentActions.deleteAgent(agentId, token).getStatusCode(), 200);
-//            delete tenant
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
-
+//        delete department
+        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(), 200);
     }
 
     @Test
     public void getAgentWithNotExistingJid() {
         Assert.assertTrue(agentActions.getListOfAgents("not_existing_jid", token, ErrorMessage.class).getErrorMessage().matches("Agent with jabber id not_existing_jid not found"));
     }
-//TODO
-//    @Test
-    public void getMaxChartForNotExistingAgentAndDepartment() {
-
+    @Test(dataProvider = "maxChatsWrongData")
+    public void getMaxChatWithWrongData(String departmentId, String agentId, int statusCode) {
+        if(departmentId.equals("test")) {
+            DepartmentDto departmentDto = new DepartmentDto();
+            departmentDto.setTenantId(testTenant.getId());
+            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+        }
+        if(agentId.equals("test")){
+            String jid = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid();
+            AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+            agentId = agent.getId();
+        }
+        if(departmentId.equals("test")&&agentId.equals("test")){
+            departmentActions.putAgentInDepartment(departmentId, agentId, token);
+        }
+        Response agentMaxChatsResponse = agentActions.getAgentMaxChats(agentId, departmentId, token);
+        Assert.assertEquals(agentMaxChatsResponse.getStatusCode(),statusCode);
     }
 
     @Test
@@ -131,7 +130,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 //            get agent credential
         AgentCredentialsDto credentials = agentActions.getCredentials(token, AgentCredentialsDto.class);
         AgentResponse agent = agentActions.getListOfAgents(credentials.getJid(), token, AgentResponse.class);
-String agentId = agent.getId();
+        String agentId = agent.getId();
 //            add new image and very that it is correct
         Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file), token).getStatusCode(), 200);
         Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId, token).asInputStream(), new FileInputStream(new File(file))));
@@ -142,7 +141,16 @@ String agentId = agent.getId();
 //            delete tenant
         Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
     }
-
+    @DataProvider
+    private static Object[][] maxChatsWrongData() {
+        return new Object[][]{
+                {"test","", 404},
+                {"test","not_existing", 404},
+                {"","test", 404},
+                {"not_existing","test", 404},
+                {"","", 404}
+        };
+    }
     private String getFullPathToFile(String pathToFile) {
         return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
@@ -168,6 +176,11 @@ String agentId = agent.getId();
             if (i2 != null)
                 i2.close();
         }
+    }
+    @AfterClass
+    public void afterClass() {
+        token = getToken();
+        removeAllTestTenants(token);
     }
 
 }
