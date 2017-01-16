@@ -231,6 +231,9 @@ public class DepartmentsTests extends BaseTestClass {
     @AfterClass
     public void afterClass() {
         deleteTestDepartmnets();
+        String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
+        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        agentActions.deleteAgent(agent.getId(),token);
     }
 
     private void deleteTestDepartmnets() {

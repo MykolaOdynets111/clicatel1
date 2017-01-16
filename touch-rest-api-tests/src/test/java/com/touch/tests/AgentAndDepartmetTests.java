@@ -190,7 +190,11 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     @AfterClass
     public void afterClass() {
         token = getToken();
+        String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
+        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        agentActions.deleteAgent(agent.getId(),token);
         removeAllTestTenants(token);
+
     }
 
 }
