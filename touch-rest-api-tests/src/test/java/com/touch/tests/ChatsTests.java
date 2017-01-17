@@ -22,7 +22,7 @@ public class ChatsTests extends BaseTestClass {
 
     @Test
     public void getNewChatRoom() {
-        String tenantWithBot = TestingEnvProperties.getPropertyByName("touch.tenant.id");
+        String tenantWithBot = getTestTenant1().getId();
         ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1","Android", token).as(ChatRoomResponse.class);
         Assert.assertTrue(chatRoom.getChatroomJid().matches(".{32}@muc.clickatelllabs.com"));
 
