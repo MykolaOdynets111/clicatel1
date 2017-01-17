@@ -5,6 +5,7 @@ import com.touch.models.touch.cards.PlatformDtoV4;
 import com.touch.models.touch.cards.TouchCardResponseV3;
 import com.touch.models.touch.cards.TouchCardResponseV4;
 import com.touch.models.touch.tenant.TenantResponseV5;
+import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -22,7 +23,9 @@ public class CardsTests extends BaseTestClass {
 
     @BeforeClass
     public void beforeClass() {
-//        add new test card
+        token = getToken();
+        testTenant = getTestTenant1();
+        testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
         cardsActions.addCard("ios", "testCard", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
         cardsActions.addCard("android", "testAndroid", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
     }

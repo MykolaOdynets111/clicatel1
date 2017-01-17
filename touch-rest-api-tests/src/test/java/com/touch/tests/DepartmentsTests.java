@@ -13,6 +13,7 @@ import com.touch.models.touch.department.DepartmentResponse;
 import com.touch.models.touch.department.ListDepartmentResponse;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
+import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -31,7 +32,13 @@ import java.util.List;
  */
 public class DepartmentsTests extends BaseTestClass {
 
-
+    @BeforeClass
+    public void beforeClass() {
+        token = getToken();
+        testTenant = getTestTenant1();
+        testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
+        deleteTestDepartmnets();
+    }
 
     @Test
     public void getListOfDepartments() {

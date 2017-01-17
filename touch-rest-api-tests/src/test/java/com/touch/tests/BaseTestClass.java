@@ -71,7 +71,7 @@ public class BaseTestClass {
 
     public TenantResponseV5 getTestTenant1() {
         for (TenantResponseV5 tenant : tenantActions.getTenantsList(token)) {
-            if (tenant.getTenantOrgName().equals("AutoVerificationTenant"))
+            if (tenant.getTenantOrgName().equalsIgnoreCase("AutoVerificationTenant"))
                 return tenant;
         }
         return addAutoTestTenant1();
