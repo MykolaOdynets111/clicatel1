@@ -32,15 +32,7 @@ import java.util.List;
  */
 public class DepartmentsTests extends BaseTestClass {
 
-    @BeforeClass
-    public void beforeClass() {
-        token = getToken();
-        testTenant = getTestTenant1();
-        testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
-        deleteTestDepartmnets();
-    }
-
-    @Test
+     @Test
     public void getListOfDepartments() {
         Response response = departmentActions.getListOfDepartments(token);
 //        verify that status code is correct
@@ -226,7 +218,7 @@ public class DepartmentsTests extends BaseTestClass {
         List<DepartmentResponse> departmetsList = departmentActions.getListOfDepartments(token).as(ListDepartmentResponse.class).getDepartments();
         if (!departmetsList.isEmpty()) {
             for (DepartmentResponse department : departmetsList) {
-                if (department.getName().contains("test")||department.getName().contains("Test")||department.getName().contains(""))
+                if (department.getName().contains("test")||department.getName().contains("Test")||department.getName().equals(""))
                     Assert.assertEquals(departmentActions.deleteDepartment(department.getId(), token).getStatusCode(), 200);
             }
         }
