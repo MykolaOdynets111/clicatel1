@@ -30,27 +30,9 @@ import java.util.List;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class DepartmentsTests extends BaseTestClass {
-    String token;
-    String testToken;
-    TenantResponseV5 testTenant;
-    TenantRequest testTenantRequest=new TenantRequest();
 
-    @BeforeClass
-    public void beforeClass() {
-        token = getToken();
-        testTenantRequest.setAccountId(null);
-        testTenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
-        String accountId=testTenant.getAccountId();
-        String accountName=testTenant.getTenantOrgName();
-        String email = testTenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = testTenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = testTenantRequest.getMc2AccountRequest().getLastName();
-        String password = testTenantRequest.getMc2AccountRequest().getPassword();
-        testToken = userActions.signUpAndLoginWithNewUser(accountId, accountName, email,firstName , lastName, password);
-        deleteTestDepartmnets();
-    }
 
-    // here is a bug
+
     @Test
     public void getListOfDepartments() {
         Response response = departmentActions.getListOfDepartments(token);
@@ -231,16 +213,13 @@ public class DepartmentsTests extends BaseTestClass {
     @AfterClass
     public void afterClass() {
         deleteTestDepartmnets();
-        String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
-        agentActions.deleteAgent(agent.getId(),token);
     }
 
     private void deleteTestDepartmnets() {
         List<DepartmentResponse> departmetsList = departmentActions.getListOfDepartments(token).as(ListDepartmentResponse.class).getDepartments();
         if (!departmetsList.isEmpty()) {
             for (DepartmentResponse department : departmetsList) {
-                if (department.getName().contains("test")||department.getName().contains("Test"))
+                if (department.getName().contains("test")||department.getName().contains("Test")||department.getName().contains(""))
                     Assert.assertEquals(departmentActions.deleteDepartment(department.getId(), token).getStatusCode(), 200);
             }
         }

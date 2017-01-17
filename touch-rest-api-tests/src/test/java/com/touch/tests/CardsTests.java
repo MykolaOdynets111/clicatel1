@@ -19,13 +19,9 @@ import java.util.List;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class CardsTests extends BaseTestClass {
-    String token;
-    TenantResponseV5 testTenant;
 
     @BeforeClass
     public void beforeClass() {
-        token = getToken();
-//        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
 //        add new test card
         cardsActions.addCard("ios", "testCard", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
         cardsActions.addCard("android", "testAndroid", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);

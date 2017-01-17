@@ -58,16 +58,18 @@ public class ChatSessionResponse {
 
   @SerializedName("userMeta")
   private String userMeta = null;
+  @SerializedName("botJid")
+  private String botJid = null;
 
   public ChatSessionResponse id(String id) {
     this.id = id;
     return this;
   }
 
-   /**
+  /**
    * Get id
    * @return id
-  **/
+   **/
   @ApiModelProperty(example = "null", value = "")
   public String getId() {
     return id;
@@ -75,6 +77,23 @@ public class ChatSessionResponse {
 
   public void setId(String id) {
     this.id = id;
+  }
+  public ChatSessionResponse botJid(String botJid) {
+    this.botJid = botJid;
+    return this;
+  }
+
+  /**
+   * Get botJid
+   * @return botJid
+   **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getBotJid() {
+    return botJid;
+  }
+
+  public void setBotJid(String botJid) {
+    this.botJid = botJid;
   }
 
   public ChatSessionResponse clientId(String clientId) {

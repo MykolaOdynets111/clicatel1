@@ -4,6 +4,7 @@ import com.touch.models.ErrorMessage;
 import com.touch.models.Message;
 import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.models.touch.tenant.*;
+import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -19,89 +20,33 @@ import java.util.List;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class TenantTests extends BaseTestClass {
-    String token;
-    String testToken;
-    TenantResponseV5 testTenant;
-    TenantRequest testTenantRequest=new TenantRequest();
 
-    @BeforeClass
-    public void beforeClass() {
-        token = getToken();
-        testTenantRequest.setAccountId(null);
-        testTenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
-        String accountId=testTenant.getAccountId();
-        String accountName=testTenant.getTenantOrgName();
-        String email = testTenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = testTenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = testTenantRequest.getMc2AccountRequest().getLastName();
-        String password = testTenantRequest.getMc2AccountRequest().getPassword();
-        testToken = userActions.signUpAndLoginWithNewUser(accountId, accountName, email,firstName , lastName, password);
-    }
-
-    @Test
-    public void createNewTenant() {
-        TenantRequest tenantRequest = new TenantRequest();
-        int amountTenantsBeforeAddNew = tenantActions.getTenantsList(token).size();
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
-        int amountTenantsAfterAddNew = tenantsListAfterAddNewTenant.size();
-        Assert.assertEquals(amountTenantsBeforeAddNew + 1, amountTenantsAfterAddNew);
-        Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
-        //Verify get tenant request
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
-        /*
-        post conditions
-         */
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
-        tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
-        // Verify that tenant was deleted after test
-        Assert.assertEquals(amountTenantsBeforeAddNew, tenantsListAfterAddNewTenant.size());
-    }
 
     @Test
     public void getTenantListFilteredByAccountId() {
         TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
         Response response = tenantActions.getTenantsList(tenant.getAccountId(), token);
-        Assert.assertEquals(response.getStatusCode(),200);
+        Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.as(ListTenantResponse.class).getTenants().contains(tenant));
     }
 
-    @Test
-    public void createNewTenantWithoutAccount() {
-        TenantRequest tenantRequest = new TenantRequest();
-        String email = tenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = tenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = tenantRequest.getMc2AccountRequest().getLastName();
-        String password = tenantRequest.getMc2AccountRequest().getPassword();
-        tenantRequest.setAccountId(null);
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
-        Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
-        //get tenant from DB
-        TenantResponseV5 tenant = tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class);
-        //add generated accountId to our request to verify other fields
-        tenantRequest.setAccountId(newTenant.getAccountId());
-        Assert.assertEquals(tenantRequest, tenant);
-        Assert.assertNotNull(tenant.getAccountId());
-        //Verify get tenant request
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
-        //activate new user in mc2
-        userActions.signUpAndLoginWithNewUser(newTenant.getAccountId(), newTenant.getTenantOrgName(), email, firstName, lastName, password);
-        // get admin token
-        String mc2AdminToken = userActions.loginAsMC2AdminUserAndReturnToken();
-        // get account in mc2 and verify that information is correct 
-        AccountInfoResponse accountInfo = userActions.getAccountInfo(newTenant.getAccountId(), mc2AdminToken);
-        Assert.assertEquals(accountInfo, new AccountInfoResponse(newTenant.getTenantOrgName(), "ACTIVE", newTenant.getAccountId(), null));
 
-        /*
-        post conditions
-         */
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
-    }
 
     @Test
     public void addExistingTenant() {
-        TenantRequest tenantRequest = new TenantRequest();
+        TenantRequest testTenantRequest = new TenantRequest();
+        testTenantRequest.setAccountId(null);
+        testTenantRequest.setTenantOrgName("AutoVerificationTenant");
+        testTenantRequest.setContactEmail("automationTenant@sink.sendgrid.net");
+        testTenantRequest.setDescription("automation");
+        testTenantRequest.setShortDescription("auto verification");
+        testTenantRequest.setTenantName("AutoVerificationTenant");
+        Mc2AccountRequest mc2Account = new Mc2AccountRequest();
+        mc2Account.setFirstName(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.firstName"));
+        mc2Account.setLastName(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.lastName"));
+        mc2Account.setEmail(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"));
+        mc2Account.setPassword(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
+        testTenantRequest.setMc2AccountRequest(mc2Account);
         String regExpErrorMessage = "Tenant with .* already exists";
         // Verify that when we add one more Tenant with same data we get errorMessage;
         Assert.assertTrue(tenantActions.createNewTenantInTouchSide(testTenantRequest, token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
@@ -112,6 +57,8 @@ public class TenantTests extends BaseTestClass {
 
         // prepare new dada for update tenant
         TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
+        tenantUpdateDto.setContactEmail("automationTenant@sink.sendgrid.net");
+        tenantUpdateDto.setTenantOrgName("AutoVerificationTenant");
         tenantActions.updateTenant(testTenant.getId(), tenantUpdateDto, testToken, TenantUpdateDtoV5.class);
         Assert.assertTrue(tenantUpdateDto.getCategory().equals(tenantUpdateDto.getCategory()));
         Assert.assertTrue(tenantUpdateDto.getContactEmail().equals(tenantUpdateDto.getContactEmail()));
@@ -126,17 +73,6 @@ public class TenantTests extends BaseTestClass {
 
     }
 
-    @Test
-    public void deleteTenant() {
-        String regExpErrorMessage = "Tenant with id .* not found";
-        TenantRequest tenantRequest = new TenantRequest();
-        int amountTenantsBefore = tenantActions.getTenantsList(token).size();
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
-        Assert.assertEquals(amountTenantsBefore, tenantActions.getTenantsList(token).size());
-        Assert.assertTrue(tenantActions.getTenant(newTenant.getId(), token, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
-    }
 
     @Test
     public void deleteNotExistingTenant() {
@@ -150,6 +86,8 @@ public class TenantTests extends BaseTestClass {
         tenantActions.addProperty(testTenant.getId(), testColourName, testColourValue, testToken, TenantProperties.class);
         //Verify that new colour was added to tenant - we use get colour request for tenant
         Assert.assertTrue(tenantActions.getPropertiesForTenant(testTenant.getId(), testToken).contains(new TenantProperties(testColourName, testColourValue)));
+//        delete colour
+        Assert.assertEquals(tenantActions.deleteColour(testTenant.getId(), testColourName, testToken), 200);
     }
 
     @Test
@@ -298,7 +236,7 @@ public class TenantTests extends BaseTestClass {
         InputStream expectedImage = new FileInputStream(new File(file));
         Assert.assertTrue(isEqualInputStreams(actualImage, expectedImage));
 //
-//        //delete common flow
+//        //delete flow
         Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName, testToken), 200);
     }
 
@@ -333,20 +271,16 @@ public class TenantTests extends BaseTestClass {
 
     @Test
     public void getNearestTenants() throws IOException {
-        TenantRequest tenantRequest1 = new TenantRequest();
-        tenantRequest1.setAccountId(null);
-        TenantResponseV5 tenant1 = tenantActions.createNewTenantInTouchSide(tenantRequest1, token, TenantResponseV5.class);
-        TenantRequest tenantRequest2 = new TenantRequest();
-        tenantRequest2.setAccountId(null);
-        TenantResponseV5 tenant2 = tenantActions.createNewTenantInTouchSide(tenantRequest2, token, TenantResponseV5.class);
+        TenantResponseV5 tenant1 = testTenant;
+        TenantResponseV5 tenant2 = getTestTenant2();
         String tenantId1 = tenant1.getId();
         String tenantId2 = tenant2.getId();
         GpsRequest gpsRequest1 = new GpsRequest(60f, 60f);
         GpsRequest gpsRequest2 = new GpsRequest(70f, 70f);
         String addressId1 = tenant1.getTenantAddresses().get(0).getId();
         String addressId2 = tenant2.getTenantAddresses().get(0).getId();
-        String token1 = getTokenForNewTenantWithNewAccount(tenant1, tenantRequest1);
-        String token2 = getTokenForNewTenantWithNewAccount(tenant2, tenantRequest2);
+        String token1 = testToken;
+        String token2 = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email"),TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password"));
         tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1, token1);
         tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2, token2);
         TenantResponseV5 ten1 = tenantActions.getTenant(tenantId1, token, TenantResponseV5.class);
@@ -354,8 +288,6 @@ public class TenantTests extends BaseTestClass {
         List<TenantResponseV5> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000", token);
         List<TenantResponseV5> newTenantsList = Arrays.asList(ten1, ten2);
         Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenets are not in nearest tenants list");
-        Assert.assertEquals(tenantActions.deleteTenant(tenantId1, token), 200);
-        Assert.assertEquals(tenantActions.deleteTenant(tenantId2, token), 200);
     }
 
     @Test
@@ -386,7 +318,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateBussinesHoursForAddress() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        String hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(),addressId,testToken,ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
+        String hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
         AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
         businessHourRequest.setStartWorkTime("11:00");
         Response response = tenantActions.updateBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, businessHourRequest, testToken);
@@ -397,7 +329,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void deleteBussinesHoursForAddress() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        String hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(),addressId,testToken,ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
+        String hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
         Assert.assertEquals(tenantActions.deleteBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, testToken), 200);
 
     }
@@ -411,7 +343,7 @@ public class TenantTests extends BaseTestClass {
             addressId = testTenant.getTenantAddresses().get(0).getId();
         }
         if (hoursId.equals("correct")) {
-            hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(),testTenant.getTenantAddresses().get(0).getId(),testToken,ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
+            hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(), testTenant.getTenantAddresses().get(0).getId(), testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
         }
         AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
         Response response = tenantActions.updateBussinesHoursForAddress(tenantId, addressId, hoursId, businessHourRequest, testToken);
@@ -447,7 +379,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateBusinessHoursForTenantWithNotExistTenant() {
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
-        Response response = tenantActions.updateBussinesHoursForTenant("not_exist", tenantActions.getBussinesHoursFromAddress(testTenant.getId(),testTenant.getTenantAddresses().get(0).getId(),testToken,ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId(), businessHourRequest, token);
+        Response response = tenantActions.updateBussinesHoursForTenant("not_exist", tenantActions.getBussinesHoursFromAddress(testTenant.getId(), testTenant.getTenantAddresses().get(0).getId(), testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId(), businessHourRequest, token);
         Assert.assertEquals(response.getStatusCode(), 401);
 
     }
@@ -467,8 +399,12 @@ public class TenantTests extends BaseTestClass {
         Response response = tenantActions.addFAQs(testTenant.getId(), faq, testToken);
 //        verify that we get correct status code and new faq was added to tenant
         Assert.assertEquals(response.getStatusCode(), 201);
-        Assert.assertEquals(faq, response.as(TenantFaqResponse.class));
+        TenantFaqResponse faqResponse = response.as(TenantFaqResponse.class);
+        Assert.assertEquals(faq, faqResponse);
         Assert.assertTrue(tenantActions.getFAQs(testTenant.getId(), testToken, ListTenantFaqsResponse.class).getFaqs().contains(response.as(TenantFaqResponse.class)));
+        //        delete faqs
+        Assert.assertEquals(tenantActions.deleteFAQs(testTenant.getId(), faqResponse.getId(), testToken).getStatusCode(), 200);
+
     }
 
     @Test
@@ -506,7 +442,8 @@ public class TenantTests extends BaseTestClass {
         Assert.assertEquals(response.getStatusCode(), 202);
         Assert.assertEquals(faq, response.as(TenantFaqResponse.class));
         Assert.assertTrue(tenantActions.getFAQs(testTenant.getId(), testToken, ListTenantFaqsResponse.class).getFaqs().contains(response.as(TenantFaqResponse.class)));
-
+//        delete faqs
+        Assert.assertEquals(tenantActions.deleteFAQs(testTenant.getId(), faqId, testToken).getStatusCode(), 200);
 
     }
 
@@ -532,7 +469,9 @@ public class TenantTests extends BaseTestClass {
         Response getTagsResponse = tenantActions.getTAGs(testTenant.getId(), testToken);
         Assert.assertEquals(getTagsResponse.getStatusCode(), 200);
         Assert.assertTrue(getTagsResponse.as(ListTenantTagsResponse.class).getTenantTags().contains(tenantTagRequest.getTag()));
-
+//        delete tag
+        Response deleteResponse = tenantActions.deleteTAGs(testTenant.getId(), tenantTagRequest.getTag(), testToken);
+        Assert.assertEquals(deleteResponse.getStatusCode(), 200);
     }
 
     @Test
@@ -562,7 +501,9 @@ public class TenantTests extends BaseTestClass {
         response = tenantActions.deleteTAGs(testTenant.getId(), "not_existing", testToken);
         Assert.assertEquals(response.getStatusCode(), 404);
         Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Tag .+ not found"));
-
+//        delete tag
+        Response deleteResponse = tenantActions.deleteTAGs(testTenant.getId(), tenantTagRequest.getTag(), testToken);
+        Assert.assertEquals(deleteResponse.getStatusCode(), 200);
     }
 
 
@@ -630,14 +571,7 @@ public class TenantTests extends BaseTestClass {
                 {"test", "test", "test", 401, "Not allowed"}
         };
     }
- private String getTokenForNewTenantWithNewAccount(TenantResponseV5 tenantResponse, TenantRequest tenantRequest){
-     String accountId=tenantResponse.getAccountId();
-     String accountName=tenantResponse.getTenantOrgName();
-     String email = tenantRequest.getMc2AccountRequest().getEmail();
-     String firstName = tenantRequest.getMc2AccountRequest().getFirstName();
-     String lastName = tenantRequest.getMc2AccountRequest().getLastName();
-     String password = tenantRequest.getMc2AccountRequest().getPassword();
-     return userActions.signUpAndLoginWithNewUser(accountId, accountName, email,firstName , lastName, password);
- }
+
+
 
 }

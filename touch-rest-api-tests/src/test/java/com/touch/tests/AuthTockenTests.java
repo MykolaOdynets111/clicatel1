@@ -7,6 +7,7 @@ import com.touch.models.touch.auth.TokenDto;
 import com.touch.models.touch.auth.TokenResponseV1;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
+import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -20,14 +21,6 @@ import java.io.InputStream;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class AuthTockenTests extends BaseTestClass {
-    String token;
-    TenantResponseV5 testTenant;
-
-    @BeforeClass
-    public void beforeClass() {
-        token = getToken();
-        testTenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
-    }
 
     @Test
     public void getTokenList() {
@@ -52,8 +45,9 @@ public class AuthTockenTests extends BaseTestClass {
     }
 
     @Test
-    public void addTokenForSpecialTenantAndVerifyPermition() {
-        TenantResponseV5 tenant2 = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
+    public void addTokenForSpecialTenantAndVerifyPermission() {
+
+        TenantResponseV5 tenant2 = getTestTenant2();
         TokenDto tokenDto = new TokenDto(testTenant.getId(), "ANDROID", "testDescritption");
         TokenResponseV1 androidToken = authActions.addTocken(tokenDto, token).as(TokenResponseV1.class);
         Response responseAndroidToken = authActions.authentificateTocken(new TokenBase(androidToken.getToken()), token);

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Automation test" >
+    <test name="Regression testcases" >
+        <classes>
+            <class name="com.touch.tests.AgentAndDepartmetTests"/>
+            <class name="com.touch.tests.AuthTockenTests"/>
+            <class name="com.touch.tests.CardsTests"/>
+            <class name="com.touch.tests.ChatsTests"/>
+            <class name="com.touch.tests.DepartmentsTests"/>
+            <class name="com.touch.tests.IntegrationTests"/>
+            <class name="com.touch.tests.TenantTests"/>
+            <class name="com.touch.tests.UserProfileTests"/>
+        </classes>
+    </test>
+</suite>

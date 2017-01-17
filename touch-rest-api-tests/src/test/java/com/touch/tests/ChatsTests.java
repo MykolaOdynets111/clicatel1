@@ -19,14 +19,10 @@ import org.testng.annotations.Test;
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class ChatsTests extends BaseTestClass {
-    String token;
-    @BeforeClass
-    public void beforeClass() {
-        token = getToken();
-    }
+
     @Test
     public void getNewChatRoom() {
-        String tenantWithBot = "20a9c80d53fb11e6a0280626baf6c11d";
+        String tenantWithBot = TestingEnvProperties.getPropertyByName("touch.tenant.id");
         ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1","Android", token).as(ChatRoomResponse.class);
         Assert.assertTrue(chatRoom.getChatroomJid().matches(".{32}@muc.clickatelllabs.com"));
 
@@ -39,10 +35,9 @@ public class ChatsTests extends BaseTestClass {
     @Test
     public void getNewSessionAndSessionList() {
         String sessionId = "testSession" + StringUtils.generateRandomString(10);
-        TenantRequest tenantRequest = new TenantRequest();
-            TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
+
         ListChatSessionResponse listSessionBeforeAddingNew = chatsActions.getListOfSessions(null, null, token).as(ListChatSessionResponse.class);
-        ChatSessionResponse session = chatsActions.addNewSession(sessionId, newTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
+        ChatSessionResponse session = chatsActions.addNewSession(sessionId, testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
         ListChatSessionResponse listSessionAfterAddingNew = chatsActions.getListOfSessions(null, null, token).as(ListChatSessionResponse.class);
 //        verify that we have one more new session in session list
         Assert.assertEquals(listSessionBeforeAddingNew.getChatSessions().size() + 1, listSessionAfterAddingNew.getChatSessions().size());
@@ -54,7 +49,6 @@ public class ChatsTests extends BaseTestClass {
 
         //        post conditions delete tenant and session
         Assert.assertEquals(chatsActions.deleteSession(session.getSessionId(), token).getStatusCode(), 200);
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
 
     }
 

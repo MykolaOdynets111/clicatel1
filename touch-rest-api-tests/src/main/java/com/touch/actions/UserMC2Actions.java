@@ -2,6 +2,7 @@ package com.touch.actions;
 
 import com.clickatell.actions.AuthActions;
 import com.clickatell.engines.RequestEngine;
+import com.clickatell.models.EndPointsClass;
 import com.clickatell.models.MessageResponse;
 import com.clickatell.models.accounts.Account;
 import com.clickatell.models.user_profiles.UserProfile;
@@ -14,6 +15,7 @@ import com.touch.utils.MySQLConnector;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.http.Header;
+import io.restassured.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,9 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
     public UserMC2Actions(RequestEngine requestEngine) {
         super(requestEngine);
         this.requestEngine =requestEngine;
+    }
+    public Response getUserProfile(String token) {
+        return requestEngine.getRequest(EndPointsClass.USERS_PROFILE, new Header("Authorization", token));
     }
     public User createUserWithTouchPlatformAndLogin() {
         String accountName = "accountname_" + StringUtils.generateRandomString(10);
