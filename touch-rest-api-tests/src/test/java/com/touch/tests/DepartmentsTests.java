@@ -41,9 +41,9 @@ public class DepartmentsTests extends BaseTestClass {
         Assert.assertTrue(!response.as(ListDepartmentResponse.class).getDepartments().isEmpty());
     }
 
-    //    here are bugs
     @Test(dataProvider = "addDepartmentsOptions")
     public void addNewDepartment(String tenantId, String name, String description, int sessionsCapacity, int statusCode) {
+        deleteTestDepartmnets();
         if(tenantId.equals("correct")&&statusCode==400)
             departmentActions.addDepartment(new DepartmentDto(testTenant.getId(), name, description, sessionsCapacity), token);
         if (tenantId.equals("correct"))
@@ -55,7 +55,7 @@ public class DepartmentsTests extends BaseTestClass {
 //            verify that new department has all correct added data
             Assert.assertEquals(response.as(DepartmentResponse.class), department);
         }
-        deleteTestDepartmnets();
+
     }
 
     @Test
