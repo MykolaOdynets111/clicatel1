@@ -83,10 +83,10 @@ public class CardsTests extends BaseTestClass {
     @Test
     public void deleteCard() {
         //add new test card
-        cardsActions.addCard("ios", "test", "testDescription", "testTenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
-        List<TouchCardResponseV4> cards = cardsActions.getAllCards("test", "ios", token).as(ListCardsPlatformsResponseV4.class).getCards();
+        cardsActions.addCard("web", "testCard1", "testDescription", null, null, null, new File(getFullPathToFile("cards/test-navigation-card")), token);
+        List<TouchCardResponseV4> cards = cardsActions.getAllCards("testCard1", "web", testToken).as(ListCardsPlatformsResponseV4.class).getCards();
         for (PlatformDtoV4 platform : cards.get(0).getPlatforms()) {
-            Assert.assertEquals(cardsActions.deleteCard(cards.get(0).getCardName(), platform.getPlatform(), platform.getVersion(), token).getStatusCode(), 200);
+            Assert.assertEquals(cardsActions.deleteCard(cards.get(0).getCardName(), platform.getPlatform(), platform.getVersion(), testToken).getStatusCode(), 200);
         }
     }
 

@@ -37,20 +37,20 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         departmentDto.setTenantId(testTenant.getId());
         String departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
         String agentId = agent.getId();
-        departmentActions.putAgentInDepartment(departmentId, agentId, token);
-        Response agentMaxChatsResponse = agentActions.getAgentMaxChats(agentId, departmentId, token);
+        departmentActions.putAgentInDepartment(departmentId, agentId, testToken);
+        Response agentMaxChatsResponse = agentActions.getAgentMaxChats(agentId, departmentId, testToken);
         Assert.assertEquals(agentMaxChatsResponse.getStatusCode(), 200);
         Assert.assertEquals(agentMaxChatsResponse.as(AgentMaxChatsResponse.class).getMaxChats(), departmentDto.getSessionsCapacity().toString());
 
 //        delete department
-        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(), 200);
+        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, testToken).getStatusCode(), 200);
     }
 
     @Test
     public void getAgentWithNotExistingJid() {
-        Assert.assertTrue(agentActions.getListOfAgents("not_existing_jid", token, ErrorMessage.class).getErrorMessage().matches("Agent with jabber id not_existing_jid not found"));
+        Assert.assertTrue(agentActions.getListOfAgents("not_existing_jid", testToken, ErrorMessage.class).getErrorMessage().matches("Agent with jabber id not_existing_jid not found"));
     }
 
     @Test(dataProvider = "maxChatsWrongData")
@@ -59,22 +59,22 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         if (departmentId.equals("test")) {
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
-            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
             deleteDepartment=true;
         }
         if (agentId.equals("test")) {
             String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-            AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+            AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
             agentId = agent.getId();
         }
         if (departmentId.equals("test") && agentId.equals("test")) {
-            departmentActions.putAgentInDepartment(departmentId, agentId, token);
+            departmentActions.putAgentInDepartment(departmentId, agentId, testToken);
         }
-        Response agentMaxChatsResponse = agentActions.getAgentMaxChats(agentId, departmentId, token);
+        Response agentMaxChatsResponse = agentActions.getAgentMaxChats(agentId, departmentId, testToken);
         Assert.assertEquals(agentMaxChatsResponse.getStatusCode(), statusCode);
         //        delete department
         if (deleteDepartment) {
-            Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(), 200);
+            Assert.assertEquals(departmentActions.deleteDepartment(departmentId, testToken).getStatusCode(), 200);
         }
     }
 
@@ -91,21 +91,21 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 
     @Test
     public void addAndDeleteImageForNotExistingAgent() {
-        Assert.assertTrue(agentActions.updateAgentImage(agentId, new File(file), token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
-        Assert.assertTrue(agentActions.deleteAgentImage(agentId, token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.updateAgentImage(agentId, new File(file), testToken).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.deleteAgentImage(agentId, testToken).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
 
     }
 
     @Test
     public void addAndDeleteImageForAgent() throws IOException {
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
         String agentId = agent.getId();
 //            add new image and very that it is correct
-        Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file), token).getStatusCode(), 200);
-        Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId, token).asInputStream(), new FileInputStream(new File(file))));
+        Assert.assertEquals(agentActions.updateAgentImage(agentId, new File(file), testToken).getStatusCode(), 200);
+        Assert.assertTrue(isEqualInputStreams(agentActions.getAgentImage(agentId, testToken).asInputStream(), new FileInputStream(new File(file))));
 //        delete image and verify that status code was return correct
-        Assert.assertEquals(agentActions.deleteAgentImage(agentId, token).getStatusCode(), 200);
+        Assert.assertEquals(agentActions.deleteAgentImage(agentId, testToken).getStatusCode(), 200);
     }
 
     @DataProvider

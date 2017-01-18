@@ -69,7 +69,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateNotExistingTenantWithCorrectData() {
         TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
-        Assert.assertTrue(tenantActions.updateTenant("not_existing_tenant", tenantUpdateDto, token, ErrorMessage.class).getErrorMessage().matches("Not allowed"));
+        Assert.assertTrue(tenantActions.updateTenant("not_existing_tenant", tenantUpdateDto, testToken, ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 
     }
 
@@ -172,9 +172,9 @@ public class TenantTests extends BaseTestClass {
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
 // Verify that new common flow was added successful
-        Assert.assertEquals(tenantActions.addCommonFlow(new File(file), token), 201);
+        Assert.assertEquals(tenantActions.addCommonFlow(new File(file), testToken), 201);
         boolean isCommonFlowAdded = false;
-        for (FlowResponse flow : tenantActions.getAllCommonFlows(token).getFlows()) {
+        for (FlowResponse flow : tenantActions.getAllCommonFlows(testToken).getFlows()) {
             if (flow.getFileName().equals(fileName)) {
                 isCommonFlowAdded = true;
                 break;
@@ -183,31 +183,31 @@ public class TenantTests extends BaseTestClass {
 
         Assert.assertTrue(isCommonFlowAdded);
 //        //get new common flow and convert it to InputStream
-        InputStream actualImage = tenantActions.getCommonFlowAsInputStream(fileName, token);
+        InputStream actualImage = tenantActions.getCommonFlowAsInputStream(fileName, testToken);
         InputStream expectedImage = new FileInputStream(new File(file));
         Assert.assertTrue(isEqualInputStreams(actualImage, expectedImage));
 //
 //        //delete common flow
-        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName, token), 200);
+        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName, testToken), 200);
     }
 
     @Test
     public void deleteCommonFlow() throws IOException {
 // try to delete not existing common flow
 // TODO        we need to add verification of error message when response for deleting will for each cases
-        Assert.assertEquals(tenantActions.deleteCommonFlow("notexisting", token), 404);
+        Assert.assertEquals(tenantActions.deleteCommonFlow("notexisting", testToken), 404);
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
 //        add common flow
-        tenantActions.addCommonFlow(new File(file), token);
+        tenantActions.addCommonFlow(new File(file), testToken);
 //        //delete common flow
-        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName, token), 200);
+        Assert.assertEquals(tenantActions.deleteCommonFlow(fileName, testToken), 200);
     }
 
     @Test
     public void getNotExistingCommonFlow() throws IOException {
         String regExpErrorMessage = "Flow with name .* not found.";
-        String actualErrorMessage = tenantActions.getCommonFlow("notexisting", token, ErrorMessage.class).getErrorMessage();
+        String actualErrorMessage = tenantActions.getCommonFlow("notexisting", testToken, ErrorMessage.class).getErrorMessage();
         Assert.assertTrue(actualErrorMessage.matches(regExpErrorMessage));
     }
 
@@ -411,18 +411,18 @@ public class TenantTests extends BaseTestClass {
     public void addAndDeleteAndUpdateFaqsWithWrongData() {
         TenantFaqRequest faq = new TenantFaqRequest("test question", "test answer");
 //        add new faq with not existing tenantId
-        Response response = tenantActions.addFAQs("not_existing", faq, token);
+        Response response = tenantActions.addFAQs("not_existing", faq, testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
         Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 //
         TenantFaqResponse faqResponse = tenantActions.addFAQs(testTenant.getId(), faq, testToken).as(TenantFaqResponse.class);
         String faqId = faqResponse.getId();
 //        delete faqs with not existing tenantId
-        response = tenantActions.deleteFAQs("not_existing", faqId, token);
+        response = tenantActions.deleteFAQs("not_existing", faqId, testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
         Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 //        update faqs with not existing tenantId
-        response = tenantActions.updateFAQ("not_existing", faqId, faq, token);
+        response = tenantActions.updateFAQ("not_existing", faqId, faq, testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
         Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 //        update faqs with not existing faqsId
@@ -494,7 +494,7 @@ public class TenantTests extends BaseTestClass {
         //        add tag
         tenantActions.addTag(testTenant.getId(), tenantTagRequest, testToken);
         //        delete tag for not existing tenant
-        Response response = tenantActions.deleteTAGs("not_existing", tenantTagRequest.getTag(), token);
+        Response response = tenantActions.deleteTAGs("not_existing", tenantTagRequest.getTag(), testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
         Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
         //        delete not existing tag for test tenant

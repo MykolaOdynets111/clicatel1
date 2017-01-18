@@ -114,7 +114,7 @@ public class DepartmentsTests extends BaseTestClass {
             departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
         }
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
         if (agentId.equals("correct")){
             agentId = agent.getId();
         }
@@ -140,7 +140,7 @@ public class DepartmentsTests extends BaseTestClass {
             addAgentTriger=true;
         }
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        AgentResponse agent = agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
         if (agentId.equals("correct")){
             agentId = agent.getId();
         }else{
