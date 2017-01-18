@@ -82,7 +82,7 @@ public class BaseTestClass {
             if (tenant.getTenantOrgName().equals("AutoVerTenant2"))
                 return tenant;
         }
-        return addAutoTestTenant1();
+        return addAutoTestTenant2();
     }
 
     public AgentResponse getTestAgent(String testToken) {
