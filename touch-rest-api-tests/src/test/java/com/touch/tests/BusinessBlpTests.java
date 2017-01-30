@@ -47,7 +47,7 @@ public class BusinessBlpTests extends BaseTestClass {
             Assert.assertEquals(integrationItem.getArtifactName(), fileName);
             Assert.assertEquals(integrationItem.getIntegrationName(), fileName.split("\\.")[0]);
             Assert.assertEquals(integrationItem.getType().toString(), integrationType);
-            Assert.assertEquals(integrationActions.deleteIntegrationItem(integrationItem.getArtifactName(), testToken).getStatusCode(), 204);
+            Assert.assertEquals(integrationActions.deleteIntegrationItem(integrationItem.getIntegrationName(), testToken).getStatusCode(), 204);
         }
 
     }
