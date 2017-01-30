@@ -55,7 +55,8 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
-    public Response postRequestWithQueryParameters(String endpoint, String id, Map<String, Object> formParameters,Header... header) {
+
+    public Response postRequestWithQueryParameters(String endpoint, String id, Map<String, Object> formParameters, Header... header) {
         RequestSpecification rs = given(requestSpecification).queryParams(formParameters);
         Response responce = null;
         if (header.length == 0) {
@@ -74,6 +75,7 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+
     public Response postRequestWithFormParameters(String endpoint, String id1, String id2, Map<String, Object> formParameters, String contentType) {
         RequestSpecification rs = given(requestSpecification).formParams(formParameters);
         if (contentType != null)
@@ -95,7 +97,7 @@ public class RequestEngine {
                 .response();
     }
 
-    public Response postRequestWithFormParametersAndFile(String endpoint, String id, Map<String, Object> formParameters, File file ,Header... header) {
+    public Response postRequestWithFormParametersAndFile(String endpoint, String id, Map<String, Object> formParameters, File file, Header... header) {
         RequestSpecification rs = null;
         if (file != null) {
             rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", file).formParams(formParameters);
@@ -120,6 +122,26 @@ public class RequestEngine {
                 .response();
     }
 
+    public Response putRequestWithFormParametersAndFile(String endpoint, Map<String, Object> formParameters, File file, Header... header) {
+        RequestSpecification rs = null;
+        if (file != null) {
+            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", file).formParams(formParameters);
+        } else {
+            rs = given().baseUri(ConfigApp.BASE_API_URL).multiPart("file", "").formParams(formParameters);
+        }
+        Response responce = null;
+        if (header.length == 0) {
+            rs.header(new Header("Solution", "PLATFORM"));
+        } else {
+            rs.headers(new Headers(header));
+        }
+        responce = rs.put(endpoint);
+        return responce
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
 //    /**
 //     * Make POST request with form parameters
 //     *
@@ -330,6 +352,7 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+
     public Response putRequest(String endpoint, String id, String id1, String id2, Object body, Header... header) {
         RequestSpecification rs = given(requestSpecification);
         if (body != null && !(body instanceof String)) {
@@ -352,9 +375,9 @@ public class RequestEngine {
         } else if (id != null) {
             if (id2 != null) {
                 response = rs.put(endpoint, id, id1, id2);
-            } else if(id1 != null) {
+            } else if (id1 != null) {
                 response = rs.put(endpoint, id, id1);
-            }else{
+            } else {
 
                 response = rs.put(endpoint, id);
             }
@@ -419,6 +442,7 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+
     public Response deleteRequestWithQueryParameters(String endpoint, String id, Map<String, Object> parameters, Header... header) {
         RequestSpecification rs = given(requestSpecification).queryParams(parameters);
         Response responce = null;
@@ -459,6 +483,7 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+
     public Response deleteRequest(String endpoint, String id, String id1, Header... header) {
         RequestSpecification rs = given(requestSpecification);
         Response response = null;
@@ -484,6 +509,7 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
+
     public Response deleteRequest(String endpoint, String id, Header... header) {
         RequestSpecification rs = given(requestSpecification);
         Response response = null;
@@ -492,11 +518,11 @@ public class RequestEngine {
         } else {
             rs.headers(new Headers(header));
         }
-        if (id == null ) {
+        if (id == null) {
             response = rs.delete(endpoint);
         } else {
 
-                response = rs.delete(endpoint, id);
+            response = rs.delete(endpoint, id);
         }
 
         return response
@@ -506,7 +532,8 @@ public class RequestEngine {
                 .extract()
                 .response();
     }
-    public Response deleteRequest(String endpoint, String id, String id1, String id2,Header... header) {
+
+    public Response deleteRequest(String endpoint, String id, String id1, String id2, Header... header) {
         RequestSpecification rs = given(requestSpecification);
         Response response = null;
         if (header.length == 0) {
@@ -514,14 +541,14 @@ public class RequestEngine {
         } else {
             rs.headers(new Headers(header));
         }
-        if (id == null && id1 == null&& id2 == null) {
+        if (id == null && id1 == null && id2 == null) {
             response = rs.delete(endpoint);
         } else if (id != null) {
             if (id2 != null) {
                 response = rs.delete(endpoint, id, id1, id2);
-            } else if(id1 != null) {
+            } else if (id1 != null) {
                 response = rs.delete(endpoint, id, id1);
-            }else{
+            } else {
 
                 response = rs.delete(endpoint, id);
             }

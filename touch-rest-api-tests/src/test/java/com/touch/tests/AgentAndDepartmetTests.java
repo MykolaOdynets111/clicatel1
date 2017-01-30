@@ -122,27 +122,5 @@ public class AgentAndDepartmetTests extends BaseTestClass {
         return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
 
-    private boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {
-
-        try {
-            // do the compare
-            while (true) {
-                int fr = i1.read();
-                int tr = i2.read();
-
-                if (fr != tr)
-                    return false;
-
-                if (fr == -1)
-                    return true;
-            }
-
-        } finally {
-            if (i1 != null)
-                i1.close();
-            if (i2 != null)
-                i2.close();
-        }
-    }
 
 }

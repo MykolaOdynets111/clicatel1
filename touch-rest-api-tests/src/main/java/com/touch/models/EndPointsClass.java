@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class EndPointsClass {
 
-    public static final String APP_CONFIG = ConfigApp.API_VERSION + "/app-config";
     public static final String APP_CONFIG_PROFILE = ConfigApp.API_VERSION + "/app-config/profile";
 
 
@@ -66,6 +65,16 @@ public class EndPointsClass {
     public static final String AUTH_TOCKEN = "/v5/auth/token";
     public static final String AUTH_AUTHENTICATED = "/v5/auth/authenticated";
 
+    //Analytics endpoints
+    public static final String ANALYTICS = "/v5/analytics";
+
+    //App_Config endpoints
+    public static final String APP_PROFILE = "/v5/app-config/profile";
+    public static final String APP_XMPP = "/v5/app-config/xmpp";
+
+    //Roster endpoints
+    public static final String ROSTER = "/v5/roster/agents";
+
     public static String generateQueryPath(Map<String, String> map) {
         String path = "?";
         int amountOfVar = 0;
@@ -81,7 +90,6 @@ public class EndPointsClass {
         if (amountOfVar == 0)
             return "";
         return path;
-
     }
 
 }

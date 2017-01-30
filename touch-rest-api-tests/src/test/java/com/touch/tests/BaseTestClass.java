@@ -18,6 +18,7 @@ import org.testng.annotations.Listeners;
 import com.touch.engines.RequestEngine;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,6 +38,9 @@ public class BaseTestClass {
     IntegrationActions integrationActions = new IntegrationActions(requestEngine);
     AuthActions authActions = new AuthActions(requestEngine);
     CardsActions cardsActions = new CardsActions(requestEngine);
+    AnalyticsActions analyticsActions = new AnalyticsActions(requestEngine);
+    AppConfigActions appConfigActions = new AppConfigActions(requestEngine);
+    RosterActions rosterActions = new RosterActions(requestEngine);
     public String token;
     public String testToken;
     public TenantResponseV5 testTenant;
@@ -63,6 +67,12 @@ public class BaseTestClass {
             e.printStackTrace();
         }
 //        removeAllTestTenants(token);
+        String environment = System.getProperty("tests.env", "testing").toLowerCase();
+        if(environment.equals("demo")){
+            tenantActions.deleteTenant(testTenant.getId(),testToken);
+            TenantResponseV5 testTenant2 = getTestTenant2();
+            tenantActions.deleteTenant(testTenant2.getId(),getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password")));
+        }
     }
 
     public String getToken() {
@@ -161,5 +171,27 @@ public class BaseTestClass {
         String lastName = tenantRequest.getMc2AccountRequest().getLastName();
         String password = tenantRequest.getMc2AccountRequest().getPassword();
         return userActions.signUpAndLoginWithNewUser(accountId, accountName, email, firstName, lastName, password);
+    }
+    public boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {
+
+        try {
+            // do the compare
+            while (true) {
+                int fr = i1.read();
+                int tr = i2.read();
+
+                if (fr != tr)
+                    return false;
+
+                if (fr == -1)
+                    return true;
+            }
+
+        } finally {
+            if (i1 != null)
+                i1.close();
+            if (i2 != null)
+                i2.close();
+        }
     }
 }

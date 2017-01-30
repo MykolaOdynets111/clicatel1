@@ -32,20 +32,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * ListAgentResponse
- */
-@javax.annotation.Generated(value = "class io.swagger.codegen.languages.JavaClientCodegen", date = "2016-10-20T12:15:53.907Z")
 public class ListAgentResponse {
   @SerializedName("agents")
-  private List<AgentResponse> agents = new ArrayList<AgentResponse>();
+  private List<AgentRosterResponse> agents = new ArrayList<AgentRosterResponse>();
 
-  public ListAgentResponse agents(List<AgentResponse> agents) {
+  public ListAgentResponse agents(List<AgentRosterResponse> agents) {
     this.agents = agents;
     return this;
   }
 
-  public ListAgentResponse addAgentsItem(AgentResponse agentsItem) {
+  public ListAgentResponse addAgentsItem(AgentRosterResponse agentsItem) {
     this.agents.add(agentsItem);
     return this;
   }
@@ -55,11 +51,11 @@ public class ListAgentResponse {
    * @return agents
   **/
   @ApiModelProperty(example = "null", value = "")
-  public List<AgentResponse> getAgents() {
+  public List<AgentRosterResponse> getAgents() {
     return agents;
   }
 
-  public void setAgents(List<AgentResponse> agents) {
+  public void setAgents(List<AgentRosterResponse> agents) {
     this.agents = agents;
   }
 
