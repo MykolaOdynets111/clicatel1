@@ -29,7 +29,7 @@ public class CardsTests extends BaseTestClass {
         cardsActions.addCard("ios", "testCard", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
         cardsActions.addCard("android", "testAndroid", "testDescription", "tenantId", "200", "200", new File(getFullPathToFile("cards/test-navigation-card")), token);
     }
-
+// one bug is here TPLAT-769
     @Test(dataProvider = "getCardListOptions")
     public void getCardsList(String name, String platform, int code, boolean positiveTest) {
         if (name.equals("test"))
