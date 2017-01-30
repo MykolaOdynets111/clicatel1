@@ -10,6 +10,10 @@
             <class name="com.touch.tests.IntegrationTests"/>
             <class name="com.touch.tests.TenantTests"/>
             <class name="com.touch.tests.UserProfileTests"/>
+            <class name="com.touch.tests.AnalyticsTests"/>
+            <class name="com.touch.tests.AppConfigTests"/>
+            <class name="com.touch.tests.BusinessBlpTests"/>
+            <class name="com.touch.tests.RosterTests"/>
         </classes>
     </test>
 </suite>
