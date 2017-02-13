@@ -67,5 +67,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="tbot-client_n" level="project" />
   </component>
 </module>

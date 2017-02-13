@@ -30,5 +30,29 @@ public class AnalyticsActions {
             parameters.put("timeZone", timeZone);
         return requestEngine.getRequest(EndPointsClass.ANALYTICS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
+    public Response getConversationCount(String tenantId, String year, String month, String day, String token) {
+        HashMap<String, String> parameters = new HashMap<>();
+        if (tenantId != null)
+            parameters.put("tenantId", tenantId);
+        if (year != null)
+            parameters.put("year", year);
+        if (month != null)
+            parameters.put("month", month);
+        if (day != null)
+            parameters.put("day", day);
+        return requestEngine.getRequest(EndPointsClass.CHATSSTATS_CONVERSATION_COUNT + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
+    public Response getConversationTime(String tenantId, String year, String month, String day, String token) {
+        HashMap<String, String> parameters = new HashMap<>();
+        if (tenantId != null)
+            parameters.put("tenantId", tenantId);
+        if (year != null)
+            parameters.put("year", year);
+        if (month != null)
+            parameters.put("month", month);
+        if (day != null)
+            parameters.put("day", day);
+        return requestEngine.getRequest(EndPointsClass.CHATSSTATS_CONVERSATION_TIME + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
 
 }

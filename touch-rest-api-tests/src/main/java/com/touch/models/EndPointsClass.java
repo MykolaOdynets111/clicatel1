@@ -13,6 +13,8 @@ public class EndPointsClass {
     //Tenants endpoint
     public final static String TENANTS = ConfigApp.API_VERSION + "/tenants";
     public final static String TENANT = TENANTS + "/{tenantId}";
+    public final static String TENANT_TBOT = TENANT + "/tbot";
+    public final static String ADDRESSES = TENANT + "/addresses";
     public final static String ADDRESS = TENANT + "/address/{addressId}";
     public final static String BUSINESS_HOURS_FOR_ADDRESS = TENANT + "/addresses/{addressId}/business-hours";
     public final static String BUSINESS_HOURS_ID_FOR_ADDRESS = BUSINESS_HOURS_FOR_ADDRESS + "/{business-hours-id}";
@@ -44,14 +46,20 @@ public class EndPointsClass {
     public static final String DEPARTMENTS_AGENTS = DEPARTMENTS + "/agents";
     public static final String DEPARTMENT = DEPARTMENTS + "/{id}";
     //Chats endpoints
-    public static final String CHATS_ATTACHMENTS = ConfigApp.API_VERSION + "/chats/attachments";
-    public static final String CHATS_ATTACHMENT = CHATS_ATTACHMENTS + "/{attachment-id}";
-    public static final String CHATS_ROOMS = ConfigApp.API_VERSION + "/chats/rooms";
-    public static final String CHATS_SESSIONS = ConfigApp.API_VERSION + "/chats/sessions";
-    public static final String CHATS_SESSION = CHATS_SESSIONS + "/{sessionId}";
-    public static final String CHATS_SESSION_TERMINATE = CHATS_SESSION + "/terminate";
+    public static final String CHATS_ATTACHMENTS = "/v5/chats/attachments";
+    public static final String CHATS_ATTACHMENT =  CHATS_ATTACHMENTS+"/{attachment-id}";
+    public static final String CHATS_EVENTS = "/v5/chats/events";
+    public static final String CHATS_HISTORIES = "/v5/chats/history";
+    public static final String CHATS_HISTORY = CHATS_HISTORIES+"/{sessionId}";
+    public static final String CHATS_INVITES = "/v5/chats/invites";
+    public static final String CHATS_INVITE = CHATS_INVITES+"/{sessionId}";
+    public static final String CHATS_ROOMS = "/v5/chats/rooms";
+    public static final String CHATS_SESSIONS = "/v5/chats/sessions";
+    public static final String CHATS_SESSION = CHATS_SESSIONS +"/{sessionId}";
+    public static final String CHATS_SESSION_TERMINATE = CHATS_SESSION+"/terminate";
+    public static final String CHATS_SESSION_TERMINATE_ALL = CHATS_SESSIONS+"/{clientId}/terminate/all";
     //business-blp endpoints
-    public static final String INTEGRATIONS = ConfigApp.API_VERSION +"/business-blp/integrations";
+    public static final String INTEGRATIONS = "/v5//business-blp/integrations";
     public static final String INTEGRATION = INTEGRATIONS + "/{name}";
     public static final String INTEGRATION_ARTIFACT = INTEGRATION + "/artifact";
     public static final String INTEGRATION_CALL = INTEGRATION + "/{action}/call";
@@ -67,13 +75,17 @@ public class EndPointsClass {
 
     //Analytics endpoints
     public static final String ANALYTICS = "/v5/analytics";
+    public static final String CHATSSTATS_CONVERSATION_COUNT = "/v5/chats/stats/conversation-count";
+    public static final String CHATSSTATS_CONVERSATION_TIME = "/v5/chats/stats/conversation-time";
 
     //App_Config endpoints
     public static final String APP_PROFILE = "/v5/app-config/profile";
     public static final String APP_XMPP = "/v5/app-config/xmpp";
 
     //Roster endpoints
-    public static final String ROSTER = "/v5/roster/agents";
+    public static final String ROSTER_AGENTS = "/v5/roster/agents";
+    public static final String ROSTER = "/v5/roster";
+    public static final String ROSTERS = "/v5/rosters";
 
     public static String generateQueryPath(Map<String, String> map) {
         String path = "?";
