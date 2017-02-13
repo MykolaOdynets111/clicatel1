@@ -90,7 +90,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/mc2-rest-api.jar</systemPath>
         </dependency>
-
+        <dependency>
+            <groupId>com.clickatell</groupId>
+            <artifactId>rest-api-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/tbot-client_n.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <profiles>
