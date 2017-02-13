@@ -59,7 +59,7 @@ public class EndPointsClass {
     public static final String CHATS_SESSION_TERMINATE = CHATS_SESSION+"/terminate";
     public static final String CHATS_SESSION_TERMINATE_ALL = CHATS_SESSIONS+"/{clientId}/terminate/all";
     //business-blp endpoints
-    public static final String INTEGRATIONS = "/v5//business-blp/integrations";
+    public static final String INTEGRATIONS = "/v5/business-blp/integrations";
     public static final String INTEGRATION = INTEGRATIONS + "/{name}";
     public static final String INTEGRATION_ARTIFACT = INTEGRATION + "/artifact";
     public static final String INTEGRATION_CALL = INTEGRATION + "/{action}/call";

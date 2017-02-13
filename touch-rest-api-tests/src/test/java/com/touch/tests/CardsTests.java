@@ -183,8 +183,8 @@ public class CardsTests extends BaseTestClass {
                 {"testCard", "", "", 200},
                 {"testCard", "", "1", 200},
                 {"testCard", "111", "rrr", 500},
-                {"testCard", "", "1111", 404},
-                {"testCard", "web", "1111", 404},
+                {"testCard", "", "999999", 404},
+                {"testCard", "web", "99999", 404},
                 {"testCard", "not_exist", "1", 404}
 
         };
