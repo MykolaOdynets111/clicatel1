@@ -1,9 +1,7 @@
 package com.touch.tests;
 
 import com.touch.models.ErrorMessage;
-import com.touch.models.touch.chats.ChatRoomResponse;
-import com.touch.models.touch.chats.ChatSessionResponse;
-import com.touch.models.touch.chats.ListChatSessionResponse;
+import com.touch.models.touch.chats.*;
 import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
@@ -11,14 +9,38 @@ import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
  */
 public class ChatsTests extends BaseTestClass {
+    String sessionId;
+    String file = getFullPathToFile("TenantResources/tenant_logo.jpg");
+    AttachmentCreateResponse testAttachment;
+
+    @BeforeClass
+    public void beforeClass() {
+        token = getToken();
+        testTenant = getTestTenant1();
+        testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
+        sessionId = chatsActions.getListOfSessions(null, null, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
+        testAttachment = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class);
+    }
+
+    @AfterClass
+    public void afterClass() {
+        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
+    }
 
     @Test
     public void getNewChatRoom() {
@@ -72,6 +94,101 @@ public class ChatsTests extends BaseTestClass {
         Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1", "Android", token).as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
     }
 
+    @Test(dataProvider = "getAttachments")
+    public void getChatsAttachments(String attachmentId, String sessionId, String fileType, int statusCode) {
+        if (attachmentId != null && attachmentId.equals("correct"))
+            attachmentId = testAttachment.getId();
+        if (sessionId != null && sessionId.equals("correct"))
+            sessionId = this.sessionId;
+        if (fileType != null && fileType.equals("correct"))
+            fileType = "image/jpeg";
+        Response getAttachmentResponse = chatsActions.getAttachmentsList(attachmentId, sessionId, fileType, testToken);
+        Assert.assertEquals(getAttachmentResponse.getStatusCode(), statusCode);
+        if (getAttachmentResponse.getStatusCode() == 200) {
+            List<AttachmentResponse> attachmentsList = getAttachmentResponse.as(ListAttachmentResponse.class).getAttachments();
+            Assert.assertFalse(attachmentsList.isEmpty());
+            boolean containsCorrectAttachmentsData = false;
+            for (AttachmentResponse attach : attachmentsList) {
+                if (attach.getFileName().equals(testAttachment.getFileName())) {
+                    containsCorrectAttachmentsData = attach.getFileType().equals(testAttachment.getFileType());
+                }
+            }
+            Assert.assertTrue(containsCorrectAttachmentsData);
+        }
+    }
+
+    @Test(dataProvider = "addAttachments")
+    public void addChatAttachments(String sessionId, String fileName, int statusCode) {
+        Response response = chatsActions.addAttachmentForSession(sessionId, fileName, new File(file), testToken);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (response.getStatusCode() == 200) {
+            AttachmentCreateResponse addedAttachment = response.as(AttachmentCreateResponse.class);
+            Assert.assertEquals(addedAttachment.getFileName(), fileName);
+            Assert.assertEquals(chatsActions.deleteAttachment(addedAttachment.getId(), testToken), 200);
+        }
+    }
+
+    @Test(dataProvider = "getDeleteAttachments")
+    public void getChatAttachment(String attachmentId, int statusCode) throws Exception {
+        if (attachmentId.equals("correct"))
+            attachmentId = testAttachment.getId();
+        Response response = chatsActions.getAttachment(attachmentId, testToken);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200)
+            Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
+    }
+
+    @Test(dataProvider = "getDeleteAttachments")
+    public void deleteChatAttachment(String attachmentId, int statusCode) {
+        if (attachmentId.equals("correct"))
+            attachmentId = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class).getId();
+        Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
+    }
+
+    @DataProvider
+    private static Object[][] getDeleteAttachments() {
+        return new Object[][]{
+                {"test", 404},
+                {"correct", 200},
+
+
+        };
+    }
+
+    @DataProvider
+    private static Object[][] addAttachments() {
+        return new Object[][]{
+                {"", "", 500},
+                {"correct", "", 500},
+                {"", "test1", 200},
+                {"correct", "test1", 200},
+                {null, "test1", 500},
+                {"correct", null, 500},
+                {null, null, 500},
+
+
+        };
+    }
+
+    @DataProvider
+    private static Object[][] getAttachments() {
+        return new Object[][]{
+                {"", "", "", 200},
+                {"", "", "correct", 200},
+                {"", "correct", "", 200},
+                {"", "correct", "correct", 200},
+                {"correct", "correct", "correct", 200},
+                {null, "correct", "correct", 200},
+                {null, null, "correct", 200},
+                {null, "correct", null, 200},
+                {null, null, null, 200},
+                {"111", "111", "11", 404},
+                {"11", "11", "correct", 404},
+                {"11", "correct", "11", 404},
+                {"111", "correct", "correct", 404},
+        };
+    }
+
     @DataProvider
     private static Object[][] chatRoomsParameters() {
         return new Object[][]{
@@ -84,6 +201,10 @@ public class ChatsTests extends BaseTestClass {
                 {"test1", "test1", "test1", 404},
                 {"correct", "testclient1@", "test1", 200}
         };
+    }
+
+    private String getFullPathToFile(String pathToFile) {
+        return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
 
 }

@@ -20,26 +20,35 @@ public class ChatsActions {
         this.requestEngine = requestEngine;
     }
 
-    public Response getListOfAttachments() {
-        return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENTS);
+    public Response getAttachment(String attachmentId, String token) {
+        return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId, new Header("Authorization", token));
     }
 
-    public Response addAttachmentForSession(String sessionId, String fileName, File file) {
+    public Response addAttachmentForSession(String sessionId, String fileName, File file, String token) {
         Map<String, Object> formParameters = new HashMap<>();
-        formParameters.put("session-id", sessionId);
-        formParameters.put("fileName", fileName);
-        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.CHATS_ATTACHMENTS, null, formParameters, file);
+        if (sessionId != null)
+            formParameters.put("session-id", sessionId);
+        if (fileName != null)
+            formParameters.put("fileName", fileName);
+        return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.CHATS_ATTACHMENTS, null, formParameters, file, new Header("Authorization", token));
     }
 
     public int deleteAttachment(String attachmentId, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId,  new Header("Authorization", token)).getStatusCode();
+        return requestEngine.deleteRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId, new Header("Authorization", token)).getStatusCode();
     }
 
-    public Response getAttachment(String attachmentId) {
-        return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId);
+    public Response getAttachmentsList(String attachmentId, String sessionId, String fileType, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if (attachmentId != null)
+            parameters.put("attachment-id", attachmentId);
+        if (sessionId != null)
+            parameters.put("session-id", sessionId);
+        if (fileType != null)
+            parameters.put("fileType", fileType);
+        return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENTS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
 
-    public Response getChatRoom(String tenantId, String clientJid, String clientId,String app, String token) {
+    public Response getChatRoom(String tenantId, String clientJid, String clientId, String app, String token) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("tenantId", tenantId);
         parameters.put("clientId", clientId);
@@ -60,12 +69,12 @@ public class ChatsActions {
         parameters.put("sessionId", sessionId);
         parameters.put("tenantId", tenantId);
         parameters.put("clientId", clientId);
-       return requestEngine.postRequestWithQueryParameters(EndPointsClass.CHATS_SESSIONS, null, parameters, new Header("Authorization", token));
+        return requestEngine.postRequestWithQueryParameters(EndPointsClass.CHATS_SESSIONS, null, parameters, new Header("Authorization", token));
 
     }
 
     public Response deleteSession(String sessionId, String token) {
-        return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId,  new Header("Authorization", token));
+        return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId, new Header("Authorization", token));
 
     }
 
@@ -74,9 +83,8 @@ public class ChatsActions {
     }
 
     public Response terminateSession(String sessionId) {
-        return requestEngine.postRequest(EndPointsClass.CHATS_SESSION_TERMINATE,sessionId,null);
+        return requestEngine.postRequest(EndPointsClass.CHATS_SESSION_TERMINATE, sessionId, null);
     }
-
 
 
 }

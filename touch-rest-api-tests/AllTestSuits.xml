@@ -15,6 +15,7 @@
             <class name="com.touch.tests.AppConfigTests"/>
             <class name="com.touch.tests.BusinessBlpTests"/>
             <class name="com.touch.tests.RosterTests"/>
+            <class name="com.touch.tests.ChatComunicationTests"/>
         </classes>
     </test>
 </suite>
