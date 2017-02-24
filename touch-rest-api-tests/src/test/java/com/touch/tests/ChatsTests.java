@@ -27,6 +27,7 @@ public class ChatsTests extends BaseTestClass {
     String sessionId;
     String file = getFullPathToFile("TenantResources/tenant_logo.jpg");
     AttachmentCreateResponse testAttachment;
+    List<ChatSessionResponse> chatSessions;
 
     @BeforeClass
     public void beforeClass() {
@@ -35,6 +36,7 @@ public class ChatsTests extends BaseTestClass {
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
         sessionId = chatsActions.getListOfSessions(null, null, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
         testAttachment = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class);
+        chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tanant.clickatell.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
     }
 
     @AfterClass
@@ -144,7 +146,53 @@ public class ChatsTests extends BaseTestClass {
             attachmentId = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class).getId();
         Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
     }
+    @Test(dataProvider = "getEvents")
+    public void getChatsEvents(String sessionId, String clientId, String tenantId, String dateFrom, String dateTo, boolean isEmpty, int statusCode){
+        ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
+        if(sessionId!=null&&sessionId.equals("correct"))
+            sessionId = session.getSessionId();
+        if(clientId!=null&&clientId.equals("correct"))
+            clientId = session.getClientId();
+        if(tenantId!=null&&tenantId.equals("correct"))
+            tenantId = session.getTenantId();
+        if(dateFrom!=null&&dateFrom.equals("correct"))
+            dateFrom = session.getStartedDate().toString();
+        if(dateTo!=null&&dateTo.equals("correct"))
+            dateTo = session.getEndedDate().toString();
+        Response response = chatsActions.getListOfChatEvents(sessionId, clientId, tenantId, dateFrom, dateTo, testToken);
+        Assert.assertEquals(response.getStatusCode(),statusCode);
+        if(statusCode==200){
+            List<ChatEventResponseV5> chatEvents = response.as(ListChatEventResponseV5.class).getChatEvents();
+            Assert.assertEquals(chatEvents.isEmpty(),isEmpty);
+        }
+    }
+    @DataProvider
+    private static Object[][] getEvents() {
+        return new Object[][]{
+                {"","correct", "correct", "", "", false, 200},
+                {"correct","", "", "", "", false, 200},
+                {"correct",null, null, null, null, false, 200},
+                {null,"correct", "correct", null, null, false, 200},
+                {"test",null, null, null, null, true, 200},
+                {null,"correct", "test", null, null, true, 200},
+                {null,"test", "test", null, null, true, 200},
+                {"correct","correct", "correct", "correct", "correct", false, 400},
+                {"correct","correct", "correct", "correct", "", false, 400},
+                {"correct","correct", "correct", "", "", true, 400},
+                {"correct","correct", "", "", "", true, 400},
+                {"correct","correct", "correct", "correct", null, false, 400},
+                {"correct","correct", "correct", null, null, true, 400},
+                {"correct","correct", null, null, null, true, 400},
+                {"notExist","notExist", "notExist", "notExist", "notExist", true, 400},
+                {"notExist","notExist", "notExist", "11", "11", true, 400},
+                {"notExist","notExist", "notExist", "notExist", "11", true, 400},
+                {"correct","correct", "correct", "test1", null, false, 400},
+                {"correct","correct", "correct", "11", null, false, 400},
+                {"correct","correct", "test", null, null, true, 400},
+                {"correct","test", null, null, null, true, 400},
 
+        };
+    }
     @DataProvider
     private static Object[][] getDeleteAttachments() {
         return new Object[][]{

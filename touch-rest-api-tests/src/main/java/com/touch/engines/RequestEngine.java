@@ -513,7 +513,7 @@ public class RequestEngine {
     public Response deleteRequest(String endpoint, String id, Header... header) {
         RequestSpecification rs = given(requestSpecification);
         Response response = null;
-        if (header.length == 0) {
+        if (header!=null&&header.length == 0) {
             rs.header(new Header("Solution", "PLATFORM"));
         } else {
             rs.headers(new Headers(header));

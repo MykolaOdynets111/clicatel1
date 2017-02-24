@@ -59,9 +59,25 @@ public class ChatsActions {
 
     public Response getListOfSessions(String tenantId, String clientId, String token) {
         Map<String, String> parameters = new HashMap<>();
+        if(tenantId!=null)
         parameters.put("tenantId", tenantId);
+        if(clientId!=null)
         parameters.put("clientId", clientId);
         return requestEngine.getRequest(EndPointsClass.CHATS_SESSIONS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
+    public Response getListOfChatEvents(String sessionId, String clientId, String tenantId, String dateFrom, String dateTo, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(sessionId!=null)
+            parameters.put("sessionId", sessionId);
+        if(clientId!=null)
+            parameters.put("clientId", clientId);
+        if(tenantId!=null)
+            parameters.put("tenantId", tenantId);
+        if(dateFrom!=null)
+            parameters.put("dateFrom", dateFrom);
+        if(dateTo!=null)
+            parameters.put("dateTo", dateTo);
+        return requestEngine.getRequest(EndPointsClass.CHATS_EVENTS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
 
     public Response addNewSession(String sessionId, String tenantId, String clientId, String token) {
