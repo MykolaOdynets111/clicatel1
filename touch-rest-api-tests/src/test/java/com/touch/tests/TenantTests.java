@@ -540,8 +540,8 @@ public class TenantTests extends BaseTestClass {
     @DataProvider
     private static Object[][] businessHoursFalseCombination() {
         return new Object[][]{
-                {"", "", "", 404, "HTTP 404 Not Found"},
-                {"correct", "", "", 404, "HTTP 404 Not Found"},
+                {"", "", "", 405, "HTTP 405 Method Not Allowed"},
+                {"correct", "", "", 405, "HTTP 405 Method Not Allowed"},
                 {"correct", "correct", "", 405, "HTTP 405 Method Not Allowed"},
                 {"correct", "", "correct", 404, "HTTP 404 Not Found"},
                 {"correct", "test", "correct", 404, "Address with id .+ not found"},
