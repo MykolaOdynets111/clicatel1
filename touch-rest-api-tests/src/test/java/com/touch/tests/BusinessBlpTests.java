@@ -140,7 +140,7 @@ public class BusinessBlpTests extends BaseTestClass {
                 {"echo","test","", 500},
                 {"test","echo","", 500},
                 {"echo","","", 404},
-                {"","","", 404},
+                {"","","", 405},
         };
     }
     private String getFullPathToFile(String pathToFile) {
