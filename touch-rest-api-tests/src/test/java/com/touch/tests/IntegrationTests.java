@@ -1,61 +1,50 @@
 package com.touch.tests;
 
+import com.touch.actions.IntegrationActions;
+import com.touch.actions.UserMC2Actions;
+import com.touch.engines.RequestEngine;
+import com.touch.models.EndPointsClass;
 import com.touch.models.mc2.userprofile.User;
 import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
-import com.touch.models.touch.tenant.Mc2AccountRequest;
-import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponseV5;
 import com.touch.utils.TestingEnvProperties;
+import com.touch.utils.reporter.CustomReport;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
  */
-public class IntegrationTests extends BaseTestClass {
-    String token;
+@Listeners(value = CustomReport.class)
+public class IntegrationTests {
+    RequestEngine requestEngine = new RequestEngine();
+    com.clickatell.engines.RequestEngine requestEngineMC2 = new com.clickatell.engines.RequestEngine();
+    UserMC2Actions userActions = new UserMC2Actions(requestEngineMC2);
+    IntegrationActions integrationActions = new IntegrationActions(requestEngine);
     IntegrationUserLoginMC2Response response;
     String signInToken;
     String env = TestingEnvProperties.getPropertyByName("integration.mc2.name");
     String login = TestingEnvProperties.getPropertyByName("integration.mc2.login");
     String password = TestingEnvProperties.getPropertyByName("integration.mc2.password");
 
-    @BeforeClass
-    public void beforeClass() {
-        token = getToken();
 
-//        TenantRequest testTenantRequest = new TenantRequest();
-//        testTenantRequest.setAccountId(null);
-//        testTenantRequest.setTenantOrgName("AutoVerificationTenant2");
-//        testTenantRequest.setContactEmail("automationTenant2@sink.sendgrid.net");
-//        testTenantRequest.setDescription("automation2");
-//        testTenantRequest.setShortDescription("auto verification2");
-//        testTenantRequest.setTenantName("AutoVerificationTenant2");
-//        Mc2AccountRequest mc2Account = new Mc2AccountRequest();
-//        mc2Account.setFirstName("automationfirstName2");
-//        mc2Account.setLastName("automationlastName2");
-//        mc2Account.setEmail("automationToucTenant2@sink.sendgrid.net");
-//        mc2Account.setPassword("passwordluxcnfv4");
-//        testTenantRequest.setMc2AccountRequest(mc2Account);
-//        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
-//        String accountId = tenant.getAccountId();
-//        String accountName = tenant.getTenantOrgName();
-//        String email = testTenantRequest.getMc2AccountRequest().getEmail();
-//        String firstName = testTenantRequest.getMc2AccountRequest().getFirstName();
-//        String lastName = testTenantRequest.getMc2AccountRequest().getLastName();
-//        String password = testTenantRequest.getMc2AccountRequest().getPassword();
-//        userActions.signUpAndLoginWithNewUser(accountId, accountName, email, firstName, lastName, password);
 
-    }
-
-    @Test
+    @Test(dependsOnMethods = {"doMC2LoginTestForMC2"})
     public void verifyThatWeAllowToGetUserProfileFromMC2() {
-        Response userProfileResponse = userActions.getUserProfile(token);
+        Response userProfileResponse = userActions.getUserProfile(signInToken);
         Assert.assertEquals(userProfileResponse.getStatusCode(), 200);
         User userProfile = userProfileResponse.as(User.class);
-        Assert.assertEquals(userProfile.getEmail(), TestingEnvProperties.getPropertyByName("touch.user.admin.login"));
+        Assert.assertEquals(userProfile.getEmail(), login);
     }
 
     @Test
@@ -99,5 +88,19 @@ public class IntegrationTests extends BaseTestClass {
         Response getBalanceResponse = integrationActions.callGivenAction(env, "doMC2GetBalance", "--context_param parameters={\"token\":\"" + signInToken + "\"}");
         Assert.assertEquals(getBalanceResponse.getStatusCode(), 200);
         Assert.assertTrue(getBalanceResponse.jsonPath().getString("responseJson.balance") != null && !getBalanceResponse.jsonPath().getString("responseJson.balance").equals("null"), "Balance == null");
+    }
+
+    @AfterSuite(alwaysRun = true)
+    public void afterSuite() {
+        Response response = requestEngine.getRequest(EndPointsClass.APP_CONFIG_PROFILE, new Header("Authorization", signInToken));
+        List<String> lines = new ArrayList<String>();
+        lines.add(response.getBody().jsonPath().getString("version"));
+        // lines.add("   " + response.getBody().jsonPath().getString("profile"));
+        Path file = Paths.get(".VERSION");
+        try {
+            Files.write(file, lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
