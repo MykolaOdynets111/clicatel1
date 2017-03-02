@@ -172,6 +172,11 @@ public class BaseTestClass {
         String password = tenantRequest.getMc2AccountRequest().getPassword();
         return userActions.signUpAndLoginWithNewUser(accountId, accountName, email, firstName, lastName, password);
     }
+    public String getTockenForTenant(String tenantId){
+        TenantResponseV5 tenant = tenantActions.getTenant(tenantId, this.token).as(TenantResponseV5.class);
+        String token= getToken(tenant.getContactEmail(),"passw0rd");
+        return token;
+    }
     public boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {
 
         try {

@@ -79,6 +79,22 @@ public class ChatsActions {
             parameters.put("dateTo", dateTo);
         return requestEngine.getRequest(EndPointsClass.CHATS_EVENTS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
+    public Response getListOfChatHistory(String sessionId, String clientId, String tenantId, String dateFrom, String dateTo, String returnDisplayMessage, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(sessionId!=null)
+            parameters.put("sessionId", sessionId);
+        if(clientId!=null)
+            parameters.put("clientId", clientId);
+        if(tenantId!=null)
+            parameters.put("tenantId", tenantId);
+        if(dateFrom!=null)
+            parameters.put("dateFrom", dateFrom);
+        if(dateTo!=null)
+            parameters.put("dateTo", dateTo);
+        if(returnDisplayMessage!=null)
+            parameters.put("returnDisplayMessage", returnDisplayMessage);
+        return requestEngine.getRequest(EndPointsClass.CHATS_HISTORIES + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
 
     public Response addNewSession(String sessionId, String tenantId, String clientId, String token) {
         Map<String, Object> parameters = new HashMap<>();

@@ -36,7 +36,7 @@ public class ChatsTests extends BaseTestClass {
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
         sessionId = chatsActions.getListOfSessions(null, null, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
         testAttachment = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class);
-        chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tanant.clickatell.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
+        chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
     }
 
     @AfterClass
@@ -168,7 +168,60 @@ public class ChatsTests extends BaseTestClass {
             Assert.assertEquals(chatEvents.isEmpty(), isEmpty);
         }
     }
+    @Test(dataProvider = "getHistory")
+    public void getChatsHistory(String sessionId, String clientId, String tenantId, String dateFrom, String dateTo, boolean returnDisplayMessage, int statusCode) {
+        ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
+        if (sessionId != null && sessionId.equals("correct"))
+            sessionId = session.getSessionId();
+        if (clientId != null && clientId.equals("correct"))
+            clientId = session.getClientId();
+        if (tenantId != null && tenantId.equals("correct"))
+            tenantId = session.getTenantId();
+        if (dateFrom != null && dateFrom.equals("correct"))
+            dateFrom = session.getStartedDate().toString();
+        if (dateTo != null && dateTo.equals("correct"))
+            if (session.getEndedDate() != null)
+                dateTo = session.getEndedDate().toString();
+        Response response = chatsActions.getListOfChatHistory(sessionId, clientId, tenantId, dateFrom, dateTo, String.valueOf(returnDisplayMessage), token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200) {
+            List<ChatHistoryRecordResponse> records = response.as(ListChatHistoryRecordsResponse.class).getRecords();
+//            Assert.assertEquals(chatEvents.isEmpty(), isEmpty);
+        }
+    }
+    @DataProvider
+    private static Object[][] getHistory() {
+        return new Object[][]{
+                {"", "correct", "correct", "correct", "", false, 200},
+                {"correct", "", "", "correct", "", false, 200},
+                {"correct", null, null, "correct", null, false, 200},
+                {null, "correct", "correct", "correct", null, false, 200},
+                {null, "correct", "correct", "correct", null, false, 200},
+                {"", "correct", "correct", "correct", "", true, 200},
+                {"correct", "", "", "correct", "", true, 200},
+                {"correct", null, null, "correct", null, true, 200},
+                {null, "correct", "correct", "correct", null, true, 200},
+                {null, "correct", "correct", "correct", null, true, 200},
+                {"test", null, null, "correct", null, true, 200},
+                {null, "correct", "test", "correct", null, true, 401},
+                {null, "test", "test", "correct", null, true, 401},
+                {"correct", "correct", "correct", "correct", "correct", false, 400},
+                {"correct", "correct", "correct", "correct", "", false, 400},
+                {"correct", "correct", "correct", "", "", true, 400},
+                {"correct", "correct", "", "", "", true, 400},
+                {"correct", "correct", "correct", "correct", null, false, 400},
+                {"correct", "correct", "correct", null, null, true, 400},
+                {"correct", "correct", null, null, null, true, 400},
+                {"notExist", "notExist", "notExist", "notExist", "notExist", true, 400},
+                {"notExist", "notExist", "notExist", "11", "11", true, 400},
+                {"notExist", "notExist", "notExist", "notExist", "11", true, 400},
+                {"correct", "correct", "correct", "test1", null, false, 400},
+                {"correct", "correct", "correct", "11", null, false, 400},
+                {"correct", "correct", "test", null, null, true, 400},
+                {"correct", "test", null, null, null, true, 400},
 
+        };
+    }
     @DataProvider
     private static Object[][] getEvents() {
         return new Object[][]{
