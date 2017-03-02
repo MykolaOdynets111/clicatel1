@@ -95,7 +95,32 @@ public class ChatsActions {
             parameters.put("returnDisplayMessage", returnDisplayMessage);
         return requestEngine.getRequest(EndPointsClass.CHATS_HISTORIES + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
-
+    public Response getListOfChatHistoryForSession(String sessionId, String token) {
+       return requestEngine.getRequest(EndPointsClass.CHATS_HISTORY, sessionId, new Header("Authorization", token));
+    }
+    public Response getListOfInvites(String status, String dateFrom, String dateTo, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(status!=null)
+            parameters.put("status", status);
+        if(dateFrom!=null)
+            parameters.put("dateFrom", dateFrom);
+        if(dateTo!=null)
+            parameters.put("dateTo", dateTo);
+        return requestEngine.getRequest(EndPointsClass.CHATS_INVITES+ EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
+    public Response getListOfInvitesFromArchive(String nickname, String page, String count, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(nickname!=null)
+            parameters.put("nickname", nickname);
+        if(page!=null)
+            parameters.put("page", page);
+        if(count!=null)
+            parameters.put("count", count);
+        return requestEngine.getRequest(EndPointsClass.CHATS_INVITE_ARCHIVE + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
+    public Response getInviteForSession(String sessionId, String token) {
+        return requestEngine.getRequest(EndPointsClass.CHATS_INVITE,sessionId, new Header("Authorization", token));
+    }
     public Response addNewSession(String sessionId, String tenantId, String clientId, String token) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("sessionId", sessionId);

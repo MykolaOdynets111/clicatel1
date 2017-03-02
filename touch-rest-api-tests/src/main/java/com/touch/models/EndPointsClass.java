@@ -53,6 +53,7 @@ public class EndPointsClass {
     public static final String CHATS_HISTORY = CHATS_HISTORIES+"/{sessionId}";
     public static final String CHATS_INVITES = "/v5/chats/invites";
     public static final String CHATS_INVITE = CHATS_INVITES+"/{sessionId}";
+    public static final String CHATS_INVITE_ARCHIVE = CHATS_INVITES+"/archive";
     public static final String CHATS_ROOMS = "/v5/chats/rooms";
     public static final String CHATS_SESSIONS = "/v5/chats/sessions";
     public static final String CHATS_SESSION = CHATS_SESSIONS +"/{sessionId}";

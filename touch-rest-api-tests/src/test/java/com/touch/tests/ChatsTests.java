@@ -1,10 +1,8 @@
 package com.touch.tests;
 
 import com.touch.models.ErrorMessage;
+import com.touch.models.touch.agent.AgentCredentialsDto;
 import com.touch.models.touch.chats.*;
-import com.touch.models.touch.integration.IntegrationUserLoginMC2Response;
-import com.touch.models.touch.tenant.TenantRequest;
-import com.touch.models.touch.tenant.TenantResponseV5;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
@@ -16,8 +14,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -168,6 +164,7 @@ public class ChatsTests extends BaseTestClass {
             Assert.assertEquals(chatEvents.isEmpty(), isEmpty);
         }
     }
+
     @Test(dataProvider = "getHistory")
     public void getChatsHistory(String sessionId, String clientId, String tenantId, String dateFrom, String dateTo, boolean returnDisplayMessage, int statusCode) {
         ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
@@ -186,9 +183,114 @@ public class ChatsTests extends BaseTestClass {
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatHistoryRecordResponse> records = response.as(ListChatHistoryRecordsResponse.class).getRecords();
-//            Assert.assertEquals(chatEvents.isEmpty(), isEmpty);
+//            Assert.assertFalse(records.isEmpty());
         }
     }
+
+    @Test(dataProvider = "getHistorySession")
+    public void getChatsHistoryForSession(String sessionId, boolean isEmpty, int statusCode) {
+        ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
+        if (sessionId != null && sessionId.equals("correct"))
+            sessionId = session.getSessionId();
+
+        Response response = chatsActions.getListOfChatHistoryForSession(sessionId, token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200) {
+            List<ChatHistoryRecordResponse> records = response.as(ListChatHistoryRecordsResponse.class).getRecords();
+            Assert.assertEquals(records.isEmpty(), isEmpty);
+        }
+    }
+
+    @Test(dataProvider = "invitesList")
+    public void getInvites(String status, String dateFrom, String dateTo, int statusCode) {
+
+        Response response = chatsActions.getListOfInvites(status, dateFrom, dateTo, token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200) {
+            List<ChatInviteHistoryResponseV5> records = response.as(ListChatInviteHistoryResponseV5.class).getChatInviteHistory();
+            Assert.assertFalse(records.isEmpty());
+        }
+    }
+
+    @Test(dataProvider = "invitesListArchive")
+    public void getInvitesFromArchive(String nickname, String page, String count, int statusCode) {
+        if (nickname != null && nickname.equals("correct"))
+            nickname = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid().split("@")[0];
+        Response response = chatsActions.getListOfInvitesFromArchive(nickname, page, count, token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200) {
+            List<ChatInviteHistoryArchiveResponse> records = response.as(ListChatInviteHistoryArchiveResponse.class).getChatInviteHistory();
+//            Assert.assertFalse(records.isEmpty());
+        }
+    }
+    @Test(dataProvider = "getInvitesSession")
+    public void getInvitesForSession(String sessionId, boolean isEmpty, int statusCode) {
+        ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
+        if (sessionId != null && sessionId.equals("correct"))
+            sessionId = session.getSessionId();
+        Response response = chatsActions.getInviteForSession(sessionId,token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200) {
+            List<ChatInviteHistoryResponseV5> records = response.as(ListChatInviteHistoryResponseV5.class).getChatInviteHistory();
+//            Assert.assertEquals(records.isEmpty(),isEmpty);
+        }
+    }
+    @DataProvider
+    private static Object[][] invitesListArchive() {
+        return new Object[][]{
+                {"correct", "1", "5", 200},
+                {"correct", "2", "5", 200},
+                {"correct", "1", "10", 200},
+                {"correct", "tt", "5", 400},
+                {"correct", "2", "tt", 400},
+                {"correct", "0", "5", 500},
+                {"test", "2", "5", 200},
+                {"", "2", "5", 400},
+                {null, "2", "5", 400},
+                {"correct", "", "5", 200},
+                {"correct", "2", "", 200},
+                {"correct", null, "5", 200},
+                {"correct", "2", null, 200},
+
+
+        };
+    }
+
+    @DataProvider
+    private static Object[][] invitesList() {
+        return new Object[][]{
+                {"JOINED", "0", "2288442453000", 200},
+                {"LEFT", "0", "2288442453000", 200},
+                {"LEFT", "ttt", "2288442453000", 400},
+                {"LEFT", "0", "ttt", 400},
+                {"Test", "0", "2288442453000", 400},
+                {"", "0", "2288442453000", 200},
+                {null, "0", "2288442453000", 200},
+                {"LEFT", null, "2288442453000", 200},
+                {"LEFT", "0", null, 200},
+                {"LEFT", "11111111111111111111", "2288442453000", 400},
+                {"LEFT", "0", "111111111111111111111", 400},
+                {"", "", "", 200},
+                {null, null, null, 200},
+        };
+    }
+    @DataProvider
+    private static Object[][] getInvitesSession() {
+        return new Object[][]{
+                {"test", true, 200},
+                {"correct", false, 200},
+                {"", false, 200}
+        };
+    }
+    @DataProvider
+    private static Object[][] getHistorySession() {
+        return new Object[][]{
+                {"test", true, 200},
+                {"correct", false, 200},
+                {"", true, 400}
+        };
+    }
+
     @DataProvider
     private static Object[][] getHistory() {
         return new Object[][]{
@@ -222,6 +324,7 @@ public class ChatsTests extends BaseTestClass {
 
         };
     }
+
     @DataProvider
     private static Object[][] getEvents() {
         return new Object[][]{
