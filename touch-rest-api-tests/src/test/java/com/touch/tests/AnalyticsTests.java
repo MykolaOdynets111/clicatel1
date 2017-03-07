@@ -54,6 +54,17 @@ public class AnalyticsTests extends BaseTestClass {
             response.as(ConversationTimeStatsResponseV5.class);
         }
     }
+//    @Test(dataProvider = "conversationCount")
+//    public void getAnaliticsRealTime(String tenantId, String year, String month, String day, int statusCode) {
+//        if (tenantId!=null&&tenantId.equals("correct")) {
+//            tenantId = testTenant.getId();
+//        }
+//        Response response = analyticsActions.getConversationTime(tenantId, year, month, day, testToken);
+//        Assert.assertEquals(response.getStatusCode(), statusCode);
+//        if (statusCode == 200) {
+//            response.as(ConversationTimeStatsResponseV5.class);
+//        }
+//    }
     @DataProvider
     private static Object[][] getAnalytics() {
         return new Object[][]{

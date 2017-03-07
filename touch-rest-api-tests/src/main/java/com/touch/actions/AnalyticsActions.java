@@ -54,5 +54,13 @@ public class AnalyticsActions {
             parameters.put("day", day);
         return requestEngine.getRequest(EndPointsClass.CHATSSTATS_CONVERSATION_TIME + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
+    public Response getAnaliticsRealTime(String tenantId, String dateTime, String token) {
+        HashMap<String, String> parameters = new HashMap<>();
+        if (tenantId != null)
+            parameters.put("tenantId", tenantId);
+        if (dateTime != null)
+            parameters.put("dateTime", dateTime);
+        return requestEngine.getRequest(EndPointsClass.ANALYTICS_REAL_TIME + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
 
 }

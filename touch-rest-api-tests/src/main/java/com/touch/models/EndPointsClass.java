@@ -31,6 +31,7 @@ public class EndPointsClass {
     public final static String TENANT_FLOWS = TENANTS + "/{tenant-id}/flows";
     public final static String TENANT_FLOW = TENANT_FLOWS + "/files/{flow-name}";
     public final static String DELETE_TENANT_FLOW = TENANT_FLOWS + "/{flow-name}";
+    public final static String TENANT_CONFIG = TENANT + "/config";
     //User profiles endpoint
     public static final String TOUCH_USER_PROFILES = ConfigApp.API_VERSION + "/user-profiles";
     public static final String TOUCH_USER_PROFILE = TOUCH_USER_PROFILES + "/{profileId}";
@@ -76,6 +77,7 @@ public class EndPointsClass {
 
     //Analytics endpoints
     public static final String ANALYTICS = "/v5/analytics";
+    public static final String ANALYTICS_REAL_TIME = ANALYTICS+"/real-time";
     public static final String CHATSSTATS_CONVERSATION_COUNT = "/v5/chats/stats/conversation-count";
     public static final String CHATSSTATS_CONVERSATION_TIME = "/v5/chats/stats/conversation-time";
 

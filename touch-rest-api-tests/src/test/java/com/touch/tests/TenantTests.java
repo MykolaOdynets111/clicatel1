@@ -2,8 +2,8 @@ package com.touch.tests;
 
 import com.touch.models.ErrorMessage;
 import com.touch.models.Message;
-import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.models.touch.tenant.*;
+import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -217,13 +218,13 @@ public class TenantTests extends BaseTestClass {
         String fileName = "testclickatell";
         String file = getFullPathToFile("TenantResources/" + fileName);
 //        try to create tenant flow with not existing tenant
-        Assert.assertEquals(tenantActions.addTanentFlow("notExisting", new File(file), token), 401);
+        Assert.assertEquals(tenantActions.addTenantFlow("notExisting", new File(file), token), 401);
 //        create tenant for test further test case
 // Verify that new tenant flow was added successful
         String tenantId = testTenant.getId();
-        Assert.assertEquals(tenantActions.addTanentFlow(tenantId, new File(file), testToken), 201);
+        Assert.assertEquals(tenantActions.addTenantFlow(tenantId, new File(file), testToken), 201);
         boolean isCommonFlowAdded = false;
-        for (FlowResponse flow : tenantActions.getAllTanentFlows(tenantId, testToken).getFlows()) {
+        for (FlowResponse flow : tenantActions.getAllTenantFlows(tenantId, testToken).getFlows()) {
             if (flow.getFileName().equals(fileName)) {
                 isCommonFlowAdded = true;
                 break;
@@ -232,12 +233,12 @@ public class TenantTests extends BaseTestClass {
 
         Assert.assertTrue(isCommonFlowAdded);
 //        //get new common flow and convert it to InputStream
-        InputStream actualImage = tenantActions.getTanentFlowAsInputStream(tenantId, fileName, testToken);
+        InputStream actualImage = tenantActions.getTenantFlowAsInputStream(tenantId, fileName, testToken);
         InputStream expectedImage = new FileInputStream(new File(file));
         Assert.assertTrue(isEqualInputStreams(actualImage, expectedImage));
 //
 //        //delete flow
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName, testToken), 200);
+        Assert.assertEquals(tenantActions.deleteTenantFlow(tenantId, fileName, testToken), 200);
     }
 
     @Test
@@ -246,18 +247,18 @@ public class TenantTests extends BaseTestClass {
         String file = getFullPathToFile("TenantResources/" + fileName);
         String tenantId = testTenant.getId();
 //      add tenant flow
-        tenantActions.addTanentFlow(tenantId, new File(file), testToken);
+        tenantActions.addTenantFlow(tenantId, new File(file), testToken);
 // try to delete not existing tenant flow with not existing tenant
 // TODO        we need to add verification of error message when response for deleting will for each cases
-        Assert.assertEquals(tenantActions.deleteTanentFlow("notexisting", "notexisting", token), 401);
+        Assert.assertEquals(tenantActions.deleteTenantFlow("notexisting", "notexisting", token), 401);
 //   try to delete not existing tenant flow in existing tenant
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, "notexisting", testToken), 404);
+        Assert.assertEquals(tenantActions.deleteTenantFlow(tenantId, "notexisting", testToken), 404);
 //        try to delete existing tenant flow in not existing tenant
-        Assert.assertEquals(tenantActions.deleteTanentFlow("notexisting", fileName, token), 401);
+        Assert.assertEquals(tenantActions.deleteTenantFlow("notexisting", fileName, token), 401);
         //     delete tenant flow
-        Assert.assertEquals(tenantActions.deleteTanentFlow(tenantId, fileName, testToken), 200);
+        Assert.assertEquals(tenantActions.deleteTenantFlow(tenantId, fileName, testToken), 200);
 //  try to delete tenant flow from tenant without any flows
-        Assert.assertEquals(tenantActions.deleteTanentFlow(testTenant.getId(), fileName, testToken), 404);
+        Assert.assertEquals(tenantActions.deleteTenantFlow(testTenant.getId(), fileName, testToken), 404);
     }
 
 
@@ -266,7 +267,7 @@ public class TenantTests extends BaseTestClass {
         String teantId = testTenant.getId();
         String notExistingFlow = "notexisting";
         String regExpErrorMessage = "Flow with name " + notExistingFlow + ", tenant id " + teantId + " not found.";
-        Assert.assertTrue(tenantActions.getTanentFlow(teantId, notExistingFlow, testToken, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
+        Assert.assertTrue(tenantActions.getTenantFlow(teantId, notExistingFlow, testToken, ErrorMessage.class).getErrorMessage().matches(regExpErrorMessage));
     }
 
     @Test
@@ -295,33 +296,33 @@ public class TenantTests extends BaseTestClass {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "10:00", "19:00");
 //        add new bussines hours
-        Response addBussinesHoursResponce = tenantActions.addBussinesHoursForAddress(testTenant.getId(), addressId, businessHourRequest, testToken);
+        Response addBussinesHoursResponce = tenantActions.addBusinessHoursForAddress(testTenant.getId(), addressId, businessHourRequest, testToken);
 //        Verify status code and that new Bussines hours have been added to tenant address
         Assert.assertEquals(addBussinesHoursResponce.getStatusCode(), 200);
-        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().contains(addBussinesHoursResponce.as(AddressBusinessHourResponse.class)));
+        Assert.assertTrue(tenantActions.getBusinessHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().contains(addBussinesHoursResponce.as(AddressBusinessHourResponse.class)));
 
     }
 
     @Test
     public void getBussinesHoursForAddressByNotExistingTenant() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress("not_existing", addressId, token, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
+        Assert.assertTrue(tenantActions.getBusinessHoursFromAddress("not_existing", addressId, token, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
 
     }
 
     @Test
     public void getBussinesHoursForAddressByNotExistingAddress() {
-        Assert.assertTrue(tenantActions.getBussinesHoursFromAddress(testTenant.getId(), "not_existing", testToken, ErrorMessage.class).getErrorMessage().matches("Address with id .* not found"));
+        Assert.assertTrue(tenantActions.getBusinessHoursFromAddress(testTenant.getId(), "not_existing", testToken, ErrorMessage.class).getErrorMessage().matches("Address with id .* not found"));
 
     }
 
     @Test
     public void updateBussinesHoursForAddress() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        String hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
+        String hoursId = tenantActions.getBusinessHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
         AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
         businessHourRequest.setStartWorkTime("11:00");
-        Response response = tenantActions.updateBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, businessHourRequest, testToken);
+        Response response = tenantActions.updateBusinessHoursForAddress(testTenant.getId(), addressId, hoursId, businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(businessHourRequest.getStartWorkTime(), response.as(AddressBusinessHourResponse.class).getStartWorkTime());
     }
@@ -329,8 +330,8 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void deleteBussinesHoursForAddress() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        String hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
-        Assert.assertEquals(tenantActions.deleteBussinesHoursForAddress(testTenant.getId(), addressId, hoursId, testToken), 200);
+        String hoursId = tenantActions.getBusinessHoursFromAddress(testTenant.getId(), addressId, testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
+        Assert.assertEquals(tenantActions.deleteBusinessHoursForAddress(testTenant.getId(), addressId, hoursId, testToken), 200);
 
     }
 
@@ -343,10 +344,10 @@ public class TenantTests extends BaseTestClass {
             addressId = testTenant.getTenantAddresses().get(0).getId();
         }
         if (hoursId.equals("correct")) {
-            hoursId = tenantActions.getBussinesHoursFromAddress(testTenant.getId(), testTenant.getTenantAddresses().get(0).getId(), testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
+            hoursId = tenantActions.getBusinessHoursFromAddress(testTenant.getId(), testTenant.getTenantAddresses().get(0).getId(), testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId();
         }
         AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
-        Response response = tenantActions.updateBussinesHoursForAddress(tenantId, addressId, hoursId, businessHourRequest, testToken);
+        Response response = tenantActions.updateBusinessHoursForAddress(tenantId, addressId, hoursId, businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), status);
         Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches(message));
 
@@ -355,10 +356,10 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void addBussinesHoursForTenant() {
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "10:00", "19:00");
-        Response response = tenantActions.addBussinesHoursForTenant(testTenant.getId(), businessHourRequest, testToken);
+        Response response = tenantActions.addBusinessHoursForTenant(testTenant.getId(), businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), 201);
         Assert.assertEquals(response.as(BusinessHourDtoIdV5.class), businessHourRequest);
-        Response getBussinesHoursResponse = tenantActions.getBussinesHoursFromTenant(testTenant.getId(), testToken);
+        Response getBussinesHoursResponse = tenantActions.getBusinessHoursFromTenant(testTenant.getId(), testToken);
         Assert.assertEquals(response.getStatusCode(), 201);
         Assert.assertTrue(getBussinesHoursResponse.as(ListTenantBusinessHoursResponse.class).getBusinessHours().contains(businessHourRequest));
     }
@@ -366,9 +367,9 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateBusinessHoursForTenant() {
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
-        String hoursId = tenantActions.addBussinesHoursForTenant(testTenant.getId(), businessHourRequest, testToken).as(BusinessHourDtoIdV5.class).getId();
+        String hoursId = tenantActions.addBusinessHoursForTenant(testTenant.getId(), businessHourRequest, testToken).as(BusinessHourDtoIdV5.class).getId();
         businessHourRequest.setStartWorkTime("13:00");
-        Response response = tenantActions.updateBussinesHoursForTenant(testTenant.getId(), hoursId, businessHourRequest, testToken);
+        Response response = tenantActions.updateBusinessHoursForTenant(testTenant.getId(), hoursId, businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.as(BusinessHourDtoIdV5.class), businessHourRequest);
 
@@ -379,7 +380,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateBusinessHoursForTenantWithNotExistTenant() {
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
-        Response response = tenantActions.updateBussinesHoursForTenant("not_exist", tenantActions.getBussinesHoursFromAddress(testTenant.getId(), testTenant.getTenantAddresses().get(0).getId(), testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId(), businessHourRequest, token);
+        Response response = tenantActions.updateBusinessHoursForTenant("not_exist", tenantActions.getBusinessHoursFromAddress(testTenant.getId(), testTenant.getTenantAddresses().get(0).getId(), testToken, ListAddressBusinessHoursResponse.class).getAddressBusinessHours().get(0).getId(), businessHourRequest, token);
         Assert.assertEquals(response.getStatusCode(), 401);
 
     }
@@ -387,7 +388,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateBusinessHoursForTenantWithNotExistBusinessHoursId() {
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "11:00", "19:00");
-        Response response = tenantActions.updateBussinesHoursForTenant(testTenant.getId(), "not_exist", businessHourRequest, testToken);
+        Response response = tenantActions.updateBusinessHoursForTenant(testTenant.getId(), "not_exist", businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), 404);
 
     }
@@ -506,7 +507,75 @@ public class TenantTests extends BaseTestClass {
         Assert.assertEquals(deleteResponse.getStatusCode(), 200);
     }
 
+    @Test(dataProvider = "getTBot")
+    public void getTBotForTenant(String tenantId, int statusCode) {
+        if(tenantId.equals("correct"))
+            tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
+        Response response = tenantActions.getTenantTBot(tenantId, token);
+        Assert.assertEquals(response.getStatusCode(),statusCode);
+        if(statusCode==200){
+            TenantTbotResponseV5 tbot = response.as(TenantTbotResponseV5.class);
+        }
 
+    }
+    @Test(dataProvider = "getTBot")
+    public void getConfigForTenant(String tenantId, int statusCode) {
+        if(tenantId.equals("correct"))
+            tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
+        Response response = tenantActions.getTenantConfig(tenantId, token);
+        Assert.assertEquals(response.getStatusCode(),statusCode);
+        if(statusCode==200){
+            TenantConfig tenantConfig = response.as(TenantConfig.class);
+        }
+
+    }  @Test(dataProvider = "deleteConfig")
+    public void deleteConfigForTenant(String tenantId, int statusCode) {
+        //use correct tenant if we need one
+        //add new configuration
+        if(tenantId.equals("correct")) {
+            tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
+            TenantConfig tenantConfig = new TenantConfig();
+            tenantConfig.setCsOfferWaitTimeSec(30);
+            ArrayList<String> ccList = new ArrayList<>();
+            ccList.add(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
+            tenantConfig.setCc(ccList);
+            tenantConfig.setPrimaryEmail(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
+            tenantActions.updateConfig(tenantId, tenantConfig, token);
+        }
+        Response response = tenantActions.deleteTenantConfig(tenantId, token);
+        Assert.assertEquals(response.getStatusCode(),statusCode);
+        if(statusCode==200){
+            TenantConfig tenantConfig =  tenantActions.getTenantConfig(tenantId, token).as(TenantConfig.class);
+            Assert.assertTrue(tenantConfig.getCc().isEmpty());
+            Assert.assertNull(tenantConfig.getPrimaryEmail());
+            Assert.assertTrue(tenantConfig.getCsOfferWaitTimeSec()==20);
+        }
+
+    }
+    @Test(dataProvider = "updateConfig")
+    public void addConfigForTenant(String tenantId, int csOfferWaitTimeSec, String primaryEmail, String cc, int statusCode) {
+        if(tenantId.equals("correct"))
+            tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
+        if(primaryEmail.equals("correct"))
+            primaryEmail= StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
+        if(cc.equals("correct"))
+            cc= StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
+        TenantConfig tenantConfig = new TenantConfig();
+        tenantConfig.setCsOfferWaitTimeSec(csOfferWaitTimeSec);
+        ArrayList<String> ccList = new ArrayList<>();
+        ccList.add(cc);
+        tenantConfig.setCc(ccList);
+        tenantConfig.setPrimaryEmail(primaryEmail);
+        Response response = tenantActions.updateConfig(tenantId, tenantConfig, token);
+        Assert.assertEquals(response.getStatusCode(),statusCode);
+        if(statusCode==200){
+            TenantConfig tenantConfigResponse = response.as(TenantConfig.class);
+            Assert.assertTrue(tenantConfigResponse.getCc().contains(cc));
+            Assert.assertEquals(tenantConfigResponse.getPrimaryEmail(),primaryEmail);
+            Assert.assertTrue(tenantConfigResponse.getCsOfferWaitTimeSec()==csOfferWaitTimeSec);
+        }
+
+    }
     @AfterClass
     public void afterClass() {
         token = getToken();
@@ -517,7 +586,39 @@ public class TenantTests extends BaseTestClass {
         return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
 
-
+    @DataProvider
+    private static Object[][] getTBot() {
+        return new Object[][]{
+                {"correct", 200},
+                {"test", 404},
+                {"11", 404},
+                {"", 404},
+        };
+    }    @DataProvider
+    private static Object[][] deleteConfig() {
+        return new Object[][]{
+                {"correct", 204},
+                {"test", 404},
+                {"11", 404},
+                {"", 404},
+        };
+    }
+    @DataProvider
+    private static Object[][] updateConfig() {
+        return new Object[][]{
+                {"correct",30,"correct","correct", 200},
+                {"correct",9,"correct","correct", 400},
+                {"correct",10,"correct","correct", 200},
+                {"test",30,"correct","correct", 404},
+                {"11",30,"correct","correct", 404},
+                {"",30,"correct","correct", 400},
+                {"correct",30,"test","correct", 400},
+                {"correct",30,"correct","test", 400},
+                {"correct",30,"11","correct", 400},
+                {"correct",30,"correct","11", 400},
+                {"test",30,"test","test", 400}
+        };
+    }
     @DataProvider
     private static Object[][] resourcesList() {
         return new Object[][]{

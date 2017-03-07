@@ -44,10 +44,17 @@ public class TenantActions {
     public Response getTenant(String tenantId,String token) {
         return requestEngine.getRequest(EndPointsClass.TENANT, tenantId,new Header("Authorization", token));
     }
-    public <T> T getBussinesHoursFromAddress(String tenantId, String addressId, String token, Class<T> clazz) {
+
+    public Response getTenantTBot(String tenantId,String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_TBOT, tenantId,new Header("Authorization", token));
+    }
+    public Response getTenantConfig(String tenantId,String token) {
+        return requestEngine.getRequest(EndPointsClass.TENANT_CONFIG, tenantId,new Header("Authorization", token));
+    }
+    public <T> T getBusinessHoursFromAddress(String tenantId, String addressId, String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId,null, new Header("Authorization", token)).as(clazz);
     }
-    public Response getBussinesHoursFromTenant(String tenantId, String token) {
+    public Response getBusinessHoursFromTenant(String tenantId, String token) {
         return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_TENANT, tenantId, new Header("Authorization", token));
     }
     public <T> T getFAQs(String tenantId, String token, Class<T> clazz) {
@@ -59,14 +66,17 @@ public class TenantActions {
     public int updateTenantAddressLongitudeAndLatitude(String tenantId, String addressId, GpsRequest gpsRequest, String token) {
         return requestEngine.putRequest(EndPointsClass.ADDRESS, tenantId, addressId, gpsRequest,new Header("Authorization", token)).getStatusCode();
     }
-    public Response updateBussinesHoursForAddress(String tenantId, String addressId, String hoursId, AddressBusinessHourRequest bussinesHours, String token) {
+    public Response updateBusinessHoursForAddress(String tenantId, String addressId, String hoursId, AddressBusinessHourRequest bussinesHours, String token) {
         return requestEngine.putRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_ADDRESS, tenantId, addressId, hoursId, bussinesHours,new Header("Authorization", token));
     }
-    public Response updateBussinesHoursForTenant(String tenantId, String hoursId, BusinessHourRequest bussinesHours, String token) {
+    public Response updateBusinessHoursForTenant(String tenantId, String hoursId, BusinessHourRequest bussinesHours, String token) {
         return requestEngine.putRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_TENANT, tenantId, hoursId, bussinesHours,new Header("Authorization", token));
     }
     public Response updateFAQ(String tenantId, String faqId, TenantFaqRequest faqBody, String token) {
         return requestEngine.putRequest(EndPointsClass.TENANT_FAQ, tenantId, faqId, faqBody,new Header("Authorization", token));
+    }
+    public Response updateConfig(String tenantId, TenantConfig config, String token) {
+        return requestEngine.putRequest(EndPointsClass.TENANT_CONFIG, tenantId, null, config,new Header("Authorization", token));
     }
     /*
     colours part
@@ -83,10 +93,10 @@ public class TenantActions {
         paramMap.put("value",value);
         return requestEngine.postRequestWithQueryParameters(EndPointsClass.TENANT_PROPERTIES,tenantId, paramMap,new Header("Authorization", token)).as(clazz);
     }
-    public Response addBussinesHoursForAddress(String tenantId, String addressId, BusinessHourRequest bussinesHours, String token) {
+    public Response addBusinessHoursForAddress(String tenantId, String addressId, BusinessHourRequest bussinesHours, String token) {
         return requestEngine.postRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId, bussinesHours,new Header("Authorization", token),new Header("Accept", "application/json"));
     }
-    public Response addBussinesHoursForTenant(String tenantId, BusinessHourRequest bussinesHours, String token) {
+    public Response addBusinessHoursForTenant(String tenantId, BusinessHourRequest bussinesHours, String token) {
         return requestEngine.postRequest(EndPointsClass.BUSINESS_HOURS_FOR_TENANT, tenantId, null, bussinesHours,new Header("Authorization", token));
     }
     public Response addFAQs(String tenantId, TenantFaqRequest faqs, String token) {
@@ -139,22 +149,22 @@ public class TenantActions {
     public int deleteCommonFlow(String name, String token) {
         return requestEngine.deleteRequest(EndPointsClass.DELETE_COMMON_FLOW, name, new Header("Authorization", token)).getStatusCode();
     }
-    public InputStream getTanentFlowAsInputStream(String tenantId, String name, String token) {
+    public InputStream getTenantFlowAsInputStream(String tenantId, String name, String token) {
         return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null, new Header("Authorization", token)).asInputStream();
     }
-    public <T> T getTanentFlow(String tenantId, String name, String token, Class<T> clazz) {
+    public <T> T getTenantFlow(String tenantId, String name, String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.TENANT_FLOW, tenantId, name, null, new Header("Authorization", token)).as(clazz);
     }
-    public ListFlowResponse getAllTanentFlows(String tenantId, String token) {
+    public ListFlowResponse getAllTenantFlows(String tenantId, String token) {
         return requestEngine.getRequest(EndPointsClass.TENANT_FLOWS, tenantId, new Header("Authorization", token)).as(ListFlowResponse.class);
     }
-    public int addTanentFlow(String tenantId, File file, String token) {
+    public int addTenantFlow(String tenantId, File file, String token) {
         return requestEngine.postRequestWithFile(EndPointsClass.TENANT_FLOWS, tenantId, null, file, new Header("Authorization", token)).getStatusCode();
     }
-    public int deleteTanentFlow(String tenantId, String name, String token) {
+    public int deleteTenantFlow(String tenantId, String name, String token) {
         return requestEngine.deleteRequest(EndPointsClass.DELETE_TENANT_FLOW, tenantId, name, new Header("Authorization", token)).getStatusCode();
     }
-    public int deleteBussinesHoursForAddress(String tenantId, String addressId, String hoursId, String token) {
+    public int deleteBusinessHoursForAddress(String tenantId, String addressId, String hoursId, String token) {
         return requestEngine.deleteRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_ADDRESS, tenantId, addressId, hoursId, new Header("Authorization", token)).getStatusCode();
     }
     public int deleteBussinesHoursForTenant(String tenantId, String hoursId, String token) {
@@ -165,5 +175,8 @@ public class TenantActions {
     }
     public Response deleteTAGs(String tenantId, String tag, String token) {
         return requestEngine.deleteRequest(EndPointsClass.TENANT_TAGS+"?tag="+tag, tenantId, new Header("Authorization", token));
+    }
+    public Response deleteTenantConfig(String tenantId, String token) {
+        return requestEngine.deleteRequest(EndPointsClass.TENANT_CONFIG, tenantId, new Header("Authorization", token));
     }
 }
