@@ -18,13 +18,19 @@ public class VerificationActions extends ScenarioSteps {
         }
         Assert.assertEquals("Values are not equal ", expected, actual);
     }
+    public void verifyThatListHasInsteadOneSameValue(List<String> list, String actual){
+        if(actual.contains("\n")){
+            actual = actual.replace("\n", " ");
+        }
+        Assert.assertTrue("List does not contain value: "+actual, list.contains(actual));
+    }
     @Step
     public void verifyThatValuesAreMatching(String regexp, String actual){
-        Assert.assertTrue("Values are not match. Actual; value is: "+actual, actual.matches(regexp));
+        Assert.assertTrue("Values are not match. Actual value is: "+actual, actual.matches(regexp));
     }
     @Step
     public void verifyThatListsContainsSameElements(List<String> expected, List<String> actual){
-        Assert.assertTrue(actual.containsAll(expected));
+        Assert.assertTrue(actual.toString(),actual.containsAll(expected));
 
     }
 

@@ -1,5 +1,11 @@
 package com.touch.tests;
 
+import com.clickatell.actions.AdminUsersActions;
+import com.clickatell.actions.AuthActions;
+import com.clickatell.models.admin_users.request.AdminUserSearchRequest;
+import com.clickatell.models.admin_users.response.AdminUserSearchData;
+import com.clickatell.models.admin_users.response.AdminUserSearchResponse;
+import com.clickatell.models.users.response.sign_in.SignInResponse;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.auth.ListTokenResponseV1;
 import com.touch.models.touch.auth.TokenBase;
@@ -14,8 +20,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.List;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -97,5 +103,7 @@ public class AuthTockenTests extends BaseTestClass {
                 {"", 500}
         };
     }
-
+    private String getFullPathToFile(String pathToFile) {
+        return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
+    }
 }

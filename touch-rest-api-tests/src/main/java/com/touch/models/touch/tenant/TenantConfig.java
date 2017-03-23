@@ -8,7 +8,9 @@ import java.util.List;
  */
 public class TenantConfig {
     private Integer csOfferWaitTimeSec = null;
+    private Integer agentInactivityTimeoutSec = null;
     private String primaryEmail = null;
+    private String timezone = null;
     private List<String> cc = new ArrayList<String>();
 
     public Integer getCsOfferWaitTimeSec() {
@@ -33,6 +35,22 @@ public class TenantConfig {
 
     public void setCc(List<String> cc) {
         this.cc = cc;
+    }
+
+    public Integer getAgentInactivityTimeoutSec() {
+        return agentInactivityTimeoutSec;
+    }
+
+    public void setAgentInactivityTimeoutSec(Integer agentInactivityTimeoutSec) {
+        this.agentInactivityTimeoutSec = agentInactivityTimeoutSec;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
     @Override

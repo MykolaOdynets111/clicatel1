@@ -20,7 +20,7 @@ public class LoginPageWeb extends PageObject {
 	@FindBy(xpath="//p[text()='Clickatell']/input")
 	public static WebElementFacade clickatellRB;
 	
-	@FindBy(css=".ctl-chat-widget-btn-open")
+	@FindBy(xpath="//input[@type='submit'][@class='ctl-chat-widget-btn-open']/../img")
 	public static WebElementFacade openChatRoomButton;
 	@FindBy(css=".ctl-chat-widget-btn-close")
 	public static WebElementFacade closeChatRoomButton;
@@ -50,7 +50,9 @@ public class LoginPageWeb extends PageObject {
 		getDriver().navigate().refresh();
 		new WaitForPageToLoad();
 	}
-
+	public Boolean isCloseChatRoomButtonEnable(){
+		return closeChatRoomButton.isCurrentlyEnabled();
+	}
 	
 		
 	}

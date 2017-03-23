@@ -11,6 +11,7 @@ import org.jbehave.core.model.ExamplesTable;
 import org.junit.Assert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +45,14 @@ public class FlowSteps {
         mainSteps.clickOnTenantRBWithName(tenant);
         mainSteps.openChatRoom();
     }
+    @When("Close chat")
+    public void closeChat() {
+        mainSteps.closeChatRoom();
+    }
+    @When("Close chat if chat is open")
+    public void closeChatIsOpen() {
+        mainSteps.closeChatRoomIfEnable();
+    }
     @Given("Select Genbank tenant and open chat")
     public void selectGenbankAndOpenChatRoom() {
         mainSteps.selectGenbankTenant();
@@ -57,7 +66,10 @@ public class FlowSteps {
     public void clickOnButtonWithText(String text) {
         mainSteps.clickOnButtonWithText(text);
     }
-
+    @When("Click on Radio-Button with text: '$text'")
+    public void clickOnRadioButtonWithText(String text) {
+        mainSteps.clickOnRadioButtonWithText(text);
+    }
     @When("Login as user '$login' with password '$password'")
     public void login(String login, String password) {
         mainSteps.setLoginAndPasswordInCard(login, password);
@@ -89,7 +101,16 @@ public class FlowSteps {
     public void setRateAndComments(String message) {
         mainSteps.setMessageToChatAndClickEnter(message);
     }
-
+@When("Provide Contact details:$data")
+public void provideContactDetails(ExamplesTable data){
+    for (int i=0;i<data.getRowCount();i++){
+        String firstName =data.getRowAsParameters(i, true).valueAs("firstName", String.class);
+        String lastName = data.getRowAsParameters(i, true).valueAs("lastName", String.class);
+        String email = data.getRowAsParameters(i, true).valueAs("email", String.class);
+        String phone = data.getRowAsParameters(i, true).valueAs("phone", String.class);
+        mainSteps.setContactDetailsAndSendIt(firstName,lastName,email,phone);
+        }
+}
     @Then("Verify that last Card has following data:$data")
     public void verifyLastTCardContent(ExamplesTable data) {
         List<String> expectedButtons = new ArrayList<>();
@@ -111,6 +132,7 @@ public class FlowSteps {
                     Assert.assertTrue("User or add other type in CardModel", false);
             }
         }
+
         if (expectedInfos.size() != 0)
             verification.verifyThatListsContainsSameElements(expectedInfos, mainSteps.getListOfInformationRowsFromLastCard());
         if (expectedButtons.size() != 0)
@@ -171,7 +193,22 @@ public class FlowSteps {
             mainSteps.setDataAndOpenNewAccount(name, surname, email, phone);
         }
     }
-
+    @When("Open card with number: '$number' from the end")
+    public void openCardWithNumberFromEnd(String number) {
+      mainSteps.openCardWithNumberFromTheEnd(Integer.valueOf(number));
+    }
+    @When("Open row details for row with title: '$title' in last card")
+    public void openRowDetailILastCard(String title) {
+        mainSteps.openRowDetaisInLastCard(title);
+    }
+    @When("Go down to last card")
+    public void goDownToLastCard() {
+        mainSteps.goDownToLastCard();
+    }
+    @When("Go down to the bottom")
+    public void goDownToTheBottom() {
+        mainSteps.goDownToTheBottom();
+    }
     @Then("Verify that list from card with number: '$number' from the end contains new ticket added previously")
     public void verifyOpenTickets(String number) {
         List<Ticket> ticketsFromCard = mainSteps.getTicketsFromCard(Integer.valueOf(number));
@@ -181,6 +218,9 @@ public class FlowSteps {
 
     @Then("Verify that card with number: '$number' from the end has following data:$data")
     public void verifyPreviousTCardContent(ExamplesTable data, String number) {
+//        if(number.equals("4")){
+//            int t=3;
+//        }
         List<String> expectedButtons = new ArrayList<>();
         List<String> expectedInfos = new ArrayList<>();
         for (int i=0;i<data.getRowCount();i++) {
@@ -188,7 +228,7 @@ public class FlowSteps {
             String value = data.getRowAsParameters(i, true).valueAs("value", String.class);
             switch (type) {
                 case "title":
-                    verification.verifyThatValuesAreEqual(value, mainSteps.getTitleOfPreviousCard());
+                    verification.verifyThatValuesAreEqual(value, mainSteps.getTitleFromCardWithNumberFromEnd(Integer.valueOf(number)));
                     break;
                 case "info":
                     expectedInfos.add(value);
@@ -200,7 +240,9 @@ public class FlowSteps {
                     Assert.assertTrue("User or add other type in CardModel", false);
             }
         }
+        if (expectedInfos.size() != 0)
         verification.verifyThatListsContainsSameElements(expectedInfos, mainSteps.getListOfInformationRowsFromCardWithNumberFromEnd(Integer.valueOf(number)));
+        if (expectedButtons.size() != 0)
         verification.verifyThatListsContainsSameElements(expectedButtons, mainSteps.getListOfButtonsNameFromCardWithNumberFromEnd(Integer.valueOf(number)));
     }
     @Then("Verify that card with number: '$number' from the end is matching data:$data")
@@ -212,7 +254,7 @@ public class FlowSteps {
             String value = data.getRowAsParameters(i, true).valueAs("value", String.class);
             switch (type) {
                 case "title":
-                    verification.verifyThatValuesAreMatching(value, mainSteps.getTitleOfPreviousCard());
+                    verification.verifyThatValuesAreMatching(value, mainSteps.getTitleFromCardWithNumberFromEnd(Integer.valueOf(number)));
                     break;
                 case "info":
                     expectedInfos.add(value);
@@ -224,18 +266,35 @@ public class FlowSteps {
                     Assert.assertTrue("User or add other type in CardModel", false);
             }
         }
+        if (expectedInfos.size() != 0)
         verification.verifyThatListsContainsSameElements(expectedInfos, mainSteps.getListOfInformationRowsFromCardWithNumberFromEnd(Integer.valueOf(number)));
+        if (expectedButtons.size() != 0)
         verification.verifyThatListsContainsSameElements(expectedButtons, mainSteps.getListOfButtonsNameFromCardWithNumberFromEnd(Integer.valueOf(number)));
     }
 
     @Then("Verify that last your request was: '$message'")
     public void verifyYourLastRequest(String message) {
-        verification.verifyThatValuesAreEqual(message, mainSteps.getYourLastRequet());
+        String yourLastRequet = mainSteps.getYourLastRequet();
+        String[] requestMessages = yourLastRequet.split("\\n");
+        verification.verifyThatValuesAreEqual(message, requestMessages[0]);
     }
-
+    @Then("Verify that last your whole request was: '$message'")
+    public void verifyYourWholeLastRequest(String message) {
+        String yourLastRequet = mainSteps.getYourLastRequet();
+        verification.verifyThatValuesAreEqual(message, yourLastRequet);
+    }
     @Then("Verify that last response was: '$message'")
     public void verifyLastResponse(String message) {
-        verification.verifyThatValuesAreEqual(message, mainSteps.getLastResponceMessage());
+        String lastResponceMessage = mainSteps.getLastResponceMessage();
+        String[] responceMessages = lastResponceMessage.split("\\n");
+        verification.verifyThatValuesAreEqual(message, responceMessages[0]);
+    }
+    @Then("Verify that last response was: '$message1' or '$message2'")
+    public void verifyLastResponse(String message1, String message2) {
+        String lastResponceMessage = mainSteps.getLastResponceMessage();
+        String[] responceMessages = lastResponceMessage.split("\\n");
+        List<String> messages = Arrays.asList(message1, message2);
+        verification.verifyThatListHasInsteadOneSameValue(messages, responceMessages[0]);
     }
 
     @Then("Verify that last response match with: '$regexp'")

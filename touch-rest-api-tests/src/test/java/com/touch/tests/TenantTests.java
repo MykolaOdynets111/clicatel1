@@ -355,6 +355,7 @@ public class TenantTests extends BaseTestClass {
 
     @Test
     public void addBussinesHoursForTenant() {
+        deleteAllBussinesHoursForTenenat(testTenant.getId(), testToken);
         BusinessHourRequest businessHourRequest = new BusinessHourRequest(BusinessHourRequest.DayOfWeekEnum.THURSDAY, "10:00", "19:00");
         Response response = tenantActions.addBusinessHoursForTenant(testTenant.getId(), businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), 201);
@@ -362,6 +363,13 @@ public class TenantTests extends BaseTestClass {
         Response getBussinesHoursResponse = tenantActions.getBusinessHoursFromTenant(testTenant.getId(), testToken);
         Assert.assertEquals(response.getStatusCode(), 201);
         Assert.assertTrue(getBussinesHoursResponse.as(ListTenantBusinessHoursResponse.class).getBusinessHours().contains(businessHourRequest));
+        deleteAllBussinesHoursForTenenat(testTenant.getId(), testToken);
+    }
+    private void deleteAllBussinesHoursForTenenat(String tenant, String token){
+        List<BusinessHourDtoIdV5> businessHours = tenantActions.getBusinessHoursFromTenant(testTenant.getId(), testToken).as(ListTenantBusinessHoursResponse.class).getBusinessHours();
+        for(BusinessHourDtoIdV5 hours: businessHours){
+            tenantActions.deleteBussinesHoursForTenant(tenant,hours.getId(),token);
+        }
     }
 
     @Test
@@ -372,7 +380,7 @@ public class TenantTests extends BaseTestClass {
         Response response = tenantActions.updateBusinessHoursForTenant(testTenant.getId(), hoursId, businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.as(BusinessHourDtoIdV5.class), businessHourRequest);
-
+        deleteAllBussinesHoursForTenenat(testTenant.getId(), testToken);
 
     }
 
@@ -566,6 +574,8 @@ public class TenantTests extends BaseTestClass {
         ccList.add(cc);
         tenantConfig.setCc(ccList);
         tenantConfig.setPrimaryEmail(primaryEmail);
+        tenantConfig.setTimezone("GMT+5:30");
+        tenantConfig.setAgentInactivityTimeoutSec(100);
         Response response = tenantActions.updateConfig(tenantId, tenantConfig, token);
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if(statusCode==200){

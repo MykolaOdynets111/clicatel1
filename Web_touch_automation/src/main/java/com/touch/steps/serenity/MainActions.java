@@ -20,6 +20,7 @@ public class MainActions extends ScenarioSteps {
     OpenAccountCard openAccount;
     CreditCardSelectionCard selectCreditCard;
     CalendarCardElement calendarCardElement;
+    ContactDetailsCard contactDetailsCard;
 
     @Step
     public void openMainPage() {
@@ -42,8 +43,9 @@ public class MainActions extends ScenarioSteps {
     public void selectGenbankTenant() {
         loginPage.clickOnGenbankRB();
     }
+
     @Step
-    public void clickOnTenantRBWithName(String name){
+    public void clickOnTenantRBWithName(String name) {
         loginPage.clickOnTenantRBWithName(name);
     }
 
@@ -63,12 +65,34 @@ public class MainActions extends ScenarioSteps {
 
         loginPage.clickOnOpenChatRoomButton();
     }
-
+    @Step
+    public void closeChatRoom() {
+        loginPage.clickOnCloseChatRoomButton();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    @Step
+    public void closeChatRoomIfEnable() {
+        if(loginPage.isCloseChatRoomButtonEnable()){
+        loginPage.clickOnCloseChatRoomButton();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        }
+    }
     @Step
     public void clickOnButtonWithText(String text) {
         chatRoomPage.clickOnButtonWithText(text);
     }
-
+    @Step
+    public void clickOnRadioButtonWithText(String text) {
+        chatRoomPage.clickOnRadioButtonWithText(text);
+    }
     @Step
     public String getLastResponceMessage() {
         return chatRoomPage.getLastResponceMessage();
@@ -114,6 +138,22 @@ public class MainActions extends ScenarioSteps {
         return chatRoomPage.getListOfInformationRowsFromCardWithNumberFromEnd(number);
     }
 
+    @Step
+    public void openCardWithNumberFromTheEnd(int number) {
+        chatRoomPage.openFaqDetailsForCardWithNumberFromEnd(number);
+    }
+    @Step
+    public void openRowDetaisInLastCard(String rowTitle) {
+        chatRoomPage.openDetailsForRowFromLastCard(rowTitle);
+    }
+    @Step
+    public void goDownToLastCard() {
+        chatRoomPage.goDownToLastCard();
+    }
+    @Step
+    public void goDownToTheBottom() {
+        chatRoomPage.goDownToTheBottom();
+    }
     @Step
     public String getTitleOfLastCard() {
         return chatRoomPage.getTitleFromLastCard();
@@ -197,13 +237,27 @@ public class MainActions extends ScenarioSteps {
             openAccount.setContactNumberInput(phone);
         openAccount.clickOnSubmitButton();
     }
+
     @Step
-    public void selectCreditCardAndBlockIt(int number){
+    public void selectCreditCardAndBlockIt(int number) {
         selectCreditCard.selectCreditCardWithNumbeInList(number);
         selectCreditCard.clickOnBlockButton();
     }
+
     @Step
-    public void clickOnDayInCalenderElementInCard(String dayNumber){
+    public void clickOnDayInCalenderElementInCard(String dayNumber) {
         calendarCardElement.clickOnDay(dayNumber);
+    }
+    @Step
+    public void setContactDetailsAndSendIt(String firstName, String lastName, String email, String phone) {
+        if (!firstName.isEmpty())
+            contactDetailsCard.setFirstNameInput(firstName);
+        if (!lastName.isEmpty())
+            contactDetailsCard.setLastNameInput(lastName);
+        if (!email.isEmpty())
+            contactDetailsCard.setEmailInput(email);
+        if (!phone.isEmpty())
+           contactDetailsCard.setContactNumberInput(phone);
+        contactDetailsCard.clickOnSubmitButton();
     }
 }
