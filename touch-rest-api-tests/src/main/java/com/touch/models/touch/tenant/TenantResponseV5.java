@@ -2,12 +2,11 @@
 
 package com.touch.models.touch.tenant;
 
-import java.util.Objects;
+import java.util.*;
+
 import com.google.gson.annotations.SerializedName;
 import com.touch.models.touch.department.DepartmentResponse;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * TenantResponseV5
@@ -62,6 +61,8 @@ public class TenantResponseV5 {
 
   @SerializedName("tenantTags")
   private List<String> tenantTags = new ArrayList<String>();
+  @SerializedName("tenantResourcesUrls")
+  private Map<String, String> tenantResourcesUrls = new HashMap<>();
 
   @SerializedName("sessionsCapacity")
   private Integer sessionsCapacity = null;
@@ -89,10 +90,19 @@ public class TenantResponseV5 {
     return this;
   }
 
-   /**
+  public Map<String, String> getTenantResourcesUrls() {
+    return tenantResourcesUrls;
+  }
+
+  public void setTenantResourcesUrls(Map<String, String> tenantResourcesUrls) {
+    this.tenantResourcesUrls = tenantResourcesUrls;
+  }
+
+  /**
    * Get accountId
    * @return accountId
   **/
+
   @ApiModelProperty(example = "null", value = "")
   public String getAccountId() {
     return accountId;

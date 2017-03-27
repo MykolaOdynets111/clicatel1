@@ -95,6 +95,21 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         }
         return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
     }
+    public String loginAsAdminUserAndCaptchaAndReturnToken(){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("touch.user.admin.login"), null, null, TestingEnvProperties.getPropertyByName("touch.user.admin.password"), null);
+        User user = new User(userSignupRequest);
+        UserProfile userProfile = authActions.getListOfAccountsWithTokenAndCaptcha(user);
+        int accountIndex =0;
+        List<Account> accounts = userProfile.getAccounts();
+        for(int i=0; i<accounts.size();i++){
+            if(accounts.get(i).getName().equals("Clickatell")){
+                accountIndex=i;
+                break;
+            }
+        }
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
     public String loginUserToMC2AndReturnToken(String login,String password){
         AuthActions authActions = new AuthActions(this.requestEngine);
         UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", login, null, null, password, null);
