@@ -547,6 +547,11 @@ public class TenantTests extends BaseTestClass {
             ArrayList<String> ccList = new ArrayList<>();
             ccList.add(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
             tenantConfig.setCc(ccList);
+            tenantConfig.setTimezone("GMT+5:30");
+            tenantConfig.setAgentInactivityTimeoutSec(100);
+            tenantConfig.setAgentWaitClientTimeoutMin(100);
+            tenantConfig.setTbotWaitClientTimeoutMin(100);
+            tenantConfig.setShowSmCardTimeoutMin(100);
             tenantConfig.setPrimaryEmail(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
             tenantActions.updateConfig(tenantId, tenantConfig, token);
         }
@@ -576,6 +581,9 @@ public class TenantTests extends BaseTestClass {
         tenantConfig.setPrimaryEmail(primaryEmail);
         tenantConfig.setTimezone("GMT+5:30");
         tenantConfig.setAgentInactivityTimeoutSec(100);
+        tenantConfig.setAgentWaitClientTimeoutMin(100);
+        tenantConfig.setTbotWaitClientTimeoutMin(100);
+        tenantConfig.setShowSmCardTimeoutMin(100);
         Response response = tenantActions.updateConfig(tenantId, tenantConfig, token);
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if(statusCode==200){

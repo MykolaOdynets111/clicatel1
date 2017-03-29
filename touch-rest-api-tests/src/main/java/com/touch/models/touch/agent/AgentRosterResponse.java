@@ -72,6 +72,16 @@ public class AgentRosterResponse {
   private String activeJid = null;
   @SerializedName("departments")
   private List<DepartmentNoAgentsResponse> departments = new ArrayList<DepartmentNoAgentsResponse>();
+  @SerializedName("agentStatus")
+  private String agentStatus = null;
+
+  public String getAgentStatus() {
+    return agentStatus;
+  }
+
+  public void setAgentStatus(String agentStatus) {
+    this.agentStatus = agentStatus;
+  }
 
   public AgentRosterResponse id(String id) {
     this.id = id;

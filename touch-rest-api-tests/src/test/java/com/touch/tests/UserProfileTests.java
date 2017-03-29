@@ -90,12 +90,8 @@ public class UserProfileTests extends BaseTestClass {
     @Test
     public void addUserProfileWithoutData() {
         Map<String, Object> userProfileData = new HashMap<>();
-        int userAmountBefore = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles().size();
 //        Verify that we can create user-profile with empty fields
-        Assert.assertEquals(userProfileActions.addUserProfile(userProfileData, null, token), 201);
-//        TODO add verification that Id id not empty in this case and was auto generated
-        List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class).getUserProfiles();
-        Assert.assertEquals(userAmountBefore + 1, userProfiles.size());
+        Assert.assertEquals(userProfileActions.addUserProfile(userProfileData, null, token), 500);
     }
 
     @Test

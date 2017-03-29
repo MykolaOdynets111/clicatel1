@@ -9,9 +9,36 @@ import java.util.List;
 public class TenantConfig {
     private Integer csOfferWaitTimeSec = null;
     private Integer agentInactivityTimeoutSec = null;
+    private Integer agentWaitClientTimeoutMin = null;
+    private Integer tbotWaitClientTimeoutMin = null;
+    private Integer showSmCardTimeoutMin = null;
     private String primaryEmail = null;
     private String timezone = null;
     private List<String> cc = new ArrayList<String>();
+
+    public Integer getAgentWaitClientTimeoutMin() {
+        return agentWaitClientTimeoutMin;
+    }
+
+    public void setAgentWaitClientTimeoutMin(Integer agentWaitClientTimeoutMin) {
+        this.agentWaitClientTimeoutMin = agentWaitClientTimeoutMin;
+    }
+
+    public Integer getTbotWaitClientTimeoutMin() {
+        return tbotWaitClientTimeoutMin;
+    }
+
+    public void setTbotWaitClientTimeoutMin(Integer tbotWaitClientTimeoutMin) {
+        this.tbotWaitClientTimeoutMin = tbotWaitClientTimeoutMin;
+    }
+
+    public Integer getShowSmCardTimeoutMin() {
+        return showSmCardTimeoutMin;
+    }
+
+    public void setShowSmCardTimeoutMin(Integer showSmCardTimeoutMin) {
+        this.showSmCardTimeoutMin = showSmCardTimeoutMin;
+    }
 
     public Integer getCsOfferWaitTimeSec() {
         return csOfferWaitTimeSec;

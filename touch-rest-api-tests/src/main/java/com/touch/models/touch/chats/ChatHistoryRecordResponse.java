@@ -77,6 +77,16 @@ public class ChatHistoryRecordResponse {
 
   @SerializedName("clientId")
   private String clientId = null;
+  @SerializedName("roomJid")
+  private String roomJid = null;
+
+  public String getRoomJid() {
+    return roomJid;
+  }
+
+  public void setRoomJid(String roomJid) {
+    this.roomJid = roomJid;
+  }
 
   public ChatHistoryRecordResponse sessionId(String sessionId) {
     this.sessionId = sessionId;

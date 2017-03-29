@@ -72,7 +72,7 @@ public class AnalyticsTests extends BaseTestClass {
                 {"correct", "correct","correct", 200},
                 {"correct", "","correct", 400},
                 {"correct", "correct","", 200},
-                {"correct", "correct","test", 400},
+                {"correct", "correct","test", 200},
                 {"correct", "test","correct", 400},
                 {"correct", "22/11/2016","correct", 400},
                 {null, null,null, 400},
