@@ -14,6 +14,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -186,7 +187,15 @@ public class ChatsTests extends BaseTestClass {
 //            Assert.assertFalse(records.isEmpty());
         }
     }
-
+private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
+    List<ChatSessionResponse> sessions = chatSessions;
+    Collections.reverse(sessions);
+    for(ChatSessionResponse session: sessions){
+        if(session.getTenantId().equals(tenant))
+            return session;
+    }
+    return null;
+}
     @Test(dataProvider = "getHistorySession")
     public void getChatsHistoryForSession(String sessionId, boolean isEmpty, int statusCode) {
         ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
@@ -263,7 +272,7 @@ public class ChatsTests extends BaseTestClass {
                 {"LEFT", "0", "2288442453000", 200},
                 {"LEFT", "ttt", "2288442453000", 400},
                 {"LEFT", "0", "ttt", 400},
-                {"Test", "0", "2288442453000", 400},
+                {"MC2RatingTest", "0", "2288442453000", 400},
                 {"", "0", "2288442453000", 200},
                 {null, "0", "2288442453000", 200},
                 {"LEFT", null, "2288442453000", 200},

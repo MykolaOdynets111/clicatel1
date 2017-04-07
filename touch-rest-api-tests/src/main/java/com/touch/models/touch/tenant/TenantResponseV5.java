@@ -61,6 +61,8 @@ public class TenantResponseV5 {
 
   @SerializedName("tenantTags")
   private List<String> tenantTags = new ArrayList<String>();
+  @SerializedName("tenantAgentTransferReason")
+  private List<Object> tenantAgentTransferReason = new ArrayList<Object>();
   @SerializedName("tenantResourcesUrls")
   private Map<String, String> tenantResourcesUrls = new HashMap<>();
 
@@ -96,6 +98,14 @@ public class TenantResponseV5 {
 
   public void setTenantResourcesUrls(Map<String, String> tenantResourcesUrls) {
     this.tenantResourcesUrls = tenantResourcesUrls;
+  }
+
+  public List<Object> getTenantAgentTransferReason() {
+    return tenantAgentTransferReason;
+  }
+
+  public void setTenantAgentTransferReason(List<Object> tenantAgentTransferReason) {
+    this.tenantAgentTransferReason = tenantAgentTransferReason;
   }
 
   /**

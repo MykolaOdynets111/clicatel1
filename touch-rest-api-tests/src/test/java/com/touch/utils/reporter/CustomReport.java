@@ -116,7 +116,7 @@ public class CustomReport implements IReporter {
 
         writer.print("<table>");
         writer.print("<tr>");
-        writer.print("<th>Test</th>");
+        writer.print("<th>MC2RatingTest</th>");
         writer.print("<th># Passed</th>");
         writer.print("<th># Skipped</th>");
         writer.print("<th># Failed</th>");

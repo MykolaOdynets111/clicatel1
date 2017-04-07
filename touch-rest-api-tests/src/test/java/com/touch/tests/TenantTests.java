@@ -543,13 +543,17 @@ public class TenantTests extends BaseTestClass {
         if(tenantId.equals("correct")) {
             tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
             TenantConfig tenantConfig = new TenantConfig();
-            tenantConfig.setCsOfferWaitTimeSec(30);
             ArrayList<String> ccList = new ArrayList<>();
             ccList.add(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
             tenantConfig.setCc(ccList);
             tenantConfig.setTimezone("GMT+5:30");
-            tenantConfig.setAgentInactivityTimeoutSec(100);
+            tenantConfig.setAgentInactivityTimeoutPreferredSec(100);
+            tenantConfig.setAgentInactivityTimeoutWarnSec(100);
             tenantConfig.setAgentWaitClientTimeoutMin(100);
+            tenantConfig.setUserWaitingTimeOfferMsg(100);
+            tenantConfig.setAgentOfferTimeoutSec(100);
+            tenantConfig.setUserWaitingTimeOfferCard(100);
+            tenantConfig.setClientOfferTimeoutSec(100);
             tenantConfig.setTbotWaitClientTimeoutMin(100);
             tenantConfig.setShowSmCardTimeoutMin(100);
             tenantConfig.setPrimaryEmail(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
@@ -561,12 +565,11 @@ public class TenantTests extends BaseTestClass {
             TenantConfig tenantConfig =  tenantActions.getTenantConfig(tenantId, token).as(TenantConfig.class);
             Assert.assertTrue(tenantConfig.getCc().isEmpty());
             Assert.assertNull(tenantConfig.getPrimaryEmail());
-            Assert.assertTrue(tenantConfig.getCsOfferWaitTimeSec()==20);
         }
 
     }
     @Test(dataProvider = "updateConfig")
-    public void addConfigForTenant(String tenantId, int csOfferWaitTimeSec, String primaryEmail, String cc, int statusCode) {
+    public void addConfigForTenant(String tenantId, int agentInTimeout, String primaryEmail, String cc, int statusCode) {
         if(tenantId.equals("correct"))
             tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
         if(primaryEmail.equals("correct"))
@@ -574,14 +577,19 @@ public class TenantTests extends BaseTestClass {
         if(cc.equals("correct"))
             cc= StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
         TenantConfig tenantConfig = new TenantConfig();
-        tenantConfig.setCsOfferWaitTimeSec(csOfferWaitTimeSec);
         ArrayList<String> ccList = new ArrayList<>();
         ccList.add(cc);
         tenantConfig.setCc(ccList);
         tenantConfig.setPrimaryEmail(primaryEmail);
         tenantConfig.setTimezone("GMT+5:30");
-        tenantConfig.setAgentInactivityTimeoutSec(100);
+        tenantConfig.setAgentInactivityTimeoutMaxSec(agentInTimeout);
+        tenantConfig.setAgentInactivityTimeoutPreferredSec(100);
+        tenantConfig.setAgentInactivityTimeoutWarnSec(100);
         tenantConfig.setAgentWaitClientTimeoutMin(100);
+        tenantConfig.setUserWaitingTimeOfferMsg(100);
+        tenantConfig.setAgentOfferTimeoutSec(100);
+        tenantConfig.setUserWaitingTimeOfferCard(100);
+        tenantConfig.setClientOfferTimeoutSec(100);
         tenantConfig.setTbotWaitClientTimeoutMin(100);
         tenantConfig.setShowSmCardTimeoutMin(100);
         Response response = tenantActions.updateConfig(tenantId, tenantConfig, token);
@@ -590,7 +598,7 @@ public class TenantTests extends BaseTestClass {
             TenantConfig tenantConfigResponse = response.as(TenantConfig.class);
             Assert.assertTrue(tenantConfigResponse.getCc().contains(cc));
             Assert.assertEquals(tenantConfigResponse.getPrimaryEmail(),primaryEmail);
-            Assert.assertTrue(tenantConfigResponse.getCsOfferWaitTimeSec()==csOfferWaitTimeSec);
+            Assert.assertTrue(tenantConfigResponse.getAgentInactivityTimeoutMaxSec()==agentInTimeout);
         }
 
     }
@@ -625,7 +633,7 @@ public class TenantTests extends BaseTestClass {
     private static Object[][] updateConfig() {
         return new Object[][]{
                 {"correct",30,"correct","correct", 200},
-                {"correct",9,"correct","correct", 400},
+                {"correct",9,"correct","correct", 200},
                 {"correct",10,"correct","correct", 200},
                 {"test",30,"correct","correct", 404},
                 {"11",30,"correct","correct", 404},

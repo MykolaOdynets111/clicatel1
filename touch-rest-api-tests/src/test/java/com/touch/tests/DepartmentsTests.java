@@ -221,7 +221,7 @@ public class DepartmentsTests extends BaseTestClass {
         List<DepartmentResponse> departmetsList = departmentActions.getListOfDepartments(token).as(ListDepartmentResponse.class).getDepartments();
         if (!departmetsList.isEmpty()) {
             for (DepartmentResponse department : departmetsList) {
-                if (department.getName().contains("test")||department.getName().contains("Test")||department.getName().equals(""))
+                if (department.getName().contains("test")||department.getName().contains("MC2RatingTest")||department.getName().equals(""))
                     Assert.assertEquals(departmentActions.deleteDepartment(department.getId(), token).getStatusCode(), 200);
             }
         }

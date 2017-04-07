@@ -107,7 +107,7 @@ public class BaseTestClass {
     public void removeAllTestTenants(String token) {
         List<TenantResponseV5> tenantsList = tenantActions.getTenantsList(token);
         for (TenantResponseV5 tenant : tenantsList) {
-            if (tenant.getTenantOrgName().contains("Test") || tenant.getTenantOrgName().contains("test")) {
+            if (tenant.getTenantOrgName().contains("MC2RatingTest") || tenant.getTenantOrgName().contains("test")) {
                 tenantActions.deleteTenant(tenant.getId(), token);
             }
         }

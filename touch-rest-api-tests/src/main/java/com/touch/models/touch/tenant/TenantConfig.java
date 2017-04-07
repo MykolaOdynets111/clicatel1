@@ -7,14 +7,93 @@ import java.util.List;
  * Created by kmakohoniuk on 3/7/2017.
  */
 public class TenantConfig {
-    private Integer csOfferWaitTimeSec = null;
-    private Integer agentInactivityTimeoutSec = null;
+    private Integer userWaitingTimeOfferMsg = null;
+    private Integer userWaitingTimeOfferCard = null;
+    private Integer agentInactivityTimeoutMaxSec = null;
+    private Integer agentInactivityTimeoutPreferredSec = null;
+    private Integer agentInactivityTimeoutWarnSec = null;
     private Integer agentWaitClientTimeoutMin = null;
     private Integer tbotWaitClientTimeoutMin = null;
     private Integer showSmCardTimeoutMin = null;
+    private String attachmentManager = null;
+    private Integer agentOfferTimeoutSec = null;
+    private Integer clientOfferTimeoutSec = null;
+    private Integer userWaitingTimeMessage = null;
     private String primaryEmail = null;
     private String timezone = null;
     private List<String> cc = new ArrayList<String>();
+
+    public Integer getUserWaitingTimeOfferMsg() {
+        return userWaitingTimeOfferMsg;
+    }
+
+    public void setUserWaitingTimeOfferMsg(Integer userWaitingTimeOfferMsg) {
+        this.userWaitingTimeOfferMsg = userWaitingTimeOfferMsg;
+    }
+
+    public Integer getUserWaitingTimeOfferCard() {
+        return userWaitingTimeOfferCard;
+    }
+
+    public void setUserWaitingTimeOfferCard(Integer userWaitingTimeOfferCard) {
+        this.userWaitingTimeOfferCard = userWaitingTimeOfferCard;
+    }
+
+    public Integer getAgentOfferTimeoutSec() {
+        return agentOfferTimeoutSec;
+    }
+
+    public void setAgentOfferTimeoutSec(Integer agentOfferTimeoutSec) {
+        this.agentOfferTimeoutSec = agentOfferTimeoutSec;
+    }
+
+    public Integer getClientOfferTimeoutSec() {
+        return clientOfferTimeoutSec;
+    }
+
+    public void setClientOfferTimeoutSec(Integer clientOfferTimeoutSec) {
+        this.clientOfferTimeoutSec = clientOfferTimeoutSec;
+    }
+
+    public Integer getUserWaitingTimeMessage() {
+        return userWaitingTimeMessage;
+    }
+
+    public void setUserWaitingTimeMessage(Integer userWaitingTimeMessage) {
+        this.userWaitingTimeMessage = userWaitingTimeMessage;
+    }
+
+    public Integer getAgentInactivityTimeoutMaxSec() {
+        return agentInactivityTimeoutMaxSec;
+    }
+
+    public void setAgentInactivityTimeoutMaxSec(Integer agentInactivityTimeoutMaxSec) {
+        this.agentInactivityTimeoutMaxSec = agentInactivityTimeoutMaxSec;
+    }
+
+    public Integer getAgentInactivityTimeoutPreferredSec() {
+        return agentInactivityTimeoutPreferredSec;
+    }
+
+    public void setAgentInactivityTimeoutPreferredSec(Integer agentInactivityTimeoutPreferredSec) {
+        this.agentInactivityTimeoutPreferredSec = agentInactivityTimeoutPreferredSec;
+    }
+
+    public Integer getAgentInactivityTimeoutWarnSec() {
+        return agentInactivityTimeoutWarnSec;
+    }
+
+    public void setAgentInactivityTimeoutWarnSec(Integer agentInactivityTimeoutWarnSec) {
+        this.agentInactivityTimeoutWarnSec = agentInactivityTimeoutWarnSec;
+    }
+
+    public String getAttachmentManager() {
+        return attachmentManager;
+    }
+
+    public void setAttachmentManager(String attachmentManager) {
+        this.attachmentManager = attachmentManager;
+    }
 
     public Integer getAgentWaitClientTimeoutMin() {
         return agentWaitClientTimeoutMin;
@@ -40,13 +119,6 @@ public class TenantConfig {
         this.showSmCardTimeoutMin = showSmCardTimeoutMin;
     }
 
-    public Integer getCsOfferWaitTimeSec() {
-        return csOfferWaitTimeSec;
-    }
-
-    public void setCsOfferWaitTimeSec(Integer csOfferWaitTimeSec) {
-        this.csOfferWaitTimeSec = csOfferWaitTimeSec;
-    }
 
     public String getPrimaryEmail() {
         return primaryEmail;
@@ -64,13 +136,7 @@ public class TenantConfig {
         this.cc = cc;
     }
 
-    public Integer getAgentInactivityTimeoutSec() {
-        return agentInactivityTimeoutSec;
-    }
 
-    public void setAgentInactivityTimeoutSec(Integer agentInactivityTimeoutSec) {
-        this.agentInactivityTimeoutSec = agentInactivityTimeoutSec;
-    }
 
     public String getTimezone() {
         return timezone;
@@ -87,8 +153,7 @@ public class TenantConfig {
 
         TenantConfig that = (TenantConfig) o;
 
-        if (csOfferWaitTimeSec != null ? !csOfferWaitTimeSec.equals(that.csOfferWaitTimeSec) : that.csOfferWaitTimeSec != null)
-            return false;
+
         if (primaryEmail != null ? !primaryEmail.equals(that.primaryEmail) : that.primaryEmail != null) return false;
         return cc != null ? cc.equals(that.cc) : that.cc == null;
 
@@ -96,8 +161,20 @@ public class TenantConfig {
 
     @Override
     public int hashCode() {
-        int result = csOfferWaitTimeSec != null ? csOfferWaitTimeSec.hashCode() : 0;
+        int result = userWaitingTimeOfferMsg != null ? userWaitingTimeOfferMsg.hashCode() : 0;
+        result = 31 * result + (userWaitingTimeOfferCard != null ? userWaitingTimeOfferCard.hashCode() : 0);
+        result = 31 * result + (agentInactivityTimeoutMaxSec != null ? agentInactivityTimeoutMaxSec.hashCode() : 0);
+        result = 31 * result + (agentInactivityTimeoutPreferredSec != null ? agentInactivityTimeoutPreferredSec.hashCode() : 0);
+        result = 31 * result + (agentInactivityTimeoutWarnSec != null ? agentInactivityTimeoutWarnSec.hashCode() : 0);
+        result = 31 * result + (agentWaitClientTimeoutMin != null ? agentWaitClientTimeoutMin.hashCode() : 0);
+        result = 31 * result + (tbotWaitClientTimeoutMin != null ? tbotWaitClientTimeoutMin.hashCode() : 0);
+        result = 31 * result + (showSmCardTimeoutMin != null ? showSmCardTimeoutMin.hashCode() : 0);
+        result = 31 * result + (attachmentManager != null ? attachmentManager.hashCode() : 0);
+        result = 31 * result + (agentOfferTimeoutSec != null ? agentOfferTimeoutSec.hashCode() : 0);
+        result = 31 * result + (clientOfferTimeoutSec != null ? clientOfferTimeoutSec.hashCode() : 0);
+        result = 31 * result + (userWaitingTimeMessage != null ? userWaitingTimeMessage.hashCode() : 0);
         result = 31 * result + (primaryEmail != null ? primaryEmail.hashCode() : 0);
+        result = 31 * result + (timezone != null ? timezone.hashCode() : 0);
         result = 31 * result + (cc != null ? cc.hashCode() : 0);
         return result;
     }
@@ -105,8 +182,20 @@ public class TenantConfig {
     @Override
     public String toString() {
         return "TenantConfig{" +
-                "csOfferWaitTimeSec=" + csOfferWaitTimeSec +
+                "userWaitingTimeOfferMsg=" + userWaitingTimeOfferMsg +
+                ", userWaitingTimeOfferCard=" + userWaitingTimeOfferCard +
+                ", agentInactivityTimeoutMaxSec=" + agentInactivityTimeoutMaxSec +
+                ", agentInactivityTimeoutPreferredSec=" + agentInactivityTimeoutPreferredSec +
+                ", agentInactivityTimeoutWarnSec=" + agentInactivityTimeoutWarnSec +
+                ", agentWaitClientTimeoutMin=" + agentWaitClientTimeoutMin +
+                ", tbotWaitClientTimeoutMin=" + tbotWaitClientTimeoutMin +
+                ", showSmCardTimeoutMin=" + showSmCardTimeoutMin +
+                ", attachmentManager='" + attachmentManager + '\'' +
+                ", agentOfferTimeoutSec=" + agentOfferTimeoutSec +
+                ", clientOfferTimeoutSec=" + clientOfferTimeoutSec +
+                ", userWaitingTimeMessage=" + userWaitingTimeMessage +
                 ", primaryEmail='" + primaryEmail + '\'' +
+                ", timezone='" + timezone + '\'' +
                 ", cc=" + cc +
                 '}';
     }

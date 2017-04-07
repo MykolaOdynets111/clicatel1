@@ -54,7 +54,7 @@ public class AnalyticsTests extends BaseTestClass {
             response.as(ConversationTimeStatsResponseV5.class);
         }
     }
-//    @Test(dataProvider = "conversationCount")
+//    @MC2RatingTest(dataProvider = "conversationCount")
 //    public void getAnaliticsRealTime(String tenantId, String year, String month, String day, int statusCode) {
 //        if (tenantId!=null&&tenantId.equals("correct")) {
 //            tenantId = testTenant.getId();

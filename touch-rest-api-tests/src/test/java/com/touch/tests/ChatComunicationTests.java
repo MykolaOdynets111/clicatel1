@@ -63,11 +63,11 @@ public class ChatComunicationTests extends BaseTestClass {
 
         xmppClient.sendRoomMessage(room, "FAQs");
         Thread.sleep(60000);
-        xmppClient.sendRoomMessage(room, "Test Message");
+        xmppClient.sendRoomMessage(room, "MC2RatingTest Message");
 //        AgentClient agentClient = new AgentClient(TestingEnvProperties.getPropertyByName("xmpp.host"), 5222, TestingEnvProperties.getPropertyByName("xmpp.domain"), agentJid, "KefBk8nx", rosterJid);
 //        agentClient.changePresence(Presence.Show.chat, 2);
 //        xmppClient.inviteAgent(rosterJid, agentJid, null, room, testClientId, "", null);
-//        xmppClient.sendRoomMessage(room, "Test Message");
+//        xmppClient.sendRoomMessage(room, "MC2RatingTest Message");
         xmppClient.disconnect();
 //        ChatRoomResponse secondTimeChatRoom = chatsActions.getChatRoom(tenantId, clientJid, testClientId, "Android", token).as(ChatRoomResponse.class);
 ////        verify that we get same room when user logout from chat and session is still alive

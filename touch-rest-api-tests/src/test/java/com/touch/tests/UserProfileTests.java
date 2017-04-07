@@ -57,7 +57,7 @@ public class UserProfileTests extends BaseTestClass {
     @Test
     public void addUserProfileWithWrongData() {
         String id = "test" + StringUtils.generateRandomString(3);
-        String name = "Test" + StringUtils.generateRandomString(6);
+        String name = "MC2RatingTest" + StringUtils.generateRandomString(6);
         String surname = "surname" + StringUtils.generateRandomString(6);
         String email = StringUtils.generateRandomString(6);
         String contactPhone = "07700 900039";
@@ -166,7 +166,7 @@ public class UserProfileTests extends BaseTestClass {
     public void afterClass() {
         ListUserProfilesResponse allUserProfiles = userProfileActions.getAllUserProfiles(token, ListUserProfilesResponse.class);
         for (UserProfileResponse userProfile : allUserProfiles.getUserProfiles()) {
-            if (userProfile.getName()==null||userProfile.getName().contains("Test"))
+            if (userProfile.getName()==null||userProfile.getName().contains("MC2RatingTest"))
                 userProfileActions.deleteUserProfile(userProfile.getId(), token);
         }
     }
