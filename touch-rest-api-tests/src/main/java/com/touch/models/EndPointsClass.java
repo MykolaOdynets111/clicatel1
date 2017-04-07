@@ -47,7 +47,7 @@ public class EndPointsClass {
     public static final String DEPARTMENTS_AGENTS = DEPARTMENTS + "/agents";
     public static final String DEPARTMENT = DEPARTMENTS + "/{id}";
     //Chats endpoints
-    public static final String CHATS_ATTACHMENTS = "/v5/chats/attachments";
+    public static final String CHATS_ATTACHMENTS = "/v5/chats/attachment";
     public static final String CHATS_ATTACHMENT =  CHATS_ATTACHMENTS+"/{attachment-id}";
     public static final String CHATS_EVENTS = "/v5/chats/events";
     public static final String CHATS_HISTORIES = "/v5/chats/history";

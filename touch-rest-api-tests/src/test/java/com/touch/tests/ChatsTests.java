@@ -1,5 +1,6 @@
 package com.touch.tests;
 
+import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.agent.AgentCredentialsDto;
 import com.touch.models.touch.chats.*;
@@ -11,6 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import tigase.jaxmpp.core.client.BareJID;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,14 +27,20 @@ public class ChatsTests extends BaseTestClass {
     String file = getFullPathToFile("TenantResources/tenant_logo.jpg");
     AttachmentCreateResponse testAttachment;
     List<ChatSessionResponse> chatSessions;
+    String clientJid = "testclient1@clickatelllabs.com";
+    String testClientId ="test1";
+    ChatRoomResponse chatRoom;
+
 
     @BeforeClass
     public void beforeClass() {
         token = getToken();
         testTenant = getTestTenant1();
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
-        sessionId = chatsActions.getListOfSessions(null, null, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
-        testAttachment = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class);
+        chatRoom = chatsActions.getChatRoom(testTenant.getId(), clientJid, testClientId,"Android", token).as(ChatRoomResponse.class);
+        generateMessageForChatRoom(chatRoom,testClientId);
+        sessionId = chatsActions.getListOfSessions(testTenant.getId(), testClientId, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
+        testAttachment = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),testClientId,testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class);
         chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
     }
 
@@ -94,35 +102,38 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test(dataProvider = "getAttachments")
-    public void getChatsAttachments(String attachmentId, String sessionId, String fileType, int statusCode) {
-        if (attachmentId != null && attachmentId.equals("correct"))
-            attachmentId = testAttachment.getId();
-        if (sessionId != null && sessionId.equals("correct"))
-            sessionId = this.sessionId;
+    public void getChatsAttachments(String sessionId, String roomJid, String clientId,  String tenantId, String fileType, int statusCode) {
+        if (sessionId!=null&&sessionId.equals("correct"))
+            sessionId=this.sessionId;
+        if (roomJid!=null&&roomJid.equals("correct"))
+            roomJid=this.chatRoom.getChatroomJid();
+        if (clientId!=null&&clientId.equals("correct"))
+            clientId=this.testClientId;
+        if (tenantId!=null&&tenantId.equals("correct"))
+            tenantId=this.testTenant.getId();
         if (fileType != null && fileType.equals("correct"))
             fileType = "image/jpeg";
-        Response getAttachmentResponse = chatsActions.getAttachmentsList(attachmentId, sessionId, fileType, testToken);
+        Response getAttachmentResponse = chatsActions.getAttachmentsList(sessionId, roomJid, clientId, tenantId, fileType, testToken);
         Assert.assertEquals(getAttachmentResponse.getStatusCode(), statusCode);
         if (getAttachmentResponse.getStatusCode() == 200) {
             List<AttachmentResponse> attachmentsList = getAttachmentResponse.as(ListAttachmentResponse.class).getAttachments();
-            Assert.assertFalse(attachmentsList.isEmpty());
-            boolean containsCorrectAttachmentsData = false;
-            for (AttachmentResponse attach : attachmentsList) {
-                if (attach.getFileName().equals(testAttachment.getFileName())) {
-                    containsCorrectAttachmentsData = attach.getFileType().equals(testAttachment.getFileType());
-                }
-            }
-            Assert.assertTrue(containsCorrectAttachmentsData);
         }
     }
 
     @Test(dataProvider = "addAttachments")
-    public void addChatAttachments(String sessionId, String fileName, int statusCode) {
-        Response response = chatsActions.addAttachmentForSession(sessionId, fileName, new File(file), testToken);
+    public void addChatAttachments(String sessionId, String roomJid, String clientId,  String tenantId, int statusCode) {
+        if (sessionId!=null&&sessionId.equals("correct"))
+            sessionId=this.sessionId;
+        if (roomJid!=null&&roomJid.equals("correct"))
+            roomJid=this.chatRoom.getChatroomJid();
+        if (clientId!=null&&clientId.equals("correct"))
+            clientId=this.testClientId;
+        if (tenantId!=null&&tenantId.equals("correct"))
+            tenantId=this.testTenant.getId();
+        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid,clientId,tenantId, new File(file), testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (response.getStatusCode() == 200) {
             AttachmentCreateResponse addedAttachment = response.as(AttachmentCreateResponse.class);
-            Assert.assertEquals(addedAttachment.getFileName(), fileName);
             Assert.assertEquals(chatsActions.deleteAttachment(addedAttachment.getId(), testToken), 200);
         }
     }
@@ -140,7 +151,7 @@ public class ChatsTests extends BaseTestClass {
     @Test(dataProvider = "getDeleteAttachments")
     public void deleteChatAttachment(String attachmentId, int statusCode) {
         if (attachmentId.equals("correct"))
-            attachmentId = chatsActions.addAttachmentForSession(sessionId, "testImage", new File(file), testToken).as(AttachmentCreateResponse.class).getId();
+            attachmentId = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),testClientId,testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class).getId();
         Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
     }
 
@@ -252,7 +263,7 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
                 {"correct", "1", "10", 200},
                 {"correct", "tt", "5", 400},
                 {"correct", "2", "tt", 400},
-                {"correct", "0", "5", 500},
+                {"correct", "0", "5", 400},
                 {"test", "2", "5", 200},
                 {"", "2", "5", 400},
                 {null, "2", "5", 400},
@@ -367,42 +378,48 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
         return new Object[][]{
                 {"test", 404},
                 {"correct", 200},
-
-
         };
     }
 
     @DataProvider
     private static Object[][] addAttachments() {
         return new Object[][]{
-                {"", "", 500},
-                {"correct", "", 500},
-                {"", "test1", 200},
-                {"correct", "test1", 200},
-                {null, "test1", 500},
-                {"correct", null, 500},
-                {null, null, 500},
-
-
+                {"", "","","", 400},
+                {"", "correct","correct","correct", 400},
+                {"correct", "correct","correct","correct", 200},
+                {"", "","correct","correct", 400},
+                {"", "","","correct", 400},
+                {"test", "correct","correct","correct", 200},
+                {"test", "test","correct","correct", 200},
+                {"test", "test","test","correct", 200},
+                {"test", "test","test","test", 200},
+                {null, null,null,null, 400},
+                {null, "correct","correct","correct", 400},
+                {null, null,"correct","correct", 400},
+                {null, null,null,"correct", 400}
         };
     }
 
     @DataProvider
     private static Object[][] getAttachments() {
         return new Object[][]{
-                {"", "", "", 200},
-                {"", "", "correct", 200},
-                {"", "correct", "", 200},
-                {"", "correct", "correct", 200},
-                {"correct", "correct", "correct", 200},
-                {null, "correct", "correct", 200},
-                {null, null, "correct", 200},
-                {null, "correct", null, 200},
-                {null, null, null, 200},
-                {"111", "111", "11", 404},
-                {"11", "11", "correct", 404},
-                {"11", "correct", "11", 404},
-                {"111", "correct", "correct", 404},
+                {"", "","","","", 400},
+                {"", "correct","correct","correct","correct", 400},
+                {"correct", "correct","correct","correct","correct", 400},
+                {"", "","correct","correct","correct", 200},
+                {"", "","","correct","correct", 400},
+                {"", "","","","correct", 400},
+                {"test", "correct","correct","correct","correct", 400},
+                {"test", "test","correct","correct","correct", 400},
+                {"test", "test","test","correct","correct", 400},
+                {"test", "test","test","test","correct", 400},
+                {"test", "test","test","test","test", 400},
+                {null, null,null,null,null, 400},
+                {null, null,null,null,"correct", 400},
+                {null, "correct","correct","correct","correct", 400},
+                {null, null,"correct","correct","correct", 200},
+                {null, null,null,"correct","correct", 400}
+
         };
     }
 
@@ -423,5 +440,20 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
     private String getFullPathToFile(String pathToFile) {
         return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
+    private void generateMessageForChatRoom(ChatRoomResponse chatRoom,String clientId){
+        XmppClient xmppClient = new XmppClient(TestingEnvProperties.getPropertyByName("xmpp.host"), 5222, TestingEnvProperties.getPropertyByName("xmpp.domain"), 30000, null);
+        xmppClient.connect();
+        BareJID room = BareJID.bareJIDInstance(chatRoom.getChatroomJid());
+        xmppClient.joinRoom(room.getLocalpart(), room.getDomain(), clientId);
 
+        xmppClient.sendRoomMessage(room, "FAQs");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        xmppClient.sendRoomMessage(room, "MC2RatingTest Message");
+        xmppClient.disconnect();
+
+    }
 }

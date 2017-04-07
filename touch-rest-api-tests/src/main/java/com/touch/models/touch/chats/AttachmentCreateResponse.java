@@ -45,12 +45,33 @@ public class AttachmentCreateResponse   {
   @SerializedName("fileType")
   private String fileType = null;
 
+  @SerializedName("fileSize")
+  private Integer fileSize = null;
+  @SerializedName("filePath")
+  private String filePath = null;
+
   public AttachmentCreateResponse id(String id) {
     this.id = id;
     return this;
   }
 
-   /**
+  public Integer getFileSize() {
+    return fileSize;
+  }
+
+  public void setFileSize(Integer fileSize) {
+    this.fileSize = fileSize;
+  }
+
+  public String getFilePath() {
+    return filePath;
+  }
+
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
+  }
+
+  /**
    * Get id
    * @return id
   **/

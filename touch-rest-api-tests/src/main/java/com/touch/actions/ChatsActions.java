@@ -24,12 +24,16 @@ public class ChatsActions {
         return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId, new Header("Authorization", token));
     }
 
-    public Response addAttachmentForSession(String sessionId, String fileName, File file, String token) {
+    public Response addAttachmentForSession(String sessionId,String roomJid, String clientId, String tenantId, File file, String token) {
         Map<String, Object> formParameters = new HashMap<>();
         if (sessionId != null)
-            formParameters.put("session-id", sessionId);
-        if (fileName != null)
-            formParameters.put("fileName", fileName);
+            formParameters.put("sessionId", sessionId);
+        if (roomJid != null)
+            formParameters.put("roomJid", roomJid);
+        if (clientId != null)
+            formParameters.put("clientId", clientId);
+        if (tenantId != null)
+            formParameters.put("tenantId", tenantId);
         return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.CHATS_ATTACHMENTS, null, formParameters, file, new Header("Authorization", token));
     }
 
@@ -37,12 +41,16 @@ public class ChatsActions {
         return requestEngine.deleteRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId, new Header("Authorization", token)).getStatusCode();
     }
 
-    public Response getAttachmentsList(String attachmentId, String sessionId, String fileType, String token) {
+    public Response getAttachmentsList(String sessionId, String roomJid, String clientId, String tenantId, String fileType, String token) {
         Map<String, String> parameters = new HashMap<>();
-        if (attachmentId != null)
-            parameters.put("attachment-id", attachmentId);
         if (sessionId != null)
-            parameters.put("session-id", sessionId);
+            parameters.put("sessionId", sessionId);
+        if (roomJid != null)
+            parameters.put("roomJid", roomJid);
+        if (clientId != null)
+            parameters.put("clientId", clientId);
+        if (tenantId != null)
+            parameters.put("tenantId", tenantId);
         if (fileType != null)
             parameters.put("fileType", fileType);
         return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENTS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));

@@ -43,6 +43,7 @@ public class ChatComunicationTests extends BaseTestClass {
         }
     }
 
+
     // according TPLAT-433
     @Test
     public void verifyIntegrationAnalyticsForTbotAndAgent() throws InterruptedException {

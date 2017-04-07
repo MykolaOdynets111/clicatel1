@@ -122,7 +122,7 @@ public class CardsTests extends BaseTestClass {
                 {"1111112", "web",  "", "", "", 404},
                 {"testCard", "test", "", "", "", 404},
                 {"testCard", "web",  "1", "", "", 200},
-                {"testCard", "web",  "test", "", "", 500},
+                {"testCard", "web",  "test", "", "", 400},
                 {"testCard", "web", "1", "300", "", 200},
                 {"testCard", "web", "1", "300", "300", 200},
                 {"testCard", "web", "1", "", "300", 200},
@@ -182,7 +182,7 @@ public class CardsTests extends BaseTestClass {
         return new Object[][]{
                 {"testCard", "", "", 200},
                 {"testCard", "", "1", 200},
-                {"testCard", "111", "rrr", 500},
+                {"testCard", "111", "rrr", 400},
                 {"testCard", "", "999999", 404},
                 {"testCard", "web", "99999", 404},
                 {"testCard", "not_exist", "1", 404}
