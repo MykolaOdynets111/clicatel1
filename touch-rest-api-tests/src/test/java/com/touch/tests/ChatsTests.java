@@ -235,8 +235,8 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
     @Test(dataProvider = "invitesListArchive")
     public void getInvitesFromArchive(String nickname, String page, String count, int statusCode) {
         if (nickname != null && nickname.equals("correct"))
-            nickname = agentActions.getCredentials(token, AgentCredentialsDto.class).getJid().split("@")[0];
-        Response response = chatsActions.getListOfInvitesFromArchive(nickname, page, count, token);
+            nickname = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid().split("@")[0];
+        Response response = chatsActions.getListOfInvitesFromArchive(nickname, page, count, testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatInviteHistoryArchiveResponse> records = response.as(ListChatInviteHistoryArchiveResponse.class).getChatInviteHistory();

@@ -79,6 +79,16 @@ public class ChatHistoryRecordResponse {
   private String clientId = null;
   @SerializedName("roomJid")
   private String roomJid = null;
+  @SerializedName("deliveryStatus")
+  private String deliveryStatus = null;
+
+  public String getDeliveryStatus() {
+    return deliveryStatus;
+  }
+
+  public void setDeliveryStatus(String deliveryStatus) {
+    this.deliveryStatus = deliveryStatus;
+  }
 
   public String getRoomJid() {
     return roomJid;
