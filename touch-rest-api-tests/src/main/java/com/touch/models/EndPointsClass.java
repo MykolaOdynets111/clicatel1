@@ -51,6 +51,7 @@ public class EndPointsClass {
     public static final String CHATS_ATTACHMENT =  CHATS_ATTACHMENTS+"/{attachment-id}";
     public static final String CHATS_ATTACHMENT_WITH_NAME =  CHATS_ATTACHMENT+"/{file-name}";
     public static final String CHATS_EVENTS = "/v5/chats/events";
+    public static final String CHATS_PRIVATE_HISTORY = "/v5/chats/private-history";
     public static final String CHATS_HISTORIES = "/v5/chats/history";
     public static final String CHATS_HISTORY = CHATS_HISTORIES+"/{sessionId}";
     public static final String CHATS_INVITES = "/v5/chats/invites";

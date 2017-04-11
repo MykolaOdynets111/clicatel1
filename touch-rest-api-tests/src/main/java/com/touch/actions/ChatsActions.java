@@ -1,6 +1,7 @@
 package com.touch.actions;
 
 import com.touch.models.EndPointsClass;
+import com.touch.models.touch.chats.ChatPrivateHistoryRequest;
 import com.touch.utils.TestingEnvProperties;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
@@ -141,7 +142,21 @@ public class ChatsActions {
         return requestEngine.postRequestWithQueryParameters(EndPointsClass.CHATS_SESSIONS, null, parameters, new Header("Authorization", token));
 
     }
+    public Response getListOfPrivateHistories(String to, String fromTs, String toTs, String token) {
+        Map<String, String> parameters = new HashMap<>();
+        if(to!=null)
+            parameters.put("to", to);
+        if(fromTs!=null)
+            parameters.put("fromTs", fromTs);
+        if(toTs!=null)
+            parameters.put("toTs", toTs);
+        return requestEngine.getRequest(EndPointsClass.CHATS_PRIVATE_HISTORY + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
+    }
+    public Response addNewPrivateHistory(ChatPrivateHistoryRequest privateHistory, String token) {
 
+        return requestEngine.postRequest(EndPointsClass.CHATS_PRIVATE_HISTORY, null, null, privateHistory, new Header("Authorization", token));
+
+    }
     public Response deleteSession(String sessionId, String token) {
         return requestEngine.deleteRequest(EndPointsClass.CHATS_SESSION, sessionId, new Header("Authorization", token));
 

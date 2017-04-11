@@ -173,7 +173,6 @@ public class RequestEngine {
         RequestSpecification rs = given(requestSpecification);
         if (body != null) {
             try {
-                String s = new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(body);
                 rs.body(new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(body));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();

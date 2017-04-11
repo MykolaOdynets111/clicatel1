@@ -264,6 +264,54 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
 //            Assert.assertEquals(records.isEmpty(),isEmpty);
         }
     }
+
+    @Test(dataProvider = "addPrivateH")
+    public void addPrivateHistory(String to, String message, int statusCode){
+        if(to.equals("correct"))
+            to=chatRoom.getChatroomJid();
+        ChatPrivateHistoryRequest historyRequest = new ChatPrivateHistoryRequest(message, to);
+        Response response = chatsActions.addNewPrivateHistory(historyRequest, token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+    }
+    @Test(dataProvider = "getPrivateH")
+    public void getPrivateHistory(String to, String fromTs, String toTs, int statusCode){
+        if(to.equals("correct")){
+            to=chatRoom.getChatroomJid();
+            ChatPrivateHistoryRequest historyRequest = new ChatPrivateHistoryRequest("test", to);
+            chatsActions.addNewPrivateHistory(historyRequest, token);
+        }
+        Response response = chatsActions.getListOfPrivateHistories(to,fromTs,toTs,token);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200) {
+            List<ChatPrivateHistoryResponse> records = response.as(ChatPrivateHistoryList.class).getRecords();
+            Assert.assertFalse(records.isEmpty());
+        }
+    }
+    @DataProvider
+    private static Object[][] addPrivateH() {
+        return new Object[][]{
+                {"correct", "test1", 201},
+                {"test", "test1", 400},
+                {"test", "", 400},
+                {"", "", 400},
+                {"", "test", 400},
+        };
+    }
+    @DataProvider
+    private static Object[][] getPrivateH() {
+        return new Object[][]{
+                {"correct", "0","11111111111111111", 200},
+                {"correct", "0","", 200},
+                {"correct", "","11111111111111111", 400},
+                {"correct", "0","111111111111111112", 200},
+                {"correct", "0","test", 400},
+                {"correct", "test","", 400},
+                {"correct", "111111111111111112","11111111111111111", 400},
+                {"test", "0","11111111111111111", 400},
+                {"test", "0","", 400},
+                {"test", "","11111111111111111", 400},
+        };
+    }
     @DataProvider
     private static Object[][] invitesListArchive() {
         return new Object[][]{

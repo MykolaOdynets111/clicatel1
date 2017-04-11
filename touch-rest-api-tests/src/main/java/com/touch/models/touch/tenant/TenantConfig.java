@@ -18,7 +18,7 @@ public class TenantConfig {
     private String attachmentManager = null;
     private Integer agentOfferTimeoutSec = null;
     private Integer clientOfferTimeoutSec = null;
-    private Integer userWaitingTimeMessage = null;
+    private String userWaitingTimeMessage = null;
     private String primaryEmail = null;
     private String timezone = null;
     private List<String> cc = new ArrayList<String>();
@@ -55,11 +55,11 @@ public class TenantConfig {
         this.clientOfferTimeoutSec = clientOfferTimeoutSec;
     }
 
-    public Integer getUserWaitingTimeMessage() {
+    public String getUserWaitingTimeMessage() {
         return userWaitingTimeMessage;
     }
 
-    public void setUserWaitingTimeMessage(Integer userWaitingTimeMessage) {
+    public void setUserWaitingTimeMessage(String userWaitingTimeMessage) {
         this.userWaitingTimeMessage = userWaitingTimeMessage;
     }
 
@@ -77,7 +77,7 @@ public class TenantConfig {
 
     public void setAgentInactivityTimeoutPreferredSec(Integer agentInactivityTimeoutPreferredSec) {
         this.agentInactivityTimeoutPreferredSec = agentInactivityTimeoutPreferredSec;
-    }
+}
 
     public Integer getAgentInactivityTimeoutWarnSec() {
         return agentInactivityTimeoutWarnSec;
