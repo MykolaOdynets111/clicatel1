@@ -50,6 +50,36 @@ public class AttachmentResponse   {
 
   @SerializedName("filePath")
   private String filePath = null;
+  @SerializedName("userId")
+  private String userId = null;
+  @SerializedName("userName")
+  private String userName = null;
+  @SerializedName("createdDate")
+  private Long createdDate = null;
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public Long getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(Long createdDate) {
+    this.createdDate = createdDate;
+  }
 
   public AttachmentResponse id(String id) {
     this.id = id;

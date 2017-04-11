@@ -96,18 +96,18 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test(dataProvider = "getAttachments")
-    public void getChatsAttachments(String sessionId, String roomJid, String clientId,  String tenantId, String fileType, int statusCode) {
+    public void getChatsAttachments(String sessionId, String roomJid, String userId,  String tenantId, String fileType, int statusCode) {
         if (sessionId!=null&&sessionId.equals("correct"))
             sessionId=this.sessionId;
         if (roomJid!=null&&roomJid.equals("correct"))
             roomJid=this.chatRoom.getChatroomJid();
-        if (clientId!=null&&clientId.equals("correct"))
-            clientId=this.testClientId;
+        if (userId!=null&&userId.equals("correct"))
+            userId=this.testClientId;
         if (tenantId!=null&&tenantId.equals("correct"))
             tenantId=this.testTenant.getId();
         if (fileType != null && fileType.equals("correct"))
             fileType = "image/jpeg";
-        Response getAttachmentResponse = chatsActions.getAttachmentsList(sessionId, roomJid, clientId, tenantId, fileType, testToken);
+        Response getAttachmentResponse = chatsActions.getAttachmentsList(sessionId, roomJid, userId, tenantId, fileType, testToken);
         Assert.assertEquals(getAttachmentResponse.getStatusCode(), statusCode);
         if (getAttachmentResponse.getStatusCode() == 200) {
             List<AttachmentResponse> attachmentsList = getAttachmentResponse.as(ListAttachmentResponse.class).getAttachments();
@@ -144,11 +144,23 @@ public class ChatsTests extends BaseTestClass {
             Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
         Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
     }
-
+    @Test(dataProvider = "getAttachmentsWithFileName")
+    public void getChatAttachmentWithName(String attachmentId,String fileName, int statusCode) throws Exception {
+        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId,"AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
+        if (attachmentId.equals("correct"))
+            attachmentId = testAttachment.getId();
+        if (fileName.equals("correct"))
+            fileName = testAttachment.getFileName();
+        Response response = chatsActions.getAttachmentWithFileName(attachmentId, fileName, testToken);
+        Assert.assertEquals(response.getStatusCode(), statusCode);
+        if (statusCode == 200)
+            Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
+        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
+    }
     @Test(dataProvider = "getDeleteAttachments")
     public void deleteChatAttachment(String attachmentId, int statusCode) {
         if (attachmentId.equals("correct"))
-            attachmentId = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),"AGENT",testClientId,testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class).getId();
+            attachmentId = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),testClientId,"AGENT",testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class).getId();
         Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
     }
 
@@ -375,6 +387,17 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
         return new Object[][]{
                 {"test", 404},
                 {"correct", 200},
+        };
+    }
+    @DataProvider
+    private static Object[][] getAttachmentsWithFileName() {
+        return new Object[][]{
+                {"test","test", 404},
+                {"test","correct", 404},
+                {"correct","test", 200},
+                {"correct","correct", 200},
+                {"correct","", 200},
+                {"","correct", 404},
         };
     }
 

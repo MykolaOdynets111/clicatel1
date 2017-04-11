@@ -43,21 +43,23 @@ public class ChatsActions {
         return requestEngine.deleteRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId, new Header("Authorization", token)).getStatusCode();
     }
 
-    public Response getAttachmentsList(String sessionId, String roomJid, String clientId, String tenantId, String fileType, String token) {
+    public Response getAttachmentsList(String sessionId, String roomJid, String userId, String tenantId, String fileType, String token) {
         Map<String, String> parameters = new HashMap<>();
         if (sessionId != null)
             parameters.put("sessionId", sessionId);
         if (roomJid != null)
             parameters.put("roomJid", roomJid);
-        if (clientId != null)
-            parameters.put("clientId", clientId);
+        if (userId != null)
+            parameters.put("userId", userId);
         if (tenantId != null)
             parameters.put("tenantId", tenantId);
         if (fileType != null)
             parameters.put("fileType", fileType);
         return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENTS + EndPointsClass.generateQueryPath(parameters), new Header("Authorization", token));
     }
-
+    public Response getAttachmentWithFileName(String attachmentId, String fileName, String token) {
+        return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT_WITH_NAME, attachmentId, fileName,null, new Header("Authorization", token));
+    }
     public Response getChatRoom(String tenantId, String clientJid, String clientId, String app, String token) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("tenantId", tenantId);
