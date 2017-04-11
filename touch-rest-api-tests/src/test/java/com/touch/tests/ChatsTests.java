@@ -25,7 +25,6 @@ import java.util.List;
 public class ChatsTests extends BaseTestClass {
     String sessionId;
     String file = getFullPathToFile("TenantResources/tenant_logo.jpg");
-    AttachmentCreateResponse testAttachment;
     List<ChatSessionResponse> chatSessions;
     String clientJid = "testclient1@clickatelllabs.com";
     String testClientId ="test1";
@@ -40,14 +39,9 @@ public class ChatsTests extends BaseTestClass {
         chatRoom = chatsActions.getChatRoom(testTenant.getId(), clientJid, testClientId,"Android", token).as(ChatRoomResponse.class);
         generateMessageForChatRoom(chatRoom,testClientId);
         sessionId = chatsActions.getListOfSessions(testTenant.getId(), testClientId, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
-        testAttachment = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),testClientId,testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class);
         chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
     }
 
-    @AfterClass
-    public void afterClass() {
-        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
-    }
 
     @Test
     public void getNewChatRoom() {
@@ -121,16 +115,16 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test(dataProvider = "addAttachments")
-    public void addChatAttachments(String sessionId, String roomJid, String clientId,  String tenantId, int statusCode) {
+    public void addChatAttachments(String sessionId, String roomJid, String userId,  String tenantId, String userType, int statusCode) {
         if (sessionId!=null&&sessionId.equals("correct"))
             sessionId=this.sessionId;
         if (roomJid!=null&&roomJid.equals("correct"))
             roomJid=this.chatRoom.getChatroomJid();
-        if (clientId!=null&&clientId.equals("correct"))
-            clientId=this.testClientId;
+        if (userId!=null&&userId.equals("correct"))
+            userId=this.testClientId;
         if (tenantId!=null&&tenantId.equals("correct"))
             tenantId=this.testTenant.getId();
-        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid,clientId,tenantId, new File(file), testToken);
+        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid,userId, userType,tenantId, new File(file), testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (response.getStatusCode() == 200) {
             AttachmentCreateResponse addedAttachment = response.as(AttachmentCreateResponse.class);
@@ -140,18 +134,21 @@ public class ChatsTests extends BaseTestClass {
 
     @Test(dataProvider = "getDeleteAttachments")
     public void getChatAttachment(String attachmentId, int statusCode) throws Exception {
+        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId,"AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
         if (attachmentId.equals("correct"))
             attachmentId = testAttachment.getId();
+
         Response response = chatsActions.getAttachment(attachmentId, testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200)
             Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
+        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
     }
 
     @Test(dataProvider = "getDeleteAttachments")
     public void deleteChatAttachment(String attachmentId, int statusCode) {
         if (attachmentId.equals("correct"))
-            attachmentId = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),testClientId,testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class).getId();
+            attachmentId = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),"AGENT",testClientId,testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class).getId();
         Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
     }
 
@@ -384,19 +381,30 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
     @DataProvider
     private static Object[][] addAttachments() {
         return new Object[][]{
-                {"", "","","", 400},
-                {"", "correct","correct","correct", 400},
-                {"correct", "correct","correct","correct", 200},
-                {"", "","correct","correct", 400},
-                {"", "","","correct", 400},
-                {"test", "correct","correct","correct", 200},
-                {"test", "test","correct","correct", 200},
-                {"test", "test","test","correct", 200},
-                {"test", "test","test","test", 200},
-                {null, null,null,null, 400},
-                {null, "correct","correct","correct", 400},
-                {null, null,"correct","correct", 400},
-                {null, null,null,"correct", 400}
+                {"", "","","","", 400},
+                {"", "correct","correct","correct","AGENT", 400},
+                {"correct", "correct","correct","correct","", 500},
+                {"correct", "correct","correct","correct","AGENT", 200},
+                {"", "","correct","correct","AGENT", 400},
+                {"", "","correct","correct","", 400},
+                {"", "","","correct","AGENT", 400},
+                {"", "","","correct","", 400},
+                {"", "","","","AGENT", 400},
+                {"test", "correct","correct","correct","AGENT", 200},
+                {"test", "correct","correct","correct","CLIENT", 200},
+                {"test", "test","correct","correct","CLIENT", 200},
+                {"test", "test","correct","correct","AGENT", 200},
+                {"test", "test","test","correct","AGENT", 200},
+                {"test", "test","test","correct","CLIENT", 200},
+                {"test", "test","test","test","AGENT", 200},
+                {"test", "test","test","test","CLIENT", 200},
+                {"test", "test","test","test","test", 400},
+                {null, null,null,null,null, 400},
+                {null, null,null,null,"AGENT", 400},
+                {null, "correct","correct","correct","AGENT", 400},
+                {null, null,"correct","correct","AGENT", 400},
+                {null, null,null,"correct","AGENT", 400},
+                {null, null,null,null,"AGENT", 400}
         };
     }
 

@@ -24,14 +24,16 @@ public class ChatsActions {
         return requestEngine.getRequest(EndPointsClass.CHATS_ATTACHMENT, attachmentId, new Header("Authorization", token));
     }
 
-    public Response addAttachmentForSession(String sessionId,String roomJid, String clientId, String tenantId, File file, String token) {
+    public Response addAttachmentForSession(String sessionId,String roomJid, String userId,String userType, String tenantId, File file, String token) {
         Map<String, Object> formParameters = new HashMap<>();
         if (sessionId != null)
             formParameters.put("sessionId", sessionId);
         if (roomJid != null)
             formParameters.put("roomJid", roomJid);
-        if (clientId != null)
-            formParameters.put("clientId", clientId);
+        if (userId != null)
+            formParameters.put("userId", userId);
+        if (userType != null)
+            formParameters.put("userType", userType);
         if (tenantId != null)
             formParameters.put("tenantId", tenantId);
         return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.CHATS_ATTACHMENTS, null, formParameters, file, new Header("Authorization", token));
