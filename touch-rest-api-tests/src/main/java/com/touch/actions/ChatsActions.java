@@ -166,9 +166,11 @@ public class ChatsActions {
         return requestEngine.getRequest(EndPointsClass.CHATS_SESSION, sessionId, new Header("Authorization", token));
     }
 
-    public Response terminateSession(String sessionId) {
-        return requestEngine.postRequest(EndPointsClass.CHATS_SESSION_TERMINATE, sessionId, null);
+    public Response terminateSession(String sessionId, String token) {
+        return requestEngine.postRequest(EndPointsClass.CHATS_SESSION_TERMINATE, sessionId, null, new Header("Authorization", token));
     }
-
+    public Response terminateAllSessions(String clientId, String token) {
+        return requestEngine.postRequest(EndPointsClass.CHATS_SESSION_TERMINATE_ALL, clientId, null, new Header("Authorization", token));
+    }
 
 }

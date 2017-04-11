@@ -27,7 +27,7 @@ public class ChatsTests extends BaseTestClass {
     String file = getFullPathToFile("TenantResources/tenant_logo.jpg");
     List<ChatSessionResponse> chatSessions;
     String clientJid = "testclient1@clickatelllabs.com";
-    String testClientId ="test1";
+    String testClientId = "test1";
     ChatRoomResponse chatRoom;
 
 
@@ -36,8 +36,8 @@ public class ChatsTests extends BaseTestClass {
         token = getToken();
         testTenant = getTestTenant1();
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
-        chatRoom = chatsActions.getChatRoom(testTenant.getId(), clientJid, testClientId,"Android", token).as(ChatRoomResponse.class);
-        generateMessageForChatRoom(chatRoom,testClientId);
+        chatRoom = chatsActions.getChatRoom(testTenant.getId(), clientJid, testClientId, "Android", token).as(ChatRoomResponse.class);
+        generateMessageForChatRoom(chatRoom, testClientId);
         sessionId = chatsActions.getListOfSessions(testTenant.getId(), testClientId, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
         chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
     }
@@ -80,6 +80,53 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test
+    public void terminateSession() {
+//terminate not existing session
+        Assert.assertEquals(chatsActions.terminateSession("testSession" + StringUtils.generateRandomString(10), token).getStatusCode(), 404);
+        String sessionId = "testSession" + StringUtils.generateRandomString(10);
+        ChatSessionResponse session = chatsActions.addNewSession(sessionId, testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
+//        terminate existing session
+        Response response = chatsActions.terminateSession(sessionId, token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        ChatSessionResponse terminatedSession = response.as(ChatSessionResponse.class);
+        Assert.assertEquals(terminatedSession.getId(), session.getId());
+        Assert.assertEquals(terminatedSession.getClientId(), session.getClientId());
+        Assert.assertEquals(terminatedSession.getState(), "TERMINATED");
+        Assert.assertTrue(terminatedSession.getEndedDate() != null);
+    }
+
+    @Test
+    public void terminateAllSessions() {
+        String testClientId = "testClientId";
+//terminate not existing session
+        Assert.assertEquals(chatsActions.terminateAllSessions("testSession" + StringUtils.generateRandomString(10), token).getStatusCode(), 200);
+        ChatSessionResponse session = chatsActions.addNewSession("testSession1" + StringUtils.generateRandomString(10), testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
+        ChatSessionResponse session1 = chatsActions.addNewSession("testSession2" + StringUtils.generateRandomString(10), testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
+        ChatSessionResponse session2 = chatsActions.addNewSession("testSession3" + StringUtils.generateRandomString(10), testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
+        ListChatSessionResponse listChatSessionResponse = new ListChatSessionResponse();
+        listChatSessionResponse.addChatSessionsItem(session);
+        listChatSessionResponse.addChatSessionsItem(session1);
+        listChatSessionResponse.addChatSessionsItem(session2);
+//        terminate existing session
+        Response response = chatsActions.terminateAllSessions(testClientId, token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        List<ChatSessionResponse> terminatedChatSessions = response.as(ListChatSessionResponse.class).getChatSessions();
+        Assert.assertTrue(listChatSessionResponse.getChatSessions().size() == terminatedChatSessions.size());
+        for (ChatSessionResponse chatSession : terminatedChatSessions) {
+            boolean isIdPresentInResponse = false;
+            for (ChatSessionResponse sessionInitial : listChatSessionResponse.getChatSessions()) {
+                if (chatSession.getId().equals(sessionInitial.getId())) {
+                    isIdPresentInResponse = true;
+                    break;
+                }
+            }
+            Assert.assertTrue(isIdPresentInResponse);
+            Assert.assertEquals(chatSession.getState(), "TERMINATED");
+            Assert.assertTrue(chatSession.getEndedDate() != null);
+        }
+    }
+
+    @Test
     public void getSessionDataWithWrongSessionId() {
         String sessionId = "wrong_sessionId";
         String expectedMessage = "ChatSession with id " + sessionId + " not found";
@@ -96,15 +143,15 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test(dataProvider = "getAttachments")
-    public void getChatsAttachments(String sessionId, String roomJid, String userId,  String tenantId, String fileType, int statusCode) {
-        if (sessionId!=null&&sessionId.equals("correct"))
-            sessionId=this.sessionId;
-        if (roomJid!=null&&roomJid.equals("correct"))
-            roomJid=this.chatRoom.getChatroomJid();
-        if (userId!=null&&userId.equals("correct"))
-            userId=this.testClientId;
-        if (tenantId!=null&&tenantId.equals("correct"))
-            tenantId=this.testTenant.getId();
+    public void getChatsAttachments(String sessionId, String roomJid, String userId, String tenantId, String fileType, int statusCode) {
+        if (sessionId != null && sessionId.equals("correct"))
+            sessionId = this.sessionId;
+        if (roomJid != null && roomJid.equals("correct"))
+            roomJid = this.chatRoom.getChatroomJid();
+        if (userId != null && userId.equals("correct"))
+            userId = this.testClientId;
+        if (tenantId != null && tenantId.equals("correct"))
+            tenantId = this.testTenant.getId();
         if (fileType != null && fileType.equals("correct"))
             fileType = "image/jpeg";
         Response getAttachmentResponse = chatsActions.getAttachmentsList(sessionId, roomJid, userId, tenantId, fileType, testToken);
@@ -115,16 +162,16 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test(dataProvider = "addAttachments")
-    public void addChatAttachments(String sessionId, String roomJid, String userId,  String tenantId, String userType, int statusCode) {
-        if (sessionId!=null&&sessionId.equals("correct"))
-            sessionId=this.sessionId;
-        if (roomJid!=null&&roomJid.equals("correct"))
-            roomJid=this.chatRoom.getChatroomJid();
-        if (userId!=null&&userId.equals("correct"))
-            userId=this.testClientId;
-        if (tenantId!=null&&tenantId.equals("correct"))
-            tenantId=this.testTenant.getId();
-        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid,userId, userType,tenantId, new File(file), testToken);
+    public void addChatAttachments(String sessionId, String roomJid, String userId, String tenantId, String userType, int statusCode) {
+        if (sessionId != null && sessionId.equals("correct"))
+            sessionId = this.sessionId;
+        if (roomJid != null && roomJid.equals("correct"))
+            roomJid = this.chatRoom.getChatroomJid();
+        if (userId != null && userId.equals("correct"))
+            userId = this.testClientId;
+        if (tenantId != null && tenantId.equals("correct"))
+            tenantId = this.testTenant.getId();
+        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid, userId, userType, tenantId, new File(file), testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (response.getStatusCode() == 200) {
             AttachmentCreateResponse addedAttachment = response.as(AttachmentCreateResponse.class);
@@ -134,7 +181,7 @@ public class ChatsTests extends BaseTestClass {
 
     @Test(dataProvider = "getDeleteAttachments")
     public void getChatAttachment(String attachmentId, int statusCode) throws Exception {
-        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId,"AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
+        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
         if (attachmentId.equals("correct"))
             attachmentId = testAttachment.getId();
 
@@ -144,9 +191,10 @@ public class ChatsTests extends BaseTestClass {
             Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
         Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
     }
+
     @Test(dataProvider = "getAttachmentsWithFileName")
-    public void getChatAttachmentWithName(String attachmentId,String fileName, int statusCode) throws Exception {
-        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId,"AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
+    public void getChatAttachmentWithName(String attachmentId, String fileName, int statusCode) throws Exception {
+        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
         if (attachmentId.equals("correct"))
             attachmentId = testAttachment.getId();
         if (fileName.equals("correct"))
@@ -157,10 +205,11 @@ public class ChatsTests extends BaseTestClass {
             Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
         Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
     }
+
     @Test(dataProvider = "getDeleteAttachments")
     public void deleteChatAttachment(String attachmentId, int statusCode) {
         if (attachmentId.equals("correct"))
-            attachmentId = chatsActions.addAttachmentForSession(sessionId,chatRoom.getChatroomJid(),testClientId,"AGENT",testTenant.getId() , new File(file), testToken).as(AttachmentCreateResponse.class).getId();
+            attachmentId = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class).getId();
         Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
     }
 
@@ -207,15 +256,17 @@ public class ChatsTests extends BaseTestClass {
 //            Assert.assertFalse(records.isEmpty());
         }
     }
-private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
-    List<ChatSessionResponse> sessions = chatSessions;
-    Collections.reverse(sessions);
-    for(ChatSessionResponse session: sessions){
-        if(session.getTenantId().equals(tenant))
-            return session;
+
+    private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant) {
+        List<ChatSessionResponse> sessions = chatSessions;
+        Collections.reverse(sessions);
+        for (ChatSessionResponse session : sessions) {
+            if (session.getTenantId().equals(tenant))
+                return session;
+        }
+        return null;
     }
-    return null;
-}
+
     @Test(dataProvider = "getHistorySession")
     public void getChatsHistoryForSession(String sessionId, boolean isEmpty, int statusCode) {
         ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
@@ -252,12 +303,13 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
 //            Assert.assertFalse(records.isEmpty());
         }
     }
+
     @Test(dataProvider = "getInvitesSession")
     public void getInvitesForSession(String sessionId, boolean isEmpty, int statusCode) {
         ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
         if (sessionId != null && sessionId.equals("correct"))
             sessionId = session.getSessionId();
-        Response response = chatsActions.getInviteForSession(sessionId,token);
+        Response response = chatsActions.getInviteForSession(sessionId, token);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatInviteHistoryResponseV5> records = response.as(ListChatInviteHistoryResponseV5.class).getChatInviteHistory();
@@ -266,27 +318,29 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
     }
 
     @Test(dataProvider = "addPrivateH")
-    public void addPrivateHistory(String to, String message, int statusCode){
-        if(to.equals("correct"))
-            to=chatRoom.getChatroomJid();
+    public void addPrivateHistory(String to, String message, int statusCode) {
+        if (to.equals("correct"))
+            to = chatRoom.getChatroomJid();
         ChatPrivateHistoryRequest historyRequest = new ChatPrivateHistoryRequest(message, to);
         Response response = chatsActions.addNewPrivateHistory(historyRequest, token);
         Assert.assertEquals(response.getStatusCode(), statusCode);
     }
+
     @Test(dataProvider = "getPrivateH")
-    public void getPrivateHistory(String to, String fromTs, String toTs, int statusCode){
-        if(to.equals("correct")){
-            to=chatRoom.getChatroomJid();
+    public void getPrivateHistory(String to, String fromTs, String toTs, int statusCode) {
+        if (to.equals("correct")) {
+            to = chatRoom.getChatroomJid();
             ChatPrivateHistoryRequest historyRequest = new ChatPrivateHistoryRequest("test", to);
             chatsActions.addNewPrivateHistory(historyRequest, token);
         }
-        Response response = chatsActions.getListOfPrivateHistories(to,fromTs,toTs,token);
+        Response response = chatsActions.getListOfPrivateHistories(to, fromTs, toTs, token);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatPrivateHistoryResponse> records = response.as(ChatPrivateHistoryList.class).getRecords();
             Assert.assertFalse(records.isEmpty());
         }
     }
+
     @DataProvider
     private static Object[][] addPrivateH() {
         return new Object[][]{
@@ -297,21 +351,23 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
                 {"", "test", 400},
         };
     }
+
     @DataProvider
     private static Object[][] getPrivateH() {
         return new Object[][]{
-                {"correct", "0","11111111111111111", 200},
-                {"correct", "0","", 200},
-                {"correct", "","11111111111111111", 400},
-                {"correct", "0","111111111111111112", 200},
-                {"correct", "0","test", 400},
-                {"correct", "test","", 400},
-                {"correct", "111111111111111112","11111111111111111", 400},
-                {"test", "0","11111111111111111", 400},
-                {"test", "0","", 400},
-                {"test", "","11111111111111111", 400},
+                {"correct", "0", "11111111111111111", 200},
+                {"correct", "0", "", 200},
+                {"correct", "", "11111111111111111", 400},
+                {"correct", "0", "111111111111111112", 200},
+                {"correct", "0", "test", 400},
+                {"correct", "test", "", 400},
+                {"correct", "111111111111111112", "11111111111111111", 400},
+                {"test", "0", "11111111111111111", 400},
+                {"test", "0", "", 400},
+                {"test", "", "11111111111111111", 400},
         };
     }
+
     @DataProvider
     private static Object[][] invitesListArchive() {
         return new Object[][]{
@@ -351,6 +407,7 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
                 {null, null, null, 200},
         };
     }
+
     @DataProvider
     private static Object[][] getInvitesSession() {
         return new Object[][]{
@@ -359,6 +416,7 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
                 {"", false, 200}
         };
     }
+
     @DataProvider
     private static Object[][] getHistorySession() {
         return new Object[][]{
@@ -437,67 +495,68 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
                 {"correct", 200},
         };
     }
+
     @DataProvider
     private static Object[][] getAttachmentsWithFileName() {
         return new Object[][]{
-                {"test","test", 404},
-                {"test","correct", 404},
-                {"correct","test", 200},
-                {"correct","correct", 200},
-                {"correct","", 200},
-                {"","correct", 404},
+                {"test", "test", 404},
+                {"test", "correct", 404},
+                {"correct", "test", 200},
+                {"correct", "correct", 200},
+                {"correct", "", 200},
+                {"", "correct", 404},
         };
     }
 
     @DataProvider
     private static Object[][] addAttachments() {
         return new Object[][]{
-                {"", "","","","", 400},
-                {"", "correct","correct","correct","AGENT", 400},
-                {"correct", "correct","correct","correct","", 500},
-                {"correct", "correct","correct","correct","AGENT", 200},
-                {"", "","correct","correct","AGENT", 400},
-                {"", "","correct","correct","", 400},
-                {"", "","","correct","AGENT", 400},
-                {"", "","","correct","", 400},
-                {"", "","","","AGENT", 400},
-                {"test", "correct","correct","correct","AGENT", 200},
-                {"test", "correct","correct","correct","CLIENT", 200},
-                {"test", "test","correct","correct","CLIENT", 200},
-                {"test", "test","correct","correct","AGENT", 200},
-                {"test", "test","test","correct","AGENT", 200},
-                {"test", "test","test","correct","CLIENT", 200},
-                {"test", "test","test","test","AGENT", 200},
-                {"test", "test","test","test","CLIENT", 200},
-                {"test", "test","test","test","test", 400},
-                {null, null,null,null,null, 400},
-                {null, null,null,null,"AGENT", 400},
-                {null, "correct","correct","correct","AGENT", 400},
-                {null, null,"correct","correct","AGENT", 400},
-                {null, null,null,"correct","AGENT", 400},
-                {null, null,null,null,"AGENT", 400}
+                {"", "", "", "", "", 400},
+                {"", "correct", "correct", "correct", "AGENT", 400},
+                {"correct", "correct", "correct", "correct", "", 500},
+                {"correct", "correct", "correct", "correct", "AGENT", 200},
+                {"", "", "correct", "correct", "AGENT", 400},
+                {"", "", "correct", "correct", "", 400},
+                {"", "", "", "correct", "AGENT", 400},
+                {"", "", "", "correct", "", 400},
+                {"", "", "", "", "AGENT", 400},
+                {"test", "correct", "correct", "correct", "AGENT", 200},
+                {"test", "correct", "correct", "correct", "CLIENT", 200},
+                {"test", "test", "correct", "correct", "CLIENT", 200},
+                {"test", "test", "correct", "correct", "AGENT", 200},
+                {"test", "test", "test", "correct", "AGENT", 200},
+                {"test", "test", "test", "correct", "CLIENT", 200},
+                {"test", "test", "test", "test", "AGENT", 200},
+                {"test", "test", "test", "test", "CLIENT", 200},
+                {"test", "test", "test", "test", "test", 400},
+                {null, null, null, null, null, 400},
+                {null, null, null, null, "AGENT", 400},
+                {null, "correct", "correct", "correct", "AGENT", 400},
+                {null, null, "correct", "correct", "AGENT", 400},
+                {null, null, null, "correct", "AGENT", 400},
+                {null, null, null, null, "AGENT", 400}
         };
     }
 
     @DataProvider
     private static Object[][] getAttachments() {
         return new Object[][]{
-                {"", "","","","", 400},
-                {"", "correct","correct","correct","correct", 400},
-                {"correct", "correct","correct","correct","correct", 400},
-                {"", "","correct","correct","correct", 200},
-                {"", "","","correct","correct", 400},
-                {"", "","","","correct", 400},
-                {"test", "correct","correct","correct","correct", 400},
-                {"test", "test","correct","correct","correct", 400},
-                {"test", "test","test","correct","correct", 400},
-                {"test", "test","test","test","correct", 400},
-                {"test", "test","test","test","test", 400},
-                {null, null,null,null,null, 400},
-                {null, null,null,null,"correct", 400},
-                {null, "correct","correct","correct","correct", 400},
-                {null, null,"correct","correct","correct", 200},
-                {null, null,null,"correct","correct", 400}
+                {"", "", "", "", "", 400},
+                {"", "correct", "correct", "correct", "correct", 400},
+                {"correct", "correct", "correct", "correct", "correct", 400},
+                {"", "", "correct", "correct", "correct", 200},
+                {"", "", "", "correct", "correct", 400},
+                {"", "", "", "", "correct", 400},
+                {"test", "correct", "correct", "correct", "correct", 400},
+                {"test", "test", "correct", "correct", "correct", 400},
+                {"test", "test", "test", "correct", "correct", 400},
+                {"test", "test", "test", "test", "correct", 400},
+                {"test", "test", "test", "test", "test", 400},
+                {null, null, null, null, null, 400},
+                {null, null, null, null, "correct", 400},
+                {null, "correct", "correct", "correct", "correct", 400},
+                {null, null, "correct", "correct", "correct", 200},
+                {null, null, null, "correct", "correct", 400}
 
         };
     }
@@ -519,7 +578,8 @@ private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant){
     private String getFullPathToFile(String pathToFile) {
         return TenantTests.class.getClassLoader().getResource(pathToFile).getPath();
     }
-    private void generateMessageForChatRoom(ChatRoomResponse chatRoom,String clientId){
+
+    private void generateMessageForChatRoom(ChatRoomResponse chatRoom, String clientId) {
         XmppClient xmppClient = new XmppClient(TestingEnvProperties.getPropertyByName("xmpp.host"), 5222, TestingEnvProperties.getPropertyByName("xmpp.domain"), 30000, null);
         xmppClient.connect();
         BareJID room = BareJID.bareJIDInstance(chatRoom.getChatroomJid());
