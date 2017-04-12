@@ -19,8 +19,8 @@ public class TenantResponseV5 {
   @SerializedName("tenantOrgName")
   private String tenantOrgName = null;
 
-  @SerializedName("tenantJid")
-  private String tenantJid = null;
+  @SerializedName("rosterJid")
+  private String rosterJid = null;
 
   @SerializedName("contactEmail")
   private String contactEmail = null;
@@ -140,22 +140,22 @@ public class TenantResponseV5 {
     this.tenantOrgName = tenantOrgName;
   }
 
-  public TenantResponseV5 tenantJid(String tenantJid) {
-    this.tenantJid = tenantJid;
+  public TenantResponseV5 rosterJid(String rosterJid) {
+    this.rosterJid = rosterJid;
     return this;
   }
 
   /**
-   * Get tenantJid
-   * @return tenantJid
+   * Get rosterJid
+   * @return rosterJid
    **/
   @ApiModelProperty(example = "null", value = "")
-  public String getTenantJid() {
-    return tenantJid;
+  public String getRosterJid() {
+    return rosterJid;
   }
 
-  public void setTenantJid(String tenantJid) {
-    this.tenantJid = tenantJid;
+  public void setRosterJid(String rosterJid) {
+    this.rosterJid = rosterJid;
   }
 
 

@@ -1,24 +1,17 @@
 package com.touch.tests;
 
 import com.clickatell.touch.tbot.xmpp.XmppClient;
-import com.run.AgentClient;
 import com.touch.models.touch.analytics.ConversationCountStatsResponseV5;
 import com.touch.models.touch.analytics.ConversationTimeStatsResponseV5;
 import com.touch.models.touch.chats.ChatRoomResponse;
 import com.touch.models.touch.tenant.TenantResponseV5;
 import com.touch.utils.TestingEnvProperties;
-import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import tigase.jaxmpp.core.client.BareJID;
-import com.touch.utils.ApplicationProperties;
-import tigase.jaxmpp.core.client.JID;
-import tigase.jaxmpp.core.client.xmpp.stanzas.Presence;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class ChatComunicationTests extends BaseTestClass {
@@ -36,7 +29,7 @@ public class ChatComunicationTests extends BaseTestClass {
         xmppClient = new XmppClient(TestingEnvProperties.getPropertyByName("xmpp.host"), 5222, TestingEnvProperties.getPropertyByName("xmpp.domain"), 30000, null);
         List<TenantResponseV5> tenantsList = tenantActions.getTenantsList(testToken);
         for(TenantResponseV5 tenant : tenantsList){
-            if(tenant.getTenantJid().equals(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.jid"))){
+            if(tenant.getRosterJid().equals(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.jid"))){
                 tenantId = tenant.getId();
                 break;
             }
