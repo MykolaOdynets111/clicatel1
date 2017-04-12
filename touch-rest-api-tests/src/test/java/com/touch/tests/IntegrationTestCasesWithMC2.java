@@ -5,8 +5,10 @@ import com.touch.models.ErrorMessage;
 import com.touch.models.mc2.AccountInfoResponse;
 import com.touch.models.touch.agent.AgentCredentialsDto;
 import com.touch.models.touch.agent.AgentResponse;
+import com.touch.models.touch.tenant.ListTenantResponse;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -16,6 +18,13 @@ import java.util.List;
  * Created by kmakohoniuk on 1/16/2017.
  */
 public class IntegrationTestCasesWithMC2 extends BaseTestClass{
+    @Test
+    public void getTenantListFilteredByAccountId() {
+        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(new TenantRequest(), token, TenantResponseV5.class);
+        Response response = tenantActions.getTenantsList(tenant.getAccountId(), token);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertTrue(response.as(ListTenantResponse.class).getTenants().contains(tenant));
+    }
 
     @Test
     public void createAndDeleteNewAgent() {
