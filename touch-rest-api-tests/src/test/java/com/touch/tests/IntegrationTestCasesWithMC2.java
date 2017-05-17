@@ -65,38 +65,7 @@ public class IntegrationTestCasesWithMC2 extends BaseTestClass{
         // Verify that tenant was deleted after test
         Assert.assertEquals(amountTenantsBeforeAddNew, tenantsListAfterAddNewTenant.size());
     }
-    @Test
-    public void createNewTenantWithoutAccount() {
-        TenantRequest tenantRequest = new TenantRequest();
-        String email = tenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = tenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = tenantRequest.getMc2AccountRequest().getLastName();
-        String password = tenantRequest.getMc2AccountRequest().getPassword();
-        tenantRequest.setAccountId(null);
-        TenantResponseV5 newTenant = tenantActions.createNewTenantInTouchSide(tenantRequest, token, TenantResponseV5.class);
-        List<TenantResponseV5> tenantsListAfterAddNewTenant = tenantActions.getTenantsList(token);
-        Assert.assertTrue(tenantsListAfterAddNewTenant.contains(newTenant), "New tenant was not added to DB or it contains wrong data");
-        //get tenant from DB
-        TenantResponseV5 tenant = tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class);
-        //add generated accountId to our request to verify other fields
-        tenantRequest.setAccountId(newTenant.getAccountId());
-        Assert.assertEquals(tenantRequest, tenant);
-        Assert.assertNotNull(tenant.getAccountId());
-        //Verify get tenant request
-        Assert.assertEquals(tenantActions.getTenant(newTenant.getId(), token, TenantResponseV5.class), newTenant);
-        //activate new user in mc2
-        userActions.signUpAndLoginWithNewUser(newTenant.getAccountId(), newTenant.getTenantOrgName(), email, firstName, lastName, password);
-        // get admin token
-        String mc2AdminToken = userActions.loginAsMC2AdminUserAndReturnToken();
-        // get account in mc2 and verify that information is correct
-        AccountInfoResponse accountInfo = userActions.getAccountInfo(newTenant.getAccountId(), mc2AdminToken);
-        Assert.assertEquals(accountInfo, new AccountInfoResponse(newTenant.getTenantOrgName(), "ACTIVE", newTenant.getAccountId(), null));
 
-        /*
-        post conditions
-         */
-        Assert.assertEquals(tenantActions.deleteTenant(newTenant.getId(), token), 200);
-    }
     @Test
     public void deleteTenant() {
         String regExpErrorMessage = "Tenant with id .* not found";

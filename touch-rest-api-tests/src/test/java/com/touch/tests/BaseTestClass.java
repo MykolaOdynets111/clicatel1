@@ -1,5 +1,6 @@
 package com.touch.tests;
 
+import com.clickatell.models.user_profiles.UserProfile;
 import com.touch.actions.*;
 import com.touch.models.EndPointsClass;
 import com.touch.models.touch.agent.AgentCredentialsDto;
@@ -7,6 +8,7 @@ import com.touch.models.touch.agent.AgentResponse;
 import com.touch.models.touch.tenant.Mc2AccountRequest;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
+import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import com.touch.utils.reporter.CustomReport;
 import io.restassured.http.Header;
@@ -47,9 +49,10 @@ public class BaseTestClass {
 
     @BeforeClass
     public void beforeClass() {
-        token = getToken();
-        testTenant = getTestTenant1();
+        token = getToken(TestingEnvProperties.getPropertyByName("touch.user.admin.login"), TestingEnvProperties.getPropertyByName("touch.user.admin.password"));
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
+        testTenant = getTestTenant1();
+
 
     }
 
@@ -80,7 +83,7 @@ public class BaseTestClass {
     }
 
     public TenantResponseV5 getTestTenant1() {
-        for (TenantResponseV5 tenant : tenantActions.getTenantsList(token)) {
+        for (TenantResponseV5 tenant : tenantActions.getTenantsList(testToken)) {
             if (tenant.getTenantOrgName().equalsIgnoreCase("AutoVerificationTenant"))
                 return tenant;
         }
@@ -88,7 +91,7 @@ public class BaseTestClass {
     }
 
     public TenantResponseV5 getTestTenant2() {
-        for (TenantResponseV5 tenant : tenantActions.getTenantsList(token)) {
+        for (TenantResponseV5 tenant : tenantActions.getTenantsList(getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password")))) {
             if (tenant.getTenantOrgName().equals("AutoVerTenant2"))
                 return tenant;
         }
@@ -97,7 +100,7 @@ public class BaseTestClass {
 
     public AgentResponse getTestAgent(String testToken) {
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        return agentActions.getListOfAgents(jid, token, AgentResponse.class);
+        return agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
     }
 
     public String getToken(String login, String password) {
@@ -114,69 +117,57 @@ public class BaseTestClass {
     }
 
     public TenantResponseV5 addAutoTestTenant2() {
+        String userEmail = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email");
+        String userPassword = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password");
+        String userFirstName = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.firstName");
+        String userLastName = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.lastName");
+        UserProfile userProfile;
+        try{
+            userProfile = userActions.getUserProfileInMC2(userEmail, userPassword);
+        }catch(Exception e){
+
+            userProfile = userActions.createNewUser("accountname_" + StringUtils.generateRandomString(10),userEmail,userFirstName, userLastName, userPassword);
+        }
         TenantRequest testTenantRequest = new TenantRequest();
-        testTenantRequest.setAccountId(null);
+        testTenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
         testTenantRequest.setTenantOrgName("AutoVerTenant2");
-        testTenantRequest.setContactEmail("automationTenant2@sink.sendgrid.net");
+        testTenantRequest.setContactEmail(userEmail);
         testTenantRequest.setDescription("automation2");
         testTenantRequest.setShortDescription("auto verification2");
         testTenantRequest.setTenantName("AutoVerificationTenant2");
-        Mc2AccountRequest mc2Account = new Mc2AccountRequest();
-        mc2Account.setFirstName(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.firstName"));
-        mc2Account.setLastName(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.lastName"));
-        mc2Account.setEmail(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email"));
-        mc2Account.setPassword(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password"));
-        testTenantRequest.setMc2AccountRequest(mc2Account);
-        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
-        String accountId = tenant.getAccountId();
-        String accountName = tenant.getTenantOrgName();
-        String email = testTenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = testTenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = testTenantRequest.getMc2AccountRequest().getLastName();
-        String password = testTenantRequest.getMc2AccountRequest().getPassword();
-        userActions.signUpAndLoginWithNewUser(accountId, accountName, email, firstName, lastName, password);
+        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password")), TenantResponseV5.class);
         return tenant;
     }
 
     public TenantResponseV5 addAutoTestTenant1() {
+        String userEmail = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email");
+        String userPassword = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password");
+        String userFirstName = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.firstName");
+        String userLastName = TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.lastName");
+        UserProfile userProfile;
+        try{
+            userProfile = userActions.getUserProfileInMC2(userEmail, userPassword);
+        }catch(Exception e){
+
+            userProfile = userActions.createNewUser("accountname_" + StringUtils.generateRandomString(10),userEmail,userFirstName, userLastName, userPassword);
+        }
         TenantRequest testTenantRequest = new TenantRequest();
-        testTenantRequest.setAccountId(null);
+        testTenantRequest.setAccountId(userProfile.getAccounts().get(0).getId());
         testTenantRequest.setTenantOrgName("AutoVerificationTenant");
-        testTenantRequest.setContactEmail("automationTenant@sink.sendgrid.net");
+        testTenantRequest.setContactEmail(userEmail);
         testTenantRequest.setDescription("automation");
         testTenantRequest.setShortDescription("auto verification");
         testTenantRequest.setTenantName("AutoVerificationTenant");
-        Mc2AccountRequest mc2Account = new Mc2AccountRequest();
-        mc2Account.setFirstName(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.firstName"));
-        mc2Account.setLastName(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.lastName"));
-        mc2Account.setEmail(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"));
-        mc2Account.setPassword(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
-        testTenantRequest.setMc2AccountRequest(mc2Account);
-        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, token, TenantResponseV5.class);
-        String accountId = tenant.getAccountId();
-        String accountName = tenant.getTenantOrgName();
-        String email = testTenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = testTenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = testTenantRequest.getMc2AccountRequest().getLastName();
-        String password = testTenantRequest.getMc2AccountRequest().getPassword();
-        userActions.signUpAndLoginWithNewUser(accountId, accountName, email, firstName, lastName, password);
+        TenantResponseV5 tenant = tenantActions.createNewTenantInTouchSide(testTenantRequest, getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password")), TenantResponseV5.class);
         return tenant;
     }
 
-    public String getTokenForNewTenantWithNewAccount(TenantResponseV5 tenantResponse, TenantRequest tenantRequest) {
-        String accountId = tenantResponse.getAccountId();
-        String accountName = tenantResponse.getTenantOrgName();
-        String email = tenantRequest.getMc2AccountRequest().getEmail();
-        String firstName = tenantRequest.getMc2AccountRequest().getFirstName();
-        String lastName = tenantRequest.getMc2AccountRequest().getLastName();
-        String password = tenantRequest.getMc2AccountRequest().getPassword();
-        return userActions.signUpAndLoginWithNewUser(accountId, accountName, email, firstName, lastName, password);
-    }
-    public String getTockenForTenant(String tenantId){
-        TenantResponseV5 tenant = tenantActions.getTenant(tenantId, this.token).as(TenantResponseV5.class);
-        String token= getToken(tenant.getContactEmail(),"passw0rd");
-        return token;
-    }
+
+//    public String getTockenForTenant(String tenantId){
+//        TenantResponseV5 tenant = tenantActions.getTenant(tenantId, this.token).as(TenantResponseV5.class);
+//        String token= getToken(tenant.getContactEmail(),"passw0rd");
+//        return token;
+//    }
     public boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {
 
         try {

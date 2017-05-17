@@ -81,7 +81,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     @Test
     public void deleteNotExistingAgent() {
 
-        Assert.assertTrue(agentActions.deleteAgent(agentId, token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.deleteAgent(agentId, token).as(ErrorMessage.class).getErrorMessage().matches("Not authorized"));
     }
 
     @Test
@@ -91,8 +91,8 @@ public class AgentAndDepartmetTests extends BaseTestClass {
 
     @Test
     public void addAndDeleteImageForNotExistingAgent() {
-        Assert.assertTrue(agentActions.updateAgentImage(agentId, new File(file), testToken).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
-        Assert.assertTrue(agentActions.deleteAgentImage(agentId, testToken).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(agentActions.updateAgentImage(agentId, new File(file), testToken).as(ErrorMessage.class).getErrorMessage().matches("Not authorized"));
+        Assert.assertTrue(agentActions.deleteAgentImage(agentId, testToken).as(ErrorMessage.class).getErrorMessage().matches("Not authorized"));
 
     }
 

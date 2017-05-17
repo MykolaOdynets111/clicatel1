@@ -63,6 +63,24 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         solutions.add("TOUCH");
 
         UserSignupRequest userSignupRequest = new UserSignupRequest(accountName, email, firstName, lastName, password, solutions);
+        userSignupRequest.setRegistrationCountry("UKR");
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupResponse userSignupResponse = authActions.createNewUser(userSignupRequest);
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(userSignupResponse.getAccountId()), MessageResponse.class);
+        User user = new User(userSignupRequest);
+        user.setId(userSignupResponse.getUserId());
+        user.setMainAccount(new Account(userSignupResponse.getAccountId(), userSignupRequest.getAccountName(), Boolean.valueOf(true)));
+        return authActions.getListOfAccountsWithToken(user);
+    }
+    public UserProfile createNewUser(String accountName,String email,String firstName, String lastName,String password){
+
+        List<String> solutions = new ArrayList();
+        solutions.add("TOUCH");
+
+        UserSignupRequest userSignupRequest = new UserSignupRequest(accountName, email, firstName, lastName, password, solutions);
+        userSignupRequest.setRegistrationCountry("UKR");
         AuthActions authActions = new AuthActions(this.requestEngine);
         UserSignupResponse userSignupResponse = authActions.createNewUser(userSignupRequest);
         new AuthActions(this.requestEngine).activateAccount(
@@ -82,7 +100,7 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
     }
     public String loginAsAdminUserAndReturnToken(){
         AuthActions authActions = new AuthActions(this.requestEngine);
-        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("touch.user.admin.login"), null, null, TestingEnvProperties.getPropertyByName("touch.user.admin.password"), null);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), null, null, TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"), null);
         User user = new User(userSignupRequest);
         UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
         int accountIndex =0;
@@ -99,7 +117,7 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
         AuthActions authActions = new AuthActions(this.requestEngine);
         UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("touch.user.admin.login"), null, null, TestingEnvProperties.getPropertyByName("touch.user.admin.password"), null);
         User user = new User(userSignupRequest);
-        UserProfile userProfile = authActions.getListOfAccountsWithTokenAndCaptcha(user);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
         int accountIndex =0;
         List<Account> accounts = userProfile.getAccounts();
         for(int i=0; i<accounts.size();i++){
@@ -124,6 +142,12 @@ public class UserMC2Actions extends com.clickatell.actions.UserActions {
             }
         }
         return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
+    public UserProfile getUserProfileInMC2(String login,String password){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", login, null, null, password, null);
+        User user = new User(userSignupRequest);
+        return authActions.getListOfAccountsWithToken(user);
     }
     public String loginAsMC2AdminUserAndReturnToken(){
         AuthActions authActions = new AuthActions(this.requestEngine);

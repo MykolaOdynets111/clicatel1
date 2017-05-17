@@ -47,50 +47,50 @@ public class EndPointsClass {
     public static final String DEPARTMENTS_AGENTS = DEPARTMENTS + "/agents";
     public static final String DEPARTMENT = DEPARTMENTS + "/{id}";
     //Chats endpoints
-    public static final String CHATS_ATTACHMENTS = "/v5/chats/attachment";
+    public static final String CHATS_ATTACHMENTS = ConfigApp.API_VERSION+"/chats/attachment";
     public static final String CHATS_ATTACHMENT =  CHATS_ATTACHMENTS+"/{attachment-id}";
     public static final String CHATS_ATTACHMENT_WITH_NAME =  CHATS_ATTACHMENT+"/{file-name}";
-    public static final String CHATS_EVENTS = "/v5/chats/events";
-    public static final String CHATS_PRIVATE_HISTORY = "/v5/chats/private-history";
-    public static final String CHATS_HISTORIES = "/v5/chats/history";
+    public static final String CHATS_EVENTS = ConfigApp.API_VERSION+"/chats/events";
+    public static final String CHATS_PRIVATE_HISTORY = ConfigApp.API_VERSION+"/chats/private-history";
+    public static final String CHATS_HISTORIES = ConfigApp.API_VERSION+"/chats/history";
     public static final String CHATS_HISTORY = CHATS_HISTORIES+"/{sessionId}";
-    public static final String CHATS_INVITES = "/v5/chats/invites";
+    public static final String CHATS_INVITES = ConfigApp.API_VERSION+"/chats/invites";
     public static final String CHATS_INVITE = CHATS_INVITES+"/{sessionId}";
     public static final String CHATS_INVITE_ARCHIVE = CHATS_INVITES+"/archive";
-    public static final String CHATS_ROOMS = "/v5/chats/rooms";
-    public static final String CHATS_SESSIONS = "/v5/chats/sessions";
+    public static final String CHATS_ROOMS = ConfigApp.API_VERSION+"/chats/rooms";
+    public static final String CHATS_SESSIONS = ConfigApp.API_VERSION+"/chats/sessions";
     public static final String CHATS_SESSION = CHATS_SESSIONS +"/{sessionId}";
     public static final String CHATS_SESSION_TERMINATE = CHATS_SESSION+"/terminate";
     public static final String CHATS_SESSION_TERMINATE_ALL = CHATS_SESSIONS+"/{clientId}/terminate/all";
     //business-blp endpoints
-    public static final String INTEGRATIONS = "/v5/business-blp/integrations";
+    public static final String INTEGRATIONS = ConfigApp.API_VERSION+"/business-blp/integrations";
     public static final String INTEGRATION = INTEGRATIONS + "/{name}";
     public static final String INTEGRATION_ARTIFACT = INTEGRATION + "/artifact";
     public static final String INTEGRATION_CALL = INTEGRATION + "/{action}/call";
     //    Cards endpoints
-    public static final String CARDS = "/v5/cards";
+    public static final String CARDS = ConfigApp.API_VERSION+"/cards";
     public static final String CARD = CARDS + "/{name}";
     public static final String CARD_BUNDLE = CARD + "/bundle";
 
 
     //Auth endpoints
-    public static final String AUTH_TOCKEN = "/v5/auth/token";
-    public static final String AUTH_AUTHENTICATED = "/v5/auth/authenticated";
+    public static final String AUTH_TOCKEN = ConfigApp.API_VERSION+"/auth/token";
+    public static final String AUTH_AUTHENTICATED = ConfigApp.API_VERSION+"/auth/authenticated";
 
     //Analytics endpoints
-    public static final String ANALYTICS = "/v5/analytics";
+    public static final String ANALYTICS = ConfigApp.API_VERSION+"/analytics";
     public static final String ANALYTICS_REAL_TIME = ANALYTICS+"/real-time";
-    public static final String CHATSSTATS_CONVERSATION_COUNT = "/v5/chats/stats/conversation-count";
-    public static final String CHATSSTATS_CONVERSATION_TIME = "/v5/chats/stats/conversation-time";
+    public static final String CHATSSTATS_CONVERSATION_COUNT = ConfigApp.API_VERSION+"/chats/stats/conversation-count";
+    public static final String CHATSSTATS_CONVERSATION_TIME = ConfigApp.API_VERSION+ "/chats/stats/conversation-time";
 
     //App_Config endpoints
-    public static final String APP_PROFILE = "/v5/app-config/profile";
-    public static final String APP_XMPP = "/v5/app-config/xmpp";
+    public static final String APP_PROFILE = ConfigApp.API_VERSION+"/app-config/profile";
+    public static final String APP_XMPP = ConfigApp.API_VERSION+"/app-config/xmpp";
 
     //Roster endpoints
-    public static final String ROSTER_AGENTS = "/v5/roster/agents";
-    public static final String ROSTER = "/v5/roster";
-    public static final String ROSTERS = "/v5/rosters";
+    public static final String ROSTER = ConfigApp.API_VERSION+"/roster";
+    public static final String ROSTER_AGENTS = ROSTER+"/agents";
+    public static final String ROSTERS = ConfigApp.API_VERSION+"/rosters";
 
     public static String generateQueryPath(Map<String, String> map) {
         String path = "?";

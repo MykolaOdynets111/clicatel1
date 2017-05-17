@@ -37,12 +37,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class ChatHistoryRecordResponse {
   @SerializedName("sessionId")
   private String sessionId = null;
-
+  @SerializedName("messageId")
+  private String messageId = null;
   @SerializedName("messageTime")
   private Long messageTime = null;
 
   @SerializedName("messageText")
   private String messageText = null;
+  @SerializedName("displayMessage")
+  private String displayMessage = null;
 
   /**
    * Gets or Sets messageType
@@ -81,6 +84,22 @@ public class ChatHistoryRecordResponse {
   private String roomJid = null;
   @SerializedName("deliveryStatus")
   private String deliveryStatus = null;
+
+  public String getDisplayMessage() {
+    return displayMessage;
+  }
+
+  public void setDisplayMessage(String displayMessage) {
+    this.displayMessage = displayMessage;
+  }
+
+  public String getMessageId() {
+    return messageId;
+  }
+
+  public void setMessageId(String messageId) {
+    this.messageId = messageId;
+  }
 
   public String getDeliveryStatus() {
     return deliveryStatus;
