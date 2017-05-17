@@ -83,7 +83,7 @@ public class BaseTestClass {
     }
 
     public TenantResponseV5 getTestTenant1() {
-        for (TenantResponseV5 tenant : tenantActions.getTenantsList(testToken)) {
+        for (TenantResponseV5 tenant : tenantActions.getTenantsList(getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password")))) {
             if (tenant.getTenantOrgName().equalsIgnoreCase("AutoVerificationTenant"))
                 return tenant;
         }
