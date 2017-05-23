@@ -35,7 +35,7 @@ public class AgentAndDepartmetTests extends BaseTestClass {
     public void verifyMaxChatsRoomForAgent() {
         DepartmentDto departmentDto = new DepartmentDto();
         departmentDto.setTenantId(testTenant.getId());
-        String departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+        String departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
         AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
         String agentId = agent.getId();

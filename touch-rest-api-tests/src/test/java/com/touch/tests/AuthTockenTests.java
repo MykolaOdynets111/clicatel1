@@ -38,21 +38,7 @@ public class AuthTockenTests extends BaseTestClass {
         }
     }
 
-    @Test
-    public void addTokenForSpecialTenantAndVerifyPermission() {
 
-        TenantResponseV5 tenant2 = getTestTenant2();
-        TokenDto tokenDto = new TokenDto(testTenant.getId(), "ANDROID", "testDescritption");
-        TokenResponseV1 androidToken = authActions.addToken(tokenDto, token).as(TokenResponseV1.class);
-        Response responseAndroidToken = authActions.authentificateToken(new TokenBase(androidToken.getToken()), token);
-        TokenBase tokenBase = responseAndroidToken.as(TokenBase.class);
-        Response tenantResponse1 = tenantActions.getTenant(testTenant.getId(), tokenBase.getToken());
-        Assert.assertEquals(tenantResponse1.getStatusCode(), 200);
-        Response tenantResponse2 = tenantActions.getTenant(tenant2.getId(), tokenBase.getToken());
-        Assert.assertEquals(tenantResponse2.getStatusCode(), 401);
-        Assert.assertTrue(tenantResponse2.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
-
-    }
 
     @Test(dataProvider = "tokenAuthenticate")
     public void authenticateToken(String tokenAuth, int statusCode) {
