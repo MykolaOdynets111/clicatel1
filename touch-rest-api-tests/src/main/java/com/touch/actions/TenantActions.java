@@ -63,8 +63,8 @@ public class TenantActions {
     public Response getTAGs(String tenantId, String token) {
         return requestEngine.getRequest(EndPointsClass.TENANT_TAGS, tenantId, new Header("Authorization", token));
     }
-    public int updateTenantAddressLongitudeAndLatitude(String tenantId, String addressId, GpsRequest gpsRequest, String token) {
-        return requestEngine.putRequest(EndPointsClass.ADDRESS, tenantId, addressId, gpsRequest,new Header("Authorization", token)).getStatusCode();
+    public int updateTenantAddressLongitudeAndLatitude(String tenantId, String addressId, TenantAddressForUpdate tenantAddressForUpdate, String token) {
+        return requestEngine.putRequest(EndPointsClass.ADDRESS, tenantId, addressId, tenantAddressForUpdate,new Header("Authorization", token)).getStatusCode();
     }
     public Response updateBusinessHoursForAddress(String tenantId, String addressId, String hoursId, AddressBusinessHourRequest bussinesHours, String token) {
         return requestEngine.putRequest(EndPointsClass.BUSINESS_HOURS_ID_FOR_ADDRESS, tenantId, addressId, hoursId, bussinesHours,new Header("Authorization", token));

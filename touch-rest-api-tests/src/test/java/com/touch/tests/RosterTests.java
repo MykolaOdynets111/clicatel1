@@ -2,34 +2,45 @@ package com.touch.tests;
 
 import com.touch.models.touch.agent.ListAgentResponse;
 import com.touch.models.touch.analytics.AnalyticsChatSessionsResponse;
+import com.touch.models.touch.auth.AccessTokenRequest;
+import com.touch.models.touch.chats.ChatRoomResponse;
+import com.touch.models.touch.chats.ListChatSessionResponse;
 import com.touch.models.touch.roster.ListRosterResponse;
 import com.touch.models.touch.roster.RosterResponse;
+import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class RosterTests extends BaseTestClass {
+    String chatToken;
+    @BeforeClass
+    public void beforeClass() {
+        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
+    }
 
     @Test(dataProvider = "roster")
     public void getAgentList(String rosterJid, String state, String canHandleMoreChats, String agentList, int statusCode) {
-
-        Response response = rosterActions.getAgentsList(rosterJid, state, canHandleMoreChats, testToken);
+if(rosterJid!=null&&rosterJid.equals("correct")){
+    rosterJid = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.rosterjid");
+}
+        Response response = rosterActions.getAgentsList(rosterJid, state, canHandleMoreChats, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             ListAgentResponse agents = response.as(ListAgentResponse.class);
-//            if(agentList.equals("notEmpty"))
-//                Assert.assertTrue(!agents.getAgents().isEmpty());
-//            else
-//                Assert.assertTrue(agents.getAgents().isEmpty());
         }
     }
 
     @Test(dataProvider = "getRosterOptions")
     public void getRoster(String rosterJid, int statusCode) {
-        Response response = rosterActions.getRoster(rosterJid, testToken);
+        if(rosterJid!=null&&rosterJid.equals("correct")){
+            rosterJid = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.rosterjid");
+        }
+        Response response = rosterActions.getRoster(rosterJid, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             RosterResponse roster = response.as(RosterResponse.class);
@@ -39,14 +50,17 @@ public class RosterTests extends BaseTestClass {
 
     @Test(dataProvider = "updateRosterOptions")
     public void updateRoster(String rosterJid, String algorithm, int statusCode) {
-        Response response = rosterActions.putRoster(rosterJid, algorithm, testToken);
+        if(rosterJid!=null&&rosterJid.equals("correct")){
+            rosterJid = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.rosterjid");
+        }
+        Response response = rosterActions.putRoster(rosterJid, algorithm, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             String alg = algorithm;
             if (!algorithm.equals("random") && !algorithm.equals("round_robin") && !algorithm.equals("less_busy") && !algorithm.equals("multicast"))
                 alg = "random";
             RosterResponse roster = response.as(RosterResponse.class);
-            RosterResponse expectedRoster = rosterActions.getRoster(rosterJid, testToken).as(RosterResponse.class);
+            RosterResponse expectedRoster = rosterActions.getRoster(rosterJid, chatToken).as(RosterResponse.class);
             Assert.assertEquals(roster.getAlgorithm(), alg);
             Assert.assertEquals(roster, expectedRoster);
         }
@@ -54,9 +68,9 @@ public class RosterTests extends BaseTestClass {
 
     @Test
     public void getListOfRosters() {
-        Response response = rosterActions.getRosterList(testToken);
+        Response response = rosterActions.getRosterList(chatToken);
         Assert.assertEquals(response.getStatusCode(), 200);
-        RosterResponse expRoster = rosterActions.getRoster("genbank@department.clickatelllabs.com", testToken).as(RosterResponse.class);
+        RosterResponse expRoster = rosterActions.getRoster(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.rosterjid"), chatToken).as(RosterResponse.class);
         List<RosterResponse> actualRostersList = response.as(ListRosterResponse.class).getRosters();
         Assert.assertTrue(actualRostersList.contains(expRoster));
     }
@@ -64,8 +78,7 @@ public class RosterTests extends BaseTestClass {
     @DataProvider
     private static Object[][] getRosterOptions() {
         return new Object[][]{
-                {"genbank@department.clickatelllabs.com", 200},
-                {"genbank1@department.clickatelllabs.com", 404},
+                {"correct", 200},
                 {"test", 400},
                 {"", 400}
         };
@@ -74,29 +87,29 @@ public class RosterTests extends BaseTestClass {
     @DataProvider
     private static Object[][] updateRosterOptions() {
         return new Object[][]{
-                {"genbank@department.clickatelllabs.com", "random", 200},
-                {"genbank@department.clickatelllabs.com", "round_robin", 200},
-                {"genbank@department.clickatelllabs.com", "less_busy", 200},
-                {"genbank@department.clickatelllabs.com", "111", 200},
-                {"genbank@department.clickatelllabs.com", "test", 200},
-                {"genbank@department.clickatelllabs.com", "", 200},
+                {"correct", "random", 200},
+                {"correct", "round_robin", 200},
+                {"correct", "less_busy", 200},
+                {"correct", "111", 200},
+                {"correct", "test", 200},
+                {"correct", "", 200},
                 {"test", "random", 400},
                 {"test", "round_robin", 400},
                 {"test", "less_busy", 400},
                 {"test", "", 400},
                 {"", "", 400},
-                {"genbank@department.clickatelllabs.com", "multicast", 200}
+                {"correct", "multicast", 200}
         };
     }
 
     @DataProvider
     private static Object[][] roster() {
         return new Object[][]{
-                {"genbank@department.clickatelllabs.com", "chat", "true", "notEmpty", 200},
-                {"genbank@department.clickatelllabs.com", "chat,away", "true", "notEmpty", 200},
-                {"genbank@department.clickatelllabs.com", "chat,away", "false", "", 200},
-                {"genbank@department.clickatelllabs.com", "test", "true", "notEmpty", 200},
-                {"genbank@department.clickatelllabs.com", "", "true", "notEmpty", 200},
+                {"correct", "chat", "true", "notEmpty", 200},
+                {"correct", "chat,away", "true", "notEmpty", 200},
+                {"correct", "chat,away", "false", "", 200},
+                {"correct", "test", "true", "notEmpty", 200},
+                {"correct", "", "true", "notEmpty", 200},
                 {"test", "", "true", "", 400},
                 {"", "", "true", "", 400},
                 {"", "", "", "", 400},

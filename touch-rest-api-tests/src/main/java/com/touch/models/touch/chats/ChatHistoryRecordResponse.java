@@ -82,8 +82,8 @@ public class ChatHistoryRecordResponse {
   private String clientId = null;
   @SerializedName("roomJid")
   private String roomJid = null;
-  @SerializedName("deliveryStatus")
-  private String deliveryStatus = null;
+  @SerializedName("deliveryStatuses")
+  private String deliveryStatuses = null;
 
   public String getDisplayMessage() {
     return displayMessage;
@@ -101,12 +101,12 @@ public class ChatHistoryRecordResponse {
     this.messageId = messageId;
   }
 
-  public String getDeliveryStatus() {
-    return deliveryStatus;
+  public String getDeliveryStatuses() {
+    return deliveryStatuses;
   }
 
-  public void setDeliveryStatus(String deliveryStatus) {
-    this.deliveryStatus = deliveryStatus;
+  public void setDeliveryStatuses(String deliveryStatuses) {
+    this.deliveryStatuses = deliveryStatuses;
   }
 
   public String getRoomJid() {

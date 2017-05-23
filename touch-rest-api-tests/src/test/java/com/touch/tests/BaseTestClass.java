@@ -5,6 +5,7 @@ import com.touch.actions.*;
 import com.touch.models.EndPointsClass;
 import com.touch.models.touch.agent.AgentCredentialsDto;
 import com.touch.models.touch.agent.AgentResponse;
+import com.touch.models.touch.auth.AccessTokenRequest;
 import com.touch.models.touch.tenant.Mc2AccountRequest;
 import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
@@ -46,12 +47,15 @@ public class BaseTestClass {
     public String token;
     public String testToken;
     public TenantResponseV5 testTenant;
+    public String accessTestToken;
 
     @BeforeClass
     public void beforeClass() {
         token = getToken(TestingEnvProperties.getPropertyByName("touch.user.admin.login"), TestingEnvProperties.getPropertyByName("touch.user.admin.password"));
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
         testTenant = getTestTenant1();
+        String refreshToken = authActions.getRefreshToken(testToken);
+        accessTestToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
 
 
     }
@@ -78,6 +82,10 @@ public class BaseTestClass {
         }
     }
 
+    public String getAccessToken(String token){
+        String refreshToken = authActions.getRefreshToken(token);
+        return authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
+    }
     public String getToken() {
         return userActions.loginAsAdminUserAndReturnToken();
     }
@@ -165,7 +173,7 @@ public class BaseTestClass {
 
 //    public String getTockenForTenant(String tenantId){
 //        TenantResponseV5 tenant = tenantActions.getTenant(tenantId, this.token).as(TenantResponseV5.class);
-//        String token= getToken(tenant.getContactEmail(),"passw0rd");
+//        String token= getAccessToken(tenant.getContactEmail(),"passw0rd");
 //        return token;
 //    }
     public boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {

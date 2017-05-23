@@ -43,7 +43,7 @@ public class AnalyticsTests extends BaseTestClass {
             response.as(ConversationCountStatsResponseV5.class);
         }
     }
-    @Test(dataProvider = "conversationCount")
+    @Test(dataProvider = "conversationTime")
     public void getConversationTime(String tenantId, String year, String month, String day, int statusCode) {
         if (tenantId!=null&&tenantId.equals("correct")) {
             tenantId = testTenant.getId();
@@ -75,7 +75,7 @@ public class AnalyticsTests extends BaseTestClass {
                 {"correct", "correct","test", 200},
                 {"correct", "test","correct", 400},
                 {"correct", "22/11/2016","correct", 400},
-                {null, null,null, 400},
+                {null, null,null, 401},
                 {"correct", null,"correct", 400},
                 {"correct", "correct",null, 200}
 
@@ -84,6 +84,25 @@ public class AnalyticsTests extends BaseTestClass {
     }
     @DataProvider
     private static Object[][] conversationCount() {
+        return new Object[][]{
+                {"", "","","", 401},
+                {"correct", "2017","01","10", 200},
+                {"correct", "","01","10", 400},
+                {"correct", "2017","","", 400},
+                {null, null,null,null, 401},
+                {null, null,null,"", 401},
+                {"correct", null,"01","10", 400},
+                {"correct", "2017",null,"10", 400},
+                {"correct", "20171","01","10", 400},
+                {"correct", "2017","111","10", 400},
+                {"correct", "2017","01","100", 400},
+                {"correct", "2017","test","10", 400},
+                {"correct", "test","01","10", 400},
+                {"correct", "2017","01","test", 400},
+        };
+    }
+    @DataProvider
+    private static Object[][] conversationTime() {
         return new Object[][]{
                 {"", "","","", 400},
                 {"correct", "2017","01","10", 200},

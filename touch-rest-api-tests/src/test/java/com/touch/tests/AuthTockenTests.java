@@ -1,27 +1,15 @@
 package com.touch.tests;
 
-import com.clickatell.actions.AdminUsersActions;
-import com.clickatell.actions.AuthActions;
-import com.clickatell.models.admin_users.request.AdminUserSearchRequest;
-import com.clickatell.models.admin_users.response.AdminUserSearchData;
-import com.clickatell.models.admin_users.response.AdminUserSearchResponse;
-import com.clickatell.models.users.response.sign_in.SignInResponse;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.auth.ListTokenResponseV1;
 import com.touch.models.touch.auth.TokenBase;
 import com.touch.models.touch.auth.TokenDto;
 import com.touch.models.touch.auth.TokenResponseV1;
-import com.touch.models.touch.tenant.TenantRequest;
 import com.touch.models.touch.tenant.TenantResponseV5;
-import com.touch.utils.TestingEnvProperties;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.io.*;
-import java.util.List;
 
 /**
  * Created by kmakohoniuk on 9/5/2016.
@@ -30,7 +18,7 @@ public class AuthTockenTests extends BaseTestClass {
 
     @Test
     public void getTokenList() {
-        Response response = authActions.getListOfTockens(token);
+        Response response = authActions.getListOfTokens(token);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertFalse(response.as(ListTokenResponseV1.class).getTokens().isEmpty());
 
@@ -42,7 +30,7 @@ public class AuthTockenTests extends BaseTestClass {
             tenantId = testTenant.getId();
         }
         TokenDto tokenDto = new TokenDto(tenantId, domain, "testDescritption");
-        Response response = authActions.addTocken(tokenDto, token);
+        Response response = authActions.addToken(tokenDto, token);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             Assert.assertEquals(response.as(TokenResponseV1.class).getDomain(), domain);
@@ -55,8 +43,8 @@ public class AuthTockenTests extends BaseTestClass {
 
         TenantResponseV5 tenant2 = getTestTenant2();
         TokenDto tokenDto = new TokenDto(testTenant.getId(), "ANDROID", "testDescritption");
-        TokenResponseV1 androidToken = authActions.addTocken(tokenDto, token).as(TokenResponseV1.class);
-        Response responseAndroidToken = authActions.authentificateTocken(new TokenBase(androidToken.getToken()), token);
+        TokenResponseV1 androidToken = authActions.addToken(tokenDto, token).as(TokenResponseV1.class);
+        Response responseAndroidToken = authActions.authentificateToken(new TokenBase(androidToken.getToken()), token);
         TokenBase tokenBase = responseAndroidToken.as(TokenBase.class);
         Response tenantResponse1 = tenantActions.getTenant(testTenant.getId(), tokenBase.getToken());
         Assert.assertEquals(tenantResponse1.getStatusCode(), 200);
@@ -70,9 +58,9 @@ public class AuthTockenTests extends BaseTestClass {
     public void authenticateToken(String tokenAuth, int statusCode) {
         if (tokenAuth.equals("existing")) {
             TokenDto tokenDto = new TokenDto(testTenant.getId(), "ANDROID", "testDescritption");
-            tokenAuth = authActions.addTocken(tokenDto, token).as(TokenResponseV1.class).getToken();
+            tokenAuth = authActions.addToken(tokenDto, token).as(TokenResponseV1.class).getToken();
         }
-        Response responseAndroidToken = authActions.authentificateTocken(new TokenBase(tokenAuth), token);
+        Response responseAndroidToken = authActions.authentificateToken(new TokenBase(tokenAuth), token);
         Assert.assertEquals(responseAndroidToken.getStatusCode(), statusCode);
     }
 

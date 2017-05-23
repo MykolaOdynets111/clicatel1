@@ -50,12 +50,22 @@ public class AttachmentResponse   {
 
   @SerializedName("filePath")
   private String filePath = null;
+  @SerializedName("thumbPath")
+  private String thumbPath = null;
   @SerializedName("userId")
   private String userId = null;
   @SerializedName("userName")
   private String userName = null;
   @SerializedName("createdDate")
   private Long createdDate = null;
+
+  public String getThumbPath() {
+    return thumbPath;
+  }
+
+  public void setThumbPath(String thumbPath) {
+    this.thumbPath = thumbPath;
+  }
 
   public String getUserId() {
     return userId;

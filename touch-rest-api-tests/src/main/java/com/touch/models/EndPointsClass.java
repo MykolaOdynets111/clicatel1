@@ -33,6 +33,7 @@ public class EndPointsClass {
     public final static String DELETE_TENANT_FLOW = TENANT_FLOWS + "/{flow-name}";
     public final static String TENANT_CONFIG = TENANT + "/config";
     //User profiles endpoint
+    public static final String TOUCH_USER_PROFILES_OLD = "/v5/user-profiles";
     public static final String TOUCH_USER_PROFILES = ConfigApp.API_VERSION + "/user-profiles";
     public static final String TOUCH_USER_PROFILE = TOUCH_USER_PROFILES + "/{profileId}";
     public static final String TOUCH_USER_PROFILE_IMAGE = TOUCH_USER_PROFILE + "/image";
@@ -43,7 +44,7 @@ public class EndPointsClass {
     public static final String AGENT = AGENTS + "/{agentId}";
     public static final String AGENT_IMAGE = AGENTS + "/{agentId}/image";
     //Departments endpoints
-    public static final String DEPARTMENTS ="/v5/departments";
+    public static final String DEPARTMENTS =ConfigApp.API_VERSION +"/departments";
     public static final String DEPARTMENTS_AGENTS = DEPARTMENTS + "/agents";
     public static final String DEPARTMENT = DEPARTMENTS + "/{id}";
     //Chats endpoints
@@ -74,8 +75,10 @@ public class EndPointsClass {
 
 
     //Auth endpoints
-    public static final String AUTH_TOCKEN = ConfigApp.API_VERSION+"/auth/token";
-    public static final String AUTH_AUTHENTICATED = ConfigApp.API_VERSION+"/auth/authenticated";
+    public static final String AUTH_TOCKEN = "/v5/auth/token";
+    public static final String AUTH_AUTHENTICATED = "/v5/auth/authenticated";
+    public static final String AUTH_ACCESS_TOKEN = ConfigApp.API_VERSION+"/auth/access-token";
+    public static final String AUTH_REFRESH_TOKEN = ConfigApp.API_VERSION+"/auth/refresh-token";
 
     //Analytics endpoints
     public static final String ANALYTICS = ConfigApp.API_VERSION+"/analytics";
@@ -90,7 +93,7 @@ public class EndPointsClass {
     //Roster endpoints
     public static final String ROSTER = ConfigApp.API_VERSION+"/roster";
     public static final String ROSTER_AGENTS = ROSTER+"/agents";
-    public static final String ROSTERS = ConfigApp.API_VERSION+"/rosters";
+    public static final String ROSTERS ="/v5/rosters";
 
     public static String generateQueryPath(Map<String, String> map) {
         String path = "?";

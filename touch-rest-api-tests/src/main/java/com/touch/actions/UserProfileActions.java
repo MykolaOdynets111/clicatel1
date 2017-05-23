@@ -57,7 +57,7 @@ public class UserProfileActions {
         return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILE, profileId, new Header("Authorization", token)).as(clazz);
     }
     public <T> T getAllUserProfiles(String token, Class<T> clazz) {
-        return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILES, new Header("Authorization", token)).as(clazz);
+        return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILES_OLD, new Header("Authorization", token)).as(clazz);
     }
     public int deleteUserProfile(String userProfileId, String token){
         return  requestEngine.deleteRequest(EndPointsClass.TOUCH_USER_PROFILE, userProfileId,  new Header("Authorization", token)).getStatusCode();

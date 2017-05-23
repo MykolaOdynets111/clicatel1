@@ -34,7 +34,7 @@ public class DepartmentsTests extends BaseTestClass {
 
      @Test
     public void getListOfDepartments() {
-        Response response = departmentActions.getListOfDepartments(token);
+        Response response = departmentActions.getListOfDepartments(testToken);
 //        verify that status code is correct
         Assert.assertEquals(response.getStatusCode(), 200);
 //        verify that list of departments is not empty
@@ -45,22 +45,23 @@ public class DepartmentsTests extends BaseTestClass {
     public void addNewDepartment(String tenantId, String name, String description, int sessionsCapacity, int statusCode) {
         deleteTestDepartmnets();
         if(tenantId.equals("correct")&&statusCode==400)
-            departmentActions.addDepartment(new DepartmentDto(testTenant.getId(), name, description, sessionsCapacity), token);
+            departmentActions.addDepartment(new DepartmentDto(testTenant.getId(), name, description, sessionsCapacity), testToken);
         if (tenantId.equals("correct"))
             tenantId = testTenant.getId();
         DepartmentDto department = new DepartmentDto(tenantId, name, description, sessionsCapacity);
-        Response response = departmentActions.addDepartment(department, token);
+        Response response = departmentActions.addDepartment(department, testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 201) {
 //            verify that new department has all correct added data
             Assert.assertEquals(response.as(DepartmentResponse.class), department);
+
         }
 
     }
 
     @Test
     public void addNewDepartmentWithWrongBody() {
-        Response response = departmentActions.addDepartment("test", token);
+        Response response = departmentActions.addDepartment("test", testToken);
         Assert.assertEquals(response.getStatusCode(), 400);
     }
 
@@ -69,9 +70,9 @@ public class DepartmentsTests extends BaseTestClass {
         if (departmentId.equals("correct")){
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
-            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
         }
-        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(), statusCode);
+        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, testToken).getStatusCode(), statusCode);
     }
 
     @Test(dataProvider = "departmentsIdOptions")
@@ -79,9 +80,9 @@ public class DepartmentsTests extends BaseTestClass {
         if (departmentId.equals("correct")){
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
-            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
         }
-        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(), statusCode);
+        Assert.assertEquals(departmentActions.deleteDepartment(departmentId, testToken).getStatusCode(), statusCode);
     }
 
     @Test(dataProvider = "updateDepartmentsOptions")
@@ -89,9 +90,9 @@ public class DepartmentsTests extends BaseTestClass {
         if (departmentId.equals("correct")){
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
-            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
         }
-        Response response = departmentActions.updateDepartment(departmentId, name, description, sessionCapacity, token);
+        Response response = departmentActions.updateDepartment(departmentId, name, description, sessionCapacity, testToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
 //            verify that new department has all correct added data
@@ -111,22 +112,22 @@ public class DepartmentsTests extends BaseTestClass {
         if (departmentId.equals("correct")){
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
-            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
         }
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
         AgentResponse agent = agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
         if (agentId.equals("correct")){
             agentId = agent.getId();
         }
-        Response response = departmentActions.putAgentInDepartment(departmentId, agentId, token);
+        Response response = departmentActions.putAgentInDepartment(departmentId, agentId, testToken);
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if (statusCode == 200) {
-            List<AgentNoDepartmentsResponse> agents = departmentActions.getDepartment(departmentId, token).as(DepartmentResponse.class).getAgents();
+            List<AgentNoDepartmentsResponse> agents = departmentActions.getDepartment(departmentId, testToken).as(DepartmentResponse.class).getAgents();
             Assert.assertEquals(agents.get(0),agent);
         }
-        Response departmentResponse = departmentActions.getDepartment(departmentId, token);
+        Response departmentResponse = departmentActions.getDepartment(departmentId, testToken);
         if (departmentResponse.getStatusCode()==200&&!departmentId.isEmpty()){
-            Assert.assertEquals(departmentActions.deleteDepartment(departmentId, token).getStatusCode(),200);
+            Assert.assertEquals(departmentActions.deleteDepartment(departmentId, testToken).getStatusCode(),200);
         }
     }
 
@@ -136,7 +137,7 @@ public class DepartmentsTests extends BaseTestClass {
         if (departmentId.equals("correct")){
             DepartmentDto departmentDto = new DepartmentDto();
             departmentDto.setTenantId(testTenant.getId());
-            departmentId = departmentActions.addDepartment(departmentDto, token).as(DepartmentResponse.class).getId();
+            departmentId = departmentActions.addDepartment(departmentDto, testToken).as(DepartmentResponse.class).getId();
             addAgentTriger=true;
         }
         String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
@@ -147,9 +148,9 @@ public class DepartmentsTests extends BaseTestClass {
             addAgentTriger=false;
         }
         if(addAgentTriger){
-            departmentActions.putAgentInDepartment(departmentId, agentId, token);
+            departmentActions.putAgentInDepartment(departmentId, agentId, testToken);
         }
-        Response response = departmentActions.deleteAgentInDepartment(departmentId, agentId, token);
+        Response response = departmentActions.deleteAgentInDepartment(departmentId, agentId, testToken);
         Assert.assertEquals(response.getStatusCode(),statusCode);
     }
 
@@ -160,9 +161,9 @@ public class DepartmentsTests extends BaseTestClass {
                 {"correct", "test", "test", 5, 400},
                 {"correct", "test1", "", 5, 201},
                 {"correct", "", "", 5, 201},
-                {"", "", "", 5, 400},
-                {"test", "test2", "test", 5, 404},
-                {"test1", "2", "2", 5, 404}
+                {"", "", "", 5, 500},
+                {"test", "test2", "test", 5, 500},
+                {"test1", "2", "2", 5, 500}
         };
     }
     @DataProvider
@@ -218,11 +219,11 @@ public class DepartmentsTests extends BaseTestClass {
     }
 
     private void deleteTestDepartmnets() {
-        List<DepartmentResponse> departmetsList = departmentActions.getListOfDepartments(token).as(ListDepartmentResponse.class).getDepartments();
+        List<DepartmentResponse> departmetsList = departmentActions.getListOfDepartments(testToken).as(ListDepartmentResponse.class).getDepartments();
         if (!departmetsList.isEmpty()) {
             for (DepartmentResponse department : departmetsList) {
-                if (department.getName().contains("test")||department.getName().contains("MC2RatingTest")||department.getName().equals(""))
-                    Assert.assertEquals(departmentActions.deleteDepartment(department.getId(), token).getStatusCode(), 200);
+                if (department.getName().contains("Test")||department.getName().contains("test")||department.getName().contains("MC2RatingTest")||department.getName().equals(""))
+                    Assert.assertEquals(departmentActions.deleteDepartment(department.getId(), testToken).getStatusCode(), 200);
             }
         }
     }

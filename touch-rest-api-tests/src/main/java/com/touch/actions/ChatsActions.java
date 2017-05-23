@@ -134,14 +134,7 @@ public class ChatsActions {
     public Response getInviteForSession(String sessionId, String token) {
         return requestEngine.getRequest(EndPointsClass.CHATS_INVITE,sessionId, new Header("Authorization", token));
     }
-    public Response addNewSession(String sessionId, String tenantId, String clientId, String token) {
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("sessionId", sessionId);
-        parameters.put("tenantId", tenantId);
-        parameters.put("clientId", clientId);
-        return requestEngine.postRequestWithQueryParameters(EndPointsClass.CHATS_SESSIONS, null, parameters, new Header("Authorization", token));
 
-    }
     public Response getListOfPrivateHistories(String to, String fromTs, String toTs, String token) {
         Map<String, String> parameters = new HashMap<>();
         if(to!=null)

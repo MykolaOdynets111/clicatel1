@@ -49,15 +49,27 @@ public class AttachmentCreateResponse   {
   private Integer fileSize = null;
   @SerializedName("filePath")
   private String filePath = null;
+  @SerializedName("thumbPath")
+  private String thumbPath = null;
   @SerializedName("userId")
   private String userId = null;
   @SerializedName("userName")
   private String userName = null;
   @SerializedName("createdDate")
   private Long createdDate = null;
+
+
   public AttachmentCreateResponse id(String id) {
     this.id = id;
     return this;
+  }
+
+  public String getThumbPath() {
+    return thumbPath;
+  }
+
+  public void setThumbPath(String thumbPath) {
+    this.thumbPath = thumbPath;
   }
 
   public String getUserId() {

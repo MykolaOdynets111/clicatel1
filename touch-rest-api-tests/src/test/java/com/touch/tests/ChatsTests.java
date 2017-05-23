@@ -3,6 +3,7 @@ package com.touch.tests;
 import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.agent.AgentCredentialsDto;
+import com.touch.models.touch.auth.AccessTokenRequest;
 import com.touch.models.touch.chats.*;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
@@ -25,28 +26,34 @@ import java.util.List;
 public class ChatsTests extends BaseTestClass {
     String sessionId;
     String file = getFullPathToFile("TenantResources/tenant_logo.jpg");
+    String clickatellId=TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id");
     List<ChatSessionResponse> chatSessions;
     String clientJid = "testclient1@clickatelllabs.com";
     String testClientId = "test1";
+    String chatToken;
+    String accessToken;
     ChatRoomResponse chatRoom;
 
 
     @BeforeClass
     public void beforeClass() {
-        token = getToken();
-        testTenant = getTestTenant1();
+//        token = getToken();
+//        testTenant = getTestTenant1();
+        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
-        chatRoom = chatsActions.getChatRoom(testTenant.getId(), clientJid, testClientId, "Android", token).as(ChatRoomResponse.class);
+        String refreshToken = authActions.getRefreshToken(chatToken);
+        accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
+        chatRoom = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
         generateMessageForChatRoom(chatRoom, testClientId);
-        sessionId = chatsActions.getListOfSessions(testTenant.getId(), testClientId, testToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
-        chatSessions = chatsActions.getListOfSessions(TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id"), null, testToken).as(ListChatSessionResponse.class).getChatSessions();
+        sessionId = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
+        chatSessions = chatsActions.getListOfSessions(clickatellId, null, chatToken).as(ListChatSessionResponse.class).getChatSessions();
     }
 
 
     @Test
     public void getNewChatRoom() {
         String tenantWithBot = getTestTenant1().getId();
-        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1", "Android", token).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1", "Android", accessToken).as(ChatRoomResponse.class);
         Assert.assertTrue(chatRoom.getChatroomJid().matches(".{32}@muc.clickatelllabs.com"));
 
     }
@@ -55,38 +62,22 @@ public class ChatsTests extends BaseTestClass {
     public void tryToGetNewChatRoomWithDifferentData(String tenantId, String clientJid, String clientId, int statusCode) {
         if (tenantId.equals("correct"))
             tenantId = getTestTenant1().getId();
-        Assert.assertEquals(chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", token).getStatusCode(), statusCode);
+        Assert.assertEquals(chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", accessToken).getStatusCode(), statusCode);
 
     }
 
-    @Test
-    public void getNewSessionAndSessionList() {
-        String sessionId = "testSession" + StringUtils.generateRandomString(10);
 
-        ListChatSessionResponse listSessionBeforeAddingNew = chatsActions.getListOfSessions(null, null, token).as(ListChatSessionResponse.class);
-        ChatSessionResponse session = chatsActions.addNewSession(sessionId, testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
-        ListChatSessionResponse listSessionAfterAddingNew = chatsActions.getListOfSessions(null, null, token).as(ListChatSessionResponse.class);
-//        verify that we have one more new session in session list
-        Assert.assertEquals(listSessionBeforeAddingNew.getChatSessions().size() + 1, listSessionAfterAddingNew.getChatSessions().size());
-//        verify that session list contains new session
-        Assert.assertTrue(listSessionAfterAddingNew.getChatSessions().contains(session));
-        ChatSessionResponse as = chatsActions.getSession(session.getSessionId(), token).as(ChatSessionResponse.class);
-//        verify that we get correct session by new sessionId
-        Assert.assertTrue(chatsActions.getSession(session.getSessionId(), token).as(ChatSessionResponse.class).equals(session));
-
-        //        post conditions delete tenant and session
-        Assert.assertEquals(chatsActions.deleteSession(session.getSessionId(), token).getStatusCode(), 200);
-
-    }
 
     @Test
     public void terminateSession() {
 //terminate not existing session
-        Assert.assertEquals(chatsActions.terminateSession("testSession" + StringUtils.generateRandomString(10), token).getStatusCode(), 404);
-        String sessionId = "testSession" + StringUtils.generateRandomString(10);
-        ChatSessionResponse session = chatsActions.addNewSession(sessionId, testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
+        Assert.assertEquals(chatsActions.terminateSession("testSession" + StringUtils.generateRandomString(10), chatToken).getStatusCode(), 404);
+        ChatRoomResponse chatRoom = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        generateMessageForChatRoom(chatRoom, testClientId);
+        String sessionId = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
+        ChatSessionResponse session = chatsActions.getSession(sessionId,chatToken).as(ChatSessionResponse.class);
 //        terminate existing session
-        Response response = chatsActions.terminateSession(sessionId, token);
+        Response response = chatsActions.terminateSession(sessionId, chatToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         ChatSessionResponse terminatedSession = response.as(ChatSessionResponse.class);
         Assert.assertEquals(terminatedSession.getId(), session.getId());
@@ -99,27 +90,17 @@ public class ChatsTests extends BaseTestClass {
     public void terminateAllSessions() {
         String testClientId = "testClientId";
 //terminate not existing session
-        Assert.assertEquals(chatsActions.terminateAllSessions("testSession" + StringUtils.generateRandomString(10), token).getStatusCode(), 200);
-        ChatSessionResponse session = chatsActions.addNewSession("testSession1" + StringUtils.generateRandomString(10), testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
-        ChatSessionResponse session1 = chatsActions.addNewSession("testSession2" + StringUtils.generateRandomString(10), testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
-        ChatSessionResponse session2 = chatsActions.addNewSession("testSession3" + StringUtils.generateRandomString(10), testTenant.getId(), "testClientId", token).as(ChatSessionResponse.class);
-        ListChatSessionResponse listChatSessionResponse = new ListChatSessionResponse();
-        listChatSessionResponse.addChatSessionsItem(session);
-        listChatSessionResponse.addChatSessionsItem(session1);
-        listChatSessionResponse.addChatSessionsItem(session2);
+        Assert.assertEquals(chatsActions.terminateAllSessions("testSession" + StringUtils.generateRandomString(10), chatToken).getStatusCode(), 500);
+        ChatRoomResponse chatRoom1 = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        generateMessageForChatRoom(chatRoom1, testClientId);
+        ChatSessionResponse session1 = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions().get(0);
+
 //        terminate existing session
-        Response response = chatsActions.terminateAllSessions(testClientId, token);
+        Response response = chatsActions.terminateAllSessions(session1.getClientId(), chatToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         List<ChatSessionResponse> terminatedChatSessions = response.as(ListChatSessionResponse.class).getChatSessions();
-        Assert.assertTrue(listChatSessionResponse.getChatSessions().size() == terminatedChatSessions.size());
         for (ChatSessionResponse chatSession : terminatedChatSessions) {
             boolean isIdPresentInResponse = false;
-            for (ChatSessionResponse sessionInitial : listChatSessionResponse.getChatSessions()) {
-                if (chatSession.getId().equals(sessionInitial.getId())) {
-                    isIdPresentInResponse = true;
-                    break;
-                }
-            }
             Assert.assertTrue(isIdPresentInResponse);
             Assert.assertEquals(chatSession.getState(), "TERMINATED");
             Assert.assertTrue(chatSession.getEndedDate() != null);
@@ -131,7 +112,7 @@ public class ChatsTests extends BaseTestClass {
         String sessionId = "wrong_sessionId";
         String expectedMessage = "ChatSession with id " + sessionId + " not found";
 //        Verify error message which we get when we try to get session data with wrong sessionId
-        Assert.assertTrue(chatsActions.getSession(sessionId, token).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
+        Assert.assertTrue(chatsActions.getSession(sessionId, chatToken).as(ErrorMessage.class).getErrorMessage().matches(expectedMessage));
 
     }
 
@@ -139,7 +120,7 @@ public class ChatsTests extends BaseTestClass {
     @Test
     public void getNewChatRoomWithWrongData() {
         // verify error message when we try to get chat room for not existing tenant
-        Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1", "Android", token).as(ErrorMessage.class).getErrorMessage().matches("Tenant with id .+ not found"));
+        Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1", "Android", chatToken).as(ErrorMessage.class).getErrorMessage().matches("This request requires HTTP authentication"));
     }
 
     @Test(dataProvider = "getAttachments")
@@ -151,10 +132,10 @@ public class ChatsTests extends BaseTestClass {
         if (userId != null && userId.equals("correct"))
             userId = this.testClientId;
         if (tenantId != null && tenantId.equals("correct"))
-            tenantId = this.testTenant.getId();
+            tenantId = clickatellId;
         if (fileType != null && fileType.equals("correct"))
             fileType = "image/jpeg";
-        Response getAttachmentResponse = chatsActions.getAttachmentsList(sessionId, roomJid, userId, tenantId, fileType, testToken);
+        Response getAttachmentResponse = chatsActions.getAttachmentsList(sessionId, roomJid, userId, tenantId, fileType, chatToken);
         Assert.assertEquals(getAttachmentResponse.getStatusCode(), statusCode);
         if (getAttachmentResponse.getStatusCode() == 200) {
             List<AttachmentResponse> attachmentsList = getAttachmentResponse.as(ListAttachmentResponse.class).getAttachments();
@@ -170,47 +151,47 @@ public class ChatsTests extends BaseTestClass {
         if (userId != null && userId.equals("correct"))
             userId = this.testClientId;
         if (tenantId != null && tenantId.equals("correct"))
-            tenantId = this.testTenant.getId();
-        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid, userId, userType, tenantId, new File(file), testToken);
+            tenantId = clickatellId;
+        Response response = chatsActions.addAttachmentForSession(sessionId, roomJid, userId, userType, tenantId, new File(file), chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (response.getStatusCode() == 200) {
             AttachmentCreateResponse addedAttachment = response.as(AttachmentCreateResponse.class);
-            Assert.assertEquals(chatsActions.deleteAttachment(addedAttachment.getId(), testToken), 200);
+            Assert.assertEquals(chatsActions.deleteAttachment(addedAttachment.getId(), chatToken), 200);
         }
     }
 
     @Test(dataProvider = "getDeleteAttachments")
     public void getChatAttachment(String attachmentId, int statusCode) throws Exception {
-        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
+        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", clickatellId, new File(file), testToken).as(AttachmentCreateResponse.class);
         if (attachmentId.equals("correct"))
             attachmentId = testAttachment.getId();
 
-        Response response = chatsActions.getAttachment(attachmentId, testToken);
+        Response response = chatsActions.getAttachment(attachmentId, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200)
             Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
-        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
+        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), chatToken), 200);
     }
 
     @Test(dataProvider = "getAttachmentsWithFileName")
     public void getChatAttachmentWithName(String attachmentId, String fileName, int statusCode) throws Exception {
-        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class);
+        AttachmentCreateResponse testAttachment = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", clickatellId, new File(file), chatToken).as(AttachmentCreateResponse.class);
         if (attachmentId.equals("correct"))
             attachmentId = testAttachment.getId();
         if (fileName.equals("correct"))
             fileName = testAttachment.getFileName();
-        Response response = chatsActions.getAttachmentWithFileName(attachmentId, fileName, testToken);
+        Response response = chatsActions.getAttachmentWithFileName(attachmentId, fileName, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200)
             Assert.assertTrue(isEqualInputStreams(response.asInputStream(), new FileInputStream(new File(file))));
-        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), testToken), 200);
+        Assert.assertEquals(chatsActions.deleteAttachment(testAttachment.getId(), chatToken), 200);
     }
 
     @Test(dataProvider = "getDeleteAttachments")
     public void deleteChatAttachment(String attachmentId, int statusCode) {
         if (attachmentId.equals("correct"))
-            attachmentId = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", testTenant.getId(), new File(file), testToken).as(AttachmentCreateResponse.class).getId();
-        Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, testToken), statusCode);
+            attachmentId = chatsActions.addAttachmentForSession(sessionId, chatRoom.getChatroomJid(), testClientId, "AGENT", clickatellId, new File(file), chatToken).as(AttachmentCreateResponse.class).getId();
+        Assert.assertEquals(chatsActions.deleteAttachment(attachmentId, chatToken), statusCode);
     }
 
     @Test(dataProvider = "getEvents")
@@ -227,7 +208,7 @@ public class ChatsTests extends BaseTestClass {
         if (dateTo != null && dateTo.equals("correct"))
             if (session.getEndedDate() != null)
                 dateTo = session.getEndedDate().toString();
-        Response response = chatsActions.getListOfChatEvents(sessionId, clientId, tenantId, dateFrom, dateTo, testToken);
+        Response response = chatsActions.getListOfChatEvents(sessionId, clientId, tenantId, dateFrom, dateTo, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatEventResponseV5> chatEvents = response.as(ListChatEventResponseV5.class).getChatEvents();
@@ -249,23 +230,14 @@ public class ChatsTests extends BaseTestClass {
         if (dateTo != null && dateTo.equals("correct"))
             if (session.getEndedDate() != null)
                 dateTo = session.getEndedDate().toString();
-        Response response = chatsActions.getListOfChatHistory(sessionId, clientId, tenantId, dateFrom, dateTo, String.valueOf(returnDisplayMessage), token);
+        Response response = chatsActions.getListOfChatHistory(sessionId, clientId, tenantId, dateFrom, dateTo, String.valueOf(returnDisplayMessage), chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatHistoryRecordResponse> records = response.as(ListChatHistoryRecordsResponse.class).getRecords();
-//            Assert.assertFalse(records.isEmpty());
         }
     }
 
-    private ChatSessionResponse getSessionWithTenantFromTheEnd(String tenant) {
-        List<ChatSessionResponse> sessions = chatSessions;
-        Collections.reverse(sessions);
-        for (ChatSessionResponse session : sessions) {
-            if (session.getTenantId().equals(tenant))
-                return session;
-        }
-        return null;
-    }
+
 
     @Test(dataProvider = "getHistorySession")
     public void getChatsHistoryForSession(String sessionId, boolean isEmpty, int statusCode) {
@@ -273,18 +245,17 @@ public class ChatsTests extends BaseTestClass {
         if (sessionId != null && sessionId.equals("correct"))
             sessionId = session.getSessionId();
 
-        Response response = chatsActions.getListOfChatHistoryForSession(sessionId, token);
+        Response response = chatsActions.getListOfChatHistoryForSession(sessionId, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatHistoryRecordResponse> records = response.as(ListChatHistoryRecordsResponse.class).getRecords();
-            Assert.assertEquals(records.isEmpty(), isEmpty);
         }
     }
 
     @Test(dataProvider = "invitesList")
     public void getInvites(String status, String dateFrom, String dateTo, int statusCode) {
 
-        Response response = chatsActions.getListOfInvites(status, dateFrom, dateTo, token);
+        Response response = chatsActions.getListOfInvites(status, dateFrom, dateTo, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatInviteHistoryResponseV5> records = response.as(ListChatInviteHistoryResponseV5.class).getChatInviteHistory();
@@ -295,12 +266,11 @@ public class ChatsTests extends BaseTestClass {
     @Test(dataProvider = "invitesListArchive")
     public void getInvitesFromArchive(String nickname, String page, String count, int statusCode) {
         if (nickname != null && nickname.equals("correct"))
-            nickname = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid().split("@")[0];
-        Response response = chatsActions.getListOfInvitesFromArchive(nickname, page, count, testToken);
+            nickname = agentActions.getCredentials(chatToken, AgentCredentialsDto.class).getJid().split("@")[0];
+        Response response = chatsActions.getListOfInvitesFromArchive(nickname, page, count, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatInviteHistoryArchiveResponse> records = response.as(ListChatInviteHistoryArchiveResponse.class).getChatInviteHistory();
-//            Assert.assertFalse(records.isEmpty());
         }
     }
 
@@ -309,7 +279,7 @@ public class ChatsTests extends BaseTestClass {
         ChatSessionResponse session = chatSessions.get(chatSessions.size() - 1);
         if (sessionId != null && sessionId.equals("correct"))
             sessionId = session.getSessionId();
-        Response response = chatsActions.getInviteForSession(sessionId, token);
+        Response response = chatsActions.getInviteForSession(sessionId, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatInviteHistoryResponseV5> records = response.as(ListChatInviteHistoryResponseV5.class).getChatInviteHistory();
@@ -322,7 +292,7 @@ public class ChatsTests extends BaseTestClass {
         if (to.equals("correct"))
             to = chatRoom.getChatroomJid();
         ChatPrivateHistoryRequest historyRequest = new ChatPrivateHistoryRequest(message, to);
-        Response response = chatsActions.addNewPrivateHistory(historyRequest, token);
+        Response response = chatsActions.addNewPrivateHistory(historyRequest, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
     }
 
@@ -331,9 +301,9 @@ public class ChatsTests extends BaseTestClass {
         if (to.equals("correct")) {
             to = chatRoom.getChatroomJid();
             ChatPrivateHistoryRequest historyRequest = new ChatPrivateHistoryRequest("test", to);
-            chatsActions.addNewPrivateHistory(historyRequest, token);
+            chatsActions.addNewPrivateHistory(historyRequest, chatToken);
         }
-        Response response = chatsActions.getListOfPrivateHistories(to, fromTs, toTs, token);
+        Response response = chatsActions.getListOfPrivateHistories(to, fromTs, toTs, chatToken);
         Assert.assertEquals(response.getStatusCode(), statusCode);
         if (statusCode == 200) {
             List<ChatPrivateHistoryResponse> records = response.as(ChatPrivateHistoryList.class).getRecords();
@@ -420,7 +390,7 @@ public class ChatsTests extends BaseTestClass {
     @DataProvider
     private static Object[][] getHistorySession() {
         return new Object[][]{
-                {"test", true, 200},
+                {"test", true, 400},
                 {"correct", false, 200},
                 {"", true, 400}
         };
@@ -439,7 +409,7 @@ public class ChatsTests extends BaseTestClass {
                 {"correct", null, null, "correct", null, true, 200},
                 {null, "correct", "correct", "correct", null, true, 200},
                 {null, "correct", "correct", "correct", null, true, 200},
-                {"test", null, null, "correct", null, true, 200},
+                {"test", null, null, "correct", null, true, 400},
                 {null, "correct", "test", "correct", null, true, 401},
                 {null, "test", "test", "correct", null, true, 401},
                 {"correct", "correct", "correct", "correct", "correct", false, 400},
@@ -468,8 +438,8 @@ public class ChatsTests extends BaseTestClass {
                 {"correct", null, null, null, null, false, 200},
                 {null, "correct", "correct", null, null, false, 200},
                 {"test", null, null, null, null, true, 200},
-                {null, "correct", "test", null, null, true, 200},
-                {null, "test", "test", null, null, true, 200},
+                {null, "correct", "test", null, null, true, 401},
+                {null, "test", "test", null, null, true, 401},
                 {"correct", "correct", "correct", "correct", "correct", false, 400},
                 {"correct", "correct", "correct", "correct", "", false, 400},
                 {"correct", "correct", "correct", "", "", true, 400},

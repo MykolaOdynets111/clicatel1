@@ -3,8 +3,8 @@ package com.touch.tests;
 import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.models.touch.analytics.ConversationCountStatsResponseV5;
 import com.touch.models.touch.analytics.ConversationTimeStatsResponseV5;
+import com.touch.models.touch.auth.AccessTokenRequest;
 import com.touch.models.touch.chats.ChatRoomResponse;
-import com.touch.models.touch.tenant.TenantResponseV5;
 import com.touch.utils.TestingEnvProperties;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -12,28 +12,16 @@ import org.testng.annotations.Test;
 import tigase.jaxmpp.core.client.BareJID;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class ChatComunicationTests extends BaseTestClass {
-    String tenantId;
+    String tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id");
+    String chatToken;
     XmppClient xmppClient;
-    private static final String HOST = "localhost";
-    private static final String XMPP_DOMAIN = "jabber.dev.net";
-    private static final String ROSTER = "demo@department.jabber.dev.net";
-    private static final String AGENT_PASSWORD = "agent";
+
     @BeforeTest
     public void beforeClass() {
-        token = getToken();
-        testTenant = getTestTenant1();
-        testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
+        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
         xmppClient = new XmppClient(TestingEnvProperties.getPropertyByName("xmpp.host"), 5222, TestingEnvProperties.getPropertyByName("xmpp.domain"), 30000, null);
-        List<TenantResponseV5> tenantsList = tenantActions.getTenantsList(testToken);
-        for(TenantResponseV5 tenant : tenantsList){
-            if(tenant.getRosterJid().equals(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.jid"))){
-                tenantId = tenant.getId();
-                break;
-            }
-        }
     }
 
 
@@ -44,13 +32,13 @@ public class ChatComunicationTests extends BaseTestClass {
         String year=String.valueOf(now.getYear());
         String month=String.valueOf(now.getMonthValue());
         String day=String.valueOf(now.getDayOfMonth());
-        ConversationCountStatsResponseV5 conversationCountBefore = analyticsActions.getConversationCount(tenantId, year, month, day, testToken).as(ConversationCountStatsResponseV5.class);
-        ConversationTimeStatsResponseV5 conversationTimeBefore = analyticsActions.getConversationTime(tenantId, year, month, day, testToken).as(ConversationTimeStatsResponseV5.class);
+        ConversationCountStatsResponseV5 conversationCountBefore = analyticsActions.getConversationCount(tenantId, year, month, day, chatToken).as(ConversationCountStatsResponseV5.class);
+        ConversationTimeStatsResponseV5 conversationTimeBefore = analyticsActions.getConversationTime(tenantId, year, month, day, chatToken).as(ConversationTimeStatsResponseV5.class);
         String clientJid = "testclient1@clickatelllabs.com";
         String testClientId ="test1";
-        BareJID rosterJid = BareJID.bareJIDInstance("clickatell@department.clickatelllabs.com");
-        BareJID agentJid = BareJID.bareJIDInstance("ff80808157b899ad0157b89c6b1e0004@clickatelllabs.com");
-        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantId, clientJid, testClientId,"Android", token).as(ChatRoomResponse.class);
+        String refreshToken = authActions.getRefreshToken(chatToken);
+        String accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
+        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantId, clientJid, testClientId,"Android", accessToken).as(ChatRoomResponse.class);
         xmppClient.connect();
         BareJID room = BareJID.bareJIDInstance(chatRoom.getChatroomJid());
         xmppClient.joinRoom(room.getLocalpart(), room.getDomain(), testClientId);
@@ -69,8 +57,8 @@ public class ChatComunicationTests extends BaseTestClass {
 
 //        this delay should be fixed in future, however now we so slow adding static to db
         Thread.sleep(200000);
-        ConversationCountStatsResponseV5 conversationCountAfter = analyticsActions.getConversationCount(tenantId, year, month, day, testToken).as(ConversationCountStatsResponseV5.class);
-        ConversationTimeStatsResponseV5 conversationTimeAfter = analyticsActions.getConversationTime(tenantId, year, month, day, testToken).as(ConversationTimeStatsResponseV5.class);
+        ConversationCountStatsResponseV5 conversationCountAfter = analyticsActions.getConversationCount(tenantId, year, month, day, chatToken).as(ConversationCountStatsResponseV5.class);
+        ConversationTimeStatsResponseV5 conversationTimeAfter = analyticsActions.getConversationTime(tenantId, year, month, day, chatToken).as(ConversationTimeStatsResponseV5.class);
         Assert.assertTrue(conversationCountAfter.getTotalConversationCount()>conversationCountBefore.getTotalConversationCount());
         Assert.assertTrue(conversationTimeAfter.getTotalBotConversationTimeMs()>conversationTimeBefore.getTotalBotConversationTimeMs());
 

@@ -63,14 +63,14 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void updateNotExistingTenantWithCorrectData() {
         TenantUpdateDtoV5 tenantUpdateDto = new TenantUpdateDtoV5();
-        Assert.assertTrue(tenantActions.updateTenant("not_existing_tenant", tenantUpdateDto, testToken, ErrorMessage.class).getErrorMessage().matches("Not allowed"));
+        Assert.assertTrue(tenantActions.updateTenant("not_existing_tenant", tenantUpdateDto, testToken, ErrorMessage.class).getErrorMessage().matches("Not authorized"));
 
     }
 
 
     @Test
     public void deleteNotExistingTenant() {
-        Assert.assertEquals(tenantActions.deleteTenant("not_existing_tenant", testToken), 404);
+        Assert.assertEquals(tenantActions.deleteTenant("not_existing_tenant", testToken), 401);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class TenantTests extends BaseTestClass {
         //verify that deleted colour is not still available for tenant
         Assert.assertFalse(tenantActions.getPropertiesForTenant(testTenant.getId(), testToken).contains(new TenantProperties(testColourName, testColourValue)));
         //delete colour in not existing tenant
-        Assert.assertEquals(tenantActions.deleteColour("notReal", testColourName, testToken), 404);
+        Assert.assertEquals(tenantActions.deleteColour("notReal", testColourName, testToken), 401);
     }
 
     @Test(dataProvider = "resourcesList")
@@ -152,12 +152,14 @@ public class TenantTests extends BaseTestClass {
         TO DO
         we need update this test cases when response body will be added to that type requests
         */
-        GpsRequest gpsRequest = new GpsRequest(10f, 10f);
+        TenantAddressForUpdate tenantAddressForUpdate = new TenantAddressForUpdate();
+        tenantAddressForUpdate.setLat(10L);
+        tenantAddressForUpdate.setLng(10L);
         if (tenantId.isEmpty())
             tenantId = testTenant.getId();
         if (addressId.isEmpty())
             addressId = testTenant.getTenantAddresses().get(0).getId();
-        int statusCode = tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId, addressId, gpsRequest, testToken);
+        int statusCode = tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId, addressId, tenantAddressForUpdate, testToken);
         Assert.assertTrue((statusCode == 200) == positiveTest);
     }
 
@@ -265,21 +267,24 @@ public class TenantTests extends BaseTestClass {
 
     @Test
     public void getNearestTenants() throws IOException {
+        String testToken2 = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
         TenantResponseV5 tenant1 = testTenant;
-        TenantResponseV5 tenant2 = getTestTenant2();
+        TenantResponseV5 tenant2 = tenantActions.getTenant(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id"),testToken2,TenantResponseV5.class);
         String tenantId1 = tenant1.getId();
         String tenantId2 = tenant2.getId();
-        GpsRequest gpsRequest1 = new GpsRequest(60f, 60f);
-        GpsRequest gpsRequest2 = new GpsRequest(70f, 70f);
+        TenantAddressForUpdate tenantAddressForUpdate1 = new TenantAddressForUpdate();
+        tenantAddressForUpdate1.setLat(60L);
+        tenantAddressForUpdate1.setLng(60L);
+        TenantAddressForUpdate tenantAddressForUpdate2 = new TenantAddressForUpdate();
+        tenantAddressForUpdate2.setLat(70L);
+        tenantAddressForUpdate2.setLng(70L);
         String addressId1 = tenant1.getTenantAddresses().get(0).getId();
         String addressId2 = tenant2.getTenantAddresses().get(0).getId();
-        String token1 = testToken;
-        String token2 = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.email"),TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user2.password"));
-        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, gpsRequest1, token1);
-        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, gpsRequest2, token2);
+        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId1, addressId1, tenantAddressForUpdate1, testToken);
+        tenantActions.updateTenantAddressLongitudeAndLatitude(tenantId2, addressId2, tenantAddressForUpdate2, testToken2);
         TenantResponseV5 ten1 = tenantActions.getTenant(tenantId1, testToken, TenantResponseV5.class);
-        TenantResponseV5 ten2 = tenantActions.getTenant(tenantId2, testToken, TenantResponseV5.class);
-        List<TenantResponseV5> nearestTenantsList = tenantActions.getNearestTenantsList(gpsRequest1.getLat().toString(), gpsRequest1.getLng().toString(), "1500000", testToken);
+        TenantResponseV5 ten2 = tenantActions.getTenant(tenantId2, testToken2, TenantResponseV5.class);
+        List<TenantResponseV5> nearestTenantsList = tenantActions.getNearestTenantsList(tenantAddressForUpdate1.getLat().toString(), tenantAddressForUpdate1.getLng().toString(), "1500000", accessTestToken);
         List<TenantResponseV5> newTenantsList = Arrays.asList(ten1, ten2);
         Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenets are not in nearest tenants list");
     }
@@ -299,7 +304,7 @@ public class TenantTests extends BaseTestClass {
     @Test
     public void getBussinesHoursForAddressByNotExistingTenant() {
         String addressId = testTenant.getTenantAddresses().get(0).getId();
-        Assert.assertTrue(tenantActions.getBusinessHoursFromAddress("not_existing", addressId, testToken, ErrorMessage.class).getErrorMessage().matches("Tenant with id .* not found"));
+        Assert.assertTrue(tenantActions.getBusinessHoursFromAddress("not_existing", addressId, testToken, ErrorMessage.class).getErrorMessage().matches("Not authorized"));
 
     }
 
@@ -342,7 +347,6 @@ public class TenantTests extends BaseTestClass {
         AddressBusinessHourRequest businessHourRequest = new AddressBusinessHourRequest();
         Response response = tenantActions.updateBusinessHoursForAddress(tenantId, addressId, hoursId, businessHourRequest, testToken);
         Assert.assertEquals(response.getStatusCode(), status);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches(message));
 
     }
 
@@ -415,22 +419,26 @@ public class TenantTests extends BaseTestClass {
 //        add new faq with not existing tenantId
         Response response = tenantActions.addFAQs("not_existing", faq, testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 //
         TenantFaqResponse faqResponse = tenantActions.addFAQs(testTenant.getId(), faq, testToken).as(TenantFaqResponse.class);
         String faqId = faqResponse.getId();
 //        delete faqs with not existing tenantId
         response = tenantActions.deleteFAQs("not_existing", faqId, testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 //        update faqs with not existing tenantId
         response = tenantActions.updateFAQ("not_existing", faqId, faq, testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
 //        update faqs with not existing faqsId
         response = tenantActions.updateFAQ(testTenant.getId(), "not_existing", faq, testToken);
         Assert.assertEquals(response.getStatusCode(), 500);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("No value present"));
+    }
+    @Test
+    public void deleteAllFaqsForTestTenant(){
+        List<TenantFaqResponse> faqs = tenantActions.getFAQs(testTenant.getId(), testToken, ListTenantFaqsResponse.class).getFaqs();
+        for(TenantFaqResponse faq : faqs) {
+            Response response = tenantActions.deleteFAQs(testTenant.getId(), faq.getId(), testToken);
+            Assert.assertTrue(response.statusCode()==200);
+        }
     }
 
     @Test
@@ -498,7 +506,7 @@ public class TenantTests extends BaseTestClass {
         //        delete tag for not existing tenant
         Response response = tenantActions.deleteTAGs("not_existing", tenantTagRequest.getTag(), testToken);
         Assert.assertEquals(response.getStatusCode(), 401);
-        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not allowed"));
+        Assert.assertTrue(response.as(ErrorMessage.class).getErrorMessage().matches("Not authorized"));
         //        delete not existing tag for test tenant
         response = tenantActions.deleteTAGs(testTenant.getId(), "not_existing", testToken);
         Assert.assertEquals(response.getStatusCode(), 404);
@@ -519,7 +527,7 @@ public class TenantTests extends BaseTestClass {
         }
 
     }
-    @Test(dataProvider = "getTBot")
+    @Test(dataProvider = "getConfig")
     public void getConfigForTenant(String tenantId, int statusCode) {
         if(tenantId.equals("correct"))
             tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
@@ -534,7 +542,7 @@ public class TenantTests extends BaseTestClass {
         //use correct tenant if we need one
         //add new configuration
         if(tenantId.equals("correct")) {
-            tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
+            tenantId = testTenant.getId();
             TenantConfig tenantConfig = new TenantConfig();
             ArrayList<String> ccList = new ArrayList<>();
             ccList.add(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
@@ -550,12 +558,12 @@ public class TenantTests extends BaseTestClass {
             tenantConfig.setTbotWaitClientTimeoutMin(100);
             tenantConfig.setShowSmCardTimeoutMin(100);
             tenantConfig.setPrimaryEmail(StringUtils.generateRandomString(10) + "@sink.sendgrid.net");
-            tenantActions.updateConfig(tenantId, tenantConfig, token);
+            tenantActions.updateConfig(tenantId, tenantConfig, accessTestToken);
         }
-        Response response = tenantActions.deleteTenantConfig(tenantId, token);
+        Response response = tenantActions.deleteTenantConfig(tenantId, testToken);
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if(statusCode==200){
-            TenantConfig tenantConfig =  tenantActions.getTenantConfig(tenantId, token).as(TenantConfig.class);
+            TenantConfig tenantConfig =  tenantActions.getTenantConfig(tenantId, testToken).as(TenantConfig.class);
             Assert.assertTrue(tenantConfig.getCc().isEmpty());
             Assert.assertNull(tenantConfig.getPrimaryEmail());
         }
@@ -564,7 +572,7 @@ public class TenantTests extends BaseTestClass {
     @Test(dataProvider = "updateConfig")
     public void addConfigForTenant(String tenantId, int agentInTimeout, String primaryEmail, String cc, int statusCode) {
         if(tenantId.equals("correct"))
-            tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
+            tenantId=testTenant.getId();
         if(primaryEmail.equals("correct"))
             primaryEmail= StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
         if(cc.equals("correct"))
@@ -585,7 +593,7 @@ public class TenantTests extends BaseTestClass {
         tenantConfig.setClientOfferTimeoutSec(100);
         tenantConfig.setTbotWaitClientTimeoutMin(100);
         tenantConfig.setShowSmCardTimeoutMin(100);
-        Response response = tenantActions.updateConfig(tenantId, tenantConfig, token);
+        Response response = tenantActions.updateConfig(tenantId, tenantConfig, testToken);
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if(statusCode==200){
             TenantConfig tenantConfigResponse = response.as(TenantConfig.class);
@@ -612,15 +620,25 @@ public class TenantTests extends BaseTestClass {
                 {"correct", 200},
                 {"test", 404},
                 {"11", 404},
-                {"", 404},
+                {"", 401},
         };
-    }    @DataProvider
+    }
+    @DataProvider
+    private static Object[][] getConfig() {
+        return new Object[][]{
+                {"correct", 200},
+                {"test", 401},
+                {"11", 401},
+                {"", 401},
+        };
+    }
+    @DataProvider
     private static Object[][] deleteConfig() {
         return new Object[][]{
                 {"correct", 204},
-                {"test", 404},
-                {"11", 404},
-                {"", 404},
+                {"test", 401},
+                {"11", 401},
+                {"", 401},
         };
     }
     @DataProvider
@@ -629,8 +647,8 @@ public class TenantTests extends BaseTestClass {
                 {"correct",30,"correct","correct", 200},
                 {"correct",9,"correct","correct", 200},
                 {"correct",10,"correct","correct", 200},
-                {"test",30,"correct","correct", 404},
-                {"11",30,"correct","correct", 404},
+                {"test",30,"correct","correct", 401},
+                {"11",30,"correct","correct", 401},
                 {"",30,"correct","correct", 400},
                 {"correct",30,"test","correct", 400},
                 {"correct",30,"correct","test", 400},

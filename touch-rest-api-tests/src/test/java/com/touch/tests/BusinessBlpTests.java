@@ -62,20 +62,7 @@ public class BusinessBlpTests extends BaseTestClass {
         Assert.assertEquals(response.getStatusCode(), statusCode);
     }
 
-    @Test(dataProvider = "getArtifacts")
-    public void getArtifactsForIntegrationItem(String name, int statusCode) throws Exception {
-        if (name != null && name.equals("correct")) {
-            name = "echo1";
-            integrationActions.addNewIntegrationItem("TALEND", new File(getFullPathToFile("TenantResources/echo1.war")), testToken);
-        }
-        Response response = integrationActions.getArtifactFileData(name, testToken);
-        if (statusCode == 200) {
-            InputStream actualFile = response.asInputStream();
-            InputStream expectedFile = new FileInputStream(new File(getFullPathToFile("TenantResources/echo1.war")));
-            Assert.assertTrue(isEqualInputStreams(actualFile, expectedFile));
-            Assert.assertEquals(integrationActions.deleteIntegrationItem(name, testToken).getStatusCode(), 204);
-        }
-    }
+
 
     @Test(dataProvider = "callData")
     public void callActionsInIntegration(String name, String action, String params, int statusCode) {
@@ -124,14 +111,7 @@ public class BusinessBlpTests extends BaseTestClass {
         };
     }
 
-    @DataProvider
-    private static Object[][] getArtifacts() {
-        return new Object[][]{
-                {"correct", 200},
-                {"test", 404},
-                {"", 404}
-        };
-    }
+
     @DataProvider
     private static Object[][] callData() {
         return new Object[][]{
