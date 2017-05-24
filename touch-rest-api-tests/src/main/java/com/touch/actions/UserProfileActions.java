@@ -51,7 +51,7 @@ public class UserProfileActions {
         return requestEngine.postRequestWithFormParametersAndFile(EndPointsClass.TOUCH_USER_PROFILES, null, userProfileData, new File(file), new Header("Authorization", token)).getStatusCode();
     }
     public int updateUserProfile(String profileId, UserProfileRequest userData, String token) {
-        return requestEngine.putRequest(EndPointsClass.TOUCH_USER_PROFILE,profileId, null, userData, new Header("Authorization", token)).getStatusCode();
+        return requestEngine.putRequest(EndPointsClass.TOUCH_USER_PROFILE_OLD,profileId, null, userData, new Header("Authorization", token)).getStatusCode();
     }
     public <T> T getUserProfile(String profileId, String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.TOUCH_USER_PROFILE, profileId, new Header("Authorization", token)).as(clazz);

@@ -49,8 +49,9 @@ public class UserProfileTests extends BaseTestClass {
         // we will add additional verification step when we have response for POST action for user-profile
 //        TODO add changes when this bug will be fixed https://clickatell.atlassian.net/browse/TPLAT-486
         Assert.assertTrue(userProfiles.contains(userProfileActions.getUserProfile(id, testToken, UserProfileResponse.class)));
+        String accessTestToken = getAccessToken(id, testToken);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessTestToken), 200);
     }
 
     @Test
@@ -60,8 +61,9 @@ public class UserProfileTests extends BaseTestClass {
         userProfileActions.addDefaultUserProfile(id, accessToken);
         //Try to create user-profile with same Id and verify that we get correct response
         Assert.assertEquals(userProfileActions.addDefaultUserProfile(id, accessToken), 409);
+        String accessTestToken = getAccessToken(id, testToken);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id, testToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessTestToken), 200);
     }
 
     @Test
@@ -109,8 +111,9 @@ public class UserProfileTests extends BaseTestClass {
         String id = "test" + StringUtils.generateRandomString(3);
         userProfileActions.addDefaultUserProfile(id, accessToken);
         int userAmountBefore = userProfileActions.getAllUserProfiles(testToken, ListUserProfilesResponse.class).getUserProfiles().size();
+        String accessTestToken = getAccessToken(id, testToken);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessTestToken), 200);
         List<UserProfileResponse> userProfiles = userProfileActions.getAllUserProfiles(testToken, ListUserProfilesResponse.class).getUserProfiles();
         Assert.assertEquals(userAmountBefore - 1, userProfiles.size());
     }
@@ -126,10 +129,11 @@ public class UserProfileTests extends BaseTestClass {
 //        update name in userProfile
         userProfile.setName(newName);
 //        update name for existing user-profile and verify that update have been done successful
-        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile, accessToken), 200);
+        String accessTestToken = getAccessToken(id, testToken);
+        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile, accessTestToken), 200);
         Assert.assertEquals(userProfileActions.getUserProfile(id, testToken, UserProfileResponse.class).getName(), newName);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessTestToken), 200);
     }
 
     @Test
@@ -140,8 +144,9 @@ public class UserProfileTests extends BaseTestClass {
         UserProfileRequest userProfile = new UserProfileRequest();
 //        update name in userProfile
         userProfile.setName(newName);
+        String accessTestToken = getAccessToken(id, testToken);
 //        update name for not existing user-profile and verify that update have been done successful
-        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile, accessToken), 404);
+        Assert.assertEquals(userProfileActions.updateUserProfile(id, userProfile, accessTestToken), 404);
     }
 
     @Test
@@ -151,12 +156,13 @@ public class UserProfileTests extends BaseTestClass {
         userProfileActions.addDefaultUserProfile(id, accessToken);
         String fileName = "bg_chat_image.jpg";
         String file = getFullPathToFile("TenantResources/" + fileName);
+        String accessTestToken = getAccessToken(id, testToken);
 //        update photo for existing user-profile
-        Assert.assertEquals(userProfileActions.updateUserProfileImage(id, new File(file), accessToken), 200);
+        Assert.assertEquals(userProfileActions.updateUserProfileImage(id, new File(file), accessTestToken), 200);
 //        update photo for not existing user-profile
-        Assert.assertEquals(userProfileActions.updateUserProfileImage("not existing", new File(file), accessToken), 404);
+        Assert.assertEquals(userProfileActions.updateUserProfileImage("not existing", new File(file), accessToken), 401);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessTestToken), 200);
     }
 
     @Test
@@ -164,12 +170,13 @@ public class UserProfileTests extends BaseTestClass {
         String id = "test" + StringUtils.generateRandomString(3);
 //        create new user-profile
         userProfileActions.addDefaultUserProfile(id, accessToken);
+        String accessTestToken = getAccessToken(id, testToken);
 //        update photo for existing user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id, accessToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id, accessTestToken), 200);
         //Delete user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessToken), 200);
+        Assert.assertEquals(userProfileActions.deleteUserProfile(id, accessTestToken), 200);
 //        update photo for not existing user-profile
-        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id, accessToken), 404);
+        Assert.assertEquals(userProfileActions.deleteUserProfileImage(id, accessTestToken), 404);
     }
 
     @AfterClass
@@ -177,7 +184,7 @@ public class UserProfileTests extends BaseTestClass {
         ListUserProfilesResponse allUserProfiles = userProfileActions.getAllUserProfiles(testToken, ListUserProfilesResponse.class);
         for (UserProfileResponse userProfile : allUserProfiles.getUserProfiles()) {
             if (userProfile.getName()==null||userProfile.getName().contains("test")||userProfile.getName().contains("MC2RatingTest"))
-                userProfileActions.deleteUserProfile(userProfile.getId(), testToken);
+                userProfileActions.deleteUserProfile(userProfile.getId(), getAccessToken(userProfile.getId(), testToken));
         }
     }
 

@@ -86,6 +86,10 @@ public class BaseTestClass {
         String refreshToken = authActions.getRefreshToken(token);
         return authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
     }
+    public String getAccessToken(String clientId, String token){
+        String refreshToken = authActions.getRefreshToken(token);
+        return authActions.getAccessToken(new AccessTokenRequest(clientId), refreshToken);
+    }
     public String getToken() {
         return userActions.loginAsAdminUserAndReturnToken();
     }

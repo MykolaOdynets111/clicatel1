@@ -35,6 +35,7 @@ public class EndPointsClass {
     //User profiles endpoint
     public static final String TOUCH_USER_PROFILES_OLD = "/v5/user-profiles";
     public static final String TOUCH_USER_PROFILES = ConfigApp.API_VERSION + "/user-profiles";
+    public static final String TOUCH_USER_PROFILE_OLD = TOUCH_USER_PROFILES_OLD + "/{profileId}";
     public static final String TOUCH_USER_PROFILE = TOUCH_USER_PROFILES + "/{profileId}";
     public static final String TOUCH_USER_PROFILE_IMAGE = TOUCH_USER_PROFILE + "/image";
     //Agents endpoints
