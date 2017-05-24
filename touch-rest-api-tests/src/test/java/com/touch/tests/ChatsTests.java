@@ -390,7 +390,7 @@ public class ChatsTests extends BaseTestClass {
     @DataProvider
     private static Object[][] getHistorySession() {
         return new Object[][]{
-                {"test", true, 400},
+                {"test", true, 200},
                 {"correct", false, 200},
                 {"", true, 400}
         };
@@ -409,7 +409,7 @@ public class ChatsTests extends BaseTestClass {
                 {"correct", null, null, "correct", null, true, 200},
                 {null, "correct", "correct", "correct", null, true, 200},
                 {null, "correct", "correct", "correct", null, true, 200},
-                {"test", null, null, "correct", null, true, 400},
+                {"test", null, null, "correct", null, true, 200},
                 {null, "correct", "test", "correct", null, true, 401},
                 {null, "test", "test", "correct", null, true, 401},
                 {"correct", "correct", "correct", "correct", "correct", false, 400},
