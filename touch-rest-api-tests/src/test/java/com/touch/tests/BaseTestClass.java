@@ -66,14 +66,12 @@ public class BaseTestClass {
         Response response = requestEngine.getRequest(EndPointsClass.APP_CONFIG_PROFILE, new Header("Authorization", token));
         List<String> lines = new ArrayList<String>();
         lines.add(response.getBody().jsonPath().getString("version"));
-        // lines.add("   " + response.getBody().jsonPath().getString("profile"));
         Path file = Paths.get(".VERSION");
         try {
             Files.write(file, lines);
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        removeAllTestTenants(token);
         String environment = System.getProperty("tests.env", "testing").toLowerCase();
         if(environment.equals("demo")){
             tenantActions.deleteTenant(testTenant.getId(),testToken);
@@ -82,10 +80,7 @@ public class BaseTestClass {
         }
     }
 
-    public String getAccessToken(String token){
-        String refreshToken = authActions.getRefreshToken(token);
-        return authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-    }
+
     public String getAccessToken(String clientId, String token){
         String refreshToken = authActions.getRefreshToken(token);
         return authActions.getAccessToken(new AccessTokenRequest(clientId), refreshToken);
@@ -110,10 +105,7 @@ public class BaseTestClass {
         return addAutoTestTenant2();
     }
 
-    public AgentResponse getTestAgent(String testToken) {
-        String jid = agentActions.getCredentials(testToken, AgentCredentialsDto.class).getJid();
-        return agentActions.getListOfAgents(jid, testToken, AgentResponse.class);
-    }
+
 
     public String getToken(String login, String password) {
         return userActions.loginUserToMC2AndReturnToken(login, password);
@@ -175,11 +167,7 @@ public class BaseTestClass {
     }
 
 
-//    public String getTockenForTenant(String tenantId){
-//        TenantResponseV5 tenant = tenantActions.getTenant(tenantId, this.token).as(TenantResponseV5.class);
-//        String token= getAccessToken(tenant.getContactEmail(),"passw0rd");
-//        return token;
-//    }
+
     public boolean isEqualInputStreams(InputStream i1, InputStream i2) throws IOException {
 
         try {
