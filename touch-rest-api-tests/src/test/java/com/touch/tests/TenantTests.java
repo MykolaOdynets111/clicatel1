@@ -286,7 +286,7 @@ public class TenantTests extends BaseTestClass {
         TenantResponseV5 ten2 = tenantActions.getTenant(tenantId2, testToken2, TenantResponseV5.class);
         List<TenantResponseV5> nearestTenantsList = tenantActions.getNearestTenantsList(tenantAddressForUpdate1.getLat().toString(), tenantAddressForUpdate1.getLng().toString(), "1500000", accessTestToken);
         List<TenantResponseV5> newTenantsList = Arrays.asList(ten1, ten2);
-        Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenets are not in nearest tenants list");
+        Assert.assertTrue(nearestTenantsList.containsAll(newTenantsList), "New tenants are not in nearest tenants list");
     }
 
     @Test

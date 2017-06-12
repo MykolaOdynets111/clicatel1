@@ -54,7 +54,7 @@ public class TenantUpdateDtoV5 {
 
   public TenantUpdateDtoV5() {
     this.tenantOrgName = "new_test_name"+ StringUtils.generateRandomString(4);
-    this.contactEmail = "newFake@fake.perfectial.com";
+    this.contactEmail = "newFake@sink.sendgrid.net";
     this.description = "New test description";
     this.shortDescription = "new test Short";
     this.category = "New Bussines";

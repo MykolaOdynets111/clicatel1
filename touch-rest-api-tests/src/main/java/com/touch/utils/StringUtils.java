@@ -11,7 +11,7 @@ public class StringUtils {
     }
 
     public static String generateEmail() {
-        return "UserEmail_" + generateRandomString(15) + "@fake.perfectial.com";
+        return "UserEmail_" + generateRandomString(15) + "@sink.sendgrid.net";
     }
 
     public static String generateRandomIntegerString(int countOfSymbols) {

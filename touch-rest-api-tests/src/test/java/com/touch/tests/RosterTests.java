@@ -105,11 +105,7 @@ if(rosterJid!=null&&rosterJid.equals("correct")){
     @DataProvider
     private static Object[][] roster() {
         return new Object[][]{
-                {"correct", "chat", "true", "notEmpty", 200},
-                {"correct", "chat,away", "true", "notEmpty", 200},
                 {"correct", "chat,away", "false", "", 200},
-                {"correct", "test", "true", "notEmpty", 200},
-                {"correct", "", "true", "notEmpty", 200},
                 {"test", "", "true", "", 400},
                 {"", "", "true", "", 400},
                 {"", "", "", "", 400},
