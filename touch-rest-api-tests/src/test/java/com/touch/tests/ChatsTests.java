@@ -1,5 +1,6 @@
 package com.touch.tests;
 
+import com.clickatell.touch.tbot.config.XmppClientConfigBean;
 import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.models.ErrorMessage;
 import com.touch.models.touch.agent.AgentCredentialsDto;
@@ -550,7 +551,15 @@ public class ChatsTests extends BaseTestClass {
     }
 
     private void generateMessageForChatRoom(ChatRoomResponse chatRoom, String clientId) {
-        XmppClient xmppClient = new XmppClient(TestingEnvProperties.getPropertyByName("xmpp.host"), 5222, TestingEnvProperties.getPropertyByName("xmpp.domain"), 30000, null);
+        XmppClientConfigBean xmppClientConfigBean = new XmppClientConfigBean();
+        xmppClientConfigBean.setHost(TestingEnvProperties.getPropertyByName("xmpp.host"));
+        xmppClientConfigBean.setPort(5222);
+        xmppClientConfigBean.setReconnectInterval(30000);
+        xmppClientConfigBean.setConnectRetryCount(10);
+        xmppClientConfigBean.setConnectRetrySleepTimeMs(2000);
+        xmppClientConfigBean.setXmppDomain(TestingEnvProperties.getPropertyByName("xmpp.domain"));
+
+        XmppClient xmppClient = new XmppClient(xmppClientConfigBean, clientJid, null, null);
         xmppClient.connect();
         BareJID room = BareJID.bareJIDInstance(chatRoom.getChatroomJid());
         xmppClient.joinRoom(room.getLocalpart(), room.getDomain(), clientId);

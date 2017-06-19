@@ -68,6 +68,7 @@ public class TenantUpdateDtoV5 {
     this.shortDescription = shortDescription;
     this.category = category;
     this.sessionsCapacity = sessionsCapacity;
+
   }
 
   public TenantUpdateDtoV5 tenantOrgName(String tenantOrgName) {
