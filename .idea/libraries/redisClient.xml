@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="redisClient">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/touch-rest-api-tests/lib/redisClient.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

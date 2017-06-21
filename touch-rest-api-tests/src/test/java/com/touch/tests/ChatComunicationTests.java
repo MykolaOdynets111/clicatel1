@@ -1,5 +1,10 @@
 package com.touch.tests;
 
+import com.clickatell.touch.RedisTestClient;
+import com.clickatell.touch.RedisTestService;
+import com.clickatell.touch.component.redis.RedisClient;
+import com.clickatell.touch.model.Agent;
+import com.clickatell.touch.model.Offer;
 import com.clickatell.touch.tbot.config.XmppClientConfigBean;
 import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.models.touch.analytics.ConversationCountStatsResponseV5;
@@ -13,6 +18,8 @@ import org.testng.annotations.Test;
 import tigase.jaxmpp.core.client.BareJID;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 public class ChatComunicationTests extends BaseTestClass {
     String tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id");
@@ -39,11 +46,22 @@ public class ChatComunicationTests extends BaseTestClass {
     }
 @Test
 public void createOfferAndConnectAgent(){
-    ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantId, clientJid, testClientId,"Android", accessToken).as(ChatRoomResponse.class);
-    xmppClient.connect();
-    BareJID room = BareJID.bareJIDInstance(chatRoom.getChatroomJid());
-    xmppClient.joinRoom(room.getLocalpart(), room.getDomain(), testClientId);
-    xmppClient.sendRoomMessage(room, "FAQs");
+//    ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantId, clientJid, testClientId,"Android", accessToken).as(ChatRoomResponse.class);
+//    xmppClient.connect();
+//    BareJID room = BareJID.bareJIDInstance(chatRoom.getChatroomJid());
+//    xmppClient.joinRoom(room.getLocalpart(), room.getDomain(), testClientId);
+//    xmppClient.sendRoomMessage(room, "FAQs");
+    RedisTestService t = RedisTestClient.createService("clickatell", "mc2_platform", "dev", new String []{"172.31.23.63:26379","172.31.25.124:26379","172.31.25.171:26379"});
+    Map<String, String> m = t.getMapOffers();
+    m.values().forEach(e -> {
+        System.out.printf(String.format("$$$$$$$$$$$$$ roster key %s", e));
+        List<Offer> offers = t.getActiveOffers4RosterByKeyName(e);
+    });
+    m.keySet().forEach(e -> {
+        System.out.printf(String.format("########## roster %s", e));
+        Map<String, Agent> agents = t.getMapAgents4Roster(e);
+    });
+
 
 }
 
