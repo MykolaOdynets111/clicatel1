@@ -91,21 +91,29 @@ public class ChatsTests extends BaseTestClass {
     public void terminateAllSessions() {
         String testClientId = "testClientId";
 //terminate not existing session
-        Assert.assertEquals(chatsActions.terminateAllSessions("testSession" + StringUtils.generateRandomString(10), chatToken).getStatusCode(), 500);
-        ChatRoomResponse chatRoom1 = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
-        generateMessageForChatRoom(chatRoom1, testClientId);
-        ChatSessionResponse session1 = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions().get(0);
-
-//        terminate existing session
-        Response response = chatsActions.terminateAllSessions(session1.getClientId(), chatToken);
+        Response response = chatsActions.terminateAllSessions("testSession" + StringUtils.generateRandomString(10), chatToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         List<ChatSessionResponse> terminatedChatSessions = response.as(ListChatSessionResponse.class).getChatSessions();
-        for (ChatSessionResponse chatSession : terminatedChatSessions) {
-            boolean isIdPresentInResponse = false;
-            Assert.assertTrue(isIdPresentInResponse);
-            Assert.assertEquals(chatSession.getState(), "TERMINATED");
-            Assert.assertTrue(chatSession.getEndedDate() != null);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(terminatedChatSessions.size(), 0);
+        ChatRoomResponse chatRoom1 = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        generateMessageForChatRoom(chatRoom1, testClientId);
+        List<ChatSessionResponse> allChatSessions = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions();
+        ChatSessionResponse activeChatSessionForTestClient = null;
+        for (ChatSessionResponse chatSessionResponse: allChatSessions){
+            if (chatSessionResponse.getState().equals("ACTIVE") && chatSessionResponse.getClientId().equals(testClientId) )
+                activeChatSessionForTestClient = chatSessionResponse;
         }
+
+//        terminate existing session
+        response = chatsActions.terminateAllSessions(activeChatSessionForTestClient.getClientId(), chatToken);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        terminatedChatSessions = response.as(ListChatSessionResponse.class).getChatSessions();
+
+        Assert.assertEquals(terminatedChatSessions.get(0).getId(), activeChatSessionForTestClient.getId());
+        Assert.assertEquals(terminatedChatSessions.get(0).getState(), "TERMINATED");
+        Assert.assertTrue(terminatedChatSessions.get(0).getEndedDate() != null);
+
     }
 
     @Test
