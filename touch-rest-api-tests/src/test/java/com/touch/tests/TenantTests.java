@@ -570,7 +570,7 @@ public class TenantTests extends BaseTestClass {
 
     }
     @Test(dataProvider = "updateConfig")
-    public void addConfigForTenant(String tenantId, int agentInTimeout, String primaryEmail, String cc, int statusCode) {
+    public void addConfigForTenant(String tenantId, int agentInTimeout, String primaryEmail, String cc, String mode, int statusCode) {
         if(tenantId.equals("correct"))
             tenantId=testTenant.getId();
         if(primaryEmail.equals("correct"))
@@ -582,6 +582,7 @@ public class TenantTests extends BaseTestClass {
         ccList.add(cc);
         tenantConfig.setCc(ccList);
         tenantConfig.setPrimaryEmail(primaryEmail);
+        tenantConfig.setMode(mode);
         tenantConfig.setTimezone("GMT+5:30");
         tenantConfig.setAgentInactivityTimeoutMaxSec(agentInTimeout);
         tenantConfig.setAgentInactivityTimeoutPreferredSec(100);
@@ -644,17 +645,20 @@ public class TenantTests extends BaseTestClass {
     @DataProvider
     private static Object[][] updateConfig() {
         return new Object[][]{
-                {"correct",30,"correct","correct", 200},
-                {"correct",9,"correct","correct", 200},
-                {"correct",10,"correct","correct", 200},
-                {"test",30,"correct","correct", 401},
-                {"11",30,"correct","correct", 401},
-                {"",30,"correct","correct", 400},
-                {"correct",30,"test","correct", 400},
-                {"correct",30,"correct","test", 400},
-                {"correct",30,"11","correct", 400},
-                {"correct",30,"correct","11", 400},
-                {"test",30,"test","test", 400}
+                {"correct",30,"correct","correct", "BOT", 200},
+                {"correct",30,"correct","correct", "AGENT", 200},
+                {"correct",9,"correct","correct", "BOT", 200},
+                {"correct",10,"correct","correct", "BOT", 200},
+                {"test",30,"correct","correct", "BOT", 401},
+                {"11",30,"correct","correct", "BOT", 401},
+                {"",30,"correct","correct", "BOT", 400},
+                {"correct",30,"test","correct", "BOT", 400},
+                {"correct",30,"correct","test", "BOT", 400},
+                {"correct",30,"11","correct", "BOT", 400},
+                {"correct",30,"correct","11", "BOT", 400},
+                {"test",30,"test","test", "BOT", 400},
+                {"test",30,"test","test", null, 400},
+                {"test",30,"test","test", StringUtils.generateRandomString(5), 400}
         };
     }
     @DataProvider

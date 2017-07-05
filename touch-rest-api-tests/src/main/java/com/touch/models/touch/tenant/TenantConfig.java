@@ -21,6 +21,8 @@ public class TenantConfig {
     private String userWaitingTimeMessage = null;
     private String primaryEmail = null;
     private String timezone = null;
+    private String availabilityWidget = null;
+        private String mode = null;
     private List<String> cc = new ArrayList<String>();
 
     public Integer getUserWaitingTimeOfferMsg() {
@@ -128,6 +130,19 @@ public class TenantConfig {
         this.primaryEmail = primaryEmail;
     }
 
+    public String getAvailabilityWidget() { return availabilityWidget; }
+
+    public void setAvailabilityWidget(String availabilityWidget) { this.availabilityWidget = availabilityWidget; }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+
     public List<String> getCc() {
         return cc;
     }
@@ -175,6 +190,8 @@ public class TenantConfig {
         result = 31 * result + (userWaitingTimeMessage != null ? userWaitingTimeMessage.hashCode() : 0);
         result = 31 * result + (primaryEmail != null ? primaryEmail.hashCode() : 0);
         result = 31 * result + (timezone != null ? timezone.hashCode() : 0);
+        result = 31 * result + (mode != null ? mode.hashCode() : 0);
+        result = 31 * result + (availabilityWidget != null ? availabilityWidget.hashCode() : 0);
         result = 31 * result + (cc != null ? cc.hashCode() : 0);
         return result;
     }
@@ -196,6 +213,8 @@ public class TenantConfig {
                 ", userWaitingTimeMessage=" + userWaitingTimeMessage +
                 ", primaryEmail='" + primaryEmail + '\'' +
                 ", timezone='" + timezone + '\'' +
+                ", mode='" + mode + '\'' +
+                ", availabilityWidget='" + availabilityWidget + '\'' +
                 ", cc=" + cc +
                 '}';
     }
