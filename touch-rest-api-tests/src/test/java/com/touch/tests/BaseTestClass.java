@@ -44,6 +44,7 @@ public class BaseTestClass {
     AnalyticsActions analyticsActions = new AnalyticsActions(requestEngine);
     AppConfigActions appConfigActions = new AppConfigActions(requestEngine);
     RosterActions rosterActions = new RosterActions(requestEngine);
+    InteranlActions interanlActions = new InteranlActions(requestEngine);
     public String token;
     public String testToken;
     public TenantResponseV5 testTenant;
@@ -56,7 +57,6 @@ public class BaseTestClass {
         testTenant = getTestTenant1();
         String refreshToken = authActions.getRefreshToken(testToken);
         accessTestToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-
 
     }
 

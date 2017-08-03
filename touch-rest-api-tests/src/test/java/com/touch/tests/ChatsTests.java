@@ -1,5 +1,6 @@
 package com.touch.tests;
 
+
 import com.clickatell.touch.tbot.config.XmppClientConfigBean;
 import com.clickatell.touch.tbot.xmpp.XmppClient;
 import com.touch.models.ErrorMessage;

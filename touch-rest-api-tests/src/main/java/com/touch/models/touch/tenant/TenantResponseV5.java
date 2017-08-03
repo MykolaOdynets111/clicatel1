@@ -87,6 +87,22 @@ public class TenantResponseV5 {
   @SerializedName("departments")
   private List<DepartmentResponse> departments = new ArrayList<DepartmentResponse>();
 
+  @SerializedName("tenantConfig")
+  private TenantResponseConfig tenantConfig = null;
+
+  /**
+   * Get tenantConfig
+   * @return tenantConfig
+   **/
+  @ApiModelProperty(example = "null", value = "")
+  public TenantResponseConfig getTenantConfig() {
+    return tenantConfig;
+  }
+
+  public void setTenantConfig(TenantResponseConfig tenantConfig) {
+    this.tenantConfig = tenantConfig;
+  }
+
   public TenantResponseV5 accountId(String accountId) {
     this.accountId = accountId;
     return this;

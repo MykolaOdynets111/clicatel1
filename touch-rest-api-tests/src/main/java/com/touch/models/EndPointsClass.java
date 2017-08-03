@@ -10,6 +10,8 @@ public class EndPointsClass {
 
 
     // TOUCH END POINTS
+    //internal endpoints
+    public final static String CHECK_SUPPORT_HOURS = "/internal/tenants/{tenantName}/check-support-hours";
     //Tenants endpoint
     public final static String TENANTS = ConfigApp.API_VERSION + "/tenants";
     public final static String TENANT = TENANTS + "/{tenantId}";
