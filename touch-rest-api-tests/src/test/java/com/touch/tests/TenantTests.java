@@ -570,7 +570,7 @@ public class TenantTests extends BaseTestClass {
 
     }
     @Test(dataProvider = "updateConfig")
-    public void addConfigForTenant(String tenantId, int agentInTimeout, String primaryEmail, String cc, String mode, int statusCode) {
+    public void addConfigForTenant(String tenantId, int agentInTimeout, String primaryEmail, String cc, String mode, String welcomeMessage,int statusCode) {
         if(tenantId.equals("correct"))
             tenantId=testTenant.getId();
         if(primaryEmail.equals("correct"))
@@ -594,12 +594,14 @@ public class TenantTests extends BaseTestClass {
         tenantConfig.setClientOfferTimeoutSec(100);
         tenantConfig.setTbotWaitClientTimeoutMin(100);
         tenantConfig.setShowSmCardTimeoutMin(100);
+        tenantConfig.setWelcomeMessage(welcomeMessage);
         Response response = tenantActions.updateConfig(tenantId, tenantConfig, testToken);
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if(statusCode==200){
             TenantConfig tenantConfigResponse = response.as(TenantConfig.class);
             Assert.assertTrue(tenantConfigResponse.getCc().contains(cc));
             Assert.assertEquals(tenantConfigResponse.getPrimaryEmail(),primaryEmail);
+            Assert.assertEquals(tenantConfigResponse.getWelcomeMessage(), welcomeMessage);
             Assert.assertTrue(tenantConfigResponse.getAgentInactivityTimeoutMaxSec()==agentInTimeout);
         }
 
@@ -645,20 +647,20 @@ public class TenantTests extends BaseTestClass {
     @DataProvider
     private static Object[][] updateConfig() {
         return new Object[][]{
-                {"correct",30,"correct","correct", "BOT", 200},
-                {"correct",30,"correct","correct", "AGENT", 200},
-                {"correct",9,"correct","correct", "BOT", 200},
-                {"correct",10,"correct","correct", "BOT", 200},
-                {"test",30,"correct","correct", "BOT", 401},
-                {"11",30,"correct","correct", "BOT", 401},
-                {"",30,"correct","correct", "BOT", 400},
-                {"correct",30,"test","correct", "BOT", 400},
-                {"correct",30,"correct","test", "BOT", 400},
-                {"correct",30,"11","correct", "BOT", 400},
-                {"correct",30,"correct","11", "BOT", 400},
-                {"test",30,"test","test", "BOT", 400},
-                {"test",30,"test","test", null, 400},
-                {"test",30,"test","test", StringUtils.generateRandomString(5), 400}
+                {"correct",30,"correct","correct", "BOT", StringUtils.generateRandomString(5),200},
+                {"correct",30,"correct","correct", "AGENT", StringUtils.generateRandomString(5),200},
+                {"correct",9,"correct","correct", "BOT", StringUtils.generateRandomString(5),200},
+                {"correct",10,"correct","correct", "BOT", StringUtils.generateRandomString(5),200},
+                {"test",30,"correct","correct", "BOT", StringUtils.generateRandomString(5),401},
+                {"11",30,"correct","correct", "BOT", StringUtils.generateRandomString(5),401},
+                {"",30,"correct","correct", "BOT", StringUtils.generateRandomString(5),400},
+                {"correct",30,"test","correct", "BOT", StringUtils.generateRandomString(5),400},
+                {"correct",30,"correct","test", "BOT", StringUtils.generateRandomString(5),400},
+                {"correct",30,"11","correct", "BOT", StringUtils.generateRandomString(5),400},
+                {"correct",30,"correct","11", "BOT", StringUtils.generateRandomString(5),400},
+                {"test",30,"test","test", "BOT", StringUtils.generateRandomString(5),400},
+                {"test",30,"test","test", null, StringUtils.generateRandomString(5),400},
+                {"test",30,"test","test", StringUtils.generateRandomString(5), StringUtils.generateRandomString(5),400}
         };
     }
     @DataProvider

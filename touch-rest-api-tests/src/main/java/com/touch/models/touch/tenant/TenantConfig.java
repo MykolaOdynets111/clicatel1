@@ -22,6 +22,7 @@ public class TenantConfig {
     private String primaryEmail = null;
     private String timezone = null;
     private String availabilityWidget = null;
+    private String welcomeMessage = null;
         private String mode = null;
     private List<String> cc = new ArrayList<String>();
 
@@ -161,6 +162,14 @@ public class TenantConfig {
         this.timezone = timezone;
     }
 
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -191,6 +200,7 @@ public class TenantConfig {
         result = 31 * result + (primaryEmail != null ? primaryEmail.hashCode() : 0);
         result = 31 * result + (timezone != null ? timezone.hashCode() : 0);
         result = 31 * result + (mode != null ? mode.hashCode() : 0);
+        result = 31 * result + (welcomeMessage != null ? welcomeMessage.hashCode() : 0);
         result = 31 * result + (availabilityWidget != null ? availabilityWidget.hashCode() : 0);
         result = 31 * result + (cc != null ? cc.hashCode() : 0);
         return result;
@@ -213,6 +223,7 @@ public class TenantConfig {
                 ", userWaitingTimeMessage=" + userWaitingTimeMessage +
                 ", primaryEmail='" + primaryEmail + '\'' +
                 ", timezone='" + timezone + '\'' +
+                ", welcomeMessage='" + welcomeMessage + '\'' +
                 ", mode='" + mode + '\'' +
                 ", availabilityWidget='" + availabilityWidget + '\'' +
                 ", cc=" + cc +
