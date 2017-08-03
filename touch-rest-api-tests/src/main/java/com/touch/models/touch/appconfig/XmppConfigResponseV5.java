@@ -30,6 +30,29 @@ public class XmppConfigResponseV5 {
   @SerializedName("boshConnectorPort")
   private Integer boshConnectorPort = null;
 
+  @SerializedName("wsConnectorPort")
+  private String wsConnectorPort = null;
+
+
+  public XmppConfigResponseV5 wsConnectorPort(String wsConnectorPort) {
+    this.wsConnectorPort = wsConnectorPort;
+    return this;
+  }
+
+  /**
+   * Get wsConnectorPort
+   * @return wsConnectorPort
+   **/
+  @ApiModelProperty(example = "null", value = "")
+  public String getWsConnectorPort() {
+    return wsConnectorPort;
+  }
+
+  public void setWsConnectorPort(String wsConnectorPort) {
+    this.wsConnectorPort = wsConnectorPort;
+  }
+
+
   public XmppConfigResponseV5 domain(String domain) {
     this.domain = domain;
     return this;
