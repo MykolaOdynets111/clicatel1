@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite data="Automation test" >
-    <test data="Regression testcases" >
+<suite name="Automation test" >
+    <test name="Regression testcases" >
         <classes>
-            <class data="com.touch.tests.AgentAndDepartmetTests"/>
-            <class data="com.touch.tests.AuthTockenTests"/>
-            <class data="com.touch.tests.CardsTests"/>
-            <class data="com.touch.tests.ChatsTests"/>
-            <class data="com.touch.tests.DepartmentsTests"/>
-            <class data="com.touch.tests.IntegrationTests"/>
-            <class data="com.touch.tests.TenantTests"/>
-            <class data="com.touch.tests.UserProfileTests"/>
-            <class data="com.touch.tests.IntegrationTestCasesWithMC2"/>
-            <class data="com.touch.tests.AnalyticsTests"/>
-            <class data="com.touch.tests.AppConfigTests"/>
-            <class data="com.touch.tests.BusinessBlpTests"/>
-            <class data="com.touch.tests.RosterTests"/>
+            <class name="com.touch.tests.AgentAndDepartmetTests"/>
+            <class name="com.touch.tests.AuthTockenTests"/>
+            <class name="com.touch.tests.CardsTests"/>
+            <class name="com.touch.tests.ChatsTests"/>
+            <class name="com.touch.tests.DepartmentsTests"/>
+            <class name="com.touch.tests.IntegrationTests"/>
+            <class name="com.touch.tests.TenantTests"/>
+            <class name="com.touch.tests.UserProfileTests"/>
+            <class name="com.touch.tests.IntegrationTestCasesWithMC2"/>
+            <class name="com.touch.tests.AnalyticsTests"/>
+            <class name="com.touch.tests.AppConfigTests"/>
+            <class name="com.touch.tests.BusinessBlpTests"/>
+            <class name="com.touch.tests.RosterTests"/>
         </classes>
     </test>
 </suite>

@@ -178,7 +178,7 @@
                             <skip>true</skip>
                             <properties>
                                 <property>
-                                    <data>listener</data>
+                                    <name>listener</name>
                                     <value>com.touch.utils.reporter.CustomReport</value>
                                 </property>
                             </properties>
@@ -215,7 +215,7 @@
                             <skip>true</skip>
                             <properties>
                                 <property>
-                                    <data>listener</data>
+                                    <name>listener</name>
                                     <value>com.touch.utils.reporter.CustomReport</value>
                                 </property>
                             </properties>
@@ -252,7 +252,7 @@
                             <skip>true</skip>
                             <properties>
                                 <property>
-                                    <data>listener</data>
+                                    <name>listener</name>
                                     <value>com.touch.utils.reporter.CustomReport</value>
                                 </property>
                             </properties>
