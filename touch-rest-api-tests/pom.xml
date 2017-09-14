@@ -203,7 +203,6 @@
                 </plugins>
             </build>
         </profile>
-    <profiles>
         <profile>
             <id>IntegrationSuits</id>
             <build>
@@ -279,5 +278,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
