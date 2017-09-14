@@ -106,13 +106,63 @@
         </dependency>
         <dependency>
             <groupId>rocks.xmpp</groupId>
+            <artifactId>xmpp-core</artifactId>
+            <version>0.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>rocks.xmpp</groupId>
             <artifactId>xmpp-core-client</artifactId>
-            <version>0.7.1</version>
+            <version>0.7.4</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>rocks.xmpp</groupId>-->
+            <!--<artifactId>xmpp-debug</artifactId>-->
+            <!--<version>0.7.4</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>rocks.xmpp</groupId>
+            <artifactId>xmpp-extensions</artifactId>
+            <version>0.7.4</version>
         </dependency>
         <dependency>
             <groupId>rocks.xmpp</groupId>
             <artifactId>xmpp-extensions-client</artifactId>
-            <version>0.7.1</version>
+            <version>0.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.igniterealtime.smack</groupId>
+            <artifactId>smack-java7</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.igniterealtime.smack</groupId>
+            <artifactId>smack-tcp</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.igniterealtime.smack</groupId>
+            <artifactId>smack-im</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.igniterealtime.smack</groupId>
+            <artifactId>smack-extensions</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.3</version>
         </dependency>
     </dependencies>
     <profiles>
@@ -128,12 +178,50 @@
                             <skip>true</skip>
                             <properties>
                                 <property>
-                                    <name>listener</name>
+                                    <data>listener</data>
                                     <value>com.touch.utils.reporter.CustomReport</value>
                                 </property>
                             </properties>
                             <suiteXmlFiles>
                                 <suiteXmlFile>DevSuits.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>touch-rest-api-tests</id>
+                                <configuration>
+                                    <parallel>false</parallel>
+                                    <skip>false</skip>
+                                </configuration>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>integration-test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    <profiles>
+        <profile>
+            <id>IntegrationSuits</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.19.1</version>
+                        <configuration>
+                            <skip>true</skip>
+                            <properties>
+                                <property>
+                                    <data>listener</data>
+                                    <value>com.touch.utils.reporter.CustomReport</value>
+                                </property>
+                            </properties>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>IntegrationSuits.xml</suiteXmlFile>
                             </suiteXmlFiles>
                         </configuration>
                         <executions>
@@ -165,10 +253,9 @@
                             <skip>true</skip>
                             <properties>
                                 <property>
-                                    <name>listener</name>
+                                    <data>listener</data>
                                     <value>com.touch.utils.reporter.CustomReport</value>
                                 </property>
-
                             </properties>
                             <suiteXmlFiles>
                                 <suiteXmlFile>AllTestSuits.xml</suiteXmlFile>
@@ -180,7 +267,6 @@
                                 <configuration>
                                     <parallel>false</parallel>
                                     <skip>false</skip>
-
                                 </configuration>
                                 <goals>
                                     <goal>test</goal>

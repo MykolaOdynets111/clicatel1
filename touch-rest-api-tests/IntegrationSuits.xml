@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite data="Automation test" >
+    <test data="Regression testcases" >
+        <classes>
+            <class data="com.touch.tests.ChatComunicationTests"/>
+        </classes>
+    </test>
+</suite>

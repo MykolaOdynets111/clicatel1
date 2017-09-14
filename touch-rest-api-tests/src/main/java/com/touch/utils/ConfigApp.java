@@ -40,6 +40,12 @@ public class ConfigApp {
                 break;
             }
 
+            case "qa": {
+                BASE_API_URL = String.format(BASE_URL_PATTERN, "qa");
+                TestingEnvProperties.setPropertiesFile("qa.properties");
+                break;
+            }
+
 
             default: {
                 System.out.println("Please set 'tests.env' variable!\nPossible values are:\ndev");
