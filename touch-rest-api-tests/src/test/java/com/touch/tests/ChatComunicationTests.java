@@ -1,17 +1,16 @@
 package com.touch.tests;
 
-//import com.clickatell.touch.component.redis.RedisClient;
-//import com.clickatell.touch.tbot.config.XmppClientConfigBean;
-//import com.clickatell.touch.tbot.xmpp.XmppClient;
+
 import com.touch.models.touch.auth.AccessTokenRequest;
 import com.touch.models.touch.chats.ChatRoomResponse;
+import com.touch.tests.cdatamodels.inputcard.InputCardModel;
 import com.touch.tests.cdatamodels.navigationcard.NavigationCardModel;
 import com.touch.tests.extensions.SubmitPerosnalDataCard;
 import com.touch.tests.extensions.Tcard;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 
-        import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.SmackException;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -19,16 +18,15 @@ import org.testng.annotations.Test;
 
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
-        import rocks.xmpp.core.session.XmppClient;
+import rocks.xmpp.core.session.XmppClient;
 
 import rocks.xmpp.core.stanza.model.Message;
 import tigase.jaxmpp.core.client.BareJID;
-//import tigase.jaxmpp.core.client.BareJID;
-//import tigase.jaxmpp.core.client.exceptions.JaxmppException;
 
 
-        import java.io.IOException;
-        import java.net.UnknownHostException;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 public class ChatComunicationTests extends BaseTestClass {
     String tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id");
@@ -38,26 +36,8 @@ public class ChatComunicationTests extends BaseTestClass {
     String testClientId = "testclient" + StringUtils.generateRandomString(4);
     String clientJid = testClientId + "@clickatelllabs.com";
 
-//    String testClientId ="agent-68a22444-02f0-4df8-7000-da0e8269a1f6-ff80808157b899ad0157b89c6b1e0004";
-//    String testClientId ="agent-ff80808157b899ad0157b89c6b1e0004";
 
-
-    @BeforeTest
-    public void beforeClass() {
-//        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
-//        XmppClientConfigBean xmppClientConfigBean = new XmppClientConfigBean();
-//        xmppClientConfigBean.setHost(TestingEnvProperties.getPropertyByName("xmpp.host"));
-//        xmppClientConfigBean.setPort(5222);
-//        xmppClientConfigBean.setReconnectInterval(30000);
-//        xmppClientConfigBean.setConnectRetryCount(10);
-//        xmppClientConfigBean.setConnectRetrySleepTimeMs(2000);
-//        xmppClientConfigBean.setXmppDomain(TestingEnvProperties.getPropertyByName("xmpp.domain"));
-//        xmppClient = new XmppClient(xmppClientConfigBean, clientJid, null, null);
-//        String refreshToken = authActions.getRefreshToken(chatToken);
-//        accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-    }
-
-//    @Test
+    //    @Test
     public void createOfferAndConnectAgent() throws UnknownHostException, InterruptedException, XmppException {
 
         XMPPClientAgent xmppClientAgent = new XMPPClientAgent();
@@ -76,34 +56,33 @@ public class ChatComunicationTests extends BaseTestClass {
         ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
         BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
 
+        XMPPClientAgent xmppClientAgent = new XMPPClientAgent();
+
+
         XMPPClient xmppClientWebWidget = new XMPPClient(testClientId, room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage());
-//        Thread.sleep(5000);
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard);
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
         xmppClientWebWidget.sendMessage("Chat to Support");
         Tcard inputCard = xmppClientWebWidget.getInputCard();
         Assert.assertNotNull(inputCard);
+        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
         Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
         message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-//        message.addExtension(new SubmitPerosnalDataCard(inputCard.g,
-//                "input-card",
-//                "card_3",
-//                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-//        message.setBody("Submitted data:\n" +
-//                "test\n" +
-//                "test\n" +
-//                "test@test.com\n" +
-//                "1234\n" +
-//                "test");
-//        xmppClientWebWidget.sendMessage(message);
-
-
-        Thread.sleep(20000);
+        message.addExtension(new SubmitPerosnalDataCard(inputCardModel.getAction(),
+                inputCard.getTcardName(),
+                "card_3",
+                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
+        message.setBody("Submitted data:\n" +
+                "test\n" +
+                "test\n" +
+                "test@test.com\n" +
+                "1234\n" +
+                "test");
+        xmppClientWebWidget.sendMessage(message);
 
         xmppClientWebWidget.sendMessage("hello2");
-
 
     }
 
@@ -142,28 +121,6 @@ public class ChatComunicationTests extends BaseTestClass {
 //        ConversationTimeStatsResponseV5 conversationTimeAfter = analyticsActions.getConversationTime(tenantId, year, month, day, chatToken).as(ConversationTimeStatsResponseV5.class);
 //        Assert.assertTrue(conversationCountAfter.getTotalConversationCount()>conversationCountBefore.getTotalConversationCount());
 //        Assert.assertTrue(conversationTimeAfter.getTotalBotConversationTimeMs()>conversationTimeBefore.getTotalBotConversationTimeMs());
-//
-//    }
-
-//    @Test
-//    public void smackXMPPClientTest() throws InterruptedException, SmackException.NotConnectedException {
-//        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
-//        String refreshToken = authActions.getRefreshToken(chatToken);
-//        accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-//        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
-//        BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
-//        SmackXMPPClient smackXMPPClient = null;
-//        try {
-//            smackXMPPClient = new SmackXMPPClient(testClientId, chatRoomResponse.getChatroomJid());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-////        Assert.assertTrue(smackXMPPClient.waitForGreetingMessage());
-//        Thread.sleep(5000);
-//        smackXMPPClient.sendMessage("Chat to Support");
-//        Thread.sleep(10000);
-//
 //
 //    }
 

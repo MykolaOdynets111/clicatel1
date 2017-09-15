@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by oshcherbatyy on 06-09-17.
  */
-public class XMPPClientAgent implements Runnable{
+public class XMPPClientAgent {
 
     private TcpConnectionConfiguration tcpConfiguration;
     private XmppClient xmppClient;
@@ -129,7 +129,6 @@ public class XMPPClientAgent implements Runnable{
         chatRoom = chatService.createRoom(Jid.of(roomJid).getLocal());
         chatRoom.enter("agent-" + StringUtils.generateRandomString(5));
         chatRoom.sendMessage("Hello client");
-        listen = true;
     }
 
     public boolean waitForGreetingMessage() throws InterruptedException {
@@ -153,16 +152,6 @@ public class XMPPClientAgent implements Runnable{
         chatRoom.sendMessage(message);
     }
 
-    public void shutdown(){
-        listen = false;
-    }
-
-    public void run(){
-        int messagesListSize = 0;
-        while (listen){
-
-        }
-    }
 
     public static void main(String[] args) {
 
