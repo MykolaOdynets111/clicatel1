@@ -81,9 +81,11 @@ public class ChatComunicationTests extends BaseTestClass {
                 "1234\n" +
                 "test");
         xmppClientWebWidget.sendMessage(message);
-
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+        xmppClientWebWidget.waitForAgentConnectedMesasge();
+//        xmppClientAgent.waitForAgentConnectedMesasge();
+        xmppClientAgent.sendMessage("Hi, how can I help You");
         xmppClientWebWidget.sendMessage("hello2");
-
     }
 
     //according TPLAT-433

@@ -60,11 +60,11 @@ public class XMPPClientAgent {
         xmppClient.addInboundMessageListener(e -> {
             Message message = e.getMessage();
             messages.add(message);
-                System.out.println("#################################################");
+            if (message.getBody() != null) {
+                System.out.println("##############START RECEIVE MESSAGE AGENT###################");
                 System.out.println(message.getBody());
-                System.out.println(message.toString());
-                System.out.println("######################################################");
-
+                System.out.println("##############END RECEIVE MESSAGE AGENT#####################");
+            }
         });
 
         xmppClient.addIQHandler(OfferGeneral.class, new IQHandler() {
@@ -128,13 +128,13 @@ public class XMPPClientAgent {
         chatService = chatServices.get(0);
         chatRoom = chatService.createRoom(Jid.of(roomJid).getLocal());
         chatRoom.enter("agent-" + StringUtils.generateRandomString(5));
-        chatRoom.sendMessage("Hello client");
+//        chatRoom.sendMessage("Hello client");
     }
 
-    public boolean waitForGreetingMessage() throws InterruptedException {
+    public boolean waitForAgentConnectedMesasge() throws InterruptedException {
         for (int i=0; i<=9; i++){
             for (Message message: messages){
-                if (message.getBody().contains("Hi there, welcome to Clickatell. How can we help you today?")){
+                if (message.getBody().contains("Agent  successfully joined!")){
                     return true;
                 }
 

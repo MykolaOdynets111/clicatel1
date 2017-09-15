@@ -50,15 +50,16 @@ public class XMPPClient {
         xmppClient.addInboundMessageListener(e -> {
             Message message = e.getMessage();
             messages.add(message);
-            if (message.hasExtension(Tcard.class)) {
-                Tcard tcard = message.getExtension(Tcard.class);
-                System.out.println("#################################################");
-                System.out.println(tcard.getData());
-            }
-                System.out.println("#################################################");
+//            if (message.hasExtension(Tcard.class)) {
+//                Tcard tcard = message.getExtension(Tcard.class);
+//                System.out.println("#################################################");
+//                System.out.println(tcard.getData());
+//            }
+            if (message.getBody() != null) {
+                System.out.println("##############START RECEIVE MESSAGE CLIENT###################");
                 System.out.println(message.getBody());
-                System.out.println(message.toString());
-                System.out.println("######################################################");
+                System.out.println("##############END RECEIVE MESSAGE CLIENT######################");
+            }
 
         });
         try {
@@ -92,6 +93,33 @@ public class XMPPClient {
         }
         return false;
     }
+
+    public boolean waitForConnectinAgentMessage() throws InterruptedException {
+        for (int i=0; i<=9; i++){
+            for (Message message: messages){
+                if (message.getBody().contains("let me connect you with one of our agents")){
+                    return true;
+                }
+
+            }
+            Thread.sleep(1000);
+        }
+        return false;
+    }
+
+    public boolean waitForAgentConnectedMesasge() throws InterruptedException {
+        for (int i=0; i<=9; i++){
+            for (Message message: messages){
+                if (message.getBody().contains("Agent  successfully joined!")){
+                    return true;
+                }
+
+            }
+            Thread.sleep(1000);
+        }
+        return false;
+    }
+
 
     public Tcard getNavigationCard() throws InterruptedException {
         for (int i=0; i<=9; i++){
