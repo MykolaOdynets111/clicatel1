@@ -14,6 +14,7 @@ public class TenantConfig {
     private Integer agentInactivityTimeoutWarnSec = null;
     private Integer agentWaitClientTimeoutMin = null;
     private Integer tbotWaitClientTimeoutMin = null;
+    private Integer welcomeMessageTimer = null;
     private Integer showSmCardTimeoutMin = null;
     private String attachmentManager = null;
     private Integer agentOfferTimeoutSec = null;
@@ -25,6 +26,14 @@ public class TenantConfig {
     private String welcomeMessage = null;
         private String mode = null;
     private List<String> cc = new ArrayList<String>();
+
+    public Integer getWelcomeMessageTimer() {
+        return welcomeMessageTimer;
+    }
+
+    public void setWelcomeMessageTimer(Integer welcomeMessageTimer) {
+        this.welcomeMessageTimer = welcomeMessageTimer;
+    }
 
     public Integer getUserWaitingTimeOfferMsg() {
         return userWaitingTimeOfferMsg;
