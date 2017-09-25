@@ -11,16 +11,17 @@ import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
-import rocks.xmpp.core.session.XmppClient;
 
 import rocks.xmpp.core.stanza.model.Message;
 import tigase.jaxmpp.core.client.BareJID;
-
 
 
 import java.io.IOException;
@@ -29,29 +30,49 @@ public class ChatComunicationTests extends BaseTestClass {
     String tenantId = TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id");
     String chatToken;
     String accessToken;
-    String testClientId = "testclient" + StringUtils.generateRandomString(4);
-    String clientJid = testClientId + "@clickatelllabs.com";
+    String clientId = "testclient" + StringUtils.generateRandomString(4);
+    String clientJid = clientId + "@clickatelllabs.com";
+    BareJID room;
+    ChatRoomResponse chatRoomResponse;
+    XMPPAgent xmppAgent;
+    XMPPClient xmppClientWebWidget;
+
+
+    @BeforeClass
+    public void beforeClass(){
+        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
+        String refreshToken = authActions.getRefreshToken(chatToken);
+        accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
+    }
+
+
+
+
+    @BeforeMethod
+    public void beforeMethod(){
+        clientId = "testclient" + StringUtils.generateRandomString(4);
+        clientJid = clientId + "@clickatelllabs.com";
+        chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", accessToken).as(ChatRoomResponse.class);
+        room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
+        xmppAgent = new XMPPAgent(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.agent.xmpp.login"),
+                TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.agent.xmpp.password"));
+        xmppClientWebWidget = new XMPPClient(clientId);
+
+    }
 
 
     @Test
     public void createOfferAndConnectAgent() throws IOException, InterruptedException, XmppException {
+        xmppAgent.connect();
 
-        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
-        String refreshToken = authActions.getRefreshToken(chatToken);
-        accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
-        BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
-
-        XMPPAgent xmppAgent = new XMPPAgent();
-
-
-        XMPPClient xmppClientWebWidget = new XMPPClient();
         xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(testClientId, room.getLocalpart());
-        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage());
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
-        Assert.assertNotNull(navigationCard);
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+
         xmppClientWebWidget.sendMessage("Chat to Support");
         Tcard inputCard = xmppClientWebWidget.getInputCard();
         Assert.assertNotNull(inputCard);
@@ -75,7 +96,9 @@ public class ChatComunicationTests extends BaseTestClass {
         xmppAgent.joinRoom();
         xmppClientWebWidget.waitForAgentConnectedMesasge();
         xmppAgent.sendMessage("Hi, how can I help You");
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"));
         xmppClientWebWidget.sendMessage("hello2");
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"));
     }
 
 
@@ -85,15 +108,15 @@ public class ChatComunicationTests extends BaseTestClass {
         chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
         String refreshToken = authActions.getRefreshToken(chatToken);
         accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", accessToken).as(ChatRoomResponse.class);
         BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
 
-        XMPPAgent xmppAgent = new XMPPAgent();
+//        XMPPAgent xmppAgent = new XMPPAgent();
 
 
-        XMPPClient xmppClientWebWidget = new XMPPClient();
+        XMPPClient xmppClientWebWidget = new XMPPClient(clientId);
         xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(testClientId, room.getLocalpart());
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage());
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard);
@@ -117,11 +140,11 @@ public class ChatComunicationTests extends BaseTestClass {
         chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
         String refreshToken = authActions.getRefreshToken(chatToken);
         accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", accessToken).as(ChatRoomResponse.class);
         BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
-        XMPPClient xmppClientWebWidget = new XMPPClient();
+        XMPPClient xmppClientWebWidget = new XMPPClient(clientId);
         xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(testClientId, room.getLocalpart());
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Greeting message was not received by client");
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard);
@@ -147,6 +170,13 @@ public class ChatComunicationTests extends BaseTestClass {
         xmppClientWebWidget.leaveRoom();
         xmppClientWebWidget.joinRoom();
         Thread.sleep(10000);
+    }
+
+    @AfterMethod
+    public void afterMethod() throws InterruptedException {
+        xmppClientWebWidget.restartFlow();
+        xmppClientWebWidget.getInputCard();
+        xmppAgent.leaveRoom();
     }
 
     //according TPLAT-433

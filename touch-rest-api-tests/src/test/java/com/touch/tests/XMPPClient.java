@@ -2,21 +2,18 @@ package com.touch.tests;
 
 import com.touch.tests.extensions.Tcard;
 import com.touch.tests.extensions.SubmitPerosnalDataCard;
-import com.touch.tests.xmppdebugger.ConsoleXmppLogger;
+import com.touch.tests.xmppdebugger.ClentConsoleXmppLogger;
 import com.touch.utils.TestingEnvProperties;
 import org.slf4j.LoggerFactory;
-import org.testng.log4testng.Logger;
 import rocks.xmpp.core.XmppException;
 import rocks.xmpp.core.session.Extension;
 import rocks.xmpp.core.session.TcpConnectionConfiguration;
 import rocks.xmpp.core.session.XmppClient;
 import rocks.xmpp.core.session.XmppSessionConfiguration;
-import rocks.xmpp.core.session.debug.ConsoleDebugger;
 import rocks.xmpp.core.stanza.model.Message;
 import rocks.xmpp.extensions.muc.ChatRoom;
 import rocks.xmpp.extensions.muc.ChatService;
 import rocks.xmpp.extensions.muc.MultiUserChatManager;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +37,16 @@ public class XMPPClient {
     private String xmppHost;
     private String xmppDomain;
 
-    public XMPPClient(){
+    public XMPPClient(String clientId){
         xmppHost = TestingEnvProperties.getPropertyByName("xmpp.host");
         xmppDomain = TestingEnvProperties.getPropertyByName("xmpp.domain");
         LOG.info("Creating XMPP client");
         LOG.info("XMPP client host = " + xmppHost);
         LOG.info("XMPP client domain = " + xmppDomain);
+
+        this.clientId = clientId;
+        LOG.info("Client room nick name = " + clientId);
+
         tcpConfiguration = TcpConnectionConfiguration.builder()
                 .hostname(xmppHost)
                 .port(5222)
@@ -53,7 +54,7 @@ public class XMPPClient {
 
         xmppSessionConfiguration = XmppSessionConfiguration.builder()
                 .extensions(Extension.of(Tcard.class), Extension.of(SubmitPerosnalDataCard.class))
-                .debugger(ConsoleXmppLogger.class)
+                .debugger(ClentConsoleXmppLogger.class)
                 .build();
 
         xmppClient = XmppClient.create(xmppDomain, xmppSessionConfiguration, tcpConfiguration);
@@ -62,7 +63,7 @@ public class XMPPClient {
         xmppClient.addInboundMessageListener(e -> {
             Message message = e.getMessage();
             messages.add(message);
-            if (message.getBody() != "") {
+            if ((message.getBody() != "") & !message.getFrom().getResource().equals(clientId)) {
                 LOG.info("Client received message :" + message.getBody());
             }
 
@@ -73,16 +74,16 @@ public class XMPPClient {
 
     public void connect(){
         try {
-            LOG.info("Client atemptrs to log in to xmpp server");
+            LOG.info("Client " +  clientId + "connects to xmpp server");
             xmppClient.connect();
             xmppClient.loginAnonymously();
         } catch (XmppException e) {
-            LOG.error("Client failed to login to xmpp server");
+            LOG.error("Client failed to connect to xmpp server");
             e.printStackTrace();
         }
     }
 
-    public void joinRoom(String clientId, String roomJidLocalPart){
+    public void joinRoom(String roomJidLocalPart){
         multiUserChatManager = xmppClient.getManager(MultiUserChatManager.class);
         List<ChatService> chatServices = null;
         try {
@@ -92,7 +93,6 @@ public class XMPPClient {
         }
         chatService = chatServices.get(0);
         chatRoom = chatService.createRoom(roomJidLocalPart);
-        this.clientId = clientId;
         this.roomJidLocalPart = roomJidLocalPart;
         LOG.info("Client: " + clientId + " joins room roomJid = " + roomJidLocalPart);
         chatRoom.enter(clientId);
@@ -113,8 +113,12 @@ public class XMPPClient {
     }
 
     public void leaveRoom(){
-        LOG.info("Client: " + clientId + " joins room roomJid = " + roomJidLocalPart);
+        LOG.info("Client: " + clientId + " leaves room roomJid = " + roomJidLocalPart);
         chatRoom.exit();
+    }
+
+    public void restartFlow(){
+        chatRoom.sendMessage("/flow:restart");
     }
 
 
@@ -158,6 +162,23 @@ public class XMPPClient {
         return false;
     }
 
+    public boolean waitForMessage(String messageText) throws InterruptedException {
+        for (int i=0; i<=9; i++){
+            for (Message message: messages){
+                if (message.getBody().contains(messageText)){
+                    return true;
+                }
+
+            }
+            Thread.sleep(1000);
+        }
+        return false;
+    }
+
+    public void cleanMessagesStorage(){
+        messages.clear();
+    }
+
 
     public Tcard getNavigationCard() throws InterruptedException {
         for (int i=0; i<=9; i++){
@@ -172,6 +193,8 @@ public class XMPPClient {
         }
         return null;
     }
+
+
 
     public Tcard getInputCard() throws InterruptedException {
         for (int i=0; i<=9; i++){

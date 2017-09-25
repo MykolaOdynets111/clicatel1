@@ -1,10 +1,9 @@
 package com.touch.tests;
 
 import com.touch.tests.extensions.*;
-import com.touch.tests.xmppdebugger.ConsoleXmppLogger;
+import com.touch.tests.xmppdebugger.AgentConsoleXmppLogger;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
-import com.touch.utils.reporter.CustomReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rocks.xmpp.addr.Jid;
@@ -13,7 +12,6 @@ import rocks.xmpp.core.session.Extension;
 import rocks.xmpp.core.session.TcpConnectionConfiguration;
 import rocks.xmpp.core.session.XmppClient;
 import rocks.xmpp.core.session.XmppSessionConfiguration;
-import rocks.xmpp.core.session.debug.ConsoleDebugger;
 import rocks.xmpp.core.stanza.IQHandler;
 import rocks.xmpp.core.stanza.model.IQ;
 import rocks.xmpp.core.stanza.model.Message;
@@ -21,7 +19,6 @@ import rocks.xmpp.core.stanza.model.Presence;
 import rocks.xmpp.extensions.muc.ChatRoom;
 import rocks.xmpp.extensions.muc.ChatService;
 import rocks.xmpp.extensions.muc.MultiUserChatManager;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,22 +36,30 @@ public class XMPPAgent {
     private MultiUserChatManager multiUserChatManager;
     private ChatService chatService;
     private ChatRoom chatRoom;
-    private boolean listen;
-    private boolean newMessages;
     private XmppSessionConfiguration xmppSessionConfiguration;
     private OfferGeneral offerProposal;
-    private OfferAccepted offerAccepted;
     private IQ offerProposalIQ;
     private boolean offerReceived = false;
     private String xmppHost;
     private String xmppDomain;
+    private String agentId;
+    private String agentLogin;
+    private String agentPassword;
+    private String roomJid;
+    private String roomJidLocalPart;
 
-    public XMPPAgent(){
+    public XMPPAgent(String agentLogin, String agentPassword){
+        this.agentLogin = agentLogin;
+        this.agentPassword = agentPassword;
+
         xmppHost = TestingEnvProperties.getPropertyByName("xmpp.host");
         xmppDomain = TestingEnvProperties.getPropertyByName("xmpp.domain");
-        LOG.info("Creating XMPP client");
+        LOG.info("Creating Agent's XMPP client");
         LOG.info("XMPP client host = " + xmppHost);
         LOG.info("XMPP client domain = " + xmppDomain);
+
+        agentId = "agent-" + StringUtils.generateRandomString(5);
+        LOG.info("Agent room nick name = " + agentId);
 
         tcpConfiguration = TcpConnectionConfiguration.builder()
                 .hostname(xmppHost)
@@ -66,7 +71,7 @@ public class XMPPAgent {
                 .extensions(Extension.of(AgentStatus.class))
                 .extensions(Extension.of(OfferGeneral.class))
                 .extensions(Extension.of(OfferAccept.class))
-                .debugger(ConsoleXmppLogger.class)
+                .debugger(AgentConsoleXmppLogger.class)
                 .build();
 
         xmppClient = XmppClient.create(xmppDomain, xmppSessionConfiguration, tcpConfiguration);
@@ -75,8 +80,8 @@ public class XMPPAgent {
         xmppClient.addInboundMessageListener(e -> {
             Message message = e.getMessage();
             messages.add(message);
-            if (message.getBody() != "") {
-                LOG.info("Agent receeived incoming message: " + message.getBody());
+            if ((message.getBody() != "") & !message.getFrom().getResource().equals(agentId)) {
+                LOG.info("Agent received incoming message: " + message.getBody());
             }
         });
 
@@ -96,28 +101,35 @@ public class XMPPAgent {
             }
         });
 
+    }
 
+    public void connect(){
         try {
+            LOG.info("Agent " +  agentId + "connects to xmpp server");
             xmppClient.connect();
-            xmppClient.login("ff8080815e5607e3015e577ec72f0005", "yl6*709p$zp_d!h6t*2!ns/6!9z-778/=7m72r#z9*s*#x9t4/b#r*53b+i@+/81");
+            xmppClient.login(agentLogin, agentPassword);
             List<AgentStatus> extensions = new ArrayList<AgentStatus>();
             extensions.add(new AgentStatus("5") );
             xmppClient.sendPresence( new Presence(Jid.of("clickatell@department.clickatelllabs.com"),
-                    null,
-                    Presence.Show.CHAT,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    extensions,
-                    null
+                            null,
+                            Presence.Show.CHAT,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            extensions,
+                            null
                     )
             );
         } catch (XmppException e) {
             e.printStackTrace();
         }
+    }
 
+    public void leaveRoom(){
+        LOG.info("Agent: " + agentId + " leaves room roomJid = " + roomJidLocalPart);
+        chatRoom.exit();
     }
 
     public boolean waitForOffer() throws InterruptedException {
@@ -143,8 +155,8 @@ public class XMPPAgent {
     }
 
     public void joinRoom(){
-        String roomJid = offerProposal.getRoom();
-        String roomJidLocalPart = Jid.of(roomJid).getLocal();
+        roomJid = offerProposal.getRoom();
+        roomJidLocalPart = Jid.of(roomJid).getLocal();
         LOG.info("Agent joins roomJid: " + roomJidLocalPart);
         multiUserChatManager = xmppClient.getManager(MultiUserChatManager.class);
         List<ChatService> chatServices = null;
@@ -156,13 +168,27 @@ public class XMPPAgent {
         }
         chatService = chatServices.get(0);
         chatRoom = chatService.createRoom(roomJidLocalPart);
-        String agentNick = "agent-" + StringUtils.generateRandomString(5);
-        LOG.info("Agent - " + agentNick + "joins MUC roomJid: " + roomJidLocalPart);
-        chatRoom.enter(agentNick);
+        LOG.info("Agent - " + agentId + "joins MUC roomJid: " + roomJidLocalPart);
+        chatRoom.enter(agentId);
     }
 
 
+    public boolean waitForMessage(String messageText) throws InterruptedException {
+        for (int i=0; i<=9; i++){
+            for (Message message: messages){
+                if (message.getBody().contains(messageText)){
+                    return true;
+                }
 
+            }
+            Thread.sleep(1000);
+        }
+        return false;
+    }
+
+    public void cleanMessagesStorage(){
+        messages.clear();
+    }
 
 
     public boolean waitForAgentConnectedMesasge() throws InterruptedException {
