@@ -277,5 +277,42 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>NightlySuits</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.19.1</version>
+                        <configuration>
+                            <skip>true</skip>
+                            <properties>
+                                <property>
+                                    <name>listener</name>
+                                    <value>com.touch.utils.reporter.CustomReport</value>
+                                </property>
+                            </properties>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>NightlySuite.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>touch-rest-api-tests</id>
+                                <configuration>
+                                    <parallel>false</parallel>
+                                    <skip>false</skip>
+                                </configuration>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>integration-test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
