@@ -1,9 +1,11 @@
 package com.touch.tests;
 
+import com.touch.tests.extensions.TButtonItemSubmit;
 import com.touch.tests.extensions.Tcard;
-import com.touch.tests.extensions.SubmitPerosnalDataCard;
+import com.touch.tests.extensions.TcardSubmit;
 import com.touch.tests.xmppdebugger.ClentConsoleXmppLogger;
 import com.touch.utils.TestingEnvProperties;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.LoggerFactory;
 import rocks.xmpp.core.XmppException;
 import rocks.xmpp.core.session.Extension;
@@ -37,7 +39,7 @@ public class XMPPClient {
     private String xmppHost;
     private String xmppDomain;
 
-    public XMPPClient(String clientId){
+    public XMPPClient(String clientId) {
         xmppHost = TestingEnvProperties.getPropertyByName("xmpp.host");
         xmppDomain = TestingEnvProperties.getPropertyByName("xmpp.domain");
         LOG.info("Creating XMPP client");
@@ -53,7 +55,7 @@ public class XMPPClient {
                 .build();
 
         xmppSessionConfiguration = XmppSessionConfiguration.builder()
-                .extensions(Extension.of(Tcard.class), Extension.of(SubmitPerosnalDataCard.class))
+                .extensions(Extension.of(Tcard.class), Extension.of(TcardSubmit.class), Extension.of(TButtonItemSubmit.class))
                 .debugger(ClentConsoleXmppLogger.class)
                 .build();
 
@@ -72,18 +74,23 @@ public class XMPPClient {
 
     }
 
-    public void connect(){
-        try {
-            LOG.info("Client " +  clientId + "connects to xmpp server");
-            xmppClient.connect();
-            xmppClient.loginAnonymously();
-        } catch (XmppException e) {
-            LOG.error("Client failed to connect to xmpp server");
-            e.printStackTrace();
+    public void connect() throws InterruptedException {
+        for (int i = 0; i <= 2; i++) {
+            try {
+                LOG.info("Client " + clientId + "connects to xmpp server");
+                xmppClient.connect();
+                xmppClient.loginAnonymously();
+                return;
+            } catch (XmppException e) {
+                LOG.error("Client failed to connect to xmpp server, retrying");
+            }
+            Thread.sleep(100);
         }
+        LOG.error("Client failed to connect to xmpp server for 3 times");
+
     }
 
-    public void joinRoom(String roomJidLocalPart){
+    public void joinRoom(String roomJidLocalPart) {
         multiUserChatManager = xmppClient.getManager(MultiUserChatManager.class);
         List<ChatService> chatServices = null;
         try {
@@ -98,7 +105,7 @@ public class XMPPClient {
         chatRoom.enter(clientId);
     }
 
-    public void joinRoom(){
+    public void joinRoom() {
         multiUserChatManager = xmppClient.getManager(MultiUserChatManager.class);
         List<ChatService> chatServices = null;
         try {
@@ -112,21 +119,22 @@ public class XMPPClient {
         chatRoom.enter(clientId);
     }
 
-    public void leaveRoom(){
+    public void leaveRoom() {
+        //clear messages history
+        messages.clear();
         LOG.info("Client: " + clientId + " leaves room roomJid = " + roomJidLocalPart);
         chatRoom.exit();
     }
 
-    public void restartFlow(){
+    public void restartFlow() {
         chatRoom.sendMessage("/flow:restart");
     }
 
 
-
     public boolean waitForGreetingMessage() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.getBody().contains("Hi there, welcome to Clickatell. How can we help you today?")){
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if (message.getBody().contains("Hi there, welcome to Clickatell. How can we help you today?")) {
                     return true;
                 }
 
@@ -137,10 +145,12 @@ public class XMPPClient {
     }
 
     public boolean waitForConnectinAgentMessage() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.getBody().contains("let me connect you with one of our agents")){
-                    return true;
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.getBody().contains("let me connect you with one of our agents")) {
+                        return true;
+                    }
                 }
 
             }
@@ -150,10 +160,12 @@ public class XMPPClient {
     }
 
     public boolean waitForAgentConnectedMesasge() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.getBody().contains("Agent  successfully joined!")){
-                    return true;
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.getBody().contains("Agent  successfully joined!")) {
+                        return true;
+                    }
                 }
 
             }
@@ -163,45 +175,50 @@ public class XMPPClient {
     }
 
     public boolean waitForMessage(String messageText) throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.getBody().contains(messageText)){
-                    return true;
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.getBody().contains(messageText)) {
+                        return true;
+                    }
                 }
-
             }
             Thread.sleep(1000);
         }
         return false;
     }
 
-    public void cleanMessagesStorage(){
+    public void cleanMessagesStorage() {
         messages.clear();
     }
 
 
     public Tcard getNavigationCard() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.hasExtension(Tcard.class)) {
-                    if (message.getExtension(Tcard.class).getTcardName().equals("navigation-card")) {
-                        return message.getExtension(Tcard.class);
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.hasExtension(Tcard.class)) {
+                        if (message.getExtension(Tcard.class).getTcardName().equals("navigation-card")) {
+                            return message.getExtension(Tcard.class);
+                        }
                     }
                 }
             }
+
             Thread.sleep(1000);
         }
         return null;
     }
-
 
 
     public Tcard getInputCard() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.hasExtension(Tcard.class)) {
-                    if (message.getExtension(Tcard.class).getTcardName().equals("input-card")) {
-                        return message.getExtension(Tcard.class);
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.hasExtension(Tcard.class)) {
+                        if (message.getExtension(Tcard.class).getTcardName().equals("input-card")) {
+                            return message.getExtension(Tcard.class);
+                        }
                     }
                 }
             }
@@ -210,13 +227,22 @@ public class XMPPClient {
         return null;
     }
 
-    public boolean waitForMidFlowReactionMessage() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
-                if (message.getBody().contains("Lets finish this up first")){
-                    return true;
-                }
+    public void disconnect() {
+        try {
+            xmppClient.close();
+        } catch (XmppException e) {
+            LOG.error("Error when disconnection client from xmpp server: " + e.getMessage());
+        }
+    }
 
+    public boolean waitForMidFlowReactionMessage() throws InterruptedException {
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.getBody().contains("Lets finish this up first")) {
+                        return true;
+                    }
+                }
             }
             Thread.sleep(1000);
         }
@@ -224,11 +250,11 @@ public class XMPPClient {
     }
 
 
-    public void sendMessage(String messageText){
+    public void sendMessage(String messageText) {
         chatRoom.sendMessage(messageText);
     }
 
-    public void sendMessage(Message message){
+    public void sendMessage(Message message) {
         chatRoom.sendMessage(message);
     }
 

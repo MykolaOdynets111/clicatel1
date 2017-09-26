@@ -67,10 +67,11 @@ public class XMPPAgent {
                 .build();
 
         xmppSessionConfiguration = XmppSessionConfiguration.builder()
-                .extensions(Extension.of(SubmitPerosnalDataCard.class))
+                .extensions(Extension.of(TcardSubmit.class))
                 .extensions(Extension.of(AgentStatus.class))
                 .extensions(Extension.of(OfferGeneral.class))
                 .extensions(Extension.of(OfferAccept.class))
+                .extensions(Extension.of(TButtonItemSubmit.class))
                 .debugger(AgentConsoleXmppLogger.class)
                 .build();
 
@@ -128,8 +129,10 @@ public class XMPPAgent {
     }
 
     public void leaveRoom(){
-        LOG.info("Agent: " + agentId + " leaves room roomJid = " + roomJidLocalPart);
-        chatRoom.exit();
+        if (chatRoom != null) {
+            LOG.info("Agent: " + agentId + " leaves room roomJid = " + roomJidLocalPart);
+            chatRoom.exit();
+        }
     }
 
     public boolean waitForOffer() throws InterruptedException {
@@ -176,8 +179,10 @@ public class XMPPAgent {
     public boolean waitForMessage(String messageText) throws InterruptedException {
         for (int i=0; i<=9; i++){
             for (Message message: messages){
-                if (message.getBody().contains(messageText)){
-                    return true;
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.getBody().contains(messageText)) {
+                        return true;
+                    }
                 }
 
             }
@@ -194,14 +199,23 @@ public class XMPPAgent {
     public boolean waitForAgentConnectedMesasge() throws InterruptedException {
         for (int i=0; i<=9; i++){
             for (Message message: messages){
-                if (message.getBody().contains("Agent  successfully joined!")){
-                    return true;
+                if ((message != null) & (message.getBody() != null)) {
+                    if (message.getBody().contains("Agent  successfully joined!")) {
+                        return true;
+                    }
                 }
-
             }
             Thread.sleep(1000);
         }
         return false;
+    }
+
+    public void disconnect(){
+        try {
+            xmppClient.close();
+        } catch (XmppException e) {
+            LOG.error("Error when disconnection agent from xmpp server: " + e.getMessage());
+        }
     }
 
     public void sendMessage(String messageText){
