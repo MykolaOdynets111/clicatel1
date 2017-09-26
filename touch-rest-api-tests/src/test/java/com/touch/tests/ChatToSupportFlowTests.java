@@ -53,13 +53,13 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
     @BeforeMethod
     public void beforeMethod(){
-//        clientId = "testclient" + StringUtils.generateRandomString(4);
-//        clientJid = clientId + "@clickatelllabs.com";
-//        chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "webchat", accessToken).as(ChatRoomResponse.class);
-//        room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
-//        xmppAgent = new XMPPAgent(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.agent.xmpp.login"),
-//                TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.agent.xmpp.password"));
-//        xmppClientWebWidget = new XMPPClient(clientId);
+        clientId = "testclient" + StringUtils.generateRandomString(4);
+        clientJid = clientId + "@clickatelllabs.com";
+        chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "webchat", accessToken).as(ChatRoomResponse.class);
+        room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
+        xmppAgent = new XMPPAgent(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.agent.xmpp.login"),
+                TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.agent.xmpp.password"));
+        xmppClientWebWidget = new XMPPClient(clientId);
 
     }
 
