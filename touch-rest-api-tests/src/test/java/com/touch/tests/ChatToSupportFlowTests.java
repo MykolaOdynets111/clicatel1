@@ -64,7 +64,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
     }
 
 
-    @Test()
+//    @Test()
     public void connectAgentSendChatMessageFlow() throws IOException, InterruptedException, XmppException {
         xmppAgent.connect();
 
@@ -112,7 +112,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
     }
 
 
-    @Test()
+//    @Test()
     public void connectAgentSubmitNavigationCardFlow() throws IOException, InterruptedException, XmppException {
         xmppAgent.connect();
 
@@ -276,7 +276,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
     }
 
-    @Test
+//    @Test
     public void checkInputIsShownOncePerSession() throws InterruptedException, IOException {
 
         xmppClientWebWidget.connect();
@@ -316,7 +316,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
     }
 
-    @Test
+//    @Test
     public void inactiveTenantBusinessHoursTryAgainLaterFlow() throws InterruptedException, IOException {
         //get current day of week
         Calendar calendar = Calendar.getInstance();
