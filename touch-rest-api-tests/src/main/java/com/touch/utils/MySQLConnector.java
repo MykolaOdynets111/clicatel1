@@ -315,6 +315,17 @@ public class MySQLConnector {
         }
     }
 
+    public void updateTenantBusinessHours(String tenantId, String dayOfWeek, String startWorkTime, String endWorkTime) {
+        String query = "update touch_testing.tenant_business_hour set end_work_time='" + endWorkTime  +
+                "', start_work_time='" + startWorkTime + "' where tenant_id='" + tenantId + "' and day_of_week='" + dayOfWeek + "'";
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+
+        }
+    }
+
     public void updateAccountBalance(String accountId, Integer balance) {
         String query = "update account_balance SET balance = " + balance + " WHERE account_id ='" + accountId + "'";
         try {
