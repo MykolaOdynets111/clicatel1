@@ -15,6 +15,7 @@ public class MySQLConnector {
     Connection connection = null;
     Statement statement = null;
     ResultSet rs = null;
+    int reslut;
 
     public static MySQLConnector db;
 
@@ -320,7 +321,7 @@ public class MySQLConnector {
                 "', start_work_time='" + startWorkTime + "' where tenant_id='" + tenantId + "' and day_of_week='" + dayOfWeek + "'";
         try {
             statement = connection.createStatement();
-            statement.executeUpdate(query);
+            reslut = statement.executeUpdate(query);
         } catch (SQLException e) {
 
         }

@@ -12,7 +12,7 @@ public class ConfigApp {
     public static String API_VERSION ="/v6";
 
     public static String DB_URL_PATTERN = "jdbc:mysql://mc2-platform-%s.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/%s?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-    public static String DB_URL_PATTERN_TESTING = "jdbc:mysql://mc2-db-testing.clickatelllabs.com:3306/mc2_testing?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+    public static String DB_URL_PATTERN_TESTING = "jdbc:mysql://touch-db-testing.clickatelllabs.com:3306/?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
 //    public static String DB_URL_PATTERN_TESTING = "jdbc:mysql://ec2-35-161-212-158.us-west-2.compute.amazonaws.com:3306/mc2_testing?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
     public static String BASE_URL_PATTERN = "https://%s-touch.clickatelllabs.com";
 
@@ -35,8 +35,8 @@ public class ConfigApp {
 //                DB_URL = String.format(DB_URL_PATTERN, "testing", "mc2_testing");
                 DB_URL = DB_URL_PATTERN_TESTING;
                 TestingEnvProperties.setPropertiesFile("testing.properties");
-                DB_USER = "mc2_testing";
-                DB_PASSWORD = "mc2_testing";
+                DB_USER = "touch_testing";
+                DB_PASSWORD = "touch_testing";
                 break;
             }
 

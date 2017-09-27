@@ -81,7 +81,7 @@ public class XMPPClient {
                 xmppClient.connect();
                 xmppClient.loginAnonymously();
                 return;
-            } catch (XmppException e) {
+            } catch (Exception e) {
                 LOG.error("Client failed to connect to xmpp server, retrying");
             }
             Thread.sleep(100);
@@ -199,12 +199,12 @@ public class XMPPClient {
                 if ((message != null) & (message.getBody() != null)) {
                     if (message.hasExtension(Tcard.class)) {
                         if (message.getExtension(Tcard.class).getTcardName().equals("navigation-card")) {
+                            messages.clear();
                             return message.getExtension(Tcard.class);
                         }
                     }
                 }
             }
-
             Thread.sleep(1000);
         }
         return null;
