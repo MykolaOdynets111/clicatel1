@@ -136,8 +136,9 @@ public class XMPPAgent {
     }
 
     public boolean waitForOffer() throws InterruptedException {
-        for (int i=0; i<=9; i++){
+        for (int i=0; i< 20; i++){
                 if (offerReceived){
+                    offerReceived = false;
                     return true;
             }
             Thread.sleep(1000);

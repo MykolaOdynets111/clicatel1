@@ -338,6 +338,9 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
         Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+
+        MySQLConnector.getDbConnection()
+                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:59");
     }
 
     @Test
@@ -359,6 +362,9 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
 
         xmppClientWebWidget.sendMessage("Chat to Support");
+
+        MySQLConnector.getDbConnection()
+                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:59");
     }
 
 
@@ -411,6 +417,9 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
+
+        MySQLConnector.getDbConnection()
+                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:00");
 
     }
 
