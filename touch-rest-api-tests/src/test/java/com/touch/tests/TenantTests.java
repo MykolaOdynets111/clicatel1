@@ -530,8 +530,8 @@ public class TenantTests extends BaseTestClass {
     @Test(dataProvider = "getConfig")
     public void getConfigForTenant(String tenantId, int statusCode) {
         if(tenantId.equals("correct"))
-            tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.genbank.id");
-        Response response = tenantActions.getTenantConfig(tenantId, getToken(TestingEnvProperties.getPropertyByName("touch.user.admin.login"), TestingEnvProperties.getPropertyByName("touch.user.admin.password")));
+            tenantId=TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.id");
+        Response response = tenantActions.getTenantConfig(tenantId, getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password")));
         Assert.assertEquals(response.getStatusCode(),statusCode);
         if(statusCode==200){
             TenantConfig tenantConfig = response.as(TenantConfig.class);
