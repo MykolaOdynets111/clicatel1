@@ -48,7 +48,7 @@ public class XMPPAgent {
     private String roomJid;
     private String roomJidLocalPart;
 
-    public XMPPAgent(String agentLogin, String agentPassword){
+    public XMPPAgent(String agentLogin, String agentPassword) {
         this.agentLogin = agentLogin;
         this.agentPassword = agentPassword;
 
@@ -72,6 +72,7 @@ public class XMPPAgent {
                 .extensions(Extension.of(OfferGeneral.class))
                 .extensions(Extension.of(OfferAccept.class))
                 .extensions(Extension.of(TButtonItemSubmit.class))
+                .extensions(Extension.of(OfferCancel.class))
                 .debugger(AgentConsoleXmppLogger.class)
                 .build();
 
@@ -91,11 +92,10 @@ public class XMPPAgent {
             public IQ handleRequest(IQ iq) {
                 offerProposalIQ = iq;
                 offerProposal = iq.getExtension(OfferGeneral.class);
-                if (offerProposal.getStatus() == null){
+                if (offerProposal.getStatus() == null) {
                     LOG.info("Agent received offerID : " + offerProposal.getId() + "for roomJid: " + offerProposal.getRoom());
                     offerReceived = true;
-                }
-                else{
+                } else {
                     LOG.info("Agent received offer status: " + offerProposal.getStatus());
                 }
                 return null;
@@ -104,31 +104,55 @@ public class XMPPAgent {
 
     }
 
-    public void connect(){
-        try {
-            LOG.info("Agent " +  agentId + "connects to xmpp server");
-            xmppClient.connect();
-            xmppClient.login(agentLogin, agentPassword);
-            List<AgentStatus> extensions = new ArrayList<AgentStatus>();
-            extensions.add(new AgentStatus("5") );
-            xmppClient.sendPresence( new Presence(Jid.of("clickatell@department.clickatelllabs.com"),
-                            null,
-                            Presence.Show.CHAT,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            extensions,
-                            null
-                    )
-            );
-        } catch (XmppException e) {
-            e.printStackTrace();
+    public void connect() throws InterruptedException {
+
+        for (int i = 0; i <= 2; i++) {
+            try {
+                LOG.info("Agent " + agentId + "connects to xmpp server");
+                xmppClient.connect();
+                xmppClient.login(agentLogin, agentPassword);
+                List<AgentStatus> extensions = new ArrayList<AgentStatus>();
+                extensions.add(new AgentStatus("5"));
+                xmppClient.sendPresence(new Presence(Jid.of("clickatell@department.clickatelllabs.com"),
+                                null,
+                                Presence.Show.CHAT,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                extensions,
+                                null
+                        )
+                );
+                return;
+            } catch (Exception e) {
+                LOG.error("Agent failed to connect to xmpp server, retrying");
+            }
+            Thread.sleep(100);
         }
+        LOG.error("Agent failed to connect to xmpp server for 3 times");
     }
 
-    public void leaveRoom(){
+    public void cancelOffer() {
+        LOG.info("Agent cancels offer offerId: " + offerProposal.getId());
+        offerProposal = offerProposalIQ.getExtension(OfferGeneral.class);
+        Jid myJid = offerProposalIQ.getTo();
+        Jid botJid = offerProposalIQ.getFrom();
+        xmppClient.sendIQ(new IQ(Jid.of("clickatell@department.clickatelllabs.com"),
+                IQ.Type.SET, new OfferCancel(offerProposal.getId()),
+                "cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3),
+                botJid,
+                null,
+                null));
+    }
+
+    public String getOfferId() {
+        return offerProposal.getId();
+    }
+
+
+    public void leaveRoom() {
         if (chatRoom != null) {
             LOG.info("Agent: " + agentId + " leaves room roomJid = " + roomJidLocalPart);
             chatRoom.exit();
@@ -136,17 +160,17 @@ public class XMPPAgent {
     }
 
     public boolean waitForOffer() throws InterruptedException {
-        for (int i=0; i< 20; i++){
-                if (offerReceived){
-                    offerReceived = false;
-                    return true;
+        for (int i = 0; i < 20; i++) {
+            if (offerReceived) {
+                offerReceived = false;
+                return true;
             }
             Thread.sleep(1000);
         }
         return false;
     }
 
-    public void acceptOffer(){
+    public void acceptOffer() {
         LOG.info("Agent accepted offer offerId: " + offerProposal.getId());
         offerProposal = offerProposalIQ.getExtension(OfferGeneral.class);
         Jid myJid = offerProposalIQ.getTo();
@@ -158,7 +182,7 @@ public class XMPPAgent {
                 null));
     }
 
-    public void joinRoom(){
+    public void joinRoom() {
         roomJid = offerProposal.getRoom();
         roomJidLocalPart = Jid.of(roomJid).getLocal();
         LOG.info("Agent joins roomJid: " + roomJidLocalPart);
@@ -178,8 +202,8 @@ public class XMPPAgent {
 
 
     public boolean waitForMessage(String messageText) throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
                 if ((message != null) & (message.getBody() != null)) {
                     if (message.getBody().contains(messageText)) {
                         return true;
@@ -192,14 +216,14 @@ public class XMPPAgent {
         return false;
     }
 
-    public void cleanMessagesStorage(){
+    public void cleanMessagesStorage() {
         messages.clear();
     }
 
 
     public boolean waitForAgentConnectedMesasge() throws InterruptedException {
-        for (int i=0; i<=9; i++){
-            for (Message message: messages){
+        for (int i = 0; i <= 9; i++) {
+            for (Message message : messages) {
                 if ((message != null) & (message.getBody() != null)) {
                     if (message.getBody().contains("Agent  successfully joined!")) {
                         return true;
@@ -211,7 +235,7 @@ public class XMPPAgent {
         return false;
     }
 
-    public void disconnect(){
+    public void disconnect() {
         try {
             xmppClient.close();
         } catch (XmppException e) {
@@ -219,11 +243,11 @@ public class XMPPAgent {
         }
     }
 
-    public void sendMessage(String messageText){
+    public void sendMessage(String messageText) {
         chatRoom.sendMessage(messageText);
     }
 
-    public void sendMessage(Message message){
+    public void sendMessage(Message message) {
         chatRoom.sendMessage(message);
     }
 

@@ -16,7 +16,7 @@ public class EndPointsClass {
     public final static String TENANTS = ConfigApp.API_VERSION + "/tenants";
     public final static String TENANT = TENANTS + "/{tenantId}";
     public final static String TENANT_TBOT = TENANT + "/tbot";
-    public final static String ADDRESSES = TENANT + "/addresses";
+    public final static String TENANT_ADDRESSES = TENANT + "/{tenantId}/addresses";
     public final static String ADDRESS = TENANT + "/address/{addressId}";
     public final static String BUSINESS_HOURS_FOR_ADDRESS = TENANT + "/addresses/{addressId}/business-hours";
     public final static String BUSINESS_HOURS_ID_FOR_ADDRESS = BUSINESS_HOURS_FOR_ADDRESS + "/{business-hours-id}";

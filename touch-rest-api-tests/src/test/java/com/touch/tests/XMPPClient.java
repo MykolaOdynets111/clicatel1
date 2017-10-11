@@ -1,21 +1,23 @@
 package com.touch.tests;
 
-import com.touch.tests.extensions.TButtonItemSubmit;
-import com.touch.tests.extensions.Tcard;
-import com.touch.tests.extensions.TcardSubmit;
+import com.touch.tests.extensions.*;
 import com.touch.tests.xmppdebugger.ClentConsoleXmppLogger;
+import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.LoggerFactory;
+import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
 import rocks.xmpp.core.session.Extension;
 import rocks.xmpp.core.session.TcpConnectionConfiguration;
 import rocks.xmpp.core.session.XmppClient;
 import rocks.xmpp.core.session.XmppSessionConfiguration;
+import rocks.xmpp.core.stanza.model.IQ;
 import rocks.xmpp.core.stanza.model.Message;
 import rocks.xmpp.extensions.muc.ChatRoom;
 import rocks.xmpp.extensions.muc.ChatService;
 import rocks.xmpp.extensions.muc.MultiUserChatManager;
+import rocks.xmpp.extensions.muc.RoomInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,7 @@ public class XMPPClient {
 
         xmppSessionConfiguration = XmppSessionConfiguration.builder()
                 .extensions(Extension.of(Tcard.class), Extension.of(TcardSubmit.class), Extension.of(TButtonItemSubmit.class))
+                .extensions(Extension.of(OfferCancel.class))
                 .debugger(ClentConsoleXmppLogger.class)
                 .build();
 
@@ -72,6 +75,21 @@ public class XMPPClient {
         });
 
 
+    }
+
+    public void cancelOffer(String offerId){
+        LOG.info("Client cancels offer offerId: " + offerId);
+
+        xmppClient.sendIQ(new IQ(Jid.of("clickatell@department.clickatelllabs.com"),
+                IQ.Type.SET, new OfferCancel(offerId),
+                "cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3),
+                Jid.of(getClientJid()),
+                null,
+                null));
+    }
+
+    public String getClientJid(){
+        return roomJidLocalPart + "@clickatelllabs.com/" + clientId;
     }
 
     public void connect() throws InterruptedException {
@@ -103,6 +121,7 @@ public class XMPPClient {
         this.roomJidLocalPart = roomJidLocalPart;
         LOG.info("Client: " + clientId + " joins room roomJid = " + roomJidLocalPart);
         chatRoom.enter(clientId);
+
     }
 
     public void joinRoom() {
@@ -174,9 +193,24 @@ public class XMPPClient {
         return false;
     }
 
+    public String getRoomJid(){
+        return roomJidLocalPart + "@muc.clickatelllabs.com";
+    }
+
+    public void endChat(){
+        Message submitTButtonItemMessage = new Message(Jid.of(getRoomJid()));
+        submitTButtonItemMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        submitTButtonItemMessage.setBody("End chat");
+        TButtonItemSubmit tButtonItemSubmit = new TButtonItemSubmit();
+        submitTButtonItemMessage.addExtension(tButtonItemSubmit);
+        chatRoom.sendMessage(submitTButtonItemMessage);
+    }
+
     public boolean waitForMessage(String messageText) throws InterruptedException {
+        List<Message> copyMessages;
         for (int i = 0; i <= 9; i++) {
-            for (Message message : messages) {
+            copyMessages = messages;
+            for (Message message : copyMessages) {
                 if ((message != null) & (message.getBody() != null)) {
                     if (message.getBody().contains(messageText)) {
                         return true;

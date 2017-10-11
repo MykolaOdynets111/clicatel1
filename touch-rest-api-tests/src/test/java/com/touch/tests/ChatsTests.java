@@ -45,7 +45,7 @@ public class ChatsTests extends BaseTestClass {
         testToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"));
         String refreshToken = authActions.getRefreshToken(chatToken);
         accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-        chatRoom = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        chatRoom = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "webchat", accessToken).as(ChatRoomResponse.class);
         generateMessageForChatRoom(chatRoom, testClientId);
         sessionId = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
         chatSessions = chatsActions.getListOfSessions(clickatellId, null, chatToken).as(ListChatSessionResponse.class).getChatSessions();
@@ -55,7 +55,7 @@ public class ChatsTests extends BaseTestClass {
     @Test
     public void getNewChatRoom() {
         String tenantWithBot = getTestTenant1().getId();
-        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1", "Android", accessToken).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoom = chatsActions.getChatRoom(tenantWithBot, "testclient1@clickatelllabs.com", "test1", "webchat", accessToken).as(ChatRoomResponse.class);
         Assert.assertTrue(chatRoom.getChatroomJid().matches(".{32}@muc.clickatelllabs.com"));
 
     }
@@ -64,7 +64,7 @@ public class ChatsTests extends BaseTestClass {
     public void tryToGetNewChatRoomWithDifferentData(String tenantId, String clientJid, String clientId, int statusCode) {
         if (tenantId.equals("correct"))
             tenantId = getTestTenant1().getId();
-        Assert.assertEquals(chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", accessToken).getStatusCode(), statusCode);
+        Assert.assertEquals(chatsActions.getChatRoom(tenantId, clientJid, clientId, "webchat", accessToken).getStatusCode(), statusCode);
 
     }
 
@@ -74,7 +74,7 @@ public class ChatsTests extends BaseTestClass {
     public void terminateSession() {
 //terminate not existing session
         Assert.assertEquals(chatsActions.terminateSession("testSession" + StringUtils.generateRandomString(10), chatToken).getStatusCode(), 404);
-        ChatRoomResponse chatRoom = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoom = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "webchat", accessToken).as(ChatRoomResponse.class);
         generateMessageForChatRoom(chatRoom, testClientId);
         String sessionId = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions().get(0).getSessionId();
         ChatSessionResponse session = chatsActions.getSession(sessionId,chatToken).as(ChatSessionResponse.class);
@@ -97,7 +97,7 @@ public class ChatsTests extends BaseTestClass {
         List<ChatSessionResponse> terminatedChatSessions = response.as(ListChatSessionResponse.class).getChatSessions();
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(terminatedChatSessions.size(), 0);
-        ChatRoomResponse chatRoom1 = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "Android", accessToken).as(ChatRoomResponse.class);
+        ChatRoomResponse chatRoom1 = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "webchat", accessToken).as(ChatRoomResponse.class);
         generateMessageForChatRoom(chatRoom1, testClientId);
         List<ChatSessionResponse> allChatSessions = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions();
         ChatSessionResponse activeChatSessionForTestClient = null;
@@ -130,7 +130,7 @@ public class ChatsTests extends BaseTestClass {
     @Test
     public void getNewChatRoomWithWrongData() {
         // verify error message when we try to get chat room for not existing tenant
-        Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1", "Android", chatToken).as(ErrorMessage.class).getErrorMessage().matches("This request requires HTTP authentication"));
+        Assert.assertTrue(chatsActions.getChatRoom("wrong_tenantId", "testclient1@clickatelllabs.com", "test1", "webchat", chatToken).as(ErrorMessage.class).getErrorMessage().matches("This request requires HTTP authentication"));
     }
 
     @Test(dataProvider = "getAttachments")

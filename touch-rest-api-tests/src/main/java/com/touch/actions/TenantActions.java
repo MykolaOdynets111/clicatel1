@@ -51,6 +51,11 @@ public class TenantActions {
     public Response getTenantConfig(String tenantId,String token) {
         return requestEngine.getRequest(EndPointsClass.TENANT_CONFIG, tenantId,new Header("Authorization", token));
     }
+
+//    public List getListOfTennatAddresses(String tenantId, String token,Class<T> clazz) {
+//        return requestEngine.getRequest(EndPointsClass.TENANT_ADDRESSES, tenantId, , new Header("Authorization", token)).as(clazz);
+//    }
+
     public <T> T getBusinessHoursFromAddress(String tenantId, String addressId, String token, Class<T> clazz) {
         return requestEngine.getRequest(EndPointsClass.BUSINESS_HOURS_FOR_ADDRESS, tenantId, addressId,null, new Header("Authorization", token)).as(clazz);
     }

@@ -73,7 +73,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
 
         xmppClientWebWidget.sendMessage("Chat to Support");
@@ -99,12 +99,11 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         xmppAgent.joinRoom();
         xmppClientWebWidget.waitForAgentConnectedMesasge();
         xmppAgent.sendMessage("Hi, how can I help You");
-        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"));
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
         xmppClientWebWidget.sendMessage("hello2");
-        Assert.assertTrue(xmppAgent.waitForMessage("hello2"));
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
@@ -165,20 +164,19 @@ public class ChatToSupportFlowTests extends BaseTestClass {
             e.printStackTrace();
         }
         xmppAgent.sendMessage("Hi, how can I help You");
-        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"));
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
         xmppClientWebWidget.sendMessage("hello2");
-        Assert.assertTrue(xmppAgent.waitForMessage("hello2"));
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
 
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
     }
 
     @Test()
-    public void connectAgentTCardFlow() throws IOException, InterruptedException, XmppException {
+    public void connectAgentTButtonFlow() throws IOException, InterruptedException, XmppException {
         xmppAgent.connect();
 
         xmppClientWebWidget.connect();
@@ -227,13 +225,12 @@ public class ChatToSupportFlowTests extends BaseTestClass {
             e.printStackTrace();
         }
         xmppAgent.sendMessage("Hi, how can I help You");
-        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"));
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
         xmppClientWebWidget.sendMessage("hello2");
-        Assert.assertTrue(xmppAgent.waitForMessage("hello2"));
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
 
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
@@ -245,11 +242,6 @@ public class ChatToSupportFlowTests extends BaseTestClass {
     @Test
     public void checkInputCardMidFlowReaction() throws IOException, InterruptedException, XmppException {
 
-        chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
-        String refreshToken = authActions.getRefreshToken(chatToken);
-        accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
-        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "Android", accessToken).as(ChatRoomResponse.class);
-        BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
 
         XMPPClient xmppClientWebWidget = new XMPPClient(clientId);
         xmppClientWebWidget.connect();
@@ -268,8 +260,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         xmppClientWebWidget.sendMessage(message);
         Assert.assertTrue(xmppClientWebWidget.waitForMidFlowReactionMessage(), "Mid flow reaction message wasn't received after InputCard");
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
@@ -314,6 +305,9 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         xmppClientWebWidget.sendMessage("Chat to Support");
         inputCard = xmppClientWebWidget.getInputCard();
 
+        xmppClientWebWidget.endChat();
+        xmppClientWebWidget.disconnect();
+
     }
 
     @Test
@@ -341,6 +335,9 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
         MySQLConnector.getDbConnection()
                 .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:59");
+
+        xmppClientWebWidget.endChat();
+        xmppClientWebWidget.disconnect();
     }
 
     @Test
@@ -365,6 +362,9 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
         MySQLConnector.getDbConnection()
                 .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:59");
+
+        xmppClientWebWidget.endChat();
+        xmppClientWebWidget.disconnect();
     }
 
 
@@ -412,8 +412,7 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! It seems agent  is currently unavailable. Will find another one."));
 
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
@@ -462,11 +461,10 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
 
         Thread.sleep(25000);
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! All our agents are currently busy."));
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! All our agents are currently busy."));
 
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
@@ -528,8 +526,48 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         Assert.assertTrue(xmppAgent.waitForMessage("hello2"));
 
 
-        xmppClientWebWidget.restartFlow();
-        xmppClientWebWidget.getInputCard();
+        xmppClientWebWidget.endChat();
+        xmppClientWebWidget.disconnect();
+        xmppAgent.leaveRoom();
+        xmppAgent.disconnect();
+
+    }
+
+    @Test()
+    public void cancelOfferTest() throws IOException, InterruptedException, XmppException {
+        xmppAgent.connect();
+
+        xmppClientWebWidget.connect();
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+
+        xmppClientWebWidget.sendMessage("Chat to Support");
+        Tcard inputCard = xmppClientWebWidget.getInputCard();
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
+        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
+                inputCard.getTcardName(),
+                "card_3",
+                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
+        message.setBody("Submitted data:\n" +
+                "test\n" +
+                "test\n" +
+                "test@test.com\n" +
+                "1234\n" +
+                "test");
+        xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+        xmppAgent.cancelOffer();
+
+
+        xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
@@ -538,8 +576,8 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
 //    @AfterMethod
 //    public void afterMethod() throws InterruptedException {
-//        xmppClientWebWidget.restartFlow();
-//        xmppClientWebWidget.getInputCard();
+//        xmppClientWebWidget.endChat();
+//        xmppClientWebWidget.disconnect();
 //        xmppAgent.leaveRoom();
 //    }
 
