@@ -25,10 +25,10 @@ public class ConfigApp {
             case "dev": {
                 DB_TABLE = "touch_dev";
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "dev");
-                DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_platform");
+                DB_URL = "jdbc:mysql://touch-db-dev.clickatelllabs.com:3306/?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
                 TestingEnvProperties.setPropertiesFile("dev.properties");
-                DB_USER = "mc2";
-                DB_PASSWORD = "mc2_platform";
+                DB_USER = "touch_dev";
+                DB_PASSWORD = "touch_dev";
                 break;
             }
 
