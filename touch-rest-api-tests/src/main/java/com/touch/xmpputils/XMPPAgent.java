@@ -1,7 +1,7 @@
-package com.touch.tests;
+package com.touch.xmpputils;
 
-import com.touch.tests.extensions.*;
-import com.touch.tests.xmppdebugger.AgentConsoleXmppLogger;
+import com.touch.xmpputils.extensions.*;
+import com.touch.xmpputils.xmpplogger.AgentConsoleXmppLogger;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
 import org.slf4j.Logger;
@@ -93,8 +93,10 @@ public class XMPPAgent {
                 offerProposalIQ = iq;
                 offerProposal = iq.getExtension(OfferGeneral.class);
                 if (offerProposal.getStatus() == null) {
-                    LOG.info("Agent received offerID : " + offerProposal.getId() + "for roomJid: " + offerProposal.getRoom());
-                    offerReceived = true;
+                    synchronized (this) {
+                        LOG.info("Agent received offerID : " + offerProposal.getId() + "for roomJid: " + offerProposal.getRoom());
+                        offerReceived = true;
+                    }
                 } else {
                     LOG.info("Agent received offer status: " + offerProposal.getStatus());
                 }
@@ -102,6 +104,10 @@ public class XMPPAgent {
             }
         });
 
+    }
+
+    public synchronized void setOfferReceived(){
+        offerReceived = true;
     }
 
     public void connect() throws InterruptedException {
@@ -160,10 +166,12 @@ public class XMPPAgent {
     }
 
     public boolean waitForOffer() throws InterruptedException {
-        for (int i = 0; i < 20; i++) {
-            if (offerReceived) {
-                offerReceived = false;
-                return true;
+        for (int i = 0; i < 25; i++) {
+            synchronized (this) {
+                if (offerReceived) {
+                    offerReceived = false;
+                    return true;
+                }
             }
             Thread.sleep(1000);
         }
@@ -203,25 +211,26 @@ public class XMPPAgent {
 
     public boolean waitForMessage(String messageText) throws InterruptedException {
         for (int i = 0; i <= 9; i++) {
-            for (Message message : messages) {
-                if ((message != null) & (message.getBody() != null)) {
-                    if (message.getBody().contains(messageText)) {
-                        return true;
+            synchronized (this) {
+                for (Message message : messages) {
+                    if ((message != null) & (message.getBody() != null)) {
+                        if (message.getBody().contains(messageText)) {
+                            return true;
+                        }
                     }
                 }
-
             }
             Thread.sleep(1000);
         }
         return false;
     }
 
-    public void cleanMessagesStorage() {
+    public synchronized void cleanMessagesStorage() {
         messages.clear();
     }
 
 
-    public boolean waitForAgentConnectedMesasge() throws InterruptedException {
+    public synchronized boolean waitForAgentConnectedMesasge() throws InterruptedException {
         for (int i = 0; i <= 9; i++) {
             for (Message message : messages) {
                 if ((message != null) & (message.getBody() != null)) {

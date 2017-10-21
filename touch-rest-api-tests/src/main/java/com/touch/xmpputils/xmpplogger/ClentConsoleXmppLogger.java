@@ -1,4 +1,4 @@
-package com.touch.tests.xmppdebugger;
+package com.touch.xmpputils.xmpplogger;
 
 import org.slf4j.LoggerFactory;
 import rocks.xmpp.core.session.XmppSession;
@@ -10,7 +10,7 @@ import java.io.OutputStream;
 /**
  * Created by oshcherbatyy on 19-09-17.
  */
-public class AgentConsoleXmppLogger implements XmppDebugger {
+public class ClentConsoleXmppLogger implements XmppDebugger {
 
     private final org.slf4j.Logger LOG = LoggerFactory.getLogger(getClass());
 
@@ -25,7 +25,7 @@ public class AgentConsoleXmppLogger implements XmppDebugger {
 //            LOG.info("pong sent");
         }
         else{
-            LOG.info("AGENT STANZA OUT: " + xml);
+            LOG.info("CLIENT STANZA OUT: " + xml);
         }
 
 
@@ -38,7 +38,7 @@ public class AgentConsoleXmppLogger implements XmppDebugger {
 //            LOG.info("ping received");
         }
         else{
-            LOG.info("AGENT STANZA IN : " + xml);
+            LOG.info("CLIENT STANZA IN : " + xml);
         }
 
     }

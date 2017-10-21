@@ -1,7 +1,7 @@
-package com.touch.tests.IQHandler;
+package com.touch.xmpputils.IQHandler;
 
-import com.touch.tests.extensions.OfferAccept;
-import com.touch.tests.extensions.OfferProposal;
+import com.touch.xmpputils.extensions.OfferAccept;
+import com.touch.xmpputils.extensions.OfferProposal;
 import com.touch.utils.StringUtils;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.stanza.IQHandler;

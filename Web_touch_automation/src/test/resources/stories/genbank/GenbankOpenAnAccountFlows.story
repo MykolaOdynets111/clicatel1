@@ -12,7 +12,7 @@ Then Verify that last Card has following data:
       | title  | If you'd like to open a Global One facility or just want to find out a bit more about it, please complete the form below and we'll get back to you as soon as we can.|
       | button | Submit                                                                                                                                                               |
 When Open account:
-      |name    |surname    |email                      |phone|
+      |data    |surname    |email                      |phone|
       |testName|testSurname|testEmail@sink.sendgrid.net|11111|
 Then Verify that last response match with: 'Thank you for submiting. We'll be in contact with you within next 24 hours. Please use the Service Request number \d{4,6} as reference.'
 Then Verify that last Card has following data:

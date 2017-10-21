@@ -3,25 +3,25 @@ package com.touch.tests;
 
 import com.touch.models.touch.auth.AccessTokenRequest;
 import com.touch.models.touch.chats.ChatRoomResponse;
-import com.touch.tests.cdatamodels.inputcard.InputCardModel;
-import com.touch.tests.cdatamodels.navigationcard.NavigationCardModel;
-import com.touch.tests.extensions.TButtonItemSubmit;
-import com.touch.tests.extensions.TcardSubmit;
-import com.touch.tests.extensions.Tcard;
 import com.touch.utils.MySQLConnector;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
-
+import com.touch.xmpputils.XMPPAgent;
+import com.touch.xmpputils.XMPPClient;
+import com.touch.xmpputils.cdatamodels.inputcard.InputCardModel;
+import com.touch.xmpputils.cdatamodels.navigationcard.NavigationCardModel;
+import com.touch.xmpputils.extensions.TButtonItemSubmit;
+import com.touch.xmpputils.extensions.Tcard;
+import com.touch.xmpputils.extensions.TcardSubmit;
 import org.testng.Assert;
-import org.testng.annotations.*;
-
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
-
 import rocks.xmpp.core.stanza.model.Message;
 import tigase.jaxmpp.core.client.BareJID;
-
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,17 +42,15 @@ public class ChatToSupportFlowTests extends BaseTestClass {
 
 
     @BeforeClass
-    public void beforeClass(){
+    public void beforeClass() {
         chatToken = getToken(TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.login"), TestingEnvProperties.getPropertyByName("touch.tenant.clickatell.password"));
         String refreshToken = authActions.getRefreshToken(chatToken);
         accessToken = authActions.getAccessToken(new AccessTokenRequest(), refreshToken);
     }
 
 
-
-
     @BeforeMethod
-    public void beforeMethod(){
+    public void beforeMethod() {
         clientId = "testclient" + StringUtils.generateRandomString(4);
         clientJid = clientId + "@clickatelllabs.com";
         chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "webchat", accessToken).as(ChatRoomResponse.class);
@@ -71,15 +69,23 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         xmppClientWebWidget.connect();
         xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
         Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Simply type in the 'send a message' box or select an option below",
+                "Client received wrong navigation card");
 
         xmppClientWebWidget.sendMessage("Chat to Support");
+
         Tcard inputCard = xmppClientWebWidget.getInputCard();
         Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        Assert.assertEquals(inputCard.getTcardName(), "input-card", "Client received wrong card " + inputCard.getTcardName());
         InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
+        Assert.assertEquals(inputCardModel.getTitle(), "No problem. Before I connect you to one of our Agents, please give us some basic info:",
+                "Client received wrong input card");
+
         Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
         message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
         message.addExtension(new TcardSubmit(inputCardModel.getAction(),
@@ -92,36 +98,42 @@ public class ChatToSupportFlowTests extends BaseTestClass {
                 "test@test.com\n" +
                 "1234\n" +
                 "test");
+
         xmppClientWebWidget.sendMessage(message);
         xmppClientWebWidget.waitForConnectinAgentMessage();
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-//        xmppAgent.acceptOffer();
-//        xmppAgent.joinRoom();
-//        xmppClientWebWidget.waitForAgentConnectedMesasge();
-//        xmppAgent.sendMessage("Hi, how can I help You");
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
-//        xmppClientWebWidget.sendMessage("hello2");
-//        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
 
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-//        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+
+        xmppAgent.acceptOffer();
+        xmppAgent.joinRoom();
+
+        xmppClientWebWidget.waitForAgentConnectedMesasge();
+
+        xmppAgent.sendMessage("Hi, how can I help You");
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
+        xmppClientWebWidget.sendMessage("hello2");
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
+
 
     }
 
 
     @Test()
     public void connectAgentSubmitNavigationCardFlow() throws IOException, InterruptedException, XmppException {
+
+
         xmppAgent.connect();
 
         xmppClientWebWidget.connect();
         xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Simply type in the 'send a message' box or select an option below",
+                "Client received wrong navigation card");
 
         Message submitNavigationCardMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
         submitNavigationCardMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
@@ -132,60 +144,60 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         submitNavigationCard.setCDATA("Chat to Support");
         submitNavigationCardMessage.addExtension(submitNavigationCard);
         xmppClientWebWidget.sendMessage(submitNavigationCardMessage);
+
         Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard);
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        Assert.assertEquals(inputCard.getTcardName(), "input-card", "Client received wrong card " + inputCard.getTcardName());
         InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
-        Message submitInputCardMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
-        submitInputCardMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-        submitInputCardMessage.addExtension(new TcardSubmit(inputCardModel.getAction(),
+        Assert.assertEquals(inputCardModel.getTitle(), "No problem. Before I connect you to one of our Agents, please give us some basic info:",
+                "Client received wrong input card");
+
+        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
                 inputCard.getTcardName(),
                 "card_3",
                 "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-        submitInputCardMessage.setBody("Submitted data:\n" +
+        message.setBody("Submitted data:\n" +
                 "test\n" +
                 "test\n" +
                 "test@test.com\n" +
                 "1234\n" +
                 "test");
-        xmppClientWebWidget.sendMessage(submitInputCardMessage);
-        try {
-            xmppClientWebWidget.waitForConnectinAgentMessage();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-//        xmppAgent.acceptOffer();
-//        xmppAgent.joinRoom();
-//        try {
-//            xmppClientWebWidget.waitForAgentConnectedMesasge();
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        xmppAgent.sendMessage("Hi, how can I help You");
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
-//        xmppClientWebWidget.sendMessage("hello2");
-//        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
+
+        xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+
+        xmppAgent.acceptOffer();
+        xmppAgent.joinRoom();
+
+        xmppClientWebWidget.waitForAgentConnectedMesasge();
+
+        xmppAgent.sendMessage("Hi, how can I help You");
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
+        xmppClientWebWidget.sendMessage("hello2");
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
 
 
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-//        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
     }
 
     @Test()
     public void connectAgentTButtonFlow() throws IOException, InterruptedException, XmppException {
+
         xmppAgent.connect();
 
         xmppClientWebWidget.connect();
         xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Simply type in the 'send a message' box or select an option below",
+                "Client received wrong navigation card");
 
         Message submitTButtonItemMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
         submitTButtonItemMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
@@ -193,77 +205,77 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         TButtonItemSubmit tButtonItemSubmit = new TButtonItemSubmit();
         submitTButtonItemMessage.addExtension(tButtonItemSubmit);
         xmppClientWebWidget.sendMessage(submitTButtonItemMessage);
+
         Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard, "Input card was not received by agent, after submitting Chat to Support from TButton");
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        Assert.assertEquals(inputCard.getTcardName(), "input-card", "Client received wrong card " + inputCard.getTcardName());
         InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
-        Message submitInputCardMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
-        submitInputCardMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-        submitInputCardMessage.addExtension(new TcardSubmit(inputCardModel.getAction(),
+        Assert.assertEquals(inputCardModel.getTitle(), "No problem. Before I connect you to one of our Agents, please give us some basic info:",
+                "Client received wrong input card");
+
+        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
                 inputCard.getTcardName(),
                 "card_3",
                 "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-        submitInputCardMessage.setBody("Submitted data:\n" +
+        message.setBody("Submitted data:\n" +
                 "test\n" +
                 "test\n" +
                 "test@test.com\n" +
                 "1234\n" +
                 "test");
-        xmppClientWebWidget.sendMessage(submitInputCardMessage);
-        try {
-            xmppClientWebWidget.waitForConnectinAgentMessage();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-//        xmppAgent.acceptOffer();
-//        xmppAgent.joinRoom();
-//        try {
-//            xmppClientWebWidget.waitForAgentConnectedMesasge();
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        xmppAgent.sendMessage("Hi, how can I help You");
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
-//        xmppClientWebWidget.sendMessage("hello2");
-//        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
+
+        xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+
+        xmppAgent.acceptOffer();
+        xmppAgent.joinRoom();
+
+        xmppClientWebWidget.waitForAgentConnectedMesasge();
+
+        xmppAgent.sendMessage("Hi, how can I help You");
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"), "Client didn't receive message from agent");
+        xmppClientWebWidget.sendMessage("hello2");
+        Assert.assertTrue(xmppAgent.waitForMessage("hello2"), "Agent didn't receive message from client");
 
 
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-//        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
     }
-
-
 
 
     @Test
     public void checkInputCardMidFlowReaction() throws IOException, InterruptedException, XmppException {
 
+        xmppAgent.connect();
 
-        XMPPClient xmppClientWebWidget = new XMPPClient(clientId);
         xmppClientWebWidget.connect();
         xmppClientWebWidget.joinRoom(room.getLocalpart());
-        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage());
+        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
-        Assert.assertNotNull(navigationCard);
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Simply type in the 'send a message' box or select an option below",
+                "Client received wrong navigation card");
+
         xmppClientWebWidget.sendMessage("Chat to Support");
+
         Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard, "InputCard not receiced by client");
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        Assert.assertEquals(inputCard.getTcardName(), "input-card", "Client received wrong card " + inputCard.getTcardName());
         InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
+        Assert.assertEquals(inputCardModel.getTitle(), "No problem. Before I connect you to one of our Agents, please give us some basic info:",
+                "Client received wrong input card");
+
         Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
         message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
         message.setBody("Message to check InputCard mid flow reaction");
         xmppClientWebWidget.sendMessage(message);
         Assert.assertTrue(xmppClientWebWidget.waitForMidFlowReactionMessage(), "Mid flow reaction message wasn't received after InputCard");
 
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
 
     }
 
@@ -295,18 +307,25 @@ public class ChatToSupportFlowTests extends BaseTestClass {
                 "1234\n" +
                 "test");
         xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
         xmppClientWebWidget.leaveRoom();
 
-        //request new room to simulate user reconnection or page refresh
-        chatRoomResponse = chatsActions.getChatRoom(tenantId, clientJid, clientId, "webchat", accessToken).as(ChatRoomResponse.class);
-        room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
-        xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(room.getLocalpart());
-        xmppClientWebWidget.sendMessage("Chat to Support");
-        inputCard = xmppClientWebWidget.getInputCard();
 
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
+        room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
+        Thread.sleep(30000);
+        xmppClientWebWidget.cleanMessagesStorage();
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+
+        Message submitTButtonItemMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        submitTButtonItemMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        submitTButtonItemMessage.setBody("Chat to Support");
+        TButtonItemSubmit tButtonItemSubmit = new TButtonItemSubmit();
+        submitTButtonItemMessage.addExtension(tButtonItemSubmit);
+        xmppClientWebWidget.sendMessage(submitTButtonItemMessage);
+
+
+        Assert.assertTrue(xmppClientWebWidget.waitForConnectinAgentMessage());
+
 
     }
 
@@ -320,24 +339,51 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         MySQLConnector.getDbConnection()
                 .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "00:01:00");
 
+        xmppAgent.connect();
+
         xmppClientWebWidget.connect();
         xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+
         Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Simply type in the 'send a message' box or select an option below",
+                "Client received wrong navigation card");
+
+        xmppClientWebWidget.cleanMessagesStorage();
 
         xmppClientWebWidget.sendMessage("Chat to Support");
+
         navigationCard = xmppClientWebWidget.getNavigationCard();
         Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "I'm sorry, but our agents are all at home right now. Can I take a message for them to get back to you?",
+                "Client received wrong navigation card");
 
-        MySQLConnector.getDbConnection()
-                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:59");
+        xmppClientWebWidget.cleanMessagesStorage();
 
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
+        Message submitNavigationCardMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        submitNavigationCardMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        TcardSubmit submitNavigationCard = new TcardSubmit();
+        submitNavigationCard.setAction(navigationCardModel.getAction());
+        submitNavigationCard.setId("card_3");
+        submitNavigationCard.setTcardName(navigationCard.getTcardName());
+        submitNavigationCard.setCDATA("tryagainlater");
+        submitNavigationCardMessage.addExtension(submitNavigationCard);
+        xmppClientWebWidget.sendMessage(submitNavigationCardMessage);
+
+        xmppClientWebWidget.waitForMessage("No problem. This is our Support hours:");
+
+        navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Is there anything else we can assist you with?",
+                "Client received wrong navigation card");
+
     }
 
     @Test
@@ -350,6 +396,58 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         MySQLConnector.getDbConnection()
                 .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "00:01:00");
 
+        xmppAgent.connect();
+
+        xmppClientWebWidget.connect();
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+
+        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Simply type in the 'send a message' box or select an option below",
+                "Client received wrong navigation card");
+
+        xmppClientWebWidget.cleanMessagesStorage();
+
+        xmppClientWebWidget.sendMessage("Chat to Support");
+
+        navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "I'm sorry, but our agents are all at home right now. Can I take a message for them to get back to you?",
+                "Client received wrong navigation card");
+
+        xmppClientWebWidget.cleanMessagesStorage();
+
+        Message submitNavigationCardMessage = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        submitNavigationCardMessage.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        TcardSubmit submitNavigationCard = new TcardSubmit();
+        submitNavigationCard.setAction(navigationCardModel.getAction());
+        submitNavigationCard.setId("card_3");
+        submitNavigationCard.setTcardName(navigationCard.getTcardName());
+        submitNavigationCard.setCDATA("getback");
+        submitNavigationCardMessage.addExtension(submitNavigationCard);
+        xmppClientWebWidget.sendMessage(submitNavigationCardMessage);
+
+
+        navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Awesome! By the way, would you know which team you are looking for?",
+                "Client received wrong navigation card");
+
+
+    }
+
+
+    @Test()
+    public void agentJoinedChatDidntRerspondDuringTimeout() throws IOException, InterruptedException, XmppException {
+        xmppAgent.connect();
+
         xmppClientWebWidget.connect();
         xmppClientWebWidget.joinRoom(room.getLocalpart());
         Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
@@ -359,228 +457,148 @@ public class ChatToSupportFlowTests extends BaseTestClass {
         NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
 
         xmppClientWebWidget.sendMessage("Chat to Support");
+        Tcard inputCard = xmppClientWebWidget.getInputCard();
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
+        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
+                inputCard.getTcardName(),
+                "card_3",
+                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
+        message.setBody("Submitted data:\n" +
+                "test\n" +
+                "test\n" +
+                "test@test.com\n" +
+                "1234\n" +
+                "test");
+        xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+        xmppAgent.acceptOffer();
+        xmppAgent.joinRoom();
+        xmppClientWebWidget.waitForAgentConnectedMesasge();
+        Thread.sleep(30000);
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! It seems agent  is currently unavailable. Will find another one."), "Message: 'Thanks for reaching out! It seems agent  is currently unavailable. Will find another one.' not received");
+
+
+    }
+
+    @Test()
+    public void noAgentAcceptsOfferTimeoutCardAppears() throws IOException, InterruptedException, XmppException {
+        xmppAgent.connect();
+
+        xmppClientWebWidget.connect();
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+
+        xmppClientWebWidget.sendMessage("Chat to Support");
+        Tcard inputCard = xmppClientWebWidget.getInputCard();
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
+        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
+                inputCard.getTcardName(),
+                "card_3",
+                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
+        message.setBody("Submitted data:\n" +
+                "test\n" +
+                "test\n" +
+                "test@test.com\n" +
+                "1234\n" +
+                "test");
+        xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+
+        xmppClientWebWidget.cleanMessagesStorage();
+        Thread.sleep(30000);
+
+        navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Thanks for reaching out! All our agents are currently busy. Would you like to",
+                "Client received wrong navigation card");
+
+
+
+    }
+
+    @Test()
+    public void timeoutCardGetCollapsedIfAgentJoins() throws IOException, InterruptedException, XmppException {
+        xmppAgent.connect();
+
+        xmppClientWebWidget.connect();
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
+        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
+        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+
+        xmppClientWebWidget.sendMessage("Chat to Support");
+        Tcard inputCard = xmppClientWebWidget.getInputCard();
+        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
+        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
+        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
+        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
+        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
+                inputCard.getTcardName(),
+                "card_3",
+                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
+        message.setBody("Submitted data:\n" +
+                "test\n" +
+                "test\n" +
+                "test@test.com\n" +
+                "1234\n" +
+                "test");
+        xmppClientWebWidget.sendMessage(message);
+        xmppClientWebWidget.waitForConnectinAgentMessage();
+        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
+
+        xmppClientWebWidget.cleanMessagesStorage();
+        Thread.sleep(30000);
+
+        navigationCard = xmppClientWebWidget.getNavigationCard();
+        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
+        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card", "Client received wrong card " + navigationCard.getTcardName());
+        navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
+        Assert.assertEquals(navigationCardModel.getTitle(), "Thanks for reaching out! All our agents are currently busy. Would you like to",
+                "Client received wrong navigation card");
+
+
+        xmppAgent.acceptOffer();
+        xmppAgent.joinRoom();
+
+        xmppAgent.sendMessage("Hi, how can I help You");
+        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"));
+
+    }
+
+
+    @AfterMethod
+    public void afterMethod() throws InterruptedException {
+
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()).toUpperCase();
 
         MySQLConnector.getDbConnection()
                 .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:59");
 
         xmppClientWebWidget.endChat();
         xmppClientWebWidget.disconnect();
-    }
-
-
-    @Test()
-    public void agentJoinedChatDidntRerspondDuringTimeout() throws IOException, InterruptedException, XmppException {
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()).toUpperCase();
-
-        MySQLConnector.getDbConnection()
-                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:00");
-        xmppAgent.connect();
-
-        xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(room.getLocalpart());
-        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
-        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
-        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
-        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
-
-        xmppClientWebWidget.sendMessage("Chat to Support");
-        Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
-        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
-        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
-        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
-                inputCard.getTcardName(),
-                "card_3",
-                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-        message.setBody("Submitted data:\n" +
-                "test\n" +
-                "test\n" +
-                "test@test.com\n" +
-                "1234\n" +
-                "test");
-        xmppClientWebWidget.sendMessage(message);
-        xmppClientWebWidget.waitForConnectinAgentMessage();
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-//        xmppAgent.acceptOffer();
-//        xmppAgent.joinRoom();
-//        xmppClientWebWidget.waitForAgentConnectedMesasge();
-        Thread.sleep(25000);
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! It seems agent  is currently unavailable. Will find another one."));
-
-
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
         xmppAgent.leaveRoom();
         xmppAgent.disconnect();
 
-        MySQLConnector.getDbConnection()
-                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:00");
 
     }
-
-    @Test()
-    public void noAgentAcceptsOfferTimeoutCardAppears() throws IOException, InterruptedException, XmppException {
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()).toUpperCase();
-
-        MySQLConnector.getDbConnection()
-                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:00");
-        xmppAgent.connect();
-
-        xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(room.getLocalpart());
-        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
-        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
-        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
-        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
-
-        xmppClientWebWidget.sendMessage("Chat to Support");
-        Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
-        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
-        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
-        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
-                inputCard.getTcardName(),
-                "card_3",
-                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-        message.setBody("Submitted data:\n" +
-                "test\n" +
-                "test\n" +
-                "test@test.com\n" +
-                "1234\n" +
-                "test");
-        xmppClientWebWidget.sendMessage(message);
-        xmppClientWebWidget.waitForConnectinAgentMessage();
-//        xmppAgent.waitForOffer();
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-
-        Thread.sleep(25000);
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! All our agents are currently busy."));
-
-
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
-
-    }
-
-    @Test()
-    public void timeoutCardGetCollapsedIfAgentJoins() throws IOException, InterruptedException, XmppException {
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
-        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()).toUpperCase();
-
-        MySQLConnector.getDbConnection()
-                .updateTenantBusinessHours(tenantId, dayOfWeek, "00:00:00", "23:59:00");
-        xmppAgent.connect();
-
-        xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(room.getLocalpart());
-        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
-        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
-        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
-        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
-
-        xmppClientWebWidget.sendMessage("Chat to Support");
-        Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
-        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
-        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
-        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
-                inputCard.getTcardName(),
-                "card_3",
-                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-        message.setBody("Submitted data:\n" +
-                "test\n" +
-                "test\n" +
-                "test@test.com\n" +
-                "1234\n" +
-                "test");
-        xmppClientWebWidget.sendMessage(message);
-        xmppClientWebWidget.waitForConnectinAgentMessage();
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-
-        Thread.sleep(25000);
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Thanks for reaching out! All our agents are currently busy."));
-
-//        xmppAgent.acceptOffer();
-//        xmppAgent.joinRoom();
-//        try {
-//            xmppClientWebWidget.waitForAgentConnectedMesasge();
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        xmppAgent.sendMessage("Hi, how can I help You");
-//        Assert.assertTrue(xmppClientWebWidget.waitForMessage("Hi, how can I help You"));
-//        xmppClientWebWidget.sendMessage("hello2");
-//        Assert.assertTrue(xmppAgent.waitForMessage("hello2"));
-
-
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
-
-    }
-
-    @Test()
-    public void cancelOfferTest() throws IOException, InterruptedException, XmppException {
-        xmppAgent.connect();
-
-        xmppClientWebWidget.connect();
-        xmppClientWebWidget.joinRoom(room.getLocalpart());
-        Assert.assertTrue(xmppClientWebWidget.waitForGreetingMessage(), "Client didn't receive grreting message within timeout");
-        Tcard navigationCard = xmppClientWebWidget.getNavigationCard();
-        Assert.assertNotNull(navigationCard, "Client didn't receive navigation card within timeout");
-        Assert.assertEquals(navigationCard.getTcardName(), "navigation-card");
-        NavigationCardModel navigationCardModel = navigationCard.getJsonCDATA(NavigationCardModel.class);
-
-        xmppClientWebWidget.sendMessage("Chat to Support");
-        Tcard inputCard = xmppClientWebWidget.getInputCard();
-        Assert.assertNotNull(inputCard, "Client didn't receive input card after sending \"Chat to Support\" message");
-        InputCardModel inputCardModel = inputCard.getJsonCDATA(InputCardModel.class);
-        Message message = new Message(Jid.of(chatRoomResponse.getChatroomJid()));
-        message.setId("cf314085-850f-e868-6401-90ee5714e" + StringUtils.generateRandomString(3));
-        message.addExtension(new TcardSubmit(inputCardModel.getAction(),
-                inputCard.getTcardName(),
-                "card_3",
-                "<![CDATA[{\"inputdata\":[{\"name\":\"firstName\",\"value\":\"sdfsdfd\"},{\"name\":\"lastName\",\"value\":\"sdfsdfsdf\"},{\"name\":\"email\",\"value\":\"sdfsdf@dsfsd.fsdf\"},{\"name\":\"phone\",\"value\":\"324234234\"},{\"name\":\"company\",\"value\":\"sdfsdfsdfsdf\"}]}]]>"));
-        message.setBody("Submitted data:\n" +
-                "test\n" +
-                "test\n" +
-                "test@test.com\n" +
-                "1234\n" +
-                "test");
-        xmppClientWebWidget.sendMessage(message);
-        xmppClientWebWidget.waitForConnectinAgentMessage();
-//        Assert.assertTrue(xmppAgent.waitForOffer(), "Agent didn't receive offer!");
-//        xmppAgent.cancelOffer();
-
-
-        xmppClientWebWidget.endChat();
-        xmppClientWebWidget.disconnect();
-        xmppAgent.leaveRoom();
-        xmppAgent.disconnect();
-
-    }
-
-//    @AfterMethod
-//    public void afterMethod() throws InterruptedException {
-//        xmppClientWebWidget.endChat();
-//        xmppClientWebWidget.disconnect();
-//        xmppAgent.leaveRoom();
-//    }
 
     //according TPLAT-433
 //    @Test

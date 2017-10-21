@@ -1,6 +1,7 @@
 package com.touch.pages;
 
 import com.thoughtworks.selenium.webdriven.commands.WaitForPageToLoad;
+import com.touch.engines.RequestEngine;
 import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;

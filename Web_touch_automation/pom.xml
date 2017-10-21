@@ -7,13 +7,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Sample Serenity project using JBehave and WebDriver</name>
+    <data>Sample Serenity project using JBehave and WebDriver</data>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <serenity.version>1.1.42</serenity.version>
         <serenity.jbehave.version>1.7.0</serenity.jbehave.version>
-        <webdriver.driver>firefox</webdriver.driver>
+        <webdriver.driver>chrome</webdriver.driver>
     </properties>
 
     <repositories>
@@ -22,7 +22,7 @@
         <enabled>false</enabled>
         </snapshots>
         <id>central</id>
-        <name>bintray</name>
+        <data>bintray</data>
         <url>http://jcenter.bintray.com</url>
       </repository>
     </repositories>
@@ -32,12 +32,17 @@
         <enabled>false</enabled>
         </snapshots>
         <id>central</id>
-        <name>bintray-plugins</name>
+        <data>bintray-plugins</data>
         <url>http://jcenter.bintray.com</url>
       </pluginRepository>
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit</artifactId>
+            <version>1.5.3</version>
+        </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
@@ -75,6 +80,11 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+        <dependency>
+            <groupId>com.touch</groupId>
+            <artifactId>touch-rest-api-tests</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -99,6 +109,7 @@
                     <argLine>-Xmx512m</argLine>
                     <systemPropertyVariables>
                         <webdriver.driver>${webdriver.driver}</webdriver.driver>
+                        <webdriver.chrome.driver>${project.basedir}/src/main/resources/chromedriver.exe</webdriver.chrome.driver>>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>

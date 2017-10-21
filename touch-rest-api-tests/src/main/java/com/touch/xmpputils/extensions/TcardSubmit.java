@@ -1,4 +1,4 @@
-package com.touch.tests.extensions;
+package com.touch.xmpputils.extensions;
 
 import javax.xml.bind.annotation.*;
 import java.io.IOException;

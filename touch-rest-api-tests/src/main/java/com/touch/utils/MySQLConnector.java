@@ -317,7 +317,7 @@ public class MySQLConnector {
     }
 
     public void updateTenantBusinessHours(String tenantId, String dayOfWeek, String startWorkTime, String endWorkTime) {
-        String query = "update touch_testing.tenant_business_hour set end_work_time='" + endWorkTime  +
+        String query = "update " + ConfigApp.DB_TABLE + ".tenant_customer_support_hour set end_work_time='" + endWorkTime  +
                 "', start_work_time='" + startWorkTime + "' where tenant_id='" + tenantId + "' and day_of_week='" + dayOfWeek + "'";
         try {
             statement = connection.createStatement();

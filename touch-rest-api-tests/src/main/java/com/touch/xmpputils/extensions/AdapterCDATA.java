@@ -1,4 +1,4 @@
-package com.touch.tests.extensions;
+package com.touch.xmpputils.extensions;
 
 /**
  * Created by oshcherbatyy on 12-09-17.

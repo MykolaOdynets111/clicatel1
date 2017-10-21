@@ -5,6 +5,7 @@ package com.touch.utils;
  * Created by sbryt on 7/13/2016.
  */
 public class ConfigApp {
+    public static String DB_TABLE;
     public static String BASE_API_URL;
     public static String DB_URL;
     public static String DB_USER;
@@ -22,6 +23,7 @@ public class ConfigApp {
         switch (environment) {
 
             case "dev": {
+                DB_TABLE = "touch_dev";
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "dev");
                 DB_URL = String.format(DB_URL_PATTERN, "dev", "mc2_platform");
                 TestingEnvProperties.setPropertiesFile("dev.properties");
@@ -31,6 +33,7 @@ public class ConfigApp {
             }
 
             case "testing": {
+                DB_TABLE = "touch_testing";
                 BASE_API_URL = String.format(BASE_URL_PATTERN, "testing");
 //                DB_URL = String.format(DB_URL_PATTERN, "testing", "mc2_testing");
                 DB_URL = DB_URL_PATTERN_TESTING;

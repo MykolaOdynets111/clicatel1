@@ -1,4 +1,4 @@
-package com.touch.tests.cdatamodels.navigationcard;
+package com.touch.xmpputils.cdatamodels.navigationcard;
 
 /**
  * Created by oshcherbatyy on 13-09-17.

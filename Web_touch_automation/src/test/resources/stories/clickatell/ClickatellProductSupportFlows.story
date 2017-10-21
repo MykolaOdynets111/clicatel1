@@ -20,7 +20,7 @@ When Click on Card-Button with text: 'generalbank'
 Then Verify that last your request was: 'generalbank'
 Then Verify that last Card has following data:
       | type   | value                                                                                                    |
-      | title  | Welcome, admin. We have the following products linked to your name, please select an account to continue |
+      | title  | Welcome, admin. We have the following products linked to your data, please select an account to continue |
       | button | Clickatell Touch                                                                                         |
       | button | Clickatell Engage                                                                                        |
       | button | Clickatell Secure                                                                                        |

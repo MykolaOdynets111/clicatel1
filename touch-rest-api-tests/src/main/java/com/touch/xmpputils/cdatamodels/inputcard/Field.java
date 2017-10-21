@@ -1,4 +1,4 @@
-package com.touch.tests.cdatamodels.inputcard;
+package com.touch.xmpputils.cdatamodels.inputcard;
 
 /**
  * Created by oshcherbatyy on 15-09-17.

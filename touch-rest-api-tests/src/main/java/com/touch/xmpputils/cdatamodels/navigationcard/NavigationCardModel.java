@@ -1,7 +1,7 @@
-package com.touch.tests.cdatamodels.inputcard;
+package com.touch.xmpputils.cdatamodels.navigationcard;
 
 /**
- * Created by oshcherbatyy on 15-09-17.
+ * Created by oshcherbatyy on 13-09-17.
  */
 import java.util.HashMap;
 import java.util.List;
@@ -16,23 +16,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "title",
-        "autosubmit",
         "action",
-        "error",
-        "fields"
+        "items"
 })
-public class InputCardModel {
+public class NavigationCardModel {
 
     @JsonProperty("title")
     private String title;
-    @JsonProperty("autosubmit")
-    private Boolean autosubmit;
     @JsonProperty("action")
     private String action;
-    @JsonProperty("error")
-    private String error;
-    @JsonProperty("fields")
-    private List<Field> fields = null;
+    @JsonProperty("items")
+    private List<Item> items = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -46,16 +40,6 @@ public class InputCardModel {
         this.title = title;
     }
 
-    @JsonProperty("autosubmit")
-    public Boolean getAutosubmit() {
-        return autosubmit;
-    }
-
-    @JsonProperty("autosubmit")
-    public void setAutosubmit(Boolean autosubmit) {
-        this.autosubmit = autosubmit;
-    }
-
     @JsonProperty("action")
     public String getAction() {
         return action;
@@ -66,24 +50,14 @@ public class InputCardModel {
         this.action = action;
     }
 
-    @JsonProperty("error")
-    public String getError() {
-        return error;
+    @JsonProperty("items")
+    public List<Item> getItems() {
+        return items;
     }
 
-    @JsonProperty("error")
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    @JsonProperty("fields")
-    public List<Field> getFields() {
-        return fields;
-    }
-
-    @JsonProperty("fields")
-    public void setFields(List<Field> fields) {
-        this.fields = fields;
+    @JsonProperty("items")
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     @JsonAnyGetter

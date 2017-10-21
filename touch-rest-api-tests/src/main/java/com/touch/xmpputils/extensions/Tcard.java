@@ -1,9 +1,8 @@
-package com.touch.tests.extensions;
+package com.touch.xmpputils.extensions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.IOException;
 
 /**

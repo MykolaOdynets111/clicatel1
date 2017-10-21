@@ -9,6 +9,8 @@ import com.touch.models.touch.auth.AccessTokenRequest;
 import com.touch.models.touch.chats.*;
 import com.touch.utils.StringUtils;
 import com.touch.utils.TestingEnvProperties;
+import com.touch.xmpputils.XMPPAgent;
+import com.touch.xmpputils.XMPPClient;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -89,17 +91,24 @@ public class ChatsTests extends BaseTestClass {
     }
 
     @Test
-    public void terminateAllSessions() {
-        String testClientId = "testClientId";
+    public void terminateAllSessions() throws InterruptedException {
 //terminate not existing session
+        String clientId = "testClientId";
+        clientJid = clientId + "@clickatelllabs.com";
         Response response = chatsActions.terminateAllSessions("testSession" + StringUtils.generateRandomString(10), chatToken);
         Assert.assertEquals(response.getStatusCode(), 200);
         List<ChatSessionResponse> terminatedChatSessions = response.as(ListChatSessionResponse.class).getChatSessions();
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(terminatedChatSessions.size(), 0);
-        ChatRoomResponse chatRoom1 = chatsActions.getChatRoom(clickatellId, clientJid, testClientId, "webchat", accessToken).as(ChatRoomResponse.class);
-        generateMessageForChatRoom(chatRoom1, testClientId);
-        List<ChatSessionResponse> allChatSessions = chatsActions.getListOfSessions(clickatellId, testClientId, chatToken).as(ListChatSessionResponse.class).getChatSessions();
+
+        ChatRoomResponse chatRoomResponse = chatsActions.getChatRoom(clickatellId, clientJid, clientId, "webchat", accessToken).as(ChatRoomResponse.class);
+        BareJID room = BareJID.bareJIDInstance(chatRoomResponse.getChatroomJid());
+        XMPPClient xmppClientWebWidget = new XMPPClient(clientId);
+        xmppClientWebWidget.connect();
+        xmppClientWebWidget.joinRoom(room.getLocalpart());
+        xmppClientWebWidget.waitForGreetingMessage();
+        xmppClientWebWidget.sendMessage("faq");
+        List<ChatSessionResponse> allChatSessions = chatsActions.getListOfSessions(clickatellId, clientId, chatToken).as(ListChatSessionResponse.class).getChatSessions();
         ChatSessionResponse activeChatSessionForTestClient = null;
         for (ChatSessionResponse chatSessionResponse: allChatSessions){
             if (chatSessionResponse.getState().equals("ACTIVE") && chatSessionResponse.getClientId().equals(testClientId) )
