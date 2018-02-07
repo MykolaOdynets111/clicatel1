@@ -52,6 +52,7 @@ public class XMPPClient {
         tcpConfiguration = TcpConnectionConfiguration.builder()
                 .hostname(xmppHost)
                 .port(5222)
+                .secure(false)
                 .build();
 
         xmppSessionConfiguration = XmppSessionConfiguration.builder()

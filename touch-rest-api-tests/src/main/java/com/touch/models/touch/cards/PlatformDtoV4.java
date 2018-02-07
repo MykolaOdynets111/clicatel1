@@ -166,7 +166,7 @@ public class PlatformDtoV4 {
      * @return description
      **/
     @ApiModelProperty(example = "null", value = "")
-    public String getВescription() {
+    public String getDescription() {
         return description;
     }
 
