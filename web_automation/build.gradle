@@ -16,7 +16,6 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'ru.d10xa.allure'
 
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -64,9 +63,12 @@ test(){
     }
 
     if(System.getProperty("remote") != null){
-        systemProperty "remote",System.getProperty("remote")
+        systemProperty "remote", System.properties.getProperty("remote")
     }
 
+    if(System.getProperty("cucumber.options") != null){
+        systemProperty "cucumber.options", System.properties.getProperty("cucumber.options")
+    }
 test.finalizedBy(allureReport)
 
 defaultTasks 'clean', 'test'

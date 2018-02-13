@@ -1,4 +1,4 @@
-@agent_to_user_conversation
+@smoke
 Feature: user on his demand is redirected on the agent
 
   Background:
@@ -6,7 +6,7 @@ Feature: user on his demand is redirected on the agent
     Given User select General Bank Demo
     And Click chat icon
 
-  Scenario: Verify if user is able to communicate with agent:
+  Scenario: Verify if user is able to communicate with agent
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation

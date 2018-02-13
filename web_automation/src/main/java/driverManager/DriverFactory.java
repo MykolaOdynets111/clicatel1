@@ -11,9 +11,11 @@ public class DriverFactory {
 
 
     public static WebDriver getInstance(){
-        if (driver.get() != null)
+        if (driver.get() != null) {
             return driver.get();
-        return startNewInstance();
+        } else {
+            return startNewInstance();
+        }
     }
 
     public static WebDriver getSecondDriverInstance(){
