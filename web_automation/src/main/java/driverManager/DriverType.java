@@ -1,8 +1,10 @@
 package driverManager;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
@@ -19,17 +21,9 @@ public enum DriverType {
 
         @Override
 		public MutableCapabilities getDesiredCapabilities() {
+            String fs = File.separator;
+
             ChromeOptions options = new ChromeOptions();
-//        Map<String, Object> prefs = new LinkedHashMap<>();
-//        prefs.put("credentials_enable_service", Boolean.valueOf(false));
-//        prefs.put("profile.password_manager_enabled", Boolean.valueOf(false));
-//        prefs.put("xdg-open", Boolean.valueOf(false));
-//        //    prefs.put("profile.default_content_settings.popups", 0);
-//        //     prefs.put("download.default_directory", pathToExtract);
-//        //    prefs.put("browser.download.folderList", 2);
-//        //    prefs.put("browser.download.manager.showWhenStarting", false);
-//        //   options.setExperimentalOption("excludeSwitches", Arrays.asList("enable-automation"));
-//        options.setExperimentalOption("prefs", prefs);
             options.addArguments("test-type");
             options.addArguments("start-maximized");
             options.addArguments("disable-web-security");
@@ -38,6 +32,7 @@ public enum DriverType {
             options.addArguments("disable-infobars");
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
+
 			return options;
 		}
 

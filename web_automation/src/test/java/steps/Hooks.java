@@ -22,6 +22,7 @@ public class Hooks {
     @After()
     public void afterScenario(){
         takeScreenshot();
+//        System.out.println("!!!!! URL !!!!!!!!!" + DriverFactory.getInstance().getCurrentUrl());
         DriverFactory.closeBrowser();
         DriverFactory.closeSecondBrowser();
     }

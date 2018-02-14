@@ -2,7 +2,10 @@ package driverManager;
 
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DriverFactory {
 
@@ -27,8 +30,10 @@ public class DriverFactory {
     public static WebDriver startNewInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-//        if (IS_REMOTE)
-//            return startRemoteDriver(capabilities);
+        if (ConfigManager.isRemote()) {
+            startRemoteChrome(capabilities);
+            return getInstance();
+        }
         WebDriver cratedDriver = driverType.getWebDriverObject(capabilities);
         driver.set(cratedDriver);
         return cratedDriver;
@@ -38,8 +43,10 @@ public class DriverFactory {
     public static WebDriver startNewSecondDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-//        if (IS_REMOTE)
-//            return startRemoteDriver(capabilities);
+        if (ConfigManager.isRemote()) {
+            startRemoteChrome(capabilities);
+            return getInstance();
+        }
         WebDriver cratedDriver = driverType.getWebDriverObject(capabilities);
         secondDriver.set(cratedDriver);
         return cratedDriver;
@@ -49,10 +56,13 @@ public class DriverFactory {
         DriverFactory.getInstance().get(URLs.getURL());
     }
 
-    private static void startRemoteChrome(){
-//        container.get().getContainerInfo();
-//        container.get().start();
-//        driver.set(container.get().getWebDriver());
+    private static void startRemoteChrome(MutableCapabilities capabilities){
+        try {
+            driver.set(new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        DriverFactory.getInstance().manage().window().maximize();
     }
 
     public static void closeBrowser(){
