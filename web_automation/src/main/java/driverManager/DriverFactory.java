@@ -30,11 +30,13 @@ public class DriverFactory {
     public static WebDriver startNewInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
+        WebDriver cratedDriver;
         if (ConfigManager.isRemote()) {
-            startRemoteChrome(capabilities);
-            return getInstance();
+            cratedDriver = startRemoteChrome(capabilities);
+            driver.set(cratedDriver);
+            return cratedDriver;
         }
-        WebDriver cratedDriver = driverType.getWebDriverObject(capabilities);
+        cratedDriver = driverType.getWebDriverObject(capabilities);
         driver.set(cratedDriver);
         return cratedDriver;
     }
@@ -43,11 +45,13 @@ public class DriverFactory {
     public static WebDriver startNewSecondDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
+        WebDriver cratedDriver;
         if (ConfigManager.isRemote()) {
-            startRemoteChrome(capabilities);
-            return getInstance();
+            cratedDriver = startRemoteChrome(capabilities);
+            secondDriver.set(cratedDriver);
+            return cratedDriver;
         }
-        WebDriver cratedDriver = driverType.getWebDriverObject(capabilities);
+        cratedDriver = driverType.getWebDriverObject(capabilities);
         secondDriver.set(cratedDriver);
         return cratedDriver;
     }
@@ -56,13 +60,13 @@ public class DriverFactory {
         DriverFactory.getInstance().get(URLs.getURL());
     }
 
-    private static void startRemoteChrome(MutableCapabilities capabilities){
+    private static WebDriver startRemoteChrome(MutableCapabilities capabilities){
         try {
-            driver.set(new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities));
+            return new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return null;
         }
-//        DriverFactory.getInstance().manage().window().maximize();
     }
 
     public static void closeBrowser(){
