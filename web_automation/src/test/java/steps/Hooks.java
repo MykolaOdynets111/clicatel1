@@ -16,11 +16,14 @@ public class Hooks {
         if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
             DriverFactory.startNewSecondDriverInstance();
         }
-        DriverFactory.startBrowser();
+        DriverFactory.openUrl();
     }
 
     @After()
     public void afterScenario(){
+        if(DriverFactory.isSecondDriverExists()) {
+            takeScreenshotFromSecondDriver();
+        }
         takeScreenshot();
 //        System.out.println("!!!!! URL !!!!!!!!!" + DriverFactory.getInstance().getCurrentUrl());
         DriverFactory.closeBrowser();
@@ -32,4 +35,8 @@ public class Hooks {
         return ((TakesScreenshot) DriverFactory.getInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
+    @Attachment(value = "Screenshot")
+    private byte[] takeScreenshotFromSecondDriver() {
+        return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
+    }
 }

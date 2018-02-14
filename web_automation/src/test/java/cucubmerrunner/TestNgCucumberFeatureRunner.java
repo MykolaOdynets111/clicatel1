@@ -22,7 +22,7 @@ public class TestNgCucumberFeatureRunner{
 
 //    @BeforeClass(alwaysRun = true)
 //    public void startContainer(){
-//        DriverFactory.startBrowser();
+//        DriverFactory.openUrl();
 //        System.out.println("!!!!!!!!!!!!!!!Cucumber feature :" + cucumberFeature.toString());
 //    }
 

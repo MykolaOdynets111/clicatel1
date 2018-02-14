@@ -21,6 +21,13 @@ public class DriverFactory {
         }
     }
 
+    public static boolean isSecondDriverExists(){
+        if (secondDriver.get() != null)
+            return true;
+        else
+            return false;
+    }
+
     public static WebDriver getSecondDriverInstance(){
         if (secondDriver.get() != null)
             return secondDriver.get();
@@ -32,7 +39,7 @@ public class DriverFactory {
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         WebDriver cratedDriver;
         if (ConfigManager.isRemote()) {
-            cratedDriver = startRemoteChrome(capabilities);
+            cratedDriver = createRemoteDriver(capabilities);
             driver.set(cratedDriver);
             return cratedDriver;
         }
@@ -47,7 +54,7 @@ public class DriverFactory {
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         WebDriver cratedDriver;
         if (ConfigManager.isRemote()) {
-            cratedDriver = startRemoteChrome(capabilities);
+            cratedDriver = createRemoteDriver(capabilities);
             secondDriver.set(cratedDriver);
             return cratedDriver;
         }
@@ -56,11 +63,11 @@ public class DriverFactory {
         return cratedDriver;
     }
 
-    public static void startBrowser() {
+    public static void openUrl() {
         DriverFactory.getInstance().get(URLs.getURL());
     }
 
-    private static WebDriver startRemoteChrome(MutableCapabilities capabilities){
+    private static WebDriver createRemoteDriver(MutableCapabilities capabilities){
         try {
             return new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities);
         } catch (MalformedURLException e) {
