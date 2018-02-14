@@ -62,7 +62,7 @@ public class DriverFactory {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        DriverFactory.getInstance().manage().window().maximize();
+//        DriverFactory.getInstance().manage().window().maximize();
     }
 
     public static void closeBrowser(){
