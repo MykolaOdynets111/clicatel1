@@ -1,5 +1,7 @@
 @smoke
-Feature: user on his demand is redirected on the agent
+Feature: User on his demand is redirected on the agent
+
+  Verification of basic communication between user and agent
 
   Background:
     Given I login as agent of General Bank Demo

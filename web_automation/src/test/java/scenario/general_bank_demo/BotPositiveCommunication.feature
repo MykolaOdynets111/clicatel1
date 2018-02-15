@@ -1,6 +1,8 @@
 @smoke
 Feature: General Bank positive flow
 
+  Verification of basic communication between user and bot
+
   Background:
     Given User select General Bank Demo
     And Click chat icon
