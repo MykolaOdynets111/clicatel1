@@ -18,6 +18,7 @@ public class FromUserMessage extends Widget implements WebActions {
     }
 
     public String getMessageText() {
-        return messageText.getText();
+        return messageText.getAttribute("innerText");
+//        return messageText.getText();
     }
 }

@@ -20,6 +20,9 @@ public class WidgetConversationArea extends AbstractUIElement {
     @FindBy(css = "li.ctl-chat-message-container.message-from")
     private List<WebElement> fromUserMessages;
 
+//    @FindBy(css = "div.ctl-conversation-area")
+//    private WebElement scrollableArea;
+
     private WebElement getFromUserWebElement(String messageText) {
         FromUserMessage theMessage =  fromUserMessages.stream().map(e -> new FromUserMessage(e))
                                             .filter(e1 -> e1.getMessageText().equals(messageText))

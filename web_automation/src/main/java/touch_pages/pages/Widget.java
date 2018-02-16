@@ -4,6 +4,7 @@ import abstract_classes.AbstractPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touch_pages.uielements.WidgetConversationArea;
@@ -51,7 +52,7 @@ public class Widget extends AbstractPage {
             waitForElementToBeInvisibleWithNoSuchElementException(conectingMassage,65);
         } catch (TimeoutException e){
             Assert.assertTrue(false, "Widget is not connected after 65 seconds wait");
-
         }
     }
+
 }

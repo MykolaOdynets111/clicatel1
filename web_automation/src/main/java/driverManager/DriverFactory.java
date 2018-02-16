@@ -9,8 +9,8 @@ import java.net.URL;
 
 public class DriverFactory {
 
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-    private static ThreadLocal<WebDriver> secondDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> secondDriver = new ThreadLocal<>();
 
 
     public static WebDriver getInstance(){

@@ -42,7 +42,6 @@ public enum DriverType {
 
             WebDriver localDriver = new ChromeDriver((ChromeOptions) capabilities);
             DriverType.setDimension(localDriver);
-            localDriver.manage().window().maximize();
             return localDriver;
         }
 
@@ -50,7 +49,6 @@ public enum DriverType {
         protected boolean isKnownAs(String name) {
             return knownNames.contains(name);
         }
-
     }
     ;
 

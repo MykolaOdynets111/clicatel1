@@ -7,6 +7,9 @@ import driverManager.DriverFactory;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import touch_pages.pages.Widget;
+import touch_pages.uielements.WidgetConversationArea;
+
 import java.util.Arrays;
 
 public class Hooks {
@@ -25,6 +28,8 @@ public class Hooks {
             takeScreenshotFromSecondDriver();
         }
         takeScreenshot();
+
+        new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();
 //        System.out.println("!!!!! URL !!!!!!!!!" + DriverFactory.getInstance().getCurrentUrl());
         DriverFactory.closeBrowser();
         DriverFactory.closeSecondBrowser();
