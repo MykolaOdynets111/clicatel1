@@ -19,6 +19,9 @@ public class Widget extends AbstractPage {
     @FindBy(css = "div.ctl-chat-container.ctl-visible")
     public WebElement widgetWindow;
 
+    @FindBy(css = "div.ctl-touch-button")
+    private WebElement touchButton;
+
     public Widget() {
         waitUntilOpenedAndConnected();
     }
@@ -55,4 +58,8 @@ public class Widget extends AbstractPage {
         }
     }
 
+
+    public void clickTouchButton(){
+        touchButton.click();
+    }
 }

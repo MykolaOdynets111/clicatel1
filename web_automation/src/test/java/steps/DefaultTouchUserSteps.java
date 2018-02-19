@@ -17,7 +17,7 @@ public class DefaultTouchUserSteps {
     WidgetConversationArea widgetConversationArea;
 
 
-    @Given("^User select (.*)$")
+    @Given("^User select (.*) tenant$")
     public void selectTenant(String tenantName) {
         mainPage.selectTenant(tenantName);
     }
