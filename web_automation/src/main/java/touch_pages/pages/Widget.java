@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import touch_pages.uielements.TouchActionsMenu;
 import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetFooter;
 
@@ -28,12 +29,17 @@ public class Widget extends AbstractPage {
 
     private WidgetConversationArea widgetConversationArea;
     private WidgetFooter widgetFooter;
+    private TouchActionsMenu touchActionsMenu;
 
     public WidgetConversationArea getWidgetConversationArea() {
         return widgetConversationArea;
     }
 
     public WidgetFooter getWidgetFooter() {return widgetFooter;}
+
+    public TouchActionsMenu getTouchActionsMenu() {
+        return touchActionsMenu;
+    }
 
     private void waitUntilOpenedAndConnected() {
         waitForElementToBeVisible(widgetWindow, 10);
@@ -59,7 +65,14 @@ public class Widget extends AbstractPage {
     }
 
 
-    public void clickTouchButton(){
-        touchButton.click();
+    public TouchActionsMenu clickTouchButton(){
+        try {
+            click(touchButton);
+            return touchActionsMenu;
+        } catch(TimeoutException e) {
+            Assert.assertTrue(false, "Touch button is not shown");
+            return null;
+        }
+
     }
 }

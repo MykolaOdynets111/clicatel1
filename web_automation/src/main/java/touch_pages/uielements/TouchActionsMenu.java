@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 
-@FindBy(css = "ul.extends AbstractUIElement")
+@FindBy(css = "ul.ctl-touch-actions-list")
 public class TouchActionsMenu extends AbstractUIElement {
 
     @FindBy(css = "li.ctl-chat-action-item")
@@ -17,7 +17,8 @@ public class TouchActionsMenu extends AbstractUIElement {
         return touchActions.stream().anyMatch(e->e.getText().equalsIgnoreCase(touchAction));
     }
 
-    public void slectTouchAction(String touchAction) {
+    public void selectTouchAction(String touchAction) {
         touchActions.stream().filter(e->e.getText().equalsIgnoreCase(touchAction)).findFirst().get().click();
+    int a=2;
     }
 }

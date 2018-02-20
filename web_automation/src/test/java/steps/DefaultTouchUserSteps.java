@@ -1,20 +1,21 @@
 package steps;
 
-import agent_side_pages.AgentHomePage;
-import agent_side_pages.AgentLoginPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 import touch_pages.uielements.WidgetConversationArea;
 
+import java.util.List;
+
 public class DefaultTouchUserSteps {
 
     private MainPage mainPage = new MainPage();
-    private Widget widget;
-    WidgetConversationArea widgetConversationArea;
+    private Widget widgetForDefaultStep;
+    WidgetConversationArea widgetConversationAreaDefaultStep;
 
 
     @Given("^User select (.*) tenant$")
@@ -24,25 +25,35 @@ public class DefaultTouchUserSteps {
 
     @Given("^Click chat icon$")
     public void clickChatIcon() {
-        widget = mainPage.openWidget();
+        widgetForDefaultStep = mainPage.openWidget();
     }
 
     @When("^User enter (.*) into widget input field$")
     public void enterText(String text) {
-        widgetConversationArea = widget.getWidgetConversationArea();
-        widgetConversationArea.waitForSalutation();
-        widget.getWidgetFooter().enterMessage(text).sendMessage();
+        widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
+        widgetConversationAreaDefaultStep.waitForSalutation();
+        widgetForDefaultStep.getWidgetFooter().enterMessage(text).sendMessage();
     }
 
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String expectedTextResponse, String userInput) {
         SoftAssert soft = new SoftAssert();
-        widgetConversationArea = widget.getWidgetConversationArea();
-        soft.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 15),
+        widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
+        soft.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 15),
                 "No text response is shown on '"+userInput+"' user's input");
-        soft.assertEquals(widgetConversationArea.getResponseTextOnUserInput(userInput), expectedTextResponse,
+        soft.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input");
+        soft.assertAll();
+    }
+
+    @Then("^Card with a button \"(.*)\" is shown on user (.*) message$")
+    public void isCardWithButtonShown(List<String> buttons, String userMessage){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(widgetConversationAreaDefaultStep.isCardShownFor(userMessage, 6),
+                "Card is not show after '"+userMessage+"' user message");
+        soft.assertTrue(widgetConversationAreaDefaultStep.isCardButtonsShownFor(userMessage, buttons),
+                buttons + " buttons ar not shown in card.");
         soft.assertAll();
     }
 

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Agents {
-    QA_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "capitec bank", "qa"),
+    QA_AGENT("taras.mytlovych@perfectial.com", ";", "capitec bank", "qa"),
 
     DEV_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "capitec bank", "dev"),
 

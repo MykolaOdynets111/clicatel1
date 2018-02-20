@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touch_pages.uielements.messages.FromUserMessage;
+import touch_pages.uielements.messages.ToUserMessageWithActions;
 import touch_pages.uielements.messages.ToUserTextMessage;
 
 import java.util.List;
@@ -37,6 +38,18 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public boolean isTextResponseShownFor(String userMessageText, int wait) {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
+    }
+
+    public boolean isCardShownFor(String userMessageText, int wait) {
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isTextInCardShown(wait);
+    }
+
+    public boolean isCardButtonsShownFor(String userMessageText, List<String> buttons) {
+        boolean result = false;
+        for (String button : buttons) {
+            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button);
+        }
+        return result;
     }
 
     public void  waitForSalutation() {
