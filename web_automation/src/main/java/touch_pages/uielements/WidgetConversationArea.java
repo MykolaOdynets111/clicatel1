@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @FindBy(css = "div.ctl-conversation-area")
 public class WidgetConversationArea extends AbstractUIElement {
 
-    @FindBy(css = "li.ctl-chat-message-container.message-to with-content")
+    @FindBy(css = "li.ctl-chat-message-container.message-to.with-content")
     private WebElement salutationElement;
 
     @FindBy(css = "li.ctl-chat-message-container.message-from")

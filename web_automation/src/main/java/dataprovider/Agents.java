@@ -8,7 +8,9 @@ import java.util.List;
 public enum Agents {
     QA_AGENT("taras.mytlovych@perfectial.com", ";", "capitec bank", "qa"),
 
-    DEV_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "capitec bank", "dev"),
+    DEV_AGENT("taras.mytlovych@perfectial.com", "passw0rd", "capitec bank", "dev"),
+
+    DEV_AGENT_GEN_BANK("taras.mytlovych@perfectial.com", "passw0rd", "general bank demo", "dev"),
 
     TESTING_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "general bank demo", "testing");
 
