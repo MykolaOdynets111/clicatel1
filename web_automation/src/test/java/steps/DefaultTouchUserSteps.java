@@ -9,6 +9,7 @@ import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 import touch_pages.uielements.WidgetConversationArea;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DefaultTouchUserSteps {
@@ -47,13 +48,14 @@ public class DefaultTouchUserSteps {
         soft.assertAll();
     }
 
-    @Then("^Card with a button \"(.*)\" is shown on user (.*) message$")
-    public void isCardWithButtonShown(List<String> buttons, String userMessage){
+    @Then("^Card with a (?:button|buttons) (.*) is shown on user (.*) message$")
+    public void isCardWithButtonShown(String buttonNames, String userMessage){
+        List<String> buttons = Arrays.asList(buttonNames.split(";"));
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationAreaDefaultStep.isCardShownFor(userMessage, 6),
                 "Card is not show after '"+userMessage+"' user message");
         soft.assertTrue(widgetConversationAreaDefaultStep.isCardButtonsShownFor(userMessage, buttons),
-                buttons + " buttons ar not shown in card.");
+                buttons + " buttons are not shown in card.");
         soft.assertAll();
     }
 

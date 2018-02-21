@@ -1,5 +1,7 @@
 package driverManager;
 
+import com.github.javafaker.Faker;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -65,6 +67,11 @@ public class DriverFactory {
 
     public static void openUrl() {
         DriverFactory.getInstance().get(URLs.getURL());
+        if(ConfigManager.getEnv().equalsIgnoreCase("dev")){
+            Faker faker=new Faker();
+            JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
+            jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+faker.code().ean8()+"');");
+        }
     }
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){
