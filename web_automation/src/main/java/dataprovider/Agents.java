@@ -6,15 +6,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Agents {
-    QA_AGENT("taras.mytlovych@perfectial.com", ";", "capitec bank", "qa"),
+    QA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
 
     DEV_AGENT("taras.mytlovych@perfectial.com", "passw0rd", "capitec bank", "dev"),
 
-    DEV_AGENT_GEN_BANK("taras.mytlovych@perfectial.com", "passw0rd", "general bank demo", "dev"),
+    DEV_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "dev"),
 
-    TESTING_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
+    TESTING_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
 
-    DEMO_AGENT_GEN_BANK("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "general bank demo", "demo");
+    DEMO_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", "demo");
 
     String userName;
     String userPass;

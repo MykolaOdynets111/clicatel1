@@ -9,6 +9,9 @@ import org.openqa.selenium.support.FindBy;
 
 public class AgentLoginPage extends AgentAbstractPage {
 
+    @FindBy(css = "div.login-form")
+    private WebElement loginForm;
+
     @FindBy(css = "input[type='email']")
     private WebElement userNameInput;
 
@@ -25,11 +28,15 @@ public class AgentLoginPage extends AgentAbstractPage {
 
    public AgentHomePage loginAsAgentOf(String tenant) {
        Agents agent = Agents.getAgentFromCurrentEnvByTenant(tenant);
-
-       waitForElementToBeVisible(userNameInput);
+       waitForLoginPageToOpen();
+//       waitForElementToBeVisible(userNameInput);
        userNameInput.sendKeys(agent.getAgentName());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();
        return new AgentHomePage();
+   }
+
+   public void waitForLoginPageToOpen() {
+        waitForElementToBeVisible(loginForm, 6);
    }
 }

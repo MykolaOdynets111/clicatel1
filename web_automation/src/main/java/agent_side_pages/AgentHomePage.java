@@ -2,6 +2,7 @@ package agent_side_pages;
 
 import abstract_classes.AgentAbstractPage;
 import agent_side_pages.UIElements.ChatBody;
+import agent_side_pages.UIElements.Header;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -21,6 +22,11 @@ public class AgentHomePage extends AgentAbstractPage {
 
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
+    private Header header;
+
+    public Header getHeader() {
+        return header;
+    }
 
     public LeftMenuWithChats getLeftMenuWithChats() {
         return leftMenuWithChats;

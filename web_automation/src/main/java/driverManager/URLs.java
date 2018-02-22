@@ -10,9 +10,7 @@ public class URLs {
     private static String FINAL_AGENT_URL = null;
 
     private static final String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
-
-    private static final String DEV_ENV_BASE_AGENT_URL = "https://dev-agentdesk.clickatelllabs.com/#/login?tenantId=";
-
+    
     public static String getURL(){
         String env = ConfigManager.getEnv();
         switch (env) {

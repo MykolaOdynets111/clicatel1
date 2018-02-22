@@ -1,5 +1,7 @@
 package steps;
 
+import agent_side_pages.AgentHomePage;
+import agent_side_pages.AgentLoginPage;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -26,9 +28,10 @@ public class Hooks {
     public void afterScenario(){
         if(DriverFactory.isSecondDriverExists()) {
             takeScreenshotFromSecondDriver();
+            new AgentHomePage().getHeader().logOut();
+            new AgentLoginPage().waitForLoginPageToOpen();
         }
         takeScreenshot();
-
         new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();
 //        System.out.println("!!!!! URL !!!!!!!!!" + DriverFactory.getInstance().getCurrentUrl());
         DriverFactory.closeBrowser();
