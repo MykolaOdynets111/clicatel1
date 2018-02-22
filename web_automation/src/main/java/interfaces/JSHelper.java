@@ -19,4 +19,10 @@ public interface JSHelper {
         JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getInstance();
         jsExec.executeScript("arguments[0].scrollTop = " + offset + "", elem);
     }
+
+
+    default String getUserNameFromLocalStorage(){
+        JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
+        return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+    }
 }

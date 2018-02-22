@@ -9,10 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 public class ToUserTextMessage  extends Widget implements WebActions {
 
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod']")
-    private WebElement toUserTextMessage;
+    private List<WebElement> toUserTextMessages;
 
     public ToUserTextMessage(WebElement element) {
         super(element);
@@ -21,18 +23,25 @@ public class ToUserTextMessage  extends Widget implements WebActions {
 
     public String getMessageText() {
         try{
-            return toUserTextMessage.getText();
-        } catch (NoSuchElementException e) {
+            return toUserTextMessages.get(0).getText();
+        } catch (IndexOutOfBoundsException e) {
             return "no text response found";
         }
     }
 
     public boolean isTextResponseShown(int wait) {
         try{
-            waitForElementToBeVisible(toUserTextMessage, wait);
+            waitForElementsToBeVisible(toUserTextMessages, wait);
             return true;
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public boolean isOnlyOneTextResponseShwon(){
+        if (toUserTextMessages.size()>1)
+            return false;
+        else
+            return true;
     }
 }

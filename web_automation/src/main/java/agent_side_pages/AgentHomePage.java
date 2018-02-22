@@ -10,7 +10,7 @@ import touch_pages.uielements.WidgetConversationArea;
 
 public class AgentHomePage extends AgentAbstractPage {
 
-    @FindBy(css = "textarea.text-input__control")
+    @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
 
     @FindBy(css = "button[type='submit']")

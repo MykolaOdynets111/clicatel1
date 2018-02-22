@@ -43,6 +43,8 @@ public class DefaultTouchUserSteps {
         widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
         soft.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 15),
                 "No text response is shown on '"+userInput+"' user's input");
+        soft.assertTrue(widgetConversationAreaDefaultStep.isOnlyOneTextResponseShwonFor(userInput),
+                "More than one text response is shown for user");
         soft.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input");
         soft.assertAll();

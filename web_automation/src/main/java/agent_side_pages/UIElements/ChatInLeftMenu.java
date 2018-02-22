@@ -14,15 +14,20 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.profile-img")
     private WebElement userIcon;
 
+    @FindBy(css = "div.profile-info>h2")
+    private WebElement userName;
+
     public ChatInLeftMenu(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
 
     public void openConversation() {
-//        executeJSclick(userIcon);
-//        moveToElemAndClick(userIcon);
         userIcon.click();
+    }
+
+    public String getUserName() {
+        return userName.getText();
     }
 }
 

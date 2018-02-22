@@ -38,6 +38,10 @@ public class WidgetConversationArea extends AbstractUIElement {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
     }
 
+    public boolean isOnlyOneTextResponseShwonFor(String userMessage) {
+        return new ToUserTextMessage(getFromUserWebElement(userMessage)).isOnlyOneTextResponseShwon();
+    }
+
     public boolean isCardShownFor(String userMessageText, int wait) {
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isTextInCardShown(wait);
     }

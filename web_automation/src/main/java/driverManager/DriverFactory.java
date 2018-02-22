@@ -1,6 +1,7 @@
 package driverManager;
 
 import com.github.javafaker.Faker;
+import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
