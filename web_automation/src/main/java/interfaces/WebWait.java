@@ -48,7 +48,7 @@ public interface WebWait {
         }
 
     default List<WebElement> waitForElementsToBeVisible(List<WebElement> elements, int wait){
-            return initWait(2).ignoring(NoSuchElementException.class)
+            return initWait(wait).ignoring(NoSuchElementException.class)
                     .ignoring(StaleElementReferenceException.class)
                     .until(ExpectedConditions.visibilityOfAllElements(elements));
     }

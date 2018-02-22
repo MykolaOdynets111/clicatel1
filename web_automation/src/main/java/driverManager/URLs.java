@@ -22,6 +22,8 @@ public class URLs {
                 return String.format(URLs.BASE_ENV_URL, "dev");
             case "testing":
                 return String.format(URLs.BASE_ENV_URL, "testing");
+            case "demo":
+                return String.format(URLs.BASE_ENV_URL, "demo");
             default:
                 return String.format(URLs.BASE_ENV_URL, "testing");
         }
@@ -45,6 +47,9 @@ public class URLs {
                     break;
                 case "testing":
                     baseUrl =String.format(URLs.BASE_AGENT_URL, "testing");
+                    break;
+                case "demo":
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, "demo");
                     break;
                 default:
                     baseUrl = String.format(URLs.BASE_AGENT_URL, "testing");

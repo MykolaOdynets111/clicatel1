@@ -39,15 +39,15 @@ public class DefaultTouchUserSteps {
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String expectedTextResponse, String userInput) {
-        SoftAssert soft = new SoftAssert();
+        SoftAssert softAssert = new SoftAssert();
         widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
-        soft.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 15),
+        softAssert.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 10),
                 "No text response is shown on '"+userInput+"' user's input");
-        soft.assertTrue(widgetConversationAreaDefaultStep.isOnlyOneTextResponseShwonFor(userInput),
+        softAssert.assertTrue(widgetConversationAreaDefaultStep.isOnlyOneTextResponseShwonFor(userInput),
                 "More than one text response is shown for user");
-        soft.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
+        softAssert.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input");
-        soft.assertAll();
+        softAssert.assertAll();
     }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown on user (.*) message$")

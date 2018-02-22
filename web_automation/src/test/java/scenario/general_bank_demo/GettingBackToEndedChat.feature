@@ -8,6 +8,7 @@ Feature: Getting back to ended chat
 
   Scenario: User should be shown Welcome message after he returns to the ended chat
     When User enter Lost my card into widget input field
+    Then User have to receive 'When your card expires and is reissued, you will need to update the card details according to your new card. Alternately you can delete your old card details and load the new card.' text response for his 'Lost my card' input
     And User enter End chat into widget input field
     Then User have to receive 'Simply type to start a new chat' text response for his 'End chat' input
     When User enter Hello into widget input field

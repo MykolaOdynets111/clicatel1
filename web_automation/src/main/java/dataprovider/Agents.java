@@ -12,8 +12,9 @@ public enum Agents {
 
     DEV_AGENT_GEN_BANK("taras.mytlovych@perfectial.com", "passw0rd", "general bank demo", "dev"),
 
-    TESTING_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "general bank demo", "testing");
+    TESTING_AGENT("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
 
+    DEMO_AGENT_GEN_BANK("taras.mytlovych@perfectial.com", "p@$$w0rd4te$t", "general bank demo", "demo");
 
     String userName;
     String userPass;
