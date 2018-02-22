@@ -10,7 +10,7 @@ public class URLs {
     private static String FINAL_AGENT_URL = null;
 
     private static final String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
-    
+
     public static String getURL(){
         String env = ConfigManager.getEnv();
         switch (env) {
@@ -22,6 +22,8 @@ public class URLs {
                 return String.format(URLs.BASE_ENV_URL, "testing");
             case "demo":
                 return String.format(URLs.BASE_ENV_URL, "demo");
+            case "beta":
+                return String.format(URLs.BASE_ENV_URL, "beta");
             default:
                 return String.format(URLs.BASE_ENV_URL, "testing");
         }
@@ -49,9 +51,15 @@ public class URLs {
                 case "demo":
                     baseUrl =String.format(URLs.BASE_AGENT_URL, "demo");
                     break;
+                case "beta":
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, "beta");
+                    break;
                 default:
                     baseUrl = String.format(URLs.BASE_AGENT_URL, "testing");
                     break;
+            }
+            if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
+                tenantName="standard bank";
             }
             FINAL_AGENT_URL = baseUrl + getTenantID(tenantName);
         }

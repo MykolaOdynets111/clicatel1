@@ -3,6 +3,7 @@ package steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import driverManager.ConfigManager;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
@@ -21,6 +22,9 @@ public class DefaultTouchUserSteps {
 
     @Given("^User select (.*) tenant$")
     public void selectTenant(String tenantName) {
+        if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
+            tenantName="Standard Bank";
+        }
         mainPage.selectTenant(tenantName);
     }
 
