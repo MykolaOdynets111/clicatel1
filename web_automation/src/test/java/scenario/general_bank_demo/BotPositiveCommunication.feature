@@ -1,5 +1,5 @@
 @smoke
-Feature: General Bank positive flow
+Feature: General Bank POSITIVE flow
 
   Verification of basic communication between user and bot
 
