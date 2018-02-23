@@ -1,5 +1,5 @@
 @tie
-Feature: TIE should give correct sentiments
+Feature: TIE should give correct neutral sentiments
 
   Scenario Outline: Verify if TIE sentiment is NEUTRAL for the following message: "<user_message>"
     Then TIE sentiment is NEUTRAL when I send '<user_message>' for General Bank Demo tenant
