@@ -22,9 +22,9 @@ public class DefaultTouchUserSteps {
 
     @Given("^User select (.*) tenant$")
     public void selectTenant(String tenantName) {
-        if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
-            tenantName="Standard Bank";
-        }
+//        if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
+//            tenantName="Standard Bank";
+//        }
         mainPage.selectTenant(tenantName);
     }
 

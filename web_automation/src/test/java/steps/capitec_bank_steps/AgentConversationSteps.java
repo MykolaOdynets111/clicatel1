@@ -17,6 +17,12 @@ public class AgentConversationSteps {
                 "'" +userMessage+ "' User message is not shown in conversation area");
     }
 
+    @Then("^There is no more than one from user message$")
+    public void checkThereIsNoMoreThanOneUserMessage() {
+        Assert.assertFalse(chatBody.isMoreThanOneUserMassageShown(),
+                "More than one user message is shown");
+    }
+
     @Then("^There is no from agent response added by default for (.*) user message$")
     public void verifyIfNoAgentResponseAddedByDefault(String userMessage) {
         Assert.assertFalse(chatBody.isResponseOnUserMessageShown(userMessage),

@@ -33,6 +33,14 @@ public class ChatBody extends AbstractUIElement {
                .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }
 
+    public boolean isMoreThanOneUserMassageShown() {
+        if (fromUserMessages.size()>1){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     public boolean isResponseOnUserMessageShown(String userMesage) {
         return new AgentDeskToUserMessage(getFromUserWebElement(userMesage)).isTextResponseShown(5);
     }

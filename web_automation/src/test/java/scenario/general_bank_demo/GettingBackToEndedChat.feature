@@ -1,3 +1,4 @@
+@smoke
 Feature: Getting back to ended chat
 
   Verification of user's possibility to return and continue ended chat

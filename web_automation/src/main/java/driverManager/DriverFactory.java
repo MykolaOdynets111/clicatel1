@@ -68,11 +68,11 @@ public class DriverFactory {
 
     public static void openUrl() {
         DriverFactory.getInstance().get(URLs.getURL());
-        if(ConfigManager.getEnv().equalsIgnoreCase("dev")){
+//        if(ConfigManager.getEnv().equalsIgnoreCase("dev")){
             Faker faker=new Faker();
             JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
             jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+faker.code().ean8()+"');");
-        }
+//        }
     }
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){

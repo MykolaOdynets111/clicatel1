@@ -58,9 +58,9 @@ public class URLs {
                     baseUrl = String.format(URLs.BASE_AGENT_URL, "testing");
                     break;
             }
-            if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
-                tenantName="standard bank";
-            }
+//            if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
+//                tenantName="standard bank";
+//            }
             FINAL_AGENT_URL = baseUrl + getTenantID(tenantName);
         }
 
