@@ -1,4 +1,4 @@
-package steps.capitec_bank_steps;
+package steps.general_bank_steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.LeftMenuWithChats;

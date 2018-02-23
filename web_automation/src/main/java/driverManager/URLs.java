@@ -11,6 +11,8 @@ public class URLs {
 
     private static final String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
 
+    private static String BASE_TIE_SENTIMENT_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/chats/?q=%s&sentiment=true";
+
     public static String getURL(){
         String env = ConfigManager.getEnv();
         switch (env) {
@@ -69,6 +71,17 @@ public class URLs {
 
     private static String getTenantID(String tenantName){
         return TenantIDs.getTenentIdFor(tenantName);
+    }
+
+    public static String getTieURL(String tenantOrgName, String message) {
+        String env = ConfigManager.getEnv();
+        String tenantName = null;
+        switch (tenantOrgName) {
+            case "General Bank Demo":
+                tenantName="generalbank";
+                break;
+        }
+        return String.format(BASE_TIE_SENTIMENT_URL, env, tenantName, message);
     }
 
 }

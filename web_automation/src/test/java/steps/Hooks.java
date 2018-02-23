@@ -18,24 +18,29 @@ public class Hooks {
 
     @Before
     public void beforeScenario(Scenario scenario){
-        if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
-            DriverFactory.startNewSecondDriverInstance();
+        if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie"))) {
+            if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
+                DriverFactory.startNewSecondDriverInstance();
+            }
+            DriverFactory.openUrl();
         }
-        DriverFactory.openUrl();
     }
 
     @After()
-    public void afterScenario(){
-        if(DriverFactory.isSecondDriverExists()) {
-            takeScreenshotFromSecondDriver();
-            new AgentHomePage().getHeader().logOut();
-            new AgentLoginPage().waitForLoginPageToOpen();
-        }
-        takeScreenshot();
-        new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();
+    public void afterScenario(Scenario scenario){
+        if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie"))) {
+
+            if (DriverFactory.isSecondDriverExists()) {
+                takeScreenshotFromSecondDriver();
+                new AgentHomePage().getHeader().logOut();
+                new AgentLoginPage().waitForLoginPageToOpen();
+            }
+            takeScreenshot();
+            new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();
 //        System.out.println("!!!!! URL !!!!!!!!!" + DriverFactory.getInstance().getCurrentUrl());
-        DriverFactory.closeBrowser();
-        DriverFactory.closeSecondBrowser();
+            DriverFactory.closeBrowser();
+            DriverFactory.closeSecondBrowser();
+        }
     }
 
     @Attachment(value = "Screenshot")
