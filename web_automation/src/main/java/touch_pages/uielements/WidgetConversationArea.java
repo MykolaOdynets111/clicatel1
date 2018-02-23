@@ -60,4 +60,8 @@ public class WidgetConversationArea extends AbstractUIElement {
         } catch (TimeoutException e) {
         }
     }
+
+    public void clickOptionInTheCard(String userMessageText, String buttonName) {
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+    }
 }

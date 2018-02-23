@@ -35,4 +35,8 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
     public boolean isButtonShown(String buttonText) {
         return buttons.stream().anyMatch(e -> e.getText().equalsIgnoreCase(buttonText));
     }
+
+    public void clickButton(String buttonName) {
+        buttons.stream().filter(e->e.getText().equalsIgnoreCase(buttonName)).findFirst().get().click();
+    }
 }

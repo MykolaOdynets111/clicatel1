@@ -65,4 +65,9 @@ public class DefaultTouchUserSteps {
         soft.assertAll();
     }
 
+    @When("^User click (.*) button in the card on user message (.*)$")
+    public void clickButtonOnToUserCard(String buttonName, String userMessage) {
+        widgetConversationAreaDefaultStep.clickOptionInTheCard(userMessage, buttonName);
+    }
+
 }

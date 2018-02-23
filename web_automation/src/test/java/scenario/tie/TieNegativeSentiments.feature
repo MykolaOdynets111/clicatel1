@@ -12,6 +12,7 @@ Feature: TIE should give correct sentiments
       |connect to agent                                               |
       |connect agent                                                  |
       |Connect to Agent                                               |
-      |hate your banking                                              |
+      |Hate your banking                                              |
+      |my money was stolen                                            |
 
 
