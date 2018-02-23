@@ -1,5 +1,5 @@
 @smoke
-Feature: User on his demand is redirected on the agent
+Feature: User on his demand should be redirected on the agent
 
   Verification of basic communication between user and agent
 
