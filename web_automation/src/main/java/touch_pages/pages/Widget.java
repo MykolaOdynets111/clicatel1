@@ -10,6 +10,7 @@ import org.testng.Assert;
 import touch_pages.uielements.TouchActionsMenu;
 import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetFooter;
+import touch_pages.uielements.WidgetHeader;
 
 
 public class Widget extends AbstractPage {
@@ -30,6 +31,11 @@ public class Widget extends AbstractPage {
     private WidgetConversationArea widgetConversationArea;
     private WidgetFooter widgetFooter;
     private TouchActionsMenu touchActionsMenu;
+    private WidgetHeader widgetHeader;
+
+    public WidgetHeader getWidgetHeader() {
+        return widgetHeader;
+    }
 
     public WidgetConversationArea getWidgetConversationArea() {
         return widgetConversationArea;
@@ -58,9 +64,9 @@ public class Widget extends AbstractPage {
 
     private void waitConnectingMessageToDisappear() {
         try{
-            waitForElementToBeInvisibleWithNoSuchElementException(conectingMassage,65);
+            waitForElementToBeInvisibleWithNoSuchElementException(conectingMassage,35);
         } catch (TimeoutException e){
-            Assert.assertTrue(false, "Widget is not connected after 65 seconds wait");
+            Assert.assertTrue(false, "Widget is not connected after 35 seconds wait");
         }
     }
 

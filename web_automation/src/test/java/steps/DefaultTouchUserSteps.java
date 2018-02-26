@@ -9,6 +9,7 @@ import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 import touch_pages.uielements.WidgetConversationArea;
+import touch_pages.uielements.WidgetHeader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ public class DefaultTouchUserSteps {
     private MainPage mainPage = new MainPage();
     private Widget widgetForDefaultStep;
     WidgetConversationArea widgetConversationAreaDefaultStep;
+    private WidgetHeader widgetHeader;
 
 
     @Given("^User select (.*) tenant$")
@@ -70,4 +72,11 @@ public class DefaultTouchUserSteps {
         widgetConversationAreaDefaultStep.clickOptionInTheCard(userMessage, buttonName);
     }
 
+    @Then("^\"End chat\" button is shown in widget's header$")
+    public void isEndChatButtonShown() {
+        widgetHeader = widgetForDefaultStep.getWidgetHeader();
+        Assert.assertTrue(widgetHeader.isEndChatButtonShown(5),
+                "End chat button is not shown on widget header after 5 seconds wait");
+
+    }
 }
