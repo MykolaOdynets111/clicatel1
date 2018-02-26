@@ -22,6 +22,7 @@ Feature: User on his demand should be redirected on the agent
       |user_message    |
       |connect to agent|
       |chat to support |
+      |you need to get way more ATMs in Cape Town|
 
   Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in Welcome card
     Given Welcome card with a button "Chat to Support" is shown

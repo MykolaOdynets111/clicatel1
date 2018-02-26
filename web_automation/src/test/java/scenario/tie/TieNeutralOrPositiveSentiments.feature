@@ -1,14 +1,13 @@
 @tie
-Feature: TIE should give correct NEUTRAL sentiments
+Feature: TIE should give NEUTRAL or POSITIVE sentiments
 
   Scenario Outline: Verify if TIE sentiment is NEUTRAL for the following message: "<user_message>"
-    Then TIE sentiment is NEUTRAL when I send '<user_message>' for General Bank Demo tenant
+    Then TIE sentiment is NEUTRAL or POSITIVE when I send '<user_message>' for General Bank Demo tenant
 
     Examples:
       |user_message                                                   |
       |Account balance                                                |
       |hi, how do i check my balance in the app?                      |
-      |you need to get way more ATMs in Cape Town                     |
       |i lost my card                                                 |
       |trading hours                                                  |
       |What if I don't have proof of residential address?             |
@@ -27,4 +26,3 @@ Feature: TIE should give correct NEUTRAL sentiments
       |Where can I find a branch?                                     |
       |hi                                                             |
       |Hi                                                             |
-

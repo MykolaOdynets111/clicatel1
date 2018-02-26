@@ -49,7 +49,7 @@ public class WidgetConversationArea extends AbstractUIElement {
     public boolean isCardButtonsShownFor(String userMessageText, List<String> buttons) {
         boolean result = false;
         for (String button : buttons) {
-            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button);
+            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
         }
         return result;
     }

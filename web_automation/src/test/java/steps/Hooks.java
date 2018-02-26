@@ -34,6 +34,7 @@ public class Hooks {
                 takeScreenshotFromSecondDriver();
                 new AgentHomePage().getHeader().logOut();
                 new AgentLoginPage().waitForLoginPageToOpen();
+//                DriverFactory.closeSecondBrowser();
             }
             takeScreenshot();
             new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();

@@ -6,12 +6,7 @@ Feature: TIE should give correct NEGATIVE sentiments
 
     Examples:
       |user_message                                                   |
-      |chat to support                                                |
-      |chat support                                                   |
-      |Chat to Support                                                |
-      |connect to agent                                               |
-      |connect agent                                                  |
-      |Connect to Agent                                               |
+      |you need to get way more ATMs in Cape Town                     |
       |Hate your banking                                              |
       |my money was stolen                                            |
 

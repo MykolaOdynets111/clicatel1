@@ -1,6 +1,5 @@
 package driverManager;
 
-import api_helper.ApiHelper;
 import dataprovider.TenantIDs;
 
 public class URLs {
@@ -70,7 +69,7 @@ public class URLs {
     }
 
     private static String getTenantID(String tenantName){
-        return TenantIDs.getTenentIdFor(tenantName);
+        return TenantIDs.getTenantIdFor(tenantName);
     }
 
     public static String getTieURL(String tenantOrgName, String message) {
