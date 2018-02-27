@@ -64,4 +64,5 @@ public class Hooks implements JSHelper, IAnnotationTransformer{
     public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
         annotation.setEnabled(false);
     }
+
 }

@@ -4,16 +4,13 @@ import cucubmerrunner.SuiteCucumberRunner;
 import cucumber.api.CucumberOptions;
 import org.testng.annotations.Test;
 
-
-@Test(groups = "cucumber")
+@Test(groups = "tie")
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
-//        strict = true,
-//        dryRun = true,
         monochrome = true,
-        features ="src/test/java/scenario",
+        features ="src/test/java/scenario/tie",
         glue ="steps")
-public class RunTest extends SuiteCucumberRunner {
+public class RunTIETest extends SuiteCucumberRunner {
 }

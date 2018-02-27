@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1519734720236" stop="1519734739271" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>TIE should give NEUTRAL or POSITIVE sentiments</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1519734720238" stop="1519734721520" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Account balance"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Account balance"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734720238" stop="1519734721519" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Account balance' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Account balance' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Account balance&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734721520" stop="1519734723984" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "hi, how do i check my balance in the app?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "hi, how do i check my balance in the app?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734721520" stop="1519734723983" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'hi, how do i check my balance in the app?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'hi, how do i check my balance in the app?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;hi, how do i check my balance in the app?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734723984" stop="1519734724648" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "i lost my card"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "i lost my card"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734723985" stop="1519734724648" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'i lost my card' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'i lost my card' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;i lost my card&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734724648" stop="1519734725214" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "trading hours"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "trading hours"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734724649" stop="1519734725214" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'trading hours' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'trading hours' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;trading hours&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734725215" stop="1519734727494" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "What if I don't have proof of residential address?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "What if I don't have proof of residential address?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734725216" stop="1519734727494" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'What if I don't have proof of residential address?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'What if I don't have proof of residential address?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;What if I don't have proof of residential address?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734727494" stop="1519734729151" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "How much interest will I earn on my savings?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "How much interest will I earn on my savings?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734727495" stop="1519734729151" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'How much interest will I earn on my savings?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'How much interest will I earn on my savings?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;How much interest will I earn on my savings?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734729152" stop="1519734730475" status="failed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Why don't you offer business accounts?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Why don't you offer business accounts?"</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: Sentiment for "Why don't you offer business accounts?" message is not as expected: 'NEUTRAL or POSITIVE'. But found: NEGATIVE expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: Sentiment for "Why don't you offer business accounts?" message is not as expected: 'NEUTRAL or POSITIVE'. But found: NEGATIVE expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:513)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at steps.tie_steps.BaseTieSteps.verifyTIESentimentVerdict(BaseTieSteps.java:23)
+	at ✽.Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Why don't you offer business accounts?' for General Bank Demo tenant(tie/TieNeutralOrPositiveSentiments.feature:5)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1519734729154" stop="1519734730475" status="failed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Why don't you offer business accounts?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Why don't you offer business accounts?' for General Bank Demo tenant</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Why don't you offer business accounts?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734730475" stop="1519734730966" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "branch location"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "branch location"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734730476" stop="1519734730965" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'branch location' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'branch location' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;branch location&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734730966" stop="1519734731389" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "hello"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "hello"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734730967" stop="1519734731389" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'hello' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'hello' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;hello&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734731390" stop="1519734732669" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "My staff want to bank with you. Can you help?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "My staff want to bank with you. Can you help?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734731390" stop="1519734732669" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'My staff want to bank with you. Can you help?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'My staff want to bank with you. Can you help?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;My staff want to bank with you. Can you help?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734732670" stop="1519734734202" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "If pay someone with another bank how long is the transfer time?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "If pay someone with another bank how long is the transfer time?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734732670" stop="1519734734202" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'If pay someone with another bank how long is the transfer time?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'If pay someone with another bank how long is the transfer time?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;If pay someone with another bank how long is the transfer time?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734734203" stop="1519734734836" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Do you have a job for me?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Do you have a job for me?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734734203" stop="1519734734836" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Do you have a job for me?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Do you have a job for me?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Do you have a job for me?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734734836" stop="1519734735384" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "How much interest will I earn on my savings"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "How much interest will I earn on my savings"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734734837" stop="1519734735384" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'How much interest will I earn on my savings' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'How much interest will I earn on my savings' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;How much interest will I earn on my savings&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734735385" stop="1519734735932" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "I want to open an account."</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "I want to open an account."</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734735385" stop="1519734735931" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'I want to open an account.' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'I want to open an account.' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;I want to open an account.&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734735932" stop="1519734736729" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "OK, Thanks"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "OK, Thanks"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734735934" stop="1519734736729" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'OK, Thanks' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'OK, Thanks' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;OK, Thanks&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734736729" stop="1519734737362" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Are you open on Saturday?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Are you open on Saturday?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734736730" stop="1519734737362" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Are you open on Saturday?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Are you open on Saturday?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Are you open on Saturday?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734737363" stop="1519734737908" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Why is my card blocked?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Why is my card blocked?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734737363" stop="1519734737908" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Why is my card blocked?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Why is my card blocked?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Why is my card blocked?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734737909" stop="1519734738451" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Where can I find a branch?"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Where can I find a branch?"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734737909" stop="1519734738451" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Where can I find a branch?' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Where can I find a branch?' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Where can I find a branch?&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734738451" stop="1519734738859" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "hi"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "hi"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734738451" stop="1519734738859" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'hi' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'hi' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;hi&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1519734738860" stop="1519734739271" status="passed">
+            <name>Verify if TIE sentiment is NEUTRAL for the following message: "Hi"</name>
+            <title>Verify if TIE sentiment is NEUTRAL for the following message: "Hi"</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1519734738860" stop="1519734739271" status="passed">
+                    <name>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Hi' for General Bank Demo tenant</name>
+                    <title>Then TIE sentiment is NEUTRAL or POSITIVE when I send 'Hi' for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if TIE sentiment is NEUTRAL for the following message: &quot;Hi&quot;"/>
+                <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6069@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="TIE should give NEUTRAL or POSITIVE sentiments"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

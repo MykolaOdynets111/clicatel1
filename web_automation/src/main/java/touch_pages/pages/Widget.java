@@ -81,4 +81,13 @@ public class Widget extends AbstractPage {
         }
 
     }
+
+    public boolean isWidgetConnected(int wait) {
+        try {
+            waitForElementToBeInvisibleWithNoSuchElementException(conectingMassage,wait);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
 }

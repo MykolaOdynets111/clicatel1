@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1519734349854" stop="1519734349855" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Widget should be connected with</name>
+    <description type="text">
+Scenario Verify if widget is connected and user is able to proceed
+  Given User select General Bank Demo tenant
+  And Click chat icon
+  Then Widget is connected</description>
+    <labels>
+        <label name="feature" value="Widget should be connected with"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

@@ -90,4 +90,9 @@ public class DefaultTouchUserSteps implements JSHelper{
         ApiHelper.createUserProfile(tenantName, clientID, "firstName", clientID);
         ApiHelper.createUserProfile(tenantName, clientID, "email", "aqa_test@gmail.com");
     }
+
+    @Then("^Widget is connected$")
+    public void verifyIfWidgetIsConnected() {
+       Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
+    }
 }
