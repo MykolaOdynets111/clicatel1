@@ -93,6 +93,6 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Widget is connected$")
     public void verifyIfWidgetIsConnected() {
-       Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
+        Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
     }
 }

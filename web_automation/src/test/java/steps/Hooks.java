@@ -20,7 +20,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class Hooks implements JSHelper, IAnnotationTransformer{
+public class Hooks implements JSHelper{
 
     @Before
     public void beforeScenario(Scenario scenario){
@@ -58,11 +58,6 @@ public class Hooks implements JSHelper, IAnnotationTransformer{
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshotFromSecondDriver() {
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
-    }
-
-    @Override
-    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
-        annotation.setEnabled(false);
     }
 
 }
