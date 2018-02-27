@@ -21,7 +21,7 @@ public class BaseTieSteps {
         if(expectedSentiment.toLowerCase().contains("or")){
             List<String> sentiments = Arrays.asList(expectedSentiment.toLowerCase().split(" or "));
             Assert.assertTrue(actualSentiment.equalsIgnoreCase(sentiments.get(0))||actualSentiment.equalsIgnoreCase(sentiments.get(1)),
-            "Sentiment for \""+userMessage+"\" message is not as expected: '"+expectedSentiment+"'");
+            "Sentiment for \""+userMessage+"\" message is not as expected: '"+expectedSentiment+"'. But found: "+actualSentiment+"");
         } else{
             Assert.assertEquals(actualSentiment, expectedSentiment,
                     "Sentiment for \""+userMessage+"\" message is not as expected");
@@ -32,12 +32,16 @@ public class BaseTieSteps {
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
         List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
-        String intent = intentsList.get(0).get("intent");
+        try {
+            String intent = intentsList.get(0).get("intent");
 
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(intentsList.size(),numberOfIntents,
-                "Number of intents for '"+userMessage+"' user message is not as expected");
-        soft.assertEquals(intent, expectedIntent, "Intent in TIE response is not as expected");
-        soft.assertAll();
+            SoftAssert soft = new SoftAssert();
+            soft.assertEquals(intentsList.size(), numberOfIntents,
+                    "Number of intents for '" + userMessage + "' user message is not as expected");
+            soft.assertEquals(intent, expectedIntent, "Intent in TIE response is not as expected");
+            soft.assertAll();
+        } catch (IndexOutOfBoundsException e){
+            Assert.assertTrue(false, "There are no intents at all in TIE response for '"+userMessage+"' user message");
+        }
     }
 }
