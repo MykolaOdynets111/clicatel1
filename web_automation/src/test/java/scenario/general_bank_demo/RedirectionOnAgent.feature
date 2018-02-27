@@ -5,6 +5,7 @@ Feature: User on his demand should be redirected on the agent
 
   Background:
     Given I login as agent of General Bank Demo
+    Given User profile for generalbank is created
     Given User select General Bank Demo tenant
     And Click chat icon
 
@@ -22,7 +23,7 @@ Feature: User on his demand should be redirected on the agent
       |user_message    |
       |connect to agent|
       |chat to support |
-      |you need to get way more ATMs in Cape Town|
+#      |you need to get way more ATMs in Cape Town|
 
   Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in Welcome card
     Given Welcome card with a button "Chat to Support" is shown

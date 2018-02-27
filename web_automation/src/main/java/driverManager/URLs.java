@@ -1,6 +1,6 @@
 package driverManager;
 
-import dataprovider.TenantIDs;
+import dataprovider.Tenants;
 
 public class URLs {
 
@@ -69,7 +69,7 @@ public class URLs {
     }
 
     private static String getTenantID(String tenantName){
-        return TenantIDs.getTenantIdFor(tenantName);
+        return Tenants.getTenantIdFor(tenantName);
     }
 
     public static String getTieURL(String tenantOrgName, String message) {

@@ -1,5 +1,6 @@
 package api_helper;
 
+import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 
 import java.util.HashMap;
@@ -15,5 +16,22 @@ public class ApiHelper {
         tenants.stream().forEach(e-> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
                 (String) e.get("id")));
         return tenantsMap;
+    }
+
+    public static void createUserProfile(String tenantName, String clientID, String keyName, String keyValue) {
+        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
+                String.format(Endpoints.CREATE_USER_PROFILE_ENDPOINT, tenantName, clientID, keyName, keyValue);
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .post(url);
+    }
+
+    public static void deleteUserProfile(String tenantName, String clientID) {
+        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
+                String.format(Endpoints.DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
+        RestAssured.given()
+                .header("Accept", "application/json")
+                .delete(url);
     }
 }

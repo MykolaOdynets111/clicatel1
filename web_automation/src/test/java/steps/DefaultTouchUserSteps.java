@@ -1,9 +1,11 @@
 package steps;
 
+import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import driverManager.ConfigManager;
+import dataprovider.Tenants;
+import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
@@ -14,7 +16,7 @@ import touch_pages.uielements.WidgetHeader;
 import java.util.Arrays;
 import java.util.List;
 
-public class DefaultTouchUserSteps {
+public class DefaultTouchUserSteps implements JSHelper{
 
     private MainPage mainPage = new MainPage();
     private Widget widgetForDefaultStep;
@@ -27,6 +29,9 @@ public class DefaultTouchUserSteps {
 //        if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
 //            tenantName="Standard Bank";
 //        }
+        if (tenantName.equalsIgnoreCase("General Bank Demo")){
+            Tenants.setTenantUnderTest("generalbank");
+        }
         mainPage.selectTenant(tenantName);
     }
 
@@ -48,11 +53,11 @@ public class DefaultTouchUserSteps {
         SoftAssert softAssert = new SoftAssert();
         widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 10),
-                "No text response is shown on '"+userInput+"' user's input");
+                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertTrue(widgetConversationAreaDefaultStep.isOnlyOneTextResponseShwonFor(userInput),
-                "More than one text response is shown for user");
+                "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
-                "Incorrect text response is shown on '"+userInput+"' user's input");
+                "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
     }
 
@@ -61,9 +66,9 @@ public class DefaultTouchUserSteps {
         List<String> buttons = Arrays.asList(buttonNames.split(";"));
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationAreaDefaultStep.isCardShownFor(userMessage, 6),
-                "Card is not show after '"+userMessage+"' user message");
+                "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertTrue(widgetConversationAreaDefaultStep.isCardButtonsShownFor(userMessage, buttons),
-                buttons + " buttons are not shown in card.");
+                buttons + " buttons are not shown in card (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
     }
 
@@ -77,6 +82,12 @@ public class DefaultTouchUserSteps {
         widgetHeader = widgetForDefaultStep.getWidgetHeader();
         Assert.assertTrue(widgetHeader.isEndChatButtonShown(5),
                 "End chat button is not shown on widget header after 5 seconds wait");
+    }
 
+    @Given("^User profile for (.*) is created$")
+    public void createUserProfile(String tenantName){
+        String clientID = getUserNameFromLocalStorage();
+        ApiHelper.createUserProfile(tenantName, clientID, "firstName", clientID);
+        ApiHelper.createUserProfile(tenantName, clientID, "email", "aqa_test@gmail.com");
     }
 }
