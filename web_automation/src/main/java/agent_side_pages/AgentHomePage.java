@@ -4,6 +4,7 @@ import abstract_classes.AgentAbstractPage;
 import agent_side_pages.UIElements.ChatBody;
 import agent_side_pages.UIElements.Header;
 import agent_side_pages.UIElements.LeftMenuWithChats;
+import agent_side_pages.UIElements.SuggestedGroup;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +24,11 @@ public class AgentHomePage extends AgentAbstractPage {
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private Header header;
+    private SuggestedGroup suggestedGroup;
+
+    public SuggestedGroup getSuggestedGroup() {
+        return suggestedGroup;
+    }
 
     public Header getHeader() {
         return header;

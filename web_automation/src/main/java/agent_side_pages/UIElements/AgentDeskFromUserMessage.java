@@ -18,6 +18,6 @@ public class AgentDeskFromUserMessage extends Widget implements WebActions {
     }
 
     public String getMessageText() {
-        return messageText.getText();
+        return messageText.getText().trim();
     }
 }

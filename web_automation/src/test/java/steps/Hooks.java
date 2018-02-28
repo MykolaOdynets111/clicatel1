@@ -11,6 +11,7 @@ import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 import org.testng.IAnnotationTransformer;
 import org.testng.annotations.ITestAnnotation;
 import ru.yandex.qatools.allure.annotations.Attachment;
@@ -38,12 +39,11 @@ public class Hooks implements JSHelper{
 
             if (DriverFactory.isSecondDriverExists()) {
                 takeScreenshotFromSecondDriver();
-                new AgentHomePage().getHeader().logOut();
-                new AgentLoginPage().waitForLoginPageToOpen();
+                logoutAgent();
 //                DriverFactory.closeSecondBrowser();
             }
             takeScreenshot();
-            new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();
+            endWidgetFlow();
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
             DriverFactory.closeBrowser();
             DriverFactory.closeSecondBrowser();
@@ -60,4 +60,16 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
+    private void endWidgetFlow() {
+        Widget widget = new Widget();
+        widget.getWidgetFooter().enterMessage("end chat").sendMessage();
+        widget.getWidgetConversationArea().isTextResponseShownFor("end chat", 5);
+    }
+
+    private void logoutAgent() {
+        try {
+            new AgentHomePage().getHeader().logOut();
+            new AgentLoginPage().waitForLoginPageToOpen();
+        } catch (WebDriverException e) { }
+    }
 }
