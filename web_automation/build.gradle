@@ -12,10 +12,8 @@ buildscript {
     }
 }
 
-apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'maven'
 apply plugin: 'ru.d10xa.allure'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -38,10 +36,6 @@ dependencies {
     compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
-
-    compile(
-            "org.codehaus.groovy:groovy-all:2.4.7"
-    )
 }
 
 configurations {
@@ -59,6 +53,8 @@ allure{
 test(){
     useTestNG(){
         ignoreFailures = true
+//        suites '/src/test/resources/testng.xml'
+//        options.suites(new File("/src/test/resources/testng.xml"))
     }
     if(System.getProperty("env") != null){
         systemProperty "env",System.getProperty("env")
@@ -75,16 +71,7 @@ test(){
     if(System.getProperty("cucumber.options") != null){
         systemProperty "cucumber.options", System.properties.getProperty("cucumber.options")
     }
+    test.finalizedBy(allureReport)
 
-    task runInParallel {
-        doLast {
-            def testProperties = "-DsomePropertie=somePropertie"
-            runCucumberTests(testProperties, "~@pending")
-        }
-    }
-
-
-test.finalizedBy(allureReport)
-
-defaultTasks 'clean', 'test'
+    defaultTasks 'clean', 'test'
 }
