@@ -45,9 +45,10 @@ import cucumber.api.testng.CucumberFeatureWrapper;
 import cucumber.api.testng.CucumberFeatureWrapperImpl;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.Factory;
-import org.testng.annotations.Test;
+import dataprovider.Tenants;
+import org.testng.SkipException;
+import org.testng.annotations.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class TestNgCucumberFeatureRunner{
     private CucumberFeatureWrapper cucumberFeature;
 
     public TestNgCucumberFeatureRunner(){}
+
 
     public TestNgCucumberFeatureRunner(CucumberFeature cucumberFeature2, Object runner) {
         testNGCucumberRunner = new TestNGCucumberRunner(runner.getClass());
@@ -77,7 +79,7 @@ public class TestNgCucumberFeatureRunner{
         this.testNGCucumberRunner.runCucumber(cucumberFeature.getCucumberFeature());
     }
 
-    @AfterClass(alwaysRun = true)
-    public void tearDownClass(){this.testNGCucumberRunner.finish();
-    }
+//    @AfterClass(alwaysRun = true)
+//    public void tearDownClass(){this.testNGCucumberRunner.finish();
+//    }
 }

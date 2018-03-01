@@ -53,7 +53,7 @@ allure{
 test(){
     useTestNG(){
         ignoreFailures = true
-//        suites '/src/test/resources/testng.xml'
+        suites '/src/test/resources/testng.xml'
 //        options.suites(new File("/src/test/resources/testng.xml"))
     }
     if(System.getProperty("env") != null){

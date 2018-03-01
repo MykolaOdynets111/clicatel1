@@ -8,6 +8,8 @@ public class Tenants {
 
     private static String TENANT_UNDER_TEST = "";
 
+    public static boolean RESULT=true;
+
     private static Map<String, String> tenantIds = null;
 
     public static String getTenantIdFor(String tenantName) {
