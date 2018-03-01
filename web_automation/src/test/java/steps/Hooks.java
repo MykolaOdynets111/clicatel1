@@ -12,6 +12,7 @@ import interfaces.JSHelper;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.testng.IAnnotationTransformer;
+import org.testng.SkipException;
 import org.testng.annotations.ITestAnnotation;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import touch_pages.pages.Widget;
@@ -25,6 +26,9 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie"))) {
+//                if(!Tenants.RESULT) {
+//                    throw new IllegalStateException("Master check is failed");
+//                }
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.startNewSecondDriverInstance();
                 }
@@ -47,6 +51,9 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
             DriverFactory.closeBrowser();
             DriverFactory.closeSecondBrowser();
+//            if(scenario.getSourceTagNames().equals(Arrays.asList("@acceptance")) && scenario.isFailed()) {
+//                throw new SkipException("Master check is failed");
+//            }
         }
     }
 

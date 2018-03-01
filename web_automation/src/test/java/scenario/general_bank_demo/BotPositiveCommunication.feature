@@ -12,7 +12,7 @@ Feature: General Bank POSITIVE flow
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                       |expected response|
-      |Account balance                                   | Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
+#      |Account balance                                   | Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
       |hi, how do i check my balance in the app?         | Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
 #      |i lost my card                                    |When your card expires and is reissued, you will need to update the card details according to your new card. Alternately you can delete your old card details and load the new card.                                                                                    |
 #      |trading hours                                     |Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us|

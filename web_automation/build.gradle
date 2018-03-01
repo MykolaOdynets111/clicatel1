@@ -51,11 +51,22 @@ allure{
 
 
 test(){
+
     useTestNG(){
+        library:
+        useDefaultListeners = true
         ignoreFailures = true
-        suites '/src/test/resources/testng.xml'
+        suites "/src/test/resources/tie.xml"
+        suites '/src/test/resources/mastercheck.xml'
+        if(project.gradle.taskGraph) {
+            exclude()
+        }
+        ignoreFailures = true
+        suites '/src/test/resources/uitests.xml'
+
 //        options.suites(new File("/src/test/resources/testng.xml"))
     }
+    reports.html.enabled = false
     if(System.getProperty("env") != null){
         systemProperty "env",System.getProperty("env")
     }

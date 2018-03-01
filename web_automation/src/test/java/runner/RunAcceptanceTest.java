@@ -4,10 +4,11 @@ import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.CucumberFeatureWrapper;
 import cucumber.api.testng.TestNGCucumberRunner;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import cucumber.runtime.model.CucumberFeature;
+import org.testng.annotations.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Test(groups = {"acceptance"})
 @CucumberOptions(
@@ -18,8 +19,18 @@ import org.testng.annotations.Test;
         features ="src/test/java/scenario/acceptance",
         glue ="steps")
 //public class RunAcceptanceTest extends SuiteCucumberRunner {
-    public class RunAcceptanceTest extends TestNgCucumberFeatureRunner {
+    public class RunAcceptanceTest {
 
+
+    @Factory
+    public Object[] features() {
+        List objects = new ArrayList<>();
+        TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
+        for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
+            objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
+        }
+        return objects.toArray();
+    }
 //    private TestNGCucumberRunner testNGCucumberRunner;
 //
 //    @BeforeClass(alwaysRun = true)

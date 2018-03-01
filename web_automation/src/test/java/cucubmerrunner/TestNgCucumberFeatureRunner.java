@@ -57,29 +57,29 @@ public class TestNgCucumberFeatureRunner{
     private TestNGCucumberRunner testNGCucumberRunner;
     private CucumberFeatureWrapper cucumberFeature;
 
-    public TestNgCucumberFeatureRunner(){}
+//    public TestNgCucumberFeatureRunner(){}
 
 
     public TestNgCucumberFeatureRunner(CucumberFeature cucumberFeature2, Object runner) {
         testNGCucumberRunner = new TestNGCucumberRunner(runner.getClass());
         cucumberFeature = new CucumberFeatureWrapperImpl(cucumberFeature2);}
 
-        @Factory
-        public Object[] features() {
-        List objects = new ArrayList<>();
-        TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
-        for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
-            objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
-        }
-            return objects.toArray();
-    }
+//        @Factory
+//        public Object[] features() {
+//        List objects = new ArrayList<>();
+//        TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
+//        for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
+//            objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
+//        }
+//            return objects.toArray();
+//    }
 
     @Test(groups = {"cucumber"})
     public void feature() {
         this.testNGCucumberRunner.runCucumber(cucumberFeature.getCucumberFeature());
     }
 
-//    @AfterClass(alwaysRun = true)
-//    public void tearDownClass(){this.testNGCucumberRunner.finish();
-//    }
+    @AfterClass(alwaysRun = true)
+    public void tearDownClass(){this.testNGCucumberRunner.finish();
+    }
 }
