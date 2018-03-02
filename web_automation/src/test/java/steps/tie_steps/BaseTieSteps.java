@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import driverManager.URLs;
 import io.restassured.RestAssured;
+import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -31,17 +32,21 @@ public class BaseTieSteps {
     @Then("^TIE returns (.*) intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
-        List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
         try {
-            String intent = intentsList.get(0).get("intent");
+            List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
+            try {
+                String intent = intentsList.get(0).get("intent");
 
-            SoftAssert soft = new SoftAssert();
-            soft.assertEquals(intentsList.size(), numberOfIntents,
-                    "Number of intents for '" + userMessage + "' user message is not as expected");
-            soft.assertEquals(intent, expectedIntent, "Intent in TIE response is not as expected");
-            soft.assertAll();
-        } catch (IndexOutOfBoundsException e){
-            Assert.assertTrue(false, "There are no intents at all in TIE response for '"+userMessage+"' user message");
+                SoftAssert soft = new SoftAssert();
+                soft.assertEquals(intentsList.size(), numberOfIntents,
+                        "Number of intents for '" + userMessage + "' user message is not as expected");
+                soft.assertEquals(intent, expectedIntent, "Intent in TIE response is not as expected");
+                soft.assertAll();
+            } catch (IndexOutOfBoundsException e) {
+                Assert.assertTrue(false, "There are no intents at all in TIE response for '" + userMessage + "' user message");
+            }
+        } catch (JsonPathException e) {
+            Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
         }
     }
 }
