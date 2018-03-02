@@ -42,7 +42,7 @@
 package cucubmerrunner;
 
 import cucumber.api.testng.CucumberFeatureWrapper;
-import cucumber.api.testng.CucumberFeatureWrapperImpl;
+//import cucumber.api.testng.CucumberFeatureWrapperImpl;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
 import dataprovider.Tenants;
@@ -62,7 +62,7 @@ public class TestNgCucumberFeatureRunner{
 
     public TestNgCucumberFeatureRunner(CucumberFeature cucumberFeature2, Object runner) {
         testNGCucumberRunner = new TestNGCucumberRunner(runner.getClass());
-        cucumberFeature = new CucumberFeatureWrapperImpl(cucumberFeature2);}
+        cucumberFeature = new CucumberFeatureWrapper(cucumberFeature2);}
 
 //        @Factory
 //        public Object[] features() {

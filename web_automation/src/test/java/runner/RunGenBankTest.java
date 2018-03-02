@@ -13,8 +13,8 @@ import org.testng.annotations.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Test(groups = "cucumber")
-@Test(groups = {"cucumber"}, dependsOnGroups = {"acceptance"})
+@Test(groups = "cucumber")
+//@Test(groups = {"cucumber"}, dependsOnGroups = {"acceptance"})
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"

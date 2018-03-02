@@ -32,7 +32,8 @@ dependencies {
     compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.18'
     compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
     compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
-    compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.5'
+    // was 1.2.5
+    compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
     compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
@@ -51,21 +52,16 @@ allure{
 
 
 test(){
-
+println 'acceptance test'
     useTestNG(){
-        library:
         useDefaultListeners = true
         ignoreFailures = true
         suites "/src/test/resources/tie.xml"
         suites '/src/test/resources/mastercheck.xml'
-        if(project.gradle.taskGraph) {
-            exclude()
-        }
-        ignoreFailures = true
-        suites '/src/test/resources/uitests.xml'
 
-//        options.suites(new File("/src/test/resources/testng.xml"))
     }
+
+
     reports.html.enabled = false
     if(System.getProperty("env") != null){
         systemProperty "env",System.getProperty("env")
@@ -82,7 +78,35 @@ test(){
     if(System.getProperty("cucumber.options") != null){
         systemProperty "cucumber.options", System.properties.getProperty("cucumber.options")
     }
-    test.finalizedBy(allureReport)
+
 
     defaultTasks 'clean', 'test'
 }
+
+task runUITest(type:Test) {
+
+    println "!! UI TESTS"
+       dependsOn test
+    
+       if (!(file("build/reports/tests/testng-failed.xml").exists())) {
+           System.out.print("!!! " + "no testng file" + " !!!")
+           useTestNG() {
+               ignoreFailures = true
+               suites '/src/test/resources/uitests.xml'
+           }
+//       } else {
+//           String xml = file("build/reports/tests/testng-failed.xml").collect(Collectors.joining("\n"))
+//           System.out.print("!!! " + xml + " !!!")
+//           if (!(xml.contains("Master check") && xml.contains("feature"))) {
+//               useTestNG() {
+//                   ignoreFailures = true
+//                   suites '/src/test/resources/uitests.xml'
+//               }
+//           }
+       }
+   }
+
+    task allTests(dependsOn: tasks.withType(Test)) {
+        test.finalizedBy(allureReport)
+    }
+
