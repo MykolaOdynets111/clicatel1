@@ -62,8 +62,8 @@ public class Hooks implements JSHelper{
 
     private void endWidgetFlow() {
         Widget widget = new Widget();
-        widget.getWidgetFooter().enterMessage("end chat").sendMessage();
-        widget.getWidgetConversationArea().isTextResponseShownFor("end chat", 5);
+        widget.getWidgetFooter().enterMessage("end").sendMessage();
+        widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
     }
 
     private void logoutAgent() {
