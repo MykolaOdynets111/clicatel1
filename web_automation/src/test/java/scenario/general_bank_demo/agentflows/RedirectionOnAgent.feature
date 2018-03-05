@@ -16,6 +16,7 @@ Feature: User on his demand should be redirected on the agent
     Then Conversation area becomes active with <user_message> user's message in it
     And There is no more than one from user message
     And There is no from agent response added by default for <user_message> user message
+    And There is no suggestions on user's input <user_message>
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his '<user_message>' input
 
@@ -32,6 +33,7 @@ Feature: User on his demand should be redirected on the agent
     When Agent click on new conversation
     Then Conversation area becomes active with Chat to Support user's message in it
     And There is no from agent response added by default for Chat to Support user message
+    And There is no suggestions on user's input <user_message>
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'Chat to Support' input
 
@@ -43,5 +45,6 @@ Feature: User on his demand should be redirected on the agent
     When Agent click on new conversation
     Then Conversation area becomes active with Chat to Support user's message in it
     And There is no from agent response added by default for Chat to Support user message
+    And There is no suggestions on user's input Chat to Support
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'Chat to Support' input

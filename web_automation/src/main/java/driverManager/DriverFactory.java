@@ -61,7 +61,7 @@ public class DriverFactory {
     public static void openUrl() {
         DriverFactory.getInstance().get(URLs.getURL());
             JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
-            jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+Math.random()
+            jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+(int)(Math.random()*(2000-1)+1)
                     +System.currentTimeMillis()+"');");
     }
 

@@ -2,6 +2,7 @@ package steps.general_bank_steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.ChatBody;
+import agent_side_pages.UIElements.SuggestedGroup;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import interfaces.JSHelper;
@@ -11,6 +12,7 @@ public class AgentConversationSteps implements JSHelper{
 
     private AgentHomePage agentHomePage ;
     private ChatBody chatBody;
+    private SuggestedGroup suggestedGroup;
 
     @Then("^Conversation area becomes active with (.*) user's message in it$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
@@ -51,5 +53,11 @@ public class AgentConversationSteps implements JSHelper{
         } else{
             return chatBody;
         }
+    }
+
+    @Then("^There is no suggestions on user's input (.*)$")
+    public void verifyIfThereIsNoSuggestions(String userMessage) {
+        Assert.assertTrue(suggestedGroup.isSuggestionListEmpty(),
+                "Suggestions list is not empty on user's input: "+userMessage+"");
     }
 }
