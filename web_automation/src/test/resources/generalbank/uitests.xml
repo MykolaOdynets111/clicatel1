@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="General Bank Suite" parallel="instances" thread-count="2" preserve-order="true">
+<suite name="General Bank Suite" parallel="instances" thread-count="3" preserve-order="true">
     <test name="Smoke test">
         <classes>
-            <class name="runner.RunGenBankTest" />
+            <class name="runner.RunGenBankBotTest" />
         </classes>
     </test>
 </suite>

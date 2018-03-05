@@ -9,11 +9,13 @@ import org.testng.Assert;
 
 public class AgentConversationRequestSteps implements JSHelper{
 
-    private AgentHomePage agentHomePage = new AgentHomePage();
-    private LeftMenuWithChats leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
+    private AgentHomePage agentHomePage;
+    private LeftMenuWithChats leftMenuWithChats;
 
     @Then("^Agent has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest() {
+        agentHomePage = new AgentHomePage();
+        leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
         Assert.assertTrue(leftMenuWithChats.isNewConversationRequestIsShown(25),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }

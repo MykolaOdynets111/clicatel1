@@ -1,27 +1,33 @@
 package steps;
 
+import agent_side_pages.AgentHomePage;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
+import driverManager.ConfigManager;
 import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
+import touch_pages.uielements.TouchActionsMenu;
 import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
+import touch_pages.uielements.messages.WelcomeMessages;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class DefaultTouchUserSteps implements JSHelper{
 
-    private MainPage mainPage = new MainPage();
+    private MainPage mainPage;
     private Widget widgetForDefaultStep;
     WidgetConversationArea widgetConversationAreaDefaultStep;
     private WidgetHeader widgetHeader;
+    private TouchActionsMenu touchActionsMenu;
+    private WelcomeMessages welcomeMessages;
 
 
     @Given("^User select (.*) tenant$")
@@ -32,12 +38,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         if (tenantName.equalsIgnoreCase("General Bank Demo")){
             Tenants.setTenantUnderTest("generalbank");
         }
-        mainPage.selectTenant(tenantName);
+        getMainPage().selectTenant(tenantName);
     }
 
     @Given("^Click chat icon$")
     public void clickChatIcon() {
-        widgetForDefaultStep = mainPage.openWidget();
+        widgetForDefaultStep = getMainPage().openWidget();
     }
 
     @When("^User enter (.*) into widget input field$")
@@ -93,8 +99,69 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Widget is connected$")
     public void verifyIfWidgetIsConnected() {
-//        Tenants.RESULT=false;
-//        Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
-        Assert.assertTrue(false);
+        Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
+    }
+
+    // ======================== Touch Actions Steps ======================== //
+
+    @When("^User click Touch button$")
+    public  void clickTouchButton() {
+        widgetForDefaultStep.clickTouchButton();
+    }
+
+    @Then("^\"(.*)\" is shown in touch menu$")
+    public void isTouchMenuActionShown(String action) {
+        Assert.assertTrue(getTouchActionsMenu().isTouchActionShown(action),
+                "Touch action '"+action+"' is not shown in Touch menu");
+    }
+
+    @When("^User select \"(.*)\" from touch menu$")
+    public void selectActionFromTouchMenu(String action) {
+        getTouchActionsMenu().selectTouchAction(action);
+    }
+
+    // ======================== Welcome Card Steps ======================= //
+
+    @Given("^Welcome card with a button \"(.*)\" is shown$")
+    public void verifyWelcomeCardWithCorrectTextIsShown(String buttonName) {
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue( getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: "+getUserNameFromLocalStorage()+"");
+        soft.assertTrue( getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
+                "Button is not shown in Welcome card (Client ID: "+getUserNameFromLocalStorage()+")");
+        soft.assertAll();
+    }
+
+    @When("^User select (.*) option from Welcome card$")
+    public void selectOptionInWelcomeCard(String butonName) {
+        getWelcomeMessages().clickActionButton(butonName);
+    }
+
+    // ======================= Private Getters ========================== //
+
+    private WelcomeMessages getWelcomeMessages() {
+        if (welcomeMessages==null) {
+            welcomeMessages = new WelcomeMessages();
+            return  welcomeMessages;
+        } else{
+            return welcomeMessages;
+        }
+    }
+
+    private MainPage getMainPage() {
+        if (mainPage==null) {
+            mainPage = new MainPage();
+            return mainPage;
+        } else{
+            return mainPage;
+        }
+    }
+
+    private TouchActionsMenu getTouchActionsMenu() {
+        if (touchActionsMenu==null) {
+            touchActionsMenu = widgetForDefaultStep.getTouchActionsMenu();
+            return touchActionsMenu;
+        } else{
+            return touchActionsMenu;
+        }
     }
 }

@@ -26,11 +26,8 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie"))) {
-//                if(!Tenants.RESULT) {
-//                    throw new IllegalStateException("Master check is failed");
-//                }
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
-                    DriverFactory.startNewSecondDriverInstance();
+                    DriverFactory.getSecondDriverInstance();
                 }
                 DriverFactory.openUrl();
             }
@@ -47,13 +44,10 @@ public class Hooks implements JSHelper{
 //                DriverFactory.closeSecondBrowser();
             }
             takeScreenshot();
-            new Widget().getWidgetFooter().enterMessage("end chat").sendMessage();
+            new Widget().getWidgetFooter().enterMessage("end").sendMessage();
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
             DriverFactory.closeBrowser();
             DriverFactory.closeSecondBrowser();
-//            if(scenario.getSourceTagNames().equals(Arrays.asList("@acceptance")) && scenario.isFailed()) {
-//                throw new SkipException("Master check is failed");
-//            }
         }
     }
 

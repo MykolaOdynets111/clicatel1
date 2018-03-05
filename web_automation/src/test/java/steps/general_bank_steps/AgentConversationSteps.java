@@ -9,29 +9,47 @@ import org.testng.Assert;
 
 public class AgentConversationSteps implements JSHelper{
 
-    private AgentHomePage agentHomePage = new AgentHomePage();
-    private ChatBody chatBody = agentHomePage.getChatBody();
+    private AgentHomePage agentHomePage ;
+    private ChatBody chatBody;
 
     @Then("^Conversation area becomes active with (.*) user's message in it$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
-        Assert.assertTrue(chatBody.isUserMessageShown(userMessage),
+        Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
     @Then("^There is no more than one from user message$")
     public void checkThereIsNoMoreThanOneUserMessage() {
-        Assert.assertFalse(chatBody.isMoreThanOneUserMassageShown(),
+        Assert.assertFalse(getChatBody().isMoreThanOneUserMassageShown(),
                 "More than one user message is shown (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
     @Then("^There is no from agent response added by default for (.*) user message$")
     public void verifyIfNoAgentResponseAddedByDefault(String userMessage) {
-        Assert.assertFalse(chatBody.isResponseOnUserMessageShown(userMessage),
+        Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(userMessage),
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
     @When("^Agent responds with (.*) to User$")
     public void sendAnswerToUser(String responseToUser){
-        agentHomePage.sendResponseToUser(responseToUser);
+        getAgentHomePage().sendResponseToUser(responseToUser);
+    }
+
+    private AgentHomePage getAgentHomePage() {
+        if (agentHomePage==null) {
+            agentHomePage =  new AgentHomePage();
+            return agentHomePage;
+        } else{
+            return agentHomePage;
+        }
+    }
+
+    private ChatBody getChatBody(){
+        if (chatBody==null) {
+            chatBody =  getAgentHomePage().getChatBody();
+            return chatBody;
+        } else{
+            return chatBody;
+        }
     }
 }

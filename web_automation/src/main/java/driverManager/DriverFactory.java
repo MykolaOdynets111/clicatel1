@@ -1,7 +1,5 @@
 package driverManager;
 
-import com.github.javafaker.Faker;
-import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
@@ -40,39 +38,31 @@ public class DriverFactory {
     public static WebDriver startNewInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-        WebDriver cratedDriver;
         if (ConfigManager.isRemote()) {
-            cratedDriver = createRemoteDriver(capabilities);
-            driver.set(cratedDriver);
-            return cratedDriver;
+            driver.set(createRemoteDriver(capabilities));
+            return driver.get();
         }
-        cratedDriver = driverType.getWebDriverObject(capabilities);
-        driver.set(cratedDriver);
-        return cratedDriver;
+        driver.set(driverType.getWebDriverObject(capabilities));
+        return  driver.get();
     }
 
 
     public static WebDriver startNewSecondDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
-        WebDriver cratedDriver;
         if (ConfigManager.isRemote()) {
-            cratedDriver = createRemoteDriver(capabilities);
-            secondDriver.set(cratedDriver);
-            return cratedDriver;
+            secondDriver.set(createRemoteDriver(capabilities));
+            return secondDriver.get();
         }
-        cratedDriver = driverType.getWebDriverObject(capabilities);
-        secondDriver.set(cratedDriver);
-        return cratedDriver;
+        secondDriver.set(driverType.getWebDriverObject(capabilities));
+        return secondDriver.get();
     }
 
     public static void openUrl() {
         DriverFactory.getInstance().get(URLs.getURL());
-//        if(ConfigManager.getEnv().equalsIgnoreCase("dev")){
-            Faker faker=new Faker();
             JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
-            jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+faker.code().ean8()+"');");
-//        }
+            jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+Math.random()
+                    +System.currentTimeMillis()+"');");
     }
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){

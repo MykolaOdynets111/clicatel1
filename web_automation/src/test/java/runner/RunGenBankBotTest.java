@@ -20,9 +20,9 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/general_bank_demo",
+        features ="src/test/java/scenario/general_bank_demo/botflows",
         glue ="steps")
-public class RunGenBankTest {
+public class RunGenBankBotTest {
 
         @Factory
         public Object[] features() {

@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath "ru.d10xa:gradle-allure-plugin:0.5.5"
-        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.6.10"
     }
 }
 
@@ -24,7 +23,6 @@ repositories {
 }
 
 dependencies {
-//    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
     compile group: 'io.appium', name: 'java-client', version: '5.0.4'
     compile group: 'org.testcontainers', name: 'selenium', version: '1.4.3'
     compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.7.2'
@@ -32,7 +30,6 @@ dependencies {
     compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.18'
     compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
     compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
-    // was 1.2.5
     compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
     compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
@@ -50,63 +47,93 @@ allure{
     allureReportDir = "$buildDir${File.separator}allure-report"
 }
 
+def baseXmlPath = "/src/test/resources/"
+def tenantName = "generalbank"
+def suite="all"
 
-test(){
-println 'acceptance test'
-    useTestNG(){
-        useDefaultListeners = true
-        ignoreFailures = true
-        suites "/src/test/resources/tie.xml"
-        suites '/src/test/resources/mastercheck.xml'
+task runAllTests(type: Test) {
 
+    if (System.getProperty("tenant") != null) {
+        tenantName = System.properties.getProperty("tenant")
+    }
+    if (System.getProperty("suite") != null) {
+        suite = System.properties.getProperty("suite")
     }
 
+    if(suite == "tie") {
+        doFirst {
+            runTieTests.execute()
+        }}
 
-    reports.html.enabled = false
-    if(System.getProperty("env") != null){
-        systemProperty "env",System.getProperty("env")
+    if(suite=="all") {
+
+        doFirst {
+            runTieTests.execute()
+            runBaseTests.execute()
+        }
+        doLast {
+            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+                System.out.print("!!! " + "no testng file" + " !!!")
+                runAllTest.execute()
+            }
+            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+                    runAllTest.execute()
+                }
+            }
+        }
     }
-
-    if(System.getProperty("browser") != null){
-        systemProperty "browser",System.getProperty("browser")
-    }
-
-    if(System.getProperty("remote") != null){
-        systemProperty "remote", System.properties.getProperty("remote")
-    }
-
-    if(System.getProperty("cucumber.options") != null){
-        systemProperty "cucumber.options", System.properties.getProperty("cucumber.options")
-    }
-
-
-    defaultTasks 'clean', 'test'
+    runAllTests.finalizedBy(allureReport)
+    defaultTasks 'clean', 'runAllTests'
 }
 
-task runUITest(type:Test) {
-
-    println "!! UI TESTS"
-       dependsOn test
-    
-       if (!(file("build/reports/tests/testng-failed.xml").exists())) {
-           System.out.print("!!! " + "no testng file" + " !!!")
-           useTestNG() {
-               ignoreFailures = true
-               suites '/src/test/resources/uitests.xml'
-           }
-//       } else {
-//           String xml = file("build/reports/tests/testng-failed.xml").collect(Collectors.joining("\n"))
-//           System.out.print("!!! " + xml + " !!!")
-//           if (!(xml.contains("Master check") && xml.contains("feature"))) {
-//               useTestNG() {
-//                   ignoreFailures = true
-//                   suites '/src/test/resources/uitests.xml'
-//               }
-//           }
-       }
-   }
-
-    task allTests(dependsOn: tasks.withType(Test)) {
-        test.finalizedBy(allureReport)
+task runTieTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
     }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/tie.xml"
+    }
+}
 
+task runBaseTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    useTestNG() {
+        println("base TEST ENV " + System.getProperty("env"))
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/mastercheck.xml"
+    }
+    reports.html.enabled = false
+}
+
+task runAllTest(type:Test) {
+
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/uitests.xml"
+        suites baseXmlPath+tenantName+"/onethreadtests.xml"
+    }
+}
