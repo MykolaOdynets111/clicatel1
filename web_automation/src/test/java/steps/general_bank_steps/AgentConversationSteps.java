@@ -37,6 +37,13 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().sendResponseToUser(responseToUser);
     }
 
+
+    @Then("^There is no suggestions on user's input (.*)$")
+    public void verifyIfThereIsNoSuggestions(String userMessage) {
+        Assert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(),
+                "Suggestions list is not empty on user's input: "+userMessage+"");
+    }
+
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
             agentHomePage =  new AgentHomePage();
@@ -55,9 +62,12 @@ public class AgentConversationSteps implements JSHelper{
         }
     }
 
-    @Then("^There is no suggestions on user's input (.*)$")
-    public void verifyIfThereIsNoSuggestions(String userMessage) {
-        Assert.assertTrue(suggestedGroup.isSuggestionListEmpty(),
-                "Suggestions list is not empty on user's input: "+userMessage+"");
+    private SuggestedGroup getSuggestedGroup() {
+        if (suggestedGroup==null) {
+            suggestedGroup =  getAgentHomePage().getSuggestedGroup();
+            return suggestedGroup;
+        } else{
+            return suggestedGroup;
+        }
     }
 }
