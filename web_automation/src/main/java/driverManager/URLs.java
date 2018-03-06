@@ -74,7 +74,7 @@ public class URLs {
     }
 
     private static String getTenantID(String tenantName){
-        return Tenants.getTenantIdFor(tenantName);
+        return Tenants.getTenantInfo(tenantName, "id");
     }
 
     public static String getTieURL(String tenantOrgName, String message) {

@@ -32,6 +32,14 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementShown(WebElement element, int wait){
+        try {
+            return waitForElementToBeVisible(element, wait).isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
     default boolean isElementEnabled(WebElement element){
         try {
             return waitForElementToBeVisible(element, 5).isEnabled();
@@ -54,4 +62,11 @@ public interface WebActions extends WebWait {
     }
 
 
+    default String getTextFrom(WebElement elem) {
+        try{
+            return elem.getText();
+        } catch (NoSuchElementException e) {
+            return "no element to get text from";
+        }
+    }
 }

@@ -24,7 +24,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     private MainPage mainPage;
     private Widget widgetForDefaultStep;
-    WidgetConversationArea widgetConversationAreaDefaultStep;
+    private WidgetConversationArea widgetConversationAreaDefaultStep;
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
@@ -86,7 +86,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^\"End chat\" button is shown in widget's header$")
     public void isEndChatButtonShown() {
         widgetHeader = widgetForDefaultStep.getWidgetHeader();
-        Assert.assertTrue(widgetHeader.isEndChatButtonShown(5),
+        Assert.assertTrue(getWidgetHeader().isEndChatButtonShown(5),
                 "End chat button is not shown on widget header after 5 seconds wait");
     }
 
@@ -100,6 +100,18 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^Widget is connected$")
     public void verifyIfWidgetIsConnected() {
         Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
+
+    }
+
+    @Then("^User sees name of tenant: (.*) and its short description in the header$")
+    public void verifyWidgetHeader(String tenantName){
+        String expectedDescription = Tenants.getTenantInfo(tenantName, "shortDescription");
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), tenantName,
+                tenantName + " tenant name is not shown in the widget header");
+        soft.assertEquals(getWidgetHeader().getDisplayedTenantDescription(), expectedDescription,
+                expectedDescription + " description is not shown for " +tenantName+ " tenant");
+        soft.assertAll();
     }
 
     // ======================== Touch Actions Steps ======================== //
@@ -123,7 +135,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     // ======================== Welcome Card Steps ======================= //
 
     @Given("^Welcome card with a button \"(.*)\" is shown$")
-    public void verifyWelcomeCardWithCorrectTextIsShown(String buttonName) {
+    public void verifyWelcomeCardWithCorrectButtonIsShown(String buttonName) {
         SoftAssert soft = new SoftAssert();
         soft.assertTrue( getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: "+getUserNameFromLocalStorage()+"");
         soft.assertTrue( getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
@@ -134,6 +146,27 @@ public class DefaultTouchUserSteps implements JSHelper{
     @When("^User select (.*) option from Welcome card$")
     public void selectOptionInWelcomeCard(String butonName) {
         getWelcomeMessages().clickActionButton(butonName);
+    }
+
+    @Then("^Welcome message (.*) is shown$")
+    public void verifyWelcomeTextMessage(String welcomeMessage) {
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getWelcomeMessages().isWelcomeTextMessageShown(),
+                "Welcome text message is not shown");
+        soft.assertEquals(getWelcomeMessages().getWelcomeMessageText(), welcomeMessage,
+                "Welcome message is not as expected");
+        soft.assertAll();
+    }
+
+    @Given("^Welcome card with text (.*) and button \"(.*)\" is shown$")
+    public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String text, String buttonName) {
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: "+getUserNameFromLocalStorage()+"");
+        soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), text,
+                "Text in Welcome card is not as expected");
+        soft.assertTrue( getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
+                "Button is not shown in Welcome card (Client ID: "+getUserNameFromLocalStorage()+")");
+        soft.assertAll();
     }
 
     // ======================= Private Getters ========================== //
@@ -162,6 +195,15 @@ public class DefaultTouchUserSteps implements JSHelper{
             return touchActionsMenu;
         } else{
             return touchActionsMenu;
+        }
+    }
+
+    private WidgetHeader getWidgetHeader() {
+        if (widgetHeader==null) {
+            widgetHeader = widgetForDefaultStep.getWidgetHeader();
+            return widgetHeader;
+        } else{
+            return widgetHeader;
         }
     }
 }

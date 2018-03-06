@@ -8,6 +8,12 @@ import org.openqa.selenium.support.FindBy;
 @FindBy(css = "div.ctl-chat-area-header-container")
 public class WidgetHeader extends AbstractUIElement {
 
+    @FindBy(css = "div.ctl-chat-agent-name")
+    private WebElement tenantName;
+
+    @FindBy(css = "div.ctl-chat-description")
+    private WebElement tenantDescription;
+
     @FindBy(xpath = ".//button[text()='Start chat']")
     private WebElement startChatHeaderButton;
 
@@ -15,15 +21,24 @@ public class WidgetHeader extends AbstractUIElement {
     private WebElement endChatHeaderButton;
 
     public boolean isEndChatButtonShown(int wait) {
-        try{
-            waitForElementToBeVisible(endChatHeaderButton, wait);
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+       return isElementShown(endChatHeaderButton, wait);
     }
 
     public void clickEndChatButton() {
 
+    }
+
+    public String getDisplayedTenantName() {
+        if(!isElementShown(tenantName)) {
+            return "no tenant name in the header";
+        }
+        return tenantName.getText();
+    }
+
+    public String getDisplayedTenantDescription() {
+        if(!isElementShown(tenantDescription)) {
+            return "no tenant description in the header";
+        }
+        return tenantDescription.getText();
     }
 }

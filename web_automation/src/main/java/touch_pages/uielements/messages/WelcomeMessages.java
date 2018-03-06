@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 public class WelcomeMessages extends AbstractPage {
 
+    @FindBy(css = "li.ctl-chat-message-container.message-to span.text-break-mod")
+    private WebElement  welcomeTextMessage;
+
     @FindBy(css = "li.message-to.with-content")
     private WebElement welcomeCardContainer;
 
@@ -34,11 +37,18 @@ public class WelcomeMessages extends AbstractPage {
 
     public void clickActionButton(String buttonName){
         WebElement button = welcomeCardButtons.stream().filter(e->e.getText().equalsIgnoreCase(buttonName)).findFirst().get();
-//        if(button != null) {
-            button.click();
-//        } else {
-//            Assert.assertTrue(false,
-//                    "There is no button with text "+buttonName+" in Welcome card");
-//        }
+        button.click();
+    }
+
+    public boolean isWelcomeTextMessageShown() {
+        return isElementShown(welcomeTextMessage, 8);
+    }
+
+    public String getWelcomeMessageText() {
+        return getTextFrom(welcomeTextMessage);
+    }
+
+    public String getWelcomeCardText() {
+        return getTextFrom(welcomeCardText);
     }
 }

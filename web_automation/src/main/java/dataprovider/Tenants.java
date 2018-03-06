@@ -8,14 +8,6 @@ public class Tenants {
 
     private static String TENANT_UNDER_TEST = "";
 
-    private static Map<String, String> tenantIds = null;
-
-    public static String getTenantIdFor(String tenantName) {
-        if (tenantIds == null) {
-            tenantIds = ApiHelper.getTenantIdMap();
-        }
-        return tenantIds.get(tenantName.toLowerCase());
-    }
 
     public static void setTenantUnderTest(String tenantName){
         TENANT_UNDER_TEST=tenantName;
@@ -23,5 +15,9 @@ public class Tenants {
 
     public static String getTenantUnderTest(){
         return TENANT_UNDER_TEST;
+    }
+
+    public static String getTenantInfo(String tenantName, String info) {
+        return ApiHelper.getTenantInfoMap(info).get(tenantName.toLowerCase().trim());
     }
 }
