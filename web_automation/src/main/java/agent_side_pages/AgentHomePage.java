@@ -5,9 +5,11 @@ import agent_side_pages.UIElements.ChatBody;
 import agent_side_pages.UIElements.Header;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import agent_side_pages.UIElements.SuggestedGroup;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import touch_pages.uielements.WidgetConversationArea;
 
 public class AgentHomePage extends AgentAbstractPage {
@@ -43,9 +45,16 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
-        messageInput.sendKeys(responseToUser);
-        click(submitMessageButton);
-        return this;
+        try {
+            messageInput.sendKeys(responseToUser);
+            click(submitMessageButton);
+            return this;
+        } catch (InvalidElementStateException e){
+            Assert.assertTrue(false, "There is a problem with agent desk page." +
+                    " Check if there is no blinking connection error.");
+            return this;
+        }
+
     }
 
     public boolean isAgentSuccessfullyLoggedIn() {

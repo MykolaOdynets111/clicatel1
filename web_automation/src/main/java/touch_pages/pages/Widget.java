@@ -18,6 +18,9 @@ import touch_pages.uielements.WidgetHeader;
 
 public class Widget extends AbstractPage {
 
+    @FindBy(css = "div.ctl-chat-icon.ctl-close")
+    private WebElement closeButton;
+
     @FindBy(xpath = "//span[@class='connection-status-bar-message']")
     private WebElement conectingMassage;
 
@@ -58,6 +61,10 @@ public class Widget extends AbstractPage {
         if (isConnectingMessageShown()) {
             waitConnectingMessageToDisappear();
         }
+    }
+
+    public boolean isWidgetCollapsed() {
+        return isElementNotShown(widgetWindow);
     }
 
     private boolean isConnectingMessageShown() {
@@ -101,5 +108,9 @@ public class Widget extends AbstractPage {
         Point point = conversationArea.getLocation();
         Actions action = new Actions(DriverFactory.getInstance());
         action.clickAndHold(conversationArea).moveByOffset(point.x, point.y+20).release().perform();
+    }
+
+    public void clickCloseButton() {
+        click(closeButton);
     }
 }

@@ -27,8 +27,16 @@ public class WidgetHeader extends AbstractUIElement {
        return isElementShown(endChatHeaderButton, wait);
     }
 
+    public boolean isStartChatButtonShown(int wait) {
+        return isElementShown(startChatHeaderButton, wait);
+    }
+
     public void clickEndChatButton() {
         click(endChatHeaderButton);
+    }
+
+    public void clickStartChatButton() {
+        click(startChatHeaderButton);
     }
 
     public String getDisplayedTenantName() {

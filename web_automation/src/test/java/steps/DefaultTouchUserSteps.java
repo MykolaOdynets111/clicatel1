@@ -22,11 +22,20 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     private MainPage mainPage;
     private Widget widget;
-    private WidgetConversationArea widgetConversationAreaDefaultStep;
+    private WidgetConversationArea widgetConversationArea;
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
 
+    @When("^User click close chat button$")
+    public void closeWidget() {
+        widget.clickCloseButton();
+    }
+
+    @Then("^Widget is collapsed$")
+    public void verifyWidgetCollapsed() {
+        Assert.assertTrue(widget.isWidgetCollapsed(), "Widget is not collapsed");
+    }
 
     @Given("^User select (.*) tenant$")
     public void selectTenant(String tenantName) {
@@ -47,8 +56,8 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @When("^User enter (.*) into widget input field$")
     public void enterText(String text) {
-        widgetConversationAreaDefaultStep = widget.getWidgetConversationArea();
-        widgetConversationAreaDefaultStep.waitForSalutation();
+        widgetConversationArea = widget.getWidgetConversationArea();
+        widgetConversationArea.waitForSalutation();
         widget.getWidgetFooter().enterMessage(text).sendMessage();
     }
 
@@ -68,31 +77,50 @@ public class DefaultTouchUserSteps implements JSHelper{
                 break;
         }
         SoftAssert softAssert = new SoftAssert();
-        widgetConversationAreaDefaultStep = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 10),
+        widgetConversationArea = widget.getWidgetConversationArea();
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 10),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
-        softAssert.assertTrue(widgetConversationAreaDefaultStep.isOnlyOneTextResponseShwonFor(userInput),
+        softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
-        softAssert.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
+        softAssert.assertEquals(widgetConversationArea.getResponseTextOnUserInput(userInput), expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
 
     }
 
-    @Then("^Card with a (?:button|buttons) (.*) is shown on user (.*) message$")
+    @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){
         List<String> buttons = Arrays.asList(buttonNames.split(";"));
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationAreaDefaultStep.isCardShownFor(userMessage, 6),
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
-        soft.assertTrue(widgetConversationAreaDefaultStep.isCardButtonsShownFor(userMessage, buttons),
+        soft.assertTrue(widgetConversationArea.isCardButtonsShownFor(userMessage, buttons),
                 buttons + " buttons are not shown in card (Client ID: "+getUserNameFromLocalStorage()+")");
+        soft.assertAll();
+    }
+
+    @Then("^Card with a (.*) text is shown (?:on|after) user (.*) (?:message|input)$")
+    public void isCardWithTextShown(String cardText, String userMessage){
+        String expectedCardText = null;
+        switch (cardText){
+            case "welcome":
+                expectedCardText = ApiHelper.getTenantMessageText("first_navigation_card_title");
+                break;
+            default:
+                expectedCardText = cardText;
+
+        }
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
+                "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
+        soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
+                "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
     }
 
     @When("^User click (.*) button in the card on user message (.*)$")
     public void clickButtonOnToUserCard(String buttonName, String userMessage) {
-        widgetConversationAreaDefaultStep.clickOptionInTheCard(userMessage, buttonName);
+        widgetConversationArea.clickOptionInTheCard(userMessage, buttonName);
     }
 
     @Then("^\"End chat\" button is shown in widget's header$")
@@ -102,9 +130,21 @@ public class DefaultTouchUserSteps implements JSHelper{
                 "End chat button is not shown on widget header after 5 seconds wait");
     }
 
+    @Then("^\"Start chat\" button is shown in widget's header$")
+    public void isStartChatButtonShown() {
+        widget.scrollABitToRevealHeaderButtons();
+        Assert.assertTrue(getWidgetHeader().isStartChatButtonShown(5),
+                "Start chat button is not shown on widget header after 5 seconds wait");
+    }
+
     @When("^User click \"End chat\" button in widget's header$")
     public void clickEndChatButtonInHeader() {
         getWidgetHeader().clickEndChatButton();
+    }
+
+    @When("^User click \"Start chat\" button in widget's header$")
+    public void clickStartChatButtonInHeader() {
+        getWidgetHeader().clickStartChatButton();
     }
 
     @Given("^User profile for (.*) is created$")
@@ -165,7 +205,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         getWelcomeMessages().clickActionButton(butonName);
     }
 
-    @Then("^Welcome message with correct text is shown is shown$")
+    @Then("^Welcome message with correct text is shown$")
     public void verifyWelcomeTextMessage() {
         String welcomeMessage = ApiHelper.getTenantMessageText("welcome_message");
         SoftAssert soft = new SoftAssert();
@@ -174,6 +214,14 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertEquals(getWelcomeMessages().getWelcomeMessageText(), welcomeMessage,
                 "Welcome message is not as expected");
         soft.assertAll();
+    }
+
+
+    @Then("^Welcome back message with correct text is shown after user's input '(.*)'$")
+    public void verifyWelcomeBackTextMessage(String userMessage) {
+        String welcomeBackMessage = ApiHelper.getTenantMessageText("welcome_back_message");
+        Assert.assertTrue( widget.getWidgetConversationArea().isTextResponseShownAmongOtherForUserMessage(userMessage, welcomeBackMessage),
+                "'"+ welcomeBackMessage + "' welcome back message is not shown");
     }
 
     @Given("^Welcome card with correct text and button \"(.*)\" is shown$")
