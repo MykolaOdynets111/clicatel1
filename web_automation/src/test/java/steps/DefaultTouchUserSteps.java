@@ -53,7 +53,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
 
-    @Then("^User have to receive ('(.*)'|(.*)) text response for his '(.*)' input$")
+    @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String textResponse, String userInput) {
         String expectedTextResponse = null;
         switch (textResponse) {
