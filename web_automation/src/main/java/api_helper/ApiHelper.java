@@ -1,5 +1,6 @@
 package api_helper;
 
+import dataprovider.Tenants;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 
@@ -10,6 +11,8 @@ import java.util.Map;
 public class ApiHelper {
 
     private static  List<HashMap> tenantsInfo=null;
+    private static List<HashMap> tenantMessages=null;
+
 
     public static Map<String, String> getTenantInfoMap(String theValue) {
         Map<String, String> tenantsMap = new HashMap<>();
@@ -42,5 +45,19 @@ public class ApiHelper {
                     .jsonPath().get("tenants");
         }
         return tenantsInfo;
+    }
+
+    private static List<HashMap> getTenantMessagesInfo() {
+        if(tenantMessages==null) {
+            String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
+                    String.format(Endpoints.TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTest());
+            tenantMessages = RestAssured.given().get(url)
+                    .jsonPath().get("tafResponses");
+        }
+        return tenantMessages;
+    }
+
+    public static String getTenantMessageText(String id) {
+        return (String) getTenantMessagesInfo().stream().filter(e -> e.get("id").equals(id)).findFirst().get().get("text");
     }
 }

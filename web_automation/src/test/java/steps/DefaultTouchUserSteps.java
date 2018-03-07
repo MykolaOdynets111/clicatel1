@@ -35,6 +35,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 //        }
         if (tenantName.equalsIgnoreCase("General Bank Demo")){
             Tenants.setTenantUnderTest("generalbank");
+            Tenants.setTenantUnderTestOrgName("General Bank Demo");
         }
         getMainPage().selectTenant(tenantName);
     }
@@ -52,8 +53,20 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
 
-    @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
-    public void verifyTextResponse(String expectedTextResponse, String userInput) {
+    @Then("^User have to receive ('(.*)'|(.*)) text response for his '(.*)' input$")
+    public void verifyTextResponse(String textResponse, String userInput) {
+        String expectedTextResponse = null;
+        switch (textResponse) {
+            case "start new conversation":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "welcome back message":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
+                break;
+            default:
+                expectedTextResponse = textResponse;
+                break;
+        }
         SoftAssert softAssert = new SoftAssert();
         widgetConversationAreaDefaultStep = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 10),
@@ -63,6 +76,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         softAssert.assertEquals(widgetConversationAreaDefaultStep.getResponseTextOnUserInput(userInput), expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
+
     }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown on user (.*) message$")
@@ -151,8 +165,9 @@ public class DefaultTouchUserSteps implements JSHelper{
         getWelcomeMessages().clickActionButton(butonName);
     }
 
-    @Then("^Welcome message (.*) is shown$")
-    public void verifyWelcomeTextMessage(String welcomeMessage) {
+    @Then("^Welcome message with correct text is shown is shown$")
+    public void verifyWelcomeTextMessage() {
+        String welcomeMessage = ApiHelper.getTenantMessageText("welcome_message");
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getWelcomeMessages().isWelcomeTextMessageShown(),
                 "Welcome text message is not shown");
@@ -161,11 +176,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertAll();
     }
 
-    @Given("^Welcome card with text (.*) and button \"(.*)\" is shown$")
-    public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String text, String buttonName) {
+    @Given("^Welcome card with correct text and button \"(.*)\" is shown$")
+    public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String buttonName) {
+        String welcomeCardText = ApiHelper.getTenantMessageText("first_navigation_card_title");
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: "+getUserNameFromLocalStorage()+"");
-        soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), text,
+        soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), welcomeCardText,
                 "Text in Welcome card is not as expected");
         soft.assertTrue( getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
                 "Button is not shown in Welcome card (Client ID: "+getUserNameFromLocalStorage()+")");

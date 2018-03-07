@@ -7,5 +7,5 @@ Feature: Widget Welcome flow
     Given User select General Bank Demo tenant
     And Click chat icon
     Then User sees name of tenant: General Bank Demo and its short description in the header
-    And Welcome message Hi. What can I help you with? is shown
-    And Welcome card with text Simply type in the 'send a message' box or select an option below and button "Chat to Support" is shown
+    And Welcome message with correct text is shown is shown
+    And Welcome card with correct text and button "Chat to Support" is shown

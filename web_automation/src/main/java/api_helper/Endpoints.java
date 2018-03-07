@@ -13,4 +13,6 @@ public class Endpoints {
     public static String CREATE_USER_PROFILE_ENDPOINT = "client-profiles/%s/%s?key=%s&value=%s";
 
     public static String DELETE_USER_PROFILE_ENDPOINT = "client-profiles/%s/%s";
+
+    public static String TENANT_CONFIGURED_MESSAGES = "taf/message-responses/%s";
 }
