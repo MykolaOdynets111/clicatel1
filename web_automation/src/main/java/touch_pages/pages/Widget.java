@@ -1,9 +1,12 @@
 package touch_pages.pages;
 
 import abstract_classes.AbstractPage;
+import driverManager.DriverFactory;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -23,6 +26,9 @@ public class Widget extends AbstractPage {
 
     @FindBy(css = "div.ctl-touch-button")
     private WebElement touchButton;
+
+    @FindBy(css = "div.ctl-conversation-area")
+    private WebElement conversationArea;
 
     public Widget() {
         waitUntilOpenedAndConnected();
@@ -89,5 +95,11 @@ public class Widget extends AbstractPage {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public void scrollABitToRevealHeaderButtons() {
+        Point point = conversationArea.getLocation();
+        Actions action = new Actions(DriverFactory.getInstance());
+        action.clickAndHold(conversationArea).moveByOffset(point.x, point.y+20).release().perform();
     }
 }

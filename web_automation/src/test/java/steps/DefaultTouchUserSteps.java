@@ -1,12 +1,10 @@
 package steps;
 
-import agent_side_pages.AgentHomePage;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
-import driverManager.ConfigManager;
 import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -23,7 +21,7 @@ import java.util.List;
 public class DefaultTouchUserSteps implements JSHelper{
 
     private MainPage mainPage;
-    private Widget widgetForDefaultStep;
+    private Widget widget;
     private WidgetConversationArea widgetConversationAreaDefaultStep;
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
@@ -43,21 +41,21 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Given("^Click chat icon$")
     public void clickChatIcon() {
-        widgetForDefaultStep = getMainPage().openWidget();
+        widget = getMainPage().openWidget();
     }
 
     @When("^User enter (.*) into widget input field$")
     public void enterText(String text) {
-        widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
+        widgetConversationAreaDefaultStep = widget.getWidgetConversationArea();
         widgetConversationAreaDefaultStep.waitForSalutation();
-        widgetForDefaultStep.getWidgetFooter().enterMessage(text).sendMessage();
+        widget.getWidgetFooter().enterMessage(text).sendMessage();
     }
 
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String expectedTextResponse, String userInput) {
         SoftAssert softAssert = new SoftAssert();
-        widgetConversationAreaDefaultStep = widgetForDefaultStep.getWidgetConversationArea();
+        widgetConversationAreaDefaultStep = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationAreaDefaultStep.isTextResponseShownFor(userInput, 10),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertTrue(widgetConversationAreaDefaultStep.isOnlyOneTextResponseShwonFor(userInput),
@@ -85,9 +83,14 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^\"End chat\" button is shown in widget's header$")
     public void isEndChatButtonShown() {
-        widgetHeader = widgetForDefaultStep.getWidgetHeader();
+        widget.scrollABitToRevealHeaderButtons();
         Assert.assertTrue(getWidgetHeader().isEndChatButtonShown(5),
                 "End chat button is not shown on widget header after 5 seconds wait");
+    }
+
+    @When("^User click \"End chat\" button in widget's header$")
+    public void clickEndChatButtonInHeader() {
+        getWidgetHeader().clickEndChatButton();
     }
 
     @Given("^User profile for (.*) is created$")
@@ -99,7 +102,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Widget is connected$")
     public void verifyIfWidgetIsConnected() {
-        Assert.assertTrue(widgetForDefaultStep.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
+        Assert.assertTrue(widget.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
 
     }
 
@@ -118,7 +121,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @When("^User click Touch button$")
     public  void clickTouchButton() {
-        widgetForDefaultStep.clickTouchButton();
+        widget.clickTouchButton();
     }
 
     @Then("^\"(.*)\" is shown in touch menu$")
@@ -191,7 +194,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     private TouchActionsMenu getTouchActionsMenu() {
         if (touchActionsMenu==null) {
-            touchActionsMenu = widgetForDefaultStep.getTouchActionsMenu();
+            touchActionsMenu = widget.getTouchActionsMenu();
             return touchActionsMenu;
         } else{
             return touchActionsMenu;
@@ -200,7 +203,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     private WidgetHeader getWidgetHeader() {
         if (widgetHeader==null) {
-            widgetHeader = widgetForDefaultStep.getWidgetHeader();
+            widgetHeader = widget.getWidgetHeader();
             return widgetHeader;
         } else{
             return widgetHeader;

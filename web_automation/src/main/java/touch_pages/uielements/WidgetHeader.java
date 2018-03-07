@@ -1,8 +1,11 @@
 package touch_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = "div.ctl-chat-area-header-container")
@@ -25,7 +28,7 @@ public class WidgetHeader extends AbstractUIElement {
     }
 
     public void clickEndChatButton() {
-
+        click(endChatHeaderButton);
     }
 
     public String getDisplayedTenantName() {
@@ -41,4 +44,6 @@ public class WidgetHeader extends AbstractUIElement {
         }
         return tenantDescription.getText();
     }
+
+
 }
