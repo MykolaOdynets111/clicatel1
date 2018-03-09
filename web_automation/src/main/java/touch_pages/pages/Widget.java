@@ -105,9 +105,10 @@ public class Widget extends AbstractPage {
     }
 
     public void scrollABitToRevealHeaderButtons() {
+
         Point point = conversationArea.getLocation();
         Actions action = new Actions(DriverFactory.getInstance());
-        action.clickAndHold(conversationArea).moveByOffset(point.x, point.y+20).release().perform();
+        action.clickAndHold(conversationArea).moveByOffset(point.x, point.y+20).release().build().perform();
     }
 
     public void clickCloseButton() {

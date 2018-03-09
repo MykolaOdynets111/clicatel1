@@ -1,8 +1,10 @@
 package touch_pages.pages;
 
 import abstract_classes.AbstractPage;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import touch_pages.uielements.TenantRow;
 
 import java.util.List;
@@ -20,11 +22,17 @@ public class MainPage extends AbstractPage {
 
 
     public MainPage selectTenant(String tenantName) {
+        try {
         waitForElementToBeVisible(tenantContainer, 10);
         new TenantRow(
                         tenants.stream().filter(e -> e.getText().equalsIgnoreCase(tenantName)).findFirst().get())
                 .selectTenant();
         return this;
+        } catch(TimeoutException e) {
+            Assert.assertTrue(false, "Tenants list is not shown");
+            return this;
+        }
+
     }
 
     public Widget openWidget() {
