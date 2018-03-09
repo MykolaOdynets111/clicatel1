@@ -54,6 +54,11 @@ public class DefaultTouchUserSteps implements JSHelper{
         widget = getMainPage().openWidget();
     }
 
+    @Then("^Chat icon is not visible$")
+    public void isChatIconVisible(){
+        Assert.assertTrue(getMainPage().isChatIconHidden(), "Chat icon is visible");
+    }
+
     @When("^User enter (.*) into widget input field$")
     public void enterText(String text) {
         widgetConversationArea = widget.getWidgetConversationArea();

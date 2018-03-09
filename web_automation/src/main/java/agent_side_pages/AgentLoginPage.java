@@ -27,7 +27,7 @@ public class AgentLoginPage extends AgentAbstractPage {
    }
 
    public AgentHomePage loginAsAgentOf(String tenant) {
-       Agents agent = Agents.getAgentFromCurrentEnvByTenant(tenant);
+       Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenant);
        waitForLoginPageToOpen();
 //       waitForElementToBeVisible(userNameInput);
        userNameInput.sendKeys(agent.getAgentName());

@@ -48,12 +48,12 @@ public enum Agents {
         return this.tenant;
     }
 
-    public static Agents getAgentFromCurrentEnvByTenant(String tenant) {
+    public static Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
         Agents[] agentsArray = Agents.values();
         List<Agents> agentsList = Arrays.asList(agentsArray);
         return agentsList.stream()
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
-                        && e.getAgentTenant().equalsIgnoreCase(tenant))
+                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName))
                 .findFirst().get();
     }
 }

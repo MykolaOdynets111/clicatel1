@@ -64,7 +64,7 @@ public class Widget extends AbstractPage {
     }
 
     public boolean isWidgetCollapsed() {
-        return isElementNotShown(widgetWindow);
+        return isElementNotShown(widgetWindow, 5);
     }
 
     private boolean isConnectingMessageShown() {

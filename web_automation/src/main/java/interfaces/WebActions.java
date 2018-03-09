@@ -48,9 +48,9 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default boolean isElementNotShown(WebElement element){
+    default boolean isElementNotShown(WebElement element, int wait){
         try {
-            waitForElementToBeInvisibleWithNoSuchElementException(element, 4);
+            waitForElementToBeInvisibleWithNoSuchElementException(element, wait);
             return true;
         } catch (TimeoutException e) {
             try {

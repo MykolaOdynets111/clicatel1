@@ -35,6 +35,10 @@ public class MainPage extends AbstractPage {
 
     }
 
+    public boolean isChatIconHidden() {
+        return isElementNotShown(chatIcon, 10);
+    }
+
     public Widget openWidget() {
         waitForElementToBeVisible(chatIcon, 25);
         moveToElemAndClick(chatIcon);
