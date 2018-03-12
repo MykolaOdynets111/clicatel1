@@ -135,5 +135,6 @@ task runAllTest(type:Test) {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
         suites baseXmlPath+tenantName+"/onethreadtests.xml"
+//        suites baseXmlPath+tenantName+"/visibilitytests.xml"
     }
 }

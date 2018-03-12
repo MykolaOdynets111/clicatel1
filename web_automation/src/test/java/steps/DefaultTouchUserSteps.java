@@ -55,8 +55,13 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^Chat icon is not visible$")
-    public void isChatIconVisible(){
+    public void isChatIconIsNotVisible(){
         Assert.assertTrue(getMainPage().isChatIconHidden(), "Chat icon is visible");
+    }
+
+    @Then("^Chat icon is visible$")
+    public void isChatIconIsVisible(){
+        Assert.assertTrue(getMainPage().isChatIconShown(), "Chat icon is not visible");
     }
 
     @When("^User enter (.*) into widget input field$")

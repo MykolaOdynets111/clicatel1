@@ -33,12 +33,16 @@ public class Hooks implements JSHelper{
                     DriverFactory.getSecondDriverInstance();
                 }
                 DriverFactory.openUrl();
+                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+                    setUpGeolocation("30.5595", "22.9375");
+                }
             }
     }
 
     @After()
     public void afterScenario(Scenario scenario){
-        if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie"))) {
+        if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
 
             if (DriverFactory.isSecondDriverExists()) {
                 takeScreenshotFromSecondDriver();
@@ -51,9 +55,13 @@ public class Hooks implements JSHelper{
             DriverFactory.closeBrowser();
             DriverFactory.closeSecondBrowser();
         }
-//        if(!scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-//            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "07:11", "08:00");
-//        }
+        if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+            takeScreenshot();
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+            DriverFactory.closeBrowser();
+            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "07:11", "08:00");
+            ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
+        }
     }
 
     @Attachment(value = "Screenshot")
