@@ -40,8 +40,13 @@ public class MainPage extends AbstractPage {
     }
 
     public Widget openWidget() {
+    try {
         waitForElementToBeVisible(chatIcon, 25);
         moveToElemAndClick(chatIcon);
         return new Widget();
+    } catch (TimeoutException e) {
+        Assert.assertTrue(false, "Chat icon is not visible");
+        return null;
+    }
     }
 }
