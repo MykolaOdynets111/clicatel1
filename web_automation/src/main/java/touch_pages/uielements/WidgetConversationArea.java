@@ -4,13 +4,11 @@ import abstract_classes.AbstractUIElement;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import touch_pages.uielements.messages.FromUserMessage;
 import touch_pages.uielements.messages.ToUserMessageWithActions;
 import touch_pages.uielements.messages.ToUserTextMessage;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @FindBy(css = "div.ctl-conversation-area")
 public class WidgetConversationArea extends AbstractUIElement {
@@ -38,12 +36,20 @@ public class WidgetConversationArea extends AbstractUIElement {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
     }
 
-    public boolean isOnlyOneTextResponseShwonFor(String userMessage) {
+    public boolean isTextResponseShownAmongOtherForUserMessage(String userInput, String expectedRisponse) {
+        return new ToUserTextMessage(getFromUserWebElement(userInput)).isTextResponseShownAmongOthers(expectedRisponse);
+    }
+
+    public boolean isOnlyOneTextResponseShownFor(String userMessage) {
         return new ToUserTextMessage(getFromUserWebElement(userMessage)).isOnlyOneTextResponseShwon();
     }
 
     public boolean isCardShownFor(String userMessageText, int wait) {
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isTextInCardShown(wait);
+    }
+
+    public String getCardTextForUserMessage(String userMessageText) {
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromCard();
     }
 
     public boolean isCardButtonsShownFor(String userMessageText, List<String> buttons) {

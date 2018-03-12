@@ -38,6 +38,14 @@ public class ToUserTextMessage  extends Widget implements WebActions {
         }
     }
 
+    public boolean isTextResponseShownAmongOthers(String expectedMessage) {
+        if(toUserTextMessages.size()==0){
+            return false;
+        } else{
+            return toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+        }
+    }
+
     public boolean isOnlyOneTextResponseShwon(){
         if (toUserTextMessages.size()>1)
             return false;

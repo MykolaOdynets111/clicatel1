@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Test(groups = "cucumber")
-//@Test(groups = {"cucumber"}, dependsOnGroups = {"acceptance"})
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
@@ -33,13 +32,5 @@ public class RunGenBankBotTest {
                 }
                 return objects.toArray();
         }
-//        private TestNGCucumberRunner testNGCucumberRunner;
-//        private CucumberFeatureWrapper cucumberFeature;
-//
-//        @Override
-//        @Test(groups = {"cucumber"}, dependsOnGroups = {"acceptance"})
-//        public void feature() {
-//        this.testNGCucumberRunner.runCucumber(cucumberFeature.getCucumberFeature());
-//}
 
 }

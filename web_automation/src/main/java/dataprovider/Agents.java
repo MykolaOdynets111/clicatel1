@@ -18,6 +18,8 @@ public enum Agents {
 
     INTEGRATION_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", "integration"),
 
+    DEMO1_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo1"),
+
     BETA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "beta");
 
     String userName;
@@ -48,12 +50,12 @@ public enum Agents {
         return this.tenant;
     }
 
-    public static Agents getAgentFromCurrentEnvByTenant(String tenant) {
+    public static Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
         Agents[] agentsArray = Agents.values();
         List<Agents> agentsList = Arrays.asList(agentsArray);
         return agentsList.stream()
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
-                        && e.getAgentTenant().equalsIgnoreCase(tenant))
+                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName))
                 .findFirst().get();
     }
 }

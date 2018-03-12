@@ -1,9 +1,12 @@
 package touch_pages.pages;
 
 import abstract_classes.AbstractPage;
+import driverManager.DriverFactory;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -15,6 +18,9 @@ import touch_pages.uielements.WidgetHeader;
 
 public class Widget extends AbstractPage {
 
+    @FindBy(css = "div.ctl-chat-icon.ctl-close")
+    private WebElement closeButton;
+
     @FindBy(xpath = "//span[@class='connection-status-bar-message']")
     private WebElement conectingMassage;
 
@@ -23,6 +29,9 @@ public class Widget extends AbstractPage {
 
     @FindBy(css = "div.ctl-touch-button")
     private WebElement touchButton;
+
+    @FindBy(css = "div.ctl-conversation-area")
+    private WebElement conversationArea;
 
     public Widget() {
         waitUntilOpenedAndConnected();
@@ -52,6 +61,10 @@ public class Widget extends AbstractPage {
         if (isConnectingMessageShown()) {
             waitConnectingMessageToDisappear();
         }
+    }
+
+    public boolean isWidgetCollapsed() {
+        return isElementNotShown(widgetWindow, 5);
     }
 
     private boolean isConnectingMessageShown() {
@@ -89,5 +102,14 @@ public class Widget extends AbstractPage {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public void scrollABitToRevealHeaderButtons() {
+        Actions action = new Actions(DriverFactory.getInstance());
+        action.dragAndDropBy(conversationArea, 0, -20).build().perform();
+    }
+
+    public void clickCloseButton() {
+        click(closeButton);
     }
 }

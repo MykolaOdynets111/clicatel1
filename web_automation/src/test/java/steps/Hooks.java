@@ -3,6 +3,7 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
+import api_helper.RequestSpec;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -16,6 +17,7 @@ import org.testng.IAnnotationTransformer;
 import org.testng.SkipException;
 import org.testng.annotations.ITestAnnotation;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 
 import java.lang.reflect.Constructor;
@@ -44,11 +46,14 @@ public class Hooks implements JSHelper{
 //                DriverFactory.closeSecondBrowser();
             }
             takeScreenshot();
-            endWidgetFlow();
+            endWidgetFlow(scenario);
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
             DriverFactory.closeBrowser();
             DriverFactory.closeSecondBrowser();
         }
+//        if(!scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+//            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "07:11", "08:00");
+//        }
     }
 
     @Attachment(value = "Screenshot")
@@ -61,7 +66,10 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
-    private void endWidgetFlow() {
+    private void endWidgetFlow(Scenario scenario) {
+        if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
+            new MainPage().openWidget();
+        }
         Widget widget = new Widget();
         widget.getWidgetFooter().enterMessage("end").sendMessage();
         widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
