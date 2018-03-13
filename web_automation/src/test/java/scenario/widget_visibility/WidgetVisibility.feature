@@ -18,11 +18,13 @@ Feature: Widget visibility
   Scenario: Widget is visible when some specific hours and specific country are selected
     Given Following widget time availability for General Bank Demo is selected: this day
     And Africa, South Africa territory availability is applied
+#    And North America, United States territory availability is applied
     When User select General Bank Demo tenant
     Then Chat icon is visible
 
   Scenario: Widget is visible when all hours and specific country are selected
     Given Following widget time availability for General Bank Demo is selected: all week
     And Africa, South Africa territory availability is applied
+#    And North America, United States territory availability is applied
     When User select General Bank Demo tenant
     Then Chat icon is visible

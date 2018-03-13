@@ -33,9 +33,9 @@ public class Hooks implements JSHelper{
                     DriverFactory.getSecondDriverInstance();
                 }
                 DriverFactory.openUrl();
-                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-                    setUpGeolocation("30.5595", "22.9375");
-                }
+//                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+//                    setUpGeolocation("30.5595", "22.9375");
+//                }
             }
     }
 
@@ -89,4 +89,6 @@ public class Hooks implements JSHelper{
             new AgentLoginPage().waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }
+
+
 }
