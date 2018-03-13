@@ -33,9 +33,10 @@ public class Hooks implements JSHelper{
                     DriverFactory.getSecondDriverInstance();
                 }
                 DriverFactory.openUrl();
-//                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-//                    setUpGeolocation("30.5595", "22.9375");
-//                }
+                // Setting up coordinates of Lviv, Ukraine into browser
+                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+                    setUpGeolocation("49.8397", "24.0297");
+                }
             }
     }
 
@@ -59,7 +60,7 @@ public class Hooks implements JSHelper{
             takeScreenshot();
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
             DriverFactory.closeBrowser();
-            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "07:11", "08:00");
+            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
             ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
         }
     }

@@ -65,6 +65,12 @@ task runAllTests(type: Test) {
             runTieTests.execute()
         }}
 
+    if(suite=="visibility"){
+        doFirst {
+            runVisibilityTests.execute()
+        }
+    }
+
     if(suite=="all") {
 
         doFirst {
@@ -82,6 +88,7 @@ task runAllTests(type: Test) {
                     runAllTest.execute()
                 }
             }
+            runVisibilityTests.execute()
         }
     }
     runAllTests.finalizedBy(allureReport)
@@ -135,6 +142,21 @@ task runAllTest(type:Test) {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
         suites baseXmlPath+tenantName+"/onethreadtests.xml"
-//        suites baseXmlPath+tenantName+"/visibilitytests.xml"
+    }
+}
+
+task runVisibilityTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/visibilitytests.xml"
     }
 }

@@ -35,12 +35,12 @@ public class MainPage extends AbstractPage {
 
     }
 
-    public boolean isChatIconHidden() {
-        return isElementNotShown(chatIcon, 10);
-    }
 
     public boolean isChatIconShown() {
-        return isElementShown(chatIcon, 10);
+        try{
+        waitForElementToBeInvisible(chatIcon, 4);}
+        catch (TimeoutException e){}
+        return isElementShown(chatIcon, 5);
     }
 
     public Widget openWidget() {
