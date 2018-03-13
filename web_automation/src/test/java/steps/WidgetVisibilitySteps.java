@@ -9,6 +9,7 @@ import org.openqa.selenium.html5.Location;
 import org.openqa.selenium.html5.LocationContext;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class WidgetVisibilitySteps {
     public void setUpWidgetVisibilityByTime(String tenantOrgName, List<String> dayTimeVisibility) {
         Tenants.setTenantUnderTestOrgName(tenantOrgName);
         String day = dayTimeVisibility.get(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:ss");
         if (day.equalsIgnoreCase("all week")) {
             ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
             return;
@@ -27,16 +29,21 @@ public class WidgetVisibilitySteps {
             ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, day, startEndTime.get(0), startEndTime.get(1));
         }
         if (day.equalsIgnoreCase("this day")) {
+            LocalDateTime startTime = LocalDateTime.now().minusHours(3);
+            LocalDateTime endTime = LocalDateTime.now().plusHours(3);
+
             LocalDateTime datetime = LocalDateTime.now();
             ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, datetime.getDayOfWeek().toString(),
-                    (datetime.getHour()-3)+":00",
-                    (datetime.getHour()+3)+":00");
+                    startTime.format(formatter),
+                    endTime.format(formatter));
         }
         if (day.equalsIgnoreCase("wrong hours")) {
-            LocalDateTime datetime = LocalDateTime.now();
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, datetime.getDayOfWeek().toString(),
-                    (datetime.getHour()-6)+":00",
-                    (datetime.getHour()-5)+":00");
+            LocalDateTime startTime = LocalDateTime.now().minusHours(6);
+            LocalDateTime endTime = LocalDateTime.now().minusHours(5);
+
+            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, LocalDateTime.now().getDayOfWeek().toString(),
+                    startTime.format(formatter),
+                    endTime.format(formatter));
         }
     }
 
