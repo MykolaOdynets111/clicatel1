@@ -89,12 +89,9 @@ public class DefaultTouchUserSteps implements JSHelper{
                 expectedTextResponse = textResponse;
                 break;
         }
-//        if (textResponse.contains("[FIRST_NAME]")) {
-//            expectedTextResponse.replace("[FIRST_NAME]", getUserNameFromLocalStorage());
-//        }
-//        if (textResponse.contains("${firstName}")) {
-//            expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
-//        }
+        if (textResponse.contains("${firstName}")) {
+            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
+        }
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 10),
