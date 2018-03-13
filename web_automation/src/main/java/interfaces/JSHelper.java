@@ -21,6 +21,17 @@ public interface JSHelper {
     }
 
 
+    default void setUpGeolocation(String latitude, String longitude) {
+        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getInstance();
+        executor.executeScript("navigator.geolocation.getCurrentPosition = function(success, failure) { \n" +
+                "    success({ coords: { \n" +
+                "        latitude: "+latitude+", \n" +
+                "        longitude: "+longitude+",\n" +
+                "\n" +
+                "    }, timestamp: Date.now() }); \n" +
+                "} ");
+    }
+
     default String getUserNameFromLocalStorage(){
         JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
         return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");

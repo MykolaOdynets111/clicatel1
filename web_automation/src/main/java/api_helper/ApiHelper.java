@@ -2,6 +2,9 @@ package api_helper;
 
 import dataprovider.Accounts;
 import dataprovider.Tenants;
+import dataprovider.Territories;
+import dataprovider.jackson_schemas.Country;
+import dataprovider.jackson_schemas.Territory;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -122,4 +125,66 @@ public class ApiHelper {
         }
         return body;
     }
+
+    public static void setAvailableForAllTerritories(String tenantOrgName){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{\n" +
+                        "  \"availability\": \"AVAILABLE\"\n" +
+                        "\n" +
+                        "}")
+                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
+                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+    }
+
+
+    public static void setAvailabilityForTerritoryAndCountry(String tenantOrgName, String terrName, boolean terrAvailability,
+                                                             String countryName, boolean countryAvailability){
+        Territory targetTerr =  Territories.getTargetTerr(tenantOrgName, terrName);
+        String territoryID = targetTerr.getTerritoryId();
+        Country targetCountry = targetTerr.getCountry().stream().filter(e -> e.getName().equalsIgnoreCase(countryName))
+                .findFirst().get();
+        String countryID = targetCountry.getCountryId();
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{\n" +
+                        "  \"availability\": \"LIMITED\",\n" +
+                        "  \"territory\": [\n" +
+                        "    {\n" +
+                        "      \"territoryId\": \""+territoryID+"\",\n" +
+                        "      \"available\": "+terrAvailability+",\n" +
+                        "      \"country\": [\n" +
+                        "        {\n" +
+                        "          \"countryId\": \""+countryID+"\",\n" +
+                        "          \"available\": "+countryAvailability+"\n" +
+                        "        }\n" +
+                        "      ]\n" +
+                        "    }" +
+                        "]" +
+                        "}")
+                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
+                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+    }
+
+    public static void setAvailabilityForTerritory(String tenantOrgName, String terrName, boolean terrAvailability){
+        Territory targetTerr =  Territories.getTargetTerr(tenantOrgName, terrName);
+        String territoryID = targetTerr.getTerritoryId();
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{\n" +
+                        "  \"availability\": \"LIMITED\",\n" +
+                        "  \"territory\": [\n" +
+                        "    {\n" +
+                        "      \"territoryId\": \""+territoryID+"\",\n" +
+                        "      \"available\": "+terrAvailability+"\n" +
+                        "    }" +
+                        "]" +
+                        "}")
+                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
+                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+    }
+
 }

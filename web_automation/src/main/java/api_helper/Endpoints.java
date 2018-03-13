@@ -18,6 +18,8 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_HOURS = "tenants/%s/hours/webchat";
 
+    public static String WIDGET_VISIBILITY_TERRITORIES = "territories/availability";
+
      // ==================  PORTAL ============== //
 
     public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com/";

@@ -46,6 +46,9 @@ public class DefaultTouchUserSteps implements JSHelper{
             Tenants.setTenantUnderTest("generalbank");
             Tenants.setTenantUnderTestOrgName("General Bank Demo");
         }
+        String clientID = getUserNameFromLocalStorage();
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
         getMainPage().selectTenant(tenantName);
     }
 
@@ -55,8 +58,13 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^Chat icon is not visible$")
-    public void isChatIconVisible(){
+    public void isChatIconIsNotVisible(){
         Assert.assertTrue(getMainPage().isChatIconHidden(), "Chat icon is visible");
+    }
+
+    @Then("^Chat icon is visible$")
+    public void isChatIconIsVisible(){
+        Assert.assertTrue(getMainPage().isChatIconShown(), "Chat icon is not visible");
     }
 
     @When("^User enter (.*) into widget input field$")
@@ -81,6 +89,12 @@ public class DefaultTouchUserSteps implements JSHelper{
                 expectedTextResponse = textResponse;
                 break;
         }
+//        if (textResponse.contains("[FIRST_NAME]")) {
+//            expectedTextResponse.replace("[FIRST_NAME]", getUserNameFromLocalStorage());
+//        }
+//        if (textResponse.contains("${firstName}")) {
+//            expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
+//        }
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 10),
