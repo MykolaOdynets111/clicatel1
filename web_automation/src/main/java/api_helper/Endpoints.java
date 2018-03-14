@@ -22,7 +22,7 @@ public class Endpoints {
 
      // ==================  PORTAL ============== //
 
-    public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com/";
+    public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com";
 
     public static  String PLATFORM_ACCOUNTS = "/auth/accounts";
 

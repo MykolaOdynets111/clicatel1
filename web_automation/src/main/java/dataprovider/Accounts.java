@@ -4,6 +4,7 @@ import api_helper.Endpoints;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,9 @@ public class Accounts {
                         "  \"password\": \""+userPass+"\"\n" +
                         "}")
                 .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) + Endpoints.PLATFORM_ACCOUNTS);
-
+        if (resp.getBody().asString().contains("Not Authorized")){
+            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal");
+        }
         tokenAndAccount.put("token", resp.jsonPath().get("token"));
         List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
         HashMap<String, String> targetAccount =accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
