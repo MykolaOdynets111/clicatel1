@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
+import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -250,6 +251,13 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertTrue( getWelcomeMessages().getWelcomeCardButtonText().contains(buttonName),
                 "Button is not shown in Welcome card (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
+    }
+
+    // ========================== Chat history Steps ========================= //
+
+    @When("^User refreshes the page$")
+    public void refreshThePage() {
+        DriverFactory.getInstance().navigate().refresh();
     }
 
     // ======================= Private Getters ========================== //
