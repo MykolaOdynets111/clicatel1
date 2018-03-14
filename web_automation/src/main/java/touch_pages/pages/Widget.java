@@ -2,10 +2,7 @@ package touch_pages.pages;
 
 import abstract_classes.AbstractPage;
 import driverManager.DriverFactory;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
@@ -112,4 +109,5 @@ public class Widget extends AbstractPage {
     public void clickCloseButton() {
         click(closeButton);
     }
+
 }
