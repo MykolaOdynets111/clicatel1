@@ -6,6 +6,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ public class Accounts {
         String accountName = getCorrectAccountName(tenantOrgName);
         Map<String, String> tokenAndAccount = new HashMap<>();
         Response resp =  RestAssured.given()
+                .log().all()
                 .header("Content-Type", "application/json")
                 .body("{\n" +
                         "  \"email\": \""+userName+"\",\n" +
@@ -23,7 +26,18 @@ public class Accounts {
                         "}")
                 .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) + Endpoints.PLATFORM_ACCOUNTS);
         if (resp.getBody().asString().contains("Not Authorized")){
-            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal");
+            InetAddress ip = null;
+            String ipAddress = "cannot get address";
+            try {
+                ip = InetAddress.getLocalHost();
+                if (!(ip.getHostAddress()==null)){
+                    ipAddress = ip.getHostAddress();
+                }
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal." +
+                    "IP: "+ipAddress);
         }
         tokenAndAccount.put("token", resp.jsonPath().get("token"));
         List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
