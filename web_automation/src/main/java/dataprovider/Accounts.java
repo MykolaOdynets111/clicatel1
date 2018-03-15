@@ -26,19 +26,8 @@ public class Accounts {
                         "}")
                 .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) + Endpoints.PLATFORM_ACCOUNTS);
         if (resp.getBody().asString().contains("Not Authorized")){
-            InetAddress ip = null;
-            String ipAddress = "no address";
-            try {
-                ip = InetAddress.getLocalHost();
-                if (!(ip.getHostAddress()==null)){
-                    ipAddress = ip.getHostAddress();
-                }
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-
-            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal. " +
-                    "IP: "+ ipAddress);
+            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal."
+                   );
         }
         tokenAndAccount.put("token", resp.jsonPath().get("token"));
         List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
