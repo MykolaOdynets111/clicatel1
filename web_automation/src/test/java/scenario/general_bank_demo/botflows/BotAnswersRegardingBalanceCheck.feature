@@ -12,7 +12,7 @@ Feature: Bot answers regarding balance check
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                       |expected response|
-      |Account balance                                   | Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
-      |hi, how do i check my balance in the app?         | Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
-      |why can't i view my balance in your app?          | Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
+      |Account balance                                   | Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
+      |hi, how do i check my balance in the app?         | Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
+      |why can't i view my balance in your app?          | Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.|
 

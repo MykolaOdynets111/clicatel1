@@ -16,4 +16,4 @@ Feature: User should be able to get back to the ended chat
     Then User have to receive 'welcome back message' text response for his 'Hello' input
     And Card with a button Chat to Support is shown on user Hello message
     When User enter account balance into widget input field
-    Then User have to receive 'Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'account balance' input
+    Then User have to receive 'Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'account balance' input
