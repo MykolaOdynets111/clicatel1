@@ -37,10 +37,10 @@ public class URLs {
     }
 
     /**
-     * @param tenantName
+     * @param tenantOrgName
      * @param updateURL - boolean value to indicate if we need to log into different tenant Agent desk
      */
-    public static String getAgentURL(String tenantName, boolean updateURL) {
+    public static String getAgentURL(String tenantOrgName, boolean updateURL) {
         if (FINAL_AGENT_URL == null || updateURL==true) {
             String baseUrl;
             String env = ConfigManager.getEnv();
@@ -71,17 +71,17 @@ public class URLs {
                     baseUrl = String.format(URLs.BASE_AGENT_URL, "testing");
                     break;
             }
-//            if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
-//                tenantName="standard bank";
+//            if(tenantOrgName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
+//                tenantOrgName="standard bank";
 //            }
-            FINAL_AGENT_URL = baseUrl + getTenantID(tenantName);
+            FINAL_AGENT_URL = baseUrl + getTenantID(tenantOrgName);
         }
 
         return FINAL_AGENT_URL;
     }
 
-    private static String getTenantID(String tenantName){
-        return Tenants.getTenantInfo(tenantName, "id");
+    private static String getTenantID(String tenantOrgName){
+        return Tenants.getTenantInfo(tenantOrgName, "id");
     }
 
     public static String getTieURL(String tenantOrgName, String message) {

@@ -10,8 +10,8 @@ public class DefaultAgentSteps {
 
 
     @Given("^I login as agent of (.*)")
-    public void loginAsAgentForTenant(String tenant){
-        agentHomePage = AgentLoginPage.openAgentLoginPage(tenant).loginAsAgentOf(tenant);
+    public void loginAsAgentForTenant(String tenantOrhName){
+        agentHomePage = AgentLoginPage.openAgentLoginPage(tenantOrhName).loginAsAgentOf(tenantOrhName);
         Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(), "Agent is not logged in.");
     }
 }

@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(css = "div.agent-assist")
 public class SuggestedGroup extends AbstractUIElement {
@@ -18,5 +19,9 @@ public class SuggestedGroup extends AbstractUIElement {
         } else{
             return false;
         }
+    }
+
+    public List<Suggestion> getSuggestionsList() {
+        return listOfSuggestion.stream().map(e -> new Suggestion(e)).collect(Collectors.toList());
     }
 }

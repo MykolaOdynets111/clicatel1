@@ -14,6 +14,9 @@ import touch_pages.uielements.WidgetConversationArea;
 
 public class AgentHomePage extends AgentAbstractPage {
 
+    @FindBy(css = "div.suggestion-wrapper")
+    private WebElement suggestionInInputField;
+
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
 
@@ -47,7 +50,7 @@ public class AgentHomePage extends AgentAbstractPage {
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
             messageInput.sendKeys(responseToUser);
-            click(submitMessageButton);
+            clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
             Assert.assertTrue(false, "There is a problem with agent desk page." +
@@ -57,11 +60,20 @@ public class AgentHomePage extends AgentAbstractPage {
 
     }
 
+    public void clickSendButton() {
+        click(submitMessageButton);
+    }
+
+
     public boolean isAgentSuccessfullyLoggedIn() {
         try {
             return isElementShown(conversationAreaContainer);
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    public String getSuggestionFromInputFiled() {
+        return suggestionInInputField.getText();
     }
 }
