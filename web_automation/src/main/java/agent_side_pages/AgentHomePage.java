@@ -5,22 +5,23 @@ import agent_side_pages.UIElements.ChatBody;
 import agent_side_pages.UIElements.Header;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import agent_side_pages.UIElements.SuggestedGroup;
-import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import driverManager.DriverFactory;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import touch_pages.uielements.WidgetConversationArea;
 
 public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "div.suggestion-wrapper")
-    private WebElement suggestionInInputField;
+    private WebElement suggestionInputField;
+
+    String messageInputLocator = "//textarea[contains(@class,'text-input')]";
 
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
 
-    @FindBy(css = "button[type='submit']")
+//    @FindBy(css = "button[type='submit']")
+    @FindBy(css = "span.icon.svg-icon-send")
     private WebElement submitMessageButton;
 
     @FindBy(css = "div.dashboard div.chat")
@@ -30,6 +31,9 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatBody chatBody;
     private Header header;
     private SuggestedGroup suggestedGroup;
+
+    public AgentHomePage() {
+    }
 
     public SuggestedGroup getSuggestedGroup() {
         return suggestedGroup;
@@ -74,6 +78,25 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String getSuggestionFromInputFiled() {
-        return suggestionInInputField.getText();
+        return suggestionInputField.getText();
+    }
+
+    public void deleteSuggestionAndAddAnother(String message) {
+        try {
+            suggestionInputField.click();
+            messageInput.clear();
+            messageInput.sendKeys(message);
+        } catch (StaleElementReferenceException e) {
+            DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(message);
+        }
+    }
+
+    public void addMoreInfo(String additionalMessage){
+            try {
+                suggestionInputField.click();
+                messageInput.sendKeys(additionalMessage);
+            } catch (StaleElementReferenceException e) {
+                DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
+            }
     }
 }

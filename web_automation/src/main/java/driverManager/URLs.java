@@ -10,6 +10,8 @@ public class URLs {
 
     private static final String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
 
+    private static final String BASE_CHATDESK_AGENT_URL = "https://%s-chatdesk.clickatelllabs.com/#/login?tenantId=";
+
     private static String BASE_TIE_SENTIMENT_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/chats/?q=%s&sentiment=true";
 
     private static String BASE_TIE_ANSWER_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/answers/?intent=%s";
@@ -47,10 +49,10 @@ public class URLs {
 
             switch (env) {
                 case "qa":
-                    baseUrl = String.format(URLs.BASE_AGENT_URL, "qa");
+                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "qa");
                     break;
                 case "dev":
-                    baseUrl = String.format(URLs.BASE_AGENT_URL, "dev");
+                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "dev");
                     break;
                 case "testing":
                     baseUrl =String.format(URLs.BASE_AGENT_URL, "testing");

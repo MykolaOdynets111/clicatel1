@@ -57,11 +57,15 @@ public class AgentConversationSteps implements JSHelper{
         if (getSuggestedGroup().isSuggestionListEmpty()){
             Assert.assertTrue(false, "Suggestion list is empty");
         }
+        String expectedResponse = "no response";
         List<Intent> listOfIntentsFromTIE = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage);
         List<String> answersFromTie = new ArrayList<>();
         for(int i =0; i<listOfIntentsFromTIE.size(); i++){
-            String answer = ApiHelperTie.getExpectedMessageOnIntent(listOfIntentsFromTIE.get(i).getIntent());
-            answersFromTie.add(i, answer);
+            expectedResponse = ApiHelperTie.getExpectedMessageOnIntent(listOfIntentsFromTIE.get(i).getIntent());
+            if (expectedResponse.contains("${firstName}")) {
+                expectedResponse = expectedResponse.replace("${firstName}", getUserNameFromLocalStorage());
+            }
+            answersFromTie.add(i, expectedResponse);
         }
         List<Suggestion> actualSuggestions = getSuggestedGroup().getSuggestionsList();
         List<String> suggestionTextsActual = actualSuggestions.stream().map(e -> e.getSuggestionMessage()).collect(Collectors.toList());
@@ -82,6 +86,17 @@ public class AgentConversationSteps implements JSHelper{
     @When("^Agent click send button$")
     public void clickSendButton() {
         getAgentHomePage().clickSendButton();
+    }
+
+    @When("^Agent is able to delete the suggestion from input field and sent his own \"(.*)\" message$")
+    public void deleteSuggestionAndSendOwn(String agentMessage){
+        getAgentHomePage().deleteSuggestionAndAddAnother(agentMessage);
+        getAgentHomePage().clickSendButton();
+    }
+
+    @When("^Agent add additional info \"(.*)\" to suggested message$")
+    public void addMoreInfo(String additional) {
+        getAgentHomePage().addMoreInfo(additional);
     }
 
     private AgentHomePage getAgentHomePage() {

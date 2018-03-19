@@ -16,7 +16,7 @@ public class AgentConversationRequestSteps implements JSHelper{
     public void verifyIfAgentReceivesConversationRequest() {
         agentHomePage = new AgentHomePage();
         leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
-        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestIsShown(25),
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestIsShown(10),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 

@@ -1,6 +1,7 @@
 package interfaces;
 
 import driverManager.DriverFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,10 @@ public interface WebWait {
 
     default WebDriverWait initWait(int waitTime){
         return new WebDriverWait(DriverFactory.getInstance(), waitTime);
+    }
+
+    default WebDriverWait initAgentWait(int waitTime){
+        return new WebDriverWait(DriverFactory.getSecondDriverInstance(), waitTime);
     }
 
     default WebElement waitForElementToBeClickable(WebElement element){
@@ -58,6 +63,12 @@ public interface WebWait {
         initWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOf(element));
+    }
+
+    default void waitForElementToBeVisibleByXpath(String xpath, int time){
+        initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){
