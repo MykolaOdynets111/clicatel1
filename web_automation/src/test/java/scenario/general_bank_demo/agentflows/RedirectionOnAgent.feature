@@ -24,7 +24,6 @@ Feature: User on his demand should be redirected on the agent
       |user_message    |
       |connect to agent|
       |chat to support |
-#      |you need to get way more ATMs in Cape Town|
 
   Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in Welcome card
     Given Welcome card with a button "Chat to Support" is shown
@@ -48,3 +47,7 @@ Feature: User on his demand should be redirected on the agent
     And There is no suggestions on user's input Chat to Support
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'Chat to Support' input
+
+  Scenario: Verify user is redirected to the Agent when types negative sentiment message
+    When User enter you need to get way more ATMs in Cape Town into widget input field
+    Then Agent has new conversation request

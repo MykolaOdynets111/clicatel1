@@ -20,7 +20,6 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
 
-//    @FindBy(css = "button[type='submit']")
     @FindBy(css = "span.icon.svg-icon-send")
     private WebElement submitMessageButton;
 
@@ -93,6 +92,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void addMoreInfo(String additionalMessage){
             try {
+                waitForElementToBeVisible(suggestionInputField,6);
                 suggestionInputField.click();
                 messageInput.sendKeys(additionalMessage);
             } catch (StaleElementReferenceException e) {

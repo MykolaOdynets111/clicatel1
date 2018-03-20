@@ -33,24 +33,10 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public boolean isNewConversationRequestIsShown(int wait) {
             String userName = getUserNameFromLocalStorage();
             try{
-//                WebElement elem =  DriverFactory.getSecondDriverInstance().findElement(
-//                        By.xpath(String.format(targetProfille, userName)));
-//                isElementShown(DriverFactory.getSecondDriverInstance().findElement(
-//                        By.xpath(String.format(targetProfille, userName))), wait);
                 waitForElementToBeVisibleByXpath(String.format(String.format(targetProfille, userName), userName), wait);
                 return true;
             } catch(TimeoutException e) {
                 return false;
             }
-
-//            return isElementNotShown(
-//                   )
-//                    ,wait);
-//            try{
-//                waitForElementsToBeVisible(newConversationRequests, wait);
-//                return newConversationRequests.stream().anyMatch(e-> new ChatInLeftMenu(e).getUserName().equals(userName));
-//            } catch (TimeoutException e) {
-//                return false;
-//            }
     }
 }
