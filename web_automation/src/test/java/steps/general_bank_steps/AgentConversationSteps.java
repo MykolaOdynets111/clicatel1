@@ -4,6 +4,7 @@ import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.ChatBody;
 import agent_side_pages.UIElements.SuggestedGroup;
 import agent_side_pages.UIElements.Suggestion;
+import api_helper.ApiHelper;
 import api_helper.ApiHelperTie;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -52,7 +53,7 @@ public class AgentConversationSteps implements JSHelper{
                 "Suggestions list is not empty on user's input: "+userMessage+"");
     }
 
-    @Then("^There is correct suggestion shown on user message \"(.*)\"$")
+    @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
         if (getSuggestedGroup().isSuggestionListEmpty()){
             Assert.assertTrue(false, "Suggestion list is empty");
@@ -82,6 +83,7 @@ public class AgentConversationSteps implements JSHelper{
                                          Intents.getIntentWithMaxConfidence(userMessage).getIntent());
         Assert.assertEquals(actualSuggestion, expectedMessage, "Expected suggestion in input field is not as expected");
     }
+
 
     @When("^Agent click send button$")
     public void clickSendButton() {

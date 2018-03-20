@@ -19,6 +19,6 @@ public class Suggestion extends Widget implements WebActions {
     private WebElement suggestedMessage;
 
     public String getSuggestionMessage() {
-        return suggestedMessage.getText();
+        return suggestedMessage.getAttribute("innerText");
     }
 }

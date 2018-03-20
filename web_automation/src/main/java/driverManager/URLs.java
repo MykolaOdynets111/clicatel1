@@ -49,10 +49,12 @@ public class URLs {
 
             switch (env) {
                 case "qa":
-                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "qa");
+//                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "qa");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, "qa");
                     break;
                 case "dev":
-                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "dev");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, "dev");
+//                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "dev");
                     break;
                 case "testing":
                     baseUrl =String.format(URLs.BASE_AGENT_URL, "testing");

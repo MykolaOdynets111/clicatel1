@@ -41,7 +41,7 @@ public enum DriverType {
             ChromeDriverManager.getInstance().setup();
 
             WebDriver localDriver = new ChromeDriver((ChromeOptions) capabilities);
-            DriverType.setDimension(localDriver);
+//            DriverType.setDimension(localDriver);
             return localDriver;
         }
 
