@@ -80,9 +80,11 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
             new MainPage().openWidget();
         }
-        Widget widget = new Widget();
-        widget.getWidgetFooter().enterMessage("end").sendMessage();
-        widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+        try {
+            Widget widget = new Widget();
+            widget.getWidgetFooter().enterMessage("end").sendMessage();
+            widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+        }catch (WebDriverException e) { }
     }
 
     private void logoutAgent() {
