@@ -32,7 +32,7 @@ public enum DriverType {
             options.addArguments("disable-infobars");
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
-
+            options.addArguments("disable-notifications");
 			return options;
 		}
 

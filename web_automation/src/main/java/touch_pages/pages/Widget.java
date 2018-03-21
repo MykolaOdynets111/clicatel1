@@ -4,7 +4,6 @@ import abstract_classes.AbstractPage;
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touch_pages.uielements.TouchActionsMenu;
