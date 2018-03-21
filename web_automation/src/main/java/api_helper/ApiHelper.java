@@ -5,6 +5,7 @@ import dataprovider.Tenants;
 import dataprovider.Territories;
 import dataprovider.jackson_schemas.Country;
 import dataprovider.jackson_schemas.Territory;
+import dataprovider.jackson_schemas.tenant_address.TenantAddress;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -187,4 +188,12 @@ public class ApiHelper {
                         Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
 
+
+    public static List<TenantAddress> getTenantAddressInfo(String tenantName) {
+        return RestAssured.given()
+                .header("Accept", "application/json")
+                .get(String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
+                     String.format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
+                .jsonPath().getList("addresses", TenantAddress.class);
+    }
 }

@@ -1,7 +1,9 @@
 package dataprovider;
 
 import api_helper.ApiHelper;
+import dataprovider.jackson_schemas.tenant_address.TenantAddress;
 
+import java.util.List;
 import java.util.Map;
 
 public class Tenants {
@@ -27,5 +29,14 @@ public class Tenants {
 
     public static String getTenantUnderTestOrgName() {
         return TENANT_UNDER_TEST_ORG_NAME;
+    }
+
+    public static String getTenantBranchLocationAddress(String tenantName){
+        List<TenantAddress> addreses = ApiHelper.getTenantAddressInfo(tenantName);
+        String branchLocation  ="Loaction address: " + addreses.get(0).getFirstAddressLine() + ", " + addreses.get(0).getSecondAddressLine() + ", " + addreses.get(0).getPostalCode()+ ", ";
+        if((addreses.get(0).getPhones()).size()>0){
+            branchLocation = branchLocation +  addreses.get(0).getPhones().get(0);
+        }
+        return branchLocation;
     }
 }

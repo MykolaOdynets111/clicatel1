@@ -3,8 +3,6 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
-import api_helper.ApiHelperTie;
-import api_helper.RequestSpec;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -14,15 +12,10 @@ import interfaces.JSHelper;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
-import org.testng.IAnnotationTransformer;
-import org.testng.SkipException;
-import org.testng.annotations.ITestAnnotation;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class Hooks implements JSHelper{
