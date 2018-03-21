@@ -20,6 +20,8 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_TERRITORIES = "territories/availability";
 
+    public static String INTERNAL_TENANT_ADDRESS = "tenants/%s/addresses";
+
      // ==================  PORTAL ============== //
 
     public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com";
