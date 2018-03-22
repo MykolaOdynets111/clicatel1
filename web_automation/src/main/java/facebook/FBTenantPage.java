@@ -12,9 +12,15 @@ public class FBTenantPage extends AbstractPage {
 
     private MessengerWindow messengerWindow;
 
+    public MessengerWindow getMessengerWindow() {
+        return messengerWindow;
+    }
+
     public MessengerWindow openMessanger(){
         waitForElementToBeVisible(sendMessageButton);
         sendMessageButton.click();
         return messengerWindow;
     }
+
+
 }

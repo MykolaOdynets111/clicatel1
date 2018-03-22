@@ -72,6 +72,10 @@ public interface WebActions extends WebWait {
         return DriverFactory.getInstance().findElement(By.xpath(xpath));
     }
 
+    default List<WebElement> findElemsByXPATH(String xpath){
+        return DriverFactory.getInstance().findElements(By.xpath(xpath));
+    }
+
     default void pressEnterForWebElem(WebElement elem){
         elem.sendKeys(Keys.ENTER);
     }

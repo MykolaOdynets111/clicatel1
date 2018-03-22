@@ -9,6 +9,7 @@ import cucumber.api.java.Before;
 import dataprovider.Tenants;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
+import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -65,6 +66,7 @@ public class Hooks implements JSHelper{
         }
         if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
             takeScreenshot();
+            endFacebookFlow();
             DriverFactory.closeBrowser();
         }
     }
@@ -97,5 +99,9 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) { }
     }
 
-
+    private void endFacebookFlow() {
+        try {
+            new FBTenantPage().getMessengerWindow().deleteConversation();
+        } catch (WebDriverException e) { }
+    }
 }
