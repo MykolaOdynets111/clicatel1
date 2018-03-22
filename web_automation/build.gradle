@@ -60,6 +60,11 @@ task runAllTests(type: Test) {
         suite = System.properties.getProperty("suite")
     }
 
+    if(suite == "facebook") {
+        doFirst {
+            runFacebookTests.execute()
+        }}
+
     if(suite == "tie") {
         doFirst {
             runTieTests.execute()
@@ -158,5 +163,21 @@ task runVisibilityTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/visibilitytests.xml"
+    }
+}
+
+task runFacebookTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/facebook.xml"
     }
 }
