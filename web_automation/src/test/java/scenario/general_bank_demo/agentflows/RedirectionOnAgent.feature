@@ -25,7 +25,7 @@ Feature: User on his demand should be redirected on the agent
       |connect to agent|
       |chat to support |
 
-  Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in Welcome card
+  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
     Given Welcome card with a button "Chat to us" is shown
     When User select Chat to us option from Welcome card
     Then Agent has new conversation request
@@ -36,7 +36,7 @@ Feature: User on his demand should be redirected on the agent
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'Chat to us' input
 
-  Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in touch menu
+  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in touch menu
     When User click Touch button
     Then "Chat to us" is shown in touch menu
     When User select "Chat to us" from touch menu
