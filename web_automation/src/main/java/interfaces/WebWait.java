@@ -65,16 +65,22 @@ public interface WebWait {
                 .until(ExpectedConditions.invisibilityOf(element));
     }
 
-    default void waitForElementToBeVisibleByXpath(String xpath, int time){
+    default void waitForElementToBeVisibleByXpathAgent(String xpath, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
-    default void waitForElementsToBeVisibleByXpath(String xpath, int time){
+    default void waitForElementsToBeVisibleByXpathAgent(String xpath, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
+    }
+
+    default void waitForElementToBeVisibleByXpath(String xpath, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){

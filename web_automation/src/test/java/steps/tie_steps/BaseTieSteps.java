@@ -32,6 +32,9 @@ public class BaseTieSteps {
     @Then("^TIE returns (.*) intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        if (resp.getBody().asString().contains("502 Bad Gateway")) {
+            Assert.assertTrue(false, "TIE is down." + resp.getBody().asString());
+        }
         try {
             List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
             try {

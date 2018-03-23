@@ -30,8 +30,8 @@ public class FacebookSteps {
 
     @Then("^User have to receive the following on his message (.*): \"(.*)\"$")
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
-       List<String> actualResponse = getMessengerWindow().getToUserResponse(userMessage);
-        Assert.assertEquals("","");
+        Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(userMessage, expectedResponse,30),
+                "User do not receive response in FB messenger after 30 seconds wait.");
     }
 
     private FBTenantPage getFbTenantPage() {

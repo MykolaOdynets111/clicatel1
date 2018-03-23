@@ -2,17 +2,15 @@ package facebook.uielements;
 
 import abstract_classes.AbstractUIElement;
 import driverManager.DriverFactory;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @FindBy(xpath = "//a[@data-hover='tooltip'][@data-tooltip-position='above'][not(contains(@class, 'close button'))]//ancestor::div[@role='complementary']")
 public class MessengerWindow extends AbstractUIElement {
 
     private String inputFieldXPATHLocator = "//div[@role='combobox']";
-    private String toUserMesaage = "//span[text()='%s']//following::div[contains(@class, 'direction')]//span/span";
+    private String toUserMessage = "//span[text()='%s']//following::span[text()=%s]";
 
     @FindBy(xpath = ".//div[@role='heading']/following-sibling::ul")
     private WebElement headerActionButonsContainer;
@@ -47,10 +45,14 @@ public class MessengerWindow extends AbstractUIElement {
         confirmDeletingConverstionButton.click();
     }
 
-    public List<String> getToUserResponse(String userMessage) {
-        waitForElementsToBeVisibleByXpath(String.format(toUserMesaage, userMessage), 30);
-        List<WebElement> webElem = findElemsByXPATH(String.format(toUserMesaage, userMessage));
-        return webElem.stream().map(e -> e.getText()).collect(Collectors.toList());
+    public boolean isExpectedToUserMessageShown(String userMessage, String expectedResponse, int wait) {
+        String expectedElem = String.format(toUserMessage, userMessage, expectedResponse);
+        try {
+            waitForElementToBeVisibleByXpath(expectedElem, wait);
+            return true;
+        } catch(TimeoutException e){
+            return false;
+        }
     }
 
 }

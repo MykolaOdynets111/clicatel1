@@ -196,4 +196,6 @@ public class ApiHelper {
                      String.format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
                 .jsonPath().getList("addresses", TenantAddress.class);
     }
+
+
 }
