@@ -1,8 +1,10 @@
 package facebook.uielements;
 
 import abstract_classes.AbstractUIElement;
+import api_helper.ApiHelper;
 import driverManager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -10,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 public class MessengerWindow extends AbstractUIElement {
 
     private String inputFieldXPATHLocator = "//div[@role='combobox']";
-    private String toUserMessage = "//span[text()='%s']//following::span[text()=%s]";
+    private String toUserMessage = "//span[text()='%s']//following::span[text()=\"%s\"]";
 
     @FindBy(xpath = ".//div[@role='heading']/following-sibling::ul")
     private WebElement headerActionButonsContainer;
@@ -52,6 +54,15 @@ public class MessengerWindow extends AbstractUIElement {
             return true;
         } catch(TimeoutException e){
             return false;
+        }
+    }
+
+    public void waitForWelcomeMessage(int wait){
+        String welcomeMessage = ApiHelper.getTenantMessageText("welcome_message");
+        try{
+            waitForElementToBeVisibleByXpath("//span[text()=\""+welcomeMessage+"\"]", wait);
+        } catch (WebDriverException e){
+
         }
     }
 

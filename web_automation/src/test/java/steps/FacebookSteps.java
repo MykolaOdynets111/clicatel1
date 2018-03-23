@@ -3,7 +3,9 @@ package steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataprovider.Tenants;
 import driverManager.ConfigManager;
+import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
@@ -18,13 +20,17 @@ public class FacebookSteps {
 
     @Given("^Open (.*) page$")
     public void openTenantPage(String tenant){
-       FBHomePage.openTenantPage(tenant, ConfigManager.getEnv());
+       FBHomePage.openTenantPage(URLs.getFBPageURL(tenant));
+       if(tenant.equals("General Bank Demo")){
+           Tenants.setTenantUnderTest("generalbank");
+       }
     }
 
     @When("^Open Messenger and send (.*) message$")
     public void clickSendMessageButton(String message){
         messengerWindow = getFbTenantPage().openMessanger();
         messengerWindow.waitUntilLoaded();
+        messengerWindow.waitForWelcomeMessage(10);
         messengerWindow.enterMessage(message);
     }
 
@@ -32,6 +38,17 @@ public class FacebookSteps {
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
         Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(userMessage, expectedResponse,30),
                 "User do not receive response in FB messenger after 30 seconds wait.");
+    }
+
+
+    @When("^User makes post message with text (.*)$")
+    public void makeAPOst(String postMessage) {
+        getFbTenantPage().getPostFeed().makeAPost(postMessage);
+    }
+
+    @When("^Click \"View Post\" button$")
+    public void clickViewPostButton(){
+        getFbTenantPage().clickViewPostButton();
     }
 
     private FBTenantPage getFbTenantPage() {
