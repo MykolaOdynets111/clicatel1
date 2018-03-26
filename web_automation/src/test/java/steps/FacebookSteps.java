@@ -4,14 +4,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
-import driverManager.ConfigManager;
 import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
 import org.testng.Assert;
-
-import java.util.List;
 
 public class FacebookSteps {
 
@@ -28,7 +25,7 @@ public class FacebookSteps {
 
     @When("^Open Messenger and send (.*) message$")
     public void clickSendMessageButton(String message){
-        messengerWindow = getFbTenantPage().openMessanger();
+        messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
         messengerWindow.waitForWelcomeMessage(10);
         messengerWindow.enterMessage(message);
@@ -51,6 +48,11 @@ public class FacebookSteps {
         getFbTenantPage().clickViewPostButton();
     }
 
+    @Then("^User is sown \"(.*)\" on his message$")
+    public void checkCommentResponse(String expectedResponse){
+        getFbTenantPage().getLastVisitorPost();
+    }
+
     private FBTenantPage getFbTenantPage() {
         if (fbTenantPage==null) {
             fbTenantPage = new FBTenantPage();
@@ -68,4 +70,6 @@ public class FacebookSteps {
             return messengerWindow;
         }
     }
+
+
 }

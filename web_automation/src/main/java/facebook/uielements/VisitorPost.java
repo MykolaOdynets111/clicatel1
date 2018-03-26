@@ -12,6 +12,9 @@ public class VisitorPost extends Widget implements WebActions {
     @FindBy(xpath = ".//a[text()='Comment']")
     private WebElement commentButton;
 
+    @FindBy(xpath = ".//a[contains(@href, 'pageid')][not(@class)]")
+    private WebElement userName;
+
     @FindBy(xpath = ".//span[@class='timestampContent']")
     private WebElement postTime;
 
@@ -21,5 +24,13 @@ public class VisitorPost extends Widget implements WebActions {
     public VisitorPost(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
+    }
+
+    public String getUserName() {
+        return userName.getText();
+    }
+
+    public String getPostTime() {
+        return postTime.getText();
     }
 }
