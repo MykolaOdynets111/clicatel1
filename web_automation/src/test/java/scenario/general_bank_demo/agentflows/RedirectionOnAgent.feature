@@ -25,16 +25,16 @@ Feature: User on his demand should be redirected on the agent
       |connect to agent|
       |chat to support |
 
-  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
-    Given Welcome card with a button "Chat to us" is shown
-    When User select Chat to us option from Welcome card
-    Then Agent has new conversation request
-    When Agent click on new conversation
-    Then Conversation area becomes active with Chat to us user's message in it
-    And There is no from agent response added by default for Chat to us user message
-    And There is no suggestions on user's input <user_message>
-    When Agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'Chat to us' input
+#  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
+#    Given Welcome card with a button "Chat to us" is shown
+#    When User select Chat to us option from Welcome card
+#    Then Agent has new conversation request
+#    When Agent click on new conversation
+#    Then Conversation area becomes active with Chat to us user's message in it
+#    And There is no from agent response added by default for Chat to us user message
+#    And There is no suggestions on user's input <user_message>
+#    When Agent responds with hello to User
+#    Then User have to receive 'hello' text response for his 'Chat to us' input
 
   Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in touch menu
     When User click Touch button
