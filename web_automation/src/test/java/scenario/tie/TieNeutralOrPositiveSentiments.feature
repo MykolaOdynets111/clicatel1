@@ -12,7 +12,7 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |trading hours                                                  |
       |What if I don't have proof of residential address?             |
       |How much interest will I earn on my savings?                   |
-      |Why don't you offer business accounts?                         |
+      |Do you offer business accounts?                                |
       |branch location                                                |
       |hello                                                          |
       |My staff want to bank with you. Can you help?                  |
