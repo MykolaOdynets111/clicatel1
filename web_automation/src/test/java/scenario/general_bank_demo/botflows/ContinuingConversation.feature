@@ -11,7 +11,7 @@ Feature: User should be able continue and end chat
     And Card with a buttons Yes; No, that’s all is shown on user account balance message
     When User click Yes button in the card on user message account balance
     Then User have to receive 'Sure, no problem' text response for his 'Yes' input
-    And Card with a button Chat to us is shown on user Yes message
+#    And Card with a button Chat to us is shown on user Yes message
     When User enter How to check my balance? into widget input field
     Then User have to receive 'Hi [FIRST_NAME], checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'How to check my balance?' input
     And Card with a buttons Yes; No, that’s all is shown on user How to check my balance? message

@@ -3,33 +3,30 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
-import api_helper.ApiHelperTie;
-import api_helper.RequestSpec;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataprovider.Tenants;
 import driverManager.DriverFactory;
+import driverManager.URLs;
+import facebook.FBLoginPage;
+import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
-import org.testng.IAnnotationTransformer;
-import org.testng.SkipException;
-import org.testng.annotations.ITestAnnotation;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class Hooks implements JSHelper{
 
     @Before
     public void beforeScenario(Scenario scenario){
-            if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie"))) {
+            if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
+                    !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getSecondDriverInstance();
                 }
@@ -39,12 +36,16 @@ public class Hooks implements JSHelper{
                     setUpGeolocation("49.8397", "24.0297");
                 }
             }
+            if (scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+                FBLoginPage.openFacebookLoginPage().loginUser();
+            }
     }
 
     @After()
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+                !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
 
             if (DriverFactory.isSecondDriverExists()) {
                 takeScreenshotFromSecondDriver();
@@ -63,6 +64,11 @@ public class Hooks implements JSHelper{
             DriverFactory.closeBrowser();
             ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
             ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
+        }
+        if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
+            takeScreenshot();
+            endFacebookFlow();
+            DriverFactory.closeBrowser();
         }
     }
 
@@ -94,5 +100,9 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) { }
     }
 
-
+    private void endFacebookFlow() {
+        try {
+            new FBTenantPage().getMessengerWindow().deleteConversation();
+        } catch (WebDriverException e) { }
+    }
 }

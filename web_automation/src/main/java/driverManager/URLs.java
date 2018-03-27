@@ -1,6 +1,11 @@
 package driverManager;
 
+import api_helper.Endpoints;
+import api_helper.RequestSpec;
+import cucumber.api.java.nl.En;
 import dataprovider.Tenants;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 public class URLs {
 
@@ -15,6 +20,8 @@ public class URLs {
     private static String BASE_TIE_SENTIMENT_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/chats/?q=%s&sentiment=true";
 
     private static String BASE_TIE_ANSWER_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/answers/?intent=%s";
+
+    private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
     public static String getURL(){
         String env = ConfigManager.getEnv();
@@ -110,4 +117,13 @@ public class URLs {
         return String.format(BASE_TIE_ANSWER_URL, env, tenantName, intent);
     }
 
+    public static String getFBPageURL(String tenantOrgName) {
+        String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName);
+        Response resp = RestAssured.given()
+                .header("Authorization", token)
+                .get(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv())+Endpoints.FACEBOOK_INTEGRATION);
+        String pageName = resp.jsonPath().get("pageName");
+        String pageID = resp.jsonPath().get("pageId");
+        return String.format(FACEBOOK_URL, pageName.replace(" ", "-")+"-"+pageID);
+    }
 }

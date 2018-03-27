@@ -1,9 +1,7 @@
 package interfaces;
 
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import driverManager.DriverFactory;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
@@ -68,5 +66,17 @@ public interface WebActions extends WebWait {
         } catch (NoSuchElementException e) {
             return "no element to get text from";
         }
+    }
+
+    default WebElement findElemByXPATH(String xpath){
+        return DriverFactory.getInstance().findElement(By.xpath(xpath));
+    }
+
+    default List<WebElement> findElemsByXPATH(String xpath){
+        return DriverFactory.getInstance().findElements(By.xpath(xpath));
+    }
+
+    default void pressEnterForWebElem(WebElement elem){
+        elem.sendKeys(Keys.ENTER);
     }
 }
