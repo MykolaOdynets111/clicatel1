@@ -21,6 +21,12 @@ public class VisitorPost extends Widget implements WebActions {
     @FindBy(xpath = ".//div[@class='clearfix']/following-sibling::span")
     private WebElement postText;
 
+    @FindBy(xpath = "//a[@aria-label='Story options']")
+    private WebElement threeDotsButton;
+
+    @FindBy(xpath = "//*[text()='Delete']")
+    private WebElement deletPostButton;
+
     public VisitorPost(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
@@ -32,5 +38,9 @@ public class VisitorPost extends Widget implements WebActions {
 
     public String getPostTime() {
         return postTime.getText();
+    }
+
+    public void deletePost() {
+        threeDotsButton.click();
     }
 }
