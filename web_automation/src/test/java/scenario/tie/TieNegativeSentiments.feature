@@ -9,5 +9,5 @@ Feature: TIE should give correct NEGATIVE sentiments
       |you need to get way more ATMs in Cape Town                     |
       |Hate your banking                                              |
       |my money was stolen                                            |
-
+      |Why don't you offer business accounts                          |
 
