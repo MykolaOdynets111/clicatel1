@@ -9,14 +9,12 @@ import org.openqa.selenium.support.PageFactory;
 
 public class VisitorPost extends Widget implements WebActions {
 
+    private String userName = ".//a[contains(@href, 'pageid')][not(@class)]";
+
+    private String postTime = ".//span[@class='timestampContent']";
+
     @FindBy(xpath = ".//a[text()='Comment']")
     private WebElement commentButton;
-
-    @FindBy(xpath = ".//a[contains(@href, 'pageid')][not(@class)]")
-    private WebElement userName;
-
-    @FindBy(xpath = ".//span[@class='timestampContent']")
-    private WebElement postTime;
 
     @FindBy(xpath = ".//div[@class='clearfix']/following-sibling::span")
     private WebElement postText;
@@ -25,7 +23,10 @@ public class VisitorPost extends Widget implements WebActions {
     private WebElement threeDotsButton;
 
     @FindBy(xpath = "//*[text()='Delete']")
-    private WebElement deletPostButton;
+    private WebElement deletePostButton;
+
+    @FindBy(xpath = "//button[text()='Delete Post']")
+    private WebElement confirmDeletingConverstionButton;
 
     public VisitorPost(WebElement element) {
         super(element);
@@ -33,14 +34,20 @@ public class VisitorPost extends Widget implements WebActions {
     }
 
     public String getUserName() {
-        return userName.getText();
+        waitForElementToBeVisibleByXpath(userName, 5);
+        return findElemByXPATH(userName).getText();
     }
 
     public String getPostTime() {
-        return postTime.getText();
+        return findElemByXPATH(postTime).getText();
     }
 
     public void deletePost() {
         threeDotsButton.click();
+        waitForElementToBeVisible(deletePostButton, 6);
+        deletePostButton.click();
+        waitForElementToBeVisible(confirmDeletingConverstionButton, 5);
+        confirmDeletingConverstionButton.click();
+        waitForElementToBeInvisible(confirmDeletingConverstionButton,7);
     }
 }

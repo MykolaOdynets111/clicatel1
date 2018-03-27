@@ -48,9 +48,9 @@ public class FacebookSteps {
         getFbTenantPage().clickViewPostButton();
     }
 
-    @Then("^User is sown \"(.*)\" on his message$")
+    @Then("^User is shown \"(.*)\" on his message$")
     public void checkCommentResponse(String expectedResponse){
-        getFbTenantPage().getLastVisitorPost();
+        getFbTenantPage().getLastVisitorPost().deletePost();
     }
 
     private FBTenantPage getFbTenantPage() {
