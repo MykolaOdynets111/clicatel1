@@ -25,6 +25,7 @@ Feature: User on his demand should be redirected on the agent
       |connect to agent|
       |chat to support |
 
+#  Welcome card is not showing anymore
 #  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
 #    Given Welcome card with a button "Chat to us" is shown
 #    When User select Chat to us option from Welcome card
