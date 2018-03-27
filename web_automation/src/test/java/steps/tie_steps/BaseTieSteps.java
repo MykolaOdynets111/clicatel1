@@ -52,4 +52,26 @@ public class BaseTieSteps {
             Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
         }
     }
+
+    @Then("^TIE response should have correct top intent: \"(.*)\" on '(.*)' for (.*) tenant$")
+    public void verifyIntent(String expectedIntent, String userMessage, String tenant){
+        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        if (resp.getBody().asString().contains("502 Bad Gateway")) {
+            Assert.assertTrue(false, "TIE is down." + resp.getBody().asString());
+        }
+        try {
+            List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
+            try {
+                String intent = intentsList.get(0).get("intent");
+
+                SoftAssert soft = new SoftAssert();
+                soft.assertEquals(intent, expectedIntent, "Intent in TIE response is not as expected");
+                soft.assertAll();
+            } catch (IndexOutOfBoundsException e) {
+                Assert.assertTrue(false, "There are no intents at all in TIE response for '" + userMessage + "' user message");
+            }
+        } catch (JsonPathException e) {
+            Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
+        }
+    }
 }
