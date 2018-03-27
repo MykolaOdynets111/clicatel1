@@ -18,6 +18,16 @@ public enum FacebookUsers {
         this.userID = userID;
     }
 
+    private static FacebookUsers LOGGED_IN_USER = null;
+
+    public static FacebookUsers getLoggedInUser() {
+        return LOGGED_IN_USER;
+    }
+
+    public static void setLoggedInUser(FacebookUsers loggedInUser) {
+        LOGGED_IN_USER = loggedInUser;
+    }
+
     public String getFBUserPass() {
         return this.userPass;
     }

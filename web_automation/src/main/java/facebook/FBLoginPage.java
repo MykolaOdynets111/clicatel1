@@ -32,6 +32,7 @@ public class FBLoginPage extends AbstractPage {
         waitForElementToBeVisible(loginForm, 6);
         emailInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserEmail());
         passInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserPass());
+        FacebookUsers.setLoggedInUser(FacebookUsers.FIRST_USER);
         loginButton.click();
         waitForElementToBeVisible(facebookHeader, 10);
     }
