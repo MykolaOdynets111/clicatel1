@@ -12,5 +12,5 @@ Feature: Bot answers regarding branch location
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                       |expected response|
-      |branch location                                   |dynamical branch address|
+      |branch location                                   |Our branches are conveniently located nationwide near main commuter routes and in shopping malls. Use our branch locator to find your nearest branch. |
       |Where can I find a branch?                        |Our branches are conveniently located nationwide near main commuter routes and in shopping malls. Use our branch locator to find your nearest branch. |
