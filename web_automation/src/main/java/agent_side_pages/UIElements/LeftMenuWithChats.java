@@ -1,6 +1,7 @@
 package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
+import dataprovider.FacebookUsers;
 import interfaces.JSHelper;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -27,7 +28,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
 
-    public boolean isNewConversationRequestIsShown(int wait) {
+    public boolean isNewConversationRequestFromTouchIsShown(int wait) {
             String userName = getUserNameFromLocalStorage();
             try{
                 waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfille, userName), userName), wait);
@@ -35,5 +36,15 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
             } catch(TimeoutException e) {
                 return false;
             }
+    }
+
+    public boolean isNewConversationRequestFromFBIsShown(int wait) {
+        String userName = FacebookUsers.getLoggedInUserName();
+        try{
+            waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfille, userName), userName), wait);
+            return true;
+        } catch(TimeoutException e) {
+            return false;
+        }
     }
 }

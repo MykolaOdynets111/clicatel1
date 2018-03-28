@@ -14,9 +14,17 @@ public class AgentConversationRequestSteps implements JSHelper{
 
     @Then("^Agent has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest() {
-        agentHomePage = new AgentHomePage();
+        agentHomePage = getAgentHomePage();
         leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
-        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestIsShown(10),
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromTouchIsShown(10),
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
+    @Then("^Agent has new conversation request from FB user$")
+    public void verifyIfAgentReceivesConversationRequestFromFB() {
+        agentHomePage = getAgentHomePage();
+        leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromFBIsShown(10),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -25,7 +33,14 @@ public class AgentConversationRequestSteps implements JSHelper{
         leftMenuWithChats.openNewConversationRequest();
     }
 
-
+    public AgentHomePage getAgentHomePage() {
+        if (agentHomePage==null) {
+            agentHomePage = new AgentHomePage();
+            return agentHomePage;
+        } else{
+            return agentHomePage;
+        }
+    }
 
 
 
