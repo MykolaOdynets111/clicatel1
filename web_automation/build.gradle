@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     compile group: 'io.appium', name: 'java-client', version: '5.0.4'
+//    compile 'com.google.apis:google-api-services-gmail:v1-rev83-1.23.0'
     compile group: 'org.testcontainers', name: 'selenium', version: '1.4.3'
     compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.7.2'
 //    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.7.1'

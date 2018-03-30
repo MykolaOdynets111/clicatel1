@@ -18,8 +18,8 @@ public enum TwitterURLs {
     }
 
     public static String getURLByTenantAndURL(String tenantName, String env){
-        FacebookURLs[] pages = FacebookURLs.values();
-        List<FacebookURLs> pagesList = Arrays.asList(pages);
+        TwitterURLs[] pages = TwitterURLs.values();
+        List<TwitterURLs> pagesList = Arrays.asList(pages);
         return pagesList.stream().filter(e -> e.getPageTenantName().equals(tenantName) &&
                 e.getPageEnv().equals(env))
                 .findFirst().get()
