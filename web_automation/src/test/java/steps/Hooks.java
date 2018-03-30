@@ -18,6 +18,7 @@ import org.openqa.selenium.WebDriverException;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
+import twitter.TwitterLoginPage;
 
 import java.util.Arrays;
 
@@ -26,7 +27,8 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                    !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+                    !scenario.getSourceTagNames().equals(Arrays.asList("@facebook")) &&
+                    !scenario.getSourceTagNames().contains("@twitter")) {
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getSecondDriverInstance();
                 }
@@ -38,6 +40,9 @@ public class Hooks implements JSHelper{
             }
             if (scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
+            }
+            if (scenario.getSourceTagNames().contains("@twitter")) {
+                TwitterLoginPage.openTwitterLoginPage().loginUser();
             }
     }
 
@@ -68,6 +73,10 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
             takeScreenshot();
             endFacebookFlow();
+            DriverFactory.closeBrowser();
+        }
+        if(scenario.getSourceTagNames().contains("@twitter")){
+            takeScreenshot();
             DriverFactory.closeBrowser();
         }
     }

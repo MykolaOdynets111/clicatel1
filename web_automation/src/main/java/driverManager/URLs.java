@@ -126,4 +126,8 @@ public class URLs {
         String pageID = resp.jsonPath().get("pageId");
         return String.format(FACEBOOK_URL, pageName.replace(" ", "-")+"-"+pageID);
     }
+
+    public static String getTwitterURL(String tenantOrgName) {
+        return TwitterURLs.getURLByTenantAndURL(tenantOrgName, ConfigManager.getEnv());
+    }
 }
