@@ -67,7 +67,7 @@ public class AgentConversationSteps implements JSHelper{
                 expectedResponse = expectedResponse.replace("${firstName}", getUserNameFromLocalStorage());
             }
             if(expectedResponse.toCharArray().length>650){
-                expectedResponse=expectedResponse.substring(0,650);
+                expectedResponse=expectedResponse.substring(0,649);
             }
             answersFromTie.add(i, expectedResponse);
         }

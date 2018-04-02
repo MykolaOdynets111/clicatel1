@@ -95,7 +95,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         }
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 10),
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 15),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
