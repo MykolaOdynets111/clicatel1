@@ -36,8 +36,8 @@ public class TwitterLoginPage extends AbstractPage {
 
     public void loginUser() {
         waitForElementToBeVisible(loginForm, 6);
-        emailInputField.sendKeys(TwitterUsers.FIRST_USER.getFBUserEmail());
-        passInputField.sendKeys(TwitterUsers.FIRST_USER.getFBUserPass());
+        emailInputField.sendKeys(TwitterUsers.FIRST_USER.getTwitterUserEmail());
+        passInputField.sendKeys(TwitterUsers.FIRST_USER.getTwitterUserPass());
         TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
         loginButton.click();
 //        if(isElementShown(findElemByCSS(filedForTelefonVerification))){
