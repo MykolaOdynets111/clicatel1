@@ -86,6 +86,9 @@ public class DefaultTouchUserSteps implements JSHelper{
             case "welcome back message":
                 expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
                 break;
+            case "dynamical branch address":
+                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
+                break;
             default:
                 expectedTextResponse = textResponse;
                 break;

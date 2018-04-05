@@ -25,28 +25,29 @@ Feature: User on his demand should be redirected on the agent
       |connect to agent|
       |chat to support |
 
-  Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in Welcome card
-    Given Welcome card with a button "Chat to Support" is shown
-    When User select Chat to Support option from Welcome card
-    Then Agent has new conversation request
-    When Agent click on new conversation
-    Then Conversation area becomes active with Chat to Support user's message in it
-    And There is no from agent response added by default for Chat to Support user message
-    And There is no suggestions on user's input <user_message>
-    When Agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'Chat to Support' input
+#  Welcome card is not showing anymore
+#  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
+#    Given Welcome card with a button "Chat to us" is shown
+#    When User select Chat to us option from Welcome card
+#    Then Agent has new conversation request
+#    When Agent click on new conversation
+#    Then Conversation area becomes active with Chat to us user's message in it
+#    And There is no from agent response added by default for Chat to us user message
+#    And There is no suggestions on user's input <user_message>
+#    When Agent responds with hello to User
+#    Then User have to receive 'hello' text response for his 'Chat to us' input
 
-  Scenario: Verify if user is able to communicate with agent by selecting "Chat to Support" in touch menu
+  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in touch menu
     When User click Touch button
-    Then "Chat to Support" is shown in touch menu
-    When User select "Chat to Support" from touch menu
+    Then "Chat to us" is shown in touch menu
+    When User select "Chat to us" from touch menu
     Then Agent has new conversation request
     When Agent click on new conversation
-    Then Conversation area becomes active with Chat to Support user's message in it
-    And There is no from agent response added by default for Chat to Support user message
-    And There is no suggestions on user's input Chat to Support
+    Then Conversation area becomes active with Chat to us user's message in it
+    And There is no from agent response added by default for Chat to us user message
+    And There is no suggestions on user's input Chat to us
     When Agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'Chat to Support' input
+    Then User have to receive 'hello' text response for his 'Chat to us' input
 
   Scenario: Verify user is redirected to the Agent when types negative sentiment message
     When User enter you need to get way more ATMs in Cape Town into widget input field

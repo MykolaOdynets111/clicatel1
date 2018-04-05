@@ -12,5 +12,5 @@ Feature: User should be able to restart chat with "Start chat"  button
     And "Start chat" button is shown in widget's header
     When User click "Start chat" button in widget's header
     Then Card with a welcome text is shown after user End chat input
-    And Card with a buttons Chat to Support is shown after user End chat input
+    And Card with a buttons Chat to us is shown after user End chat input
     And Welcome back message with correct text is shown after user's input 'End chat'

@@ -7,10 +7,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataprovider.Tenants;
-import dataprovider.TwitterUsers;
 import driverManager.DriverFactory;
-import driverManager.URLs;
-import email_helper.CheckEmail;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
@@ -29,8 +26,9 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                    !scenario.getSourceTagNames().equals(Arrays.asList("@facebook")) &&
+                    !scenario.getSourceTagNames().contains("@facebook") &&
                     !scenario.getSourceTagNames().contains("@twitter")) {
+
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getSecondDriverInstance();
                 }
@@ -40,8 +38,11 @@ public class Hooks implements JSHelper{
                     setUpGeolocation("49.8397", "24.0297");
                 }
             }
-            if (scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+            if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
+                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
+                    DriverFactory.getSecondDriverInstance();
+                }
             }
             if (scenario.getSourceTagNames().contains("@twitter")) {
                 TwitterLoginPage.openTwitterLoginPage().loginUser();
@@ -52,20 +53,21 @@ public class Hooks implements JSHelper{
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
-                !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+                !scenario.getSourceTagNames().contains("@facebook")) {
 
             finishAgentFlowIfExists();
             takeScreenshot();
-            endWidgetFlow(scenario);
+            endTouchFlow(scenario);
         }
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
             takeScreenshot();
             finishVisibilityFlow();
         }
-        if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
+        if(scenario.getSourceTagNames().contains("@facebook")){
             finishAgentFlowIfExists();
             takeScreenshot();
-            endFacebookFlow();
+            endFacebookFlow(scenario);
+            DriverFactory.closeBrowser();
         }
         if(scenario.getSourceTagNames().contains("@twitter")){
             takeScreenshot();
@@ -84,7 +86,7 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
-    private void endWidgetFlow(Scenario scenario) {
+    private void endTouchFlow(Scenario scenario) {
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
             new MainPage().openWidget();
         }
@@ -103,12 +105,6 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) { }
     }
 
-    private void endFacebookFlow() {
-        try {
-            new FBTenantPage().getMessengerWindow().deleteConversation();
-        } catch (WebDriverException e) { }
-    }
-
     private void finishAgentFlowIfExists() {
         if (DriverFactory.isSecondDriverExists()) {
             takeScreenshotFromSecondDriver();
@@ -117,15 +113,23 @@ public class Hooks implements JSHelper{
         }
     }
 
+    private void finishVisibilityFlow() {
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
+    }
+
+    private void endFacebookFlow(Scenario scenario) {
+        try {
+            new FBTenantPage().getMessengerWindow().deleteConversation();
+        } catch (WebDriverException e) { }
+    }
+
+
     private void closeMainBrowserIfOpened() {
         if (DriverFactory.isDriverExists()) {
             DriverFactory.closeBrowser();
         }
     }
 
-    private void finishVisibilityFlow() {
-        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
-        ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-        ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
-    }
 }
