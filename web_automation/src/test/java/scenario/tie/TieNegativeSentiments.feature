@@ -10,4 +10,6 @@ Feature: TIE should give correct NEGATIVE sentiments
       |Hate your banking                                              |
       |my money was stolen                                            |
       |Why don't you offer business accounts                          |
+      |why can't i view my balance in your app?                       |
+      |What if I don't have proof of residential address?             |
 
