@@ -10,7 +10,7 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |hi, how do i check my balance in the app?                      |
       |i lost my card                                                 |
       |trading hours                                                  |
-      |What if I don't have proof of residential address?             |
+      |Should I have proof of residential address?             |
       |How much interest will I earn on my savings?                   |
       |Do you offer business accounts?                                |
       |branch location                                                |
