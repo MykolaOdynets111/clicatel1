@@ -54,33 +54,24 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
 
-            if (DriverFactory.isSecondDriverExists()) {
-                takeScreenshotFromSecondDriver();
-                logoutAgent();
-//                DriverFactory.closeSecondBrowser();
-            }
+            finishAgentFlowIfExists();
             takeScreenshot();
             endWidgetFlow(scenario);
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
-            DriverFactory.closeBrowser();
-            DriverFactory.closeSecondBrowser();
         }
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
             takeScreenshot();
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
-            DriverFactory.closeBrowser();
-            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-            ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
+            finishVisibilityFlow();
         }
         if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
+            finishAgentFlowIfExists();
             takeScreenshot();
             endFacebookFlow();
-            DriverFactory.closeBrowser();
         }
         if(scenario.getSourceTagNames().contains("@twitter")){
             takeScreenshot();
-            DriverFactory.closeBrowser();
         }
+
+        closeMainBrowserIfOpened();
     }
 
     @Attachment(value = "Screenshot")
@@ -102,6 +93,7 @@ public class Hooks implements JSHelper{
             widget.getWidgetFooter().enterMessage("end").sendMessage();
             widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
         }catch (WebDriverException e) { }
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
     }
 
     private void logoutAgent() {
@@ -115,5 +107,25 @@ public class Hooks implements JSHelper{
         try {
             new FBTenantPage().getMessengerWindow().deleteConversation();
         } catch (WebDriverException e) { }
+    }
+
+    private void finishAgentFlowIfExists() {
+        if (DriverFactory.isSecondDriverExists()) {
+            takeScreenshotFromSecondDriver();
+            logoutAgent();
+            DriverFactory.closeSecondBrowser();
+        }
+    }
+
+    private void closeMainBrowserIfOpened() {
+        if (DriverFactory.isDriverExists()) {
+            DriverFactory.closeBrowser();
+        }
+    }
+
+    private void finishVisibilityFlow() {
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }
 }
