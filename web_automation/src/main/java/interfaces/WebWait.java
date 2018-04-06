@@ -77,10 +77,22 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
     }
 
+    default void waitForElementsToBeVisibleByCssAgent(String css, int time){
+        initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(css)));
+    }
+
     default void waitForElementToBeVisibleByXpath(String xpath, int time){
         initWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    }
+
+    default void waitForElementsToBeVisibleByXpath(String xpath, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
     }
 
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){

@@ -14,12 +14,11 @@ public class DMToUserMessage extends Widget implements WebActions {
         super(element);
     }
 
-    @FindBy(xpath = "./following-sibling::li[contains(@class, 'DirectMessage--received')]//p[contains(@class, 'tweet-text')]")
-    private List<WebElement> toUserTextMessages;
+    private String toUserTextMessagesXPATH = "./following-sibling::li[contains(@class, 'DirectMessage--received')]//p[contains(@class, 'tweet-text')]";
 
     public String getMessageText() {
         try{
-            return toUserTextMessages.get(0).getText();
+            return findElemsByXPATH(toUserTextMessagesXPATH).get(0).getText();
         } catch (IndexOutOfBoundsException e) {
             return "no text response found";
         }
@@ -27,7 +26,8 @@ public class DMToUserMessage extends Widget implements WebActions {
 
     public boolean isTextResponseShown(int wait) {
         try{
-            waitForElementsToBeVisible(toUserTextMessages, wait);
+            waitForElementsToBeVisibleByXpath(toUserTextMessagesXPATH, wait);
+//            waitForElementsToBeVisible(toUserTextMessages, wait);
             return true;
         } catch (TimeoutException e) {
             return false;

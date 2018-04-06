@@ -41,7 +41,7 @@ public class TwitterSteps {
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
                 "There is no response on "+userMessage+" user message");
-        soft.assertEquals(expectedResponse, getDmWindow().getToUserResponse(userMessage),
+        soft.assertEquals(getDmWindow().getToUserResponse(userMessage), expectedResponse,
                 "To user response is not as expected");
         soft.assertAll();
     }
