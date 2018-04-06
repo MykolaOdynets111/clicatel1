@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class Tweet extends Widget implements WebActions {
+public class TimelineTweet extends Widget implements WebActions {
 
     @FindBy(css = "div.ReplyingToContextBelowAuthor span.username")
     private WebElement toUserName;
@@ -15,7 +15,7 @@ public class Tweet extends Widget implements WebActions {
     @FindBy(css = "p.tweet-text")
     private WebElement tweeterText;
 
-    public Tweet(WebElement element) {
+    public TimelineTweet(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }

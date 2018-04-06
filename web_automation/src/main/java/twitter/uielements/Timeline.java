@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 @FindBy(css = "div.ProfileTimeline ")
-public class DWTimeline extends AbstractUIElement {
+public class Timeline extends AbstractUIElement {
 
     @FindBy(css = "li.stream-item")
     private List<WebElement> tweetsList;

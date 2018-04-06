@@ -10,9 +10,8 @@ public enum TwitterUsers {
     String userPass;
     String screenName;
     String userMailBoxPassword;
-//String userID = "979311039996157952";
-//{"consumerSecret":"xECSBWTtNKuqUmE5sMvPDCjHwtqVNy5FZcsfPpO3XEx5zhBNrc","consumerKey":"eFxUEbDPBjMyEuQdXXESHzN6m","accessToken":"966677566840025088-dXnb8XOVWSsotUgAJ2SQp3GP9L3fHay","userId":966677566840025100,"accessTokenSecret":"O1IwzassrIXddUdj4jM94iC69PjpfzacmNHfRlg9HWJca"}
-    TwitterUsers(String userName, String userSurname, String userEmail, String userPass, String screenName, String userMailBoxPassword) {
+
+   TwitterUsers(String userName, String userSurname, String userEmail, String userPass, String screenName, String userMailBoxPassword) {
         this.userName = userName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;

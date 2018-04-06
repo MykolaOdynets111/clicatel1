@@ -4,6 +4,9 @@ import abstract_classes.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @FindBy(css = "div.DMDock-conversations")
 public class DMWindow extends AbstractUIElement {
 
@@ -19,10 +22,18 @@ public class DMWindow extends AbstractUIElement {
     @FindBy(xpath = "//button[text()='Delete conversation']")
     private WebElement deleteConversationButton;
 
+    @FindBy(css = "li.DirectMessage--sent")
+    private List<WebElement> userMessages;
+
+    private DMUserMessage getTargetUserMessageElem(String userInput) {
+        return userMessages.stream().map(DMUserMessage::new).collect(Collectors.toList())
+                .stream().filter(e -> e.getMessageText().equals(userMessages))
+                .findFirst().get();
+    }
+
     public void sendUserMessage(String message){
         findElemByCSS(cssLocatorDMInputfield).sendKeys(message);
         sendButton.click();
-        deleteConversation();
     }
 
     public void deleteConversation(){
@@ -34,4 +45,13 @@ public class DMWindow extends AbstractUIElement {
         waitForElementToBeInvisible(findElemByCSS(deleteConversationConfirmButton), 2);
     }
 
+    public boolean isTextResponseForUserMessageShown(String userMessage){
+       return new DMToUserMessage(getTargetUserMessageElem(userMessage).getWrappedElement()).isTextResponseShown(30);
+    }
+
+
+    public String getToUserResponse(String userMessage){
+        return new DMToUserMessage(getTargetUserMessageElem(userMessage).getWrappedElement()).getMessageText();
+
+    }
 }

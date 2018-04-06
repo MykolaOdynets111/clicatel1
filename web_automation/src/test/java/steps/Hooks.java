@@ -18,6 +18,8 @@ import ru.yandex.qatools.allure.annotations.Attachment;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 import twitter.TwitterLoginPage;
+import twitter.TwitterTenantPage;
+import twitter.uielements.DMWindow;
 
 import java.util.Arrays;
 
@@ -53,7 +55,8 @@ public class Hooks implements JSHelper{
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
-                !scenario.getSourceTagNames().contains("@facebook")) {
+                !scenario.getSourceTagNames().contains("@facebook") &&
+                !scenario.getSourceTagNames().contains("@twitter")){
 
             finishAgentFlowIfExists();
             takeScreenshot();
@@ -70,6 +73,8 @@ public class Hooks implements JSHelper{
             DriverFactory.closeBrowser();
         }
         if(scenario.getSourceTagNames().contains("@twitter")){
+            takeScreenshot();
+            endTwitterFlow();
             takeScreenshot();
         }
 
@@ -129,6 +134,16 @@ public class Hooks implements JSHelper{
     private void closeMainBrowserIfOpened() {
         if (DriverFactory.isDriverExists()) {
             DriverFactory.closeBrowser();
+        }
+    }
+
+    private void endTwitterFlow(){
+        try{
+            DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
+            dmWindow.sendUserMessage("end");
+            dmWindow.deleteConversation();
+        } catch(WebDriverException e){
+
         }
     }
 
