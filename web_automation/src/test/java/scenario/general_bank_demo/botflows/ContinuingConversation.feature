@@ -16,6 +16,6 @@ Feature: User should be able continue and end chat
     Then User have to receive 'Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'How to check my balance?' input
     And Card with a buttons Yes; No, that’s all is shown on user How to check my balance? message
     When User click No, that’s all button in the card on user message How to check my balance?
-    Then User have to receive 'Simply type to start a new chat' text response for his 'No, that’s all' input
+    Then User have to receive 'Thank you. Chat soon!' text response for his 'No, that’s all' input
 
 
