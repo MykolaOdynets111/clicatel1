@@ -124,7 +124,8 @@ public class URLs {
                 .get(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv())+Endpoints.FACEBOOK_INTEGRATION);
         String pageName = resp.jsonPath().get("pageName");
         String pageID = resp.jsonPath().get("pageId");
-        return String.format(FACEBOOK_URL, pageName.replace(" ", "-")+"-"+pageID);
+//        return String.format(FACEBOOK_URL, pageName.replace(" ", "-")+"-"+pageID);
+        return "https://www.facebook.com/General-Bank-QA-135125267153030/";
     }
 
     public static String getTwitterURL(String tenantOrgName) {
