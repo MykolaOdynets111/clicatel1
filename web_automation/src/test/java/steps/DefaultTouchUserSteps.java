@@ -192,7 +192,26 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertAll();
     }
 
-
+    @Then("^User session is ended$")
+    public void verifyUserSessionEnded(){
+        boolean result = false;
+        for(int i = 0; i<6; i++){
+            result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage())
+                    .equalsIgnoreCase("terminated");
+            if(result){
+                break;
+            } else{
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+       Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+                                            "is not terminated for user: " +getUserNameFromLocalStorage() +
+                                                " after bot response.");
+    }
 
     // ======================== Touch Actions Steps ======================== //
 

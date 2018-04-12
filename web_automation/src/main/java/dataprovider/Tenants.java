@@ -39,4 +39,8 @@ public class Tenants {
         }
         return branchLocation;
     }
+
+    public static String getLastUserSessionStatus(String userID){
+        return ApiHelper.getLastUserSession(userID, getTenantUnderTest()).getState();
+    }
 }
