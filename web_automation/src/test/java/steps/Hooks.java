@@ -52,6 +52,7 @@ public class Hooks implements JSHelper{
                 logoutAgent();
 //                DriverFactory.closeSecondBrowser();
             }
+
             takeScreenshot();
             endWidgetFlow(scenario);
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
@@ -87,9 +88,11 @@ public class Hooks implements JSHelper{
             new MainPage().openWidget();
         }
         try {
-            Widget widget = new Widget();
-            widget.getWidgetFooter().enterMessage("end").sendMessage();
-            widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+            if (scenario.isFailed()) {
+                Widget widget = new Widget();
+                widget.getWidgetFooter().enterMessage("end").sendMessage();
+                widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+            }
         }catch (WebDriverException e) { }
     }
 
