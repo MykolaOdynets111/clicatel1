@@ -1,24 +1,14 @@
-# Tests are obsolete because according to TPLAT-2547 and TPLAT-2283 session is automatically ended after
-# bot's response and automatically started with user new message
-  # ToDo: Add test on typing a few messages one after conversation with no additional from bot messages (e.g. welcome, exit messages)
-#@smoke
-#Feature: User should be able continue and end chat
-#
-#  Background:
-#    Given User select General Bank Demo tenant
-#    And Click chat icon
-#
-#  Scenario: User should be able to interact with "Yes", "No, that’s all" card buttons
-#    When User enter account balance into widget input field
-#    Then User have to receive 'Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'account balance' input
-#    And Card with a buttons Yes; No, that’s all is shown on user account balance message
-#    When User click Yes button in the card on user message account balance
-#    Then User have to receive 'Sure, no problem' text response for his 'Yes' input
-##    And Card with a button Chat to us is shown on user Yes message
-#    When User enter How to check my balance? into widget input field
-#    Then User have to receive 'Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'How to check my balance?' input
-#    And Card with a buttons Yes; No, that’s all is shown on user How to check my balance? message
-#    When User click No, that’s all button in the card on user message How to check my balance?
-#    Then User have to receive 'Thank you. Chat soon!' text response for his 'No, that’s all' input
+@smoke
+Feature: User should be able continue chat
 
+  Background:
+    Given User select General Bank Demo tenant
+    And Click chat icon
 
+  Scenario: User should be able to continue conversation after first message
+    When User enter account balance into widget input field
+    Then User have to receive 'Hi ${firstName}, checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.' text response for his 'account balance' input
+    And No additional card should be shown after user account balance message
+    When User enter what do i need to open an account? into widget input field
+    Then User have to receive 'You may visit your nearest General Bank branch with your ID and Proof of Residence to open a Savings Account. For more information on opening an account you can visit us. To open an account you will need to visit your nearest General Bank branch with your ID document and Proof of Residence. When in the branch be sure to get the cellphone banking app. It's the #BestWaytoBank.' text response for his 'what do i need to open an account?' input
+    And No additional card should be shown after user what do i need to open an account? message

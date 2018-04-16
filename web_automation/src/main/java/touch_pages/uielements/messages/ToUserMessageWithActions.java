@@ -12,6 +12,9 @@ import java.util.List;
 
 public class ToUserMessageWithActions  extends Widget implements WebActions {
 
+    @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']")
+    private WebElement toUserCard;
+
     @FindBy(xpath = "(./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//span)[3]")
     private WebElement toUserTextMessageInCardButton;
 
@@ -32,6 +35,15 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
             return true;
         } catch (TimeoutException e) {
             return false;
+        }
+    }
+
+    public boolean isCardNotShown(int wait) {
+        try{
+            waitForElementToBeVisible(toUserCard, wait);
+            return false;
+        } catch (TimeoutException e) {
+            return true;
         }
     }
 
