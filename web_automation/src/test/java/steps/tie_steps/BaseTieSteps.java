@@ -18,6 +18,9 @@ public class BaseTieSteps {
     @Then("^TIE sentiment is (.*) when I send '(.*)' for (.*) tenant$")
     public void verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        if (resp.getBody().asString().contains("502 Bad Gateway")) {
+            Assert.assertTrue(false, "TIE is down." + resp.getBody().asString());
+        }
         String actualSentiment = resp.getBody().jsonPath().get("sentiment_verdict");
         if(expectedSentiment.toLowerCase().contains("or")){
             List<String> sentiments = Arrays.asList(expectedSentiment.toLowerCase().split(" or "));
