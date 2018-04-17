@@ -139,6 +139,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertAll();
     }
 
+    @Then("^No additional card should be shown (?:on|after) user (.*) (?:message|input)$")
+    public void verifyNoCardIsShown(String userMessage){
+        Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 6),
+                "Unexpected Card is show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
     @When("^User click (.*) button in the card on user message (.*)$")
     public void clickButtonOnToUserCard(String buttonName, String userMessage) {
         widgetConversationArea.clickOptionInTheCard(userMessage, buttonName);
@@ -190,6 +196,48 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertEquals(getWidgetHeader().getDisplayedTenantDescription(), expectedDescription,
                 expectedDescription + " description is not shown for " +tenantName+ " tenant");
         soft.assertAll();
+    }
+
+    @Then("^User session is ended$")
+    public void verifyUserSessionEnded(){
+        boolean result = false;
+        for(int i = 0; i<6; i++){
+            result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage())
+                    .equalsIgnoreCase("terminated");
+            if(result){
+                break;
+            } else{
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+       Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+                                            "is not terminated for user: " +getUserNameFromLocalStorage() +
+                                                " after bot response.");
+    }
+
+    @Then("^User session is created")
+    public void verifyUserSessionCreated(){
+        boolean result = false;
+        for(int i = 0; i<6; i++){
+            result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage())
+                    .equalsIgnoreCase("active");
+            if(result){
+                break;
+            } else{
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+                "is not created for user: " +getUserNameFromLocalStorage() +
+                " after bot response.");
     }
 
     // ======================== Touch Actions Steps ======================== //

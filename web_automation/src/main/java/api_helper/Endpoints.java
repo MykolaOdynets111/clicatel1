@@ -20,9 +20,15 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_TERRITORIES = "territories/availability";
 
+    public static String FACEBOOK_INTEGRATION = "facebook-registration/integration";
+
+
+    // ================== INTERNAL ============== //
+
     public static String INTERNAL_TENANT_ADDRESS = "tenants/%s/addresses";
 
-    public static String FACEBOOK_INTEGRATION = "facebook-registration/integration";
+    public static String INTERNAL_LAST_CLIENT_SESSION = "sessions/tenant/%s/client/%s/last";
+
 
      // ==================  PORTAL ============== //
 
