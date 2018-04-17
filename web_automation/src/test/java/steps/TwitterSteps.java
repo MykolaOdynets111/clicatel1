@@ -11,12 +11,16 @@ import org.testng.asserts.SoftAssert;
 import touch_pages.uielements.WidgetHeader;
 import twitter.TwitterHomePage;
 import twitter.TwitterTenantPage;
+import twitter.UserMentionsPage;
 import twitter.uielements.DMWindow;
+import twitter.uielements.TweetWindow;
 
 public class TwitterSteps {
 
     private TwitterTenantPage twitterTenantPage;
     private DMWindow dmWindow;
+    private TweetWindow tweetWindow;
+    private UserMentionsPage userMentionsPage;
 
     @Given("^Open twitter page of (.*)$")
     public void openTwitterPage(String tenantOrgName){
@@ -31,9 +35,24 @@ public class TwitterSteps {
         getTwitterTenantPage().openDMWindow();
     }
 
+    @Given("^Open new tweet window$")
+    public void openNewTweetWindow() {
+        getTwitterTenantPage().openNewTweetWindow();
+    }
+
     @When("^User sends twitter direct message \"(.*)\"$")
     public void sendTwitterDM(String userMessage){
         getDmWindow().sendUserMessage(userMessage);
+    }
+
+    @When("^User sends tweet \"(.*)\"$")
+    public void sendTweet(String tweetMessage){
+        getTweetWindow().sendTweet(tweetMessage);
+    }
+
+    @Then("^He has to receive \"(.*)\" answer$")
+    public void verifyReceivingAnswerInTimeline(String expectedAnswer){
+        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(30), expectedAnswer);
     }
 
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
@@ -64,6 +83,24 @@ public class TwitterSteps {
             return dmWindow;
         } else{
             return dmWindow;
+        }
+    }
+
+    private TweetWindow getTweetWindow() {
+        if (tweetWindow==null) {
+            tweetWindow = getTwitterTenantPage().getTweetWindow();
+            return tweetWindow;
+        } else{
+            return tweetWindow;
+        }
+    }
+
+    private UserMentionsPage getUserMentionsPage() {
+        if (userMentionsPage==null) {
+            userMentionsPage = new UserMentionsPage();
+            return userMentionsPage;
+        } else{
+            return userMentionsPage;
         }
     }
 }

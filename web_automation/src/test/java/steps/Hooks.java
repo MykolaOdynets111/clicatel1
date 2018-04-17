@@ -3,6 +3,7 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
+import api_helper.TwitterAPI;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -145,6 +146,7 @@ public class Hooks implements JSHelper{
         } catch(WebDriverException e){
 
         }
+        TwitterAPI.deleteToTestUserTweets();
     }
 
 }

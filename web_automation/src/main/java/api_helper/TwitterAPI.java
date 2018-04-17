@@ -41,7 +41,6 @@ public class TwitterAPI {
 
     public static List<Status> getAllTweetsToTestUser(){
         List<Status> toTestUserTweets = new ArrayList<>();
-        TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
         try {
             List<Status> allTweets = getTwitter().getHomeTimeline();
             allTweets =  allTweets.stream().filter(e -> !(e.getInReplyToScreenName() == null)).collect(Collectors.toList());
