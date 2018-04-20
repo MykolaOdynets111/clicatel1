@@ -20,9 +20,15 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_TERRITORIES = "territories/availability";
 
+    public static String FACEBOOK_INTEGRATION = "facebook-registration/integration";
+
+
+    // ================== INTERNAL ============== //
+
     public static String INTERNAL_TENANT_ADDRESS = "tenants/%s/addresses";
 
-    public static String FACEBOOK_INTEGRATION = "facebook-registration/integration";
+    public static String INTERNAL_LAST_CLIENT_SESSION = "sessions/tenant/%s/client/%s/last";
+
 
      // ==================  PORTAL ============== //
 
@@ -32,4 +38,23 @@ public class Endpoints {
 
     public static  String PLATFORM_SIGN_IN = "/auth/accounts/sign-in";
 
+    // ====================  TIE ================= //
+
+    private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
+
+    public static String TIE_INTENT_WITHOUT_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s";
+
+    public static String TIE_INTENT_WITH_TIE_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s&tie_sentiment=True";
+
+    public static String TIE_INTENT_PLUS_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s&sentiment=true";
+
+    public static String TIE_INTENT_SPECIFYING_SENTIMENT_URL = BASE_TIE_URL+"%s/intents/%s";
+
+    public static String TIE_SENTIMENTS = BASE_TIE_URL+"%s/sentiment/?q=%s";
+
+    public static String TIE_ANSWER_URL = BASE_TIE_URL + "%s/answers/?intent=%s";
+
+    public static String TIE_ANSWERS_LIST = BASE_TIE_URL+"%s/answers_map/?intents=%s";
+
+    public static String TIE_ANSWER_BY_CATEGORY_URL = BASE_TIE_URL + "%s/answers/?category=%s";
 }

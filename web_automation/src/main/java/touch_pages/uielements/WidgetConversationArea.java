@@ -48,6 +48,10 @@ public class WidgetConversationArea extends AbstractUIElement {
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isTextInCardShown(wait);
     }
 
+    public boolean isCardNotShownFor(String userMessageText, int wait) {
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isCardNotShown(wait);
+    }
+
     public String getCardTextForUserMessage(String userMessageText) {
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromCard();
     }

@@ -97,9 +97,11 @@ public class Hooks implements JSHelper{
             new MainPage().openWidget();
         }
         try {
-            Widget widget = new Widget();
-            widget.getWidgetFooter().enterMessage("end").sendMessage();
-            widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+            if (scenario.isFailed()) {
+                Widget widget = new Widget();
+                widget.getWidgetFooter().enterMessage("end").sendMessage();
+                widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+            }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
     }

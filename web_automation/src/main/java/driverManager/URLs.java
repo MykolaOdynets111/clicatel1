@@ -2,7 +2,6 @@ package driverManager;
 
 import api_helper.Endpoints;
 import api_helper.RequestSpec;
-import cucumber.api.java.nl.En;
 import dataprovider.Tenants;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -14,12 +13,6 @@ public class URLs {
     private static String FINAL_AGENT_URL = null;
 
     private static final String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
-
-    private static final String BASE_CHATDESK_AGENT_URL = "https://%s-chatdesk.clickatelllabs.com/#/login?tenantId=";
-
-    private static String BASE_TIE_SENTIMENT_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/chats/?q=%s&sentiment=true";
-
-    private static String BASE_TIE_ANSWER_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/answers/?intent=%s";
 
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
@@ -103,7 +96,7 @@ public class URLs {
                 tenantName="generalbank";
                 break;
         }
-        return String.format(BASE_TIE_SENTIMENT_URL, env, tenantName, message);
+        return String.format(Endpoints.TIE_INTENT_PLUS_SENTIMENT_URL, env, tenantName, message);
     }
 
     public static String getTIEURLForAnswers(String tenantOrgName, String intent) {
@@ -114,7 +107,7 @@ public class URLs {
                 tenantName="generalbank";
                 break;
         }
-        return String.format(BASE_TIE_ANSWER_URL, env, tenantName, intent);
+        return String.format(Endpoints.TIE_ANSWER_URL, env, tenantName, intent);
     }
 
     public static String getFBPageURL(String tenantOrgName) {

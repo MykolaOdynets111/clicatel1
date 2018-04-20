@@ -1,6 +1,7 @@
 package touch_pages.pages;
 
 import abstract_classes.AbstractPage;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -102,7 +103,11 @@ public class Widget extends AbstractPage {
 
     public void scrollABitToRevealHeaderButtons() {
         Actions action = new Actions(DriverFactory.getInstance());
-        action.dragAndDropBy(conversationArea, 0, -20).build().perform();
+        if(ConfigManager.isRemote()){
+            action.dragAndDropBy(conversationArea, 0, -50).build().perform();
+        }else {
+            action.dragAndDropBy(conversationArea, 0, -20).build().perform();
+        }
     }
 
     public void clickCloseButton() {
