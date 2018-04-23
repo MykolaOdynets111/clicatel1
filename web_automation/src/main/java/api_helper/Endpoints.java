@@ -42,6 +42,8 @@ public class Endpoints {
 
     private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
 
+    public static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
+
     public static String TIE_INTENT_WITHOUT_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s";
 
     public static String TIE_INTENT_WITH_TIE_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s&tie_sentiment=True";

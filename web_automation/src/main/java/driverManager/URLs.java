@@ -96,6 +96,7 @@ public class URLs {
                 tenantName="generalbank";
                 break;
         }
+//        return  String.format(Endpoints.BASE_TIE_PROD_URL+"%s/chats/?q=%s&sentiment=true", tenantName, message);
         return String.format(Endpoints.TIE_INTENT_PLUS_SENTIMENT_URL, env, tenantName, message);
     }
 

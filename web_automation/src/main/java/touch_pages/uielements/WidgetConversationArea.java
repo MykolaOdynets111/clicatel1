@@ -13,7 +13,7 @@ import java.util.List;
 @FindBy(css = "div.ctl-conversation-area")
 public class WidgetConversationArea extends AbstractUIElement {
 
-    @FindBy(css = "li.ctl-chat-message-container.message-to.with-content")
+    @FindBy(css = "li.ctl-chat-message-container.message-to")
     private WebElement salutationElement;
 
     @FindBy(css = "li.ctl-chat-message-container.message-from")
@@ -66,7 +66,7 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public void  waitForSalutation() {
         try {
-            waitForElementToBeVisible(salutationElement, 5);
+            waitForElementToBeVisible(salutationElement, 10);
         } catch (TimeoutException e) {
         }
     }
