@@ -40,7 +40,7 @@ public class Endpoints {
 
     // ====================  TIE ================= //
 
-    private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
+    public static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
 
     public static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
 
@@ -59,4 +59,8 @@ public class Endpoints {
     public static String TIE_ANSWERS_LIST = BASE_TIE_URL+"%s/answers_map/?intents=%s";
 
     public static String TIE_ANSWER_BY_CATEGORY_URL = BASE_TIE_URL + "%s/answers/?category=%s";
+
+    public static String TIE_DELETE_TENANT = "?tenant=%s";
+
+    public static String TIE_CONFIG = "%s/config";
 }

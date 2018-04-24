@@ -55,4 +55,34 @@ Feature: Testing TIE APIs
 
   ### Data set and config management ##
 
-    # ToDo: When is TPLAT-2651 closed Add tests on GET /tenants/<tenant_name>/config
+  Scenario: User should be able to get and update tenant configs
+          API GET /tenants/<tenant_name>/config
+          API POST /tenants/<tenant_name>/config
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    When I make request to see tenant config I receive response with tenant's config
+    When I add additional field aqaTest value to the new tenant config
+    Then New additional field with aqaTest value to the new tenant config
+
+    # ToDo: Investigate and add test on API POST /tenants/<tenant_name>/trainset/<resource name>
+
+
+  ### Tenant management ###
+
+  Scenario: User should be able to create and remove new tenant
+          API PUT /tenants/ data={'tenant': 'TESTONE'}
+          API DELETE /tenants/?tenant=TESTONE
+    When I create new tenant with TIE API
+    And Wait for a minute
+    Then I receives response on my input check balance
+    When I delete created tenant
+    And Wait for a minute
+    Then I am not receiving the response for this tenant on check balance
+
+  Scenario: User should be able to clone tenant
+        API PUT /tenants/ data={'tenant': 'TESTONE', 'source_tenant':'generalbank'}
+    When I create a clone of generalbank tenant with TIE API
+    And Wait for a minute
+    Then Config of cloned intent is the same as for generalbank
+
+    # ToDo: Add test on API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
