@@ -18,8 +18,8 @@ public class BaseTieSteps {
     @Then("^TIE sentiment is (.*) when I send '(.*)' for (.*) tenant$")
     public void verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
-        if (resp.getBody().asString().contains("502 Bad Gateway")) {
-            Assert.assertTrue(false, "TIE is down." + resp.getBody().asString());
+        if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "TIE is down. \n" + resp.getBody().asString());
         }
         String actualSentiment = resp.getBody().jsonPath().get("sentiment_verdict");
         if(expectedSentiment.toLowerCase().contains("or")){
@@ -35,8 +35,8 @@ public class BaseTieSteps {
     @Then("^TIE returns (.*) intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
-        if (resp.getBody().asString().contains("502 Bad Gateway")) {
-            Assert.assertTrue(false, "TIE is down." + resp.getBody().asString());
+        if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "TIE is down. . \n" + resp.getBody().asString());
         }
         try {
             List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
@@ -59,8 +59,8 @@ public class BaseTieSteps {
     @Then("^TIE response should have correct top intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyIntent(String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
-        if (resp.getBody().asString().contains("502 Bad Gateway")) {
-            Assert.assertTrue(false, "TIE is down." + resp.getBody().asString());
+        if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "TIE is down. . \n" + resp.getBody().asString());
         }
         try {
             List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
