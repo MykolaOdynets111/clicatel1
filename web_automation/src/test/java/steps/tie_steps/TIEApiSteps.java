@@ -70,11 +70,21 @@ public class TIEApiSteps {
                 tenant, intentText);
         when()
                 .get(url).
-                then()
+        then()
                 .statusCode(200)
                 .body("intents_result.intents", hasSize(greaterThan(0)));
     }
 
+    @When("^I add to (.*) intent (.*) sample text for created tenant status code is 200$")
+    public void addSampleTextForIntent(String intent, String sampleText){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING,
+                        NEW_TENANT_NAMES.get(Thread.currentThread().getId()),intent,sampleText);
+        when()
+                .get(url).
+        then()
+                .statusCode(200);
+    }
 
     // ======================= Sentiments ======================== //
 
@@ -91,6 +101,9 @@ public class TIEApiSteps {
                 .body("sentiment_score", notNullValue())
                 .body("tie_sentiment_score", notNullValue());
     }
+
+
+    // ======================= Intent Answers ======================== //
 
     @When("^I send (.*) for (.*) tenant then response code is 200 and list of answers is shown$")
     public void checkListOfAnswers(List<String> intents, String tenant){
@@ -139,6 +152,20 @@ public class TIEApiSteps {
                 .body("category", everyItem(equalTo(category)));
     }
 
+    // ======================= TIE trainings ======================== //
+
+    @When("^I want to get trainings for (.*) (?:tenant|tenants) response status should be 200 and body is not empty$")
+    public void getAllTrainings(String tenant){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_TRAININGS, tenant);
+        when()
+                .get(url).
+        then()
+                .log().all()
+                .statusCode(200)
+                .body("isEmpty()", is(false));
+    }
+
     @When("^I create new tenant with TIE API$")
     public void createNewTenant(){
         String newTenantName = createNewTenantName();
@@ -153,6 +180,17 @@ public class TIEApiSteps {
 //                .body(contains(newTenantName));
     }
 
+    @When("^I try to create tenant with the same ame I should receive 404 response code$")
+    public void createDuplicatedTenant(){
+        given()
+                .log().all()
+                .body("tenant="+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"").
+        when()
+                .put(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()))
+                .then()
+                .statusCode(404);
+    }
+
     @When("^I create a clone of (.*) tenant with TIE API$")
     public void createNewTenantClone(String sourceTenant){
         String newTenantName = createNewTenantName();
@@ -160,9 +198,9 @@ public class TIEApiSteps {
         given()
                 .log().all()
                 .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"").
-                when()
+        when()
                 .put(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()))
-                .then()
+        .then()
                 .statusCode(200);
     }
 
@@ -199,16 +237,28 @@ public class TIEApiSteps {
                 .statusCode(200);
     }
 
-    @Then("^New (.*) field with (.*) value to the new tenant config$")
+    @Then("^New (.*) field with (.*) value is added to tenant config$")
     public void verifyAddingNewItemToConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
                 .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                         String.format(Endpoints.TIE_CONFIG, newTenant)).
-                then()
+        then()
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant))
                 .body(field, equalTo(value));
+    }
+
+    @Then("^(.*) field with (.*) value is removed from tenant config$")
+    public void verifyRemovingItemFromConfig(String field, String value){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        when()
+                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                        String.format(Endpoints.TIE_CONFIG, newTenant)).
+        then()
+                .statusCode(200)
+                .body("tenant", equalTo(newTenant))
+                .body("$", not(hasKey(field)));
     }
 
     @Then("^I receives response on my input (.*)$")
@@ -260,5 +310,18 @@ public class TIEApiSteps {
         Response resp = RestAssured.get(URLs.getTieURL(NEW_TENANT_NAMES.get(Thread.currentThread().getId()), userMessage));
         soft.assertTrue(resp.statusCode()!=200);
         soft.assertAll();
+    }
+
+    @Then("I clear tenant data")
+    public void clearTenantData(){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_CLEARING_CONFIGS, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
+        given().log().all()
+                .header("Content-Type", "multipart/form-data")
+                .header("Cache-Control", "no-cache").
+        when()
+                .post(url).
+        then()
+                .statusCode(200);
     }
 }

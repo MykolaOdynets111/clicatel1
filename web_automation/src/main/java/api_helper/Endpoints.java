@@ -63,4 +63,11 @@ public class Endpoints {
     public static String TIE_DELETE_TENANT = "?tenant=%s";
 
     public static String TIE_CONFIG = "%s/config";
+
+    public static String TIE_TRAININGS = "%s/train";
+
+    public static String TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING = "%s/intents/%s/train/%s";
+
+    public static String TIE_CLEARING_CONFIGS = "?tenant=%s&clear=nlp_config,train_data";
 }
+

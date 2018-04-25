@@ -92,6 +92,7 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
+
     private void endWidgetFlow(Scenario scenario) {
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
             new MainPage().openWidget();
@@ -127,4 +128,5 @@ public class Hooks implements JSHelper{
             }
         }
     }
+
 }
