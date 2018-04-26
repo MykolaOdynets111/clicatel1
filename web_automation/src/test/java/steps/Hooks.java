@@ -4,10 +4,12 @@ import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
 import api_helper.TwitterAPI;
+import api_helper.Endpoints;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataprovider.Tenants;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
@@ -16,6 +18,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import steps.tie_steps.TIEApiSteps;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 import twitter.TwitterLoginPage;
@@ -23,6 +26,9 @@ import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
 import java.util.Arrays;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 
 public class Hooks implements JSHelper{
 
@@ -73,13 +79,18 @@ public class Hooks implements JSHelper{
             endFacebookFlow(scenario);
             DriverFactory.closeBrowser();
         }
+
         if(scenario.getSourceTagNames().contains("@twitter")){
             takeScreenshot();
             endTwitterFlow();
             takeScreenshot();
         }
 
+        if(scenario.getSourceTagNames().contains(Arrays.asList("@tie"))){
+            endTieFlow();
+        }
         closeMainBrowserIfOpened();
+
     }
 
     @Attachment(value = "Screenshot")
@@ -93,6 +104,7 @@ public class Hooks implements JSHelper{
     }
 
     private void endTouchFlow(Scenario scenario) {
+
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
             new MainPage().openWidget();
         }
@@ -140,15 +152,25 @@ public class Hooks implements JSHelper{
         }
     }
 
-    private void endTwitterFlow(){
-        try{
+    private void endTwitterFlow() {
+        try {
             DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
             dmWindow.sendUserMessage("end");
             dmWindow.deleteConversation();
-        } catch(WebDriverException e){
+        } catch (WebDriverException e) {
 
         }
         TwitterAPI.deleteToTestUserTweets();
+    }
+
+    private void endTieFlow() {
+        if (TIEApiSteps.getNewTenantNames() != null) {
+            for (String tenant : TIEApiSteps.getNewTenantNames().values()) {
+                String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
+                        String.format(Endpoints.TIE_DELETE_TENANT, tenant);
+                given().delete(url);
+            }
+        }
     }
 
 }

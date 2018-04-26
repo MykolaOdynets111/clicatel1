@@ -22,8 +22,14 @@ Feature: Testing TIE APIs
             API: GET /tenants/<tenant_name>/intents/<intent_text>
     When I send "check balance" intent for generalbank tenant then response code is 200 and intents are not empty
 
-  #  After  TPLAT-2648 is fixed:
-  # ToDo: Add test on GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text>
+
+  Scenario: User should be able to fill training set with new sample text for selected intent
+            API: GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text>
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    # ToDo: Extend test when TPLAT-2648 is fixed
+    When I add to business address location intent business ADDRESS sample text for created tenant status code is 200
+
 
   ### Sentiments ###
 
@@ -51,8 +57,66 @@ Feature: Testing TIE APIs
 
   ### TIE trainings###
 
-    # ToDo: When is TPLAT-2649 closed Add tests on GET /tenats/<tenant_name>/train and GET /tenats/all/train
+  Scenario: TIE API about all trainings should work
+            API GET /tenants/all/train
+    When I want to get trainings for all tenants response status should be 200 and body is not empty
+
+  Scenario: TIE should return training for desired tenant
+            API GET /tenants/<tenant_name>/train
+    When I want to get trainings for generalbank tenant response status should be 200 and body is not empty
+
 
   ### Data set and config management ##
 
-    # ToDo: When is TPLAT-2651 closed Add tests on GET /tenants/<tenant_name>/config
+  Scenario: User should be able to retrieve all tenants's trainset
+          API GET /tenants/<tenant_name>/trainset
+    When I make a request to see generalbank trainset I receive response with 200 code and not empty body
+
+  Scenario: User should be able to get and update tenant configs
+          API GET /tenants/<tenant_name>/config
+          API POST /tenants/<tenant_name>/config
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    When I make request to see tenant config I receive response with tenant's config
+    When I add additional field aqaTest value to the new tenant config
+    Then New additional field with aqaTest value is added to tenant config
+
+ #ToDo: add additional verification when TPLAT-2666 is fixed
+  Scenario: User should be able to add new trainset
+        API POST /tenants/<tenant_name>/trainset/<resource name>
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    When I send test trainset for newly created tenant status code is 200
+
+  ### Tenant management ###
+
+  Scenario: User should be able to create and remove new tenant
+          API PUT /tenants/ data={'tenant': 'TESTONE'}
+          API DELETE /tenants/?tenant=TESTONE
+    When I create new tenant with TIE API
+    And Wait for a minute
+    Then I receives response on my input check balance
+    When I delete created tenant
+    And Wait for a minute
+    Then I am not receiving the response for this tenant on check balance
+
+  Scenario: User should not be able to create duplicated tenant
+    Given I create new tenant with TIE API
+    And Wait for a minute
+    When I try to create tenant with the same ame I should receive 404 response code
+
+
+  Scenario: User should be able to clone tenant
+        API PUT /tenants/ data={'tenant': 'TESTONE', 'source_tenant':'generalbank'}
+    When I create a clone of generalbank tenant with TIE API
+    And Wait for a minute
+    Then Config of cloned intent is the same as for generalbank
+
+  #ToDo: add additional verification when TPLAT-2666 is fixed
+  Scenario: User should be able to clear tenant config
+        API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
+    Given I create new tenant with TIE API
+    And Wait for a minute
+    And I add additional field aqaTest value to the new tenant config
+    When I clear tenant data
+    Then additional field with aqaTest value is removed from tenant config
