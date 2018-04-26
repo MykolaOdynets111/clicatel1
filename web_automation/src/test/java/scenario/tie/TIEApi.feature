@@ -68,6 +68,10 @@ Feature: Testing TIE APIs
 
   ### Data set and config management ##
 
+  Scenario: User should be able to retrieve all tenants's trainset
+          API GET /tenants/<tenant_name>/trainset
+    When I make a request to see generalbank trainset I receive response with 200 code and not empty body
+
   Scenario: User should be able to get and update tenant configs
           API GET /tenants/<tenant_name>/config
           API POST /tenants/<tenant_name>/config
@@ -77,7 +81,12 @@ Feature: Testing TIE APIs
     When I add additional field aqaTest value to the new tenant config
     Then New additional field with aqaTest value is added to tenant config
 
-    # ToDo: Investigate and add test on API POST /tenants/<tenant_name>/trainset/<resource name>
+ #ToDo: add additional verification when TPLAT-2666 is fixed
+  Scenario: User should be able to add new trainset
+        API POST /tenants/<tenant_name>/trainset/<resource name>
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    When I send test trainset for newly created tenant status code is 200
 
   ### Tenant management ###
 
@@ -103,10 +112,11 @@ Feature: Testing TIE APIs
     And Wait for a minute
     Then Config of cloned intent is the same as for generalbank
 
-#  Scenario: User should be able to clear tenant config
-#        API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
-#    Given I create new tenant with TIE API
-#    And Wait for a minute
-#    And I add additional field aqaTest value to the new tenant config
-#    When I clear tenant data
-#    Then additional field with aqaTest value is removed from tenant config
+  #ToDo: add additional verification when TPLAT-2666 is fixed
+  Scenario: User should be able to clear tenant config
+        API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
+    Given I create new tenant with TIE API
+    And Wait for a minute
+    And I add additional field aqaTest value to the new tenant config
+    When I clear tenant data
+    Then additional field with aqaTest value is removed from tenant config

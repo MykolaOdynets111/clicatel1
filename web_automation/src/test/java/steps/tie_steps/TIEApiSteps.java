@@ -214,6 +214,21 @@ public class TIEApiSteps {
         }
     }
 
+    // ======================= Data set and config management  ======================== //
+
+    @When("^I make a request to see (.*) trainset I receive response with 200 code and not empty body$")
+    public void getTenantTrainset(String tenant){
+        SoftAssert soft = new SoftAssert();
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_GET_TRAINSET, tenant);
+        Response resp = RestAssured.get(url);
+        soft.assertTrue(resp.statusCode()==200,
+                "Status code is not '200' when trying to get trainset for '"+tenant+ "' tenant" );
+        soft.assertTrue(!resp.getBody().asString().isEmpty(),
+                "Body is empty  when trying to get trainset for '"+tenant+ "' tenant");
+        soft.assertAll();
+    }
+
     @When("^I make request to see tenant config I receive response with tenant's config$")
     public void makeGetTenantConfigVerification(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
@@ -247,6 +262,18 @@ public class TIEApiSteps {
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant))
                 .body(field, equalTo(value));
+    }
+
+    @When("^I send test trainset for newly created tenant status code is 200$")
+    public void addTrainingSetForNewTenant(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        given()
+                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
+        when()
+                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                        String.format(Endpoints.TIE_CONFIG, newTenant)).
+        then()
+                .statusCode(200);
     }
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
