@@ -61,11 +61,18 @@ Feature: Testing TIE APIs
             API GET /tenants/all/train
     When I want to get trainings for all tenants response status should be 200 and body is not empty
 
-  Scenario: TIE should return training for desired tenant
+  Scenario: TIE should return training for existed tenant
             API GET /tenants/<tenant_name>/train
     When I want to get trainings for generalbank tenant response status should be 200 and body is not empty
 
-  # ToDo add tests on API POST /tenats/<tenant_name>/train
+  Scenario: User should be able to schedule training for created tenant
+            API POST /tenats/<tenant_name>/train
+            API GET /tenants/<tenant_name>/train
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    When I schedule training for a new tenant
+    Then Training for new tenant is scheduled
+    And All trainings should contain newly added tenant training
 
   ### Data set and config management ##
 

@@ -77,7 +77,7 @@ public class Hooks implements JSHelper{
             endFacebookFlow();
             DriverFactory.closeBrowser();
         }
-        if(scenario.getSourceTagNames().contains(Arrays.asList("@tie"))){
+        if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow();
         }
     }
