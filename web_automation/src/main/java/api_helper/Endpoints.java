@@ -38,4 +38,40 @@ public class Endpoints {
 
     public static  String PLATFORM_SIGN_IN = "/auth/accounts/sign-in";
 
+    // ====================  TIE ================= //
+
+    public static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
+
+    public static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
+
+    public static String TIE_INTENT_WITHOUT_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s";
+
+    public static String TIE_INTENT_WITH_TIE_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s&tie_sentiment=True";
+
+    public static String TIE_INTENT_PLUS_SENTIMENT_URL = BASE_TIE_URL+"%s/chats/?q=%s&sentiment=true";
+
+    public static String TIE_INTENT_SPECIFYING_SENTIMENT_URL = BASE_TIE_URL+"%s/intents/%s";
+
+    public static String TIE_SENTIMENTS = BASE_TIE_URL+"%s/sentiment/?q=%s";
+
+    public static String TIE_ANSWER_URL = BASE_TIE_URL + "%s/answers/?intent=%s";
+
+    public static String TIE_ANSWERS_LIST = BASE_TIE_URL+"%s/answers_map/?intents=%s";
+
+    public static String TIE_ANSWER_BY_CATEGORY_URL = BASE_TIE_URL + "%s/answers/?category=%s";
+
+    public static String TIE_DELETE_TENANT = "?tenant=%s";
+
+    public static String TIE_CONFIG = "%s/config";
+
+    public static String TIE_TRAININGS = "%s/train";
+
+    public static String TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING = "%s/intents/%s/train/%s";
+
+    public static String TIE_CLEARING_CONFIGS = "?tenant=%s&clear=nlp_config,train_data";
+
+    public static String TIE_GET_TRAINSET = "%s/trainset/";
+
+    public  static String TIE_TRAINSET = "%s/trainset/test";
 }
+

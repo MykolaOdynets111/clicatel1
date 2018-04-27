@@ -1,5 +1,5 @@
 @smoke
-Feature: User should be able continue chat
+Feature: User should be able to continue chat
 
   Background:
     Given User select General Bank Demo tenant

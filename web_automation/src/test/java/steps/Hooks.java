@@ -3,10 +3,12 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
+import api_helper.Endpoints;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataprovider.Tenants;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import driverManager.URLs;
 import facebook.FBLoginPage;
@@ -16,10 +18,14 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import steps.tie_steps.TIEApiSteps;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 
 import java.util.Arrays;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 
 public class Hooks implements JSHelper{
 
@@ -71,6 +77,9 @@ public class Hooks implements JSHelper{
             endFacebookFlow();
             DriverFactory.closeBrowser();
         }
+        if(scenario.getSourceTagNames().contains(Arrays.asList("@tie"))){
+            endTieFlow();
+        }
     }
 
     @Attachment(value = "Screenshot")
@@ -82,6 +91,7 @@ public class Hooks implements JSHelper{
     private byte[] takeScreenshotFromSecondDriver() {
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
+
 
     private void endWidgetFlow(Scenario scenario) {
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
@@ -108,4 +118,15 @@ public class Hooks implements JSHelper{
             new FBTenantPage().getMessengerWindow().deleteConversation();
         } catch (WebDriverException e) { }
     }
+
+    private void endTieFlow() {
+        if (TIEApiSteps.getNewTenantNames() != null){
+            for (String tenant : TIEApiSteps.getNewTenantNames().values()){
+                String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                        String.format(Endpoints.TIE_DELETE_TENANT, tenant);
+                given().delete(url);
+            }
+        }
+    }
+
 }
