@@ -19,6 +19,7 @@ public class WidgetConversationArea extends AbstractUIElement {
     @FindBy(css = "li.ctl-chat-message-container.message-from")
     private List<WebElement> fromUserMessages;
 
+    private String targetFromUserMessage = "//li[contains(@class, message-from)]//*[text()='%s']";
 
     private WebElement getFromUserWebElement(String messageText) {
         FromUserMessage theMessage =  fromUserMessages.stream().map(e -> new FromUserMessage(e))
@@ -67,6 +68,13 @@ public class WidgetConversationArea extends AbstractUIElement {
     public void  waitForSalutation() {
         try {
             waitForElementToBeVisible(salutationElement, 10);
+        } catch (TimeoutException e) {
+        }
+    }
+
+    public void waitForMessageToAppearInWidget(String text){
+        try {
+            waitForElementToBeVisibleByXpath(String.format(targetFromUserMessage, text), 10);
         } catch (TimeoutException e) {
         }
     }

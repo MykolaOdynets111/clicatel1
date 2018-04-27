@@ -65,6 +65,7 @@ Feature: Testing TIE APIs
             API GET /tenants/<tenant_name>/train
     When I want to get trainings for generalbank tenant response status should be 200 and body is not empty
 
+  # ToDo add tests on API POST /tenats/<tenant_name>/train
 
   ### Data set and config management ##
 
@@ -81,7 +82,7 @@ Feature: Testing TIE APIs
     When I add additional field aqaTest value to the new tenant config
     Then New additional field with aqaTest value is added to tenant config
 
- #ToDo: add additional verification when TPLAT-2666 is fixed
+ #ToDo: add additional verification when TPLAT-2666 is fixed (that trainset is added)
   Scenario: User should be able to add new trainset
         API POST /tenants/<tenant_name>/trainset/<resource name>
     Given  I create new tenant with TIE API
@@ -112,7 +113,7 @@ Feature: Testing TIE APIs
     And Wait for a minute
     Then Config of cloned intent is the same as for generalbank
 
-  #ToDo: add additional verification when TPLAT-2666 is fixed
+  #ToDo: add additional verification when TPLAT-2666 is fixed (that trainset is removed)
   Scenario: User should be able to clear tenant config
         API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
     Given I create new tenant with TIE API
