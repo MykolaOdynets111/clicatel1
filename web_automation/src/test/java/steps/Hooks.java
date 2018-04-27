@@ -86,7 +86,7 @@ public class Hooks implements JSHelper{
             takeScreenshot();
         }
 
-        if(scenario.getSourceTagNames().contains(Arrays.asList("@tie"))){
+        if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow();
         }
         closeMainBrowserIfOpened();
