@@ -19,11 +19,7 @@ public class BaseTieSteps {
     public void verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
-<<<<<<< HEAD
-            Assert.assertTrue(false, "TIE is down. \n" + resp.getBody().asString());
-=======
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
->>>>>>> develop
         }
         String actualSentiment = resp.getBody().jsonPath().get("sentiment_verdict");
         if(expectedSentiment.toLowerCase().contains("or")){
@@ -40,11 +36,7 @@ public class BaseTieSteps {
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
-<<<<<<< HEAD
-            Assert.assertTrue(false, "TIE is down. . \n" + resp.getBody().asString());
-=======
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
->>>>>>> develop
         }
         try {
             List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
@@ -68,11 +60,7 @@ public class BaseTieSteps {
     public void verifyIntent(String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
-<<<<<<< HEAD
-            Assert.assertTrue(false, "TIE is down. . \n" + resp.getBody().asString());
-=======
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
->>>>>>> develop
         }
         try {
             List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
