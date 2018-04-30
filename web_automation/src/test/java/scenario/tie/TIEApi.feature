@@ -1,6 +1,9 @@
 @tie
 Feature: Testing TIE APIs
 
+  Background:
+    Given Listener for logging request and response is ready
+
   ### Chat ###
 
   Scenario: Chat endpoint for intents only should work
@@ -80,38 +83,30 @@ Feature: Testing TIE APIs
           API GET /tenants/<tenant_name>/trainset
     When I make a request to see generalbank trainset I receive response with 200 code and not empty body
 
-  Scenario: User should be able to get and update tenant configs
+     #ToDo: add additional verification when TPLAT-2666 is fixed (that trainset is added)
+  Scenario: User should be able to get and update tenant configs and trainset
           API GET /tenants/<tenant_name>/config
           API POST /tenants/<tenant_name>/config
+          API POST /tenants/<tenant_name>/trainset/<resource name>
     Given  I create new tenant with TIE API
     And Wait for a minute
     When I make request to see tenant config I receive response with tenant's config
     When I add additional field aqaTest value to the new tenant config
     Then New additional field with aqaTest value is added to tenant config
-
- #ToDo: add additional verification when TPLAT-2666 is fixed (that trainset is added)
-  Scenario: User should be able to add new trainset
-        API POST /tenants/<tenant_name>/trainset/<resource name>
-    Given  I create new tenant with TIE API
-    And Wait for a minute
     When I send test trainset for newly created tenant status code is 200
 
   ### Tenant management ###
 
-  Scenario: User should be able to create and remove new tenant
+  Scenario: User should be able to create and remove new tenant and not be able to create duplicated tenant
           API PUT /tenants/ data={'tenant': 'TESTONE'}
           API DELETE /tenants/?tenant=TESTONE
     When I create new tenant with TIE API
     And Wait for a minute
     Then I receives response on my input check balance
+    When I try to create tenant with the same name I should receive 404 response code
     When I delete created tenant
     And Wait for a minute
     Then I am not receiving the response for this tenant on check balance
-
-  Scenario: User should not be able to create duplicated tenant
-    Given I create new tenant with TIE API
-    And Wait for a minute
-    When I try to create tenant with the same ame I should receive 404 response code
 
 
   Scenario: User should be able to clone tenant

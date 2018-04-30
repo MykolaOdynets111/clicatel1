@@ -217,7 +217,7 @@ public class TIEApiSteps {
 //                .body(contains(newTenantName));
     }
 
-    @When("^I try to create tenant with the same ame I should receive 404 response code$")
+    @When("^I try to create tenant with the same name I should receive 404 response code$")
     public void createDuplicatedTenant(){
         given()
                 .log().all()

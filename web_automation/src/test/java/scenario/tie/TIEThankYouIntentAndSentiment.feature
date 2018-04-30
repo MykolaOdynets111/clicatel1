@@ -1,6 +1,9 @@
 @tie
 Feature: TIE should correctly identify "thank you" intent
 
+  Background:
+    Given Listener for logging request and response is ready
+
   Scenario Outline: Verify if TIE correctly identifies "thank you" intent from following message: "<user_message>"
     Then TIE response should have correct top intent: "thank you" on '<user_message>' for General Bank Demo tenant
     And TIE sentiment is NEUTRAL or POSITIVE when I send '<user_message>' for General Bank Demo tenant

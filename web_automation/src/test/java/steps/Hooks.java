@@ -10,7 +10,6 @@ import cucumber.api.java.Before;
 import dataprovider.Tenants;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
-import driverManager.URLs;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
@@ -18,14 +17,15 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 
 public class Hooks implements JSHelper{
 
@@ -44,6 +44,10 @@ public class Hooks implements JSHelper{
             }
             if (scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
+            }
+            if(scenario.getSourceTagNames().contains("@tie")){
+                BaseTieSteps.request = new ByteArrayOutputStream();
+                BaseTieSteps.response = new ByteArrayOutputStream();
             }
     }
 
@@ -81,6 +85,7 @@ public class Hooks implements JSHelper{
             endTieFlow();
         }
     }
+
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshot() {
@@ -120,13 +125,30 @@ public class Hooks implements JSHelper{
     }
 
     private void endTieFlow() {
-        if (TIEApiSteps.getNewTenantNames() != null){
-            for (String tenant : TIEApiSteps.getNewTenantNames().values()){
-                String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+        if (TIEApiSteps.getNewTenantNames() != null) {
+            for (String tenant : TIEApiSteps.getNewTenantNames().values()) {
+                String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
                         String.format(Endpoints.TIE_DELETE_TENANT, tenant);
                 given().delete(url);
             }
+        logRequest(BaseTieSteps.request);
+        logResponse(BaseTieSteps.response);
         }
     }
 
+    @Attachment(value = "request")
+    public byte[] logRequest(ByteArrayOutputStream stream) {
+        return attach(stream);
+    }
+
+    @Attachment(value = "response")
+    public byte[] logResponse(ByteArrayOutputStream stream) {
+        return attach(stream);
+    }
+
+    public byte[] attach(ByteArrayOutputStream log) {
+        byte[] array = log.toByteArray();
+        log.reset();
+        return array;
+    }
 }
