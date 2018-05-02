@@ -29,6 +29,13 @@ public class DriverFactory {
             return false;
     }
 
+    public static boolean isDriverExists(){
+        if (driver.get() != null)
+            return true;
+        else
+            return false;
+    }
+
     public static WebDriver getSecondDriverInstance(){
         if (secondDriver.get() != null)
             return secondDriver.get();

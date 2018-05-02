@@ -57,33 +57,22 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
 
-            if (DriverFactory.isSecondDriverExists()) {
-                takeScreenshotFromSecondDriver();
-                logoutAgent();
-//                DriverFactory.closeSecondBrowser();
-            }
-
+            finishAgentFlowIfExists();
             takeScreenshot();
-            endWidgetFlow(scenario);
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
-            DriverFactory.closeBrowser();
-            DriverFactory.closeSecondBrowser();
+            endTouchFlow(scenario);
         }
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
             takeScreenshot();
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
-            DriverFactory.closeBrowser();
-            ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-            ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
+            finishVisibilityFlow();
         }
         if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
             takeScreenshot();
             endFacebookFlow();
-            DriverFactory.closeBrowser();
         }
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow();
         }
+        closeMainBrowserIfOpened();
     }
 
 
@@ -97,8 +86,16 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
+    private void finishAgentFlowIfExists() {
+        if (DriverFactory.isSecondDriverExists()) {
+            takeScreenshotFromSecondDriver();
+            logoutAgent();
+            DriverFactory.closeSecondBrowser();
+        }
+    }
 
-    private void endWidgetFlow(Scenario scenario) {
+
+    private void endTouchFlow(Scenario scenario) {
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
             new MainPage().openWidget();
         }
@@ -109,6 +106,13 @@ public class Hooks implements JSHelper{
                 widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
             }
         }catch (WebDriverException e) { }
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+    }
+
+    private void finishVisibilityFlow() {
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }
 
     private void logoutAgent() {
@@ -133,6 +137,13 @@ public class Hooks implements JSHelper{
             }
         logRequest(BaseTieSteps.request);
         logResponse(BaseTieSteps.response);
+        }
+    }
+
+
+    private void closeMainBrowserIfOpened() {
+        if (DriverFactory.isDriverExists()) {
+            DriverFactory.closeBrowser();
         }
     }
 
