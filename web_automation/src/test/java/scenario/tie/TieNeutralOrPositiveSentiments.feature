@@ -1,6 +1,9 @@
 @tie
 Feature: TIE should give NEUTRAL or POSITIVE sentiments
 
+  Background:
+    Given Listener for logging request and response is ready
+
   Scenario Outline: Verify if TIE sentiment is NEUTRAL for the following message: "<user_message>"
     Then TIE sentiment is NEUTRAL or POSITIVE when I send '<user_message>' for General Bank Demo tenant
 

@@ -37,6 +37,7 @@ Feature: User on his demand should be redirected on the agent
 #    When Agent responds with hello to User
 #    Then User have to receive 'hello' text response for his 'Chat to us' input
 
+
 # Touch button is hidden for now
 #  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in touch menu
 #    When User click Touch button

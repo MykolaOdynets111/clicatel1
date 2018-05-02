@@ -73,6 +73,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         widgetConversationArea = widget.getWidgetConversationArea();
         widgetConversationArea.waitForSalutation();
         widget.getWidgetFooter().enterMessage(text).sendMessage();
+        widgetConversationArea.waitForMessageToAppearInWidget(text);
     }
 
 

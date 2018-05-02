@@ -1,6 +1,9 @@
 @tie
 Feature: TIE should correctly identify intents for messages with spelling mistakes
 
+  Background:
+    Given Listener for logging request and response is ready
+
   Scenario: Verify if TIE correctly identifies "hello" intent from following message: "helo"
     Then TIE returns 1 intent: "hello" on 'helo' for General Bank Demo tenant
 

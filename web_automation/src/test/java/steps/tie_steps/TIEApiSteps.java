@@ -166,6 +166,43 @@ public class TIEApiSteps {
                 .body("isEmpty()", is(false));
     }
 
+
+    @Then("^All trainings should contain newly added tenant training$")
+    public void verifyTenantAddedToTrainings(){
+        String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_TRAININGS,"all");
+        when()
+                .get(url).
+        then()
+                .statusCode(200)
+                .body(tenant, equalTo("scheduled"));
+    }
+
+    @Then("^Training for new tenant is scheduled$")
+    public void verifyTenantTrainingScheduled(){
+        String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_TRAININGS, tenant);
+        when()
+                .get(url).
+                then()
+                .statusCode(200)
+                .body(tenant, equalTo("scheduled"));
+    }
+
+    @When("^I schedule training for a new tenant$")
+    public void scheduleTenantTraining(){
+        String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_TRAININGS, tenant);
+        given().log().all().
+        when()
+                .post(url).
+        then()
+                .statusCode(200);
+    }
+
     @When("^I create new tenant with TIE API$")
     public void createNewTenant(){
         String newTenantName = createNewTenantName();
@@ -180,7 +217,7 @@ public class TIEApiSteps {
 //                .body(contains(newTenantName));
     }
 
-    @When("^I try to create tenant with the same ame I should receive 404 response code$")
+    @When("^I try to create tenant with the same name I should receive 404 response code$")
     public void createDuplicatedTenant(){
         given()
                 .log().all()
@@ -343,9 +380,8 @@ public class TIEApiSteps {
     public void clearTenantData(){
         String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                 String.format(Endpoints.TIE_CLEARING_CONFIGS, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
-        given().log().all()
-                .header("Content-Type", "multipart/form-data")
-                .header("Cache-Control", "no-cache").
+        given().log().all().
+                urlEncodingEnabled(false).
         when()
                 .post(url).
         then()

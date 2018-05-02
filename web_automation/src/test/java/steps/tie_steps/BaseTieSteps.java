@@ -1,19 +1,38 @@
 package steps.tie_steps;
 
+import cucumber.api.Scenario;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import driverManager.URLs;
 import io.restassured.RestAssured;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class BaseTieSteps {
+
+    public static ByteArrayOutputStream request;
+    public static ByteArrayOutputStream response;
+
+    @Given("Listener for logging request and response is ready")
+    public void logRequests(){
+        PrintStream requestVar = new PrintStream(request, true);
+        PrintStream responseVar = new PrintStream(response, true);
+        RestAssured.filters(new ResponseLoggingFilter(LogDetail.ALL, responseVar),
+                new RequestLoggingFilter(LogDetail.ALL, requestVar));
+    }
 
     @Then("^TIE sentiment is (.*) when I send '(.*)' for (.*) tenant$")
     public void verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
