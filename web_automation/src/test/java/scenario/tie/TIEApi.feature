@@ -25,14 +25,7 @@ Feature: Testing TIE APIs
             API: GET /tenants/<tenant_name>/intents/<intent_text>
     When I send "check balance" intent for generalbank tenant then response code is 200 and intents are not empty
 
-
-  Scenario: User should be able to fill training set with new sample text for selected intent
-            API: GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text>
-    Given  I create new tenant with TIE API
-    And Wait for a minute
-    # ToDo: Extend test when TPLAT-2648 is fixed
-    When I add to business address location intent business ADDRESS sample text for created tenant status code is 200
-
+  # for API: GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text> please see TIE trainings section below
 
   ### Sentiments ###
 
@@ -58,7 +51,7 @@ Feature: Testing TIE APIs
             API GET /tenants/{tenant}/answers/?category={CATEGORY ID}
     When I want to get all answers of Some FAQ category for generalbank response has status 200
 
-  ### TIE trainings###
+  ### TIE trainings ###
 
   Scenario: TIE API about all trainings should work
             API GET /tenants/all/train
@@ -68,14 +61,19 @@ Feature: Testing TIE APIs
             API GET /tenants/<tenant_name>/train
     When I want to get trainings for generalbank tenant response status should be 200 and body is not empty
 
-  Scenario: User should be able to schedule training for created tenant
+
+  Scenario: User should be able to fill training set with new sample text for selected intent and
+                                                                      schedule training for created tenant
+            # ToDo: Extend test when TPLAT-2648 is fixed
             API POST /tenats/<tenant_name>/train
             API GET /tenants/<tenant_name>/train
+            API GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text>
     Given  I create new tenant with TIE API
     And Wait for a minute
     When I schedule training for a new tenant
     Then Training for new tenant is scheduled
     And All trainings should contain newly added tenant training
+    When I add to business address location intent business ADDRESS sample text for created tenant status code is 200
 
   ### Data set and config management ##
 
