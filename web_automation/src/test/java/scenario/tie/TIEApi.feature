@@ -62,9 +62,8 @@ Feature: Testing TIE APIs
     When I want to get trainings for generalbank tenant response status should be 200 and body is not empty
 
 
-  Scenario: User should be able to fill training set with new sample text for selected intent and
-                                                                      schedule training for created tenant
-            # ToDo: Extend test when TPLAT-2648 is fixed
+     # ToDo: Extend test when TPLAT-2648 is fixed
+  Scenario: User should be able to fill training set with new sample text for selected intent and                                                                      schedule training for created tenant
             API POST /tenats/<tenant_name>/train
             API GET /tenants/<tenant_name>/train
             API GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text>

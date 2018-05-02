@@ -20,7 +20,7 @@ import java.util.List;
         monochrome = true,
         features ="src/test/java/scenario/tie",
         glue ="steps")
-public class RunTIETest extends SuiteCucumberRunner {
+public class RunTIETest {
 
 
         @Factory
