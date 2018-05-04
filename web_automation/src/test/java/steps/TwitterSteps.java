@@ -52,7 +52,7 @@ public class TwitterSteps {
 
     @Then("^He has to receive \"(.*)\" answer$")
     public void verifyReceivingAnswerInTimeline(String expectedAnswer){
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(30), expectedAnswer);
+        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(40), expectedAnswer);
     }
 
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")

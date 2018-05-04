@@ -47,7 +47,7 @@ public class DMWindow extends AbstractUIElement {
     }
 
     public boolean isTextResponseForUserMessageShown(String userMessage){
-       return new DMToUserMessage(getTargetUserMessageElem(userMessage).getWrappedElement()).isTextResponseShown(30);
+       return new DMToUserMessage(getTargetUserMessageElem(userMessage).getWrappedElement()).isTextResponseShown(40);
     }
 
 

@@ -162,7 +162,6 @@ public class Hooks implements JSHelper{
     private void endTwitterFlow() {
         try {
             DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
-            dmWindow.sendUserMessage("end");
             dmWindow.deleteConversation();
         } catch (WebDriverException e) {
 

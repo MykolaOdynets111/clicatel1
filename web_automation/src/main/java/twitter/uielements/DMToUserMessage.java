@@ -14,7 +14,7 @@ public class DMToUserMessage extends Widget implements WebActions {
         super(element);
     }
 
-    private String toUserTextMessagesXPATH = "./following-sibling::li[contains(@class, 'DirectMessage--received')]//p[contains(@class, 'tweet-text')]";
+    private String toUserTextMessagesXPATH = ".//following-sibling::li[contains(@class, 'DirectMessage--received')]//p[contains(@class, 'tweet-text')]";
 
     public String getMessageText() {
         try{
