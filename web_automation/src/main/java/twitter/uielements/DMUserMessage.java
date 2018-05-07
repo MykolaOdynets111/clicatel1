@@ -11,9 +11,13 @@ public class DMUserMessage extends Widget implements WebActions {
         super(element);
     }
 
-    private String messageTextCss = "div.DirectMessage-text p.tweet-text";
+    @FindBy(xpath = ".//p[contains(@class, 'tweet-text')]")
+    private WebElement messageTextCss;
+
+//    private String messageTextCss = "div.DirectMessage-text p.tweet-text";
 
     public String getMessageText(){
-        return findElemByCSS(messageTextCss).getAttribute("innerText").split("\n")[0];
+        return findElemByXPATH(".//p[contains(@class, 'tweet-text')]").getAttribute("innerText").split("\n")[0];
+//        return messageTextCss.getAttribute("innerText").split("\n")[0];
     }
 }

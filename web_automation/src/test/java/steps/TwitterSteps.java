@@ -15,6 +15,8 @@ import twitter.UserMentionsPage;
 import twitter.uielements.DMWindow;
 import twitter.uielements.TweetWindow;
 
+import java.time.LocalDateTime;
+
 public class TwitterSteps {
 
     private TwitterTenantPage twitterTenantPage;
@@ -45,14 +47,23 @@ public class TwitterSteps {
         getDmWindow().sendUserMessage(userMessage);
     }
 
-    @When("^User sends tweet \"(.*)\"$")
+    @When("^User sends tweet regarding \"(.*)\"$")
     public void sendTweet(String tweetMessage){
+//        int day = LocalDateTime.now().getDayOfMonth();
+//        if ( day % 2 == 0 ) {
+//            if (tweetMessage.equalsIgnoreCase("account balance"))
+//                tweetMessage = "How can I check account balance?";
+//        }
+//        else {
+//            if (tweetMessage.equalsIgnoreCase("account balance"))
+//                tweetMessage = "How to check my account balance?";
+//        }
         getTweetWindow().sendTweet(tweetMessage);
     }
 
     @Then("^He has to receive \"(.*)\" answer$")
     public void verifyReceivingAnswerInTimeline(String expectedAnswer){
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(40), expectedAnswer);
+        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(20), expectedAnswer);
     }
 
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")

@@ -11,8 +11,7 @@ import java.util.List;
 
 public class UserMentionsPage extends AbstractPage {
 
-    @FindBy(css = "div.count.new-count")
-    private WebElement newNotificationIcon;
+    private String newNotificationIcon="span.count.new-count";
 
     @FindBy(css = "ol.stream-items")
     private WebElement timeline;
@@ -20,18 +19,18 @@ public class UserMentionsPage extends AbstractPage {
     @FindBy(css = "li.stream-item")
     private List<WebElement> timelineElemements;
 
-    @FindBy(css = "span.Icon--notifications")
+    @FindBy(xpath = "//span[text()='Notifications']")
     private WebElement notificationsIcon;
 
     public String getReplyIfShown(int wait){
         try {
-            waitForElementToBeVisible(newNotificationIcon, wait);
+            waitForElementToBeVisibleByCss(newNotificationIcon, wait);
         } catch (TimeoutException e){}
         notificationsIcon.click();
         waitForElementToBeVisible(timeline);
         if(timelineElemements.size()==0) {
             Assert.assertTrue(false, "Tweet response is not shown");
         }
-        return new TimelineTweet(timelineElemements.get(0)).getTweeterText();
+        return new TimelineTweet(timelineElemements.get(1)).getTweeterText();
     }
 }

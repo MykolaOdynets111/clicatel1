@@ -21,11 +21,10 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
     }
 
-    public void openNewConversationRequest() {
-        String userName = getUserNameFromLocalStorage();
-//        waitForElementToBeVisible(newConversationRequest);
+    public void openNewConversationRequest(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).openConversation();
     }
+
 
 
     public boolean isNewConversationRequestFromTouchIsShown(int wait) {
@@ -38,10 +37,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
             }
     }
 
-    public boolean isNewConversationRequestFromFBIsShown(int wait) {
-        String userName = FacebookUsers.getLoggedInUserName();
+    public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait) {
         try{
-            waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait);
+            waitForElementToBeVisibleByXpathAgent(String.format(targetProfile, userName), wait);
             return true;
         } catch(TimeoutException e) {
             return false;

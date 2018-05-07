@@ -56,6 +56,9 @@ public class Hooks implements JSHelper{
             }
             if (scenario.getSourceTagNames().contains("@twitter")) {
                 TwitterLoginPage.openTwitterLoginPage().loginUser();
+                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
+                    DriverFactory.getSecondDriverInstance();
+                }
             }
             if(scenario.getSourceTagNames().contains("@tie")){
                 BaseTieSteps.request = new ByteArrayOutputStream();
@@ -83,13 +86,12 @@ public class Hooks implements JSHelper{
             finishAgentFlowIfExists();
             takeScreenshot();
             endFacebookFlow(scenario);
-            DriverFactory.closeBrowser();
         }
 
         if(scenario.getSourceTagNames().contains("@twitter")){
+            finishAgentFlowIfExists();
             takeScreenshot();
             endTwitterFlow();
-            takeScreenshot();
         }
 
         if(scenario.getSourceTagNames().contains("@tie")){
@@ -162,6 +164,7 @@ public class Hooks implements JSHelper{
     private void endTwitterFlow() {
         try {
             DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
+//            dmWindow.sendUserMessage("end");
             dmWindow.deleteConversation();
         } catch (WebDriverException e) {
 

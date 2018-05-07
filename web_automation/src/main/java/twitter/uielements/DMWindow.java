@@ -22,14 +22,13 @@ public class DMWindow extends AbstractUIElement {
     @FindBy(xpath = "//button[text()='Delete conversation']")
     private WebElement deleteConversationButton;
 
-    @FindBy(css = "li.DirectMessage--sent")
+    @FindBy(xpath = "//li[contains(@class, 'DirectMessage--sent')]//p[contains(@class, 'tweet-text')]")
     private List<WebElement> userMessages;
 
     private DMUserMessage getTargetUserMessageElem(String userInput) {
 //        waitForElementsToBeVisible(userMessages, 6);
-        return userMessages.stream().map(DMUserMessage::new).collect(Collectors.toList())
-                .stream().filter(e -> e.getMessageText().equals(userInput))
-                .findFirst().get();
+        return new DMUserMessage(userMessages.stream().filter(e -> e.getText().equals(userInput))
+                .findFirst().get());
     }
 
     public void sendUserMessage(String message){

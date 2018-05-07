@@ -59,7 +59,6 @@ public class TwitterAPI {
 
     public static void deleteToTestUserTweets() {
         List<Status> toTestUserTweets = getAllTweetsToTestUser();
-        int a =2;
         toTestUserTweets.stream().map(e -> e.getId()).collect(Collectors.toList())
                         .stream().forEach(e -> {
                 try {

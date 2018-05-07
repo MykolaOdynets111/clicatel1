@@ -22,6 +22,9 @@ public enum TwitterUsers {
 
     private static TwitterUsers LOGGED_IN_USER = null;
 
+    public static String getLoggedInUserName() {
+        return LOGGED_IN_USER.userName+" "+LOGGED_IN_USER.userSurname;
+    }
     public static TwitterUsers getLoggedInUser() {
         return LOGGED_IN_USER;
     }

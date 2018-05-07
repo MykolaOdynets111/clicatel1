@@ -68,6 +68,12 @@ task runAllTests(type: Test) {
             runFacebookTests.execute()
         }}
 
+    if(suite == "twitter") {
+        doFirst {
+            runTwitterTests.execute()
+        }}
+
+
     if(suite == "tie") {
         doFirst {
             runTieTests.execute()
@@ -182,5 +188,21 @@ task runFacebookTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + tenantName + "/facebook.xml"
+    }
+}
+
+task runTwitterTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/twitter.xml"
     }
 }
