@@ -99,4 +99,12 @@ public class AgentHomePage extends AgentAbstractPage {
                 DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
             }
     }
+
+    public boolean isSuggestionFieldShown(){
+        try {
+            return isElementShown(suggestionInputField);
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 }

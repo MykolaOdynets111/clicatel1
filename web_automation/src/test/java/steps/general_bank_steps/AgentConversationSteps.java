@@ -23,7 +23,7 @@ public class AgentConversationSteps implements JSHelper{
     private ChatBody chatBody;
     private SuggestedGroup suggestedGroup;
 
-    @Then("^Conversation area becomes active with (.*) user's message in it$")
+    @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -46,6 +46,15 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().sendResponseToUser(responseToUser);
     }
 
+    @When("^Agent replays with (.*) message$")
+    public void respondToUserWithCheck(String agentMessage){
+        int a =2;
+        if(getAgentHomePage().isSuggestionFieldShown()) {
+            deleteSuggestionAndSendOwn(agentMessage);
+        }else{
+            sendAnswerToUser(agentMessage);
+        }
+    }
 
     @Then("^There is no suggestions on user's input (.*)$")
     public void verifyIfThereIsNoSuggestions(String userMessage) {

@@ -15,6 +15,9 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
 
+    @FindBy(css = "li.to")
+    private List<WebElement> toUserMessages;
+
     private WebElement getFromUserWebElement(String messageText) {
         try {
             AgentDeskFromUserMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskFromUserMessage(e))

@@ -29,7 +29,6 @@ public class Endpoints {
 
     public static String INTERNAL_LAST_CLIENT_SESSION = "sessions/tenant/%s/client/%s/last";
 
-
      // ==================  PORTAL ============== //
 
     public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com";

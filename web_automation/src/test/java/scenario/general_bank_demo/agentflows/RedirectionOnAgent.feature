@@ -13,7 +13,7 @@ Feature: User on his demand should be redirected on the agent
     When User enter <user_message> into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
-    Then Conversation area becomes active with <user_message> user's message in it
+    Then Conversation area becomes active with <user_message> user's message
     And There is no more than one from user message
     And There is no from agent response added by default for <user_message> user message
     And There is no suggestions on user's input <user_message>
