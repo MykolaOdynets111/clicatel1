@@ -29,6 +29,7 @@ public class Endpoints {
 
     public static String INTERNAL_LAST_CLIENT_SESSION = "sessions/tenant/%s/client/%s/last";
 
+    public static String INTERNAL_TENANT_CONFIG = "tenants/%s/config ";
 
      // ==================  PORTAL ============== //
 

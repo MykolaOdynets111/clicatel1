@@ -9,6 +9,7 @@ import org.openqa.selenium.html5.Location;
 import org.openqa.selenium.html5.LocationContext;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -29,22 +30,31 @@ public class WidgetVisibilitySteps {
             ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, day, startEndTime.get(0), startEndTime.get(1));
         }
         if (day.equalsIgnoreCase("this day")) {
-            LocalDateTime startTime = LocalDateTime.now().minusHours(3);
-            LocalDateTime endTime = LocalDateTime.now().plusHours(3);
+            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
+            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(3);
+            LocalDateTime endTime = currentTimeIntenantTimeZone.plusHours(3);
 
-            LocalDateTime datetime = LocalDateTime.now();
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, datetime.getDayOfWeek().toString(),
+            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.toString(),
                     startTime.format(formatter),
                     endTime.format(formatter));
         }
         if (day.equalsIgnoreCase("wrong hours")) {
-            LocalDateTime startTime = LocalDateTime.now().minusHours(6);
-            LocalDateTime endTime = LocalDateTime.now().minusHours(5);
+            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
 
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, LocalDateTime.now().getDayOfWeek().toString(),
+            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(6);
+            LocalDateTime endTime = currentTimeIntenantTimeZone.minusHours(5);
+
+            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.getDayOfWeek().toString(),
                     startTime.format(formatter),
                     endTime.format(formatter));
         }
+    }
+
+    private LocalDateTime getCurrentTimeInTenantTimeZone(String tenantOrgName){
+        String tenantTimeZone = ApiHelper.getTenantConfig(Tenants.getTenantInfo(tenantOrgName, "id"), "timezone");
+        String zoneOffset = tenantTimeZone.split(":")[0].replace("GMT", "");
+        ZoneId.of(zoneOffset);
+        return LocalDateTime.now(ZoneId.of(zoneOffset));
     }
 
     @Given("^(.*) territory availability is applied$")
