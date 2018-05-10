@@ -49,21 +49,29 @@ public class TwitterSteps {
 
     @When("^User sends tweet regarding \"(.*)\"$")
     public void sendTweet(String tweetMessage){
-//        int day = LocalDateTime.now().getDayOfMonth();
-//        if ( day % 2 == 0 ) {
-//            if (tweetMessage.equalsIgnoreCase("account balance"))
-//                tweetMessage = "How can I check account balance?";
-//        }
-//        else {
-//            if (tweetMessage.equalsIgnoreCase("account balance"))
-//                tweetMessage = "How to check my account balance?";
-//        }
+        int day = LocalDateTime.now().getDayOfMonth();
+        if ( day % 2 == 0 ) {
+            if (tweetMessage.contains("account balance"))
+                tweetMessage = "How can I check account balance?";
+        }
+        else {
+            if (tweetMessage.contains("account balance"))
+                tweetMessage = "How to check my account balance?";
+        }
         getTweetWindow().sendTweet(tweetMessage);
     }
 
     @Then("^He has to receive \"(.*)\" answer$")
     public void verifyReceivingAnswerInTimeline(String expectedAnswer){
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(20), expectedAnswer.substring(0,131));
+        if(expectedAnswer.length()>132){
+            expectedAnswer = expectedAnswer.substring(0,131);
+        }
+        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(20), expectedAnswer);
+    }
+
+    @When("^He clicks \"(.*)\" tweet$")
+    public void openTweet(String expectedAnswer){
+        getUserMentionsPage().clickTimeLIneMentionWithText(expectedAnswer);
     }
 
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")

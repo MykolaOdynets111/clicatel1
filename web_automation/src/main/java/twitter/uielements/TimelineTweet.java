@@ -24,7 +24,8 @@ public class TimelineTweet extends Widget implements WebActions {
         return toUserName.getText();
     }
 
-    public String getTweeterText() {
+    public String getTweetText() {
         return tweeterText.getText();
     }
+
 }
