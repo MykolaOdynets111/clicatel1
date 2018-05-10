@@ -30,10 +30,27 @@ public class ChatBody extends AbstractUIElement {
         }
     }
 
-    public boolean isUserMessageShown(String usrMessage){
-       return fromUserMessages.stream()
-               .map(e -> new AgentDeskFromUserMessage(e))
-               .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
+    public boolean isUserMessageShown(String usrMessage) {
+        waitForElementsToBeVisible(fromUserMessages, 3);
+        for (int i = 0; i < 5; i++) {
+            if (checkThatExpectedUserMessageOnAgenyDesk(usrMessage)) {
+                return true;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+
+    private boolean checkThatExpectedUserMessageOnAgenyDesk(String usrMessage) {
+        return fromUserMessages.stream()
+                .map(e -> new AgentDeskFromUserMessage(e))
+                .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }
 
     public boolean isMoreThanOneUserMassageShown() {

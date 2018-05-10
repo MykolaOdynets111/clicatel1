@@ -25,11 +25,11 @@ public class DMWindow extends AbstractUIElement {
     @FindBy(xpath = "//li[contains(@class, 'DirectMessage--sent')]//p[contains(@class, 'tweet-text')]")
     private List<WebElement> userMessages;
 
-    private DMUserMessage getTargetUserMessageElem(String userInput) {
-//        waitForElementsToBeVisible(userMessages, 6);
-        return new DMUserMessage(userMessages.stream().filter(e -> e.getText().equals(userInput))
-                .findFirst().get());
-    }
+//    private DMUserMessage getTargetUserMessageElem(String userInput) {
+////        waitForElementsToBeVisible(userMessages, 6);
+//        return new DMUserMessage(userMessages.stream().filter(e -> e.getText().equals(userInput))
+//                .findFirst().get());
+//    }
 
     public void sendUserMessage(String message){
         findElemByCSS(cssLocatorDMInputfield).sendKeys(message);
@@ -46,12 +46,12 @@ public class DMWindow extends AbstractUIElement {
     }
 
     public boolean isTextResponseForUserMessageShown(String userMessage){
-       return new DMToUserMessage(getTargetUserMessageElem(userMessage).getWrappedElement()).isTextResponseShown(40);
+       return new DMToUserMessage(userMessage).isTextResponseShown(40);
     }
 
 
     public String getToUserResponse(String userMessage){
-        return new DMToUserMessage(getTargetUserMessageElem(userMessage).getWrappedElement()).getMessageText();
+        return new DMToUserMessage(userMessage).getMessageText();
 
     }
 }
