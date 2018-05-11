@@ -48,7 +48,6 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent replays with (.*) message$")
     public void respondToUserWithCheck(String agentMessage){
-        int a =2;
         if(getAgentHomePage().isSuggestionFieldShown()) {
             deleteSuggestionAndSendOwn(agentMessage);
         }else{

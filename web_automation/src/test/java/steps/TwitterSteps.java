@@ -61,7 +61,7 @@ public class TwitterSteps {
         getTweetWindow().sendTweet(tweetMessage);
     }
 
-    @Then("^He has to receive \"(.*)\" answer$")
+    @Then("^(?:He|User) has to receive \"(.*)\" answer$")
     public void verifyReceivingAnswerInTimeline(String expectedAnswer){
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
