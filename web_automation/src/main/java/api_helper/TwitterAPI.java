@@ -1,18 +1,11 @@
 package api_helper;
 
-import com.github.javafaker.Faker;
 import dataprovider.TwitterUsers;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.apache.commons.codec.digest.HmacUtils;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

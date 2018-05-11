@@ -30,7 +30,7 @@ public class UserMentionsPage extends AbstractPage {
         return openedTweet;
     }
 
-    public String getReplyIfShown(int wait){
+    public String getReplyIfShown(int wait, String answerSource){
         try {
             waitForElementToBeVisibleByCss(newNotificationIcon, wait);
         } catch (TimeoutException e){}
@@ -39,15 +39,17 @@ public class UserMentionsPage extends AbstractPage {
         if(timelineElemements.size()==0) {
             Assert.assertTrue(false, "Tweet response is not shown");
         }
+        if(answerSource.equalsIgnoreCase("agent")){
+            return new TimelineTweet(timelineElemements.get(0)).getTweetText();
+        }
         return new TimelineTweet(timelineElemements.get(1)).getTweetText();
-    }
+}
 
     public OpenedTweet clickTimeLIneMentionWithText(String expectedText){
         timelineElemements.stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
                 .stream().filter(e -> e.getTweetText().equals(expectedText))
                 .findFirst().get().getWrappedElement().click();
         waitForElementToBeVisible(openedTweet);
-        getOpenedTweet().sendReply("Hallo");
         return getOpenedTweet();
     }
 }

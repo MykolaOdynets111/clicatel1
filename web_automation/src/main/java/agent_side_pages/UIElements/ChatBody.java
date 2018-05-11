@@ -32,7 +32,7 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isUserMessageShown(String usrMessage) {
         waitForElementsToBeVisible(fromUserMessages, 3);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 18; i++) {
             if (checkThatExpectedUserMessageOnAgenyDesk(usrMessage)) {
                 return true;
             }

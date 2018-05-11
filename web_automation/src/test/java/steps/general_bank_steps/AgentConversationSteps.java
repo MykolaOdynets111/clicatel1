@@ -55,6 +55,7 @@ public class AgentConversationSteps implements JSHelper{
         }
     }
 
+
     @Then("^There is no suggestions on user's input (.*)$")
     public void verifyIfThereIsNoSuggestions(String userMessage) {
         Assert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(),
