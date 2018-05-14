@@ -3,6 +3,7 @@ package steps;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import dataprovider.Tenants;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.html5.Location;
@@ -11,6 +12,7 @@ import org.openqa.selenium.html5.LocationContext;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +60,8 @@ public class WidgetVisibilitySteps {
     }
 
     @Given("^(.*) territory availability is applied$")
-    public void setUpWidgetVisibilityByTerritory(List<String> territory){
+    public void setUpWidgetVisibilityByTerritory(List<String> territoryConfig){
+        List<String> territory = getCorrectTerritory(territoryConfig);
         if (territory.get(0).equalsIgnoreCase("all territories")){
             ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
             return;
@@ -70,6 +73,21 @@ public class WidgetVisibilitySteps {
             ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory.get(0), true,
                     territory.get(1), true);
         }
+    }
+
+    private List<String> getCorrectTerritory(List<String> territories){
+        List<String> territory = new ArrayList<>();
+        if (territories.get(0).equalsIgnoreCase("My territory")&ConfigManager.isRemote()){
+            territory.add("North America");
+            territory.add("United States");
+        }
+        if (territories.get(0).equalsIgnoreCase("My territory")&!(ConfigManager.isRemote())){
+            territory.add("Europe");
+            territory.add("Ukraine");
+        }else {
+            return territories;
+        }
+        return territory;
     }
 
     @Given("^Widget is turned off for (.*) country$")
