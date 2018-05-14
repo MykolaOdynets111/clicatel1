@@ -92,14 +92,18 @@ public class WidgetVisibilitySteps {
     }
 
     @Given("^Widget is turned off for (.*) country$")
-    public void turnOffWidgetForCountry(List<String> territory){
-
+    public void turnOffWidgetForCountry(List<String> territoryConfig){
+        List<String> territory = getCorrectTerritory(territoryConfig);
         ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory.get(0), true,
                 territory.get(1), false);
     }
 
     @Given("^Widget is disabled for (.*) territory but is enabled for (.*) User's country$")
     public void turnOffWidgetForTerritory(String territory, String country){
+        if(ConfigManager.isRemote()){
+            territory="North America";
+            country="United States";
+        }
         ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory, false,
                 country, true);
     }
