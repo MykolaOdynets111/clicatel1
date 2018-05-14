@@ -1,21 +1,22 @@
 package steps.tie_steps;
 
 import api_helper.Endpoints;
-import com.github.javafaker.Faker;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataprovider.jackson_schemas.TIE.TieNER;
+import dataprovider.jackson_schemas.TIE.TieNERItem;
+import dataprovider.jackson_schemas.Entity;
+
 import driverManager.ConfigManager;
 import driverManager.URLs;
 import static io.restassured.RestAssured.*;
 
 import io.restassured.RestAssured;
-import io.restassured.matcher.RestAssuredMatchers.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
-import javax.xml.ws.Endpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,8 @@ public class TIEApiSteps {
     private static String createNewTenantName() {
         return "testing"+ System.currentTimeMillis();
     }
+
+    private static TieNERItem NER_DATA_SET = createNERDataSet();
 
     // ======================= Chats ======================== //
 
@@ -386,5 +389,37 @@ public class TIEApiSteps {
                 .post(url).
         then()
                 .statusCode(200);
+    }
+
+    // ============================ NER ============================ //
+
+    private static TieNERItem createNERDataSet(){
+        List<Entity> entities = new ArrayList<>();
+        entities.add(new Entity().setStart(0).setEnd(13).setType("PERSON"));
+        return new TieNERItem().setText("AQA test "+System.currentTimeMillis()+"").setEntities(entities);
+    }
+
+    @When("^I try to add some trainset response status code should be 200$")
+    public void addNERDataSet(){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+        given()
+                .body("{\"NER_trainset\": ["+NER_DATA_SET.toString()+"]}").
+        when()
+                .post(url).
+        then()
+                .statusCode(200);
+    }
+
+    @Then("^GET request should return created trainset$")
+    public void getNERDataSet(){
+        SoftAssert soft = new SoftAssert();
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+        Response resp = get(url);
+        soft.assertTrue(resp.statusCode()==200);
+        soft.assertTrue(resp.getBody().as(TieNER.class).getNERTrainset().contains(NER_DATA_SET));
+//        then()
+//                .statusCode(200)
+//                .body("NER_trainset", contains(NER_DATA_SET));
+
     }
 }

@@ -21,11 +21,8 @@ Feature: Testing TIE APIs
 
   ### Intent ###
 
-  Scenario: Intent endpoint for specific intent should work
-            API: GET /tenants/<tenant_name>/intents/<intent_text>
-    When I send "check balance" intent for generalbank tenant then response code is 200 and intents are not empty
-
-  # for API: GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text> please see TIE trainings section below
+  # API: GET /tenants/<tenant_name>/intents/<intent_text>,
+  # API: GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text> endpoints are removed and not used
 
   ### Sentiments ###
 
@@ -65,13 +62,11 @@ Feature: Testing TIE APIs
   Scenario: User should be able to fill training set with new sample text for selected intent and schedule training for created tenant
             API POST /tenats/<tenant_name>/train
             API GET /tenants/<tenant_name>/train
-            API GET /tenants/<tenant_name>/intents/<intent>/train/<sample_text>
     Given  I create new tenant with TIE API
     And Wait for a minute
     When I schedule training for a new tenant
     Then Training for new tenant is scheduled
     And All trainings should contain newly added tenant training
-    When I add to business address location intent business ADDRESS sample text for created tenant status code is 200
 
   ### Data set and config management ##
 
@@ -119,3 +114,11 @@ Feature: Testing TIE APIs
     And I add additional field aqaTest value to the new tenant config
     When I clear tenant data
     Then additional field with aqaTest value is removed from tenant config
+
+  ### NER ### under development
+#  Scenario: User should be able to add, get and delete NER data set
+#          API POST /tenants/ner-trainset
+#          API GET /tenants/ner-trainset
+#          API DELETE /tenants/ner-trainset/{id of particular data set sample in DB, is displayed in  API GET /tenants/ner-trainse  }
+#    When I try to add some trainset response status code should be 200
+#    And GET request should return created trainset

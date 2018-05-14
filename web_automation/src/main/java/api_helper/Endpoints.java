@@ -73,6 +73,8 @@ public class Endpoints {
 
     public static String TIE_GET_TRAINSET = "%s/trainset/";
 
-    public  static String TIE_TRAINSET = "%s/trainset/test";
+    public  static String TIE_NER = "ner-trainset/";
+
+
 }
 
