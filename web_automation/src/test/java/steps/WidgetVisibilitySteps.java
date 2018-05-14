@@ -80,12 +80,13 @@ public class WidgetVisibilitySteps {
         if (territories.get(0).equalsIgnoreCase("My territory")&ConfigManager.isRemote()){
             territory.add("North America");
             territory.add("United States");
-        }
-        if (territories.get(0).equalsIgnoreCase("My territory")&!(ConfigManager.isRemote())){
-            territory.add("Europe");
-            territory.add("Ukraine");
-        }else {
-            return territories;
+        } else {
+            if (territories.get(0).equalsIgnoreCase("My territory") & !(ConfigManager.isRemote())) {
+                territory.add("Europe");
+                territory.add("Ukraine");
+            } else {
+                return territories;
+            }
         }
         return territory;
     }
