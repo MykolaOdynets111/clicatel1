@@ -19,7 +19,7 @@ public class OpenedTweet extends AbstractUIElement {
 
     String replyInputFieldCSS = "div.PermalinkOverlay-modal div.RichEditor-scrollContainer div[name='tweet']";
 
-    String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()='%s";
+    String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()='%s']";
 
     public void sendReply(String tweetText){
         moveToElemAndClick(replyInputArea);

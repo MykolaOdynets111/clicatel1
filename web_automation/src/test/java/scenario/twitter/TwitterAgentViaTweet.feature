@@ -8,11 +8,10 @@ Feature: User should be able to receive answer on his tweet from the agent
     Given Open new tweet window
 
   Scenario: Receiving answer on tweet from the agent
-    When User sends tweet regarding "chat to support"
+    When User sends tweet regarding "connect to agent"
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
-    Then Conversation area becomes active with chat to support user's message
-    And There is no from agent response added by default for chat to support user message
+    Then Conversation area becomes active with connect to agent user's message
     When Agent replays with how can i help you? message
     Then User has to receive "how can i help you?" answer from the agent
     When He clicks "how can i help you?" tweet

@@ -24,10 +24,35 @@ public class UserMentionsPage extends AbstractPage {
     @FindBy(xpath = "//span[text()='Notifications']")
     private WebElement notificationsIcon;
 
+    private String fromAgentResponse = "//li[contains(@class,'stream-item')]//p[text()='%s']";
+
+    private String newTweetsButon = "button.new-tweets-bar";
+
     private OpenedTweet openedTweet;
 
     public OpenedTweet getOpenedTweet() {
         return openedTweet;
+    }
+
+    public boolean verifyFromAgentTweetIsShown(int wait, String agentREsponse){
+        try {
+            waitForElementToBeVisibleByCss(newTweetsButon, wait);
+            findElemByCSS(newTweetsButon).click();
+        } catch (TimeoutException e){}
+
+        try {
+            waitForElementToBeVisibleByXpath(String.format(fromAgentResponse, agentREsponse),wait);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public String getAgentReply(){
+        if(timelineElemements.size()==0) {
+            Assert.assertTrue(false, "Tweet response is not shown");
+        }
+        return new TimelineTweet(timelineElemements.get(0)).getTweetText();
     }
 
     public String getReplyIfShown(int wait, String answerSource){

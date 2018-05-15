@@ -5,10 +5,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
 import driverManager.URLs;
-import facebook.FBHomePage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import touch_pages.uielements.WidgetHeader;
 import twitter.TwitterHomePage;
 import twitter.TwitterTenantPage;
 import twitter.UserMentionsPage;
@@ -76,7 +74,8 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(20, "agent"), expectedAnswer);
+        Assert.assertTrue(getUserMentionsPage().verifyFromAgentTweetIsShown(40, expectedAnswer));
+
     }
 
     @When("^He clicks \"(.*)\" tweet$")
@@ -93,7 +92,7 @@ public class TwitterSteps {
     @When("^User have to receive (.*) agent response as comment for (.*) tweet$")
     public void checkAgentResponse(String expectedResponse, String targetTweet){
         boolean result = false;
-        for (int i =0; i < 5; i++){
+        for (int i =0; i < 10; i++){
             openedTweet.closeTweet();
             openedTweet = getUserMentionsPage().clickTimeLIneMentionWithText(targetTweet);
             if(openedTweet.ifAgentReplyShown(expectedResponse,1)){
