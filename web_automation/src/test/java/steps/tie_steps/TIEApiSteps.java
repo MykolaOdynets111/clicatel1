@@ -1,21 +1,21 @@
 package steps.tie_steps;
 
 import api_helper.Endpoints;
-import com.github.javafaker.Faker;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataprovider.jackson_schemas.TIE.TieNERItem;
+import dataprovider.jackson_schemas.TIE.Entity;
+
 import driverManager.ConfigManager;
 import driverManager.URLs;
 import static io.restassured.RestAssured.*;
 
 import io.restassured.RestAssured;
-import io.restassured.matcher.RestAssuredMatchers.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
-import javax.xml.ws.Endpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +33,12 @@ public class TIEApiSteps {
 
     private static String createNewTenantName() {
         return "testing"+ System.currentTimeMillis();
+    }
+
+    private static TieNERItem NER_DATA_SET = createNERDataSet();
+
+    public TieNERItem getNerDataSet(){
+        return  NER_DATA_SET;
     }
 
     // ======================= Chats ======================== //
@@ -186,7 +192,7 @@ public class TIEApiSteps {
                 String.format(Endpoints.TIE_TRAININGS, tenant);
         when()
                 .get(url).
-                then()
+        then()
                 .statusCode(200)
                 .body(tenant, equalTo("scheduled"));
     }
@@ -224,7 +230,7 @@ public class TIEApiSteps {
                 .body("tenant="+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"").
         when()
                 .put(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()))
-                .then()
+        .then()
                 .statusCode(404);
     }
 
@@ -307,15 +313,31 @@ public class TIEApiSteps {
         given()
                 .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
         when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_CONFIG, newTenant)).
+                .post(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                        String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
         then()
                 .statusCode(200);
+    }
+
+    @Then("^Trainset is added for newly created tenant$")
+    public void checkTrainsetIsAddedForNewTennant(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        waitFor(1000);
+        given()
+                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
+        when()
+                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
+        then()
+                .statusCode(200)
+                .body("intent_trainset.tenant[0]", equalTo(newTenant))
+                .body("intent_trainset.intent[0]", equalTo("SANTA"));
     }
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
     public void verifyRemovingItemFromConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        waitFor(1000);
         when()
                 .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                         String.format(Endpoints.TIE_CONFIG, newTenant)).
@@ -323,6 +345,20 @@ public class TIEApiSteps {
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant))
                 .body("$", not(hasKey(field)));
+    }
+
+    @Then("^Added trainset is removed$")
+    public void checkTrainsetIsRemoved(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        waitFor(1000);
+        given()
+                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
+        when()
+                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
+        then()
+                .statusCode(200)
+                .body("intent_trainset", everyItem(isEmptyOrNullString()));
     }
 
     @Then("^I receives response on my input (.*)$")
@@ -387,4 +423,71 @@ public class TIEApiSteps {
         then()
                 .statusCode(200);
     }
+
+    // ============================ NER ============================ //
+
+    private static TieNERItem createNERDataSet(){
+        List<Entity> entities = new ArrayList<>();
+        entities.add(new Entity().setStart(0).setEnd(13).setType("PERSON"));
+        return new TieNERItem().setText("AQA test "+System.currentTimeMillis()+"").setEntities(entities);
+    }
+
+    @When("^I try to add some trainset response status code should be 200$")
+    public void addNERDataSet(){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+        given()
+                .body("{\"NER_trainset\": ["+NER_DATA_SET.toString()+"]}").
+        when()
+                .post(url).
+        then()
+                .statusCode(200);
+    }
+
+    @Then("^GET request should return created trainset$")
+    public void getNERDataSet(){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+        when()
+                .get(url).
+        then()
+                .statusCode(200)
+                .body("NER_trainset.text", hasItems(NER_DATA_SET.getText()));
+    }
+
+    @When("^Trying to delete a trainset status code is 200$")
+    public void deleteNER(){
+        String getUrl = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+        String id = (String) ((HashMap) get(getUrl)
+                .jsonPath().getList("NER_trainset").stream()
+                .filter(e -> ((HashMap) e).get("text").equals(NER_DATA_SET.getText()))
+                .findFirst().get()).get("id");
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_NER_DELETE, id);
+        when()
+                .delete(url).
+        then()
+                .statusCode(200);
+    }
+
+    @Then("Trainset should be deleted")
+    public void trainsetIsDeleted(){
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+        when()
+                .get(url).
+                then()
+                .statusCode(200)
+                .body("NER_trainset.text", not(hasItems(NER_DATA_SET.getText())));
+    }
+
+    public static List<Map> getListOfNERs(){
+        String getUrl = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
+
+        return get(getUrl).jsonPath().getList("NER_trainset");
+    }
+
+    private void waitFor(int wait){
+        try {
+            Thread.sleep(wait);
+        } catch (InterruptedException e) {        }
+    }
+
 }

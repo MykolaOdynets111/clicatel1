@@ -3,13 +3,16 @@ package steps;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import dataprovider.Tenants;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.html5.Location;
 import org.openqa.selenium.html5.LocationContext;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,26 +32,36 @@ public class WidgetVisibilitySteps {
             ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, day, startEndTime.get(0), startEndTime.get(1));
         }
         if (day.equalsIgnoreCase("this day")) {
-            LocalDateTime startTime = LocalDateTime.now().minusHours(3);
-            LocalDateTime endTime = LocalDateTime.now().plusHours(3);
+            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
+            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(3);
+            LocalDateTime endTime = currentTimeIntenantTimeZone.plusHours(3);
 
-            LocalDateTime datetime = LocalDateTime.now();
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, datetime.getDayOfWeek().toString(),
+            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.toString(),
                     startTime.format(formatter),
                     endTime.format(formatter));
         }
         if (day.equalsIgnoreCase("wrong hours")) {
-            LocalDateTime startTime = LocalDateTime.now().minusHours(6);
-            LocalDateTime endTime = LocalDateTime.now().minusHours(5);
+            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
 
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, LocalDateTime.now().getDayOfWeek().toString(),
+            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(6);
+            LocalDateTime endTime = currentTimeIntenantTimeZone.minusHours(5);
+
+            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.getDayOfWeek().toString(),
                     startTime.format(formatter),
                     endTime.format(formatter));
         }
     }
 
+    private LocalDateTime getCurrentTimeInTenantTimeZone(String tenantOrgName){
+        String tenantTimeZone = ApiHelper.getTenantConfig(Tenants.getTenantInfo(tenantOrgName, "id"), "timezone");
+        String zoneOffset = tenantTimeZone.split(":")[0].replace("GMT", "");
+        ZoneId.of(zoneOffset);
+        return LocalDateTime.now(ZoneId.of(zoneOffset));
+    }
+
     @Given("^(.*) territory availability is applied$")
-    public void setUpWidgetVisibilityByTerritory(List<String> territory){
+    public void setUpWidgetVisibilityByTerritory(List<String> territoryConfig){
+        List<String> territory = getCorrectTerritory(territoryConfig);
         if (territory.get(0).equalsIgnoreCase("all territories")){
             ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
             return;
@@ -62,15 +75,35 @@ public class WidgetVisibilitySteps {
         }
     }
 
-    @Given("^Widget is turned off for (.*) country$")
-    public void turnOffWidgetForCountry(List<String> territory){
+    private List<String> getCorrectTerritory(List<String> territories){
+        List<String> territory = new ArrayList<>();
+        if (territories.get(0).equalsIgnoreCase("My territory")&ConfigManager.isRemote()){
+            territory.add("North America");
+            territory.add("United States");
+        } else {
+            if (territories.get(0).equalsIgnoreCase("My territory") & !(ConfigManager.isRemote())) {
+                territory.add("Europe");
+                territory.add("Ukraine");
+            } else {
+                return territories;
+            }
+        }
+        return territory;
+    }
 
+    @Given("^Widget is turned off for (.*) country$")
+    public void turnOffWidgetForCountry(List<String> territoryConfig){
+        List<String> territory = getCorrectTerritory(territoryConfig);
         ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory.get(0), true,
                 territory.get(1), false);
     }
 
     @Given("^Widget is disabled for (.*) territory but is enabled for (.*) User's country$")
     public void turnOffWidgetForTerritory(String territory, String country){
+        if(ConfigManager.isRemote()){
+            territory="North America";
+            country="United States";
+        }
         ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory, false,
                 country, true);
     }

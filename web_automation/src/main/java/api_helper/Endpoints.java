@@ -29,6 +29,8 @@ public class Endpoints {
 
     public static String INTERNAL_LAST_CLIENT_SESSION = "sessions/tenant/%s/client/%s/last";
 
+    public static String INTERNAL_TENANT_CONFIG = "tenants/%s/config ";
+
      // ==================  PORTAL ============== //
 
     public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com";
@@ -69,8 +71,13 @@ public class Endpoints {
 
     public static String TIE_CLEARING_CONFIGS = "?tenant=%s&clear=nlp_config,train_data";
 
-    public static String TIE_GET_TRAINSET = "%s/trainset/";
+    public static String TIE_POST_TRAINSET = "%s/trainset/test";
 
-    public  static String TIE_TRAINSET = "%s/trainset/test";
+    public static String TIE_GET_TRAINSET = "%s/trainset";
+
+    public  static String TIE_NER = "ner-trainset/";
+
+    public  static String TIE_NER_DELETE = "ner-trainset/%s";
+
 }
 

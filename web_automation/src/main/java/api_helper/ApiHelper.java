@@ -20,6 +20,11 @@ public class ApiHelper {
     private static  List<HashMap> tenantsInfo=null;
     private static List<HashMap> tenantMessages=null;
 
+    public static String getTenantConfig(String tenantID, String config){
+        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
+                String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantID);
+        return RestAssured.get(url).jsonPath().get(config);
+    }
 
     public static Map<String, String> getTenantInfoMap(String theValue) {
         Map<String, String> tenantsMap = new HashMap<>();

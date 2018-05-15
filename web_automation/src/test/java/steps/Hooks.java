@@ -28,8 +28,14 @@ import twitter.uielements.DMWindow;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 
 public class Hooks implements JSHelper{
 

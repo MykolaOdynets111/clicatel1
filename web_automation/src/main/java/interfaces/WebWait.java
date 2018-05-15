@@ -104,4 +104,5 @@ public interface WebWait {
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){
         initWait(time).until(ExpectedConditions.invisibilityOf(element)).toString();
     }
+
 }
