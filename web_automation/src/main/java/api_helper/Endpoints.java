@@ -71,10 +71,13 @@ public class Endpoints {
 
     public static String TIE_CLEARING_CONFIGS = "?tenant=%s&clear=nlp_config,train_data";
 
-    public static String TIE_GET_TRAINSET = "%s/trainset/";
+    public static String TIE_POST_TRAINSET = "%s/trainset/test";
+
+    public static String TIE_GET_TRAINSET = "%s/trainset";
 
     public  static String TIE_NER = "ner-trainset/";
 
+    public  static String TIE_NER_DELETE = "ner-trainset/%s";
 
 }
 

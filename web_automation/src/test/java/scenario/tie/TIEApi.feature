@@ -58,7 +58,6 @@ Feature: Testing TIE APIs
             API GET /tenants/<tenant_name>/train
     When I want to get trainings for generalbank tenant response status should be 200 and body is not empty
 
-            # ToDo: Extend test when TPLAT-2648 is fixed
   Scenario: User should be able to fill training set with new sample text for selected intent and schedule training for created tenant
             API POST /tenats/<tenant_name>/train
             API GET /tenants/<tenant_name>/train
@@ -74,7 +73,6 @@ Feature: Testing TIE APIs
           API GET /tenants/<tenant_name>/trainset
     When I make a request to see generalbank trainset I receive response with 200 code and not empty body
 
-     #ToDo: add additional verification when TPLAT-2666 is fixed (that trainset is added)
   Scenario: User should be able to get and update tenant configs and trainset
           API GET /tenants/<tenant_name>/config
           API POST /tenants/<tenant_name>/config
@@ -85,6 +83,7 @@ Feature: Testing TIE APIs
     When I add additional field aqaTest value to the new tenant config
     Then New additional field with aqaTest value is added to tenant config
     When I send test trainset for newly created tenant status code is 200
+    And Trainset is added for newly created tenant
 
   ### Tenant management ###
 
@@ -99,26 +98,29 @@ Feature: Testing TIE APIs
     And Wait for a minute
     Then I am not receiving the response for this tenant on check balance
 
-
   Scenario: User should be able to clone tenant
         API PUT /tenants/ data={'tenant': 'TESTONE', 'source_tenant':'generalbank'}
     When I create a clone of generalbank tenant with TIE API
     And Wait for a minute
     Then Config of cloned intent is the same as for generalbank
 
-  #ToDo: add additional verification when TPLAT-2666 is fixed (that trainset is removed)
   Scenario: User should be able to clear tenant config
         API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
     Given I create new tenant with TIE API
     And Wait for a minute
-    And I add additional field aqaTest value to the new tenant config
+    When I add additional field aqaTest value to the new tenant config
+    And I send test trainset for newly created tenant status code is 200
     When I clear tenant data
     Then additional field with aqaTest value is removed from tenant config
+    And Added trainset is removed
 
-  ### NER ### under development
-#  Scenario: User should be able to add, get and delete NER data set
-#          API POST /tenants/ner-trainset
-#          API GET /tenants/ner-trainset
-#          API DELETE /tenants/ner-trainset/{id of particular data set sample in DB, is displayed in  API GET /tenants/ner-trainse  }
-#    When I try to add some trainset response status code should be 200
-#    And GET request should return created trainset
+  ### NER ###
+  Scenario: User should be able to add, get and delete NER data set
+          API POST /tenants/ner-trainset
+          API GET /tenants/ner-trainset
+          API DELETE /tenants/ner-trainset/{id of particular data set sample in DB, is displayed in  API GET /tenants/ner-trainse  }
+    When I try to add some trainset response status code should be 200
+    And GET request should return created trainset
+    When Trying to delete a trainset status code is 200
+    And Trainset should be deleted
+

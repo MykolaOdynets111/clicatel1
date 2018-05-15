@@ -1,11 +1,12 @@
 
 package dataprovider.jackson_schemas.TIE;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
-
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -13,7 +14,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
     "id",
     "entities"
 })
-public class NERTrainset {
+public class TieNERItem {
 
     @JsonProperty("text")
     private String text;
@@ -30,8 +31,9 @@ public class NERTrainset {
     }
 
     @JsonProperty("text")
-    public void setText(String text) {
+    public TieNERItem setText(String text) {
         this.text = text;
+        return this;
     }
 
     @JsonProperty("id")
@@ -50,8 +52,9 @@ public class NERTrainset {
     }
 
     @JsonProperty("entities")
-    public void setEntities(List<Entity> entities) {
+    public TieNERItem setEntities(List<Entity> entities) {
         this.entities = entities;
+        return this;
     }
 
     @JsonAnyGetter
@@ -64,4 +67,18 @@ public class NERTrainset {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString(){
+        return "{\"text\":  \""+this.getText()+"\", \"entities\": [{ \"start\": "+this.getEntities().get(0).getStart()+", \"end\": "+this.getEntities().get(0).getEnd()+", \"type\": \""+this.getEntities().get(0).getType()+"\"}]}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TieNERItem that = (TieNERItem) o;
+        return
+                Objects.equals(text, that.text) &&
+                        Objects.equals(entities, that.entities);
+    }
 }

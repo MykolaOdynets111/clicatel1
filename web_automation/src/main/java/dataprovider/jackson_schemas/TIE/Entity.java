@@ -3,8 +3,9 @@ package dataprovider.jackson_schemas.TIE;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+import java.util.Objects;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -29,8 +30,9 @@ public class Entity {
     }
 
     @JsonProperty("start")
-    public void setStart(Integer start) {
+    public Entity setStart(Integer start) {
         this.start = start;
+        return this;
     }
 
     @JsonProperty("end")
@@ -39,8 +41,9 @@ public class Entity {
     }
 
     @JsonProperty("end")
-    public void setEnd(Integer end) {
+    public Entity setEnd(Integer end) {
         this.end = end;
+        return this;
     }
 
     @JsonProperty("type")
@@ -49,8 +52,9 @@ public class Entity {
     }
 
     @JsonProperty("type")
-    public void setType(String type) {
+    public Entity setType(String type) {
         this.type = type;
+        return this;
     }
 
     @JsonAnyGetter
@@ -63,4 +67,13 @@ public class Entity {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity that = (Entity) o;
+        return Objects.equals(start, that.start) &&
+                        Objects.equals(end, that.end) &&
+                        Objects.equals(type, that.type);
+    }
 }
