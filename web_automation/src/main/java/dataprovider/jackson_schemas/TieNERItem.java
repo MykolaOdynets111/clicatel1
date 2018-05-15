@@ -1,7 +1,6 @@
 
-package dataprovider.jackson_schemas.TIE;
+package dataprovider.jackson_schemas;
 
-import dataprovider.jackson_schemas.Entity;
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class TieNERItem {
     @JsonProperty("id")
     private String id;
     @JsonProperty("entities")
-    private List<Entity> entities = null;
+    private List<EntitywORKING> entities = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -48,12 +47,12 @@ public class TieNERItem {
     }
 
     @JsonProperty("entities")
-    public List<Entity> getEntities() {
+    public List<EntitywORKING> getEntities() {
         return entities;
     }
 
     @JsonProperty("entities")
-    public TieNERItem setEntities(List<Entity> entities) {
+    public TieNERItem setEntities(List<EntitywORKING> entities) {
         this.entities = entities;
         return this;
     }

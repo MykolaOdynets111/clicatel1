@@ -13,7 +13,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
     "end",
     "type"
 })
-public class Entity {
+public class EntitywORKING {
 
     @JsonProperty("start")
     private Integer start;
@@ -30,7 +30,7 @@ public class Entity {
     }
 
     @JsonProperty("start")
-    public Entity setStart(Integer start) {
+    public EntitywORKING setStart(Integer start) {
         this.start = start;
         return this;
     }
@@ -41,7 +41,7 @@ public class Entity {
     }
 
     @JsonProperty("end")
-    public Entity setEnd(Integer end) {
+    public EntitywORKING setEnd(Integer end) {
         this.end = end;
         return this;
     }
@@ -52,7 +52,7 @@ public class Entity {
     }
 
     @JsonProperty("type")
-    public Entity setType(String type) {
+    public EntitywORKING setType(String type) {
         this.type = type;
         return this;
     }
@@ -71,7 +71,7 @@ public class Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Entity that = (Entity) o;
+        EntitywORKING that = (EntitywORKING) o;
         return Objects.equals(start, that.start) &&
                         Objects.equals(end, that.end) &&
                         Objects.equals(type, that.type);

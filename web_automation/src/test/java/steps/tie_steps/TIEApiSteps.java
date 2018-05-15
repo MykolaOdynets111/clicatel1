@@ -4,8 +4,8 @@ import api_helper.Endpoints;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.jackson_schemas.TIE.TieNER;
-import dataprovider.jackson_schemas.TIE.TieNERItem;
-import dataprovider.jackson_schemas.Entity;
+import dataprovider.jackson_schemas.TieNERItem;
+import dataprovider.jackson_schemas.EntitywORKING;
 
 import driverManager.ConfigManager;
 import driverManager.URLs;
@@ -394,8 +394,8 @@ public class TIEApiSteps {
     // ============================ NER ============================ //
 
     private static TieNERItem createNERDataSet(){
-        List<Entity> entities = new ArrayList<>();
-        entities.add(new Entity().setStart(0).setEnd(13).setType("PERSON"));
+        List<EntitywORKING> entities = new ArrayList<>();
+        entities.add(new EntitywORKING().setStart(0).setEnd(13).setType("PERSON"));
         return new TieNERItem().setText("AQA test "+System.currentTimeMillis()+"").setEntities(entities);
     }
 
