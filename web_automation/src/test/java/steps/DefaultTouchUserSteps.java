@@ -16,6 +16,8 @@ import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
 import touch_pages.uielements.messages.WelcomeMessages;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,12 +62,24 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Chat icon is not visible$")
     public void isChatIconIsNotVisible(){
-        Assert.assertFalse(getMainPage().isChatIconShown(), "Chat icon is visible");
+        String ip=null;
+        try {
+            ip = String.valueOf(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        Assert.assertFalse(getMainPage().isChatIconShown(), "Chat icon is visible. IP: "+ip+"");
     }
 
     @Then("^Chat icon is visible$")
     public void isChatIconIsVisible(){
-        Assert.assertTrue(getMainPage().isChatIconShown(), "Chat icon is not visible");
+        String ip=null;
+        try {
+            ip = String.valueOf(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        Assert.assertTrue(getMainPage().isChatIconShown(), "Chat icon is not visible. IP: "+ip+"");
     }
 
     @When("^User enter (.*) into widget input field$")
