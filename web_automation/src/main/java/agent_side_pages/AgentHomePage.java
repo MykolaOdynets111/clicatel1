@@ -15,6 +15,12 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.suggestion-wrapper")
     private WebElement suggestionInputField;
 
+    @FindBy(xpath = "//button[text()='End chat']")
+    private WebElement endChatButton;
+
+    @FindBy(xpath = "//button[text()='Close chat']")
+    private WebElement closeChatButton;
+
     String messageInputLocator = "//textarea[contains(@class,'text-input')]";
 
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
@@ -98,5 +104,22 @@ public class AgentHomePage extends AgentAbstractPage {
             } catch (StaleElementReferenceException e) {
                 DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
             }
+    }
+
+    public void endChat(){
+        if(isEndChatShown()){
+            endChatButton.click();
+            waitForElementToBeVisible(closeChatButton);
+            closeChatButton.click();
+        }
+    }
+
+    private boolean isEndChatShown(){
+        try {
+            waitForElementToBeVisible(endChatButton,10);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 }

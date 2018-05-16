@@ -123,7 +123,9 @@ public class Hooks implements JSHelper{
 
     private void logoutAgent() {
         try {
-            new AgentHomePage().getHeader().logOut();
+            AgentHomePage agentHomePage =  new AgentHomePage();
+            agentHomePage.endChat();
+            agentHomePage.getHeader().logOut();
             new AgentLoginPage().waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }

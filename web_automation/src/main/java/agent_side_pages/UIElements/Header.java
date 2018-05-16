@@ -14,6 +14,7 @@ public class Header extends AbstractUIElement {
     private WebElement logOutButton;
 
     public Header logOut() {
+        waitForElementToBeVisible(topMenuDropdown);
         click(topMenuDropdown);
         waitForElementToBeVisible(logOutButton, 6);
         logOutButton.click();
