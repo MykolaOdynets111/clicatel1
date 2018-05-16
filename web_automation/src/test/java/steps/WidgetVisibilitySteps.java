@@ -78,12 +78,12 @@ public class WidgetVisibilitySteps {
     private List<String> getCorrectTerritory(List<String> territories){
         List<String> territory = new ArrayList<>();
         if (territories.get(0).equalsIgnoreCase("My territory")&ConfigManager.isRemote()){
-            territory.add("North America");
-            territory.add("United States");
+            territory.add(0,"North America");
+            territory.add(1,"United States");
         } else {
             if (territories.get(0).equalsIgnoreCase("My territory") & !(ConfigManager.isRemote())) {
-                territory.add("Europe");
-                territory.add("Ukraine");
+                territory.add(0,"Europe");
+                territory.add(1,"Ukraine");
             } else {
                 return territories;
             }

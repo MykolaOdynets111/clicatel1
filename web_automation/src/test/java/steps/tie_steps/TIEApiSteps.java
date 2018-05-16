@@ -418,7 +418,7 @@ public class TIEApiSteps {
                 .post(url).
         then()
                 .statusCode(200);
-        waitFor(4000);
+        waitFor(5000);
     }
 
     // ============================ NER ============================ //
