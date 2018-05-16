@@ -65,6 +65,7 @@ public class UserMentionsPage extends AbstractPage {
 }
 
     public OpenedTweet clickTimeLIneMentionWithText(String expectedText){
+        waitForElementsToBeVisible(timelineElemements,5);
         timelineElemements.stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
                 .stream().filter(e -> e.getTweetText().equals(expectedText))
                 .findFirst().get().getWrappedElement().click();
