@@ -52,5 +52,5 @@ Feature: User on his demand should be redirected on the agent
 #    Then User have to receive 'hello' text response for his 'Chat to us' input
 
   Scenario: Verify user is redirected to the Agent when types negative sentiment message
-    When User enter you need to get way more ATMs in Cape Town into widget input field
+    When User enter Hate your banking into widget input field
     Then Agent has new conversation request

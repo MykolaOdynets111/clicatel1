@@ -8,6 +8,7 @@ import driverManager.DriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.html5.Location;
 import org.openqa.selenium.html5.LocationContext;
+import org.testng.asserts.SoftAssert;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -80,12 +81,12 @@ public class WidgetVisibilitySteps {
     private List<String> getCorrectTerritory(List<String> territories){
         List<String> territory = new ArrayList<>();
         if (territories.get(0).equalsIgnoreCase("My territory")&ConfigManager.isRemote()){
-            territory.add("North America");
-            territory.add("United States");
+            territory.add(0,"North America");
+            territory.add(1,"United States");
         } else {
             if (territories.get(0).equalsIgnoreCase("My territory") & !(ConfigManager.isRemote())) {
-                territory.add("Europe");
-                territory.add("Ukraine");
+                territory.add(0,"Europe");
+                territory.add(1,"Ukraine");
             } else {
                 return territories;
             }
@@ -98,6 +99,11 @@ public class WidgetVisibilitySteps {
         List<String> territory = getCorrectTerritory(territoryConfig);
         ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory.get(0), true,
                 territory.get(1), false);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Given("^Widget is disabled for (.*) territory but is enabled for (.*) User's country$")
