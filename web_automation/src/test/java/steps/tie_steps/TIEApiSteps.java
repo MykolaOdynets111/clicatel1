@@ -350,10 +350,8 @@ public class TIEApiSteps {
     @Then("^Added trainset is removed$")
     public void checkTrainsetIsRemoved(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        waitFor(1000);
-        given()
-                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
-        when()
+        waitFor(2000);
+       when()
                 .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                         String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
         then()
