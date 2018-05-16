@@ -8,6 +8,7 @@ import driverManager.DriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.html5.Location;
 import org.openqa.selenium.html5.LocationContext;
+import org.testng.asserts.SoftAssert;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -96,6 +97,11 @@ public class WidgetVisibilitySteps {
         List<String> territory = getCorrectTerritory(territoryConfig);
         ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory.get(0), true,
                 territory.get(1), false);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Given("^Widget is disabled for (.*) territory but is enabled for (.*) User's country$")
