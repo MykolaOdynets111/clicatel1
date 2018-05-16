@@ -62,24 +62,12 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Chat icon is not visible$")
     public void isChatIconIsNotVisible(){
-        String ip=null;
-        try {
-            ip = String.valueOf(InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        Assert.assertFalse(getMainPage().isChatIconShown(), "Chat icon is visible. IP: "+ip+"");
+        Assert.assertFalse(getMainPage().isChatIconShown(), "Chat icon is visible.");
     }
 
     @Then("^Chat icon is visible$")
     public void isChatIconIsVisible(){
-        String ip=null;
-        try {
-            ip = String.valueOf(InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        Assert.assertTrue(getMainPage().isChatIconShown(), "Chat icon is not visible. IP: "+ip+"");
+        Assert.assertTrue(getMainPage().isChatIconShown(), "Chat icon is not visible.");
     }
 
     @When("^User enter (.*) into widget input field$")

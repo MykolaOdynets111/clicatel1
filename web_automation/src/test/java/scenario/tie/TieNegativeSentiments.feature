@@ -9,10 +9,10 @@ Feature: TIE should give correct NEGATIVE sentiments
 
     Examples:
       |user_message                                                   |
-      |you need to get way more ATMs in Cape Town                     |
+#      |you need to get way more ATMs in Cape Town                     |
       |Hate your banking                                              |
       |my money was stolen                                            |
       |Why don't you offer business accounts                          |
       |why can't i view my balance in your app?                       |
-      |What if I don't have proof of residential address?             |
+#      |What if I don't have proof of residential address?             |
 
