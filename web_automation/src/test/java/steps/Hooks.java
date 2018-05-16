@@ -50,9 +50,9 @@ public class Hooks implements JSHelper{
                 }
                 DriverFactory.openUrl();
                 // Setting up coordinates of Lviv, Ukraine into browser
-                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-                    setUpGeolocation("49.8397", "24.0297");
-                }
+//                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+//                    setUpGeolocation("49.8397", "24.0297");
+//                }
             }
             if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
