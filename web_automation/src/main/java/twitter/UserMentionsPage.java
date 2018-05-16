@@ -48,18 +48,12 @@ public class UserMentionsPage extends AbstractPage {
         }
     }
 
-    public String getAgentReply(){
-        if(timelineElemements.size()==0) {
-            Assert.assertTrue(false, "Tweet response is not shown");
-        }
-        return new TimelineTweet(timelineElemements.get(0)).getTweetText();
-    }
 
     public String getReplyIfShown(int wait, String answerSource){
         try {
-            waitForElementToBeVisibleByCss(newNotificationIcon, wait);
+            waitForElementToBeVisibleByCss(newTweetsButon, wait);
+            findElemByCSS(newTweetsButon).click();
         } catch (TimeoutException e){}
-        notificationsIcon.click();
         waitForElementToBeVisible(timeline);
         if(timelineElemements.size()==0) {
             Assert.assertTrue(false, "Tweet response is not shown");

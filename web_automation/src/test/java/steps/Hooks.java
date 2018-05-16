@@ -176,6 +176,8 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) {
 
         }
+        TwitterAPI.deleteToTestUserTweets();
+
     }
 
     private void endTieFlow() {

@@ -66,7 +66,7 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(20, "touch"), expectedAnswer);
+        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(40, "touch"), expectedAnswer);
     }
 
     @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
