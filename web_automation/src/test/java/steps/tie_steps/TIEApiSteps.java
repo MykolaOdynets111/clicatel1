@@ -337,7 +337,6 @@ public class TIEApiSteps {
     @Then("^(.*) field with (.*) value is removed from tenant config$")
     public void verifyRemovingItemFromConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        waitFor(1000);
         when()
                 .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                         String.format(Endpoints.TIE_CONFIG, newTenant)).
@@ -350,7 +349,6 @@ public class TIEApiSteps {
     @Then("^Added trainset is removed$")
     public void checkTrainsetIsRemoved(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        waitFor(2000);
        when()
                 .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                         String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
@@ -420,6 +418,7 @@ public class TIEApiSteps {
                 .post(url).
         then()
                 .statusCode(200);
+        waitFor(4000);
     }
 
     // ============================ NER ============================ //
