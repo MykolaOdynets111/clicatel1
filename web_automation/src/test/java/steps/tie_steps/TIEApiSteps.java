@@ -351,23 +351,11 @@ public class TIEApiSteps {
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                 String.format(Endpoints.TIE_GET_TRAINSET, newTenant);
-        boolean result = false;
-        for(int i =0; i<20; i++){
-            Response resp = get(url);
-            result = resp.statusCode()==200 & resp.jsonPath().getList("intent_trainset").size()==0;
-            if (result) {
-                break;
-            } else {
-                waitFor(1000);
-            }
-        }
-        Assert.assertTrue(result);
-//       when()
-//                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-//                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
-//        then()
-//                .statusCode(200)
-//                .body("intent_trainset", everyItem(isEmptyOrNullString()));
+       when()
+                .get(url).
+        then()
+                .statusCode(200)
+                .body("intent_trainset", everyItem(isEmptyOrNullString()));
     }
 
     @Then("^I receives response on my input (.*)$")
