@@ -251,7 +251,7 @@ public class TIEApiSteps {
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(60000);
+            Thread.sleep(70000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -349,12 +349,25 @@ public class TIEApiSteps {
     @Then("^Added trainset is removed$")
     public void checkTrainsetIsRemoved(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-       when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
-        then()
-                .statusCode(200)
-                .body("intent_trainset", everyItem(isEmptyOrNullString()));
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_GET_TRAINSET, newTenant);
+        boolean result = false;
+        for(int i =0; i<20; i++){
+            Response resp = get(url);
+            result = resp.statusCode()==200 & resp.jsonPath().getList("intent_trainset").size()==0;
+            if (result) {
+                break;
+            } else {
+                waitFor(1000);
+            }
+        }
+        Assert.assertTrue(result);
+//       when()
+//                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+//                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
+//        then()
+//                .statusCode(200)
+//                .body("intent_trainset", everyItem(isEmptyOrNullString()));
     }
 
     @Then("^I receives response on my input (.*)$")
