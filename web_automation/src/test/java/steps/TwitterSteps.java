@@ -66,7 +66,8 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(40, "touch"), expectedAnswer);
+        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(70, "touch"), expectedAnswer,
+                "Expected tweet answer is missing after 70 secs wait");
     }
 
     @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
@@ -74,7 +75,8 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertTrue(getUserMentionsPage().verifyFromAgentTweetIsShown(40, expectedAnswer));
+        Assert.assertTrue(getUserMentionsPage().verifyFromAgentTweetIsShown(50, expectedAnswer),
+                "Expected tweet answer from the agent is missing after 50 secs wait");
 
     }
 

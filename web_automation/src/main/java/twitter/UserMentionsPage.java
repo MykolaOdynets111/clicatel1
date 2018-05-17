@@ -24,7 +24,8 @@ public class UserMentionsPage extends AbstractPage {
     @FindBy(xpath = "//span[text()='Notifications']")
     private WebElement notificationsIcon;
 
-    private String fromAgentResponse = "//li[contains(@class,'stream-item')]//p[text()='%s']";
+    private String toUserResponse = "//li[contains(@class,'stream-item')]//p[text()='%s']";
+
 
     private String newTweetsButon = "button.new-tweets-bar";
 
@@ -41,7 +42,7 @@ public class UserMentionsPage extends AbstractPage {
         } catch (TimeoutException e){}
 
         try {
-            waitForElementToBeVisibleByXpath(String.format(fromAgentResponse, agentREsponse),wait);
+            waitForElementToBeVisibleByXpath(String.format(toUserResponse, agentREsponse),wait);
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -53,15 +54,14 @@ public class UserMentionsPage extends AbstractPage {
         try {
             waitForElementToBeVisibleByCss(newTweetsButon, wait);
             findElemByCSS(newTweetsButon).click();
-        } catch (TimeoutException e){}
-        waitForElementToBeVisible(timeline);
-        if(timelineElemements.size()==0) {
-            Assert.assertTrue(false, "Tweet response is not shown");
+            waitForElementToBeVisible(timeline);
+//          if(timelineElemements.size()==0) {
+//              Assert.assertTrue(false, "Tweet response is not shown");
+//          }
+            return new TimelineTweet(timelineElemements.get(1)).getTweetText();
+        } catch (TimeoutException e){
+            return "no new tweets";
         }
-        if(answerSource.equalsIgnoreCase("agent")){
-            return new TimelineTweet(timelineElemements.get(0)).getTweetText();
-        }
-        return new TimelineTweet(timelineElemements.get(1)).getTweetText();
 }
 
     public OpenedTweet clickTimeLIneMentionWithText(String expectedText){
