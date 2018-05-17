@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="TIE Suite">
-    <test name="Acceptance test">
+    <test name="Acceptance test" parallel="instances" thread-count="6">
         <classes>
             <class name="runner.RunTIETest" />
         </classes>
