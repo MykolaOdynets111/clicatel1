@@ -171,6 +171,7 @@ public class Hooks implements JSHelper{
 
     private void endTwitterFlow() {
         TwitterAPI.deleteToTestUserTweets();
+        TwitterAPI.deleteTweetsFromTestUser();
         try {
             DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
 //            dmWindow.sendUserMessage("end");
@@ -178,8 +179,6 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) {
 
         }
-        TwitterAPI.deleteTweetsFromTestUser();
-        TwitterAPI.deleteToTestUserTweets();
     }
 
     private void endTieFlow() {

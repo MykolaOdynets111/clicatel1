@@ -48,14 +48,14 @@ public class TwitterAPI {
 
 
     public static void deleteTweetsFromTestUser(){
-        Twitter testUserYwitter = getTestUserTwitter();
+        Twitter testUserTwitter = getTestUserTwitter();
         List<Status> allTweets = new ArrayList<>();
         try {
-            allTweets = testUserYwitter.getHomeTimeline();
+            allTweets = testUserTwitter.getHomeTimeline();
             allTweets.stream().map(e -> e.getId()).collect(Collectors.toList())
                     .stream().forEach(e -> {
                 try {
-                    getTwitter().destroyStatus(e);
+                    testUserTwitter.destroyStatus(e);
                 } catch (TwitterException e1) {
                     e1.printStackTrace();
                 }
