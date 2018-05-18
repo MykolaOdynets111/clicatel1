@@ -30,7 +30,40 @@ public class TwitterAPI {
         }
     }
 
+    private static Twitter getTestUserTwitter() {
+        if (twitter==null) {
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+                    .setOAuthConsumerKey("0Bil1fRe3OqOaUsiZVAvFB7Ob")
+                    .setOAuthConsumerSecret("fBAnImckv1WBDH6bLKZPYiPZAZPaVcbmXcb3puUgg1xn4cazZH")
+                    .setOAuthAccessToken("979311039996157952-70Xpy1xN1IM6hu8JpRvIOfLogNrd76Q")
+                    .setOAuthAccessTokenSecret("7Q9PZxChbEzSW1FRWvocWV1ieF8uhAY9APTPK2970Is4b");
+            TwitterFactory tf = new TwitterFactory(cb.build());
+            twitter = tf.getInstance();
+            return twitter;
+        } else {
+            return twitter;
+        }
+    }
 
+
+    public static void deleteTweetsFromTestUser(){
+        Twitter testUserYwitter = getTestUserTwitter();
+        List<Status> allTweets = new ArrayList<>();
+        try {
+            allTweets = testUserYwitter.getHomeTimeline();
+            allTweets.stream().map(e -> e.getId()).collect(Collectors.toList())
+                    .stream().forEach(e -> {
+                try {
+                    getTwitter().destroyStatus(e);
+                } catch (TwitterException e1) {
+                    e1.printStackTrace();
+                }
+            });
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static List<Status> getAllTweetsToTestUser(){
         List<Status> toTestUserTweets = new ArrayList<>();

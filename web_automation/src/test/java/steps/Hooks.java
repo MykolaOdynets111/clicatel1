@@ -25,6 +25,7 @@ import touch_pages.pages.Widget;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
+import twitter4j.Twitter;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
@@ -177,8 +178,8 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) {
 
         }
+        TwitterAPI.deleteTweetsFromTestUser();
         TwitterAPI.deleteToTestUserTweets();
-
     }
 
     private void endTieFlow() {
