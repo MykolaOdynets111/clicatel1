@@ -32,19 +32,11 @@ public class TIEApiSteps {
         return NEW_TENANT_NAMES;
     }
 
-    public static void clearMapWithTenantsNames(){
-        NEW_TENANT_NAMES.clear();
-    }
-
     private static String createNewTenantName() {
         return "testing"+ System.currentTimeMillis();
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
-
-    public TieNERItem getNerDataSet(){
-        return  NER_DATA_SET;
-    }
 
     // ======================= Chats ======================== //
 
