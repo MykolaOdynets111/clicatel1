@@ -317,6 +317,7 @@ public class TIEApiSteps {
                         String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
         then()
                 .statusCode(200);
+        waitFor(10000);
     }
 
     @Then("^Trainset is added for newly created tenant$")
