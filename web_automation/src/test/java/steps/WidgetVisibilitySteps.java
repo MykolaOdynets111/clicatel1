@@ -78,6 +78,8 @@ public class WidgetVisibilitySteps {
         }
     }
 
+
+
     private List<String> getCorrectTerritory(List<String> territories){
         List<String> territory = new ArrayList<>();
         if (territories.get(0).equalsIgnoreCase("My territory")&ConfigManager.isRemote()){
@@ -94,11 +96,18 @@ public class WidgetVisibilitySteps {
         return territory;
     }
 
-    @Given("^Widget is turned off for (.*) country$")
-    public void turnOffWidgetForCountry(List<String> territoryConfig){
-        List<String> territory = getCorrectTerritory(territoryConfig);
-        ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory.get(0), true,
-                territory.get(1), false);
+    @Given("^Widget is turned off for my country only$")
+    public void turnOffWidgetForCountry(){
+        String territory, country;
+        if(ConfigManager.isRemote()){
+            territory="North America";
+            country="United States";
+        } else{
+            territory="Europe";
+            country="Ukraine";
+        }
+        ApiHelper.setAvailabilityForTerritoryAndCountry(Tenants.getTenantUnderTestOrgName(), territory, true,
+                country, false);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

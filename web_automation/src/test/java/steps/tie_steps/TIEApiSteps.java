@@ -251,7 +251,7 @@ public class TIEApiSteps {
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(60000);
+            Thread.sleep(70000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -317,6 +317,7 @@ public class TIEApiSteps {
                         String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
         then()
                 .statusCode(200);
+        waitFor(10000);
     }
 
     @Then("^Trainset is added for newly created tenant$")
@@ -349,9 +350,10 @@ public class TIEApiSteps {
     @Then("^Added trainset is removed$")
     public void checkTrainsetIsRemoved(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_GET_TRAINSET, newTenant);
        when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
+                .get(url).
         then()
                 .statusCode(200)
                 .body("intent_trainset", everyItem(isEmptyOrNullString()));
