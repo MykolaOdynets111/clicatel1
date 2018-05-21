@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1526913052291" stop="1526913142177" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Testing TIE APIs (Trainings)</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1526913052297" stop="1526913137001" status="passed">
+            <name>TIE API about all trainings should work</name>
+            <title>TIE API about all trainings should work</title>
+            <description type="text">        API GET /tenants/all/train</description>
+            <steps>
+                <step start="1526913052304" stop="1526913052720" status="passed">
+                    <name>Given Listener for logging request and response is ready</name>
+                    <title>Given Listener for logging request and response is ready</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913052721" stop="1526913068208" status="passed">
+                    <name>When I want to get trainings for all tenants response status should be 200 and body is not empty</name>
+                    <title>When I want to get trainings for all tenants response status should be 200 and body is not empty</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="TIE API about all trainings should work"/>
+                <label name="feature" value="Testing TIE APIs (Trainings)"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="22693@unassigned.pool-1-thread-2(13)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1526913137023" stop="1526913138935" status="passed">
+            <name>TIE should return training for existed tenant</name>
+            <title>TIE should return training for existed tenant</title>
+            <description type="text">        API GET /tenants/&lt;tenant_name&gt;/train</description>
+            <steps>
+                <step start="1526913137024" stop="1526913137024" status="passed">
+                    <name>Given Listener for logging request and response is ready</name>
+                    <title>Given Listener for logging request and response is ready</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913137024" stop="1526913137428" status="passed">
+                    <name>When I want to get trainings for generalbank tenant response status should be 200 and body is not empty</name>
+                    <title>When I want to get trainings for generalbank tenant response status should be 200 and body is not empty</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="TIE should return training for existed tenant"/>
+                <label name="feature" value="Testing TIE APIs (Trainings)"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="22693@unassigned.pool-1-thread-2(13)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1526913138936" stop="1526913142175" status="broken">
+            <name>User should be able to fill training set with new sample text for selected intent and schedule training for created tenant</name>
+            <title>User should be able to fill training set with new sample text for selected intent and schedule training for created tenant</title>
+            <description type="text">        API POST /tenats/&lt;tenant_name&gt;/train
+        API GET /tenants/&lt;tenant_name&gt;/train</description>
+            <failure>
+                <message>Test was interrupted</message>
+            </failure>
+            <labels>
+                <label name="story" value="User should be able to fill training set with new sample text for selected intent and schedule training for created tenant"/>
+                <label name="feature" value="Testing TIE APIs (Trainings)"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="22693@unassigned.pool-1-thread-2(13)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1526913052291" stop="1526913142175" status="broken">
+            <name>Testing TIE APIs (Trainings)</name>
+            <title>Testing TIE APIs (Trainings)</title>
+            <failure>
+                <message>Test suite was interrupted, some test cases may be lost</message>
+            </failure>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Testing TIE APIs (Trainings)"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

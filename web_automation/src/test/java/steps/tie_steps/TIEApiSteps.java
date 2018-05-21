@@ -20,15 +20,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.Matchers.*;
 
 public class TIEApiSteps {
 
-    private static Map<Long, String> NEW_TENANT_NAMES = new HashMap<>();
+    private static Map<Long, String> NEW_TENANT_NAMES = new ConcurrentHashMap<>();
 
     public static Map<Long, String> getNewTenantNames() {
         return NEW_TENANT_NAMES;
+    }
+
+    public static void clearMapWithTenantsNames(){
+        NEW_TENANT_NAMES.clear();
     }
 
     private static String createNewTenantName() {

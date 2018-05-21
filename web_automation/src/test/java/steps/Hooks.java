@@ -137,15 +137,19 @@ public class Hooks implements JSHelper{
     }
 
     private void endTieFlow() {
-        if (TIEApiSteps.getNewTenantNames() != null) {
-            for (String tenant : TIEApiSteps.getNewTenantNames().values()) {
-                String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
-                        String.format(Endpoints.TIE_DELETE_TENANT, tenant);
-                given().delete(url);
+        if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
+            for(long thread : TIEApiSteps.getNewTenantNames().keySet()){
+                if (thread==Thread.currentThread().getId()){
+                    String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
+                            String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
+                    given().delete(url);
+                    TIEApiSteps.getNewTenantNames().remove(thread);
+                }
             }
+        }
         logRequest(BaseTieSteps.request);
         logResponse(BaseTieSteps.response);
-        }
+
     }
 
 

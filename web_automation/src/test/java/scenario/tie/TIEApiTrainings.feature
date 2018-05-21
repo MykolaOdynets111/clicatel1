@@ -1,5 +1,5 @@
 @tie
-Feature: Testing TIE APIs
+Feature: Testing TIE APIs (Trainings)
 
   Background:
     Given Listener for logging request and response is ready

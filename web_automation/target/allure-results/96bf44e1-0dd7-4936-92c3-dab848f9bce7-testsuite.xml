@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1526913739350" stop="1526913960923" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Testing TIE APIs</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1526913739356" stop="1526913883734" status="passed">
+            <name>User should be able to create and remove new tenant and not be able to create duplicated tenant</name>
+            <title>User should be able to create and remove new tenant and not be able to create duplicated tenant</title>
+            <description type="text">API PUT /tenants/ data={'tenant': 'TESTONE'}
+API DELETE /tenants/?tenant=TESTONE</description>
+            <steps>
+                <step start="1526913739365" stop="1526913739797" status="passed">
+                    <name>Given Listener for logging request and response is ready</name>
+                    <title>Given Listener for logging request and response is ready</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913739798" stop="1526913741354" status="passed">
+                    <name>When I create new tenant with TIE API</name>
+                    <title>When I create new tenant with TIE API</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913741354" stop="1526913811354" status="passed">
+                    <name>And Wait for a minute</name>
+                    <title>And Wait for a minute</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913811355" stop="1526913812150" status="passed">
+                    <name>Then I receives response on my input check balance</name>
+                    <title>Then I receives response on my input check balance</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913812150" stop="1526913812540" status="passed">
+                    <name>When I try to create tenant with the same name I should receive 404 response code</name>
+                    <title>When I try to create tenant with the same name I should receive 404 response code</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913812540" stop="1526913812925" status="passed">
+                    <name>When I delete created tenant</name>
+                    <title>When I delete created tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913812925" stop="1526913882925" status="passed">
+                    <name>And Wait for a minute</name>
+                    <title>And Wait for a minute</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913882925" stop="1526913883353" status="passed">
+                    <name>Then I am not receiving the response for this tenant on check balance</name>
+                    <title>Then I am not receiving the response for this tenant on check balance</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="User should be able to create and remove new tenant and not be able to create duplicated tenant"/>
+                <label name="feature" value="Testing TIE APIs"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="23228@unassigned.pool-1-thread-2(11)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1526913883736" stop="1526913960922" status="passed">
+            <name>User should be able to clone tenant</name>
+            <title>User should be able to clone tenant</title>
+            <description type="text">API PUT /tenants/ data={'tenant': 'TESTONE', 'source_tenant':'generalbank'}</description>
+            <steps>
+                <step start="1526913883736" stop="1526913883737" status="passed">
+                    <name>Given Listener for logging request and response is ready</name>
+                    <title>Given Listener for logging request and response is ready</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913883737" stop="1526913889562" status="passed">
+                    <name>When I create a clone of generalbank tenant with TIE API</name>
+                    <title>When I create a clone of generalbank tenant with TIE API</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913889562" stop="1526913959563" status="passed">
+                    <name>And Wait for a minute</name>
+                    <title>And Wait for a minute</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1526913959563" stop="1526913960490" status="passed">
+                    <name>Then Config of cloned intent is the same as for generalbank</name>
+                    <title>Then Config of cloned intent is the same as for generalbank</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="User should be able to clone tenant"/>
+                <label name="feature" value="Testing TIE APIs"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="23228@unassigned.pool-1-thread-2(11)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Testing TIE APIs"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>
