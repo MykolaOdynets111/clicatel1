@@ -20,12 +20,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.Matchers.*;
 
 public class TIEApiSteps {
 
-    private static Map<Long, String> NEW_TENANT_NAMES = new HashMap<>();
+    private static Map<Long, String> NEW_TENANT_NAMES = new ConcurrentHashMap<>();
 
     public static Map<Long, String> getNewTenantNames() {
         return NEW_TENANT_NAMES;
@@ -36,10 +37,6 @@ public class TIEApiSteps {
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
-
-    public TieNERItem getNerDataSet(){
-        return  NER_DATA_SET;
-    }
 
     // ======================= Chats ======================== //
 
@@ -317,7 +314,7 @@ public class TIEApiSteps {
                         String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
         then()
                 .statusCode(200);
-        waitFor(10000);
+        waitFor(2500);
     }
 
     @Then("^Trainset is added for newly created tenant$")

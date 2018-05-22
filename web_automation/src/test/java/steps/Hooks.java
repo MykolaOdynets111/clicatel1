@@ -25,18 +25,11 @@ import touch_pages.pages.Widget;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
-import twitter4j.Twitter;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 
 public class Hooks implements JSHelper{
 
@@ -182,15 +175,19 @@ public class Hooks implements JSHelper{
     }
 
     private void endTieFlow() {
-        if (TIEApiSteps.getNewTenantNames() != null) {
-            for (String tenant : TIEApiSteps.getNewTenantNames().values()) {
-                String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
-                        String.format(Endpoints.TIE_DELETE_TENANT, tenant);
-                given().delete(url);
+        if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
+            for(long thread : TIEApiSteps.getNewTenantNames().keySet()){
+                if (thread==Thread.currentThread().getId()){
+                    String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
+                            String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
+                    given().delete(url);
+                    TIEApiSteps.getNewTenantNames().remove(thread);
+                }
             }
+        }
         logRequest(BaseTieSteps.request);
         logResponse(BaseTieSteps.response);
-        }
+
     }
 
 
