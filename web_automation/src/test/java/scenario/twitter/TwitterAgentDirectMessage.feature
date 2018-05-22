@@ -1,6 +1,6 @@
 @agent_to_user_conversation
 @twitter
-Feature: Communication with bot via direct messages
+Feature: Communication with agent via direct messages
 
   Background:
     Given I login as agent of General Bank Demo

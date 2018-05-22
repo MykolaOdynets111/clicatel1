@@ -167,7 +167,7 @@ public class Hooks implements JSHelper{
         TwitterAPI.deleteTweetsFromTestUser();
         try {
             DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
-//            dmWindow.sendUserMessage("end");
+            dmWindow.sendUserMessage("end");
             dmWindow.deleteConversation();
         } catch (WebDriverException e) {
 

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class TwitterAPI {
 
     private static Twitter twitter = null;
+    private static Twitter testUserTwitter = null;
 
     private static Twitter getTwitter() {
         if (twitter==null) {
@@ -31,7 +32,7 @@ public class TwitterAPI {
     }
 
     private static Twitter getTestUserTwitter() {
-        if (twitter==null) {
+        if (testUserTwitter==null) {
             ConfigurationBuilder cb = new ConfigurationBuilder();
             cb.setDebugEnabled(true)
                     .setOAuthConsumerKey("0Bil1fRe3OqOaUsiZVAvFB7Ob")
@@ -39,10 +40,10 @@ public class TwitterAPI {
                     .setOAuthAccessToken("979311039996157952-70Xpy1xN1IM6hu8JpRvIOfLogNrd76Q")
                     .setOAuthAccessTokenSecret("7Q9PZxChbEzSW1FRWvocWV1ieF8uhAY9APTPK2970Is4b");
             TwitterFactory tf = new TwitterFactory(cb.build());
-            twitter = tf.getInstance();
-            return twitter;
+            testUserTwitter = tf.getInstance();
+            return testUserTwitter;
         } else {
-            return twitter;
+            return testUserTwitter;
         }
     }
 

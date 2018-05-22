@@ -12,3 +12,5 @@ Feature: User should be redirected to the agent when sends negative message into
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
     Then Conversation area becomes active with Hate your banking user's message
+    When Agent click on new conversation request from twitter
+    Then Conversation area becomes active with Hate your banking user's message

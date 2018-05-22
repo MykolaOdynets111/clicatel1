@@ -52,17 +52,17 @@ public class UserMentionsPage extends AbstractPage {
 
     public String getReplyIfShown(int wait, String answerSource){
         try {
+            waitForElementToBeVisibleByXpath(newNotificationIcon, wait);
+            notificationsIcon.click();
+        } catch (TimeoutException e){
             waitForElementToBeVisibleByCss(newTweetsButon, wait);
             findElemByCSS(newTweetsButon).click();
-            waitForElementToBeVisible(timeline);
-//          if(timelineElemements.size()==0) {
-//              Assert.assertTrue(false, "Tweet response is not shown");
-//          }
-            return new TimelineTweet(timelineElemements.get(1)).getTweetText();
-        } catch (TimeoutException e){
-            return "no new tweets";
         }
-}
+
+        waitForElementToBeVisible(timeline);
+        return new TimelineTweet(timelineElemements.get(1)).getTweetText();
+
+    }
 
     public OpenedTweet clickTimeLIneMentionWithText(String expectedText){
         waitForElementsToBeVisible(timelineElemements,5);
