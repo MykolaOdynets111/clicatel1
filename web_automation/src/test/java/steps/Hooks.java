@@ -16,6 +16,9 @@ import interfaces.JSHelper;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
@@ -23,10 +26,7 @@ import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.delete;
@@ -110,6 +110,7 @@ public class Hooks implements JSHelper{
                 Widget widget = new Widget();
                 widget.getWidgetFooter().enterMessage("end").sendMessage();
                 widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
+                touchConsoleOutput();
             }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
@@ -173,5 +174,15 @@ public class Hooks implements JSHelper{
         byte[] array = log.toByteArray();
         log.reset();
         return array;
+    }
+
+    @Attachment
+    private String touchConsoleOutput(){
+        StringBuilder result = new StringBuilder();
+        LogEntries logEntries = DriverFactory.getInstance().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+        }
+        return  result.toString();
     }
 }
