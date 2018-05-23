@@ -1,5 +1,5 @@
 @twitter
-Feature: User should be able to receive answer on his tweet
+Feature: Communication with bot via tweet
 
   Background:
     Given Open twitter page of General Bank Demo

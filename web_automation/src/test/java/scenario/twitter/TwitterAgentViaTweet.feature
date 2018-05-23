@@ -1,6 +1,6 @@
 @agent_to_user_conversation
 @twitter
-Feature: User should be able to receive answer on his tweet from the agent
+Feature: Communication with agent via tweet
 
   Background:
     Given I login as agent of General Bank Demo

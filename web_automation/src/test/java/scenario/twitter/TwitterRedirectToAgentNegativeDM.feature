@@ -1,6 +1,6 @@
 @agent_to_user_conversation
 @twitter
-Feature: User should be redirected to the agent when sends negative message into DM
+Feature: Redirection to the agent after negative DM message
 
   Background:
     Given I login as agent of General Bank Demo

@@ -1,6 +1,6 @@
 @agent_to_user_conversation
 @twitter
-Feature: User be redirected to the agent after sending negative tweet
+Feature: Redirection to the agent after negative tweet
 
   Background:
     Given I login as agent of General Bank Demo
