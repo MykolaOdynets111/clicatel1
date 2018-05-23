@@ -55,8 +55,10 @@ public class UserMentionsPage extends AbstractPage {
             waitForElementToBeVisibleByXpath(newNotificationIcon, wait);
             notificationsIcon.click();
         } catch (TimeoutException e){
-            waitForElementToBeVisibleByCss(newTweetsButon, wait);
-            findElemByCSS(newTweetsButon).click();
+            try{
+            waitForElementToBeVisibleByCss(newTweetsButon, wait/10);
+            findElemByCSS(newTweetsButon).click();}
+            catch (TimeoutException e1){}
         }
 
         waitForElementToBeVisible(timeline);

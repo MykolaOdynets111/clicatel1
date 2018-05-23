@@ -3,6 +3,7 @@ package driverManager;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 import org.openqa.selenium.Dimension;
@@ -13,6 +14,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import io.github.bonigarcia.wdm.ChromeDriverManager;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 
 public enum DriverType {
 
@@ -21,9 +25,11 @@ public enum DriverType {
 
         @Override
 		public MutableCapabilities getDesiredCapabilities() {
-            String fs = File.separator;
+            LoggingPreferences logPrefs = new LoggingPreferences();
+            logPrefs.enable(LogType.BROWSER, Level.ALL);
 
             ChromeOptions options = new ChromeOptions();
+            options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type");
             options.addArguments("start-maximized");
             options.addArguments("disable-web-security");
