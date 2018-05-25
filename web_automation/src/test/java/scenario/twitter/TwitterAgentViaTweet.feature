@@ -7,6 +7,9 @@ Feature: Communication with agent via tweet
     Given Open twitter page of General Bank Demo
     Given Open new tweet window
 
+  # ToDo: Check how tweet response from agent is coming.
+  # ToDo: It should be as comment on the user's first post ("connect to support"), not new tweet
+
   Scenario: Receiving answer on tweet from the agent
     When User sends tweet regarding "connect to support"
     Then Agent has new conversation request from twitter user

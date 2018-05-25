@@ -10,6 +10,8 @@ public class Header extends AbstractUIElement {
     @FindBy(css = "button#top-menu-dropdown")
     private WebElement topMenuDropdown;
 
+    private String topMenuDropdownCSS = "button#top-menu-dropdown";
+
     @FindBy(xpath = ".//a[text()='Log out']")
     private WebElement logOutButton;
 
@@ -18,6 +20,7 @@ public class Header extends AbstractUIElement {
         click(topMenuDropdown);
         waitForElementToBeVisible(logOutButton, 6);
         logOutButton.click();
+        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6);
         return this;
     }
 

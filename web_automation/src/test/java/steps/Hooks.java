@@ -122,10 +122,11 @@ public class Hooks implements JSHelper{
         }
         try {
             if (scenario.isFailed()) {
+                touchConsoleOutput();
                 Widget widget = new Widget();
                 widget.getWidgetFooter().enterMessage("end").sendMessage();
                 widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
-                touchConsoleOutput();
+
             }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());

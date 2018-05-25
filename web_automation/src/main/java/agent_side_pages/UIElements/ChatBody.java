@@ -1,6 +1,7 @@
 package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -31,18 +32,23 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage) {
-        waitForElementsToBeVisible(fromUserMessages, 3);
-        for (int i = 0; i < 35; i++) {
-            if (checkThatExpectedUserMessageOnAgenyDesk(usrMessage)) {
-                return true;
+        try {
+
+            waitForElementsToBeVisible(fromUserMessages, 10);
+            for (int i = 0; i < 35; i++) {
+                if (checkThatExpectedUserMessageOnAgenyDesk(usrMessage)) {
+                    return true;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            return false;
+        } catch(TimeoutException e1){
+            return false;
         }
-        return false;
     }
 
 
