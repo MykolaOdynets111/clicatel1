@@ -63,7 +63,7 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
 
-            finishAgentFlowIfExists();
+            finishAgentFlowIfExists(scenario);
             takeScreenshot();
             endTouchFlow(scenario);
         }
@@ -92,10 +92,13 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
-    private void finishAgentFlowIfExists() {
+    private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isSecondDriverExists()) {
             takeScreenshotFromSecondDriver();
             logoutAgent();
+            if (scenario.getSourceTagNames().contains("@suggestions")){
+                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
+            }
             DriverFactory.closeSecondBrowser();
         }
     }

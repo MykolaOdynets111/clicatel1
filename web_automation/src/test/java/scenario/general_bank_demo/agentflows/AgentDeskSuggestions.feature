@@ -1,8 +1,10 @@
+#@suggestions
 #Commented out due to TPORT-1757 story
 #Feature: Agent suggestions
 #
 #  Background:
-#    Given I login as agent of General Bank Demo
+#    Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo
+#    And I login as agent of General Bank Demo
 #    Given User profile for generalbank is created
 #    Given User select General Bank Demo tenant
 #    And Click chat icon
