@@ -17,6 +17,8 @@ public class TwitterTenantPage extends AbstractPage {
     @FindBy(css = "button.NewTweetButton")
     private WebElement newTweetButton;
 
+    private String tweetSEndPopupCss = "alert-messages.js-message-drawer-visible";
+
     private DMWindow dmWindow;
     private TweetWindow tweetWindow;
 
@@ -29,8 +31,9 @@ public class TwitterTenantPage extends AbstractPage {
     }
 
     public void openDMWindow() {
-        waitForElementToBeVisible(messageButton, 5);
-        messageButton.click();
+        waitForElementToBeInVisibleByCss(tweetSEndPopupCss, 8);
+        waitForElementToBeClickable(messageButton, 5);
+        executeJSclick(messageButton);
         waitForElementToBeVisible(directConversationArea, 5);
     }
 

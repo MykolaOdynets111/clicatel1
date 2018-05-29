@@ -42,6 +42,12 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOf(element));
     }
 
+    default WebElement waitForElementToBeClickable(WebElement element, int time){
+        return initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(element));
+    }
+
     default List<WebElement> waitForElementsToBeClickable(List<WebElement> elements){
         WebDriverWait wait = initWait();
         for(WebElement element: elements) {
@@ -99,6 +105,12 @@ public interface WebWait {
         initWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(css)));
+    }
+
+    default void waitForElementToBeInVisibleByCss(String css, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
     }
 
     default void waitForElementsToBeVisibleByXpath(String xpath, int time){
