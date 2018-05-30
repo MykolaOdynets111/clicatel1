@@ -84,7 +84,10 @@ public class AgentConversationSteps implements JSHelper{
         }
         String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(
                                          Intents.getIntentWithMaxConfidence(userMessage).getIntent());
-        Assert.assertEquals(actualSuggestion, expectedMessage, "Expected suggestion in input field is not as expected");
+        if (expectedMessage.contains("${firstName}")){
+            expectedMessage = expectedMessage.replace("${firstName}", getUserNameFromLocalStorage());
+        }
+        Assert.assertEquals(actualSuggestion, expectedMessage, "Suggestion in input field is not as expected");
     }
 
 

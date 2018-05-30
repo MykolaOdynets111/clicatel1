@@ -216,7 +216,8 @@ public class ApiHelper {
 
     public static void updateFeatureStatus(String tenantOrgName, String feature, String status){
         String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
-        String url = Endpoints.BASE_INTERNAL_ENDPOINT +
+        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv()) +
                 String.format(Endpoints.INTERNAL_FEATURE_STATE,tenantID, feature, status);
+        RestAssured.put(url);
     }
 }

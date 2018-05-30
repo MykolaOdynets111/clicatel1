@@ -113,8 +113,7 @@ public class Hooks implements JSHelper{
                 touchConsoleOutput();
                 Widget widget = new Widget();
                 widget.getWidgetFooter().enterMessage("end").sendMessage();
-                widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
-
+//                widget.getWidgetConversationArea().isTextResponseShownFor("end", 3);
             }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
