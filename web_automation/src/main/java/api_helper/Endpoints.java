@@ -31,6 +31,8 @@ public class Endpoints {
 
     public static String INTERNAL_TENANT_CONFIG = "tenants/%s/config ";
 
+    public static String INTERNAL_FEATURE_STATE = "features/tenants/%s/%s/%s";
+
      // ==================  PORTAL ============== //
 
     public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com";

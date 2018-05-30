@@ -77,7 +77,7 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@twitter")){
 
 
-            finishAgentFlowIfExists();
+            finishAgentFlowIfExists(scenario);
             takeScreenshot();
             endTouchFlow(scenario);
         }
@@ -115,6 +115,17 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
+    private void finishAgentFlowIfExists(Scenario scenario) {
+        if (DriverFactory.isSecondDriverExists()) {
+            takeScreenshotFromSecondDriver();
+            logoutAgent();
+            if (scenario.getSourceTagNames().contains("@suggestions")){
+                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
+            }
+            DriverFactory.closeSecondBrowser();
+        }
+    }
+
     private void endTouchFlow(Scenario scenario) {
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
@@ -125,8 +136,7 @@ public class Hooks implements JSHelper{
                 touchConsoleOutput();
                 Widget widget = new Widget();
                 widget.getWidgetFooter().enterMessage("end").sendMessage();
-                widget.getWidgetConversationArea().isTextResponseShownFor("end", 5);
-
+//                widget.getWidgetConversationArea().isTextResponseShownFor("end", 3);
             }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
