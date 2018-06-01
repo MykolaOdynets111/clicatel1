@@ -20,12 +20,11 @@ import java.util.List;
         monochrome = true,
         features ="src/test/java/scenario/tie",
         glue ="steps")
-public class RunTIETest extends SuiteCucumberRunner {
-
+public class RunTIETest{
 
         @Factory
         public Object[] features() {
-                List<TestNgCucumberFeatureRunner> objects = new ArrayList<>();
+                List objects = new ArrayList<>();
                 TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
                 for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
                         objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
