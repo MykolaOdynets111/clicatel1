@@ -151,8 +151,8 @@ public class Hooks implements JSHelper{
                 }
             }
         }
-        logRequest(BaseTieSteps.request);
-        logResponse(BaseTieSteps.response);
+//        logRequest(BaseTieSteps.request);
+//        logResponse(BaseTieSteps.response);
 
     }
 
