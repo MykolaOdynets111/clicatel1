@@ -36,15 +36,19 @@ public class BaseTieSteps {
 
     @Then("^TIE sentiment is (.*) when I send '(.*)' for (.*) tenant$")
     public void verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
+        SoftAssert soft = new SoftAssert();
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }
         String actualSentiment = resp.getBody().jsonPath().get("sentiment_verdict");
+        List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
         if(expectedSentiment.toLowerCase().contains("or")){
             List<String> sentiments = Arrays.asList(expectedSentiment.toLowerCase().split(" or "));
-            Assert.assertTrue(actualSentiment.equalsIgnoreCase(sentiments.get(0))||actualSentiment.equalsIgnoreCase(sentiments.get(1)),
+            soft.assertTrue(actualSentiment.equalsIgnoreCase(sentiments.get(0))||actualSentiment.equalsIgnoreCase(sentiments.get(1)),
             "Sentiment for \""+userMessage+"\" message is not as expected: '"+expectedSentiment+"'. But found: "+actualSentiment+"");
+            soft.assertTrue(intentsList.size()==1, "There are more than 1 intent on '"+userMessage+"' user message");
+        soft.assertAll();
         } else{
             Assert.assertEquals(actualSentiment, expectedSentiment,
                     "Sentiment for \""+userMessage+"\" message is not as expected");
