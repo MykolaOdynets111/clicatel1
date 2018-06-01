@@ -28,14 +28,14 @@ public class BaseTieSteps {
 
     @Given("Listener for logging request and response is ready")
     public void logRequests(){
-        PrintStream requestVar = new PrintStream(request, true);
-        PrintStream responseVar = new PrintStream(response, true);
-        RestAssured.filters(new ResponseLoggingFilter(LogDetail.ALL, responseVar),
-                new RequestLoggingFilter(LogDetail.ALL, requestVar));
+//        PrintStream requestVar = new PrintStream(request, true);
+//        PrintStream responseVar = new PrintStream(response, true);
+//        RestAssured.filters(new ResponseLoggingFilter(LogDetail.ALL, responseVar),
+//                new RequestLoggingFilter(LogDetail.ALL, requestVar));
     }
 
     @Then("^TIE sentiment is (.*) when I send '(.*)' for (.*) tenant$")
-    public void verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
+    public void  verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
         SoftAssert soft = new SoftAssert();
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
