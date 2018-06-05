@@ -37,6 +37,11 @@ public class TwitterSteps {
         getTwitterTenantPage().openDMWindow();
     }
 
+    @Given("^User closes DM window$")
+    public void closeDMWindow(){
+        getTwitterTenantPage().getDmWindow().closeDMWindow();
+    }
+
     @Given("^Open new tweet window$")
     public void openNewTweetWindow() {
         getTwitterTenantPage().openNewTweetWindow();

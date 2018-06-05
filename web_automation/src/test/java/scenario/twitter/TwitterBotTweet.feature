@@ -5,9 +5,7 @@ Feature: Communication with bot via tweet
     Given Open twitter page of General Bank Demo
     Given Open new tweet window
 
-  # ToDo: Check how tweet response from agent is coming.
-  # ToDo: It should be as comment on the user's first post ("connect to support"), not new tweet
-
   Scenario: Receiving answer on tweet
-    When User sends tweet regarding " see my account balance"
-    Then He has to receive "Hi , checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances." answer
+    When User sends tweet regarding "see my account balance"
+    Then Agent's answer arrives to twitter
+    And User has to receive "Hi , checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances." answer from the agent as a comment on his initial tweet see my account balance

@@ -25,6 +25,9 @@ public class DMWindow extends AbstractUIElement {
     @FindBy(xpath = "//li[contains(@class, 'DirectMessage--sent')]//p[contains(@class, 'tweet-text')]")
     private List<WebElement> userMessages;
 
+    @FindBy(css = "div.DMActivity--open div.DMActivity-toolbar span.Icon--close")
+    private WebElement closeDMButton;
+
 //    private DMUserMessage getTargetUserMessageElem(String userInput) {
 ////        waitForElementsToBeVisible(userMessages, 6);
 //        return new DMUserMessage(userMessages.stream().filter(e -> e.getText().equals(userInput))
@@ -43,6 +46,10 @@ public class DMWindow extends AbstractUIElement {
         waitForElementToBeVisible(findElemByCSS(deleteConversationConfirmButton));
         findElemByCSS(deleteConversationConfirmButton).click();
         waitForElementToBeInvisible(findElemByCSS(deleteConversationConfirmButton), 2);
+    }
+
+    public void closeDMWindow(){
+        closeDMButton.click();
     }
 
     public boolean isTextResponseForUserMessageShown(String userMessage){
