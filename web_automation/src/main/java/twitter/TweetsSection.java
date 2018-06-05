@@ -11,9 +11,8 @@ import twitter.uielements.TimelineTweet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserMentionsPage extends AbstractPage {
+public class TweetsSection extends TwitterHomePage {
 
-    private String newNotificationIcon="span.count.new-count";
 
     @FindBy(css = "ol.stream-items")
     private WebElement timeline;
@@ -21,8 +20,8 @@ public class UserMentionsPage extends AbstractPage {
     @FindBy(css = "li.stream-item")
     private List<WebElement> timelineElemements;
 
-    @FindBy(xpath = "//span[text()='Notifications']")
-    private WebElement notificationsIcon;
+    private String newCommentIcon = "//p[contains(text(), '%s')]//following::span[@class='ProfileTweet-actionCount ']";
+
 
     private String toUserResponse = "//li[contains(@class,'stream-item')]//p[text()='%s']";
 
@@ -35,25 +34,21 @@ public class UserMentionsPage extends AbstractPage {
         return openedTweet;
     }
 
-    public boolean verifyFromAgentTweetIsShown(int wait, String agentREsponse){
+    public boolean verifyFromAgentTweetArrives(int wait){
         try {
             waitForElementToBeVisibleByCss(newTweetsButon, wait);
             findElemByCSS(newTweetsButon).click();
-        } catch (TimeoutException e){}
-
-        try {
-            waitForElementToBeVisibleByXpath(String.format(toUserResponse, agentREsponse),wait);
             return true;
-        } catch (TimeoutException e) {
-            return false;
+        } catch (TimeoutException e){
+            return getTwitterHeader().waitForNewNotificationIconToBeShown(wait);
         }
     }
 
 
     public String getReplyIfShown(int wait, String answerSource){
         try {
-            waitForElementToBeVisibleByXpath(newNotificationIcon, wait);
-            notificationsIcon.click();
+            getTwitterHeader().waitForNewNotificationIconToBeShown(wait);
+            getTwitterHeader().clickNotificationsIcon();
         } catch (TimeoutException e){
             try{
             waitForElementToBeVisibleByCss(newTweetsButon, wait/10);
@@ -66,12 +61,16 @@ public class UserMentionsPage extends AbstractPage {
 
     }
 
-    public OpenedTweet clickTimeLIneMentionWithText(String expectedText){
+    public OpenedTweet clickTimeLineTweetWithText(String expectedText){
         waitForElementsToBeVisible(timelineElemements,5);
         timelineElemements.stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
                 .stream().filter(e -> e.getTweetText().equals(expectedText))
                 .findFirst().get().getWrappedElement().click();
         waitForElementToBeVisible(openedTweet);
         return getOpenedTweet();
+    }
+
+    public void waitFotResponseToCome(String targetTweet){
+
     }
 }

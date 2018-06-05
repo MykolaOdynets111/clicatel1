@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import twitter.uielements.DMWindow;
 import twitter.uielements.TweetWindow;
 
-public class TwitterTenantPage extends AbstractPage {
+public class TwitterTenantPage extends TwitterHomePage {
 
     @FindBy(css = "button.DMButton")
     private WebElement messageButton;

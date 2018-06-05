@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import twitter.TwitterHomePage;
 import twitter.TwitterTenantPage;
-import twitter.UserMentionsPage;
+import twitter.TweetsSection;
 import twitter.uielements.DMWindow;
 import twitter.uielements.OpenedTweet;
 import twitter.uielements.TweetWindow;
@@ -21,7 +21,7 @@ public class TwitterSteps {
     private TwitterTenantPage twitterTenantPage;
     private DMWindow dmWindow;
     private TweetWindow tweetWindow;
-    private UserMentionsPage userMentionsPage;
+    private TweetsSection tweetsSection;
     private OpenedTweet openedTweet;
 
     @Given("^Open twitter page of (.*)$")
@@ -66,23 +66,32 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertEquals(getUserMentionsPage().getReplyIfShown(70, "touch"), expectedAnswer,
+        Assert.assertEquals(getTweetsSection().getReplyIfShown(70, "touch"), expectedAnswer,
                 "Expected tweet answer is missing after 70 secs wait");
     }
 
-    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
-    public void verifyReceivingAnswerInTimelineFromAgent(String expectedAnswer){
-        if(expectedAnswer.length()>132){
-            expectedAnswer = expectedAnswer.substring(0,131);
-        }
-        Assert.assertTrue(getUserMentionsPage().verifyFromAgentTweetIsShown(50, expectedAnswer),
+//    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
+    @Then("^Agent's answer arrives to twitter$")
+    public void verifyReceivingAnswerInTimelineFromAgent(){
+//        if(expectedAnswer.length()>132){
+//            expectedAnswer = expectedAnswer.substring(0,131);
+//        }
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(50),
                 "Expected tweet answer from the agent is missing after 50 secs wait");
-
     }
+
+    @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
+    public void verifyFromAgentResponseAsACommentOnTweet(String expectedAgentMessage, String initialUserTweet){
+        getTwitterTenantPage().getTwitterHeader().openHomePage();
+        openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
+        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,5),
+                "Agent response "+expectedAgentMessage+" for user is not shown as comment for tweet");
+    }
+
 
     @When("^He clicks \"(.*)\" tweet$")
     public void openTweet(String expectedAnswer){
-        openedTweet = getUserMentionsPage().clickTimeLIneMentionWithText(expectedAnswer);
+        openedTweet = getTweetsSection().clickTimeLineTweetWithText(expectedAnswer);
     }
 
     @When("^Send \"(.*)\" reply into tweet$")
@@ -96,7 +105,7 @@ public class TwitterSteps {
         boolean result = false;
         for (int i =0; i < 10; i++){
             openedTweet.closeTweet();
-            openedTweet = getUserMentionsPage().clickTimeLIneMentionWithText(targetTweet);
+            openedTweet = getTweetsSection().clickTimeLineTweetWithText(targetTweet);
             if(openedTweet.ifAgentReplyShown(expectedResponse,1)){
                 result = true;
                 break;
@@ -151,12 +160,13 @@ public class TwitterSteps {
         }
     }
 
-    private UserMentionsPage getUserMentionsPage() {
-        if (userMentionsPage==null) {
-            userMentionsPage = new UserMentionsPage();
-            return userMentionsPage;
+    private TweetsSection getTweetsSection() {
+        if (tweetsSection ==null) {
+            tweetsSection = new TweetsSection();
+            return tweetsSection;
         } else{
-            return userMentionsPage;
+            return tweetsSection;
         }
     }
+
 }
