@@ -14,8 +14,7 @@ public class TwitterTenantPage extends TwitterHomePage {
     @FindBy(css = "div.DMDock-conversations")
     private WebElement directConversationArea;
 
-    @FindBy(css = "button.NewTweetButton")
-    private WebElement newTweetButton;
+    private String newTweetButtonCss = "button.NewTweetButton";
 
     private String tweetSEndPopupCss = "alert-messages.js-message-drawer-visible";
 
@@ -39,7 +38,7 @@ public class TwitterTenantPage extends TwitterHomePage {
 
 
     public void openNewTweetWindow() {
-        waitForElementToBeVisible(newTweetButton, 6);
-        newTweetButton.click();
+        waitForElementToBeVisibleByCss(newTweetButtonCss, 6);
+        findElemByCSS(newTweetButtonCss).click();
     }
 }
