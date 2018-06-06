@@ -3,6 +3,7 @@ package interfaces;
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -18,8 +19,13 @@ public interface WebActions extends WebWait {
     }
 
     default void inputText(WebElement element, String text){
-        waitForElementToBeClickable(element).clear();
-        element.sendKeys(text);
+        try {
+            waitForElementToBeClickable(element).clear();
+            element.sendKeys(text);
+        } catch (TimeoutException e){
+            Assert.assertTrue(false, "Cannot insert text '"+text+"' because input is not clickable.");
+        }
+
     }
 
     default boolean isElementShown(WebElement element){

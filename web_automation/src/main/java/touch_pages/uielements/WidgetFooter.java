@@ -14,9 +14,7 @@ public class WidgetFooter extends AbstractUIElement {
     private WebElement sendMesageButton;
 
     public WidgetFooter enterMessage(String text) {
-//        waitForElementToBeVisible(textInput);
         inputText(textInput, text);
-//        textInput.sendKeys(text);
         return this;
     }
 
