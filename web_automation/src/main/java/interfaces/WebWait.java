@@ -114,6 +114,12 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(css)));
     }
 
+    default void waitForElementToBeCklickableByCss(String css, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(By.cssSelector(css)));
+    }
+
     default void waitForElementToBeInVisibleByCss(String css, int time){
         initWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
