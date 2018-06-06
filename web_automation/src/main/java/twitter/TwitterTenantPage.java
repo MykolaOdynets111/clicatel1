@@ -39,6 +39,6 @@ public class TwitterTenantPage extends TwitterHomePage {
 
     public void openNewTweetWindow() {
         waitForElementToBeCklickableByCss(newTweetButtonCss, 10);
-        findElemByCSS(newTweetButtonCss).click();
+        executeJSclick(findElemByCSS(newTweetButtonCss));
     }
 }
