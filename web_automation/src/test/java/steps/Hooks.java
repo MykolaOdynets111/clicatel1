@@ -92,8 +92,8 @@ public class Hooks implements JSHelper{
         }
 
         if(scenario.getSourceTagNames().contains("@twitter")){
-            finishAgentFlowIfExists();
             takeScreenshot();
+            finishAgentFlowIfExists();
             endTwitterFlow();
         }
 
