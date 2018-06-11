@@ -99,9 +99,9 @@ public class TwitterSteps {
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(expectedAnswer);
     }
 
-    @When("^Send \"(.*)\" reply into tweet$")
-    public void sendResponseIntoTweet(String replyMessage){
-        openedTweet.sendReply(replyMessage);
+    @When("^Send \"(.*)\" reply on agent's tweet \"(.*)\"$")
+    public void sendResponseIntoTweet(String replyMessage, String agentMessage ){
+        openedTweet.sendReply(replyMessage, agentMessage);
     }
 
 

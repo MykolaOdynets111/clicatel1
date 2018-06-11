@@ -13,12 +13,13 @@ import java.util.stream.Collectors;
 
 public class TweetsSection extends TwitterHomePage {
 
-
     @FindBy(css = "ol.stream-items")
     private WebElement timeline;
 
     @FindBy(css = "li.stream-item")
     private List<WebElement> timelineElemements;
+
+    private String replyPopUpInputField = "form.tweet-form.is-reply div.RichEditor-scrollContainer>div[name='tweet']";
 
     private String newCommentIcon = "//p[contains(text(), '%s')]//following::span[@class='ProfileTweet-actionCount ']";
 
@@ -70,7 +71,11 @@ public class TweetsSection extends TwitterHomePage {
         return getOpenedTweet();
     }
 
-    public void waitFotResponseToCome(String targetTweet){
-
+    public void clickReplyButtonForTweet(String expectedText, String reply){
+        waitForElementsToBeVisible(timelineElemements,5);
+        timelineElemements.stream().map(TimelineTweet::new).collect(Collectors.toList())
+                .stream().filter(e -> e.getTweetText().contains(expectedText))
+                .findFirst().get().clickReplyButton();
+        waitForElementToBeClickable(findElemByCSS(replyPopUpInputField)).sendKeys(reply);
     }
 }
