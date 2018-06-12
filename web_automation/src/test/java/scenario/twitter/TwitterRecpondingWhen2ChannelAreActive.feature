@@ -34,4 +34,4 @@ Feature: Receiving answer when two channels are active
     Then Conversation area contains hello, can you help me? user's message
     When Agent responds with yes, sure to User
     And Open direct message channel
-    Then User have to receive correct response "yes, sure" on his message "hello, can you help me?"
+    Then User have to receive correct response "yes, sure" on his message "chat to support"
