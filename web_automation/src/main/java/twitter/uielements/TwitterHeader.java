@@ -4,6 +4,7 @@ import abstract_classes.AbstractUIElement;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import twitter.TwitterHomePage;
 
 @FindBy(css = "div.container")
 public class TwitterHeader extends AbstractUIElement {
@@ -17,9 +18,10 @@ public class TwitterHeader extends AbstractUIElement {
     private String newNotificationIcon="span.count.new-count";
 
 
-    public void openHomePage(){
+    public TwitterHomePage openHomePage(){
         waitForElementToBeVisible(homeHeaderButton);
         homeHeaderButton.click();
+        return new TwitterHomePage();
     }
 
     public void clickNotificationsIcon(){

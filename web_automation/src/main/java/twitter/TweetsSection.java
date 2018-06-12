@@ -38,10 +38,10 @@ public class TweetsSection extends TwitterHomePage {
     public boolean verifyFromAgentTweetArrives(int wait){
         try {
             waitForElementToBeVisibleByCss(newTweetsButon, wait);
-            findElemByCSS(newTweetsButon).click();
+//            findElemByCSS(newTweetsButon).click();
             return true;
         } catch (TimeoutException e){
-            return getTwitterHeader().waitForNewNotificationIconToBeShown(wait);
+                return getTwitterHeader().waitForNewNotificationIconToBeShown(wait);
         }
     }
 

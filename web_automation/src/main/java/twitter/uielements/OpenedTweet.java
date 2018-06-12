@@ -21,7 +21,7 @@ public class OpenedTweet extends AbstractUIElement {
 
     String replyInputFieldCSS = "div.PermalinkOverlay-modal div.RichEditor-scrollContainer div[name='tweet']";
 
-    String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()='%s']";
+    String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()=\"%s\"]";
 
     public void sendReply(String tweetText, String agentMessage){
         new TweetsSection().clickReplyButtonForTweet(agentMessage, tweetText);
@@ -36,7 +36,7 @@ public class OpenedTweet extends AbstractUIElement {
 
     public boolean ifAgentReplyShown(String replyText, int wait){
         try {
-            waitForElementToBeVisibleByXpath(String.format(agentResponseXpath, replyText),wait);
+            waitForElementToBeVisibleByXpath(String.format(agentResponseXpath, replyText.trim()),wait);
             return true;
         } catch (TimeoutException e) {
             return false;

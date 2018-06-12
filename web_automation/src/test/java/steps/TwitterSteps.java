@@ -55,14 +55,14 @@ public class TwitterSteps {
     @When("^User sends tweet regarding \"(.*)\"$")
     public void sendTweet(String tweetMessage){
         int day = LocalDateTime.now().getDayOfMonth();
-        if ( day % 2 == 0 ) {
-            if (tweetMessage.contains("account balance"))
-                tweetMessage = "How can I check account balance?";
-        }
-        else {
-            if (tweetMessage.contains("account balance"))
-                tweetMessage = "How to check my account balance?";
-        }
+//        if ( day % 2 == 0 ) {
+//            if (tweetMessage.contains("account balance"))
+//                tweetMessage = "How can I check account balance?";
+//        }
+//        else {
+//            if (tweetMessage.contains("account balance"))
+//                tweetMessage = "How to check my account balance?";
+//        }
         getTweetWindow().sendTweet(tweetMessage);
     }
 
@@ -81,14 +81,17 @@ public class TwitterSteps {
 //        if(expectedAnswer.length()>132){
 //            expectedAnswer = expectedAnswer.substring(0,131);
 //        }
-        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(50),
-                "Expected tweet answer from the agent is missing after 50 secs wait");
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(60),
+                "Expected tweet answer from the agent is missing after 60 secs wait");
     }
 
     @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
     public void verifyFromAgentResponseAsACommentOnTweet(String expectedAgentMessage, String initialUserTweet){
-        getTwitterTenantPage().getTwitterHeader().openHomePage();
+        getTwitterTenantPage().getTwitterHeader().openHomePage().waitForPageToBeLoaded();
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
+        if(expectedAgentMessage.length()>132){
+            expectedAgentMessage = expectedAgentMessage.substring(0,131);
+        }
         Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,5),
                 "Agent response "+expectedAgentMessage+" for user is not shown as comment for tweet");
     }
