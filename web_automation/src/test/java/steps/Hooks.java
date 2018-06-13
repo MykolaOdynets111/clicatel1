@@ -94,6 +94,9 @@ public class Hooks implements JSHelper{
 
     private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isSecondDriverExists()) {
+            if(scenario.isFailed()){
+                chatDeskConsoleOutput();
+            }
             takeScreenshotFromSecondDriver();
             logoutAgent();
             if (scenario.getSourceTagNames().contains("@suggestions")){
@@ -183,6 +186,16 @@ public class Hooks implements JSHelper{
     private String touchConsoleOutput(){
         StringBuilder result = new StringBuilder();
         LogEntries logEntries = DriverFactory.getInstance().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+        }
+        return  result.toString();
+    }
+
+    @Attachment
+    private String chatDeskConsoleOutput(){
+        StringBuilder result = new StringBuilder();
+        LogEntries logEntries = DriverFactory.getSecondDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }
