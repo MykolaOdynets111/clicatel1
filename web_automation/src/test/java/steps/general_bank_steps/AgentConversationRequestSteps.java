@@ -2,6 +2,7 @@ package steps.general_bank_steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.LeftMenuWithChats;
+import api_helper.ApiHelper;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import interfaces.JSHelper;
@@ -17,7 +18,8 @@ public class AgentConversationRequestSteps implements JSHelper{
         agentHomePage = new AgentHomePage();
         leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
         Assert.assertTrue(leftMenuWithChats.isNewConversationRequestIsShown(10),
-                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")/n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"");
     }
 
     @When("^Agent click on new conversation$")

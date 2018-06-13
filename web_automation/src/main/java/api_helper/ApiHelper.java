@@ -220,4 +220,10 @@ public class ApiHelper {
                 String.format(Endpoints.INTERNAL_FEATURE_STATE,tenantID, feature, status);
         RestAssured.put(url);
     }
+
+    public static int getNumberOfLoggedInAgents(){
+        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
+                String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTest());
+        return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
+    }
 }

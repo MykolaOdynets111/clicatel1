@@ -33,6 +33,8 @@ public class Endpoints {
 
     public static String INTERNAL_FEATURE_STATE = "features/tenants/%s/%s/%s";
 
+    public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = "loggedin-agents-count/%s";
+
      // ==================  PORTAL ============== //
 
     public static String BASE_PLATFORM_ENDPOINT = "https://%s-platform.clickatelllabs.com";
