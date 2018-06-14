@@ -3,6 +3,7 @@ package steps.general_bank_steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import api_helper.TwitterAPI;
+import api_helper.ApiHelper;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.FacebookUsers;
@@ -21,6 +22,7 @@ public class AgentConversationRequestSteps implements JSHelper{
         leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
         Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromTouchIsShown(10),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+
     }
 
     @Then("^Agent has new conversation request from FB user$")

@@ -42,10 +42,17 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOf(element));
     }
 
-    default WebElement waitForElementToBeClickable(WebElement element, int time){
+
+    default WebElement waitForElementToBeClickable(WebElement element, int time) {
         return initWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    default WebElement waitForElementToBeVisibleAgent(WebElement element, int time){
+        return initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
     }
 
     default List<WebElement> waitForElementsToBeClickable(List<WebElement> elements){

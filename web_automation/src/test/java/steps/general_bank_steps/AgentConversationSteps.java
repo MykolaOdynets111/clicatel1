@@ -12,6 +12,7 @@ import dataprovider.Intents;
 import dataprovider.jackson_schemas.Intent;
 import interfaces.JSHelper;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,8 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
+        getAgentHomePage().clickAgentAssistantButton();
+        getAgentHomePage().waitForElementToBeVisible(getAgentHomePage().getSuggestedGroup());
         if (getSuggestedGroup().isSuggestionListEmpty()){
             Assert.assertTrue(false, "Suggestion list is empty");
         }
@@ -113,6 +116,46 @@ public class AgentConversationSteps implements JSHelper{
     @When("^Agent add additional info \"(.*)\" to suggested message$")
     public void addMoreInfo(String additional) {
         getAgentHomePage().addMoreInfo(additional);
+    }
+
+    @Then("^'Clear' buttons are not shown$")
+    public void checkClearEditButtonsAreShown(){
+        Assert.assertTrue(getAgentHomePage().isClearButtonShown(),
+                "'Clear' button is not shown for suggestion input field.");
+    }
+
+    @Then("^'Clear' and 'Edit' buttons are shown$")
+    public void checkClearEditButtonsAreNotShown(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getAgentHomePage().isClearButtonShown(),
+                "'Clear' button is not shown for suggestion input field.");
+        soft.assertTrue(getAgentHomePage().isEditButtonShown(),
+                "'Edit' button is not shown for suggestion input field.");
+        soft.assertAll();
+    }
+
+    @When("^Agent click Edit suggestions button$")
+    public void clickEditButton(){
+        getAgentHomePage().clickEditButton();
+    }
+
+    @When("^Agent click Clear suggestions button$")
+    public void clickClearButton(){
+        getAgentHomePage().clickClearButton();
+    }
+
+    @Then("^Message input field is cleared$")
+    public void verifySuggestionClearedByClearButton(){
+        Assert.assertTrue(getAgentHomePage().isMessageInputFieldEmpty(),
+                "Message input field is not empty");
+    }
+
+    @Then("Agent is able to add \"(.*)\"")
+    public void enterAdditionTextForSuggestion(String textToAdd){
+        if(!getAgentHomePage().isSuggestionContainerDisappeares()){
+            Assert.assertTrue(false, "Input field is not become cklickable");
+        }
+        getAgentHomePage().sendResponseToUser(textToAdd);
     }
 
     private AgentHomePage getAgentHomePage() {
