@@ -10,6 +10,14 @@ import java.util.List;
 
 public interface WebActions extends WebWait {
 
+    public default void waitFor(int milisecs){
+        try {
+            Thread.sleep(milisecs);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     default void click(WebElement element){
         waitForElementToBeClickable(element).click();
     }

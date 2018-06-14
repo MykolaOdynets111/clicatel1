@@ -154,6 +154,21 @@ public class AgentHomePage extends AgentAbstractPage {
         editButton.click();
     }
 
+    public void clickClearButton(){
+        clearButton.click();
+    }
+
+    public boolean isMessageInputFieldEmpty(){
+        waitForElementToBeVisible(messageInput);
+        boolean result = false;
+        for(int i=0; i<3; i++){
+            result = messageInput.getText().equals("");
+            if (result) return true;
+            getSuggestedGroup().waitFor(1000);
+        }
+        return result;
+    }
+
     public boolean isSuggestionContainerDisappeares(){
         try {
             waitForElementToBeInvisibleAgent(suggestionInputField,10);

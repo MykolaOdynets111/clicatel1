@@ -110,8 +110,14 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().addMoreInfo(additional);
     }
 
-    @Then("^'Clear' and 'Edit' buttons are shown$")
+    @Then("^'Clear' buttons are not shown$")
     public void checkClearEditButtonsAreShown(){
+        Assert.assertTrue(getAgentHomePage().isClearButtonShown(),
+                "'Clear' button is not shown for suggestion input field.");
+    }
+
+    @Then("^'Clear' and 'Edit' buttons are shown$")
+    public void checkClearEditButtonsAreNotShown(){
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getAgentHomePage().isClearButtonShown(),
                 "'Clear' button is not shown for suggestion input field.");
@@ -120,12 +126,23 @@ public class AgentConversationSteps implements JSHelper{
         soft.assertAll();
     }
 
-    @When("^I click Edit suggestions button$")
+    @When("^Agent click Edit suggestions button$")
     public void clickEditButton(){
         getAgentHomePage().clickEditButton();
     }
 
-    @Then("User is able to add \"(.*)\"")
+    @When("^Agent click Clear suggestions button$")
+    public void clickClearButton(){
+        getAgentHomePage().clickClearButton();
+    }
+
+    @Then("^Message input field is cleared$")
+    public void verifySuggestionClearedByClearButton(){
+        Assert.assertTrue(getAgentHomePage().isMessageInputFieldEmpty(),
+                "Message input field is not empty");
+    }
+
+    @Then("Agent is able to add \"(.*)\"")
     public void enterAdditionTextForSuggestion(String textToAdd){
         if(!getAgentHomePage().isSuggestionContainerDisappeares()){
             Assert.assertTrue(false, "Input field is not become cklickable");
