@@ -12,6 +12,7 @@ import dataprovider.Intents;
 import dataprovider.jackson_schemas.Intent;
 import interfaces.JSHelper;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,8 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
+        getAgentHomePage().clickAgentAssistantButton();
+        getAgentHomePage().waitForElementToBeVisible(getAgentHomePage().getSuggestedGroup());
         if (getSuggestedGroup().isSuggestionListEmpty()){
             Assert.assertTrue(false, "Suggestion list is empty");
         }
@@ -105,6 +108,29 @@ public class AgentConversationSteps implements JSHelper{
     @When("^Agent add additional info \"(.*)\" to suggested message$")
     public void addMoreInfo(String additional) {
         getAgentHomePage().addMoreInfo(additional);
+    }
+
+    @Then("^'Clear' and 'Edit' buttons are shown$")
+    public void checkClearEditButtonsAreShown(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getAgentHomePage().isClearButtonShown(),
+                "'Clear' button is not shown for suggestion input field.");
+        soft.assertTrue(getAgentHomePage().isEditButtonShown(),
+                "'Edit' button is not shown for suggestion input field.");
+        soft.assertAll();
+    }
+
+    @When("^I click Edit suggestions button$")
+    public void clickEditButton(){
+        getAgentHomePage().clickEditButton();
+    }
+
+    @Then("User is able to add \"(.*)\"")
+    public void enterAdditionTextForSuggestion(String textToAdd){
+        if(!getAgentHomePage().isSuggestionContainerDisappeares()){
+            Assert.assertTrue(false, "Input field is not become cklickable");
+        }
+        getAgentHomePage().sendResponseToUser(textToAdd);
     }
 
     private AgentHomePage getAgentHomePage() {

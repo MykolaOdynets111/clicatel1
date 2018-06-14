@@ -42,6 +42,12 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOf(element));
     }
 
+    default WebElement waitForElementToBeVisibleAgent(WebElement element, int time){
+        return initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
+    }
+
     default List<WebElement> waitForElementsToBeClickable(List<WebElement> elements){
         WebDriverWait wait = initWait();
         for(WebElement element: elements) {
@@ -61,6 +67,12 @@ public interface WebWait {
 
     default void waitForElementToBeInvisible(WebElement element, int time){
         initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOf(element));
+    }
+
+    default void waitForElementToBeInvisibleAgent(WebElement element, int time){
+        initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOf(element));
     }

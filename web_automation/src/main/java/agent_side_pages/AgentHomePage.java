@@ -32,6 +32,15 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
 
+    @FindBy(xpath = "//button[text()='Clear']")
+    private WebElement clearButton;
+
+    @FindBy(xpath = "//button[text()='Edit']")
+    private WebElement editButton;
+
+    @FindBy(xpath = "//div[text()='Agent Assistant']")
+    private WebElement agentAssistantButton;
+
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private Header header;
@@ -121,5 +130,40 @@ public class AgentHomePage extends AgentAbstractPage {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public boolean isClearButtonShown(){
+        try {
+            waitForElementToBeVisibleAgent(clearButton,10);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean isEditButtonShown(){
+        try {
+            waitForElementToBeVisibleAgent(editButton,10);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public void clickEditButton(){
+        editButton.click();
+    }
+
+    public boolean isSuggestionContainerDisappeares(){
+        try {
+            waitForElementToBeInvisibleAgent(suggestionInputField,10);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public void clickAgentAssistantButton(){
+        agentAssistantButton.click();
     }
 }

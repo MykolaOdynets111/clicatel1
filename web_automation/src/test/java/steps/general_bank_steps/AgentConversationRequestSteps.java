@@ -18,8 +18,8 @@ public class AgentConversationRequestSteps implements JSHelper{
         agentHomePage = new AgentHomePage();
         leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
         Assert.assertTrue(leftMenuWithChats.isNewConversationRequestIsShown(10),
-                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")/n" +
-                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"");
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
     @When("^Agent click on new conversation$")
