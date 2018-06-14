@@ -42,7 +42,7 @@ public class AgentConversationSteps implements JSHelper{
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
-    @When("^Agent responds with (.*) to User$")
+    @When("^Agent (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String responseToUser){
         getAgentHomePage().sendResponseToUser(responseToUser);
     }
@@ -107,7 +107,7 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().clickSendButton();
     }
 
-    @When("^Agent is able to delete the suggestion from input field and sent his own \"(.*)\" message$")
+    @When("^Agent is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
     public void deleteSuggestionAndSendOwn(String agentMessage){
         getAgentHomePage().deleteSuggestionAndAddAnother(agentMessage);
         getAgentHomePage().clickSendButton();
@@ -156,6 +156,17 @@ public class AgentConversationSteps implements JSHelper{
             Assert.assertTrue(false, "Input field is not become cklickable");
         }
         getAgentHomePage().sendResponseToUser(textToAdd);
+    }
+
+    @Then("^'Profanity not allowed' pop up is shown$")
+    public void verifyProfanityNotAllowedPopupShwon(){
+        Assert.assertTrue(getAgentHomePage().isProfanityPopupShown(),
+                "'Profanity not allowed' popup not shown.");
+    }
+
+    @When("^Agent closes 'Profanity not allowed' popup$")
+    public void closeProfanityPopup(){
+        getAgentHomePage().clickAcceptProfanityPopupButton();
     }
 
     private AgentHomePage getAgentHomePage() {

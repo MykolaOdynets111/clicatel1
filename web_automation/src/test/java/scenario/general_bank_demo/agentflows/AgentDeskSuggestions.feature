@@ -24,13 +24,13 @@ Feature: Agent suggestions
     When User enter i lost my card into widget input field
     Then There is correct suggestion shown on user message "i lost my card"
     And The suggestion for user message "i lost my card" with the biggest confidence is added to the input field
-    And Agent is able to delete the suggestion from input field and sent his own "Let me see what I can do" message
+    And Agent is able to delete the suggestion from input field and sends his own "Let me see what I can do" message
     Then User have to receive 'Let me see what I can do' text response for his 'i lost my card' input
 
   Scenario: Interaction with "Clear" and "Edit" suggestion buttons
     When User enter Chat to Support into widget input field
     Then Agent has new conversation request
-    And Agent click on new conversation
+    And Agent click on new conversation request from touch
     When User enter trading hours into widget input field
     Then There is correct suggestion shown on user message "trading hours"
     Then The suggestion for user message "trading hours" with the biggest confidence is added to the input field

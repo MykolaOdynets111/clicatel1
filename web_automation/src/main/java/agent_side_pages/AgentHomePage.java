@@ -41,6 +41,12 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[text()='Agent Assistant']")
     private WebElement agentAssistantButton;
 
+    @FindBy(xpath = "//div[@class='modal-header' and text()='Profanity not allowed']")
+    private WebElement profanityPopup;
+
+    @FindBy(xpath = "//button[text()='Accept']")
+    private WebElement acceptProfanityPopupButton;
+
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private Header header;
@@ -67,6 +73,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
+            messageInput.clear();
             messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
@@ -96,13 +103,12 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-        try {
+//        try {
             suggestionInputField.click();
-            messageInput.clear();
-            messageInput.sendKeys(message);
-        } catch (StaleElementReferenceException e) {
-            DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(message);
-        }
+            sendResponseToUser(message);
+//        } catch (StaleElementReferenceException e) {
+//            DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(message);
+//        }
     }
 
     public void addMoreInfo(String additionalMessage){
@@ -189,5 +195,18 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickAgentAssistantButton(){
         agentAssistantButton.click();
+    }
+
+    public boolean isProfanityPopupShown(){
+        try {
+            waitForElementToBeVisible(profanityPopup,10);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public void clickAcceptProfanityPopupButton(){
+        acceptProfanityPopupButton.click();
     }
 }
