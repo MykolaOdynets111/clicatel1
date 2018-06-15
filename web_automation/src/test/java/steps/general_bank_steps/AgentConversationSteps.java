@@ -4,7 +4,6 @@ import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.ChatBody;
 import agent_side_pages.UIElements.SuggestedGroup;
 import agent_side_pages.UIElements.Suggestion;
-import api_helper.ApiHelper;
 import api_helper.ApiHelperTie;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -47,6 +46,10 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().sendResponseToUser(responseToUser);
     }
 
+    @When("^Agent clear input and send a new message (.*)$")
+    public void clearAndSendAnswerToUser(String responseToUser){
+        getAgentHomePage().clearAndSendResponseToUser(responseToUser);
+    }
 
     @Then("^There is no suggestions on user's input (.*)$")
     public void verifyIfThereIsNoSuggestions(String userMessage) {
@@ -102,7 +105,7 @@ public class AgentConversationSteps implements JSHelper{
     @When("^Agent is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
     public void deleteSuggestionAndSendOwn(String agentMessage){
         getAgentHomePage().deleteSuggestionAndAddAnother(agentMessage);
-        getAgentHomePage().clickSendButton();
+//        getAgentHomePage().clickSendButton();
     }
 
     @When("^Agent add additional info \"(.*)\" to suggested message$")

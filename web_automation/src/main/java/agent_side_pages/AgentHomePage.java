@@ -73,7 +73,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
-            messageInput.clear();
             messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
@@ -82,7 +81,12 @@ public class AgentHomePage extends AgentAbstractPage {
                     " Check if there is no blinking connection error.");
             return this;
         }
+    }
 
+    public void clearAndSendResponseToUser(String response){
+        moveToElemAndClick(findElemByXPATH(messageInputLocator));
+        messageInput.clear();
+        sendResponseToUser(response);
     }
 
     public void clickSendButton() {
@@ -91,11 +95,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
 
     public boolean isAgentSuccessfullyLoggedIn() {
-        try {
-            return isElementShown(conversationAreaContainer);
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+            return isElementShownAgent(conversationAreaContainer);
     }
 
     public String getSuggestionFromInputFiled() {
@@ -103,12 +103,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-//        try {
             suggestionInputField.click();
-            sendResponseToUser(message);
-//        } catch (StaleElementReferenceException e) {
-//            DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(message);
-//        }
+            clearAndSendResponseToUser(message);
     }
 
     public void addMoreInfo(String additionalMessage){
@@ -130,30 +126,15 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     private boolean isEndChatShown(){
-        try {
-            waitForElementToBeVisible(endChatButton,10);
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+       return isElementShownAgent(endChatButton,10);
     }
 
     public boolean isClearButtonShown(){
-        try {
-            waitForElementToBeVisibleAgent(clearButton,10);
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        return isElementShownAgent(clearButton,10);
     }
 
     public boolean isEditButtonShown(){
-        try {
-            waitForElementToBeVisibleAgent(editButton,10);
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        return isElementShownAgent(editButton,10);
     }
 
     public void clickEditButton(){
@@ -189,12 +170,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public boolean isProfanityPopupShown(){
-        try {
-            waitForElementToBeVisible(profanityPopup,10);
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        return isElementShownAgent(profanityPopup,10);
     }
 
     public void clickAcceptProfanityPopupButton(){

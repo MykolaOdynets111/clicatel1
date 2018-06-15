@@ -39,7 +39,23 @@ public interface WebActions extends WebWait {
     default boolean isElementShown(WebElement element){
         try {
             return waitForElementToBeVisible(element, 5).isDisplayed();
-        } catch (TimeoutException e) {
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    default boolean isElementShownAgent(WebElement element){
+        try {
+            return waitForElementToBeVisibleAgent(element, 5).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    default boolean isElementShownAgent(WebElement element, int wait){
+        try {
+            return waitForElementToBeVisibleAgent(element, wait).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
@@ -47,7 +63,7 @@ public interface WebActions extends WebWait {
     default boolean isElementShown(WebElement element, int wait){
         try {
             return waitForElementToBeVisible(element, wait).isDisplayed();
-        } catch (TimeoutException e) {
+        } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
