@@ -85,7 +85,8 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clearAndSendResponseToUser(String response){
         moveToElemAndClick(findElemByXPATH(messageInputLocator));
-        messageInput.clear();
+
+        findElemByXPATH(messageInputLocator).clear();
         sendResponseToUser(response);
     }
 
