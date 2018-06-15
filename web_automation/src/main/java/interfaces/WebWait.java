@@ -83,6 +83,12 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
+    default void waitForElementToBeInVisibleByXpathAgent(String xpath, int time){
+        initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(xpath)));
+    }
+
     default void waitForElementsToBeVisibleByXpathAgent(String xpath, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)

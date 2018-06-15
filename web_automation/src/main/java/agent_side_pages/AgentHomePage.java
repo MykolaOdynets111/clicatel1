@@ -85,8 +85,8 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clearAndSendResponseToUser(String response){
         moveToElemAndClick(findElemByXPATH(messageInputLocator));
+        waitForElementToBeClickable(messageInput);
         messageInput.clear();
-//        findElemByXPATH(messageInputLocator).clear();
         sendResponseToUser(response);
     }
 
@@ -176,5 +176,19 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickAcceptProfanityPopupButton(){
         acceptProfanityPopupButton.click();
+    }
+
+    public void clickEndChat(){
+        if (!isElementShownAgent(endChatButton)){
+            Assert.assertTrue(false, "'End chat' button is not shown.");
+        } else {endChatButton.click();}
+    }
+
+    public boolean isEndChatPopupShown (){
+        return isElementShownAgent(closeChatButton,12);
+    }
+
+    public void clickCloseButtonInCloseChatPopup (){
+        closeChatButton.click();
     }
 }

@@ -92,6 +92,9 @@ public class DefaultTouchUserSteps implements JSHelper{
             case "dynamical branch address":
                 expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
                 break;
+            case "exit":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
             default:
                 expectedTextResponse = textResponse;
                 break;
@@ -111,6 +114,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         softAssert.assertAll();
 
     }
+
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){

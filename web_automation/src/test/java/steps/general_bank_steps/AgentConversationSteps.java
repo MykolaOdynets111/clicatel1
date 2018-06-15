@@ -164,6 +164,25 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().clickAcceptProfanityPopupButton();
     }
 
+
+    @When("^Agent click \"End chat\" button$")
+    public void clickEndChatButton(){
+        getAgentHomePage().clickEndChat();
+    }
+
+    @Then("^End chat popup should be opened$")
+    public void verifyEndChatPopupOpened(){
+        Assert.assertTrue(getAgentHomePage().isEndChatPopupShown(),
+                "End chat popup is not opened");
+    }
+
+    @When("^Agent click 'Close chat' button$")
+    public void clickCloseChatButton(){
+        getAgentHomePage().clickCloseButtonInCloseChatPopup();
+    }
+
+
+
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
             agentHomePage =  new AgentHomePage();
