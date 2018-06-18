@@ -1,6 +1,4 @@
-Feature: End char button interaction by the agent on chatdesk
-
-  Verification of basic communication between user and agent
+Feature: Interaction with End chat button on chatdesk
 
   Background:
     Given I login as agent of General Bank Demo
