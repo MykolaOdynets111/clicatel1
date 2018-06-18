@@ -17,17 +17,19 @@ public class OpenedTweet extends AbstractUIElement {
 
     private String tweetAnswer = "(//div[@class='TweetBoxToolbar-tweetButton tweet-button']//span[contains(text(),'Tweet')])[4]";
 
-    String closeTweetButtonCSS = "div.modal-close-fixed";
+    private String closeTweetButtonCSS = "div.modal-close-fixed";
 
-    String replyInputFieldCSS = "div.PermalinkOverlay-modal div.RichEditor-scrollContainer div[name='tweet']";
+    private String replyInputFieldCSS = "div.PermalinkOverlay-modal div.RichEditor-scrollContainer div[name='tweet']";
 
-    String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()=\"%s\"]";
+    private String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()=\"%s\"]";
+
+    private String replyButtonOnTweetComment = "(//span[@class='button-text replying-text'])[2]";
 
     public void sendReply(String tweetText, String agentMessage){
         new TweetsSection().clickReplyButtonForTweet(agentMessage, tweetText);
 //        moveToElemAndClick(replyInputArea);
 //        findElemByCSS(replyInputFieldCSS).sendKeys(tweetText);
-//        executeJSclick(findElemByXPATH(tweetAnswer));
+        executeJSclick(findElemByXPATH(replyButtonOnTweetComment));
     }
 
     public void closeTweet(){
