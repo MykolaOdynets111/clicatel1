@@ -20,7 +20,13 @@ public enum Agents {
 
     DEMO1_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo1"),
 
-    BETA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "beta");
+    BETA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "beta"),
+
+    // email credentials: devgeneralbankdemo@gmail.com, pass p@$$w0rd4te$t
+
+    SECOND_AGENT_QA("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
+
+    SECOND_AGENT_DEV("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa");
 
     String userName;
     String userPass;

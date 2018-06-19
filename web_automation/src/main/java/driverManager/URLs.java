@@ -102,6 +102,12 @@ public class URLs {
         return String.format(Endpoints.TIE_INTENT_PLUS_SENTIMENT_URL, env, tenantName, message);
     }
 
+    public static String getBaseTieChatURL(String tenant) {
+        String env = ConfigManager.getEnv();
+        String baseUrl = Endpoints.BASE_TIE_CHAT_URL;
+        return String.format(baseUrl, env, tenant);
+    }
+
     public static String getTIEURLForAnswers(String tenantOrgName, String intent) {
         String env = ConfigManager.getEnv();
         String tenantName = null;
@@ -112,6 +118,7 @@ public class URLs {
         }
         return String.format(Endpoints.TIE_ANSWER_URL, env, tenantName, intent);
     }
+
 
     public static String getFBPageURL(String tenantOrgName) {
         String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName);

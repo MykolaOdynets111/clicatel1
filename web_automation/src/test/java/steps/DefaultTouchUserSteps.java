@@ -92,6 +92,9 @@ public class DefaultTouchUserSteps implements JSHelper{
             case "dynamical branch address":
                 expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
                 break;
+            case "exit":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
             default:
                 expectedTextResponse = textResponse;
                 break;
@@ -110,6 +113,12 @@ public class DefaultTouchUserSteps implements JSHelper{
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
 
+    }
+
+    @Then("^Text response that contains \"(.*)\" is shown$")
+    public void quickVerifyIsResponseShown(String text){
+       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 15),
+               "Bot response is not shown");
     }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")

@@ -4,7 +4,6 @@ import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.ChatBody;
 import agent_side_pages.UIElements.SuggestedGroup;
 import agent_side_pages.UIElements.Suggestion;
-import api_helper.ApiHelper;
 import api_helper.ApiHelperTie;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -47,13 +46,19 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().sendResponseToUser(responseToUser);
     }
 
+
     @When("^Agent replays with (.*) message$")
-    public void respondToUserWithCheck(String agentMessage){
-        if(getAgentHomePage().isSuggestionFieldShown()) {
+    public void respondToUserWithCheck(String agentMessage) {
+        if (getAgentHomePage().isSuggestionFieldShown()) {
             deleteSuggestionAndSendOwn(agentMessage);
-        }else{
+        } else {
             sendAnswerToUser(agentMessage);
         }
+    }
+
+    @When("^Agent clear input and send a new message (.*)$")
+    public void clearAndSendAnswerToUser(String responseToUser){
+        getAgentHomePage().clearAndSendResponseToUser(responseToUser);
     }
 
     @Then("^There is no suggestions on user's input (.*)$")
@@ -110,7 +115,7 @@ public class AgentConversationSteps implements JSHelper{
     @When("^Agent is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
     public void deleteSuggestionAndSendOwn(String agentMessage){
         getAgentHomePage().deleteSuggestionAndAddAnother(agentMessage);
-        getAgentHomePage().clickSendButton();
+//        getAgentHomePage().clickSendButton();
     }
 
     @When("^Agent add additional info \"(.*)\" to suggested message$")
@@ -168,6 +173,25 @@ public class AgentConversationSteps implements JSHelper{
     public void closeProfanityPopup(){
         getAgentHomePage().clickAcceptProfanityPopupButton();
     }
+
+
+    @When("^Agent click \"End chat\" button$")
+    public void clickEndChatButton(){
+        getAgentHomePage().clickEndChat();
+    }
+
+    @Then("^End chat popup should be opened$")
+    public void verifyEndChatPopupOpened(){
+        Assert.assertTrue(getAgentHomePage().isEndChatPopupShown(),
+                "End chat popup is not opened");
+    }
+
+    @When("^Agent click 'Close chat' button$")
+    public void clickCloseChatButton(){
+        getAgentHomePage().clickCloseButtonInCloseChatPopup();
+    }
+
+
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {

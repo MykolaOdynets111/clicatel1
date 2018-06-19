@@ -16,10 +16,9 @@ import org.testng.asserts.SoftAssert;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
+import static io.restassured.RestAssured.given;
 
 public class BaseTieSteps {
 
@@ -99,5 +98,17 @@ public class BaseTieSteps {
         } catch (JsonPathException e) {
             Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
         }
+    }
+
+    @When("^I send a \"(.*)\" to (.*) tenant TIE should return \"(.*)\" entity$")
+    public void verifyTieEntity(String message, String tenant, String expectedEntity){
+        Response resp = RestAssured.get(URLs.getBaseTieChatURL(tenant)+message+"&sentiment=true");
+        if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
+        }
+        Map<String, String> entities = resp.jsonPath().getMap("intents_result.entities");
+        Assert.assertTrue(entities.size()==1 && entities.containsKey(expectedEntity),
+                "Actual entity is not as expected.\n Expected "+expectedEntity+", but found "+entities.keySet()+"");
+
     }
 }

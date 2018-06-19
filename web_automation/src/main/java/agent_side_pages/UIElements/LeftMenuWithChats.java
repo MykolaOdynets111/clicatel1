@@ -45,4 +45,14 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
             return false;
         }
     }
+
+    public boolean isConversationRequestIsRemoved(int wait) {
+        String userName = getUserNameFromLocalStorage();
+        try{
+            waitForElementToBeInVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait);
+            return true;
+        } catch(TimeoutException e) {
+            return false;
+        }
+    }
 }
