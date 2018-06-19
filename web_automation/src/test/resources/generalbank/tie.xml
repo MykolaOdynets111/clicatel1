@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="TIE Suite" parallel="instances" thread-count="6">
+<suite name="TIE Suite" parallel="instances" thread-count="11">
     <test name="TIE tests" >
         <classes>
             <class name="runner.RunTIETest" />

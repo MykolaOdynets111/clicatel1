@@ -115,6 +115,11 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     }
 
+    @Then("^Text response that contains \"(.*)\" is shown$")
+    public void quickVerifyIsResponseShown(String text){
+       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 15),
+               "Bot response is not shown");
+    }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){

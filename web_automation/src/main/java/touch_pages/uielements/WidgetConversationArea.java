@@ -1,6 +1,9 @@
 package touch_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import interfaces.WebActions;
+import interfaces.WebWait;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,7 +14,7 @@ import touch_pages.uielements.messages.ToUserTextMessage;
 import java.util.List;
 
 @FindBy(css = "div.ctl-conversation-area")
-public class WidgetConversationArea extends AbstractUIElement {
+public class WidgetConversationArea extends AbstractUIElement implements WebActions{
 
     @FindBy(css = "li.ctl-chat-message-container.message-to")
     private WebElement salutationElement;
@@ -20,6 +23,8 @@ public class WidgetConversationArea extends AbstractUIElement {
     private List<WebElement> fromUserMessages;
 
     private String targetFromUserMessage = "//li[contains(@class, message-from)]//*[text()='%s']";
+
+    public String targetTextInConversationArea = "//li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod' and contains(text(), \"%s\")]";
 
     private WebElement getFromUserWebElement(String messageText) {
         FromUserMessage theMessage =  fromUserMessages.stream().map(e -> new FromUserMessage(e))
@@ -81,5 +86,18 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public void clickOptionInTheCard(String userMessageText, String buttonName) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+    }
+
+    public boolean isTextShown(String text, int wait){
+
+        for (int i=0; i<wait*2; i++){
+            try {
+                findElemByXPATH(String.format(targetTextInConversationArea, text));
+                return true;
+            } catch (NoSuchElementException e){
+                waitFor(500);
+            }
+        }
+        return false;
     }
 }

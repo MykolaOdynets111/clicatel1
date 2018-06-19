@@ -1,4 +1,4 @@
-Feature: Sanity filter on agent's messages
+Feature: Profanity filter on agent's messages
 
   Background:
     Given I login as agent of General Bank Demo
@@ -6,7 +6,7 @@ Feature: Sanity filter on agent's messages
     Given User select General Bank Demo tenant
     And Click chat icon
 
-  Scenario: Verify if sanity filter is applied to agent's messages
+  Scenario: Verify if profanity filter is applied to agent's messages
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation

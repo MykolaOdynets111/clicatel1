@@ -45,6 +45,8 @@ public class Endpoints {
 
     // ====================  TIE ================= //
 
+    public static String BASE_TIE_CHAT_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/chats/?q=";
+
     public static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
 
     public static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
