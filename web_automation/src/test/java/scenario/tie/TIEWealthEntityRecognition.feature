@@ -1,7 +1,7 @@
 @tie
 Feature: Tie WEALTH entity recognition
 
-  Scenario Outline: Tie should recognize WEALTH entity from a message
+  Scenario Outline: Tie should recognize WEALTH entity from a "<user_message>" message
     When I send a "<message>" to generalbank tenant TIE should return "WEALTH" entity
 
     Examples:
