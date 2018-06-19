@@ -189,6 +189,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickCloseButtonInCloseChatPopup (){
-        closeChatButton.click();
+        executeJSclick(closeChatButton);
+//        closeChatButton.click();
     }
 }
