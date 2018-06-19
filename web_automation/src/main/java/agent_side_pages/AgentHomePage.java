@@ -21,6 +21,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Close chat']")
     private WebElement closeChatButton;
 
+    String closeChatButtonXPATH = "//button[text()='Close chat']";
     String messageInputLocator = "//textarea[contains(@class,'text-input')]";
 
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
@@ -96,7 +97,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
 
     public boolean isAgentSuccessfullyLoggedIn() {
-            return isElementShownAgent(conversationAreaContainer);
+            return isElementShownAgent(conversationAreaContainer,10);
     }
 
     public String getSuggestionFromInputFiled() {
@@ -157,7 +158,7 @@ public class AgentHomePage extends AgentAbstractPage {
         return result;
     }
 
-    public boolean isSuggestionContainerDisappeares(){
+    public boolean isSuggestionContainerDisappears(){
         try {
             waitForElementToBeInvisibleAgent(suggestionInputField,10);
             return true;
@@ -189,7 +190,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickCloseButtonInCloseChatPopup (){
-        executeJSclick(closeChatButton);
-//        closeChatButton.click();
+        waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 6);
+        findElemByXPATHAgent(closeChatButtonXPATH).click();
+        //        closeChatButton.click();
     }
 }

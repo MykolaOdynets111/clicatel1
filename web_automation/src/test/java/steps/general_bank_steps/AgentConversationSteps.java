@@ -147,7 +147,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("Agent is able to add \"(.*)\"")
     public void enterAdditionTextForSuggestion(String textToAdd){
-        if(!getAgentHomePage().isSuggestionContainerDisappeares()){
+        if(!getAgentHomePage().isSuggestionContainerDisappears()){
             Assert.assertTrue(false, "Input field is not become cklickable");
         }
         getAgentHomePage().sendResponseToUser(textToAdd);
