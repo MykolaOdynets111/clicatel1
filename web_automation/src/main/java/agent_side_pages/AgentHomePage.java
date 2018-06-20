@@ -1,14 +1,13 @@
 package agent_side_pages;
 
 import abstract_classes.AgentAbstractPage;
-import agent_side_pages.UIElements.ChatBody;
-import agent_side_pages.UIElements.Header;
-import agent_side_pages.UIElements.LeftMenuWithChats;
-import agent_side_pages.UIElements.SuggestedGroup;
+import agent_side_pages.UIElements.*;
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+
+import java.security.cert.X509Certificate;
 
 public class AgentHomePage extends AgentAbstractPage {
 
@@ -48,12 +47,19 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptProfanityPopupButton;
 
+    private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
+
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private Header header;
     private SuggestedGroup suggestedGroup;
+    private ProfileWindow profileWindow;
 
     public AgentHomePage() {
+    }
+
+    public ProfileWindow getProfileWindow() {
+        return profileWindow;
     }
 
     public SuggestedGroup getSuggestedGroup() {
@@ -128,7 +134,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     private boolean isEndChatShown(){
-       return isElementShownAgent(endChatButton,10);
+       return isElementShownAgent(endChatButton,1);
     }
 
     public boolean isClearButtonShown(){
@@ -195,5 +201,13 @@ public class AgentHomePage extends AgentAbstractPage {
         //        closeChatButton.click();
     }
 
+    public boolean isProfileWindowOpened(){
+        try{
+            findElemByXPATHAgent(openedProfileWindow);
+            return true;
+        } catch (WebDriverException e){
+            return false;
+        }
+    }
 
 }

@@ -13,6 +13,9 @@ public class Header extends AbstractUIElement {
     @FindBy(xpath = ".//a[text()='Log out']")
     private WebElement logOutButton;
 
+    @FindBy(xpath = ".//a[text()='Profile Settings']")
+    private WebElement profileSettingsButton;
+
     @FindBy(css = "li.user.dropdown-header>p>strong")
     private WebElement agentName;
 
@@ -36,5 +39,21 @@ public class Header extends AbstractUIElement {
 
     public void clickIconWithInitials(){
         iconWithAgentInitials.click();
+    }
+
+    public String getAgentName(){
+        return agentName.getText();
+    }
+
+    public String getAgentRole(){
+        return agentRole.getText();
+    }
+
+    public String getAgentEmail(){
+        return agentEmail.getText();
+    }
+
+    public void clickProfileSettingsButton(){
+        profileSettingsButton.click();
     }
 }
