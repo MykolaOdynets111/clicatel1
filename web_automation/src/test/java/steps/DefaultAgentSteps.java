@@ -4,6 +4,7 @@ import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import dataprovider.Tenants;
 import org.testng.Assert;
 
@@ -22,4 +23,8 @@ public class DefaultAgentSteps {
         ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
     }
 
+    @Then("^Icon should contain agent's initials$")
+    public void verifyUserInitials(){
+
+    }
 }

@@ -1,3 +1,5 @@
+
+# Note: Is blocked by TPLAT-2873
 #Feature: User should be able to send message only after bot has joined
 #
 #  Background:
@@ -13,6 +15,4 @@
 #    Then Text response that contains "When your card expires and is reissued," is shown
 #    When User enter interest rate into widget input field
 #    Then Text response that contains "You'll earn the highest interest on a transaction account" is shown
-#
-#
-#
+

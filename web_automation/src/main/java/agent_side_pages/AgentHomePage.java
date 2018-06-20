@@ -48,6 +48,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptProfanityPopupButton;
 
+    @FindBy(css = "button#top-menu-dropdown>div")
+    private WebElement iconWithAgentInitials;
+
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private Header header;
@@ -193,5 +196,9 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 6);
         findElemByXPATHAgent(closeChatButtonXPATH).click();
         //        closeChatButton.click();
+    }
+
+    public String getTextFromIcon(){
+        return waitForElementToBeVisibleAgent(iconWithAgentInitials, 5).getText();
     }
 }
