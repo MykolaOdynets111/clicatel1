@@ -19,6 +19,8 @@ public class TweetsSection extends TwitterHomePage {
     @FindBy(css = "li.stream-item")
     private List<WebElement> timelineElemements;
 
+    private String timelineElemementsCSS = "li.stream-item";
+
     private String replyPopUpInputField = "form.tweet-form.is-reply div.RichEditor-scrollContainer>div[name='tweet']";
 
     private String newCommentIcon = "//p[contains(text(), '%s')]//following::span[@class='ProfileTweet-actionCount ']";
@@ -63,8 +65,8 @@ public class TweetsSection extends TwitterHomePage {
     }
 
     public OpenedTweet clickTimeLineTweetWithText(String expectedText){
-        waitForElementsToBeVisible(timelineElemements,5);
-        timelineElemements.stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
+        waitForElementsToBeVisible(findElemntsByCSS(timelineElemementsCSS),5);
+        findElemntsByCSS(timelineElemementsCSS).stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
                 .stream().filter(e -> e.getTweetText().contains(expectedText))
                 .findFirst().get().getWrappedElement().click();
         waitForElementToBeVisible(openedTweet);
