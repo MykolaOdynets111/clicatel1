@@ -46,9 +46,9 @@ public class Tenants {
         return ApiHelper.getLastUserSession(userID, getTenantUnderTest()).getState();
     }
 
-    public static Response getPrimarAgentInfoForTenant(String tenantOrgName){
+    public static Response getPrimaryAgentInfoForTenant(String tenantOrgName){
         if (respWithAgentInfo==null){
-            ApiHelper.getAgentInfo(tenantOrgName);
+            respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName);
         }
             return respWithAgentInfo;
     }

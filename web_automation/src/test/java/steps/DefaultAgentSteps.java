@@ -5,7 +5,9 @@ import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import dataprovider.Tenants;
+import io.restassured.response.Response;
 import org.testng.Assert;
 
 public class DefaultAgentSteps {
@@ -23,8 +25,17 @@ public class DefaultAgentSteps {
         ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
     }
 
-    @Then("^Icon should contain agent's initials$")
-    public void verifyUserInitials(){
+    @Then("^Icon should contain (.*) agent's initials$")
+    public void verifyUserInitials(String tenantOrgName){
+        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
+        String expectedInitials = Character.toString(agentInfoResp.getBody().jsonPath().get("firstName").toString().charAt(0)) +
+                Character.toString(agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0));
 
+        Assert.assertEquals(agentHomePage.getHeader().getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
+    }
+
+    @When("^I click icon with initials$")
+    public void clickIconWithInitials(){
+        agentHomePage.getHeader().clickIconWithInitials();
     }
 }

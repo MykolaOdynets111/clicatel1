@@ -7,19 +7,34 @@ import org.openqa.selenium.support.FindBy;
 @FindBy(css = "div.header")
 public class Header extends AbstractUIElement {
 
-    @FindBy(css = "button#top-menu-dropdown")
-    private WebElement topMenuDropdown;
+    @FindBy(css = "button#top-menu-dropdown>div")
+    private WebElement iconWithAgentInitials;
 
     @FindBy(xpath = ".//a[text()='Log out']")
     private WebElement logOutButton;
 
+    @FindBy(css = "li.user.dropdown-header>p>strong")
+    private WebElement agentName;
+
+    @FindBy(css = "li.user.dropdown-header>p>em")
+    private WebElement agentRole;
+
+    @FindBy(xpath = "//li[@class= 'user dropdown-header']/p[not(child::*)]")
+    private WebElement agentEmail;
+
     public Header logOut() {
-        waitForElementToBeVisible(topMenuDropdown);
-        click(topMenuDropdown);
+        waitForElementToBeVisible(iconWithAgentInitials);
+        click(iconWithAgentInitials);
         waitForElementToBeVisible(logOutButton, 6);
         logOutButton.click();
         return this;
     }
 
+    public String getTextFromIcon(){
+        return waitForElementToBeVisibleAgent(iconWithAgentInitials, 5).getText();
+    }
 
+    public void clickIconWithInitials(){
+        iconWithAgentInitials.click();
+    }
 }
