@@ -34,6 +34,7 @@ dependencies {
     compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
+    compile 'mysql:mysql-connector-java:5.1.+'
 }
 
 configurations {

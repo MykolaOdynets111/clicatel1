@@ -4,6 +4,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dbManager.DBConnector;
 import driverManager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.LogDetail;
@@ -110,5 +111,19 @@ public class BaseTieSteps {
         Assert.assertTrue(entities.size()==1 && entities.containsKey(expectedEntity),
                 "Actual entity is not as expected.\n Expected "+expectedEntity+", but found "+entities.keySet()+"");
 
+    }
+
+    @Then("^I can connect to testing DB$")
+    public void verifyDB(){
+//        SoftAssert soft
+        Assert.assertEquals(DBConnector.getInvitationIdForCreatedUserFromMC2DB("testing","aqatest_1@aqa.com"), "ff8080816420c614016421c273bb0000",
+        "tESTING DB IS NOT CONNECTED");
+    }
+
+    @Then("^I can connect to integration DB$")
+    public void verifyDBInt(){
+//        SoftAssert soft
+        Assert.assertEquals(DBConnector.getInvitationIdForCreatedUserFromMC2DB("integration", "aqatest_1@aqa.com"), "ff8080816420c614016421c273bb0000",
+                "integration DB IS NOT CONNECTED");
     }
 }
