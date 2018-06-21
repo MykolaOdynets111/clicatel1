@@ -2,12 +2,14 @@ package dataprovider;
 
 import api_helper.ApiHelper;
 import dataprovider.jackson_schemas.tenant_address.TenantAddress;
+import io.restassured.response.Response;
 
 import java.util.List;
 import java.util.Map;
 
 public class Tenants {
 
+    private static Response respWithAgentInfo = null;
     private static String TENANT_UNDER_TEST = "";
     private static String TENANT_UNDER_TEST_ORG_NAME = "";
 
@@ -42,5 +44,12 @@ public class Tenants {
 
     public static String getLastUserSessionStatus(String userID){
         return ApiHelper.getLastUserSession(userID, getTenantUnderTest()).getState();
+    }
+
+    public static Response getPrimaryAgentInfoForTenant(String tenantOrgName){
+        if (respWithAgentInfo==null){
+            respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName);
+        }
+            return respWithAgentInfo;
     }
 }

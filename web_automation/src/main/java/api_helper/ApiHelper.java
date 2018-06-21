@@ -226,4 +226,13 @@ public class ApiHelper {
                 String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTest());
         return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
     }
+
+    public static Response getAgentInfo(String tenantOrgName) {
+        String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName);
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", token)
+                .get(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
+                        String.format(Endpoints.AGENT_INFO, token));
+    }
 }

@@ -100,7 +100,7 @@ public class BaseTieSteps {
         }
     }
 
-    @When("^I send a \"(.*)\" to (.*) tenant TIE should return \"(.*)\" entity$")
+    @When("^If I send a \"(.*)\" to (.*) tenant TIE should return \"(.*)\" entity$")
     public void verifyTieEntity(String message, String tenant, String expectedEntity){
         Response resp = RestAssured.get(URLs.getBaseTieChatURL(tenant)+message+"&sentiment=true");
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {

@@ -22,6 +22,7 @@ public class Endpoints {
 
     public static String FACEBOOK_INTEGRATION = "facebook-registration/integration";
 
+    public static String AGENT_INFO = "agents/info?mc2Token=%s";
 
     // ================== INTERNAL ============== //
 

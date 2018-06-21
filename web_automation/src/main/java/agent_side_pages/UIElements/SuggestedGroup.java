@@ -14,11 +14,14 @@ public class SuggestedGroup extends AbstractUIElement {
     private List<WebElement> listOfSuggestion;
 
     public boolean isSuggestionListEmpty() {
-        if (listOfSuggestion.size()==0){
-            return true;
-        } else{
-            return false;
+        for (int i=0; i<5; i++){
+            if (listOfSuggestion.size()==0){
+                waitFor(500);
+            }else{
+                return false;
+            }
         }
+        return true;
     }
 
     public List<Suggestion> getSuggestionsList() {

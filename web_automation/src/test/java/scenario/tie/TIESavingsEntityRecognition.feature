@@ -1,8 +1,9 @@
 @tie
 Feature: Tie SAVINGS entity recognition
 
-  Scenario Outline: Tie should recognize SAVINGS entity from a message
-    When I send a "<message>" to generalbank tenant TIE should return "SAVINGS" entity
+  Scenario Outline: Tie should recognize SAVINGS entity from a "<message>" message
+    Then If I send a "<message>" to generalbank tenant TIE should return "SAVINGS" entity
+
     Examples:
     | message                                                      |
     |Do you offer savings accounts?                                |
