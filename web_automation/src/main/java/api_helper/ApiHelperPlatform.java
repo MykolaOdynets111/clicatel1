@@ -3,7 +3,6 @@ package api_helper;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,8 +12,11 @@ public class ApiHelperPlatform {
 
     public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail){
 
-        String ids="";
-        getIdsOfRoles(tenantOrgName, "Touch agent role");
+        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
+        String[] idsArray = new String[ids.size()];
+        for(int i=0; i<ids.size(); i++){
+            idsArray[i] = "\""+ids.get(i)+"\"";
+        }
 
        Response resp =  RestAssured.given()
                 .header("Content-Type", "application/json")
@@ -25,16 +27,12 @@ public class ApiHelperPlatform {
                         "      \"targetEmail\": \""+agentEmail+"\",\n" +
                         "      \"firstName\": \"AQA\",\n" +
                         "      \"lastName\": \"TEST\",\n" +
-//                        "      \"roleIds\": [\n" +
-//                        "       \"ff80808160c18a79016103cd0e7f008a\"\n" +
-//                        "      ]\n" +
-                        "      \"roleIds\": "+ Arrays.toString(getIdsOfRoles(tenantOrgName, "Touch agent role").toArray()) +
+                        "      \"roleIds\": "+ Arrays.toString(idsArray) +
                         "    }\n" +
                         "  ]\n" +
                         "}")
                 .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
                         Endpoints.PLATFORM_SEND_INVITATION);
-       int a = 2;
     }
 
 
