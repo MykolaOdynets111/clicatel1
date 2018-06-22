@@ -1,5 +1,4 @@
 package dbManager;
-import driverManager.ConfigManager;
 import org.testng.Assert;
 
 import java.sql.*;
@@ -53,7 +52,7 @@ public class DBConnector {
         return id;
     }
 
-    public static boolean isConnectionEstabliished(String env, String platform){
+    public static boolean isConnectionEstablished(String env, String platform){
         boolean result;
             try {
                 getConnection(env, platform).getSchema();
@@ -63,7 +62,6 @@ public class DBConnector {
                 e.printStackTrace();
                 result = false;
             }
-            connection=null;
             closeConnection();
         return result;
     }
@@ -75,6 +73,7 @@ public class DBConnector {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            connection = null;
         }
     }
 
