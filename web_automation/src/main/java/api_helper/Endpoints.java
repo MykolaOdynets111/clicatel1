@@ -44,6 +44,13 @@ public class Endpoints {
 
     public static  String PLATFORM_SIGN_IN = "/auth/accounts/sign-in";
 
+    public static String PLATFORM_SEND_INVITATION = "/invitations";
+
+    public static String PLATFORM_ACCEPT_INVITATION = "/invitations/%s/accepted";
+
+    public static String PLATFORM_USER_ROLES = "/roles?details=false";
+
+
     // ====================  TIE ================= //
 
     public static String BASE_TIE_CHAT_URL = "http://%s-tie.clickatelllabs.com/tenants/%s/chats/?q=";
