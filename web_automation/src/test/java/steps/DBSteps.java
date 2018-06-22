@@ -8,6 +8,6 @@ public class DBSteps {
 
     @Then("^I can connect to DB: (.*), (.*)$")
     public void verifyDB(String env, String plat){
-        Assert.assertTrue(DBConnector.isConnectionEstabliished(env, plat), env + " Connection failed");
+        Assert.assertTrue(DBConnector.isConnectionEstablished(env, plat), env + " Connection failed");
     }
 }
