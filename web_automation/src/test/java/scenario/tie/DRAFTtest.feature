@@ -1,3 +1,4 @@
+@tie
 Feature: Draft test to verify DB connection
 
   Scenario: I can connect to testing db

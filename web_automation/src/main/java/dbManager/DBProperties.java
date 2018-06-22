@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum DBProperties {
-    TESTING_MC2("testing", "mc2", "mc2_testing", "mc2_int", "mc2_testing",
+    TESTING_MC2("testing", "mc2", "mc2_testing", "mc2_testing", "mc2_testing",
             "jdbc:mysql://mc2-db-testing.clickatelllabs.com:3306/mc2_testing?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
     TESTING_TOUCH("testing", "touch", "touch_testing", "touch_testing", "testing_touch_platform",
             "jdbc:mysql://touch-db-testing.clickatelllabs.com:3306/testing_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),

@@ -54,13 +54,16 @@ public class DBConnector {
     }
 
     public static boolean isConnectionEstabliished(String env, String platform){
-        boolean result = false;
+        boolean result;
             try {
                 getConnection(env, platform).getSchema();
                 result = true;
+
             } catch (SQLException e) {
                 e.printStackTrace();
+                result = false;
             }
+            connection=null;
             closeConnection();
         return result;
     }
