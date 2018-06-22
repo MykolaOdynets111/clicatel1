@@ -113,17 +113,11 @@ public class BaseTieSteps {
 
     }
 
-    @Then("^I can connect to testing DB$")
-    public void verifyDB(){
-//        SoftAssert soft
-        Assert.assertEquals(DBConnector.getInvitationIdForCreatedUserFromMC2DB("testing","aqatest_1@aqa.com"), "ff8080816420c614016421c273bb0000",
-        "tESTING DB IS NOT CONNECTED");
+    @Then("^I can connect to DB: (.*), (.*)$")
+    public void verifyDB(String env, String plat){
+        Assert.assertTrue(DBConnector.isConnectionEstabliished(env, plat), env + " Connection failed");
+//        Assert.assertEquals(DBConnector.getInvitationIdForCreatedUserFromMC2DB("testing","aqatest_1@aqa.com"), "ff8080816420c614016421c273bb0000",
+//        "tESTING DB IS NOT CONNECTED");
     }
 
-    @Then("^I can connect to integration DB$")
-    public void verifyDBInt(){
-//        SoftAssert soft
-        Assert.assertEquals(DBConnector.getInvitationIdForCreatedUserFromMC2DB("integration", "aqatest_1@aqa.com"), "ff8080816420c614016421c273bb0000",
-                "integration DB IS NOT CONNECTED");
-    }
 }

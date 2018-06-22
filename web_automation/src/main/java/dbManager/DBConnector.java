@@ -13,10 +13,9 @@ public class DBConnector {
 
     private static void createConnection(String env, String platform){
         DBProperties dbProperties = DBProperties.getPropertiesFor(env, platform);
-        String creds = dbProperties.getCreds();
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(dbProperties.getURL(), creds, creds);
+            connection = DriverManager.getConnection(dbProperties.getURL(), dbProperties.getUser(), dbProperties.getPass());
         } catch (Exception e) {
             System.out.println("Connection Failed! Check output console");
             e.printStackTrace();
@@ -47,10 +46,23 @@ public class DBConnector {
             results.next();
             id = results.getString("id");
             statement.close();
+            DBConnector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return id;
+    }
+
+    public static boolean isConnectionEstabliished(String env, String platform){
+        boolean result = false;
+            try {
+                getConnection(env, platform).getSchema();
+                result = true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            closeConnection();
+        return result;
     }
 
     public static void closeConnection(){
@@ -64,7 +76,7 @@ public class DBConnector {
     }
 
 //    public static void main(String args[]){
-//        String a = DBConnector.getInvitationIdForCreatedUserFromMC2DB("aqatest_1@aqa.com");
+//        String a = DBConnector.getInvitationIdForCreatedUserFromMC2DB("demo", "aqatest_1@aqa.com");
 //        DBConnector.closeConnection();
 //    }
 }
