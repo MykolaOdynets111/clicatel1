@@ -52,6 +52,7 @@ public class DBConnector {
         return id;
     }
 
+
     public static boolean isConnectionEstablished(String env, String platform){
         boolean result;
             try {

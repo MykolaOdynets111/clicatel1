@@ -50,6 +50,8 @@ public class Endpoints {
 
     public static String PLATFORM_USER_ROLES = "/roles?details=false";
 
+    public static String PLATFORM_USER = "/users";
+
 
     // ====================  TIE ================= //
 

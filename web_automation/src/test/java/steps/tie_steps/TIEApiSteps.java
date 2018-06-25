@@ -102,8 +102,8 @@ public class TIEApiSteps {
         then()
                 .statusCode(200)
                 .body("text", equalTo(userMessage))
-                .body("sentiment_score", notNullValue())
-                .body("tie_sentiment_score", notNullValue());
+                .body("sentiment_score", notNullValue());
+//                .body("tie_sentiment_score", notNullValue());
     }
 
 

@@ -12,7 +12,7 @@ public class DriverFactory {
 
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondDriver = new ThreadLocal<>();
-
+    private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
 
     public static WebDriver getInstance(){
         if (driver.get() != null) {
@@ -42,6 +42,12 @@ public class DriverFactory {
         return startNewSecondDriverInstance();
     }
 
+    public static WebDriver getPortalDriverInstance(){
+        if (portalDriver.get() != null)
+            return portalDriver.get();
+        return startNewPortalDriverInstance();
+    }
+
     public static WebDriver startNewInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
@@ -63,6 +69,17 @@ public class DriverFactory {
         }
         secondDriver.set(driverType.getWebDriverObject(capabilities));
         return secondDriver.get();
+    }
+
+    public static WebDriver startNewPortalDriverInstance(){
+        DriverType driverType = ConfigManager.getDriverType();
+        MutableCapabilities capabilities = driverType.getDesiredCapabilities();
+        if (ConfigManager.isRemote()) {
+            portalDriver.set(createRemoteDriver(capabilities));
+            return portalDriver.get();
+        }
+        portalDriver.set(driverType.getWebDriverObject(capabilities));
+        return portalDriver.get();
     }
 
     public static void openUrl() {
@@ -97,5 +114,12 @@ public class DriverFactory {
             secondDriver.get().quit();
         }
         secondDriver.set(null);
+    }
+
+    public static void closePortalBrowser(){
+        if(portalDriver.get() != null) {
+            portalDriver.get().quit();
+        }
+        portalDriver.set(null);
     }
 }

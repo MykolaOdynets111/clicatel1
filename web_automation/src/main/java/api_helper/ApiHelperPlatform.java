@@ -36,12 +36,12 @@ public class ApiHelperPlatform {
     }
 
 
-    public static void acceptInvitation(String tenantOrgName, String invitationID){
+    public static void acceptInvitation(String tenantOrgName, String invitationID, String pass){
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
-                        "  \"password\": \"p@$$w0rd4te$t\"\n" +
+                        "  \"password\": \""+pass+"\"\n" +
                         "}")
                 .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
                         String.format(Endpoints.PLATFORM_ACCEPT_INVITATION, invitationID));
@@ -59,6 +59,25 @@ public class ApiHelperPlatform {
                                 (String) e.get("id"));});
          ids.stream().forEach(e -> e.replace(e, "\""+e+"\""));
          return ids;
+    }
+
+    public static void deleteUser(String tenantOrgName, String userID){
+        Response resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
+                        Endpoints.PLATFORM_USER +"/"+ userID);
+    }
+
+    public static String getUserID(String tenantOrgName, String userEmail){
+        Response resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
+                        Endpoints.PLATFORM_USER);
+        return (String) resp.getBody().jsonPath().getList("users", Map.class)
+                .stream().filter(e -> e.get("email").equals(userEmail))
+                .findFirst().get().get("id");
     }
 
 //    public static void main(String [] args){

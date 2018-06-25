@@ -38,7 +38,9 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
+                    !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
                     !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getSecondDriverInstance();
                 }
@@ -61,6 +63,7 @@ public class Hooks implements JSHelper{
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
 
             finishAgentFlowIfExists(scenario);
@@ -78,6 +81,11 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow();
         }
+        if(scenario.getSourceTagNames().contains("@portal")){
+            if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
+            finishAgentFlowIfExists(scenario);
+        }
+
         closeMainBrowserIfOpened();
     }
 
@@ -204,4 +212,5 @@ public class Hooks implements JSHelper{
         }
         return  result.toString();
     }
+
 }
