@@ -39,6 +39,7 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
+                    !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
                     !scenario.getSourceTagNames().contains("@facebook") &&
                     !scenario.getSourceTagNames().contains("@twitter")) {
 
@@ -73,9 +74,9 @@ public class Hooks implements JSHelper{
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter")){
-
 
             finishAgentFlowIfExists(scenario);
             takeScreenshot();
@@ -100,6 +101,11 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow();
         }
+        if(scenario.getSourceTagNames().contains("@portal")){
+            if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
+            finishAgentFlowIfExists(scenario);
+        }
+
         closeMainBrowserIfOpened();
 
     }
@@ -247,4 +253,5 @@ public class Hooks implements JSHelper{
         }
         return  result.toString();
     }
+
 }

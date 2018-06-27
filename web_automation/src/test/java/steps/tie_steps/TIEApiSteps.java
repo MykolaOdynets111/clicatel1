@@ -12,6 +12,7 @@ import static io.restassured.RestAssured.*;
 
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -101,8 +102,8 @@ public class TIEApiSteps {
         then()
                 .statusCode(200)
                 .body("text", equalTo(userMessage))
-                .body("sentiment_score", notNullValue())
-                .body("tie_sentiment_score", notNullValue());
+                .body("sentiment_score", notNullValue());
+//                .body("tie_sentiment_score", notNullValue());
     }
 
 
@@ -387,10 +388,12 @@ public class TIEApiSteps {
 
     @Then("^Config of cloned intent is the same as for (.*)")
     public void verifyClonedTenantResponds(String sourceTenant){
+
         Response sourceTenantResp = get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                 String.format(Endpoints.TIE_CONFIG, sourceTenant));
         Response resp = get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                 String.format(Endpoints.TIE_CONFIG, NEW_TENANT_NAMES.get(Thread.currentThread().getId())));
+        try{
         JsonPath json = resp.getBody().jsonPath();
         JsonPath jsonSource = sourceTenantResp.getBody().jsonPath();
 
@@ -404,6 +407,12 @@ public class TIEApiSteps {
                 json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
         "Config of source tenant was not applied to the new one."
         );
+        } catch(JsonPathException e){
+            Assert.assertTrue(false, "invalid JSON response\n"
+                    +sourceTenantResp.getBody().asString()+" original tenant TIE response \n" +
+                resp.getBody().asString()+" created tenant TIE response"
+            );
+        }
     }
 
     @When("^I delete created tenant$")
