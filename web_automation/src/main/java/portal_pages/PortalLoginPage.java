@@ -26,6 +26,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         waitForElementToBeVisibleAgent(emailInput, 10);
         emailInput.sendKeys(email);
         passInput.sendKeys(pass);
+//        executeJSclick(loginButton);
         loginButton.click();
     }
 }

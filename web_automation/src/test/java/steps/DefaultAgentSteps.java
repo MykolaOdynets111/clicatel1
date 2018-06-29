@@ -84,6 +84,12 @@ public class DefaultAgentSteps {
         soft.assertAll();
     }
 
+    @Then("^Agent is logged in chat desk$")
+    public void verifyAgentLoggedIn(){
+        agentHomePage = new AgentHomePage();
+        Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(), "Agent is not logged in chat desk.");
+
+    }
 
     private ProfileWindow getProfileWindow(){
         if (profileWindow==null) {

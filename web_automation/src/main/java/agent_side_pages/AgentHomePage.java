@@ -103,7 +103,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
 
     public boolean isAgentSuccessfullyLoggedIn() {
-            return isElementShownAgent(conversationAreaContainer,10);
+            return isElementShownAgent(conversationAreaContainer,15);
     }
 
     public String getSuggestionFromInputFiled() {

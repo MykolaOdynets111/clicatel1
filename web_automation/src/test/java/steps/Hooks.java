@@ -27,11 +27,9 @@ import touch_pages.pages.Widget;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 
 public class Hooks implements JSHelper{
 
@@ -106,7 +104,12 @@ public class Hooks implements JSHelper{
                 chatDeskConsoleOutput();
             }
             takeScreenshotFromSecondDriver();
-            logoutAgent();
+            if(scenario.getSourceTagNames().contains("@portal")){
+                logoutAgent();
+            } else{
+                closePopupsIfOpenedEndChatAndlogoutAgent();
+
+            }
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
             }
@@ -136,13 +139,21 @@ public class Hooks implements JSHelper{
         ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }
 
-    private void logoutAgent() {
+    private void closePopupsIfOpenedEndChatAndlogoutAgent() {
         try {
             AgentHomePage agentHomePage =  new AgentHomePage();
             if(agentHomePage.isProfileWindowOpened()){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
             agentHomePage.endChat();
+            agentHomePage.getHeader().logOut();
+            new AgentLoginPage().waitForLoginPageToOpen();
+        } catch (WebDriverException e) { }
+    }
+
+    private void logoutAgent() {
+        try {
+            AgentHomePage agentHomePage =  new AgentHomePage();
             agentHomePage.getHeader().logOut();
             new AgentLoginPage().waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
