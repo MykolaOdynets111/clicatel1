@@ -17,6 +17,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,19 +159,66 @@ public class TIEApiSteps {
 
     @When("^I Create new mapping for intent-answer pare: (.*)$")
     public void createIntentAnswerTraining(List<String> info){
-        String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_TRAININGS, tenant);
-        given().log().all().
-                when()
-                .post(url).
-                then()
+        when()
+                .put(formURLForCreatingNewIntentAnswer(info)).
+        then()
                 .statusCode(200);
     }
 
-    private String forURLForCreatingNewIntentAnswer(List<String> info){
-        return "";
+
+    @Then("^I am not able to create duplicated intent: (.*)")
+    public void verifyCreatingDuplicatedIntent(List<String> info){
+        SoftAssert soft = new SoftAssert();
+        Response resp = put(formURLForCreatingNewIntentAnswer(info));
+        soft.assertEquals(resp.statusCode(), 404,
+                "Status code is not 404 after trying to create duplicated intent");
+        soft.assertEquals(resp.getBody().asString(), "Such intent already exists",
+                "Body does not contain expected message about already created intent");
+        soft.assertAll();
     }
+
+    private String formURLForCreatingNewIntentAnswer(List<String> info){
+        String creatingURL = Endpoints.TIE_BASE_INTENT_ANSWER_CREATING;
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        switch (info.size()){
+            case 1:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0));
+                break;
+            case 2:
+               creatingURL = String.format(creatingURL, tenantID, info.get(0)) + "&answer="+info.get(1);
+               break;
+            case 3:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2);
+                break;
+            case 4:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2)+"&category="+info.get(3);
+                break;
+            case 5:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2)+"&category="+info.get(3)+"&type="+info.get(4);
+                break;
+        }
+        return String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) + creatingURL;
+    }
+
+
+    @Then("^Intent (.*) with the following details: (.*) is created$")
+    public void verifyIntentInfo(String intent, List<String> info){
+        SoftAssert soft = new SoftAssert();
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());;
+        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        Response resp = RestAssured.get(url);
+        soft.assertEquals(resp.getBody().jsonPath().get("title"), info.get(0),
+                "Title of created intent is not as expected");
+        soft.assertEquals(resp.getBody().jsonPath().get("text"), info.get(1),
+                "Answer of created intent is not as expected");
+        soft.assertEquals(resp.getBody().jsonPath().get("url"), info.get(2),
+                "Url of created intent is not as expected");
+        soft.assertEquals(resp.getBody().jsonPath().get("category"), info.get(3),
+                "Category of created intent is not as expected");
+//        soft.assertEquals(resp.getBody().jsonPath().get("type"), info.get(0)); - not yet implemented, TPLAT-2911
+        soft.assertAll();
+    }
+
 
     // ======================= TIE trainings ======================== //
 
