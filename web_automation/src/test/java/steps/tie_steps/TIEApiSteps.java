@@ -156,6 +156,22 @@ public class TIEApiSteps {
                 .body("category", everyItem(equalTo(category)));
     }
 
+    @When("^I Create new mapping for intent-answer pare: (.*)$")
+    public void createIntentAnswerTraining(List<String> info){
+        String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
+                String.format(Endpoints.TIE_TRAININGS, tenant);
+        given().log().all().
+                when()
+                .post(url).
+                then()
+                .statusCode(200);
+    }
+
+    private String forURLForCreatingNewIntentAnswer(List<String> info){
+        return "";
+    }
+
     // ======================= TIE trainings ======================== //
 
     @When("^I want to get trainings for (.*) (?:tenant|tenants) response status should be 200 and body is not empty$")

@@ -95,5 +95,7 @@ public class Endpoints {
 
     public  static String TIE_NER_DELETE = "ner-trainset/%s";
 
+    public static String TIE_BASE_INTENT_ANSWER_CREATING = "%s/answers/?intent=%s&answer=%s";
+
 }
 

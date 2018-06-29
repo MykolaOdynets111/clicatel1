@@ -30,24 +30,6 @@ Feature: Testing TIE APIs
             API: GET /tenants/<tenant_name>/sentiment/?q=<user input>
     When I send "account Balance" for generalbank tenant then sentiments response code is 200
 
-   ### Intent Answers ###
-
-  Scenario: Tie should be able to give list of answers
-            API GET /tenants/{tenant}/answers_map/?intents=<normalized intent name>,<normalized intent name>
-    When I send balance check,trading hours for generalbank tenant then response code is 200 and list of answers is shown
-
-  Scenario: Tie should not give answer if there is only one intent
-            API GET /tenants/{tenant}/answers_map/?intents=<normalized intent name>,<normalized intent name>
-    When I send only balance check for generalbank tenant then response code is 404
-
-  Scenario: Tie should return list of all categories
-            API GET /tenants/{tenant}/answers/?category=all
-    When I want to get all categories for generalbank response has status 200
-
-  Scenario: Tie should return list of all answers for specific category
-            API GET /tenants/{tenant}/answers/?category={CATEGORY ID}
-    When I want to get all answers of Some FAQ category for generalbank response has status 200
-
   ### Data set and config management ##
 
   Scenario: User should be able to retrieve all tenants's trainset
