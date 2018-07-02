@@ -17,6 +17,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -156,6 +157,128 @@ public class TIEApiSteps {
                 .body("category", everyItem(equalTo(category)));
     }
 
+    @When("^I Create new mapping for intent-answer pare: (.*)$")
+    public void createIntentAnswerTraining(List<String> info){
+        when()
+                .put(formURLForCreatingNewIntentAnswer(info)).
+        then()
+                .statusCode(200);
+        waitFor(5000);
+    }
+
+
+    @Then("^I am not able to create duplicated intent: (.*)")
+    public void verifyCreatingDuplicatedIntent(List<String> info){
+        SoftAssert soft = new SoftAssert();
+        Response resp = put(formURLForCreatingNewIntentAnswer(info));
+        soft.assertEquals(resp.statusCode(), 404,
+                "Status code is not 404 after trying to create duplicated intent");
+        soft.assertEquals(resp.getBody().asString(), "Such intent already exists",
+                "Body does not contain expected message about already created intent");
+        soft.assertAll();
+    }
+
+    private String formURLForCreatingNewIntentAnswer(List<String> info){
+        String creatingURL = Endpoints.TIE_BASE_INTENT_ANSWER_CREATING;
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        switch (info.size()){
+            case 1:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0));
+                break;
+            case 2:
+               creatingURL = String.format(creatingURL, tenantID, info.get(0)) + "&answer="+info.get(1);
+               break;
+            case 3:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2);
+                break;
+            case 4:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2)+"&category="+info.get(3);
+                break;
+            case 5:
+                creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2)+"&category="+info.get(3)+"&type="+info.get(4);
+                break;
+        }
+        return String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) + creatingURL;
+    }
+
+
+    @Then("^Intent (.*) with the following details: (.*) is created$")
+    public void verifyIntentInfo(String intent, List<String> info){
+        SoftAssert soft = new SoftAssert();
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());;
+        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        Response resp = RestAssured.get(url);
+        try {
+            if (info.size()==1) {
+                Assert.assertEquals(resp.getBody().jsonPath().get("title"), info.get(0),
+                        "Title of created intent is not as expected");
+            } else {
+                soft.assertEquals(resp.getBody().jsonPath().get("title"), info.get(0),
+                        "Title of created intent is not as expected");
+                soft.assertEquals(resp.getBody().jsonPath().get("text"), info.get(1),
+                        "Answer of created intent is not as expected");
+                soft.assertEquals(resp.getBody().jsonPath().get("url"), info.get(2),
+                        "Url of created intent is not as expected");
+                soft.assertEquals(resp.getBody().jsonPath().get("category"), info.get(3),
+                        "Category of created intent is not as expected");
+                soft.assertEquals(resp.getBody().jsonPath().get("type"), info.get(4));
+                soft.assertAll();
+            }
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "JSON response is not as expected. For created intent "+intent+"\n"+
+                    resp.getBody().asString());
+        }
+    }
+
+    @When("^I update (.*) intent's (?:answer and URL|answer) to (.*)$")
+    public void updateIntentAnswer(String intent, List<String> newIntentInfo){
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        if(newIntentInfo.size()==1) {
+            String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "";
+            when().
+                    post(url).
+            then().
+                    statusCode(200);
+        }else{
+            String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "&answer_url="+newIntentInfo.get(1)+"";
+            when().
+                    post(url).
+            then().
+                    statusCode(200);
+        }
+    }
+
+
+    @When("^404 status code for updating not existed intent$")
+    public void updateIntentAnswerAndURL(){
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, "notexisted_intent")+"&answer=newAnswer";
+        when().
+                post(url).
+        then().
+                statusCode(404);
+    }
+
+    @When("^I delete created intent (.*)$")
+    public void deleteIntent(String intent){
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        when().
+                delete(url).
+        then().
+                statusCode(200);
+        waitFor(4000);
+    }
+
+    @When("^Intent (.*) is deleted$")
+    public void verifyIntentDeleted(String intent){
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        when().
+                get(url).
+        then().
+                statusCode(404);
+    }
     // ======================= TIE trainings ======================== //
 
     @When("^I want to get trainings for (.*) (?:tenant|tenants) response status should be 200 and body is not empty$")
@@ -410,7 +533,7 @@ public class TIEApiSteps {
         } catch(JsonPathException e){
             Assert.assertTrue(false, "invalid JSON response. New Tetant: "+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"\n"
                     +sourceTenantResp.getBody().asString()+" original tenant TIE response \n" +
-                resp.getBody().asString()+" created tenant TIE response"
+                    resp.getBody().asString()+" created tenant TIE response"
             );
         }
     }

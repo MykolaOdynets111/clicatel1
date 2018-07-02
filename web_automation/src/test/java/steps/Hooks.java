@@ -127,7 +127,12 @@ public class Hooks implements JSHelper{
                 chatDeskConsoleOutput();
             }
             takeScreenshotFromSecondDriver();
-            logoutAgent();
+            if(scenario.getSourceTagNames().contains("@portal")){
+                logoutAgent();
+            } else{
+                closePopupsIfOpenedEndChatAndlogoutAgent();
+
+            }
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
             }
@@ -154,18 +159,27 @@ public class Hooks implements JSHelper{
     private void logoutAgent() {
         try {
             AgentHomePage agentHomePage =  new AgentHomePage();
+            agentHomePage.getHeader().logOut();
+            new AgentLoginPage().waitForLoginPageToOpen();
+        } catch (WebDriverException e) { }
+    }
+
+    private void closePopupsIfOpenedEndChatAndlogoutAgent() {
+        try {
+            AgentHomePage agentHomePage =  new AgentHomePage();
             if(agentHomePage.isProfileWindowOpened()){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
             agentHomePage.endChat();
             agentHomePage.getHeader().logOut();
+            new AgentLoginPage().waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }
 
     private void finishAgentFlowIfExists() {
         if (DriverFactory.isSecondDriverExists()) {
             takeScreenshotFromSecondDriver();
-            logoutAgent();
+            closePopupsIfOpenedEndChatAndlogoutAgent();
             DriverFactory.closeSecondBrowser();
         }
     }
@@ -177,11 +191,10 @@ public class Hooks implements JSHelper{
     }
 
     private void endFacebookFlow(Scenario scenario) {
-        try {
-            new FBTenantPage().getMessengerWindow().deleteConversation();
-        } catch (WebDriverException e) { }
-    }
-
+            try {
+                new FBTenantPage().getMessengerWindow().deleteConversation();
+            } catch (WebDriverException e) { }
+        }
 
     private void closeMainBrowserIfOpened() {
         if (DriverFactory.isDriverExists()) {
