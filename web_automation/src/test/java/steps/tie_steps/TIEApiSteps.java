@@ -408,7 +408,7 @@ public class TIEApiSteps {
         "Config of source tenant was not applied to the new one."
         );
         } catch(JsonPathException e){
-            Assert.assertTrue(false, "invalid JSON response\n"
+            Assert.assertTrue(false, "invalid JSON response. New Tetant: "+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"\n"
                     +sourceTenantResp.getBody().asString()+" original tenant TIE response \n" +
                 resp.getBody().asString()+" created tenant TIE response"
             );
