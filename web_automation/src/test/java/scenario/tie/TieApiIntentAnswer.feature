@@ -19,14 +19,14 @@ Feature:  Tie API (intent answers)
         API GET /tenants/{tenant}/answers/?category={CATEGORY ID}
     When I want to get all answers of Some FAQ category for generalbank response has status 200
 
-  Scenario: Creating, editing, deleting new intent and answers
-        API GET /tenants/<tenant_name>/answers/?intent=<normalized intent name>
-        API POST /tenants/{tenant}/answers/?intent={INTEND_ID}&answer={ANSWER_TXT}&answer_url={URL}
-        API PUT /tenants/{tenant}/answers/?intent={INTEND_ID}&answer={ANSWER_TXT}&answer_url={URL}&category={CATEGORY}&type={TYPE}
-        API DELETE /tenants/{tenant}/answers/?intent={INTEND_ID}
-    Given  I create new tenant with TIE API
-    And Wait for a minute
-    When I Create new mapping for intent-answer pare: test_intent1, answer_for_int1, www.testyrl.com, aqa, test
-    And I Create new mapping for intent-answer pare: solo_intent
-    Then Intent test intent1 with the following details: test_intent1, answer_for_int1, www.testyrl.com, aqa, test is created
-    And I am not able to create duplicated intent: solo_intent
+#  Scenario: Creating, editing, deleting new intent and answers
+#        API GET /tenants/<tenant_name>/answers/?intent=<normalized intent name>
+#        API POST /tenants/{tenant}/answers/?intent={INTEND_ID}&answer={ANSWER_TXT}&answer_url={URL}
+#        API PUT /tenants/{tenant}/answers/?intent={INTEND_ID}&answer={ANSWER_TXT}&answer_url={URL}&category={CATEGORY}&type={TYPE}
+#        API DELETE /tenants/{tenant}/answers/?intent={INTEND_ID}
+#    Given  I create new tenant with TIE API
+#    And Wait for a minute
+#    When I Create new mapping for intent-answer pare: test_intent1, answer_for_int1, www.testyrl.com, aqa, test
+#    And I Create new mapping for intent-answer pare: solo_intent
+#    Then Intent test intent1 with the following details: test_intent1, answer_for_int1, www.testyrl.com, aqa, test is created
+#    And I am not able to create duplicated intent: solo_intent
