@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
 import driverManager.URLs;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import twitter.TwitterHomePage;
@@ -109,23 +110,31 @@ public class TwitterSteps {
 
 
     @When("^User have to receive (.*) agent response as comment for (.*) tweet$")
-    public void checkAgentResponse(String expectedResponse, String targetTweet){
+    public void verifyAgentResponse(String expectedResponse, String targetTweet){
         boolean result = false;
-        for (int i =0; i < 10; i++){
-            openedTweet.closeTweet();
-            openedTweet = getTweetsSection().clickTimeLineTweetWithText(targetTweet);
-            if(openedTweet.ifAgentReplyShown(expectedResponse,1)){
-                result = true;
-                break;
-            } else {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            for (int i =0; i < 10; i++){
+                openedTweet.closeTweet();
+                try{
+                    result = checkAgentsResponse(expectedResponse, targetTweet);
+                    if(result) break;
+                    else openedTweet.waitFor(2000);
+                } catch(StaleElementReferenceException e){
+                    result = checkAgentsResponse(expectedResponse, targetTweet);
+                    if(result) break;
+                    else openedTweet.waitFor(2000);
                 }
             }
-        }
         Assert.assertTrue(result, "Agent response for user is not shown as comment for tweet");
+    }
+
+    private boolean checkAgentsResponse(String expectedResponse, String targetTweet){
+            openedTweet = getTweetsSection().clickTimeLineTweetWithText(targetTweet);
+            if(openedTweet.ifAgentReplyShown(expectedResponse,1)) {
+                return true;
+            } else{
+                return false;
+            }
+
     }
 
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
