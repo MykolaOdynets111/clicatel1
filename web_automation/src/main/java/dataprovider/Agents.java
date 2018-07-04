@@ -24,9 +24,13 @@ public enum Agents {
 
     // email credentials: devgeneralbankdemo@gmail.com, pass p@$$w0rd4te$t
 
-    SECOND_AGENT_QA("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
+    SECOND_AGENT_QA("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
 
-    SECOND_AGENT_DEV("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa");
+    SECOND_AGENT_DEV("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "dev"),
+
+    SECOND_AGENT_TESTING("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
+
+    SECOND_AGENT_INTEGRATION("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "integration");
 
     String userName;
     String userPass;
