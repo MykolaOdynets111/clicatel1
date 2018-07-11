@@ -13,6 +13,7 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> thirdDriver = new ThreadLocal<>();
 
     public static WebDriver getInstance(){
         if (driver.get() != null) {
@@ -24,6 +25,13 @@ public class DriverFactory {
 
     public static boolean isSecondDriverExists(){
         if (secondDriver.get() != null)
+            return true;
+        else
+            return false;
+    }
+
+    public static boolean isThirdDriverExists(){
+        if (thirdDriver.get() != null)
             return true;
         else
             return false;
@@ -41,6 +49,16 @@ public class DriverFactory {
             return secondDriver.get();
         return startNewSecondDriverInstance();
     }
+
+    public static WebDriver getThirdDriverInstance(){
+        if (thirdDriver.get() != null)
+            return thirdDriver.get();
+        return startNewThirdDriverInstance();
+    }
+
+
+
+
 
     public static WebDriver getPortalDriverInstance(){
         if (portalDriver.get() != null)
@@ -69,6 +87,17 @@ public class DriverFactory {
         }
         secondDriver.set(driverType.getWebDriverObject(capabilities));
         return secondDriver.get();
+    }
+
+    public static WebDriver startNewThirdDriverInstance(){
+        DriverType driverType = ConfigManager.getDriverType();
+        MutableCapabilities capabilities = driverType.getDesiredCapabilities();
+        if (ConfigManager.isRemote()) {
+            thirdDriver.set(createRemoteDriver(capabilities));
+            return thirdDriver.get();
+        }
+        thirdDriver.set(driverType.getWebDriverObject(capabilities));
+        return thirdDriver.get();
     }
 
     public static WebDriver startNewPortalDriverInstance(){
@@ -121,5 +150,12 @@ public class DriverFactory {
             portalDriver.get().quit();
         }
         portalDriver.set(null);
+    }
+
+    public static void closeThirdBrowser(){
+        if(thirdDriver.get() != null) {
+            thirdDriver.get().quit();
+        }
+        thirdDriver.set(null);
     }
 }
