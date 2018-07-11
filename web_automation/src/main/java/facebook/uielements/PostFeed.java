@@ -21,7 +21,7 @@ public class PostFeed extends AbstractUIElement {
     public void makeAPost(String userPostText){
         postArea.click();
         waitForElementToBeVisibleByXpath(postInputField,4);
-        DriverFactory.getInstance().findElement(By.xpath(postInputField)).sendKeys(userPostText);
+        DriverFactory.getTouchDriverInstance().findElement(By.xpath(postInputField)).sendKeys(userPostText);
         postButton.click();
         waitForElementToBeInvisible(postButton,10);
     }

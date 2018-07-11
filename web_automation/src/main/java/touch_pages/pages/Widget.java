@@ -102,7 +102,7 @@ public class Widget extends AbstractPage {
     }
 
     public void scrollABitToRevealHeaderButtons() {
-        Actions action = new Actions(DriverFactory.getInstance());
+        Actions action = new Actions(DriverFactory.getTouchDriverInstance());
         if(ConfigManager.isRemote()){
             action.dragAndDropBy(conversationArea, 0, -50).build().perform();
         }else {

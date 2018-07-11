@@ -1,6 +1,5 @@
 package portal_pages;
 
-import agent_side_pages.AgentLoginPage;
 import driverManager.DriverFactory;
 import driverManager.URLs;
 import org.openqa.selenium.WebElement;
@@ -18,7 +17,7 @@ public class PortalLoginPage extends PortalAbstractPage {
     private WebElement loginButton;
 
     public static PortalLoginPage openPortalLoginPage() {
-        DriverFactory.getSecondDriverInstance().get(URLs.getPortalURL());
+        DriverFactory.getAgentDriverInstance().get(URLs.getPortalURL());
         return new PortalLoginPage();
     }
 

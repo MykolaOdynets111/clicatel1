@@ -10,55 +10,59 @@ import java.net.URL;
 
 public class DriverFactory {
 
-    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-    private static final ThreadLocal<WebDriver> secondDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> touchDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> agentDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
-    private static final ThreadLocal<WebDriver> thirdDriver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> secondAgentDriver = new ThreadLocal<>();
 
-    public static WebDriver getInstance(){
-        if (driver.get() != null) {
-            return driver.get();
+    public static boolean isAgentDriverExists(){
+        if (agentDriver.get() != null)
+            return true;
+        else
+            return false;
+    }
+
+    public static boolean isSecondAgentDriverExists(){
+        if (secondAgentDriver.get() != null)
+            return true;
+        else
+            return false;
+    }
+
+    public static boolean isTouchDriverExists(){
+        if (touchDriver.get() != null)
+            return true;
+        else
+            return false;
+    }
+
+    public static WebDriver getTouchDriverInstance(){
+        if (touchDriver.get() != null) {
+            return touchDriver.get();
         } else {
-            return startNewInstance();
+            return startNewTouchInstance();
         }
     }
 
-    public static boolean isSecondDriverExists(){
-        if (secondDriver.get() != null)
-            return true;
-        else
-            return false;
+    public static WebDriver getAgentDriverInstance(){
+        if (agentDriver.get() != null)
+            return agentDriver.get();
+        return startNewAgentDriverInstance();
     }
 
-    public static boolean isThirdDriverExists(){
-        if (thirdDriver.get() != null)
-            return true;
-        else
-            return false;
+    public static WebDriver getSecondAgentDriverInstance(){
+        if (secondAgentDriver.get() != null)
+            return secondAgentDriver.get();
+        return startNewSecondAgentDriverInstance();
     }
 
-    public static boolean isDriverExists(){
-        if (driver.get() != null)
-            return true;
-        else
-            return false;
+    public static  WebDriver getDriverForAgent(String agent){
+        if (agent.equalsIgnoreCase("second agent")){
+            return DriverFactory.getSecondAgentDriverInstance();
+        } else {
+            return DriverFactory.getAgentDriverInstance();
+        }
     }
-
-    public static WebDriver getSecondDriverInstance(){
-        if (secondDriver.get() != null)
-            return secondDriver.get();
-        return startNewSecondDriverInstance();
-    }
-
-    public static WebDriver getThirdDriverInstance(){
-        if (thirdDriver.get() != null)
-            return thirdDriver.get();
-        return startNewThirdDriverInstance();
-    }
-
-
-
-
 
     public static WebDriver getPortalDriverInstance(){
         if (portalDriver.get() != null)
@@ -66,38 +70,38 @@ public class DriverFactory {
         return startNewPortalDriverInstance();
     }
 
-    public static WebDriver startNewInstance(){
+    public static WebDriver startNewTouchInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {
-            driver.set(createRemoteDriver(capabilities));
-            return driver.get();
+            touchDriver.set(createRemoteDriver(capabilities));
+            return touchDriver.get();
         }
-        driver.set(driverType.getWebDriverObject(capabilities));
-        return  driver.get();
+        touchDriver.set(driverType.getWebDriverObject(capabilities));
+        return  touchDriver.get();
     }
 
 
-    public static WebDriver startNewSecondDriverInstance(){
+    public static WebDriver startNewAgentDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {
-            secondDriver.set(createRemoteDriver(capabilities));
-            return secondDriver.get();
+            agentDriver.set(createRemoteDriver(capabilities));
+            return agentDriver.get();
         }
-        secondDriver.set(driverType.getWebDriverObject(capabilities));
-        return secondDriver.get();
+        agentDriver.set(driverType.getWebDriverObject(capabilities));
+        return agentDriver.get();
     }
 
-    public static WebDriver startNewThirdDriverInstance(){
+    public static WebDriver startNewSecondAgentDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {
-            thirdDriver.set(createRemoteDriver(capabilities));
-            return thirdDriver.get();
+            secondAgentDriver.set(createRemoteDriver(capabilities));
+            return secondAgentDriver.get();
         }
-        thirdDriver.set(driverType.getWebDriverObject(capabilities));
-        return thirdDriver.get();
+        secondAgentDriver.set(driverType.getWebDriverObject(capabilities));
+        return secondAgentDriver.get();
     }
 
     public static WebDriver startNewPortalDriverInstance(){
@@ -112,8 +116,8 @@ public class DriverFactory {
     }
 
     public static void openUrl() {
-        DriverFactory.getInstance().get(URLs.getURL());
-            JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
+        DriverFactory.getTouchDriverInstance().get(URLs.getURL());
+            JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
             jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+(int)(Math.random()*(2000-1)+1)
                     +System.currentTimeMillis()+"');");
     }
@@ -130,19 +134,19 @@ public class DriverFactory {
         }
     }
 
-    public static void closeBrowser(){
-        if(driver.get() != null) {
-            driver.get().quit();
+    public static void closeTouchBrowser(){
+        if(touchDriver.get() != null) {
+            touchDriver.get().quit();
         }
-        driver.set(null);
+        touchDriver.set(null);
     }
 
 
-    public static void closeSecondBrowser(){
-        if(secondDriver.get() != null) {
-            secondDriver.get().quit();
+    public static void closeAgentBrowser(){
+        if(agentDriver.get() != null) {
+            agentDriver.get().quit();
         }
-        secondDriver.set(null);
+        agentDriver.set(null);
     }
 
     public static void closePortalBrowser(){
@@ -152,10 +156,10 @@ public class DriverFactory {
         portalDriver.set(null);
     }
 
-    public static void closeThirdBrowser(){
-        if(thirdDriver.get() != null) {
-            thirdDriver.get().quit();
+    public static void closeSecondAgentBrowser(){
+        if(secondAgentDriver.get() != null) {
+            secondAgentDriver.get().quit();
         }
-        thirdDriver.set(null);
+        secondAgentDriver.set(null);
     }
 }

@@ -7,8 +7,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.security.cert.X509Certificate;
-
 public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "div.suggestion-wrapper")
@@ -47,6 +45,8 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptProfanityPopupButton;
 
+    String transferChatButton =  "//button[text()='Transfer chat']";
+
     private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
 
     private LeftMenuWithChats leftMenuWithChats;
@@ -54,9 +54,18 @@ public class AgentHomePage extends AgentAbstractPage {
     private Header header;
     private SuggestedGroup suggestedGroup;
     private ProfileWindow profileWindow;
+    private TransferChatWindow transferChatWindow;
+    private IncomingTransferWindow incomingTransferWindow;
 
-    public AgentHomePage() {
+    public AgentHomePage(String agent) {
+        super(agent);
     }
+
+    public IncomingTransferWindow getIncomingTransferWindow() {
+        return incomingTransferWindow;
+    }
+
+    public TransferChatWindow getTransferChatWindow() {return transferChatWindow;}
 
     public ProfileWindow getProfileWindow() {
         return profileWindow;
@@ -121,7 +130,7 @@ public class AgentHomePage extends AgentAbstractPage {
                 suggestionInputField.click();
                 messageInput.sendKeys(additionalMessage);
             } catch (StaleElementReferenceException e) {
-                DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
+                DriverFactory.getAgentDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
             }
     }
 
@@ -210,4 +219,9 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
+    public void clickTransferButton(){
+        findElemByXPATHAgent(transferChatButton).click();
+//        executeJSclick(transferChatButton);
+//        transferChatButton.click();
+    }
 }

@@ -185,7 +185,7 @@ public class AgentConversationSteps implements JSHelper{
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
-            agentHomePage =  new AgentHomePage();
+            agentHomePage =  new AgentHomePage("main agent");
             return agentHomePage;
         } else{
             return agentHomePage;

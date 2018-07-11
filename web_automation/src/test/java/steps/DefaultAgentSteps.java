@@ -2,12 +2,14 @@ package steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
+import agent_side_pages.UIElements.LeftMenuWithChats;
 import agent_side_pages.UIElements.ProfileWindow;
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataprovider.Tenants;
+import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -16,14 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultAgentSteps {
+public class DefaultAgentSteps implements JSHelper {
     private AgentHomePage agentHomePage;
+    private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
+    private LeftMenuWithChats leftMenuWithChats;
 
-    @Given("^I login as agent of (.*)")
-    public void loginAsAgentForTenant(String tenantOrhName){
-        agentHomePage = AgentLoginPage.openAgentLoginPage(tenantOrhName).loginAsAgentOf(tenantOrhName);
-        Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(), "Agent is not logged in.");
+    @Given("^I login as (.*) of (.*)")
+    public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrhName){
+        AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrhName).loginAsAgentOf(tenantOrhName, ordinalAgentNumber);
+                Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(), "Agent is not logged in.");
     }
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
@@ -73,30 +77,103 @@ public class DefaultAgentSteps {
                 e.get("name").toString().toUpperCase() + " ("+
                         e.get("solution").toString().toUpperCase() +        ")"
         );});
-        soft.assertTrue(getProfileWindow().isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("firstName")),
+        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("firstName")),
                 "Agent first name is not shown in profile window");
-        soft.assertTrue(getProfileWindow().isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("lastName")),
+        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("lastName")),
                 "Agent last name is not shown in profile window");
-        soft.assertTrue(getProfileWindow().isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("email")),
+        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("email")),
                 "Agent email is not shown in profile window");
-        soft.assertEquals(getProfileWindow().getListOfRoles(), expected,
+        soft.assertEquals(getProfileWindow("agent").getListOfRoles(), expected,
                 "Agent roles listed in Profile window are not as expected");
         soft.assertAll();
     }
 
-    @Then("^Agent is logged in chat desk$")
-    public void verifyAgentLoggedIn(){
-        agentHomePage = new AgentHomePage();
+    @Then("^(.*) is logged in chat desk$")
+    public void verifyAgentLoggedIn(String ordinalAgentNumber){
+        agentHomePage = new AgentHomePage(ordinalAgentNumber);
         Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(), "Agent is not logged in chat desk.");
 
     }
 
-    private ProfileWindow getProfileWindow(){
+    @When("^Agent transfers chat$")
+    public void transferChat(){
+        getAgentHomeForMainAgent().clickTransferButton();
+        getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
+    }
+
+    @Then("Second agent receives incoming transfer with \"(.*)\" note from the first agent")
+    public void verifyIncomingTransferReceived(String notes){
+        Assert.assertEquals(getAgentHomeForSecondAgent().getIncomingTransferWindow().getTransferNotes(), notes,
+                "Notes in incoming transfer window is not as added by the first agent");
+    }
+
+    @Then("^Second agent click \"Accept transfer\" button$")
+    public void acceptIncomingTransfer(){
+        getAgentHomeForSecondAgent().getIncomingTransferWindow().acceptTransfer();
+    }
+
+    @Then("^(.*) has new conversation request$")
+    public void verifyIfAgentReceivesConversationRequest(String agent) {
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(10),
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+    }
+
+    @Then("^From (.*) chat should be removed from agent desk$")
+    public void verifyConversationRemovedFromChatDesk(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
+                "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
+        );
+    }
+
+
+    @When("^(.*) click on new conversation$")
+    public void acceptUserConversation(String ordinalAgentNumber) {
+        getLeftMenu(ordinalAgentNumber).openNewConversationRequest();
+    }
+
+    private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
+            return getAgentHomeForSecondAgent();
+        } else {
+            return getAgentHomeForMainAgent();
+        }
+    }
+
+    private AgentHomePage getAgentHomeForSecondAgent(){
+        if (secondAgentHomePage==null) {
+            secondAgentHomePage = new AgentHomePage("second agent");
+            return secondAgentHomePage;
+        } else{
+            return secondAgentHomePage;
+        }
+    }
+
+    private AgentHomePage getAgentHomeForMainAgent(){
+        if (agentHomePage==null) {
+            agentHomePage = new AgentHomePage("main agent");
+            return agentHomePage;
+        } else{
+            return agentHomePage;
+        }
+    }
+
+    private ProfileWindow getProfileWindow(String ordinalAgentNumber){
         if (profileWindow==null) {
-            profileWindow = agentHomePage.getProfileWindow();
+            profileWindow = getAgentHomePage(ordinalAgentNumber).getProfileWindow();
             return profileWindow;
         } else{
             return profileWindow;
+        }
+    }
+
+
+    private LeftMenuWithChats getLeftMenu(String agent) {
+        if (leftMenuWithChats==null) {
+            leftMenuWithChats =  getAgentHomePage(agent).getLeftMenuWithChats();
+            return leftMenuWithChats;
+        } else{
+            return leftMenuWithChats;
         }
     }
 }

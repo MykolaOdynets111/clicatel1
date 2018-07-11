@@ -2,7 +2,6 @@ package interfaces;
 
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
 import java.util.List;
@@ -99,19 +98,19 @@ public interface WebActions extends WebWait {
     }
 
     default WebElement findElemByXPATH(String xpath){
-        return DriverFactory.getInstance().findElement(By.xpath(xpath));
+        return DriverFactory.getTouchDriverInstance().findElement(By.xpath(xpath));
     }
 
     default WebElement findElemByXPATHAgent(String xpath){
-        return DriverFactory.getSecondDriverInstance().findElement(By.xpath(xpath));
+        return DriverFactory.getAgentDriverInstance().findElement(By.xpath(xpath));
     }
 
         default WebElement findElemByCSSAgent(String css){
-        return DriverFactory.getSecondDriverInstance().findElement(By.cssSelector(css));
+        return DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(css));
     }
 
     default List<WebElement> findElemsByXPATH(String xpath){
-        return DriverFactory.getInstance().findElements(By.xpath(xpath));
+        return DriverFactory.getTouchDriverInstance().findElements(By.xpath(xpath));
     }
 
     default void pressEnterForWebElem(WebElement elem){

@@ -33,8 +33,8 @@
 //
 //    @AfterClass(alwaysRun = true)
 //    public void tearDownClass(){
-////        DriverFactory.closeBrowser();
-////        DriverFactory.closeSecondBrowser();
+////        DriverFactory.closeTouchBrowser();
+////        DriverFactory.closeAgentBrowser();
 ////        this.testNGCucumberRunner.finish();
 //    }
 //

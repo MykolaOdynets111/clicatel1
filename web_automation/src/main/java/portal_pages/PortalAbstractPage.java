@@ -9,7 +9,7 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public PortalAbstractPage() {
-        HtmlElementLoader.populatePageObject(this, DriverFactory.getSecondDriverInstance());
+        HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
     }
 
 }

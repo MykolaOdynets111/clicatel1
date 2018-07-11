@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -48,7 +47,7 @@ public class FBTenantPage extends AbstractPage {
 
     public VisitorPost getLastVisitorPost() {
         String loggedFBUserName = FacebookUsers.getLoggedInUser().getFBUserName() +" " + FacebookUsers.getLoggedInUser().getFBUserSurname();
-        List<VisitorPost> allPosts = DriverFactory.getInstance().findElements(By.xpath(postLocator))
+        List<VisitorPost> allPosts = DriverFactory.getTouchDriverInstance().findElements(By.xpath(postLocator))
                 .stream().map(e -> new VisitorPost(e)).collect(Collectors.toList());
         List<VisitorPost> postsFromLoggedInAQAUser = allPosts.stream().filter(e-> e.getUserName().equals(loggedFBUserName)).collect(Collectors.toList());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");

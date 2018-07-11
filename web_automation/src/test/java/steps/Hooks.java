@@ -40,7 +40,7 @@ public class Hooks implements JSHelper{
                     !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
 
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
-                    DriverFactory.getSecondDriverInstance();
+                    DriverFactory.getAgentDriverInstance();
                 }
                 DriverFactory.openUrl();
                 // Setting up coordinates of Lviv, Ukraine into browser
@@ -90,16 +90,16 @@ public class Hooks implements JSHelper{
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshot() {
-        return ((TakesScreenshot) DriverFactory.getInstance()).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshotFromSecondDriver() {
-        return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) DriverFactory.getAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
     private void finishAgentFlowIfExists(Scenario scenario) {
-        if (DriverFactory.isSecondDriverExists()) {
+        if (DriverFactory.isAgentDriverExists()) {
             if(scenario.isFailed()){
                 chatDeskConsoleOutput();
             }
@@ -113,7 +113,10 @@ public class Hooks implements JSHelper{
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
             }
-            DriverFactory.closeSecondBrowser();
+            DriverFactory.closeAgentBrowser();
+        }
+        if(DriverFactory.isSecondAgentDriverExists()){
+            DriverFactory.closeSecondAgentBrowser();
         }
     }
 
@@ -141,21 +144,21 @@ public class Hooks implements JSHelper{
 
     private void closePopupsIfOpenedEndChatAndlogoutAgent() {
         try {
-            AgentHomePage agentHomePage =  new AgentHomePage();
+            AgentHomePage agentHomePage =  new AgentHomePage("main agent");
             if(agentHomePage.isProfileWindowOpened()){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
             agentHomePage.endChat();
             agentHomePage.getHeader().logOut();
-            new AgentLoginPage().waitForLoginPageToOpen();
+            new AgentLoginPage("one agent").waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }
 
     private void logoutAgent() {
         try {
-            AgentHomePage agentHomePage =  new AgentHomePage();
+            AgentHomePage agentHomePage =  new AgentHomePage("main agent");
             agentHomePage.getHeader().logOut();
-            new AgentLoginPage().waitForLoginPageToOpen();
+            new AgentLoginPage("one agent").waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }
 
@@ -183,8 +186,8 @@ public class Hooks implements JSHelper{
 
 
     private void closeMainBrowserIfOpened() {
-        if (DriverFactory.isDriverExists()) {
-            DriverFactory.closeBrowser();
+        if (DriverFactory.isTouchDriverExists()) {
+            DriverFactory.closeTouchBrowser();
         }
     }
 
@@ -207,7 +210,7 @@ public class Hooks implements JSHelper{
     @Attachment
     private String touchConsoleOutput(){
         StringBuilder result = new StringBuilder();
-        LogEntries logEntries = DriverFactory.getInstance().manage().logs().get(LogType.BROWSER);
+        LogEntries logEntries = DriverFactory.getTouchDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }
@@ -217,7 +220,7 @@ public class Hooks implements JSHelper{
     @Attachment
     private String chatDeskConsoleOutput(){
         StringBuilder result = new StringBuilder();
-        LogEntries logEntries = DriverFactory.getSecondDriverInstance().manage().logs().get(LogType.BROWSER);
+        LogEntries logEntries = DriverFactory.getAgentDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }

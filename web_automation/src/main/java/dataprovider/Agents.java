@@ -62,12 +62,28 @@ public enum Agents {
         return this.tenant;
     }
 
-    public static Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
+    public static Agents getMainAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
         Agents[] agentsArray = Agents.values();
         List<Agents> agentsList = Arrays.asList(agentsArray);
         return agentsList.stream()
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
-                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName))
+                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
+                        && !e.getAgentName().contains("second"))
                 .findFirst().get();
+    }
+
+    public static Agents getSecondAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
+        Agents[] agentsArray = Agents.values();
+        List<Agents> agentsList = Arrays.asList(agentsArray);
+        return agentsList.stream()
+                .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
+                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
+                        && e.getAgentName().contains("second"))
+                .findFirst().get();
+    }
+
+    public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String ordinalAgentNumber){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
+        else return getMainAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
     }
 }

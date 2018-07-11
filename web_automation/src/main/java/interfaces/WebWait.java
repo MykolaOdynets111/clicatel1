@@ -13,15 +13,20 @@ import java.util.List;
 public interface WebWait {
 
     default WebDriverWait initWait(){
-        return new WebDriverWait(DriverFactory.getInstance(), 30);
+        return new WebDriverWait(DriverFactory.getTouchDriverInstance(), 30);
     }
 
     default WebDriverWait initWait(int waitTime){
-        return new WebDriverWait(DriverFactory.getInstance(), waitTime);
+        return new WebDriverWait(DriverFactory.getTouchDriverInstance(), waitTime);
     }
 
     default WebDriverWait initAgentWait(int waitTime){
-        return new WebDriverWait(DriverFactory.getSecondDriverInstance(), waitTime);
+        return new WebDriverWait(DriverFactory.getAgentDriverInstance(), waitTime);
+    }
+
+    default WebDriverWait initAgentWait(int waitTime, String ordinalAgentNumber){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return new WebDriverWait(DriverFactory.getSecondAgentDriverInstance(), waitTime);
+        else return new WebDriverWait(DriverFactory.getAgentDriverInstance(), waitTime);
     }
 
     default WebElement waitForElementToBeClickable(WebElement element){
@@ -44,6 +49,12 @@ public interface WebWait {
 
     default WebElement waitForElementToBeVisibleAgent(WebElement element, int time){
         return initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
+    }
+
+    default WebElement waitForElementToBeVisibleAgent(WebElement element, int time, String agent){
+        return initAgentWait(time, agent).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOf(element));
     }
