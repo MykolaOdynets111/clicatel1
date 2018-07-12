@@ -16,10 +16,12 @@ Feature: User on his demand should be redirected on the agent
     When First Agent click on new conversation
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Please take care of this one" note from the first agent
+    And Second agent can seen transferring agent name, user name and following user's message: 'connect to agent'
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request
     And From agent chat should be removed from agent desk
     When Second agent click on new conversation
-#    Then Conversation area becomes active with connect to agent user's message in it
-
+    Then Conversation area becomes active with connect to agent user's message in it for second agent
+    When Second agent responds with hello to User
+    Then User have to receive 'hello' text response for his 'connect to agent' input
 

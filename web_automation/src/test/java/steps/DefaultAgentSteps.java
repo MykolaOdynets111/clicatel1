@@ -107,6 +107,23 @@ public class DefaultAgentSteps implements JSHelper {
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
+    @Then("(.*) can seen transferring agent name, user name and following user's message: '(.*)'")
+    public void verifyIncomingTransferDetails(String agent, String userMessage){
+        SoftAssert soft = new SoftAssert();
+        String expectedUserName = getUserNameFromLocalStorage();
+        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
+        String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " "+
+                agentInfoResp.getBody().jsonPath().get("lastName");
+
+        soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientName(), expectedUserName,
+                "User name in Incoming transfer window is not as expected");
+        soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientMessage(), userMessage,
+                "User message in Incoming transfer window is not as expected");
+        soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getFromAgentName(), expectedAgentNAme,
+                "Transferring agent name in Incoming transfer window is not as expected");
+        soft.assertAll();
+    }
+
     @Then("^Second agent click \"Accept transfer\" button$")
     public void acceptIncomingTransfer(){
         getAgentHomeForSecondAgent().getIncomingTransferWindow().acceptTransfer();
@@ -114,7 +131,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(10),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(10, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
@@ -169,11 +186,6 @@ public class DefaultAgentSteps implements JSHelper {
 
 
     private LeftMenuWithChats getLeftMenu(String agent) {
-        if (leftMenuWithChats==null) {
-            leftMenuWithChats =  getAgentHomePage(agent).getLeftMenuWithChats();
-            return leftMenuWithChats;
-        } else{
-            return leftMenuWithChats;
-        }
+        return getAgentHomePage(agent).getLeftMenuWithChats();
     }
 }

@@ -59,6 +59,14 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementShownAgent(WebElement element, int wait, String agent){
+        try {
+            return waitForElementToBeVisibleAgent(element, wait, agent).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShown(WebElement element, int wait){
         try {
             return waitForElementToBeVisible(element, wait).isDisplayed();

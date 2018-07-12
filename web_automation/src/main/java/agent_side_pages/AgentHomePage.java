@@ -134,16 +134,16 @@ public class AgentHomePage extends AgentAbstractPage {
             }
     }
 
-    public void endChat(){
-        if(isEndChatShown()){
+    public void endChat(String agent){
+        if(isEndChatShown(agent)){
             endChatButton.click();
-            waitForElementToBeVisible(closeChatButton);
+            waitForElementToBeVisibleAgent(closeChatButton, 2, agent);
             closeChatButton.click();
         }
     }
 
-    private boolean isEndChatShown(){
-       return isElementShownAgent(endChatButton,1);
+    private boolean isEndChatShown(String agent){
+       return isElementShownAgent(endChatButton,1, agent);
     }
 
     public boolean isClearButtonShown(){

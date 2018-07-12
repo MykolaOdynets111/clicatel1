@@ -98,6 +98,11 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
+    @Attachment(value = "Screenshot")
+    private byte[] takeScreenshotFromThirdDriver() {
+        return ((TakesScreenshot) DriverFactory.getSecondAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
+    }
+
     private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isAgentDriverExists()) {
             if(scenario.isFailed()){
@@ -107,7 +112,7 @@ public class Hooks implements JSHelper{
             if(scenario.getSourceTagNames().contains("@portal")){
                 logoutAgent();
             } else{
-                closePopupsIfOpenedEndChatAndlogoutAgent();
+                closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             }
             if (scenario.getSourceTagNames().contains("@suggestions")){
@@ -115,7 +120,12 @@ public class Hooks implements JSHelper{
             }
             DriverFactory.closeAgentBrowser();
         }
-        if(DriverFactory.isSecondAgentDriverExists()){
+        if (DriverFactory.isSecondAgentDriverExists()) {
+            if(scenario.isFailed()){
+                secondAgentChatDeskConsoleOutput();
+            }
+            takeScreenshotFromThirdDriver();
+            closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
             DriverFactory.closeSecondAgentBrowser();
         }
     }
@@ -142,15 +152,15 @@ public class Hooks implements JSHelper{
         ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }
 
-    private void closePopupsIfOpenedEndChatAndlogoutAgent() {
+    private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
-            AgentHomePage agentHomePage =  new AgentHomePage("main agent");
-            if(agentHomePage.isProfileWindowOpened()){
+            AgentHomePage agentHomePage = new AgentHomePage(agent);
+            if(!agent.equalsIgnoreCase("second agent") && agentHomePage.isProfileWindowOpened()){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
-            agentHomePage.endChat();
+            agentHomePage.endChat(agent);
             agentHomePage.getHeader().logOut();
-            new AgentLoginPage("one agent").waitForLoginPageToOpen();
+            new AgentLoginPage(agent).waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }
 
@@ -227,4 +237,13 @@ public class Hooks implements JSHelper{
         return  result.toString();
     }
 
+    @Attachment
+    private String secondAgentChatDeskConsoleOutput(){
+        StringBuilder result = new StringBuilder();
+        LogEntries logEntries = DriverFactory.getSecondAgentDriverInstance().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+        }
+        return  result.toString();
+    }
 }
