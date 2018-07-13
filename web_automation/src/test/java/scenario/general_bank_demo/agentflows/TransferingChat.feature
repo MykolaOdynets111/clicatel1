@@ -1,7 +1,7 @@
 @smoke
 Feature: Transferring chat
 
-  Verification of basic communication between user and agent
+  Verification of basic transfer chat functionality
 
   Background:
     Given I login as agent of General Bank Demo
