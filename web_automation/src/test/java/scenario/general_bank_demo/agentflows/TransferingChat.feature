@@ -1,5 +1,5 @@
 @smoke
-Feature: User on his demand should be redirected on the agent
+Feature: Transferring chat
 
   Verification of basic communication between user and agent
 
@@ -9,7 +9,7 @@ Feature: User on his demand should be redirected on the agent
     Given User select General Bank Demo tenant
     And Click chat icon
 
-  Scenario: Verify if user is able to communicate with agent by typing "<user_message>" into widget
+  Scenario: Verify if agent is able to transfer chat via "Transfer chat" button
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     Given I login as second agent of General Bank Demo

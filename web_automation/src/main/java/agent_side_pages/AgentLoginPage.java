@@ -32,7 +32,7 @@ public class AgentLoginPage extends AgentAbstractPage {
 
    public AgentHomePage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
-       waitForLoginPageToOpen();
+//       waitForLoginPageToOpen();
 //       waitForElementToBeVisible(userNameInput);
        userNameInput.sendKeys(agent.getAgentName());
        userPassInput.sendKeys(agent.getAgentPass());

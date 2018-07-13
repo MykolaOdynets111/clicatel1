@@ -20,6 +20,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     String closeChatButtonXPATH = "//button[text()='Close chat']";
     String messageInputLocator = "//textarea[contains(@class,'text-input')]";
+    String loadingSpinner = "//*[text()='Connecting...']";
 
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
@@ -111,8 +112,16 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
 
-    public boolean isAgentSuccessfullyLoggedIn() {
-            return isElementShownAgent(conversationAreaContainer,15);
+    public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
+        if (isElementShownAgent(conversationAreaContainer,15, ordinalAgentNumber)) {
+            try{
+                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 7, ordinalAgentNumber);
+                return true;
+            }
+            catch (TimeoutException e){
+                return false;
+            }
+        } else { return false;}
     }
 
     public String getSuggestionFromInputFiled() {

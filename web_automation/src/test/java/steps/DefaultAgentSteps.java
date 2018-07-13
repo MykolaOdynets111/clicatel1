@@ -27,7 +27,7 @@ public class DefaultAgentSteps implements JSHelper {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrhName){
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrhName).loginAsAgentOf(tenantOrhName, ordinalAgentNumber);
-                Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(), "Agent is not logged in.");
+                Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
@@ -91,7 +91,7 @@ public class DefaultAgentSteps implements JSHelper {
     @Then("^(.*) is logged in chat desk$")
     public void verifyAgentLoggedIn(String ordinalAgentNumber){
         agentHomePage = new AgentHomePage(ordinalAgentNumber);
-        Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(), "Agent is not logged in chat desk.");
+        Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in chat desk.");
 
     }
 
