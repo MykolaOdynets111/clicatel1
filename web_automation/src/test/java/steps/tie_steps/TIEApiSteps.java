@@ -389,7 +389,7 @@ public class TIEApiSteps {
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(70000);
+            Thread.sleep(110000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -560,12 +560,13 @@ public class TIEApiSteps {
     public void clearTenantData(){
         String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
                 String.format(Endpoints.TIE_CLEARING_CONFIGS, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
-        given().log().all().
+        Response resp = given().log().all().
                 urlEncodingEnabled(false).
-        when()
-                .post(url).
-        then()
-                .statusCode(200);
+                when()
+                .post(url);
+        Assert.assertEquals(200, resp.getStatusCode(),
+                "Status code is not 200.\nResponse body: "+resp.getBody().asString()+"\nUrl: "+url+"");
+
         waitFor(5000);
     }
 
