@@ -149,6 +149,11 @@ public class DefaultAgentSteps implements JSHelper {
         getLeftMenu(ordinalAgentNumber).openNewConversationRequest();
     }
 
+    @When("^(.*) changes status to: (.*)$")
+    public void changeAgentStatus(String agent, String newStatus){
+        getAgentHomePage(agent).getHeader().clickIconWithInitials();
+    }
+
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
             return getAgentHomeForSecondAgent();

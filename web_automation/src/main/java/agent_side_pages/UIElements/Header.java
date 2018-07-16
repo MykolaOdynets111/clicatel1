@@ -4,6 +4,8 @@ import abstract_classes.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 @FindBy(css = "div.header")
 public class Header extends AbstractUIElement {
 
@@ -24,6 +26,9 @@ public class Header extends AbstractUIElement {
 
     @FindBy(xpath = "//li[@class= 'user dropdown-header']/p[not(child::*)]")
     private WebElement agentEmail;
+
+    @FindBy(xpath = "div.header div.radio-group label")
+    private List<WebElement> statusButtons;
 
     public Header logOut() {
         waitForElementToBeVisible(iconWithAgentInitials);
@@ -55,5 +60,9 @@ public class Header extends AbstractUIElement {
 
     public void clickProfileSettingsButton(){
         profileSettingsButton.click();
+    }
+
+    public void selectStatus(String status){
+        statusButtons.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get().click();
     }
 }

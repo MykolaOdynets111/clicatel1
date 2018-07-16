@@ -186,7 +186,12 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().clickCloseButtonInCloseChatPopup();
     }
 
-
+    @When("(.*) closes chat")
+    public void closeChat(String agent){
+        getAgentHomePage(agent).clickEndChat();
+        getAgentHomePage(agent).clickCloseButtonInCloseChatPopup();
+        int a =2;
+    }
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
