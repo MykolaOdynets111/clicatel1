@@ -1,6 +1,8 @@
 package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -27,8 +29,10 @@ public class Header extends AbstractUIElement {
     @FindBy(xpath = "//li[@class= 'user dropdown-header']/p[not(child::*)]")
     private WebElement agentEmail;
 
-    @FindBy(xpath = "div.header div.radio-group label")
-    private List<WebElement> statusButtons;
+    private String statusElem = "div.header div.radio-group label";
+
+    @FindBy(css = "div.header div.radio-group label")
+    private List<WebElement> statusElems;
 
     public Header logOut() {
         waitForElementToBeVisible(iconWithAgentInitials);
@@ -63,6 +67,11 @@ public class Header extends AbstractUIElement {
     }
 
     public void selectStatus(String status){
-        statusButtons.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get().click();
+//        WebElement targetElem = findElemsByCSSAgent(statusElem).stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
+        WebElement targetElem = statusElems.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
+        targetElem.click();
+        //    executeJSclick(targetElem);
+//        targetElem.findElement(By.cssSelector("input")).click();
+
     }
 }

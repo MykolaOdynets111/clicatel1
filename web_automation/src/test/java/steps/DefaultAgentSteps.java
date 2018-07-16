@@ -152,6 +152,9 @@ public class DefaultAgentSteps implements JSHelper {
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
         getAgentHomePage(agent).getHeader().clickIconWithInitials();
+        getAgentHomePage(agent).getHeader().selectStatus(newStatus);
+        getAgentHomePage(agent).getHeader().clickIconWithInitials();
+
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
