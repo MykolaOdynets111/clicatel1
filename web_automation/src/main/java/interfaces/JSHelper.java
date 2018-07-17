@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 public interface JSHelper {
 
     default void executeJSclick(WebElement elem) {
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getInstance();
+        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
         executor.executeScript("arguments[0].click();", elem);
     }
 
@@ -16,13 +16,13 @@ public interface JSHelper {
      * @author tmytlovych
      */
     default void scrollInsideElement(WebElement elem, int offset) {
-        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getInstance();
+        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
         jsExec.executeScript("arguments[0].scrollTop = " + offset + "", elem);
     }
 
 
     default void setUpGeolocation(String latitude, String longitude) {
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getInstance();
+        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
         executor.executeScript("navigator.geolocation.getCurrentPosition = function(success, failure) { \n" +
                 "    success({ coords: { \n" +
                 "        latitude: "+latitude+", \n" +
@@ -33,7 +33,7 @@ public interface JSHelper {
     }
 
     default String getUserNameFromLocalStorage(){
-        JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getInstance();
+        JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
         return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
     }
 }

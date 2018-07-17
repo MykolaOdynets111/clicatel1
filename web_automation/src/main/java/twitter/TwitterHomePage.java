@@ -20,7 +20,7 @@ public class TwitterHomePage extends AbstractPage {
     }
 
     public static void openTenantPage(String URL){
-        DriverFactory.getInstance().get(URL);
+        DriverFactory.getTouchDriverInstance().get(URL);
     }
 
     public void waitForPageToBeLoaded(){

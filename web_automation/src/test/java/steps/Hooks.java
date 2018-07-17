@@ -44,7 +44,7 @@ public class Hooks implements JSHelper{
                     !scenario.getSourceTagNames().contains("@twitter")) {
 
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
-                    DriverFactory.getSecondDriverInstance();
+                    DriverFactory.getAgentDriverInstance();
                 }
                 DriverFactory.openUrl();
                 // Setting up coordinates of Lviv, Ukraine into browser
@@ -55,13 +55,13 @@ public class Hooks implements JSHelper{
             if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
-                    DriverFactory.getSecondDriverInstance();
+                    DriverFactory.getAgentDriverInstance();
                 }
             }
             if (scenario.getSourceTagNames().contains("@twitter")) {
                 TwitterLoginPage.openTwitterLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
-                    DriverFactory.getSecondDriverInstance();
+                    DriverFactory.getAgentDriverInstance();
                 }
             }
             if(scenario.getSourceTagNames().contains("@tie")){
@@ -87,14 +87,14 @@ public class Hooks implements JSHelper{
             finishVisibilityFlow();
         }
         if(scenario.getSourceTagNames().contains("@facebook")){
-            finishAgentFlowIfExists();
+            finishAgentFlowIfExists(scenario);
             takeScreenshot();
             endFacebookFlow(scenario);
         }
 
         if(scenario.getSourceTagNames().contains("@twitter")){
             takeScreenshot();
-            finishAgentFlowIfExists();
+            finishAgentFlowIfExists(scenario);
             endTwitterFlow();
         }
 
@@ -113,16 +113,21 @@ public class Hooks implements JSHelper{
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshot() {
-        return ((TakesScreenshot) DriverFactory.getInstance()).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshotFromSecondDriver() {
-        return ((TakesScreenshot) DriverFactory.getSecondDriverInstance()).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) DriverFactory.getAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
+    }
+
+    @Attachment(value = "Screenshot")
+    private byte[] takeScreenshotFromThirdDriver() {
+        return ((TakesScreenshot) DriverFactory.getSecondAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
     private void finishAgentFlowIfExists(Scenario scenario) {
-        if (DriverFactory.isSecondDriverExists()) {
+        if (DriverFactory.isAgentDriverExists()) {
             if(scenario.isFailed()){
                 chatDeskConsoleOutput();
             }
@@ -130,13 +135,21 @@ public class Hooks implements JSHelper{
             if(scenario.getSourceTagNames().contains("@portal")){
                 logoutAgent();
             } else{
-                closePopupsIfOpenedEndChatAndlogoutAgent();
+                closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             }
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
             }
-            DriverFactory.closeSecondBrowser();
+            DriverFactory.closeAgentBrowser();
+        }
+        if (DriverFactory.isSecondAgentDriverExists()) {
+            if(scenario.isFailed()){
+                secondAgentChatDeskConsoleOutput();
+            }
+            takeScreenshotFromThirdDriver();
+            closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            DriverFactory.closeSecondAgentBrowser();
         }
     }
 
@@ -156,33 +169,26 @@ public class Hooks implements JSHelper{
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
     }
 
-    private void logoutAgent() {
+    private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
-            AgentHomePage agentHomePage =  new AgentHomePage();
-            agentHomePage.getHeader().logOut();
-            new AgentLoginPage().waitForLoginPageToOpen();
-        } catch (WebDriverException e) { }
-    }
-
-    private void closePopupsIfOpenedEndChatAndlogoutAgent() {
-        try {
-            AgentHomePage agentHomePage =  new AgentHomePage();
-            if(agentHomePage.isProfileWindowOpened()){
+            AgentHomePage agentHomePage = new AgentHomePage(agent);
+            if(!agent.equalsIgnoreCase("second agent") && agentHomePage.isProfileWindowOpened()){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
-            agentHomePage.endChat();
+            agentHomePage.endChat(agent);
             agentHomePage.getHeader().logOut();
-            new AgentLoginPage().waitForLoginPageToOpen();
+            new AgentLoginPage(agent).waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
     }
 
-    private void finishAgentFlowIfExists() {
-        if (DriverFactory.isSecondDriverExists()) {
-            takeScreenshotFromSecondDriver();
-            closePopupsIfOpenedEndChatAndlogoutAgent();
-            DriverFactory.closeSecondBrowser();
-        }
-    }
+
+//    private void finishAgentFlowIfExists() {
+//        if (DriverFactory.isSecondDriverExists()) {
+//            takeScreenshotFromSecondDriver();
+//            closePopupsIfOpenedEndChatAndlogoutAgent();
+//            DriverFactory.closeSecondBrowser();
+//        }
+//    }
 
     private void finishVisibilityFlow() {
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
@@ -197,9 +203,18 @@ public class Hooks implements JSHelper{
         }
 
     private void closeMainBrowserIfOpened() {
-        if (DriverFactory.isDriverExists()) {
-            DriverFactory.closeBrowser();
+        if (DriverFactory.isTouchDriverExists()) {
+            DriverFactory.closeTouchBrowser();
         }
+    }
+
+    private void logoutAgent() {
+        try {
+            AgentHomePage agentHomePage =  new AgentHomePage("main agent");
+            agentHomePage.getHeader().logOut();
+            new AgentLoginPage("one agent").waitForLoginPageToOpen();
+        } catch (WebDriverException e) { }
+
     }
 
     private void endTwitterFlow() {
@@ -250,7 +265,7 @@ public class Hooks implements JSHelper{
     @Attachment
     private String touchConsoleOutput(){
         StringBuilder result = new StringBuilder();
-        LogEntries logEntries = DriverFactory.getInstance().manage().logs().get(LogType.BROWSER);
+        LogEntries logEntries = DriverFactory.getTouchDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }
@@ -260,11 +275,20 @@ public class Hooks implements JSHelper{
     @Attachment
     private String chatDeskConsoleOutput(){
         StringBuilder result = new StringBuilder();
-        LogEntries logEntries = DriverFactory.getSecondDriverInstance().manage().logs().get(LogType.BROWSER);
+        LogEntries logEntries = DriverFactory.getAgentDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
             result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }
         return  result.toString();
     }
 
+    @Attachment
+    private String secondAgentChatDeskConsoleOutput(){
+        StringBuilder result = new StringBuilder();
+        LogEntries logEntries = DriverFactory.getSecondAgentDriverInstance().manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+        }
+        return  result.toString();
+    }
 }

@@ -39,7 +39,7 @@ public class MessengerWindow extends AbstractUIElement {
     }
 
     public void deleteConversation(){
-        moveToElement(DriverFactory.getInstance(),headerActionButonsContainer);
+        moveToElement(DriverFactory.getTouchDriverInstance(),headerActionButonsContainer);
         gearIcon.click();
         waitForElementToBeVisible(popupMenu, 9);
         deleteConversationButton.click();

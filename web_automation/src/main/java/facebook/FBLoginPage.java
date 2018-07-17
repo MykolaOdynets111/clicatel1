@@ -24,7 +24,7 @@ public class FBLoginPage extends AbstractPage {
     private WebElement loginButton;
 
     public static FBLoginPage openFacebookLoginPage() {
-        DriverFactory.getInstance().get("https://www.facebook.com/");
+        DriverFactory.getTouchDriverInstance().get("https://www.facebook.com/");
         return new FBLoginPage();
     }
 

@@ -21,20 +21,33 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
     }
 
-    public void openNewConversationRequest(String userName) {
+    public void openNewConversationRequest() {
+        String userName = getUserNameFromLocalStorage();
         new ChatInLeftMenu(getTargetChat(userName)).openConversation();
     }
 
+    public void openNewConversationRequest(String userName) {
+        new ChatInLeftMenu(getTargetChat(userName)).openConversation();
+    }
+//    public boolean isNewConversationRequestIsShown(int wait) {
+//            String userName = getUserNameFromLocalStorage();
+//            try{
+//                waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfille, userName), userName), wait);
+//                return true;
+//            } catch(TimeoutException e) {
+//                return false;
+//            }
+//    }
 
 
-    public boolean isNewConversationRequestFromTouchIsShown(int wait) {
-            String userName = getUserNameFromLocalStorage();
-            try{
-                waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait);
-                return true;
-            } catch(TimeoutException e) {
-                return false;
-            }
+    public boolean isNewConversationRequestIsShown(int wait, String agent) {
+        String userName = getUserNameFromLocalStorage();
+        try{
+            waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait, agent);
+            return true;
+        } catch(TimeoutException e) {
+            return false;
+        }
     }
 
     public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait) {

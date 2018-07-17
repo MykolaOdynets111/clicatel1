@@ -2,7 +2,6 @@ package interfaces;
 
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
 import java.util.List;
@@ -60,6 +59,14 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementShownAgent(WebElement element, int wait, String agent){
+        try {
+            return waitForElementToBeVisibleAgent(element, wait, agent).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShown(WebElement element, int wait){
         try {
             return waitForElementToBeVisible(element, wait).isDisplayed();
@@ -99,29 +106,32 @@ public interface WebActions extends WebWait {
     }
 
     default WebElement findElemByXPATH(String xpath){
-        return DriverFactory.getInstance().findElement(By.xpath(xpath));
+        return DriverFactory.getTouchDriverInstance().findElement(By.xpath(xpath));
     }
 
 
     default WebElement findElemByCSS(String css){
-        return DriverFactory.getInstance().findElement(By.cssSelector(css));
+        return DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(css));
     }
 
     default List<WebElement> findElemntsByCSS(String css) {
-        return DriverFactory.getInstance().findElements(By.cssSelector(css));
+        return DriverFactory.getTouchDriverInstance().findElements(By.cssSelector(css));
     }
 
     default WebElement findElemByXPATHAgent(String xpath){
-        return DriverFactory.getSecondDriverInstance().findElement(By.xpath(xpath));
+        return DriverFactory.getAgentDriverInstance().findElement(By.xpath(xpath));
     }
 
         default WebElement findElemByCSSAgent(String css){
-        return DriverFactory.getSecondDriverInstance().findElement(By.cssSelector(css));
-
+        return DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(css));
     }
 
     default List<WebElement> findElemsByXPATH(String xpath){
-        return DriverFactory.getInstance().findElements(By.xpath(xpath));
+        return DriverFactory.getTouchDriverInstance().findElements(By.xpath(xpath));
+    }
+
+    default List<WebElement> findElemsByCSSAgent(String css){
+        return DriverFactory.getAgentDriverInstance().findElements(By.cssSelector(css));
     }
 
     default void pressEnterForWebElem(WebElement elem){

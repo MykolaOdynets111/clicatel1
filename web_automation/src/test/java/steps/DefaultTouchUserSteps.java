@@ -16,8 +16,6 @@ import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
 import touch_pages.uielements.messages.WelcomeMessages;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -321,7 +319,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @When("^User refreshes the page$")
     public void refreshThePage() {
-        DriverFactory.getInstance().navigate().refresh();
+        DriverFactory.getTouchDriverInstance().navigate().refresh();
     }
 
     // ======================= Private Getters ========================== //

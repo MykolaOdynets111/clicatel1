@@ -21,19 +21,23 @@ public class AgentLoginPage extends AgentAbstractPage {
     @FindBy(css = "button[type='submit']")
     private WebElement loginButton;
 
-    public static AgentLoginPage openAgentLoginPage(String tenantOrgName) {
-       DriverFactory.getSecondDriverInstance().get(URLs.getAgentURL(tenantOrgName, true));
-       return new AgentLoginPage();
+    public AgentLoginPage(String ordinalAgentNumber) {
+        super(ordinalAgentNumber);
+    }
+
+    public static AgentLoginPage openAgentLoginPage(String ordinalAgentNumber, String tenantOrgName) {
+       DriverFactory.getDriverForAgent(ordinalAgentNumber).get(URLs.getAgentURL(tenantOrgName, true));
+       return new AgentLoginPage(ordinalAgentNumber);
    }
 
-   public AgentHomePage loginAsAgentOf(String tenantOrgName) {
-       Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
-       waitForLoginPageToOpen();
+   public AgentHomePage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
+       Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+//       waitForLoginPageToOpen();
 //       waitForElementToBeVisible(userNameInput);
        userNameInput.sendKeys(agent.getAgentName());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();
-       return new AgentHomePage();
+       return new AgentHomePage(ordinalAgentNumber);
    }
 
    public void waitForLoginPageToOpen() {

@@ -8,14 +8,14 @@ import org.openqa.selenium.interactions.Actions;
 public interface ActionsHelper {
 
     default void moveToElemAndClick(WebElement elem){
-        Actions actions=new Actions(DriverFactory.getInstance());
+        Actions actions=new Actions(DriverFactory.getTouchDriverInstance());
         actions.moveToElement(elem).click().
                 build().
                 perform();
     }
 
     default void moveToElement(WebDriver driver, WebElement elem){
-        Actions action = new Actions(DriverFactory.getInstance());
+        Actions action = new Actions(DriverFactory.getTouchDriverInstance());
         action.moveToElement(elem).build().perform();
     }
 }

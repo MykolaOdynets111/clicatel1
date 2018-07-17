@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 
 public class AgentConversationSteps implements JSHelper{
 
+    private AgentHomePage mainAgentHomePage;
+    private AgentHomePage secondAgentHomePage;
     private AgentHomePage agentHomePage ;
     private ChatBody chatBody;
     private SuggestedGroup suggestedGroup;
@@ -26,6 +28,12 @@ public class AgentConversationSteps implements JSHelper{
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
+                "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
+    @Then("^Conversation area becomes active with (.*) user's message in it for (.*)$")
+    public void verifyUserMessageOnAgentDesk(String userMessage, String agent) {
+        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -41,18 +49,18 @@ public class AgentConversationSteps implements JSHelper{
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
-    @When("^Agent (?:responds with|sends a new message) (.*) to User$")
-    public void sendAnswerToUser(String responseToUser){
-        getAgentHomePage().sendResponseToUser(responseToUser);
+    @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
+    public void sendAnswerToUser(String agent, String responseToUser){
+        getAgentHomePage(agent).sendResponseToUser(responseToUser);
     }
 
 
     @When("^Agent replays with (.*) message$")
     public void respondToUserWithCheck(String agentMessage) {
-        if (getAgentHomePage().isSuggestionFieldShown()) {
+        if (getAgentHomePage("main agent").isSuggestionFieldShown()) {
             deleteSuggestionAndSendOwn(agentMessage);
         } else {
-            sendAnswerToUser(agentMessage);
+            sendAnswerToUser("main agent", agentMessage);
         }
     }
 
@@ -81,9 +89,6 @@ public class AgentConversationSteps implements JSHelper{
             expectedResponse = ApiHelperTie.getExpectedMessageOnIntent(listOfIntentsFromTIE.get(i).getIntent());
             if (expectedResponse.contains("${firstName}")) {
                 expectedResponse = expectedResponse.replace("${firstName}", getUserNameFromLocalStorage());
-            }
-            if(expectedResponse.toCharArray().length>650){
-                expectedResponse=expectedResponse.substring(0,650);
             }
             answersFromTie.add(i, expectedResponse);
         }
@@ -191,14 +196,45 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().clickCloseButtonInCloseChatPopup();
     }
 
-
+    @When("(.*) closes chat")
+    public void closeChat(String agent){
+        getAgentHomePage(agent).clickEndChat();
+        getAgentHomePage(agent).clickCloseButtonInCloseChatPopup();
+        getAgentHomePage(agent).clickCloseButtonInCloseChatPopup();
+    }
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
-            agentHomePage =  new AgentHomePage();
+            agentHomePage =  new AgentHomePage("");
             return agentHomePage;
         } else{
             return agentHomePage;
+        }
+    }
+
+    private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
+            return getAgentHomeForSecondAgent();
+        } else {
+            return getAgentHomeForMainAgent();
+        }
+    }
+
+    private AgentHomePage getAgentHomeForSecondAgent(){
+        if (secondAgentHomePage==null) {
+            secondAgentHomePage = new AgentHomePage("second agent");
+            return secondAgentHomePage;
+        } else{
+            return secondAgentHomePage;
+        }
+    }
+
+    private AgentHomePage getAgentHomeForMainAgent(){
+        if (mainAgentHomePage==null) {
+            mainAgentHomePage = new AgentHomePage("main agent");
+            return mainAgentHomePage;
+        } else{
+            return mainAgentHomePage;
         }
     }
 
@@ -209,6 +245,10 @@ public class AgentConversationSteps implements JSHelper{
         } else{
             return chatBody;
         }
+    }
+
+    private ChatBody getChatBody(String agent){
+        return getAgentHomePage(agent).getChatBody();
     }
 
     private SuggestedGroup getSuggestedGroup() {

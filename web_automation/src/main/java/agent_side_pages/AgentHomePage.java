@@ -7,8 +7,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.security.cert.X509Certificate;
-
 public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "div.suggestion-wrapper")
@@ -22,6 +20,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     String closeChatButtonXPATH = "//button[text()='Close chat']";
     String messageInputLocator = "//textarea[contains(@class,'text-input')]";
+    String loadingSpinner = "//*[text()='Connecting...']";
 
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
@@ -47,6 +46,8 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptProfanityPopupButton;
 
+    String transferChatButton =  "//button[text()='Transfer chat']";
+
     private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
 
     private LeftMenuWithChats leftMenuWithChats;
@@ -54,9 +55,18 @@ public class AgentHomePage extends AgentAbstractPage {
     private Header header;
     private SuggestedGroup suggestedGroup;
     private ProfileWindow profileWindow;
+    private TransferChatWindow transferChatWindow;
+    private IncomingTransferWindow incomingTransferWindow;
 
-    public AgentHomePage() {
+    public AgentHomePage(String agent) {
+        super(agent);
     }
+
+    public IncomingTransferWindow getIncomingTransferWindow() {
+        return incomingTransferWindow;
+    }
+
+    public TransferChatWindow getTransferChatWindow() {return transferChatWindow;}
 
     public ProfileWindow getProfileWindow() {
         return profileWindow;
@@ -102,8 +112,16 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
 
-    public boolean isAgentSuccessfullyLoggedIn() {
-            return isElementShownAgent(conversationAreaContainer,15);
+    public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
+        if (isElementShownAgent(conversationAreaContainer,15, ordinalAgentNumber)) {
+            try{
+                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 7, ordinalAgentNumber);
+                return true;
+            }
+            catch (TimeoutException e){
+                return false;
+            }
+        } else { return false;}
     }
 
     public String getSuggestionFromInputFiled() {
@@ -121,28 +139,29 @@ public class AgentHomePage extends AgentAbstractPage {
                 suggestionInputField.click();
                 messageInput.sendKeys(additionalMessage);
             } catch (StaleElementReferenceException e) {
-                DriverFactory.getSecondDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
+                DriverFactory.getAgentDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
             }
     }
 
     public boolean isSuggestionFieldShown() {
         try {
-            return isElementShown(suggestionInputField);
+            return isElementShownAgent(suggestionInputField);
         } catch (NoSuchElementException e) {
             return false;
         }
     }
 
-    public void endChat(){
-        if(isEndChatShown()){
+
+    public void endChat(String agent){
+        if(isEndChatShown(agent)){
             endChatButton.click();
-            waitForElementToBeVisible(closeChatButton);
+            waitForElementToBeVisibleAgent(closeChatButton, 2, agent);
             closeChatButton.click();
         }
     }
 
-    private boolean isEndChatShown(){
-       return isElementShownAgent(endChatButton,1);
+    private boolean isEndChatShown(String agent){
+       return isElementShownAgent(endChatButton,1, agent);
     }
 
     public boolean isClearButtonShown(){
@@ -204,8 +223,20 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickCloseButtonInCloseChatPopup (){
-        waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 6);
-        findElemByXPATHAgent(closeChatButtonXPATH).click();
+        for (int i =0; i<5; i++){
+            try{
+            if (isElementShownAgent(findElemByXPATHAgent(closeChatButtonXPATH))){
+                findElemByXPATHAgent(closeChatButtonXPATH).click();
+                break;
+            }else{
+                waitFor(500);
+            }}
+            catch (NoSuchElementException e){
+                break;
+            }
+        }
+//        waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 6);
+
         //        closeChatButton.click();
     }
 
@@ -218,4 +249,9 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
+    public void clickTransferButton(){
+        findElemByXPATHAgent(transferChatButton).click();
+//        executeJSclick(transferChatButton);
+//        transferChatButton.click();
+    }
 }

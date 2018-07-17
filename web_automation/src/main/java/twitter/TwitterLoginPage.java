@@ -30,7 +30,7 @@ public class TwitterLoginPage extends AbstractPage {
 
     public static TwitterLoginPage openTwitterLoginPage() {
         //https://twitter.com/login?lang=en
-        DriverFactory.getInstance().get("https://twitter.com/");
+        DriverFactory.getTouchDriverInstance().get("https://twitter.com/");
         return new TwitterLoginPage();
     }
 

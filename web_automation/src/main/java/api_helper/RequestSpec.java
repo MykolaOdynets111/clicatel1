@@ -63,7 +63,7 @@ public class RequestSpec {
 
     public static String getAccessTokenForPortalUser(String tenantOrgName) {
         if (PORTAL_USER_ACCESS_TOKEN==null) {
-            Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase());
+            Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "main agent");
             Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
             Response resp = RestAssured.given()
                     .header("Content-Type", "application/json")

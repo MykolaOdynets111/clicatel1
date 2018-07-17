@@ -24,9 +24,15 @@ public enum Agents {
 
     // email credentials: devgeneralbankdemo@gmail.com, pass p@$$w0rd4te$t
 
-    SECOND_AGENT_QA("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
+    SECOND_AGENT_QA("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
 
-    SECOND_AGENT_DEV("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa");
+    SECOND_AGENT_DEV("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "dev"),
+
+    SECOND_AGENT_TESTING("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
+
+    SECOND_AGENT_DEMO("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo"),
+
+    SECOND_AGENT_INTEGRATION("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "integration");
 
     String userName;
     String userPass;
@@ -56,12 +62,28 @@ public enum Agents {
         return this.tenant;
     }
 
-    public static Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
+    public static Agents getMainAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
         Agents[] agentsArray = Agents.values();
         List<Agents> agentsList = Arrays.asList(agentsArray);
         return agentsList.stream()
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
-                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName))
+                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
+                        && !e.getAgentName().contains("second"))
                 .findFirst().get();
+    }
+
+    public static Agents getSecondAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
+        Agents[] agentsArray = Agents.values();
+        List<Agents> agentsList = Arrays.asList(agentsArray);
+        return agentsList.stream()
+                .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
+                        && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
+                        && e.getAgentName().contains("second"))
+                .findFirst().get();
+    }
+
+    public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String ordinalAgentNumber){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
+        else return getMainAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
     }
 }
