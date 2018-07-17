@@ -29,6 +29,14 @@ public class ToUserTextMessage  extends Widget implements WebActions {
         }
     }
 
+    public String getSecondMessageText() {
+        try{
+            return toUserTextMessages.get(1).getText();
+        } catch (IndexOutOfBoundsException e) {
+            return "no text response found";
+        }
+    }
+
     public boolean isTextResponseShown(int wait) {
         try{
             waitForElementsToBeVisible(toUserTextMessages, wait);

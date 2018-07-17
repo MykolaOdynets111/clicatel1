@@ -79,6 +79,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String textResponse, String userInput) {
+        int waitForResponse=10;
         String expectedTextResponse = null;
         switch (textResponse) {
             case "start new conversation":
@@ -93,6 +94,10 @@ public class DefaultTouchUserSteps implements JSHelper{
             case "exit":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
                 break;
+            case "agents_away":
+                waitForResponse = 150;
+                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
+                break;
             default:
                 expectedTextResponse = textResponse;
                 break;
@@ -102,11 +107,50 @@ public class DefaultTouchUserSteps implements JSHelper{
         }
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, 10),
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertEquals(widgetConversationArea.getResponseTextOnUserInput(userInput).replace("\n", "")
+                , expectedTextResponse,
+                "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+        softAssert.assertAll();
+
+    }
+
+    @Then("^User have to receive '(.*)' text response as a second response for his '(.*)' input$")
+    public void verifyecondTextResponse(String textResponse, String userInput) {
+        int waitForResponse=10;
+        String expectedTextResponse = null;
+        switch (textResponse) {
+            case "start new conversation":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "welcome back message":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
+                break;
+            case "dynamical branch address":
+                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
+                break;
+            case "exit":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "agents_away":
+                waitForResponse = 150;
+                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
+                break;
+            default:
+                expectedTextResponse = textResponse;
+                break;
+        }
+        if (textResponse.contains("${firstName}")) {
+            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
+        }
+        SoftAssert softAssert = new SoftAssert();
+        widgetConversationArea = widget.getWidgetConversationArea();
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
+                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+        softAssert.assertEquals(widgetConversationArea.getSecondResponseTextOnUserInput(userInput).replace("\n", "")
                 , expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
