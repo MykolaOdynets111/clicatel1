@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1531831686966" stop="1531831754512" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Interaction with End chat button on chatdesk</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1531831686967" stop="1531831754511" status="passed">
+            <name>Verify if agent is able to close chat in chat desk</name>
+            <title>Verify if agent is able to close chat in chat desk</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1531831691705" stop="1531831721851" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831721852" stop="1531831723959" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831723959" stop="1531831726216" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831726216" stop="1531831730354" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831730354" stop="1531831731526" status="passed">
+                    <name>When User enter connect to Support into widget input field</name>
+                    <title>When User enter connect to Support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831731526" stop="1531831736175" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831736175" stop="1531831736598" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831736598" stop="1531831737713" status="passed">
+                    <name>Then Conversation area becomes active with connect to Support user's message</name>
+                    <title>Then Conversation area becomes active with connect to Support user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831737713" stop="1531831737947" status="passed">
+                    <name>When Agent click "End chat" button</name>
+                    <title>When Agent click "End chat" button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831737948" stop="1531831738660" status="passed">
+                    <name>Then End chat popup should be opened</name>
+                    <title>Then End chat popup should be opened</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831738660" stop="1531831738834" status="passed">
+                    <name>When Agent click 'Close chat' button</name>
+                    <title>When Agent click 'Close chat' button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831738834" stop="1531831739132" status="passed">
+                    <name>Then From agent chat should be removed from agent desk</name>
+                    <title>Then From agent chat should be removed from agent desk</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831739132" stop="1531831739389" status="passed">
+                    <name>Then User have to receive 'exit' text response for his 'connect to Support' input</name>
+                    <title>Then User have to receive 'exit' text response for his 'connect to Support' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if agent is able to close chat in chat desk"/>
+                <label name="feature" value="Interaction with End chat button on chatdesk"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="31692@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Interaction with End chat button on chatdesk"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

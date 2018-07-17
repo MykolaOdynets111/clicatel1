@@ -14,6 +14,6 @@ Feature: Interaction with End chat button on chatdesk
     When Agent click "End chat" button
     Then End chat popup should be opened
     When Agent click 'Close chat' button
-    Then From agent chat should be removed from agent desk
+    Then Agent should not see from user chat in agent desk
     Then User have to receive 'exit' text response for his 'connect to Support' input
 

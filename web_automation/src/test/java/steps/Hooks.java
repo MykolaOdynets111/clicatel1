@@ -172,12 +172,12 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            if(!agent.equalsIgnoreCase("second agent") && agentHomePage.isProfileWindowOpened()){
+            if(!agent.equalsIgnoreCase("second agent") && agentHomePage.isProfileWindowOpened(agent)){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
             agentHomePage.endChat(agent);
-            agentHomePage.getHeader().logOut();
-            new AgentLoginPage(agent).waitForLoginPageToOpen();
+            agentHomePage.getHeader().logOut(agent);
+            new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch (WebDriverException e) { }
     }
 
@@ -211,8 +211,8 @@ public class Hooks implements JSHelper{
     private void logoutAgent() {
         try {
             AgentHomePage agentHomePage =  new AgentHomePage("main agent");
-            agentHomePage.getHeader().logOut();
-            new AgentLoginPage("one agent").waitForLoginPageToOpen();
+            agentHomePage.getHeader().logOut("main agent");
+            new AgentLoginPage("one agent").waitForLoginPageToOpen("main agent");
         } catch (WebDriverException e) { }
 
     }

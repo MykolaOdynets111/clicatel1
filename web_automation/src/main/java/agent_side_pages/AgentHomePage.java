@@ -249,6 +249,15 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
+    public boolean isProfileWindowOpened(String agent){
+        try{
+            findElemByXPATHAgent(openedProfileWindow, agent);
+            return true;
+        } catch (WebDriverException e){
+            return false;
+        }
+    }
+
     public void clickTransferButton(){
         findElemByXPATHAgent(transferChatButton).click();
 //        executeJSclick(transferChatButton);

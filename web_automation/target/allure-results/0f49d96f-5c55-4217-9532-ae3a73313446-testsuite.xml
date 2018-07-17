@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1531831071928" stop="1531831283039" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent availability</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1531831071970" stop="1531831282991" status="passed">
+            <name>Changing agent's availability with correctly ended chat</name>
+            <title>Changing agent's availability with correctly ended chat</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1531831078958" stop="1531831119433" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831119433" stop="1531831121625" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831121625" stop="1531831124215" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831124216" stop="1531831128689" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831128690" stop="1531831129451" status="passed">
+                    <name>When User enter chat to support into widget input field</name>
+                    <title>When User enter chat to support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831129451" stop="1531831132645" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831132646" stop="1531831133090" status="passed">
+                    <name>When Agent click on new conversation</name>
+                    <title>When Agent click on new conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831133091" stop="1531831133928" status="passed">
+                    <name>Then Conversation area becomes active with chat to support user's message</name>
+                    <title>Then Conversation area becomes active with chat to support user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831133929" stop="1531831134769" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831134770" stop="1531831135218" status="passed">
+                    <name>Then User have to receive 'hello' text response for his 'chat to support' input</name>
+                    <title>Then User have to receive 'hello' text response for his 'chat to support' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831135218" stop="1531831142151" status="passed">
+                    <name>When Agent closes chat</name>
+                    <title>When Agent closes chat</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831142151" stop="1531831142174" status="passed">
+                    <name>Then From agent chat should be removed from agent desk</name>
+                    <title>Then From agent chat should be removed from agent desk</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831142175" stop="1531831143439" status="passed">
+                    <name>Then User have to receive 'exit' text response as a second response for his 'chat to support' input</name>
+                    <title>Then User have to receive 'exit' text response as a second response for his 'chat to support' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831143439" stop="1531831143871" status="passed">
+                    <name>When Agent changes status to: Unavailable</name>
+                    <title>When Agent changes status to: Unavailable</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831143871" stop="1531831146023" status="passed">
+                    <name>And User enter connect to agent into widget input field</name>
+                    <title>And User enter connect to agent into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831146024" stop="1531831271316" status="passed">
+                    <name>Then User have to receive 'agents_away' text response for his 'connect to agent' input</name>
+                    <title>Then User have to receive 'agents_away' text response for his 'connect to agent' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831271316" stop="1531831271640" status="passed">
+                    <name>When Agent changes status to: Available</name>
+                    <title>When Agent changes status to: Available</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831271640" stop="1531831274300" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831274300" stop="1531831274727" status="passed">
+                    <name>When Agent click on new conversation</name>
+                    <title>When Agent click on new conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831274728" stop="1531831275641" status="passed">
+                    <name>When Agent responds with How can I help you to User</name>
+                    <title>When Agent responds with How can I help you to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1531831275641" stop="1531831275956" status="passed">
+                    <name>Then User have to receive 'How can I help you' text response as a second response for his 'connect to agent' input</name>
+                    <title>Then User have to receive 'How can I help you' text response as a second response for his 'connect to agent' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Changing agent's availability with correctly ended chat"/>
+                <label name="feature" value="Agent availability"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="31692@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent availability"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

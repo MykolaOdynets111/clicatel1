@@ -40,7 +40,7 @@ public class AgentLoginPage extends AgentAbstractPage {
        return new AgentHomePage(ordinalAgentNumber);
    }
 
-   public void waitForLoginPageToOpen() {
-        waitForElementToBeVisible(loginForm, 6);
+   public void waitForLoginPageToOpen(String agent) {
+        waitForElementToBeVisibleAgent(loginForm, 6, agent);
    }
 }

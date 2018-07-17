@@ -36,12 +36,12 @@ public class Header extends AbstractUIElement {
     @FindBy(css = "div.header div.radio-group label")
     private List<WebElement> statusElems;
 
-    public Header logOut() {
-        waitForElementToBeVisible(iconWithAgentInitials);
+    public Header logOut(String agent) {
+        waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
         click(iconWithAgentInitials);
-        waitForElementToBeVisible(logOutButton, 6);
+        waitForElementToBeVisibleAgent(logOutButton, 6, agent);
         logOutButton.click();
-        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6);
+//        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6,agent);
         return this;
     }
 

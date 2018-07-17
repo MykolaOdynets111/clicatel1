@@ -109,7 +109,7 @@ public class DefaultAgentSteps implements JSHelper {
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
-    @Then("(.*) can seen transferring agent name, user name and following user's message: '(.*)'")
+    @Then("(.*) can see transferring agent name, user name and following user's message: '(.*)'")
     public void verifyIncomingTransferDetails(String agent, String userMessage){
         SoftAssert soft = new SoftAssert();
         String expectedUserName = getUserNameFromLocalStorage();
@@ -138,7 +138,7 @@ public class DefaultAgentSteps implements JSHelper {
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
-    @Then("^From (.*) chat should be removed from agent desk$")
+    @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
