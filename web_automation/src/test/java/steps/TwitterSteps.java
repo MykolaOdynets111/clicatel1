@@ -1,0 +1,189 @@
+package steps;
+
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import dataprovider.Tenants;
+import driverManager.URLs;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
+import twitter.TwitterHomePage;
+import twitter.TwitterTenantPage;
+import twitter.TweetsSection;
+import twitter.uielements.DMWindow;
+import twitter.uielements.OpenedTweet;
+import twitter.uielements.TweetWindow;
+
+import java.time.LocalDateTime;
+
+public class TwitterSteps {
+
+    private TwitterTenantPage twitterTenantPage;
+    private DMWindow dmWindow;
+    private TweetWindow tweetWindow;
+    private TweetsSection tweetsSection;
+    private OpenedTweet openedTweet;
+
+    @Given("^Open twitter page of (.*)$")
+    public void openTwitterPage(String tenantOrgName){
+        TwitterHomePage.openTenantPage(URLs.getTwitterURL(tenantOrgName));
+        if(tenantOrgName.equals("General Bank Demo")){
+            Tenants.setTenantUnderTest("generalbank");
+        }
+    }
+
+    @Given("^Open direct message channel$")
+    public void openDirectMessage() {
+        getTwitterTenantPage().openDMWindow();
+    }
+
+    @Given("^User closes DM window$")
+    public void closeDMWindow(){
+        getTwitterTenantPage().getDmWindow().closeDMWindow();
+    }
+
+    @Given("^Open new tweet window$")
+    public void openNewTweetWindow() {
+        getTwitterTenantPage().openNewTweetWindow();
+    }
+
+    @When("^User sends twitter direct message \"(.*)\"$")
+    public void sendTwitterDM(String userMessage){
+        getDmWindow().sendUserMessage(userMessage);
+    }
+
+    @When("^User sends tweet regarding \"(.*)\"$")
+    public void sendTweet(String tweetMessage){
+        int day = LocalDateTime.now().getDayOfMonth();
+//        if ( day % 2 == 0 ) {
+//            if (tweetMessage.contains("account balance"))
+//                tweetMessage = "How can I check account balance?";
+//        }
+//        else {
+//            if (tweetMessage.contains("account balance"))
+//                tweetMessage = "How to check my account balance?";
+//        }
+        getTweetWindow().sendTweet(tweetMessage);
+    }
+
+    @Then("^(?:He|User) has to receive \"(.*)\" answer$")
+    public void verifyReceivingAnswerInTimeline(String expectedAnswer){
+        if(expectedAnswer.length()>132){
+            expectedAnswer = expectedAnswer.substring(0,131);
+        }
+        Assert.assertEquals(getTweetsSection().getReplyIfShown(70, "touch"), expectedAnswer,
+                "Expected tweet answer is missing after 70 secs wait");
+    }
+
+//    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
+    @Then("^Agent's answer arrives to twitter$")
+    public void verifyReceivingAnswerInTimelineFromAgent(){
+//        if(expectedAnswer.length()>132){
+//            expectedAnswer = expectedAnswer.substring(0,131);
+//        }
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(60),
+                "Expected tweet answer from the agent is missing after 60 secs wait");
+    }
+
+    @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
+    public void verifyFromAgentResponseAsACommentOnTweet(String expectedAgentMessage, String initialUserTweet){
+        getTwitterTenantPage().getTwitterHeader().openHomePage().waitForPageToBeLoaded();
+        openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
+        if(expectedAgentMessage.length()>132){
+            expectedAgentMessage = expectedAgentMessage.substring(0,131);
+        }
+        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,5),
+                "Agent response "+expectedAgentMessage+" for user is not shown as comment for tweet");
+    }
+
+
+    @When("^He clicks \"(.*)\" tweet$")
+    public void openTweet(String expectedAnswer){
+        openedTweet = getTweetsSection().clickTimeLineTweetWithText(expectedAnswer);
+    }
+
+    @When("^Send \"(.*)\" reply on agent's tweet \"(.*)\"$")
+    public void sendResponseIntoTweet(String replyMessage, String agentMessage ){
+        openedTweet.sendReply(replyMessage, agentMessage);
+    }
+
+
+    @When("^User have to receive (.*) agent response as comment for (.*) tweet$")
+    public void verifyAgentResponse(String expectedResponse, String targetTweet){
+        boolean result = false;
+            for (int i =0; i < 10; i++){
+                openedTweet.closeTweet();
+                try{
+                    result = checkAgentsResponse(expectedResponse, targetTweet);
+                    if(result) break;
+                    else openedTweet.waitFor(2000);
+                } catch(StaleElementReferenceException e){
+                    result = checkAgentsResponse(expectedResponse, targetTweet);
+                    if(result) break;
+                    else openedTweet.waitFor(2000);
+                }
+            }
+        Assert.assertTrue(result, "Agent response for user is not shown as comment for tweet");
+    }
+
+    private boolean checkAgentsResponse(String expectedResponse, String targetTweet){
+            openedTweet = getTweetsSection().clickTimeLineTweetWithText(targetTweet);
+            if(openedTweet.ifAgentReplyShown(expectedResponse,1)) {
+                return true;
+            } else{
+                return false;
+            }
+
+    }
+
+    @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
+    public void verifyDMTwitterResponse(String expectedResponse, String userMessage){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
+                "There is no response on "+userMessage+" user message");
+        soft.assertEquals(getDmWindow().getToUserResponse(userMessage), expectedResponse,
+                "To user response is not as expected");
+        soft.assertAll();
+    }
+
+
+    // =======================  Private Class Members =========================== //
+
+    private TwitterTenantPage getTwitterTenantPage() {
+        if (twitterTenantPage==null) {
+            twitterTenantPage = new TwitterTenantPage();
+            return twitterTenantPage;
+        } else{
+            return twitterTenantPage;
+        }
+    }
+
+    private DMWindow getDmWindow() {
+        if (dmWindow==null) {
+            dmWindow = getTwitterTenantPage().getDmWindow();
+            return dmWindow;
+        } else{
+            return dmWindow;
+        }
+    }
+
+    private TweetWindow getTweetWindow() {
+        if (tweetWindow==null) {
+            tweetWindow = getTwitterTenantPage().getTweetWindow();
+            return tweetWindow;
+        } else{
+            return tweetWindow;
+        }
+    }
+
+    private TweetsSection getTweetsSection() {
+        if (tweetsSection ==null) {
+            tweetsSection = new TweetsSection();
+            return tweetsSection;
+        } else{
+            return tweetsSection;
+        }
+    }
+
+}

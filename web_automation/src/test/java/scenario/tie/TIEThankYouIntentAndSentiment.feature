@@ -14,7 +14,7 @@ Feature: TIE should correctly identify "thank you" intent
       |Thank you!                                    |
       |thanks                                        |
       |thks                                          |
-      |tx                                           |
+      |tx                                            |
       |thx                                           |
       |many thanks                                   |
       |thanks so much                                |

@@ -9,8 +9,8 @@ Feature: Profanity filter on agent's messages
   Scenario: Verify if profanity filter is applied to agent's messages
     When User enter chat to support into widget input field
     Then Agent has new conversation request
-    When Agent click on new conversation
-    Then Conversation area becomes active with chat to support user's message in it
+    When Agent click on new conversation request from touch
+    Then Conversation area becomes active with chat to support user's message
     When Agent responds with fuck off to User
     Then 'Profanity not allowed' pop up is shown
     When Agent closes 'Profanity not allowed' popup

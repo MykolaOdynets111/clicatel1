@@ -19,6 +19,5 @@ public class TouchActionsMenu extends AbstractUIElement {
 
     public void selectTouchAction(String touchAction) {
         touchActions.stream().filter(e->e.getText().equalsIgnoreCase(touchAction)).findFirst().get().click();
-    int a=2;
     }
 }

@@ -48,4 +48,7 @@ public enum FacebookUsers {
         return this.userID;
     }
 
+    public static String getLoggedInUserName(){
+        return LOGGED_IN_USER.getFBUserName() + " " + LOGGED_IN_USER.getFBUserSurname();
+    }
     }

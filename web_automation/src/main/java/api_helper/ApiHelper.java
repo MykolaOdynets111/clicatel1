@@ -75,7 +75,7 @@ public class ApiHelper {
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForWidgetDisplayHours(day, startTime, endTime);
-        RestAssured.given()
+        RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body(body)
@@ -153,7 +153,7 @@ public class ApiHelper {
         Country targetCountry = targetTerr.getCountry().stream().filter(e -> e.getName().equalsIgnoreCase(countryName))
                 .findFirst().get();
         String countryID = targetCountry.getCountryId();
-        RestAssured.given()
+        RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
@@ -178,7 +178,7 @@ public class ApiHelper {
     public static void setAvailabilityForTerritory(String tenantOrgName, String terrName, boolean terrAvailability){
         Territory targetTerr =  Territories.getTargetTerr(tenantOrgName, terrName);
         String territoryID = targetTerr.getTerritoryId();
-        RestAssured.given()
+        RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +

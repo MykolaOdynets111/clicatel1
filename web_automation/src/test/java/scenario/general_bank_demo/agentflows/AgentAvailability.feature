@@ -45,7 +45,7 @@ Feature: Agent availability
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation
-    Then Conversation area becomes active with chat to support user's message in it
+    Then Conversation area becomes active with chat to support user's message
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'chat to support' input
     When Agent closes chat

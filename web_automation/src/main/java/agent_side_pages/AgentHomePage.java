@@ -143,6 +143,15 @@ public class AgentHomePage extends AgentAbstractPage {
             }
     }
 
+    public boolean isSuggestionFieldShown() {
+        try {
+            return isElementShownAgent(suggestionInputField);
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+
     public void endChat(String agent){
         if(isEndChatShown(agent)){
             endChatButton.click();

@@ -109,6 +109,15 @@ public interface WebActions extends WebWait {
         return DriverFactory.getTouchDriverInstance().findElement(By.xpath(xpath));
     }
 
+
+    default WebElement findElemByCSS(String css){
+        return DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(css));
+    }
+
+    default List<WebElement> findElemntsByCSS(String css) {
+        return DriverFactory.getTouchDriverInstance().findElements(By.cssSelector(css));
+    }
+
     default WebElement findElemByXPATHAgent(String xpath){
         return DriverFactory.getAgentDriverInstance().findElement(By.xpath(xpath));
     }

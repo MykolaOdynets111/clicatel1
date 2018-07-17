@@ -11,7 +11,7 @@ Feature: Agent suggestions
   Scenario: Agent should be able to work with suggestion
     When User enter Chat to Support into widget input field
     Then Agent has new conversation request
-    And Agent click on new conversation
+    And Agent click on new conversation request from touch
     When User enter trading hours into widget input field
     Then There is correct suggestion shown on user message "trading hours"
     And The suggestion for user message "trading hours" with the biggest confidence is added to the input field
@@ -30,7 +30,7 @@ Feature: Agent suggestions
   Scenario: Interaction with "Clear" and "Edit" suggestion buttons
     When User enter Chat to Support into widget input field
     Then Agent has new conversation request
-    And Agent click on new conversation
+    And Agent click on new conversation request from touch
     When User enter trading hours into widget input field
     Then There is correct suggestion shown on user message "trading hours"
     Then The suggestion for user message "trading hours" with the biggest confidence is added to the input field
@@ -48,7 +48,7 @@ Feature: Agent suggestions
   Scenario: Suggestions should be shown in descending order by confidence
     When User enter Chat to Support into widget input field
     Then Agent has new conversation request
-    And Agent click on new conversation
+    And Agent click on new conversation request from touch
     When User enter some question regarding balance into widget input field
     Then There is correct suggestion shown on user message "some question regarding balance" and sorted by confidence
     And The suggestion for user message "some question regarding balance" with the biggest confidence is added to the input field

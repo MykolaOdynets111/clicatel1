@@ -3,6 +3,7 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
+import api_helper.TwitterAPI;
 import api_helper.Endpoints;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -24,11 +25,13 @@ import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
+import twitter.TwitterLoginPage;
+import twitter.TwitterTenantPage;
+import twitter.uielements.DMWindow;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 
-import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
 
 public class Hooks implements JSHelper{
@@ -37,19 +40,29 @@ public class Hooks implements JSHelper{
     public void beforeScenario(Scenario scenario){
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                     !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
-                    !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+                    !scenario.getSourceTagNames().contains("@facebook") &&
+                    !scenario.getSourceTagNames().contains("@twitter")) {
 
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getAgentDriverInstance();
                 }
                 DriverFactory.openUrl();
                 // Setting up coordinates of Lviv, Ukraine into browser
-                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-                    setUpGeolocation("49.8397", "24.0297");
+//                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+//                    setUpGeolocation("49.8397", "24.0297");
+//                }
+            }
+            if (scenario.getSourceTagNames().contains("@facebook")) {
+                FBLoginPage.openFacebookLoginPage().loginUser();
+                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
+                    DriverFactory.getAgentDriverInstance();
                 }
             }
-            if (scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
-                FBLoginPage.openFacebookLoginPage().loginUser();
+            if (scenario.getSourceTagNames().contains("@twitter")) {
+                TwitterLoginPage.openTwitterLoginPage().loginUser();
+                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
+                    DriverFactory.getAgentDriverInstance();
+                }
             }
             if(scenario.getSourceTagNames().contains("@tie")){
                 BaseTieSteps.request = new ByteArrayOutputStream();
@@ -62,7 +75,8 @@ public class Hooks implements JSHelper{
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
-                !scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))) {
+                !scenario.getSourceTagNames().contains("@facebook") &&
+                !scenario.getSourceTagNames().contains("@twitter")){
 
             finishAgentFlowIfExists(scenario);
             takeScreenshot();
@@ -72,10 +86,18 @@ public class Hooks implements JSHelper{
             takeScreenshot();
             finishVisibilityFlow();
         }
-        if(scenario.getSourceTagNames().equals(Arrays.asList("@facebook"))){
+        if(scenario.getSourceTagNames().contains("@facebook")){
+            finishAgentFlowIfExists(scenario);
             takeScreenshot();
-            endFacebookFlow();
+            endFacebookFlow(scenario);
         }
+
+        if(scenario.getSourceTagNames().contains("@twitter")){
+            takeScreenshot();
+            finishAgentFlowIfExists(scenario);
+            endTwitterFlow();
+        }
+
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow();
         }
@@ -85,6 +107,7 @@ public class Hooks implements JSHelper{
         }
 
         closeMainBrowserIfOpened();
+
     }
 
 
@@ -130,8 +153,8 @@ public class Hooks implements JSHelper{
         }
     }
 
-
     private void endTouchFlow(Scenario scenario) {
+
         if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
             new MainPage().openWidget();
         }
@@ -146,12 +169,6 @@ public class Hooks implements JSHelper{
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
     }
 
-    private void finishVisibilityFlow() {
-        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
-        ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-        ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
-    }
-
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
@@ -164,18 +181,52 @@ public class Hooks implements JSHelper{
         } catch (WebDriverException e) { }
     }
 
+
+//    private void finishAgentFlowIfExists() {
+//        if (DriverFactory.isSecondDriverExists()) {
+//            takeScreenshotFromSecondDriver();
+//            closePopupsIfOpenedEndChatAndlogoutAgent();
+//            DriverFactory.closeSecondBrowser();
+//        }
+//    }
+
+    private void finishVisibilityFlow() {
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
+    }
+
+    private void endFacebookFlow(Scenario scenario) {
+            try {
+                new FBTenantPage().getMessengerWindow().deleteConversation();
+            } catch (WebDriverException e) { }
+        }
+
+    private void closeMainBrowserIfOpened() {
+        if (DriverFactory.isTouchDriverExists()) {
+            DriverFactory.closeTouchBrowser();
+        }
+    }
+
     private void logoutAgent() {
         try {
             AgentHomePage agentHomePage =  new AgentHomePage("main agent");
             agentHomePage.getHeader().logOut();
             new AgentLoginPage("one agent").waitForLoginPageToOpen();
         } catch (WebDriverException e) { }
+
     }
 
-    private void endFacebookFlow() {
+    private void endTwitterFlow() {
+        TwitterAPI.deleteToTestUserTweets();
+        TwitterAPI.deleteTweetsFromTestUser();
         try {
-            new FBTenantPage().getMessengerWindow().deleteConversation();
-        } catch (WebDriverException e) { }
+            DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
+            dmWindow.sendUserMessage("end");
+            dmWindow.deleteConversation();
+        } catch (WebDriverException e) {
+
+        }
     }
 
     private void endTieFlow() {
@@ -194,12 +245,6 @@ public class Hooks implements JSHelper{
 
     }
 
-
-    private void closeMainBrowserIfOpened() {
-        if (DriverFactory.isTouchDriverExists()) {
-            DriverFactory.closeTouchBrowser();
-        }
-    }
 
     @Attachment(value = "request")
     public byte[] logRequest(ByteArrayOutputStream stream) {

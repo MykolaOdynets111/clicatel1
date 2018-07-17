@@ -47,6 +47,13 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOf(element));
     }
 
+
+    default WebElement waitForElementToBeClickable(WebElement element, int time) {
+        return initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(element));
+    }
+
     default WebElement waitForElementToBeVisibleAgent(WebElement element, int time){
         return initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
@@ -112,6 +119,13 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
     }
 
+
+    default void waitForElementsToBeVisibleByCssAgent(String css, int time) {
+        initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(css)));
+    }
+
     default void waitForElementsToBeInvisibleByCssAgent(String css, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
@@ -128,6 +142,30 @@ public interface WebWait {
         initWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    }
+
+    default void waitForElementToBeVisibleByCss(String css, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(css)));
+    }
+
+    default void waitForElementToBeCklickableByCss(String css, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(By.cssSelector(css)));
+    }
+
+    default void waitForElementToBeInVisibleByCss(String css, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
+    }
+
+    default void waitForElementsToBeVisibleByXpath(String xpath, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
     }
 
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){

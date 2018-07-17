@@ -25,7 +25,7 @@ public class AgentConversationSteps implements JSHelper{
     private ChatBody chatBody;
     private SuggestedGroup suggestedGroup;
 
-    @Then("^Conversation area becomes active with (.*) user's message in it$")
+    @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -52,6 +52,16 @@ public class AgentConversationSteps implements JSHelper{
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser){
         getAgentHomePage(agent).sendResponseToUser(responseToUser);
+    }
+
+
+    @When("^Agent replays with (.*) message$")
+    public void respondToUserWithCheck(String agentMessage) {
+        if (getAgentHomePage("main agent").isSuggestionFieldShown()) {
+            deleteSuggestionAndSendOwn(agentMessage);
+        } else {
+            sendAnswerToUser("main agent", agentMessage);
+        }
     }
 
     @When("^Agent clear input and send a new message (.*)$")

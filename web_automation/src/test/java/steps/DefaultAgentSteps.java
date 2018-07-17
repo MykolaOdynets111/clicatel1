@@ -8,7 +8,9 @@ import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataprovider.FacebookUsers;
 import dataprovider.Tenants;
+import dataprovider.TwitterUsers;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -142,6 +144,24 @@ public class DefaultAgentSteps implements JSHelper {
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }
+
+    @When("^(.*) click on new conversation request from (.*)$")
+    public void acceptUserFromSocialConversation(String agent, String socialChannel) {
+        String userName=null;
+        switch (socialChannel.toLowerCase()){
+            case "touch":
+                userName = getUserNameFromLocalStorage();
+                break;
+            case "twitter":
+                userName = TwitterUsers.getLoggedInUserName();
+                break;
+            case "facebook":
+                userName = FacebookUsers.getLoggedInUserName();
+                break;
+        }
+        getLeftMenu(agent).openNewConversationRequest(userName);
+    }
+
 
 
     @When("^(.*) click on new conversation$")
