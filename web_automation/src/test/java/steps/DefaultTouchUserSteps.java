@@ -119,7 +119,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^User have to receive '(.*)' text response as a second response for his '(.*)' input$")
-    public void verifyecondTextResponse(String textResponse, String userInput) {
+    public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
         String expectedTextResponse = null;
         switch (textResponse) {

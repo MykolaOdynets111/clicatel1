@@ -30,6 +30,10 @@ public class ToUserTextMessage  extends Widget implements WebActions {
     }
 
     public String getSecondMessageText() {
+        for(int i=0; i<4; i++){
+            if (toUserTextMessages.size()>1) break;
+            else waitFor(500);
+        }
         try{
             return toUserTextMessages.get(1).getText();
         } catch (IndexOutOfBoundsException e) {
