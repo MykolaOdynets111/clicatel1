@@ -225,12 +225,17 @@ public class AgentHomePage extends AgentAbstractPage {
     public void clickCloseButtonInCloseChatPopup (){
         for (int i =0; i<5; i++){
             try{
-            if (isElementShownAgent(findElemByXPATHAgent(closeChatButtonXPATH))){
-                findElemByXPATHAgent(closeChatButtonXPATH).click();
-                break;
-            }else{
-                waitFor(500);
-            }}
+                try{
+                    if (isElementShownAgent(findElemByXPATHAgent(closeChatButtonXPATH))){
+                        findElemByXPATHAgent(closeChatButtonXPATH).click();
+                        break;}
+                    else{
+                        waitFor(500);
+                }}
+                catch (StaleElementReferenceException e1){
+
+                    }
+            }
             catch (NoSuchElementException e){
                 break;
             }

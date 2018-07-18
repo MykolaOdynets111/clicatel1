@@ -35,6 +35,12 @@ public interface WebWait {
                 .until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    default WebElement waitForElementToBeClickableAgent(WebElement element, int wait, String agent){
+        return initAgentWait(wait, agent).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(element));
+    }
+
     default WebElement waitForElementToBeVisible(WebElement element){
         return initWait()
                 .ignoring(StaleElementReferenceException.class)
