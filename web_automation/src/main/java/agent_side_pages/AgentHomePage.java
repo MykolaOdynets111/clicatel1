@@ -223,26 +223,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickCloseButtonInCloseChatPopup (){
-        for (int i =0; i<5; i++){
-            try{
-                try{
-                    if (isElementShownAgent(findElemByXPATHAgent(closeChatButtonXPATH))){
-                        findElemByXPATHAgent(closeChatButtonXPATH).click();
-                        }
-                    else{
-                        waitFor(200);
-                }}
-                catch (StaleElementReferenceException e1){
-
-                    }
-            }
-            catch (NoSuchElementException e){
-                break;
-            }
-        }
-//        waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 6);
-
-        //        closeChatButton.click();
+        waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 5);
+        findElemByXPATHAgent(closeChatButtonXPATH).click();
     }
 
     public boolean isProfileWindowOpened(){
