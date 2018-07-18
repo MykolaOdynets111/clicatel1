@@ -9,6 +9,7 @@ public class ConfigManager {
     private static final String REMOTE_FLAG_VARIABLE = "remote";
     private static final String BROWSER_NAME = "browser";
     private static final String ENV = "env";
+    private static final String DEPLOY_TO = "deploy_to";
 
     public static boolean isRemote() {
         String remoteValue = System.getProperty(REMOTE_FLAG_VARIABLE);
@@ -27,6 +28,8 @@ public class ConfigManager {
     }
 
     public static String getEnv() {
+//        String env =
+
         if (System.getProperty(ENV)==null) {
             return "testing";
         } else {
