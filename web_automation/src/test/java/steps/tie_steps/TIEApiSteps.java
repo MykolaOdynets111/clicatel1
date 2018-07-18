@@ -389,7 +389,7 @@ public class TIEApiSteps {
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(110000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
