@@ -138,6 +138,14 @@ public class DefaultAgentSteps implements JSHelper {
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
+    @Then("^(.*) has new conversation request from twitter user$")
+    public void verifyAgentHasRequestFormTwitterUser(String agent){
+                agentHomePage = getAgentHomePage(agent);
+                leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(TwitterUsers.getLoggedInUserName(),40),
+                                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+            }
+
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
