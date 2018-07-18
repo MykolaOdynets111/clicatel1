@@ -228,9 +228,9 @@ public class AgentHomePage extends AgentAbstractPage {
                 try{
                     if (isElementShownAgent(findElemByXPATHAgent(closeChatButtonXPATH))){
                         findElemByXPATHAgent(closeChatButtonXPATH).click();
-                        break;}
+                        }
                     else{
-                        waitFor(500);
+                        waitFor(200);
                 }}
                 catch (StaleElementReferenceException e1){
 

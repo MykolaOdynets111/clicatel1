@@ -10,11 +10,11 @@ Feature: Agent availability
 #    When User enter chat to agent into widget input field
 #    Then Agent has new conversation request
 #    When Agent click on new conversation
-#    Then Conversation area becomes active with chat to agent user's message in it
+#    Then Conversation area becomes active with chat to agent user's message
 #    When Agent closes chat
 #    And Agent  changes status to: Unavailable
 #    And Agent  changes status to: Available
-#    Then From agent chat should be removed from agent desk
+#    Then Agent should not see from user chat in agent desk
 #    Given I login as second agent of General Bank Demo
 #    Then Second agent has new conversation request
 #
