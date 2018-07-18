@@ -19,24 +19,27 @@ public class URLs {
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
     public static String getURL(){
-        String env = ConfigManager.getEnv();
+        String targetEnvConfiguration = ConfigManager.getEnv();
+        String env;
+        if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
+        else env = targetEnvConfiguration;
         switch (env) {
             case "qa":
-                return String.format(URLs.BASE_ENV_URL, "qa");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             case "dev":
-                return String.format(URLs.BASE_ENV_URL, "dev");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             case "testing":
-                return String.format(URLs.BASE_ENV_URL, "testing");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             case "demo":
-                return String.format(URLs.BASE_ENV_URL, "demo");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             case "beta":
-                return String.format(URLs.BASE_ENV_URL, "beta");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             case "integration":
-                return String.format(URLs.BASE_ENV_URL, "integration");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             case "demo1":
-                return String.format(URLs.BASE_ENV_URL, "demo1");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
             default:
-                return String.format(URLs.BASE_ENV_URL, "testing");
+                return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
         }
     }
 
@@ -47,34 +50,37 @@ public class URLs {
     public static String getAgentURL(String tenantOrgName, boolean updateURL) {
         if (FINAL_AGENT_URL == null || updateURL==true) {
             String baseUrl;
-            String env = ConfigManager.getEnv();
+            String targetEnvConfiguration = ConfigManager.getEnv();
+            String env;
+            if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
+            else env = targetEnvConfiguration;
 
             switch (env) {
                 case "qa":
 //                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "qa");
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "qa");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
                 case "dev":
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "dev");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
 //                    baseUrl = String.format(URLs.BASE_CHATDESK_AGENT_URL, "dev");
                     break;
                 case "testing":
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "testing");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
                 case "demo":
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "demo");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
                 case "beta":
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "beta");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
                 case "integration":
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "integration");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
                 case "demo1":
-                    baseUrl =String.format(URLs.BASE_AGENT_URL, "demo1");
+                    baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
                 default:
-                    baseUrl = String.format(URLs.BASE_AGENT_URL, "testing");
+                    baseUrl = String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
                     break;
             }
 //            if(tenantOrgName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){

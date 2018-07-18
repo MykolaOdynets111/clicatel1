@@ -28,12 +28,11 @@ public class ConfigManager {
     }
 
     public static String getEnv() {
-//        String env =
-
-        if (System.getProperty(ENV)==null) {
-            return "testing";
-        } else {
-            return System.getProperty(ENV);
-        }
+        String env = System.getProperty(ENV);
+        String deployTo = System.getProperty(DEPLOY_TO);
+        if(env==null) env = "testing";
+        if (deployTo.equalsIgnoreCase("standby_group")) env = "standby-"+env;
+         System.out.println("!!! Will run tests on env: "+env+"");
+         return env;
     }
 }
