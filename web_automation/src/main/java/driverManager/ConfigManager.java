@@ -31,8 +31,13 @@ public class ConfigManager {
         String env = System.getProperty(ENV);
         String deployTo = System.getProperty(DEPLOY_TO);
         if(env==null) env = "testing";
-        if (deployTo.equalsIgnoreCase("standby_group")) env = "standby-"+env;
-         System.out.println("!!! Will run tests on env: "+env+"");
-         return env;
+        if(deployTo==null) return env;
+        else{
+            if (deployTo.equalsIgnoreCase("standby_group")) {
+                env = "standby-"+env;
+            }
+            System.out.println("!!! Will run tests on env: "+env+"");
+            return env;
+        }
     }
 }
