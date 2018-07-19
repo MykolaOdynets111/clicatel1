@@ -1,3 +1,4 @@
+#@agent_availability
 #Feature: Agent availability
 #
 #  Background:

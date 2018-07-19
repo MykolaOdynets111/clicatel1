@@ -135,8 +135,13 @@ public class Hooks implements JSHelper{
             if(scenario.getSourceTagNames().contains("@portal")){
                 logoutAgent();
             } else{
+                if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
+                    AgentHomePage agentHomePage = new AgentHomePage("main agent");
+                    agentHomePage.getHeader().clickIconWithInitials();
+                    agentHomePage.getHeader().selectStatus("available");
+                    agentHomePage.getHeader().clickIconWithInitials();
+                }
                 closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
-
             }
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
@@ -163,7 +168,6 @@ public class Hooks implements JSHelper{
                 touchConsoleOutput();
                 Widget widget = new Widget();
                 widget.getWidgetFooter().enterMessage("end").sendMessage();
-//                widget.getWidgetConversationArea().isTextResponseShownFor("end", 3);
             }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
