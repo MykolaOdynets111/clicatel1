@@ -117,6 +117,9 @@ task runTieTests(type:Test) {
     if (System.getProperty("remote") != null) {
         systemProperty "remote", System.properties.getProperty("remote")
     }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tie.xml"
@@ -132,6 +135,9 @@ task runBaseTests(type:Test) {
     }
     if (System.getProperty("browser") != null) {
         systemProperty "browser", System.getProperty("browser")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
     }
     useTestNG() {
         println("base TEST ENV " + System.getProperty("env"))
@@ -153,6 +159,9 @@ task runAllTest(type:Test) {
     if (System.getProperty("browser") != null) {
         systemProperty "browser", System.getProperty("browser")
     }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
@@ -170,6 +179,9 @@ task runVisibilityTests(type:Test) {
     if (System.getProperty("browser") != null) {
         systemProperty "browser", System.getProperty("browser")
     }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/visibilitytests.xml"
@@ -186,6 +198,9 @@ task runFacebookTests(type:Test) {
     if (System.getProperty("browser") != null) {
         systemProperty "browser", System.getProperty("browser")
     }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + tenantName + "/facebook.xml"
@@ -201,6 +216,9 @@ task runTwitterTests(type:Test) {
     }
     if (System.getProperty("browser") != null) {
         systemProperty "browser", System.getProperty("browser")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
     }
     useTestNG() {
         ignoreFailures = true
