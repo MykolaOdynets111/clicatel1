@@ -1,22 +1,17 @@
 package steps.tie_steps;
 
-import cucumber.api.Scenario;
+import api_helper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dbManager.DBConnector;
 import driverManager.URLs;
 import io.restassured.RestAssured;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
@@ -103,7 +98,7 @@ public class BaseTieSteps {
 
     @When("^If I send a \"(.*)\" to (.*) tenant TIE should return \"(.*)\" entity$")
     public void verifyTieEntity(String message, String tenant, String expectedEntity){
-        Response resp = RestAssured.get(URLs.getBaseTieChatURL(tenant)+message+"&sentiment=true");
+        Response resp = RestAssured.get(String.format(Endpoints.TIE_CHAT_URL, tenant)+message+"&sentiment=true");
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }

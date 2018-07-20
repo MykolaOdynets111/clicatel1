@@ -1,6 +1,5 @@
 package api_helper;
 
-import dataprovider.Accounts;
 import dataprovider.Tenants;
 import dataprovider.Territories;
 import dataprovider.jackson_schemas.Country;
@@ -21,8 +20,7 @@ public class ApiHelper {
     private static List<HashMap> tenantMessages=null;
 
     public static String getTenantConfig(String tenantName, String config){
-        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
-                String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
+        String url = String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
         return RestAssured.get(url).jsonPath().get(config);
     }
 
@@ -35,8 +33,7 @@ public class ApiHelper {
     }
 
     public static void createUserProfile(String tenantName, String clientID, String keyName, String keyValue) {
-        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
-                String.format(Endpoints.CREATE_USER_PROFILE_ENDPOINT, tenantName, clientID, keyName, keyValue);
+        String url = String.format(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT, tenantName, clientID, keyName, keyValue);
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -44,8 +41,7 @@ public class ApiHelper {
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
-        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
-                String.format(Endpoints.DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
+        String url = String.format(Endpoints.INTERNAL_DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
         RestAssured.given()
                 .header("Accept", "application/json")
                 .delete(url);
@@ -61,8 +57,7 @@ public class ApiHelper {
 
     private static List<HashMap> getTenantMessagesInfo() {
         if(tenantMessages==null) {
-            String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
-                    String.format(Endpoints.TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTest());
+            String url = String.format(Endpoints.INTERNAL_TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTest());
             tenantMessages = RestAssured.given().get(url)
                     .jsonPath().get("tafResponses");
         }
@@ -79,8 +74,7 @@ public class ApiHelper {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body(body)
-                .put(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
-                        String.format(Endpoints.WIDGET_VISIBILITY_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
     }
 
     private static String createPutBodyForWidgetDisplayHours(String day, String startTime,  String endTime) {
@@ -141,8 +135,7 @@ public class ApiHelper {
                         "  \"availability\": \"AVAILABLE\"\n" +
                         "\n" +
                         "}")
-                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+                .post(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
 
 
@@ -171,8 +164,7 @@ public class ApiHelper {
                         "    }" +
                         "]" +
                         "}")
-                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+                .post(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
 
     public static void setAvailabilityForTerritory(String tenantOrgName, String terrName, boolean terrAvailability){
@@ -190,16 +182,14 @@ public class ApiHelper {
                         "    }" +
                         "]" +
                         "}")
-                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+                .post(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
     }
 
 
     public static List<TenantAddress> getTenantAddressInfo(String tenantName) {
         return RestAssured.given()
                 .header("Accept", "application/json")
-                .get(String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
-                     String.format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
+                .get(String.format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
                 .jsonPath().getList("addresses", TenantAddress.class);
     }
 
@@ -207,8 +197,7 @@ public class ApiHelper {
     public static UserSession getLastUserSession(String userID, String tenant){
         return RestAssured.given()
                 .header("Accept", "application/json")
-                .get(String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv()) +
-                String.format(Endpoints.INTERNAL_LAST_CLIENT_SESSION, tenant, userID))
+                .get(String.format(Endpoints.INTERNAL_LAST_CLIENT_SESSION, tenant, userID))
                 .getBody().as(UserSession.class);
 
     }
@@ -216,14 +205,12 @@ public class ApiHelper {
 
     public static void updateFeatureStatus(String tenantOrgName, String feature, String status){
         String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
-        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv()) +
-                String.format(Endpoints.INTERNAL_FEATURE_STATE,tenantID, feature, status);
+        String url = String.format(Endpoints.INTERNAL_FEATURE_STATE,tenantID, feature, status);
         RestAssured.put(url);
     }
 
     public static int getNumberOfLoggedInAgents(){
-        String url = String.format(Endpoints.BASE_INTERNAL_ENDPOINT, ConfigManager.getEnv())+
-                String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTest());
+        String url = String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTest());
         return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
     }
 
@@ -232,7 +219,6 @@ public class ApiHelper {
         return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", token)
-                .get(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
-                        String.format(Endpoints.AGENT_INFO, token));
+                .get(String.format(Endpoints.AGENT_INFO, token));
     }
 }

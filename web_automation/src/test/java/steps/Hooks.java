@@ -237,8 +237,7 @@ public class Hooks implements JSHelper{
         if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
             for(long thread : TIEApiSteps.getNewTenantNames().keySet()){
                 if (thread==Thread.currentThread().getId()){
-                    String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
-                            String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
+                    String url = String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
                     given().delete(url);
                     TIEApiSteps.getNewTenantNames().remove(thread);
                 }
