@@ -15,6 +15,15 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
     private List<WebElement> newConversationRequests;
 
+    @FindBy(css = "span.icon.icon-expand")
+    private WebElement expandFilterButton;
+
+    @FindBy(css = "ul.dropdown-menu")
+    private WebElement filterDropdownMenu;
+
+    @FindBy(css = "ul.dropdown-menu a")
+    private List<WebElement> filterOptions;
+
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
     private WebElement getTargetChat(String userName){
@@ -29,16 +38,6 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public void openNewConversationRequest(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).openConversation();
     }
-//    public boolean isNewConversationRequestIsShown(int wait) {
-//            String userName = getUserNameFromLocalStorage();
-//            try{
-//                waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfille, userName), userName), wait);
-//                return true;
-//            } catch(TimeoutException e) {
-//                return false;
-//            }
-//    }
-
 
     public boolean isNewConversationRequestIsShown(int wait, String agent) {
         String userName = getUserNameFromLocalStorage();
@@ -67,5 +66,14 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         } catch(TimeoutException e) {
             return false;
         }
+    }
+
+    public void selectFilterOption(String option){
+        expandFilterButton.click();
+        waitForElementToBeVisibleAgent(filterDropdownMenu, 4);
+        filterOptions.stream()
+                .filter(e -> e.getText().toLowerCase().contains(option.toLowerCase()))
+                .findFirst().get()
+                .click();
     }
 }

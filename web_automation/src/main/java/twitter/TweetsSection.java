@@ -73,11 +73,11 @@ public class TweetsSection extends TwitterHomePage {
         return getOpenedTweet();
     }
 
-    public void clickReplyButtonForTweet(String expectedText, String reply){
-        waitForElementsToBeVisible(timelineElemements,5);
-        timelineElemements.stream().map(TimelineTweet::new).collect(Collectors.toList())
-                .stream().filter(e -> e.getTweetText().contains(expectedText))
-                .findFirst().get().clickReplyButton();
-        waitForElementToBeClickable(findElemByCSS(replyPopUpInputField)).sendKeys(reply);
-    }
+    public void sendReplyForTweet(String expectedText, String reply){
+//            waitForElementsToBeVisible(timelineElemements, 5);
+//            timelineElemements.stream().map(TimelineTweet::new).collect(Collectors.toList())
+//                    .stream().filter(e -> e.getTweetText().contains(expectedText))
+//                    .findFirst().get().clickReplyButton();
+            waitForElementToBeClickable(findElemByCSS(replyPopUpInputField)).sendKeys(reply);
+            }
 }

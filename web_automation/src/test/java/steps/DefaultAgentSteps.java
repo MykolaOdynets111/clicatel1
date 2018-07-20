@@ -138,6 +138,11 @@ public class DefaultAgentSteps implements JSHelper {
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
+    @Then("^Agent select \"(.*)\" filter option$")
+    public void selectFilterOption(String option){
+        getLeftMenu("main agent").selectFilterOption(option);
+    }
+
     @Then("^(.*) has new conversation request from twitter user$")
     public void verifyAgentHasRequestFormTwitterUser(String agent){
                 agentHomePage = getAgentHomePage(agent);

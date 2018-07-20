@@ -23,10 +23,10 @@ public class OpenedTweet extends AbstractUIElement {
 
     private String agentResponseXpath = "//div[@class='js-tweet-text-container']/p[text()=\"%s\"]";
 
-    private String replyButtonOnTweetComment = "(//span[@class='button-text replying-text'])[2]";
+    private String replyButtonOnTweetComment = "//button[@class='tweet-action EdgeButton EdgeButton--primary js-tweet-btn']/span[@class='button-text replying-text']";
 
     public void sendReply(String tweetText, String agentMessage){
-        new TweetsSection().clickReplyButtonForTweet(agentMessage, tweetText);
+        new TweetsSection().sendReplyForTweet(agentMessage, tweetText);
 //        moveToElemAndClick(replyInputArea);
 //        findElemByCSS(replyInputFieldCSS).sendKeys(tweetText);
         executeJSclick(findElemByXPATH(replyButtonOnTweetComment));
