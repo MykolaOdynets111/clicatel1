@@ -79,7 +79,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String textResponse, String userInput) {
-        int waitForResponse=10;
+        int waitForResponse=15;
         String expectedTextResponse = null;
         switch (textResponse) {
             case "start new conversation":
