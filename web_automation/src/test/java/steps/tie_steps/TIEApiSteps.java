@@ -519,17 +519,21 @@ public class TIEApiSteps {
         try{
         JsonPath json = resp.getBody().jsonPath();
         JsonPath jsonSource = sourceTenantResp.getBody().jsonPath();
-
-        Assert.assertTrue(json.get("stopwords_file").equals(jsonSource.get("stopwords_file"))&
-                json.get("normalizer_features").equals(jsonSource.get("normalizer_features"))&
-                json.get("fields").equals(jsonSource.get("fields"))&
-                json.get("excluded_types").equals(jsonSource.get("excluded_types"))&
-                json.get("separate_models").equals(jsonSource.get("separate_models"))&
-                json.get("add_synonyms").equals(jsonSource.get("add_synonyms"))&
-                json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
-                json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
-        "Config of source tenant was not applied to the new one."
-        );
+        if(json==null || jsonSource==null){
+            Assert.assertTrue(false, "JSON response after geting training config is missing.\n" +
+                    "Response for getting config of newly created tenant: "+resp.getBody().asString()+"\n"+
+                    "Response for getting config of source tenant: " +sourceTenantResp.getBody().asString()+"");
+        } else{
+                Assert.assertTrue(json.get("stopwords_file").equals(jsonSource.get("stopwords_file"))&
+                    json.get("normalizer_features").equals(jsonSource.get("normalizer_features"))&
+                    json.get("fields").equals(jsonSource.get("fields"))&
+                    json.get("excluded_types").equals(jsonSource.get("excluded_types"))&
+                    json.get("separate_models").equals(jsonSource.get("separate_models"))&
+                    json.get("add_synonyms").equals(jsonSource.get("add_synonyms"))&
+                    json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
+                    json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
+                "Config of source tenant was not applied to the new one.");
+        };
         } catch(JsonPathException e){
             Assert.assertTrue(false, "invalid JSON response. New Tetant: "+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"\n"
                     +sourceTenantResp.getBody().asString()+" original tenant TIE response \n" +
