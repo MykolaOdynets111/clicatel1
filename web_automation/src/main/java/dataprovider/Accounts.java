@@ -24,7 +24,7 @@ public class Accounts {
                         "  \"email\": \""+userName+"\",\n" +
                         "  \"password\": \""+userPass+"\"\n" +
                         "}")
-                .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) + Endpoints.PLATFORM_ACCOUNTS);
+                .post(Endpoints.PLATFORM_ACCOUNTS);
         if (resp.getBody().asString().contains("Not Authorized")){
             Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal."
                    );

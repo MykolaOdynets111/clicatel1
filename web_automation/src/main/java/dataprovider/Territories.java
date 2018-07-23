@@ -21,8 +21,7 @@ public class Territories {
                         "  \"availability\": \"AVAILABLE\"\n" +
                         "\n" +
                         "}")
-                .get(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.WIDGET_VISIBILITY_TERRITORIES);
+                .get(Endpoints.WIDGET_VISIBILITY_TERRITORIES);
         List<Territory> terr = resp.jsonPath().getList("territory", Territory.class);
         return terr.stream().filter(e -> e.getName().equalsIgnoreCase(terrName)).findFirst().get();
     }

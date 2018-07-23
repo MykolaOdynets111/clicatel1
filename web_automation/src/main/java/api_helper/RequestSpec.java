@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import dataprovider.Accounts;
 import dataprovider.Agents;
 import driverManager.ConfigManager;
+import driverManager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -28,7 +29,7 @@ public class RequestSpec {
                     .addHeader("Accept", "application/json, text/javascript")
                     .addHeader("Content-Type", "application/json")
                     .addHeader("Authorization", getAccessToken())
-                    .setBaseUri(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()))
+                    .setBaseUri(URLs.getTouchApiBaseURL())
                     .log(LogDetail.ALL)
                     .build());
         }
@@ -42,7 +43,7 @@ public class RequestSpec {
                 .header("Content-Type", "application/json")
                 .header("Authorization", getAuthToken())
                 .body("{\"clientId\":\""+faker.code().asin()+"\"}")
-                .post(String.format(Endpoints.BASE_TOUCH_ENDPOINT, ConfigManager.getEnv()) + Endpoints.ACCESS_TOKEN_ENDPOINT)
+                .post(Endpoints.ACCESS_TOKEN_ENDPOINT)
                 .jsonPath().get("accessToken");
     }
 
@@ -71,7 +72,7 @@ public class RequestSpec {
                             "  \"token\": \"" + tokenAndAccount.get("token") + "\",\n" +
                             "  \"accountId\": \"" + tokenAndAccount.get("accountId") + "\"\n" +
                             "}")
-                    .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) + Endpoints.PLATFORM_SIGN_IN);
+                    .post(Endpoints.PLATFORM_SIGN_IN);
 
             PORTAL_USER_ACCESS_TOKEN = resp.jsonPath().get("token");
             return PORTAL_USER_ACCESS_TOKEN;

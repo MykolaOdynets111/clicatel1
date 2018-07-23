@@ -31,8 +31,7 @@ public class ApiHelperPlatform {
                         "    }\n" +
                         "  ]\n" +
                         "}")
-                .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.PLATFORM_SEND_INVITATION);
+                .post(Endpoints.PLATFORM_SEND_INVITATION);
     }
 
 
@@ -43,16 +42,14 @@ public class ApiHelperPlatform {
                 .body("{\n" +
                         "  \"password\": \""+pass+"\"\n" +
                         "}")
-                .post(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
-                        String.format(Endpoints.PLATFORM_ACCEPT_INVITATION, invitationID));
+                .post(String.format(Endpoints.PLATFORM_ACCEPT_INVITATION, invitationID));
     }
 
     public static List<String> getIdsOfRoles(String tenantOrgName, String roleDescription){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.PLATFORM_USER_ROLES);
+                .get(Endpoints.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
         resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).filter(e -> e.get("description").equals(roleDescription)).
                         forEach(e -> {ids.add(
@@ -65,16 +62,14 @@ public class ApiHelperPlatform {
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .delete(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.PLATFORM_USER +"/"+ userID);
+                .delete(Endpoints.PLATFORM_USER +"/"+ userID);
     }
 
     public static String getUserID(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(String.format(Endpoints.BASE_PLATFORM_ENDPOINT, ConfigManager.getEnv()) +
-                        Endpoints.PLATFORM_USER);
+                .get(Endpoints.PLATFORM_USER);
         return (String) resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().filter(e -> e.get("email").equals(userEmail))
                 .findFirst().get().get("id");

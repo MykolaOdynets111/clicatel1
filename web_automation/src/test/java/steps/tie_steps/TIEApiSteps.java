@@ -45,8 +45,7 @@ public class TIEApiSteps {
     @When("^I send \"(.*)\" for (.*) tenant then response code is 200 and intents are not empty$")
     //API: GET /tenants/<tenant_name>/chats/?q=<user input>
     public void checkResponseStatusForIntentOnlyRequest(String userMessage, String tenant){
-        String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, ConfigManager.getEnv(),
-                tenant, userMessage);
+        String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
         when()
                 .get(url).
         then()
@@ -57,8 +56,7 @@ public class TIEApiSteps {
     @When("^I send \"(.*)\" for (.*) tenant including tie_sentiment then response code is 200 and intents are not empty$")
     //API: GET /tenants/<tenant_name>/chats/?q=<user input>&tie_sentiment=True
     public void checkResponseStatusForIntentWIthTieSentimentOnlyRequest(String userMessage, String tenant){
-        String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_SENTIMENT_URL, ConfigManager.getEnv(),
-                tenant, userMessage);
+        String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_SENTIMENT_URL, tenant, userMessage);
         when()
                 .get(url).
                 then()
@@ -71,8 +69,7 @@ public class TIEApiSteps {
     @When("^I send \"(.*)\" intent for (.*) tenant then response code is 200 and intents are not empty$")
     // API: GET /tenants/<tenant_name>/intents/<intent_text>
     public void checkResponseStatusForsPECYFINGIntentRequest(String intentText, String tenant){
-        String url = String.format(Endpoints.TIE_INTENT_SPECIFYING_SENTIMENT_URL, ConfigManager.getEnv(),
-                tenant, intentText);
+        String url = String.format(Endpoints.TIE_INTENT_SPECIFYING_SENTIMENT_URL, tenant, intentText);
         when()
                 .get(url).
         then()
@@ -82,8 +79,7 @@ public class TIEApiSteps {
 
     @When("^I add to (.*) intent (.*) sample text for created tenant status code is 200$")
     public void addSampleTextForIntent(String intent, String sampleText){
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING,
+        String url = String.format(Endpoints.TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING,
                         NEW_TENANT_NAMES.get(Thread.currentThread().getId()),intent,sampleText);
         when()
                 .get(url).
@@ -96,8 +92,7 @@ public class TIEApiSteps {
     @When("^I send \"(.*)\" for (.*) tenant then sentiments response code is 200$")
     //API: GET /tenants/<tenant_name>/sentiment/?q=<user input>
     public void checkResponseStatusForSentiments(String userMessage, String tenant){
-        String url = String.format(Endpoints.TIE_SENTIMENTS, ConfigManager.getEnv(),
-                tenant, userMessage);
+        String url = String.format(Endpoints.TIE_SENTIMENTS, tenant, userMessage);
         when()
                 .get(url).
         then()
@@ -112,8 +107,7 @@ public class TIEApiSteps {
 
     @When("^I send (.*) for (.*) tenant then response code is 200 and list of answers is shown$")
     public void checkListOfAnswers(List<String> intents, String tenant){
-        String url = String.format(Endpoints.TIE_ANSWERS_LIST, ConfigManager.getEnv(),
-                tenant, intents.get(0).replace(" ", "%20")+","+intents.get(1)).replace(" ", "%20");
+        String url = String.format(Endpoints.TIE_ANSWERS_LIST, tenant, intents.get(0).replace(" ", "%20")+","+intents.get(1)).replace(" ", "%20");
         String[] targetArray = intents.toArray(new String[intents.size()]);
         given()
                 .urlEncodingEnabled(false).
@@ -127,8 +121,7 @@ public class TIEApiSteps {
 
     @When("^I send only (.*) for (.*) tenant then response code is 404$")
     public void checkListOfAnswers(String intent, String tenant){
-        String url = String.format(Endpoints.TIE_ANSWERS_LIST, ConfigManager.getEnv(),
-                tenant, intent);
+        String url = String.format(Endpoints.TIE_ANSWERS_LIST, tenant, intent);
         when()
                 .get(url).
         then()
@@ -137,8 +130,7 @@ public class TIEApiSteps {
 
     @When("^I want to get all categories for (.*) response has status 200$")
     public void getAllCategories(String tenant){
-        String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, ConfigManager.getEnv(),
-                tenant, "all");
+        String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, tenant, "all");
         when()
                 .get(url).
         then()
@@ -147,8 +139,7 @@ public class TIEApiSteps {
 
     @When("^I want to get all answers of (.*) category for (.*) response has status 200$")
     public void getAllCategoryAnswer(String category, String tenant){
-        String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, ConfigManager.getEnv(),
-                tenant, category);
+        String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, tenant, category);
         when()
                 .get(url).
         then()
@@ -198,7 +189,7 @@ public class TIEApiSteps {
                 creatingURL = String.format(creatingURL, tenantID, info.get(0))+ "&answer="+info.get(1)+"&answer_url="+info.get(2)+"&category="+info.get(3)+"&type="+info.get(4);
                 break;
         }
-        return String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) + creatingURL;
+        return creatingURL;
     }
 
 
@@ -206,7 +197,7 @@ public class TIEApiSteps {
     public void verifyIntentInfo(String intent, List<String> info){
         SoftAssert soft = new SoftAssert();
         String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());;
-        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent);
         Response resp = RestAssured.get(url);
         try {
             if (info.size()==1) {
@@ -234,13 +225,13 @@ public class TIEApiSteps {
     public void updateIntentAnswer(String intent, List<String> newIntentInfo){
         String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         if(newIntentInfo.size()==1) {
-            String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "";
+            String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "";
             when().
                     post(url).
             then().
                     statusCode(200);
         }else{
-            String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "&answer_url="+newIntentInfo.get(1)+"";
+            String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent) + "&answer=" + newIntentInfo.get(0) + "&answer_url="+newIntentInfo.get(1)+"";
             when().
                     post(url).
             then().
@@ -252,7 +243,7 @@ public class TIEApiSteps {
     @When("^404 status code for updating not existed intent$")
     public void updateIntentAnswerAndURL(){
         String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, "notexisted_intent")+"&answer=newAnswer";
+        String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, "notexisted_intent")+"&answer=newAnswer";
         when().
                 post(url).
         then().
@@ -262,7 +253,7 @@ public class TIEApiSteps {
     @When("^I delete created intent (.*)$")
     public void deleteIntent(String intent){
         String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent);
         when().
                 delete(url).
         then().
@@ -273,7 +264,7 @@ public class TIEApiSteps {
     @When("^Intent (.*) is deleted$")
     public void verifyIntentDeleted(String intent){
         String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.TIE_ANSWER_URL, ConfigManager.getEnv(), tenantID, intent);
+        String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent);
         when().
                 get(url).
         then().
@@ -284,14 +275,12 @@ public class TIEApiSteps {
     @When("^I want to get trainings for (.*) (?:tenant|tenants) response status should be 200 and body is not empty$")
     public void getAllTrainings(String tenant){
         if(tenant.equalsIgnoreCase("existed")){
-            String urlToGetAllTenants = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                    String.format(Endpoints.TIE_TRAININGS, "all");
+            String urlToGetAllTenants = String.format(Endpoints.TIE_TRAININGS, "all");
             Response resp = get(urlToGetAllTenants);
             Map<String, String> trainings = resp.getBody().jsonPath().getMap("");
             String existedTenants = new ArrayList<>(trainings.keySet()).get(0);
 
-            String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                    String.format(Endpoints.TIE_TRAININGS, existedTenants);
+            String url = String.format(Endpoints.TIE_TRAININGS, existedTenants);
             when()
                     .get(url).
             then()
@@ -299,14 +288,13 @@ public class TIEApiSteps {
                     .statusCode(200)
                     .body("isEmpty()", is(false));
         } else{
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_TRAININGS, tenant);
-        when()
-                .get(url).
-        then()
-                .log().all()
-                .statusCode(200)
-                .body("isEmpty()", is(false));
+                String url = String.format(Endpoints.TIE_TRAININGS, tenant);
+                when()
+                    .get(url).
+                then()
+                    .log().all()
+                    .statusCode(200)
+                    .body("isEmpty()", is(false));
         }
     }
 
@@ -314,8 +302,7 @@ public class TIEApiSteps {
     @Then("^All trainings should contain newly added tenant training$")
     public void verifyTenantAddedToTrainings(){
         String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_TRAININGS,"all");
+        String url = String.format(Endpoints.TIE_TRAININGS,"all");
         when()
                 .get(url).
         then()
@@ -326,8 +313,7 @@ public class TIEApiSteps {
     @Then("^Training for new tenant is scheduled$")
     public void verifyTenantTrainingScheduled(){
         String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_TRAININGS, tenant);
+        String url = String.format(Endpoints.TIE_TRAININGS, tenant);
         when()
                 .get(url).
         then()
@@ -338,8 +324,7 @@ public class TIEApiSteps {
     @When("^I schedule training for a new tenant$")
     public void scheduleTenantTraining(){
         String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_TRAININGS, tenant);
+        String url = String.format(Endpoints.TIE_TRAININGS, tenant);
         given().log().all().
         when()
                 .post(url).
@@ -355,7 +340,7 @@ public class TIEApiSteps {
                 .log().all()
                 .body("tenant="+newTenantName+"").
         when()
-                .put(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()))
+                .put(URLs.getBaseTieURL())
         .then()
                 .statusCode(200);
 //                .body(contains(newTenantName));
@@ -367,7 +352,7 @@ public class TIEApiSteps {
                 .log().all()
                 .body("tenant="+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"").
         when()
-                .put(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()))
+                .put(URLs.getBaseTieURL())
         .then()
                 .statusCode(404);
     }
@@ -380,7 +365,7 @@ public class TIEApiSteps {
                 .log().all()
                 .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"").
         when()
-                .put(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()))
+                .put(URLs.getBaseTieURL())
         .then()
                 .statusCode(200);
     }
@@ -389,7 +374,7 @@ public class TIEApiSteps {
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(110000);
+            Thread.sleep(65000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -400,8 +385,7 @@ public class TIEApiSteps {
     @When("^I make a request to see (.*) trainset I receive response with 200 code and not empty body$")
     public void getTenantTrainset(String tenant){
         SoftAssert soft = new SoftAssert();
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_GET_TRAINSET, tenant);
+        String url = String.format(Endpoints.TIE_GET_TRAINSET, tenant);
         Response resp = RestAssured.get(url);
         soft.assertTrue(resp.statusCode()==200,
                 "Status code is not '200' when trying to get trainset for '"+tenant+ "' tenant" );
@@ -414,8 +398,7 @@ public class TIEApiSteps {
     public void makeGetTenantConfigVerification(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                            String.format(Endpoints.TIE_CONFIG, newTenant)).
+                .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant));
@@ -427,8 +410,7 @@ public class TIEApiSteps {
         given()
                 .body("{\""+field+"\":\""+value+"\"}").
         when()
-                .post(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_CONFIG, newTenant)).
+                .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200);
     }
@@ -437,8 +419,7 @@ public class TIEApiSteps {
     public void verifyAddingNewItemToConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_CONFIG, newTenant)).
+                .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant))
@@ -451,8 +432,7 @@ public class TIEApiSteps {
         given()
                 .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
         when()
-                .post(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
+                .post(String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
         then()
                 .statusCode(200);
         waitFor(2500);
@@ -465,8 +445,7 @@ public class TIEApiSteps {
         given()
                 .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
         when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
+                .get(String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
         then()
                 .statusCode(200)
                 .body("intent_trainset.tenant[0]", equalTo(newTenant))
@@ -477,8 +456,7 @@ public class TIEApiSteps {
     public void verifyRemovingItemFromConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                        String.format(Endpoints.TIE_CONFIG, newTenant)).
+                .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200)
                 .body("tenant", equalTo(newTenant))
@@ -488,8 +466,7 @@ public class TIEApiSteps {
     @Then("^Added trainset is removed$")
     public void checkTrainsetIsRemoved(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_GET_TRAINSET, newTenant);
+        String url = String.format(Endpoints.TIE_GET_TRAINSET, newTenant);
        when()
                 .get(url).
         then()
@@ -512,24 +489,26 @@ public class TIEApiSteps {
     @Then("^Config of cloned intent is the same as for (.*)")
     public void verifyClonedTenantResponds(String sourceTenant){
 
-        Response sourceTenantResp = get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_CONFIG, sourceTenant));
-        Response resp = get(String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_CONFIG, NEW_TENANT_NAMES.get(Thread.currentThread().getId())));
+        Response sourceTenantResp = get(String.format(Endpoints.TIE_CONFIG, sourceTenant));
+        Response resp = get(String.format(Endpoints.TIE_CONFIG, NEW_TENANT_NAMES.get(Thread.currentThread().getId())));
         try{
         JsonPath json = resp.getBody().jsonPath();
         JsonPath jsonSource = sourceTenantResp.getBody().jsonPath();
-
-        Assert.assertTrue(json.get("stopwords_file").equals(jsonSource.get("stopwords_file"))&
-                json.get("normalizer_features").equals(jsonSource.get("normalizer_features"))&
-                json.get("fields").equals(jsonSource.get("fields"))&
-                json.get("excluded_types").equals(jsonSource.get("excluded_types"))&
-                json.get("separate_models").equals(jsonSource.get("separate_models"))&
-                json.get("add_synonyms").equals(jsonSource.get("add_synonyms"))&
-                json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
-                json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
-        "Config of source tenant was not applied to the new one."
-        );
+        if(json==null || jsonSource==null){
+            Assert.assertTrue(false, "JSON response after geting training config is missing.\n" +
+                    "Response for getting config of newly created tenant: "+resp.getBody().asString()+"\n"+
+                    "Response for getting config of source tenant: " +sourceTenantResp.getBody().asString()+"");
+        } else{
+                Assert.assertTrue(json.get("stopwords_file").equals(jsonSource.get("stopwords_file"))&
+                    json.get("normalizer_features").equals(jsonSource.get("normalizer_features"))&
+                    json.get("fields").equals(jsonSource.get("fields"))&
+                    json.get("excluded_types").equals(jsonSource.get("excluded_types"))&
+                    json.get("separate_models").equals(jsonSource.get("separate_models"))&
+                    json.get("add_synonyms").equals(jsonSource.get("add_synonyms"))&
+                    json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
+                    json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
+                "Config of source tenant was not applied to the new one.");
+        };
         } catch(JsonPathException e){
             Assert.assertTrue(false, "invalid JSON response. New Tetant: "+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"\n"
                     +sourceTenantResp.getBody().asString()+" original tenant TIE response \n" +
@@ -540,8 +519,7 @@ public class TIEApiSteps {
 
     @When("^I delete created tenant$")
     public void deleteTenant(){
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_DELETE_TENANT, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
+        String url = String.format(Endpoints.TIE_DELETE_TENANT, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
         when()
                 .delete(url).
         then()
@@ -558,8 +536,7 @@ public class TIEApiSteps {
 
     @Then("I clear tenant data")
     public void clearTenantData(){
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_CLEARING_CONFIGS, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
+        String url = String.format(Endpoints.TIE_CLEARING_CONFIGS, NEW_TENANT_NAMES.get(Thread.currentThread().getId()));
         Response resp = given().log().all().
                 urlEncodingEnabled(false).
                 when()
@@ -580,20 +557,18 @@ public class TIEApiSteps {
 
     @When("^I try to add some trainset response status code should be 200$")
     public void addNERDataSet(){
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
         given()
                 .body("{\"NER_trainset\": ["+NER_DATA_SET.toString()+"]}").
         when()
-                .post(url).
+                .post(Endpoints.TIE_NER).
         then()
                 .statusCode(200);
     }
 
     @Then("^GET request should return created trainset$")
     public void getNERDataSet(){
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
         when()
-                .get(url).
+                .get(Endpoints.TIE_NER).
         then()
                 .statusCode(200)
                 .body("NER_trainset.text", hasItems(NER_DATA_SET.getText()));
@@ -601,13 +576,11 @@ public class TIEApiSteps {
 
     @When("^Trying to delete a trainset status code is 200$")
     public void deleteNER(){
-        String getUrl = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
-        String id = (String) ((HashMap) get(getUrl)
+        String id = (String) ((HashMap) get(Endpoints.TIE_NER)
                 .jsonPath().getList("NER_trainset").stream()
                 .filter(e -> ((HashMap) e).get("text").equals(NER_DATA_SET.getText()))
                 .findFirst().get()).get("id");
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+
-                String.format(Endpoints.TIE_NER_DELETE, id);
+        String url = String.format(Endpoints.TIE_NER_DELETE, id);
         when()
                 .delete(url).
         then()
@@ -616,18 +589,15 @@ public class TIEApiSteps {
 
     @Then("Trainset should be deleted")
     public void trainsetIsDeleted(){
-        String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
         when()
-                .get(url).
-                then()
+                .get(Endpoints.TIE_NER).
+        then()
                 .statusCode(200)
                 .body("NER_trainset.text", not(hasItems(NER_DATA_SET.getText())));
     }
 
     public static List<Map> getListOfNERs(){
-        String getUrl = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv())+ Endpoints.TIE_NER;
-
-        return get(getUrl).jsonPath().getList("NER_trainset");
+        return get(Endpoints.TIE_NER).jsonPath().getList("NER_trainset");
     }
 
     private void waitFor(int wait){

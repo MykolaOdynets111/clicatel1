@@ -135,8 +135,13 @@ public class Hooks implements JSHelper{
             if(scenario.getSourceTagNames().contains("@portal")){
                 logoutAgent();
             } else{
+                if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
+                    AgentHomePage agentHomePage = new AgentHomePage("main agent");
+                    agentHomePage.getHeader().clickIconWithInitials();
+                    agentHomePage.getHeader().selectStatus("available");
+                    agentHomePage.getHeader().clickIconWithInitials();
+                }
                 closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
-
             }
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
@@ -163,7 +168,6 @@ public class Hooks implements JSHelper{
                 touchConsoleOutput();
                 Widget widget = new Widget();
                 widget.getWidgetFooter().enterMessage("end").sendMessage();
-//                widget.getWidgetConversationArea().isTextResponseShownFor("end", 3);
             }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
@@ -233,8 +237,7 @@ public class Hooks implements JSHelper{
         if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
             for(long thread : TIEApiSteps.getNewTenantNames().keySet()){
                 if (thread==Thread.currentThread().getId()){
-                    String url = String.format(Endpoints.BASE_TIE_URL, ConfigManager.getEnv()) +
-                            String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
+                    String url = String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
                     given().delete(url);
                     TIEApiSteps.getNewTenantNames().remove(thread);
                 }
