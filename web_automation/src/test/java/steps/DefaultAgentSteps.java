@@ -13,6 +13,7 @@ import dataprovider.Tenants;
 import dataprovider.TwitterUsers;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
+import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -184,10 +185,13 @@ public class DefaultAgentSteps implements JSHelper {
 
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
-        getAgentHomePage(agent).getHeader().clickIconWithInitials();
-        getAgentHomePage(agent).getHeader().selectStatus(newStatus);
-        getAgentHomePage(agent).getHeader().clickIconWithInitials();
-
+        try {
+            getAgentHomePage(agent).getHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getHeader().selectStatus(newStatus);
+            getAgentHomePage(agent).getHeader().clickIconWithInitials();
+        } catch (WebDriverException e) {
+            Assert.assertTrue(false, "Unable to change agent status. Please check the screenshot.");
+        }
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
