@@ -7,6 +7,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import touch_pages.uielements.messages.FromUserMessage;
 import touch_pages.uielements.messages.ToUserMessageWithActions;
 import touch_pages.uielements.messages.ToUserTextMessage;
@@ -27,10 +28,16 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
     public String targetTextInConversationArea = "//li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod' and contains(text(), \"%s\")]";
 
     private WebElement getFromUserWebElement(String messageText) {
-        FromUserMessage theMessage =  fromUserMessages.stream().map(e -> new FromUserMessage(e))
-                                            .filter(e1 -> e1.getMessageText().equals(messageText))
-                                            .findFirst().get();
-        return theMessage.getWrappedElement();
+        try {
+            FromUserMessage theMessage = fromUserMessages.stream().map(e -> new FromUserMessage(e))
+                    .filter(e1 -> e1.getMessageText().equals(messageText))
+                    .findFirst().get();
+            return theMessage.getWrappedElement();
+        }catch (java.util.NoSuchElementException e){
+            Assert.assertTrue(false,
+                    "Expected user message \""+messageText+"\" is not shown in widget conversation area");
+            return null;
+        }
     }
 
 

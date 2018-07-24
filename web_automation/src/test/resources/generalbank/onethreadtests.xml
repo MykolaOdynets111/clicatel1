@@ -4,6 +4,7 @@
     <test name="User to Agent conversation ">
         <classes>
             <class name="runner.RunGenBankAgentTest" />
+            <class name="runner.RunPortalTest" />
         </classes>
     </test>
 </suite>
