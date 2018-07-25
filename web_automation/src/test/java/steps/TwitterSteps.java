@@ -72,7 +72,7 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertEquals(getTweetsSection().getReplyIfShown(70, "touch"), expectedAnswer,
+        Assert.assertEquals(getTweetsSection().getReplyIfShown(100, "touch"), expectedAnswer,
                 "Expected tweet answer is missing after 70 secs wait");
     }
 
@@ -82,8 +82,8 @@ public class TwitterSteps {
 //        if(expectedAnswer.length()>132){
 //            expectedAnswer = expectedAnswer.substring(0,131);
 //        }
-        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(60),
-                "Expected tweet answer from the agent is missing after 60 secs wait");
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),
+                "Expected tweet answer from the agent is missing after 100 secs wait");
     }
 
     @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
@@ -115,6 +115,7 @@ public class TwitterSteps {
             for (int i =0; i < 10; i++){
                 openedTweet.closeTweet();
                 try{
+                    getTweetsSection().clickNewTweetsButtonIfShown(50);
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
                     else openedTweet.waitFor(2000);

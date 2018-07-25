@@ -48,6 +48,14 @@ public class TweetsSection extends TwitterHomePage {
     }
 
 
+    public void clickNewTweetsButtonIfShown(int wait){
+        try {
+            waitForElementToBeVisibleByCss(newTweetsButon, wait);
+            findElemByCSS(newTweetsButon).click();
+        } catch (TimeoutException e){
+        }
+    }
+
     public String getReplyIfShown(int wait, String answerSource){
         try {
             getTwitterHeader().waitForNewNotificationIconToBeShown(wait);

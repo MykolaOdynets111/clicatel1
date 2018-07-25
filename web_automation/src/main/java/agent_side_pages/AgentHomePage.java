@@ -46,6 +46,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptProfanityPopupButton;
 
+    @FindBy(css = "span.connection-error-img")
+    private WebElement connectionErrorImage;
+
     String transferChatButton =  "//button[text()='Transfer chat']";
 
     private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
@@ -122,6 +125,16 @@ public class AgentHomePage extends AgentAbstractPage {
                 return false;
             }
         } else { return false;}
+    }
+
+    public boolean isConnectionErrorShown(String ordinalAgentNumber){
+        try{
+            waitForElementToBeVisibleAgent(connectionErrorImage, 10, ordinalAgentNumber);
+            return true;
+        }
+        catch (TimeoutException e){
+            return false;
+        }
     }
 
     public String getSuggestionFromInputFiled() {
