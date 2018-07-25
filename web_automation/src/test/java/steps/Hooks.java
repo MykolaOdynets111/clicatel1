@@ -125,11 +125,11 @@ public class Hooks implements JSHelper{
 
     private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isAgentDriverExists()) {
+            takeScreenshotFromSecondDriver();
             if(scenario.isFailed()){
                 chatDeskConsoleOutput();
             }
-            takeScreenshotFromSecondDriver();
-
+            
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
                     agentHomePage.getHeader().clickIconWithInitials();
