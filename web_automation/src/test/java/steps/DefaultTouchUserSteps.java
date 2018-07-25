@@ -136,7 +136,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
                 break;
             case "agents_away":
-                waitForResponse = 160;
+                waitForResponse = 340;
                 expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
                 break;
             default:
