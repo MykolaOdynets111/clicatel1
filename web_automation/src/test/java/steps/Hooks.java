@@ -129,7 +129,7 @@ public class Hooks implements JSHelper{
             if(scenario.isFailed()){
                 chatDeskConsoleOutput();
             }
-            
+
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
                     agentHomePage.getHeader().clickIconWithInitials();
