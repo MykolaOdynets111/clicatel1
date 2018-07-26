@@ -11,7 +11,7 @@ Feature: Communication with agent via tweet
     When User sends tweet regarding "connect to agent"
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
-    Then Conversation area becomes active with connect to agent user's message
+    Then Conversation area becomes active with connect to agent message from tweet user
     When Agent replays with how can i help you? message
     Then Agent's answer arrives to twitter
     And User has to receive "how can i help you?" answer from the agent as a comment on his initial tweet connect to agent
