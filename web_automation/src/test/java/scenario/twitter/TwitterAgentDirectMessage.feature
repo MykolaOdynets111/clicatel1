@@ -11,7 +11,7 @@ Feature: Communication with agent via direct messages
     When User sends twitter direct message "chat to support"
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
-    Then Conversation area becomes active with chat to support user's message
+    Then Conversation area becomes active with chat to support message from tweet user
     And There is no from agent response added by default for chat to support user message
     When Agent responds with hello to User
     Then User have to receive correct response "hello" on his message "chat to support"

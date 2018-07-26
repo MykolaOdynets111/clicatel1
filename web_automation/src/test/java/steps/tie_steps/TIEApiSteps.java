@@ -274,28 +274,25 @@ public class TIEApiSteps {
 
     @When("^I want to get trainings for (.*) (?:tenant|tenants) response status should be 200 and body is not empty$")
     public void getAllTrainings(String tenant){
+        Response resp = null;
+        SoftAssert soft = new SoftAssert();
         if(tenant.equalsIgnoreCase("existed")){
             String urlToGetAllTenants = String.format(Endpoints.TIE_TRAININGS, "all");
-            Response resp = get(urlToGetAllTenants);
-            Map<String, String> trainings = resp.getBody().jsonPath().getMap("");
+            Response respToGetExistedTenant = get(urlToGetAllTenants);
+            Map<String, String> trainings = respToGetExistedTenant.getBody().jsonPath().getMap("");
             String existedTenants = new ArrayList<>(trainings.keySet()).get(0);
-
             String url = String.format(Endpoints.TIE_TRAININGS, existedTenants);
-            when()
-                    .get(url).
-            then()
-                    .log().all()
-                    .statusCode(200)
-                    .body("isEmpty()", is(false));
+            resp = get(url);
         } else{
                 String url = String.format(Endpoints.TIE_TRAININGS, tenant);
-                when()
-                    .get(url).
-                then()
-                    .log().all()
-                    .statusCode(200)
-                    .body("isEmpty()", is(false));
+                resp = get(url);
         }
+
+        soft.assertEquals(resp.statusCode(), 200,
+                "Status code for getting training is not 200\n" +resp.getBody().asString()+"");
+        soft.assertFalse(resp.getBody().asString().isEmpty(),
+                "Response body on getting training is empty\n" +resp.getBody().asString()+"");
+        soft.assertAll();
     }
 
 

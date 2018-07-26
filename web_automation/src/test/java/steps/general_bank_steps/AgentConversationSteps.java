@@ -12,6 +12,7 @@ import dataprovider.jackson_schemas.Intent;
 import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.TwitterSteps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,15 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
+        Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
+                "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
+    @Then("^Conversation area (?:becomes active with||contains) (.*) message from tweet user$")
+    public void verifyUserMessageOnAgentDeskFromTwitter(String userMessage) {
+        if (userMessage.contains("agent")||userMessage.contains("support")){
+            userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
+        }
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }

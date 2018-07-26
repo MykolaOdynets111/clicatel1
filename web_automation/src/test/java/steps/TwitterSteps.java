@@ -1,5 +1,6 @@
 package steps;
 
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -24,6 +25,8 @@ public class TwitterSteps {
     private TweetWindow tweetWindow;
     private TweetsSection tweetsSection;
     private OpenedTweet openedTweet;
+    private static int invocationCount = 0;
+    private static String tweetMessage;
 
     @Given("^Open twitter page of (.*)$")
     public void openTwitterPage(String tenantOrgName){
@@ -55,15 +58,10 @@ public class TwitterSteps {
 
     @When("^User sends tweet regarding \"(.*)\"$")
     public void sendTweet(String tweetMessage){
-        int day = LocalDateTime.now().getDayOfMonth();
-//        if ( day % 2 == 0 ) {
-//            if (tweetMessage.contains("account balance"))
-//                tweetMessage = "How can I check account balance?";
-//        }
-//        else {
-//            if (tweetMessage.contains("account balance"))
-//                tweetMessage = "How to check my account balance?";
-//        }
+        if (tweetMessage.contains("agent")||tweetMessage.contains("support")){
+                tweetMessage = createToAgentTweetText();
+        }
+
         getTweetWindow().sendTweet(tweetMessage);
     }
 
@@ -72,7 +70,7 @@ public class TwitterSteps {
         if(expectedAnswer.length()>132){
             expectedAnswer = expectedAnswer.substring(0,131);
         }
-        Assert.assertEquals(getTweetsSection().getReplyIfShown(70, "touch"), expectedAnswer,
+        Assert.assertEquals(getTweetsSection().getReplyIfShown(100, "touch"), expectedAnswer,
                 "Expected tweet answer is missing after 70 secs wait");
     }
 
@@ -82,13 +80,16 @@ public class TwitterSteps {
 //        if(expectedAnswer.length()>132){
 //            expectedAnswer = expectedAnswer.substring(0,131);
 //        }
-        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(60),
-                "Expected tweet answer from the agent is missing after 60 secs wait");
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),
+                "Expected tweet answer from the agent is missing after 100 secs wait");
     }
 
     @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
     public void verifyFromAgentResponseAsACommentOnTweet(String expectedAgentMessage, String initialUserTweet){
         getTwitterTenantPage().getTwitterHeader().openHomePage().waitForPageToBeLoaded();
+        if(initialUserTweet.contains("agent")||initialUserTweet.contains("support")){
+            initialUserTweet = getCurrentConnectToAgentTweetText();
+        }
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
         if(expectedAgentMessage.length()>132){
             expectedAgentMessage = expectedAgentMessage.substring(0,131);
@@ -115,6 +116,7 @@ public class TwitterSteps {
             for (int i =0; i < 10; i++){
                 openedTweet.closeTweet();
                 try{
+                    getTweetsSection().clickNewTweetsButtonIfShown(50);
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
                     else openedTweet.waitFor(2000);
@@ -147,6 +149,25 @@ public class TwitterSteps {
         soft.assertAll();
     }
 
+    private static String createToAgentTweetText(){
+        Faker faker = new Faker();
+        int day = LocalDateTime.now().getDayOfMonth();
+        if (day % 2 == 0) {
+            if (invocationCount<1) tweetMessage = "chat to agent " +  faker.lorem().character();
+            else tweetMessage= "connect to agent " + invocationCount +  faker.lorem().character();
+            invocationCount ++;
+        }
+        else {
+            if (invocationCount<1) tweetMessage = "chat to support " +  faker.lorem().character();
+            else tweetMessage= invocationCount +" connect to support " + invocationCount + faker.lorem().character();
+            invocationCount ++;
+        }
+        return tweetMessage;
+    }
+
+    public static String getCurrentConnectToAgentTweetText(){
+        return tweetMessage;
+    }
 
     // =======================  Private Class Members =========================== //
 

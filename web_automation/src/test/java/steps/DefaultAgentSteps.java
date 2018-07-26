@@ -28,9 +28,21 @@ public class DefaultAgentSteps implements JSHelper {
     private LeftMenuWithChats leftMenuWithChats;
 
     @Given("^I login as (.*) of (.*)")
-    public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrhName){
-        AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrhName).loginAsAgentOf(tenantOrhName, ordinalAgentNumber);
+    public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
+        AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
                 Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
+    }
+
+    @When("I login with the same credentials in another browser as an agent of (.*)")
+    public void loginWithTheSameCreds(String tenantOrgName){
+        AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
+    }
+
+    @Then("^In the first browser Connection Error should be shown$")
+    public void verifyAgentIsDisconnected(){
+        Assert.assertTrue(getAgentHomePage("first agent").isConnectionErrorShown("first agent"),
+                "Agent in the first browser is not disconnected");
     }
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
@@ -134,7 +146,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(10, agent),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(30, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
