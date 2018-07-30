@@ -160,7 +160,7 @@ public class DefaultAgentSteps implements JSHelper {
     public void verifyAgentHasRequestFormTwitterUser(String agent){
                 agentHomePage = getAgentHomePage(agent);
                 leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(TwitterUsers.getLoggedInUserName(),40),
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(TwitterUsers.getLoggedInUserName(),60),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
 

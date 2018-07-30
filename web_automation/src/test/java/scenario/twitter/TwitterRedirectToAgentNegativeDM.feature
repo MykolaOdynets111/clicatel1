@@ -8,7 +8,7 @@ Feature: Redirection to the agent after negative DM message
     Given Open direct message channel
 
   Scenario: Redirecting to the agent negative negative direct message
-    When User sends twitter direct message "Hate your banking"
+    When User sends twitter direct message: Hate your banking!! Will never use it again
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
-    Then Conversation area becomes active with Hate your banking user's message
+    Then Conversation area becomes active with Hate your banking!! Will never use it again user's message

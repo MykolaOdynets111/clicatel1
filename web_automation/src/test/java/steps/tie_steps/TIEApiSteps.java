@@ -451,13 +451,17 @@ public class TIEApiSteps {
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
     public void verifyRemovingItemFromConfig(String field, String value){
+        SoftAssert soft = new SoftAssert();
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        when()
-                .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
-        then()
-                .statusCode(200)
-                .body("tenant", equalTo(newTenant))
-                .body("$", not(hasKey(field)));
+        Response resp = when()
+                .get(String.format(Endpoints.TIE_CONFIG, newTenant));
+        soft.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after trying to clear "+newTenant+" tenant configs");
+        soft.assertEquals(resp.getBody().jsonPath().get("tenant"), newTenant,
+                "Tenant "+newTenant+" is not shown in the response after trying to delete tenant configs\n"+resp.getBody().asString());
+        soft.assertFalse(resp.getBody().asString().contains(field),
+                "Config "+field+ " is not cleared for "+newTenant+" tenant\n"+resp.getBody().asString());
+        soft.assertAll();
     }
 
     @Then("^Added trainset is removed$")

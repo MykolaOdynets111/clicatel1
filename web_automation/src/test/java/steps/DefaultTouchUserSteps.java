@@ -255,7 +255,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^User session is ended$")
     public void verifyUserSessionEnded(){
         boolean result = false;
-        for(int i = 0; i<6; i++){
+        for(int i = 0; i<10; i++){
             result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage())
                     .equalsIgnoreCase("terminated");
             if(result){

@@ -17,14 +17,14 @@ Feature: Receiving answer when two channels are active
     When Agent click on new conversation request from twitter
     Then Conversation area becomes active with chat to agent message from tweet user
     When Open direct message channel
-    When User sends twitter direct message "hello"
+    When User sends twitter direct message: hello
     Then Conversation area contains hello user's message
     When Agent responds with How can I help you? to User
     Then User have to receive correct response "How can I help you?" on his message "hello"
 
   Scenario: User receive agent response in DM after he sends last message via tweet
     Given Open direct message channel
-    When User sends twitter direct message "chat to support"
+    When User sends twitter direct message: chat to support
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
     Then Conversation area becomes active with chat to support message from tweet user
