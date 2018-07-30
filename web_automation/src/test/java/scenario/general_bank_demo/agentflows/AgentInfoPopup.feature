@@ -1,7 +1,5 @@
 Feature: Agent information should be present in the info popup
 
-#  ToDo: Add verification on agent's rolls in info popup (the one with logout button)
-
   Scenario: Viewing agent's details in information popup
     When I login as agent of General Bank Demo
     Then Icon should contain General Bank Demo agent's initials

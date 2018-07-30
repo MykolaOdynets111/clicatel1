@@ -51,8 +51,11 @@ public class TwitterSteps {
         getTwitterTenantPage().openNewTweetWindow();
     }
 
-    @When("^User sends twitter direct message \"(.*)\"$")
+    @When("^User sends twitter direct (?:message regarding|message:) (.*)$")
     public void sendTwitterDM(String userMessage){
+        if (userMessage.contains("agent")||userMessage.contains("support")){
+            userMessage = createToAgentTweetText();
+        }
         getDmWindow().sendUserMessage(userMessage);
     }
 
@@ -117,10 +120,16 @@ public class TwitterSteps {
                 openedTweet.closeTweet();
                 try{
                     getTweetsSection().clickNewTweetsButtonIfShown(50);
+                    if(targetTweet.contains("agent")||targetTweet.contains("support")){
+                        targetTweet = getCurrentConnectToAgentTweetText();
+                    }
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
                     else openedTweet.waitFor(2000);
                 } catch(StaleElementReferenceException e){
+                    if(targetTweet.contains("agent")||targetTweet.contains("support")){
+                        targetTweet = getCurrentConnectToAgentTweetText();
+                    }
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
                     else openedTweet.waitFor(2000);
@@ -142,6 +151,9 @@ public class TwitterSteps {
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
     public void verifyDMTwitterResponse(String expectedResponse, String userMessage){
         SoftAssert soft = new SoftAssert();
+        if (userMessage.contains("agent")||userMessage.contains("support")){
+            userMessage = getCurrentConnectToAgentTweetText();
+        }
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
                 "There is no response on "+userMessage+" user message");
         soft.assertEquals(getDmWindow().getToUserResponse(userMessage), expectedResponse,
