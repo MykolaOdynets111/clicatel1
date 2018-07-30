@@ -2,6 +2,7 @@ package twitter;
 
 import abstract_classes.AbstractPage;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -50,8 +51,12 @@ public class TweetsSection extends TwitterHomePage {
 
     public void clickNewTweetsButtonIfShown(int wait){
         try {
-            waitForElementToBeVisibleByCss(newTweetsButon, wait);
-            findElemByCSS(newTweetsButon).click();
+                waitForElementToBeVisibleByCss(newTweetsButon, wait);
+                try{
+                    findElemByCSS(newTweetsButon).click();
+                } catch (WebDriverException e1){
+                    findElemByCSS(newTweetsButon).click();
+                }
         } catch (TimeoutException e){
         }
     }
