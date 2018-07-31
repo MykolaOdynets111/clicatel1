@@ -43,10 +43,12 @@ Feature: Testing TIE APIs
     Given  I create new tenant with TIE API
     And Wait for a minute
     When I make request to see tenant config I receive response with tenant's config
-    When I add additional field aqaTest value to the new tenant config
-    Then New additional field with aqaTest value is added to tenant config
+    When I add add_synonyms field false value to the new tenant config
+    Then add_synonyms field with false value is added to tenant config
+    And Status code is 400 when I add additional field aqaTest value to the new tenant config
     When I send test trainset for newly created tenant status code is 200
     And Trainset is added for newly created tenant
+
 
 
 

@@ -404,25 +404,50 @@ public class TIEApiSteps {
     @When("^I add (.*) field (.*) value to the new tenant config$")
     public void updateConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        given()
+        given().log().all()
                 .body("{\""+field+"\":\""+value+"\"}").
         when()
                 .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200);
-        waitFor(3000);
     }
 
-    @Then("^New (.*) field with (.*) value is added to tenant config$")
-    public void verifyAddingNewItemToConfig(String field, String value){
+    @When("^Status code is 400 when I add (.*) field (.*) value to the new tenant config$")
+    public void invalidUpdateConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        Response resp = get(String.format(Endpoints.TIE_CONFIG, newTenant));
-        when()
-                .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
+        given().log().all()
+                .body("{\""+field+"\":\""+value+"\"}").
+                when()
+               .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
-                .statusCode(200)
-                .body("tenant", equalTo(newTenant))
-                .body(field, equalTo(value));
+                .statusCode(400);
+    }
+
+    @Then("^(.*) field with (.*) value is added to tenant config$")
+    public void verifyAddingNewItemToConfig(String field, String value){
+        waitFor(5000);
+        SoftAssert soft = new SoftAssert();
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        Response resp = null;
+        boolean updateResult=false;
+        for (int i=0; i<40 ; i++){
+            resp = get(String.format(Endpoints.TIE_CONFIG, newTenant));
+            if (resp.getBody().jsonPath().get(field).toString().equals(value)){
+                updateResult=true;
+                break;
+            } else{
+                waitFor(500);
+                updateResult=false;
+            }
+        }
+        soft.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after getting configs for tenant "+newTenant+"");
+        soft.assertEquals(resp.getBody().jsonPath().get("tenant"), newTenant,
+                "Tenant is missing in configs\n" +resp.getBody().asString()+"");
+        soft.assertTrue(updateResult,
+                "Config \""+field+ "\" with \""+value+"\" value is not added for "+newTenant+" tenant\n"+resp.getBody().asString());
+        soft.assertAll();
+
     }
 
     @When("^I send test trainset for newly created tenant status code is 200$")
