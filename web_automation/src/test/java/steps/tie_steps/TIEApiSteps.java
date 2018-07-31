@@ -410,7 +410,7 @@ public class TIEApiSteps {
                 .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200);
-        waitFor(3000);
+        waitFor(6000);
     }
 
     @Then("^New (.*) field with (.*) value is added to tenant config$")
