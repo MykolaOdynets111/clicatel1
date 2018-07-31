@@ -410,11 +410,13 @@ public class TIEApiSteps {
                 .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200);
+        waitFor(3000);
     }
 
     @Then("^New (.*) field with (.*) value is added to tenant config$")
     public void verifyAddingNewItemToConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        Response resp = get(String.format(Endpoints.TIE_CONFIG, newTenant));
         when()
                 .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
@@ -451,15 +453,22 @@ public class TIEApiSteps {
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
     public void verifyRemovingItemFromConfig(String field, String value){
+        boolean isFieldPresent = false;
         SoftAssert soft = new SoftAssert();
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         Response resp = when()
                 .get(String.format(Endpoints.TIE_CONFIG, newTenant));
+        try {
+            resp.body().jsonPath().get(field).toString();
+            isFieldPresent = true;
+        } catch (java.lang.NullPointerException e){
+            isFieldPresent = false;
+        }
         soft.assertEquals(resp.statusCode(), 200,
                 "Status code is not 200 after trying to clear "+newTenant+" tenant configs");
         soft.assertEquals(resp.getBody().jsonPath().get("tenant"), newTenant,
                 "Tenant "+newTenant+" is not shown in the response after trying to delete tenant configs\n"+resp.getBody().asString());
-        soft.assertFalse(resp.getBody().asString().contains(field),
+        soft.assertFalse(isFieldPresent,
                 "Config "+field+ " is not cleared for "+newTenant+" tenant\n"+resp.getBody().asString());
         soft.assertAll();
     }
