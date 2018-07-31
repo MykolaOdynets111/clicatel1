@@ -410,19 +410,29 @@ public class TIEApiSteps {
                 .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
                 .statusCode(200);
-        waitFor(6000);
     }
 
     @Then("^New (.*) field with (.*) value is added to tenant config$")
     public void verifyAddingNewItemToConfig(String field, String value){
+        waitFor(6000);
+        SoftAssert soft = new SoftAssert();
+        boolean isFieldPresent;
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         Response resp = get(String.format(Endpoints.TIE_CONFIG, newTenant));
-        when()
-                .get(String.format(Endpoints.TIE_CONFIG, newTenant)).
-        then()
-                .statusCode(200)
-                .body("tenant", equalTo(newTenant))
-                .body(field, equalTo(value));
+        try {
+            resp.body().jsonPath().get(field).toString();
+            isFieldPresent = true;
+        } catch (java.lang.NullPointerException e){
+            isFieldPresent = false;
+        }
+        soft.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after getting configs for tenant "+newTenant+"");
+        soft.assertEquals(resp.getBody().jsonPath().get("tenant"), newTenant,
+                "Tenant is missing in configs\n" +resp.getBody().asString()+"");
+        soft.assertTrue(isFieldPresent,
+                "Config \""+field+ "\" is not added for "+newTenant+" tenant\n"+resp.getBody().asString());
+        soft.assertAll();
+
     }
 
     @When("^I send test trainset for newly created tenant status code is 200$")
