@@ -16,8 +16,8 @@ Feature: Testing TIE APIs (tenant management)
         API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
     Given I create new tenant with TIE API
     And Wait for a minute
-    When I add additional field aqaTest value to the new tenant config
+    When I add add_synonyms field false value to the new tenant config
     And I send test trainset for newly created tenant status code is 200
     When I clear tenant data
-    Then additional field with aqaTest value is removed from tenant config
+    Then add_synonyms field with true value is added to tenant config
     And Added trainset is removed
