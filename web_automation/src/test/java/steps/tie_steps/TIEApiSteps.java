@@ -425,7 +425,6 @@ public class TIEApiSteps {
 
     @Then("^(.*) field with (.*) value is added to tenant config$")
     public void verifyAddingNewItemToConfig(String field, String value){
-        waitFor(5000);
         SoftAssert soft = new SoftAssert();
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         Response resp = null;
