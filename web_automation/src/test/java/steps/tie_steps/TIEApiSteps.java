@@ -278,7 +278,13 @@ public class TIEApiSteps {
             String urlToGetAllTenants = String.format(Endpoints.TIE_TRAININGS, "all");
             Response respToGetExistedTenant = get(urlToGetAllTenants);
             Map<String, String> trainings = respToGetExistedTenant.getBody().jsonPath().getMap("");
-            String existedTenants = new ArrayList<>(trainings.keySet()).get(0);
+            String existedTenants = null;
+            try {
+                existedTenants = new ArrayList<>(trainings.keySet()).get(0);
+            } catch(java.lang.IndexOutOfBoundsException e){
+                Assert.assertTrue(false, "There is no existed tie training scheduled." +
+                        " \nResponse:" +respToGetExistedTenant.getBody().asString()+"");
+            }
             String url = String.format(Endpoints.TIE_TRAININGS, existedTenants);
             resp = get(url);
         } else{
@@ -288,7 +294,7 @@ public class TIEApiSteps {
 
         soft.assertEquals(resp.statusCode(), 200,
                 "Status code for getting training is not 200\n" +resp.getBody().asString()+"");
-        soft.assertFalse(resp.getBody().asString().isEmpty(),
+        soft.assertFalse(resp.getBody().asString().equals("{}"),
                 "Response body on getting training is empty\n" +resp.getBody().asString()+"");
         soft.assertAll();
     }
