@@ -8,8 +8,7 @@ import api_helper.Endpoints;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import dataprovider.Tenants;
-import driverManager.ConfigManager;
+import dataManager.Tenants;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
@@ -86,8 +85,8 @@ public class Hooks implements JSHelper{
             finishVisibilityFlow();
         }
         if(scenario.getSourceTagNames().contains("@facebook")){
-            finishAgentFlowIfExists(scenario);
             takeScreenshot();
+            finishAgentFlowIfExists(scenario);
             endFacebookFlow(scenario);
         }
 
@@ -214,7 +213,6 @@ public class Hooks implements JSHelper{
             agentHomePage.getHeader().logOut("main agent");
             new AgentLoginPage("one agent").waitForLoginPageToOpen("main agent");
         } catch (WebDriverException e) { }
-
     }
 
     private void endTwitterFlow() {

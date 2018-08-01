@@ -1,7 +1,7 @@
 package agent_side_pages;
 
 import abstract_classes.AgentAbstractPage;
-import dataprovider.Agents;
+import dataManager.Agents;
 import driverManager.DriverFactory;
 import driverManager.URLs;
 import org.openqa.selenium.WebElement;

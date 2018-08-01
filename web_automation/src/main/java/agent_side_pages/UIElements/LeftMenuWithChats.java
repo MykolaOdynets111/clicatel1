@@ -1,7 +1,6 @@
 package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
-import dataprovider.FacebookUsers;
 import interfaces.JSHelper;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;

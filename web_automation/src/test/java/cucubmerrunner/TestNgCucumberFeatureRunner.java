@@ -45,12 +45,7 @@ import cucumber.api.testng.CucumberFeatureWrapper;
 //import cucumber.api.testng.CucumberFeatureWrapperImpl;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
-import dataprovider.Tenants;
-import org.testng.SkipException;
 import org.testng.annotations.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestNgCucumberFeatureRunner{
 

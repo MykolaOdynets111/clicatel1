@@ -2,16 +2,9 @@ package steps;
 
 import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
-import dataprovider.Tenants;
+import dataManager.Tenants;
 import driverManager.ConfigManager;
-import driverManager.DriverFactory;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.html5.Location;
-import org.openqa.selenium.html5.LocationContext;
-import org.testng.asserts.SoftAssert;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;

@@ -3,10 +3,9 @@ package steps.tie_steps;
 import api_helper.Endpoints;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataprovider.jackson_schemas.TIE.TieNERItem;
-import dataprovider.jackson_schemas.TIE.Entity;
+import dataManager.jackson_schemas.TIE.TieNERItem;
+import dataManager.jackson_schemas.TIE.Entity;
 
-import driverManager.ConfigManager;
 import driverManager.URLs;
 import static io.restassured.RestAssured.*;
 
@@ -17,7 +16,6 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

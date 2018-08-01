@@ -1,8 +1,8 @@
 package api_helper;
 
 import com.github.javafaker.Faker;
-import dataprovider.Accounts;
-import dataprovider.Agents;
+import dataManager.Accounts;
+import dataManager.Agents;
 import driverManager.ConfigManager;
 import driverManager.URLs;
 import io.restassured.RestAssured;
@@ -11,8 +11,6 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RequestSpec {
