@@ -3,10 +3,9 @@ package steps.tie_steps;
 import api_helper.Endpoints;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataprovider.jackson_schemas.TIE.TieNERItem;
-import dataprovider.jackson_schemas.TIE.Entity;
+import dataManager.jackson_schemas.TIE.TieNERItem;
+import dataManager.jackson_schemas.TIE.Entity;
 
-import driverManager.ConfigManager;
 import driverManager.URLs;
 import static io.restassured.RestAssured.*;
 
@@ -17,7 +16,6 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -280,7 +278,13 @@ public class TIEApiSteps {
             String urlToGetAllTenants = String.format(Endpoints.TIE_TRAININGS, "all");
             Response respToGetExistedTenant = get(urlToGetAllTenants);
             Map<String, String> trainings = respToGetExistedTenant.getBody().jsonPath().getMap("");
-            String existedTenants = new ArrayList<>(trainings.keySet()).get(0);
+            String existedTenants = null;
+            try {
+                existedTenants = new ArrayList<>(trainings.keySet()).get(0);
+            } catch(java.lang.IndexOutOfBoundsException e){
+                Assert.assertTrue(false, "There is no existed tie training scheduled." +
+                        " \nResponse:" +respToGetExistedTenant.getBody().asString()+"");
+            }
             String url = String.format(Endpoints.TIE_TRAININGS, existedTenants);
             resp = get(url);
         } else{
@@ -290,7 +294,7 @@ public class TIEApiSteps {
 
         soft.assertEquals(resp.statusCode(), 200,
                 "Status code for getting training is not 200\n" +resp.getBody().asString()+"");
-        soft.assertFalse(resp.getBody().asString().isEmpty(),
+        soft.assertFalse(resp.getBody().asString().equals("{}"),
                 "Response body on getting training is empty\n" +resp.getBody().asString()+"");
         soft.assertAll();
     }
@@ -472,7 +476,8 @@ public class TIEApiSteps {
         then()
                 .statusCode(200)
                 .body("intent_trainset.tenant[0]", equalTo(newTenant))
-                .body("intent_trainset.intent[0]", equalTo("SANTA"));
+                .body("intent_trainset.rasa_nlu_data.intent_examples.intent[0][0]", equalTo("SANTA"))
+                .body("intent_trainset.rasa_nlu_data.intent_examples.text[0][0]", equalTo("HO-HO-HO"));
     }
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
@@ -591,18 +596,20 @@ public class TIEApiSteps {
 
     @When("^I try to add some trainset response status code should be 200$")
     public void addNERDataSet(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         given()
                 .body("{\"NER_trainset\": ["+NER_DATA_SET.toString()+"]}").
         when()
-                .post(Endpoints.TIE_NER).
+                .post(String.format(Endpoints.TIE_NER,newTenant)).
         then()
                 .statusCode(200);
     }
 
     @Then("^GET request should return created trainset$")
     public void getNERDataSet(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(Endpoints.TIE_NER).
+                .get(String.format(Endpoints.TIE_NER,newTenant)).
         then()
                 .statusCode(200)
                 .body("NER_trainset.text", hasItems(NER_DATA_SET.getText()));
@@ -610,11 +617,12 @@ public class TIEApiSteps {
 
     @When("^Trying to delete a trainset status code is 200$")
     public void deleteNER(){
-        String id = (String) ((HashMap) get(Endpoints.TIE_NER)
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String id = (String) ((HashMap) get(String.format(Endpoints.TIE_NER,newTenant))
                 .jsonPath().getList("NER_trainset").stream()
                 .filter(e -> ((HashMap) e).get("text").equals(NER_DATA_SET.getText()))
                 .findFirst().get()).get("id");
-        String url = String.format(Endpoints.TIE_NER_DELETE, id);
+        String url = String.format(Endpoints.TIE_NER_DELETE, newTenant, id);
         when()
                 .delete(url).
         then()
@@ -623,8 +631,9 @@ public class TIEApiSteps {
 
     @Then("Trainset should be deleted")
     public void trainsetIsDeleted(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(Endpoints.TIE_NER).
+                .get(String.format(Endpoints.TIE_NER,newTenant)).
         then()
                 .statusCode(200)
                 .body("NER_trainset.text", not(hasItems(NER_DATA_SET.getText())));

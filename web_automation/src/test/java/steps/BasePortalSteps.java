@@ -1,10 +1,9 @@
 package steps;
 
-import api_helper.ApiHelper;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
-import dataprovider.Tenants;
+import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
 import portal_pages.PortalLoginPage;

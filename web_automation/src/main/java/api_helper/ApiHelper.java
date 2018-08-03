@@ -1,12 +1,11 @@
 package api_helper;
 
-import dataprovider.Tenants;
-import dataprovider.Territories;
-import dataprovider.jackson_schemas.Country;
-import dataprovider.jackson_schemas.Territory;
-import dataprovider.jackson_schemas.tenant_address.TenantAddress;
-import dataprovider.jackson_schemas.user_session_info.UserSession;
-import driverManager.ConfigManager;
+import dataManager.Tenants;
+import dataManager.Territories;
+import dataManager.jackson_schemas.Country;
+import dataManager.jackson_schemas.Territory;
+import dataManager.jackson_schemas.tenant_address.TenantAddress;
+import dataManager.jackson_schemas.user_session_info.UserSession;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 

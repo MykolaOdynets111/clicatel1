@@ -106,6 +106,27 @@ task runAllTests(type: Test) {
             runVisibilityTests.execute()
         }
     }
+
+    if(suite=="pullrequest") {
+
+        doFirst {
+            runTiePullRequestTests.execute()
+            runBaseTests.execute()
+        }
+        doLast {
+            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+                System.out.print("!!! " + "no testng file" + " !!!")
+                runAllTest.execute()
+            }
+            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+                    runAllTest.execute()
+                }
+            }
+            runVisibilityTests.execute()
+        }
+    }
     runAllTests.finalizedBy(allureReport)
     defaultTasks 'clean', 'runAllTests'
 }
@@ -223,5 +244,21 @@ task runTwitterTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + tenantName + "/twitter.xml"
+    }
+}
+
+task runTiePullRequestTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/tiepullrequest.xml"
     }
 }

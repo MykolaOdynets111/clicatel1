@@ -1,6 +1,6 @@
 package api_helper;
 
-import dataprovider.TwitterUsers;
+import dataManager.TwitterUsers;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

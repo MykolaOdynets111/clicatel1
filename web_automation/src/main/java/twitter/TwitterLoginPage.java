@@ -1,7 +1,7 @@
 package twitter;
 
 import abstract_classes.AbstractPage;
-import dataprovider.TwitterUsers;
+import dataManager.TwitterUsers;
 import driverManager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

@@ -1,7 +1,7 @@
 package email_helper;
 
 import com.sun.mail.imap.IMAPMessage;
-import dataprovider.TwitterUsers;
+import dataManager.TwitterUsers;
 import javax.mail.*;
 import java.io.FileInputStream;
 import java.io.IOException;

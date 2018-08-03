@@ -1,9 +1,10 @@
 package steps;
 
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataprovider.Tenants;
+import dataManager.Tenants;
 import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
@@ -14,6 +15,7 @@ public class FacebookSteps {
 
     FBTenantPage fbTenantPage;
     MessengerWindow messengerWindow;
+    private static String fbMessage;
 
     @Given("^Open (.*) page$")
     public void openTenantPage(String tenant){
@@ -23,17 +25,17 @@ public class FacebookSteps {
        }
     }
 
-    @When("^Open Messenger and send (.*) message$")
+    @When("^Open Messenger and send message regarding (.*)")
     public void clickSendMessageButton(String message){
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
-        messengerWindow.waitForWelcomeMessage(10);
-        messengerWindow.enterMessage(message);
+//        messengerWindow.waitForWelcomeMessage(10);
+        messengerWindow.enterMessage(createUniqueFBMessage(message));
     }
 
-    @Then("^User have to receive the following on his message (.*): \"(.*)\"$")
+    @Then("^User have to receive the following on his message regarding (.*): \"(.*)\"$")
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
-        Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(userMessage, expectedResponse,30),
+        Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(getCurrentFBMessageText(), expectedResponse,30),
                 "User does not receive response in FB messenger after 30 seconds wait.");
     }
 
@@ -52,6 +54,19 @@ public class FacebookSteps {
     public void checkCommentResponse(String expectedResponse){
         getFbTenantPage().getLastVisitorPost().deletePost();
     }
+
+
+    private static String createUniqueFBMessage(String baseMessage){
+        Faker faker = new Faker();
+        fbMessage = baseMessage + " " + faker.lorem().character();
+        return fbMessage;
+    }
+
+    public static String getCurrentFBMessageText(){
+        return fbMessage;
+    }
+
+
 
     private FBTenantPage getFbTenantPage() {
         if (fbTenantPage==null) {

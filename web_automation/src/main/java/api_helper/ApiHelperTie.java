@@ -1,7 +1,7 @@
 package api_helper;
 
-import dataprovider.Tenants;
-import dataprovider.jackson_schemas.Intent;
+import dataManager.Tenants;
+import dataManager.jackson_schemas.Intent;
 import driverManager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;

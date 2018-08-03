@@ -2,11 +2,14 @@ package driverManager;
 
 import api_helper.Endpoints;
 import api_helper.RequestSpec;
-import dataprovider.Tenants;
+import dataManager.FacebookPages;
+import dataManager.Tenants;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 public class URLs {
+
+    private static final String BASE_FB_URL = "https://www.facebook.com/";
 
     private static final String BASE_ENV_URL = "https://%s-touch-web.clickatelllabs.com";
 
@@ -100,14 +103,14 @@ public class URLs {
 
 
     public static String getFBPageURL(String tenantOrgName) {
-        String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName);
-        Response resp = RestAssured.given()
-                .header("Authorization", token)
-                .get(Endpoints.FACEBOOK_INTEGRATION);
-        String pageName = resp.jsonPath().get("pageName");
-        String pageID = resp.jsonPath().get("pageId");
+//        String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName);
+//        Response resp = RestAssured.given()
+//                .header("Authorization", token)
+//                .get(Endpoints.FACEBOOK_INTEGRATION);
+//        String pageName = resp.jsonPath().get("pageName");
+//        String pageID = resp.jsonPath().get("pageId");
 //        return String.format(FACEBOOK_URL, pageName.replace(" ", "-")+"-"+pageID);
-        return "https://www.facebook.com/General-Bank-QA-135125267153030/";
+        return BASE_FB_URL+ FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName);
     }
 
     public static String getTwitterURL(String tenantOrgName) {

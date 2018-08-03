@@ -8,9 +8,9 @@ import api_helper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataprovider.FacebookUsers;
-import dataprovider.Tenants;
-import dataprovider.TwitterUsers;
+import dataManager.FacebookUsers;
+import dataManager.Tenants;
+import dataManager.TwitterUsers;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.WebDriverException;
@@ -156,11 +156,14 @@ public class DefaultAgentSteps implements JSHelper {
         getLeftMenu("main agent").selectFilterOption(option);
     }
 
-    @Then("^(.*) has new conversation request from twitter user$")
-    public void verifyAgentHasRequestFormTwitterUser(String agent){
+    @Then("^(.*) has new conversation request from (.*) user$")
+    public void verifyAgentHasRequestFormTwitterUser(String agent, String chanel){
                 agentHomePage = getAgentHomePage(agent);
                 leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(TwitterUsers.getLoggedInUserName(),60),
+                String userName=null;
+                if (chanel.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
+                if(chanel.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,60),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
 

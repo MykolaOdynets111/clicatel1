@@ -17,7 +17,7 @@ public class MessengerWindow extends AbstractUIElement {
     @FindBy(xpath = ".//div[@role='heading']/following-sibling::ul")
     private WebElement headerActionButonsContainer;
 
-    @FindBy(xpath = ".//div[contains(@class, 'uiPopover')]")
+    @FindBy(xpath = ".//div[@role='heading']/following-sibling::ul//a[@aria-label='Options']")
     private WebElement gearIcon;
 
     @FindBy(xpath = "//ul[@role='menu']")
@@ -39,7 +39,8 @@ public class MessengerWindow extends AbstractUIElement {
     }
 
     public void deleteConversation(){
-        moveToElement(DriverFactory.getTouchDriverInstance(),headerActionButonsContainer);
+//        moveToElement(DriverFactory.getTouchDriverInstance(),headerActionButonsContainer);
+        gearIcon.click();
         gearIcon.click();
         waitForElementToBeVisible(popupMenu, 9);
         deleteConversationButton.click();

@@ -8,8 +8,7 @@ import api_helper.Endpoints;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import dataprovider.Tenants;
-import driverManager.ConfigManager;
+import dataManager.Tenants;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
@@ -86,8 +85,8 @@ public class Hooks implements JSHelper{
             finishVisibilityFlow();
         }
         if(scenario.getSourceTagNames().contains("@facebook")){
-            finishAgentFlowIfExists(scenario);
             takeScreenshot();
+            finishAgentFlowIfExists(scenario);
             endFacebookFlow(scenario);
         }
 
@@ -98,7 +97,7 @@ public class Hooks implements JSHelper{
         }
 
         if(scenario.getSourceTagNames().contains("@tie")){
-            endTieFlow();
+            endTieFlow(scenario);
         }
         if(scenario.getSourceTagNames().contains("@portal")){
             if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
@@ -214,7 +213,6 @@ public class Hooks implements JSHelper{
             agentHomePage.getHeader().logOut("main agent");
             new AgentLoginPage("one agent").waitForLoginPageToOpen("main agent");
         } catch (WebDriverException e) { }
-
     }
 
     private void endTwitterFlow() {
@@ -229,19 +227,20 @@ public class Hooks implements JSHelper{
         }
     }
 
-    private void endTieFlow() {
-        if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
-            for(long thread : TIEApiSteps.getNewTenantNames().keySet()){
-                if (thread==Thread.currentThread().getId()){
-                    String url = String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
-                    given().delete(url);
-                    TIEApiSteps.getNewTenantNames().remove(thread);
+    private void endTieFlow(Scenario scenario) {
+        if(!scenario.isFailed()) {
+            if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
+                for (long thread : TIEApiSteps.getNewTenantNames().keySet()) {
+                    if (thread == Thread.currentThread().getId()) {
+                        String url = String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
+                        given().delete(url);
+                        TIEApiSteps.getNewTenantNames().remove(thread);
+                    }
                 }
             }
         }
 //        logRequest(BaseTieSteps.request);
 //        logResponse(BaseTieSteps.response);
-
     }
 
 
