@@ -89,7 +89,7 @@ task runAllTests(type: Test) {
     if(suite=="all") {
 
         doFirst {
-            runTieTests.execute()
+//            runTieTests.execute()
             runBaseTests.execute()
         }
         doLast {
