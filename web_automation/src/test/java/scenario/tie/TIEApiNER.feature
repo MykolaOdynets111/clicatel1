@@ -1,8 +1,8 @@
 @tie
 Feature: Testing TIE NER APIs
 
-  Background:
-    Given Listener for logging request and response is ready
+#  Background:
+#    Given Listener for logging request and response is ready
 
   ### NER ###
   Scenario: User should be able to add, get and delete NER data set

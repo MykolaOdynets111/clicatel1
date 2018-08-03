@@ -1,9 +1,6 @@
 @tie
 Feature: Testing TIE APIs (Trainings)
 
-  Background:
-    Given Listener for logging request and response is ready
-
   ### TIE trainings ###
 
   Scenario: TIE API about getting trainings should work (all and for specific tenant)

@@ -1,9 +1,6 @@
 @tie
 Feature: Testing TIE APIs
 
-  Background:
-    Given Listener for logging request and response is ready
-
   ### Chat ###
 
   Scenario: Chat endpoint for intents only should work
