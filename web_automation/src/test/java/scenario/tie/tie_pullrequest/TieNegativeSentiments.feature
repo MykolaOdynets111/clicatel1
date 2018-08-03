@@ -1,9 +1,6 @@
 @tie
 Feature: TIE should give correct NEGATIVE sentiments
 
-  Background:
-    Given Listener for logging request and response is ready
-
   Scenario Outline: Verify if TIE sentiment is NEGATIVE for the following message: "<user_message>"
     Then TIE sentiment is NEGATIVE when I send '<user_message>' for General Bank Demo tenant
 

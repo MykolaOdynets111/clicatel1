@@ -28,9 +28,9 @@ public class Endpoints {
 
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
 
-    public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/%s?key=%s&value=%s";
+    public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s?key=%s&value=%s";
 
-    public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/%s";
+    public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s";
 
     public static String INTERNAL_TENANT_CONFIGURED_MESSAGES = URLs.getBaseInternalApiUrl() + "taf/message-responses/%s";
 

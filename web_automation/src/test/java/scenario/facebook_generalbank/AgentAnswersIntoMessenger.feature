@@ -7,5 +7,5 @@ Feature: Communication between user and agent in FB messenger
     Given Open General Bank Demo page
     When Open Messenger and send message regarding chat to agent
     Then Agent has new conversation request from facebook user
-    When Agent click on new conversation request from twitter
+    When Agent click on new conversation request from facebook
     Then Conversation area becomes active with chat to support message from facebook user

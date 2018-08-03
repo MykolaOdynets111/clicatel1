@@ -1,9 +1,6 @@
 @tie
 Feature: Testing TIE APIs (tenant management)
 
-  Background:
-    Given Listener for logging request and response is ready
-
   ### Tenant management ###
 
 #  change clone from default, not general bank

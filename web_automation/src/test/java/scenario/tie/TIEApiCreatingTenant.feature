@@ -1,9 +1,6 @@
 @tie
 Feature: Testing TIE APIs (creating and removing tenant)
 
-  Background:
-    Given Listener for logging request and response is ready
-
   Scenario: User should be able to create and remove new tenant and not be able to create duplicated tenant
             API PUT /tenants/ data={'tenant': 'TESTONE'}
             API DELETE /tenants/?tenant=TESTONE
