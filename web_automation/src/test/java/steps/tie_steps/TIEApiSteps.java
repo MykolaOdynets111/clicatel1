@@ -476,7 +476,7 @@ public class TIEApiSteps {
                 .get(String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
         then()
                 .statusCode(200)
-                .body("intent_trainset.tenant", equalTo(newTenant))
+                .body("intent_trainset.tenant[0]", equalTo(newTenant))
                 .body("intent_trainset.rasa_nlu_data.intent_examples.intent[0][0]", equalTo("SANTA"))
                 .body("intent_trainset.rasa_nlu_data.intent_examples.text[0][0]", equalTo("HO-HO-HO"));
     }
