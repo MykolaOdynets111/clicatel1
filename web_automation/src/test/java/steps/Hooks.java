@@ -239,7 +239,7 @@ public class Hooks implements JSHelper{
                 }
             }
         }
-        TIEApiSteps.clearTenantNames();
+//        TIEApiSteps.clearTenantNames();
 //        logRequest(BaseTieSteps.request);
 //        logResponse(BaseTieSteps.response);
     }

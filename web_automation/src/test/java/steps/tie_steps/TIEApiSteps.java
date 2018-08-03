@@ -35,8 +35,7 @@ public class TIEApiSteps {
     public static void clearTenantNames(){
         NEW_TENANT_NAMES.clear();
     }
-
-
+    
     private static String createNewTenantName() {
         return "testing"+ System.currentTimeMillis();
     }
