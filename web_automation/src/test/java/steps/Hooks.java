@@ -97,7 +97,7 @@ public class Hooks implements JSHelper{
         }
 
         if(scenario.getSourceTagNames().contains("@tie")){
-            endTieFlow();
+            endTieFlow(scenario);
         }
         if(scenario.getSourceTagNames().contains("@portal")){
             if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
@@ -227,19 +227,20 @@ public class Hooks implements JSHelper{
         }
     }
 
-    private void endTieFlow() {
-        if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
-            for(long thread : TIEApiSteps.getNewTenantNames().keySet()){
-                if (thread==Thread.currentThread().getId()){
-                    String url = String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
-                    given().delete(url);
-                    TIEApiSteps.getNewTenantNames().remove(thread);
+    private void endTieFlow(Scenario scenario) {
+        if(!scenario.isFailed()) {
+            if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
+                for (long thread : TIEApiSteps.getNewTenantNames().keySet()) {
+                    if (thread == Thread.currentThread().getId()) {
+                        String url = String.format(Endpoints.TIE_DELETE_TENANT, TIEApiSteps.getNewTenantNames().get(thread));
+                        given().delete(url);
+                        TIEApiSteps.getNewTenantNames().remove(thread);
+                    }
                 }
             }
         }
 //        logRequest(BaseTieSteps.request);
 //        logResponse(BaseTieSteps.response);
-
     }
 
 

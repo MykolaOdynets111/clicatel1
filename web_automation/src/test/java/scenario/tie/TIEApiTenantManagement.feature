@@ -6,6 +6,7 @@ Feature: Testing TIE APIs (tenant management)
 
   ### Tenant management ###
 
+#  change clone from default, not general bank
   Scenario: User should be able to clone tenant
         API PUT /tenants/ data={'tenant': 'TESTONE', 'source_tenant':'generalbank'}
     When I create a clone of generalbank tenant with TIE API

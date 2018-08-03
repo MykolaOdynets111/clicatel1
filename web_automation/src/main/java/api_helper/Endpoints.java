@@ -83,9 +83,9 @@ public class Endpoints {
 
     public static String TIE_GET_TRAINSET = URLs.getBaseTieURL() + "%s/trainset";
 
-    public  static String TIE_NER = URLs.getBaseTieURL() + "ner-trainset/";
+    public  static String TIE_NER = URLs.getBaseTieURL() + "%s/ner-trainset/";
 
-    public  static String TIE_NER_DELETE = URLs.getBaseTieURL() + "ner-trainset/%s";
+    public  static String TIE_NER_DELETE = URLs.getBaseTieURL() + "%s/ner-trainset/%s";
 
     public static String TIE_BASE_INTENT_ANSWER_CREATING = URLs.getBaseTieURL() + "%s/answers/?intent=%s";
 

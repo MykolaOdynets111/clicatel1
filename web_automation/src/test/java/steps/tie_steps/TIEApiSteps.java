@@ -476,8 +476,9 @@ public class TIEApiSteps {
                 .get(String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
         then()
                 .statusCode(200)
-                .body("intent_trainset.tenant[0]", equalTo(newTenant))
-                .body("intent_trainset.intent[0]", equalTo("SANTA"));
+                .body("intent_trainset.tenant", equalTo(newTenant))
+                .body("intent_trainset.rasa_nlu_data.intent_examples.intent[0][0]", equalTo("SANTA"))
+                .body("intent_trainset.rasa_nlu_data.intent_examples.text[0][0]", equalTo("HO-HO-HO"));
     }
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
@@ -596,18 +597,20 @@ public class TIEApiSteps {
 
     @When("^I try to add some trainset response status code should be 200$")
     public void addNERDataSet(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         given()
                 .body("{\"NER_trainset\": ["+NER_DATA_SET.toString()+"]}").
         when()
-                .post(Endpoints.TIE_NER).
+                .post(String.format(Endpoints.TIE_NER,newTenant)).
         then()
                 .statusCode(200);
     }
 
     @Then("^GET request should return created trainset$")
     public void getNERDataSet(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(Endpoints.TIE_NER).
+                .get(String.format(Endpoints.TIE_NER,newTenant)).
         then()
                 .statusCode(200)
                 .body("NER_trainset.text", hasItems(NER_DATA_SET.getText()));
@@ -615,11 +618,12 @@ public class TIEApiSteps {
 
     @When("^Trying to delete a trainset status code is 200$")
     public void deleteNER(){
-        String id = (String) ((HashMap) get(Endpoints.TIE_NER)
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String id = (String) ((HashMap) get(String.format(Endpoints.TIE_NER,newTenant))
                 .jsonPath().getList("NER_trainset").stream()
                 .filter(e -> ((HashMap) e).get("text").equals(NER_DATA_SET.getText()))
                 .findFirst().get()).get("id");
-        String url = String.format(Endpoints.TIE_NER_DELETE, id);
+        String url = String.format(Endpoints.TIE_NER_DELETE, newTenant, id);
         when()
                 .delete(url).
         then()
@@ -628,8 +632,9 @@ public class TIEApiSteps {
 
     @Then("Trainset should be deleted")
     public void trainsetIsDeleted(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         when()
-                .get(Endpoints.TIE_NER).
+                .get(String.format(Endpoints.TIE_NER,newTenant)).
         then()
                 .statusCode(200)
                 .body("NER_trainset.text", not(hasItems(NER_DATA_SET.getText())));
