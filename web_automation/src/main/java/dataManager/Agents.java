@@ -32,6 +32,8 @@ public enum Agents {
 
     SECOND_AGENT_DEMO("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo"),
 
+    SECOND_AGENT_DEMO1("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo1"),
+
     SECOND_AGENT_INTEGRATION("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "integration");
 
     String userName;

@@ -22,7 +22,7 @@ Feature: User on his demand should be redirected on the agent
 
     Examples:
       |user_message    |
-      |connect to agent|
+#      |connect to agent|
       |chat to support |
 
 #  Welcome card is not showing anymore
