@@ -16,10 +16,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.Matchers.*;
@@ -27,6 +24,7 @@ import static org.hamcrest.Matchers.*;
 public class TIEApiSteps {
 
     private static Map<Long, String> NEW_TENANT_NAMES = new ConcurrentHashMap<>();
+//    private static Map<Long, String> NEW_TENANT_NAMES = Collections.synchronizedMap();
 
     public static Map<Long, String> getNewTenantNames() {
         return NEW_TENANT_NAMES;
@@ -626,7 +624,7 @@ public class TIEApiSteps {
                 .jsonPath().getList("NER_trainset").stream()
                 .filter(e -> ((HashMap) e).get("text").equals(NER_DATA_SET.getText()))
                 .findFirst().get()).get("id");
-        String url = String.format(Endpoints.TIE_NER_DELETE, newTenant, id);
+        String url = String.format(Endpoints.TIE_NER_DELETE, id);
         when()
                 .delete(url).
         then()
