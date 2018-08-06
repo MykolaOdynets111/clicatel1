@@ -25,13 +25,20 @@ public class FacebookSteps {
        }
     }
 
-    @When("^Open Messenger and send message regarding (.*)")
-    public void clickSendMessageButton(String message){
+    @When("^User sends message regarding (.*)")
+    public void sendMessage(String message){
+//        messengerWindow.waitForWelcomeMessage(10);
+        messengerWindow.enterMessage(createUniqueFBMessage(message));
+    }
+
+    @When("^User opens Messenger and send message regarding (.*)")
+    public void openMessengerAndSendMessage(String message){
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
 //        messengerWindow.waitForWelcomeMessage(10);
         messengerWindow.enterMessage(createUniqueFBMessage(message));
     }
+
 
     @Then("^User have to receive the following on his message regarding (.*): \"(.*)\"$")
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
