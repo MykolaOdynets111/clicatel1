@@ -66,6 +66,12 @@ public class AgentConversationSteps implements JSHelper{
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
+    @Then("^There is no from agent response added by default for (.*) message from fb user$")
+    public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String userMessage) {
+        Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(FacebookSteps.getCurrentFBMessageText()),
+                "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser){
         getAgentHomePage(agent).sendResponseToUser(responseToUser);

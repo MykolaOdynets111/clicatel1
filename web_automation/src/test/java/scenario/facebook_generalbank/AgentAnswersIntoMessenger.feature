@@ -11,8 +11,12 @@ Feature: Communication between user and agent in FB messenger
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook
     Then Conversation area becomes active with chat to support message from facebook user
+    And There is no more than one from user message
+    And There is no from agent response added by default for chat to support message from fb user
     When Agent responds with hello to User
     Then User have to receive the following on his message regarding chat to support: "hello"
     When User sends message regarding can i open saving accounts?
     Then Conversation area contains can i open saving accounts? message from facebook user
+    When Agent responds with sure. please provide us with your telephone number and we will contact you to User
+    Then User have to receive the following on his message regarding can i open saving accounts?: "sure. please provide us with your telephone number and we will contact you"
 
