@@ -183,6 +183,7 @@ task runAllTest(type:Test) {
     if (System.getProperty("deploy_to") != null) {
         systemProperty "deploy_to", System.getProperty("deploy_to")
     }
+        System.out.print("\n!!! tenant name from alltests task" + tenantName + " !!!\n")
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"

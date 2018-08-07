@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1533646221020" stop="1533646230035" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Bot answers regarding branch location</name>
+    <description type="text">
+Verification of basic communication between user and bot</description>
+    <test-cases>
+        <test-case start="1533646221050" stop="1533646230035" status="broken">
+            <name>Verify if user receives answer on "Where can I find a branch?" message</name>
+            <title>Verify if user receives answer on "Where can I find a branch?" message</title>
+            <description type="text"></description>
+            <failure>
+                <message>Test was interrupted</message>
+            </failure>
+            <labels>
+                <label name="story" value="Verify if user receives answer on &quot;Where can I find a branch?&quot; message"/>
+                <label name="feature" value="Bot answers regarding branch location"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="25073@unassigned.pool-1-thread-2(11)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1533646221020" stop="1533646230035" status="broken">
+            <name>Bot answers regarding branch location</name>
+            <title>Bot answers regarding branch location</title>
+            <failure>
+                <message>Test suite was interrupted, some test cases may be lost</message>
+            </failure>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Bot answers regarding branch location"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

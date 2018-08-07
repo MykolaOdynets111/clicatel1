@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="General Bank Suite" parallel="instances" thread-count="6">
+    <test name="Smoke test">
+        <classes>
+            <!-- not implemented for now -->
+            <!--<class name="runner.virginmoney.RunVMBotTest> -->
+        </classes>
+    </test>
+</suite>
