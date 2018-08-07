@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1533645220935" stop="1533645237218" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>MASTER CHECK: Widget Connection</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1533645220944" stop="1533645237200" status="passed">
+            <name>Verify if widget is connected and user is able to proceed</name>
+            <title>Verify if widget is connected and user is able to proceed</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1533645227536" stop="1533645231899" status="passed">
+                    <name>Given User select Virgin Money tenant</name>
+                    <title>Given User select Virgin Money tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1533645231899" stop="1533645235848" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1533645235849" stop="1533645235869" status="passed">
+                    <name>Then Widget is connected</name>
+                    <title>Then Widget is connected</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if widget is connected and user is able to proceed"/>
+                <label name="feature" value="MASTER CHECK: Widget Connection"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="23044@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="MASTER CHECK: Widget Connection"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

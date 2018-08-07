@@ -1,4 +1,4 @@
-package runner;
+package runner.generalbank;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -16,9 +16,9 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/tie/tie_pullrequest",
+        features ="src/test/java/scenario/generalbank/tie",
         glue ="steps")
-public class RunTIEPullRequestTest {
+public class RunTIETest {
 
         @Factory
         public Object[] features() {

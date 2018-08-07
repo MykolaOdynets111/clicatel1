@@ -3,7 +3,7 @@
 <suite name="Master check">
     <test name="Acceptance test">
         <classes>
-            <class name="runner.RunAcceptanceTest" />
+            <class name="runner.generalbank.RunAcceptanceTest" />
         </classes>
     </test>
 </suite>

@@ -3,8 +3,8 @@
 <suite name="One Thread Suite"  thread-count="1">
     <test name="User to Agent conversation ">
         <classes>
-            <class name="runner.RunGenBankAgentTest" />
-            <class name="runner.RunPortalTest" />
+            <class name="runner.generalbank.RunGenBankAgentTest" />
+            <class name="runner.generalbank.RunPortalTest" />
         </classes>
     </test>
 </suite>

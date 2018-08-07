@@ -1,5 +1,4 @@
-package runner;
-
+package runner.generalbank;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -11,15 +10,15 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "cucumber")
+@Test(groups = "tie")
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/general_bank_demo/agentflows",
+        features ="src/test/java/scenario/generalbank/tie/tie_pullrequest",
         glue ="steps")
-public class RunGenBankAgentTest {
+public class RunTIEPullRequestTest {
 
         @Factory
         public Object[] features() {
@@ -30,5 +29,4 @@ public class RunGenBankAgentTest {
                 }
                 return objects.toArray();
         }
-
 }

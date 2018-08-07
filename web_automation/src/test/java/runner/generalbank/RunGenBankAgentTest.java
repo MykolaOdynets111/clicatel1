@@ -1,11 +1,12 @@
-package runner;
+package runner.generalbank;
 
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.*;
+import org.testng.annotations.Factory;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,9 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/general_bank_demo/botflows",
+        features ="src/test/java/scenario/generalbank/touch/agentflows",
         glue ="steps")
-public class RunGenBankBotTest {
+public class RunGenBankAgentTest {
 
         @Factory
         public Object[] features() {

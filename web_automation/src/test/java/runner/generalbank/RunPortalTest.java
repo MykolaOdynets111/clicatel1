@@ -1,4 +1,4 @@
-package runner;
+package runner.generalbank;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -16,7 +16,7 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/general_bank_demo/portal",
+        features ="src/test/java/scenario/touch/portal",
         glue ="steps")
 public class RunPortalTest {
 

@@ -1,24 +1,24 @@
-package runner;
+package runner.generalbank;
+
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.Factory;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "tie")
+@Test(groups = "cucumber")
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/tie",
+        features ="src/test/java/scenario/generalbank/touch/botflows",
         glue ="steps")
-public class RunTIETest {
+public class RunGenBankBotTest {
 
         @Factory
         public Object[] features() {
@@ -29,4 +29,5 @@ public class RunTIETest {
                 }
                 return objects.toArray();
         }
+
 }

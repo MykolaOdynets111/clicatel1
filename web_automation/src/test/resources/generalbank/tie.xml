@@ -3,7 +3,7 @@
 <suite name="TIE Suite" parallel="instances" thread-count="11">
     <test name="TIE tests" >
         <classes>
-            <class name="runner.RunTIETest" />
+            <class name="runner.generalbank.RunTIETest" />
         </classes>
     </test>
 </suite>

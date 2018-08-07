@@ -1,25 +1,24 @@
-package runner;
+package runner.generalbank;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
-import cucumber.api.testng.CucumberFeatureWrapper;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.*;
+import org.testng.annotations.Factory;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = {"acceptance"})
+@Test(groups = {"facebook"})
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/acceptance",
+        features ="src/test/java/scenario/generalbank/facebook",
         glue ="steps")
-public class RunAcceptanceTest {
-
+public class RunFacebookGenBankTest {
 
     @Factory
     public Object[] features() {
@@ -30,5 +29,4 @@ public class RunAcceptanceTest {
         }
         return objects.toArray();
     }
-
-    }
+}

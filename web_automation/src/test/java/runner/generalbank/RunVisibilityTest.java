@@ -1,4 +1,4 @@
-package runner;
+package runner.generalbank;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -10,15 +10,15 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = {"twitter"})
+@Test(groups = "widget visibility")
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/twitter",
+        features ="src/test/java/scenario/generalbank/widget_visibility",
         glue ="steps")
-public class RunTwitterGenBankTest {
+public class RunVisibilityTest {
 
     @Factory
     public Object[] features() {

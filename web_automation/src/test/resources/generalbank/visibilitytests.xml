@@ -3,7 +3,7 @@
 <suite name="General Bank Widget visibility">
     <test name="Widget visibility test">
         <classes>
-            <class name="runner.RunVisibilityTest" />
+            <class name="runner.generalbank.RunVisibilityTest" />
         </classes>
     </test>
 </suite>

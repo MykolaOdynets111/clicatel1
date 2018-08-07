@@ -1,4 +1,4 @@
-package runner;
+package runner.virginmoney;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -10,15 +10,16 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "widget visibility")
+@Test(groups = {"acceptance"})
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/widget_visibility",
+        features ="src/test/java/scenario/virginmoney/acceptance",
         glue ="steps")
-public class RunVisibilityTest {
+public class RunAcceptanceTest {
+
 
     @Factory
     public Object[] features() {
@@ -29,4 +30,5 @@ public class RunVisibilityTest {
         }
         return objects.toArray();
     }
-}
+
+    }

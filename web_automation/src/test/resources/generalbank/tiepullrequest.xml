@@ -3,7 +3,7 @@
 <suite name="TIE pull request suite" parallel="instances" thread-count="2">
     <test name="TIE tests" >
         <classes>
-            <class name="runner.RunTIEPullRequestTest" />
+            <class name="runner.generalbank.RunTIEPullRequestTest" />
         </classes>
     </test>
 </suite>
