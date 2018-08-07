@@ -370,7 +370,7 @@ public class TIEApiSteps {
                             .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"")
                             .put(URLs.getBaseTieURL());
         Assert.assertEquals(resp.statusCode(), 200,
-                "Status code is not 200 after cloning "+sourceTenant+" tenant\n"+resp.prettyPrint()+"")
+                "Status code is not 200 after cloning "+sourceTenant+" tenant\n"+resp.prettyPrint()+"");
     }
 
 
