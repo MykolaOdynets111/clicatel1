@@ -1,6 +1,7 @@
 package steps.tie_steps;
 
 import api_helper.Endpoints;
+import cucumber.api.Scenario;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.jackson_schemas.TIE.TieNERItem;
@@ -364,13 +365,12 @@ public class TIEApiSteps {
     public void createNewTenantClone(String sourceTenant){
         String newTenantName = createNewTenantName();
         NEW_TENANT_NAMES.put(Thread.currentThread().getId(), newTenantName);
-        given()
-                .log().all()
-                .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"").
-        when()
-                .put(URLs.getBaseTieURL())
-        .then()
-                .statusCode(200);
+        Response resp = given()
+                            .log().all()
+                            .body("tenant="+newTenantName+"&source_tenant="+sourceTenant+"")
+                            .put(URLs.getBaseTieURL());
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after cloning "+sourceTenant+" tenant\n"+resp.prettyPrint()+"")
     }
 
 
