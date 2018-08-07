@@ -340,14 +340,13 @@ public class TIEApiSteps {
     public void createNewTenant(){
         String newTenantName = createNewTenantName();
         NEW_TENANT_NAMES.put(Thread.currentThread().getId(), newTenantName);
-        given()
-                .log().all()
-                .body("tenant="+newTenantName+"").
-        when()
-                .put(URLs.getBaseTieURL())
-        .then()
-                .statusCode(200);
-//                .body(contains(newTenantName));
+        Response resp = given()
+                            .log().all()
+                            .body("tenant="+newTenantName+"")
+                            .put(URLs.getBaseTieURL());
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after creating "+newTenantName+" tenant\n"+resp.prettyPrint()+"");
+
     }
 
     @When("^I try to create tenant with the same name I should receive 404 response code$")
