@@ -30,7 +30,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public String getTransferNotes(){
         try {
-            waitForElementToBeVisibleAgent(transferNotes, 10, "second agent");
+            waitForElementToBeVisibleAgent(transferNotes, 10, "second agentflows");
             return transferNotes.getText();
         } catch (TimeoutException e){
             Assert.assertTrue(false, "Transfer notes are not visible.\n Please see the screenshot");

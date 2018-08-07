@@ -25,7 +25,7 @@ public class TransferChatWindow extends AbstractUIElement {
 
 
     public void transferChat() {
-        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
+        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agentflows");
         openDropdownButton.click();
         try{
             isElementShown(findElement(By.cssSelector(openedMenu)), 5);

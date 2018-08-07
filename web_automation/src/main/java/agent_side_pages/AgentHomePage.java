@@ -97,7 +97,7 @@ public class AgentHomePage extends AgentAbstractPage {
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
-            Assert.assertTrue(false, "There is a problem with agent desk page." +
+            Assert.assertTrue(false, "There is a problem with agentflows desk page." +
                     " Check if there is no blinking connection error.");
             return this;
         }

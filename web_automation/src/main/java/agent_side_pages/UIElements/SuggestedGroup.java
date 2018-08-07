@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.agent-assist")
+@FindBy(css = "div.agentflows-assist")
 public class SuggestedGroup extends AbstractUIElement {
 
     @FindBy(css = "div.suggestion")

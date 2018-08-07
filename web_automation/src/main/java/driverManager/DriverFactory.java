@@ -57,7 +57,7 @@ public class DriverFactory {
     }
 
     public static  WebDriver getDriverForAgent(String agent){
-        if (agent.equalsIgnoreCase("second agent")){
+        if (agent.equalsIgnoreCase("second agentflows")){
             return DriverFactory.getSecondAgentDriverInstance();
         } else {
             return DriverFactory.getAgentDriverInstance();

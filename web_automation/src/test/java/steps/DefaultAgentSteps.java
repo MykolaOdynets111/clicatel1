@@ -36,13 +36,13 @@ public class DefaultAgentSteps implements JSHelper {
 
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
-        AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
-        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
+        AgentLoginPage.openAgentLoginPage("second agentflows", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agentflows");
+        Assert.assertTrue(getAgentHomePage("second agentflows").isAgentSuccessfullyLoggedIn("second agentflows"), "Agent is not logged in.");
     }
 
     @Then("^In the first browser Connection Error should be shown$")
     public void verifyAgentIsDisconnected(){
-        Assert.assertTrue(getAgentHomePage("first agent").isConnectionErrorShown("first agent"),
+        Assert.assertTrue(getAgentHomePage("first agentflows").isConnectionErrorShown("first agentflows"),
                 "Agent in the first browser is not disconnected");
     }
 
@@ -93,13 +93,13 @@ public class DefaultAgentSteps implements JSHelper {
                 e.get("name").toString().toUpperCase() + " ("+
                         e.get("solution").toString().toUpperCase() +        ")"
         );});
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("firstName")),
+        soft.assertTrue(getProfileWindow("agentflows").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("firstName")),
                 "Agent first name is not shown in profile window");
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("lastName")),
+        soft.assertTrue(getProfileWindow("agentflows").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("lastName")),
                 "Agent last name is not shown in profile window");
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("email")),
+        soft.assertTrue(getProfileWindow("agentflows").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("email")),
                 "Agent email is not shown in profile window");
-        soft.assertEquals(getProfileWindow("agent").getListOfRoles(), expected,
+        soft.assertEquals(getProfileWindow("agentflows").getListOfRoles(), expected,
                 "Agent roles listed in Profile window are not as expected");
         soft.assertAll();
     }
@@ -120,7 +120,7 @@ public class DefaultAgentSteps implements JSHelper {
     @Then("Second agent receives incoming transfer with \"(.*)\" note from the first agent")
     public void verifyIncomingTransferReceived(String notes){
         Assert.assertEquals(getAgentHomeForSecondAgent().getIncomingTransferWindow().getTransferNotes(), notes,
-                "Notes in incoming transfer window is not as added by the first agent");
+                "Notes in incoming transfer window is not as added by the first agentflows");
     }
 
     @Then("(.*) can see transferring agent name, user name and following user's message: '(.*)'")
@@ -137,7 +137,7 @@ public class DefaultAgentSteps implements JSHelper {
             soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientMessage(), userMessage,
                     "User message in Incoming transfer window is not as expected");
             soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getFromAgentName(), expectedAgentNAme,
-                    "Transferring agent name in Incoming transfer window is not as expected");
+                    "Transferring agentflows name in Incoming transfer window is not as expected");
             soft.assertAll();
         } catch (NoSuchElementException e){
             Assert.assertTrue(false,
@@ -159,7 +159,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^Agent select \"(.*)\" filter option$")
     public void selectFilterOption(String option){
-        getLeftMenu("main agent").selectFilterOption(option);
+        getLeftMenu("main agentflows").selectFilterOption(option);
     }
 
     @Then("^(.*) has new conversation request from (.*) user$")
@@ -211,12 +211,12 @@ public class DefaultAgentSteps implements JSHelper {
             getAgentHomePage(agent).getHeader().selectStatus(newStatus);
             getAgentHomePage(agent).getHeader().clickIconWithInitials();
         } catch (WebDriverException e) {
-            Assert.assertTrue(false, "Unable to change agent status. Please check the screenshot.");
+            Assert.assertTrue(false, "Unable to change agentflows status. Please check the screenshot.");
         }
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agentflows")){
             return getAgentHomeForSecondAgent();
         } else {
             return getAgentHomeForMainAgent();
@@ -225,7 +225,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     private AgentHomePage getAgentHomeForSecondAgent(){
         if (secondAgentHomePage==null) {
-            secondAgentHomePage = new AgentHomePage("second agent");
+            secondAgentHomePage = new AgentHomePage("second agentflows");
             return secondAgentHomePage;
         } else{
             return secondAgentHomePage;
@@ -234,7 +234,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     private AgentHomePage getAgentHomeForMainAgent(){
         if (agentHomePage==null) {
-            agentHomePage = new AgentHomePage("main agent");
+            agentHomePage = new AgentHomePage("main agentflows");
             return agentHomePage;
         } else{
             return agentHomePage;

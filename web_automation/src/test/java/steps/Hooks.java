@@ -130,13 +130,13 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
-                    AgentHomePage agentHomePage = new AgentHomePage("main agent");
+                    AgentHomePage agentHomePage = new AgentHomePage("main agentflows");
                     agentHomePage.getHeader().clickIconWithInitials();
                     agentHomePage.getHeader().selectStatus("available");
                     agentHomePage.getHeader().clickIconWithInitials();
             }
 
-            closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
+            closePopupsIfOpenedEndChatAndlogoutAgent("main agentflows");
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
@@ -148,7 +148,7 @@ public class Hooks implements JSHelper{
                 secondAgentChatDeskConsoleOutput();
             }
             takeScreenshotFromThirdDriver();
-            closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            closePopupsIfOpenedEndChatAndlogoutAgent("second agentflows");
             DriverFactory.closeSecondAgentBrowser();
         }
     }
@@ -171,7 +171,7 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            if(!agent.equalsIgnoreCase("second agent") && agentHomePage.isProfileWindowOpened(agent)){
+            if(!agent.equalsIgnoreCase("second agentflows") && agentHomePage.isProfileWindowOpened(agent)){
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
             agentHomePage.endChat(agent);
@@ -209,9 +209,9 @@ public class Hooks implements JSHelper{
 
     private void logoutAgent() {
         try {
-            AgentHomePage agentHomePage =  new AgentHomePage("main agent");
-            agentHomePage.getHeader().logOut("main agent");
-            new AgentLoginPage("one agent").waitForLoginPageToOpen("main agent");
+            AgentHomePage agentHomePage =  new AgentHomePage("main agentflows");
+            agentHomePage.getHeader().logOut("main agentflows");
+            new AgentLoginPage("one agentflows").waitForLoginPageToOpen("main agentflows");
         } catch (WebDriverException e) { }
     }
 

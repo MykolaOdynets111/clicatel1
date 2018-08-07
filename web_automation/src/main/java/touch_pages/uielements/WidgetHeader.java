@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 @FindBy(css = "div.ctl-chat-area-header-container")
 public class WidgetHeader extends AbstractUIElement {
 
-    @FindBy(css = "div.ctl-chat-agent-name")
+    @FindBy(css = "div.ctl-chat-agentflows-name")
     private WebElement tenantName;
 
     @FindBy(css = "div.ctl-chat-description")

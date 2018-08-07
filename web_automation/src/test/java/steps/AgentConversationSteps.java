@@ -1,4 +1,4 @@
-package steps.general_bank_steps;
+package steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.UIElements.ChatBody;
@@ -35,7 +35,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from tweet user$")
     public void verifyUserMessageOnAgentDeskFromTwitter(String userMessage) {
-        if (userMessage.contains("agent")||userMessage.contains("support")){
+        if (userMessage.contains("agentflows")||userMessage.contains("support")){
             userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
         }
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
@@ -63,13 +63,13 @@ public class AgentConversationSteps implements JSHelper{
     @Then("^There is no from agent response added by default for (.*) user message$")
     public void verifyIfNoAgentResponseAddedByDefault(String userMessage) {
         Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(userMessage),
-                "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
+                "There is agentflows answer added without agentflows's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
     @Then("^There is no from agent response added by default for (.*) message from fb user$")
     public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String userMessage) {
         Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(FacebookSteps.getCurrentFBMessageText()),
-                "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
+                "There is agentflows answer added without agentflows's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
@@ -80,10 +80,10 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent replays with (.*) message$")
     public void respondToUserWithCheck(String agentMessage) {
-        if (getAgentHomePage("main agent").isSuggestionFieldShown()) {
+        if (getAgentHomePage("main agentflows").isSuggestionFieldShown()) {
             deleteSuggestionAndSendOwn(agentMessage);
         } else {
-            sendAnswerToUser("main agent", agentMessage);
+            sendAnswerToUser("main agentflows", agentMessage);
         }
     }
 
@@ -235,7 +235,7 @@ public class AgentConversationSteps implements JSHelper{
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agentflows")){
             return getAgentHomeForSecondAgent();
         } else {
             return getAgentHomeForMainAgent();
@@ -244,7 +244,7 @@ public class AgentConversationSteps implements JSHelper{
 
     private AgentHomePage getAgentHomeForSecondAgent(){
         if (secondAgentHomePage==null) {
-            secondAgentHomePage = new AgentHomePage("second agent");
+            secondAgentHomePage = new AgentHomePage("second agentflows");
             return secondAgentHomePage;
         } else{
             return secondAgentHomePage;
@@ -253,7 +253,7 @@ public class AgentConversationSteps implements JSHelper{
 
     private AgentHomePage getAgentHomeForMainAgent(){
         if (mainAgentHomePage==null) {
-            mainAgentHomePage = new AgentHomePage("main agent");
+            mainAgentHomePage = new AgentHomePage("main agentflows");
             return mainAgentHomePage;
         } else{
             return mainAgentHomePage;

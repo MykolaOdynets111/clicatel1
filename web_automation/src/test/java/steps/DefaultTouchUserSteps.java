@@ -185,8 +185,11 @@ public class DefaultTouchUserSteps implements JSHelper{
                 expectedCardText = cardText;
 
         }
+        if (cardText.contains("${firstName}")) {
+            cardText = cardText.replace("${firstName}", getUserNameFromLocalStorage());
+        }
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 15),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");

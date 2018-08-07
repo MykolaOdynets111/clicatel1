@@ -53,7 +53,7 @@ public class TwitterSteps {
 
     @When("^User sends twitter direct (?:message regarding|message:) (.*)$")
     public void sendTwitterDM(String userMessage){
-        if (userMessage.contains("agent")||userMessage.contains("support")){
+        if (userMessage.contains("agentflows")||userMessage.contains("support")){
             userMessage = createToAgentTweetText();
         }
         getDmWindow().sendUserMessage(userMessage);
@@ -61,7 +61,7 @@ public class TwitterSteps {
 
     @When("^User sends tweet regarding \"(.*)\"$")
     public void sendTweet(String tweetMessage){
-        if (tweetMessage.contains("agent")||tweetMessage.contains("support")){
+        if (tweetMessage.contains("agentflows")||tweetMessage.contains("support")){
                 tweetMessage = createToAgentTweetText();
         }
 
@@ -77,20 +77,20 @@ public class TwitterSteps {
                 "Expected tweet answer is missing after 70 secs wait");
     }
 
-//    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
+//    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agentflows$")
     @Then("^Agent's answer arrives to twitter$")
     public void verifyReceivingAnswerInTimelineFromAgent(){
 //        if(expectedAnswer.length()>132){
 //            expectedAnswer = expectedAnswer.substring(0,131);
 //        }
         Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),
-                "Expected tweet answer from the agent is missing after 100 secs wait");
+                "Expected tweet answer from the agentflows is missing after 100 secs wait");
     }
 
     @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
     public void verifyFromAgentResponseAsACommentOnTweet(String expectedAgentMessage, String initialUserTweet){
         getTwitterTenantPage().getTwitterHeader().openHomePage().waitForPageToBeLoaded();
-        if(initialUserTweet.contains("agent")||initialUserTweet.contains("support")){
+        if(initialUserTweet.contains("agentflows")||initialUserTweet.contains("support")){
             initialUserTweet = getCurrentConnectToAgentTweetText();
         }
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
@@ -120,14 +120,14 @@ public class TwitterSteps {
                 openedTweet.closeTweet();
                 try{
                     getTweetsSection().clickNewTweetsButtonIfShown(50);
-                    if(targetTweet.contains("agent")||targetTweet.contains("support")){
+                    if(targetTweet.contains("agentflows")||targetTweet.contains("support")){
                         targetTweet = getCurrentConnectToAgentTweetText();
                     }
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
                     else openedTweet.waitFor(2000);
                 } catch(StaleElementReferenceException e){
-                    if(targetTweet.contains("agent")||targetTweet.contains("support")){
+                    if(targetTweet.contains("agentflows")||targetTweet.contains("support")){
                         targetTweet = getCurrentConnectToAgentTweetText();
                     }
                     result = checkAgentsResponse(expectedResponse, targetTweet);
@@ -151,7 +151,7 @@ public class TwitterSteps {
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
     public void verifyDMTwitterResponse(String expectedResponse, String userMessage){
         SoftAssert soft = new SoftAssert();
-        if (userMessage.contains("agent")||userMessage.contains("support")){
+        if (userMessage.contains("agentflows")||userMessage.contains("support")){
             userMessage = getCurrentConnectToAgentTweetText();
         }
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
@@ -165,8 +165,8 @@ public class TwitterSteps {
         Faker faker = new Faker();
         int day = LocalDateTime.now().getDayOfMonth();
         if (day % 2 == 0) {
-            if (invocationCount<1) tweetMessage = "chat to agent " +  faker.lorem().character();
-            else tweetMessage= "connect to agent " + invocationCount +  faker.lorem().character();
+            if (invocationCount<1) tweetMessage = "chat to agentflows " +  faker.lorem().character();
+            else tweetMessage= "connect to agentflows " + invocationCount +  faker.lorem().character();
             invocationCount ++;
         }
         else {
