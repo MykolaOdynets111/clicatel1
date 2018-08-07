@@ -13,6 +13,7 @@ import dataManager.Tenants;
 import dataManager.TwitterUsers;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -123,20 +124,25 @@ public class DefaultAgentSteps implements JSHelper {
     }
 
     @Then("(.*) can see transferring agent name, user name and following user's message: '(.*)'")
-    public void verifyIncomingTransferDetails(String agent, String userMessage){
-        SoftAssert soft = new SoftAssert();
-        String expectedUserName = getUserNameFromLocalStorage();
-        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
-        String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " "+
-                agentInfoResp.getBody().jsonPath().get("lastName");
+    public void verifyIncomingTransferDetails(String agent, String userMessage) {
+        try {
+            SoftAssert soft = new SoftAssert();
+            String expectedUserName = getUserNameFromLocalStorage();
+            Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
+            String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
+                    agentInfoResp.getBody().jsonPath().get("lastName");
 
-        soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientName(), expectedUserName,
-                "User name in Incoming transfer window is not as expected");
-        soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientMessage(), userMessage,
-                "User message in Incoming transfer window is not as expected");
-        soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getFromAgentName(), expectedAgentNAme,
-                "Transferring agent name in Incoming transfer window is not as expected");
-        soft.assertAll();
+            soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientName(), expectedUserName,
+                    "User name in Incoming transfer window is not as expected");
+            soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientMessage(), userMessage,
+                    "User message in Incoming transfer window is not as expected");
+            soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getFromAgentName(), expectedAgentNAme,
+                    "Transferring agent name in Incoming transfer window is not as expected");
+            soft.assertAll();
+        } catch (NoSuchElementException e){
+            Assert.assertTrue(false,
+                    "Incoming transfer window is not shown.\n Please see the screenshot");
+        }
     }
 
     @Then("^Second agent click \"Accept transfer\" button$")

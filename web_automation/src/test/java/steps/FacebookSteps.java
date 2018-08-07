@@ -1,5 +1,6 @@
 package steps;
 
+import api_helper.ApiHelper;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -42,6 +43,9 @@ public class FacebookSteps {
 
     @Then("^User have to receive the following on his message regarding (.*): \"(.*)\"$")
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
+        if (expectedResponse.equalsIgnoreCase("agents_away")){
+            expectedResponse = ApiHelper.getTenantMessageText("agents_away");
+        }
         Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(getCurrentFBMessageText(), expectedResponse,30),
                 "User does not receive response in FB messenger after 30 seconds wait.");
     }

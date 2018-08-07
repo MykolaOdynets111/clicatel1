@@ -11,5 +11,7 @@ Feature: Redirection to the agent negative DM fb message
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook
     Then Conversation area becomes active with Your service is awful! message from facebook user
+    And There is no more than one from user message
+    And There is no from agent response added by default for chat to agent message from fb user
 
 
