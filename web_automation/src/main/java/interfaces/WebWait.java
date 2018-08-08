@@ -25,7 +25,7 @@ public interface WebWait {
     }
 
     default WebDriverWait initAgentWait(int waitTime, String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agentflows")) return new WebDriverWait(DriverFactory.getSecondAgentDriverInstance(), waitTime);
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return new WebDriverWait(DriverFactory.getSecondAgentDriverInstance(), waitTime);
         else return new WebDriverWait(DriverFactory.getAgentDriverInstance(), waitTime);
     }
 

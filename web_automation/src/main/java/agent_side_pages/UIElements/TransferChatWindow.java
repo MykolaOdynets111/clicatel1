@@ -25,7 +25,7 @@ public class TransferChatWindow extends AbstractUIElement {
 
 
     public void transferChat() {
-        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agentflows");
+        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
         openDropdownButton.click();
         try{
             isElementShown(findElement(By.cssSelector(openedMenu)), 5);
@@ -33,7 +33,7 @@ public class TransferChatWindow extends AbstractUIElement {
             openDropdownButton.click();
         }
         waitForElementToBeVisibleAgent(availableAgent,5);
-        for(int i=0; i<10; i++){
+        for(int i=0; i<15; i++){
             if(availableAgent.getText().contains("AQA")) break;
             else waitFor(500);
         }

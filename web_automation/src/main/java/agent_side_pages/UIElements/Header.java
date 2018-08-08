@@ -41,7 +41,7 @@ public class Header extends AbstractUIElement {
         click(iconWithAgentInitials);
         waitForElementToBeVisibleAgent(logOutButton, 6, agent);
         logOutButton.click();
-//        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6,agentflows);
+//        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6,agent);
         return this;
     }
 

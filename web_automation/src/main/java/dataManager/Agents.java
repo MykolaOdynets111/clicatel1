@@ -85,7 +85,7 @@ public enum Agents {
     }
 
     public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agentflows")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
         else return getMainAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
     }
 }
