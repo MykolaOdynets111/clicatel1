@@ -84,6 +84,9 @@ public class URLs {
             case "General Bank Demo":
                 tenantName="generalbank";
                 break;
+            case "Virgin Money":
+                tenantName="virgin-money";
+                break;
             default:
                 tenantName=tenantOrgName;
         }
