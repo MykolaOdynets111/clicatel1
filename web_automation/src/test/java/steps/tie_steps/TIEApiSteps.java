@@ -36,7 +36,7 @@ public class TIEApiSteps {
     }
 
     private static String createNewTenantName() {
-        return "testing"+ System.currentTimeMillis();
+        return "testing"+ Thread.currentThread().getId();
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();

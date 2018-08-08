@@ -12,7 +12,7 @@ public class ApiHelperPlatform {
 
     public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail){
 
-        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agentflows role");
+        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
         String[] idsArray = new String[ids.size()];
         for(int i=0; i<ids.size(); i++){
             idsArray[i] = "\""+ids.get(i)+"\"";
@@ -32,6 +32,7 @@ public class ApiHelperPlatform {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.PLATFORM_SEND_INVITATION);
+        int a = 2;
     }
 
 
@@ -75,8 +76,4 @@ public class ApiHelperPlatform {
                 .findFirst().get().get("id");
     }
 
-//    public static void main(String [] args){
-//
-//
-//    {
 }
