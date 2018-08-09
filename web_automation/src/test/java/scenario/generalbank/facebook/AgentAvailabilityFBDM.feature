@@ -6,7 +6,7 @@ Feature: Agent availability in terms of fb direct messages
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 
-  Scenario: Communication between user and bot
+  Scenario: Agent availability for fb user
     When User opens Messenger and send message regarding connect to agent
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook

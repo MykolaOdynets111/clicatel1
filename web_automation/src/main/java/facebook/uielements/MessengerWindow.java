@@ -34,6 +34,7 @@ public class MessengerWindow extends AbstractUIElement {
     }
 
     public void enterMessage(String message){
+        waitForElementToBeVisibleByXpath(inputFieldXPATHLocator, 6);
         findElemByXPATH(inputFieldXPATHLocator).sendKeys(message);
         pressEnterForWebElem(findElemByXPATH(inputFieldXPATHLocator));
     }
