@@ -1,6 +1,7 @@
 package steps.tie_steps;
 
 import api_helper.Endpoints;
+import com.github.javafaker.Faker;
 import cucumber.api.Scenario;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -36,7 +37,8 @@ public class TIEApiSteps {
     }
 
     private static String createNewTenantName() {
-        return "testing"+ Thread.currentThread().getId();
+        Faker faker = new Faker();
+        return "testing"+ Thread.currentThread().getId() + "_" + faker.lorem().word();
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
