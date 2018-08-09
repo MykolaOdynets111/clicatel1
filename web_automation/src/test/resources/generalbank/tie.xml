@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="TIE Suite" parallel="instances" thread-count="11">
-    <test name="TIE tests" >
+<suite name="TIE Suite" >
+    <test name="TIE parallel tests" parallel="instances" thread-count="11">
         <classes>
             <class name="runner.generalbank.RunTIETest" />
+        </classes>
+    </test>
+    <test name="TIE one thread tests">
+        <classes>
+            <class name="runner.generalbank.RunTIEOneThreadTest" />
         </classes>
     </test>
 </suite>
