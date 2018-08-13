@@ -116,13 +116,15 @@ public class DefaultTouchUserSteps implements JSHelper{
             expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
         }
         SoftAssert softAssert = new SoftAssert();
+        String actualCardText = widgetConversationArea.getResponseTextOnUserInput(userInput);
+        if (!expectedTextResponse.contains("\\n")) actualCardText.replace("\n", "");
+        else expectedTextResponse = expectedTextResponse.replace("\\n", "\n");
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
-        softAssert.assertEquals(widgetConversationArea.getResponseTextOnUserInput(userInput).replace("\n", "")
-                , expectedTextResponse,
+        softAssert.assertEquals(actualCardText, expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
 

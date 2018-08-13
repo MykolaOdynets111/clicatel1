@@ -1,5 +1,5 @@
 @tie
-Feature: TIE should give correct sentiments and intent for claims question
+Feature: TIE should give correct sentiments and intent for claims questions
 
   Scenario Outline: Verify if TIE sentiment is NEUTRAL or POSITIVE for the following message: "<user_message>"
     Then TIE sentiment is NEUTRAL or POSITIVE when I send '<user_message>' for Virgin Money tenant
