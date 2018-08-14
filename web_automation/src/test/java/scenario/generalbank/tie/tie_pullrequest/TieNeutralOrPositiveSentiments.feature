@@ -26,3 +26,4 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |Where can I find a branch?                                     |
       |hi                                                             |
       |Hi                                                             |
+      |interest rate                                                  |
