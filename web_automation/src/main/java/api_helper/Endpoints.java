@@ -4,6 +4,8 @@ import driverManager.URLs;
 
 public class Endpoints {
 
+    // =================== TOUCH =============== //
+
     public static String ACCESS_TOKEN_ENDPOINT = URLs.getTouchApiBaseURL() + "auth/access-token";
 
     public static String GET_ALL_TENANTS_ENDPOINT = "tenants?state=ACTIVE";

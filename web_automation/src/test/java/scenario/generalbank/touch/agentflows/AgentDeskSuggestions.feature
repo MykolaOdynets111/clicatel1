@@ -49,5 +49,6 @@ Feature: Agent suggestions
     Then Agent has new conversation request
     And Agent click on new conversation request from touch
     When User enter some question regarding balance into widget input field
+    Then Conversation area contains some question regarding balance user's message
     Then There is correct suggestion shown on user message "some question regarding balance" and sorted by confidence
     And The suggestion for user message "some question regarding balance" with the biggest confidence is added to the input field
