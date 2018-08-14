@@ -113,6 +113,8 @@ public class AgentConversationSteps implements JSHelper{
             if (expectedResponse.contains("${firstName}")) {
                 expectedResponse = expectedResponse.replace("${firstName}", getUserNameFromLocalStorage());
             }
+//            ToDo: remove this after TIE fixes the issue
+            expectedResponse = expectedResponse.replace("  ", " ");
             answersFromTie.add(i, expectedResponse);
         }
         List<Suggestion> actualSuggestions = getSuggestedGroup().getSuggestionsList();

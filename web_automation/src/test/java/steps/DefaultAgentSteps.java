@@ -199,7 +199,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
-        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(30),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }
