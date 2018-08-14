@@ -19,6 +19,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,24 @@ public class DefaultAgentSteps implements JSHelper {
     private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
     private LeftMenuWithChats leftMenuWithChats;
+    private static Map<String, Boolean> PRE_TEST_FEATURE_STATUS = new HashMap<>();
+    private static Map<String, Boolean> TEST_FEATURE_STATUS_CHANGES = new HashMap<>();
+
+    private static void savePreTestFeatureStatus(String featureName, boolean status){
+        PRE_TEST_FEATURE_STATUS.put(featureName, status);
+    }
+
+    public static boolean getPreTestFeatureStatus(String featureName){
+        return PRE_TEST_FEATURE_STATUS.get(featureName);
+    }
+
+    private static void saveTestFeatureStatusChanging(String featureName, boolean status){
+        TEST_FEATURE_STATUS_CHANGES.put(featureName, status);
+    }
+
+    public static boolean getTestFeatureStatusChanging(String featureName){
+        return TEST_FEATURE_STATUS_CHANGES.get(featureName);
+    }
 
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
@@ -48,7 +67,12 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
-        ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
+        boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
+        savePreTestFeatureStatus(feature, featureStatus);
+        saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));
+        if(featureStatus!=Boolean.parseBoolean(status.toLowerCase())) {
+            ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
+        }
     }
 
     @Then("^Icon should contain (.*) agent's initials$")

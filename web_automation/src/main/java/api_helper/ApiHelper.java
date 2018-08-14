@@ -208,6 +208,13 @@ public class ApiHelper {
         RestAssured.put(url);
     }
 
+    public static boolean getFeatureStatus(String tenantOrgName, String FEATURE){
+        Response resp = RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.FEATURE);
+        return resp.getBody().jsonPath().getBoolean(FEATURE);
+    }
+
     public static int getNumberOfLoggedInAgents(){
         String url = String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTest());
         return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");

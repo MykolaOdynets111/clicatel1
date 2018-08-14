@@ -139,7 +139,10 @@ public class Hooks implements JSHelper{
             closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
-                ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", "false");
+                boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
+                if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_ASSISTANT")) {
+                    ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
+                }
             }
             DriverFactory.closeAgentBrowser();
         }

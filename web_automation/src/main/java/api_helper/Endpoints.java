@@ -16,6 +16,8 @@ public class Endpoints {
 
     public static String AGENT_INFO = URLs.getTouchApiBaseURL() + "agents/info?mc2Token=%s";
 
+    public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
