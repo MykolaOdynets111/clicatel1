@@ -1,5 +1,10 @@
 group 'web_authomation'
 version '1.0-SNAPSHOT'
+import java.io.*
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.EncoderRegistry
+import static groovyx.net.http.Method.*
+import static groovyx.net.http.ContentType.*
 
 buildscript {
     repositories {
@@ -38,6 +43,7 @@ dependencies {
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
     compile 'mysql:mysql-connector-java:5.1.+'
+    classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'
 }
 
 configurations {
@@ -261,5 +267,19 @@ task runTiePullRequestTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tiepullrequest.xml"
+    }
+}
+
+task hello {
+    def http = new groovyx.net.http.HTTPBuilder("http://local.com:8983/solr/update/json")
+
+    http.request(POST, JSON ) { req ->
+        req.body{
+
+        }
+        response.success = { resp, reader ->
+            println "$resp.statusLine   Respond rec"
+
+        }
     }
 }
