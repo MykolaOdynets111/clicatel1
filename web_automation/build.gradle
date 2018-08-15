@@ -1,11 +1,6 @@
 group 'web_authomation'
 version '1.0-SNAPSHOT'
-import org._10ne.gradle.rest.RestTask
 import java.io.*
-import groovyx.net.http.HTTPBuilder
-import groovyx.net.http.EncoderRegistry
-import static groovyx.net.http.Method.*
-import static groovyx.net.http.ContentType.*
 import groovy.json.*
 
 
@@ -69,164 +64,38 @@ def baseXmlPath = "/src/test/resources/"
 def tenantName = "generalbank"
 def suite="all"
 def touchGoPlan = "unknown"
+def env = 'testing'
 
-task runAllTests(type: Test) {
+// ========= !! SERVICE TASKS !! ============== //
 
-    mustRunAfter 'getTouchGoPlan'
+//task readComandLineProperties(type:Test){
+//    if (System.getProperty("env") != null) {
+//        systemProperty "env", System.getProperty("env")
+//    }
+//    if (System.getProperty("remote") != null) {
+//        systemProperty "remote", System.properties.getProperty("remote")
+//    }
+//    if (System.getProperty("deploy_to") != null) {
+//        systemProperty "deploy_to", System.getProperty("deploy_to")
+//    }
+//}
 
+task getTouchGoPlan() {
+    if (System.getProperty("env") != null){
+        env=System.getProperty("env")
+    }
     if (System.getProperty("tenant") != null) {
         tenantName = System.properties.getProperty("tenant")
     }
-    if (System.getProperty("suite") != null) {
-        suite = System.properties.getProperty("suite")
-    }
-
-
-
-    if(suite == "facebook") {
-        doFirst {
-            runFacebookTests.execute()
-        }}
-
-    if(suite == "twitter") {
-        doFirst {
-            runTwitterTests.execute()
-        }}
-
-
-    if(suite == "tie") {
-        System.out.print("\n\n!!! print "+ touchGoPlan +" !!\n\n")
-        doFirst {
-            runTieTests.execute()
-        }}
-
-    if(suite=="visibility"){
-        doFirst {
-            runVisibilityTests.execute()
-        }
-    }
-
-    if(suite=="all") {
-
-        doFirst {
-            runTieTests.execute()
-            runBaseTests.execute()
-        }
-        doLast {
-            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-                runAllTest.execute()
-            }
-            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
-                    runAllTest.execute()
-                }
-            }
-            runVisibilityTests.execute()
-        }
-    }
-
-    if(suite=="pullrequest") {
-
-        doFirst {
-            runTiePullRequestTests.execute()
-            runBaseTests.execute()
-        }
-        doLast {
-            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-                runAllTest.execute()
-            }
-            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
-                    runAllTest.execute()
-                }
-            }
-            runVisibilityTests.execute()
-        }
-    }
-    runAllTests.finalizedBy(allureReport)
-    defaultTasks 'clean', 'runAllTests'
+    def uri = 'https://'+env+'-touch.clickatelllabs.com/internal/tenants/'+tenantName+'/config/'
+    def headers = [ Accept: 'application/json' ]
+    def jsonText = new URL(uri).getText( requestProperties: headers )
+    def parsedJson = new JsonSlurper().parseText(jsonText) as Map
+    touchGoPlan = parsedJson.get('touchGoType')
+    System.out.print("\n!!! touchGoPlan:   "+ touchGoPlan +"!!\n")
 }
 
-task runTieTests(type:Test) {
-    if (System.getProperty("env") != null) {
-        systemProperty "env", System.getProperty("env")
-    }
-    if (System.getProperty("remote") != null) {
-        systemProperty "remote", System.properties.getProperty("remote")
-    }
-    if (System.getProperty("deploy_to") != null) {
-        systemProperty "deploy_to", System.getProperty("deploy_to")
-    }
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/tie.xml"
-    }
-}
-
-task runBaseTests(type:Test) {
-    if (System.getProperty("env") != null) {
-        systemProperty "env", System.getProperty("env")
-    }
-    if (System.getProperty("remote") != null) {
-        systemProperty "remote", System.properties.getProperty("remote")
-    }
-    if (System.getProperty("browser") != null) {
-        systemProperty "browser", System.getProperty("browser")
-    }
-    if (System.getProperty("deploy_to") != null) {
-        systemProperty "deploy_to", System.getProperty("deploy_to")
-    }
-    useTestNG() {
-        println("base TEST ENV " + System.getProperty("env"))
-        useDefaultListeners = true
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/mastercheck.xml"
-    }
-    reports.html.enabled = false
-}
-
-task runAllTest(type:Test) {
-
-    if (System.getProperty("env") != null) {
-        systemProperty "env", System.getProperty("env")
-    }
-    if (System.getProperty("remote") != null) {
-        systemProperty "remote", System.properties.getProperty("remote")
-    }
-    if (System.getProperty("browser") != null) {
-        systemProperty "browser", System.getProperty("browser")
-    }
-    if (System.getProperty("deploy_to") != null) {
-        systemProperty "deploy_to", System.getProperty("deploy_to")
-    }
-        System.out.print("\n!!! tenant name from alltests task: " + tenantName + " !!!\n")
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/uitests.xml"
-        suites baseXmlPath+tenantName+"/onethreadtests.xml"
-    }
-}
-
-task runVisibilityTests(type:Test) {
-    if (System.getProperty("env") != null) {
-        systemProperty "env", System.getProperty("env")
-    }
-    if (System.getProperty("remote") != null) {
-        systemProperty "remote", System.properties.getProperty("remote")
-    }
-    if (System.getProperty("browser") != null) {
-        systemProperty "browser", System.getProperty("browser")
-    }
-    if (System.getProperty("deploy_to") != null) {
-        systemProperty "deploy_to", System.getProperty("deploy_to")
-    }
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/visibilitytests.xml"
-    }
-}
+// ========= !! TASKS FOR SUITES !! ============== //
 
 task runFacebookTests(type:Test) {
     if (System.getProperty("env") != null) {
@@ -266,6 +135,172 @@ task runTwitterTests(type:Test) {
     }
 }
 
+task runBaseTests(type:Test) {
+
+//    runBaseTests.dependsOn(readComandLineProperties)
+
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
+    useTestNG() {
+        println("base TEST ENV " + System.getProperty("env"))
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/mastercheck.xml"
+    }
+    reports.html.enabled = false
+}
+
+task runTieTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/tie.xml"
+    }
+}
+
+task runVisibilityTests(type:Test) {
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/visibilitytests.xml"
+    }
+}
+
+// ========= !! MAIN TASK !! ============== //
+
+task runTests(type: Test) {
+
+    runTests.dependsOn(getTouchGoPlan)
+
+    if (System.getProperty("tenant") != null) {
+        tenantName = System.properties.getProperty("tenant")
+    }
+    if (System.getProperty("suite") != null) {
+        suite = System.properties.getProperty("suite")
+    }
+    System.out.print("\n!!! from runTests tie:   "+ touchGoPlan +"!!\n")
+
+    if(suite == "facebook") {
+        runTests.dependsOn(runFacebookTests)
+    }
+
+    if(suite == "twitter") {
+        runTests.dependsOn(runTwitterTests)
+    }
+
+    if(suite == "basecheck") {
+        runTests.dependsOn(runBaseTests)
+    }
+
+    if(suite == "tie") {
+        System.out.print("\n!!! from doFirst tie:   "+ touchGoPlan +"!!\n")
+        runTests.dependsOn(runTieTests)
+    }
+
+    if(suite=="visibility"){
+        runTests.(runVisibilityTests)
+    }
+
+    if(suite=="all") {
+
+        doFirst {
+            getTouchGoPlan.execute()
+            System.out.print("\n!!! from doFirst:   "+ touchGoPlan +"!!\n")
+
+            runTieTests.execute()
+            System.out.print("\n!!! from doFirst:   "+ touchGoPlan +"!!\n")
+            runBaseTests.execute()
+        }
+        doLast {
+            System.out.print("\n!!! from doLast:   "+ touchGoPlan +"!!\n")
+
+            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+                runTouchTests.execute()
+            }
+            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+                    runTouchTests.execute()
+                }
+            }
+            runVisibilityTests.execute()
+        }
+    }
+
+    if(suite=="pullrequest") {
+
+        doFirst {
+            runTiePullRequestTests.execute()
+            runBaseTests.execute()
+        }
+        doLast {
+            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+                runTouchTests.execute()
+            }
+            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+                    runTouchTests.execute()
+                }
+            }
+            runVisibilityTests.execute()
+        }
+    }
+    runTests.finalizedBy(allureReport)
+    defaultTasks 'clean', 'runTests'
+}
+
+task runTouchTests(type:Test) {
+
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
+        System.out.print("\n!!! tenant name from alltests task: " + tenantName + " !!!\n")
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/uitests.xml"
+        suites baseXmlPath+tenantName+"/onethreadtests.xml"
+    }
+}
+
 task runTiePullRequestTests(type:Test) {
     if (System.getProperty("env") != null) {
         systemProperty "env", System.getProperty("env")
@@ -280,39 +315,4 @@ task runTiePullRequestTests(type:Test) {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tiepullrequest.xml"
     }
-}
-
-task getTouchGoPlan(type: RestTask) {
-//    if (System.getProperty("env") != null) {
-//        systemProperty "env", System.getProperty("env")
-//    }
-    def a
-    httpMethod = 'get'
-    uri = 'http://'+System.getProperty("env")+'-touch.clickatelllabs.com/internal/tenants/'+tenantName+'/config/'
-    contentType = groovyx.net.http.ContentType.JSON
-    System.out.print("\n!!! URI:   "+ uri +"!!\n")
-    responseHandler = { map ->
-        def jsonBuilder = new JsonBuilder(map)
-        a = jsonBuilder.toString()
-    }
-    System.out.print("\n!!! jsonBuilder:   "+ a +"!!\n")
-
-//    def jsonText = new URL( "http://ip.jsontest.com" ).getText()
-//
-//    uri = 'http://'+System.getProperty("env")+'-touch.clickatelllabs.com/internal/tenants/'+tenantName+'/config/'
-//
-//    def http = new groovyx.net.http.HTTPBuilder(uri)
-//
-//    http.request(GET, JSON ) { req ->
-//        req.body{
-//
-//        }
-//        response.success = { resp, reader ->
-//            println "$resp.statusLine   Respond rec"
-//
-//        }
-//    }
-//
-//    System.out.print("\n!!! serverResponse.getData():   "+ jsonText +"!!\n")
-
 }
