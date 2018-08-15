@@ -1,24 +1,33 @@
 group 'web_authomation'
 version '1.0-SNAPSHOT'
+import org._10ne.gradle.rest.RestTask
 import java.io.*
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.EncoderRegistry
 import static groovyx.net.http.Method.*
 import static groovyx.net.http.ContentType.*
+import groovy.json.*
+
 
 buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "ru.d10xa:gradle-allure-plugin:0.5.5"
+        classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'
+        classpath "org._10ne.gradle:rest-gradle-plugin:0.4.2"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'ru.d10xa.allure'
+apply plugin: "org.tenne.rest"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -43,7 +52,6 @@ dependencies {
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
     compile 'mysql:mysql-connector-java:5.1.+'
-    classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'
 }
 
 configurations {
@@ -60,8 +68,11 @@ allure{
 def baseXmlPath = "/src/test/resources/"
 def tenantName = "generalbank"
 def suite="all"
+def touchGoPlan = "unknown"
 
 task runAllTests(type: Test) {
+
+    mustRunAfter 'getTouchGoPlan'
 
     if (System.getProperty("tenant") != null) {
         tenantName = System.properties.getProperty("tenant")
@@ -69,6 +80,8 @@ task runAllTests(type: Test) {
     if (System.getProperty("suite") != null) {
         suite = System.properties.getProperty("suite")
     }
+
+
 
     if(suite == "facebook") {
         doFirst {
@@ -82,6 +95,7 @@ task runAllTests(type: Test) {
 
 
     if(suite == "tie") {
+        System.out.print("\n\n!!! print "+ touchGoPlan +" !!\n\n")
         doFirst {
             runTieTests.execute()
         }}
@@ -100,7 +114,6 @@ task runAllTests(type: Test) {
         }
         doLast {
             if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-                System.out.print("!!! " + "no testng file" + " !!!")
                 runAllTest.execute()
             }
             if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
@@ -121,7 +134,6 @@ task runAllTests(type: Test) {
         }
         doLast {
             if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-                System.out.print("!!! " + "no testng file" + " !!!")
                 runAllTest.execute()
             }
             if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
@@ -270,16 +282,37 @@ task runTiePullRequestTests(type:Test) {
     }
 }
 
-task hello {
-    def http = new groovyx.net.http.HTTPBuilder("http://local.com:8983/solr/update/json")
-
-    http.request(POST, JSON ) { req ->
-        req.body{
-
-        }
-        response.success = { resp, reader ->
-            println "$resp.statusLine   Respond rec"
-
-        }
+task getTouchGoPlan(type: RestTask) {
+//    if (System.getProperty("env") != null) {
+//        systemProperty "env", System.getProperty("env")
+//    }
+    def a
+    httpMethod = 'get'
+    uri = 'http://'+System.getProperty("env")+'-touch.clickatelllabs.com/internal/tenants/'+tenantName+'/config/'
+    contentType = groovyx.net.http.ContentType.JSON
+    System.out.print("\n!!! URI:   "+ uri +"!!\n")
+    responseHandler = { map ->
+        def jsonBuilder = new JsonBuilder(map)
+        a = jsonBuilder.toString()
     }
+    System.out.print("\n!!! jsonBuilder:   "+ a +"!!\n")
+
+//    def jsonText = new URL( "http://ip.jsontest.com" ).getText()
+//
+//    uri = 'http://'+System.getProperty("env")+'-touch.clickatelllabs.com/internal/tenants/'+tenantName+'/config/'
+//
+//    def http = new groovyx.net.http.HTTPBuilder(uri)
+//
+//    http.request(GET, JSON ) { req ->
+//        req.body{
+//
+//        }
+//        response.success = { resp, reader ->
+//            println "$resp.statusLine   Respond rec"
+//
+//        }
+//    }
+//
+//    System.out.print("\n!!! serverResponse.getData():   "+ jsonText +"!!\n")
+
 }
