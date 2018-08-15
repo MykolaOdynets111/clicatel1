@@ -27,3 +27,4 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |hi                                                             |
       |Hi                                                             |
       |interest rate                                                  |
+      |how to check balance on my current account at home?            |
