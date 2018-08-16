@@ -104,10 +104,17 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clearAndSendResponseToUser(String response){
-        moveToElemAndClick(findElemByXPATH(messageInputLocator));
-        waitForElementToBeClickable(messageInput);
-        messageInput.clear();
+        try {
+            moveToElemAndClick(findElemByXPATH(messageInputLocator));
+            waitForElementToBeClickable(messageInput);
+            messageInput.clear();
+        } catch (WebDriverException e){
+            moveToElemAndClick(findElemByXPATH(messageInputLocator));
+            waitForElementToBeClickable(messageInput);
+            messageInput.clear();
+        }
         sendResponseToUser(response);
+
     }
 
     public void clickSendButton() {
