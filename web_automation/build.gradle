@@ -211,6 +211,31 @@ task runTouchTests(type:Test) {
     }
 }
 
+task runTouchPullRequestTests(type:Test) {
+
+    runTouchTests.dependsOn(getTouchGoPlan)
+
+    if (System.getProperty("env") != null) {
+        systemProperty "env", System.getProperty("env")
+    }
+    if (System.getProperty("remote") != null) {
+        systemProperty "remote", System.properties.getProperty("remote")
+    }
+    if (System.getProperty("browser") != null) {
+        systemProperty "browser", System.getProperty("browser")
+    }
+    if (System.getProperty("deploy_to") != null) {
+        systemProperty "deploy_to", System.getProperty("deploy_to")
+    }
+    System.out.print("\n!!! touchGoPlan.toLowerCase() " + touchGoPlan.toLowerCase() + " !!!\n")
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/uitests.xml"
+        suites baseXmlPath+tenantName+"/onethreadtests_pullrequest.xml"
+        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+    }
+}
+
 task runAllTests(type:Test){
     doFirst {
         runTieTests.execute()
@@ -237,12 +262,12 @@ task runPullRequestTests(type:Test){
     }
     doLast {
         if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-            runTouchTests.execute()
+            runTouchPullRequestTests.execute()
         }
         if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
             String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
             if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
-                runTouchTests.execute()
+                runTouchPullRequestTests.execute()
             }
         }
         runVisibilityTests.execute()
