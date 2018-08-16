@@ -50,6 +50,7 @@ public class Header extends AbstractUIElement {
     }
 
     public void clickIconWithInitials(){
+        waitForElementToBeClickableAgent(iconWithAgentInitials, 10, "main agent");
         iconWithAgentInitials.click();
     }
 
