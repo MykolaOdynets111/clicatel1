@@ -70,11 +70,13 @@ public class Header extends AbstractUIElement {
     }
 
     public void selectStatus(String status){
+        if(!isElementShown(agentName)){
+            clickIconWithInitials();
+        }
 //        WebElement targetElem = findElemsByCSSAgent(statusElem).stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
         WebElement targetElem = statusElems.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
         targetElem.click();
         //    executeJSclick(targetElem);
 //        targetElem.findElement(By.cssSelector("input")).click();
-
     }
 }
