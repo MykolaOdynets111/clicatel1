@@ -38,7 +38,7 @@ public class TIEApiSteps {
 
     private static String createNewTenantName() {
         Faker faker = new Faker();
-        return "testing"+ Thread.currentThread().getId() + "_" + faker.lorem().word();
+        return "testing"+ Thread.currentThread().getId() + "_" + faker.lorem().word() + faker.lorem().word();
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
