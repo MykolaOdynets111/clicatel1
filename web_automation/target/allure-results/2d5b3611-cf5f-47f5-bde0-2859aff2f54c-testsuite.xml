@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1534323396082" stop="1534323514279" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Newly created agent should be able to login into to chat desk</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1534323396091" stop="1534323514277" status="broken">
+            <name>Newly created agent should be able to login into to chat desk</name>
+            <title>Newly created agent should be able to login into to chat desk</title>
+            <description type="text"></description>
+            <failure>
+                <message>Test was interrupted</message>
+            </failure>
+            <labels>
+                <label name="story" value="Newly created agent should be able to login into to chat desk"/>
+                <label name="feature" value="Newly created agent should be able to login into to chat desk"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="4098@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1534323396082" stop="1534323514278" status="broken">
+            <name>Newly created agent should be able to login into to chat desk</name>
+            <title>Newly created agent should be able to login into to chat desk</title>
+            <failure>
+                <message>Test suite was interrupted, some test cases may be lost</message>
+            </failure>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Newly created agent should be able to login into to chat desk"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

@@ -8,21 +8,15 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
     }
     dependencies {
         classpath "ru.d10xa:gradle-allure-plugin:0.5.5"
-        classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'
-        classpath "org._10ne.gradle:rest-gradle-plugin:0.4.2"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'ru.d10xa.allure'
-apply plugin: "org.tenne.rest"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8

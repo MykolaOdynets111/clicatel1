@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1534323618916" stop="1534323830893" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>User on his demand should be redirected on the agent</name>
+    <description type="text">
+Verification of basic communication between user and agent</description>
+    <test-cases>
+        <test-case start="1534323618918" stop="1534323786947" status="passed">
+            <name>Verify if user is able to communicate with agent by typing "chat to support" into widget</name>
+            <title>Verify if user is able to communicate with agent by typing "chat to support" into widget</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1534323621379" stop="1534323629035" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323629035" stop="1534323631218" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323631219" stop="1534323635014" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323635014" stop="1534323637627" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323637628" stop="1534323642479" status="passed">
+                    <name>When User enter chat to support into widget input field</name>
+                    <title>When User enter chat to support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323642479" stop="1534323645633" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323645633" stop="1534323647192" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323647192" stop="1534323649210" status="passed">
+                    <name>Then Conversation area becomes active with chat to support user's message</name>
+                    <title>Then Conversation area becomes active with chat to support user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323649211" stop="1534323649782" status="passed">
+                    <name>And There is no more than one from user message</name>
+                    <title>And There is no more than one from user message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323649782" stop="1534323656980" status="passed">
+                    <name>And There is no from agent response added by default for chat to support user message</name>
+                    <title>And There is no from agent response added by default for chat to support user message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323656981" stop="1534323768184" status="passed">
+                    <name>And There is no suggestions on user's input chat to support</name>
+                    <title>And There is no suggestions on user's input chat to support</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323768184" stop="1534323769878" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323769879" stop="1534323774294" status="passed">
+                    <name>Then User have to receive 'hello' text response for his 'chat to support' input</name>
+                    <title>Then User have to receive 'hello' text response for his 'chat to support' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if user is able to communicate with agent by typing &quot;chat to support&quot; into widget"/>
+                <label name="feature" value="User on his demand should be redirected on the agent"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="4314@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1534323786948" stop="1534323830892" status="passed">
+            <name>Verify user is redirected to the Agent when types negative sentiment message</name>
+            <title>Verify user is redirected to the Agent when types negative sentiment message</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1534323789765" stop="1534323797392" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323797392" stop="1534323799570" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323799570" stop="1534323803381" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323803381" stop="1534323805994" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323805994" stop="1534323810582" status="passed">
+                    <name>When User enter Hate your banking into widget input field</name>
+                    <title>When User enter Hate your banking into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1534323810582" stop="1534323815809" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify user is redirected to the Agent when types negative sentiment message"/>
+                <label name="feature" value="User on his demand should be redirected on the agent"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="4314@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="User on his demand should be redirected on the agent"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>
