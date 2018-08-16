@@ -92,7 +92,6 @@ task getTouchGoPlan() {
     def jsonText = new URL(uri).getText( requestProperties: headers )
     def parsedJson = new JsonSlurper().parseText(jsonText) as Map
     touchGoPlan = parsedJson.get('touchGoType')
-    System.out.print("\n!!! touchGoPlan:   "+ touchGoPlan +"!!\n")
 }
 
 // ========= !! TASKS FOR SUITES !! ============== //
@@ -136,8 +135,6 @@ task runTwitterTests(type:Test) {
 }
 
 task runBaseTests(type:Test) {
-
-//    runBaseTests.dependsOn(readComandLineProperties)
 
     if (System.getProperty("env") != null) {
         systemProperty "env", System.getProperty("env")
@@ -195,91 +192,9 @@ task runVisibilityTests(type:Test) {
     }
 }
 
-// ========= !! MAIN TASK !! ============== //
-
-task runTests(type: Test) {
-
-    runTests.dependsOn(getTouchGoPlan)
-
-    if (System.getProperty("tenant") != null) {
-        tenantName = System.properties.getProperty("tenant")
-    }
-    if (System.getProperty("suite") != null) {
-        suite = System.properties.getProperty("suite")
-    }
-    System.out.print("\n!!! from runTests tie:   "+ touchGoPlan +"!!\n")
-
-    if(suite == "facebook") {
-        runTests.dependsOn(runFacebookTests)
-    }
-
-    if(suite == "twitter") {
-        runTests.dependsOn(runTwitterTests)
-    }
-
-    if(suite == "basecheck") {
-        runTests.dependsOn(runBaseTests)
-    }
-
-    if(suite == "tie") {
-        System.out.print("\n!!! from doFirst tie:   "+ touchGoPlan +"!!\n")
-        runTests.dependsOn(runTieTests)
-    }
-
-    if(suite=="visibility"){
-        runTests.(runVisibilityTests)
-    }
-
-    if(suite=="all") {
-
-        doFirst {
-            getTouchGoPlan.execute()
-            System.out.print("\n!!! from doFirst:   "+ touchGoPlan +"!!\n")
-
-            runTieTests.execute()
-            System.out.print("\n!!! from doFirst:   "+ touchGoPlan +"!!\n")
-            runBaseTests.execute()
-        }
-        doLast {
-            System.out.print("\n!!! from doLast:   "+ touchGoPlan +"!!\n")
-
-            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-                runTouchTests.execute()
-            }
-            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
-                    runTouchTests.execute()
-                }
-            }
-            runVisibilityTests.execute()
-        }
-    }
-
-    if(suite=="pullrequest") {
-
-        doFirst {
-            runTiePullRequestTests.execute()
-            runBaseTests.execute()
-        }
-        doLast {
-            if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-                runTouchTests.execute()
-            }
-            if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-                String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-                if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
-                    runTouchTests.execute()
-                }
-            }
-            runVisibilityTests.execute()
-        }
-    }
-    runTests.finalizedBy(allureReport)
-    defaultTasks 'clean', 'runTests'
-}
-
 task runTouchTests(type:Test) {
+
+    runTouchTests.dependsOn(getTouchGoPlan)
 
     if (System.getProperty("env") != null) {
         systemProperty "env", System.getProperty("env")
@@ -293,11 +208,50 @@ task runTouchTests(type:Test) {
     if (System.getProperty("deploy_to") != null) {
         systemProperty "deploy_to", System.getProperty("deploy_to")
     }
-        System.out.print("\n!!! tenant name from alltests task: " + tenantName + " !!!\n")
+    System.out.print("\n!!! touchGoPlan.toLowerCase() " + touchGoPlan.toLowerCase() + " !!!\n")
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
         suites baseXmlPath+tenantName+"/onethreadtests.xml"
+        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+    }
+}
+
+task runAllTests(type:Test){
+    doFirst {
+        runTieTests.execute()
+        runBaseTests.execute()
+    }
+    doLast {
+        if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+            runTouchTests.execute()
+        }
+        if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+            String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+            if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+                runTouchTests.execute()
+            }
+        }
+        runVisibilityTests.execute()
+    }
+}
+
+task runPullRequestTests(type:Test){
+    doFirst {
+        runTiePullRequestTests.execute()
+        runBaseTests.execute()
+    }
+    doLast {
+        if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+            runTouchTests.execute()
+        }
+        if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+            String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+            if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+                runTouchTests.execute()
+            }
+        }
+        runVisibilityTests.execute()
     }
 }
 
@@ -315,4 +269,48 @@ task runTiePullRequestTests(type:Test) {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tiepullrequest.xml"
     }
+}
+
+
+// ========= !! MAIN TASK !! ============== //
+
+task runTests(type: Test) {
+
+    if (System.getProperty("tenant") != null) {
+        tenantName = System.properties.getProperty("tenant")
+    }
+    if (System.getProperty("suite") != null) {
+        suite = System.properties.getProperty("suite")
+    }
+
+    if(suite == "facebook") {
+        runTests.dependsOn(runFacebookTests)
+    }
+
+    if(suite == "twitter") {
+        runTests.dependsOn(runTwitterTests)
+    }
+
+    if(suite == "basecheck") {
+        runTests.dependsOn(runBaseTests)
+    }
+
+    if(suite == "tie") {
+        runTests.dependsOn(runTieTests)
+    }
+
+    if(suite=="visibility"){
+        runTests.dependsOn(runVisibilityTests)
+    }
+
+    if(suite=="all") {
+        runTests.dependsOn(runAllTests)
+    }
+
+    if(suite=="pullrequest") {
+        runTests.dependsOn(runPullRequestTests)
+    }
+
+    runTests.finalizedBy(allureReport)
+    defaultTasks 'clean', 'runTests'
 }
