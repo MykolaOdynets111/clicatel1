@@ -230,6 +230,11 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clickAcceptProfanityPopupButton(){
         acceptProfanityPopupButton.click();
+        for(int i = 0; i<10;i++){
+            if (!isElementShownAgent(profanityPopup, 1, "main agent")){
+                break;
+            }
+        }
     }
 
     public void clickEndChat(){
@@ -243,8 +248,10 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickCloseButtonInCloseChatPopup (){
-        waitForElementsToBeVisibleByXpathAgent(closeChatButtonXPATH, 5);
-        findElemByXPATHAgent(closeChatButtonXPATH).click();
+        if (isElementShownAgentByXpath(closeChatButtonXPATH, 5, "main agent")){
+            findElemByXPATHAgent(closeChatButtonXPATH).click();
+            waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
+        }
     }
 
     public boolean isProfileWindowOpened(){
