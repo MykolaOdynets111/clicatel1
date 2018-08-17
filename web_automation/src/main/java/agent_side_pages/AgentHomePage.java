@@ -2,6 +2,8 @@ package agent_side_pages;
 
 import abstract_classes.AgentAbstractPage;
 import agent_side_pages.UIElements.*;
+import api_helper.ApiHelper;
+import dataManager.Tenants;
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -248,7 +250,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickCloseButtonInCloseChatPopup (){
-        if (isElementShownAgentByXpath(closeChatButtonXPATH, 5, "main agent")){
+        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
+            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
             findElemByXPATHAgent(closeChatButtonXPATH).click();
             waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
         }
