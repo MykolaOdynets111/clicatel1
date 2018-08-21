@@ -23,6 +23,7 @@ public class FacebookSteps {
        FBHomePage.openTenantPage(URLs.getFBPageURL(tenant));
        if(tenant.equals("General Bank Demo")){
            Tenants.setTenantUnderTest("generalbank");
+           Tenants.setTenantUnderTestOrgName("General Bank Demo");
        }
     }
 
