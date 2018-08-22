@@ -11,7 +11,6 @@ Feature: VM flow regarding Cost or transactions fees (spot option)
     And Card with a buttons Credit card; Spot is shown on user <user message> message
     When User click Spot button in the card on user message <user message>
     Then User have to receive 'There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his 'Spot' input
-
     Examples:
       |user message                             |
       |What are your transaction fees           |
