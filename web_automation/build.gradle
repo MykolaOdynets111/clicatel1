@@ -194,7 +194,7 @@ task runTiePullRequestTests(type:Test) {
     }
 }
 
-task runTouchVirgunMoneyTests(type:Test){
+task runTouchVirginMoneyTests(type:Test){
     systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
@@ -280,7 +280,7 @@ task runTestsForAllTenants(type: Test) {
     doLast {
         if (!file("build/reports/tests/runTestsForAllTenants/Master check Virgin Money/testng-failed.xml").exists()){
             tenantName="virgin_money"
-            runTouchVirgunMoneyTests.execute()
+            runTouchVirginMoneyTests.execute()
         }
         if (!file("build/reports/tests/runTestsForAllTenants/Master check General Bank/testng-failed.xml").exists()){
             tenantName="generalbank"
