@@ -4,7 +4,7 @@ Feature: VM flow regarding Claims and premiums
     Given User select Virgin Money tenant
     And Click chat icon
 
-  Scenario Outline: "Claims and premiums: Funeral" flow should work for "user message" user message
+  Scenario Outline: "Claims and premiums: Funeral" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
 #    Then Card with a Hi ${firstName}, are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
     Then Card with a Are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
@@ -19,7 +19,7 @@ Feature: VM flow regarding Claims and premiums
       |How does a claim change my premium       |
 
 
-  Scenario Outline: "Claims and premiums: Auto or household" flow should work for "user message" user message
+  Scenario Outline: "Claims and premiums: Auto or household" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
 #    Then Card with a Hi ${firstName}, are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
     Then Card with a Are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message

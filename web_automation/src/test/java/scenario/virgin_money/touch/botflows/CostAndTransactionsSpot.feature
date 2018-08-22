@@ -4,7 +4,7 @@ Feature: VM flow regarding Cost or transactions fees (spot option)
     Given User select Virgin Money tenant
     And Click chat icon
 
-  Scenario Outline: "Cost or transactions fees: Spot" flow should work for "user message" user message
+  Scenario Outline: "Cost or transactions fees: Spot" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
 #    Then Card with a Hi ${firstName}, which product are you enquiring about? Credit card or Virgin Money Spot? text is shown on user <user message> message
     Then Card with a Which product are you enquiring about? Credit card or Virgin Money Spot? text is shown on user <user message> message

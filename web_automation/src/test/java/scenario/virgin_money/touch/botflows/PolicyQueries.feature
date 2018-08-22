@@ -4,7 +4,7 @@ Feature: VM flow regarding Policy queries
     Given User select Virgin Money tenant
     And Click chat icon
 
-  Scenario Outline: "Policy queries: Funeral" flow should work for "user message" user message
+  Scenario Outline: "Policy queries: Funeral" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
 #    Then Card with a Hi ${firstName}, are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
     Then Card with a Are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
@@ -18,7 +18,7 @@ Feature: VM flow regarding Policy queries
       |Whats the cut off age for a policy?      |
 
 
-  Scenario Outline: "Policy queries: Auto or household" flow should work for "user message" user message
+  Scenario Outline: "Policy queries: Auto or household" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
 #    Then Card with a Hi ${firstName}, are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
     Then Card with a Are you asking about a car, funeral or household insurance policy? text is shown on user <user message> message
