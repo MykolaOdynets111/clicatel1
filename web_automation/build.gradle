@@ -62,13 +62,16 @@ def env = 'testing'
 // ========= !! SERVICE TASKS !! ============== //
 
 task getTouchGoPlan() {
+    def localTenantName // Created for handling cases when tenant name contains "-". Like "virgin-money".
     if (System.getProperty("env") != null){
         env=System.getProperty("env")
     }
     if (System.getProperty("tenant") != null) {
         tenantName = System.properties.getProperty("tenant")
     }
-    def uri = 'https://'+env+'-touch.clickatelllabs.com/internal/tenants/'+tenantName+'/config/'
+    localTenantName=tenantName
+    if(localTenantName.contains("_")) localTenantName = localTenantName.replace("_", "-")
+    def uri = 'https://'+env+'-touch.clickatelllabs.com/internal/tenants/'+ localTenantName +'/config/'
     def headers = [ Accept: 'application/json' ]
     def jsonText = new URL(uri).getText( requestProperties: headers )
     def parsedJson = new JsonSlurper().parseText(jsonText) as Map
@@ -122,11 +125,8 @@ task runVisibilityTests(type:Test) {
 }
 
 task runTouchTests(type:Test) {
-
     runTouchTests.dependsOn(getTouchGoPlan)
-
     systemProperties = System.getProperties()
-    System.out.print("\n!!! touchGoPlan.toLowerCase() " + touchGoPlan.toLowerCase() + " !!!\n")
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
@@ -137,7 +137,7 @@ task runTouchTests(type:Test) {
 
 task runTouchPullRequestTests(type:Test) {
 
-    runTouchTests.dependsOn(getTouchGoPlan)
+//    runTouchTests.dependsOn(getTouchGoPlan)
 
     systemProperties = System.getProperties()
     useTestNG() {
@@ -194,8 +194,30 @@ task runTiePullRequestTests(type:Test) {
     }
 }
 
+task runTouchVirgunMoneyTests(type:Test){
+    systemProperties = System.getProperties()
+    doFirst {
+        useTestNG() {
+            ignoreFailures = true
+            suites baseXmlPath+tenantName+"/uitests.xml"
+            suites baseXmlPath+tenantName+"/onethreadtests.xml"
+            suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+        }
+    }
+}
+task runTouchGenBankTests(type:Test){
+    systemProperties = System.getProperties()
+    doFirst {
+        useTestNG() {
+            ignoreFailures = true
+            suites baseXmlPath+tenantName+"/uitests.xml"
+            suites baseXmlPath+tenantName+"/onethreadtests.xml"
+            suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+        }
+    }
+}
 
-// ========= !! MAIN TASK !! ============== //
+// ========= !! MAIN TASKS !! ============== //
 
 task runTests(type: Test) {
 
@@ -236,4 +258,35 @@ task runTests(type: Test) {
 
     runTests.finalizedBy(allureReport)
     defaultTasks 'clean', 'runTests'
+}
+
+task runTestsForAllTenants(type: Test) {
+    runTestsForAllTenants.dependsOn 'clean'
+    classes.mustRunAfter 'clean'
+
+    systemProperties = System.getProperties()
+    doFirst {
+        useTestNG() {
+            useDefaultListeners = true
+            ignoreFailures = true
+            suites baseXmlPath + "generalbank/mastercheck.xml"
+            suites baseXmlPath + "virgin_money/mastercheck.xml"
+            suites baseXmlPath + "generalbank/tie.xml"
+            suites baseXmlPath + "virgin_money/tie.xml"
+        }
+        reports.html.enabled = false
+//        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")
+    }
+    doLast {
+        if (!file("build/reports/tests/runTestsForAllTenants/Master check Virgin Money/testng-failed.xml").exists()){
+            tenantName="virgin_money"
+            runTouchVirgunMoneyTests.execute()
+        }
+        if (!file("build/reports/tests/runTestsForAllTenants/Master check General Bank/testng-failed.xml").exists()){
+            tenantName="generalbank"
+            runTouchGenBankTests.execute()
+        }
+        runVisibilityTests.execute()
+    }
+    runTestsForAllTenants.finalizedBy(allureReport)
 }
