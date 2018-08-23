@@ -9,6 +9,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataManager.Tenants;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
@@ -37,6 +38,13 @@ public class Hooks implements JSHelper{
 
     @Before
     public void beforeScenario(Scenario scenario){
+            if(scenario.getSourceTagNames().contains("@skip_for_demo1")){
+                if(ConfigManager.getEnv().equalsIgnoreCase("qa")) {
+                    throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
+                            " connection to DB is used and demo1 DB located in different network than other DBs");
+                }
+            }
+
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                     !scenario.getSourceTagNames().contains("@facebook") &&
                     !scenario.getSourceTagNames().contains("@twitter")) {
@@ -109,8 +117,11 @@ public class Hooks implements JSHelper{
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshot() {
-        return ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.BYTES);
-    }
+        if (DriverFactory.isTouchDriverExists()) {
+            return ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.BYTES);
+        } else{
+            return null;
+        }    }
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshotFromSecondDriver() {
@@ -157,18 +168,21 @@ public class Hooks implements JSHelper{
     }
 
     private void endTouchFlow(Scenario scenario) {
+        if (DriverFactory.isTouchDriverExists()) {
 
-        if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
-            new MainPage().openWidget();
-        }
-        try {
-            if (scenario.isFailed()) {
-                touchConsoleOutput();
-                Widget widget = new Widget();
-                widget.getWidgetFooter().enterMessage("end").sendMessage();
+            if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
+                new MainPage().openWidget();
             }
+            try {
+                if (scenario.isFailed()) {
+                    touchConsoleOutput();
+                    Widget widget = new Widget();
+                    widget.getWidgetFooter().enterMessage("end").sendMessage();
+                }
         }catch (WebDriverException e) { }
+        
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        }
     }
 
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
