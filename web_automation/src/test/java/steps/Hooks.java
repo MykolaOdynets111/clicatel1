@@ -180,7 +180,6 @@ public class Hooks implements JSHelper{
                     widget.getWidgetFooter().enterMessage("end").sendMessage();
                 }
         }catch (WebDriverException e) { }
-        
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
         }
     }
