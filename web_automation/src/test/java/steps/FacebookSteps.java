@@ -71,7 +71,7 @@ public class FacebookSteps {
     private static String createUniqueFBMessage(String baseMessage){
         Faker faker = new Faker();
         if(baseMessage.contains("thanks")) fbMessage=baseMessage;
-        else fbMessage = baseMessage + " " + faker.lorem().character();
+        else fbMessage = baseMessage + faker.lorem().character();
         return fbMessage;
     }
 
