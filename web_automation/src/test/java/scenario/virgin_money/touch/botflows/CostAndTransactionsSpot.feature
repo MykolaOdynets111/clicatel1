@@ -23,5 +23,15 @@ Feature: VM flow regarding Cost or transactions fees (spot option)
       |Do you have fees                         |
       |What fees apply on the card              |
       |How much is it to use the card overseas  |
+      |what is the cost of an atm withdrawl?    |
+
+    Scenario Outline: "Spot" flow should work for "<user message>" user message
+    When User enter <user message> into widget input field
+    Then User have to receive 'There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his 'Spot' input
+    Examples:
+      |user message       |
+      |Spot               |
+      |Spot app           |
+      |Virgin Money spot  |
 
 

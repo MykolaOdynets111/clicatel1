@@ -13,6 +13,7 @@ import org.testng.asserts.SoftAssert;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
@@ -37,18 +38,17 @@ public class BaseTieSteps {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }
         String actualSentiment = resp.getBody().jsonPath().get("sentiment_verdict");
-        List<HashMap<String, String>> intentsList = resp.getBody().jsonPath().get("intents_result.intents");
         if(expectedSentiment.toLowerCase().contains("or")){
             List<String> sentiments = Arrays.asList(expectedSentiment.toLowerCase().split(" or "));
-            soft.assertTrue(actualSentiment.equalsIgnoreCase(sentiments.get(0))||actualSentiment.equalsIgnoreCase(sentiments.get(1)),
+            Assert.assertTrue(actualSentiment.equalsIgnoreCase(sentiments.get(0))||actualSentiment.equalsIgnoreCase(sentiments.get(1)),
             "Sentiment for \""+userMessage+"\" message is not as expected: '"+expectedSentiment+"'. But found: "+actualSentiment+"");
-            soft.assertTrue(intentsList.size()==1, "There are more than 1 intent on '"+userMessage+"' user message");
-        soft.assertAll();
         } else{
             Assert.assertEquals(actualSentiment, expectedSentiment,
                     "Sentiment for \""+userMessage+"\" message is not as expected");
         }
     }
+
+
 
     @Then("^TIE returns (.*) intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
@@ -106,6 +106,32 @@ public class BaseTieSteps {
         Assert.assertTrue(entities.size()==1 && entities.containsKey(expectedEntity),
                 "Actual entity is not as expected.\n Expected "+expectedEntity+", but found "+entities.keySet()+"");
 
+    }
+
+    @Then("^TIE returns (.*) intents: \"(.*)\" on '(.*)' for (.*) tenant$")
+    public void verifyIntentsList(int numberOfIntents, List<String> expectedIntents, String userMessage, String tenant){
+        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
+        }
+        try {
+            List<HashMap<String, String>> intentsMap = resp.getBody().jsonPath().get("intents_result.intents");
+            try {
+
+                List<String> intents = intentsMap.stream().map(e -> e.get("intent")).collect(Collectors.toList());
+                Collections.sort(intents);
+                Collections.sort(expectedIntents);
+                SoftAssert soft = new SoftAssert();
+                soft.assertEquals(intents.size(), numberOfIntents,
+                        "Number of intents for '" + userMessage + "' user message is not as expected");
+                soft.assertEquals(intents, expectedIntents, "Intent in TIE response is not as expected");
+                soft.assertAll();
+            } catch (IndexOutOfBoundsException e) {
+                Assert.assertTrue(false, "There are no intents at all in TIE response for '" + userMessage + "' user message");
+            }
+        } catch (JsonPathException e) {
+            Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
+        }
     }
 
 }

@@ -54,3 +54,5 @@ Feature: User on his demand should be redirected on the agent
   Scenario: Verify user is redirected to the Agent when types negative sentiment message
     When User enter Hate your banking into widget input field
     Then Agent has new conversation request
+#    When Agent click on new conversation request from touch
+#    Then Conversation area becomes active with Hate your banking user's message
