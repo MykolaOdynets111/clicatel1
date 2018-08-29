@@ -23,7 +23,7 @@ public class MessengerWindow extends AbstractUIElement {
     @FindBy(xpath = "//ul[@role='menu']")
     private WebElement popupMenu;
 
-    @FindBy(xpath = "//span[text()='Delete Conversation...']")
+    @FindBy(xpath = "//div[@data-testid='fanta_dropdown_menu_delete_conversation']")
     private WebElement deleteConversationButton;
 
     @FindBy(xpath = "//a[text()='Delete Conversation']")
@@ -42,7 +42,7 @@ public class MessengerWindow extends AbstractUIElement {
     public void deleteConversation(){
 //        moveToElement(DriverFactory.getTouchDriverInstance(),headerActionButonsContainer);
         gearIcon.click();
-        gearIcon.click();
+        if(!isElementShown(popupMenu,2)) gearIcon.click();
         waitForElementToBeVisible(popupMenu, 9);
         deleteConversationButton.click();
         waitForElementToBeVisible(confirmDeletingConverstionButton, 9);
