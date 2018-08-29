@@ -7,7 +7,7 @@ Feature: VM flow regarding General messages
   Scenario Outline: General messages flow should work for "<user message>" user message
     When User enter <user message> into widget input field
 #    Then User have to receive 'Hi ${firstName} is there something we can help you with?' text response for his '<user message>' input
-    Then User have to receive 'Is there something else we can assist you with?' text response for his '<user message>' input
+    Then User have to receive 'Is there something we can help you with?' text response for his '<user message>' input
     Examples:
       |user message       |
       |Thumbs up emoticon |
