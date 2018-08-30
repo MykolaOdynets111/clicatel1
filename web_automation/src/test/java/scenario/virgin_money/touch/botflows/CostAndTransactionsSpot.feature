@@ -27,7 +27,7 @@ Feature: VM flow regarding Cost or transactions fees (spot option)
 
     Scenario Outline: "Spot" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
-    Then User have to receive 'There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his 'Spot' input
+    Then User have to receive 'There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his '<user message>' input
     Examples:
       |user message       |
       |Spot               |
