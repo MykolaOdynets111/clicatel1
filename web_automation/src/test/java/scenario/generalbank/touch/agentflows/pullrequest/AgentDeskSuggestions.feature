@@ -19,7 +19,7 @@ Feature: Agent suggestions
     When User enter interest rate into widget input field
     When Agent add additional info " Thanks for asking" to suggested message
     And Agent click send button
-    Then User have to receive 'You'll earn the highest interest on a transaction account  5.35% interest per year on any amount up to R10 000 is calculated daily and credited to your account monthly. If your balance is more than R10 000, a rate of 5.35% to 5.75% per year will apply to the full balance, depending on how much is in your account. To earn higher interest rates, consider opening a savings plan. Rates may change from time to time, so check our rates and fees for the latest info. Thanks for asking' text response for his 'interest rate' input
+    Then User have to receive 'You'll earn the highest interest on a transaction account  5.35% interest per year on any amount up to R10 000 is calculated daily and credited to your account monthly. If your balance is more than R10 000, a rate of 5.35% to 5.75% per year will apply to the full balance, depending on how much is in your account. To earn higher interest rates, consider opening a savings plan. Rates may change from time to time, so check our rates and fees for the latest info.\n Thanks for asking' text response for his 'interest rate' input
     When User enter i lost my card into widget input field
     Then There is correct suggestion shown on user message "i lost my card"
     And The suggestion for user message "i lost my card" with the biggest confidence is added to the input field
@@ -36,7 +36,7 @@ Feature: Agent suggestions
     And 'Clear' and 'Edit' buttons are shown
     When Agent click Edit suggestions button
     Then Agent is able to add " Please visit us."
-    Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us Please visit us.' text response for his 'trading hours' input
+    Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us\n Please visit us.' text response for his 'trading hours' input
     When User enter i lost my card into widget input field
     Then There is correct suggestion shown on user message "i lost my card"
     When Agent click Clear suggestions button

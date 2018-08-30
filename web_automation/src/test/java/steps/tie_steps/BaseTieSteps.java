@@ -1,5 +1,6 @@
 package steps.tie_steps;
 
+import api_helper.ApiHelperTie;
 import api_helper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -132,6 +133,12 @@ public class BaseTieSteps {
         } catch (JsonPathException e) {
             Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
         }
+    }
+
+    @Then("^TIE returns (.*) answer for (.*) tenant (.*) intent$")
+    public void verifYtieAnswer(String expectedAnswer,  String tenant,  String intent){
+        Assert.assertEquals(ApiHelperTie.getExpectedMessageOnIntent(tenant, intent), expectedAnswer,
+                "From TIE answer on \""+intent+"\" intent is not as expected\n");
     }
 
 }

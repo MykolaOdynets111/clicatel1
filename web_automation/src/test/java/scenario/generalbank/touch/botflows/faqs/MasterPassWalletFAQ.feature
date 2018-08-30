@@ -1,4 +1,4 @@
-Feature: General Bank FAQ: "Can I open an account if I'm not from South Africa?" intent
+Feature: General Bank FAQ: "Is my card information stored within the MasterPass wallet?" intent
 
   Background:
     Given User select General Bank Demo tenant
@@ -8,5 +8,5 @@ Feature: General Bank FAQ: "Can I open an account if I'm not from South Africa?"
     When User enter <user input> into widget input field
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
-      | user input                                                            |expected response|
-      |If I am not from South Africa and want to open a General Bank account  | If you're not from South Africa and you want to open a General Bank account , we can help you under any of the following conditions: You have a valid passport You have a valid permanent residence permit You have a temporary work permit Find out more here .|
+      | user input                                                  |expected response|
+      |Is my card information stored within the MasterPass wallet?  | No, as soon as your card information has been entered into the wallet, your card number is automatically replaced by a token. This token will be used for transactions, keeping your card information private and secure at all times.|

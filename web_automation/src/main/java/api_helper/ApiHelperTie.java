@@ -23,4 +23,9 @@ public class ApiHelperTie {
         return RestAssured.get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestOrgName(), intent)).jsonPath().get("text");
 
     }
+
+    public static String getExpectedMessageOnIntent(String tenantOrgName, String intent) {
+        return RestAssured.get(URLs.getTIEURLForAnswers(tenantOrgName, intent)).jsonPath().get("text");
+
+    }
 }
