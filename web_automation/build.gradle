@@ -142,7 +142,7 @@ task runTouchPullRequestTests(type:Test) {
     systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath+tenantName+"/uitests.xml"
+        suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
         suites baseXmlPath+tenantName+"/onethreadtests_pullrequest.xml"
 //        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
@@ -217,6 +217,16 @@ task runTouchGenBankTests(type:Test){
     }
 }
 
+task runFAQsTests(type:Test){
+    systemProperties = System.getProperties()
+    doFirst {
+        useTestNG() {
+            ignoreFailures = true
+            suites baseXmlPath+tenantName+"/faqs.xml"
+        }
+    }
+}
+
 // ========= !! MAIN TASKS !! ============== //
 
 task runTests(type: Test) {
@@ -254,6 +264,10 @@ task runTests(type: Test) {
 
     if(suite=="pullrequest") {
         runTests.dependsOn(runPullRequestTests)
+    }
+
+    if(suite=="faqs") {
+        runTests.dependsOn(runFAQsTests)
     }
 
     runTests.finalizedBy(allureReport)
