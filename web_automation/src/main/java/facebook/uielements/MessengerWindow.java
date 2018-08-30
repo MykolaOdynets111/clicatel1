@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(xpath = "//a[@data-hover='tooltip'][@data-tooltip-position='above'][not(contains(@class, 'close button'))]//ancestor::div[@role='complementary']")
+@FindBy(xpath = "//div[@class='clearfix fbNubFlyoutTitlebar titlebar']//ancestor::div[@role='complementary']")
 public class MessengerWindow extends AbstractUIElement {
 
     private String inputFieldXPATHLocator = "//div[@role='combobox']";
