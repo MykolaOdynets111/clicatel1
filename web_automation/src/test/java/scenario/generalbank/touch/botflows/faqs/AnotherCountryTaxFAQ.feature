@@ -1,4 +1,4 @@
-Feature: General Bank FAQ: "I haven't used my account for a while. Why can't I access it?" intent
+Feature: General Bank FAQ: "What are my tax obligations if I pay tax in another country?" intent
 
   Background:
     Given User select General Bank Demo tenant
@@ -9,4 +9,4 @@ Feature: General Bank FAQ: "I haven't used my account for a while. Why can't I a
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                                        |expected response|
-      |I haven't used my account for a while. Why can't I access it? |All inactive accounts become dormant after 12 months. This means that the account will be frozen for security reasons and no further transactions can be made. To prevent this, simply transact on your account at least once every 12 months. If you'd like to reactivate a dormant account, visit your nearest branch with your ID book and an original proof of residential address .|
+      |What are my tax obligations if I pay tax in another country? |If you are liable to pay tax in a country other than South Africa we need your foreign tax number. General bank is required by law to obtain certain international tax information from all our clients. The information will be reported to the relevant countries through the South African Revenue Services (SARS), based on the United States Foreign Account Tax Compliance Act (FATCA) and the Organisation for Economic Co-operation and Development (OECD) Common Reporting Standard for the Automatic Exchange of Financial Account Information. New and existing clients are required to confirm all countries other than South Africa where they are a resident for tax purposes or liable to pay tax. Clients must provide their tax identification number for the listed countries. If you are unsure of any information, please contact a professional tax consultant.|
