@@ -73,9 +73,13 @@ task getTouchGoPlan() {
     if(localTenantName.contains("_")) localTenantName = localTenantName.replace("_", "-")
     def uri = 'https://'+env+'-touch.clickatelllabs.com/internal/tenants/'+ localTenantName +'/config/'
     def headers = [ Accept: 'application/json' ]
-    def jsonText = new URL(uri).getText( requestProperties: headers )
-    def parsedJson = new JsonSlurper().parseText(jsonText) as Map
-    touchGoPlan = parsedJson.get('touchGoType')
+    try {
+        def jsonText = new URL(uri).getText(requestProperties: headers)
+        def parsedJson = new JsonSlurper().parseText(jsonText) as Map
+        touchGoPlan = parsedJson.get('touchGoType')
+    } catch(FileNotFoundException e){
+        touchGoPlan = "started"
+    }
 }
 
 // ========= !! TASKS FOR SUITES !! ============== //
