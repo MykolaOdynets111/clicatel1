@@ -39,7 +39,7 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
             if(scenario.getSourceTagNames().contains("@skip_for_demo1")){
-                if(ConfigManager.getEnv().equalsIgnoreCase("qa")) {
+                if(ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
                 }
