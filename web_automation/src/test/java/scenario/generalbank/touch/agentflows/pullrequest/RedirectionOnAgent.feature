@@ -20,8 +20,8 @@ Feature: User on his demand should be redirected on the agent
 #    When Agent responds with hello to User
 #    Then User have to receive 'hello' text response for his '<user_message>' input
 
-    Examples:
-      |user_message    |
+#    Examples:
+#      |user_message    |
 #      |connect to agent| Duplicated
 #      |chat to support |
 
