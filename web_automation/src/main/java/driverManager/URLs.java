@@ -19,6 +19,8 @@ public class URLs {
 
     private static String FINAL_AGENT_URL = null;
 
+    private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com";
+
     // ================== API BASE URLs ========================= //
 
     private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
@@ -122,5 +124,10 @@ public class URLs {
 
     public static String getPortalURL(){
         return String.format(BASE_PORTAL_URL, ConfigManager.getEnv());
+    }
+
+    public static String getBaseSocialUrl(){
+        return String.format(BASE_SOCIAL_URL, ConfigManager.getEnv());
+
     }
 }

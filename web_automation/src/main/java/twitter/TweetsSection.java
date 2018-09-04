@@ -1,6 +1,7 @@
 package twitter;
 
 import abstract_classes.AbstractPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -21,6 +22,8 @@ public class TweetsSection extends TwitterHomePage {
     private List<WebElement> timelineElemements;
 
     private String timelineElemementsCSS = "li.stream-item";
+
+    private String targetTweetXPATH = "//p[contains(@class, 'tweet-text')][contains(text(), '%s')]";
 
     private String replyPopUpInputField = "form.tweet-form.is-reply div.RichEditor-scrollContainer>div[name='tweet']";
 
@@ -79,9 +82,12 @@ public class TweetsSection extends TwitterHomePage {
 
     public OpenedTweet clickTimeLineTweetWithText(String expectedText){
         waitForElementsToBeVisible(findElemntsByCSS(timelineElemementsCSS),5);
-        findElemntsByCSS(timelineElemementsCSS).stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
-                .stream().filter(e -> e.getTweetText().contains(expectedText))
-                .findFirst().get().getWrappedElement().click();
+        findElemByXPATH(String.format(targetTweetXPATH, expectedText)).click();
+//        findElemntsByCSS(timelineElemementsCSS).stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())
+//                .stream().filter(e -> e.getTweetText().contains(expectedText))
+////                .findFirst().get().getWrappedElement().findElement(By.cssSelector("div.my-tweet")).click();
+//                        .findFirst().get().getWrappedElement().click();
+
         waitForElementToBeVisible(openedTweet);
         return getOpenedTweet();
     }

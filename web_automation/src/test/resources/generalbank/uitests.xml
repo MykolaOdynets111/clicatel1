@@ -6,4 +6,9 @@
             <class name="runner.generalbank.RunAllGenBankBotTest" />
         </classes>
     </test>
+    <test name="Social Health check">
+        <classes>
+            <class name="runner.SocialHealthCheckTest" />
+        </classes>
+    </test>
 </suite>
