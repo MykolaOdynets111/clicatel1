@@ -24,6 +24,9 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//button/span")
     private List<WebElement> buttons;
 
+    @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//div/input")
+    private List<WebElement> inputs;
+
     public ToUserMessageWithActions(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
@@ -57,5 +60,12 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
 
     public String getTextFromCard(){
         return getTextFrom(toUserMessageInCard);
+    }
+
+    public ToUserMessageWithActions fillInInputFieldWithAPlaceholder(String placeholder, String textToInput){
+        inputs.stream().filter(e -> e.getAttribute("placeholder").equalsIgnoreCase(placeholder))
+                .findFirst().get()
+                .sendKeys(textToInput);
+        return this;
     }
 }

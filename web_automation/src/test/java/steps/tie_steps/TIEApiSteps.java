@@ -118,7 +118,7 @@ public class TIEApiSteps {
                 .get(url).
         then()
                 .statusCode(200)
-                .body("size()", is(intents.size()))
+                .body("size()", is(intents.size()+1))
                 .body("intent", hasItems(targetArray));
     }
 
@@ -128,7 +128,7 @@ public class TIEApiSteps {
         when()
                 .get(url).
         then()
-                .statusCode(404);
+                .statusCode(400);
     }
 
     @When("^I want to get all categories for (.*) response has status 200$")
@@ -143,12 +143,16 @@ public class TIEApiSteps {
     @When("^I want to get all answers of (.*) category for (.*) response has status 200$")
     public void getAllCategoryAnswer(String category, String tenant){
         String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, tenant, category);
-        when()
-                .get(url).
-        then()
-                .statusCode(200)
-                .body("size()", greaterThan(0))
-                .body("category", everyItem(equalTo(category)));
+        Response resp = get(url);
+        List<String> returnedListOfCategories = resp.getBody().jsonPath().getList("category");
+        returnedListOfCategories.removeIf(Objects::isNull);
+
+        SoftAssert soft = new SoftAssert();
+
+        soft.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after trying to get all answers for '"+tenant+"' tenant, category'"+category+"'\n"+resp.getBody().asString());
+        soft.assertTrue(returnedListOfCategories.stream().allMatch(e -> e.equals(category)),
+                "Not all categories in returned answers are as expected: '"+category+"'\n"+resp.getBody().asString());
     }
 
     @When("^I Create new mapping for intent-answer pare: (.*)$")
