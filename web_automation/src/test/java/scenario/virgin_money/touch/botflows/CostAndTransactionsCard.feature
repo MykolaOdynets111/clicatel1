@@ -23,7 +23,7 @@ Feature: VM flow regarding Cost or transactions fees (card option)
       |Do you have fees                         |
       |What fees apply on the card              |
       |How much is it to use the card overseas  |
-      |what is the cost of an atm withdrawl?    |
+      |what is the cost of an atm withdrawal?    |
 
   Scenario Outline: "Credit Card" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
@@ -33,6 +33,7 @@ Feature: VM flow regarding Cost or transactions fees (card option)
       |Credit Card              |
       |virgin money credit card |
       |card                     |
+      |cc                       |
 
 
 

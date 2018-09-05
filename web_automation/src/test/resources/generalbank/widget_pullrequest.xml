@@ -11,9 +11,9 @@
             <class name="runner.generalbank.RunGenBankSmokeFAQsTest" />
         </classes>
     </test>
-    <test name="Social Health check (pull request)">
-        <classes>
-            <class name="runner.SocialHealthCheckTest" />
-        </classes>
-    </test>
+    <!--<test name="Social Health check (pull request)">-->
+        <!--<classes>-->
+            <!--<class name="runner.SocialHealthCheckTest" />-->
+        <!--</classes>-->
+    <!--</test>-->
 </suite>
