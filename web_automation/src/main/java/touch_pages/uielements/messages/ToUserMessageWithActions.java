@@ -62,6 +62,10 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
         return getTextFrom(toUserMessageInCard);
     }
 
+    public String getTextFromAboveCardButton(){
+        return getTextFrom(toUserTextMessageInCardButton);
+    }
+
     public ToUserMessageWithActions fillInInputFieldWithAPlaceholder(String placeholder, String textToInput){
         inputs.stream().filter(e -> e.getAttribute("placeholder").equalsIgnoreCase(placeholder))
                 .findFirst().get()

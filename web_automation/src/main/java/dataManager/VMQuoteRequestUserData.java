@@ -32,4 +32,9 @@ public class VMQuoteRequestUserData {
     public String getLastName() {
         return lastName;
     }
+
+    public String getWidgetPresentationOfPersonalInfoInput(){
+        return "I am " +firstName + " " + lastName + " and you can contact me on " +
+                contactNumber + " and mail me at " + email;
+    }
 }

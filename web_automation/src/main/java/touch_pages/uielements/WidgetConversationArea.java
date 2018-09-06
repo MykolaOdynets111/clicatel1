@@ -1,9 +1,8 @@
 package touch_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
-import com.github.javafaker.Faker;
+import dataManager.VMQuoteRequestUserData;
 import interfaces.WebActions;
-import interfaces.WebWait;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -14,6 +13,7 @@ import touch_pages.uielements.messages.ToUserMessageWithActions;
 import touch_pages.uielements.messages.ToUserTextMessage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(css = "div.ctl-conversation-area")
 public class WidgetConversationArea extends AbstractUIElement implements WebActions{
@@ -26,15 +26,19 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
 
     private String targetFromUserMessage = "//li[contains(@class, message-from)]//*[text()='%s']";
 
-    public String targetTextInConversationArea = "//li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod' and contains(text(), \"%s\")]";
+    private String targetTextInConversationArea = "//li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod' and contains(text(), \"%s\")]";
 
+    /*
+    Getting the last (the newest) from user message in touch with searched text
+     */
     private WebElement getFromUserWebElement(String messageText) {
         try {
-            FromUserMessage theMessage = fromUserMessages.stream().map(e -> new FromUserMessage(e))
+             List<FromUserMessage> listWithUserMessages = fromUserMessages.stream().map(FromUserMessage::new)
                     .filter(e1 -> e1.getMessageText().equals(messageText))
-                    .findFirst().get();
+                    .collect(Collectors.toList());
+            FromUserMessage theMessage = listWithUserMessages.get(listWithUserMessages.size()-1);
             return theMessage.getWrappedElement();
-        }catch (java.util.NoSuchElementException e){
+        }catch (java.util.NoSuchElementException|ArrayIndexOutOfBoundsException e1){
             Assert.assertTrue(false,
                     "Expected user message \""+messageText+"\" is not shown in widget conversation area");
             return null;
@@ -72,6 +76,10 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
 
     public String getCardTextForUserMessage(String userMessageText) {
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromCard();
+    }
+
+    public String getCardAboveButtonsTextForUserMessage(String userMessageText) {
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromAboveCardButton();
     }
 
     public boolean isCardButtonsShownFor(String userMessageText, List<String> buttons) {
@@ -113,13 +121,12 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         return false;
     }
 
-    public void submitCardWithUserInfo(String userMessageText) {
-        Faker faker = new Faker();
+    public void submitCardWithUserInfo(String userMessageText, VMQuoteRequestUserData userData) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
-                                        .fillInInputFieldWithAPlaceholder("Last Name", "AQA")
-                                        .fillInInputFieldWithAPlaceholder("Contact Number", faker.phoneNumber().cellPhone())
-                                        .fillInInputFieldWithAPlaceholder("Email", "aqa_"+System.currentTimeMillis()+"@aqa.com")
+                                        .fillInInputFieldWithAPlaceholder("Last Name", userData.getLastName())
+                                        .fillInInputFieldWithAPlaceholder("Contact Number", userData.getContactNumber())
+                                        .fillInInputFieldWithAPlaceholder("Email", userData.getEmail())
                                         .clickButton("Submit");
-int a=2;
+        int a=2;
     }
 }

@@ -443,6 +443,7 @@ public class TIEApiSteps {
         boolean updateResult=false;
         for (int i=0; i<40 ; i++){
             resp = get(String.format(Endpoints.TIE_CONFIG, newTenant));
+            if (resp.statusCode()!= 200) Assert.assertTrue(false, "Response status code is not 200\n"+resp.getBody().asString());
             if (resp.getBody().jsonPath().get(field).toString().equals(value)){
                 updateResult=true;
                 break;
@@ -474,7 +475,7 @@ public class TIEApiSteps {
     }
 
     @Then("^Trainset is added for newly created tenant$")
-    public void checkTrainsetIsAddedForNewTennant(){
+    public void checkTrainsetIsAddedForNewTenant(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         waitFor(1000);
         given()
@@ -577,7 +578,8 @@ public class TIEApiSteps {
     public void verifyTenantDeleted(String userMessage){
         SoftAssert soft = new SoftAssert();
         Response resp = RestAssured.get(URLs.getTieURL(NEW_TENANT_NAMES.get(Thread.currentThread().getId()), userMessage));
-        soft.assertTrue(resp.statusCode()!=200);
+        soft.assertTrue(resp.statusCode()!= 200,
+                "Status code is not 200 after GET request on deleted tenant"+resp.getBody().asString());
         soft.assertAll();
     }
 
