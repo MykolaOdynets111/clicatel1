@@ -57,6 +57,3 @@ Feature: VM flow regarding Claims and premiums
       |auto           |
       |household      |
       |home           |
-
-
-
