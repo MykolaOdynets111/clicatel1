@@ -170,9 +170,10 @@ public class TIEApiSteps {
         SoftAssert soft = new SoftAssert();
         Response resp = put(formURLForCreatingNewIntentAnswer(info));
         soft.assertEquals(resp.statusCode(), 404,
-                "Status code is not 404 after trying to create duplicated intent");
-        soft.assertEquals(resp.getBody().asString(), "Such intent already exists",
-                "Body does not contain expected message about already created intent");
+                "Status code is not 404 after trying to create duplicated intent\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Such intent already exists",
+                "Body does not contain expected message about already created intent\n"+
+                        resp.getBody().asString());
         soft.assertAll();
     }
 
@@ -203,7 +204,7 @@ public class TIEApiSteps {
     @Then("^Intent (.*) with the following details: (.*) is created$")
     public void verifyIntentInfo(String intent, List<String> info){
         SoftAssert soft = new SoftAssert();
-        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());;
+        String tenantID = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         String url = String.format(Endpoints.TIE_ANSWER_URL, tenantID, intent);
         Response resp = RestAssured.get(url);
         try {
@@ -281,7 +282,7 @@ public class TIEApiSteps {
 
     @When("^I want to get trainings for (.*) (?:tenant|tenants) response status should be 200 and body is not empty$")
     public void getAllTrainings(String tenant){
-        Response resp = null;
+        Response resp;
         SoftAssert soft = new SoftAssert();
         if(tenant.equalsIgnoreCase("existed")){
             String urlToGetAllTenants = String.format(Endpoints.TIE_TRAININGS, "all");
@@ -423,7 +424,7 @@ public class TIEApiSteps {
                 .statusCode(200);
     }
 
-    @When("^Status code is 400 when I add (.*) field (.*) value to the new tenant config$")
+    @When("^Status code is 404 when I add (.*) field (.*) value to the new tenant config$")
     public void invalidUpdateConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         given().log().all()
@@ -431,7 +432,7 @@ public class TIEApiSteps {
                 when()
                .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
         then()
-                .statusCode(400);
+                .statusCode(404);
     }
 
     @Then("^(.*) field with (.*) value is added to tenant config$")
@@ -489,13 +490,13 @@ public class TIEApiSteps {
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
     public void verifyRemovingItemFromConfig(String field, String value){
-        boolean isFieldPresent = false;
+        boolean isFieldPresent;
         SoftAssert soft = new SoftAssert();
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         Response resp = when()
                 .get(String.format(Endpoints.TIE_CONFIG, newTenant));
         try {
-            resp.body().jsonPath().get(field).toString();
+            resp.body().jsonPath().get(field);
             isFieldPresent = true;
         } catch (java.lang.NullPointerException e){
             isFieldPresent = false;
@@ -554,7 +555,7 @@ public class TIEApiSteps {
                     json.get("trusted_types").equals(jsonSource.get("trusted_types"))&
                     json.get("intent_confidence_threshold").equals(jsonSource.get("intent_confidence_threshold")),
                 "Config of source tenant was not applied to the new one.");
-        };
+        }
         } catch(JsonPathException e){
             Assert.assertTrue(false, "invalid JSON response. New Tetant: "+NEW_TENANT_NAMES.get(Thread.currentThread().getId())+"\n"
                     +sourceTenantResp.getBody().asString()+" original tenant TIE response \n" +
@@ -653,7 +654,9 @@ public class TIEApiSteps {
     private void waitFor(int wait){
         try {
             Thread.sleep(wait);
-        } catch (InterruptedException e) {        }
+        } catch (InterruptedException e) {
+            // Nothing to do
+        }
     }
 
 }
