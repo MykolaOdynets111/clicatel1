@@ -107,7 +107,12 @@ public interface WebActions extends WebWait {
 
     default String getTextFrom(WebElement elem) {
         try{
-            return elem.getText();
+            String text = elem.getText();
+            if(text.isEmpty()) {
+                waitFor(500);
+                text = elem.getText();
+            }
+            return text;
         } catch (NoSuchElementException e) {
             return "no element to get text from";
         }

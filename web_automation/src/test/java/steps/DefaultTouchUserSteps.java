@@ -1,10 +1,12 @@
 package steps;
 
 import api_helper.ApiHelper;
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Tenants;
+import dataManager.VMQuoteRequestUserData;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.testng.Assert;
@@ -14,10 +16,13 @@ import touch_pages.pages.Widget;
 import touch_pages.uielements.TouchActionsMenu;
 import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
+import touch_pages.uielements.messages.ToUserMessageWithActions;
 import touch_pages.uielements.messages.WelcomeMessages;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultTouchUserSteps implements JSHelper{
 
@@ -27,6 +32,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
+    private static Map<String, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
 
     @When("^User click close chat button$")
     public void closeWidget() {
@@ -310,6 +316,11 @@ public class DefaultTouchUserSteps implements JSHelper{
                 " after bot response.");
     }
 
+    @When("^User submit card with personal information after user's message: (.*)$")
+    public void fillInCardForVMQuoteRequestFlow(String userMessage){
+        widgetConversationArea.submitCardWithUserInfo(userMessage);
+    }
+
     // ======================== Touch Actions Steps ======================== //
 
     @When("^User click Touch button$")
@@ -418,5 +429,15 @@ public class DefaultTouchUserSteps implements JSHelper{
         } else{
             return widgetHeader;
         }
+    }
+
+    private void createQuoteRequesUserData(){
+//        userDataForQuoteRequest.
+//        Faker faker = new Faker();
+//        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+//                .fillInInputFieldWithAPlaceholder("Last Name", "AQA")
+//                .fillInInputFieldWithAPlaceholder("Contact Number", faker.phoneNumber().cellPhone())
+//                .fillInInputFieldWithAPlaceholder("Email", "aqa_"+System.currentTimeMillis()+"@aqa.com")
+//                .clickButton("Submit");
     }
 }

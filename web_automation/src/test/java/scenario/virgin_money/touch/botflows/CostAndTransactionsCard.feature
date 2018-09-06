@@ -23,16 +23,17 @@ Feature: VM flow regarding Cost or transactions fees (card option)
       |Do you have fees                         |
       |What fees apply on the card              |
       |How much is it to use the card overseas  |
-      |what is the cost of an atm withdrawl?    |
+      |what is the cost of an atm withdrawal?    |
 
   Scenario Outline: "Credit Card" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
     Then User have to receive 'The Virgin Money credit card is a no fees card. So we don't charge you any recurring fees for owning the card. We also don't charge you for swiping the card when making local purchases.\n\nThese are the only fees that apply:\nOnce-off initiation fee: R166.45\nATM enquiries and mini statements: R7.57\nATM withdrawals (local): R24.21\nATM cash deposits: R35.31\nCheque and cash deposits at any Absa branch: R60.53\nCash withdrawals at any Absa branch: R61.54\nLost card administration fee R166.45 (we may charge a replacement card fee or lost card administration fee at our own discretion)\nCard replacement fee R166.45 (we may charge a replacement card fee or lost card administration fee at our own discretion)\nNotifyMe: R0.55\nCurrency conversion fee: 2.75% (of the Rand value of the transaction) applies to any transaction outside of South Africa\nCashback at point-of-sale: R4.54' text response for his '<user message>' input
     Examples:
       |user message             |
-#      |Credit Card              | To be confirmed because we have separate intent credit card
+      |Credit Card              |
       |virgin money credit card |
       |card                     |
+      |cc                       |
 
 
 

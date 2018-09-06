@@ -78,7 +78,7 @@ public class TwitterSteps {
     }
 
 //    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
-    @Then("^Agent's answer arrives to twitter$")
+    @Then("^(?:Agent's|Bot's) answer arrives to twitter$")
     public void verifyReceivingAnswerInTimelineFromAgent(){
 //        if(expectedAnswer.length()>132){
 //            expectedAnswer = expectedAnswer.substring(0,131);
@@ -87,16 +87,16 @@ public class TwitterSteps {
                 "Expected tweet answer from the agent is missing after 100 secs wait");
     }
 
-    @Then("^User has to receive \"(.*)\" answer from the agent as a comment on his initial tweet (.*)$")
+    @Then("^User has to receive \"(.*)\" answer from the (?:agent|bot) as a comment on his initial tweet (.*)$")
     public void verifyFromAgentResponseAsACommentOnTweet(String expectedAgentMessage, String initialUserTweet){
         getTwitterTenantPage().getTwitterHeader().openHomePage().waitForPageToBeLoaded();
         if(initialUserTweet.contains("agent")||initialUserTweet.contains("support")){
             initialUserTweet = getCurrentConnectToAgentTweetText();
         }
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
-        if(expectedAgentMessage.length()>132){
-            expectedAgentMessage = expectedAgentMessage.substring(0,131);
-        }
+//        if(expectedAgentMessage.length()>132){
+//            expectedAgentMessage = expectedAgentMessage.substring(0,131);
+//        }
         Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,5),
                 "Agent response "+expectedAgentMessage+" for user is not shown as comment for tweet");
     }
@@ -109,6 +109,8 @@ public class TwitterSteps {
 
     @When("^Send \"(.*)\" reply on agent's tweet \"(.*)\"$")
     public void sendResponseIntoTweet(String replyMessage, String agentMessage ){
+        openedTweet.closeTweet();
+        openedTweet = getTweetsSection().clickTimeLineTweetWithText(agentMessage);
         openedTweet.sendReply(replyMessage, agentMessage);
     }
 
@@ -165,12 +167,12 @@ public class TwitterSteps {
         Faker faker = new Faker();
         int day = LocalDateTime.now().getDayOfMonth();
         if (day % 2 == 0) {
-            if (invocationCount<1) tweetMessage = "chat to agent " +  faker.lorem().character();
+            if (invocationCount<1) tweetMessage = "chat to agent" +  faker.lorem().character();
             else tweetMessage= "connect to agent " + invocationCount +  faker.lorem().character();
             invocationCount ++;
         }
         else {
-            if (invocationCount<1) tweetMessage = "chat to support " +  faker.lorem().character();
+            if (invocationCount<1) tweetMessage = "chat to support" +  faker.lorem().character();
             else tweetMessage= invocationCount +" connect to support " + invocationCount + faker.lorem().character();
             invocationCount ++;
         }

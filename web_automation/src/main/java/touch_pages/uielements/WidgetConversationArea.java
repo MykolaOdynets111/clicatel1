@@ -1,6 +1,7 @@
 package touch_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import com.github.javafaker.Faker;
 import interfaces.WebActions;
 import interfaces.WebWait;
 import org.openqa.selenium.NoSuchElementException;
@@ -39,7 +40,6 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
             return null;
         }
     }
-
 
     public String getResponseTextOnUserInput(String userMessageText) {
             return new ToUserTextMessage(getFromUserWebElement(userMessageText)).getMessageText();
@@ -111,5 +111,15 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
             }
         }
         return false;
+    }
+
+    public void submitCardWithUserInfo(String userMessageText) {
+        Faker faker = new Faker();
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                                        .fillInInputFieldWithAPlaceholder("Last Name", "AQA")
+                                        .fillInInputFieldWithAPlaceholder("Contact Number", faker.phoneNumber().cellPhone())
+                                        .fillInInputFieldWithAPlaceholder("Email", "aqa_"+System.currentTimeMillis()+"@aqa.com")
+                                        .clickButton("Submit");
+int a=2;
     }
 }

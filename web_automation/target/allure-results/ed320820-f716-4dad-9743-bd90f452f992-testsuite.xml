@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1536066764458" stop="1536066773179" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Verification that social channel is UP</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1536066764464" stop="1536066773163" status="passed">
+            <name>Check social is up</name>
+            <title>Check social is up</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1536066769589" stop="1536066771698" status="passed">
+                    <name>When Make get request for social health check returns 200 status code</name>
+                    <title>When Make get request for social health check returns 200 status code</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Check social is up"/>
+                <label name="feature" value="Verification that social channel is UP"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="20100@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Verification that social channel is UP"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

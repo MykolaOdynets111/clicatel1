@@ -6,9 +6,9 @@
             <class name="runner.generalbank.RunAgentPullRequestTest" />
         </classes>
     </test>
-    <test name="Creating new agent">
-        <classes>
-            <class name="runner.generalbank.RunPortalTest" />
-        </classes>
-    </test>
+    <!--<test name="Creating new agent">-->
+        <!--<classes>-->
+            <!--<class name="runner.generalbank.RunPortalTest" />-->
+        <!--</classes>-->
+    <!--</test>-->
 </suite>
