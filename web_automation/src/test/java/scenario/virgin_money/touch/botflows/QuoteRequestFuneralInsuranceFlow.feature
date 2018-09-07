@@ -1,4 +1,4 @@
-Feature: Quote request flow
+Feature: Quote request Funeral insurance flow
 
   Background:
     Given User select Virgin Money tenant
