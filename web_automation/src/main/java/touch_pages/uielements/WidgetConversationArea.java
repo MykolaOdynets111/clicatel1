@@ -137,4 +137,12 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
                 .fillInInputFieldWithAPlaceholder(field, value);
     }
+
+    public int getNumberOfFieldRequiredErrorsInCardOnUserMessage(String userMessageText){
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getNumberOfFieldRequiredErrors();
+    }
+
+    public boolean areFieldRequiredErrorsInCardOnUserMessageShown(String userMessageText){
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).areRequiredFieldErrorsShown();
+    }
 }

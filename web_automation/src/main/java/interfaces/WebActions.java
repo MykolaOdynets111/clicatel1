@@ -35,6 +35,14 @@ public interface WebActions extends WebWait {
 
     }
 
+    default boolean areElementsShown(List<WebElement> elements){
+        try {
+            return waitForElementsToBeVisible(elements, 5).size()>0;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShown(WebElement element){
         try {
             return waitForElementToBeVisible(element, 5).isDisplayed();

@@ -230,7 +230,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
-    @Then("^No additional card should be shown (?:on|after) user (.*) (?:message|input)$")
+    @Then("^No (?:additional card|card) should be shown (?:on|after) user (.*) (?:message|input)$")
     public void verifyNoCardIsShown(String userMessage){
         Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 6),
                 "Unexpected Card is show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -345,6 +345,22 @@ public class DefaultTouchUserSteps implements JSHelper{
         widgetConversationArea.clickSubmitButton(userMessage);
       }
 
+    @When("^(.*) field required (?:errors|error) is shown in personal info input card on user message: (.*)$")
+    public void verifyFieldRequiredErrors(int numberOfErrors, String userMessage){
+       Assert.assertEquals(widgetConversationArea.getNumberOfFieldRequiredErrorsInCardOnUserMessage(userMessage), numberOfErrors,
+               "Number of required filed errors is not as expected.");
+    }
+
+    @When("^User fill in field (.*) with '(.*)' in card on user message: (.*)$")
+    public void clickSubmitButton(String fieldName, String fieldValue, String userMessage){
+        widgetConversationArea.fillInTheField(userMessage, fieldName, fieldValue);
+    }
+
+    @Then("^No required field errors are shown in card on user message (.*)$")
+    public void verifyRequiredFieldErrorsNotShown(String userMessage){
+        Assert.assertFalse(widgetConversationArea.areFieldRequiredErrorsInCardOnUserMessageShown(userMessage),
+                "Errors about required fields are still shown");
+    }
 
     // ======================== Touch Actions Steps ======================== //
 
