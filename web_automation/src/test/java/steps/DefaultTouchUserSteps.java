@@ -340,6 +340,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         widgetConversationArea.submitCardWithUserInfo(userMessage, getUserDataForQuoteRequest(Thread.currentThread().getId()));
     }
 
+    @When("^User click 'Submit' button in the card after user message: (.*)$")
+    public void clickSubmitButton(String userMessage){
+        widgetConversationArea.clickSubmitButton(userMessage);
+      }
+
+
     // ======================== Touch Actions Steps ======================== //
 
     @When("^User click Touch button$")

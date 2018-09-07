@@ -127,6 +127,14 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
                                         .fillInInputFieldWithAPlaceholder("Contact Number", userData.getContactNumber())
                                         .fillInInputFieldWithAPlaceholder("Email", userData.getEmail())
                                         .clickButton("Submit");
-        int a=2;
+    }
+
+    public void clickSubmitButton(String userMessageText) {
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton("Submit");
+    }
+
+    public void fillInTheField(String userMessageText, String field, String value) {
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .fillInInputFieldWithAPlaceholder(field, value);
     }
 }
