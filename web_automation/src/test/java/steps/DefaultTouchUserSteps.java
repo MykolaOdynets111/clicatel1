@@ -16,7 +16,6 @@ import touch_pages.pages.Widget;
 import touch_pages.uielements.TouchActionsMenu;
 import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
-import touch_pages.uielements.messages.ToUserMessageWithActions;
 import touch_pages.uielements.messages.WelcomeMessages;
 
 import java.util.Arrays;
@@ -32,7 +31,11 @@ public class DefaultTouchUserSteps implements JSHelper{
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
-    private static Map<String, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+    private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+
+    public static VMQuoteRequestUserData getUserDataForQuoteRequest(long threadID){
+        return userDataForQuoteRequest.get(threadID);
+    }
 
     @When("^User click close chat button$")
     public void closeWidget() {
@@ -96,7 +99,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyTextResponse(String textResponse, String userInput) {
         int waitForResponse=15;
-        String expectedTextResponse = null;
+        String expectedTextResponse;
         switch (textResponse) {
             case "start new conversation":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
@@ -140,7 +143,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^User have to receive '(.*)' text response as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = null;
+        String expectedTextResponse;
         switch (textResponse) {
             case "start new conversation":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
@@ -184,6 +187,9 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){
+        if (userMessage.equalsIgnoreCase("personal info")){
+            userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
+        }
         List<String> buttons = Arrays.asList(buttonNames.split(";"));
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
@@ -195,7 +201,10 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Card with a (.*) text is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithTextShown(String cardText, String userMessage){
-        String expectedCardText = null;
+        if (userMessage.equalsIgnoreCase("personal info")){
+            userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
+        }
+        String expectedCardText;
         switch (cardText){
             case "welcome":
                 expectedCardText = ApiHelper.getTenantMessageText("first_navigation_card_title");
@@ -205,7 +214,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
         }
         if (cardText.contains("${firstName}")) {
-            cardText = cardText.replace("${firstName}", getUserNameFromLocalStorage());
+            expectedCardText = cardText.replace("${firstName}", getUserNameFromLocalStorage());
         }
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 15),
@@ -215,7 +224,13 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertAll();
     }
 
-    @Then("^No additional card should be shown (?:on|after) user (.*) (?:message|input)$")
+    @Then("^Text '(.*)' is shown above the buttons in the card on user (.*) input above$")
+    public void verifyTextShownInTheCardAboveButtons(String expectedText, String userMessage){
+        Assert.assertEquals(widgetConversationArea.getCardAboveButtonsTextForUserMessage(userMessage), expectedText,
+                "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
+    @Then("^No (?:additional card|card) should be shown (?:on|after) user (.*) (?:message|input)$")
     public void verifyNoCardIsShown(String userMessage){
         Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 6),
                 "Unexpected Card is show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -223,6 +238,9 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @When("^User click (.*) button in the card on user message (.*)$")
     public void clickButtonOnToUserCard(String buttonName, String userMessage) {
+        if (userMessage.equalsIgnoreCase("personal info")){
+            userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
+        }
         widgetConversationArea.clickOptionInTheCard(userMessage, buttonName);
     }
 
@@ -318,7 +336,30 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @When("^User submit card with personal information after user's message: (.*)$")
     public void fillInCardForVMQuoteRequestFlow(String userMessage){
-        widgetConversationArea.submitCardWithUserInfo(userMessage);
+        createQuoteRequestUserDataAndAddToTheMap();
+        widgetConversationArea.submitCardWithUserInfo(userMessage, getUserDataForQuoteRequest(Thread.currentThread().getId()));
+    }
+
+    @When("^User click 'Submit' button in the card after user message: (.*)$")
+    public void clickSubmitButton(String userMessage){
+        widgetConversationArea.clickSubmitButton(userMessage);
+      }
+
+    @When("^(.*) field required (?:errors|error) is shown in personal info input card on user message: (.*)$")
+    public void verifyFieldRequiredErrors(int numberOfErrors, String userMessage){
+       Assert.assertEquals(widgetConversationArea.getNumberOfFieldRequiredErrorsInCardOnUserMessage(userMessage), numberOfErrors,
+               "Number of required filed errors is not as expected.");
+    }
+
+    @When("^User fill in field (.*) with '(.*)' in card on user message: (.*)$")
+    public void clickSubmitButton(String fieldName, String fieldValue, String userMessage){
+        widgetConversationArea.fillInTheField(userMessage, fieldName, fieldValue);
+    }
+
+    @Then("^No required field errors are shown in card on user message (.*)$")
+    public void verifyRequiredFieldErrorsNotShown(String userMessage){
+        Assert.assertFalse(widgetConversationArea.areFieldRequiredErrorsInCardOnUserMessageShown(userMessage),
+                "Errors about required fields are still shown");
     }
 
     // ======================== Touch Actions Steps ======================== //
@@ -431,13 +472,14 @@ public class DefaultTouchUserSteps implements JSHelper{
         }
     }
 
-    private void createQuoteRequesUserData(){
-//        userDataForQuoteRequest.
-//        Faker faker = new Faker();
-//        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
-//                .fillInInputFieldWithAPlaceholder("Last Name", "AQA")
-//                .fillInInputFieldWithAPlaceholder("Contact Number", faker.phoneNumber().cellPhone())
-//                .fillInInputFieldWithAPlaceholder("Email", "aqa_"+System.currentTimeMillis()+"@aqa.com")
-//                .clickButton("Submit");
+    private void createQuoteRequestUserDataAndAddToTheMap(){
+        Faker faker = new Faker();
+        userDataForQuoteRequest.put(Thread.currentThread().getId(), new VMQuoteRequestUserData(
+                getUserNameFromLocalStorage(),                                              // first name
+                "AQA",                                                             // last name
+                String.valueOf(faker.number().randomNumber(6, false)),   // contact phone
+                "aqa_"+System.currentTimeMillis()+"@aqa.com"                          // email
+        ));
     }
+
 }

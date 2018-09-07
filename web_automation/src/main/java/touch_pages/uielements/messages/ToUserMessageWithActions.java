@@ -27,6 +27,9 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//div/input")
     private List<WebElement> inputs;
 
+    @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//div/span[contains(text(), 'is required')]")
+    private List<WebElement> fieldRequiredErrors;
+
     public ToUserMessageWithActions(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
@@ -62,10 +65,23 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
         return getTextFrom(toUserMessageInCard);
     }
 
+    public String getTextFromAboveCardButton(){
+        return getTextFrom(toUserTextMessageInCardButton);
+    }
+
     public ToUserMessageWithActions fillInInputFieldWithAPlaceholder(String placeholder, String textToInput){
         inputs.stream().filter(e -> e.getAttribute("placeholder").equalsIgnoreCase(placeholder))
                 .findFirst().get()
                 .sendKeys(textToInput);
         return this;
+    }
+
+    public int getNumberOfFieldRequiredErrors(){
+        waitForElementsToBeVisible(fieldRequiredErrors, 5);
+        return fieldRequiredErrors.size();
+    }
+
+    public boolean areRequiredFieldErrorsShown(){
+        return areElementsShown(fieldRequiredErrors);
     }
 }

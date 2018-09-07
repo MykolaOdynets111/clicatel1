@@ -1,7 +1,7 @@
 @smoke
 Feature: Bot answers regarding interest and account
 
-  Verification of basic communication between user and bot
+  Verification of communication between user and bot regarding interest and account
 
   Background:
     Given User select General Bank Demo tenant
