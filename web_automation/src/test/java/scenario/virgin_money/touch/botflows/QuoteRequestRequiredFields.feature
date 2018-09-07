@@ -1,4 +1,4 @@
-Feature: Quote request Auto Insurance flow
+Feature: Quote request: required user input fields
 
   Background:
     Given User select Virgin Money tenant

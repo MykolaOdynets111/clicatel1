@@ -93,6 +93,10 @@ public class Endpoints {
 
     public static String TIE_BASE_INTENT_ANSWER_CREATING = URLs.getBaseTieURL() + "%s/answers/?intent=%s";
 
+    public static String TIE_POST_SEMANTIC = URLs.getBaseTieURL() + "%s/chats/?q=%s";
+
+    public static String TIE_TYPE = URLs.getBaseTieURL() + "";
+
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "/actuator/health";

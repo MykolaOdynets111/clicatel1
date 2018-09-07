@@ -661,4 +661,15 @@ public class TIEApiSteps {
         }
     }
 
+    // ============================ SEMANTIC ============================ //
+    @When("^I make post request with semantic candidates$")
+    public void verifyPostSemantic(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        Response resp = given()
+                .body("{\"semantic_candidates\": [\"semantic\", \"test\"]}").
+        when()
+                .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "user input about semantic"));
+        int a =2;
+
+    }
 }
