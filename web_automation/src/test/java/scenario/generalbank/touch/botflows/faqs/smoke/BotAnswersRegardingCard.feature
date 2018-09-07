@@ -1,7 +1,7 @@
 @smoke
 Feature: Bot answers regarding card
 
-  Verification of basic communication between user and bot
+  Verification of communication between user and bot regarding card
 
   Background:
     Given User select General Bank Demo tenant

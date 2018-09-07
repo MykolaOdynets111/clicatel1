@@ -1,7 +1,7 @@
 @smoke
 Feature: Bot answers regarding branch location
 
-  Verification of basic communication between user and bot
+  Verification of communication between user and bot regarding branch location
 
   Background:
     Given User select General Bank Demo tenant
