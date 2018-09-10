@@ -141,14 +141,14 @@ task runTouchTests(type:Test) {
 
 task runTouchPullRequestTests(type:Test) {
 
-    runTouchTests.dependsOn(getTouchGoPlan)
+//    runTouchTests.dependsOn(getTouchGoPlan)
 
     systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
         suites baseXmlPath+tenantName+"/onethreadtests_pullrequest.xml"
-        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+//        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
 }
 
