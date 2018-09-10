@@ -90,6 +90,10 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         return result;
     }
 
+    public boolean isCardContainsButton(String userMessageText, String button) {
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
+    }
+
     public void  waitForSalutation() {
         try {
             waitForElementToBeVisible(salutationElement, 10);
