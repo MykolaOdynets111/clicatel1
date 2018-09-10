@@ -668,7 +668,7 @@ public class TIEApiSteps {
         Response resp = given()
                 .body("{\"semantic_candidates\": [\"semantic\", \"test\"]}").
         when()
-                .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "user input about semantic"));
+                .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "semantic message"));
         int a =2;
 
     }
