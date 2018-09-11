@@ -11,12 +11,11 @@ Feature: Testing TIE APIs
             API: GET /tenants/<tenant_name>/chats/?q=<user input>&tie_sentiment=True
     When I send "account balance" for generalbank tenant including tie_sentiment then response code is 200 and intents are not empty
 
-#    ToDo Finish this one
-#  Scenario: TIE semantic test
-#            API POST /tenants/<tenant_name>/chats/?q=<user input> data={'semantic_candidates': ['<text1>', '<text2>']}
-#    Given  I create new tenant with TIE API
-#    And Wait for a minute
-#    When I make post request with semantic candidates
+  Scenario: TIE semantic test
+            API POST /tenants/<tenant_name>/chats/?q=<user input> data={'semantic_candidates': ['<text1>', '<text2>']}
+    Given  I create new tenant with TIE API
+    And Wait for a minute
+    When I make post request with semantic candidates
 
     # ToDo: add test on GET /tenants/<tenant_name>/chats/?q=<user input>&type=<type name>
 

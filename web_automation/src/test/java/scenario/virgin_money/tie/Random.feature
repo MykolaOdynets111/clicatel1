@@ -12,5 +12,8 @@ Feature: VM: TIE sentiments and intent regarding random interactions questions
       |More               |
       |More info          |
       |like to know more  |
-      |ok                 |
       |Need help          |
+
+  Scenario: Verify if TIE sentiment is NEUTRAL or POSITIVE for the following message: "ok"
+    Then TIE sentiment is NEUTRAL or POSITIVE when I send 'ok' for Virgin Money tenant
+    And TIE returns 1 intent: "ok" on 'ok' for Virgin Money tenant
