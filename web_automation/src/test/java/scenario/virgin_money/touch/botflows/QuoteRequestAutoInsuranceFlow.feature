@@ -9,12 +9,12 @@ Feature: Quote request Auto Insurance flow
     Then Card with a Sure! Please, tell us who we are chatting to? text is shown on user quote request message
     When User submit card with personal information after user's message: quote request
     Then Card with a Hi ${firstName}, would you like a quote on car or funeral insurance? text is shown after user personal info input
-    And Card with a buttons Auto Insurance; Funeral insurance is shown after user personal info input
-    When User click Auto Insurance button in the card on user message personal info
-    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto Insurance input
-    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto Insurance input above
-    And Card with a buttons Yes; No is shown on user Auto Insurance message
-    When User click No button in the card on user message Auto Insurance
+    And Card with a buttons Auto insurance; Funeral insurance is shown after user personal info input
+    When User click Auto insurance button in the card on user message personal info
+    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto insurance input
+    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto insurance input above
+    And Card with a buttons Yes; No is shown on user Auto insurance message
+    When User click No button in the card on user message Auto insurance
     Then Card with a For the next step we need to confirm a few things: text is shown after user No input
     Then Text 'Have you or any of the main drivers made more than 3 claims in the past 12 months?' is shown above the buttons in the card on user No input above
     And Card with a buttons Yes; No is shown on user No message
@@ -30,12 +30,12 @@ Feature: Quote request Auto Insurance flow
     Then Card with a Sure! Please, tell us who we are chatting to? text is shown on user Quote Request message
     When User submit card with personal information after user's message: Quote Request
     Then Card with a Hi ${firstName}, would you like a quote on car or funeral insurance? text is shown after user personal info input
-    And Card with a buttons Auto Insurance; Funeral insurance is shown after user personal info input
-    When User click Auto Insurance button in the card on user message personal info
-    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto Insurance input
-    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto Insurance input above
-    And Card with a buttons Yes; No is shown on user Auto Insurance message
-    When User click No button in the card on user message Auto Insurance
+    And Card with a buttons Auto insurance; Funeral insurance is shown after user personal info input
+    When User click Auto insurance button in the card on user message personal info
+    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto insurance input
+    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto insurance input above
+    And Card with a buttons Yes; No is shown on user Auto insurance message
+    When User click No button in the card on user message Auto insurance
     Then Card with a For the next step we need to confirm a few things: text is shown after user No input
     Then Text 'Have you or any of the main drivers made more than 3 claims in the past 12 months?' is shown above the buttons in the card on user No input above
     And Card with a buttons Yes; No is shown on user No message
@@ -51,12 +51,12 @@ Feature: Quote request Auto Insurance flow
     Then Card with a Sure! Please, tell us who we are chatting to? text is shown on user Quote request message
     When User submit card with personal information after user's message: Quote request
     Then Card with a Hi ${firstName}, would you like a quote on car or funeral insurance? text is shown after user personal info input
-    And Card with a buttons Auto Insurance; Funeral insurance is shown after user personal info input
-    When User click Auto Insurance button in the card on user message personal info
-    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto Insurance input
-    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto Insurance input above
-    And Card with a buttons Yes; No is shown on user Auto Insurance message
-    When User click No button in the card on user message Auto Insurance
+    And Card with a buttons Auto insurance; Funeral insurance is shown after user personal info input
+    When User click Auto insurance button in the card on user message personal info
+    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto insurance input
+    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto insurance input above
+    And Card with a buttons Yes; No is shown on user Auto insurance message
+    When User click No button in the card on user message Auto insurance
     Then Card with a For the next step we need to confirm a few things: text is shown after user No input
     Then Text 'Have you or any of the main drivers made more than 3 claims in the past 12 months?' is shown above the buttons in the card on user No input above
     And Card with a buttons Yes; No is shown on user No message
@@ -68,11 +68,11 @@ Feature: Quote request Auto Insurance flow
     Then Card with a Sure! Please, tell us who we are chatting to? text is shown on user quote request message
     When User submit card with personal information after user's message: quote request
     Then Card with a Hi ${firstName}, would you like a quote on car or funeral insurance? text is shown after user personal info input
-    And Card with a buttons Auto Insurance; Funeral insurance is shown after user personal info input
-    When User click Auto Insurance button in the card on user message personal info
-    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto Insurance input
-    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto Insurance input above
-    And Card with a buttons Yes; No is shown on user Auto Insurance message
-    When User click Yes button in the card on user message Auto Insurance
+    And Card with a buttons Auto insurance; Funeral insurance is shown after user personal info input
+    When User click Auto insurance button in the card on user message personal info
+    Then Card with a For the next step we need to confirm a few things: text is shown after user Auto insurance input
+    Then Text 'Have you ever been sequestrated or liquidated (meaning the court has had to sell your stuff to pay off your debts)?' is shown above the buttons in the card on user Auto insurance input above
+    And Card with a buttons Yes; No is shown on user Auto insurance message
+    When User click Yes button in the card on user message Auto insurance
     Then User have to receive 'Sorry you are not eligible for a quote. Please call us on 0861 50 6070 for more info' text response for his 'Yes' input
 

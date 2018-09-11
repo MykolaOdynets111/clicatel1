@@ -1,6 +1,7 @@
 package steps;
 
 import api_helper.ApiHelper;
+import api_helper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -64,7 +65,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 break;
             case "Virgin Money":
                 Tenants.setTenantUnderTest("virgin-money");
-                Tenants.setTenantUnderTestOrgName("General Bank Demo");
+                Tenants.setTenantUnderTestOrgName("Virgin Money");
                 break;
         }
         //        if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
@@ -97,33 +98,52 @@ public class DefaultTouchUserSteps implements JSHelper{
 
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
-    public void verifyTextResponse(String textResponse, String userInput) {
+    public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=15;
-        String expectedTextResponse;
-        switch (textResponse) {
-            case "start new conversation":
-                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
-                break;
-            case "welcome back message":
-                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
-                break;
-            case "dynamical branch address":
-                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
-                break;
-            case "exit":
-                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
-                break;
-            case "agents_away":
-                waitForResponse = 150;
-                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
-                break;
-            default:
-                expectedTextResponse = textResponse;
-                break;
+        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
+        verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
+
+    }
+
+    /**Method for verifying TIE response in widget on user's message
+     * Method is designed to respect TIE mod for tenant under test
+     * If TIE is in semi autonomus mode we expect ONLY text response from TIE
+     * If TIE is in autonomus mode, we take into account choice card
+     * @param textResponse
+     * @param userInput
+     * @param intent - intent should be passed as it will be shown in the widget (with upper case letters where they should be)
+     */
+    @Then("^User have to receive '(.*)' text response with (.*) intent for his '(.*)' input$")
+    public void verifyTextResponseWithIntent(String textResponse, String intent, String userInput){
+        int waitForResponse=15;
+        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
+
+//      ToDo: As soon as there is an API to check the TIE mode implement the following logic
+//        String tenantTIEMode = ApiHelperTie.getTIEModeForTenant(Tenants.getTenantUnderTestOrgName()).equals("automomus")
+//        if(!isTextResponseShown & tenantTIEMode.equals("autonomus"))
+        if (!isTextResponseShown & Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
+            voidVerifyTextResponseAfterInteractionWithChoiceCard(userInput, expectedTextResponse, intent, waitForResponse);
+        } else{
+            verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
         }
-        if (textResponse.contains("${firstName}")) {
-            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
+    }
+
+    private void voidVerifyTextResponseAfterInteractionWithChoiceCard(String userInput, String expectedTextResponse, String intent, int waitForResponse){
+        widgetConversationArea = widget.getWidgetConversationArea();
+        if(!widgetConversationArea.isCardShownFor(userInput, 15)){
+            Assert.assertTrue(false, "Neither plain text, nor choice card is shown on user's input "+userInput);
         }
+        if (!widgetConversationArea.isCardContainsButton(userInput, intent)){
+            Assert.assertTrue(false, "Intent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
+
+        }
+        widgetConversationArea.clickOptionInTheCard(userInput, intent);
+        verifyTextResponse(intent, expectedTextResponse, 15);
+    }
+
+    private void verifyTextResponse(String userInput, String expectedTextResponse, int waitForResponse){
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
@@ -137,7 +157,34 @@ public class DefaultTouchUserSteps implements JSHelper{
         softAssert.assertEquals(actualCardText, expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
+    }
 
+    private String formExpectedTextResponseForBotWidget(String fromFeatureText){
+        String expectedTextResponse;
+        switch (fromFeatureText) {
+            case "start new conversation":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "welcome back message":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
+                break;
+            case "dynamical branch address":
+                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
+                break;
+            case "exit":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "agents_away":
+                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
+                break;
+            default:
+                expectedTextResponse = fromFeatureText;
+                break;
+        }
+        if (fromFeatureText.contains("${firstName}")) {
+            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
+        }
+        return expectedTextResponse;
     }
 
     @Then("^User have to receive '(.*)' text response as a second response for his '(.*)' input$")
