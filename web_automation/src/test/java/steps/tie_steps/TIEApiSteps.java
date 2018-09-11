@@ -664,15 +664,14 @@ public class TIEApiSteps {
     // ============================ SEMANTIC ============================ //
     @When("^I make post request with semantic candidates$")
     public void verifyPostSemantic(){
-//        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
 //        Headers:		Accept=*/*
 //				Content-Type=text/plain; charset=ISO-8859-1
-        String newTenant ="testing1_sitaccusamus";
         Response resp = given().header("Content-Type", "application/json").log().all()
                 .body("{\"semantic_candidates\": [\"semantic\", \"test\"]}").
         when()
                 .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "semantic"));
         Assert.assertEquals(resp.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
-                "Intent in the response is not as expected");
+                "Intent in the response is not as expected\n"+resp.getBody().asString());
     }
 }
