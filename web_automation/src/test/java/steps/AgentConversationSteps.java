@@ -12,8 +12,6 @@ import dataManager.jackson_schemas.Intent;
 import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import steps.FacebookSteps;
-import steps.TwitterSteps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
     public void verifyUserMessageOnAgentDeskFromFB(String userMessage) {
-        Assert.assertTrue(getChatBody().isUserMessageShown(FacebookSteps.getCurrentFBMessageText()),
+        Assert.assertTrue(getChatBody().isUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -68,7 +66,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^There is no from agent response added by default for (.*) message from fb user$")
     public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String userMessage) {
-        Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(FacebookSteps.getCurrentFBMessageText()),
+        Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 

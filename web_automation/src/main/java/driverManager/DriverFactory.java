@@ -122,6 +122,11 @@ public class DriverFactory {
                     +System.currentTimeMillis()+"');");
     }
 
+    public static void openTouchUrlWithPredifinedUserID(String ctlUsername) {
+        DriverFactory.getTouchDriverInstance().get(URLs.getURL());
+        JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
+        jsExec.executeScript("window.localStorage.setItem('ctlUsername', '"+ctlUsername+"');");
+    }
 
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){

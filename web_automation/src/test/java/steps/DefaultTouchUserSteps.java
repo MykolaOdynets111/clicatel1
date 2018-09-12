@@ -96,14 +96,26 @@ public class DefaultTouchUserSteps implements JSHelper{
         widgetConversationArea.waitForMessageToAppearInWidget(text);
     }
 
+    @When("^User enters message regarding (.*) into widget input field$")
+    public void enterUniqueText(String text) {
+        widgetConversationArea = widget.getWidgetConversationArea();
+        widgetConversationArea.waitForSalutation();
+        widget.getWidgetFooter().enterMessage(FacebookSteps.createUniqueUserMessage(text)).sendMessage();
+        widgetConversationArea.waitForMessageToAppearInWidget(FacebookSteps.getCurrentUserMessageText());
+    }
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=15;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
-        boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
         verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
+    }
 
+    @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
+    public void verifyResponseOnUniqueMessage(String textResponse, String userInput) {
+        int waitForResponse=15;
+        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        verifyTextResponse(FacebookSteps.getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
     }
 
     /**Method for verifying TIE response in widget on user's message
@@ -342,7 +354,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^User session is ended$")
     public void verifyUserSessionEnded(){
         boolean result = false;
-        for(int i = 0; i<10; i++){
+        for(int i = 0; i<15; i++){
             result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage())
                     .equalsIgnoreCase("terminated");
             if(result){

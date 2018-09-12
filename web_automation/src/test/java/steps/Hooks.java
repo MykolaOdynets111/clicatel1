@@ -47,7 +47,8 @@ public class Hooks implements JSHelper{
 
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                     !scenario.getSourceTagNames().contains("@facebook") &&
-                    !scenario.getSourceTagNames().contains("@twitter")) {
+                    !scenario.getSourceTagNames().contains("@twitter") &&
+                    !scenario.getSourceTagNames().contains("@predefined_user")){
 
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getAgentDriverInstance();
@@ -58,6 +59,9 @@ public class Hooks implements JSHelper{
 //                    setUpGeolocation("49.8397", "24.0297");
 //                }
             }
+        if (scenario.getSourceTagNames().contains("@predefined_user")) {
+            DriverFactory.openTouchUrlWithPredifinedUserID("testing_aqaTestUser");
+        }
             if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
