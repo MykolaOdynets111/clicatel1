@@ -99,6 +99,7 @@ public class TweetsSection extends TwitterHomePage {
 //            timelineElemements.stream().map(TimelineTweet::new).collect(Collectors.toList())
 //                    .stream().filter(e -> e.getTweetText().contains(expectedText))
 //                    .findFirst().get().clickReplyButton();
-            waitForElementToBeClickable(findElemByCSS(replyPopUpInputField)).sendKeys(reply);
+        waitForElementToBeVisibleByCss(replyPopUpInputField, 10);
+        findElemByCSS(replyPopUpInputField).sendKeys(reply);
             }
 }
