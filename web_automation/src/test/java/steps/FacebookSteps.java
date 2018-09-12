@@ -12,11 +12,13 @@ import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
 import org.testng.Assert;
 
+import javax.annotation.concurrent.GuardedBy;
+
 public class FacebookSteps {
 
     FBTenantPage fbTenantPage;
     MessengerWindow messengerWindow;
-    private static String fbMessage;
+    @GuardedBy("this") private static String fbMessage;
 
     @Given("^Open (.*) page$")
     public void openTenantPage(String tenant){
@@ -30,7 +32,7 @@ public class FacebookSteps {
     @When("^User sends message regarding (.*)")
     public void sendMessage(String message){
 //        messengerWindow.waitForWelcomeMessage(10);
-        messengerWindow.enterMessage(createUniqueFBMessage(message));
+        messengerWindow.enterMessage(createUniqueUserMessage(message));
     }
 
     @When("^User opens Messenger and send message regarding (.*)")
@@ -38,7 +40,7 @@ public class FacebookSteps {
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
 //        messengerWindow.waitForWelcomeMessage(10);
-        messengerWindow.enterMessage(createUniqueFBMessage(message));
+        messengerWindow.enterMessage(createUniqueUserMessage(message));
     }
 
 
@@ -47,8 +49,8 @@ public class FacebookSteps {
         if (expectedResponse.equalsIgnoreCase("agents_away")){
             expectedResponse = ApiHelper.getTenantMessageText("agents_away");
         }
-        Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(getCurrentFBMessageText(), expectedResponse,30),
-                "User does not receive response on the message \""+getCurrentFBMessageText()+"\" in FB messenger after 30 seconds wait.");
+        Assert.assertTrue(getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,30),
+                "User does not receive response on the message \""+ getCurrentUserMessageText()+"\" in FB messenger after 30 seconds wait.");
     }
 
 
@@ -68,14 +70,14 @@ public class FacebookSteps {
     }
 
 
-    private static String createUniqueFBMessage(String baseMessage){
+    public synchronized static String createUniqueUserMessage(String baseMessage){
         Faker faker = new Faker();
         if(baseMessage.contains("thanks")) fbMessage=baseMessage;
         else fbMessage = baseMessage + faker.lorem().character();
         return fbMessage;
     }
 
-    public static String getCurrentFBMessageText(){
+    public synchronized static String getCurrentUserMessageText(){
         return fbMessage;
     }
 
