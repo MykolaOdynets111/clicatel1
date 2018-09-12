@@ -28,4 +28,4 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |hi                                                             |hello                                                            |
       |Hi                                                             |hello                                                            |
       |interest rate                                                  |how much interest will i earn on my savings                      |
-      |how to check balance on my current account at home?            |balance check                                                    |
+      |how to check balance at home?                                  |balance check                                                    |
