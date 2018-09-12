@@ -17,6 +17,8 @@ Feature: VM flow regarding General messages
       |like to know more  |
       |ok                 |
       |Need help          |
+      |Hi                 |
+      |Hello              |
 
   Scenario Outline: General messages flow should work for "<user message>" user message
     When User enter <user message> into widget input field
