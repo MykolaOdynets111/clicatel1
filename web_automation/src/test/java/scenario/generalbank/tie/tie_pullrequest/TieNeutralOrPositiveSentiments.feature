@@ -27,5 +27,5 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |Where can I find a branch?                                     |where can i find a branch                                        |
       |hi                                                             |hello                                                            |
       |Hi                                                             |hello                                                            |
-      |interest rate                                                  |how much interest will i earn on my savings                      |
+      |interest                                                       |how much interest will i earn on my savings                      |
       |how to check balance at home?                                  |balance check                                                    |
