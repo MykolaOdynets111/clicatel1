@@ -75,6 +75,23 @@ public class BaseTieSteps {
         }
     }
 
+
+    @Then("TIE response on '(.*)' for (.*) tenant contains '(.*)' intent")
+    public void verifyTieResponseContainExpectedIntent(String userMessage,String tenant, String expectedIntent){
+        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
+        }
+        try {
+            List<String> intentsList = resp.getBody().jsonPath().getList("intents_result.intents.intent");
+            Assert.assertTrue(intentsList.contains(expectedIntent),
+                    "TIE response does not contain '"+expectedIntent+"' expected intent on '"+userMessage+"' user message\n"
+                                +resp.getBody().asString());
+        } catch (JsonPathException e) {
+            Assert.assertTrue(false, "Failed parsing JSON response. The response body: "+ resp.getBody().asString());
+        }
+    }
+
     @Then("^TIE response should have correct top intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyIntent(String expectedIntent, String userMessage, String tenant){
         Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
