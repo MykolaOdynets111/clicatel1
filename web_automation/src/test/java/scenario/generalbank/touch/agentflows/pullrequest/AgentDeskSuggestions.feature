@@ -43,12 +43,3 @@ Feature: Agent suggestions
     Then Message input field is cleared
     When Agent responds with please verify your identity to User
     Then User have to receive 'please verify your identity' text response for his 'i lost my card' input
-
-  Scenario: Suggestions should be shown in descending order by confidence
-    When User enter Chat to Support into widget input field
-    Then Agent has new conversation request
-    And Agent click on new conversation request from touch
-    When User enter some question about balance into widget input field
-    Then Conversation area contains some question about balance user's message
-    Then There is correct suggestion shown on user message "some question about balance" and sorted by confidence
-    And The suggestion for user message "some question about balance" with the biggest confidence is added to the input field
