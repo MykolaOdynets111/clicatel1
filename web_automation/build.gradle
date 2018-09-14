@@ -77,7 +77,7 @@ task getTouchGoPlan() {
         def jsonText = new URL(uri).getText(requestProperties: headers)
         def parsedJson = new JsonSlurper().parseText(jsonText) as Map
         touchGoPlan = parsedJson.get('touchGoType')
-    } catch(FileNotFoundException e){
+    } catch(FileNotFoundException|IOException e){
         touchGoPlan = "started"
     }
 }
