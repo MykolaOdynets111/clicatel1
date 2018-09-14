@@ -15,13 +15,19 @@ public class PostFeed extends AbstractUIElement {
     @FindBy(xpath = "//span[text()='Post']")
     private WebElement postButton;
 
-    private String postInputField = "//div[@role='presentation']//div[@role='textbox']";
+    @FindBy(xpath = "//div[@role='presentation']//div[@role='textbox']")
+    private WebElement postInputField;
+
+//    private String postInputField = "//div[@role='presentation']//div[@role='textbox']";
 
 
     public void makeAPost(String userPostText){
-        postArea.click();
-        waitForElementToBeVisibleByXpath(postInputField,4);
-        DriverFactory.getTouchDriverInstance().findElement(By.xpath(postInputField)).sendKeys(userPostText);
+        waitForElementToBeVisible(postInputField, 6);
+        postInputField.click();
+        postInputField.sendKeys(userPostText);
+//        postArea.click();
+//        waitForElementToBeVisibleByXpath(postInputField,4);
+//        DriverFactory.getTouchDriverInstance().findElement(By.xpath(postInputField)).sendKeys(userPostText);
         postButton.click();
         waitForElementToBeInvisible(postButton,10);
     }

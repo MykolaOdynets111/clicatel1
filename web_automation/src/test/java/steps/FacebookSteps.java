@@ -10,14 +10,18 @@ import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
+import facebook.uielements.YourPostWindow;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import javax.annotation.concurrent.GuardedBy;
+import java.util.Random;
 
 public class FacebookSteps {
 
-    FBTenantPage fbTenantPage;
-    MessengerWindow messengerWindow;
+    private FBTenantPage fbTenantPage;
+    private MessengerWindow messengerWindow;
+    private YourPostWindow yourPostWindow;
     @GuardedBy("this") private static String fbMessage;
 
     @Given("^Open (.*) page$")
@@ -54,9 +58,26 @@ public class FacebookSteps {
     }
 
 
-    @When("^User makes post message with text (.*)$")
-    public void makeAPOst(String postMessage) {
-        getFbTenantPage().getPostFeed().makeAPost(postMessage);
+    @When("^User makes post message regarding (.*)$")
+    public void makeAPost(String postMessage) {
+        getFbTenantPage().getPostFeed().makeAPost(createUniqueUserMessage(postMessage));
+    }
+
+    @Then("^Post response arrives$")
+    public void checkThatPostResponseArrives(){
+        Assert.assertTrue(getFbTenantPage().isYourPostWindowOpened(20),
+                "New window 'Your post' with user's post and the answer is not shown.");
+
+    }
+
+    @Then("^User initial message regarding (.*) with following bot response '(.*)' in comments are shown$")
+    public void verifyResponseOnUserPost(String userInitialPost, String expectedMessage){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getYourPostWindow().isYourPostWindowContainsInitialUserPostText(getCurrentUserMessageText()),
+                "User initial post '"+getCurrentUserMessageText()+"' is not shown in 'Your post' window\n");
+        soft.assertTrue(getYourPostWindow().isExpectedResponseShownInComments(expectedMessage),
+                "Expected '"+expectedMessage+"' response is not shown in comments");
+        soft.assertAll();
     }
 
     @When("^Click \"View Post\" button$")
@@ -71,9 +92,12 @@ public class FacebookSteps {
 
 
     public synchronized static String createUniqueUserMessage(String baseMessage){
-        Faker faker = new Faker();
         if(baseMessage.contains("thanks")) fbMessage=baseMessage;
-        else fbMessage = baseMessage + faker.lorem().character();
+        else {
+            Random rnd = new Random();
+            char c = (char) (rnd.nextInt(26) + 'a');
+            fbMessage = baseMessage + c;
+        }
         return fbMessage;
     }
 
@@ -101,5 +125,12 @@ public class FacebookSteps {
         }
     }
 
-
+    private YourPostWindow getYourPostWindow() {
+        if (yourPostWindow==null) {
+            yourPostWindow = getFbTenantPage().getYourPostWindow();
+            return yourPostWindow;
+        } else{
+            return yourPostWindow;
+        }
+    }
 }

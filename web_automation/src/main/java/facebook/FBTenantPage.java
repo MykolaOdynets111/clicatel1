@@ -6,6 +6,7 @@ import driverManager.DriverFactory;
 import facebook.uielements.MessengerWindow;
 import facebook.uielements.PostFeed;
 import facebook.uielements.VisitorPost;
+import facebook.uielements.YourPostWindow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,6 +28,11 @@ public class FBTenantPage extends AbstractPage {
 
     private MessengerWindow messengerWindow;
     private PostFeed postFeed;
+    private YourPostWindow yourPostWindow;
+
+    public YourPostWindow getYourPostWindow() {
+        return yourPostWindow;
+    }
 
     public MessengerWindow getMessengerWindow() {
         return messengerWindow;
@@ -41,6 +47,10 @@ public class FBTenantPage extends AbstractPage {
         return messengerWindow;
     }
 
+    public boolean isYourPostWindowOpened(int wait){
+        return isElementShown(getYourPostWindow().getWrappedElement(), wait);
+    }
+
     public void clickViewPostButton() {
         waitForElementToBeVisible(viewPostButton).click();
     }
@@ -48,7 +58,7 @@ public class FBTenantPage extends AbstractPage {
     public VisitorPost getLastVisitorPost() {
         String loggedFBUserName = FacebookUsers.getLoggedInUser().getFBUserName() +" " + FacebookUsers.getLoggedInUser().getFBUserSurname();
         List<VisitorPost> allPosts = DriverFactory.getTouchDriverInstance().findElements(By.xpath(postLocator))
-                .stream().map(e -> new VisitorPost(e)).collect(Collectors.toList());
+                .stream().map(VisitorPost::new).collect(Collectors.toList());
         List<VisitorPost> postsFromLoggedInAQAUser = allPosts.stream().filter(e-> e.getUserName().equals(loggedFBUserName)).collect(Collectors.toList());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime latestTime = null;
