@@ -1,7 +1,6 @@
 package steps;
 
 import api_helper.ApiHelper;
-import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -10,7 +9,7 @@ import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
-import facebook.uielements.YourPostWindow;
+import facebook.uielements.YourPostPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -21,7 +20,7 @@ public class FacebookSteps {
 
     private FBTenantPage fbTenantPage;
     private MessengerWindow messengerWindow;
-    private YourPostWindow yourPostWindow;
+    private YourPostPage yourPostWindow;
     @GuardedBy("this") private static String fbMessage;
 
     @Given("^Open (.*) page$")
@@ -65,13 +64,15 @@ public class FacebookSteps {
 
     @Then("^Post response arrives$")
     public void checkThatPostResponseArrives(){
-        Assert.assertTrue(getFbTenantPage().isYourPostWindowOpened(20),
+        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(20),
                 "New window 'Your post' with user's post and the answer is not shown.");
 
     }
 
     @Then("^User initial message regarding (.*) with following bot response '(.*)' in comments are shown$")
     public void verifyResponseOnUserPost(String userInitialPost, String expectedMessage){
+        getFbTenantPage().clickNewCommentNotification();
+//        getFbTenantPage().closeYourPost
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getYourPostWindow().isYourPostWindowContainsInitialUserPostText(getCurrentUserMessageText()),
                 "User initial post '"+getCurrentUserMessageText()+"' is not shown in 'Your post' window\n");
@@ -125,7 +126,7 @@ public class FacebookSteps {
         }
     }
 
-    private YourPostWindow getYourPostWindow() {
+    private YourPostPage getYourPostWindow() {
         if (yourPostWindow==null) {
             yourPostWindow = getFbTenantPage().getYourPostWindow();
             return yourPostWindow;

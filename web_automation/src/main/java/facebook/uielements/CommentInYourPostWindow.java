@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class CommentInYourPostWindow extends Widget implements WebActions {
 
-    @FindBy(xpath = "./span[@class='UFICommentBody']/span")
+    @FindBy(css = "span.UFICommentBody>span")
     private WebElement commentText;
 
     public CommentInYourPostWindow(WebElement element) {

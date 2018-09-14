@@ -6,7 +6,7 @@ import driverManager.DriverFactory;
 import facebook.uielements.MessengerWindow;
 import facebook.uielements.PostFeed;
 import facebook.uielements.VisitorPost;
-import facebook.uielements.YourPostWindow;
+import facebook.uielements.YourPostPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -24,13 +24,16 @@ public class FBTenantPage extends AbstractPage {
     @FindBy(xpath = "//a[text()='View Post.']")
     private WebElement viewPostButton;
 
+    @FindBy(xpath = "//ul/li[contains(@data-gt, 'feed_comment')]")
+    private WebElement notificationAboutNewComment;
+
     private String postLocator = "//a//ancestor::div[@class='clearfix']//ancestor::li";
 
     private MessengerWindow messengerWindow;
     private PostFeed postFeed;
-    private YourPostWindow yourPostWindow;
+    private YourPostPage yourPostWindow;
 
-    public YourPostWindow getYourPostWindow() {
+    public YourPostPage getYourPostWindow() {
         return yourPostWindow;
     }
 
@@ -47,8 +50,12 @@ public class FBTenantPage extends AbstractPage {
         return messengerWindow;
     }
 
-    public boolean isYourPostWindowOpened(int wait){
-        return isElementShown(getYourPostWindow().getWrappedElement(), wait);
+    public boolean isNotificationAboutNewCommentArrives(int wait){
+        return isElementShown(notificationAboutNewComment, wait);
+    }
+
+    public void clickNewCommentNotification(){
+        notificationAboutNewComment.click();
     }
 
     public void clickViewPostButton() {
