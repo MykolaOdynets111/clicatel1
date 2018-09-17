@@ -20,7 +20,7 @@ public class FacebookSteps {
 
     private FBTenantPage fbTenantPage;
     private MessengerWindow messengerWindow;
-    private YourPostPage yourPostWindow;
+    private YourPostPage yourPostPage;
     @GuardedBy("this") private static String fbMessage;
 
     @Given("^Open (.*) page$")
@@ -69,16 +69,28 @@ public class FacebookSteps {
 
     }
 
+    @When("^User sends a new post regarding (.*) in the same conversation$")
+    public void postIntoTheSameFBBranch(String userText){
+        getYourPostPage().makeAPost(createUniqueUserMessage(userText));
+    }
+
     @Then("^User initial message regarding (.*) with following bot response '(.*)' in comments are shown$")
     public void verifyResponseOnUserPost(String userInitialPost, String expectedMessage){
         getFbTenantPage().clickNewCommentNotification();
 //        getFbTenantPage().closeYourPost
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getYourPostWindow().isYourPostWindowContainsInitialUserPostText(getCurrentUserMessageText()),
+        soft.assertTrue(getYourPostPage().isYourPostWindowContainsInitialUserPostText(getCurrentUserMessageText()),
                 "User initial post '"+getCurrentUserMessageText()+"' is not shown in 'Your post' window\n");
-        soft.assertTrue(getYourPostWindow().isExpectedResponseShownInComments(expectedMessage),
+        soft.assertTrue(getYourPostPage().isExpectedResponseShownInComments(expectedMessage),
                 "Expected '"+expectedMessage+"' response is not shown in comments");
         soft.assertAll();
+    }
+
+    @Then("^Bot responds with '(.*)' on user additional question regarding (.*)$")
+    public void verifyBotResponseOnAdditionalUserPostInComments(String expectedResponse, String userPost){
+        getFbTenantPage().clickNewCommentNotification();
+        Assert.assertTrue(getYourPostPage().isExpectedResponseShownInSecondLevelComments(getCurrentUserMessageText(), expectedResponse),
+                "Bot response in user comment is not shown");
     }
 
     @When("^Click \"View Post\" button$")
@@ -126,12 +138,12 @@ public class FacebookSteps {
         }
     }
 
-    private YourPostPage getYourPostWindow() {
-        if (yourPostWindow==null) {
-            yourPostWindow = getFbTenantPage().getYourPostWindow();
-            return yourPostWindow;
+    private YourPostPage getYourPostPage() {
+        if (yourPostPage ==null) {
+            yourPostPage = getFbTenantPage().getYourPostWindow();
+            return yourPostPage;
         } else{
-            return yourPostWindow;
+            return yourPostPage;
         }
     }
 }

@@ -26,6 +26,15 @@ public class ApiHelperTie {
 
     public static String getExpectedMessageOnIntent(String tenantOrgName, String intent) {
         return RestAssured.get(URLs.getTIEURLForAnswers(tenantOrgName, intent)).jsonPath().get("text");
+    }
 
+    public static String getTenantConfig(String tenantName, String configName){
+        String url = String.format(Endpoints.TIE_CONFIG, tenantName);
+        return RestAssured.get(url).jsonPath().get(configName).toString();
+    }
+
+    public static double getIntentConfidenceOnUserMessage(String userMessage) {
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestOrgName(), userMessage));
+        return resp.jsonPath().getList("intents_result.intents", Intent.class).get(0).getConfidence();
     }
 }

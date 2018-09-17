@@ -3,6 +3,8 @@ package facebook.uielements;
 import abstract_classes.AbstractUIElement;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -18,8 +20,9 @@ public class YourPostPage extends AbstractUIElement {
 
     private String commentsCSS = "div[aria-label='Comment']";
 
-    private String inputField = "div.UFIAddCommentInput";
+    private String inputField = "div.UFIAddCommentInput div";
 
+    private String inputContainer = "div.UFIAddCommentInput";
 
     public boolean isYourPostWindowContainsInitialUserPostText(String initialUserPost){
         findElemByXPATH(closeYourPostPopup).click();
@@ -30,5 +33,20 @@ public class YourPostPage extends AbstractUIElement {
     public boolean isExpectedResponseShownInComments(String expectedResponse){
        return findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
                .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+    }
+
+    public void makeAPost(String message){
+        findElemByCSS(inputContainer).click();
+        findElemByCSS(inputField).sendKeys(message);
+        findElemByCSS(inputField).sendKeys(Keys.ENTER);
+        int a=2;
+    }
+
+    public boolean isExpectedResponseShownInSecondLevelComments(String usermesage, String expectedResponse){
+        WebElement userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
+                .filter(e -> e.getCommentText().equals(usermesage)).findFirst().get().getWrappedElement();
+        return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
+                .stream().map(CommentInYourPostWindow::new)
+                .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
     }
 }
