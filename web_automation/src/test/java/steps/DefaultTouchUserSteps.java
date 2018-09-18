@@ -169,9 +169,9 @@ public class DefaultTouchUserSteps implements JSHelper{
                 String textInCard = widgetConversationArea.getCardTextForUserMessage(userInput);
                 String expectedText = "Do you mean \""+intent + "\"?";
                 if(!expectedText.equals(textInCard)){
-                    Assert.assertTrue(false, "Card text on user message'"+userInput+"' is not as expected.\n" +
-                            "Expected: " +expectedText+ "\n" +
-                            "But found: " +textInCard);
+                    Assert.assertTrue(false, "Card text on user message '"+userInput+"' is not as expected.\n" +
+                            "Expected: " + expectedText + "\n" +
+                            "But found: " + textInCard + "\n");
                 }
                 widgetConversationArea.clickOptionInTheCard(userInput, "Yes");
                 verifyTextResponse("Yes", expectedTextResponse, 15);
