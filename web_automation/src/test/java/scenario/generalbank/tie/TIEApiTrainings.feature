@@ -10,7 +10,7 @@ Feature: Testing TIE APIs (Trainings)
     When I want to get trainings for existed tenant response status should be 200 and body is not empty
 
   Scenario: User should be able to fill training set with new sample text for selected intent and schedule training for created tenant
-            API POST /tenats/<tenant_name>/train
+            API POST /tenants/<tenant_name>/train
             API GET /tenants/<tenant_name>/train
     Given  I create new tenant with TIE API
     And Wait for a minute
