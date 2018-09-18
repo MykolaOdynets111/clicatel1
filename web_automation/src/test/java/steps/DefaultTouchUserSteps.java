@@ -136,23 +136,52 @@ public class DefaultTouchUserSteps implements JSHelper{
 //        String tenantTIEMode = ApiHelperTie.getTIEModeForTenant(Tenants.getTenantUnderTestOrgName()).equals("automomus")
 //        if(!isTextResponseShown & tenantTIEMode.equals("autonomus"))
         if (!isTextResponseShown & Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
-            voidVerifyTextResponseAfterInteractionWithChoiceCard(userInput, expectedTextResponse, intent, waitForResponse);
+            verifyTextResponseAfterInteractionWithChoiceCard(userInput, expectedTextResponse, intent, waitForResponse);
         } else{
             verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
         }
     }
 
-    private void voidVerifyTextResponseAfterInteractionWithChoiceCard(String userInput, String expectedTextResponse, String intent, int waitForResponse){
+    private void verifyTextResponseAfterInteractionWithChoiceCard(String userInput, String expectedTextResponse, String intent, int waitForResponse){
         widgetConversationArea = widget.getWidgetConversationArea();
         if(!widgetConversationArea.isCardShownFor(userInput, 15)){
             Assert.assertTrue(false, "Neither plain text, nor choice card is shown on user's input "+userInput);
         }
-        if (!widgetConversationArea.isCardContainsButton(userInput, intent)){
-            Assert.assertTrue(false, "Intent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
+        int intentsCount=ApiHelperTie.getListOfIntentsOnUserMessage(userInput).size();
 
+        //if tie returns more than 1 intent then choice card should be shown.
+        // And we are verifying that expected intent is among the choice options
+        if(intentsCount>1){
+            if (!widgetConversationArea.isCardContainsButton(userInput, intent)){
+                Assert.assertTrue(false, "Intent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
+
+            }
+            widgetConversationArea.clickOptionInTheCard(userInput, intent);
+            verifyTextResponse(intent, expectedTextResponse, 15);
         }
-        widgetConversationArea.clickOptionInTheCard(userInput, intent);
-        verifyTextResponse(intent, expectedTextResponse, 15);
+
+        // if tie returns 1 intent and we have card shown then we are verifying that it is
+        // confirmation card with correct intent
+        else{
+            double configConfidenceThreshold = Double.valueOf(ApiHelperTie.getTenantConfig(Tenants.getTenantUnderTest(), "intent_confidence_threshold.high_confident"));
+            double confidenceOnUserMessage = ApiHelperTie.getIntentConfidenceOnUserMessage(userInput);
+            if(confidenceOnUserMessage<configConfidenceThreshold){
+                String textInCard = widgetConversationArea.getCardTextForUserMessage(userInput);
+                String expectedText = "Do you mean \""+intent + "\"?";
+                if(!expectedText.equals(textInCard)){
+                    Assert.assertTrue(false, "Card text on user message '"+userInput+"' is not as expected.\n" +
+                            "Expected: " + expectedText + "\n" +
+                            "But found: " + textInCard + "\n");
+                }
+                widgetConversationArea.clickOptionInTheCard(userInput, "Yes");
+                verifyTextResponse("Yes", expectedTextResponse, 15);
+
+
+            } else{
+                Assert.assertTrue(false, "Unexpected card is shown as a response on '"+userInput+"' user message.");
+            }
+        }
+
     }
 
     private void verifyTextResponse(String userInput, String expectedTextResponse, int waitForResponse){

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface WebActions extends WebWait {
 
-    public default void waitFor(int milisecs){
+    default void waitFor(int milisecs){
         try {
             Thread.sleep(milisecs);
         } catch (InterruptedException e) {
@@ -46,6 +46,14 @@ public interface WebActions extends WebWait {
     default boolean isElementShown(WebElement element){
         try {
             return waitForElementToBeVisible(element, 5).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    default boolean isElementShownByXpath(String xpath, int wait){
+        try {
+            return waitForElementToBeVisible(findElemByXPATH(xpath), wait).isDisplayed();
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }

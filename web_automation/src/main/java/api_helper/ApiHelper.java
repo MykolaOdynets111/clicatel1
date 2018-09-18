@@ -26,7 +26,7 @@ public class ApiHelper {
     public static Map<String, String> getTenantInfoMap(String theValue) {
         Map<String, String> tenantsMap = new HashMap<>();
         List<HashMap> tenants = getAllTenantInfo();
-        tenants.stream().forEach(e-> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
+        tenants.forEach(e-> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
                 (String) e.get(theValue)));
         return tenantsMap;
     }
@@ -226,5 +226,11 @@ public class ApiHelper {
                 .header("Content-Type", "application/json")
                 .header("Authorization", token)
                 .get(String.format(Endpoints.AGENT_INFO, token));
+    }
+
+    public static void logoutTheAgent(String tenantOrgName) {
+        String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
+        RestAssured.given().header("Accept", "application/json")
+               .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT), tenantID);
     }
 }
