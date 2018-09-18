@@ -306,6 +306,8 @@ public class TIEApiSteps {
                 "Status code for getting training is not 200\n" +resp.getBody().asString()+"");
         soft.assertFalse(resp.getBody().asString().equals("{}"),
                 "Response body on getting training is empty\n" +resp.getBody().asString()+"");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "",
+                "Response body on getting training contains error\n" +resp.getBody().asString()+"");
         soft.assertAll();
     }
 
