@@ -320,7 +320,7 @@ public class TIEApiSteps {
                 .get(url).
         then()
                 .statusCode(200)
-                .body(tenant, equalTo("scheduled"));
+                .body("train."+ tenant, equalTo("scheduled"));
     }
 
     @Then("^Training for new tenant is scheduled$")
