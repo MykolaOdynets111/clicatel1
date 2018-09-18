@@ -252,7 +252,6 @@ public class Hooks implements JSHelper{
     }
 
     private void endTieFlow(Scenario scenario) {
-        if(!scenario.isFailed()) {
             if (!TIEApiSteps.getNewTenantNames().isEmpty()) {
                 for (long thread : TIEApiSteps.getNewTenantNames().keySet()) {
                     if (thread == Thread.currentThread().getId()) {
@@ -262,7 +261,6 @@ public class Hooks implements JSHelper{
                     }
                 }
             }
-        }
 //        TIEApiSteps.clearTenantNames();
 //        logRequest(BaseTieSteps.request);
 //        logResponse(BaseTieSteps.response);
