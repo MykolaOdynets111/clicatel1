@@ -73,6 +73,7 @@ public class FacebookSteps {
 
     @When("^User sends a new post regarding (.*) in the same conversation$")
     public void postIntoTheSameFBBranch(String userText){
+        getFbTenantPage().waitForNewPostNotificationToDisappear();
         getYourPostPage().makeAPost(createUniqueUserMessage(userText));
     }
 

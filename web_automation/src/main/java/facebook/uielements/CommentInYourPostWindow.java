@@ -3,13 +3,14 @@ package facebook.uielements;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class CommentInYourPostWindow extends Widget implements WebActions {
 
-    @FindBy(css = "span.UFICommentBody>span")
+    @FindBy(css = "span.UFICommentBody")
     private WebElement commentText;
 
     public CommentInYourPostWindow(WebElement element) {
@@ -18,7 +19,10 @@ public class CommentInYourPostWindow extends Widget implements WebActions {
     }
 
     public String getCommentText() {
-        return commentText.getAttribute("innerText");
-//        return messageText.getText();
+        try {
+            return commentText.getAttribute("innerText");
+        } catch (NoSuchElementException e){
+            return "no text in comment element";
+        }
     }
 }

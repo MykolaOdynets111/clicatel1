@@ -62,6 +62,10 @@ public class FBTenantPage extends AbstractPage {
         waitForElementToBeVisible(viewPostButton).click();
     }
 
+    public void waitForNewPostNotificationToDisappear(){
+        waitForElementToBeInvisible(notificationAboutNewComment, 5);
+    }
+
     public VisitorPost getLastVisitorPost() {
         String loggedFBUserName = FacebookUsers.getLoggedInUser().getFBUserName() +" " + FacebookUsers.getLoggedInUser().getFBUserSurname();
         List<VisitorPost> allPosts = DriverFactory.getTouchDriverInstance().findElements(By.xpath(postLocator))
@@ -84,6 +88,4 @@ public class FBTenantPage extends AbstractPage {
         }
         return targetPost;
     }
-
-
 }

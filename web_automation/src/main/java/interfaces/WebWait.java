@@ -174,6 +174,12 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
     }
 
+    default void waitForElementsToBeVisibleBycSS(String css, int time){
+        initWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(css)));
+    }
+
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){
         initWait(time).until(ExpectedConditions.invisibilityOf(element)).toString();
     }

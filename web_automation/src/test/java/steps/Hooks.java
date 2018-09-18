@@ -59,15 +59,18 @@ public class Hooks implements JSHelper{
 //                    setUpGeolocation("49.8397", "24.0297");
 //                }
             }
-        if (scenario.getSourceTagNames().contains("@predefined_user")) {
-            DriverFactory.openTouchUrlWithPredifinedUserID("testing_aqaTestUser");
-        }
+
+            if (scenario.getSourceTagNames().contains("@predefined_user")) {
+                DriverFactory.openTouchUrlWithPredifinedUserID("testing_aqaTestUser");
+            }
+
             if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
                 }
             }
+
             if (scenario.getSourceTagNames().contains("@twitter")) {
                 TwitterLoginPage.openTwitterLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
@@ -195,6 +198,7 @@ public class Hooks implements JSHelper{
                 agentHomePage.getProfileWindow().closeProfileWindow();
             }
             agentHomePage.endChat(agent);
+//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); enable after TPORT-1874 is fixed
             agentHomePage.getHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch (WebDriverException e) { }

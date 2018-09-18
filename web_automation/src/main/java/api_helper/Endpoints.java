@@ -38,6 +38,8 @@ public class Endpoints {
 
     public static String INTERNAL_TENANT_CONFIGURED_MESSAGES = URLs.getBaseInternalApiUrl() + "taf/message-responses/%s";
 
+    public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
+
     // ==================  PLATFORM ============== //
 
     public static  String PLATFORM_ACCOUNTS = URLs.getBasePlatformUrl() + "/auth/accounts";

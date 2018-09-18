@@ -14,7 +14,7 @@ public class FBLoginPage extends AbstractPage {
     @FindBy(css = "form#login_form")
     private WebElement loginForm;
 
-    @FindBy(css = "input[type='email']")
+    @FindBy(xpath = "//input[@type='email']")
     private WebElement emailInputField;
 
     @FindBy(css = "input#pass")
