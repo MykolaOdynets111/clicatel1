@@ -287,7 +287,7 @@ public class TIEApiSteps {
         if(tenant.equalsIgnoreCase("existed")){
             String urlToGetAllTenants = String.format(Endpoints.TIE_TRAININGS, "all");
             Response respToGetExistedTenant = get(urlToGetAllTenants);
-            Map<String, String> trainings = respToGetExistedTenant.getBody().jsonPath().getMap("");
+            Map<String, String> trainings = respToGetExistedTenant.getBody().jsonPath().getMap("train");
             String existedTenants = null;
             try {
                 existedTenants = new ArrayList<>(trainings.keySet()).get(0);
@@ -331,7 +331,7 @@ public class TIEApiSteps {
                 .get(url).
         then()
                 .statusCode(200)
-                .body(tenant, equalTo("scheduled"));
+                .body("train." + tenant, equalTo("scheduled"));
     }
 
     @When("^I schedule training for a new tenant$")

@@ -77,7 +77,7 @@ public class FacebookSteps {
         getYourPostPage().makeAPost(createUniqueUserMessage(userText));
     }
 
-    @Then("^User initial message regarding (.*) with following bot response '(.*)' in comments are shown$")
+    @Then("^User initial message regarding (.*) with following (?:bot|agent) response '(.*)' in comments are shown$")
     public void verifyResponseOnUserPost(String userInitialPost, String expectedMessage){
         getFbTenantPage().clickNewCommentNotification();
 //        getFbTenantPage().closeYourPost
