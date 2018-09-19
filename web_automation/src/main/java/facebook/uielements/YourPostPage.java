@@ -22,6 +22,8 @@ public class YourPostPage extends AbstractUIElement {
 
     private String inputContainer = "div.UFIAddCommentInput";
 
+    private String firstCommentOnSecondLevel = "(//following-sibling::div[contains(@class,'UFIReplyList')]/div)[1]";
+
     public boolean isYourPostWindowContainsInitialUserPostText(String initialUserPost){
         if (isElementShownByXpath(closeYourPostPopupButton, 2)) findElemByXPATH(closeYourPostPopupButton).click();
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
@@ -54,14 +56,17 @@ public class YourPostPage extends AbstractUIElement {
                     .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
         }
 
-        try {
-            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-                    .stream().map(CommentInYourPostWindow::new)
-                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
-        }catch (StaleElementReferenceException ex){
-            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-                    .stream().map(CommentInYourPostWindow::new)
-                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
-        }
+        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)));
+        WebElement firstComment =userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel));
+        return new CommentInYourPostWindow(firstComment).getCommentText().equals(expectedResponse);
+//        try {
+//            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
+//                    .stream().map(CommentInYourPostWindow::new)
+//                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+//        }catch (StaleElementReferenceException ex){
+//            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
+//                    .stream().map(CommentInYourPostWindow::new)
+//                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+//        }
     }
 }

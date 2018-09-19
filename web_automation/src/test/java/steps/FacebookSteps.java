@@ -90,7 +90,7 @@ public class FacebookSteps {
         soft.assertAll();
     }
 
-    @Then("^Bot responds with '(.*)' on user additional question regarding (.*)$")
+    @Then("^(?:Bot|Agent) responds with '(.*)' on user additional question regarding (.*)$")
     public void verifyBotResponseOnAdditionalUserPostInComments(String expectedResponse, String userPost){
         getFbTenantPage().clickNewCommentNotification();
         Assert.assertTrue(getYourPostPage().isExpectedResponseShownInSecondLevelComments(getCurrentUserMessageText(), expectedResponse),
