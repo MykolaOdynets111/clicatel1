@@ -36,6 +36,7 @@ public class YourPostPage extends AbstractUIElement {
     }
 
     public void makeAPost(String message){
+        if (isElementShownByXpath(closeYourPostPopupButton, 2)) findElemByXPATH(closeYourPostPopupButton).click();
         findElemByCSS(inputContainer).click();
         waitForElementToBeVisibleByCss(inputField,3);
         findElemByCSS(inputField).sendKeys(message);
