@@ -1,5 +1,5 @@
 @facebook
-Feature:  Bot answers on post
+Feature:  Agent answers on post
 
   Background:
     Given I login as agent of General Bank Demo

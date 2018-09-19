@@ -52,8 +52,15 @@ public class YourPostPage extends AbstractUIElement {
             userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
                     .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
         }
-        return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-                .stream().map(CommentInYourPostWindow::new)
-                .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+
+        try {
+            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
+                    .stream().map(CommentInYourPostWindow::new)
+                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+        }catch (StaleElementReferenceException ex){
+            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
+                    .stream().map(CommentInYourPostWindow::new)
+                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+        }
     }
 }
