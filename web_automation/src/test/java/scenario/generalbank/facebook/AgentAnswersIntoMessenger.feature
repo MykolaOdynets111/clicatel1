@@ -1,5 +1,6 @@
 @agent_to_user_conversation
 @facebook
+@fb_dm
 Feature: Communication between user and agent in FB messenger
 
   Background:

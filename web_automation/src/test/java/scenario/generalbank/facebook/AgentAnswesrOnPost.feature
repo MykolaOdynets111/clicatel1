@@ -1,4 +1,6 @@
+@agent_to_user_conversation
 @facebook
+@fb_post
 Feature:  Agent answers on post
 
   Background:

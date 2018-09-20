@@ -33,7 +33,7 @@ public class FBTenantPage extends AbstractPage {
     private PostFeed postFeed;
     private YourPostPage yourPostWindow;
 
-    public YourPostPage getYourPostWindow() {
+    public YourPostPage getYourPostPage() {
         return yourPostWindow;
     }
 

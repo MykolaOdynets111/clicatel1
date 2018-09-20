@@ -1,4 +1,5 @@
 @facebook
+@fb_post
 Feature:  Bot answers on post
 
   Scenario: Bot should answer with comment on users's post

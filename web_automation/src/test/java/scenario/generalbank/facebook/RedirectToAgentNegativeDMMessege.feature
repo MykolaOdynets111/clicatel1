@@ -1,5 +1,6 @@
 @agent_to_user_conversation
 @facebook
+@fb_dm
 Feature: Redirection to the agent negative DM fb message
 
   Background:

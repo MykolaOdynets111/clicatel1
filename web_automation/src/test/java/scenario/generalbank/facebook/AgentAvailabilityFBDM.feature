@@ -1,5 +1,6 @@
 @agent_to_user_conversation
 @facebook
+@fb_dm
 Feature: Agent availability in terms of fb direct messages
 
   Background:

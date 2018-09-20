@@ -144,7 +144,7 @@ public class FacebookSteps {
 
     private YourPostPage getYourPostPage() {
         if (yourPostPage ==null) {
-            yourPostPage = getFbTenantPage().getYourPostWindow();
+            yourPostPage = getFbTenantPage().getYourPostPage();
             return yourPostPage;
         } else{
             return yourPostPage;
