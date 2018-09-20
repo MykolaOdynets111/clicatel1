@@ -9,8 +9,10 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
 
-public class YourPostPage extends AbstractPage {
+
+public class FBYourPostPage extends AbstractPage {
 
     private String closeYourPostPopupButton = "(//div[contains(@class, 'titlebarLabel clearfix')])[2]";
 
@@ -32,6 +34,17 @@ public class YourPostPage extends AbstractPage {
     @FindBy(xpath = "//div[@class='uiContextualLayerPositioner uiLayer']//div[@class='uiContextualLayer uiContextualLayerBelowRight']")
     private WebElement contextLayover;
 
+    @FindBy(xpath = "//div[@class='uiContextualLayerPositioner uiLayer']//div[@class='uiContextualLayer uiContextualLayerBelowRight']//ul[@role='menu']//a[@role='menuitem']/span")
+    private List<WebElement> contextLayoverButtons;
+
+    @FindBy(xpath = "//form[descendant::h3]")
+    private WebElement deletePostConfirmationPopup;
+
+    private String deletePostConfirmationPopupXPATH = "//form[descendant::h3]";
+
+    @FindBy(xpath = "//form[descendant::h3]//button")
+    private WebElement confirmDeleteButton;
+
     public boolean isYourPostWindowContainsInitialUserPostText(String initialUserPost){
         if (isElementShownByXpath(closeYourPostPopupButton, 2)) findElemByXPATH(closeYourPostPopupButton).click();
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
@@ -51,6 +64,16 @@ public class YourPostPage extends AbstractPage {
         waitForElementToBeVisibleByCss(inputField,3);
         findElemByCSS(inputField).sendKeys(message);
         findElemByCSS(inputField).sendKeys(Keys.ENTER);
+    }
+
+    public void deletePost(){
+        treeDotsButton.click();
+        waitForElementToBeVisible(contextLayover, 5);
+        contextLayoverButtons.stream().filter(e -> e.getText().equalsIgnoreCase("Delete"))
+                .findFirst().get().click();
+        waitForElementToBeVisible(deletePostConfirmationPopup, 5);
+        confirmDeleteButton.click();
+        waitForElementToBeInVisibleByXpath(deletePostConfirmationPopupXPATH, 25);
     }
 
     public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){

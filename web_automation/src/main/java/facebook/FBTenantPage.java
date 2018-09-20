@@ -30,13 +30,13 @@ public class FBTenantPage extends AbstractPage {
 
     private MessengerWindow messengerWindow;
     private PostFeed postFeed;
-    private YourPostPage yourPostPage;
+    private FBYourPostPage FBYourPostPage;
 
-    public YourPostPage getYourPostPage() {
-        if(yourPostPage==null){
-            yourPostPage = new YourPostPage();
+    public FBYourPostPage getFBYourPostPage() {
+        if(FBYourPostPage ==null){
+            FBYourPostPage = new FBYourPostPage();
         }
-        return yourPostPage;
+        return FBYourPostPage;
     }
 
     public MessengerWindow getMessengerWindow() {

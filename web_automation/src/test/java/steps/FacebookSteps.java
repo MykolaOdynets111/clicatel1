@@ -9,7 +9,7 @@ import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
-import facebook.YourPostPage;
+import facebook.FBYourPostPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -20,7 +20,7 @@ public class FacebookSteps {
 
     private FBTenantPage fbTenantPage;
     private MessengerWindow messengerWindow;
-    private YourPostPage yourPostPage;
+    private FBYourPostPage FBYourPostPage;
     @GuardedBy("this") private static String fbMessage;
 
     @Given("^Open (.*) page$")
@@ -75,7 +75,7 @@ public class FacebookSteps {
     public void postIntoTheSameFBBranch(String userText){
         if(getFbTenantPage().isNotificationAboutNewCommentArrives(2)) getFbTenantPage().clickNewCommentNotification();
         getFbTenantPage().waitForNewPostNotificationToDisappear();
-        getYourPostPage().makeAPost(createUniqueUserMessage(userText));
+        getFBYourPostPage().makeAPost(createUniqueUserMessage(userText));
     }
 
     @Then("^User initial message regarding (.*) with following (?:bot|agent) response '(.*)' in comments are shown$")
@@ -83,9 +83,9 @@ public class FacebookSteps {
         getFbTenantPage().clickNewCommentNotification();
 //        getFbTenantPage().closeYourPost
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getYourPostPage().isYourPostWindowContainsInitialUserPostText(getCurrentUserMessageText()),
+        soft.assertTrue(getFBYourPostPage().isYourPostWindowContainsInitialUserPostText(getCurrentUserMessageText()),
                 "User initial post '"+getCurrentUserMessageText()+"' is not shown in 'Your post' window\n");
-        soft.assertTrue(getYourPostPage().isExpectedResponseShownInComments(expectedMessage),
+        soft.assertTrue(getFBYourPostPage().isExpectedResponseShownInComments(expectedMessage),
                 "Expected '"+expectedMessage+"' response is not shown in comments");
         soft.assertAll();
     }
@@ -93,7 +93,7 @@ public class FacebookSteps {
     @Then("^(?:Bot|Agent) responds with '(.*)' on user additional question regarding (.*)$")
     public void verifyBotResponseOnAdditionalUserPostInComments(String expectedResponse, String userPost){
         getFbTenantPage().clickNewCommentNotification();
-        Assert.assertTrue(getYourPostPage().isExpectedResponseShownInSecondLevelComments(getCurrentUserMessageText(), expectedResponse),
+        Assert.assertTrue(getFBYourPostPage().isExpectedResponseShownInSecondLevelComments(getCurrentUserMessageText(), expectedResponse),
                 "Bot response in user comment is not shown");
     }
 
@@ -142,12 +142,12 @@ public class FacebookSteps {
         }
     }
 
-    private YourPostPage getYourPostPage() {
-        if (yourPostPage ==null) {
-            yourPostPage = getFbTenantPage().getYourPostPage();
-            return yourPostPage;
+    private FBYourPostPage getFBYourPostPage() {
+        if (FBYourPostPage ==null) {
+            FBYourPostPage = getFbTenantPage().getFBYourPostPage();
+            return FBYourPostPage;
         } else{
-            return yourPostPage;
+            return FBYourPostPage;
         }
     }
 }
