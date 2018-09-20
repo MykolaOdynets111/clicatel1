@@ -49,6 +49,8 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelper.logoutTheAgent(tenantOrgName);
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }

@@ -50,28 +50,13 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Given("^User select (.*) tenant$")
     public void selectTenant(String tenantOrgName) {
-        setTenantUnderTestName(tenantOrgName);
+        Tenants.setTenantUnderTestNames(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
         ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
         ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
         getMainPage().selectTenant(tenantOrgName);
     }
 
-    private void setTenantUnderTestName(String tenantOrgName){
-        switch (tenantOrgName) {
-            case "General Bank Demo":
-                Tenants.setTenantUnderTest("generalbank");
-                Tenants.setTenantUnderTestOrgName("General Bank Demo");
-                break;
-            case "Virgin Money":
-                Tenants.setTenantUnderTest("virgin-money");
-                Tenants.setTenantUnderTestOrgName("Virgin Money");
-                break;
-        }
-        //        if(tenantName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
-//            tenantName="Standard Bank";
-//        }
-    }
 
     @Given("^Click chat icon$")
     public void clickChatIcon() {

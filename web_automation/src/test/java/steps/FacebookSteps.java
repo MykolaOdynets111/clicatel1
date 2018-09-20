@@ -26,10 +26,7 @@ public class FacebookSteps {
     @Given("^Open (.*) page$")
     public void openTenantPage(String tenant){
        FBHomePage.openTenantPage(URLs.getFBPageURL(tenant));
-       if(tenant.equals("General Bank Demo")){
-           Tenants.setTenantUnderTest("generalbank");
-           Tenants.setTenantUnderTestOrgName("General Bank Demo");
-       }
+       Tenants.setTenantUnderTestNames(tenant);
     }
 
     @When("^User sends message regarding (.*)")
