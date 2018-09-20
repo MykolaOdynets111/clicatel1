@@ -6,7 +6,6 @@ import driverManager.DriverFactory;
 import facebook.uielements.MessengerWindow;
 import facebook.uielements.PostFeed;
 import facebook.uielements.VisitorPost;
-import facebook.uielements.YourPostPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -31,10 +30,13 @@ public class FBTenantPage extends AbstractPage {
 
     private MessengerWindow messengerWindow;
     private PostFeed postFeed;
-    private YourPostPage yourPostWindow;
+    private YourPostPage yourPostPage;
 
     public YourPostPage getYourPostPage() {
-        return yourPostWindow;
+        if(yourPostPage==null){
+            yourPostPage = new YourPostPage();
+        }
+        return yourPostPage;
     }
 
     public MessengerWindow getMessengerWindow() {

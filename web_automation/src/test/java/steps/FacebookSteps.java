@@ -9,7 +9,7 @@ import driverManager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
-import facebook.uielements.YourPostPage;
+import facebook.YourPostPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 

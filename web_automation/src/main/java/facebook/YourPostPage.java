@@ -1,14 +1,16 @@
-package facebook.uielements;
+package facebook;
 
+import abstract_classes.AbstractPage;
 import abstract_classes.AbstractUIElement;
+import facebook.uielements.CommentInYourPostWindow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(css = "div#stream_pagelet")
-public class YourPostPage extends AbstractUIElement {
+
+public class YourPostPage extends AbstractPage {
 
     private String closeYourPostPopupButton = "(//div[contains(@class, 'titlebarLabel clearfix')])[2]";
 
@@ -23,6 +25,12 @@ public class YourPostPage extends AbstractUIElement {
     private String inputContainer = "div.UFIAddCommentInput";
 
     private String firstCommentOnSecondLevel = "(//following-sibling::div[contains(@class,'UFIReplyList')]/div)[1]";
+
+    @FindBy(css = "a[data-testid='post_chevron_button']")
+    private WebElement treeDotsButton;
+
+    @FindBy(xpath = "//div[@class='uiContextualLayerPositioner uiLayer']//div[@class='uiContextualLayer uiContextualLayerBelowRight']")
+    private WebElement contextLayover;
 
     public boolean isYourPostWindowContainsInitialUserPostText(String initialUserPost){
         if (isElementShownByXpath(closeYourPostPopupButton, 2)) findElemByXPATH(closeYourPostPopupButton).click();
