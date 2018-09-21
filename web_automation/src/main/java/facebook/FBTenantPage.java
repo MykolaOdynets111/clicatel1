@@ -68,7 +68,7 @@ public class FBTenantPage extends AbstractPage {
 
     public void waitForNewPostNotificationToDisappear(){
         if (isElementShownByXpath(newPostResponseCloseNotificationButton, 5)) findElemByXPATH(newPostResponseCloseNotificationButton).click();
-        waitForElementToBeInvisible(notificationAboutNewComment, 5);
+        waitForElementToBeInVisibleByXpath(newPostResponseCloseNotificationButton, 10);
     }
 
     public VisitorPost getLastVisitorPost() {
