@@ -2,6 +2,7 @@ package facebook;
 
 import abstract_classes.AbstractPage;
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
 import facebook.uielements.CommentInYourPostWindow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -67,6 +68,7 @@ public class FBYourPostPage extends AbstractPage {
     }
 
     public void deletePost(){
+        scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
         treeDotsButton.click();
         waitForElementToBeVisible(contextLayover, 5);
         contextLayoverButtons.stream().filter(e -> e.getText().equalsIgnoreCase("Delete"))
