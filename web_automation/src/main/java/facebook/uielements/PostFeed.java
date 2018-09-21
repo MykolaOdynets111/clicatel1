@@ -1,11 +1,7 @@
 package facebook.uielements;
-
 import abstract_classes.AbstractUIElement;
-import driverManager.DriverFactory;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 @FindBy(xpath = "//div[@id='PageComposerPagelet_']")
 public class PostFeed extends AbstractUIElement {
 
@@ -18,16 +14,13 @@ public class PostFeed extends AbstractUIElement {
     @FindBy(xpath = "//div[@role='presentation']//div[@role='textbox']")
     private WebElement postInputField;
 
-//    private String postInputField = "//div[@role='presentation']//div[@role='textbox']";
-
+    private String closeDMPopupButton = "//a[@aria-label='Close tab']";
 
     public void makeAPost(String userPostText){
         waitForElementToBeVisible(postInputField, 6);
         postInputField.click();
         postInputField.sendKeys(userPostText);
-//        postArea.click();
-//        waitForElementToBeVisibleByXpath(postInputField,4);
-//        DriverFactory.getTouchDriverInstance().findElement(By.xpath(postInputField)).sendKeys(userPostText);
+        if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
         postButton.click();
         waitForElementToBeInvisible(postButton,10);
     }

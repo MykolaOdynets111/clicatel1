@@ -28,6 +28,8 @@ public class FBTenantPage extends AbstractPage {
 
     private String postLocator = "//a//ancestor::div[@class='clearfix']//ancestor::li";
 
+    private String newPostResponseCloseNotificationButton = "//button[@title='Close']";
+
     private MessengerWindow messengerWindow;
     private PostFeed postFeed;
     private FBYourPostPage FBYourPostPage;
@@ -65,6 +67,7 @@ public class FBTenantPage extends AbstractPage {
     }
 
     public void waitForNewPostNotificationToDisappear(){
+        if (isElementShownByXpath(newPostResponseCloseNotificationButton, 5)) findElemByXPATH(newPostResponseCloseNotificationButton).click();
         waitForElementToBeInvisible(notificationAboutNewComment, 5);
     }
 
