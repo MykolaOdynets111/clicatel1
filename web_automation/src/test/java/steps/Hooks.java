@@ -210,7 +210,8 @@ public class Hooks implements JSHelper{
             try {
                 if(scenario.getSourceTagNames().contains("@fb_dm")) {
                     new FBTenantPage().getMessengerWindow().deleteConversation();
-                } else{
+                }
+                if(scenario.getSourceTagNames().contains("@fb_post")){
                     new FBTenantPage().getFBYourPostPage().deletePost();
                 }
 

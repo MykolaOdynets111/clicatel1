@@ -75,6 +75,11 @@ public class FacebookSteps {
         getFBYourPostPage().makeAPost(createUniqueUserMessage(userText));
     }
 
+    @When("Delete users post")
+    public void deleteUserPost(){
+        getFbTenantPage().getFBYourPostPage().deletePost();
+    }
+
     @Then("^User initial message regarding (.*) with following (?:bot|agent) response '(.*)' in comments are shown$")
     public void verifyResponseOnUserPost(String userInitialPost, String expectedMessage){
         getFbTenantPage().clickNewCommentNotification();

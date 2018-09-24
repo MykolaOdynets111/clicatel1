@@ -189,15 +189,27 @@ public class DefaultAgentSteps implements JSHelper {
     }
 
     @Then("^(.*) has new conversation request from (.*) user$")
-    public void verifyAgentHasRequestFormTwitterUser(String agent, String chanel){
+    public void verifyAgentHasRequestFormSocialUser(String agent, String social){
                 agentHomePage = getAgentHomePage(agent);
                 leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
                 String userName=null;
-                if (chanel.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
-                if(chanel.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
+                if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
+                if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,60),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
+
+    @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
+    public void verifyAgentHasRequestFormSocialUser(String agent, String social, String channel){
+        agentHomePage = getAgentHomePage(agent);
+        leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
+        String userName=null;
+        if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
+        if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,60),
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
