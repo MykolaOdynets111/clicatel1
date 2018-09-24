@@ -131,8 +131,8 @@ public class DriverFactory {
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){
         try {
-            return new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities);
-//            return new RemoteWebDriver(new URL("http://35.164.148.100:4441/wd/hub"), capabilities);
+//            return new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities);
+            return new RemoteWebDriver(new URL("http://35.164.148.100:4441/wd/hub"), capabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
