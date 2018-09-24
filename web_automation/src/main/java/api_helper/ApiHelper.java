@@ -231,6 +231,6 @@ public class ApiHelper {
     public static void logoutTheAgent(String tenantOrgName) {
         String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
         RestAssured.given().header("Accept", "application/json")
-               .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT), tenantID);
+               .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT, tenantID));
     }
 }

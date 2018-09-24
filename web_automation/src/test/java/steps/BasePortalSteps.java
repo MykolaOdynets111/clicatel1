@@ -16,7 +16,7 @@ public class BasePortalSteps {
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
-        Tenants.setTenantUnderTestOrgName(tenantOrgName);
+        Tenants.setTenantUnderTestNames(tenantOrgName);
         agentEmail = "aqa_"+System.currentTimeMillis()+"@aqa.com";
         ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, agentEmail);
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), agentEmail);
@@ -41,10 +41,6 @@ public class BasePortalSteps {
     }
 
     public static boolean isNewUserWasCreated(){
-        if(agentEmail==null){
-            return false;
-        } else{
-            return true;
-        }
+        return agentEmail != null;
     }
 }

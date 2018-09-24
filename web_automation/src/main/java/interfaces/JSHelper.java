@@ -2,6 +2,7 @@ package interfaces;
 
 import driverManager.DriverFactory;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public interface JSHelper {
@@ -35,5 +36,10 @@ public interface JSHelper {
     default String getUserNameFromLocalStorage(){
         JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
         return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+    }
+
+    default void scrollPageToTheTop(WebDriver driver){
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("window.scrollBy(0,-250)", "");
     }
 }

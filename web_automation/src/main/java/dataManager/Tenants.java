@@ -12,11 +12,11 @@ public class Tenants {
     private static String TENANT_UNDER_TEST = "";
     private static String TENANT_UNDER_TEST_ORG_NAME = "";
 
-    public static void setTenantUnderTestOrgName(String orgName){
+    private static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME=orgName;
     }
 
-    public static void setTenantUnderTest(String tenantName){
+    private static void setTenantUnderTest(String tenantName){
         TENANT_UNDER_TEST=tenantName;
     }
 
@@ -50,5 +50,18 @@ public class Tenants {
             respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName);
         }
             return respWithAgentInfo;
+    }
+
+    public static void setTenantUnderTestNames(String tenantOrgName) {
+        switch (tenantOrgName) {
+            case "General Bank Demo":
+                Tenants.setTenantUnderTest("generalbank");
+                Tenants.setTenantUnderTestOrgName("General Bank Demo");
+                break;
+            case "Virgin Money":
+                Tenants.setTenantUnderTest("virgin-money");
+                Tenants.setTenantUnderTestOrgName("Virgin Money");
+                break;
+        }
     }
 }

@@ -194,24 +194,11 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            if(!agent.equalsIgnoreCase("second agent") && agentHomePage.isProfileWindowOpened(agent)){
-                agentHomePage.getProfileWindow().closeProfileWindow();
-            }
             agentHomePage.endChat(agent);
-//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); enable after TPORT-1874 is fixed
-            agentHomePage.getHeader().logOut(agent);
+            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch (WebDriverException e) { }
     }
-
-
-//    private void finishAgentFlowIfExists() {
-//        if (DriverFactory.isSecondDriverExists()) {
-//            takeScreenshotFromSecondDriver();
-//            closePopupsIfOpenedEndChatAndlogoutAgent();
-//            DriverFactory.closeSecondBrowser();
-//        }
-//    }
 
     private void finishVisibilityFlow() {
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
@@ -221,7 +208,12 @@ public class Hooks implements JSHelper{
 
     private void endFacebookFlow(Scenario scenario) {
             try {
-                new FBTenantPage().getMessengerWindow().deleteConversation();
+                if(scenario.getSourceTagNames().contains("@fb_dm")) {
+                    new FBTenantPage().getMessengerWindow().deleteConversation();
+                } else{
+                    new FBTenantPage().getFBYourPostPage().deletePost();
+                }
+
             } catch (WebDriverException e) { }
         }
 
@@ -229,14 +221,6 @@ public class Hooks implements JSHelper{
         if (DriverFactory.isTouchDriverExists()) {
             DriverFactory.closeTouchBrowser();
         }
-    }
-
-    private void logoutAgent() {
-        try {
-            AgentHomePage agentHomePage =  new AgentHomePage("main agent");
-            agentHomePage.getHeader().logOut("main agent");
-            new AgentLoginPage("one agent").waitForLoginPageToOpen("main agent");
-        } catch (WebDriverException e) { }
     }
 
     private void endTwitterFlow() {

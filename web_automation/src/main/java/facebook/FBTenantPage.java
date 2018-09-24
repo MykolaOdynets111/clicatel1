@@ -6,7 +6,6 @@ import driverManager.DriverFactory;
 import facebook.uielements.MessengerWindow;
 import facebook.uielements.PostFeed;
 import facebook.uielements.VisitorPost;
-import facebook.uielements.YourPostPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,12 +28,17 @@ public class FBTenantPage extends AbstractPage {
 
     private String postLocator = "//a//ancestor::div[@class='clearfix']//ancestor::li";
 
+    private String newPostResponseCloseNotificationButton = "//button[@title='Close']";
+
     private MessengerWindow messengerWindow;
     private PostFeed postFeed;
-    private YourPostPage yourPostWindow;
+    private FBYourPostPage FBYourPostPage;
 
-    public YourPostPage getYourPostWindow() {
-        return yourPostWindow;
+    public FBYourPostPage getFBYourPostPage() {
+        if(FBYourPostPage ==null){
+            FBYourPostPage = new FBYourPostPage();
+        }
+        return FBYourPostPage;
     }
 
     public MessengerWindow getMessengerWindow() {
@@ -63,7 +67,8 @@ public class FBTenantPage extends AbstractPage {
     }
 
     public void waitForNewPostNotificationToDisappear(){
-        waitForElementToBeInvisible(notificationAboutNewComment, 5);
+        if (isElementShownByXpath(newPostResponseCloseNotificationButton, 5)) findElemByXPATH(newPostResponseCloseNotificationButton).click();
+        waitForElementToBeInVisibleByXpath(newPostResponseCloseNotificationButton, 10);
     }
 
     public VisitorPost getLastVisitorPost() {

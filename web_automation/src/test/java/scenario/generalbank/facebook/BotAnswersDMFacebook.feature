@@ -1,4 +1,5 @@
 @facebook
+@fb_dm
 Feature: Bot answers in messenger
 
   Scenario: Communication between fb user and bot in DM

@@ -16,7 +16,7 @@ public class WidgetVisibilitySteps {
 
     @Given("^Following widget time availability for (.*) is selected: (.*)$")
     public void setUpWidgetVisibilityByTime(String tenantOrgName, List<String> dayTimeVisibility) {
-        Tenants.setTenantUnderTestOrgName(tenantOrgName);
+        Tenants.setTenantUnderTestNames(tenantOrgName);
         String day = dayTimeVisibility.get(0);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:ss");
         if (day.equalsIgnoreCase("all week")) {
