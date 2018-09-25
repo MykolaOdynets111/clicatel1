@@ -18,6 +18,7 @@ public class PostFeed extends AbstractUIElement {
 
     public void makeAPost(String userPostText){
         waitForElementToBeVisible(postInputField, 6);
+        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
         postInputField.click();
         postInputField.sendKeys(userPostText);
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();

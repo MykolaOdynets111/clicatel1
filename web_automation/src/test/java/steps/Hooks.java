@@ -136,7 +136,7 @@ public class Hooks implements JSHelper{
     }
 
     @Attachment(value = "Screenshot")
-    private byte[] takeScreenshotFromThirdDriver() {
+    private byte[] takeScreenshotFromThirdDriverIfExists() {
         return ((TakesScreenshot) DriverFactory.getSecondAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
@@ -146,7 +146,12 @@ public class Hooks implements JSHelper{
             if(scenario.isFailed()){
                 chatDeskConsoleOutput();
             }
-
+            if (DriverFactory.isSecondAgentDriverExists()) {
+                if (scenario.isFailed()) {
+                    secondAgentChatDeskConsoleOutput();
+                }
+                takeScreenshotFromThirdDriverIfExists();
+            }
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
                     agentHomePage.getHeader().clickIconWithInitials();
@@ -165,10 +170,6 @@ public class Hooks implements JSHelper{
             DriverFactory.closeAgentBrowser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-            if(scenario.isFailed()){
-                secondAgentChatDeskConsoleOutput();
-            }
-            takeScreenshotFromThirdDriver();
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
             DriverFactory.closeSecondAgentBrowser();
         }
@@ -210,7 +211,8 @@ public class Hooks implements JSHelper{
             try {
                 if(scenario.getSourceTagNames().contains("@fb_dm")) {
                     new FBTenantPage().getMessengerWindow().deleteConversation();
-                } else{
+                }
+                if(scenario.getSourceTagNames().contains("@fb_post")){
                     new FBTenantPage().getFBYourPostPage().deletePost();
                 }
 
@@ -261,7 +263,7 @@ public class Hooks implements JSHelper{
         return attach(stream);
     }
 
-    public byte[] attach(ByteArrayOutputStream log) {
+    private byte[] attach(ByteArrayOutputStream log) {
         byte[] array = log.toByteArray();
         log.reset();
         return array;

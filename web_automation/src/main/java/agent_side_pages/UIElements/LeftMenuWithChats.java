@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @FindBy(css = "div.scrollable-roster")
 public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
@@ -23,11 +24,20 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     @FindBy(css = "ul.dropdown-menu a")
     private List<WebElement> filterOptions;
 
+    @FindBy(xpath = "//div[@class='profile-info']/span[@class='msg-count']")
+    private WebElement newConversationIcon;
+
+    @FindBy(xpath = ".//li/div[@class='roster-item']")
+    private List<WebElement> chatsList;
+
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
+
 
     private WebElement getTargetChat(String userName){
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
     }
+
+
 
     public void openNewConversationRequest() {
         String userName = getUserNameFromLocalStorage();
@@ -44,6 +54,17 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
             waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait, agent);
             return true;
         } catch(TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait){
+        try{
+            waitForElementToBeVisible(newConversationIcon, wait);
+            return  newConversationRequests.stream().
+                    anyMatch(e-> new ChatInLeftMenu(e).getUserName().equals(userName)
+                                &  new ChatInLeftMenu(e).getChatsChannel().equalsIgnoreCase(channel));
+        } catch(TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
@@ -75,4 +96,6 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
                 .findFirst().get()
                 .click();
     }
+
+
 }

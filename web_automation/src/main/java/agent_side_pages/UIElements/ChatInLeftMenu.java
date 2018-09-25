@@ -17,6 +17,9 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.profile-info>h2")
     private WebElement userName;
 
+    @FindBy(css = "div.context-info div.icons>span")
+    private WebElement channelIcon;
+
     public ChatInLeftMenu(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
@@ -29,5 +32,18 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     public String getUserName() {
         return userName.getText();
     }
-}
 
+    public String getChatsChannel(){
+        String iconClass = channelIcon.getAttribute("class");
+        switch (iconClass){
+            case "icon svg-icon-webchat":
+                return "touch";
+            case "icon svg-icon-fbmsg":
+                return "fb messenger";
+            case "icon icon-fbpost":
+                return "fb post";
+            default:
+                return "unknown icon with tag span[@class='"+iconClass+"']";
+        }
+    }
+}
