@@ -14,14 +14,11 @@ public class FBLoginPage extends AbstractPage {
     @FindBy(css = "form#login_form")
     private WebElement loginForm;
 
-    @FindBy(xpath = "//input[@type='email']")
+    @FindBy(xpath = "//input[@id='email']")
     private WebElement emailInputField;
 
-    @FindBy(css = "input#pass")
+    @FindBy(xpath = "//input[@id='pass']")
     private WebElement passInputField;
-
-    @FindBy(css = "label#loginbutton")
-    private WebElement loginButton;
 
     public static FBLoginPage openFacebookLoginPage() {
         DriverFactory.getTouchDriverInstance().get("https://www.facebook.com/");
@@ -33,7 +30,7 @@ public class FBLoginPage extends AbstractPage {
         emailInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserEmail());
         passInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserPass());
         FacebookUsers.setLoggedInUser(FacebookUsers.FIRST_USER);
-        loginButton.click();
+        loginForm.submit();
         waitForElementToBeVisible(facebookHeader, 10);
     }
 }
