@@ -23,7 +23,7 @@ public class BasePortalSteps {
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
     }
 
-    @Given("Delete user")
+    @Given("^Delete user$")
     public static void deleteAgent(){
         String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);

@@ -47,7 +47,7 @@ public class FBYourPostPage extends AbstractPage {
     private WebElement confirmDeleteButton;
 
     public boolean isYourPostWindowContainsInitialUserPostText(String initialUserPost){
-        if (isElementShownByXpath(closeYourPostPopupButton, 2)) findElemByXPATH(closeYourPostPopupButton).click();
+        if (isElementShownByXpath(closeYourPostPopupButton, 5)) findElemByXPATH(closeYourPostPopupButton).click();
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
 
         waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
@@ -68,6 +68,7 @@ public class FBYourPostPage extends AbstractPage {
     }
 
     public void deletePost(){
+        makeAPost("end");
         scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
         treeDotsButton.click();
         waitForElementToBeVisible(contextLayover, 5);

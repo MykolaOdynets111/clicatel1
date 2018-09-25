@@ -75,7 +75,7 @@ public class FacebookSteps {
         getFBYourPostPage().makeAPost(createUniqueUserMessage(userText));
     }
 
-    @When("Delete users post")
+    @When("^Delete users post$")
     public void deleteUserPost(){
         getFbTenantPage().getFBYourPostPage().deletePost();
     }
