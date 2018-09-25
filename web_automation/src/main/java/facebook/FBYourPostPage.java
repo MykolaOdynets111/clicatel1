@@ -89,18 +89,13 @@ public class FBYourPostPage extends AbstractPage {
             userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
                     .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
         }
-
-        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)), 18);
+        try {
+            waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)), 18);
+        }catch (StaleElementReferenceException e1){
+            waitFor(500);
+            waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)), 18);
+        }
         WebElement firstComment =userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel));
         return new CommentInYourPostWindow(firstComment).getCommentText().equals(expectedResponse);
-//        try {
-//            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-//                    .stream().map(CommentInYourPostWindow::new)
-//                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
-//        }catch (StaleElementReferenceException ex){
-//            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-//                    .stream().map(CommentInYourPostWindow::new)
-//                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
-//        }
     }
 }
