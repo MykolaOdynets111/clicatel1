@@ -63,7 +63,7 @@ public class FacebookSteps {
 
     @Then("^Post response arrives$")
     public void checkThatPostResponseArrives(){
-        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(20),
+        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(35),
                 "Notification about new post reply is not shown is not shown.");
 
     }
