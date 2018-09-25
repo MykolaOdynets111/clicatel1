@@ -17,8 +17,8 @@ Feature:  Agent answers on post
     When Agent responds with hello to User
     Then Post response arrives
     And User initial message regarding connect to agent with following agent response 'hello' in comments are shown
-    When User sends a new post regarding can i open saving accounts? in the same conversation
-    Then Conversation area contains can i open saving accounts? message from facebook user
+    When User sends a new post regarding can i open saving accounts in the same conversation
+    Then Conversation area contains can i open saving accounts message from facebook user
     When Agent responds with sure. please provide us with your telephone number and we will contact you to User
     Then Post response arrives
     And Agent responds with 'sure. please provide us with your telephone number and we will contact you' on user additional question regarding can i open saving accounts?
