@@ -90,7 +90,7 @@ public class FBYourPostPage extends AbstractPage {
                     .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
         }
 
-        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)), 12);
+        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)), 18);
         WebElement firstComment =userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel));
         return new CommentInYourPostWindow(firstComment).getCommentText().equals(expectedResponse);
 //        try {
