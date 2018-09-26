@@ -87,6 +87,7 @@ public class FBYourPostPage extends AbstractPage {
         int loopsCounter=0;
         while(isStaleReferenceErrorThrown&loopsCounter<10){
             try {
+                waitFor(1000);
                 isVerificationPassed =  makeSecondLevelResponseVerification(userMessage, expectedResponse);
                 isStaleReferenceErrorThrown=false;
             } catch(StaleElementReferenceException ex){
@@ -101,7 +102,7 @@ public class FBYourPostPage extends AbstractPage {
         WebElement userPostInCommentsLine;
         userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
                 .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
-        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(repliesContainer)), 18);
+        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(repliesContainer)), 25);
         WebElement firstComment = userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel));
         return new CommentInYourPostWindow(firstComment).getCommentText().equals(expectedResponse);
     }
