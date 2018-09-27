@@ -1,5 +1,6 @@
 package facebook.uielements;
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 @FindBy(xpath = "//div[@id='PageComposerPagelet_']")
@@ -21,8 +22,16 @@ public class PostFeed extends AbstractUIElement {
         if (isElementShownByXpath(closeDMPopupButton, 10)) findElemByXPATH(closeDMPopupButton).click();
         postInputField.click();
         postInputField.sendKeys(userPostText);
-        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+        try{
         postButton.click();
+        } catch (WebDriverException e){
+            if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+        }
+
         waitForElementToBeInvisible(postButton,10);
+    }
+
+    public void endSessionIfPostFeedIsShown(){
+        if (isElementShown(postInputField, 5)) postInputField.sendKeys("end");
     }
 }
