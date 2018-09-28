@@ -4,10 +4,7 @@ import abstract_classes.AbstractPage;
 import abstract_classes.AbstractUIElement;
 import driverManager.DriverFactory;
 import facebook.uielements.CommentInYourPostWindow;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -52,7 +49,12 @@ public class FBYourPostPage extends AbstractPage {
         if (isElementShownByXpath(closeYourPostPopupButton, 5)) findElemByXPATH(closeYourPostPopupButton).click();
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
 
-        waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
+        try {
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
+        }catch (TimeoutException e){
+            scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 5);
+        }
         return findElemByCSS(userInitialPostMessageCSS).getText().equals(initialUserPost);
     }
 
