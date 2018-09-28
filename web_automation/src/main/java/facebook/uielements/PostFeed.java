@@ -26,6 +26,7 @@ public class PostFeed extends AbstractUIElement {
         postButton.click();
         } catch (WebDriverException e){
             if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+            postButton.click();
         }
 
         waitForElementToBeInvisible(postButton,10);
