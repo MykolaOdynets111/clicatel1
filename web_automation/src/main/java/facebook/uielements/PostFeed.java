@@ -33,5 +33,7 @@ public class PostFeed extends AbstractUIElement {
 
     public void endSessionIfPostFeedIsShown(){
         if (isElementShown(postInputField, 5)) postInputField.sendKeys("end");
+        postButton.click();
+
     }
 }
