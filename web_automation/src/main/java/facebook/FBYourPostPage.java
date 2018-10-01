@@ -51,7 +51,7 @@ public class FBYourPostPage extends AbstractPage {
 
         try {
             waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
-        }catch (TimeoutException e){
+        }catch (TimeoutException|NoSuchElementException e){
             scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
             waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 5);
         }
