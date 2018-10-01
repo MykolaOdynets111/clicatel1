@@ -17,10 +17,12 @@ Feature: Testing TIE APIs
     And Wait for a minute
     When I make post request with semantic candidates
 
-    # ToDo: add test on GET /tenants/<tenant_name>/chats/?q=<user input>&type=<type name>
+  #ToDo: Finish this one
+  Scenario: Tie model type tests
+            API: GET /tenants/<tenant_name>/chats/?q=<user input>&type=<type name>
+    When I make a request with 'I would like to chat to support' user input and 'touch button' type for generalbank tenant then response contains 1 correct intent: connect agent
 
 
-  # After issue TPLAT-2647 is fixed:
   # API: GET /tenants/<tenant_name>/chats/?q=acount balance&tie_sentiment=True is not used according to TPLAT-2647
   # API: GET /tenants/<tenant_name>/chats/?q=<user input>&usesemantic=True is replaced by
   #       API POST /tenants/<tenant_name>/chats/?q=<user input> according to TPLAT-2647

@@ -358,6 +358,19 @@ public class TIEApiSteps {
 
     }
 
+    @When("^I make a request with '(.*)' user input and '(.*)' type for (.*) tenant then response contains 1 correct intent: (.*)$")
+    public void verifyAppropriateModelUsing(String userInput, String modelType, String tenant, String intent){
+        String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_TYPE_URL, tenant, userInput) + modelType;
+        Response resp = get(url);
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(resp.getBody().jsonPath().getList("intents_result.intents").size(), 1,
+                "");
+        soft.assertEquals(resp.getBody().jsonPath().get("intents_result.intents[0].type"), modelType,
+                "");
+        soft.assertEquals(resp.getBody().jsonPath().get("intents_result.intents[0].intent"), intent,
+                "");
+    }
+
     @When("^I try to create tenant with the same name I should receive 404 response code$")
     public void createDuplicatedTenant(){
         given()
