@@ -18,8 +18,12 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
@@ -57,6 +61,19 @@ public class TIEApiSteps {
         then()
                 .statusCode(200)
                 .body("intents_result.intents", hasSize(greaterThan(0)));
+    }
+
+    @When("^I send \"(.*)\" for (.*) tenant then response code is 200$")
+    //API: GET /tenants/<tenant_name>/chats/?q=<user input>
+    public void checkResponseStatus(String userMessage, String tenant){
+        if(tenant.contains("new")){
+            tenant =  NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        }
+        String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
+        when()
+                .get(url).
+        then()
+                .statusCode(200);
     }
 
     @When("^I send \"(.*)\" for (.*) tenant including tie_sentiment then response code is 200 and intents are not empty$")
@@ -713,6 +730,8 @@ public class TIEApiSteps {
     }
 
 
+    // ============================ USER  INPUT============================ //
+
     @When("^I make user statistic request it returns empty response$")
     public void verifyEmptyUserInputCall(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
@@ -721,5 +740,79 @@ public class TIEApiSteps {
         Assert.assertTrue(resp.getBody().jsonPath().getList("data").isEmpty(),
                 "User info API returns not empty body for just created tenant\n"+resp.getBody().asString());
     }
+
+
+    @When("^User statistic call returns '(.*)' user's inputs$")
+    public void verifyUserInfo(List<String> expectedUserInputs){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+//        String newTenant = "testing1_perspiciatisdolorem";
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
+        waitFor(500);
+        Response resp = get(url);
+        List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
+        SoftAssert soft = new SoftAssert();
+        for (int i=0; i<10; i++){
+            if(userInputs.size()!=expectedUserInputs.size()){
+                waitFor(100);
+                resp = get(url);
+                userInputs = resp.getBody().jsonPath().getList("data.user_input");
+            }else{break;}
+        }
+        for (String expectedInput : expectedUserInputs){
+            soft.assertTrue(userInputs.contains(expectedInput),
+                    "Api did not return '"+expectedInput+"' expected user input\n"+resp.getBody().asString());
+        }
+        soft.assertAll();
+    }
+
+    @When("^I filter by (.*) only records after the date is returned$")
+    public void verifyByDateFiltering(String dateFilter){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String targetDate = getListOfUserInPutElements().get(0).get("date");
+        targetDate = targetDate.substring(0, targetDate.indexOf("+"));
+        LocalDateTime targetDateTime = LocalDateTime.parse(targetDate);
+
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?"+dateFilter+"="+targetDate;
+        Response resp = get(url);
+        List<Map<String, String>> returnedInputs = resp.getBody().jsonPath().getList("data");
+        List<LocalDateTime> itemsDateTimes = returnedInputs.stream().map(e -> {
+            String a = e.get("date");
+            a = a.substring(0,a.indexOf("+"));
+            return  LocalDateTime.parse(a);
+        }).collect(Collectors.toList());
+        switch(dateFilter) {
+            case "start_date":
+                Assert.assertTrue(itemsDateTimes.stream().allMatch(e -> e.isEqual(targetDateTime)|e.isAfter(targetDateTime)),
+                "Incorrect items are shown after applying the following filters: '"+dateFilter+"="+targetDate+"'");
+                break;
+            case "end_date":
+                Assert.assertTrue(itemsDateTimes.stream().allMatch(e -> e.isEqual(targetDateTime)|e.isBefore(targetDateTime)),
+                        "Incorrect items are shown after applying the following filters: '"+dateFilter+"="+targetDate+"'");
+                break;
+            default:
+                Assert.assertTrue(false, "Incorrect filter value is used for filtering by date");
+        }
+    }
+
+    @When("^I filter by '(.*)' text only records with appropriate user input text are shown$")
+    public void verifyFilteringByText(String text){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?text="+text;
+        Response resp = get(url);
+        List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(userInputs.size()==1,
+                "More than 1 user input in response are shown after filtering by text '"+text+"'\n"+resp.getBody().asString());
+        soft.assertTrue(userInputs.stream().allMatch(e -> e.contains(text)),
+                "Unexpected user inputs are shown after filtering by text '"+text+"'\n"+resp.getBody().asString());
+        soft.assertAll();
+    }
+
+    private List<Map<String, String>> getListOfUserInPutElements(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
+        return get(url).getBody().jsonPath().getList("data");
+    }
+
 
 }
