@@ -99,7 +99,7 @@ public class Endpoints {
 
     public static String TIE_POST_SEMANTIC = URLs.getBaseTieURL() + "%s/chats/?q=%s";
 
-    public static String TIE_TYPE = URLs.getBaseTieURL() + "";
+    public static String TIE_USER_INPUT = URLs.getBaseTieURL() + "%s/user_inputs/";
 
     // ====================  SOCIAL ================= //
 

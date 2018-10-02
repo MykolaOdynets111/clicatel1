@@ -15,7 +15,7 @@ public class Suggestion extends Widget implements WebActions {
 
     }
 
-    @FindBy(xpath = "./p[not(@class='confidence-level')]")
+    @FindBy(xpath = ".//p[not(@class='confidence-level')]")
     private WebElement suggestedMessage;
 
     public String getSuggestionMessage() {

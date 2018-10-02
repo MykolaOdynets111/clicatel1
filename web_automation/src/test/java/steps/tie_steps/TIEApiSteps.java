@@ -48,6 +48,9 @@ public class TIEApiSteps {
     @When("^I send \"(.*)\" for (.*) tenant then response code is 200 and intents are not empty$")
     //API: GET /tenants/<tenant_name>/chats/?q=<user input>
     public void checkResponseStatusForIntentOnlyRequest(String userMessage, String tenant){
+        if(tenant.contains("new")){
+            tenant =  NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        }
         String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
         when()
                 .get(url).
@@ -364,12 +367,31 @@ public class TIEApiSteps {
         Response resp = get(url);
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(resp.getBody().jsonPath().getList("intents_result.intents").size(), 1,
-                "");
+                "More than 1 intent is returned in the response for the direct model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
         soft.assertEquals(resp.getBody().jsonPath().get("intents_result.intents[0].type"), modelType,
-                "");
+                "Incorrect model type is returned in the response for direct model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
         soft.assertEquals(resp.getBody().jsonPath().get("intents_result.intents[0].intent"), intent,
-                "");
+                "Incorrect intent is returned in the response for direct model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertAll();
     }
+
+    @When("^I make a request with '(.*)' user input and '(.*)' type for (.*) tenant then response contains list of intents and does not contain '(.*)' intent")
+    public void verifyNorRelatedModelUsing(String userInput, String modelType, String tenant, String intent){
+        String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_TYPE_URL, tenant, userInput) + modelType;
+        Response resp = get(url);
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(resp.getBody().jsonPath().getList("intents_result.intents").size()>1,
+                "Only 1 intent is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertFalse(resp.getBody().jsonPath().getList("intents_result.intents.intent").contains(intent),
+                "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertAll();
+    }
+
 
     @When("^I try to create tenant with the same name I should receive 404 response code$")
     public void createDuplicatedTenant(){
@@ -689,4 +711,15 @@ public class TIEApiSteps {
         Assert.assertEquals(resp.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
                 "Intent in the response is not as expected\n"+resp.getBody().asString());
     }
+
+
+    @When("^I make user statistic request it returns empty response$")
+    public void verifyEmptyUserInputCall(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
+        Response resp = get(url);
+        Assert.assertTrue(resp.getBody().jsonPath().getList("data").isEmpty(),
+                "User info API returns not empty body for just created tenant\n"+resp.getBody().asString());
+    }
+
 }
