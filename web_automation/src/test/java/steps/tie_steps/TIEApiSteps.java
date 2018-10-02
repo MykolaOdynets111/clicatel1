@@ -814,5 +814,28 @@ public class TIEApiSteps {
         return get(url).getBody().jsonPath().getList("data");
     }
 
+    @When("^I filter by '(.*)' (.*) text only records with appropriate user input text are shown$")
+    public void filterByConfidence(String filterType, Float filterValue){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?"+filterType+"="+filterValue;
+        Response resp = get(url);
+        List<Float> userInputsConfidence = resp.getBody().jsonPath().getList("data.top_confidence");
+        switch (filterType){
+            case "max_top_conf":
+                Assert.assertTrue(userInputsConfidence.stream().allMatch(e-> e<=filterValue),
+                        "Incorrect values after sorting by confidence are shown.\n" +
+                                "Expected: '"+filterType+"' = "+filterValue +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            case "min_top_conf":
+                Assert.assertTrue(userInputsConfidence.stream().allMatch(e-> e>=filterValue),
+                        "Incorrect values after sorting by confidence are shown.\n" +
+                                "Expected: '"+filterType+"' = "+filterValue +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            default:
+                Assert.assertTrue(false, "Unsupported filter name by confidence provided:'"+filterType+"'");
+        }
+    }
 
 }
