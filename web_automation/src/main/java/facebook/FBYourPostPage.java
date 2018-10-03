@@ -4,10 +4,7 @@ import abstract_classes.AbstractPage;
 import abstract_classes.AbstractUIElement;
 import driverManager.DriverFactory;
 import facebook.uielements.CommentInYourPostWindow;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -27,7 +24,9 @@ public class FBYourPostPage extends AbstractPage {
 
     private String inputContainer = "div.UFIAddCommentInput";
 
-    private String firstCommentOnSecondLevel = "(//following-sibling::div[contains(@class,'UFIReplyList')]/div)[1]";
+    private String firstCommentOnSecondLevel = "(//following-sibling::div[@class=' UFIReplyList']/div)[1]";
+
+    private String repliesContainer = "//following-sibling::div[@class=' UFIReplyList']";
 
     @FindBy(css = "a[data-testid='post_chevron_button']")
     private WebElement treeDotsButton;
@@ -50,7 +49,12 @@ public class FBYourPostPage extends AbstractPage {
         if (isElementShownByXpath(closeYourPostPopupButton, 5)) findElemByXPATH(closeYourPostPopupButton).click();
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
 
-        waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
+        try {
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
+        }catch (TimeoutException|NoSuchElementException e){
+            scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 5);
+        }
         return findElemByCSS(userInitialPostMessageCSS).getText().equals(initialUserPost);
     }
 
@@ -80,27 +84,28 @@ public class FBYourPostPage extends AbstractPage {
     }
 
     public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){
-        WebElement userPostInCommentsLine;
-        try {
-            userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
-                    .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
-        } catch (StaleElementReferenceException ex){
-            waitFor(500);
-            userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
-                    .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
+        boolean isStaleReferenceErrorThrown=true;
+        boolean isVerificationPassed=false;
+        int loopsCounter=0;
+        while(isStaleReferenceErrorThrown&loopsCounter<10){
+            try {
+                waitFor(1000);
+                isVerificationPassed =  makeSecondLevelResponseVerification(userMessage, expectedResponse);
+                isStaleReferenceErrorThrown=false;
+            } catch(StaleElementReferenceException ex){
+                loopsCounter++;
+                waitFor(200);
+            }
         }
+        return isVerificationPassed;
+    }
 
-        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel)), 12);
-        WebElement firstComment =userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel));
+    private boolean makeSecondLevelResponseVerification(String userMessage, String expectedResponse){
+        WebElement userPostInCommentsLine;
+        userPostInCommentsLine = findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
+                .filter(e -> e.getCommentText().equals(userMessage)).findFirst().get().getWrappedElement();
+        waitForElementToBeVisible(userPostInCommentsLine.findElement(By.xpath(repliesContainer)), 25);
+        WebElement firstComment = userPostInCommentsLine.findElement(By.xpath(firstCommentOnSecondLevel));
         return new CommentInYourPostWindow(firstComment).getCommentText().equals(expectedResponse);
-//        try {
-//            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-//                    .stream().map(CommentInYourPostWindow::new)
-//                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
-//        }catch (StaleElementReferenceException ex){
-//            return userPostInCommentsLine.findElements(By.xpath("//following-sibling::div[contains(@class,'UFIReplyList')]/div"))
-//                    .stream().map(CommentInYourPostWindow::new)
-//                    .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
-//        }
     }
 }

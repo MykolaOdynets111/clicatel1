@@ -11,6 +11,7 @@ import cucumber.api.java.en.When;
 import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dataManager.TwitterUsers;
+import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
@@ -252,6 +253,12 @@ public class DefaultAgentSteps implements JSHelper {
             Assert.assertTrue(false, "Unable to change agent status. Please check the screenshot.");
         }
     }
+
+    @When("^(.*) refreshes the page$")
+    public void refreshThePage(String agent){
+        DriverFactory.getDriverForAgent(agent).navigate().refresh();
+    }
+
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){

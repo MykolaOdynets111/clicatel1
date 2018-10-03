@@ -208,12 +208,14 @@ public class Hooks implements JSHelper{
     }
 
     private void endFacebookFlow(Scenario scenario) {
+        FBTenantPage fbTenantPage = new FBTenantPage();
             try {
                 if(scenario.getSourceTagNames().contains("@fb_dm")) {
-                    new FBTenantPage().getMessengerWindow().deleteConversation();
+                    fbTenantPage.getMessengerWindow().deleteConversation();
                 }
                 if(scenario.getSourceTagNames().contains("@fb_post")){
-                    new FBTenantPage().getFBYourPostPage().deletePost();
+                    fbTenantPage.getPostFeed().endSessionIfPostFeedIsShown();
+                    fbTenantPage.getFBYourPostPage().deletePost();
                 }
 
             } catch (WebDriverException e) { }

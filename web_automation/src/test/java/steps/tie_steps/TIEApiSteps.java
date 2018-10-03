@@ -18,8 +18,12 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
@@ -48,12 +52,28 @@ public class TIEApiSteps {
     @When("^I send \"(.*)\" for (.*) tenant then response code is 200 and intents are not empty$")
     //API: GET /tenants/<tenant_name>/chats/?q=<user input>
     public void checkResponseStatusForIntentOnlyRequest(String userMessage, String tenant){
+        if(tenant.contains("new")){
+            tenant =  NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        }
         String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
         when()
                 .get(url).
         then()
                 .statusCode(200)
                 .body("intents_result.intents", hasSize(greaterThan(0)));
+    }
+
+    @When("^I send \"(.*)\" for (.*) tenant then response code is 200$")
+    //API: GET /tenants/<tenant_name>/chats/?q=<user input>
+    public void checkResponseStatus(String userMessage, String tenant){
+        if(tenant.contains("new")){
+            tenant =  NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        }
+        String url = String.format(Endpoints.TIE_INTENT_WITHOUT_SENTIMENT_URL, tenant, userMessage);
+        when()
+                .get(url).
+        then()
+                .statusCode(200);
     }
 
     @When("^I send \"(.*)\" for (.*) tenant including tie_sentiment then response code is 200 and intents are not empty$")
@@ -357,6 +377,38 @@ public class TIEApiSteps {
                 "Status code is not 200 after creating "+newTenantName+" tenant\n"+resp.prettyPrint()+"");
 
     }
+
+    @When("^I make a request with '(.*)' user input and '(.*)' type for (.*) tenant then response contains 1 correct intent: (.*)$")
+    public void verifyAppropriateModelUsing(String userInput, String modelType, String tenant, String intent){
+        String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_TYPE_URL, tenant, userInput) + modelType;
+        Response resp = get(url);
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(resp.getBody().jsonPath().getList("intents_result.intents").size(), 1,
+                "More than 1 intent is returned in the response for the direct model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("intents_result.intents[0].type"), modelType,
+                "Incorrect model type is returned in the response for direct model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("intents_result.intents[0].intent"), intent,
+                "Incorrect intent is returned in the response for direct model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertAll();
+    }
+
+    @When("^I make a request with '(.*)' user input and '(.*)' type for (.*) tenant then response contains list of intents and does not contain '(.*)' intent")
+    public void verifyNorRelatedModelUsing(String userInput, String modelType, String tenant, String intent){
+        String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_TYPE_URL, tenant, userInput) + modelType;
+        Response resp = get(url);
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(resp.getBody().jsonPath().getList("intents_result.intents").size()>1,
+                "Only 1 intent is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertFalse(resp.getBody().jsonPath().getList("intents_result.intents.intent").contains(intent),
+                "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                        "\n"+resp.getBody().asString()+"\n");
+        soft.assertAll();
+    }
+
 
     @When("^I try to create tenant with the same name I should receive 404 response code$")
     public void createDuplicatedTenant(){
@@ -675,5 +727,141 @@ public class TIEApiSteps {
                 .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "semantic"));
         Assert.assertEquals(resp.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
                 "Intent in the response is not as expected\n"+resp.getBody().asString());
+    }
+
+
+    // ============================ USER  INPUT============================ //
+
+    @When("^I make user statistic request it returns empty response$")
+    public void verifyEmptyUserInputCall(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
+        Response resp = get(url);
+        Assert.assertTrue(resp.getBody().jsonPath().getList("data").isEmpty(),
+                "User info API returns not empty body for just created tenant\n"+resp.getBody().asString());
+    }
+
+
+    @When("^User statistic call returns '(.*)' user's inputs$")
+    public void verifyUserInfo(List<String> expectedUserInputs){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
+        Response resp = get(url);
+        List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
+        SoftAssert soft = new SoftAssert();
+        for (int i=0; i<25; i++){
+            if(userInputs.size()!=expectedUserInputs.size()){
+                waitFor(500);
+                resp = get(url);
+                userInputs = resp.getBody().jsonPath().getList("data.user_input");
+            }else{break;}
+        }
+        for (String expectedInput : expectedUserInputs){
+            soft.assertTrue(userInputs.contains(expectedInput),
+                    "Api did not return '"+expectedInput+"' expected user input\n"+resp.getBody().asString());
+        }
+        soft.assertAll();
+    }
+
+    @When("^I filter by (.*) only records after the date is returned$")
+    public void verifyByDateFiltering(String dateFilter){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String targetDate = getListOfUserInPutElements().get(0).get("date");
+        targetDate = targetDate.substring(0, targetDate.indexOf("+"));
+        LocalDateTime targetDateTime = LocalDateTime.parse(targetDate);
+
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?"+dateFilter+"="+targetDate;
+        Response resp = get(url);
+        List<Map<String, String>> returnedInputs = resp.getBody().jsonPath().getList("data");
+        List<LocalDateTime> itemsDateTimes = returnedInputs.stream().map(e -> {
+            String a = e.get("date");
+            a = a.substring(0,a.indexOf("+"));
+            return  LocalDateTime.parse(a);
+        }).collect(Collectors.toList());
+        switch(dateFilter) {
+            case "start_date":
+                Assert.assertTrue(itemsDateTimes.stream().allMatch(e -> e.isEqual(targetDateTime)|e.isAfter(targetDateTime)),
+                "Incorrect items are shown after applying the following filters: '"+dateFilter+"="+targetDate+"'");
+                break;
+            case "end_date":
+                Assert.assertTrue(itemsDateTimes.stream().allMatch(e -> e.isEqual(targetDateTime)|e.isBefore(targetDateTime)),
+                        "Incorrect items are shown after applying the following filters: '"+dateFilter+"="+targetDate+"'");
+                break;
+            default:
+                Assert.assertTrue(false, "Incorrect filter value is used for filtering by date");
+        }
+    }
+
+    @When("^I filter by '(.*)' text only records with appropriate user input text are shown$")
+    public void verifyFilteringByText(String text){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?text="+text;
+        Response resp = get(url);
+        List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(userInputs.size()==1,
+                "More than 1 user input in response are shown after filtering by text '"+text+"'\n"+resp.getBody().asString());
+        soft.assertTrue(userInputs.stream().allMatch(e -> e.contains(text)),
+                "Unexpected user inputs are shown after filtering by text '"+text+"'\n"+resp.getBody().asString());
+        soft.assertAll();
+    }
+
+    private List<Map<String, String>> getListOfUserInPutElements(){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
+        return get(url).getBody().jsonPath().getList("data");
+    }
+
+    @When("^I filter by '(.*)' (.*) text only records with appropriate user input text are shown$")
+    public void filterByConfidence(String filterType, Float filterValue){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?"+filterType+"="+filterValue;
+        Response resp = get(url);
+        List<Float> userInputsConfidence = resp.getBody().jsonPath().getList("data.top_confidence");
+        switch (filterType){
+            case "max_top_conf":
+                Assert.assertTrue(userInputsConfidence.stream().allMatch(e-> e<=filterValue),
+                        "Incorrect values after filtering by confidence are shown.\n" +
+                                "Expected: '"+filterType+"' = "+filterValue +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            case "min_top_conf":
+                Assert.assertTrue(userInputsConfidence.stream().allMatch(e-> e>=filterValue),
+                        "Incorrect values after filtering by confidence are shown.\n" +
+                                "Expected: '"+filterType+"' = "+filterValue +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            default:
+                Assert.assertTrue(false, "Unsupported filter name by confidence provided:'"+filterType+"'");
+        }
+    }
+
+
+    @When("^I apply (.*) sorting then all elements are correctly sorted$")
+    public void verifyUserInputSorting(String sortCriteria){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?sort="+sortCriteria;
+        Response resp = get(url);
+        List<Float> valuesInTheResponse = get(url).jsonPath().getList("data.top_confidence");
+//                                                .stream().map(e -> ((Float) e)).collect(Collectors.toList());
+        ArrayList<Float> sortedList = new ArrayList<Float>(valuesInTheResponse);
+        switch (sortCriteria){
+            case "asc":
+                Collections.sort(sortedList);
+                Assert.assertTrue(valuesInTheResponse.equals(sortedList),
+                        "Incorrect values after sorting by '"+sortCriteria+"' are shown.\n" +
+                                "Expected: '"+sortedList +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            case "desc":
+                sortedList.sort(Collections.reverseOrder());
+                Assert.assertTrue(valuesInTheResponse.equals(sortedList),
+                        "Incorrect values after sorting by '"+sortCriteria+"'  are shown.\n" +
+                                "Expected: '"+ sortedList +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            default:
+                Assert.assertTrue(false, "Unsupported sorting criteria provided:'"+sortCriteria+"'");
+        }
     }
 }

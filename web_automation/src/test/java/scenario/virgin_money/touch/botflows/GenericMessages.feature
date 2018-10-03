@@ -22,8 +22,8 @@ Feature: VM flow regarding General messages
 
   Scenario Outline: General messages flow should work for "<user message>" user message
     When User enter <user message> into widget input field
-#    Then User have to receive 'Hi ${firstName} sorry not right now but watch this space ;) can we perhaps offer you a credit card instead? Click on the link below and then click 'apply now'. https://www.virginmoney.co.za/credit-card/' text response for his '<user message>' input
-    Then User have to receive 'Sorry not right now but watch this space ;) can we perhaps offer you a credit card instead? Click on the link below and then click 'apply now'. https://www.virginmoney.co.za/credit-card/' text response for his '<user message>' input
+#    Then User have to receive 'Hi ${firstName} Virgin Money in partnership with Capitec have affordable personal loans. Just click on the link below and complete the form to apply. https://loans.virginmoney.co.za/' text response for his '<user message>' input
+    Then User have to receive 'Virgin Money in partnership with Capitec have affordable personal loans. Just click on the link below and complete the form to apply. https://loans.virginmoney.co.za/' text response for his '<user message>' input
     Examples:
       |user message        |
       |Loan queries        |
