@@ -745,15 +745,13 @@ public class TIEApiSteps {
     @When("^User statistic call returns '(.*)' user's inputs$")
     public void verifyUserInfo(List<String> expectedUserInputs){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-//        String newTenant = "testing1_perspiciatisdolorem";
         String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant);
-        waitFor(500);
         Response resp = get(url);
         List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
         SoftAssert soft = new SoftAssert();
-        for (int i=0; i<10; i++){
+        for (int i=0; i<25; i++){
             if(userInputs.size()!=expectedUserInputs.size()){
-                waitFor(100);
+                waitFor(500);
                 resp = get(url);
                 userInputs = resp.getBody().jsonPath().getList("data.user_input");
             }else{break;}
@@ -823,13 +821,13 @@ public class TIEApiSteps {
         switch (filterType){
             case "max_top_conf":
                 Assert.assertTrue(userInputsConfidence.stream().allMatch(e-> e<=filterValue),
-                        "Incorrect values after sorting by confidence are shown.\n" +
+                        "Incorrect values after filtering by confidence are shown.\n" +
                                 "Expected: '"+filterType+"' = "+filterValue +"\n" +
                                 "Found: " + resp.getBody().asString());
                 break;
             case "min_top_conf":
                 Assert.assertTrue(userInputsConfidence.stream().allMatch(e-> e>=filterValue),
-                        "Incorrect values after sorting by confidence are shown.\n" +
+                        "Incorrect values after filtering by confidence are shown.\n" +
                                 "Expected: '"+filterType+"' = "+filterValue +"\n" +
                                 "Found: " + resp.getBody().asString());
                 break;
@@ -838,4 +836,32 @@ public class TIEApiSteps {
         }
     }
 
+
+    @When("^I apply (.*) sorting then all elements are correctly sorted$")
+    public void verifyUserInputSorting(String sortCriteria){
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?sort="+sortCriteria;
+        Response resp = get(url);
+        List<Float> valuesInTheResponse = get(url).jsonPath().getList("data.top_confidence");
+//                                                .stream().map(e -> ((Float) e)).collect(Collectors.toList());
+        ArrayList<Float> sortedList = new ArrayList<Float>(valuesInTheResponse);
+        switch (sortCriteria){
+            case "asc":
+                Collections.sort(sortedList);
+                Assert.assertTrue(valuesInTheResponse.equals(sortedList),
+                        "Incorrect values after sorting by '"+sortCriteria+"' are shown.\n" +
+                                "Expected: '"+sortedList +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            case "desc":
+                sortedList.sort(Collections.reverseOrder());
+                Assert.assertTrue(valuesInTheResponse.equals(sortedList),
+                        "Incorrect values after sorting by '"+sortCriteria+"'  are shown.\n" +
+                                "Expected: '"+ sortedList +"\n" +
+                                "Found: " + resp.getBody().asString());
+                break;
+            default:
+                Assert.assertTrue(false, "Unsupported sorting criteria provided:'"+sortCriteria+"'");
+        }
+    }
 }

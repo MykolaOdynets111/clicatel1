@@ -1,14 +1,10 @@
 @tie
-Feature: Testing TIE APIs
+Feature: Testing TIE APIs (user inputs)
 
   ### User input ###
 
   #ToDo: cover following test cases for user_inputs API
-  # date: start_date, end_date(up to what datetime show records) - done
   # pagination: start, end - blocked by TPLAT-3247
-  # text - done
-  # sorting: sort=asc, desc
-  # confidence: limit max_top_conf=1,  min_top_conf -done
 
   Scenario: User should be able to get and filter user inputs statistic by date and text
           API GET /tenants/{tenant}/user_inputs/?{PARAMS}
@@ -33,5 +29,7 @@ Feature: Testing TIE APIs
     Then User statistic call returns 'trading hours, hello, 887788' user's inputs
     When I filter by 'max_top_conf' 0.5 text only records with appropriate user input text are shown
     When I filter by 'min_top_conf' 0.5 text only records with appropriate user input text are shown
+    When I apply asc sorting then all elements are correctly sorted
+    When I apply desc sorting then all elements are correctly sorted
 
 
