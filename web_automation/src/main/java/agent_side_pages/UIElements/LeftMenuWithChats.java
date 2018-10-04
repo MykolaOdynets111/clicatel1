@@ -40,16 +40,16 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
 
 
-    public void openNewConversationRequest() {
+    public void openNewConversationRequestByAgent(String agent) {
         String userName = getUserNameFromLocalStorage();
-        if (isNewConversationRequestIsShown(6, userName)){
+        if (isNewConversationRequestIsShown(6, agent)){
             new ChatInLeftMenu(getTargetChat(userName)).openConversation();
         }else{
             Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk.");
         }
     }
 
-    public void openNewConversationRequest(String userName) {
+    public void openNewFromSocialConversationRequest(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).openConversation();
     }
 
