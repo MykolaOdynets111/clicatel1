@@ -28,6 +28,10 @@ public class FBYourPostPage extends AbstractPage {
 
     private String repliesContainer = "//following-sibling::div[@class=' UFIReplyList']";
 
+    private String secondLevelInputContainer = "//div[contains(@class, 'UFIAddCommentWithPhotoAttacher')][not(ancestor::div[@class=' UFIReplyList'])]";
+
+    private String secondLevelInputField = "//div[@data-testid='ufi_comment_composer']";
+
     @FindBy(css = "a[data-testid='post_chevron_button']")
     private WebElement treeDotsButton;
 
@@ -69,6 +73,14 @@ public class FBYourPostPage extends AbstractPage {
         waitForElementToBeVisibleByCss(inputField,3);
         findElemByCSS(inputField).sendKeys(message);
         findElemByCSS(inputField).sendKeys(Keys.ENTER);
+    }
+
+    public void makeASecondPostInBranch(String message){
+        if (isElementShownByXpath(closeYourPostPopupButton, 2)) findElemByXPATH(closeYourPostPopupButton).click();
+        findElemByXPATH(secondLevelInputContainer).click();
+        waitForElementToBeVisibleByXpath(secondLevelInputField,3);
+        findElemByXPATH(secondLevelInputField).sendKeys(message);
+        findElemByXPATH(secondLevelInputField).sendKeys(Keys.ENTER);
     }
 
     public void deletePost(){
