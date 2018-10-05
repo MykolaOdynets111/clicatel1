@@ -749,11 +749,13 @@ public class TIEApiSteps {
         Response resp = get(url);
         List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
         SoftAssert soft = new SoftAssert();
-        for (int i=0; i<40; i++){
+        for (int i=0; i<45; i++){
             if(userInputs.size()!=expectedUserInputs.size()){
                 waitFor(500);
                 resp = get(url);
-                userInputs = resp.getBody().jsonPath().getList("data.user_input");
+                try {
+                    userInputs = resp.getBody().jsonPath().getList("data.user_input");
+                } catch(JsonPathException e){ }
             }else{break;}
         }
         for (String expectedInput : expectedUserInputs){
