@@ -864,4 +864,24 @@ public class TIEApiSteps {
                 Assert.assertTrue(false, "Unsupported sorting criteria provided:'"+sortCriteria+"'");
         }
     }
+
+    @When("^I apply pagination (.*) (?:from|to) (.*) correct response is shown$")
+    public void verifyPagination(String paginationDirection, int boundary){
+        List<Map<String, String>> allValues =  getListOfUserInPutElements();
+        String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?"+paginationDirection+"="+boundary;
+        List<Map<String, String>> actualResults = get(url).getBody().jsonPath().getList("data");
+        List<Map<String, String>> expectedResults;
+        switch(paginationDirection){
+            case "start":
+                expectedResults = allValues.subList(boundary, allValues.size());
+                Assert.assertEquals(actualResults, expectedResults);
+                break;
+            case "end":
+                expectedResults = allValues.subList(0, boundary);
+                Assert.assertEquals(actualResults, expectedResults);
+                break;
+        }
+
+    }
 }

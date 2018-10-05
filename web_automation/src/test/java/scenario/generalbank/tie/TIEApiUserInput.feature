@@ -31,5 +31,8 @@ Feature: Testing TIE APIs (user inputs)
     When I filter by 'min_top_conf' 0.5 text only records with appropriate user input text are shown
     When I apply asc sorting then all elements are correctly sorted
     When I apply desc sorting then all elements are correctly sorted
+#    When I apply pagination start from 2  correct response is shown
+#    When I apply pagination end to 2  correct response is shown
+
 
 
