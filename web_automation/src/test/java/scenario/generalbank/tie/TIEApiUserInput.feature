@@ -14,8 +14,8 @@ Feature: Testing TIE APIs (user inputs)
     When I send "hello" for a new tenant then response code is 200 and intents are not empty
     When I send "111" for a new tenant then response code is 200
     When I send "some random message" for a new tenant then response code is 200
-    Then User statistic call returns 'account balance, 111, some random message' user's inputs
-    When I filter by 'account balance' text only records with appropriate user input text are shown
+    Then User statistic call returns 'hello, 111, some random message' user's inputs
+    When I filter by 'hello' text only records with appropriate user input text are shown
     When I filter by start_date only records after the date is returned
     When I filter by end_date only records after the date is returned
 
