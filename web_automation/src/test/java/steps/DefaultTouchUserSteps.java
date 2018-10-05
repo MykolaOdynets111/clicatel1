@@ -93,7 +93,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=45;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
-        verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
+        if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
     }
 
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
@@ -169,6 +169,13 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     }
 
+
+    /**Method that strictly verifies is there only one text response is shown
+     * and it is correct (expected) one
+     * @param userInput
+     * @param expectedTextResponse
+     * @param waitForResponse
+     */
     private void verifyTextResponse(String userInput, String expectedTextResponse, int waitForResponse){
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
@@ -213,6 +220,10 @@ public class DefaultTouchUserSteps implements JSHelper{
         return expectedTextResponse;
     }
 
+    /**Method that strictly verifies is there expected response shown as an second response in the widget
+     * @param textResponse expected text response
+     * @param userInput user input on which we are expecting response
+     */
     @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
@@ -225,7 +236,25 @@ public class DefaultTouchUserSteps implements JSHelper{
                 , expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
+    }
 
+    /**Method that verifies is there expected response among shown text responses,
+     * regardless position and any other unexpected messages
+     * Some analog of contains check
+     * @param textResponse expected text response
+     * @param userInput user input on which we are expecting response
+     */
+    @Then("^User should see '(.*)' (?:text response|url) for his '(.*)' input$")
+    public void verifyTextResponseRegardlessPosition(String textResponse, String userInput) {
+        int waitForResponse=10;
+        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        SoftAssert softAssert = new SoftAssert();
+        widgetConversationArea = widget.getWidgetConversationArea();
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
+                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownAmongOtherForUserMessage(userInput, expectedTextResponse),
+                "Expected '"+expectedTextResponse+"' text response on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+") is missing.");
+        softAssert.assertAll();
     }
 
     @Then("^Text response that contains \"(.*)\" is shown$")

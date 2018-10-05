@@ -58,8 +58,8 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
     }
 
-    public boolean isTextResponseShownAmongOtherForUserMessage(String userInput, String expectedRisponse) {
-        return new ToUserTextMessage(getFromUserWebElement(userInput)).isTextResponseShownAmongOthers(expectedRisponse);
+    public boolean isTextResponseShownAmongOtherForUserMessage(String userInput, String expectedResponse) {
+        return new ToUserTextMessage(getFromUserWebElement(userInput)).isTextResponseShownAmongOthers(expectedResponse);
     }
 
     public boolean isOnlyOneTextResponseShownFor(String userMessage) {

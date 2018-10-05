@@ -58,7 +58,7 @@ public class ApiHelper {
         if(tenantMessages==null) {
             String url = String.format(Endpoints.INTERNAL_TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTest());
             tenantMessages = RestAssured.given().get(url)
-                    .jsonPath().get("tafResponses");
+                    .jsonPath().get("");
         }
         return tenantMessages;
     }

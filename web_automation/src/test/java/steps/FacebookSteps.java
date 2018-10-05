@@ -72,7 +72,7 @@ public class FacebookSteps {
     public void postIntoTheSameFBBranch(String userText){
         if(getFbTenantPage().isNotificationAboutNewCommentArrives(2)) getFbTenantPage().clickNewCommentNotification();
         getFbTenantPage().waitForNewPostNotificationToDisappear();
-        getFBYourPostPage().makeAPost(createUniqueUserMessage(userText));
+        getFBYourPostPage().makeASecondPostInBranch(createUniqueUserMessage(userText));
     }
 
     @When("^Delete users post$")

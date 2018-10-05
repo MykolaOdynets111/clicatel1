@@ -233,14 +233,14 @@ public class DefaultAgentSteps implements JSHelper {
                 userName = FacebookUsers.getLoggedInUserName();
                 break;
         }
-        getLeftMenu(agent).openNewConversationRequest(userName);
+        getLeftMenu(agent).openNewFromSocialConversationRequest(userName);
     }
 
 
 
     @When("^(.*) click on new conversation$")
     public void acceptUserConversation(String ordinalAgentNumber) {
-        getLeftMenu(ordinalAgentNumber).openNewConversationRequest();
+        getLeftMenu(ordinalAgentNumber).openNewConversationRequestByAgent(ordinalAgentNumber);
     }
 
     @When("^(.*) changes status to: (.*)$")

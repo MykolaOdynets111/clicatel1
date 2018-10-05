@@ -5,6 +5,7 @@ import interfaces.JSHelper;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -39,12 +40,16 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
 
 
-    public void openNewConversationRequest() {
+    public void openNewConversationRequestByAgent(String agent) {
         String userName = getUserNameFromLocalStorage();
-        new ChatInLeftMenu(getTargetChat(userName)).openConversation();
+        if (isNewConversationRequestIsShown(6, agent)){
+            new ChatInLeftMenu(getTargetChat(userName)).openConversation();
+        }else{
+            Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk.");
+        }
     }
 
-    public void openNewConversationRequest(String userName) {
+    public void openNewFromSocialConversationRequest(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).openConversation();
     }
 

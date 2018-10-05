@@ -59,6 +59,6 @@ Feature: Agent availability
     Then Agent has new conversation request
     When Agent click on new conversation
     When Agent responds with How can I help you to User
-    Then User have to receive 'How can I help you' text response as a second response for his 'connect to agent' input
+    Then User should see 'How can I help you' text response for his 'connect to agent' input
 
 
