@@ -163,7 +163,7 @@ task runAllTests(type:Test){
         }
         if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
             String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-            if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+            if (!failedTestXMLContent.contains("Failed suite [General Bank Master check]")) {
                 runTouchTests.execute()
             }
         }
@@ -182,7 +182,7 @@ task runPullRequestTests(type:Test){
         }
         if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
             String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-            if (!failedTestXMLContent.contains("Failed suite [Master check]")) {
+            if (!failedTestXMLContent.contains("Failed suite [General Bank Master check]")) {
                 runTouchPullRequestTests.execute()
             }
         }
