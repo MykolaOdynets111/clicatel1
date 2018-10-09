@@ -135,7 +135,7 @@ public class DriverFactory {
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){
         try {
-            if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()==true){
+            if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()){
                 Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
             }
             return new RemoteWebDriver(new URL(REMOTE_URL), capabilities);

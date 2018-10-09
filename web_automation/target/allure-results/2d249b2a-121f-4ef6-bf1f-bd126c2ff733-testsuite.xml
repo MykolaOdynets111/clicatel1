@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1537448388949" stop="1537448451885" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent should be able to filter chats</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1537448388952" stop="1537448451884" status="passed">
+            <name>Verify agent can filter chats</name>
+            <title>Verify agent can filter chats</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1537448392938" stop="1537448425082" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448425082" stop="1537448427054" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448427054" stop="1537448429113" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448429113" stop="1537448434677" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448434677" stop="1537448435709" status="passed">
+                    <name>When User enter connect to agent into widget input field</name>
+                    <title>When User enter connect to agent into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448435709" stop="1537448440776" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448440776" stop="1537448441122" status="passed">
+                    <name>When Agent select "Mobile chats" filter option</name>
+                    <title>When Agent select "Mobile chats" filter option</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448441122" stop="1537448441190" status="passed">
+                    <name>Then Agent should not see from user chat in agent desk</name>
+                    <title>Then Agent should not see from user chat in agent desk</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448441190" stop="1537448441507" status="passed">
+                    <name>When Agent select "Touch" filter option</name>
+                    <title>When Agent select "Touch" filter option</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448441508" stop="1537448442539" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448442539" stop="1537448442799" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448442799" stop="1537448443124" status="passed">
+                    <name>Then Conversation area becomes active with connect to agent user's message</name>
+                    <title>Then Conversation area becomes active with connect to agent user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify agent can filter chats"/>
+                <label name="feature" value="Agent should be able to filter chats"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="5587@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent should be able to filter chats"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

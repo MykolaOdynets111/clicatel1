@@ -3,6 +3,7 @@ package steps;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
+import dataManager.Agents;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
@@ -38,6 +39,12 @@ public class BasePortalSteps {
     @When("^Login as newly created agent$")
     public void loginAsCreatedAgent(){
         portalLoginPage.login(agentEmail, agentPass);
+    }
+
+    @When("^Login into portal as an (.*) of (.*) account$")
+    public void loginToPortal(String ordinalAgentNumber, String account){
+        Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(account, ordinalAgentNumber);
+        portalLoginPage.login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
     }
 
     public static boolean isNewUserWasCreated(){

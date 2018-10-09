@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1538381087984" stop="1538381185073" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Redirection to the agent negative DM fb message</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1538381087984" stop="1538381185072" status="passed">
+            <name>Redirection to the agent negative DM fb message</name>
+            <title>Redirection to the agent negative DM fb message</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1538381099108" stop="1538381147258" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381147258" stop="1538381150352" status="passed">
+                    <name>Given Open General Bank Demo page</name>
+                    <title>Given Open General Bank Demo page</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381150353" stop="1538381151645" status="passed">
+                    <name>When User opens Messenger and send message regarding Your service is awful!</name>
+                    <title>When User opens Messenger and send message regarding Your service is awful!</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381151646" stop="1538381158381" status="passed">
+                    <name>Then Agent has new conversation request from facebook user</name>
+                    <title>Then Agent has new conversation request from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381158381" stop="1538381158698" status="passed">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381158698" stop="1538381159059" status="passed">
+                    <name>Then Conversation area becomes active with Your service is awful! message from facebook user</name>
+                    <title>Then Conversation area becomes active with Your service is awful! message from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381159060" stop="1538381159080" status="passed">
+                    <name>And There is no more than one from user message</name>
+                    <title>And There is no more than one from user message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381159080" stop="1538381164834" status="passed">
+                    <name>And There is no from agent response added by default for chat to agent message from fb user</name>
+                    <title>And There is no from agent response added by default for chat to agent message from fb user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Redirection to the agent negative DM fb message"/>
+                <label name="feature" value="Redirection to the agent negative DM fb message"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="6450@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Redirection to the agent negative DM fb message"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

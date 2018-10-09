@@ -719,14 +719,19 @@ public class TIEApiSteps {
     @When("^I make post request with semantic candidates$")
     public void verifyPostSemantic(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-//        Headers:		Accept=*/*
-//				Content-Type=text/plain; charset=ISO-8859-1
-        Response resp = given().header("Content-Type", "application/json").log().all()
-                .body("{\"semantic_candidates\": [\"semantic\", \"test\"]}").
-        when()
+        SoftAssert soft = new SoftAssert();
+        Response resp1 = given().header("Content-Type", "application/json").log().all()
+                .body("{\"semantic_candidates\": [\"semantic\", \"test\"]}")
                 .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "semantic"));
-        Assert.assertEquals(resp.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
-                "Intent in the response is not as expected\n"+resp.getBody().asString());
+        Response resp2 = given().header("Content-Type", "text/plain").log().all()
+                .body("{\"semantic_candidates\": [\"semantic\", \"test\"]}")
+                .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "semantic"));
+
+        soft.assertEquals(resp1.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
+                "Intent in the response is not as expected after using application/json Content Type\n"+resp1.getBody().asString());
+        soft.assertEquals(resp2.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
+                "Intent in the response is not as expected after using text/plain Content Type\n"+resp2.getBody().asString());
+        soft.assertAll();
     }
 
 
