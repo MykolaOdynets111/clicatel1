@@ -39,7 +39,10 @@ public enum Agents {
     // Touch Go
 
     QA_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
-    QA_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa")
+    QA_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
+
+    QA_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "qa")
+
     ;
 
     String userName;

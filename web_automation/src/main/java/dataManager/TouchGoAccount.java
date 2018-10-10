@@ -7,7 +7,10 @@ import java.util.List;
 
 public enum TouchGoAccount {
 
-    QA_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter_aqa", "Starter AQA", "qa");
+    QA_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "qa"),
+    QA_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "account-for-updating", "Updating AQA", "qa")
+
+    ;
 
     String touchGoPlan;
     String email;
