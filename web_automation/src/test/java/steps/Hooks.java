@@ -38,11 +38,14 @@ public class Hooks implements JSHelper{
 
     @Before
     public void beforeScenario(Scenario scenario){
-            if(scenario.getSourceTagNames().contains("@skip_for_demo1")){
-                if(ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
+
+            if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
-                }
+            }
+
+            if(scenario.getSourceTagNames().contains("@lodash")&ConfigManager.getEnv().equalsIgnoreCase("integration")){
+                throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
             }
 
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&

@@ -10,6 +10,8 @@ import dataManager.Tenants;
 import dataManager.VMQuoteRequestUserData;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.logging.LogType;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
@@ -511,6 +513,25 @@ public class DefaultTouchUserSteps implements JSHelper{
     public void refreshThePage() {
         DriverFactory.getTouchDriverInstance().navigate().refresh();
     }
+
+    @When("^I send window.lodash into browser console it returns function$")
+    public void sendWindowLodashToBrowserConsole() {
+        String windowLodashType = ((String) ((JavascriptExecutor) DriverFactory.getTouchDriverInstance())
+                .executeScript("return typeof window.lodash;"));
+
+        Assert.assertEquals(windowLodashType, "function",
+                "'window.lodash' input in browser console does not return function.\n");
+    }
+
+    @When("^I send underscore: '_' into browser console it returns 'undefined' type$")
+    public void sendUnderscoreToBrowserConsole() {
+        String underscoreType = ((String) ((JavascriptExecutor) DriverFactory.getTouchDriverInstance())
+                .executeScript("return typeof _;"));
+
+        Assert.assertEquals(underscoreType, "undefined",
+                "'_' input in browser console does not return 'undefined'.\n");
+    }
+
 
     // ======================= Private Getters ========================== //
 
