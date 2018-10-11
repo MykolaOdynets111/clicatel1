@@ -470,7 +470,7 @@ public class TIEApiSteps {
     @When("^I add (.*) field (.*) value to the new tenant config$")
     public void updateConfig(String field, String value){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        given().log().all()
+        given().header("Content-Type", "application/json").log().all()
                 .body("{\""+field+"\":\""+value+"\"}").
         when()
                 .post(String.format(Endpoints.TIE_CONFIG, newTenant)).
@@ -519,28 +519,29 @@ public class TIEApiSteps {
     @When("^I send test trainset for newly created tenant status code is 200$")
     public void addTrainingSetForNewTenant(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
-        given()
-                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
+        Response resp =
+        given().header("Content-Type", "application/json").log().all()
+                .body("{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\",\"type\":\"AQA\", \"tags\":[\"AQA\"]}").
         when()
-                .post(String.format(Endpoints.TIE_POST_TRAINSET, newTenant)).
-        then()
-                .statusCode(200);
+                .post(String.format(Endpoints.TIE_POST_TRAINSET, newTenant));
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(resp.statusCode(), 200,
+                "Status code is not 200 after adding new trainset \n" + resp.getBody().asString());
         waitFor(2500);
+        soft.assertAll();
     }
 
     @Then("^Trainset is added for newly created tenant$")
     public void checkTrainsetIsAddedForNewTenant(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         waitFor(1000);
-        given()
-                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
         when()
                 .get(String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
         then()
                 .statusCode(200)
                 .body("intent_trainset.tenant[0]", equalTo(newTenant))
-                .body("intent_trainset.rasa_nlu_data.intent_examples.intent[0][0]", equalTo("SANTA"))
-                .body("intent_trainset.rasa_nlu_data.intent_examples.text[0][0]", equalTo("HO-HO-HO"));
+                .body("intent_trainset.intent[0]", equalTo("SANTA"))
+                .body("intent_trainset.text[0]", equalTo("HO-HO-HO"));
     }
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
