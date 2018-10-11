@@ -98,6 +98,7 @@ public interface WebWait {
     default void waitForElementToBeInvisibleAgent(WebElement element, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
+                .ignoring(NoSuchElementException.class)
                 .until(ExpectedConditions.invisibilityOf(element));
     }
 

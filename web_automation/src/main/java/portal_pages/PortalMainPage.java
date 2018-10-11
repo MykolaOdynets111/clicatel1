@@ -8,12 +8,15 @@ import portal_pages.uielements.UpgradeYourPlanWindow;
 
 public class PortalMainPage extends PortalAbstractPage {
 
+    private String addedToCartAlertXPATH = "//div[@ng-bind-html='alert'][text()='Added to cart']";
+
     @FindBy(xpath = "//div[@ng-bind-html='alert'][text()='Added to cart']")
     private WebElement addedToCartAlert;
 
     private LeftMenu leftMenu;
     private PageHeader pageHeader;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
+    private CartPage cartPage;
 
     public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
         waitForElementToBeVisible(upgradeYourPlanWindow.getWrappedElement());
@@ -33,11 +36,17 @@ public class PortalMainPage extends PortalAbstractPage {
         getPageHeader().clickUpgradeButton();
         getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
                                     .clickAddToCardButton();
-        waitForElementToBeVisibleAgent(addedToCartAlert, 20);
         waitForElementToBeVisibleAgent(addedToCartAlert, 15);
-        getPageHeader().openCart()
-                .clickCheckoutButton()
-        ;
+        waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 10);
+        cartPage = getPageHeader().openCart();
+        cartPage.clickCheckoutButton();
+        cartPage.getConfirmPaymentDetailsWindow()
+                .selectTestVisaCardToPay()
+                .clickNexButton()
+                .acceptTerms()
+                .clickNexButton()
+                .acceptTerms()
+                .clickNexButton();
 
     }
 }

@@ -14,11 +14,9 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
     @FindBy(xpath =  ".//button[@ng-click='wizardSubmit()'][not(@id='integration-save')]")
     private WebElement addToCardButton;
 
-
-
-
     public UpgradeYourPlanWindow selectAgentSeats(int seats){
-        for(int i =0; i<seats; i++ ){
+        waitForElementToBeClickableAgent(addAgentSeatsButton, 5, "main");
+        for(int i =1; i<seats; i++ ){
             addAgentSeatsButton.click();
         }
         return this;

@@ -23,21 +23,23 @@ public class ConfirmPaymentDetailsWindow extends AbstractUIElement {
     @FindBy(css = "input[type='checkbox']")
     private WebElement acceptTermsCheckbox;
 
-    public void selectTestVisaCardToPay(){
+    public ConfirmPaymentDetailsWindow selectTestVisaCardToPay(){
         selectPaymentBox.click();
         waitForElementToBeVisibleAgent(choisesGroup, 5);
         visaOption.click();
         nextButton.click();
+        return this;
     }
 
-    public void confirmPaymentReviewStep(){
+    public ConfirmPaymentDetailsWindow clickNexButton(){
         waitForElementToBeVisibleAgent(nextButton, 7);
         nextButton.click();
+        return this;
     }
 
-    public void acceptTermsAndClickPayNow(){
+    public ConfirmPaymentDetailsWindow acceptTerms(){
         waitForElementToBeVisibleAgent(acceptTermsCheckbox, 7);
         acceptTermsCheckbox.click();
-        nextButton.click();
+        return this;
     }
 }

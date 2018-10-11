@@ -62,6 +62,12 @@ public class BasePortalSteps {
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
     }
 
+    @When("^I try to upgrade and buy (.*) agent seats$")
+    public void upgradeTouchGoPlan(int agentSeats){
+        getPortalMainPage().upgradePlan(agentSeats);
+    }
+
+
     private LeftMenu getLeftMenu() {
         if (leftMenu==null) {
             leftMenu =  getPortalMainPage().getLeftMenu();
