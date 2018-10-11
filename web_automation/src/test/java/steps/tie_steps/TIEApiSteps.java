@@ -535,15 +535,13 @@ public class TIEApiSteps {
     public void checkTrainsetIsAddedForNewTenant(){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         waitFor(1000);
-        given()
-                .body("{\"rasa_nlu_data\": {\"entity_examples\": [], \"intent_examples\": [{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\"}]}}").
         when()
                 .get(String.format(Endpoints.TIE_GET_TRAINSET, newTenant)).
         then()
                 .statusCode(200)
                 .body("intent_trainset.tenant[0]", equalTo(newTenant))
-                .body("intent_trainset.rasa_nlu_data.intent_examples.intent[0][0]", equalTo("SANTA"))
-                .body("intent_trainset.rasa_nlu_data.intent_examples.text[0][0]", equalTo("HO-HO-HO"));
+                .body("intent_trainset.intent[0]", equalTo("SANTA"))
+                .body("intent_trainset.text[0]", equalTo("HO-HO-HO"));
     }
 
     @Then("^(.*) field with (.*) value is removed from tenant config$")
