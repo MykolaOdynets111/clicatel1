@@ -259,6 +259,12 @@ public class DefaultAgentSteps implements JSHelper {
         DriverFactory.getDriverForAgent(agent).navigate().refresh();
     }
 
+    @When("^Agent limit reached popup is show for (.*)$")
+    public void verifyAgentLimitPopup(String ordinalAgentNumber){
+        Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentLimitReachedPopupShown(12),
+                "'Agent limit reached' pop up is not shown.");
+    }
+
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){

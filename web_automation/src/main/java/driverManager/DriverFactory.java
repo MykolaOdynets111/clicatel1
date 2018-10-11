@@ -4,6 +4,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Assert;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +15,9 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> agentDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondAgentDriver = new ThreadLocal<>();
+    private static final String REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
+//    private static final String REMOTE_URL = "http://35.164.148.100:4441/wd/hub";
+
 
     public static boolean isAgentDriverExists(){
         if (agentDriver.get() != null)
@@ -131,8 +135,10 @@ public class DriverFactory {
 
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){
         try {
-            return new RemoteWebDriver(new URL("http://172.31.29.139:4441/wd/hub"), capabilities);
-//            return new RemoteWebDriver(new URL("http://35.164.148.100:4441/wd/hub"), capabilities);
+            if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()){
+                Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
+            }
+            return new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;

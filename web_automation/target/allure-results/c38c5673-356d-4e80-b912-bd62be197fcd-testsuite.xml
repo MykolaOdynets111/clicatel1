@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1537446614430" stop="1537446676677" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Newly created agent should be able to login into to chat desk</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1537446614431" stop="1537446676677" status="passed">
+            <name>Newly created agent should be able to login into to chat desk</name>
+            <title>Newly created agent should be able to login into to chat desk</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1537446618524" stop="1537446620430" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446620430" stop="1537446622554" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446622554" stop="1537446627458" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446627458" stop="1537446633037" status="passed">
+                    <name>Given New General Bank Demo agent is created</name>
+                    <title>Given New General Bank Demo agent is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446633037" stop="1537446640810" status="passed">
+                    <name>When I open portal</name>
+                    <title>When I open portal</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446640810" stop="1537446643989" status="passed">
+                    <name>And Login as newly created agent</name>
+                    <title>And Login as newly created agent</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446643989" stop="1537446660073" status="passed">
+                    <name>Then Agent is logged in chat desk</name>
+                    <title>Then Agent is logged in chat desk</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446660073" stop="1537446660735" status="passed">
+                    <name>When User enter Chat to Support into widget input field</name>
+                    <title>When User enter Chat to Support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446660735" stop="1537446665349" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446665349" stop="1537446665729" status="passed">
+                    <name>When Agent click on new conversation</name>
+                    <title>When Agent click on new conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446665729" stop="1537446666138" status="passed">
+                    <name>Then Conversation area becomes active with Chat to Support user's message</name>
+                    <title>Then Conversation area becomes active with Chat to Support user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446666139" stop="1537446666466" status="passed">
+                    <name>When Agent responds with Hello, how can I help you? to User</name>
+                    <title>When Agent responds with Hello, how can I help you? to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446666466" stop="1537446667270" status="passed">
+                    <name>Then User have to receive 'Hello, how can I help you?' text response for his 'Chat to Support' input</name>
+                    <title>Then User have to receive 'Hello, how can I help you?' text response for his 'Chat to Support' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Newly created agent should be able to login into to chat desk"/>
+                <label name="feature" value="Newly created agent should be able to login into to chat desk"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="29433@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Newly created agent should be able to login into to chat desk"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

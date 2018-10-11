@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1538055096459" stop="1538055277674" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent availability in terms of fb direct messages</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1538055096516" stop="1538055277673" status="failed">
+            <name>Agent availability for fb user</name>
+            <title>Agent availability for fb user</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: User does not receive response on the message "connect to supportx" in FB messenger after 30 seconds wait. expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: User does not receive response on the message "connect to supportx" in FB messenger after 30 seconds wait. expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at steps.FacebookSteps.verifyMessengerResponse(FacebookSteps.java:54)
+	at ✽.Then User have to receive the following on his message regarding chat to agent: "agents_away"(AgentAvailabilityFBDM.feature:21)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1538055122050" stop="1538055190059" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                </step>
+                <step start="1538055190059" stop="1538055198667" status="passed">
+                    <name>Given Open General Bank Demo page</name>
+                    <title>Given Open General Bank Demo page</title>
+                </step>
+                <step start="1538055198668" stop="1538055201513" status="passed">
+                    <name>When User opens Messenger and send message regarding connect to agent</name>
+                    <title>When User opens Messenger and send message regarding connect to agent</title>
+                </step>
+                <step start="1538055201513" stop="1538055207754" status="passed">
+                    <name>Then Agent has new conversation request from facebook user</name>
+                    <title>Then Agent has new conversation request from facebook user</title>
+                </step>
+                <step start="1538055207754" stop="1538055209046" status="passed">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                </step>
+                <step start="1538055209046" stop="1538055209678" status="passed">
+                    <name>Then Conversation area becomes active with connect to agent message from facebook user</name>
+                    <title>Then Conversation area becomes active with connect to agent message from facebook user</title>
+                </step>
+                <step start="1538055209678" stop="1538055210446" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                </step>
+                <step start="1538055210447" stop="1538055211702" status="passed">
+                    <name>Then User have to receive the following on his message regarding connect to agent: "hello"</name>
+                    <title>Then User have to receive the following on his message regarding connect to agent: "hello"</title>
+                </step>
+                <step start="1538055211702" stop="1538055216522" status="passed">
+                    <name>When Agent closes chat</name>
+                    <title>When Agent closes chat</title>
+                </step>
+                <step start="1538055216522" stop="1538055216581" status="passed">
+                    <name>Then User have to receive the following on his message regarding chat to agent: "hello"</name>
+                    <title>Then User have to receive the following on his message regarding chat to agent: "hello"</title>
+                </step>
+                <step start="1538055216581" stop="1538055217962" status="passed">
+                    <name>When Agent changes status to: Unavailable</name>
+                    <title>When Agent changes status to: Unavailable</title>
+                </step>
+                <step start="1538055217962" stop="1538055219130" status="passed">
+                    <name>When User sends message regarding connect to support</name>
+                    <title>When User sends message regarding connect to support</title>
+                </step>
+                <step start="1538055219130" stop="1538055251081" status="failed">
+                    <name>Then User have to receive the following on his message regarding chat to agent: "agents_away"</name>
+                    <title>Then User have to receive the following on his message regarding chat to agent: "agents_away"</title>
+                </step>
+                <step start="1538055251081" stop="1538055251083" status="canceled">
+                    <name>Then Agent should not see from user chat in agent desk</name>
+                    <title>Then Agent should not see from user chat in agent desk</title>
+                </step>
+                <step start="1538055251083" stop="1538055251083" status="canceled">
+                    <name>When Agent changes status to: Available</name>
+                    <title>When Agent changes status to: Available</title>
+                </step>
+                <step start="1538055251086" stop="1538055251086" status="canceled">
+                    <name>Then Agent has new conversation request from facebook user</name>
+                    <title>Then Agent has new conversation request from facebook user</title>
+                </step>
+                <step start="1538055251086" stop="1538055251086" status="canceled">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                </step>
+                <step start="1538055251086" stop="1538055251087" status="canceled">
+                    <name>When Agent responds with How can I help you? to User</name>
+                    <title>When Agent responds with How can I help you? to User</title>
+                </step>
+                <step start="1538055251087" stop="1538055251087" status="canceled">
+                    <name>Then User have to receive the following on his message regarding connect to agent: "How can I help you?"</name>
+                    <title>Then User have to receive the following on his message regarding connect to agent: "How can I help you?"</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent availability for fb user"/>
+                <label name="feature" value="Agent availability in terms of fb direct messages"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="13120@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent availability in terms of fb direct messages"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

@@ -1,0 +1,43 @@
+package portal_pages;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import portal_pages.uielements.LeftMenu;
+import portal_pages.uielements.PageHeader;
+import portal_pages.uielements.UpgradeYourPlanWindow;
+
+public class PortalMainPage extends PortalAbstractPage {
+
+    @FindBy(xpath = "//div[@ng-bind-html='alert'][text()='Added to cart']")
+    private WebElement addedToCartAlert;
+
+    private LeftMenu leftMenu;
+    private PageHeader pageHeader;
+    private UpgradeYourPlanWindow upgradeYourPlanWindow;
+
+    public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
+        waitForElementToBeVisible(upgradeYourPlanWindow.getWrappedElement());
+        return upgradeYourPlanWindow;
+    }
+
+    public PageHeader getPageHeader() {
+        return pageHeader;
+    }
+
+    public LeftMenu getLeftMenu() {
+        waitForElementToBeVisible(leftMenu.getWrappedElement());
+        return leftMenu;
+    }
+
+    public void upgradePlan(int agentSeats){
+        getPageHeader().clickUpgradeButton();
+        getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
+                                    .clickAddToCardButton();
+        waitForElementToBeVisibleAgent(addedToCartAlert, 20);
+        waitForElementToBeVisibleAgent(addedToCartAlert, 15);
+        getPageHeader().openCart()
+                .clickCheckoutButton()
+        ;
+
+    }
+}

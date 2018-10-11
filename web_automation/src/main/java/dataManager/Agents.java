@@ -34,7 +34,16 @@ public enum Agents {
 
     SECOND_AGENT_DEMO1("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo1"),
 
-    SECOND_AGENT_INTEGRATION("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "integration");
+    SECOND_AGENT_INTEGRATION("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "integration"),
+
+    // Touch Go
+
+    QA_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
+    QA_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
+
+    QA_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "qa")
+
+    ;
 
     String userName;
     String userPass;

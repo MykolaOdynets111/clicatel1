@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1538393999950" stop="1538394117158" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Communication between user and agent in two channel</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1538393999950" stop="1538394117156" status="passed">
+            <name>Communication between user and agent (start in dm, proceed with post)</name>
+            <title>Communication between user and agent (start in dm, proceed with post)</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1538394018878" stop="1538394028614" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394028614" stop="1538394034309" status="passed">
+                    <name>Given Open General Bank Demo page</name>
+                    <title>Given Open General Bank Demo page</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394034310" stop="1538394037469" status="passed">
+                    <name>When User opens Messenger and send message regarding connect to agent</name>
+                    <title>When User opens Messenger and send message regarding connect to agent</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394037470" stop="1538394042912" status="passed">
+                    <name>Then Agent has new conversation request from facebook user</name>
+                    <title>Then Agent has new conversation request from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394042913" stop="1538394044544" status="passed">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394044545" stop="1538394046601" status="passed">
+                    <name>Then Conversation area becomes active with connect to agent message from facebook user</name>
+                    <title>Then Conversation area becomes active with connect to agent message from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394046601" stop="1538394048390" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394048390" stop="1538394049535" status="passed">
+                    <name>Then User have to receive the following on his message regarding connect to agent: "hello"</name>
+                    <title>Then User have to receive the following on his message regarding connect to agent: "hello"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394049535" stop="1538394055838" status="passed">
+                    <name>When User makes post message regarding can you help me?</name>
+                    <title>When User makes post message regarding can you help me?</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394055839" stop="1538394068598" status="passed">
+                    <name>Then Agent has new conversation request from facebook user through fb post channel</name>
+                    <title>Then Agent has new conversation request from facebook user through fb post channel</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394068598" stop="1538394072326" status="passed">
+                    <name>Given Agent closes chat</name>
+                    <title>Given Agent closes chat</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394072327" stop="1538394073822" status="passed">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394073823" stop="1538394075944" status="passed">
+                    <name>Then Conversation area becomes active with can you help me? message from facebook user</name>
+                    <title>Then Conversation area becomes active with can you help me? message from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394075944" stop="1538394076689" status="passed">
+                    <name>And There is no more than one from user message</name>
+                    <title>And There is no more than one from user message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394076689" stop="1538394082899" status="passed">
+                    <name>And There is no from agent response added by default for can you help me? message from fb user</name>
+                    <title>And There is no from agent response added by default for can you help me? message from fb user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394082900" stop="1538394084596" status="passed">
+                    <name>When Agent responds with yes, sure to User</name>
+                    <title>When Agent responds with yes, sure to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394084596" stop="1538394087477" status="passed">
+                    <name>Then Post response arrives</name>
+                    <title>Then Post response arrives</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538394087478" stop="1538394095856" status="passed">
+                    <name>And User initial message regarding can you help me? with following agent response 'yes, sure' in comments are shown</name>
+                    <title>And User initial message regarding can you help me? with following agent response 'yes, sure' in comments are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Communication between user and agent (start in dm, proceed with post)"/>
+                <label name="feature" value="Communication between user and agent in two channel"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="19156@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Communication between user and agent in two channel"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

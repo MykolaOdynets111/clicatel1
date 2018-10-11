@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1537448004469" stop="1537448079395" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent information should be present in the info popup</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1537448004469" stop="1537448079394" status="passed">
+            <name>Viewing agent's details in information popup</name>
+            <title>Viewing agent's details in information popup</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1537448008560" stop="1537448056692" status="passed">
+                    <name>When I login as agent of General Bank Demo</name>
+                    <title>When I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448056693" stop="1537448058078" status="passed">
+                    <name>Then Icon should contain General Bank Demo agent's initials</name>
+                    <title>Then Icon should contain General Bank Demo agent's initials</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448058078" stop="1537448058400" status="passed">
+                    <name>When I click icon with initials</name>
+                    <title>When I click icon with initials</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448058400" stop="1537448058677" status="passed">
+                    <name>Then I see General Bank Demo agent's info</name>
+                    <title>Then I see General Bank Demo agent's info</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448058677" stop="1537448059109" status="passed">
+                    <name>When I click "Profile Settings" button</name>
+                    <title>When I click "Profile Settings" button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448059109" stop="1537448061807" status="passed">
+                    <name>Then General Bank Demo Agent's info derails is shown in profile window</name>
+                    <title>Then General Bank Demo Agent's info derails is shown in profile window</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Viewing agent's details in information popup"/>
+                <label name="feature" value="Agent information should be present in the info popup"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="5587@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent information should be present in the info popup"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

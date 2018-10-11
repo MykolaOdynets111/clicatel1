@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1538393206517" stop="1538393341014" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent answers on negative post</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1538393206523" stop="1538393340989" status="passed">
+            <name>Agent should answer with comment on users's negative post</name>
+            <title>Agent should answer with comment on users's negative post</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1538393226152" stop="1538393242962" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393242963" stop="1538393251980" status="passed">
+                    <name>Given Open General Bank Demo page</name>
+                    <title>Given Open General Bank Demo page</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393251981" stop="1538393257623" status="passed">
+                    <name>When User makes post message regarding your service is awful!</name>
+                    <title>When User makes post message regarding your service is awful!</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393257624" stop="1538393269235" status="passed">
+                    <name>Then Agent has new conversation request from facebook user</name>
+                    <title>Then Agent has new conversation request from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393269236" stop="1538393270969" status="passed">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393270970" stop="1538393272911" status="passed">
+                    <name>Then Conversation area becomes active with your service is awful! message from facebook user</name>
+                    <title>Then Conversation area becomes active with your service is awful! message from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393272912" stop="1538393281249" status="passed">
+                    <name>And There is no from agent response added by default for your service is awful! message from fb user</name>
+                    <title>And There is no from agent response added by default for your service is awful! message from fb user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393281249" stop="1538393283045" status="passed">
+                    <name>When Agent responds with how can i help you? to User</name>
+                    <title>When Agent responds with how can i help you? to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393283045" stop="1538393286743" status="passed">
+                    <name>Then Post response arrives</name>
+                    <title>Then Post response arrives</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538393286744" stop="1538393291790" status="passed">
+                    <name>And User initial message regarding your service is awful! with following agent response 'how can i help you?' in comments are shown</name>
+                    <title>And User initial message regarding your service is awful! with following agent response 'how can i help you?' in comments are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent should answer with comment on users's negative post"/>
+                <label name="feature" value="Agent answers on negative post"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="19156@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent answers on negative post"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

@@ -1,0 +1,32 @@
+package portal_pages.uielements;
+
+import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import portal_pages.CartPage;
+
+
+@FindBy(css = "div.header.ng-scope")
+public class PageHeader extends AbstractUIElement {
+
+    @FindBy(css = "button.upgrade-touch-plan-bttn")
+    private WebElement upgradeButton;
+
+    @FindBy(css = "span.mini-cart-icon")
+    private WebElement cartIcon;
+
+    @FindBy(css = "div.cl-cart-drop-footer--controls>button")
+    private WebElement checkoutCartButton;
+
+    public void clickUpgradeButton(){
+        waitForElementToBeVisibleAgent(upgradeButton, 5);
+        upgradeButton.click();
+    }
+
+    public CartPage openCart(){
+        cartIcon.click();
+        waitForElementToBeVisibleAgent(checkoutCartButton, 10);
+        checkoutCartButton.click();
+        return new CartPage();
+    }
+}

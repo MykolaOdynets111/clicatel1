@@ -20,9 +20,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Close chat']")
     private WebElement closeChatButton;
 
-    String closeChatButtonXPATH = "//button[text()='Close chat']";
-    String messageInputLocator = "//textarea[contains(@class,'text-input')]";
-    String loadingSpinner = "//*[text()='Connecting...']";
+    private String closeChatButtonXPATH = "//button[text()='Close chat']";
+    private String messageInputLocator = "//textarea[contains(@class,'text-input')]";
+    private String loadingSpinner = "//*[text()='Connecting...']";
 
     @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
     private WebElement messageInput;
@@ -51,7 +51,10 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "span.connection-error-img")
     private WebElement connectionErrorImage;
 
-    String transferChatButton =  "//button[text()='Transfer chat']";
+    @FindBy(xpath = "//div[@class='modal-header'][text()='Agent limit reached']")
+    private WebElement agentLimitReachedPopup;
+
+    private String transferChatButton =  "//button[text()='Transfer chat']";
 
     private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
 
@@ -280,4 +283,9 @@ public class AgentHomePage extends AgentAbstractPage {
 //        executeJSclick(transferChatButton);
 //        transferChatButton.click();
     }
+
+    public boolean isAgentLimitReachedPopupShown(int wait){
+        return isElementShownAgent(agentLimitReachedPopup,wait);
+    }
+
 }

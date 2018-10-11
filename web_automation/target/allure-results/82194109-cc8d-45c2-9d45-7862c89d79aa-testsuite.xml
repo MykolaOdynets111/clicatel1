@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1538381760911" stop="1538381907380" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent answers on post</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1538381760911" stop="1538381907379" status="passed">
+            <name>Agent should answer with comment on users's post</name>
+            <title>Agent should answer with comment on users's post</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1538381771212" stop="1538381804169" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381804169" stop="1538381807355" status="passed">
+                    <name>Given Open General Bank Demo page</name>
+                    <title>Given Open General Bank Demo page</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381807356" stop="1538381809044" status="passed">
+                    <name>When User makes post message regarding connect to agent</name>
+                    <title>When User makes post message regarding connect to agent</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381809045" stop="1538381820961" status="passed">
+                    <name>Then Agent has new conversation request from facebook user</name>
+                    <title>Then Agent has new conversation request from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381820962" stop="1538381821364" status="passed">
+                    <name>When Agent click on new conversation request from facebook</name>
+                    <title>When Agent click on new conversation request from facebook</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381821365" stop="1538381821727" status="passed">
+                    <name>Then Conversation area becomes active with chat to agent message from facebook user</name>
+                    <title>Then Conversation area becomes active with chat to agent message from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381821727" stop="1538381821749" status="passed">
+                    <name>And There is no more than one from user message</name>
+                    <title>And There is no more than one from user message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381821749" stop="1538381827529" status="passed">
+                    <name>And There is no from agent response added by default for chat to agent message from fb user</name>
+                    <title>And There is no from agent response added by default for chat to agent message from fb user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381827529" stop="1538381827792" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381827793" stop="1538381829246" status="passed">
+                    <name>Then Post response arrives</name>
+                    <title>Then Post response arrives</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381829246" stop="1538381829986" status="passed">
+                    <name>And User initial message regarding connect to agent with following agent response 'hello' in comments are shown</name>
+                    <title>And User initial message regarding connect to agent with following agent response 'hello' in comments are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381829987" stop="1538381840544" status="passed">
+                    <name>When User sends a new post regarding can i open saving accounts in the same conversation</name>
+                    <title>When User sends a new post regarding can i open saving accounts in the same conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381840544" stop="1538381846034" status="passed">
+                    <name>Then Conversation area contains can i open saving accounts message from facebook user</name>
+                    <title>Then Conversation area contains can i open saving accounts message from facebook user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381846034" stop="1538381846441" status="passed">
+                    <name>When Agent responds with sure. please provide us with your telephone number and we will contact you to User</name>
+                    <title>When Agent responds with sure. please provide us with your telephone number and we will contact you to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381846442" stop="1538381847612" status="passed">
+                    <name>Then Post response arrives</name>
+                    <title>Then Post response arrives</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1538381847613" stop="1538381867213" status="passed">
+                    <name>And Agent responds with 'sure. please provide us with your telephone number and we will contact you' on user additional question regarding can i open saving accounts?</name>
+                    <title>And Agent responds with 'sure. please provide us with your telephone number and we will contact you' on user additional question regarding can i open saving accounts?</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent should answer with comment on users's post"/>
+                <label name="feature" value="Agent answers on post"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="9651@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent answers on post"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

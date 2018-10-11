@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1537448079448" stop="1537448142792" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>User on his demand should be redirected on the agent</name>
+    <description type="text">
+Verification of basic communication between user and agent</description>
+    <test-cases>
+        <test-case start="1537448079448" stop="1537448142791" status="passed">
+            <name>Verify user is redirected to the Agent when types negative sentiment message</name>
+            <title>Verify user is redirected to the Agent when types negative sentiment message</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1537448083444" stop="1537448119905" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448119906" stop="1537448121818" status="passed">
+                    <name>Given User profile for generalbank is created</name>
+                    <title>Given User profile for generalbank is created</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448121818" stop="1537448123858" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448123858" stop="1537448128313" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448128313" stop="1537448128735" status="passed">
+                    <name>When User enter Hate your banking into widget input field</name>
+                    <title>When User enter Hate your banking into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448128736" stop="1537448134322" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448134323" stop="1537448134613" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537448134613" stop="1537448134954" status="passed">
+                    <name>Then Conversation area becomes active with Hate your banking user's message</name>
+                    <title>Then Conversation area becomes active with Hate your banking user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify user is redirected to the Agent when types negative sentiment message"/>
+                <label name="feature" value="User on his demand should be redirected on the agent"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="5587@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="User on his demand should be redirected on the agent"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

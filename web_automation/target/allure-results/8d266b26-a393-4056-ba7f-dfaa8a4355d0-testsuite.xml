@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1537446144579" stop="1537446250015" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent should be disconnected from the first browser if he logs in the second one</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1537446144579" stop="1537446250015" status="passed">
+            <name>Agent should be disconnected from the first browser if he logs in the second one</name>
+            <title>Agent should be disconnected from the first browser if he logs in the second one</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1537446151436" stop="1537446180478" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446180478" stop="1537446221075" status="passed">
+                    <name>When I login with the same credentials in another browser as an agent of General Bank Demo</name>
+                    <title>When I login with the same credentials in another browser as an agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1537446221075" stop="1537446221119" status="passed">
+                    <name>Then In the first browser Connection Error should be shown</name>
+                    <title>Then In the first browser Connection Error should be shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent should be disconnected from the first browser if he logs in the second one"/>
+                <label name="feature" value="Agent should be disconnected from the first browser if he logs in the second one"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="29433@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent should be disconnected from the first browser if he logs in the second one"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>
