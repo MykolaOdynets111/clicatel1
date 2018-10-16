@@ -22,6 +22,12 @@ public class PostFeed extends AbstractUIElement {
         if (isElementShownByXpath(closeDMPopupButton, 10)) findElemByXPATH(closeDMPopupButton).click();
         postInputField.click();
         postInputField.sendKeys(userPostText);
+        if(!postInputField.getText().equals(userPostText)){
+            if (isElementShownByXpath(closeDMPopupButton, 8)) findElemByXPATH(closeDMPopupButton).click();
+            postInputField.click();
+            postInputField.clear();
+            postInputField.sendKeys(userPostText);
+        }
         try{
         postButton.click();
         } catch (WebDriverException e){
