@@ -5,14 +5,31 @@ import interfaces.JSHelper;
 import interfaces.WebActions;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portal_pages.uielements.ConfirmPaymentDetailsWindow;
 
 public class CartPage implements WebActions, ActionsHelper, JSHelper {
 
-    @FindBy(css = "button.small-centered.button.button-primary")
-    private WebElement checkOutButton;
+   private String checkOutButtonCSS = "button.small-centered.button.button-primary";
+
+   private String confirmDetailsPopUp = "div.cl-wizzard.create-integration-container";
+
+   private ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow;
+
+    public ConfirmPaymentDetailsWindow getConfirmPaymentDetailsWindow() {
+        if (confirmPaymentDetailsWindow==null) {
+            waitForElementsToBeVisibleByCssAgent(confirmDetailsPopUp, 5);
+            confirmPaymentDetailsWindow =  new ConfirmPaymentDetailsWindow(findElemByCSSAgent(confirmDetailsPopUp));
+            return confirmPaymentDetailsWindow;
+        } else{
+            return confirmPaymentDetailsWindow;
+        }
+    }
 
     public void clickCheckoutButton(){
-        waitForElementToBeVisibleAgent(checkOutButton, 10);
-        checkOutButton.click();
+        waitForElementsToBeVisibleByCssAgent(checkOutButtonCSS, 5);
+        findElemByCSSAgent(checkOutButtonCSS).click();
     }
+
+
+
 }
