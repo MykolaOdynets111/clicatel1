@@ -138,8 +138,8 @@ public class TIEApiSteps {
                 .get(url).
         then()
                 .statusCode(200)
-                .body("size()", is(intents.size()+1))
-                .body("intent", hasItems(targetArray));
+                .body("data.size()", is(intents.size()))
+                .body("data.intent", hasItems(targetArray));
     }
 
     @When("^I send only (.*) for (.*) tenant then response code is 404$")
@@ -164,7 +164,7 @@ public class TIEApiSteps {
     public void getAllCategoryAnswer(String category, String tenant){
         String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, tenant, category);
         Response resp = get(url);
-        List<String> returnedListOfCategories = resp.getBody().jsonPath().getList("category");
+        List<String> returnedListOfCategories = resp.getBody().jsonPath().getList("data.category");
         returnedListOfCategories.removeIf(Objects::isNull);
 
         SoftAssert soft = new SoftAssert();

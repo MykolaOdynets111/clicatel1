@@ -3,11 +3,13 @@ package steps;
 import agent_side_pages.UIElements.SuggestedGroup;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Agents;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
+import org.testng.Assert;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
 import portal_pages.uielements.LeftMenu;
@@ -67,6 +69,11 @@ public class BasePortalSteps {
         getPortalMainPage().upgradePlan(agentSeats);
     }
 
+    @Then("^I see \"Payment Successful\" message$")
+    public void verifyPaymentSuccessfulMessage(){
+        Assert.assertEquals(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
+                "Payment Successful", "Payment successful message was not shown");
+    }
 
     private LeftMenu getLeftMenu() {
         if (leftMenu==null) {

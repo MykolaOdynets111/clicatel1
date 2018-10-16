@@ -11,14 +11,25 @@ public class CartPage implements WebActions, ActionsHelper, JSHelper {
 
    private String checkOutButtonCSS = "button.small-centered.button.button-primary";
 
-    private ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow;
+   private String confirmDetailsPopUp = "div.cl-wizzard.create-integration-container";
+
+   private ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow;
 
     public ConfirmPaymentDetailsWindow getConfirmPaymentDetailsWindow() {
-        return confirmPaymentDetailsWindow;
+        if (confirmPaymentDetailsWindow==null) {
+            waitForElementsToBeVisibleByCssAgent(confirmDetailsPopUp, 5);
+            confirmPaymentDetailsWindow =  new ConfirmPaymentDetailsWindow(findElemByCSSAgent(confirmDetailsPopUp));
+            return confirmPaymentDetailsWindow;
+        } else{
+            return confirmPaymentDetailsWindow;
+        }
     }
 
     public void clickCheckoutButton(){
         waitForElementsToBeVisibleByCssAgent(checkOutButtonCSS, 5);
-        findElemByCSS(checkOutButtonCSS).click();
+        findElemByCSSAgent(checkOutButtonCSS).click();
     }
+
+
+
 }

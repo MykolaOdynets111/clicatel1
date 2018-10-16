@@ -2,6 +2,7 @@ package portal_pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portal_pages.uielements.ConfirmPaymentDetailsWindow;
 import portal_pages.uielements.LeftMenu;
 import portal_pages.uielements.PageHeader;
 import portal_pages.uielements.UpgradeYourPlanWindow;
@@ -42,11 +43,20 @@ public class PortalMainPage extends PortalAbstractPage {
         cartPage.clickCheckoutButton();
         cartPage.getConfirmPaymentDetailsWindow()
                 .selectTestVisaCardToPay()
-                .clickNexButton()
                 .acceptTerms()
                 .clickNexButton()
+                .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickNexButton();
 
+    }
+
+    public CartPage getCartPage() {
+        if (cartPage==null) {
+            cartPage =  new CartPage();
+            return cartPage;
+        } else{
+            return cartPage;
+        }
     }
 }
