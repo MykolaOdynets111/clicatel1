@@ -9,6 +9,7 @@ import dataManager.Agents;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
+import driverManager.DriverFactory;
 import org.testng.Assert;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
@@ -61,7 +62,14 @@ public class BasePortalSteps {
 
     @When("^I select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
+
+        for(String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()){
+            if(!winHandle.equals(currentWindow)){
+                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+            }
+        }
     }
 
     @When("^I try to upgrade and buy (.*) agent seats$")
