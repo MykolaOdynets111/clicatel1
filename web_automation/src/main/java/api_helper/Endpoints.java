@@ -85,7 +85,7 @@ public class Endpoints {
 
     public static String TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING = URLs.getBaseTieURL() + "%s/intents/%s/train/%s";
 
-    public static String TIE_CLEARING_CONFIGS = URLs.getBaseTieURL() + "?tenant=%s&clear=nlp_config,train_data";
+    public static String TIE_CLEARING_CONFIGS = URLs.getBaseTieURL() + "%s/reset?clear=nlp_config,train_data";
 
     public static String TIE_POST_TRAINSET = URLs.getBaseTieURL() + "%s/trainset/test";
 

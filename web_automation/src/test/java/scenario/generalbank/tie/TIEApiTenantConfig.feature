@@ -4,7 +4,7 @@ Feature: Testing TIE APIs (tenant config)
   ### Tenant management ###
 
   Scenario: User should be able to clear tenant config
-        API POST tenants/?tenant=TESTONE&clear=nlp_config,train_data
+          API POST tenants/TESTONE/reset?clear=nlp_config,train_data
     Given I create new tenant with TIE API
     And Wait for a minute
     When I add add_synonyms field false value to the new tenant config

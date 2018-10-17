@@ -645,7 +645,7 @@ public class TIEApiSteps {
                 urlEncodingEnabled(false).
                 when()
                 .post(url);
-        Assert.assertEquals(200, resp.getStatusCode(),
+        Assert.assertEquals(resp.getStatusCode(), 200,
                 "Status code is not 200.\nResponse body: "+resp.getBody().asString()+"\nUrl: "+url+"");
 
         waitFor(5000);
