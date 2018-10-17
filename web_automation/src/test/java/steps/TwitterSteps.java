@@ -95,8 +95,8 @@ public class TwitterSteps {
 //        if(expectedAgentMessage.length()>132){
 //            expectedAgentMessage = expectedAgentMessage.substring(0,131);
 //        }
-        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,5),
-                "Agent response "+expectedAgentMessage+" for user is not shown as comment for tweet");
+        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,15),
+                "Expected response "+expectedAgentMessage+" for user is not shown as comment for tweet");
     }
 
 
