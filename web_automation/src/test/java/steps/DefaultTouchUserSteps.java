@@ -186,7 +186,6 @@ public class DefaultTouchUserSteps implements JSHelper{
         softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
         String actualCardText = widgetConversationArea.getResponseTextOnUserInput(userInput);
-        System.out.println("actualCardText "+ actualCardText);
         if (!expectedTextResponse.contains("\\n")) actualCardText.replace("\n", "");
         else expectedTextResponse = expectedTextResponse.replace("\\n", "\n");
         softAssert.assertEquals(actualCardText, expectedTextResponse,
@@ -532,6 +531,11 @@ public class DefaultTouchUserSteps implements JSHelper{
                 "'_' input in browser console does not return 'undefined'.\n");
     }
 
+    @Then("^Touch button is not shown$")
+    public void verifyTButtonIsNotShown(){
+        Assert.assertFalse(widget.isTouchButtonShown(2),
+                "TButton is shown for tenant with Starter TouchGoPlan.");
+    }
 
     // ======================= Private Getters ========================== //
 

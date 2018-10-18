@@ -83,6 +83,18 @@ public class BasePortalSteps {
                 "Payment Successful", "Payment successful message was not shown");
     }
 
+    @Then("^Admin should see \"(.*)\" in the page header$")
+    public void verifyTouchGoPlanNamePresence(String expectedTocuhGo){
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTocuhGo,
+                "Shown Touch go plan is not as expected.");
+    }
+
+    @Then("^Not see \"Add Agent seats\"$")
+    public void verifyAddAgentsSeatsNotShown(){
+        Assert.assertFalse(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals("Add Agent seats"),
+                "'Add Agent seats' button is shown for Starter Touch Go tenant");
+    }
+
     private LeftMenu getLeftMenu() {
         if (leftMenu==null) {
             leftMenu =  getPortalMainPage().getLeftMenu();
