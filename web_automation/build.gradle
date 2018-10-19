@@ -242,6 +242,17 @@ task runTIETestsForAllTenants(type: Test) {
     }
 }
 
+task runTouchGoTests(type:Test) {
+    runTouchTests.dependsOn(getTouchGoPlan)
+    systemProperties = System.getProperties()
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "touchgo/onethreadtouchgotests.xml"
+        suites baseXmlPath+ "touchgo/paralleltouchgotests.xml"
+    }
+}
+
+
 // ========= !! MAIN TASKS !! ============== //
 
 task runTests(type: Test) {
@@ -287,6 +298,10 @@ task runTests(type: Test) {
 
     if(suite=="tiepullrequest"){
         runTests.dependsOn(runTIETestsForAllTenants)
+    }
+
+    if(suite=="touchgo"){
+        runTests.dependsOn(runTouchGoTests)
     }
 
     runTests.finalizedBy(allureReport)
