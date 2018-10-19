@@ -84,14 +84,20 @@ public class BasePortalSteps {
     }
 
     @Then("^Admin should see \"(.*)\" in the page header$")
-    public void verifyTouchGoPlanNamePresence(String expectedTocuhGo){
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTocuhGo,
+    public void verifyTouchGoPlanNamePresence(String expectedTouchGo){
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
-    @Then("^Not see \"Add Agent seats\"$")
-    public void verifyAddAgentsSeatsNotShown(){
-        Assert.assertFalse(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals("Add Agent seats"),
+    @Then("^Not see \"(.*)\" button$")
+    public void verifyNotShowingUpgradeButtonText(String textNotToBeShown){
+        Assert.assertFalse(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals(textNotToBeShown),
+                "'Add Agent seats' button is shown for Starter Touch Go tenant");
+    }
+
+    @Then("^See \"(.*)\" button$")
+    public void verifyNShowingUpgradeButtonText(String textToBeShown){
+        Assert.assertTrue(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals(textToBeShown),
                 "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 

@@ -162,7 +162,7 @@ public class Hooks implements JSHelper{
                     agentHomePage.getHeader().clickIconWithInitials();
             }
 
-            closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
+            if(!scenario.getSourceTagNames().equals(Arrays.asList("@portal"))) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");

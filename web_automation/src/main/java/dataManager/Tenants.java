@@ -66,6 +66,10 @@ public class Tenants {
                 Tenants.setTenantUnderTest("starter-aqa");
                 Tenants.setTenantUnderTestOrgName("Starter AQA");
                 break;
+            case "Standard AQA" :
+                Tenants.setTenantUnderTest("standardplan");
+                Tenants.setTenantUnderTestOrgName("Standard AQA");
+                break;
         }
     }
 }
