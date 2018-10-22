@@ -2,17 +2,18 @@ package portal_pages.uielements;
 
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
 public class IntegrationCard extends Widget implements WebActions {
 
-    @FindBy(css = "p.title")
-    private WebElement integrationName;
+    private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(css = "button.status-button")
-    private WebElement statusButton;
+    private String integrationName =  "p.title";
+
+    private String statusButton = "button.status-button";
 
     public IntegrationCard(WebElement element) {
         super(element);
@@ -20,11 +21,11 @@ public class IntegrationCard extends Widget implements WebActions {
 
 
     public String getIntegrationName(){
-        return integrationName.getText();
+        return baseWebElem.findElement(By.cssSelector(integrationName)).getText();
    }
 
 
    public String getStatus(){
-        return statusButton.getText();
+        return  baseWebElem.findElement(By.cssSelector(statusButton)).getText();
    }
 }
