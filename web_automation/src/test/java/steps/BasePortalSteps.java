@@ -1,6 +1,5 @@
 package steps;
 
-import agent_side_pages.UIElements.SuggestedGroup;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -11,6 +10,8 @@ import dbManager.DBConnector;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
+import portal_pages.PortalIntegrationsPage;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
 import portal_pages.uielements.LeftMenu;
@@ -22,6 +23,7 @@ public class BasePortalSteps {
     private PortalLoginPage portalLoginPage;
     private LeftMenu leftMenu;
     private PortalMainPage portalMainPage;
+    private PortalIntegrationsPage portalIntegrationsPage;
 
 
     @Given("^New (.*) agent is created$")
@@ -101,6 +103,18 @@ public class BasePortalSteps {
                 "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
+    @When("^Disable the (.*)$")
+    public void disableTheIntegration(String integration){
+        getPortalIntegrationsPage().clickToggleFor(integration);
+    }
+
+    @Then("^Status of (.*) is changed to \"(.*)\"$")
+    public void verifyTheIntegrationStatus(String integration, String expectedStatus){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalIntegrationsPage().getIntegrationRowStatus(integration).equalsIgnoreCase(expectedStatus));
+        soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
+    }
+
     private LeftMenu getLeftMenu() {
         if (leftMenu==null) {
             leftMenu =  getPortalMainPage().getLeftMenu();
@@ -118,4 +132,14 @@ public class BasePortalSteps {
             return portalMainPage;
         }
     }
+
+    private PortalIntegrationsPage getPortalIntegrationsPage(){
+        if (portalIntegrationsPage==null) {
+            portalIntegrationsPage =  new PortalIntegrationsPage();
+            return portalIntegrationsPage;
+        } else{
+            return portalIntegrationsPage;
+        }
+    }
+
 }
