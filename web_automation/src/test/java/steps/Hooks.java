@@ -20,6 +20,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import portal_pages.PortalIntegrationsPage;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
@@ -170,7 +171,15 @@ public class Hooks implements JSHelper{
                     ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
                 }
             }
-            DriverFactory.closeAgentBrowser();
+
+            if (scenario.getSourceTagNames().contains("@widget_disabling")){
+                PortalIntegrationsPage portalIntegrationsPage = new PortalIntegrationsPage();
+                if (!portalIntegrationsPage.getIntegrationRowStatus("web chat").equalsIgnoreCase("active")){
+                    portalIntegrationsPage.clickToggleFor("web chat");
+                }
+            }
+
+                    DriverFactory.closeAgentBrowser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

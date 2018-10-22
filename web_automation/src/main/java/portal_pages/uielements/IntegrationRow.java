@@ -3,6 +3,7 @@ package portal_pages.uielements;
 import abstract_classes.AbstractUIElement;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.CartPage;
@@ -10,28 +11,27 @@ import portal_pages.CartPage;
 
 public class IntegrationRow extends Widget implements WebActions {
 
-    @FindBy(css = "td>a")
-    private WebElement integrationName;
+    private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(css = "button.bttn-toggle")
-    private WebElement toggle;
+    private String integrationName = ".//td/a";
 
-    @FindBy(css = "button.status-button")
-    private WebElement statusField;
+    private String toggle = "button.bttn-toggle";
+
+    private String statusField = "button.status-button";
 
     public IntegrationRow(WebElement element) {
         super(element);
     }
 
    public String getIntegrationName(){
-        return integrationName.getText();
+        return baseWebElem.findElement(By.xpath(integrationName)).getText();
    }
 
    public void clickToggle(){
-        toggle.click();
+       baseWebElem.findElement(By.cssSelector(toggle)).click();
    }
 
    public String getStatus(){
-        return statusField.getText();
+        return baseWebElem.findElement(By.cssSelector(statusField)).getText();
    }
 }

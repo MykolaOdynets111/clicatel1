@@ -17,13 +17,13 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
 
     private IntegrationRow getTargetIntegrationRow(String integrationName){
         return integrationRows.stream().map(IntegrationRow::new).collect(Collectors.toList())
-                .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName))
+                .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName.toLowerCase()))
                 .findFirst().get();
     }
 
     private IntegrationCard getTargetIntegrationCard(String integrationName){
         return integrationCards.stream().map(IntegrationCard::new).collect(Collectors.toList())
-                .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName))
+                .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName.toLowerCase()))
                 .findFirst().get();
     }
 
