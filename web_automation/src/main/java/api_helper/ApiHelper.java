@@ -1,11 +1,13 @@
 package api_helper;
 
+import dataManager.MC2Account;
 import dataManager.Tenants;
 import dataManager.Territories;
 import dataManager.jackson_schemas.Country;
 import dataManager.jackson_schemas.Territory;
 import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import dataManager.jackson_schemas.user_session_info.UserSession;
+import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
@@ -232,5 +234,16 @@ public class ApiHelper {
         String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
         RestAssured.given().header("Accept", "application/json")
                .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT, tenantID));
+    }
+
+    public static void decreaseTouchGoPLan(String tenantOrgName){
+        MC2Account targetAccount = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        RestAssured.given().log().all()
+                .header("Content-Type", "application/json")
+                .body("{\n" +
+                        "  \"accountId\": \""+targetAccount.getAccountID()+"\",\n" +
+                        "  \"messageType\": \"TOUCH_STARTED\"" +
+                        "}")
+                .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
     }
 }

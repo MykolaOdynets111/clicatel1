@@ -3,6 +3,7 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
+import api_helper.ApiHelperPlatform;
 import api_helper.TwitterAPI;
 import api_helper.Endpoints;
 import cucumber.api.Scenario;
@@ -164,6 +165,15 @@ public class Hooks implements JSHelper{
             }
 
             if(!scenario.getSourceTagNames().equals(Arrays.asList("@portal"))) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
+
+            if(scenario.getSourceTagNames().contains("@updating_touchgo")) {
+                ApiHelper.decreaseTouchGoPLan(Tenants.getTenantUnderTestOrgName());
+                List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(Tenants.getTenantUnderTestOrgName());
+                for(int subscription : subscriptionIDs){
+                    ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), subscription);
+                }
+            }
+
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");

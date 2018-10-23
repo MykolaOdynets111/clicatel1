@@ -44,7 +44,8 @@ public class Accounts {
                 accountName = "generalbankdemo";
             }
             return accountName;
+        } else{
+           return MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName).getAccountName();
         }
-        return "account name is not defined yet for " +tenantOrgName+ " tenant org name";
     }
 }

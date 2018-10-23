@@ -16,6 +16,8 @@ import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
 import portal_pages.uielements.LeftMenu;
 
+import java.util.List;
+
 public class BasePortalSteps {
 
     private static String agentEmail;
