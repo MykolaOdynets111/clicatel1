@@ -62,6 +62,14 @@ public class Tenants {
                 Tenants.setTenantUnderTest("virgin-money");
                 Tenants.setTenantUnderTestOrgName("Virgin Money");
                 break;
+            case "Starter AQA" :
+                Tenants.setTenantUnderTest("starter-aqa");
+                Tenants.setTenantUnderTestOrgName("Starter AQA");
+                break;
+            case "Standard AQA" :
+                Tenants.setTenantUnderTest("standardplan");
+                Tenants.setTenantUnderTestOrgName("Standard AQA");
+                break;
         }
     }
 }

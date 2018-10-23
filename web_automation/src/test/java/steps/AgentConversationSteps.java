@@ -90,12 +90,6 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().clearAndSendResponseToUser(responseToUser);
     }
 
-    @Then("^There is no suggestions on user's input (.*)$")
-    public void verifyIfThereIsNoSuggestions(String userMessage) {
-        Assert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(),
-                "Suggestions list is not empty on user's input: "+userMessage+"");
-    }
-
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
         getAgentHomePage().clickAgentAssistantButton();
@@ -223,6 +217,26 @@ public class AgentConversationSteps implements JSHelper{
     public void closeChat(String agent){
         getAgentHomePage(agent).clickEndChat();
         getAgentHomePage(agent).clickCloseButtonInCloseChatPopup();
+    }
+
+    @Then("^Suggestions are not shown$")
+    public void verifySuggestionNotShown(){
+        getAgentHomePage().clickAgentAssistantButton();
+        Assert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(),
+                "Suggestions list is not empty.");
+    }
+
+    @Then("And message that feature is not available is shown")
+    public void verifySuggestionFeatureNotAvailable(){
+        String expectedMessage = "Agent assist is not available on your current touch package";
+        Assert.assertEquals(getSuggestedGroup().getSuggestionsNotAvailableMessage(), expectedMessage,
+                "Error message that Agent Assist feature is not available is not as expected");
+    }
+
+    @Then("^(?:End chat|Agent Feedback) popup is not shown$")
+    public void verifyEndChatPopupNotOpened(){
+        Assert.assertFalse(getAgentHomePage().isEndChatPopupShown(),
+                "Agent Feedback popup is opened");
     }
 
     private AgentHomePage getAgentHomePage() {

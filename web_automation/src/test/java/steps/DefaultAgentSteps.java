@@ -56,6 +56,14 @@ public class DefaultAgentSteps implements JSHelper {
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }
 
+    @Given("^Try to login as (.*) of (.*)")
+    public void tryToLoginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+//        if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
+        AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
+    }
+
+
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
         AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");

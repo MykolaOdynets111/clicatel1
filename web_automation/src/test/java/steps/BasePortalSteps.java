@@ -1,6 +1,5 @@
 package steps;
 
-import agent_side_pages.UIElements.SuggestedGroup;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -9,7 +8,10 @@ import dataManager.Agents;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
+import driverManager.DriverFactory;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
+import portal_pages.PortalIntegrationsPage;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
 import portal_pages.uielements.LeftMenu;
@@ -21,6 +23,7 @@ public class BasePortalSteps {
     private PortalLoginPage portalLoginPage;
     private LeftMenu leftMenu;
     private PortalMainPage portalMainPage;
+    private PortalIntegrationsPage portalIntegrationsPage;
 
 
     @Given("^New (.*) agent is created$")
@@ -61,7 +64,14 @@ public class BasePortalSteps {
 
     @When("^I select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
+
+        for(String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()){
+            if(!winHandle.equals(currentWindow)){
+                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+            }
+        }
     }
 
     @When("^I try to upgrade and buy (.*) agent seats$")
@@ -73,6 +83,36 @@ public class BasePortalSteps {
     public void verifyPaymentSuccessfulMessage(){
         Assert.assertEquals(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
                 "Payment Successful", "Payment successful message was not shown");
+    }
+
+    @Then("^Admin should see \"(.*)\" in the page header$")
+    public void verifyTouchGoPlanNamePresence(String expectedTouchGo){
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+                "Shown Touch go plan is not as expected.");
+    }
+
+    @Then("^Not see \"(.*)\" button$")
+    public void verifyNotShowingUpgradeButtonText(String textNotToBeShown){
+        Assert.assertFalse(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals(textNotToBeShown),
+                "'Add Agent seats' button is shown for Starter Touch Go tenant");
+    }
+
+    @Then("^See \"(.*)\" button$")
+    public void verifyNShowingUpgradeButtonText(String textToBeShown){
+        Assert.assertTrue(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals(textToBeShown),
+                "'Add Agent seats' button is shown for Starter Touch Go tenant");
+    }
+
+    @When("^Disable the (.*)$")
+    public void disableTheIntegration(String integration){
+        getPortalIntegrationsPage().clickToggleFor(integration);
+    }
+
+    @Then("^Status of (.*) is changed to \"(.*)\"$")
+    public void verifyTheIntegrationStatus(String integration, String expectedStatus){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalIntegrationsPage().getIntegrationRowStatus(integration).equalsIgnoreCase(expectedStatus));
+        soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
     }
 
     private LeftMenu getLeftMenu() {
@@ -92,4 +132,14 @@ public class BasePortalSteps {
             return portalMainPage;
         }
     }
+
+    private PortalIntegrationsPage getPortalIntegrationsPage(){
+        if (portalIntegrationsPage==null) {
+            portalIntegrationsPage =  new PortalIntegrationsPage();
+            return portalIntegrationsPage;
+        } else{
+            return portalIntegrationsPage;
+        }
+    }
+
 }

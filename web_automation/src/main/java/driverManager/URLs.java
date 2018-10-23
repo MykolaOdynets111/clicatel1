@@ -1,11 +1,9 @@
 package driverManager;
 
 import api_helper.Endpoints;
-import api_helper.RequestSpec;
 import dataManager.FacebookPages;
 import dataManager.Tenants;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
+import dataManager.TwitterPages;
 
 public class URLs {
 
@@ -119,7 +117,7 @@ public class URLs {
     }
 
     public static String getTwitterURL(String tenantOrgName) {
-        return TwitterURLs.getURLByTenantAndURL(tenantOrgName, ConfigManager.getEnv());
+        return TwitterPages.getURLByTenantAndURL(tenantOrgName, ConfigManager.getEnv());
     }
 
     public static String getPortalURL(){

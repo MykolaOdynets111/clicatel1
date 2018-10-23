@@ -114,4 +114,7 @@ public class Widget extends AbstractPage {
         click(closeButton);
     }
 
+    public boolean isTouchButtonShown(int wait){
+        return isElementShown(touchButton, wait);
+    }
 }

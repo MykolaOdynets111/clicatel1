@@ -18,6 +18,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.cl-cart-drop-footer--controls>button")
     private WebElement checkoutCartButton;
 
+    @FindBy(css = "div.balance-text.ng-binding")
+    private WebElement touchGoPlanName;
+
     public void clickUpgradeButton(){
         waitForElementToBeVisibleAgent(upgradeButton, 5);
         upgradeButton.click();
@@ -28,5 +31,14 @@ public class PageHeader extends AbstractUIElement {
         waitForElementToBeVisibleAgent(checkoutCartButton, 10);
         checkoutCartButton.click();
         return new CartPage();
+    }
+
+    public String getTouchGoPlanName(){
+        if(isElementShownAgent(touchGoPlanName,3)) return touchGoPlanName.getText();
+        else return "no Touch Go plan name is shown";
+    }
+
+    public String getTextOfUpgradeButton(){
+        return upgradeButton.getText();
     }
 }
