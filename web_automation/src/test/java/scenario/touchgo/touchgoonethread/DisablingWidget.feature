@@ -9,4 +9,4 @@ Feature: Widget disabling
     And Disable the web chat
     Then Status of Web Chat is changed to "Not Active"
     When User select Starter AQA tenant
-    Then Chat icon is visible
+    Then Chat icon is not visible
