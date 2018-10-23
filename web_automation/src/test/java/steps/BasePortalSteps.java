@@ -1,10 +1,12 @@
 package steps;
 
+import api_helper.ApiHelper;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Agents;
+import dataManager.MC2Account;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
@@ -55,9 +57,10 @@ public class BasePortalSteps {
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
-    public void loginToPortal(String ordinalAgentNumber, String account){
-        Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(account, ordinalAgentNumber);
+    public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
+        Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
         portalLoginPage.login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
+        Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 
     public static boolean isNewUserWasCreated(){
@@ -115,6 +118,32 @@ public class BasePortalSteps {
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getPortalIntegrationsPage().getIntegrationRowStatus(integration).equalsIgnoreCase(expectedStatus));
         soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
+    }
+
+    @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
+    public void verifyTouchGoPlanUpdatingInTenantConfig(String tenantOrgName, String expectedTouchGoPlan){
+        String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
+        for(int i=0; i<41; i++){
+            if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
+                getPortalMainPage().waitFor(15000);
+                actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
+            } else{
+                break;
+            }
+        }
+        Assert.assertTrue(actualType.equalsIgnoreCase(expectedTouchGoPlan),
+                "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
+                        "Expected: " + expectedTouchGoPlan + "\n" +
+                        "Found:" + actualType
+        );
+    }
+
+
+    @Then("^Touch Go PLan is updated to (.*) in portal page$")
+    public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
+        DriverFactory.getAgentDriverInstance();
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+                "Shown Touch go plan is not as expected.");
     }
 
     private LeftMenu getLeftMenu() {
