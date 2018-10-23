@@ -7,12 +7,12 @@ import java.util.List;
 
 public enum TouchGoAccount {
 
-    QA_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "qa"),
-    QA_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingaccount", "Updating AQA", "qa"),
-    QA_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "qa"),
+    QA_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "qa", "ff808081661a899b016653366b13214c"),
+    QA_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingaccount", "Updating AQA", "qa", ""),
+    QA_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "qa", ""),
 
-    TESTING_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "testing"),
-    TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing")
+    TESTING_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "testing", ""),
+    TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing", "")
 
     ;
 
@@ -22,14 +22,16 @@ public enum TouchGoAccount {
     String accountName;
     String tenantOrgName;
     String env;
+    String tenantID;
 
-    TouchGoAccount(String touchGoPlan, String email, String pass, String accountName, String tenantOrgName, String env) {
+    TouchGoAccount(String touchGoPlan, String email, String pass, String accountName, String tenantOrgName, String env, String tenantID) {
         this.touchGoPlan = touchGoPlan;
         this.email = email;
         this.pass = pass;
         this.accountName = accountName;
         this.tenantOrgName = tenantOrgName;
         this.env = env;
+        this.tenantID = tenantID;
     }
 
     public String getEmail() {

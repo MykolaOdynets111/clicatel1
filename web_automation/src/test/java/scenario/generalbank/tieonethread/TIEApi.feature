@@ -56,7 +56,7 @@ Feature: Testing TIE APIs
   Scenario: Tie model type tests
           API: GET /tenants/<tenant_name>/chats/?q=<user input>&type=<type name>
     When I make a request with 'I would like to chat to support' user input and 'touch button' type for generalbank tenant then response contains 1 correct intent: connect agent
-    When I make a request with 'I would like to chat to support' user input and 'touch button' type for generalbank tenant then response contains 1 correct intent: connect agent
+    When I make a request with 'I would like to chat to support' user input and 'faq' type for generalbank tenant then response contains list of intents and does not contain 'connect agent' intent
 
 
 
