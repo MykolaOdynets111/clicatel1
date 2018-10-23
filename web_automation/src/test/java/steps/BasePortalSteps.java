@@ -121,7 +121,7 @@ public class BasePortalSteps {
     }
 
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
-    public void verifyTouchGoPlanUpdatingInTenantConfig(String tenantOrgName, String expectedTouchGoPlan){
+    public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
         String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
         for(int i=0; i<41; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
@@ -139,9 +139,9 @@ public class BasePortalSteps {
     }
 
 
-    @Then("^Touch Go PLan is updated to (.*) in portal page$")
+    @Then("^Touch Go plan is updated to (.*) in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
-        DriverFactory.getAgentDriverInstance();
+        DriverFactory.getAgentDriverInstance().navigate().refresh();
         Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }

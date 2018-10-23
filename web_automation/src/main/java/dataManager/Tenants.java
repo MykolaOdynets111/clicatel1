@@ -72,7 +72,7 @@ public class Tenants {
                 break;
             case "Updating AQA" :
                 Tenants.setTenantUnderTest("updatingaccount");
-                Tenants.setTenantUnderTestOrgName("Updating AQA ");
+                Tenants.setTenantUnderTestOrgName("Updating AQA");
                 break;
         }
     }
