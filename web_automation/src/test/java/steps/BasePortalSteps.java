@@ -25,11 +25,12 @@ public class BasePortalSteps {
 
     private static String agentEmail;
     private String agentPass = "p@$$w0rd4te$t";
-    private PortalLoginPage portalLoginPage;
-    private LeftMenu leftMenu;
-    private PortalMainPage portalMainPage;
-    private PortalIntegrationsPage portalIntegrationsPage;
-    private PortalBillingDetailsPage portalBillingDetailsPage;
+    private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
+    private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
+    private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
+    private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
+    private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
+
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
@@ -49,18 +50,18 @@ public class BasePortalSteps {
 
     @When("^I open portal$")
     public void openPortal(){
-        portalLoginPage = PortalLoginPage.openPortalLoginPage();
+        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
     }
 
     @When("^Login as newly created agent$")
     public void loginAsCreatedAgent(){
-        portalLoginPage.login(agentEmail, agentPass);
+        portalLoginPage.get().login(agentEmail, agentPass);
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
     public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
         Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
-        portalLoginPage.login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
+        portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
         Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 
@@ -161,39 +162,71 @@ public class BasePortalSteps {
 
     @When("^Admin clicks 'Setup Billing' button$")
     public void clickSetupBillingButton(){
-        portalBillingDetailsPage = getPortalMainPage().clickSetupBillingButton();
+        portalBillingDetailsPage.set(getPortalMainPage().clickSetupBillingButton());
     }
 
     @Then("^Billing Details page is opened$")
     public void verifyBillingDetailsPageOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isPageOpened(5),
+                "Admin is not redirected to billing details page");
+    }
 
+    @When("^Select '(.*)' in nav menu$")
+    public void clickNavItemOnBillingDetailsPage(String navName){
+        getPortalBillingDetailsPage().clickNavItem(navName);
+    }
+
+
+    @Then("^'Add a payment method now\\?' button is shown$")
+    public void verifyAddPaymentButtonShown(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodButtonShwon(5),
+                "'Add a payment method now?' is not shown");
+    }
+
+    @Then("^Admin clicks 'Add a payment method now\\?' button$")
+    public void clickAddPaymentButton(){
+        getPortalBillingDetailsPage().clickAddPaymentButton();
+    }
+
+    @Then("^'Add Payment Method' window is opened$")
+    public void verifyAddPaymentMethodWindowOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodWindowShwon(5),
+                "'Add Payment Method' is not opened");
     }
 
     private LeftMenu getLeftMenu() {
-        if (leftMenu==null) {
-            leftMenu =  getPortalMainPage().getLeftMenu();
-            return leftMenu;
+        if (leftMenu.get()==null) {
+            leftMenu.set(getPortalMainPage().getLeftMenu());
+            return leftMenu.get();
         } else{
-            return leftMenu;
+            return leftMenu.get();
         }
     }
 
     private PortalMainPage getPortalMainPage() {
-        if (portalMainPage==null) {
-            portalMainPage =  new PortalMainPage();
-            return portalMainPage;
+        if (portalMainPage.get()==null) {
+            portalMainPage.set(new PortalMainPage());
+            return portalMainPage.get();
         } else{
-            return portalMainPage;
+            return portalMainPage.get();
         }
     }
 
     private PortalIntegrationsPage getPortalIntegrationsPage(){
-        if (portalIntegrationsPage==null) {
-            portalIntegrationsPage =  new PortalIntegrationsPage();
-            return portalIntegrationsPage;
+        if (portalIntegrationsPage.get()==null) {
+            portalIntegrationsPage.set(new PortalIntegrationsPage());
+            return portalIntegrationsPage.get();
         } else{
-            return portalIntegrationsPage;
+            return portalIntegrationsPage.get();
         }
     }
 
+    private PortalBillingDetailsPage getPortalBillingDetailsPage(){
+        if (portalBillingDetailsPage.get()==null) {
+            portalBillingDetailsPage.set(new PortalBillingDetailsPage());
+            return portalBillingDetailsPage.get();
+        } else{
+            return portalBillingDetailsPage.get();
+        }
+    }
 }
