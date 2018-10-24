@@ -47,7 +47,7 @@ public class TwitterLoginPage extends AbstractPage {
     }
 
     public void loginUser() {
-        if(!isElementShown(loginForm, 6)){
+        if(isElementShown(logInButton, 6)){
             logInButton.click();
             waitForElementsToBeVisibleByXpath(emailInputOnSeparatePageXPATH, 4);
             findElemByXPATH(emailInputOnSeparatePageXPATH).sendKeys(TwitterUsers.FIRST_USER.getTwitterUserEmail());
