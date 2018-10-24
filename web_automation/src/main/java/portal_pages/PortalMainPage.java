@@ -14,6 +14,12 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@ng-bind-html='alert'][text()='Added to cart']")
     private WebElement addedToCartAlert;
 
+    @FindBy(xpath = "//span[text() = 'Billing Not Setup']")
+    private WebElement billingNotSetUpPopupHeader;
+
+    @FindBy(xpath = "//button[text() = 'Setup Billing']")
+    private WebElement setUpBillingButton;
+
     private LeftMenu leftMenu;
     private PageHeader pageHeader;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
@@ -59,4 +65,16 @@ public class PortalMainPage extends PortalAbstractPage {
             return cartPage;
         }
     }
+
+    public boolean isBillingNotSetUpPopupShown(int wait){
+        return isElementShown(billingNotSetUpPopupHeader, wait);
+    }
+
+    public PortalBillingDetailsPage clickSetupBillingButton(){
+        setUpBillingButton.click();
+        return new PortalBillingDetailsPage();
+    }
+
+
+
 }

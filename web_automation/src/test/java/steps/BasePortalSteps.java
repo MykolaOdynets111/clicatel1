@@ -13,6 +13,7 @@ import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import portal_pages.PortalBillingDetailsPage;
 import portal_pages.PortalIntegrationsPage;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
@@ -28,7 +29,7 @@ public class BasePortalSteps {
     private LeftMenu leftMenu;
     private PortalMainPage portalMainPage;
     private PortalIntegrationsPage portalIntegrationsPage;
-
+    private PortalBillingDetailsPage portalBillingDetailsPage;
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
@@ -82,6 +83,12 @@ public class BasePortalSteps {
     @When("^I try to upgrade and buy (.*) agent seats$")
     public void upgradeTouchGoPlan(int agentSeats){
         getPortalMainPage().upgradePlan(agentSeats);
+    }
+
+
+    @When("^Admin clicks 'Upgrade' button$")
+    public void clickUpgradeTouchGoPlanButton(){
+        getPortalMainPage().getPageHeader().clickUpgradeButton();
     }
 
     @Then("^I see \"Payment Successful\" message$")
@@ -144,6 +151,22 @@ public class BasePortalSteps {
         DriverFactory.getAgentDriverInstance().navigate().refresh();
         Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
+    }
+
+    @Then("^'Billing Not Setup' pop up is shown$")
+    public void verifyBillingNotSetUpPopupShown(){
+        Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
+                "'Billing Not Setup' pop up is not shown");
+    }
+
+    @When("^Admin clicks 'Setup Billing' button$")
+    public void clickSetupBillingButton(){
+        portalBillingDetailsPage = getPortalMainPage().clickSetupBillingButton();
+    }
+
+    @Then("^Billing Details page is opened$")
+    public void verifyBillingDetailsPageOpened(){
+
     }
 
     private LeftMenu getLeftMenu() {
