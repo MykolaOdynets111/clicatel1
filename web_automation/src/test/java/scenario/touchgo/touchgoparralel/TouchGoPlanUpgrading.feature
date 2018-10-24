@@ -7,4 +7,4 @@
 #    When I try to upgrade and buy 3 agent seats
 #    Then I see "Payment Successful" message
 #    And Touch Go plan is updated to "TOUCH_STANDARD" in Updating AQA tenant configs
-#    And Touch Go plan is updated to "TOUCH_STANDARD" in portal page
+#    And Touch Go plan is updated to "TOUCH GO STANDARD" in portal page
