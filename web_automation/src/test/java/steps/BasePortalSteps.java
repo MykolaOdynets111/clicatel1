@@ -139,7 +139,7 @@ public class BasePortalSteps {
     }
 
 
-    @Then("^Touch Go plan is updated to (.*) in portal page$")
+    @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
         DriverFactory.getAgentDriverInstance().navigate().refresh();
         Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
