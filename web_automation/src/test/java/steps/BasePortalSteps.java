@@ -6,7 +6,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Agents;
-import dataManager.MC2Account;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
@@ -18,8 +17,6 @@ import portal_pages.PortalIntegrationsPage;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
 import portal_pages.uielements.LeftMenu;
-
-import java.util.List;
 
 public class BasePortalSteps {
 
@@ -192,6 +189,11 @@ public class BasePortalSteps {
     public void verifyAddPaymentMethodWindowOpened(){
         Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodWindowShwon(5),
                 "'Add Payment Method' is not opened");
+    }
+
+    @When("^Admin provides all card info$")
+    public void addNewCard(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
     }
 
     private LeftMenu getLeftMenu() {
