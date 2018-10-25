@@ -10,4 +10,5 @@ Feature: Admin should be able to manage payment methods
     When Admin clicks 'Add a payment method now?' button
     Then 'Add Payment Method' window is opened
     When Admin provides all card info
+    Then New card is shown in Payment methods tab
 
