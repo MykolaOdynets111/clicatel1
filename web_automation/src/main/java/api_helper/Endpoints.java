@@ -60,6 +60,7 @@ public class Endpoints {
 
     public static String PLATFORM_SUBSCRIPTIONS_DEACTIVATION = URLs.getBasePlatformUrl() + "/subscriptions/%s/deactivated";
 
+    public static String PLATFORM_PAYMENT_METHODS = URLs.getBasePlatformUrl() + "/payment-methods";
 
     // ====================  TIE ================= //
 

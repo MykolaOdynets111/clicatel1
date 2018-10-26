@@ -77,7 +77,6 @@ public class ApiHelperPlatform {
     }
 
     public static List<Integer> getListOfActiveSubscriptions(String tenantOrgName){
-        List<Integer> listOfActiveSubscriptions = new ArrayList<>();
         Response resp =   RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
@@ -95,6 +94,25 @@ public class ApiHelperPlatform {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .post(url);
+    }
+
+    public static List<String> getListOfActivePaymentMethods(String tenantOrgName, String paymentType){
+        Response resp =   RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_PAYMENT_METHODS);
+
+        return resp.getBody().jsonPath().getList("paymentMethods", Map.class)
+                .stream().filter(e -> e.get("paymentType").equals(paymentType))
+                .map(e -> ((String) e.get("id")))
+                .collect(Collectors.toList());
+    }
+
+    public static void deletePaymentMethod(String tenantOrgName, String paymentID){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(Endpoints.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
     }
 
 }

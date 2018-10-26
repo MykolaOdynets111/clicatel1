@@ -1,8 +1,9 @@
 package portal_pages;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portal_pages.uielements.ConfirmPaymentDetailsWindow;
+import org.testng.Assert;
 import portal_pages.uielements.LeftMenu;
 import portal_pages.uielements.PageHeader;
 import portal_pages.uielements.UpgradeYourPlanWindow;
@@ -26,7 +27,7 @@ public class PortalMainPage extends PortalAbstractPage {
     private CartPage cartPage;
 
     public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
-        waitForElementToBeVisible(upgradeYourPlanWindow.getWrappedElement());
+        waitForElementToBeVisibleAgent(upgradeYourPlanWindow.getWrappedElement(), 5);
         return upgradeYourPlanWindow;
     }
 
@@ -35,26 +36,40 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public LeftMenu getLeftMenu() {
-        waitForElementToBeVisible(leftMenu.getWrappedElement());
+        waitForElementToBeVisibleAgent(leftMenu.getWrappedElement(), 5);
         return leftMenu;
     }
 
     public void upgradePlan(int agentSeats){
-        getPageHeader().clickUpgradeButton();
-        getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
-                                    .clickAddToCardButton();
-        waitForElementToBeVisibleAgent(addedToCartAlert, 15);
-        waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 10);
-        cartPage = getPageHeader().openCart();
-        cartPage.clickCheckoutButton();
+        addAgentSeatsIntoCart(agentSeats);
+        openAgentsPurchasingConfirmationWindow();
         cartPage.getConfirmPaymentDetailsWindow()
-                .selectTestVisaCardToPay()
+                .clickSelectPaymentField()
+                .selectPaymentMethod("VISA")
+                .clickNexButton()
                 .acceptTerms()
                 .clickNexButton()
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickNexButton();
 
+    }
+
+    public void addAgentSeatsIntoCart(int agentSeats){
+        getPageHeader().clickUpgradeButton();
+        getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
+                .clickAddToCardButton();
+        try {
+            waitForElementToBeVisibleAgent(addedToCartAlert, 15);
+        } catch (TimeoutException e){
+            Assert.assertTrue(false, "Item is not added to the cart");
+        }
+        waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 10);
+    }
+
+    public void openAgentsPurchasingConfirmationWindow(){
+        cartPage = getPageHeader().openCart();
+        cartPage.clickCheckoutButton();
     }
 
     public CartPage getCartPage() {
@@ -67,7 +82,7 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public boolean isBillingNotSetUpPopupShown(int wait){
-        return isElementShown(billingNotSetUpPopupHeader, wait);
+        return isElementShownAgent(billingNotSetUpPopupHeader, wait);
     }
 
     public PortalBillingDetailsPage clickSetupBillingButton(){

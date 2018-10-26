@@ -1,6 +1,7 @@
 package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.CartPage;
@@ -17,7 +18,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
     @FindBy(css = "li.ui-select-choices-group")
     private WebElement choisesGroup;
 
-    @FindBy(xpath =  ".//span[@class='ui-select-choices-row-inner']/span[contains(text(), 'Debit/Credit Card')]")
+    @FindBy(xpath =  ".//span[@class='ui-select-choices-row-inner']/span[contains(text(), 'Card')]")
     private WebElement cardOption;
 
     @FindBy(css = "div#expirationMonth")
@@ -46,6 +47,8 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
 
     private String lastName =  "input#lastName";
 
+    private String paymentAddedAlert = "//div[@ng-bind-html='alert'][text()='Payment method has been configured successfully']";
+
     public AddPaymentMethodWindow addTestCardAsANewPayment(){
         selectPaymentBox.click();
         waitForElementToBeVisibleAgent(choisesGroup, 5);
@@ -58,8 +61,42 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
         findElemByCSSAgent(cardCvv).sendKeys("112");
         findElemByCSSAgent(firstName).sendKeys("AQA");
         findElemByCSSAgent(lastName).sendKeys("Test");
-        checkboxes.stream().forEach(e -> e.click());
+        checkAllCheckboxesForAddingNewPayment();
         nextButton.click();
+        try {
+            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 10);
+            waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
+        }catch(TimeoutException e){
+            // nothing to do 'cause it were stabilizing waits before continuing
+        }
         return this;
+    }
+
+    public void checkAllCheckboxesForAddingNewPayment(){
+        checkboxes.stream().forEach(e -> e.click());
+
+    }
+
+    public AddPaymentMethodWindow fillInNewCardInfo(){
+        selectPaymentBox.click();
+        waitForElementToBeVisibleAgent(choisesGroup, 5);
+        cardOption.click();
+        findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
+        expirationMonth.click();
+        thirdMons.click();
+        expirationYear.click();
+        thirdYear.click();
+        findElemByCSSAgent(cardCvv).sendKeys("112");
+        findElemByCSSAgent(firstName).sendKeys("AQA");
+        findElemByCSSAgent(lastName).sendKeys("Test");
+        return this;
+    }
+
+    public void clickCheckBox(int checkboxOrder){
+        checkboxes.get(checkboxOrder-1).click();
+    }
+
+    public void clickAddPaymentButton(){
+        nextButton.click();
     }
 }

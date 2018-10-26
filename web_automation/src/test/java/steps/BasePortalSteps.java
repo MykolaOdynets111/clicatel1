@@ -71,9 +71,11 @@ public class BasePortalSteps {
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
 
-        for(String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()){
-            if(!winHandle.equals(currentWindow)){
-                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
             }
         }
     }
@@ -176,7 +178,7 @@ public class BasePortalSteps {
 
     @Then("^'Add a payment method now\\?' button is shown$")
     public void verifyAddPaymentButtonShown(){
-        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodButtonShwon(5),
+        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodButtonShown(5),
                 "'Add a payment method now?' is not shown");
     }
 
@@ -187,13 +189,95 @@ public class BasePortalSteps {
 
     @Then("^'Add Payment Method' window is opened$")
     public void verifyAddPaymentMethodWindowOpened(){
-        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodWindowShwon(5),
+        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodWindowShown(5),
                 "'Add Payment Method' is not opened");
     }
 
-    @When("^Admin provides all card info$")
+    @When("^Admin tries to add new card$")
     public void addNewCard(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+    }
+
+    @When("^Admin provides all card info$")
+    public void fillInNewCardInfo(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo();
+    }
+
+    @When("^Selects all checkboxes for adding new payment$")
+    public void checkAllCheckBoxesForAddindNewPayment(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().checkAllCheckboxesForAddingNewPayment();
+    }
+
+    @When("^Admin selects (.*) terms checkbox$")
+    public void selectCheckBoxForAddingNewPayment(int checkboxNumber){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickCheckBox(checkboxNumber);
+    }
+
+    @When("^Admin clicks (?:'Add payment method'|'Next') button$")
+    public void clickAddPaymentButtonInAddPaymentWindow(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickAddPaymentButton();
+    }
+
+    @Then("^New card is shown in Payment methods tab$")
+    public void verifyNewPaymentAdded(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalBillingDetailsPage().isNewPaymentAdded(),
+                "New payment is not shown in 'Billing & payments' page");
+        soft.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
+                "Cardholder name of added card is not as expected");
+        soft.assertAll();
+    }
+
+    @Then("^Payment method is not shown in Payment methods tab$")
+    public void paymentMethodIsNotShown(){
+        Assert.assertFalse(getPortalBillingDetailsPage().isNewPaymentAdded(),
+                "New payment is not shown in 'Billing & payments' page");
+    }
+
+    @When("^Admin clicks Manage -> Remove payment method$")
+    public void deletePaymentMethod(){
+        getPortalBillingDetailsPage().deletePaymentMethod();
+    }
+
+    @When("^Admin adds to cart (.*) agents$")
+    public void addAgentsToTheCart(int agentsNumber){
+        getPortalMainPage().addAgentSeatsIntoCart(agentsNumber);
+    }
+
+    @When("^Admin opens Confirm Details window$")
+    public void openConfirmDetailsPage(){
+        getPortalMainPage().openAgentsPurchasingConfirmationWindow();
+    }
+
+    @Then("Added payment method is able to be selected")
+    public void verifyCardIsAvailableToSelecting(){
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getTestVisaCardToPayDetails().contains("1111"),
+                "Added payment method is not available for purchasing");
+    }
+
+    @When("^Click Next button on Details tab$")
+    public void clickNextButtonOnConfirmDetailsWindow(){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButton();
+    }
+
+    @When("^\"(.*)\" shown in payment methods dropdown$")
+    public void verifyPresencePaymentOptionForBuyingAgentSeats(String option){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionshown(option),
+                "'"+option+"' is not shown in payment options");
+    }
+
+    @When("^Admin selects \"(.*)\" in payment methods dropdown$")
+    public void selectPaymentOptioWhileBuyingAgents(String option){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
+    }
+
+
+    @Then("^Payment review tab is opened$")
+    public void verifyPaymentReviewTabIsOpened(){
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
+                "Admin is not redirected to PaymentReview tab after adding new card.");
+
     }
 
     private LeftMenu getLeftMenu() {

@@ -1,4 +1,7 @@
+@portal
 @updating_touchgo
+@no_widget
+@no_chatdesk
 Feature: User should be able to upgrade Touch Go PLan
 
   Scenario: Upgrading Touch Go plan

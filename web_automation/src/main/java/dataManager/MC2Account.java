@@ -9,10 +9,10 @@ public enum MC2Account {
 
     QA_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "qa", "ff808081661a899b016653366b13214c", ""),
     QA_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingaccount", "Updating AQA", "qa", "ff808081661a899b0166636e761a292c", "ff808081665d942a0166636cf20200a3"),
-    QA_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "qa", "", ""),
+    QA_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "qa", "ff808081661a899b01667d162b6e35c6", "ff808081666834d201667d1279b50061"),
 
-    TESTING_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "testing", "", ""),
-    TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing", "", "")
+    TESTING_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "testing", "ff8080816680668201668225f48205f4", "ff8080816642a8850166820e804e00a2"),
+    TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing", "ff808081668ab31c01668b98407f05e5", "ff8080816642a88501668b925a0e00cc")
 
     ;
 
