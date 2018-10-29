@@ -34,14 +34,14 @@ public class PostFeed extends AbstractUIElement {
             postInputField.sendKeys(userPostText);
         }
         try{
-        postButton.click();
+            clickPostButton();
         } catch (WebDriverException e){
-            if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+            waitFor(500);
             try {
-                postButton.click();
+                clickPostButton();
             }catch (WebDriverException e1){
-                if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
-                postButton.click();
+                waitFor(500);
+                clickPostButton();
             }
         }
 
@@ -53,5 +53,10 @@ public class PostFeed extends AbstractUIElement {
             postInputField.sendKeys("end");
             postButton.click();
         }
+    }
+
+    private void clickPostButton(){
+        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+        postButton.click();
     }
 }
