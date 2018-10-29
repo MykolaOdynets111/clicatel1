@@ -5,6 +5,8 @@
 Feature: Admin should be able to manage payment methods
 
 #    ToDo: Add test on removing card and verification by API that new payment added
+  Background:
+    Given Tenant Standard AQA has no Payment Methods
 
 
   Scenario: Admin should be able to add payment method from Billing Details page add see it while purchasing

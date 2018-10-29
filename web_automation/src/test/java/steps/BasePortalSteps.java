@@ -18,6 +18,8 @@ import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
 import portal_pages.uielements.LeftMenu;
 
+import java.util.List;
+
 public class BasePortalSteps {
 
     private static String agentEmail;
@@ -48,6 +50,12 @@ public class BasePortalSteps {
     @When("^I open portal$")
     public void openPortal(){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+    }
+
+    @Given("^Tenant (.*) has no Payment Methods$")
+    public void clearPaymentMethods(String tenantOrgName){
+        List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
+        ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
     @When("^Login as newly created agent$")
