@@ -155,11 +155,11 @@ public class Hooks implements JSHelper{
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             if(scenario.getSourceTagNames().contains("@updating_touchgo")) {
+                DriverFactory.closeAgentBrowser();
                 ApiHelper.decreaseTouchGoPLan(Tenants.getTenantUnderTestOrgName());
                 List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(Tenants.getTenantUnderTestOrgName());
                 subscriptionIDs.forEach(e ->
                         ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
-
             }
 
             if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
@@ -179,7 +179,7 @@ public class Hooks implements JSHelper{
 
             }
 
-                    DriverFactory.closeAgentBrowser();
+            DriverFactory.closeAgentBrowser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

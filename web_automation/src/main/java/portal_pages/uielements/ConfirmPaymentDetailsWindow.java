@@ -60,7 +60,7 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
 
     public ConfirmPaymentDetailsWindow acceptTerms(){
         waitForElementsToBeVisibleByCssAgent(acceptTermsCheckboxCSS, 7);
-        findElemByCSSAgent(acceptTermsCheckboxCSS).click();
+        findElemsByCSSAgent(acceptTermsCheckboxCSS).forEach(WebElement::click);
         return this;
     }
 
