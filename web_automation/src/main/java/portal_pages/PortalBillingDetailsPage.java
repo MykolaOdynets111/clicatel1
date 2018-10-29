@@ -5,16 +5,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.uielements.AddPaymentMethodWindow;
-import portal_pages.uielements.LeftMenu;
-import portal_pages.uielements.PageHeader;
-import portal_pages.uielements.UpgradeYourPlanWindow;
 
 import java.util.List;
 
 public class PortalBillingDetailsPage extends PortalAbstractPage {
 
-    @FindBy(css = "li[ui-sref='billingDetails']")
-    private WebElement pageHeader;
+    @FindBy(css = "form[name=billingDetailsForm]")
+    private WebElement billingDetailsForm;
 
     @FindBy(css = "div[cl-tabs='tabs'] ol.list-unstyled.list-inline>li")
     private List<WebElement> navItems;
@@ -44,7 +41,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     }
 
     public boolean isPageOpened(int wait){
-        return isElementShownAgent(pageHeader, wait);
+        return isElementShownAgent(billingDetailsForm, wait);
     }
 
     public void clickNavItem(String navName){
