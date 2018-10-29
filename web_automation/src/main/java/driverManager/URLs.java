@@ -9,7 +9,7 @@ public class URLs {
 
     private static final String BASE_FB_URL = "https://www.facebook.com/";
 
-    private static final String BASE_ENV_URL = "https://%s-touch-web.clickatelllabs.com";
+    private static final String BASE_ENV_URL = "https://%s-touch-web.clickatelllabs.com/?tenantId=%s";
 
     private static String BASE_PORTAL_URL = "https://%s-portal.clickatelllabs.com/#/login";
 
@@ -23,7 +23,7 @@ public class URLs {
 
     private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
 
-    public static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
+    private static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
 
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
@@ -31,22 +31,23 @@ public class URLs {
 
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
 
-    public static String BASE_PLATFORM_URL = "https://%s-platform.clickatelllabs.com";
+    private static String BASE_PLATFORM_URL = "https://%s-platform.clickatelllabs.com";
 
-    public static String getURL(){
+    public static String getWidgetURL(String tenantOrgName){
+        String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
         String targetEnvConfiguration = ConfigManager.getEnv();
         String env;
         if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
         else env = targetEnvConfiguration;
-        return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration);
+        return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration, tenantID);
     }
 
     /**
-     * @param tenantOrgName
+     * @param tenantOrgName - target tenant org name
      * @param updateURL - boolean value to indicate if we need to log into different tenant Agent desk
      */
     public static String getAgentURL(String tenantOrgName, boolean updateURL) {
-        if (FINAL_AGENT_URL == null || updateURL==true) {
+        if (FINAL_AGENT_URL == null || updateURL) {
             String baseUrl;
             String targetEnvConfiguration = ConfigManager.getEnv();
             String env;
@@ -79,7 +80,7 @@ public class URLs {
     }
 
     public static String getTieURL(String tenantOrgName, String message) {
-        String tenantName = null;
+        String tenantName;
         switch (tenantOrgName) {
             case "General Bank Demo":
                 tenantName="generalbank";

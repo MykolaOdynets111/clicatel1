@@ -21,7 +21,11 @@ public class PostFeed extends AbstractUIElement {
 
     public void makeAPost(String userPostText){
         waitForElementToBeVisible(postInputField, 6);
-        if (isElementShownByXpath(closeDMPopupButton, 10)) findElemByXPATH(closeDMPopupButton).click();
+        if (isElementShownByXpath(closeDMPopupButton, 10)){
+//            findElemByXPATH(closeDMPopupButton).click();
+            executeJSclick(findElemByXPATH(closeDMPopupButton));
+
+        }
         postInputField.click();
         postInputField.sendKeys(userPostText);
         if(!postInputField.getText().equals(userPostText)){
@@ -56,7 +60,7 @@ public class PostFeed extends AbstractUIElement {
     }
 
     private void clickPostButton(){
-        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+        if (isElementShownByXpath(closeDMPopupButton, 5)) executeJSclick(findElemByXPATH(closeDMPopupButton));
         postButton.click();
     }
 }

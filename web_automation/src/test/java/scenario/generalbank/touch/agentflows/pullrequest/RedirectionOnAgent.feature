@@ -5,7 +5,6 @@ Feature: User on his demand should be redirected on the agent
 
   Background:
     Given I login as agent of General Bank Demo
-    Given User profile for generalbank is created
     Given User select General Bank Demo tenant
     And Click chat icon
 

@@ -50,26 +50,11 @@ public class Hooks implements JSHelper{
                 throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
             }
 
-            if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                    !scenario.getSourceTagNames().contains("@facebook") &&
-                    !scenario.getSourceTagNames().contains("@twitter") &&
-                    !scenario.getSourceTagNames().contains("@predefined_user") &&
-                    !scenario.getSourceTagNames().contains("@no_widget")
-            ){
 
-                if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
+            if (scenario.getSourceTagNames().contains(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getAgentDriverInstance();
-                }
-                DriverFactory.openUrl();
-                // Setting up coordinates of Lviv, Ukraine into browser
-//                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-//                    setUpGeolocation("49.8397", "24.0297");
-//                }
             }
 
-            if (scenario.getSourceTagNames().contains("@predefined_user")) {
-                DriverFactory.openTouchUrlWithPredifinedUserID("testing_aqaTestUser");
-            }
 
             if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
@@ -173,13 +158,13 @@ public class Hooks implements JSHelper{
                 ApiHelper.decreaseTouchGoPLan(Tenants.getTenantUnderTestOrgName());
                 List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(Tenants.getTenantUnderTestOrgName());
                 subscriptionIDs.forEach(e ->
-                        ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), ((Integer) e) ));
+                        ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
 
             }
 
             if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
                 List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(Tenants.getTenantUnderTestOrgName(), "CREDIT_CARD");
-                ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), ((String) e) ));
+                ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), e));
             }
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
