@@ -63,12 +63,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
         nextButton.click();
-        try {
-            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 10);
-            waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
-        }catch(TimeoutException e){
-            // nothing to do 'cause it were stabilizing waits before continuing
-        }
+        waitForAddingNewPaymentConfirmationPopup();
         return this;
     }
 
@@ -98,5 +93,14 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
 
     public void clickAddPaymentButton(){
         nextButton.click();
+    }
+
+    public void waitForAddingNewPaymentConfirmationPopup(){
+        try {
+            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 10);
+            waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
+        }catch(TimeoutException e){
+            // nothing to do 'cause it were stabilizing waits before continuing
+        }
     }
 }

@@ -138,7 +138,7 @@ public class BasePortalSteps {
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
         String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
-        for(int i=0; i<41; i++){
+        for(int i=0; i<60; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
                 actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
@@ -224,6 +224,7 @@ public class BasePortalSteps {
     @When("^Admin clicks (?:'Add payment method'|'Next') button$")
     public void clickAddPaymentButtonInAddPaymentWindow(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickAddPaymentButton();
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
     }
 
     @Then("^New card is shown in Payment methods tab$")
