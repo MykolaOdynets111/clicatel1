@@ -17,13 +17,18 @@ public class PostFeed extends AbstractUIElement {
 
     private String closeDMPopupButton = "//a[@aria-label='Close tab']";
 
+    private String closeDMPopupButtonConfirmation = "//a[@action='cancel'][text()='OK']";
+
     public void makeAPost(String userPostText){
         waitForElementToBeVisible(postInputField, 6);
         if (isElementShownByXpath(closeDMPopupButton, 10)) findElemByXPATH(closeDMPopupButton).click();
         postInputField.click();
         postInputField.sendKeys(userPostText);
         if(!postInputField.getText().equals(userPostText)){
-            if (isElementShownByXpath(closeDMPopupButton, 8)) findElemByXPATH(closeDMPopupButton).click();
+            if (isElementShownByXpath(closeDMPopupButton, 8)) {
+                findElemByXPATH(closeDMPopupButton).click();
+                if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)) findElemByXPATH(closeDMPopupButtonConfirmation).click();
+            }
             postInputField.click();
             postInputField.clear();
             postInputField.sendKeys(userPostText);
@@ -32,7 +37,12 @@ public class PostFeed extends AbstractUIElement {
         postButton.click();
         } catch (WebDriverException e){
             if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
-            postButton.click();
+            try {
+                postButton.click();
+            }catch (WebDriverException e1){
+                if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
+                postButton.click();
+            }
         }
 
         waitForElementToBeInvisible(postButton,10);

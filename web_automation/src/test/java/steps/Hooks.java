@@ -3,6 +3,7 @@ package steps;
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
 import api_helper.ApiHelper;
+import api_helper.ApiHelperPlatform;
 import api_helper.TwitterAPI;
 import api_helper.Endpoints;
 import cucumber.api.Scenario;
@@ -52,7 +53,9 @@ public class Hooks implements JSHelper{
             if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                     !scenario.getSourceTagNames().contains("@facebook") &&
                     !scenario.getSourceTagNames().contains("@twitter") &&
-                    !scenario.getSourceTagNames().contains("@predefined_user")){
+                    !scenario.getSourceTagNames().contains("@predefined_user") &&
+                    !scenario.getSourceTagNames().contains("@no_widget")
+            ){
 
                 if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getAgentDriverInstance();
@@ -91,27 +94,28 @@ public class Hooks implements JSHelper{
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
-//                !scenario.getSourceTagNames().equals(Arrays.asList("@portal")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@no_widget")) &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter")){
 
             takeScreenshot();
-            finishAgentFlowIfExists(scenario);
             endTouchFlow(scenario);
         }
+
+        finishAgentFlowIfExists(scenario);
+
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
             takeScreenshot();
             finishVisibilityFlow();
         }
+
         if(scenario.getSourceTagNames().contains("@facebook")){
             takeScreenshot();
-            finishAgentFlowIfExists(scenario);
             endFacebookFlow(scenario);
         }
 
         if(scenario.getSourceTagNames().contains("@twitter")){
             takeScreenshot();
-            finishAgentFlowIfExists(scenario);
             endTwitterFlow();
         }
 
@@ -163,7 +167,20 @@ public class Hooks implements JSHelper{
                     agentHomePage.getHeader().clickIconWithInitials();
             }
 
-            if(!scenario.getSourceTagNames().equals(Arrays.asList("@portal"))) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
+            if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
+
+            if(scenario.getSourceTagNames().contains("@updating_touchgo")) {
+                ApiHelper.decreaseTouchGoPLan(Tenants.getTenantUnderTestOrgName());
+                List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(Tenants.getTenantUnderTestOrgName());
+                subscriptionIDs.forEach(e ->
+                        ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), ((Integer) e) ));
+
+            }
+
+            if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
+                List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(Tenants.getTenantUnderTestOrgName(), "CREDIT_CARD");
+                ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), ((String) e) ));
+            }
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");

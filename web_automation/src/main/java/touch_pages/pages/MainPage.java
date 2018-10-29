@@ -23,7 +23,7 @@ public class MainPage extends AbstractPage {
 
     public MainPage selectTenant(String tenantName) {
         try {
-        waitForElementToBeVisible(tenantContainer, 15);
+        waitForElementToBeVisible(tenantContainer, 25);
         new TenantRow(
                         tenants.stream().filter(e -> e.getText().equalsIgnoreCase(tenantName)).findFirst().get())
                 .selectTenant();

@@ -1,3 +1,4 @@
+@no_widget
 Feature: Opening chat desk from portal
 
   Scenario: Admin should be able to open chat desk from portal

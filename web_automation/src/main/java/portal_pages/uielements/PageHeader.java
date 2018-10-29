@@ -22,7 +22,7 @@ public class PageHeader extends AbstractUIElement {
     private WebElement touchGoPlanName;
 
     public void clickUpgradeButton(){
-        waitForElementToBeVisibleAgent(upgradeButton, 5);
+        waitForElementToBeClickableAgent(upgradeButton, 5, "main");
         upgradeButton.click();
     }
 

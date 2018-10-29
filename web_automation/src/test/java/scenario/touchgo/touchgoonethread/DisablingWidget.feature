@@ -1,5 +1,6 @@
 @portal
 @widget_disabling
+@no_chatdesk
 Feature: Widget disabling
 
   Scenario: Agent should be able to disable widget from admin

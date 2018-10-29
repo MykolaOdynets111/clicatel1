@@ -1,9 +1,11 @@
 package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -23,12 +25,11 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
 
     @FindBy(css = "li.ui-select-choices-group")
     private WebElement choisesGroup;
-
-    @FindBy(xpath =  ".//span[@class='ui-select-choices-row-inner']/span[contains(text(), 'VISA')]")
-    private WebElement visaOption;
-
+    
     @FindBy(css = "button.button.button-primary.ng-scope")
     private WebElement nextButton;
+
+    private String totalOrderSum = "th[ng-bind='model.totalCurrency']";
 
     private String acceptTermsCheckboxCSS = "label.cl-label.checkbox-control";
 
@@ -36,17 +37,24 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
 
     private String paymentSummaryScreenSCC = "ul[class ='payment-summary list-unstyled mod-absolute-side']";
 
-    public ConfirmPaymentDetailsWindow selectTestVisaCardToPay(){
-        selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(choisesGroup, 5);
-        visaOption.click();
-        nextButton.click();
+    private String paymentMethodXpath =  "//span[@class='ui-select-choices-row-inner']/span[contains(text(), '%s')]";
+
+    public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
+        findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
         return this;
     }
 
+    public ConfirmPaymentDetailsWindow clickSelectPaymentField(){
+        selectPaymentBox.click();
+        waitForElementToBeVisibleAgent(choisesGroup, 5);
+        return this;
+    }
+    
     public ConfirmPaymentDetailsWindow clickNexButton(){
-        waitForElementToBeVisibleAgent(nextButton, 7);
-        nextButton.click();
+        waitFor(500);
+        waitForElementToBeClickableAgent(nextButton, 7, "admin");
+        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+        executor.executeScript("arguments[0].click();", nextButton);
         return this;
     }
 
@@ -68,5 +76,18 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
         } catch (TimeoutException |NoSuchElementException e){
             return "no success message is shown";
         }
+    }
+
+    public String getTestVisaCardToPayDetails(){
+        clickSelectPaymentField();
+        return findElemByXPATHAgent(String.format(paymentMethodXpath, "VISA")).getText();
+    }
+
+    public boolean isPaymentOptionshown(String option){
+        return isElementShownAgentByXpath(String.format(paymentMethodXpath, option), 4, "admin");
+    }
+
+    public boolean isPaymentReviewTabOpened(){
+        return isElementShownAgentByCSS(totalOrderSum, 12, "admin");
     }
 }

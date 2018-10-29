@@ -40,6 +40,8 @@ public class Endpoints {
 
     public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
 
+    public static String INTERNAL_DECREASING_TOUCHGO_PLAN = URLs.getBaseInternalApiUrl() + "tenants/touchGo/standard";
+
     // ==================  PLATFORM ============== //
 
     public static  String PLATFORM_ACCOUNTS = URLs.getBasePlatformUrl() + "/auth/accounts";
@@ -54,6 +56,11 @@ public class Endpoints {
 
     public static String PLATFORM_USER = URLs.getBasePlatformUrl() + "/users";
 
+    public static String PLATFORM_SUBSCRIPTIONS_LIST = URLs.getBasePlatformUrl() + "/subscriptions?pageNumber=1&pageSize=50&ascending=false";
+
+    public static String PLATFORM_SUBSCRIPTIONS_DEACTIVATION = URLs.getBasePlatformUrl() + "/subscriptions/%s/deactivated";
+
+    public static String PLATFORM_PAYMENT_METHODS = URLs.getBasePlatformUrl() + "/payment-methods";
 
     // ====================  TIE ================= //
 

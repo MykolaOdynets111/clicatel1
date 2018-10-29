@@ -1,5 +1,6 @@
 package steps;
 
+import api_helper.ApiHelper;
 import api_helper.ApiHelperPlatform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -11,6 +12,7 @@ import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import portal_pages.PortalBillingDetailsPage;
 import portal_pages.PortalIntegrationsPage;
 import portal_pages.PortalLoginPage;
 import portal_pages.PortalMainPage;
@@ -20,10 +22,11 @@ public class BasePortalSteps {
 
     private static String agentEmail;
     private String agentPass = "p@$$w0rd4te$t";
-    private PortalLoginPage portalLoginPage;
-    private LeftMenu leftMenu;
-    private PortalMainPage portalMainPage;
-    private PortalIntegrationsPage portalIntegrationsPage;
+    private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
+    private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
+    private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
+    private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
+    private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
 
 
     @Given("^New (.*) agent is created$")
@@ -44,18 +47,19 @@ public class BasePortalSteps {
 
     @When("^I open portal$")
     public void openPortal(){
-        portalLoginPage = PortalLoginPage.openPortalLoginPage();
+        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
     }
 
     @When("^Login as newly created agent$")
     public void loginAsCreatedAgent(){
-        portalLoginPage.login(agentEmail, agentPass);
+        portalLoginPage.get().login(agentEmail, agentPass);
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
-    public void loginToPortal(String ordinalAgentNumber, String account){
-        Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(account, ordinalAgentNumber);
-        portalLoginPage.login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
+    public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
+        Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+        portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
+        Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 
     public static boolean isNewUserWasCreated(){
@@ -67,9 +71,11 @@ public class BasePortalSteps {
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
 
-        for(String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()){
-            if(!winHandle.equals(currentWindow)){
-                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
             }
         }
     }
@@ -77,6 +83,12 @@ public class BasePortalSteps {
     @When("^I try to upgrade and buy (.*) agent seats$")
     public void upgradeTouchGoPlan(int agentSeats){
         getPortalMainPage().upgradePlan(agentSeats);
+    }
+
+
+    @When("^Admin clicks 'Upgrade' button$")
+    public void clickUpgradeTouchGoPlanButton(){
+        getPortalMainPage().getPageHeader().clickUpgradeButton();
     }
 
     @Then("^I see \"Payment Successful\" message$")
@@ -115,31 +127,192 @@ public class BasePortalSteps {
         soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
     }
 
+    @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
+    public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
+        String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
+        for(int i=0; i<41; i++){
+            if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
+                getPortalMainPage().waitFor(15000);
+                actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
+            } else{
+                break;
+            }
+        }
+        Assert.assertTrue(actualType.equalsIgnoreCase(expectedTouchGoPlan),
+                "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
+                        "Expected: " + expectedTouchGoPlan + "\n" +
+                        "Found:" + actualType
+        );
+    }
+
+
+    @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
+    public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
+        DriverFactory.getAgentDriverInstance().navigate().refresh();
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+                "Shown Touch go plan is not as expected.");
+    }
+
+    @Then("^'Billing Not Setup' pop up is shown$")
+    public void verifyBillingNotSetUpPopupShown(){
+        Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
+                "'Billing Not Setup' pop up is not shown");
+    }
+
+    @When("^Admin clicks 'Setup Billing' button$")
+    public void clickSetupBillingButton(){
+        portalBillingDetailsPage.set(getPortalMainPage().clickSetupBillingButton());
+    }
+
+    @Then("^Billing Details page is opened$")
+    public void verifyBillingDetailsPageOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isPageOpened(5),
+                "Admin is not redirected to billing details page");
+    }
+
+    @When("^Select '(.*)' in nav menu$")
+    public void clickNavItemOnBillingDetailsPage(String navName){
+        getPortalBillingDetailsPage().clickNavItem(navName);
+    }
+
+
+    @Then("^'Add a payment method now\\?' button is shown$")
+    public void verifyAddPaymentButtonShown(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodButtonShown(5),
+                "'Add a payment method now?' is not shown");
+    }
+
+    @Then("^Admin clicks 'Add a payment method now\\?' button$")
+    public void clickAddPaymentButton(){
+        getPortalBillingDetailsPage().clickAddPaymentButton();
+    }
+
+    @Then("^'Add Payment Method' window is opened$")
+    public void verifyAddPaymentMethodWindowOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodWindowShown(5),
+                "'Add Payment Method' is not opened");
+    }
+
+    @When("^Admin tries to add new card$")
+    public void addNewCard(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+    }
+
+    @When("^Admin provides all card info$")
+    public void fillInNewCardInfo(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo();
+    }
+
+    @When("^Selects all checkboxes for adding new payment$")
+    public void checkAllCheckBoxesForAddindNewPayment(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().checkAllCheckboxesForAddingNewPayment();
+    }
+
+    @When("^Admin selects (.*) terms checkbox$")
+    public void selectCheckBoxForAddingNewPayment(int checkboxNumber){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickCheckBox(checkboxNumber);
+    }
+
+    @When("^Admin clicks (?:'Add payment method'|'Next') button$")
+    public void clickAddPaymentButtonInAddPaymentWindow(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickAddPaymentButton();
+    }
+
+    @Then("^New card is shown in Payment methods tab$")
+    public void verifyNewPaymentAdded(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalBillingDetailsPage().isNewPaymentAdded(),
+                "New payment is not shown in 'Billing & payments' page");
+        soft.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
+                "Cardholder name of added card is not as expected");
+        soft.assertAll();
+    }
+
+    @Then("^Payment method is not shown in Payment methods tab$")
+    public void paymentMethodIsNotShown(){
+        Assert.assertFalse(getPortalBillingDetailsPage().isNewPaymentAdded(),
+                "New payment is not shown in 'Billing & payments' page");
+    }
+
+    @When("^Admin clicks Manage -> Remove payment method$")
+    public void deletePaymentMethod(){
+        getPortalBillingDetailsPage().deletePaymentMethod();
+    }
+
+    @When("^Admin adds to cart (.*) agents$")
+    public void addAgentsToTheCart(int agentsNumber){
+        getPortalMainPage().addAgentSeatsIntoCart(agentsNumber);
+    }
+
+    @When("^Admin opens Confirm Details window$")
+    public void openConfirmDetailsPage(){
+        getPortalMainPage().openAgentsPurchasingConfirmationWindow();
+    }
+
+    @Then("Added payment method is able to be selected")
+    public void verifyCardIsAvailableToSelecting(){
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getTestVisaCardToPayDetails().contains("1111"),
+                "Added payment method is not available for purchasing");
+    }
+
+    @When("^Click Next button on Details tab$")
+    public void clickNextButtonOnConfirmDetailsWindow(){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButton();
+    }
+
+    @When("^\"(.*)\" shown in payment methods dropdown$")
+    public void verifyPresencePaymentOptionForBuyingAgentSeats(String option){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionshown(option),
+                "'"+option+"' is not shown in payment options");
+    }
+
+    @When("^Admin selects \"(.*)\" in payment methods dropdown$")
+    public void selectPaymentOptioWhileBuyingAgents(String option){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
+    }
+
+
+    @Then("^Payment review tab is opened$")
+    public void verifyPaymentReviewTabIsOpened(){
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
+                "Admin is not redirected to PaymentReview tab after adding new card.");
+
+    }
+
     private LeftMenu getLeftMenu() {
-        if (leftMenu==null) {
-            leftMenu =  getPortalMainPage().getLeftMenu();
-            return leftMenu;
+        if (leftMenu.get()==null) {
+            leftMenu.set(getPortalMainPage().getLeftMenu());
+            return leftMenu.get();
         } else{
-            return leftMenu;
+            return leftMenu.get();
         }
     }
 
     private PortalMainPage getPortalMainPage() {
-        if (portalMainPage==null) {
-            portalMainPage =  new PortalMainPage();
-            return portalMainPage;
+        if (portalMainPage.get()==null) {
+            portalMainPage.set(new PortalMainPage());
+            return portalMainPage.get();
         } else{
-            return portalMainPage;
+            return portalMainPage.get();
         }
     }
 
     private PortalIntegrationsPage getPortalIntegrationsPage(){
-        if (portalIntegrationsPage==null) {
-            portalIntegrationsPage =  new PortalIntegrationsPage();
-            return portalIntegrationsPage;
+        if (portalIntegrationsPage.get()==null) {
+            portalIntegrationsPage.set(new PortalIntegrationsPage());
+            return portalIntegrationsPage.get();
         } else{
-            return portalIntegrationsPage;
+            return portalIntegrationsPage.get();
         }
     }
 
+    private PortalBillingDetailsPage getPortalBillingDetailsPage(){
+        if (portalBillingDetailsPage.get()==null) {
+            portalBillingDetailsPage.set(new PortalBillingDetailsPage());
+            return portalBillingDetailsPage.get();
+        } else{
+            return portalBillingDetailsPage.get();
+        }
+    }
 }

@@ -1,4 +1,6 @@
 @portal
+@no_widget
+@no_chatdesk
 Feature: Admin of tenant with Standard plan should see his plan and not see 'Upgrade' button
 
   Scenario: Agent assist and Feedback should be turned off for Starter

@@ -1,12 +1,12 @@
 package api_helper;
 
-import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
 
@@ -74,6 +74,45 @@ public class ApiHelperPlatform {
         return (String) resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().filter(e -> e.get("email").equals(userEmail))
                 .findFirst().get().get("id");
+    }
+
+    public static List<Integer> getListOfActiveSubscriptions(String tenantOrgName){
+        Response resp =   RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_SUBSCRIPTIONS_LIST);
+
+        return resp.getBody().jsonPath().getList("data", Map.class)
+                .stream().filter(e -> e.get("status").equals("SERVICE_ACTIVE"))
+                .map(e -> ((Integer) e.get("serviceEid")))
+                .collect(Collectors.toList());
+    }
+
+    public static void deactivateSubscription(String tenantOrgName, int subscriptionID){
+        String url = String.format(Endpoints.PLATFORM_SUBSCRIPTIONS_DEACTIVATION, subscriptionID);
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .post(url);
+    }
+
+    public static List<String> getListOfActivePaymentMethods(String tenantOrgName, String paymentType){
+        Response resp =   RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_PAYMENT_METHODS);
+
+        return resp.getBody().jsonPath().getList("paymentMethods", Map.class)
+                .stream().filter(e -> e.get("paymentType").equals(paymentType))
+                .map(e -> ((String) e.get("id")))
+                .collect(Collectors.toList());
+    }
+
+    public static void deletePaymentMethod(String tenantOrgName, String paymentID){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(Endpoints.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
     }
 
 }
