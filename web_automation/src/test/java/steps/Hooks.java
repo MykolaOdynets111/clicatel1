@@ -175,10 +175,8 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
-                PortalIntegrationsPage portalIntegrationsPage = new PortalIntegrationsPage();
-                if (!portalIntegrationsPage.getIntegrationRowStatus("web chat").equalsIgnoreCase("active")){
-                    portalIntegrationsPage.clickToggleFor("web chat");
-                }
+                ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "touch", true);
+
             }
 
                     DriverFactory.closeAgentBrowser();

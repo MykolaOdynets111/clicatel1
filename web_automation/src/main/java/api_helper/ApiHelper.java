@@ -246,4 +246,16 @@ public class ApiHelper {
                         "}")
                 .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
     }
+
+    public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{\n" +
+                        "  \"integrationType\": \""+ integration.toUpperCase() +"\",\n" +
+                        "  \"channelType\": \"webchat\",\n" +
+                        "  \"enable\": "+ integrationStatus + "" +
+                        "}")
+                .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
+    }
 }

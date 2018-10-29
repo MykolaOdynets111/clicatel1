@@ -3,8 +3,8 @@ package portal_pages.uielements;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 
 public class IntegrationCard extends Widget implements WebActions {
@@ -26,6 +26,11 @@ public class IntegrationCard extends Widget implements WebActions {
 
 
    public String getStatus(){
-        return  baseWebElem.findElement(By.cssSelector(statusButton)).getText();
+        try {
+            return baseWebElem.findElement(By.cssSelector(statusButton)).getText();
+        }catch (StaleElementReferenceException e){
+            waitFor(300);
+            return baseWebElem.findElement(By.cssSelector(statusButton)).getText();
+        }
    }
 }

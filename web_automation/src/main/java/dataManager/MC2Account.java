@@ -7,7 +7,7 @@ import java.util.List;
 
 public enum MC2Account {
 
-    QA_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter-aqa", "Starter AQA", "qa", "ff808081661a899b016653366b13214c", ""),
+    QA_STARTER_ACCOUNT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "starter_aqa", "Starter AQA", "qa", "ff808081661a899b016653366b13214c", ""),
     QA_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingaccount", "Updating AQA", "qa", "ff808081661a899b0166636e761a292c", "ff808081665d942a0166636cf20200a3"),
     QA_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "qa", "ff808081661a899b01667d162b6e35c6", "ff808081666834d201667d1279b50061"),
 

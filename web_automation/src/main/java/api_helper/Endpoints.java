@@ -20,6 +20,8 @@ public class Endpoints {
 
     public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
 
+    public static String INTEGRATIONS_ENABLING_DISABLING = URLs.getTouchApiBaseURL() + "integrations/channel/enable";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";

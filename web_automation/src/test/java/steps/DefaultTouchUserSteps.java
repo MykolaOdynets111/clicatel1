@@ -11,7 +11,6 @@ import dataManager.VMQuoteRequestUserData;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.logging.LogType;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import touch_pages.pages.MainPage;
