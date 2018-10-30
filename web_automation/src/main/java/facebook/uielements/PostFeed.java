@@ -30,6 +30,7 @@ public class PostFeed extends AbstractUIElement {
             postInputField.clear();
             postInputField.sendKeys(userPostText);
         }
+        clickPostButton();
 //        try{
 //            clickPostButton();
 //        } catch (WebDriverException e){
