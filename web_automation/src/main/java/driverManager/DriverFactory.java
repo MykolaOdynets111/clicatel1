@@ -8,6 +8,7 @@ import org.testng.Assert;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 public class DriverFactory {
 
@@ -113,8 +114,9 @@ public class DriverFactory {
     public static void openUrl(String tenantOrgName) {
         DriverFactory.getTouchDriverInstance().get(URLs.getWidgetURL(tenantOrgName));
             JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
-            jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+(int)(Math.random()*(2000-1)+1)
-                    +System.currentTimeMillis()+"');");
+        Random r = new Random( System.currentTimeMillis() );
+        jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+
+                    ((1 + r.nextInt(2)) * 10000 + r.nextInt(10000))+"');");
     }
 
     public static void openTouchUrlWithPredifinedUserID(String tenantorgName, String ctlUsername) {
