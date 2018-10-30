@@ -1,7 +1,9 @@
 package portal_pages;
 
 import driverManager.DriverFactory;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.uielements.AddPaymentMethodWindow;
@@ -66,8 +68,15 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     public void deletePaymentMethod(){
         managePaymentMethodButton.click();
         waitForElementsToBeVisibleByXpathAgent(removePaymentButton, 12);
-        findElemByXPATHAgent(removePaymentButton).click();
-//        executeJSclick(findElemByXPATHAgent(removePaymentButton), DriverFactory.getAgentDriverInstance());
+        try{
+            findElemByXPATHAgent(removePaymentButton).sendKeys(Keys.ENTER);
+        } catch(InvalidElementStateException e){
+            waitFor(200);
+            findElemByXPATHAgent(removePaymentButton).sendKeys(Keys.ENTER);
+
+        }
+
+        //        executeJSclick(findElemByXPATHAgent(removePaymentButton), DriverFactory.getAgentDriverInstance());
 //        if(isElementShownAgent(removePaymentButton, 2)) executeJSclick(removePaymentButton, DriverFactory.getAgentDriverInstance());
 //        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), removePaymentButton);
 //        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
