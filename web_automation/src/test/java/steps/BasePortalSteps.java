@@ -74,7 +74,7 @@ public class BasePortalSteps {
         return agentEmail != null;
     }
 
-    @When("^I select (.*) in left menu and (.*) in submenu$")
+    @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
@@ -243,7 +243,7 @@ public class BasePortalSteps {
                 "New payment is not shown in 'Billing & payments' page");
     }
 
-    @When("^Admin clicks Manage -> Remove payment method$")
+    @When("^Admin clicks Manage -> Remove payment$")
     public void deletePaymentMethod(){
         getPortalBillingDetailsPage().deletePaymentMethod();
     }
@@ -287,6 +287,11 @@ public class BasePortalSteps {
         Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
 
+    }
+
+    @When("^Admin closes Confirm details window$")
+    public void closeConfirmDetailsWindow(){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
     }
 
     private LeftMenu getLeftMenu() {

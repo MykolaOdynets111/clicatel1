@@ -1,6 +1,7 @@
 package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -92,7 +93,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
     }
 
     public void clickAddPaymentButton(){
-        nextButton.click();
+        executeJSclick(nextButton, DriverFactory.getAgentDriverInstance());
     }
 
     public void waitForAddingNewPaymentConfirmationPopup(){

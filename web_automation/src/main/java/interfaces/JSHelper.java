@@ -12,6 +12,11 @@ public interface JSHelper {
         executor.executeScript("arguments[0].click();", elem);
     }
 
+
+    default void executeJSclick(WebElement elem, WebDriver driver) {
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click();", elem);
+    }
     /**
      * Positive offset scroll will scroll element to the bottom, negative - to the top.
      * @author tmytlovych

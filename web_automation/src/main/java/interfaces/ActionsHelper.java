@@ -18,4 +18,12 @@ public interface ActionsHelper {
         Actions action = new Actions(DriverFactory.getTouchDriverInstance());
         action.moveToElement(elem).build().perform();
     }
+
+    default void moveToElemAndClick(WebDriver driver, WebElement elem){
+        Actions actions=new Actions(driver);
+        actions.moveToElement(elem).click().release().
+                build().
+                perform();
+    }
+
 }

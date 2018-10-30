@@ -60,7 +60,7 @@ public class PostFeed extends AbstractUIElement {
     }
 
     private void clickPostButton(){
-        if (isElementShownByXpath(closeDMPopupButton, 5)) executeJSclick(findElemByXPATH(closeDMPopupButton));
+        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
         postButton.click();
     }
 }

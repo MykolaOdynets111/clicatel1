@@ -2,6 +2,7 @@ package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
 import driverManager.DriverFactory;
+import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
@@ -13,7 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 
-public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
+public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, JSHelper {
 
     public ConfirmPaymentDetailsWindow(WebElement element) {
         super(element);
@@ -28,6 +29,10 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
     
     @FindBy(css = "button.button.button-primary.ng-scope")
     private WebElement nextButton;
+
+    private String closeWindowButton = "span.svg-close";
+
+    private String confirmationButton = "//button[text()='Yes']";
 
     private String totalOrderSum = "th[ng-bind='model.totalCurrency']";
 
@@ -46,7 +51,7 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
 
     public ConfirmPaymentDetailsWindow clickSelectPaymentField(){
         selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(choisesGroup, 5);
+        waitForElementToBeVisibleAgent(choisesGroup, 9);
         return this;
     }
     
@@ -89,5 +94,10 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions{
 
     public boolean isPaymentReviewTabOpened(){
         return isElementShownAgentByCSS(totalOrderSum, 12, "admin");
+    }
+
+    public void closeWindow(){
+        executeJSclick(findElemByCSSAgent(closeWindowButton), DriverFactory.getAgentDriverInstance());
+        if(isElementShownAgentByXpath(confirmationButton, 2, "admin")) findElemByXPATHAgent(confirmationButton).click();
     }
 }

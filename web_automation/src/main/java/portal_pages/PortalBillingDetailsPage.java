@@ -28,13 +28,12 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(css = "div.payment-method button")
     private WebElement managePaymentMethodButton;
 
-    @FindBy(css = "div.cl-header--item>div>button")
-    private WebElement removePaymentButton;
-
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement removePaymentConfirmationButton;
 
     private AddPaymentMethodWindow addPaymentMethodWindow;
+
+    private String removePaymentButton =  "//button[@ng-click='removeCard()']";
 
     public AddPaymentMethodWindow getAddPaymentMethodWindow(){
         return addPaymentMethodWindow;
@@ -66,10 +65,14 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
 
     public void deletePaymentMethod(){
         managePaymentMethodButton.click();
-        waitForElementToBeVisibleAgent(removePaymentButton, 9);
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-        executor.executeScript("arguments[0].click();", removePaymentButton);
-        removePaymentConfirmationButton.click();
+        waitForElementsToBeVisibleByXpathAgent(removePaymentButton, 12);
+        findElemByXPATHAgent(removePaymentButton).click();
+//        executeJSclick(findElemByXPATHAgent(removePaymentButton), DriverFactory.getAgentDriverInstance());
+//        if(isElementShownAgent(removePaymentButton, 2)) executeJSclick(removePaymentButton, DriverFactory.getAgentDriverInstance());
+//        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), removePaymentButton);
+//        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+//        executor.executeScript("arguments[0].click();", removePaymentButton);
+        if(isElementShownAgent(removePaymentConfirmationButton, 3))removePaymentConfirmationButton.click();
 
     }
 }
