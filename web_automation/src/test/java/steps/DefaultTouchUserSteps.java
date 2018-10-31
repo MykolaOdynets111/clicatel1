@@ -54,8 +54,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
 //        getMainPage().openTenantPage(tenantOrgName);
     }
 
@@ -63,8 +62,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     public void openTenantPage(String tenantOrgName, String clientID) {
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
 
     }
 
@@ -359,8 +359,8 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Given("^User profile for (.*) is created$")
     public void createUserProfile(String tenantName){
         String clientID = getUserNameFromLocalStorage();
-        ApiHelper.createUserProfile(tenantName, clientID, "firstName", clientID);
-        ApiHelper.createUserProfile(tenantName, clientID, "email", "aqa_test@gmail.com");
+        ApiHelper.createUserProfile(tenantName, clientID);
+//        ApiHelper.createUserProfile(tenantName, clientID, "email", "aqa_test@gmail.com");
     }
 
     @Then("^Widget is connected$")
