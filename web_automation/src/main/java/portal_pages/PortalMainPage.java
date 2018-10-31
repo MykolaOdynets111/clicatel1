@@ -55,6 +55,19 @@ public class PortalMainPage extends PortalAbstractPage {
 
     }
 
+    public void upgradePlanWithoutTerms(int agentSeats){
+        addAgentSeatsIntoCart(agentSeats);
+        openAgentsPurchasingConfirmationWindow();
+        cartPage.getConfirmPaymentDetailsWindow()
+                .clickSelectPaymentField()
+                .selectPaymentMethod("VISA")
+                .clickNexButton()
+                .acceptTerms()
+                .clickNexButton()
+                .waitFotPaymentSummaryScreenToLoad()
+                .clickNexButton();
+    }
+
     public void addAgentSeatsIntoCart(int agentSeats){
         getPageHeader().clickUpgradeButton();
         getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)

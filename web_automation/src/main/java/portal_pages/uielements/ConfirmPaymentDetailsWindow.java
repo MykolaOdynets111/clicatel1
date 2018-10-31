@@ -44,6 +44,8 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, J
 
     private String paymentMethodXpath =  "//span[@class='ui-select-choices-row-inner']/span[contains(text(), '%s')]";
 
+    private String termsAndConditions = "//a[text()='Terms and Conditions']";
+
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
         findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
         return this;
@@ -99,5 +101,9 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, J
     public void closeWindow(){
         executeJSclick(findElemByCSSAgent(closeWindowButton), DriverFactory.getAgentDriverInstance());
         if(isElementShownAgentByXpath(confirmationButton, 2, "admin")) findElemByXPATHAgent(confirmationButton).click();
+    }
+
+    public boolean isPaymnentSummaryTabOPened(){
+        return isElementShownAgentByXpath(termsAndConditions, 1, "admin");
     }
 }

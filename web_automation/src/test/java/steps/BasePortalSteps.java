@@ -107,6 +107,16 @@ public class BasePortalSteps {
         getPortalMainPage().upgradePlan(agentSeats);
     }
 
+    @When("^I try to upgrade and buy (.*) agent seats without accept Clickatell's Terms and Conditions$")
+    public void upgradeTouchGoPlanWithoutTerms(int agentSeats){
+        getPortalMainPage().upgradePlanWithoutTerms(agentSeats);
+    }
+
+    @Then("^Payment is not proceeded and Payment Summary tab is still opened$")
+    public void verifyPaymentSummaryTabOpened(){
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymnentSummaryTabOPened(),
+                "'Payment Summary' tab is not still opened when admin tries to proceed without accepting Terms and Conditions");
+    }
 
     @When("^Admin clicks 'Upgrade' button$")
     public void clickUpgradeTouchGoPlanButton(){
