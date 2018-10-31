@@ -1,6 +1,7 @@
 package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -23,6 +24,6 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
     }
 
     public void clickAddToCardButton(){
-        addToCardButton.click();
+        addToCardButton.sendKeys(Keys.ENTER);
     }
 }

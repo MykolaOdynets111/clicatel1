@@ -1,9 +1,9 @@
 @portal
 @no_widget
 @no_chatdesk
-Feature: Admin of tenant with Starter plan should see his plan and not see 'Add Agent seats' button
+Feature: Touch Go plan info
 
-  Scenario: Agent assist and Feedback should be turned off for Starter
+  Scenario: Admin of tenant with Starter plan should see his plan and not see 'Add Agent seats' button
     When I open portal
     And Login into portal as an admin of Starter AQA account
     Then Admin should see "TOUCH GO STARTER" in the page header
