@@ -9,19 +9,19 @@ import java.util.List;
 public class Tenants {
 
     private static Response respWithAgentInfo = null;
-    private static String TENANT_UNDER_TEST = "";
-    private static String TENANT_UNDER_TEST_ORG_NAME = "";
+    private static ThreadLocal<String> TENANT_UNDER_TEST = new ThreadLocal<>();
+    private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
 
     private static void setTenantUnderTestOrgName(String orgName){
-        TENANT_UNDER_TEST_ORG_NAME=orgName;
+        TENANT_UNDER_TEST_ORG_NAME.set(orgName);
     }
 
     private static void setTenantUnderTest(String tenantName){
-        TENANT_UNDER_TEST=tenantName;
+        TENANT_UNDER_TEST.set(tenantName);
     }
 
     public static String getTenantUnderTest(){
-        return TENANT_UNDER_TEST;
+        return TENANT_UNDER_TEST.get();
     }
 
     public static String getTenantInfo(String tenantORGName, String info) {
@@ -29,7 +29,7 @@ public class Tenants {
     }
 
     public static String getTenantUnderTestOrgName() {
-        return TENANT_UNDER_TEST_ORG_NAME;
+        return TENANT_UNDER_TEST_ORG_NAME.get();
     }
 
     public static String getTenantBranchLocationAddress(String tenantName){
