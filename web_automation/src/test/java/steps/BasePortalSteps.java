@@ -52,6 +52,11 @@ public class BasePortalSteps {
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
     }
 
+    @Given("Widget is enabled for (.*) tenant")
+    public void enableWidget(String tenantOrgNAme){
+        ApiHelper.setIntegrationStatus(tenantOrgNAme, "touch", true);
+    }
+
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
     public void downgradeTouchGoPlan(String tenantOrgName){
             DriverFactory.closeAgentBrowser();

@@ -2,10 +2,7 @@ package steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
-import api_helper.ApiHelper;
-import api_helper.ApiHelperPlatform;
-import api_helper.TwitterAPI;
-import api_helper.Endpoints;
+import api_helper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -145,6 +142,7 @@ public class Hooks implements JSHelper{
                 }
                 takeScreenshotFromThirdDriverIfExists();
             }
+            RequestSpec.clearAccessTokenForPortalUser();
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
                     agentHomePage.getHeader().clickIconWithInitials();

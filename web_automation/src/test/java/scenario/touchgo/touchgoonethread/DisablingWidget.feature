@@ -3,6 +3,9 @@
 @no_chatdesk
 Feature: Disabling Widget
 
+  Background:
+    Given Widget is enabled for Starter AQA tenant
+
   Scenario: Agent should be able to disable widget from admin
     Given I open portal
     And Login into portal as an admin of Starter AQA account
