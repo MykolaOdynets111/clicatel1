@@ -25,7 +25,6 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
     }
 
     public void clickAddToCardButton(){
-        executeJSclick(addToCardButton, DriverFactory.getAgentDriverInstance());
-//        addToCardButton.sendKeys(Keys.ENTER);
+        addToCardButton.click();
     }
 }
