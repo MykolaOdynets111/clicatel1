@@ -165,6 +165,7 @@ public class BasePortalSteps {
         for(int i=0; i<60; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
+                DriverFactory.getAgentDriverInstance().navigate().refresh();
                 actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
             } else{
                 break;
