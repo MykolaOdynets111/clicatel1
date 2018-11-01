@@ -22,4 +22,8 @@ public class WidgetFooter extends AbstractUIElement {
         sendMesageButton.click();
         return this;
     }
+
+    public void tryToCloseSession(){
+        if(textInput.isEnabled()) enterMessage("end").sendMessage();
+    }
 }
