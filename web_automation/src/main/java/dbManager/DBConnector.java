@@ -2,6 +2,8 @@ package dbManager;
 import org.testng.Assert;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DBConnector {
 
@@ -78,8 +80,33 @@ public class DBConnector {
         }
     }
 
+
+    public static String getAccountActivationIdFromMC2DB(String env) {
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        localDateTime = localDateTime.minusHours(3);
+        String datetime = localDateTime.format(formatter);
+        String query = "SELECT * FROM "+tableName+".account_activation where created_date > '" + datetime + "';";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "mc2").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = results.getString("id");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
 //    public static void main(String args[]){
-//        String a = DBConnector.getInvitationIdForCreatedUserFromMC2DB("demo", "aqatest_1@aqa.com");
+//        String a = DBConnector.getAccountActivationIdFromMC2DB("testing");
 //        DBConnector.closeConnection();
 //    }
 }

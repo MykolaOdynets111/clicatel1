@@ -11,7 +11,7 @@ public class URLs {
 
     private static final String BASE_ENV_URL = "https://%s-touch-web.clickatelllabs.com/?tenantId=%s";
 
-    private static String BASE_PORTAL_URL = "https://%s-portal.clickatelllabs.com/#/login";
+    private static String BASE_PORTAL_URL = "https://%s-portal.clickatelllabs.com/";
 
     private static String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
 
@@ -121,7 +121,7 @@ public class URLs {
         return TwitterPages.getURLByTenantAndURL(tenantOrgName, ConfigManager.getEnv());
     }
 
-    public static String getPortalURL(){
+    public static String getBasePortalUrl(){
         return String.format(BASE_PORTAL_URL, ConfigManager.getEnv());
     }
 

@@ -119,5 +119,13 @@ public class Endpoints {
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "/actuator/health";
 
+    // ====================  PORTAL ================= //
+
+    public static String PORTAL_LOGIN_PAGE = URLs.getBasePortalUrl() + "#/login";
+
+    public static String PORTAL_SIGN_UP_PAGE = URLs.getBasePortalUrl() + "#/signup";
+
+    public static String PORTAL_ACCOUNT_ACTIVATION = URLs.getBasePortalUrl() + "#/activation/%s ";
+
 }
 
