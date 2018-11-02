@@ -177,6 +177,12 @@ public class Hooks implements JSHelper{
 
             }
 
+            if (scenario.getSourceTagNames().contains("@signup_account")){
+                ApiHelperPlatform.deactivateAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+            }
+
             DriverFactory.closeAgentBrowser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {

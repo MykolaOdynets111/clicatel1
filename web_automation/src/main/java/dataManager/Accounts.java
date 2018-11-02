@@ -35,6 +35,28 @@ public class Accounts {
         return tokenAndAccount;
     }
 
+    public static Map<String, String> getToken(String accountName, String userName, String userPass) {
+        Map<String, String> tokenAndAccount = new HashMap<>();
+        Response resp =  RestAssured.given()
+                .log().all()
+                .header("Content-Type", "application/json")
+                .body("{\n" +
+                        "  \"email\": \""+userName+"\",\n" +
+                        "  \"password\": \""+userPass+"\"\n" +
+                        "}")
+                .post(Endpoints.PLATFORM_ACCOUNTS);
+        if (resp.getBody().asString().contains("Not Authorized")){
+            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal."
+            );
+        }
+        tokenAndAccount.put("token", resp.jsonPath().get("token"));
+        List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
+        HashMap<String, String> targetAccount =accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
+        tokenAndAccount.put("accountId", targetAccount.get("id"));
+
+        return tokenAndAccount;
+    }
+
     private static String getCorrectAccountName(String tenantOrgName) {
         String accountName;
         if (tenantOrgName.equalsIgnoreCase("general bank demo")) {

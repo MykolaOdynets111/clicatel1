@@ -17,6 +17,9 @@ public class PortalLoginPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Log In']")
     private WebElement loginButton;
 
+    @FindBy(css = "div[ng-show='newAccountEmail']")
+    private WebElement confirmationEmailMessage;
+
     public static PortalLoginPage openPortalLoginPage() {
         DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_LOGIN_PAGE);
         return new PortalLoginPage();
@@ -28,5 +31,13 @@ public class PortalLoginPage extends PortalAbstractPage {
         passInput.sendKeys(pass);
 //        executeJSclick(loginButton);
         loginButton.click();
+    }
+
+    public boolean isMessageAboutConfirmationMailSnetShown(){
+        return isElementShownAgent(confirmationEmailMessage, 15);
+    }
+
+    public String getMessageAboutSendingConfirmationEmail(){
+        return confirmationEmailMessage.getText();
     }
 }

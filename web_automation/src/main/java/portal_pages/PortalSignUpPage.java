@@ -11,7 +11,7 @@ public class PortalSignUpPage extends PortalAbstractPage {
     private WebElement fullName;
 
     @FindBy(name = "accountName")
-    private WebElement accountName;
+    private WebElement accountNameInput;
 
     @FindBy(name = "email")
     private WebElement emailInput;
@@ -27,12 +27,12 @@ public class PortalSignUpPage extends PortalAbstractPage {
         return new PortalSignUpPage();
     }
 
-    public void signUp(String email, String pass){
+    public void signUp(String accountName, String email, String pass){
         waitForElementToBeVisibleAgent(fullName, 5);
         fullName.sendKeys("Taras AQA");
-        accountName.sendKeys("testaccount");
-        emailInput.sendKeys("aqa@test.com");
-        password.sendKeys("p@$$w0rd4te$t");
+        accountNameInput.sendKeys(accountName);
+        emailInput.sendKeys(email);
+        password.sendKeys(pass);
         signUpButton.click();
     }
 }

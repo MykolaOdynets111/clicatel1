@@ -2,6 +2,7 @@ package steps;
 
 import api_helper.ApiHelper;
 import api_helper.ApiHelperPlatform;
+import api_helper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -12,10 +13,7 @@ import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portal_pages.PortalBillingDetailsPage;
-import portal_pages.PortalIntegrationsPage;
-import portal_pages.PortalLoginPage;
-import portal_pages.PortalMainPage;
+import portal_pages.*;
 import portal_pages.uielements.LeftMenu;
 
 import java.util.List;
@@ -29,6 +27,11 @@ public class BasePortalSteps {
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
     private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
     private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
+    private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
+    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
+    public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
+    public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
+    private String activationAccountID;
 
 
     @Given("^New (.*) agent is created$")
@@ -44,12 +47,48 @@ public class BasePortalSteps {
     public static void deleteAgent(){
         String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
-//        ApiHelperPlatform.deleteUser("General Bank Demo", "ff808081619df1000161bd8981060003");
+    }
+
+    @When("^I provide all info about new account and click 'Sign Up' button$")
+    public void fillInFormWithInfoAboutNewAccount(){
+        getPortalSignUpPage().signUp(ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP, EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
     @When("^I open portal$")
     public void openPortal(){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+    }
+
+
+    @When("Portal Sign Up page is opened")
+    public void openPortalSignUpPage(){
+        portalSignUpPage.set(PortalSignUpPage.openPortalSignUpPage());
+    }
+
+    @When("I use activation ID and opens activation page")
+    public void openActivationAccountPage(){
+        String activationURL = String.format(Endpoints.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
+        DriverFactory.getAgentDriverInstance().get(activationURL);
+    }
+
+    @Then("^Activation ID record is created in DB$")
+    public void verifyActivationIDIsCreatedInDB(){
+        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv());
+        Assert.assertFalse(activationAccountID ==null,
+        "Record with new activation ID is not created in mc2 DB after submitting sign up form");
+    }
+
+
+    @Then("^Login page is opened with a message that activation email has been sent$")
+    public void verifyMassageThatConfirmationEmailSent(){
+        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+EMAIL_FOR_NEW_ACCOUNT_SIGN_UP+"" +
+                " to complete your sign up process";
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSnetShown(),
+                "Message that confirmation email was sent is not shown");
+        softAssert.assertEquals(getPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
+                "Message about sent confirmation email is not as expected");
+        softAssert.assertAll();
     }
 
     @Given("Widget is enabled for (.*) tenant")
@@ -352,6 +391,24 @@ public class BasePortalSteps {
             return portalBillingDetailsPage.get();
         } else{
             return portalBillingDetailsPage.get();
+        }
+    }
+
+    private PortalSignUpPage getPortalSignUpPage(){
+        if (portalSignUpPage.get()==null) {
+            portalSignUpPage.set(new PortalSignUpPage());
+            return portalSignUpPage.get();
+        } else{
+            return portalSignUpPage.get();
+        }
+    }
+
+    private PortalLoginPage getPortalLoginPage(){
+        if (portalLoginPage.get()==null) {
+            portalLoginPage.set(new PortalLoginPage());
+            return portalLoginPage.get();
+        } else{
+            return portalLoginPage.get();
         }
     }
 }

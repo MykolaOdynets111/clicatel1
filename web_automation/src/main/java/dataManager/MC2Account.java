@@ -15,6 +15,8 @@ public enum MC2Account {
     TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing", "ff808081668ab31c01668b98407f05e5", "ff8080816642a88501668b925a0e00cc"),
     TESTING_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingaccount", "Updating AQA", "testing", "", ""),
 
+    TESTING_SIGNUP_ACCOUNT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "automationtest", "SignUp AQA", "testing", "", ""),
+
     ;
 
     String touchGoPlan;
@@ -84,6 +86,15 @@ public enum MC2Account {
         return agentsList.stream()
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getTenantOrgName().equalsIgnoreCase(tenantOrgName))
+                .findFirst().get();
+    }
+
+    public static MC2Account getAccountDetails(String env, String accounName){
+        MC2Account[] accountsArray = MC2Account.values();
+        List<MC2Account> agentsList = Arrays.asList(accountsArray);
+        return agentsList.stream()
+                .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
+                        && e.getAccountName().equalsIgnoreCase(accounName))
                 .findFirst().get();
     }
 }

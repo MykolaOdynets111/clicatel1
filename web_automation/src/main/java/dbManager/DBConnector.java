@@ -85,7 +85,7 @@ public class DBConnector {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
         LocalDateTime localDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        localDateTime = localDateTime.minusHours(3);
+        localDateTime = localDateTime.minusHours(2).minusMinutes(5);
         String datetime = localDateTime.format(formatter);
         String query = "SELECT * FROM "+tableName+".account_activation where created_date > '" + datetime + "';";
         Statement statement = null;
