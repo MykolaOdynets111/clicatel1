@@ -45,8 +45,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         String userName = getUserNameFromLocalStorage();
         try {
             new ChatInLeftMenu(getTargetChat(userName)).openConversation();
-        } catch(WebDriverException e){
-            Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk when tries to open it.");
+        } catch(WebDriverException|NoSuchElementException e){
+            Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk when tries to open it.\n" +
+                    "UserID: "+ getUserNameFromLocalStorage());
         }
     }
 
