@@ -71,9 +71,23 @@ public class BasePortalSteps {
         DriverFactory.getAgentDriverInstance().get(activationURL);
     }
 
+    @Then("^Page with a message \"Your account has successfully been created!\" is shown$")
+    public void verifySuccessMessageIsShown(){
+        Assert.assertTrue(getPortalSignUpPage().isSuccessSignUpMessageSHown(),
+                "Success sign up message is not shown");
+    }
+
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
-        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv());
+        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+                ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+        for(int i=0; i<4; i++){
+            if (activationAccountID==null){
+                getPortalSignUpPage().waitFor(1000);
+                activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+                        ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+            }
+        }
         Assert.assertFalse(activationAccountID ==null,
         "Record with new activation ID is not created in mc2 DB after submitting sign up form");
     }
@@ -119,8 +133,22 @@ public class BasePortalSteps {
     @When("^Login into portal as an (.*) of (.*) account$")
     public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
         Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
-        portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
+        portalMainPage.set(
+                portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass())
+        );
         Tenants.setTenantUnderTestNames(tenantOrgName);
+    }
+
+    @Then("^Portal Page is opened$")
+    public void verifyPortalPageOpened(){
+        Assert.assertTrue(getPortalMainPage().isPortalPageOPened(),
+                "User is not logged in Portal");
+    }
+
+    @Then("^\"Update policy\" pop up is shown$")
+    public void verifyUpdatePolicyPopupShown(){
+        Assert.assertTrue(getPortalMainPage().isUpdatePolicyPopUpOpened(),
+                "User is not logged in Portal");
     }
 
     public static boolean isNewUserWasCreated(){

@@ -18,7 +18,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import portal_pages.PortalIntegrationsPage;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
@@ -178,7 +177,7 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@signup_account")){
-                ApiHelperPlatform.deactivateAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
             }

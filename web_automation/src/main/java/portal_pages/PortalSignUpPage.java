@@ -22,6 +22,9 @@ public class PortalSignUpPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Sign Up']")
     private WebElement signUpButton;
 
+    @FindBy(xpath = "//div[text()='Your account has successfully been created!']")
+    private WebElement successSignUpMessage;
+
     public static PortalSignUpPage openPortalSignUpPage() {
         DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_SIGN_UP_PAGE);
         return new PortalSignUpPage();
@@ -34,5 +37,9 @@ public class PortalSignUpPage extends PortalAbstractPage {
         emailInput.sendKeys(email);
         password.sendKeys(pass);
         signUpButton.click();
+    }
+
+    public boolean isSuccessSignUpMessageSHown(){
+        return isElementShownAgent(successSignUpMessage, 10);
     }
 }

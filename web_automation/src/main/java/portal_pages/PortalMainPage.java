@@ -21,6 +21,9 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text() = 'Setup Billing']")
     private WebElement setUpBillingButton;
 
+    @FindBy(xpath = "//h3[text()='We’ve updated our privacy policy']")
+    private WebElement updatePolicyPopUp;
+
     private LeftMenu leftMenu;
     private PageHeader pageHeader;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
@@ -103,6 +106,13 @@ public class PortalMainPage extends PortalAbstractPage {
         return new PortalBillingDetailsPage();
     }
 
+    public boolean isUpdatePolicyPopUpOpened(){
+        return isElementShownAgent(updatePolicyPopUp, 10);
+    }
+
+    public boolean isPortalPageOPened(){
+        return isElementShownAgent(getPageHeader().getWrappedElement());
+    }
 
 
 }

@@ -69,7 +69,7 @@ public class Endpoints {
 
     public static String PLATFORM_PAYMENT_METHODS = URLs.getBasePlatformUrl() + "/payment-methods";
 
-    public static String PLATFORM_DEACTIVATE_ACCOUNT = URLs.getBasePlatformUrl() + "/accounts/close";
+    public static String PLATFORM_CLOSE_ACCOUNT = URLs.getBasePlatformUrl() + "/accounts/close";
 
     // ====================  TIE ================= //
 

@@ -10,5 +10,7 @@
 #    Then Login page is opened with a message that activation email has been sent
 #    And Activation ID record is created in DB
 #    When I use activation ID and opens activation page
-##    And Provide new password
-##    Then I am able to log into new account
+#    Then Page with a message "Your account has successfully been created!" is shown
+#    And Login into portal as an admin of SignUp AQA account
+#    Then Portal Page is opened
+#    Then "Update policy" pop up is shown

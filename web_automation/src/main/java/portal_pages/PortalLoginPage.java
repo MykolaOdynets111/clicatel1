@@ -3,6 +3,7 @@ package portal_pages;
 import api_helper.Endpoints;
 import driverManager.DriverFactory;
 import driverManager.URLs;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -25,12 +26,13 @@ public class PortalLoginPage extends PortalAbstractPage {
         return new PortalLoginPage();
     }
 
-    public void login(String email, String pass){
+    public PortalMainPage login(String email, String pass){
         waitForElementToBeVisibleAgent(emailInput, 10);
         emailInput.sendKeys(email);
         passInput.sendKeys(pass);
 //        executeJSclick(loginButton);
         loginButton.click();
+        return new PortalMainPage();
     }
 
     public boolean isMessageAboutConfirmationMailSnetShown(){
@@ -38,6 +40,10 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public String getMessageAboutSendingConfirmationEmail(){
-        return confirmationEmailMessage.getText();
+        try {
+            return confirmationEmailMessage.getText();
+        }catch(NoSuchElementException e){
+            return "no elemnt to get the text from";
+        }
     }
 }

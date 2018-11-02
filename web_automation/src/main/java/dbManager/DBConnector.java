@@ -81,13 +81,33 @@ public class DBConnector {
     }
 
 
-    public static String getAccountActivationIdFromMC2DB(String env) {
+    public static String getAccountActivationIdFromMC2DB(String env, String accountName) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
-        LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        localDateTime = localDateTime.minusHours(2).minusMinutes(5);
-        String datetime = localDateTime.format(formatter);
-        String query = "SELECT * FROM "+tableName+".account_activation where created_date > '" + datetime + "';";
+        String accountId = getAccountIdFromMC2DB(env, accountName);
+
+        String query = "SELECT * FROM "+tableName+".account_activation where account_id = '"+accountId+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "mc2").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = results.getString("id");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static String getAccountIdFromMC2DB(String env, String accountName) {
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
+        String accountId = "";
+
+        String query = "SELECT * FROM "+ tableName +".account where name = '" + accountName + "';";
         Statement statement = null;
         ResultSet results = null;
         String id = null;
