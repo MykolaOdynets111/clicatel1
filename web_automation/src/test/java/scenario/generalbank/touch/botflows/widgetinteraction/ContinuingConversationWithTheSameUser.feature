@@ -1,5 +1,5 @@
 @smoke
-Feature: User should be able to continue chat
+Feature: User should be able to continue previously started chat
 
   Background:
     Given User opens General Bank Demo tenant page for user testing_aqaTestUser
