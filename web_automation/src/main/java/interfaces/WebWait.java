@@ -66,6 +66,12 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOf(element));
     }
 
+    default List<WebElement> waitForElementsToBeVisibleAgent(List<WebElement> elements, int time, String agent){
+        return initAgentWait(time, agent).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOfAllElements(elements));
+    }
+
     default WebElement waitForElementToBeVisibleAgent(WebElement element, int time, String agent){
         return initAgentWait(time, agent).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)

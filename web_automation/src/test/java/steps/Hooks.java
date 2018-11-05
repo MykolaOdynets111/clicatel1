@@ -46,6 +46,12 @@ public class Hooks implements JSHelper{
                 throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
             }
 
+        if(scenario.getSourceTagNames().contains("@signup_account")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
+            throw new cucumber.api.PendingException("Designed to run only on testing env. " +
+                    "On other envs the test may break the limit of sent activation emails and cause " +
+                    "Clickatell to be billed for that");
+        }
+
 
             if (scenario.getSourceTagNames().contains(Arrays.asList("@agent_to_user_conversation"))) {
                     DriverFactory.getAgentDriverInstance();
@@ -141,7 +147,7 @@ public class Hooks implements JSHelper{
                 }
                 takeScreenshotFromThirdDriverIfExists();
             }
-            RequestSpec.clearAccessTokenForPortalUser();
+
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
                     agentHomePage.getHeader().clickIconWithInitials();
@@ -175,14 +181,13 @@ public class Hooks implements JSHelper{
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "touch", true);
 
             }
-
+            DriverFactory.closeAgentBrowser();
             if (scenario.getSourceTagNames().contains("@signup_account")){
                 ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
             }
-
-            DriverFactory.closeAgentBrowser();
+            RequestSpec.clearAccessTokenForPortalUser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

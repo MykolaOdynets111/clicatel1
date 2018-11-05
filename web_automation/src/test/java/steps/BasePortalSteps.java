@@ -51,7 +51,24 @@ public class BasePortalSteps {
 
     @When("^I provide all info about new account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(){
-        getPortalSignUpPage().signUp(ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP, EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        getPortalSignUpPage().signUp("TARAS AQA", ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP, EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    }
+
+    @When("^I try to create new account with following data: (.*), (.*), (.*), (.*)$")
+    public void createNewAccountWithData(String names, String accountName, String email, String pass){
+        getPortalSignUpPage().signUp(names, accountName, email, pass);
+    }
+
+    @Then("^Required error should be shown$")
+    public void verifyRequiredErrorsShown(){
+        Assert.assertTrue(getPortalSignUpPage().areRequiredErrorsShown(),
+                "'Required' error not shown");
+    }
+
+    @Then("^Error popup with text (.*)  is shown$")
+    public void verifyVerificationMessage(String expectedMessage){
+        Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText(), expectedMessage,
+                "Field verification is not working.");
     }
 
     @When("^I open portal$")
@@ -73,7 +90,7 @@ public class BasePortalSteps {
 
     @Then("^Page with a message \"Your account has successfully been created!\" is shown$")
     public void verifySuccessMessageIsShown(){
-        Assert.assertTrue(getPortalSignUpPage().isSuccessSignUpMessageSHown(),
+        Assert.assertTrue(getPortalSignUpPage().isSuccessSignUpMessageShown(),
                 "Success sign up message is not shown");
     }
 
