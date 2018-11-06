@@ -52,7 +52,7 @@ public enum Agents {
 
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
 
-    TESTING_SIGNUP_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "SignUp AQA", "testing"),
+    TESTING_SIGNUP_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
 
 
     ;

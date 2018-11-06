@@ -31,6 +31,7 @@ public class BasePortalSteps {
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
+    public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
     private String activationAccountID;
 
 
@@ -51,7 +52,8 @@ public class BasePortalSteps {
 
     @When("^I provide all info about new account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(){
-        getPortalSignUpPage().signUp("TARAS AQA", ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP, EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                                        EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
     @When("^I try to create new account with following data: (.*), (.*), (.*), (.*)$")
@@ -158,7 +160,7 @@ public class BasePortalSteps {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-        Assert.assertTrue(getPortalMainPage().isPortalPageOPened(),
+        Assert.assertTrue(getPortalMainPage().isPortalPageOpened(),
                 "User is not logged in Portal");
     }
 
@@ -166,6 +168,39 @@ public class BasePortalSteps {
     public void verifyUpdatePolicyPopupShown(){
         Assert.assertTrue(getPortalMainPage().isUpdatePolicyPopUpOpened(),
                 "User is not logged in Portal");
+    }
+
+    @When("^Accept \"Update policy\" popup$")
+    public void acceptUpdatedPolicyPopup(){
+        getPortalMainPage().closeUpdatePolicyPopup();
+    }
+
+    @Then("^Main portal page with welcome message is shown$")
+    public void verifyMainPageWithWelcomeMessageShown(){
+        Assert.assertEquals(getPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
+                ". Thanks for signing up.", "Welcome message is not shown.");
+    }
+
+    @Then("^\"Get started with Touch\" button is shown$")
+    public void verifyGetStartedWithTouchButtonShown(){
+        Assert.assertTrue(getPortalMainPage().isGetStartedWithTouchButtonIsShown(),
+                "'Get started with Touch' is not shown");
+    }
+
+    @When("^Click \"Get started with Touch\" button$")
+    public void clickGetStartedWithTouchButton(){
+        getPortalMainPage().clickGetStartedWithTouchButton();
+    }
+
+    @When("^\"Get started with Touch Go\" window is opened$")
+    public void verifyStartedWithTouchGoWindowOpened(){
+        Assert.assertTrue(getPortalMainPage().isConfigureTouchWindowOpened(),
+                "\"Get started with Touch Go\" window is not opened");
+    }
+
+    @When("^I try to create new tenant$")
+    public void createNewTenant(){
+        getPortalMainPage().getConfigureTouchWindow().createNewTenant("SignedUp AQA", EMAIL_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
     public static boolean isNewUserWasCreated(){

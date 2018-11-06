@@ -14,3 +14,5 @@ Feature: Signing up the account
     And Login into portal as an admin of SignUp AQA account
     Then Portal Page is opened
     Then "Update policy" pop up is shown
+    When Accept "Update policy" popup
+    Then Main portal page with welcome message is shown

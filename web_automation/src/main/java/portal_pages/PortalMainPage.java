@@ -4,6 +4,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import portal_pages.uielements.ConfigureTouchWindow;
 import portal_pages.uielements.LeftMenu;
 import portal_pages.uielements.PageHeader;
 import portal_pages.uielements.UpgradeYourPlanWindow;
@@ -24,10 +25,24 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//h3[text()='We’ve updated our privacy policy']")
     private WebElement updatePolicyPopUp;
 
+    @FindBy(xpath = "//button[text()='Got it']")
+    private WebElement gotItButton;
+
+    @FindBy(css = "div.cl-greeting-text")
+    private WebElement greetingMessage;
+
+    @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
+    private WebElement getStartedWithTouchButton;
+
     private LeftMenu leftMenu;
     private PageHeader pageHeader;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
+    private ConfigureTouchWindow configureTouchWindow;
+
+    public ConfigureTouchWindow getConfigureTouchWindow() {
+        return configureTouchWindow;
+    }
 
     public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
         waitForElementToBeVisibleAgent(upgradeYourPlanWindow.getWrappedElement(), 5);
@@ -110,9 +125,23 @@ public class PortalMainPage extends PortalAbstractPage {
         return isElementShownAgent(updatePolicyPopUp, 10);
     }
 
-    public boolean isPortalPageOPened(){
+    public boolean isPortalPageOpened(){
         return isElementShownAgent(getPageHeader().getWrappedElement());
     }
 
+    public void closeUpdatePolicyPopup(){
+        gotItButton.click();
+    }
 
+    public String getGreetingMessage(){
+        return getTextFrom(greetingMessage);
+    }
+
+    public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShownAgent(getStartedWithTouchButton, 2);}
+
+    public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
+
+    public boolean isConfigureTouchWindowOpened(){
+        return isElementShownAgent(getConfigureTouchWindow().getWrappedElement());
+    }
 }

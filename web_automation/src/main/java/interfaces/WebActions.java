@@ -141,7 +141,7 @@ public interface WebActions extends WebWait {
         try{
             String text = elem.getText();
             if(text.isEmpty()) {
-                waitFor(500);
+                waitFor(200);
                 text = elem.getText();
             }
             return text;

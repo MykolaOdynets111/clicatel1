@@ -187,6 +187,11 @@ public class Hooks implements JSHelper{
                                                     BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
             }
+            if (scenario.getSourceTagNames().contains("@creating_new_tenant  ")){
+                String url = String.format(Endpoints.TIE_DELETE_TENANT, BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+                given().delete(url);
+            }
+
             RequestSpec.clearAccessTokenForPortalUser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
