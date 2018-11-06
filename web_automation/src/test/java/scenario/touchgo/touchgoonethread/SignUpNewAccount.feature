@@ -11,7 +11,7 @@ Feature: Signing up the account
     And Activation ID record is created in DB
     When I use activation ID and opens activation page
     Then Page with a message "Your account has successfully been created!" is shown
-    And Login into portal as an admin of SignUp AQA account
+    And Login into portal as an admin of SignedUp AQA account
     Then Portal Page is opened
     Then "Update policy" pop up is shown
     When Accept "Update policy" popup
