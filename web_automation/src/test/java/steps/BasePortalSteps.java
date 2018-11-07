@@ -70,7 +70,7 @@ public class BasePortalSteps {
 
     @Then("^Error popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
-        Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText(), expectedMessage,
+        Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
     }
 
@@ -118,7 +118,7 @@ public class BasePortalSteps {
         String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+EMAIL_FOR_NEW_ACCOUNT_SIGN_UP+"" +
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSnetShown(),
+        softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
                 "Message that confirmation email was sent is not shown");
         softAssert.assertEquals(getPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
                 "Message about sent confirmation email is not as expected");
@@ -194,7 +194,10 @@ public class BasePortalSteps {
 
     @Then("^Admin is not able to login into portal with deleted account$")
     public void verifyAdminCannotLoginToPortal(){
-        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+
+//        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        DriverFactory.getAgentDriverInstance().navigate().to(Endpoints.PORTAL_LOGIN_PAGE);
+
         if (!portalLoginPage.get().isLoginPageOpened()){
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());

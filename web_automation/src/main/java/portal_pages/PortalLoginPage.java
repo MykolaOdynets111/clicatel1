@@ -35,7 +35,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         return new PortalMainPage();
     }
 
-    public boolean isMessageAboutConfirmationMailSnetShown(){
+    public boolean isMessageAboutConfirmationMailSentShown(){
         return isElementShownAgent(confirmationEmailMessage, 15);
     }
 
@@ -48,6 +48,6 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public boolean isLoginPageOpened(){
-        return isElementShownAgent(emailInput);
+        return isElementShownAgent(emailInput,5);
     }
 }
