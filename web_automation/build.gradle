@@ -242,13 +242,35 @@ task runTIETestsForAllTenants(type: Test) {
     }
 }
 
-task runTouchGoTests(type:Test) {
-    runTouchTests.dependsOn(getTouchGoPlan)
+task runTestsAgainstNewlyCreatedAccount(type:Test){
     systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "touchgo/onethreadtouchgotests.xml"
-        suites baseXmlPath+ "touchgo/paralleltouchgotests.xml"
+        suites baseXmlPath + "touchgo/touchgofornewaccount.xml"
+    }
+}
+
+task runTouchGoTests(type:Test) {
+    runTouchTests.dependsOn(getTouchGoPlan)
+    systemProperties = System.getProperties()
+    doFirst {
+        useTestNG() {
+            useDefaultListeners = true
+            ignoreFailures = true
+            suites baseXmlPath + "touchgo/onethreadtouchgotests.xml"
+            suites baseXmlPath+ "touchgo/paralleltouchgotests.xml"
+        }
+    }
+    doLast {
+        if (!file("build/reports/tests/runTouchGoTests/testng-failed.xml").exists()) {
+            runTestsAgainstNewlyCreatedAccount.execute()
+        } else {
+            String failedTestXMLContent = file("build/reports/tests/runTouchGoTests/testng-failed.xml").text
+            if (!failedTestXMLContent.contains("Touch Go create new account test(failed)")) {
+                runTestsAgainstNewlyCreatedAccount.execute()
+            }
+
+        }
     }
 }
 

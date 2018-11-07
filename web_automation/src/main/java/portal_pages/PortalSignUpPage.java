@@ -31,8 +31,7 @@ public class PortalSignUpPage extends PortalAbstractPage {
     @FindBy(css = "form[name='signupForm'] input.ng-invalid")
     private List<WebElement> requiredInputErrors;
 
-    @FindBy(css = "div.alert-container")
-    private WebElement verificationError;
+
 
     public static PortalSignUpPage openPortalSignUpPage() {
         DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_SIGN_UP_PAGE);
@@ -60,12 +59,6 @@ public class PortalSignUpPage extends PortalAbstractPage {
         return  areElementsShownAgent(requiredInputErrors, 2, "admin");
     }
 
-    public String getVerificatinErrorText(){
-        if( isElementShownAgent(verificationError, 2)){
-            return verificationError.getText();
-        } else{
-            return "no verification error";
-        }
-    }
+
 
 }

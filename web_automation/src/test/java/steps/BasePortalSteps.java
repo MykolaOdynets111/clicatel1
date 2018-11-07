@@ -28,6 +28,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
     private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
+    private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
@@ -67,7 +68,7 @@ public class BasePortalSteps {
                 "'Required' error not shown");
     }
 
-    @Then("^Error popup with text (.*)  is shown$")
+    @Then("^Error popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
         Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText(), expectedMessage,
                 "Field verification is not working.");
@@ -156,6 +157,52 @@ public class BasePortalSteps {
                 portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass())
         );
         Tenants.setTenantUnderTestNames(tenantOrgName);
+    }
+
+    @When("^I click Launchpad button$")
+    public void clickLaunchpadButton(){
+        getPortalMainPage().clickLaunchpadButton();
+    }
+
+    @When("^Click 'Close account' button$")
+    public void clickCloseAccount(){
+        getPortalAccountDetailsPage().clickCloseAccountButton();
+    }
+
+    @Then("^'Close account\\?' popup is shown$")
+    public void verifyClosingConfirmationPopupShown(){
+        Assert.assertTrue(getPortalAccountDetailsPage().isClosingConfirmationPopupShown(),
+        "Closing account confirmation window is not shown.");
+    }
+
+    @When("^Admin clicks 'Close account' button in confirmation popup$")
+    public void confirmClosingAccount(){
+        getPortalAccountDetailsPage().confirmClosingAccount();
+    }
+
+    @Then("^'Account confirmation' popup is shown$")
+    public void verifyAccountConfirmationPopupShown(){
+        Assert.assertTrue(getPortalAccountDetailsPage().isAccountConfirmationPopupShown(),
+                "Account confirmation popup is not shown");
+    }
+
+    @When("^Admin confirms account to close$")
+    public void confirmAccountToCLosing(){
+        getPortalAccountDetailsPage().confirmAccount(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+                PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    }
+
+    @Then("^Admin is not able to login into portal with deleted account$")
+    public void verifyAdminCannotLoginToPortal(){
+        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        if (!portalLoginPage.get().isLoginPageOpened()){
+            portalLoginPage.get().waitFor(200);
+            portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        }
+        portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        Assert.assertEquals(portalLoginPage.get().getVerificatinErrorText(),
+                "Username or password is invalid",
+                "Error about invalid credentials is not shown");
     }
 
     @Then("^Portal Page is opened$")
@@ -489,6 +536,15 @@ public class BasePortalSteps {
             return portalLoginPage.get();
         } else{
             return portalLoginPage.get();
+        }
+    }
+
+    private PortalAccountDetailsPage getPortalAccountDetailsPage(){
+        if (portalAccountDetailsPageThreadLocal.get()==null) {
+            portalAccountDetailsPageThreadLocal.set(new PortalAccountDetailsPage());
+            return portalAccountDetailsPageThreadLocal.get();
+        } else{
+            return portalAccountDetailsPageThreadLocal.get();
         }
     }
 }

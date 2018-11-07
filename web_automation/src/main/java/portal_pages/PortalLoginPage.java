@@ -46,4 +46,8 @@ public class PortalLoginPage extends PortalAbstractPage {
             return "no elemnt to get the text from";
         }
     }
+
+    public boolean isLoginPageOpened(){
+        return isElementShownAgent(emailInput);
+    }
 }

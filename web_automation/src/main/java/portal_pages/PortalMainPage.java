@@ -34,6 +34,9 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
     private WebElement getStartedWithTouchButton;
 
+    @FindBy(css = "button.launchpad-btn")
+    private WebElement launchpadButton;
+
     private LeftMenu leftMenu;
     private PageHeader pageHeader;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
@@ -144,4 +147,6 @@ public class PortalMainPage extends PortalAbstractPage {
     public boolean isConfigureTouchWindowOpened(){
         return isElementShownAgent(getConfigureTouchWindow().getWrappedElement());
     }
+
+    public void clickLaunchpadButton(){launchpadButton.click();}
 }

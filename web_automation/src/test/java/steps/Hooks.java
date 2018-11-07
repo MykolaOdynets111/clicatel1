@@ -53,7 +53,7 @@ public class Hooks implements JSHelper{
         }
 
 
-            if (scenario.getSourceTagNames().contains(Arrays.asList("@agent_to_user_conversation"))) {
+        if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")) {
                     DriverFactory.getAgentDriverInstance();
             }
 
@@ -154,7 +154,6 @@ public class Hooks implements JSHelper{
                     agentHomePage.getHeader().selectStatus("available");
                     agentHomePage.getHeader().clickIconWithInitials();
             }
-
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             if(scenario.getSourceTagNames().contains("@updating_touchgo")) {
@@ -182,7 +181,7 @@ public class Hooks implements JSHelper{
 
             }
             DriverFactory.closeAgentBrowser();
-            if (scenario.getSourceTagNames().contains("@signup_account")){
+            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
                 ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
