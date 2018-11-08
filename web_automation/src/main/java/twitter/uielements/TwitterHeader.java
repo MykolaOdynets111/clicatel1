@@ -30,10 +30,14 @@ public class TwitterHeader extends AbstractUIElement {
 
     public boolean waitForNewNotificationIconToBeShown(int wait) {
         try {
-            waitForElementToBeVisibleByXpath(newNotificationIcon, wait);
+            checkIfNewNotificationShown(wait);
             return true;
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public void checkIfNewNotificationShown(int wait){
+        waitForElementToBeVisibleByCss(newNotificationIcon, wait);
     }
 }

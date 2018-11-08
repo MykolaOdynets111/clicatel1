@@ -41,16 +41,22 @@ public class TweetsSection extends TwitterHomePage {
         return openedTweet;
     }
 
-    public boolean verifyFromAgentTweetArrives(int wait){
-        try {
-            waitForElementToBeVisibleByCss(newTweetsButon, wait);
-//            findElemByCSS(newTweetsButon).click();
-            return true;
-        } catch (TimeoutException e){
-                return getTwitterHeader().waitForNewNotificationIconToBeShown(wait);
+    public boolean verifyFromAgentTweetArrives(int wait) {
+        for (int i = 0; i <= wait/2; i++) {
+            try {
+                waitForElementToBeVisibleByCss(newTweetsButon, 1);
+                return true;
+            } catch (TimeoutException e) {
+                try {
+                     getTwitterHeader().checkIfNewNotificationShown(1);
+                     return true;
+                } catch (TimeoutException e1) {
+                    //nothing to do here, one more loop
+                }
+            }
         }
+        return false;
     }
-
 
     public void clickNewTweetsButtonIfShown(int wait){
         try {
