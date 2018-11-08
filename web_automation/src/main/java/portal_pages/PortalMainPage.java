@@ -148,5 +148,6 @@ public class PortalMainPage extends PortalAbstractPage {
         return isElementShownAgent(getConfigureTouchWindow().getWrappedElement());
     }
 
-    public void clickLaunchpadButton(){launchpadButton.click();}
+    public void clickLaunchpadButton(){
+        if(isElementShownAgent(launchpadButton,2)) launchpadButton.click();}
 }
