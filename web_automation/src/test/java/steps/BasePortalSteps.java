@@ -180,6 +180,17 @@ public class BasePortalSteps {
         getPortalAccountDetailsPage().confirmClosingAccount();
     }
 
+    @When("^Admin clicks 'Cancel' button in confirmation popup$")
+    public void cancelClosingAccount(){
+        getPortalAccountDetailsPage().cancelClosingAccount();
+    }
+
+    @Then("^Account details page is opened$")
+    public void verifyAccountDetailsPageOpened(){
+        Assert.assertTrue(getPortalAccountDetailsPage().isAccountDetailsPageOpened(),
+                "Account details page is not shown after canceling account closing");
+    }
+
     @Then("^'Account confirmation' popup is shown$")
     public void verifyAccountConfirmationPopupShown(){
         Assert.assertTrue(getPortalAccountDetailsPage().isAccountConfirmationPopupShown(),
@@ -192,6 +203,11 @@ public class BasePortalSteps {
                 PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
+    @When("Admin provides '(.*)' email and '(.*)' pass for account confirmation")
+    public void enterConfirmationAccountDetails(String email, String account){
+        getPortalAccountDetailsPage().confirmAccount(email, account);
+    }
+
     @Then("^Admin is not able to login into portal with deleted account$")
     public void verifyAdminCannotLoginToPortal(){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
@@ -202,6 +218,13 @@ public class BasePortalSteps {
         portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
         Assert.assertEquals(portalLoginPage.get().getVerificationErrorText(),
                 "Username or password is invalid",
+                "Error about invalid credentials is not shown");
+    }
+
+    @Then("^Error about invalid credentials is shown$")
+    public void verifyInvalidCredsError(){
+        Assert.assertEquals(portalAccountDetailsPageThreadLocal.get().getVerificationErrorText(),
+                "Invalid username or password.",
                 "Error about invalid credentials is not shown");
     }
 

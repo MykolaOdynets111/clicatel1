@@ -16,9 +16,9 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/touchgonewaccount/CretingNewTenant.feature",
+        features ="src/test/java/scenario/touchgo/touchgonewaccount/testswithnewaccount/",
         glue ="steps")
-public class RunTouchGoCreatingTenatTest {
+public class RunTouchGoWithNewAccountTest {
 
 
     @Factory
