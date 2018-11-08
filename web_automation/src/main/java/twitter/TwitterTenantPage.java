@@ -1,10 +1,9 @@
 package twitter;
 
-import abstract_classes.AbstractPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import twitter.uielements.DMWindow;
-import twitter.uielements.TweetWindow;
+import twitter.uielements.SendNewTweetWindow;
 
 public class TwitterTenantPage extends TwitterHomePage {
 
@@ -19,9 +18,9 @@ public class TwitterTenantPage extends TwitterHomePage {
     private String tweetSEndPopupCss = "alert-messages.js-message-drawer-visible";
 
     private DMWindow dmWindow;
-    private TweetWindow tweetWindow;
+    private SendNewTweetWindow tweetWindow;
 
-    public TweetWindow getTweetWindow(){
+    public SendNewTweetWindow getTweetWindow(){
         return tweetWindow;
     }
 
@@ -40,5 +39,13 @@ public class TwitterTenantPage extends TwitterHomePage {
     public void openNewTweetWindow() {
         waitForElementToBeCklickableByCss(newTweetButtonCss, 10);
         executeJSclick(findElemByCSS(newTweetButtonCss));
+    }
+
+    public boolean isDMWindowOpened(){
+        return dmWindow.getWrappedElement().isDisplayed();
+    }
+
+    public boolean isTweetWindowOpened(){
+        return tweetWindow.getWrappedElement().isDisplayed();
     }
 }

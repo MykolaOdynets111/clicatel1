@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(xpath = "//div[@class='modal-content'][@role='document']")
-public class TweetWindow extends AbstractUIElement {
+public class SendNewTweetWindow extends AbstractUIElement {
 
     @FindBy(xpath = ".//div[@name='tweet']")
     private WebElement tweetInputArea;

@@ -23,6 +23,7 @@ import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
 import touch_pages.pages.MainPage;
 import touch_pages.pages.Widget;
+import twitter.TweetsSection;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
@@ -103,7 +104,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@twitter")){
             takeScreenshot();
-            endTwitterFlow();
+            endTwitterFlow(scenario);
         }
 
         if(scenario.getSourceTagNames().contains("@tie")){
@@ -251,16 +252,26 @@ public class Hooks implements JSHelper{
         }
     }
 
-    private void endTwitterFlow() {
+    private void endTwitterFlow(Scenario scenario) {
+        TwitterTenantPage twitterTenantPage = new TwitterTenantPage();
+        try {
+            if(scenario.isFailed()){
+                TweetsSection tweetsSection =  new TweetsSection();
+                if(tweetsSection.getOpenedTweet().isDisplayed()){
+                    tweetsSection.sendReplyForTweet("", "end");
+                    tweetsSection.getOpenedTweet().clickSendReplyButton();
+                }
+            }
+        } catch (WebDriverException e) {}
         TwitterAPI.deleteToTestUserTweets();
         TwitterAPI.deleteTweetsFromTestUser();
         try {
-            DMWindow dmWindow = new TwitterTenantPage().getDmWindow();
-            dmWindow.sendUserMessage("end");
-            dmWindow.deleteConversation();
-        } catch (WebDriverException e) {
-
-        }
+            if(twitterTenantPage.isDMWindowOpened()) {
+                DMWindow dmWindow = twitterTenantPage.getDmWindow();
+                dmWindow.sendUserMessage("end");
+                dmWindow.deleteConversation();
+            }
+        } catch (WebDriverException e) {}
     }
 
     private void endTieFlow(Scenario scenario) {
