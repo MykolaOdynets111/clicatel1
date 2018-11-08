@@ -36,7 +36,8 @@ Feature: Admin should be able to manage payment methods
     And Admin clicks 'Next' button
     Then Payment review tab is opened
     When Admin closes Confirm details window
-    When Admin select Settings in left menu and Billing & payments in submenu
+    When Admin select BACK in left menu
+    And Admin select Settings in left menu and Billing & payments in submenu
     And Select 'Payment methods' in nav menu
     When Admin clicks Manage -> Remove payment
     Then 'Add a payment method now?' button is shown

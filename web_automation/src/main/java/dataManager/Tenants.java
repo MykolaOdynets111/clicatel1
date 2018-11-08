@@ -71,7 +71,7 @@ public class Tenants {
                 Tenants.setTenantUnderTestOrgName("Standard AQA");
                 break;
             case "Updating AQA" :
-                Tenants.setTenantUnderTest("updatingaccount");
+                Tenants.setTenantUnderTest("updatingplan");
                 Tenants.setTenantUnderTestOrgName("Updating AQA");
                 break;
         }

@@ -257,7 +257,21 @@ public class BasePortalSteps {
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        getLeftMenu().navigateINLeftMenu(menuItem, submenu);
+        getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
+
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
+    @When("^(?:I|Admin) select (.*) in left menu$")
+    public void navigateInLeftMenu(String menuItem){
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        getLeftMenu().navigateINLeftMenu(menuItem);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
             for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {

@@ -27,7 +27,7 @@ public class LeftMenu extends AbstractUIElement {
     }
 
 
-    public void navigateINLeftMenu(String menuItem, String subMenuItem){
+    public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
 //        waitForElementToBeVisible(findElement(By.xpath("//div[@ng-repeat='menuItem in menu']/div[not(contains(@class, 'collapse'))]/a[not(contains(@class, 'hidden'))]/span")), 5);
         for(int i=0; i<10; i++){
             try{
@@ -41,5 +41,17 @@ public class LeftMenu extends AbstractUIElement {
 
         waitForElementToBeVisibleAgent(leftSubMenu, 5);
         submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get().click();
+    }
+
+    public void navigateINLeftMenu(String menuItem){
+        for(int i=0; i<10; i++){
+            try{
+                activeLeftMenuItems
+                        .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get().click();
+                break;
+            } catch(NoSuchElementException|StaleElementReferenceException e){
+                waitFor(200);
+            }
+        }
     }
 }
