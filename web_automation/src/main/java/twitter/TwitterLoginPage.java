@@ -37,7 +37,10 @@ public class TwitterLoginPage extends AbstractPage {
     @FindBy(css = "input#email_challenge_submit")
     private WebElement submitVerification;
 
-    @FindBy(css = "a.StaticLoggedOutHomePage-buttonLogin")
+    @FindAll({
+            @FindBy(css = "a.StaticLoggedOutHomePage-buttonLogin"),
+            @FindBy(css = "a[href='/login']")
+    })
     private WebElement logInButton;
 
     public static TwitterLoginPage openTwitterLoginPage() {

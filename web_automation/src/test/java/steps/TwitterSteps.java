@@ -14,7 +14,7 @@ import twitter.TwitterTenantPage;
 import twitter.TweetsSection;
 import twitter.uielements.DMWindow;
 import twitter.uielements.OpenedTweet;
-import twitter.uielements.TweetWindow;
+import twitter.uielements.SendNewTweetWindow;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ public class TwitterSteps {
 
     private TwitterTenantPage twitterTenantPage;
     private DMWindow dmWindow;
-    private TweetWindow tweetWindow;
+    private SendNewTweetWindow tweetWindow;
     private TweetsSection tweetsSection;
     private OpenedTweet openedTweet;
     private static int invocationCount = 0;
@@ -75,12 +75,8 @@ public class TwitterSteps {
                 "Expected tweet answer is missing after 70 secs wait");
     }
 
-//    @Then("^(?:He|User) has to receive \"(.*)\" answer from the agent$")
     @Then("^(?:Agent's|Bot's) answer arrives to twitter$")
     public void verifyReceivingAnswerInTimelineFromAgent(){
-//        if(expectedAnswer.length()>132){
-//            expectedAnswer = expectedAnswer.substring(0,131);
-//        }
         Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),
                 "Expected tweet answer from the agent is missing after 100 secs wait");
     }
@@ -92,9 +88,6 @@ public class TwitterSteps {
             initialUserTweet = getCurrentConnectToAgentTweetText();
         }
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
-//        if(expectedAgentMessage.length()>132){
-//            expectedAgentMessage = expectedAgentMessage.substring(0,131);
-//        }
         Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,15),
                 "Expected response "+expectedAgentMessage+" for user is not shown as comment for tweet");
     }
@@ -196,7 +189,7 @@ public class TwitterSteps {
         }
     }
 
-    private TweetWindow getTweetWindow() {
+    private SendNewTweetWindow getTweetWindow() {
         if (tweetWindow==null) {
             tweetWindow = getTwitterTenantPage().getTweetWindow();
             return tweetWindow;

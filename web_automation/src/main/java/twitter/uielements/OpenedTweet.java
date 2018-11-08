@@ -32,6 +32,10 @@ public class OpenedTweet extends AbstractUIElement {
         executeJSclick(findElemByXPATH(replyButtonOnTweetComment));
     }
 
+    public void clickSendReplyButton(){
+        executeJSclick(findElemByXPATH(replyButtonOnTweetComment));
+    }
+
     public void closeTweet(){
         findElemByCSS(closeTweetButtonCSS).click();
     }
