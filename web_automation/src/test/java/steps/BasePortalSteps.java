@@ -70,7 +70,7 @@ public class BasePortalSteps {
 
     @Then("^Error popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
-        Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText().trim(), expectedMessage.trim(),
+        Assert.assertEquals(getPortalSignUpPage().getVerificationErrorText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
     }
 
@@ -194,16 +194,13 @@ public class BasePortalSteps {
 
     @Then("^Admin is not able to login into portal with deleted account$")
     public void verifyAdminCannotLoginToPortal(){
-
-//        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
-        DriverFactory.getAgentDriverInstance().navigate().to(Endpoints.PORTAL_LOGIN_PAGE);
-
+        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         if (!portalLoginPage.get().isLoginPageOpened()){
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }
         portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-        Assert.assertEquals(portalLoginPage.get().getVerificatinErrorText(),
+        Assert.assertEquals(portalLoginPage.get().getVerificationErrorText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
     }

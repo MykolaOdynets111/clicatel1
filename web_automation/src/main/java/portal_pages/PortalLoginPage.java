@@ -48,6 +48,6 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public boolean isLoginPageOpened(){
-        return isElementShownAgent(emailInput,5);
+        return isElementShownAgent(emailInput,1);
     }
 }

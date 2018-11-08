@@ -17,7 +17,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(css = "div.alert-container")
     private WebElement verificationError;
 
-    public String getVerificatinErrorText(){
+    public String getVerificationErrorText(){
         if( isElementShownAgent(verificationError, 2)){
             return verificationError.getText();
         } else{
