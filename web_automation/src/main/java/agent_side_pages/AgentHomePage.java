@@ -11,6 +11,8 @@ import org.testng.Assert;
 
 public class AgentHomePage extends AgentAbstractPage {
 
+    private String suggestionInputFieldCSS = "div.suggestion-wrapper";
+
     @FindBy(css = "div.suggestion-wrapper")
     private WebElement suggestionInputField;
 
@@ -113,12 +115,12 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clearAndSendResponseToUser(String response){
         try {
-            moveToElemAndClick(findElemByXPATH(messageInputLocator));
-            waitForElementToBeClickable(messageInput);
+            moveToElemAndClick(DriverFactory.getAgentDriverInstance(), findElemByXPATHAgent(messageInputLocator));
+            waitForElementToBeClickableAgent(messageInput, 4, "main agent");
             messageInput.clear();
         } catch (WebDriverException e){
-            moveToElemAndClick(findElemByXPATH(messageInputLocator));
-            waitForElementToBeClickable(messageInput);
+            moveToElemAndClick(DriverFactory.getAgentDriverInstance(), findElemByXPATHAgent(messageInputLocator));
+            waitForElementToBeClickableAgent(messageInput, 4, "agent");
             messageInput.clear();
         }
         sendResponseToUser(response);
@@ -173,7 +175,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public boolean isSuggestionFieldShown() {
         try {
-            return isElementShownAgent(suggestionInputField);
+            return isElementShownAgentByCSS(suggestionInputFieldCSS, 5, "main agent");
         } catch (NoSuchElementException e) {
             return false;
         }
