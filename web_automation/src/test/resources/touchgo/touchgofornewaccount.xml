@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Touch Go one suite for the new account">
+
+
+    <!-- Should run the last among the tests for newly created account hence closes the account -->
+    <test name="Touch Go closing account">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoClosingAccountTest" />
+        </classes>
+    </test>
+
+</suite>

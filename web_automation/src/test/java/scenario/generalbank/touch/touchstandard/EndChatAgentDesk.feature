@@ -2,7 +2,6 @@ Feature: Interaction with End chat button on chatdesk
 
   Background:
     Given I login as agent of General Bank Demo
-    Given User profile for generalbank is created
     Given User select General Bank Demo tenant
     And Click chat icon
 

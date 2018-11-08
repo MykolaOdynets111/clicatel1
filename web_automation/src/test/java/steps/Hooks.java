@@ -2,10 +2,7 @@ package steps;
 
 import agent_side_pages.AgentHomePage;
 import agent_side_pages.AgentLoginPage;
-import api_helper.ApiHelper;
-import api_helper.ApiHelperPlatform;
-import api_helper.TwitterAPI;
-import api_helper.Endpoints;
+import api_helper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -21,7 +18,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import portal_pages.PortalIntegrationsPage;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
@@ -50,26 +46,17 @@ public class Hooks implements JSHelper{
                 throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
             }
 
-            if (!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                    !scenario.getSourceTagNames().contains("@facebook") &&
-                    !scenario.getSourceTagNames().contains("@twitter") &&
-                    !scenario.getSourceTagNames().contains("@predefined_user") &&
-                    !scenario.getSourceTagNames().contains("@no_widget")
-            ){
+        if(scenario.getSourceTagNames().contains("@signup_account")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
+            throw new cucumber.api.PendingException("Designed to run only on testing env. " +
+                    "On other envs the test may break the limit of sent activation emails and cause " +
+                    "Clickatell to be billed for that");
+        }
 
-                if (scenario.getSourceTagNames().equals(Arrays.asList("@agent_to_user_conversation"))) {
+
+        if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")) {
                     DriverFactory.getAgentDriverInstance();
-                }
-                DriverFactory.openUrl();
-                // Setting up coordinates of Lviv, Ukraine into browser
-//                if (scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
-//                    setUpGeolocation("49.8397", "24.0297");
-//                }
             }
 
-            if (scenario.getSourceTagNames().contains("@predefined_user")) {
-                DriverFactory.openTouchUrlWithPredifinedUserID("testing_aqaTestUser");
-            }
 
             if (scenario.getSourceTagNames().contains("@facebook")) {
                 FBLoginPage.openFacebookLoginPage().loginUser();
@@ -160,26 +147,26 @@ public class Hooks implements JSHelper{
                 }
                 takeScreenshotFromThirdDriverIfExists();
             }
+
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
                     agentHomePage.getHeader().clickIconWithInitials();
                     agentHomePage.getHeader().selectStatus("available");
                     agentHomePage.getHeader().clickIconWithInitials();
             }
-
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
             if(scenario.getSourceTagNames().contains("@updating_touchgo")) {
+                DriverFactory.closeAgentBrowser();
                 ApiHelper.decreaseTouchGoPLan(Tenants.getTenantUnderTestOrgName());
                 List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(Tenants.getTenantUnderTestOrgName());
                 subscriptionIDs.forEach(e ->
-                        ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), ((Integer) e) ));
-
+                        ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
             }
 
             if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
                 List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(Tenants.getTenantUnderTestOrgName(), "CREDIT_CARD");
-                ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), ((String) e) ));
+                ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), e));
             }
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
@@ -190,13 +177,21 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
-                PortalIntegrationsPage portalIntegrationsPage = new PortalIntegrationsPage();
-                if (!portalIntegrationsPage.getIntegrationRowStatus("web chat").equalsIgnoreCase("active")){
-                    portalIntegrationsPage.clickToggleFor("web chat");
-                }
+                ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "touch", true);
+
+            }
+            DriverFactory.closeAgentBrowser();
+            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
+                ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+            }
+            if (scenario.getSourceTagNames().contains("@creating_new_tenant  ")){
+                String url = String.format(Endpoints.TIE_DELETE_TENANT, BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+                given().delete(url);
             }
 
-                    DriverFactory.closeAgentBrowser();
+            RequestSpec.clearAccessTokenForPortalUser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
@@ -213,8 +208,8 @@ public class Hooks implements JSHelper{
             try {
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
-                    Widget widget = new Widget();
-                    widget.getWidgetFooter().enterMessage("end").sendMessage();
+                    Widget widget = new Widget("withoutWait");
+                    widget.getWidgetFooter().tryToCloseSession();
                 }
         }catch (WebDriverException e) { }
         ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());

@@ -115,4 +115,16 @@ public class ApiHelperPlatform {
                 .delete(Endpoints.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
     }
 
+    public static void closeAccount(String accountName, String email, String pass){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUserByAccount(accountName))
+                .body("{\n" +
+                        "  \"email\": \""+email+"\",\n" +
+                        "  \"password\": \""+pass+"\",\n" +
+                        "  \"reason\": \"string\"\n" +
+                        "}")
+                .post(Endpoints.PLATFORM_CLOSE_ACCOUNT);
+    }
+
 }

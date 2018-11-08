@@ -33,12 +33,20 @@ public class ApiHelper {
         return tenantsMap;
     }
 
-    public static void createUserProfile(String tenantName, String clientID, String keyName, String keyValue) {
-        String url = String.format(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT, tenantName, clientID, keyName, keyValue);
+    public static void createUserProfile(String tenantName, String clientID) {
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .post(url);
+                .body("{ "+
+                        "\"tenantName\": \""+tenantName+"\","+
+                        "\"type\": \"TOUCH\"," +
+                        "\"clientId\": \""+clientID+"\","+
+                        "\"attributes\": {" +
+                            "\"firstName\": \""+clientID+"\","+
+                            "\"email\": \"aqa_test@gmail.com\"" +
+                            "}" +
+                        "}")
+                .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
@@ -245,5 +253,17 @@ public class ApiHelper {
                         "  \"messageType\": \"TOUCH_STARTED\"" +
                         "}")
                 .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
+    }
+
+    public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{\n" +
+                        "  \"integrationType\": \""+ integration.toUpperCase() +"\",\n" +
+                        "  \"channelType\": \"webchat\",\n" +
+                        "  \"enable\": "+ integrationStatus + "" +
+                        "}")
+                .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }
 }

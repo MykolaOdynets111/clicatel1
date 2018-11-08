@@ -43,6 +43,14 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean areElementsShownAgent(List<WebElement> elements, int time, String agent){
+        try {
+            return waitForElementsToBeVisibleAgent(elements, time, agent).size()>0;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShown(WebElement element){
         try {
             return waitForElementToBeVisible(element, 5).isDisplayed();
@@ -133,7 +141,7 @@ public interface WebActions extends WebWait {
         try{
             String text = elem.getText();
             if(text.isEmpty()) {
-                waitFor(500);
+                waitFor(200);
                 text = elem.getText();
             }
             return text;

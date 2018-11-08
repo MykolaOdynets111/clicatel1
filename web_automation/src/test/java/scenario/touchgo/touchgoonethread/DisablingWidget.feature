@@ -1,7 +1,10 @@
 @portal
 @widget_disabling
 @no_chatdesk
-Feature: Widget disabling
+Feature: Disabling Widget
+
+  Background:
+    Given Widget is enabled for Starter AQA tenant
 
   Scenario: Agent should be able to disable widget from admin
     Given I open portal

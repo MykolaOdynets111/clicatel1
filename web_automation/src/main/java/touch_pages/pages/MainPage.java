@@ -21,19 +21,19 @@ public class MainPage extends AbstractPage {
     private WebElement chatIcon;
 
 
-    public MainPage selectTenant(String tenantName) {
-        try {
-        waitForElementToBeVisible(tenantContainer, 25);
-        new TenantRow(
-                        tenants.stream().filter(e -> e.getText().equalsIgnoreCase(tenantName)).findFirst().get())
-                .selectTenant();
-        return this;
-        } catch(TimeoutException e) {
-            Assert.assertTrue(false, "Tenants list is not shown");
-            return this;
-        }
-
-    }
+//    public MainPage selectTenant(String tenantName) {
+//        try {
+//        waitForElementToBeVisible(tenantContainer, 25);
+//        new TenantRow(
+//                        tenants.stream().filter(e -> e.getText().equalsIgnoreCase(tenantName)).findFirst().get())
+//                .selectTenant();
+//        return this;
+//        } catch(TimeoutException e) {
+//            Assert.assertTrue(false, "Tenants list is not shown");
+//            return this;
+//        }
+//
+//    }
 
 
     public boolean isChatIconShown() {

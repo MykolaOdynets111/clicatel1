@@ -20,6 +20,8 @@ public class Endpoints {
 
     public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
 
+    public static String INTEGRATIONS_ENABLING_DISABLING = URLs.getTouchApiBaseURL() + "integrations/channel/enable";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
@@ -32,9 +34,14 @@ public class Endpoints {
 
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
 
-    public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s?key=%s&value=%s";
+//    public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s?key=%s&value=%s";
 
-    public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s";
+    public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles";
+
+//    public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s";
+
+    public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TOUCH/%s";
+
 
     public static String INTERNAL_TENANT_CONFIGURED_MESSAGES = URLs.getBaseInternalApiUrl() + "taf/message-responses/%s";
 
@@ -61,6 +68,8 @@ public class Endpoints {
     public static String PLATFORM_SUBSCRIPTIONS_DEACTIVATION = URLs.getBasePlatformUrl() + "/subscriptions/%s/deactivated";
 
     public static String PLATFORM_PAYMENT_METHODS = URLs.getBasePlatformUrl() + "/payment-methods";
+
+    public static String PLATFORM_CLOSE_ACCOUNT = URLs.getBasePlatformUrl() + "/accounts/close";
 
     // ====================  TIE ================= //
 
@@ -111,6 +120,14 @@ public class Endpoints {
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "/actuator/health";
+
+    // ====================  PORTAL ================= //
+
+    public static String PORTAL_LOGIN_PAGE = URLs.getBasePortalUrl() + "#/login";
+
+    public static String PORTAL_SIGN_UP_PAGE = URLs.getBasePortalUrl() + "#/signup";
+
+    public static String PORTAL_ACCOUNT_ACTIVATION = URLs.getBasePortalUrl() + "#/activation/%s ";
 
 }
 

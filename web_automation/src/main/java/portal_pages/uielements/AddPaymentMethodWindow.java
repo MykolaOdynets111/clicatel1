@@ -1,6 +1,7 @@
 package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -63,12 +64,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
         nextButton.click();
-        try {
-            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 10);
-            waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
-        }catch(TimeoutException e){
-            // nothing to do 'cause it were stabilizing waits before continuing
-        }
+        waitForAddingNewPaymentConfirmationPopup();
         return this;
     }
 
@@ -97,6 +93,15 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
     }
 
     public void clickAddPaymentButton(){
-        nextButton.click();
+        executeJSclick(nextButton, DriverFactory.getAgentDriverInstance());
+    }
+
+    public void waitForAddingNewPaymentConfirmationPopup(){
+        try {
+            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 10);
+            waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
+        }catch(TimeoutException e){
+            // nothing to do 'cause it were stabilizing waits before continuing
+        }
     }
 }

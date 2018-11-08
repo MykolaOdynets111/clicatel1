@@ -6,4 +6,9 @@
             <class name="runner.touchgo.RunTouchGoOneThreadTest" />
         </classes>
     </test>
+    <test name="Touch Go create new account test">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoCreatingAccountTest" />
+        </classes>
+    </test>
 </suite>

@@ -9,7 +9,7 @@ import portal_pages.CartPage;
 @FindBy(css = "div.header.ng-scope")
 public class PageHeader extends AbstractUIElement {
 
-    @FindBy(css = "button.upgrade-touch-plan-bttn")
+    @FindBy(css = "div[cl-tenant-feature='UPGRADE_PACKAGE||ADD_AGENT_SEATS'] button.upgrade-touch-plan-bttn")
     private WebElement upgradeButton;
 
     @FindBy(css = "span.mini-cart-icon")

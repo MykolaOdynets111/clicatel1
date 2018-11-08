@@ -1,20 +1,19 @@
 package portal_pages;
 
 import driverManager.DriverFactory;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.uielements.AddPaymentMethodWindow;
-import portal_pages.uielements.LeftMenu;
-import portal_pages.uielements.PageHeader;
-import portal_pages.uielements.UpgradeYourPlanWindow;
 
 import java.util.List;
 
 public class PortalBillingDetailsPage extends PortalAbstractPage {
 
-    @FindBy(css = "li[ui-sref='billingDetails']")
-    private WebElement pageHeader;
+    @FindBy(css = "form[name=billingDetailsForm]")
+    private WebElement billingDetailsForm;
 
     @FindBy(css = "div[cl-tabs='tabs'] ol.list-unstyled.list-inline>li")
     private List<WebElement> navItems;
@@ -31,20 +30,19 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(css = "div.payment-method button")
     private WebElement managePaymentMethodButton;
 
-    @FindBy(css = "div.cl-header--item>div>button")
-    private WebElement removePaymentButton;
-
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement removePaymentConfirmationButton;
 
     private AddPaymentMethodWindow addPaymentMethodWindow;
+
+    private String removePaymentButton =  "//button[@ng-click='removeCard()']";
 
     public AddPaymentMethodWindow getAddPaymentMethodWindow(){
         return addPaymentMethodWindow;
     }
 
     public boolean isPageOpened(int wait){
-        return isElementShownAgent(pageHeader, wait);
+        return isElementShownAgent(billingDetailsForm, wait);
     }
 
     public void clickNavItem(String navName){
@@ -69,10 +67,21 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
 
     public void deletePaymentMethod(){
         managePaymentMethodButton.click();
-        waitForElementToBeVisibleAgent(removePaymentButton, 9);
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-        executor.executeScript("arguments[0].click();", removePaymentButton);
-        removePaymentConfirmationButton.click();
+        waitForElementsToBeVisibleByXpathAgent(removePaymentButton, 12);
+        try{
+            findElemByXPATHAgent(removePaymentButton).sendKeys(Keys.ENTER);
+        } catch(InvalidElementStateException e){
+            waitFor(200);
+            findElemByXPATHAgent(removePaymentButton).sendKeys(Keys.ENTER);
+
+        }
+
+        //        executeJSclick(findElemByXPATHAgent(removePaymentButton), DriverFactory.getAgentDriverInstance());
+//        if(isElementShownAgent(removePaymentButton, 2)) executeJSclick(removePaymentButton, DriverFactory.getAgentDriverInstance());
+//        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), removePaymentButton);
+//        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+//        executor.executeScript("arguments[0].click();", removePaymentButton);
+        if(isElementShownAgent(removePaymentConfirmationButton, 3))removePaymentConfirmationButton.click();
 
     }
 }

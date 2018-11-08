@@ -21,29 +21,28 @@ public class PostFeed extends AbstractUIElement {
 
     public void makeAPost(String userPostText){
         waitForElementToBeVisible(postInputField, 6);
-        if (isElementShownByXpath(closeDMPopupButton, 10)) findElemByXPATH(closeDMPopupButton).click();
+        closeFBDMWindowIfOpened();
         postInputField.click();
         postInputField.sendKeys(userPostText);
         if(!postInputField.getText().equals(userPostText)){
-            if (isElementShownByXpath(closeDMPopupButton, 8)) {
-                findElemByXPATH(closeDMPopupButton).click();
-                if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)) findElemByXPATH(closeDMPopupButtonConfirmation).click();
-            }
+            closeFBDMWindowIfOpened();
             postInputField.click();
             postInputField.clear();
             postInputField.sendKeys(userPostText);
         }
-        try{
-            clickPostButton();
-        } catch (WebDriverException e){
-            waitFor(500);
-            try {
-                clickPostButton();
-            }catch (WebDriverException e1){
-                waitFor(500);
-                clickPostButton();
-            }
-        }
+
+        clickPostButton();
+//        try{
+//            clickPostButton();
+//        } catch (WebDriverException e){
+//            waitFor(500);
+//            try {
+//                clickPostButton();
+//            }catch (WebDriverException e1){
+//                waitFor(500);
+//                clickPostButton();
+//            }
+//        }
 
         waitForElementToBeInvisible(postButton,10);
     }
@@ -58,5 +57,16 @@ public class PostFeed extends AbstractUIElement {
     private void clickPostButton(){
         if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
         postButton.click();
+    }
+
+
+    private void closeFBDMWindowIfOpened(){
+        if (isElementShownByXpath(closeDMPopupButton, 10)){
+            executeJSclick(findElemByXPATH(closeDMPopupButton));
+        }
+        if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)){
+            moveToElemAndClick(findElemByXPATH(closeDMPopupButtonConfirmation));
+        }
+
     }
 }

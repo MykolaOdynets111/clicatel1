@@ -2,6 +2,7 @@ package steps;
 
 import api_helper.ApiHelper;
 import api_helper.ApiHelperPlatform;
+import api_helper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -12,11 +13,10 @@ import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portal_pages.PortalBillingDetailsPage;
-import portal_pages.PortalIntegrationsPage;
-import portal_pages.PortalLoginPage;
-import portal_pages.PortalMainPage;
+import portal_pages.*;
 import portal_pages.uielements.LeftMenu;
+
+import java.util.List;
 
 public class BasePortalSteps {
 
@@ -27,6 +27,13 @@ public class BasePortalSteps {
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
     private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
     private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
+    private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
+    private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
+    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
+    public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
+    public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
+    public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
+    private String activationAccountID;
 
 
     @Given("^New (.*) agent is created$")
@@ -42,12 +49,100 @@ public class BasePortalSteps {
     public static void deleteAgent(){
         String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
-//        ApiHelperPlatform.deleteUser("General Bank Demo", "ff808081619df1000161bd8981060003");
+    }
+
+    @When("^I provide all info about new account and click 'Sign Up' button$")
+    public void fillInFormWithInfoAboutNewAccount(){
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                                        EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    }
+
+    @When("^I try to create new account with following data: (.*), (.*), (.*), (.*)$")
+    public void createNewAccountWithData(String names, String accountName, String email, String pass){
+        getPortalSignUpPage().signUp(names, accountName, email, pass);
+    }
+
+    @Then("^Required error should be shown$")
+    public void verifyRequiredErrorsShown(){
+        Assert.assertTrue(getPortalSignUpPage().areRequiredErrorsShown(),
+                "'Required' error not shown");
+    }
+
+    @Then("^Error popup with text (.*) is shown$")
+    public void verifyVerificationMessage(String expectedMessage){
+        Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText().trim(), expectedMessage.trim(),
+                "Field verification is not working.");
     }
 
     @When("^I open portal$")
     public void openPortal(){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+    }
+
+
+    @When("Portal Sign Up page is opened")
+    public void openPortalSignUpPage(){
+        portalSignUpPage.set(PortalSignUpPage.openPortalSignUpPage());
+    }
+
+    @When("I use activation ID and opens activation page")
+    public void openActivationAccountPage(){
+        String activationURL = String.format(Endpoints.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
+        DriverFactory.getAgentDriverInstance().get(activationURL);
+    }
+
+    @Then("^Page with a message \"Your account has successfully been created!\" is shown$")
+    public void verifySuccessMessageIsShown(){
+        Assert.assertTrue(getPortalSignUpPage().isSuccessSignUpMessageShown(),
+                "Success sign up message is not shown");
+    }
+
+    @Then("^Activation ID record is created in DB$")
+    public void verifyActivationIDIsCreatedInDB(){
+        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+                ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+        for(int i=0; i<4; i++){
+            if (activationAccountID==null){
+                getPortalSignUpPage().waitFor(1000);
+                activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+                        ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+            }
+        }
+        Assert.assertFalse(activationAccountID ==null,
+        "Record with new activation ID is not created in mc2 DB after submitting sign up form");
+    }
+
+
+    @Then("^Login page is opened with a message that activation email has been sent$")
+    public void verifyMassageThatConfirmationEmailSent(){
+        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+EMAIL_FOR_NEW_ACCOUNT_SIGN_UP+"" +
+                " to complete your sign up process";
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
+                "Message that confirmation email was sent is not shown");
+        softAssert.assertEquals(getPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
+                "Message about sent confirmation email is not as expected");
+        softAssert.assertAll();
+    }
+
+    @Given("Widget is enabled for (.*) tenant")
+    public void enableWidget(String tenantOrgNAme){
+        ApiHelper.setIntegrationStatus(tenantOrgNAme, "touch", true);
+    }
+
+    @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
+    public void downgradeTouchGoPlan(String tenantOrgName){
+            DriverFactory.closeAgentBrowser();
+            ApiHelper.decreaseTouchGoPLan(tenantOrgName);
+            List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(tenantOrgName);
+            subscriptionIDs.forEach(e ->
+                    ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
+    }
+
+    @Given("^Tenant (.*) has no Payment Methods$")
+    public void clearPaymentMethods(String tenantOrgName){
+        List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
+        ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
     @When("^Login as newly created agent$")
@@ -58,15 +153,111 @@ public class BasePortalSteps {
     @When("^Login into portal as an (.*) of (.*) account$")
     public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
         Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
-        portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass());
+        portalMainPage.set(
+                portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass())
+        );
         Tenants.setTenantUnderTestNames(tenantOrgName);
+    }
+
+    @When("^I click Launchpad button$")
+    public void clickLaunchpadButton(){
+        getPortalMainPage().clickLaunchpadButton();
+    }
+
+    @When("^Click 'Close account' button$")
+    public void clickCloseAccount(){
+        getPortalAccountDetailsPage().clickCloseAccountButton();
+    }
+
+    @Then("^'Close account\\?' popup is shown$")
+    public void verifyClosingConfirmationPopupShown(){
+        Assert.assertTrue(getPortalAccountDetailsPage().isClosingConfirmationPopupShown(),
+        "Closing account confirmation window is not shown.");
+    }
+
+    @When("^Admin clicks 'Close account' button in confirmation popup$")
+    public void confirmClosingAccount(){
+        getPortalAccountDetailsPage().confirmClosingAccount();
+    }
+
+    @Then("^'Account confirmation' popup is shown$")
+    public void verifyAccountConfirmationPopupShown(){
+        Assert.assertTrue(getPortalAccountDetailsPage().isAccountConfirmationPopupShown(),
+                "Account confirmation popup is not shown");
+    }
+
+    @When("^Admin confirms account to close$")
+    public void confirmAccountToCLosing(){
+        getPortalAccountDetailsPage().confirmAccount(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+                PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    }
+
+    @Then("^Admin is not able to login into portal with deleted account$")
+    public void verifyAdminCannotLoginToPortal(){
+
+//        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        DriverFactory.getAgentDriverInstance().navigate().to(Endpoints.PORTAL_LOGIN_PAGE);
+
+        if (!portalLoginPage.get().isLoginPageOpened()){
+            portalLoginPage.get().waitFor(200);
+            portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        }
+        portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        Assert.assertEquals(portalLoginPage.get().getVerificatinErrorText(),
+                "Username or password is invalid",
+                "Error about invalid credentials is not shown");
+    }
+
+    @Then("^Portal Page is opened$")
+    public void verifyPortalPageOpened(){
+        Assert.assertTrue(getPortalMainPage().isPortalPageOpened(),
+                "User is not logged in Portal");
+    }
+
+    @Then("^\"Update policy\" pop up is shown$")
+    public void verifyUpdatePolicyPopupShown(){
+        Assert.assertTrue(getPortalMainPage().isUpdatePolicyPopUpOpened(),
+                "User is not logged in Portal");
+    }
+
+    @When("^Accept \"Update policy\" popup$")
+    public void acceptUpdatedPolicyPopup(){
+        getPortalMainPage().closeUpdatePolicyPopup();
+    }
+
+    @Then("^Main portal page with welcome message is shown$")
+    public void verifyMainPageWithWelcomeMessageShown(){
+        Assert.assertEquals(getPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
+                ". Thanks for signing up.", "Welcome message is not shown.");
+    }
+
+    @Then("^\"Get started with Touch\" button is shown$")
+    public void verifyGetStartedWithTouchButtonShown(){
+        Assert.assertTrue(getPortalMainPage().isGetStartedWithTouchButtonIsShown(),
+                "'Get started with Touch' is not shown");
+    }
+
+    @When("^Click \"Get started with Touch\" button$")
+    public void clickGetStartedWithTouchButton(){
+        getPortalMainPage().clickGetStartedWithTouchButton();
+    }
+
+    @When("^\"Get started with Touch Go\" window is opened$")
+    public void verifyStartedWithTouchGoWindowOpened(){
+        Assert.assertTrue(getPortalMainPage().isConfigureTouchWindowOpened(),
+                "\"Get started with Touch Go\" window is not opened");
+    }
+
+    @When("^I try to create new tenant$")
+    public void createNewTenant(){
+        getPortalMainPage().getConfigureTouchWindow().createNewTenant("SignedUp AQA", EMAIL_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
     public static boolean isNewUserWasCreated(){
         return agentEmail != null;
     }
 
-    @When("^I select (.*) in left menu and (.*) in submenu$")
+    @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenu(menuItem, submenu);
@@ -85,6 +276,16 @@ public class BasePortalSteps {
         getPortalMainPage().upgradePlan(agentSeats);
     }
 
+    @When("^I try to upgrade and buy (.*) agent seats without accept Clickatell's Terms and Conditions$")
+    public void upgradeTouchGoPlanWithoutTerms(int agentSeats){
+        getPortalMainPage().upgradePlanWithoutTerms(agentSeats);
+    }
+
+    @Then("^Payment is not proceeded and Payment Summary tab is still opened$")
+    public void verifyPaymentSummaryTabOpened(){
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymnentSummaryTabOPened(),
+                "'Payment Summary' tab is not still opened when admin tries to proceed without accepting Terms and Conditions");
+    }
 
     @When("^Admin clicks 'Upgrade' button$")
     public void clickUpgradeTouchGoPlanButton(){
@@ -130,9 +331,10 @@ public class BasePortalSteps {
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
         String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
-        for(int i=0; i<41; i++){
+        for(int i=0; i<60; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
+                DriverFactory.getAgentDriverInstance().navigate().refresh();
                 actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
             } else{
                 break;
@@ -216,6 +418,7 @@ public class BasePortalSteps {
     @When("^Admin clicks (?:'Add payment method'|'Next') button$")
     public void clickAddPaymentButtonInAddPaymentWindow(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickAddPaymentButton();
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
     }
 
     @Then("^New card is shown in Payment methods tab$")
@@ -234,7 +437,7 @@ public class BasePortalSteps {
                 "New payment is not shown in 'Billing & payments' page");
     }
 
-    @When("^Admin clicks Manage -> Remove payment method$")
+    @When("^Admin clicks Manage -> Remove payment$")
     public void deletePaymentMethod(){
         getPortalBillingDetailsPage().deletePaymentMethod();
     }
@@ -280,6 +483,11 @@ public class BasePortalSteps {
 
     }
 
+    @When("^Admin closes Confirm details window$")
+    public void closeConfirmDetailsWindow(){
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
+    }
+
     private LeftMenu getLeftMenu() {
         if (leftMenu.get()==null) {
             leftMenu.set(getPortalMainPage().getLeftMenu());
@@ -313,6 +521,33 @@ public class BasePortalSteps {
             return portalBillingDetailsPage.get();
         } else{
             return portalBillingDetailsPage.get();
+        }
+    }
+
+    private PortalSignUpPage getPortalSignUpPage(){
+        if (portalSignUpPage.get()==null) {
+            portalSignUpPage.set(new PortalSignUpPage());
+            return portalSignUpPage.get();
+        } else{
+            return portalSignUpPage.get();
+        }
+    }
+
+    private PortalLoginPage getPortalLoginPage(){
+        if (portalLoginPage.get()==null) {
+            portalLoginPage.set(new PortalLoginPage());
+            return portalLoginPage.get();
+        } else{
+            return portalLoginPage.get();
+        }
+    }
+
+    private PortalAccountDetailsPage getPortalAccountDetailsPage(){
+        if (portalAccountDetailsPageThreadLocal.get()==null) {
+            portalAccountDetailsPageThreadLocal.set(new PortalAccountDetailsPage());
+            return portalAccountDetailsPageThreadLocal.get();
+        } else{
+            return portalAccountDetailsPageThreadLocal.get();
         }
     }
 }

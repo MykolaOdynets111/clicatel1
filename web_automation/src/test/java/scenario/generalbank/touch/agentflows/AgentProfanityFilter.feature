@@ -2,8 +2,7 @@ Feature: Profanity filter on agent's messages
 
   Background:
     Given I login as agent of General Bank Demo
-    Given User profile for generalbank is created
-    Given User select General Bank Demo tenant
+    Given User opens General Bank Demo tenant page
     And Click chat icon
 
   Scenario: Verify if profanity filter is applied to agent's messages

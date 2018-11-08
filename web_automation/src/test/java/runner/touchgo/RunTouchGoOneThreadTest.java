@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = {"acceptance"})
+@Test(groups = {"touchgo"})
 @CucumberOptions(
         plugin={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"

@@ -3,6 +3,7 @@ package agent_side_pages.UIElements;
 import abstract_classes.AbstractUIElement;
 import interfaces.JSHelper;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -42,10 +43,11 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     public void openNewConversationRequestByAgent(String agent) {
         String userName = getUserNameFromLocalStorage();
-        if (isNewConversationRequestIsShown(6, agent)){
+        try {
             new ChatInLeftMenu(getTargetChat(userName)).openConversation();
-        }else{
-            Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk.");
+        } catch(WebDriverException|NoSuchElementException e){
+            Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk when tries to open it.\n" +
+                    "UserID: "+ getUserNameFromLocalStorage());
         }
     }
 

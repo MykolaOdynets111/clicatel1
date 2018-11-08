@@ -5,8 +5,7 @@ Feature: Agent should see active chat after page was refreshed
 
   Background:
     Given I login as agent of General Bank Demo
-    Given User profile for generalbank is created
-    Given User select General Bank Demo tenant
+    Given User opens General Bank Demo tenant page
     And Click chat icon
 
 

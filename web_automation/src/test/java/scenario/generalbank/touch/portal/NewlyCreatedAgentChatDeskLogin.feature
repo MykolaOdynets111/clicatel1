@@ -2,8 +2,7 @@
 Feature: Newly created agent should be able to login into to chat desk
 
   Background:
-    Given User profile for generalbank is created
-    Given User select General Bank Demo tenant
+    Given User opens General Bank Demo tenant page
     And Click chat icon
 
   @skip_for_demo1

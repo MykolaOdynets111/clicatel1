@@ -34,6 +34,9 @@ public class Widget extends AbstractPage {
         waitUntilOpenedAndConnected();
     }
 
+    public Widget(String withWait) {
+    }
+
     private WidgetConversationArea widgetConversationArea;
     private WidgetFooter widgetFooter;
     private TouchActionsMenu touchActionsMenu;

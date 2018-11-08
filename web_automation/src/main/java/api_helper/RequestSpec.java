@@ -3,6 +3,7 @@ package api_helper;
 import com.github.javafaker.Faker;
 import dataManager.Accounts;
 import dataManager.Agents;
+import dataManager.MC2Account;
 import driverManager.ConfigManager;
 import driverManager.URLs;
 import io.restassured.RestAssured;
@@ -17,7 +18,7 @@ public class RequestSpec {
 
     private static ThreadLocal<RequestSpecification> requestSpecification = new ThreadLocal<RequestSpecification>();
     private static Faker faker = new Faker();
-    private static String PORTAL_USER_ACCESS_TOKEN = null;
+    private static ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
 
 
     public static RequestSpecification getRequestSpecification(){
@@ -61,7 +62,7 @@ public class RequestSpec {
         }
 
     public static String getAccessTokenForPortalUser(String tenantOrgName) {
-        if (PORTAL_USER_ACCESS_TOKEN==null) {
+        if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
             Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "main agent");
             Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
             Response resp = RestAssured.given()
@@ -72,11 +73,35 @@ public class RequestSpec {
                             "}")
                     .post(Endpoints.PLATFORM_SIGN_IN);
 
-            PORTAL_USER_ACCESS_TOKEN = resp.jsonPath().get("token");
-            return PORTAL_USER_ACCESS_TOKEN;
+            PORTAL_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
+            return PORTAL_USER_ACCESS_TOKEN.get();
         } else {
-            return PORTAL_USER_ACCESS_TOKEN;
+            return PORTAL_USER_ACCESS_TOKEN.get();
         }
+    }
+
+    public static String getAccessTokenForPortalUserByAccount(String accountName) {
+        if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
+            MC2Account admin = MC2Account.getAccountDetails(ConfigManager.getEnv(), accountName);
+
+            Map<String, String> tokenAndAccount = Accounts.getToken(accountName, admin.getEmail(), admin.getPass());
+            Response resp = RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .body("{\n" +
+                            "  \"token\": \"" + tokenAndAccount.get("token") + "\",\n" +
+                            "  \"accountId\": \"" + tokenAndAccount.get("accountId") + "\"\n" +
+                            "}")
+                    .post(Endpoints.PLATFORM_SIGN_IN);
+
+            PORTAL_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
+            return PORTAL_USER_ACCESS_TOKEN.get();
+        } else {
+            return PORTAL_USER_ACCESS_TOKEN.get();
+        }
+    }
+
+    public static void clearAccessTokenForPortalUser(){
+        PORTAL_USER_ACCESS_TOKEN.set(null);
     }
 
 
