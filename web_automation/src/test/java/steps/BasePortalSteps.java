@@ -70,7 +70,7 @@ public class BasePortalSteps {
 
     @Then("^Error popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
-        Assert.assertEquals(getPortalSignUpPage().getVerificatinErrorText().trim(), expectedMessage.trim(),
+        Assert.assertEquals(getPortalSignUpPage().getNotificationAlertText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
     }
 
@@ -180,6 +180,17 @@ public class BasePortalSteps {
         getPortalAccountDetailsPage().confirmClosingAccount();
     }
 
+    @When("^Admin clicks 'Cancel' button in confirmation popup$")
+    public void cancelClosingAccount(){
+        getPortalAccountDetailsPage().cancelClosingAccount();
+    }
+
+    @Then("^Account details page is opened$")
+    public void verifyAccountDetailsPageOpened(){
+        Assert.assertTrue(getPortalAccountDetailsPage().isAccountDetailsPageOpened(),
+                "Account details page is not shown after canceling account closing");
+    }
+
     @Then("^'Account confirmation' popup is shown$")
     public void verifyAccountConfirmationPopupShown(){
         Assert.assertTrue(getPortalAccountDetailsPage().isAccountConfirmationPopupShown(),
@@ -192,19 +203,28 @@ public class BasePortalSteps {
                 PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
+    @When("Admin provides '(.*)' email and '(.*)' pass for account confirmation")
+    public void enterConfirmationAccountDetails(String email, String account){
+        getPortalAccountDetailsPage().confirmAccount(email, account);
+    }
+
     @Then("^Admin is not able to login into portal with deleted account$")
     public void verifyAdminCannotLoginToPortal(){
-
-//        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
-        DriverFactory.getAgentDriverInstance().navigate().to(Endpoints.PORTAL_LOGIN_PAGE);
-
+        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         if (!portalLoginPage.get().isLoginPageOpened()){
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }
         portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-        Assert.assertEquals(portalLoginPage.get().getVerificatinErrorText(),
+        Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
+                "Error about invalid credentials is not shown");
+    }
+
+    @Then("^Error about invalid credentials is shown$")
+    public void verifyInvalidCredsError(){
+        Assert.assertEquals(portalAccountDetailsPageThreadLocal.get().getNotificationAlertText(),
+                "Invalid username or password.",
                 "Error about invalid credentials is not shown");
     }
 
@@ -260,7 +280,21 @@ public class BasePortalSteps {
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        getLeftMenu().navigateINLeftMenu(menuItem, submenu);
+        getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
+
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
+    @When("^(?:I|Admin) select (.*) in left menu$")
+    public void navigateInLeftMenu(String menuItem){
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        getLeftMenu().navigateINLeftMenu(menuItem);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
             for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {

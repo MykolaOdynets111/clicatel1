@@ -115,13 +115,15 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public void clearAndSendResponseToUser(String response){
         try {
-            moveToElemAndClick(DriverFactory.getAgentDriverInstance(), findElemByXPATHAgent(messageInputLocator));
-            waitForElementToBeClickableAgent(messageInput, 4, "main agent");
-            messageInput.clear();
+            int symbolsNumber = messageInput.getText().split("").length;
+            for (int i = 0; i<symbolsNumber; i++) {
+                messageInput.sendKeys(Keys.BACK_SPACE);
+            }
         } catch (WebDriverException e){
-            moveToElemAndClick(DriverFactory.getAgentDriverInstance(), findElemByXPATHAgent(messageInputLocator));
-            waitForElementToBeClickableAgent(messageInput, 4, "agent");
-            messageInput.clear();
+            int symbolsNumber = messageInput.getText().split("").length;
+            for (int i = 0; i<symbolsNumber; i++) {
+                messageInput.sendKeys(Keys.BACK_SPACE);
+            }
         }
         sendResponseToUser(response);
 

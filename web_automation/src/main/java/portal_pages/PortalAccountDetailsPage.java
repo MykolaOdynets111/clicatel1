@@ -14,6 +14,9 @@ public class PortalAccountDetailsPage extends PortalAbstractPage {
    @FindBy(css = "div.button-container button.button-primary")
    private WebElement closeAccountConfirmationButton;
 
+    @FindBy(css = "div.button-container button.button-secondary")
+    private WebElement cancelCloseAccountButton;
+
    @FindBy(xpath = "//span[text()='Account confirmation']")
    private WebElement accountConfirmationPopupHeader;
 
@@ -43,4 +46,12 @@ public class PortalAccountDetailsPage extends PortalAbstractPage {
        confirmationEmailInput.sendKeys(email);
        confirmationPassInput.sendKeys(pass);
    }
+
+    public void cancelClosingAccount(){
+        cancelCloseAccountButton.click();
+    }
+
+    public boolean isAccountDetailsPageOpened(){
+       return isElementShownAgent(closeAccountButton, 5);
+    }
 }

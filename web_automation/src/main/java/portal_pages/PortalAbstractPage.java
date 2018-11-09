@@ -4,6 +4,7 @@ import driverManager.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
@@ -15,13 +16,19 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     }
 
     @FindBy(css = "div.alert-container")
-    private WebElement verificationError;
+    private WebElement notificationAlert;
 
-    public String getVerificatinErrorText(){
-        if( isElementShownAgent(verificationError, 2)){
-            return verificationError.getText();
+    public String getNotificationAlertText(){
+        if( isElementShownAgent(notificationAlert, 2)){
+            return notificationAlert.getText();
         } else{
-            return "no verification error";
+            return "no notification alert";
         }
+    }
+
+    public void waitForNotificationAlertToDisappear(){
+        try {
+            waitForElementToBeInvisibleAgent(notificationAlert, 5);
+        } catch(NoSuchElementException e){}
     }
 }
