@@ -61,7 +61,10 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
         addPaymentMethodButton.click();
     }
 
-    public boolean isNewPaymentAdded() { return isElementShownAgent(addedPayment);}
+    public boolean isNewPaymentAdded() {
+//        waitForNotificationAlertToDisappear();
+        return isElementShownAgent(addedPayment);
+    }
 
     public String getPaymentMethodDetails(){ return paymentMethodDetails.getText();}
 

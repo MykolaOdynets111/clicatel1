@@ -70,7 +70,7 @@ public class BasePortalSteps {
 
     @Then("^Error popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
-        Assert.assertEquals(getPortalSignUpPage().getVerificationErrorText().trim(), expectedMessage.trim(),
+        Assert.assertEquals(getPortalSignUpPage().getNotificationAlertText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
     }
 
@@ -216,14 +216,14 @@ public class BasePortalSteps {
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }
         portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-        Assert.assertEquals(portalLoginPage.get().getVerificationErrorText(),
+        Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
     }
 
     @Then("^Error about invalid credentials is shown$")
     public void verifyInvalidCredsError(){
-        Assert.assertEquals(portalAccountDetailsPageThreadLocal.get().getVerificationErrorText(),
+        Assert.assertEquals(portalAccountDetailsPageThreadLocal.get().getNotificationAlertText(),
                 "Invalid username or password.",
                 "Error about invalid credentials is not shown");
     }
