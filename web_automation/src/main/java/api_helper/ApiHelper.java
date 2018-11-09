@@ -9,7 +9,9 @@ import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import dataManager.jackson_schemas.user_session_info.UserSession;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
+import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,9 +59,15 @@ public class ApiHelper {
     }
 
     private static List<HashMap> getAllTenantInfo() {
-        if(tenantsInfo==null) {
-            tenantsInfo = RestAssured.given(RequestSpec.getRequestSpecification()).get(Endpoints.GET_ALL_TENANTS_ENDPOINT)
-                    .jsonPath().get("tenants");
+        Response resp = RestAssured.given(RequestSpec.getRequestSpecification()).get(Endpoints.GET_ALL_TENANTS_ENDPOINT);
+        try {
+            if(tenantsInfo==null) {
+                tenantsInfo = resp.jsonPath().get("tenants");
+            }
+        }catch(JsonPathException e){
+            Assert.assertTrue(false, "Unexpected JSON response: \n" +
+            "Status code "+resp.statusCode()+"\n"+
+            "Body "+resp.getBody().asString());
         }
         return tenantsInfo;
     }
