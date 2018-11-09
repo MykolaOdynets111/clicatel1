@@ -67,7 +67,7 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@twitter")) {
-                TwitterLoginPage.openTwitterLoginPage().loginUser();
+                TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
                 }

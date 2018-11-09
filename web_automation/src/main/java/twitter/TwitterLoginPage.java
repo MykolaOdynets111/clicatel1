@@ -43,13 +43,16 @@ public class TwitterLoginPage extends AbstractPage {
     })
     private WebElement logInButton;
 
+    @FindBy(css = "li.people.notifications")
+    private WebElement notificationsButton;
+
     public static TwitterLoginPage openTwitterLoginPage() {
         //https://twitter.com/login?lang=en
         DriverFactory.getTouchDriverInstance().get("https://twitter.com/");
         return new TwitterLoginPage();
     }
 
-    public void loginUser() {
+    public TwitterLoginPage loginUser() {
         if(isElementShown(logInButton, 6)){
             logInButton.click();
             waitForElementsToBeVisibleByXpath(emailInputOnSeparatePageXPATH, 4);
@@ -63,5 +66,10 @@ public class TwitterLoginPage extends AbstractPage {
         }
         TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
         waitForElementToBeVisible(profileDashboard, 10);
+        return this;
+    }
+
+    public void clickNotificationsButton(){
+        notificationsButton.click();
     }
 }
