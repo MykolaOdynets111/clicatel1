@@ -119,6 +119,10 @@ public class DriverFactory {
                 ((1 + r.nextInt(2)) * 10000 + r.nextInt(10000))+"');");
     }
 
+    public static void openUrlForDynamicTenant() {
+        DriverFactory.getTouchDriverInstance().get(URLs.getWidgetURLForDynamicTenant());
+    }
+
     public static void openTouchUrlWithPredifinedUserID(String tenantorgName, String ctlUsername) {
         DriverFactory.getTouchDriverInstance().get(URLs.getWidgetURL(tenantorgName));
         JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();

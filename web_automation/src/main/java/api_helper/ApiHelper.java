@@ -58,17 +58,17 @@ public class ApiHelper {
                 .delete(url);
     }
 
-    private static List<HashMap> getAllTenantInfo() {
+    private static synchronized List<HashMap> getAllTenantInfo() {
         Response resp = RestAssured.given(RequestSpec.getRequestSpecification()).get(Endpoints.GET_ALL_TENANTS_ENDPOINT);
-        try {
-            if(tenantsInfo==null) {
-                tenantsInfo = resp.jsonPath().get("tenants");
+            try {
+                if (tenantsInfo == null) {
+                    tenantsInfo = resp.jsonPath().get("tenants");
+                }
+            } catch (JsonPathException e) {
+                Assert.assertTrue(false, "Unexpected JSON response: \n" +
+                        "Status code " + resp.statusCode() + "\n" +
+                        "Body " + resp.getBody().asString() +"\n");
             }
-        }catch(JsonPathException e){
-            Assert.assertTrue(false, "Unexpected JSON response: \n" +
-            "Status code "+resp.statusCode()+"\n"+
-            "Body "+resp.getBody().asString());
-        }
         return tenantsInfo;
     }
 

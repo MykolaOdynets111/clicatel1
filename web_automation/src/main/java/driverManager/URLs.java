@@ -11,6 +11,8 @@ public class URLs {
 
     private static final String BASE_ENV_URL = "https://%s-touch-web.clickatelllabs.com/?tenantId=%s";
 
+    private static final String BASE_PROD_URL = "https://touch-web.clickatell.com/?tenantId=%s";
+
     private static String BASE_PORTAL_URL = "https://%s-portal.clickatelllabs.com/";
 
     private static String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
@@ -40,6 +42,16 @@ public class URLs {
         if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
         else env = targetEnvConfiguration;
         return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration, tenantID);
+    }
+
+    public static String getWidgetURLForDynamicTenant(){
+        String tenantID = ConfigManager.getID();
+        String targetEnvConfiguration = ConfigManager.getEnv();
+        String env;
+        if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
+        else env = targetEnvConfiguration;
+        if (env.equalsIgnoreCase("prod")) return String.format(URLs.BASE_PROD_URL, tenantID);
+        else return String.format(URLs.BASE_ENV_URL, targetEnvConfiguration, tenantID);
     }
 
     /**

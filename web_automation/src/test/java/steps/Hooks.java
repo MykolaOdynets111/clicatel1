@@ -84,7 +84,8 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@no_widget")) &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
-                !scenario.getSourceTagNames().contains("@twitter")){
+                !scenario.getSourceTagNames().contains("@twitter") &&
+                !scenario.getSourceTagNames().contains("@healthcheck")){
 
             takeScreenshot();
             endTouchFlow(scenario);
