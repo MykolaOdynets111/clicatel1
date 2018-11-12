@@ -88,7 +88,8 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@healthcheck")){
 
             takeScreenshot();
-            endTouchFlow(scenario);
+            endTouchFlow(scenario, scenario.isFailed());
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
         }
 
         finishAgentFlowIfExists(scenario);
@@ -117,6 +118,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@healthcheck")){
             takeScreenshot();
+            endTouchFlow(scenario, true);
         }
 
         closeMainBrowserIfOpened();
@@ -205,7 +207,7 @@ public class Hooks implements JSHelper{
         }
     }
 
-    private void endTouchFlow(Scenario scenario) {
+    private void endTouchFlow(Scenario scenario, boolean typeEndInWidget) {
         if (DriverFactory.isTouchDriverExists()) {
 
             if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
@@ -214,11 +216,12 @@ public class Hooks implements JSHelper{
             try {
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
+                }
+                if(typeEndInWidget){
                     Widget widget = new Widget("withoutWait");
                     widget.getWidgetFooter().tryToCloseSession();
                 }
         }catch (WebDriverException e) { }
-        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
         }
     }
 
