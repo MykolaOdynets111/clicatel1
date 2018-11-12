@@ -115,6 +115,10 @@ public class Hooks implements JSHelper{
             if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
         }
 
+        if(scenario.getSourceTagNames().contains("@healthcheck")){
+            takeScreenshot();
+        }
+
         closeMainBrowserIfOpened();
     }
 

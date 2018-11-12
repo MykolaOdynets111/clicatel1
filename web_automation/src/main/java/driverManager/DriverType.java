@@ -69,9 +69,6 @@ public enum DriverType {
             options.addArguments("--proxy-bypass-list=*");
             options.addArguments("--start-maximized");
             options.addArguments("--headless");
-//            options.addArguments("--screenshot=out.png"); - Taking screen shoots crashes the webdriver, but not sure if we need it
-//            options.addArguments("--no-sandbox");
-//            options.addArguments("--disable-dev-shm-usage");
             return options;
         }
 
