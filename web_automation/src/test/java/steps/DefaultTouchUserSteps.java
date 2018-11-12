@@ -8,6 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Tenants;
 import dataManager.VMQuoteRequestUserData;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
@@ -56,6 +57,13 @@ public class DefaultTouchUserSteps implements JSHelper{
         String clientID = getUserNameFromLocalStorage();
         ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
 //        getMainPage().openTenantPage(tenantOrgName);
+    }
+
+    @Given("^User opens page with desired tenant widget$")
+    public void openPageForDynamicallyPassedTenant() {
+        String tenantOrgName = ConfigManager.getTenantOrgName();
+        DriverFactory.openUrlForDynamicTenant();
+        Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 
     @Given("^User opens (.*) tenant page for user (.*)$")
@@ -310,6 +318,11 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
+    }
+
+    @Then("^User is able to provide some info about himself in the card after his (.*) message$")
+    public void provideInfoBeforeRedirectingToTheAgent(String userMessage){
+        widgetConversationArea.provideInfoBeforeGoingToAgent(userMessage, "AQA Test", "health@test.com");
     }
 
     @Then("^Text '(.*)' is shown above the buttons in the card on user (.*) input above$")

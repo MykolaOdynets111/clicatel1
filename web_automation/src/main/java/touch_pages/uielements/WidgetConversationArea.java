@@ -149,4 +149,10 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
     public boolean areFieldRequiredErrorsInCardOnUserMessageShown(String userMessageText){
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).areRequiredFieldErrorsShown();
     }
+
+    public void provideInfoBeforeGoingToAgent(String userMessageText, String userName, String userPass) {
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .fillInInputFieldWithAPlaceholder("Name", userName)
+                .fillInInputFieldWithAPlaceholder("Email", userPass);
+    }
 }

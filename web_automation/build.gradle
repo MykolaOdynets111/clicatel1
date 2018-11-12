@@ -77,7 +77,7 @@ task getTouchGoPlan() {
         def jsonText = new URL(uri).getText(requestProperties: headers)
         def parsedJson = new JsonSlurper().parseText(jsonText) as Map
         touchGoPlan = parsedJson.get('touchGoType')
-    } catch(FileNotFoundException|IOException e){
+    } catch(IOException e){
         touchGoPlan = "started"
     }
 }
@@ -274,6 +274,16 @@ task runTouchGoTests(type:Test) {
     }
 }
 
+task runHealthCheckTests(type:Test) {
+    systemProperties = System.getProperties()
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+"/healthcheck.xml"
+    }
+    reports.html.enabled = false
+}
+
 
 // ========= !! MAIN TASKS !! ============== //
 
@@ -324,6 +334,10 @@ task runTests(type: Test) {
 
     if(suite=="touchgo"){
         runTests.dependsOn(runTouchGoTests)
+    }
+
+    if(suite == "healthcheck") {
+        runTests.dependsOn(runHealthCheckTests)
     }
 
     runTests.finalizedBy(allureReport)

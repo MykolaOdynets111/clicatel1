@@ -1,15 +1,10 @@
 package driverManager;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-import io.github.bonigarcia.wdm.PhantomJsDriverManager;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.MutableCapabilities;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -46,9 +41,44 @@ public enum DriverType {
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
             ChromeDriverManager.getInstance().setup();
 
-            WebDriver localDriver = new ChromeDriver((ChromeOptions) capabilities);
-//            DriverType.setDimension(localDriver);
-            return localDriver;
+           return new ChromeDriver((ChromeOptions) capabilities);
+        }
+
+        @Override
+        protected boolean isKnownAs(String name) {
+            return knownNames.contains(name);
+        }
+    },
+
+    HEADLESS_CHROME {
+        private final List<String> knownNames = Arrays.asList("headlesschrome", "chromeheadless",
+                "chrome_headless", "headless_chrome");
+
+        @Override
+        public MutableCapabilities getDesiredCapabilities() {
+            LoggingPreferences logPrefs = new LoggingPreferences();
+            logPrefs.enable(LogType.BROWSER, Level.ALL);
+
+            ChromeOptions options = new ChromeOptions();
+            options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+            options.addArguments("--window-size=1024,768");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--disable-extensions");
+            options.setExperimentalOption("useAutomationExtension", false);
+            options.addArguments("--proxy-server='direct://'");
+            options.addArguments("--proxy-bypass-list=*");
+            options.addArguments("--start-maximized");
+            options.addArguments("--headless");
+//            options.addArguments("--screenshot=out.png"); - Taking screen shoots crashes the webdriver, but not sure if we need it
+//            options.addArguments("--no-sandbox");
+//            options.addArguments("--disable-dev-shm-usage");
+            return options;
+        }
+
+
+        public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
+            ChromeDriverManager.getInstance().setup();
+            return new ChromeDriver((ChromeOptions) capabilities);
         }
 
         @Override
