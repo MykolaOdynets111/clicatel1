@@ -52,10 +52,12 @@ public class ApiHelper {
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
-        String url = String.format(Endpoints.INTERNAL_DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
-        RestAssured.given()
-                .header("Accept", "application/json")
-                .delete(url);
+        if(!clientID.isEmpty()) {
+            String url = String.format(Endpoints.INTERNAL_DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
+            RestAssured.given()
+                    .header("Accept", "application/json")
+                    .delete(url);
+        }
     }
 
     private static synchronized List<HashMap> getAllTenantInfo() {
