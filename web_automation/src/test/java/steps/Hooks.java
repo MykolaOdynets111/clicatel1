@@ -218,11 +218,15 @@ public class Hooks implements JSHelper{
                     touchConsoleOutput();
                 }
                 if(typeEndInWidget){
-                    Widget widget = new Widget("withoutWait");
-                    widget.getWidgetFooter().tryToCloseSession();
+                    closeWidgetSession();
                 }
         }catch (WebDriverException e) { }
         }
+    }
+
+    public void closeWidgetSession(){
+        Widget widget = new Widget("withoutWait");
+        widget.getWidgetFooter().tryToCloseSession();
     }
 
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {

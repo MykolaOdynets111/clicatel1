@@ -12,6 +12,19 @@ public class ConfigManager {
     private static final String TENANT_ORG_NAME = "tenantorgname";
     private static final String TENANT_ID = "tenantid";
 
+    public static void setTenantId(String tenantId) {
+        System.setProperty("tenantid", tenantId);
+    }
+
+    public static void setBrowserType(String browserType) {
+        System.setProperty("browsertype", browserType);
+    }
+
+    public static void setEnv(String env) {
+        System.setProperty("env", env);
+    }
+
+
     public static boolean isRemote() {
         String remoteValue = System.getProperty(REMOTE_FLAG_VARIABLE);
 

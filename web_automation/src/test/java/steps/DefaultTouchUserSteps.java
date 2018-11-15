@@ -60,10 +60,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Given("^User opens page with desired tenant widget$")
-    public void openPageForDynamicallyPassedTenant() {
-        String tenantOrgName = ConfigManager.getTenantOrgName();
+    public DefaultTouchUserSteps openPageForDynamicallyPassedTenant() {
         DriverFactory.openUrlForDynamicTenant();
-        Tenants.setTenantUnderTestNames(tenantOrgName);
+        return this;
     }
 
     @Given("^User opens (.*) tenant page for user (.*)$")
@@ -78,8 +77,9 @@ public class DefaultTouchUserSteps implements JSHelper{
 
 
     @Given("^Click chat icon$")
-    public void clickChatIcon() {
+    public DefaultTouchUserSteps clickChatIcon() {
         widget = getMainPage().openWidget();
+        return this;
     }
 
     @Then("^Chat icon is not visible$")
@@ -93,11 +93,12 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @When("^User enter (.*) into widget input field$")
-    public void enterText(String text) {
+    public DefaultTouchUserSteps enterText(String text) {
         widgetConversationArea = widget.getWidgetConversationArea();
         widgetConversationArea.waitForSalutation();
         widget.getWidgetFooter().enterMessage(text).sendMessage();
         widgetConversationArea.waitForMessageToAppearInWidget(text);
+        return this;
     }
 
     @When("^User enters message regarding (.*) into widget input field$")
@@ -296,7 +297,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^Card with a (.*) text is shown (?:on|after) user (.*) (?:message|input)$")
-    public void isCardWithTextShown(String cardText, String userMessage){
+    public DefaultTouchUserSteps isCardWithTextShown(String cardText, String userMessage){
         if (userMessage.equalsIgnoreCase("personal info")){
             userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
         }
@@ -318,10 +319,11 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
+        return this;
     }
 
     @Then("^User is able to provide some info about himself in the card after his (.*) message$")
-    public void provideInfoBeforeRedirectingToTheAgent(String userMessage){
+    public void verifyUserCanProvideInfoBeforeRedirectingToTheAgent(String userMessage){
         widgetConversationArea.provideInfoBeforeGoingToAgent(userMessage, "AQA Test", "health@test.com");
     }
 
@@ -377,9 +379,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^Widget is connected$")
-    public void verifyIfWidgetIsConnected() {
+    public DefaultTouchUserSteps verifyIfWidgetIsConnected() {
         Assert.assertTrue(widget.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
-
+        return this;
     }
 
     @Then("^User sees name of tenant: (.*) and its short description in the header$")
