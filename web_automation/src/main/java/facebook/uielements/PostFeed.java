@@ -65,6 +65,12 @@ public class PostFeed extends AbstractUIElement {
         if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)){
             moveToElemAndClick(findElemByXPATH(closeDMPopupButtonConfirmation));
         }
+        try {
+            if (isElementShownByXpath(closeDMPopupButtonConfirmation, 5)) {
+                findElemByXPATH(closeDMPopupButtonConfirmation).click();
+            }
+        }catch (WebDriverException e){
 
+        }
     }
 }
