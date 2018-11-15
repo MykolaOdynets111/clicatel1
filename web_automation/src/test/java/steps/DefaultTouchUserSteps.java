@@ -110,7 +110,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
-        int waitForResponse=45;
+        int waitForResponse=75;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
     }

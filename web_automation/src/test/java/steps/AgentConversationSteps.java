@@ -72,7 +72,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser){
-        getAgentHomePage(agent).sendResponseToUser(responseToUser);
+        getAgentHomePage(agent).clearAndSendResponseToUser(responseToUser);
     }
 
 
