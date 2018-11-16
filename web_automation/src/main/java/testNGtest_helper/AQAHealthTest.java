@@ -1,11 +1,9 @@
 package testNGtest_helper;
 
-import driverManager.ConfigManager;
-
 import java.util.Arrays;
 import java.util.List;
 
-public enum AQAHeathTest {
+public enum AQAHealthTest {
 
     BASE_BOT_CONNECTION_TEST("bot connection", "Widget should connect and bot should respond"),
     BASE_TO_AGENT_CARD_TEST("redirection to agent", "User should be able to provide personal info before going to the agent"),
@@ -16,15 +14,15 @@ public enum AQAHeathTest {
     String fullName;
 
 
-    AQAHeathTest(String shortName, String fullName) {
+    AQAHealthTest(String shortName, String fullName) {
         this.shortName = shortName;
         this.fullName = fullName;
 
     }
 
     public static String getAQATestDescriptionByShortName(String shortName) {
-        AQAHeathTest[] agentsArray = AQAHeathTest.values();
-        List<AQAHeathTest> agentsList = Arrays.asList(agentsArray);
+        AQAHealthTest[] agentsArray = AQAHealthTest.values();
+        List<AQAHealthTest> agentsList = Arrays.asList(agentsArray);
         return agentsList.stream()
                 .filter(e -> e.getShortName().equalsIgnoreCase(shortName))
                 .findFirst().get()

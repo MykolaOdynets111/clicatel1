@@ -3,7 +3,7 @@ package runner.plainTestNgTests;
 import driverManager.ConfigManager;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
-import testNGtest_helper.AQAHeathTest;
+import testNGtest_helper.AQAHealthTest;
 import testNGtest_helper.PlainTestNGConfigs;
 
 import java.util.HashMap;
@@ -33,13 +33,13 @@ public class AutomationWidgetHealthCheck {
 
     /**
      * Run test on redirection to the agent (without sending request, only filling out user info card)
-     * Full and short description of test may be found in AQAHeathTest enum
+     * Full and short description of test may be found in AQAHealthTest enum
      * @param env - target env where to run test (e.g. demo, qa, prod, etc.)
      * @param tenantID - target tenantId
      * @return Map with full test description as a key and its run result as a value (true means test passed).
      */
     public Map<String, Boolean> runTestOnWidgetConnectionAndBotResponse(String env, String tenantID){
-        String testDescription = AQAHeathTest.getAQATestDescriptionByShortName("bot connection");
+        String testDescription = AQAHealthTest.getAQATestDescriptionByShortName("bot connection");
         setUpConfigs(env, tenantID);
 
         getTestNGRunner().setTestClasses(new Class[] { WidgetAndBotHealthCheckTest.class });
@@ -54,13 +54,13 @@ public class AutomationWidgetHealthCheck {
 
     /**
      * Run test on redirection to the agent (without sending request, only filling out user info card)
-     * Full and short description of test may be found in AQAHeathTest enum
+     * Full and short description of test may be found in AQAHealthTest enum
      * @param env - target env where to run test (e.g. demo, qa, prod, etc.)
      * @param tenantID - target tenantId
      * @return Map with full test description as a key and its run result as a value (true means test passed).
      */
     public Map<String, Boolean> runTestOnRedirectionToAgentAndUserInfoCard(String env, String tenantID){
-        String testDescription = AQAHeathTest.getAQATestDescriptionByShortName("redirection to agent");
+        String testDescription = AQAHealthTest.getAQATestDescriptionByShortName("redirection to agent");
         setUpConfigs(env, tenantID);
 
 
