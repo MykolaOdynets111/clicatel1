@@ -807,8 +807,8 @@ public class TIEApiSteps {
         Response resp = get(url);
         List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(userInputs.size()==1,
-                "More than 1 user input in response are shown after filtering by text '"+text+"'\nurl:" + url + "\n"+resp.getBody().asString());
+        soft.assertEquals(userInputs.size(), 1,
+                "Incorrect number of user input in the response are shown after filtering by text '"+text+"'\nurl:" + url + "\n"+resp.getBody().asString());
         soft.assertTrue(userInputs.stream().allMatch(e -> e.contains(text)),
                 "Unexpected user inputs are shown after filtering by text '"+text+"'\n" + url + "\nurl:"+resp.getBody().asString());
         soft.assertAll();
