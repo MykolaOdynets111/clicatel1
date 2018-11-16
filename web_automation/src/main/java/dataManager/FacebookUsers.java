@@ -2,7 +2,7 @@ package dataManager;
 
 public enum FacebookUsers {
 
-    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "p@$$w0rd4te$t!", "100024956568638"),
+    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "p@$$w0rd4te$t!1", "100024956568638"),
     ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
     ;
 
