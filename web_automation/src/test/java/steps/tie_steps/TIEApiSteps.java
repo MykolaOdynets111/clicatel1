@@ -804,13 +804,17 @@ public class TIEApiSteps {
     public void verifyFilteringByText(String text){
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         String url =  String.format(Endpoints.TIE_USER_INPUT, newTenant)+"?text="+text;
+        String urlForBaseResponse = String.format(Endpoints.TIE_USER_INPUT, newTenant);
         Response resp = get(url);
+        Response respWithOuFilterring = get(urlForBaseResponse);
         List<String> userInputs = resp.getBody().jsonPath().getList("data.user_input");
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(userInputs.size(), 1,
-                "Incorrect number of user input in the response are shown after filtering by text '"+text+"'\nurl:" + url + "\n"+resp.getBody().asString());
+                "Incorrect number of user input in the response are shown after filtering by text '"+text+"'\nurl:" + url + "\n"+resp.getBody().asString()
+                        +"\n response without filterring:\n" + respWithOuFilterring.getBody().asString());
         soft.assertTrue(userInputs.stream().allMatch(e -> e.contains(text)),
-                "Unexpected user inputs are shown after filtering by text '"+text+"'\n" + url + "\nurl:"+resp.getBody().asString());
+                "Unexpected user inputs are shown after filtering by text '"+text+"'\n" + url + "\nurl:"+resp.getBody().asString()+
+                        "\n response without filterring:\n" + respWithOuFilterring.getBody().asString());
         soft.assertAll();
     }
 
