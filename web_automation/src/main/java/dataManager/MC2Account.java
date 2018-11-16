@@ -17,6 +17,10 @@ public enum MC2Account {
 
     TESTING_SIGNUP_ACCOUNT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "automationtest", "SignedUp AQA", "testing", "", ""),
 
+    TESTING_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "testing", "", ""),
+    QA_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "qa", "", ""),
+    DEV_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "dev", "", ""),
+
     ;
 
     String touchGoPlan;
