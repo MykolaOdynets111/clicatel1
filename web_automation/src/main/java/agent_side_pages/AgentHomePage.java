@@ -116,8 +116,8 @@ public class AgentHomePage extends AgentAbstractPage {
     public void clearAndSendResponseToUser(String response){
 
 //        try {
-            moveToElemAndClick(DriverFactory.getAgentDriverInstance(), findElemByXPATHAgent(messageInputLocator));
-            waitForElementToBeClickableAgent(messageInput, 4, "main agent");
+            moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
+            waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
             messageInput.clear();
             int symbolsNumber = messageInput.getText().split("").length;
             if(symbolsNumber>0) {
