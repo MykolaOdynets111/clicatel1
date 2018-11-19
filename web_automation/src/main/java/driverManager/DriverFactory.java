@@ -116,7 +116,7 @@ public class DriverFactory {
             JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
         Random r = new Random( System.currentTimeMillis() );
         jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+
-                ((1 + r.nextInt(2)) * 10000 + r.nextInt(10000))+"');");
+                ((1 + r.nextInt(2)) * 1000000 + r.nextInt(1000000))+"');");
     }
 
     public static void openUrlForDynamicTenant() {

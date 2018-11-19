@@ -1,6 +1,7 @@
 package touch_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import api_helper.ApiHelper;
 import dataManager.VMQuoteRequestUserData;
 import interfaces.WebActions;
 import org.openqa.selenium.NoSuchElementException;
