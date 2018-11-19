@@ -74,6 +74,10 @@ public class Tenants {
                 Tenants.setTenantUnderTest("updatingplan");
                 Tenants.setTenantUnderTestOrgName("Updating AQA");
                 break;
+            case "Automation":
+                Tenants.setTenantUnderTest("agentmode");
+                Tenants.setTenantUnderTestOrgName("Automation");
+
         }
     }
 }

@@ -129,6 +129,16 @@ public class AgentConversationSteps implements JSHelper{
     }
 
 
+    @Then("There is no suggestions on '(.*)' user input")
+    public void verifySuggestionIsNotShown(String userInput){
+        getAgentHomePage().clickAgentAssistantButton();
+        SoftAssert softAssert = new SoftAssert();
+        String actualSuggestion = getAgentHomePage().getSuggestionFromInputFiled();
+        softAssert.assertTrue(actualSuggestion.isEmpty(),"Input field is not empty\n");
+        softAssert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(), "Suggestions list is not empty");
+        softAssert.assertAll();
+    }
+
     @When("^Agent click send button$")
     public void clickSendButton() {
         getAgentHomePage().clickSendButton();
