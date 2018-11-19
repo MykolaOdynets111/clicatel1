@@ -1,7 +1,7 @@
 @agent_mode
 Feature: User messages handling in "Agent" tenant mode
 
-  Verification of basic communication between user and agent
+  Verification of basic communication between user and agent in "Agent" tenant mode
 
 
   Scenario: Verify if user is redirected to the agent after NEUTRAL or POSITIVE message
