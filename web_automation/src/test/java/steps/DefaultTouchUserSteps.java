@@ -58,7 +58,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
     }
 
-    @Given("^User (?:select|opens) (.*) (?:tenant|tenant page)$")
+    @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
     public void openTenantPageWithoutCreatingUserProfile(String tenantOrgName) {
         DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
