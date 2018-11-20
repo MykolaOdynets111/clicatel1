@@ -27,6 +27,11 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
+        if(userMessage.contains("personal info")){
+            userMessage = "Submitted data:\n" +
+                    ""+getUserNameFromLocalStorage()+"\n" +
+                    "health@test.com";
+        }
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }

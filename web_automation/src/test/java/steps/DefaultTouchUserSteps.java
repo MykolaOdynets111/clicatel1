@@ -63,7 +63,6 @@ public class DefaultTouchUserSteps implements JSHelper{
         DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
 //        getMainPage().openTenantPage(tenantOrgName);
     }
 
@@ -273,6 +272,11 @@ public class DefaultTouchUserSteps implements JSHelper{
      */
     @Then("^User should see '(.*)' (?:text response|url) for his '(.*)' input$")
     public void verifyTextResponseRegardlessPosition(String textResponse, String userInput) {
+        if(userInput.contains("personal info")){
+            userInput = "Submitted data:\n" +
+                    ""+getUserNameFromLocalStorage()+"\n" +
+                    "health@test.com";
+        }
         int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
@@ -332,7 +336,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^User is able to provide some info about himself in the card after his (.*) message$")
     public void verifyUserCanProvideInfoBeforeRedirectingToTheAgent(String userMessage){
-        widgetConversationArea.provideInfoBeforeGoingToAgent(userMessage, "AQA Test", "health@test.com");
+        widgetConversationArea.provideInfoBeforeGoingToAgent(userMessage, getUserNameFromLocalStorage(), "health@test.com");
     }
 
     @Then("^Text '(.*)' is shown above the buttons in the card on user (.*) input above$")
