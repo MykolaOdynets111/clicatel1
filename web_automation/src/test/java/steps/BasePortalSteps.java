@@ -432,6 +432,7 @@ public class BasePortalSteps {
     @When("^Admin tries to add new card$")
     public void addNewCard(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+        getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
     @When("^Admin provides all card info$")
@@ -512,6 +513,7 @@ public class BasePortalSteps {
 
     @Then("^Payment review tab is opened$")
     public void verifyPaymentReviewTabIsOpened(){
+        getPortalMainPage().waitForNotificationAlertToDisappear();
         Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
 
