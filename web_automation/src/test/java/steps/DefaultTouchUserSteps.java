@@ -8,7 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Tenants;
 import dataManager.VMQuoteRequestUserData;
-import driverManager.ConfigManager;
+import dataManager.jackson_schemas.TIE.TIEIntentPerCategory;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
@@ -21,10 +21,11 @@ import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
 import touch_pages.uielements.messages.WelcomeMessages;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import static io.restassured.RestAssured.get;
 
 public class DefaultTouchUserSteps implements JSHelper{
 
@@ -35,6 +36,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
     private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+    private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
 
     public static VMQuoteRequestUserData getUserDataForQuoteRequest(long threadID){
         return userDataForQuoteRequest.get(threadID);
@@ -118,9 +120,29 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
-        int waitForResponse=75;
+        int waitForResponse=60;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
+    }
+
+    @Then("^Correct response is shown in the widget for selected category$")
+    public void verifyCorrectResponseOnSelectedCategory(){
+        String selectedCategory = enteredUserMessageInTouchWidget.get();
+        List<TIEIntentPerCategory> intentsListForCategory = ApiHelperTie.getListOfIntentsForCategory(selectedCategory);
+        if(intentsListForCategory.size()==1){
+            verifyResponse(intentsListForCategory.get(0).getText(), selectedCategory);
+        } else{
+            List<String> intentsTitles = intentsListForCategory.stream().map(TIEIntentPerCategory::getTitle).collect(Collectors.toList());
+            widgetConversationArea.checkIfCardButtonsShownFor(selectedCategory, intentsTitles);
+
+            String selectedIntentTitle =                 intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
+            String expectedAnswerOnSelectedIntent = intentsListForCategory.stream()
+                                                    .filter(e -> e.getTitle().equals(selectedIntentTitle))
+                                                    .findFirst().get().getText();
+
+            widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
+            verifyResponse(expectedAnswerOnSelectedIntent, selectedIntentTitle);
+        }
     }
 
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
@@ -296,17 +318,30 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){
+        List<String> buttons = formListOfExpectedButtonNames(buttonNames);
         if (userMessage.equalsIgnoreCase("personal info")){
             userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
         }
-        List<String> buttons = Arrays.asList(buttonNames.split(";"));
+
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
-        soft.assertTrue(widgetConversationArea.isCardButtonsShownFor(userMessage, buttons),
+        soft.assertTrue(widgetConversationArea.checkIfCardButtonsShownFor(userMessage, buttons),
                 buttons + " buttons are not shown in card (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
     }
+
+    private List<String> formListOfExpectedButtonNames(String buttonNames){
+        if(buttonNames.contains("FAQ categories")){
+            return ApiHelperTie.getLIstOfAllFAGCategories();
+        }
+        if(buttonNames.contains("FAQ categories")){
+            return  null;
+        }
+        return Arrays.asList(buttonNames.split(";"));
+    }
+
+
 
     @Then("^Card with a (.*) text is shown (?:on|after) user (.*) (?:message|input)$")
     public DefaultTouchUserSteps isCardWithTextShown(String cardText, String userMessage){
@@ -357,6 +392,14 @@ public class DefaultTouchUserSteps implements JSHelper{
             userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
         }
         widgetConversationArea.clickOptionInTheCard(userMessage, buttonName);
+    }
+
+    @When("^User select random (.*) in the card on user message (.*)$")
+    public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
+        List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
+        enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
+//        enteredUserMessageInTouchWidget.set("mobile banking 120 3279");
+        widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
     }
 
     @Then("^\"End chat\" button is shown in widget's header$")

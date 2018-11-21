@@ -1,10 +1,10 @@
 package touch_pages.uielements.messages;
 
+import driverManager.ConfigManager;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -40,6 +40,10 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
             waitForElementToBeVisible(toUserTextMessageInCardButton, wait);
             return true;
         } catch (TimeoutException e) {
+            if(ConfigManager.isRemote()) {
+                scrollUpWidget(182);
+                return isElementShown(toUserTextMessageInCardButton);
+            }
             return false;
         }
     }
@@ -54,15 +58,33 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
     }
 
     public boolean isButtonShown(String buttonText) {
-        return buttons.stream().anyMatch(e -> e.getText().equalsIgnoreCase(buttonText));
+        return buttons.stream().anyMatch(e -> e.getAttribute("innerText").equalsIgnoreCase(buttonText));
     }
 
     public void clickButton(String buttonName) {
-        buttons.stream().filter(e->e.getText().equalsIgnoreCase(buttonName)).findFirst().get().click();
+        WebElement targetButton =  buttons.stream().filter(e -> e.getAttribute("innerText").equalsIgnoreCase(buttonName)).findFirst().get();
+        try {
+            targetButton.click();
+        } catch(ElementNotVisibleException e){
+            scrollToButtonAndClick(targetButton);
+        }
+    }
+
+    private void scrollToButtonAndClick(WebElement targetButton){
+        int scrollPosition=2228;
+        for (int i =0; i<5; i++){
+            try{
+                scrollUpWidget(scrollPosition);
+                targetButton.click();
+                break;
+            } catch (ElementNotVisibleException e){
+                scrollPosition=scrollPosition-300;
+            }
+        }
     }
 
     public String getTextFromCard(){
-        return getTextFrom(toUserMessageInCard);
+        return toUserMessageInCard.getAttribute("innerText");
     }
 
     public String getTextFromAboveCardButton(){
