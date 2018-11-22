@@ -135,17 +135,35 @@ public class DefaultTouchUserSteps implements JSHelper{
             List<String> intentsTitles = intentsListForCategory.stream().map(TIEIntentPerCategory::getTitle).collect(Collectors.toList());
             widgetConversationArea.checkIfCardButtonsShownFor(selectedCategory, intentsTitles);
 
-            String selectedIntentTitle =                 intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
+            String selectedIntentTitle = getRandomIntent(intentsTitles);
 //            String selectedIntentTitle = "How much does General Bank MasterPass app cost?";
             TIEIntentPerCategory selectedIntentItem = intentsListForCategory.stream()
                                                     .filter(e -> e.getTitle().equals(selectedIntentTitle))
                                                     .findFirst().get();
             String expectedAnswerOnSelectedIntent = selectedIntentItem.getText();
             String selectedIntentName = selectedIntentItem.getIntent();
-
+            if(expectedAnswerOnSelectedIntent==null){
+                Assert.assertTrue(false, "Answer is not provided by the TIE for '"+selectedIntentName+"' intent");
+            }
             widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
             verifyTextResponseWithIntent(expectedAnswerOnSelectedIntent, selectedIntentName, selectedIntentTitle);
         }
+    }
+
+    /**This method is designed in order to exclude some tenant specific intents from randomiser
+     * For e.g., on message 'Cost or transactions fees' TIE API returns one intent, but on the camunda level
+     * there is choice card mapped on this message and test will fail because it expects 1 text response (because 1 intent is shown),
+     * but in fact choice map is shown
+     * @param intentsTitles
+     * @return
+     */
+    private String getRandomIntent(List<String> intentsTitles){
+        if (Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
+            intentsTitles.remove("Cost or transactions fees");
+            intentsTitles.remove("Quote request");
+
+        }
+        return intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
     }
 
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
