@@ -11,6 +11,8 @@ public class ConfigManager {
     private static final String DEPLOY_TO = "deploy_to";
     private static final String TENANT_ORG_NAME = "tenantorgname";
     private static final String TENANT_ID = "tenantid";
+    private static final String FACEBOOK_PASS = "fbuserpass";
+
 
     public static void setTenantId(String tenantId) {
         System.setProperty("tenantid", tenantId);
@@ -71,5 +73,9 @@ public class ConfigManager {
                     "Tenant ID was not provided");
         }
         return tenantID;
+    }
+
+    public static  String getFBUserPass(){
+        return System.getProperty(FACEBOOK_PASS);
     }
 }

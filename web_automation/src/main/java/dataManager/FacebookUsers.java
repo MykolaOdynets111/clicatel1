@@ -1,9 +1,11 @@
 package dataManager;
 
+import driverManager.ConfigManager;
+
 public enum FacebookUsers {
 
-    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "p@$$w0rd4te$t!1", "100024956568638"),
-    ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
+    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638"),
+//    ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
     ;
 
 
@@ -13,11 +15,15 @@ public enum FacebookUsers {
     String userPass;
     String userID;
 
-    FacebookUsers(String userName, String userSurname, String userEmail, String userPass, String userID) {
+    FacebookUsers(String userName, String userSurname, String userEmail, String userID) {
         this.userName = userName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;
-        this.userPass = userPass;
+        if(ConfigManager.getFBUserPass()==null){
+            this.userPass = "p@$$w0rd4te$t!1";
+        } else{
+            this.userPass = ConfigManager.getFBUserPass();
+        }
         this.userID = userID;
     }
 
