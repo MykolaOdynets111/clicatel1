@@ -660,7 +660,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 getUserNameFromLocalStorage(),                                              // first name
                 "AQA",                                                             // last name
                 String.valueOf(faker.number().randomNumber(6, false)),   // contact phone
-                "aqa_"+System.currentTimeMillis()+"@aqa.com"                          // email
+                "aqa_quoterequest"+System.currentTimeMillis()+"@aqa.com"                          // email
         ));
     }
 
