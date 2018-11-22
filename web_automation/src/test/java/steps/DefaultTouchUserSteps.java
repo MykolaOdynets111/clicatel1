@@ -136,12 +136,15 @@ public class DefaultTouchUserSteps implements JSHelper{
             widgetConversationArea.checkIfCardButtonsShownFor(selectedCategory, intentsTitles);
 
             String selectedIntentTitle =                 intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
-            String expectedAnswerOnSelectedIntent = intentsListForCategory.stream()
+//            String selectedIntentTitle = "How much does General Bank MasterPass app cost?";
+            TIEIntentPerCategory selectedIntentItem = intentsListForCategory.stream()
                                                     .filter(e -> e.getTitle().equals(selectedIntentTitle))
-                                                    .findFirst().get().getText();
+                                                    .findFirst().get();
+            String expectedAnswerOnSelectedIntent = selectedIntentItem.getText();
+            String selectedIntentName = selectedIntentItem.getIntent();
 
             widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
-            verifyResponse(expectedAnswerOnSelectedIntent, selectedIntentTitle);
+            verifyTextResponseWithIntent(expectedAnswerOnSelectedIntent, selectedIntentName, selectedIntentTitle);
         }
     }
 
@@ -169,7 +172,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 //      ToDo: As soon as there is an API to check the TIE mode implement the following logic
 //        String tenantTIEMode = ApiHelperTie.getTIEModeForTenant(Tenants.getTenantUnderTestOrgName()).equals("automomus")
 //        if(!isTextResponseShown & tenantTIEMode.equals("autonomus"))
-        if (!isTextResponseShown & Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
+        if (!isTextResponseShown & widgetConversationArea.isCardShownFor(userInput, 15)){
             verifyTextResponseAfterInteractionWithChoiceCard(userInput, expectedTextResponse, intent, waitForResponse);
         } else{
             verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
@@ -398,7 +401,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
-//        enteredUserMessageInTouchWidget.set("mobile banking 120 3279");
+//        enteredUserMessageInTouchWidget.set("general bank masterpass app");
         widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
     }
 

@@ -72,13 +72,13 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
 
     private void scrollToButtonAndClick(WebElement targetButton){
         int scrollPosition=2228;
-        for (int i =0; i<5; i++){
+        for (int i =0; i<10; i++){
             try{
                 scrollUpWidget(scrollPosition);
                 targetButton.click();
                 break;
             } catch (ElementNotVisibleException e){
-                scrollPosition=scrollPosition-300;
+                scrollPosition=scrollPosition-200;
             }
         }
     }
