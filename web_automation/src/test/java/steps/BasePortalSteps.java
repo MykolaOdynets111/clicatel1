@@ -45,6 +45,12 @@ public class BasePortalSteps {
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
     }
 
+    @Then("^New agent is added into touch database$")
+    public void verifyThatNewAgentAddedToDatabase(){
+        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), agentEmail),
+                "Agent with '" + agentEmail + "' Email is not created in touch DB after 3 seconds wait.");
+    }
+
     @Given("^Delete user$")
     public static void deleteAgent(){
         String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);

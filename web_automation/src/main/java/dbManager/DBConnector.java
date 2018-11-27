@@ -125,6 +125,38 @@ public class DBConnector {
         return id;
     }
 
+    public static boolean isAgentCreatedInDB(String env, String agentEmail) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "SELECT * FROM "+tableName+".agent where agent_email='"+agentEmail+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        boolean isAgentPresent = false;
+        try {
+            for(int i = 0; i<6; i++){
+                statement = getConnection(env, "touch").createStatement();
+                statement.executeQuery(query);
+                results = statement.getResultSet();
+                isAgentPresent = results.next();
+                if(isAgentPresent){
+                    break;
+                }
+                else {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isAgentPresent;
+    }
+
 //    public static void main(String args[]){
 //        String a = DBConnector.getAccountActivationIdFromMC2DB("testing");
 //        DBConnector.closeConnection();
