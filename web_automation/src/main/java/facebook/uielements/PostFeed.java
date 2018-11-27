@@ -15,7 +15,7 @@ public class PostFeed extends AbstractUIElement {
     @FindBy(xpath = "//div[@role='presentation']//div[@role='textbox']")
     private WebElement postInputField;
 
-    private String closeDMPopupButton = "//a[@aria-label='Close tab']";
+    private String closeDMPopupButton = "//div[@class='fbNubFlyoutOuter']//span[text()='General Bank QA']/ancestor::div[@role='presentation']";
 
     private String closeDMPopupButtonConfirmation = "//a[@action='cancel'][text()='OK']";
 
@@ -60,17 +60,18 @@ public class PostFeed extends AbstractUIElement {
 
     private void closeFBDMWindowIfOpened(){
         if (isElementShownByXpath(closeDMPopupButton, 10)){
-            executeJSclick(findElemByXPATH(closeDMPopupButton));
+            findElemByXPATH(closeDMPopupButton).click();
+//            executeJSclick(findElemByXPATH(closeDMPopupButton));
         }
-        if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)){
-            moveToElemAndClick(findElemByXPATH(closeDMPopupButtonConfirmation));
-        }
-        try {
-            if (isElementShownByXpath(closeDMPopupButtonConfirmation, 5)) {
-                findElemByXPATH(closeDMPopupButtonConfirmation).click();
-            }
-        }catch (WebDriverException e){
-
-        }
+//        if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)){
+//            moveToElemAndClick(findElemByXPATH(closeDMPopupButtonConfirmation));
+//        }
+//        try {
+//            if (isElementShownByXpath(closeDMPopupButtonConfirmation, 5)) {
+//                findElemByXPATH(closeDMPopupButtonConfirmation).click();
+//            }
+//        }catch (WebDriverException e){
+//
+//        }
     }
 }
