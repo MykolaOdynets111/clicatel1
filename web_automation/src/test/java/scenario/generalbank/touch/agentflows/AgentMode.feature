@@ -18,7 +18,7 @@ Feature: User messages handling in "Agent" tenant mode
     Then User have to receive 'hello' text response for his 'account balance' input
 
   @suggestions
-  Scenario: Verify if suggestion are not shown in "Agent" mode
+  Scenario: Verify if suggestion are shown in "Agent" mode
     Given AGENT_ASSISTANT tenant feature is set to true for Automation
     Given I login as agent of Automation
     Given User select Automation tenant
@@ -27,8 +27,9 @@ Feature: User messages handling in "Agent" tenant mode
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with what is your open hours user's message
-    And There is no suggestions on 'what is your open hours' user input
-    When Agent responds with thanks for asking to User
+    Then There is correct suggestion shown on user message "what is your open hours"
+    And The suggestion for user message "what is your open hours" with the biggest confidence is added to the input field
+    And Agent is able to delete the suggestion from input field and sends his own "thanks for asking" message
     Then User have to receive 'thanks for asking' text response for his 'what is your open hours' input
 
 
