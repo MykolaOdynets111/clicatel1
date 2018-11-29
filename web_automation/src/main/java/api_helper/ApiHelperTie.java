@@ -37,7 +37,7 @@ public class ApiHelperTie {
     }
 
     public static double getIntentConfidenceOnUserMessage(String userMessage) {
-        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestOrgName(), userMessage));
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().getList("intents_result.intents", Intent.class).get(0).getConfidence();
     }
 

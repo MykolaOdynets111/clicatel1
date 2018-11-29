@@ -5,6 +5,7 @@ import api_helper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataManager.Tenants;
 import driverManager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;
@@ -33,8 +34,8 @@ public class BaseTieSteps {
 
     @Then("^TIE sentiment is (.*) when I send '(.*)' for (.*) tenant$")
     public void  verifyTIESentimentVerdict(String expectedSentiment, String userMessage, String tenant) {
-        SoftAssert soft = new SoftAssert();
-        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        Tenants.setTenantUnderTestNames(tenant);
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }
@@ -53,7 +54,8 @@ public class BaseTieSteps {
 
     @Then("^TIE returns (.*) intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyConnectAgentIntent(int numberOfIntents, String expectedIntent, String userMessage, String tenant){
-        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        Tenants.setTenantUnderTestNames(tenant);
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }
@@ -78,7 +80,8 @@ public class BaseTieSteps {
 
     @Then("TIE response on '(.*)' for (.*) tenant contains '(.*)' intent")
     public void verifyTieResponseContainExpectedIntent(String userMessage,String tenant, String expectedIntent){
-        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        Tenants.setTenantUnderTestNames(tenant);
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }
@@ -94,7 +97,8 @@ public class BaseTieSteps {
 
     @Then("^TIE response should have correct top intent: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyIntent(String expectedIntent, String userMessage, String tenant){
-        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        Tenants.setTenantUnderTestNames(tenant);
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }
@@ -128,7 +132,8 @@ public class BaseTieSteps {
 
     @Then("^TIE returns (.*) intents: \"(.*)\" on '(.*)' for (.*) tenant$")
     public void verifyIntentsList(int numberOfIntents, List<String> expectedIntents, String userMessage, String tenant){
-        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        Tenants.setTenantUnderTestNames(tenant);
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "TIE is not responding. \n" + resp.getBody().asString());
         }

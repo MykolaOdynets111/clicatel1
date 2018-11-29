@@ -579,13 +579,13 @@ public class TIEApiSteps {
 
     @Then("^I receives response on my input (.*)$")
     public void verifyNewCreatedTenantResponds(String userMessage){
-        String tenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
+        String tenantName = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         SoftAssert soft = new SoftAssert();
-        Response resp = RestAssured.get(URLs.getTieURL(tenant, userMessage));
+        Response resp = RestAssured.get(URLs.getTieURL(tenantName, userMessage));
         soft.assertTrue(resp.statusCode()==200,
-                "Status code is not '200' when trying to get intents on message '"+userMessage+"' for newly created "+tenant+ " tenant" );
+                "Status code is not '200' when trying to get intents on message '"+userMessage+"' for newly created "+tenantName+ " tenant" );
         soft.assertTrue(!resp.getBody().asString().isEmpty(),
-                "Body is empty  when trying to get intents on message '"+userMessage+"' for newly created "+tenant+ " tenant");
+                "Body is empty  when trying to get intents on message '"+userMessage+"' for newly created "+tenantName+ " tenant");
         soft.assertAll();
     }
 

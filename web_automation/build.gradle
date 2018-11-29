@@ -333,6 +333,10 @@ task runTests(type: Test) {
         runTests.dependsOn(runTiePullRequestTests)
     }
 
+    if(suite=="tiealltenants"){
+        runTests.dependsOn(runTIETestsForAllTenants)
+    }
+
     if(suite=="touchgo"){
         runTests.dependsOn(runTouchGoTests)
     }
