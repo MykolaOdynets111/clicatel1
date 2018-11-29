@@ -136,7 +136,7 @@ public class DefaultTouchUserSteps implements JSHelper{
             widgetConversationArea.checkIfCardButtonsShownFor(selectedCategory, intentsTitles);
 
             String selectedIntentTitle = getRandomIntent(intentsTitles);
-//            String selectedIntentTitle = "How much does General Bank MasterPass app cost?";
+//            String selectedIntentTitle = "Loans";
             TIEIntentPerCategory selectedIntentItem = intentsListForCategory.stream()
                                                     .filter(e -> e.getTitle().equals(selectedIntentTitle))
                                                     .findFirst().get();
@@ -254,8 +254,10 @@ public class DefaultTouchUserSteps implements JSHelper{
         softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
         String actualCardText = widgetConversationArea.getResponseTextOnUserInput(userInput);
-        if (!expectedTextResponse.contains("\\n")) actualCardText.replace("\n", "");
-        else expectedTextResponse = expectedTextResponse.replace("\\n", "\n");
+        if (!expectedTextResponse.contains("\n")) {
+            if (!expectedTextResponse.contains("\\n")) actualCardText = actualCardText.replace("\n", "");
+            else expectedTextResponse = expectedTextResponse.replace("\\n", "\n");
+        }
         softAssert.assertEquals(actualCardText, expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
@@ -419,7 +421,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
-//        enteredUserMessageInTouchWidget.set("general bank masterpass app");
+//        enteredUserMessageInTouchWidget.set("generic");
         widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
     }
 
