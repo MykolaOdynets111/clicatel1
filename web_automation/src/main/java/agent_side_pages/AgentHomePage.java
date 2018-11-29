@@ -114,25 +114,14 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clearAndSendResponseToUser(String response){
+        moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
+        waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
+        int symbolsNumber = messageInput.getText().split("").length;
+        if(symbolsNumber>0) {
+                messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+        }
 
-//        try {
-            moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
-            waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
-            messageInput.clear();
-            int symbolsNumber = messageInput.getText().split("").length;
-            if(symbolsNumber>0) {
-                for (int i = 0; i < symbolsNumber; i++) {
-                    messageInput.sendKeys(Keys.BACK_SPACE);
-                }
-            }
-//        } catch (WebDriverException e){
-//            int symbolsNumber = messageInput.getText().split("").length;
-//            for (int i = 0; i<symbolsNumber; i++) {
-//                messageInput.sendKeys(Keys.BACK_SPACE);
-//            }
-//        }
         sendResponseToUser(response);
-
     }
 
     public void clickSendButton() {
