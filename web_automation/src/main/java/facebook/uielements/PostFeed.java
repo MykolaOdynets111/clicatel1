@@ -1,5 +1,6 @@
 package facebook.uielements;
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -49,7 +50,7 @@ public class PostFeed extends AbstractUIElement {
     public void endSessionIfPostFeedIsShown(){
         if (isElementShown(postInputField, 5)){
             postInputField.sendKeys("end");
-            postButton.click();
+            postInputField.sendKeys(Keys.ENTER);
         }
     }
 
