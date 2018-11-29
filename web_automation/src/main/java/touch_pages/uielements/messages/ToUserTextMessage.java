@@ -55,11 +55,13 @@ public class ToUserTextMessage  extends Widget implements WebActions {
     }
 
     public boolean isTextResponseShownAmongOthers(String expectedMessage) {
-        if(toUserTextMessages.size()==0){
-            return false;
-        } else{
-            return toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+        boolean result = false;
+        for(int i = 0; i < 6; i++){
+            result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+            if (result) return true;
+            waitFor(500);
         }
+        return result;
     }
 
     public boolean isOnlyOneTextResponseShwon(){

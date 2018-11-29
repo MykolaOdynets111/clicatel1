@@ -91,29 +91,11 @@ public class URLs {
         return String.format(BASE_TIE_URL, ConfigManager.getEnv());
     }
 
-    public static String getTieURL(String tenantOrgName, String message) {
-        String tenantName;
-        switch (tenantOrgName) {
-            case "General Bank Demo":
-                tenantName="generalbank";
-                break;
-            case "Virgin Money":
-                tenantName="virgin-money";
-                break;
-            default:
-                tenantName=tenantOrgName;
-        }
-//        return  String.format(Endpoints.BASE_TIE_PROD_URL+"%s/chats/?q=%s&sentiment=true", tenantName, message);
+    public static String getTieURL(String tenantName, String message) {
         return String.format(Endpoints.TIE_INTENT_PLUS_SENTIMENT_URL, tenantName, message);
     }
 
-    public static String getTIEURLForAnswers(String tenantOrgName, String intent) {
-        String tenantName = null;
-        switch (tenantOrgName) {
-            case "General Bank Demo":
-                tenantName="generalbank";
-                break;
-        }
+    public static String getTIEURLForAnswers(String tenantName, String intent) {
         return String.format(Endpoints.TIE_ANSWER_URL, tenantName, intent);
     }
 

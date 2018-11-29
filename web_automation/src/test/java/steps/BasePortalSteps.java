@@ -45,6 +45,12 @@ public class BasePortalSteps {
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
     }
 
+    @Then("^New agent is added into touch database$")
+    public void verifyThatNewAgentAddedToDatabase(){
+        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), agentEmail),
+                "Agent with '" + agentEmail + "' Email is not created in touch DB after 10 seconds wait.");
+    }
+
     @Given("^Delete user$")
     public static void deleteAgent(){
         String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);
@@ -364,12 +370,12 @@ public class BasePortalSteps {
 
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
-        String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
+        String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
         for(int i=0; i<60; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
-                actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTest(), "touchGoType");
+                actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
             } else{
                 break;
             }
@@ -432,6 +438,7 @@ public class BasePortalSteps {
     @When("^Admin tries to add new card$")
     public void addNewCard(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+        getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
     @When("^Admin provides all card info$")
@@ -512,6 +519,7 @@ public class BasePortalSteps {
 
     @Then("^Payment review tab is opened$")
     public void verifyPaymentReviewTabIsOpened(){
+        getPortalMainPage().waitForNotificationAlertToDisappear();
         Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
 

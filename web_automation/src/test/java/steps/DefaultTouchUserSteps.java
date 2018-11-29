@@ -8,7 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Tenants;
 import dataManager.VMQuoteRequestUserData;
-import driverManager.ConfigManager;
+import dataManager.jackson_schemas.TIE.TIEIntentPerCategory;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
@@ -21,10 +21,11 @@ import touch_pages.uielements.WidgetConversationArea;
 import touch_pages.uielements.WidgetHeader;
 import touch_pages.uielements.messages.WelcomeMessages;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import static io.restassured.RestAssured.get;
 
 public class DefaultTouchUserSteps implements JSHelper{
 
@@ -35,6 +36,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
     private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
+    private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
 
     public static VMQuoteRequestUserData getUserDataForQuoteRequest(long threadID){
         return userDataForQuoteRequest.get(threadID);
@@ -55,31 +57,38 @@ public class DefaultTouchUserSteps implements JSHelper{
         DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+    }
+
+    @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
+    public void openTenantPageWithoutCreatingUserProfile(String tenantOrgName) {
+        DriverFactory.openUrl(tenantOrgName);
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        String clientID = getUserNameFromLocalStorage();
 //        getMainPage().openTenantPage(tenantOrgName);
     }
 
     @Given("^User opens page with desired tenant widget$")
-    public void openPageForDynamicallyPassedTenant() {
-        String tenantOrgName = ConfigManager.getTenantOrgName();
+    public DefaultTouchUserSteps openPageForDynamicallyPassedTenant() {
         DriverFactory.openUrlForDynamicTenant();
-        Tenants.setTenantUnderTestNames(tenantOrgName);
+        return this;
     }
 
     @Given("^User opens (.*) tenant page for user (.*)$")
     public void openTenantPage(String tenantOrgName, String clientID) {
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
-//        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
-//        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "firstName", clientID);
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "email", "aqa"+clientID+"@gmail.com");
 
     }
 
 
     @Given("^Click chat icon$")
-    public void clickChatIcon() {
+    public DefaultTouchUserSteps clickChatIcon() {
         widget = getMainPage().openWidget();
+        return this;
     }
 
     @Then("^Chat icon is not visible$")
@@ -93,11 +102,12 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @When("^User enter (.*) into widget input field$")
-    public void enterText(String text) {
+    public DefaultTouchUserSteps enterText(String text) {
         widgetConversationArea = widget.getWidgetConversationArea();
         widgetConversationArea.waitForSalutation();
         widget.getWidgetFooter().enterMessage(text).sendMessage();
         widgetConversationArea.waitForMessageToAppearInWidget(text);
+        return this;
     }
 
     @When("^User enters message regarding (.*) into widget input field$")
@@ -110,9 +120,50 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
-        int waitForResponse=45;
+        int waitForResponse=60;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
+    }
+
+    @Then("^Correct response is shown in the widget for selected category$")
+    public void verifyCorrectResponseOnSelectedCategory(){
+        String selectedCategory = enteredUserMessageInTouchWidget.get();
+        List<TIEIntentPerCategory> intentsListForCategory = ApiHelperTie.getListOfIntentsForCategory(selectedCategory);
+        if(intentsListForCategory.size()==1){
+            verifyResponse(intentsListForCategory.get(0).getText(), selectedCategory);
+        } else{
+            List<String> intentsTitles = intentsListForCategory.stream().map(TIEIntentPerCategory::getTitle).collect(Collectors.toList());
+            widgetConversationArea.checkIfCardButtonsShownFor(selectedCategory, intentsTitles);
+
+            String selectedIntentTitle = getRandomIntent(intentsTitles);
+//            String selectedIntentTitle = "Loans";
+            TIEIntentPerCategory selectedIntentItem = intentsListForCategory.stream()
+                                                    .filter(e -> e.getTitle().equals(selectedIntentTitle))
+                                                    .findFirst().get();
+            String expectedAnswerOnSelectedIntent = selectedIntentItem.getText();
+            String selectedIntentName = selectedIntentItem.getIntent();
+            if(expectedAnswerOnSelectedIntent==null){
+                Assert.assertTrue(false, "Answer is not provided by the TIE for '"+selectedIntentName+"' intent");
+            }
+            widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
+            verifyTextResponseWithIntent(expectedAnswerOnSelectedIntent, selectedIntentName, selectedIntentTitle);
+        }
+    }
+
+    /**This method is designed in order to exclude some tenant specific intents from randomiser
+     * For e.g., on message 'Cost or transactions fees' TIE API returns one intent, but on the camunda level
+     * there is choice card mapped on this message and test will fail because it expects 1 text response (because 1 intent is shown),
+     * but in fact choice map is shown
+     * @param intentsTitles
+     * @return
+     */
+    private String getRandomIntent(List<String> intentsTitles){
+        if (Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
+            intentsTitles.remove("Cost or transactions fees");
+            intentsTitles.remove("Quote request");
+
+        }
+        return intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
     }
 
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
@@ -139,7 +190,7 @@ public class DefaultTouchUserSteps implements JSHelper{
 //      ToDo: As soon as there is an API to check the TIE mode implement the following logic
 //        String tenantTIEMode = ApiHelperTie.getTIEModeForTenant(Tenants.getTenantUnderTestOrgName()).equals("automomus")
 //        if(!isTextResponseShown & tenantTIEMode.equals("autonomus"))
-        if (!isTextResponseShown & Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
+        if (!isTextResponseShown & widgetConversationArea.isCardShownFor(userInput, 15)){
             verifyTextResponseAfterInteractionWithChoiceCard(userInput, expectedTextResponse, intent, waitForResponse);
         } else{
             verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
@@ -167,7 +218,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         // if tie returns 1 intent and we have card shown then we are verifying that it is
         // confirmation card with correct intent
         else{
-            double configConfidenceThreshold = Double.valueOf(ApiHelperTie.getTenantConfig(Tenants.getTenantUnderTest(), "intent_confidence_threshold.high_confident"));
+            double configConfidenceThreshold = Double.valueOf(ApiHelperTie.getTenantConfig(Tenants.getTenantUnderTestName(), "intent_confidence_threshold.high_confident"));
             double confidenceOnUserMessage = ApiHelperTie.getIntentConfidenceOnUserMessage(userInput);
             if(confidenceOnUserMessage<configConfidenceThreshold){
                 String textInCard = widgetConversationArea.getCardTextForUserMessage(userInput);
@@ -203,8 +254,10 @@ public class DefaultTouchUserSteps implements JSHelper{
         softAssert.assertTrue(widgetConversationArea.isOnlyOneTextResponseShownFor(userInput),
                 "More than one text response is shown for user (Client ID: "+getUserNameFromLocalStorage()+")");
         String actualCardText = widgetConversationArea.getResponseTextOnUserInput(userInput);
-        if (!expectedTextResponse.contains("\\n")) actualCardText.replace("\n", "");
-        else expectedTextResponse = expectedTextResponse.replace("\\n", "\n");
+        if (!expectedTextResponse.contains("\n")) {
+            if (!expectedTextResponse.contains("\\n")) actualCardText = actualCardText.replace("\n", "");
+            else expectedTextResponse = expectedTextResponse.replace("\\n", "\n");
+        }
         softAssert.assertEquals(actualCardText, expectedTextResponse,
                 "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
@@ -220,7 +273,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
                 break;
             case "dynamical branch address":
-                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
+                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
                 break;
             case "exit":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
@@ -264,6 +317,11 @@ public class DefaultTouchUserSteps implements JSHelper{
      */
     @Then("^User should see '(.*)' (?:text response|url) for his '(.*)' input$")
     public void verifyTextResponseRegardlessPosition(String textResponse, String userInput) {
+        if(userInput.contains("personal info")){
+            userInput = "Submitted data:\n" +
+                    ""+getUserNameFromLocalStorage()+"\n" +
+                    "health@test.com";
+        }
         int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
@@ -283,20 +341,33 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){
+        List<String> buttons = formListOfExpectedButtonNames(buttonNames);
         if (userMessage.equalsIgnoreCase("personal info")){
             userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
         }
-        List<String> buttons = Arrays.asList(buttonNames.split(";"));
+
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
-        soft.assertTrue(widgetConversationArea.isCardButtonsShownFor(userMessage, buttons),
+        soft.assertTrue(widgetConversationArea.checkIfCardButtonsShownFor(userMessage, buttons),
                 buttons + " buttons are not shown in card (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
     }
 
+    private List<String> formListOfExpectedButtonNames(String buttonNames){
+        if(buttonNames.contains("FAQ categories")){
+            return ApiHelperTie.getLIstOfAllFAGCategories();
+        }
+        if(buttonNames.contains("FAQ categories")){
+            return  null;
+        }
+        return Arrays.asList(buttonNames.split(";"));
+    }
+
+
+
     @Then("^Card with a (.*) text is shown (?:on|after) user (.*) (?:message|input)$")
-    public void isCardWithTextShown(String cardText, String userMessage){
+    public DefaultTouchUserSteps isCardWithTextShown(String cardText, String userMessage){
         if (userMessage.equalsIgnoreCase("personal info")){
             userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
         }
@@ -318,11 +389,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
+        return this;
     }
 
     @Then("^User is able to provide some info about himself in the card after his (.*) message$")
-    public void provideInfoBeforeRedirectingToTheAgent(String userMessage){
-        widgetConversationArea.provideInfoBeforeGoingToAgent(userMessage, "AQA Test", "health@test.com");
+    public void verifyUserCanProvideInfoBeforeRedirectingToTheAgent(String userMessage){
+        widgetConversationArea.provideInfoBeforeGoingToAgent(userMessage, getUserNameFromLocalStorage(), "health@test.com");
     }
 
     @Then("^Text '(.*)' is shown above the buttons in the card on user (.*) input above$")
@@ -343,6 +415,14 @@ public class DefaultTouchUserSteps implements JSHelper{
             userMessage = userDataForQuoteRequest.get(Thread.currentThread().getId()).getWidgetPresentationOfPersonalInfoInput();
         }
         widgetConversationArea.clickOptionInTheCard(userMessage, buttonName);
+    }
+
+    @When("^User select random (.*) in the card on user message (.*)$")
+    public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
+        List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
+        enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
+//        enteredUserMessageInTouchWidget.set("generic");
+        widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
     }
 
     @Then("^\"End chat\" button is shown in widget's header$")
@@ -377,9 +457,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^Widget is connected$")
-    public void verifyIfWidgetIsConnected() {
+    public DefaultTouchUserSteps verifyIfWidgetIsConnected() {
         Assert.assertTrue(widget.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
-
+        return this;
     }
 
     @Then("^User sees name of tenant: (.*) and its short description in the header$")
@@ -409,7 +489,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 }
             }
         }
-       Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+       Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTestName()).getSessionId() +
                                             "is not terminated for user: " +getUserNameFromLocalStorage() +
                                                 " after bot response.");
     }
@@ -430,7 +510,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 }
             }
         }
-        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTestName()).getSessionId() +
                 "is not created for user: " +getUserNameFromLocalStorage() +
                 " after bot response.");
     }
@@ -603,7 +683,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 getUserNameFromLocalStorage(),                                              // first name
                 "AQA",                                                             // last name
                 String.valueOf(faker.number().randomNumber(6, false)),   // contact phone
-                "aqa_"+System.currentTimeMillis()+"@aqa.com"                          // email
+                "aqa_quoterequest"+System.currentTimeMillis()+"@aqa.com"                          // email
         ));
     }
 

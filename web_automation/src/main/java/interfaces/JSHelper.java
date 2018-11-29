@@ -39,8 +39,13 @@ public interface JSHelper {
     }
 
     default String getUserNameFromLocalStorage(){
-        JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
-        return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+        if(DriverFactory.isTouchDriverExists()){
+            JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
+            return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+        }else{
+            return "";
+        }
+
     }
 
     default void scrollPageToTheTop(WebDriver driver){

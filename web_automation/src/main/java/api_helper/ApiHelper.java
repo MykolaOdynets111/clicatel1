@@ -52,10 +52,12 @@ public class ApiHelper {
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
-        String url = String.format(Endpoints.INTERNAL_DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
-        RestAssured.given()
-                .header("Accept", "application/json")
-                .delete(url);
+        if(!clientID.isEmpty()) {
+            String url = String.format(Endpoints.INTERNAL_DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
+            RestAssured.given()
+                    .header("Accept", "application/json")
+                    .delete(url);
+        }
     }
 
     private static synchronized List<HashMap> getAllTenantInfo() {
@@ -74,7 +76,7 @@ public class ApiHelper {
 
     private static List<HashMap> getTenantMessagesInfo() {
         if(tenantMessages==null) {
-            String url = String.format(Endpoints.INTERNAL_TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTest());
+            String url = String.format(Endpoints.INTERNAL_TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTestName());
             tenantMessages = RestAssured.given().get(url)
                     .jsonPath().get("");
         }
@@ -234,7 +236,7 @@ public class ApiHelper {
     }
 
     public static int getNumberOfLoggedInAgents(){
-        String url = String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTest());
+        String url = String.format(Endpoints.INTERNAL_COUNT_OF_LOGGED_IN_AGENTS, Tenants.getTenantUnderTestName());
         return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
     }
 

@@ -47,6 +47,12 @@ public class Hooks implements JSHelper{
                 throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
             }
 
+//        if(scenario.getSourceTagNames().contains("@agent_mode")&!
+//                (ConfigManager.getEnv().equalsIgnoreCase("integration") |
+//                 ConfigManager.getEnv().equalsIgnoreCase("dev"))){
+//            throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
+//        }
+
         if(scenario.getSourceTagNames().contains("@signup_account")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
                     "On other envs the test may break the limit of sent activation emails and cause " +
@@ -89,7 +95,7 @@ public class Hooks implements JSHelper{
 
             takeScreenshot();
             endTouchFlow(scenario, scenario.isFailed());
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
         finishAgentFlowIfExists(scenario);
@@ -218,11 +224,15 @@ public class Hooks implements JSHelper{
                     touchConsoleOutput();
                 }
                 if(typeEndInWidget){
-                    Widget widget = new Widget("withoutWait");
-                    widget.getWidgetFooter().tryToCloseSession();
+                    closeWidgetSession();
                 }
         }catch (WebDriverException e) { }
         }
+    }
+
+    public void closeWidgetSession(){
+        Widget widget = new Widget("withoutWait");
+        widget.getWidgetFooter().tryToCloseSession();
     }
 
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
@@ -235,7 +245,7 @@ public class Hooks implements JSHelper{
     }
 
     private void finishVisibilityFlow() {
-        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
         ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }

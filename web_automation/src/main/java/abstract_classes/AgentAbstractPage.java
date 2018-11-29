@@ -14,8 +14,14 @@ public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JS
 //        HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
 //    }
 
+    private String agent="main agent";
+
     public AgentAbstractPage(String agent) {
+        this.agent = agent;
         HtmlElementLoader.populatePageObject(this, DriverFactory.getDriverForAgent(agent));
     }
 
+    public String getCurrentAgent(){
+        return agent;
+    }
 }

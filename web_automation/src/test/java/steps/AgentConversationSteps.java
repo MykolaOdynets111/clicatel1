@@ -27,6 +27,11 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
+        if(userMessage.contains("personal info")){
+            userMessage = "Submitted data:\n" +
+                    ""+getUserNameFromLocalStorage()+"\n" +
+                    "health@test.com";
+        }
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
@@ -72,7 +77,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser){
-        getAgentHomePage(agent).sendResponseToUser(responseToUser);
+        getAgentHomePage(agent).clearAndSendResponseToUser(responseToUser);
     }
 
 
@@ -128,6 +133,16 @@ public class AgentConversationSteps implements JSHelper{
         Assert.assertEquals(actualSuggestion, expectedMessage, "Suggestion in input field is not as expected");
     }
 
+
+    @Then("There is no suggestions on '(.*)' user input")
+    public void verifySuggestionIsNotShown(String userInput){
+        getAgentHomePage().clickAgentAssistantButton();
+        SoftAssert softAssert = new SoftAssert();
+        String actualSuggestion = getAgentHomePage().getSuggestionFromInputFiled();
+        softAssert.assertTrue(actualSuggestion.isEmpty(),"Input field is not empty\n");
+        softAssert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(), "Suggestions list is not empty");
+        softAssert.assertAll();
+    }
 
     @When("^Agent click send button$")
     public void clickSendButton() {

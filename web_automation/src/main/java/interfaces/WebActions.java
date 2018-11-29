@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface WebActions extends WebWait {
 
+    String widgetScroller = "div.scroller";
+
     default void waitFor(int milisecs){
         try {
             Thread.sleep(milisecs);
@@ -193,5 +195,12 @@ public interface WebActions extends WebWait {
 
     default void pressEnterForWebElem(WebElement elem){
         elem.sendKeys(Keys.ENTER);
+    }
+
+    default void scrollUpWidget(int scrollPosition){
+        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
+        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
+        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
+                DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(widgetScroller)));
     }
 }

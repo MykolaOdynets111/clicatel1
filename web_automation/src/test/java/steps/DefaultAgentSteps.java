@@ -245,7 +245,6 @@ public class DefaultAgentSteps implements JSHelper {
     }
 
 
-
     @When("^(.*) click on new conversation$")
     public void acceptUserConversation(String ordinalAgentNumber) {
         getLeftMenu(ordinalAgentNumber).openNewConversationRequestByAgent(ordinalAgentNumber);

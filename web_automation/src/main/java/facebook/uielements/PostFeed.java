@@ -1,5 +1,6 @@
 package facebook.uielements;
 import abstract_classes.AbstractUIElement;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +16,7 @@ public class PostFeed extends AbstractUIElement {
     @FindBy(xpath = "//div[@role='presentation']//div[@role='textbox']")
     private WebElement postInputField;
 
-    private String closeDMPopupButton = "//a[@aria-label='Close tab']";
+    private String closeDMPopupButton = "//div[@class='fbNubFlyoutOuter']//span[text()='General Bank QA']/ancestor::div[@role='presentation']";
 
     private String closeDMPopupButtonConfirmation = "//a[@action='cancel'][text()='OK']";
 
@@ -31,42 +32,21 @@ public class PostFeed extends AbstractUIElement {
             postInputField.sendKeys(userPostText);
         }
 
-        clickPostButton();
-//        try{
-//            clickPostButton();
-//        } catch (WebDriverException e){
-//            waitFor(500);
-//            try {
-//                clickPostButton();
-//            }catch (WebDriverException e1){
-//                waitFor(500);
-//                clickPostButton();
-//            }
-//        }
-
-        waitForElementToBeInvisible(postButton,10);
+        postInputField.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
 
     public void endSessionIfPostFeedIsShown(){
         if (isElementShown(postInputField, 5)){
             postInputField.sendKeys("end");
-            postButton.click();
+            postInputField.sendKeys(Keys.ENTER);
         }
     }
 
-    private void clickPostButton(){
-        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
-        postButton.click();
-    }
 
 
     private void closeFBDMWindowIfOpened(){
         if (isElementShownByXpath(closeDMPopupButton, 10)){
-            executeJSclick(findElemByXPATH(closeDMPopupButton));
+            findElemByXPATH(closeDMPopupButton).click();
         }
-        if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)){
-            moveToElemAndClick(findElemByXPATH(closeDMPopupButtonConfirmation));
-        }
-
     }
 }

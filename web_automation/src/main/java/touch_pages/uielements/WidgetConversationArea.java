@@ -1,10 +1,12 @@
 package touch_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
+import api_helper.ApiHelper;
 import dataManager.VMQuoteRequestUserData;
 import interfaces.WebActions;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -82,10 +84,14 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromAboveCardButton();
     }
 
-    public boolean isCardButtonsShownFor(String userMessageText, List<String> buttons) {
+    public boolean checkIfCardButtonsShownFor(String userMessageText, List<String> buttons) {
         boolean result = false;
         for (String button : buttons) {
             result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
+            if(!result){
+                Assert.assertTrue(false,
+                        "Button '"+button+"' is not shown in the card on '"+userMessageText+"' user message");
+            }
         }
         return result;
     }

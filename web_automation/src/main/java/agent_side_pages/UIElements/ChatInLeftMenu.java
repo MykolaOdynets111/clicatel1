@@ -26,6 +26,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public void openConversation() {
+        waitForElementToBeClickableAgent(userIcon, 6, "main");
         userIcon.click();
     }
 
