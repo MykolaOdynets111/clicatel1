@@ -31,20 +31,7 @@ public class PostFeed extends AbstractUIElement {
             postInputField.clear();
             postInputField.sendKeys(userPostText);
         }
-        clickPostButton();
-//        try{
-//            clickPostButton();
-//        } catch (WebDriverException e){
-//            waitFor(500);
-//            try {
-//                clickPostButton();
-//            }catch (WebDriverException e1){
-//                waitFor(500);
-//                clickPostButton();
-//            }
-//        }
-
-        waitForElementToBeInvisible(postButton,10);
+        postInputField.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
 
     public void endSessionIfPostFeedIsShown(){
@@ -54,25 +41,10 @@ public class PostFeed extends AbstractUIElement {
         }
     }
 
-    private void clickPostButton(){
-        if (isElementShownByXpath(closeDMPopupButton, 5)) findElemByXPATH(closeDMPopupButton).click();
-        postButton.click();
-    }
 
     private void closeFBDMWindowIfOpened(){
         if (isElementShownByXpath(closeDMPopupButton, 10)){
             findElemByXPATH(closeDMPopupButton).click();
-//            executeJSclick(findElemByXPATH(closeDMPopupButton));
         }
-//        if(isElementShownByXpath(closeDMPopupButtonConfirmation, 5)){
-//            moveToElemAndClick(findElemByXPATH(closeDMPopupButtonConfirmation));
-//        }
-//        try {
-//            if (isElementShownByXpath(closeDMPopupButtonConfirmation, 5)) {
-//                findElemByXPATH(closeDMPopupButtonConfirmation).click();
-//            }
-//        }catch (WebDriverException e){
-//
-//        }
     }
 }
