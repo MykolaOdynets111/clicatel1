@@ -91,8 +91,9 @@ public class URLs {
         return String.format(BASE_TIE_URL, ConfigManager.getEnv());
     }
 
-    public static String getTieURL(String tenantName, String message) {
-        return String.format(Endpoints.TIE_INTENT_PLUS_SENTIMENT_URL, tenantName, message);
+    public static String getTieURL(String tenantOrgName, String message) {
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        return String.format(Endpoints.TIE_INTENT_PLUS_SENTIMENT_URL, Tenants.getTenantUnderTestName(), message);
     }
 
     public static String getTIEURLForAnswers(String tenantName, String intent) {

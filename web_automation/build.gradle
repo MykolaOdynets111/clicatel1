@@ -330,7 +330,7 @@ task runTests(type: Test) {
     }
 
     if(suite=="tiepullrequest"){
-        runTests.dependsOn(runTIETestsForAllTenants)
+        runTests.dependsOn(runTiePullRequestTests)
     }
 
     if(suite=="touchgo"){
