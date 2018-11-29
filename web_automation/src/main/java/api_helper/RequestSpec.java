@@ -9,8 +9,10 @@ import driverManager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
+import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
 
 import java.util.Map;
 
@@ -36,14 +38,21 @@ public class RequestSpec {
     }
 
 
-
     public static String getAccessToken() {
-        return RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Authorization", getAuthToken())
-                .body("{\"clientId\":\""+faker.code().asin()+"\"}")
-                .post(Endpoints.ACCESS_TOKEN_ENDPOINT)
-                .jsonPath().get("accessToken");
+        String accessToken = "";
+        Response resp = null;
+        try{
+             resp = RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", getAuthToken())
+                    .body("{\"clientId\":\""+faker.code().asin()+"\"}")
+                    .post(Endpoints.ACCESS_TOKEN_ENDPOINT);
+            accessToken = resp.jsonPath().get("accessToken");
+        } catch (JsonPathException e){
+            Assert.assertTrue(true, "Endpoint '"+Endpoints.ACCESS_TOKEN_ENDPOINT+"' returns" +
+                    " "+resp.statusCode()+" status code after POST request");
+        }
+        return accessToken;
     }
 
     public static void removeRequestSpecification(){
