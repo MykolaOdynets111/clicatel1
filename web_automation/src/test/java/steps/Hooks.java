@@ -95,7 +95,7 @@ public class Hooks implements JSHelper{
 
             takeScreenshot();
             endTouchFlow(scenario, scenario.isFailed());
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
         finishAgentFlowIfExists(scenario);
@@ -245,7 +245,7 @@ public class Hooks implements JSHelper{
     }
 
     private void finishVisibilityFlow() {
-        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTest(), getUserNameFromLocalStorage());
+        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
         ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }

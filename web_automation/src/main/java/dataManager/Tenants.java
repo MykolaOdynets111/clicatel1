@@ -4,24 +4,27 @@ import api_helper.ApiHelper;
 import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Tenants {
 
     private static Response respWithAgentInfo = null;
-    private static ThreadLocal<String> TENANT_UNDER_TEST = new ThreadLocal<>();
+    private static ThreadLocal<String> TENANT_UNDER_TEST_NAME = new ThreadLocal<>();
     private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
+    private static ThreadLocal<Map<String,String>> TENANT_UNDER_TEST =  new ThreadLocal<>();
 
     private static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME.set(orgName);
     }
 
-    private static void setTenantUnderTest(String tenantName){
-        TENANT_UNDER_TEST.set(tenantName);
+    private static void setTenantUnderTestName(String tenantName){
+        TENANT_UNDER_TEST_NAME.set(tenantName);
     }
 
-    public static String getTenantUnderTest(){
-        return TENANT_UNDER_TEST.get();
+    public static String getTenantUnderTestName(){
+        return TENANT_UNDER_TEST_NAME.get();
     }
 
     public static String getTenantInfo(String tenantORGName, String info) {
@@ -42,7 +45,7 @@ public class Tenants {
     }
 
     public static String getLastUserSessionStatus(String userID){
-        return ApiHelper.getLastUserSession(userID, getTenantUnderTest()).getState();
+        return ApiHelper.getLastUserSession(userID, getTenantUnderTestName()).getState();
     }
 
     public static Response getPrimaryAgentInfoForTenant(String tenantOrgName){
@@ -53,31 +56,42 @@ public class Tenants {
     }
 
     public static void setTenantUnderTestNames(String tenantOrgName) {
+        TENANT_UNDER_TEST.set(new HashMap<>());
         switch (tenantOrgName) {
             case "General Bank Demo":
-                Tenants.setTenantUnderTest("generalbank");
+                Tenants.setTenantUnderTestName("generalbank");
                 Tenants.setTenantUnderTestOrgName("General Bank Demo");
+                TENANT_UNDER_TEST.get().put("General Bank Demo", "generalbank");
                 break;
             case "Virgin Money":
-                Tenants.setTenantUnderTest("virgin-money");
+                Tenants.setTenantUnderTestName("virgin-money");
                 Tenants.setTenantUnderTestOrgName("Virgin Money");
+                TENANT_UNDER_TEST.get().put("Virgin Money", "virgin-money");
                 break;
             case "Starter AQA" :
-                Tenants.setTenantUnderTest("starter-aqa");
+                Tenants.setTenantUnderTestName("starter-aqa");
                 Tenants.setTenantUnderTestOrgName("Starter AQA");
+                TENANT_UNDER_TEST.get().put("Starter AQA", "starter-aqa");
                 break;
             case "Standard AQA" :
-                Tenants.setTenantUnderTest("standardplan");
+                Tenants.setTenantUnderTestName("standardplan");
                 Tenants.setTenantUnderTestOrgName("Standard AQA");
+                TENANT_UNDER_TEST.get().put("Standard AQA", "standardplan");
                 break;
             case "Updating AQA" :
-                Tenants.setTenantUnderTest("updatingplan");
+                Tenants.setTenantUnderTestName("updatingplan");
                 Tenants.setTenantUnderTestOrgName("Updating AQA");
+                TENANT_UNDER_TEST.get().put("Updating AQA", "updatingplan");
                 break;
             case "Automation":
-                Tenants.setTenantUnderTest("agentmode");
+                Tenants.setTenantUnderTestName("agentmode");
                 Tenants.setTenantUnderTestOrgName("Automation");
-
+                TENANT_UNDER_TEST.get().put("Automation", "agentmode");
+                break;
         }
+    }
+
+    public static String getTenantNameByTenantOrgName(String tenantOrgName){
+        return TENANT_UNDER_TEST.get().get(tenantOrgName);
     }
 }

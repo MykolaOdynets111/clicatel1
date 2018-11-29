@@ -57,7 +57,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
 
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
@@ -78,9 +78,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     public void openTenantPage(String tenantOrgName, String clientID) {
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID);
-//        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "firstName", clientID);
-//        ApiHelper.createUserProfile(Tenants.getTenantUnderTest(), clientID, "email", "aqa"+clientID+"@gmail.com");
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "firstName", clientID);
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "email", "aqa"+clientID+"@gmail.com");
 
     }
 
@@ -218,7 +218,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         // if tie returns 1 intent and we have card shown then we are verifying that it is
         // confirmation card with correct intent
         else{
-            double configConfidenceThreshold = Double.valueOf(ApiHelperTie.getTenantConfig(Tenants.getTenantUnderTest(), "intent_confidence_threshold.high_confident"));
+            double configConfidenceThreshold = Double.valueOf(ApiHelperTie.getTenantConfig(Tenants.getTenantUnderTestName(), "intent_confidence_threshold.high_confident"));
             double confidenceOnUserMessage = ApiHelperTie.getIntentConfidenceOnUserMessage(userInput);
             if(confidenceOnUserMessage<configConfidenceThreshold){
                 String textInCard = widgetConversationArea.getCardTextForUserMessage(userInput);
@@ -273,7 +273,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
                 break;
             case "dynamical branch address":
-                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTest());
+                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
                 break;
             case "exit":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
@@ -489,7 +489,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 }
             }
         }
-       Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+       Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTestName()).getSessionId() +
                                             "is not terminated for user: " +getUserNameFromLocalStorage() +
                                                 " after bot response.");
     }
@@ -510,7 +510,7 @@ public class DefaultTouchUserSteps implements JSHelper{
                 }
             }
         }
-        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTest()).getSessionId() +
+        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(), Tenants.getTenantUnderTestName()).getSessionId() +
                 "is not created for user: " +getUserNameFromLocalStorage() +
                 " after bot response.");
     }
