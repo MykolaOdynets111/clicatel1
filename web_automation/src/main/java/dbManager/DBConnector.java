@@ -132,12 +132,14 @@ public class DBConnector {
         ResultSet results = null;
         boolean isAgentPresent = false;
         try {
-            for(int i = 0; i<6; i++){
+            for(int i = 0; i<20; i++){
                 statement = getConnection(env, "touch").createStatement();
                 statement.executeQuery(query);
                 results = statement.getResultSet();
                 isAgentPresent = results.next();
                 if(isAgentPresent){
+                    statement.close();
+                    DBConnector.closeConnection();
                     break;
                 }
                 else {
@@ -147,10 +149,9 @@ public class DBConnector {
                         e.printStackTrace();
                     }
                 }
-
+                statement.close();
+                DBConnector.closeConnection();
             }
-            statement.close();
-            DBConnector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }

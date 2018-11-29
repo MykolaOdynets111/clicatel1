@@ -48,7 +48,7 @@ public class BasePortalSteps {
     @Then("^New agent is added into touch database$")
     public void verifyThatNewAgentAddedToDatabase(){
         Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), agentEmail),
-                "Agent with '" + agentEmail + "' Email is not created in touch DB after 3 seconds wait.");
+                "Agent with '" + agentEmail + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
     @Given("^Delete user$")
