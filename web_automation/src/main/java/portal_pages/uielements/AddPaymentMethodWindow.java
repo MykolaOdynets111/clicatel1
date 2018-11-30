@@ -98,7 +98,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
 
     public void waitForAddingNewPaymentConfirmationPopup(){
         try {
-            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 10);
+            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 15);
             waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
         }catch(TimeoutException e){
             // nothing to do 'cause it were stabilizing waits before continuing

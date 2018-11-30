@@ -27,7 +27,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitForNotificationAlertToDisappear(){
         try {
-            waitForElementsToBeInvisibleByCssAgent(notificationAlert, 5);
+            waitForElementsToBeInvisibleByCssAgent(notificationAlert, 15);
         } catch(NoSuchElementException e){}
     }
 }
