@@ -161,7 +161,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         if (Tenants.getTenantUnderTestOrgName().equalsIgnoreCase("Virgin Money")){
             intentsTitles.remove("Cost or transactions fees");
             intentsTitles.remove("Quote request");
-
+            intentsTitles.remove("Policy queries");
         }
         return intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
     }

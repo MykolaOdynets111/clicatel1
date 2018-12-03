@@ -2,6 +2,7 @@ package portal_pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import portal_pages.uielements.*;
 
 import java.util.List;
@@ -28,7 +29,11 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
     }
 
     public void clickToggleFor(String integrationName){
-        getTargetIntegrationRow(integrationName).clickToggle();
+        try {
+            getTargetIntegrationRow(integrationName).clickToggle();
+        } catch(java.util.NoSuchElementException e){
+            Assert.assertTrue(false, "Toggle for managing '"+integrationName+"' integration is not shown on the page");
+        }
     }
 
     public String getIntegrationRowStatus(String integrationName){

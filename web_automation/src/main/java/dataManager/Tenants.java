@@ -2,6 +2,7 @@ package dataManager;
 
 import api_helper.ApiHelper;
 import dataManager.jackson_schemas.tenant_address.TenantAddress;
+import driverManager.ConfigManager;
 import io.restassured.response.Response;
 
 import java.util.HashMap;
@@ -81,6 +82,7 @@ public class Tenants {
             case "Updating AQA" :
                 Tenants.setTenantUnderTestName("updatingplan");
                 Tenants.setTenantUnderTestOrgName("Updating AQA");
+                if(ConfigManager.getEnv().equals("qa")) Tenants.setTenantUnderTestName("updatingaccount");
                 TENANT_UNDER_TEST.get().put("Updating AQA", "updatingplan");
                 break;
             case "Automation":
