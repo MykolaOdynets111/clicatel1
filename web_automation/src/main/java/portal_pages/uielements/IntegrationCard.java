@@ -3,6 +3,7 @@ package portal_pages.uielements;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -37,7 +38,11 @@ public class IntegrationCard extends Widget implements WebActions {
    }
 
    public void clickActionButton(){
-//        waitForElementsToBeVisibleByXpathAgent(integrationCardButton, 5);
-        baseWebElem.findElement(By.xpath(integrationCardButton)).click();
+        try {
+            baseWebElem.findElement(By.xpath(integrationCardButton)).click();
+        }catch (NoSuchElementException e){
+            waitFor(700);
+            baseWebElem.findElement(By.xpath(integrationCardButton)).click();
+        }
    }
 }

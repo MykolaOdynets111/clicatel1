@@ -47,12 +47,14 @@ public class FBLoginPage extends AbstractPage {
     }
 
     public void loginUserForFBIntegration(){
+        String fbWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
         waitForElementToBeVisibleAgent(emailInputField, 6);
         emailInputField.sendKeys(FacebookUsers.USER_FOR_INTEGRATION.getFBUserEmail());
         passInputField.sendKeys(FacebookUsers.USER_FOR_INTEGRATION.getFBUserPass());
         logInButton.click();
-        waitForElementToBeVisibleAgent(continueWithFBIntegration, 6);
-        continueWithFBIntegration.click();
-
+        while(isElementShownAgent(continueWithFBIntegration, 5)) continueWithFBIntegration.click();
+        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
+            if(!handle.equals(fbWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+        }
     }
 }
