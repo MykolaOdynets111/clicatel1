@@ -368,6 +368,16 @@ public class BasePortalSteps {
         soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
     }
 
+    @When("^Click '(.*)' button for (.*) integration$")
+    public void clickButtonForIntegrationCard(String button, String integration){
+        getPortalIntegrationsPage().clickActionButtonForIntegration(integration);
+    }
+
+    @When("^Add fb integration$")
+    public void makeFBIntegration(){
+        getPortalIntegrationsPage().getCreateIntegrationWindow().setUpFBIntegration();
+    }
+
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
         String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");

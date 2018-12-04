@@ -11,6 +11,8 @@ public class IntegrationCard extends Widget implements WebActions {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
+    private String integrationCardButton = ".//button[contains(text(),'Configure') or contains(text(),'Manage')]";
+
     private String integrationName =  "p.title";
 
     private String statusButton = "button.status-button";
@@ -32,5 +34,10 @@ public class IntegrationCard extends Widget implements WebActions {
             waitFor(300);
             return baseWebElem.findElement(By.cssSelector(statusButton)).getText();
         }
+   }
+
+   public void clickActionButton(){
+//        waitForElementsToBeVisibleByXpathAgent(integrationCardButton, 5);
+        baseWebElem.findElement(By.xpath(integrationCardButton)).click();
    }
 }

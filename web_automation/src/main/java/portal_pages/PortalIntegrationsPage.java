@@ -1,5 +1,7 @@
 package portal_pages;
 
+import driverManager.DriverFactory;
+import facebook.FBLoginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -13,8 +15,14 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
     @FindBy(css = "tr[ng-repeat='channel in channels']")
     private List<WebElement> integrationRows;
 
-    @FindBy(css = "div.integration-type.cl-card")
+    @FindBy(xpath = "//div[contains(@class,'integration-type cl-card')]")
     private List<WebElement> integrationCards;
+
+    private CreateIntegrationWindow createIntegrationWindow;
+
+    public CreateIntegrationWindow getCreateIntegrationWindow() {
+        return createIntegrationWindow;
+    }
 
     private IntegrationRow getTargetIntegrationRow(String integrationName){
         return integrationRows.stream().map(IntegrationRow::new).collect(Collectors.toList())
@@ -44,4 +52,7 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
         return getTargetIntegrationCard(integrationName).getStatus();
     }
 
+    public void clickActionButtonForIntegration(String integrationName){
+        getTargetIntegrationCard(integrationName).clickActionButton();
+    }
 }
