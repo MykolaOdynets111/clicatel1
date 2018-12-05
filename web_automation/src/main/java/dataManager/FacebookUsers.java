@@ -20,7 +20,7 @@ public enum FacebookUsers {
         this.userName = userName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;
-        if(userPass==null){
+        if(userPass.equals("")){
             if(ConfigManager.getFBUserPass()==null){
                 this.userPass = "newpassw0rd";
             } else{
