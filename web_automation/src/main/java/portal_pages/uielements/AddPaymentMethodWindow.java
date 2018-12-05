@@ -68,7 +68,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     public AddPaymentMethodWindow fillInNewCardInfo(){
         selectPaymentBox.click();
-        waitForElementsToBeVisibleAgent(selectOptionsInDropdown, 5, "admin");
+        waitForElementToBeVisibleAgent(selectOptionsInDropdown.get(0), 5, "admin");
         cardOption.click();
         findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();
