@@ -127,6 +127,11 @@ public class Hooks implements JSHelper{
             endTouchFlow(scenario, true);
         }
 
+        if(scenario.getSourceTagNames().contains("@dilinking_account")&&scenario.isFailed()){
+            ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
+        }
+
+
         closeMainBrowserIfOpened();
     }
 

@@ -1,3 +1,4 @@
+@dilinking_account
 Feature: Creating integration with facebook
 
   Scenario: Admin should be able to set up fb integration

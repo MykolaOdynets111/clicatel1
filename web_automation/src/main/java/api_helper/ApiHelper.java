@@ -284,4 +284,11 @@ public class ApiHelper {
                 .get(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
+
+    public static void delinkFBIntegration(String tenantOrgName){
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(Endpoints.FACEBOOK_INTEGRATION)
+                .getBody();
+    }
 }
