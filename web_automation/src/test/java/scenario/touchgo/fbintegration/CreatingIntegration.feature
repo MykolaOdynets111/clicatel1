@@ -7,3 +7,4 @@ Feature: Creating integration with facebook
     When Click 'Configure' button for Facebook posts & Messenger integration
     And Add fb integration
     Then Status of Facebook posts & Messenger integration is changed to "Active" in integration card
+    And Fb integration is saved on the backend

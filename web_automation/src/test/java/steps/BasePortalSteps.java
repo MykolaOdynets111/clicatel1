@@ -7,10 +7,13 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Agents;
+import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
+import io.restassured.path.json.exception.JsonPathException;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portal_pages.*;
@@ -375,6 +378,30 @@ public class BasePortalSteps {
         String actualStatus = getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase();
         Assert.assertEquals(actualStatus, expectedStatus.toLowerCase(),
                 "'"+integration+"' has unexpected status.");
+    }
+
+    @Then("^Fb integration is saved on the backend$")
+    public void verifyFBIntegrationSaved(){
+        Response fbIntegrationInfo = (Response) ApiHelper.getInfoAboutFBIntegration(Tenants.getTenantUnderTestOrgName());
+        String userName = "";
+        try {
+            userName = fbIntegrationInfo.getBody().jsonPath().getString("firstName");
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "FB integration not created");
+        }
+        Assert.assertEquals(userName, FacebookUsers.USER_FOR_INTEGRATION.getFBUserName(),
+                "Incorrect user name in fb integration");
+    }
+
+    @Then("^Facebook integration is deleted$")
+    public void verifyFBIntegrationDeleted(){
+        Response fbIntegrationInfo = (Response) ApiHelper.getInfoAboutFBIntegration(Tenants.getTenantUnderTestOrgName());
+        try {
+            fbIntegrationInfo.getBody().jsonPath().getString("errorMessage");
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "FB integration is not deleted");
+        }
+
     }
 
     @When("^Click '(.*)' button for (.*) integration$")

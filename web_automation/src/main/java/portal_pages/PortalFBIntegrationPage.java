@@ -18,7 +18,6 @@ public class PortalFBIntegrationPage extends PortalAbstractPage {
         waitForElementToBeVisibleAgent(delinkAccountButton, 5);
         delinkAccountButton.click();
         delinkAccountButton.click();
-
     }
 
 }
