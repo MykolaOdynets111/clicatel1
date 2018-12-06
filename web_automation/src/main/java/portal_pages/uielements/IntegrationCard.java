@@ -29,7 +29,8 @@ public class IntegrationCard extends Widget implements WebActions {
 
 
    public String getStatus(){
-        try {
+       waitForElementToBeVisibleAgent(baseWebElem, 2);
+       try {
             return baseWebElem.findElement(By.cssSelector(statusButton)).getText();
         }catch (StaleElementReferenceException e){
             waitFor(300);

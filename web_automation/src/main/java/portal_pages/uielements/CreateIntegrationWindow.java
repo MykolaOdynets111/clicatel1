@@ -15,7 +15,7 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectFBPage;
 
-    public void setUpFBIntegration(){
+    public void setUpFBIntegration(String fbPage){
         waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");
         loginToFBButton.click();
 //        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
@@ -28,7 +28,10 @@ public class CreateIntegrationWindow extends BasePortalWindow {
         waitForElementToBeVisibleAgent(selectFBPage, 5);
         selectFBPage.click();
         waitForElementsToBeVisibleAgent(selectOptionsInDropdown, 6, "agent");
-        selectOptionsInDropdown.get(0).click();
+        selectOptionsInDropdown.stream()
+                .filter(e -> e.getText().equalsIgnoreCase(fbPage))
+                .findFirst().get().click();
+//        selectOptionsInDropdown.get(0).click();
         nextButton.click();
         waitForElementToBeVisibleByCssAgent(PortalAbstractPage.getNotificationAlertLocator(), 6);
         waitForElementToBeInvisibleAgent(findElemByCSSAgent(PortalAbstractPage.getNotificationAlertLocator()), 6);

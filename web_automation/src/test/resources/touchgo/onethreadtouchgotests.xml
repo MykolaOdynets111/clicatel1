@@ -11,4 +11,10 @@
             <class name="runner.touchgo.RunTouchGoCreatingAccountTest" />
         </classes>
     </test>
+    <test name="FB integration">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoCreatingFBIntegrationTest" />
+            <class name="runner.touchgo.RunTouchGoDeleteFBIntegrationTest" />
+        </classes>
+    </test>
 </suite>

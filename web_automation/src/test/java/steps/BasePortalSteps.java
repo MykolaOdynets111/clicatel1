@@ -373,9 +373,12 @@ public class BasePortalSteps {
         soft.assertAll();
     }
 
-    @Then("^Status of (.*) integration is changed to \"(.*)\" in integration card$")
+    @Then("^Status of (.*) integration is \"(.*)\" in integration card$")
     public void verifyTheIntegrationStatusInTheCard(String integration, String expectedStatus){
         String actualStatus = getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase();
+        if(!actualStatus.equalsIgnoreCase(expectedStatus)) {
+            actualStatus = getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase();
+        }
         Assert.assertEquals(actualStatus, expectedStatus.toLowerCase(),
                 "'"+integration+"' has unexpected status.");
     }
@@ -409,9 +412,9 @@ public class BasePortalSteps {
         getPortalIntegrationsPage().clickActionButtonForIntegration(integration);
     }
 
-    @When("^Add fb integration$")
-    public void makeFBIntegration(){
-        getPortalIntegrationsPage().getCreateIntegrationWindow().setUpFBIntegration();
+    @When("^Add fb integration with (.*) fb page$")
+    public void makeFBIntegration(String fbPage){
+        getPortalIntegrationsPage().getCreateIntegrationWindow().setUpFBIntegration(fbPage);
     }
 
     @When("^Delink facebook account$")

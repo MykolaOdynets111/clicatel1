@@ -12,6 +12,6 @@ public class BasePortalWindow extends AbstractUIElement{
     @FindBy(css = "button.button.button-primary.ng-scope")
     protected WebElement nextButton;
 
-    @FindBy(css = "li.ui-select-choices-group")
+    @FindBy(css = "li.ui-select-choices-group div.ui-select-choices-row")
     protected List<WebElement> selectOptionsInDropdown;
 }

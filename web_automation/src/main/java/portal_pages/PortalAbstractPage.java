@@ -17,6 +17,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     private static String notificationAlert = "div.alert-container";
 
+    private static String processingAllert = "div.loader-bar-text";
+
     public String getNotificationAlertText(){
         if( isElementShownAgentByCSS(notificationAlert, 2, "admin")){
             return findElemByCSSAgent(notificationAlert).getText();
@@ -33,5 +35,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public static String getNotificationAlertLocator(){
         return notificationAlert;
+    }
+
+    public static String getProcessingAlertLocator(){
+        return processingAllert;
     }
 }
