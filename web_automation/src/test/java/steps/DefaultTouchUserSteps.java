@@ -162,6 +162,7 @@ public class DefaultTouchUserSteps implements JSHelper{
             intentsTitles.remove("Cost or transactions fees");
             intentsTitles.remove("Quote request");
             intentsTitles.remove("Policy queries");
+            intentsTitles.remove("Claims and premiums");
         }
         return intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
     }
