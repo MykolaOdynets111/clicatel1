@@ -17,7 +17,7 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 
     public void setUpFBIntegration(String fbPage){
         waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");
-        loginToFBButton.click();
+        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
 //        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
         if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
         String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
