@@ -1,5 +1,5 @@
 @dilinking_account
-Feature: Creating integration with facebook
+Feature: Delinking integration with facebook
 
   Scenario: Admin of the Starter tenant should be able to delink fb integration
     Given I open portal

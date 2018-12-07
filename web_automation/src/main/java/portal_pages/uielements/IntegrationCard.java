@@ -1,5 +1,7 @@
 package portal_pages.uielements;
 
+import driverManager.DriverFactory;
+import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.By;
@@ -8,7 +10,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 
-public class IntegrationCard extends Widget implements WebActions {
+public class IntegrationCard extends Widget implements WebActions, JSHelper {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
@@ -40,10 +42,12 @@ public class IntegrationCard extends Widget implements WebActions {
 
    public void clickActionButton(){
         try {
-            baseWebElem.findElement(By.xpath(integrationCardButton)).click();
+            executeJSclick(baseWebElem.findElement(By.xpath(integrationCardButton)),
+                    DriverFactory.getAgentDriverInstance());
         }catch (NoSuchElementException e){
             waitFor(700);
-            baseWebElem.findElement(By.xpath(integrationCardButton)).click();
+            executeJSclick(baseWebElem.findElement(By.xpath(integrationCardButton)),
+                    DriverFactory.getAgentDriverInstance());
         }
    }
 }
