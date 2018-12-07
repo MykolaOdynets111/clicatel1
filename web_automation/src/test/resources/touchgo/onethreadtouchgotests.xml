@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Touch Go one thread suite">
+    <test name="FB integration creation">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoCreatingFBIntegrationTest" />
+        </classes>
+    </test>
     <test name="Touch Go one thread tests">
         <classes>
             <class name="runner.touchgo.RunTouchGoOneThreadTest" />
@@ -9,11 +14,6 @@
     <test name="Touch Go create new account test">
         <classes>
             <class name="runner.touchgo.RunTouchGoCreatingAccountTest" />
-        </classes>
-    </test>
-    <test name="FB integration creation">
-        <classes>
-            <class name="runner.touchgo.RunTouchGoCreatingFBIntegrationTest" />
         </classes>
     </test>
     <test name="FB integration deleting">

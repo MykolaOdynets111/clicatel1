@@ -4,6 +4,7 @@ import abstract_classes.AbstractPage;
 import dataManager.FacebookUsers;
 import driverManager.DriverFactory;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -57,7 +58,7 @@ public class FBLoginPage extends AbstractPage {
                 if (isElementShownAgentByXpath(continueWithFBIntegrationXPATH, 3, "admin")) {
                     findElemByXPATHAgent(continueWithFBIntegrationXPATH).click();
                 }
-            }catch(NoSuchWindowException e){
+            }catch(NoSuchWindowException|StaleElementReferenceException e){
 
             }
         }
