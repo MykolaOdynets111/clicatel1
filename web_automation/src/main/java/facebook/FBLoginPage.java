@@ -55,7 +55,7 @@ public class FBLoginPage extends AbstractPage {
         for(int i = 0; i < 3; i++){
             try {
                 if (isElementShownAgentByXpath(continueWithFBIntegrationXPATH, 3, "admin")) {
-                    findElemByXPATHAgent(continueWithFBIntegrationXPATH);
+                    findElemByXPATHAgent(continueWithFBIntegrationXPATH).click();
                 }
             }catch(NoSuchWindowException e){
 

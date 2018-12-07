@@ -2,6 +2,7 @@ package portal_pages.uielements;
 
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.PortalAbstractPage;
@@ -17,7 +18,9 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 
     public void setUpFBIntegration(String fbPage){
         waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");
-        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
+        executeJSHover(loginToFBButton, DriverFactory.getAgentDriverInstance());
+        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
+//        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
 //        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
         if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
         String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
@@ -31,10 +34,8 @@ public class CreateIntegrationWindow extends BasePortalWindow {
         selectOptionsInDropdown.stream()
                 .filter(e -> e.getText().equalsIgnoreCase(fbPage))
                 .findFirst().get().click();
-//        selectOptionsInDropdown.get(0).click();
         nextButton.click();
         waitForElementToBeVisibleByCssAgent(PortalAbstractPage.getNotificationAlertLocator(), 6);
         waitForElementToBeInvisibleAgent(findElemByCSSAgent(PortalAbstractPage.getNotificationAlertLocator()), 6);
-
     }
 }
