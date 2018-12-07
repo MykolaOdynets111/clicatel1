@@ -11,6 +11,7 @@ import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import org.testng.Assert;
 
 import java.util.HashMap;
@@ -275,5 +276,19 @@ public class ApiHelper {
                         "  \"enable\": "+ integrationStatus + "" +
                         "}")
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
+    }
+
+    public static ResponseBody getInfoAboutFBIntegration(String tenantOrgName){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.FACEBOOK_INTEGRATION)
+                .getBody();
+    }
+
+    public static void delinkFBIntegration(String tenantOrgName){
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(Endpoints.FACEBOOK_INTEGRATION)
+                .getBody();
     }
 }

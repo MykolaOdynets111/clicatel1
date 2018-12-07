@@ -80,7 +80,7 @@ public interface WebActions extends WebWait {
     default boolean isElementShownAgent(WebElement element, int wait){
         try {
             return waitForElementToBeVisibleAgent(element, wait).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (TimeoutException|NoSuchElementException|NoSuchWindowException|NullPointerException e) {
             return false;
         }
     }

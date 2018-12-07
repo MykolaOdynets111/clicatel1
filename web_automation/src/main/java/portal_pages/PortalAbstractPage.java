@@ -15,7 +15,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
     }
 
-    private String notificationAlert = "div.alert-container";
+    private static String notificationAlert = "div.alert-container";
+
+    private static String processingAllert = "div.loader-bar-text";
 
     public String getNotificationAlertText(){
         if( isElementShownAgentByCSS(notificationAlert, 2, "admin")){
@@ -29,5 +31,13 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         try {
             waitForElementsToBeInvisibleByCssAgent(notificationAlert, 15);
         } catch(NoSuchElementException e){}
+    }
+
+    public static String getNotificationAlertLocator(){
+        return notificationAlert;
+    }
+
+    public static String getProcessingAlertLocator(){
+        return processingAllert;
     }
 }

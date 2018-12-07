@@ -127,6 +127,11 @@ public class Hooks implements JSHelper{
             endTouchFlow(scenario, true);
         }
 
+        if(scenario.getSourceTagNames().contains("@dilinking_account")&&scenario.isFailed()){
+            ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
+        }
+
+
         closeMainBrowserIfOpened();
     }
 
@@ -215,7 +220,7 @@ public class Hooks implements JSHelper{
 
     private void endTouchFlow(Scenario scenario, boolean typeEndInWidget) {
         if (DriverFactory.isTouchDriverExists()) {
-
+            userName();
             if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
                 new MainPage().openWidget();
             }
@@ -322,6 +327,11 @@ public class Hooks implements JSHelper{
         byte[] array = log.toByteArray();
         log.reset();
         return array;
+    }
+
+    @Attachment
+    private String userName(){
+        return getUserNameFromLocalStorage();
     }
 
     @Attachment

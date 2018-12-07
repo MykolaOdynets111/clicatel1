@@ -10,14 +10,10 @@ import portal_pages.CartPage;
 import java.util.List;
 
 
-@FindBy(css = "div.cl-wizzard.create-integration-container")
-public class AddPaymentMethodWindow extends AbstractUIElement {
+public class AddPaymentMethodWindow extends BasePortalWindow {
 
     @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectPaymentBox;
-
-    @FindBy(css = "li.ui-select-choices-group")
-    private WebElement choisesGroup;
 
     @FindBy(xpath =  ".//span[@class='ui-select-choices-row-inner']/span[contains(text(), 'Card')]")
     private WebElement cardOption;
@@ -37,9 +33,6 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
     @FindBy(css = "input[type='checkbox']+span")
     private List<WebElement> checkboxes;
 
-    @FindBy(css = "button.button.button-primary.ng-scope")
-    private WebElement nextButton;
-
     private String cardNumber = "input#cardNumber";
 
     private String cardCvv =  "input#cardCvv";
@@ -52,7 +45,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
 
     public AddPaymentMethodWindow addTestCardAsANewPayment(){
         selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(choisesGroup, 5);
+        waitForElementsToBeVisibleAgent(selectOptionsInDropdown, 5, "admin");
         cardOption.click();
         findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();
@@ -75,7 +68,7 @@ public class AddPaymentMethodWindow extends AbstractUIElement {
 
     public AddPaymentMethodWindow fillInNewCardInfo(){
         selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(choisesGroup, 5);
+        waitForElementToBeVisibleAgent(selectOptionsInDropdown.get(0), 5, "admin");
         cardOption.click();
         findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();

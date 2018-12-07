@@ -162,6 +162,7 @@ public class DefaultTouchUserSteps implements JSHelper{
             intentsTitles.remove("Cost or transactions fees");
             intentsTitles.remove("Quote request");
             intentsTitles.remove("Policy queries");
+            intentsTitles.remove("Claims and premiums");
         }
         return intentsTitles.get(new Random().nextInt(intentsTitles.size()-1));
     }
@@ -596,6 +597,15 @@ public class DefaultTouchUserSteps implements JSHelper{
                 "'"+ welcomeBackMessage + "' welcome back message is not shown");
     }
 
+    @Given("^Welcome card with correct (.*) text is shown$")
+    public void verifyWelcomeCardWithCorrectText(String welcomeCardText) {
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: "+getUserNameFromLocalStorage()+"");
+        soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), welcomeCardText,
+                "Text in Welcome card is not as expected");
+        soft.assertAll();
+    }
+
     @Given("^Welcome card with correct text and button \"(.*)\" is shown$")
     public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String buttonName) {
         String welcomeCardText = ApiHelper.getTenantMessageText("first_navigation_card_title");
@@ -607,7 +617,6 @@ public class DefaultTouchUserSteps implements JSHelper{
                 "Button is not shown in Welcome card (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertAll();
     }
-
     // ========================== Chat history Steps ========================= //
 
     @When("^User refreshes the page$")

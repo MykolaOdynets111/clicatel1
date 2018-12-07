@@ -7,10 +7,13 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Agents;
+import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
+import io.restassured.path.json.exception.JsonPathException;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portal_pages.*;
@@ -29,6 +32,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
@@ -361,11 +365,61 @@ public class BasePortalSteps {
         getPortalIntegrationsPage().clickToggleFor(integration);
     }
 
-    @Then("^Status of (.*) is changed to \"(.*)\"$")
+    @Then("^Status of (.*) integration is changed to \"(.*)\"$")
     public void verifyTheIntegrationStatus(String integration, String expectedStatus){
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getPortalIntegrationsPage().getIntegrationRowStatus(integration).equalsIgnoreCase(expectedStatus));
         soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
+        soft.assertAll();
+    }
+
+    @Then("^Status of (.*) integration is \"(.*)\" in integration card$")
+    public void verifyTheIntegrationStatusInTheCard(String integration, String expectedStatus){
+        String actualStatus = getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase();
+        if(!actualStatus.equalsIgnoreCase(expectedStatus)) {
+            actualStatus = getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase();
+        }
+        Assert.assertEquals(actualStatus, expectedStatus.toLowerCase(),
+                "'"+integration+"' has unexpected status.");
+    }
+
+    @Then("^Fb integration is saved on the backend$")
+    public void verifyFBIntegrationSaved(){
+        Response fbIntegrationInfo = (Response) ApiHelper.getInfoAboutFBIntegration(Tenants.getTenantUnderTestOrgName());
+        String userName = "";
+        try {
+            userName = fbIntegrationInfo.getBody().jsonPath().getString("firstName");
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "FB integration not created");
+        }
+        Assert.assertEquals(userName, FacebookUsers.USER_FOR_INTEGRATION.getFBUserName(),
+                "Incorrect user name in fb integration");
+    }
+
+    @Then("^Facebook integration is deleted$")
+    public void verifyFBIntegrationDeleted(){
+        Response fbIntegrationInfo = (Response) ApiHelper.getInfoAboutFBIntegration(Tenants.getTenantUnderTestOrgName());
+        try {
+            fbIntegrationInfo.getBody().jsonPath().getString("errorMessage");
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "FB integration is not deleted");
+        }
+
+    }
+
+    @When("^Click '(.*)' button for (.*) integration$")
+    public void clickButtonForIntegrationCard(String button, String integration){
+        getPortalIntegrationsPage().clickActionButtonForIntegration(integration);
+    }
+
+    @When("^Add fb integration with (.*) fb page$")
+    public void makeFBIntegration(String fbPage){
+        getPortalIntegrationsPage().getCreateIntegrationWindow().setUpFBIntegration(fbPage);
+    }
+
+    @When("^Delink facebook account$")
+    public void delinkFBAccount(){
+        getFBPortalFBIntegrationPage().delinkFBAccount();
     }
 
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
@@ -592,4 +646,14 @@ public class BasePortalSteps {
             return portalAccountDetailsPageThreadLocal.get();
         }
     }
+
+    private PortalFBIntegrationPage getFBPortalFBIntegrationPage(){
+        if (portalFBIntegrationPageThreadLocal.get()==null) {
+            portalFBIntegrationPageThreadLocal.set(new PortalFBIntegrationPage());
+            return portalFBIntegrationPageThreadLocal.get();
+        } else{
+            return portalFBIntegrationPageThreadLocal.get();
+        }
+    }
+
 }

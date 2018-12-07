@@ -7,7 +7,8 @@ import java.util.List;
 
 public enum FacebookPages {
 
-    QA_GEN_BANK("General-Bank-QA-135125267153030/", "General Bank Demo", "qa")
+    QA_GEN_BANK("General-Bank-QA-135125267153030/", "General Bank Demo", "qa"),
+    INTEGRATION_GEN_BANK("General-Bank-Integration-307344189832958",  "General Bank Demo", "for integration testing")
 
     ;
 
