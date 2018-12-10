@@ -409,6 +409,11 @@ public class BasePortalSteps {
 
     @When("^Click '(.*)' button for (.*) integration$")
     public void clickButtonForIntegrationCard(String button, String integration){
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         getPortalIntegrationsPage().clickActionButtonForIntegration(integration);
     }
 
