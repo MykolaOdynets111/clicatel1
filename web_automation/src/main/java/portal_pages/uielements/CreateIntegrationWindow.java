@@ -23,8 +23,8 @@ public class CreateIntegrationWindow extends BasePortalWindow {
             e.printStackTrace();
         }
 //        waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");
-        executeJSHover(loginToFBButton, DriverFactory.getAgentDriverInstance());
-        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
+        executeJSHover(findElemByCSSAgent("button.facebook-login-bttn"), DriverFactory.getAgentDriverInstance());
+        executeJSclick(findElemByCSSAgent("button.facebook-login-bttn"), DriverFactory.getAgentDriverInstance());
 //        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
 //        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
         if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
