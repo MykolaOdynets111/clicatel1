@@ -39,7 +39,7 @@ public class FBLoginPage extends AbstractPage {
 
     public void loginUser() {
         try {
-            Thread.sleep(15000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
