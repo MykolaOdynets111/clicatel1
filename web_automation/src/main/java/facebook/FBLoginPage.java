@@ -38,11 +38,6 @@ public class FBLoginPage extends AbstractPage {
     }
 
     public void loginUser() {
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         waitForElementToBeVisible(emailInputField, 6);
         emailInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserEmail());
         passInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserPass());
