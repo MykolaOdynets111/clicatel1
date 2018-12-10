@@ -4,6 +4,7 @@ import driverManager.DriverFactory;
 import facebook.FBLoginPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.PortalAbstractPage;
 
@@ -23,7 +24,12 @@ public class CreateIntegrationWindow extends BasePortalWindow {
             e.printStackTrace();
         }
 //        waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");+
-        findElemByCSSAgent("button.facebook-login-bttn").click();
+        Actions action = new Actions(DriverFactory.getAgentDriverInstance());
+        action.moveToElement(findElemByCSSAgent("button.facebook-login-bttn")).build().perform();
+        executeJSclick(findElemByCSSAgent("button.facebook-login-bttn"),
+                DriverFactory.getAgentDriverInstance());
+
+
 //        executeJSHover(findElemByCSSAgent("button.facebook-login-bttn"), DriverFactory.getAgentDriverInstance());
 //        executeJSclick(findElemByCSSAgent("button.facebook-login-bttn"), DriverFactory.getAgentDriverInstance());
 //        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
