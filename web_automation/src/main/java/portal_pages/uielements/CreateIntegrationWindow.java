@@ -18,11 +18,11 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 
     public void setUpFBIntegration(String fbPage){
         try {
-            Thread.sleep(25000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");
+//        waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");
         executeJSHover(loginToFBButton, DriverFactory.getAgentDriverInstance());
         executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
 //        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
