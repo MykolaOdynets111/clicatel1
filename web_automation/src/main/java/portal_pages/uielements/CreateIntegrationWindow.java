@@ -23,11 +23,14 @@ public class CreateIntegrationWindow extends BasePortalWindow {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Actions action = new Actions(DriverFactory.getAgentDriverInstance());
-        action.moveToElement(findElemByCSSAgent("button.facebook-login-bttn")).build().perform();
-        executeJSclick(findElemByCSSAgent("button.facebook-login-bttn"),
-                DriverFactory.getAgentDriverInstance());
-        findElemByCSSAgent("button.facebook-login-bttn").click();
+        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+        executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
+
+//        Actions action = new Actions(DriverFactory.getAgentDriverInstance());
+//        action.moveToElement(findElemByCSSAgent("button.facebook-login-bttn")).build().perform();
+//        executeJSclick(findElemByCSSAgent("button.facebook-login-bttn"),
+//                DriverFactory.getAgentDriverInstance());
+//        findElemByCSSAgent("button.facebook-login-bttn").click();
 //        waitForElementToBeClickableAgent(loginToFBButton, 6, "agent");+
 //        Actions action = new Actions(DriverFactory.getAgentDriverInstance());
 //        action.moveToElement(findElemByCSSAgent("cl-facebook-login-bttn")).build().perform();
