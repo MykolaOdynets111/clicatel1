@@ -2,11 +2,13 @@ package portal_pages.uielements;
 
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.support.FindBy;
+import org.testcontainers.containers.SeleniumUtils;
 import portal_pages.PortalAbstractPage;
 
 
@@ -67,9 +69,11 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     private void clickLoginToFacebookButton(String currentWindowHandle){
 
         JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-//        executor.executeScript( "document.querySelector('button.facebook-login-bttn').FireEvent \"onclick\"");
+        executor.executeScript( "document.querySelector('button.facebook-login-bttn').dispatchEvent(new Event('click'));");
 
-        executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
+//        executor.executeScript( "arguments[0].dispatchEvent(new Event('change'));", DriverFactory.getAgentDriverInstance().findElements(By.cssSelector("button.facebook-login-bttn")));
+//
+//        executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
         for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
             if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
         }
