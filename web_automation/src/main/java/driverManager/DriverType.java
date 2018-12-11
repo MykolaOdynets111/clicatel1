@@ -26,6 +26,7 @@ public enum DriverType {
             ChromeOptions options = new ChromeOptions();
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type");
+            options.addArguments("disable-popup-blocking");
             options.addArguments("start-maximized");
             options.addArguments("disable-web-security");
             options.addArguments("disable-gpu");

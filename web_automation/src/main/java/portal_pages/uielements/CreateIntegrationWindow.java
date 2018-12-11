@@ -5,6 +5,7 @@ import facebook.FBLoginPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.PortalAbstractPage;
 
@@ -23,6 +24,8 @@ public class CreateIntegrationWindow extends BasePortalWindow {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+//        CapabilityType
+//        DriverFactory.getAgentDriverInstance().
         JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
         executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
 
