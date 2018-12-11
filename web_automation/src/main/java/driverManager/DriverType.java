@@ -26,7 +26,6 @@ public enum DriverType {
             ChromeOptions options = new ChromeOptions();
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type");
-            options.addArguments("disable-popup-blocking");
             options.addArguments("start-maximized");
             options.addArguments("disable-web-security");
             options.addArguments("disable-gpu");
@@ -35,7 +34,6 @@ public enum DriverType {
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
             options.addArguments("disable-notifications");
-            options.addArguments("allow-running-insecure-content");
             return options;
 		}
 
