@@ -19,15 +19,16 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     private WebElement selectFBPage;
 
     public void setUpFBIntegration(String fbPage){
+        String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
         try {
             Thread.sleep(15000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        clickLoginToFacebookButton(currentWindowHandle);
 //        CapabilityType
 //        DriverFactory.getAgentDriverInstance().
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-        executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
+
 
 //        Actions action = new Actions(DriverFactory.getAgentDriverInstance());
 //        action.moveToElement(findElemByCSSAgent("button.facebook-login-bttn")).build().perform();
@@ -39,17 +40,18 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 //        action.moveToElement(findElemByCSSAgent("cl-facebook-login-bttn")).build().perform();
 //        executeJSclick(findElemByCSSAgent("cl-facebook-login-bttn"),
 //                DriverFactory.getAgentDriverInstance());
-
-
 //        executeJSHover(findElemByCSSAgent("button.facebook-login-bttn"), DriverFactory.getAgentDriverInstance());
 //        executeJSclick(findElemByCSSAgent("button.facebook-login-bttn"), DriverFactory.getAgentDriverInstance());
 //        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), loginToFBButton);
 //        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
+
         if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
-        String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
-        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
-            if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+
+        if(!DriverFactory.getDriverForAgent("admin").getCurrentUrl().contains("facebook")){
+            DriverFactory.getDriverForAgent("admin").close();
+            DriverFactory.getDriverForAgent("admin").switchTo().window(currentWindowHandle);
         }
+        clickLoginToFacebookButton(currentWindowHandle);
         new FBLoginPage(DriverFactory.getAgentDriverInstance()).loginUserForFBIntegration();
         waitForElementToBeVisibleAgent(selectFBPage, 5);
         selectFBPage.click();
@@ -60,5 +62,13 @@ public class CreateIntegrationWindow extends BasePortalWindow {
         nextButton.click();
         waitForElementToBeVisibleByCssAgent(PortalAbstractPage.getNotificationAlertLocator(), 6);
         waitForElementToBeInvisibleAgent(findElemByCSSAgent(PortalAbstractPage.getNotificationAlertLocator()), 6);
+    }
+
+    private void clickLoginToFacebookButton(String currentWindowHandle){
+        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+        executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
+        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
+            if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+        }
     }
 }
