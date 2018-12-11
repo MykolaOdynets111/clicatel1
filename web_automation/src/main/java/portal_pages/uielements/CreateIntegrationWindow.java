@@ -45,7 +45,7 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 
         JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
 //        executor.executeScript( "document.querySelector('button.facebook-login-bttn').dispatchEvent(new Event('click'));");
-        executor.executeScript( "document.querySelector('div[ng-form='setupTwitterForm'] button').dispatchEvent(new Event('click'));");
+        executor.executeScript( "arguments[0].dispatchEvent(new Event('click'));", findElemByCSSAgent("div[ng-form='setupTwitterForm'] button"));
         for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
             if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
         }
