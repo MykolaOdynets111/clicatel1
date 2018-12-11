@@ -35,7 +35,8 @@ public enum DriverType {
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
             options.addArguments("disable-notifications");
-			return options;
+            options.addArguments("allow-running-insecure-content");
+            return options;
 		}
 
 

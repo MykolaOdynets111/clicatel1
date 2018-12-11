@@ -46,7 +46,7 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 //        executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
 
         if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
-
+//DriverFactory.getDriverForAgent("admin").navigate().to("generabanksecondagent@gmail.com:p@$$w0rd4te$t@https://www.facebook.com");
         if(!DriverFactory.getDriverForAgent("admin").getCurrentUrl().contains("facebook")){
             DriverFactory.getDriverForAgent("admin").close();
             DriverFactory.getDriverForAgent("admin").switchTo().window(currentWindowHandle);
@@ -65,7 +65,10 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     }
 
     private void clickLoginToFacebookButton(String currentWindowHandle){
+
         JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+//        executor.executeScript( "document.querySelector('button.facebook-login-bttn').FireEvent \"onclick\"");
+
         executor.executeScript( "document.querySelector('button.facebook-login-bttn').click()");
         for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
             if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
