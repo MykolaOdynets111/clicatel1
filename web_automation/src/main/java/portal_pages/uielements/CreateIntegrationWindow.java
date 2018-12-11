@@ -22,7 +22,8 @@ public class CreateIntegrationWindow extends BasePortalWindow {
 
     public void setUpFBIntegration(String fbPage){
         String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
-        clickLoginToFacebookButton(currentWindowHandle);    if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
+        clickLoginToFacebookButton(currentWindowHandle);
+        if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
         if(!DriverFactory.getDriverForAgent("admin").getCurrentUrl().contains("facebook")){
             DriverFactory.getDriverForAgent("admin").close();
             DriverFactory.getDriverForAgent("admin").switchTo().window(currentWindowHandle);
@@ -43,7 +44,8 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     private void clickLoginToFacebookButton(String currentWindowHandle){
 
         JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-        executor.executeScript( "document.querySelector('button.facebook-login-bttn').dispatchEvent(new Event('click'));");
+//        executor.executeScript( "document.querySelector('button.facebook-login-bttn').dispatchEvent(new Event('click'));");
+        executor.executeScript( "document.querySelector('div[ng-form='setupTwitterForm'] button').dispatchEvent(new Event('click'));");
         for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
             if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
         }
