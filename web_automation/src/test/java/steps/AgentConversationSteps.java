@@ -57,6 +57,9 @@ public class AgentConversationSteps implements JSHelper{
         if(ConfigManager.getSuite().equalsIgnoreCase("twitter")&userMessage.contains("support")){
             userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
         }
+        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")&userMessage.contains("support")){
+            userMessage = FacebookSteps.getCurrentUserMessageText();
+        }
         Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage, agent),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }

@@ -1,13 +1,13 @@
 @agent_to_user_conversation
 @twitter
-Feature: Communication with agent via direct messages
+Feature: Twitter chat transferring
 
   Background:
     Given I login as agent of General Bank Demo
     Given Open twitter page of General Bank Demo
     Given Open direct message channel
 
-  Scenario: Agent answers on user messages
+  Scenario: Verify if agent is able to transfer twitter chat via "Transfer chat" button
     When User sends twitter direct message regarding chat to support
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
@@ -22,8 +22,3 @@ Feature: Communication with agent via direct messages
     Then Conversation area becomes active with connect to support user's message in it for second agent
     When Second agent responds with hello to User
     Then User have to receive correct response "hello" on his message "chat to support"
-
-#    When User sends twitter direct message: where can i find all interest rates?
-#    Then Conversation area contains where can i find all interest rates? user's message
-#    When Agent replays with please have a look on our website message
-#    Then User have to receive correct response "please have a look on our website" on his message "where can i find all interest rates?"
