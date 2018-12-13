@@ -164,13 +164,15 @@ public class DefaultAgentSteps implements JSHelper {
         try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = "";
-            if(ConfigManager.getSuite().equalsIgnoreCase("twitter")){
-                expectedUserName = TwitterUsers.getLoggedInUserName();
-                userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-            }
-            if(ConfigManager.getSuite().equalsIgnoreCase("facebook")){
-                expectedUserName = FacebookUsers.getLoggedInUserName();
-                userMessage = FacebookSteps.getCurrentUserMessageText();
+            if(!ConfigManager.getSuite().equalsIgnoreCase("all tests")) {
+                if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
+                    expectedUserName = TwitterUsers.getLoggedInUserName();
+                    userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
+                }
+                if (ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
+                    expectedUserName = FacebookUsers.getLoggedInUserName();
+                    userMessage = FacebookSteps.getCurrentUserMessageText();
+                }
             }else {
                 expectedUserName = getUserNameFromLocalStorage();
             }
