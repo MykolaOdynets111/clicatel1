@@ -77,9 +77,9 @@ public class ApiHelper {
 
     private static List<HashMap> getTenantMessagesInfo() {
         if(tenantMessages==null) {
-            String url = String.format(Endpoints.INTERNAL_TENANT_CONFIGURED_MESSAGES, Tenants.getTenantUnderTestName());
+            String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
             tenantMessages = RestAssured.given().get(url)
-                    .jsonPath().get("");
+                    .jsonPath().get("tafResponses");
         }
         return tenantMessages;
     }

@@ -43,7 +43,7 @@ public class Endpoints {
     public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TOUCH/%s";
 
 
-    public static String INTERNAL_TENANT_CONFIGURED_MESSAGES = URLs.getBaseInternalApiUrl() + "taf/message-responses/%s";
+//    public static String INTERNAL_TENANT_CONFIGURED_MESSAGES = URLs.getBaseInternalApiUrl() + "taf/message-responses/%s";
 
     public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
 
@@ -129,5 +129,8 @@ public class Endpoints {
 
     public static String PORTAL_ACCOUNT_ACTIVATION = URLs.getBasePortalUrl() + "#/activation/%s ";
 
+    // ====================  TAF ================= //
+
+    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "taf-camunda-rest/taf/resources/taf-messages?tenant=%s";
 }
 

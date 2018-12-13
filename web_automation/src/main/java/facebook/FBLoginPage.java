@@ -4,6 +4,7 @@ import abstract_classes.AbstractPage;
 import dataManager.FacebookUsers;
 import driverManager.DriverFactory;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,8 +26,7 @@ public class FBLoginPage extends AbstractPage {
     @FindBy(name = "login")
     private WebElement logInButton;
 
-    @FindBy(xpath = "//button[contains(@name, 'CONFIRM')]")
-    private WebElement continueWithFBIntegration;
+    private String continueWithFBIntegrationXPATH = "//button[contains(@name, 'CONFIRM')]";
 
     public static FBLoginPage openFacebookLoginPage() {
         DriverFactory.getTouchDriverInstance().get("https://www.facebook.com/");
@@ -53,10 +53,14 @@ public class FBLoginPage extends AbstractPage {
         emailInputField.sendKeys(FacebookUsers.USER_FOR_INTEGRATION.getFBUserEmail());
         passInputField.sendKeys(FacebookUsers.USER_FOR_INTEGRATION.getFBUserPass());
         logInButton.click();
-        try {
-            while(isElementShownAgent(continueWithFBIntegration, 2)) continueWithFBIntegration.click();
-        }catch (NullPointerException|NoSuchWindowException e){
-            // Nothing to do here. The exception means there is mo fb window and we may proceed
+        for(int i = 0; i < 3; i++){
+            try {
+                if (isElementShownAgentByXpath(continueWithFBIntegrationXPATH, 3, "admin")) {
+                    findElemByXPATHAgent(continueWithFBIntegrationXPATH).click();
+                }
+            }catch(NoSuchWindowException|StaleElementReferenceException e){
+
+            }
         }
         for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
             if(!handle.equals(fbWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);

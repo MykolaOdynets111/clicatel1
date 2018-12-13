@@ -417,6 +417,11 @@ public class BasePortalSteps {
         getPortalIntegrationsPage().getCreateIntegrationWindow().setUpFBIntegration(fbPage);
     }
 
+    @When("^Add twitter integration with (.*) fb page$")
+    public void makeTwitterIntegration(String page){
+
+    }
+
     @When("^Delink facebook account$")
     public void delinkFBAccount(){
         getFBPortalFBIntegrationPage().delinkFBAccount();

@@ -258,6 +258,7 @@ task runTouchGoTests(type:Test) {
         useTestNG() {
             useDefaultListeners = true
             ignoreFailures = true
+            suites baseXmlPath+ "touchgo/createfbintegration.xml"
             suites baseXmlPath + "touchgo/onethreadtouchgotests.xml"
             suites baseXmlPath+ "touchgo/paralleltouchgotests.xml"
         }
