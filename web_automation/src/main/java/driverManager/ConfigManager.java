@@ -80,5 +80,9 @@ public class ConfigManager {
         return System.getProperty(FACEBOOK_PASS);
     }
 
-    public static String getSuite(){ return System.getProperty(SUITE);}
+    public static String getSuite(){
+        String suite = System.getProperty(SUITE);
+        if(suite==null) return "all tests";
+        return suite;
+    }
 }
