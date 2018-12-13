@@ -5,13 +5,14 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import touch_pages.uielements.messages.FromUserMessage;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @FindBy(css = "div.chat-body")
 public class ChatBody extends AbstractUIElement {
+
+    private String fromUserMessagesCSS = "li.from";
 
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
@@ -36,7 +37,7 @@ public class ChatBody extends AbstractUIElement {
 
             waitForElementsToBeVisible(fromUserMessages, 10);
             for (int i = 0; i < 35; i++) {
-                if (checkThatExpectedUserMessageOnAgenyDesk(usrMessage)) {
+                if (checkThatExpectedUserMessageOnAgentDesk(usrMessage)) {
                     return true;
                 }
                 try {
@@ -53,9 +54,9 @@ public class ChatBody extends AbstractUIElement {
 
 
 
-    private boolean checkThatExpectedUserMessageOnAgenyDesk(String usrMessage) {
-        return fromUserMessages.stream()
-                .map(e -> new AgentDeskFromUserMessage(e))
+    private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
+        return findElemsByCSSAgent(fromUserMessagesCSS).stream()
+                .map(AgentDeskFromUserMessage::new)
                 .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }
 
