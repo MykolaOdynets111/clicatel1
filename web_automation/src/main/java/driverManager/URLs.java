@@ -35,6 +35,8 @@ public class URLs {
 
     private static String BASE_PLATFORM_URL = "https://%s-platform.clickatelllabs.com";
 
+    private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
+
     public static String getWidgetURL(String tenantOrgName){
         String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
         String targetEnvConfiguration = ConfigManager.getEnv();
@@ -121,6 +123,10 @@ public class URLs {
 
     public static String getBaseSocialUrl(){
         return String.format(BASE_SOCIAL_URL, ConfigManager.getEnv());
-
     }
+
+    public static String getBaseTafUrl(){
+        return String.format(BASE_TAF_URL, ConfigManager.getEnv());
+    }
+
 }
