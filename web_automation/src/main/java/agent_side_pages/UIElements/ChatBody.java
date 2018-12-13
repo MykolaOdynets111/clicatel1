@@ -58,7 +58,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
-        return findElemsByCSSAgent(fromUserMessagesXPATH).stream()
+        return findElemsByXPATHAgent(fromUserMessagesXPATH).stream()
                 .map(AgentDeskFromUserMessage::new)
                 .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }
