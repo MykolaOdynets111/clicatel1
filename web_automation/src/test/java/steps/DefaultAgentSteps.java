@@ -159,7 +159,7 @@ public class DefaultAgentSteps implements JSHelper {
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
-    @Then("(.*) can see transferring agent name, (?:user name|twitter user name) and following user's message: '(.*)'")
+    @Then("(.*) can see transferring agent name, (?:user name|twitter user name|facebook user name) and following user's message: '(.*)'")
     public void verifyIncomingTransferDetails(String agent, String userMessage) {
         try {
             SoftAssert soft = new SoftAssert();
@@ -167,7 +167,11 @@ public class DefaultAgentSteps implements JSHelper {
             if(ConfigManager.getSuite().equalsIgnoreCase("twitter")){
                 expectedUserName = TwitterUsers.getLoggedInUserName();
                 userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-            } else {
+            }
+            if(ConfigManager.getSuite().equalsIgnoreCase("facebook")){
+                expectedUserName = FacebookUsers.getLoggedInUserName();
+                userMessage = FacebookSteps.getCurrentUserMessageText();
+            }else {
                 expectedUserName = getUserNameFromLocalStorage();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
