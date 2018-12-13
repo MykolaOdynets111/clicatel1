@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 @FindBy(css = "div.chat-body")
 public class ChatBody extends AbstractUIElement {
 
-    private String fromUserMessagesCSS = "li.from";
+    private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
@@ -35,7 +35,7 @@ public class ChatBody extends AbstractUIElement {
     public boolean isUserMessageShown(String usrMessage) {
         try {
 
-            waitForElementsToBeVisible(fromUserMessages, 10);
+            waitForElementsToBeVisible(fromUserMessages, 15);
             for (int i = 0; i < 35; i++) {
                 if (checkThatExpectedUserMessageOnAgentDesk(usrMessage)) {
                     return true;
@@ -52,10 +52,13 @@ public class ChatBody extends AbstractUIElement {
         }
     }
 
-
+    public boolean isUserMessageShown(String usrMessage, String agent) {
+        waitForElementsToBeVisible(fromUserMessages, 15);
+        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 20, agent);
+    }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
-        return findElemsByCSSAgent(fromUserMessagesCSS).stream()
+        return findElemsByCSSAgent(fromUserMessagesXPATH).stream()
                 .map(AgentDeskFromUserMessage::new)
                 .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }

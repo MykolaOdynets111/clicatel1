@@ -9,6 +9,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Intents;
 import dataManager.jackson_schemas.Intent;
+import driverManager.ConfigManager;
 import interfaces.JSHelper;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -41,7 +42,7 @@ public class AgentConversationSteps implements JSHelper{
         if (userMessage.contains("agent")||userMessage.contains("support")){
             userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
         }
-        Assert.assertTrue(getChatBody().isUserMessageShown(userMessage),
+        Assert.assertTrue(getChatBody().isUserMessageShown(userMessage, "main agent"),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -53,7 +54,10 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area becomes active with (.*) user's message in it for (.*)$")
     public void verifyUserMessageOnAgentDesk(String userMessage, String agent) {
-        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage),
+        if(ConfigManager.getSuite().equalsIgnoreCase("twitter")&userMessage.contains("support")){
+            userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
+        }
+        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage, agent),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 

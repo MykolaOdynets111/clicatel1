@@ -12,6 +12,7 @@ public class ConfigManager {
     private static final String TENANT_ORG_NAME = "tenantorgname";
     private static final String TENANT_ID = "tenantid";
     private static final String FACEBOOK_PASS = "fbuserpass";
+    private static final String SUITE = "suite";
 
 
     public static void setTenantId(String tenantId) {
@@ -78,4 +79,6 @@ public class ConfigManager {
     public static  String getFBUserPass(){
         return System.getProperty(FACEBOOK_PASS);
     }
+
+    public static String getSuite(){ return System.getProperty(SUITE);}
 }

@@ -11,6 +11,7 @@ import cucumber.api.java.en.When;
 import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dataManager.TwitterUsers;
+import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
@@ -158,11 +159,17 @@ public class DefaultAgentSteps implements JSHelper {
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
-    @Then("(.*) can see transferring agent name, user name and following user's message: '(.*)'")
+    @Then("(.*) can see transferring agent name, (?:user name|twitter user name) and following user's message: '(.*)'")
     public void verifyIncomingTransferDetails(String agent, String userMessage) {
         try {
             SoftAssert soft = new SoftAssert();
-            String expectedUserName = getUserNameFromLocalStorage();
+            String expectedUserName = "";
+            if(ConfigManager.getSuite().equalsIgnoreCase("twitter")){
+                expectedUserName = TwitterUsers.getLoggedInUserName();
+                userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
+            } else {
+                expectedUserName = getUserNameFromLocalStorage();
+            }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
             String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
                     agentInfoResp.getBody().jsonPath().get("lastName");
