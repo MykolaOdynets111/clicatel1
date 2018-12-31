@@ -3,13 +3,29 @@ package api_helper;
 import dataManager.dot_control.DotControlCreateIntegrationInfo;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import java_server.Server;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DotControllAPI {
+public class DotControlAPI {
 
+    public static void waitForServerToBeReady(){
+        for(int i = 0; i<10; i++){
+            if(RestAssured.get(Server.getServerURL()).statusCode()==200){
+                break;
+            }else{
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static void createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
+        Response resp =
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
@@ -25,18 +41,23 @@ public class DotControllAPI {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.CREATE_DOT_CONTROL_INTEGRATION);
+        int a =2;
     }
 
     public static void sendMessage(DotControlRequestMessage requestMessage){
         ObjectMapper mapper = new ObjectMapper();
+        Response resp = null;
         try {
-            RestAssured.given().log().all()
+            resp = RestAssured.given().log().all()
                     .header("Content-Type", "application/json")
                     .body(mapper.writeValueAsString(requestMessage))
-                    .post(Endpoints.CREATE_DOT_CONTROL_INTEGRATION);
+                    .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
+            int a = 2;
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        int a = 2;
     }
 
 

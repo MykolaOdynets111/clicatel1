@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import dataManager.jackson_schemas.dot_control.BotMessageResponse;
+import driverManager.ConfigManager;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
@@ -24,6 +25,15 @@ public class Server {
     public static final int SERVER_PORT = 8888;
 
     public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
+
+    public static String getServerURL(){
+        if(ConfigManager.isRemote()){
+            return Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
+        }else{
+            // to provide local ngrok url
+            return "http://89e3ef8d.ngrok.io";
+        }
+    }
 
     public void startServer() {
         final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
@@ -55,24 +65,25 @@ public class Server {
     class MyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange t) throws IOException {
-            BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
-            String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
+                BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
+                String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
 
 
-            String response = "This is the response";
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+                String response = "This is the response";
+                t.sendResponseHeaders(200, response.length());
+                OutputStream os = t.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
 
-            BotMessageResponse incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
+                BotMessageResponse incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
 //            System.out.println("\n\nincomingRequest +" + incomingRequest + " + clientid = " + incomingRequest.getClientId());
 
-            if (Server.incomingRequests.isEmpty() || !Server.incomingRequests.containsKey(incomingRequest.getClientId())) {
-                System.out.println("?? Map is empty ?? \n");
-                Server.incomingRequests.put(incomingRequest.getClientId(), incomingRequest);
+                if (Server.incomingRequests.isEmpty() || !Server.incomingRequests.containsKey(incomingRequest.getClientId())) {
+                    System.out.println("?? Map is empty ?? \n");
+                    Server.incomingRequests.put(incomingRequest.getClientId(), incomingRequest);
 //                System.out.println("After output was written  " + Server.incomingRequests.get(incomingRequest.getClientId()).getMessage());
-            }
+                }
+//            }
 
         }
 
