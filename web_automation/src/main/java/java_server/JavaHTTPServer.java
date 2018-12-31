@@ -1,48 +1,69 @@
 package java_server;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.StringTokenizer;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-public class JavaHTTPServer implements Runnable{
+public class JavaHTTPServer{
 
-    static final File WEB_ROOT = new File(".");
-    static final String DEFAULT_FILE = "index.html";
-    static final String FILE_NOT_FOUND = "404.html";
-    static final String METHOD_SOT_SUPPORTED = "not_supported.html";
-    static final int PORT = 8888;
+    public static boolean IS_READY = false;
+    private OutputStream os = null;
+    private String input = null;
+    public static String incommingMessage = "start";
 
-    static final boolean verbose = true;
-
-    private Socket connect;
-
-    public JavaHTTPServer(Socket c){
-        connect = c;
-    }
-
-    public static void main(String[] args){
+    public static void startServer() {
+        HttpServer server = null;
         try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
-            System.out.println("Server started + \n");
+            server = HttpServer.create(new InetSocketAddress(8888), 0);
+            server.createContext("/", new MyHandler());
+            server.setExecutor(null); // creates a default executor
+            server.start();
 
-            while ((true)){
-                JavaHTTPServer myServer = new JavaHTTPServer(serverSocket.accept());
-                Thread thread = new Thread(myServer);
-                thread.start();
+            while(true) {
+                if(!KnockKnockProtocol.message.equals("test")) {
+                    System.out.println("incommingMessage from while loop " + KnockKnockProtocol.message);
+//                    KnockKnockProtocol.message = null;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+//            System.out.println("After output was written +" + incommingMessage);
+            server.stop(1);
+        }
+
+    }
+
+    static class MyHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+            BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
+            try {
+                Thread.sleep(8000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            in.read()
+//            System.out.println(in.lines().map(e -> e + "\n").collect(Collectors.toList()));
+                String input = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
+//                System.out.println(input);
+
+            String response = "This is the response";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+            System.out.println("After output was written +" + input);
+            KnockKnockProtocol.message = input;
         }
     }
 
-    @Override
-    public void run() {
-        BufferedReader in = null;
-        PrintWriter out = null;
-
-        
-    }
 }
