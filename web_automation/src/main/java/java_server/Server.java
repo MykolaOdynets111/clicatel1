@@ -3,7 +3,7 @@ package java_server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import dataManager.jackson_schemas.dot_control.BotMessage;
+import dataManager.jackson_schemas.dot_control.BotMessageResponse;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
@@ -20,7 +20,10 @@ import java.util.stream.Collectors;
 
 public class Server {
 
-    public static Map<String, BotMessage> incomingRequests = new HashMap<>();
+    public static final String INTERNAL_CI_IP = "172.31.16.120";
+    public static final int SERVER_PORT = 8888;
+
+    public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
 
     public void startServer() {
         final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
@@ -30,7 +33,7 @@ public class Server {
                     HttpServer server = null;
 
                     try {
-                        server = HttpServer.create(new InetSocketAddress(8888), 0);
+                        server = HttpServer.create(new InetSocketAddress(SERVER_PORT), 0);
                         System.out.println("Waiting for clients to connect...");
                         server.createContext("/", new MyHandler());
                         server.setExecutor(null); // creates a default executor
@@ -62,7 +65,7 @@ public class Server {
             os.write(response.getBytes());
             os.close();
 
-            BotMessage incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
+            BotMessageResponse incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
 //            System.out.println("\n\nincomingRequest +" + incomingRequest + " + clientid = " + incomingRequest.getClientId());
 
             if (Server.incomingRequests.isEmpty() || !Server.incomingRequests.containsKey(incomingRequest.getClientId())) {
@@ -73,15 +76,15 @@ public class Server {
 
         }
 
-        private BotMessage convertStringBotResponseBodyToObject(String body) {
+        private BotMessageResponse convertStringBotResponseBodyToObject(String body) {
             if ((body.charAt(0) + "").equals("[")) {
                 body = body.replace("[", "");
                 body = body.replace("]", "");
             }
-            BotMessage botMessage = null;
+            BotMessageResponse botMessage = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
-                botMessage = mapper.readValue(body, BotMessage.class);
+                botMessage = mapper.readValue(body, BotMessageResponse.class);
             } catch (IOException e) {
                 Assert.assertTrue(false, "Incorrect schema of response from .Control \n" + body);
             }

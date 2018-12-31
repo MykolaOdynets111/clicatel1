@@ -28,5 +28,21 @@ public class DotControlCreateIntegrationInfo {
     private String generateRandomApiKey(){
         return "testing_" + ((1 + r.nextInt(2)) * 1000000 + r.nextInt(1000000));
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean getIsEnabled(){
+        return enabled;
+    }
+
+    public String getApiToken() {
+        return apiToken;
+    }
+
+    public String getCallBackURL() {
+        return callBackURL;
+    }
 }
 

@@ -18,7 +18,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
         "source",
         "context"
 })
-public class BotMessage {
+public class BotMessageResponse {
 
     @JsonProperty("apiToken")
     private String apiToken;
@@ -37,7 +37,7 @@ public class BotMessage {
     @JsonProperty("source")
     private Object source;
     @JsonProperty("context")
-    private BotMessageContext context;
+    private BotMessageResponseContext context;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -122,12 +122,12 @@ public class BotMessage {
     }
 
     @JsonProperty("context")
-    public BotMessageContext getContext() {
+    public BotMessageResponseContext getContext() {
         return context;
     }
 
     @JsonProperty("context")
-    public void setContext(BotMessageContext context) {
+    public void setContext(BotMessageResponseContext context) {
         this.context = context;
     }
 

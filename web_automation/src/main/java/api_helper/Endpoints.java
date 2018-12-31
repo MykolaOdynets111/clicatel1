@@ -119,7 +119,7 @@ public class Endpoints {
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "/actuator/health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "actuator/health";
 
     // ====================  PORTAL ================= //
 
@@ -132,5 +132,12 @@ public class Endpoints {
     // ====================  TAF ================= //
 
     public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "taf-camunda-rest/taf/resources/taf-messages?tenant=%s";
+
+    // ====================  .Control ================= //
+
+    public static String CREATE_DOT_CONTROL_INTEGRATION = URLs.getTouchApiBaseURL() + "http-integrations";
+
+    public static String DOT_CONTROL_TO_BOT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/message";
+
 }
 

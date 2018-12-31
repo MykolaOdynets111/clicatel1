@@ -8,7 +8,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 @JsonPropertyOrder({
 
 })
-public class BotMessageContext {
+public class BotMessageResponseContext {
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
