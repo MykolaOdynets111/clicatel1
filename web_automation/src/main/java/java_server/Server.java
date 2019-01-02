@@ -28,8 +28,8 @@ public class Server {
 
     public static String getServerURL(){
         if(ConfigManager.isRemote()){
-//            return Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
-            return Server.INTERNAL_CI_IP;
+            return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
+//            return Server.INTERNAL_CI_IP;
         }else{
             // to provide local ngrok url
             return "http://f0823f02.ngrok.io";
