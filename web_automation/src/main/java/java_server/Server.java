@@ -28,7 +28,8 @@ public class Server {
 
     public static String getServerURL(){
         if(ConfigManager.isRemote()){
-            return Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
+//            return Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
+            return Server.INTERNAL_CI_IP;
         }else{
             // to provide local ngrok url
             return "http://f0823f02.ngrok.io";
@@ -69,7 +70,7 @@ public class Server {
             System.out.println("\n Inside handler \n");
             BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
             String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
-            System.out.println("\n Inside handler  incomingBody \n + incomingBody");
+            System.out.println("\n Inside handler  incomingBody \n "+ incomingBody);
 
             String response = "This is the response";
             t.sendResponseHeaders(200, response.length());
