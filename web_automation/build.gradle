@@ -362,7 +362,7 @@ task runTests(type: Test) {
     }
 
     if(suite == "dotcontrol"){
-        runTests.dependsOn(runDotControlTests);
+        runTests.dependsOn(runDotControlTests)
     }
 
     runTests.finalizedBy(allureReport)
@@ -396,6 +396,7 @@ task runTestsForAllTenants(type: Test) {
             runTouchGenBankTests.execute()
         }
         runVisibilityTests.execute()
+        runDotControlTests.execute()
     }
     runTestsForAllTenants.finalizedBy(allureReport)
 }
