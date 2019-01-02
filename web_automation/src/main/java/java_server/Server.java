@@ -66,8 +66,10 @@ public class Server {
 
         @Override
         public void handle(HttpExchange t) throws IOException {
+            System.out.println("\n Inside handler \n");
             BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
             String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
+            System.out.println("\n Inside handler  incomingBody \n + incomingBody");
 
             String response = "This is the response";
             t.sendResponseHeaders(200, response.length());

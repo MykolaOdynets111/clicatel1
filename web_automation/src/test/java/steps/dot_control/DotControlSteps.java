@@ -47,7 +47,7 @@ public class DotControlSteps {
             }
         }
         if(Server.incomingRequests.isEmpty()){
-            Assert.assertTrue(false, ".Control is not responding after 15 seconds wait.");
+            Assert.assertTrue(false, ".Control is not responding after 35 seconds wait.");
         }
         Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                 "Message is not as expected");
