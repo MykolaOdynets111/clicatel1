@@ -291,6 +291,16 @@ task runHealthCheckTests(type:Test) {
     reports.html.enabled = false
 }
 
+task runDotControlTests(type:Test) {
+    systemProperties = System.getProperties()
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+"/dotcontrol/dotcontrol.xml"
+    }
+    reports.html.enabled = false
+}
+
 
 // ========= !! MAIN TASKS !! ============== //
 
@@ -349,6 +359,10 @@ task runTests(type: Test) {
 
     if(suite == "healthcheck") {
         runTests.dependsOn(runHealthCheckTests)
+    }
+
+    if(suite == "dotcontrol"){
+        runTests.dependsOn(runDotControlTests);
     }
 
     runTests.finalizedBy(allureReport)

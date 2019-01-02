@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import java_server.Server;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testng.Assert;
 
 public class DotControlAPI {
 
@@ -41,7 +42,11 @@ public class DotControlAPI {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.CREATE_DOT_CONTROL_INTEGRATION);
-        int a =2;
+        if(!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "Integration creating was not successful\n" +
+            "Status code " + resp.statusCode()+
+            "\n Body: " + resp.getBody().asString());
+        }
     }
 
     public static void sendMessage(DotControlRequestMessage requestMessage){
@@ -52,7 +57,11 @@ public class DotControlAPI {
                     .header("Content-Type", "application/json")
                     .body(mapper.writeValueAsString(requestMessage))
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
-            int a = 2;
+            if(!(resp.statusCode()==200)) {
+                Assert.assertTrue(false, "Integration creating was not successful\n" +
+                        "Status code " + resp.statusCode()+
+                        "\n Body: " + resp.getBody().asString());
+            }
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();

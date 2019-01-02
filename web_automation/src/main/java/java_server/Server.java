@@ -31,7 +31,7 @@ public class Server {
             return Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://89e3ef8d.ngrok.io";
+            return "http://f0823f02.ngrok.io";
         }
     }
 
@@ -63,27 +63,27 @@ public class Server {
 
 
     class MyHandler implements HttpHandler {
+
         @Override
         public void handle(HttpExchange t) throws IOException {
-                BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
-                String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
+            BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
+            String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
 
+            String response = "This is the response";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
 
-                String response = "This is the response";
-                t.sendResponseHeaders(200, response.length());
-                OutputStream os = t.getResponseBody();
-                os.write(response.getBytes());
-                os.close();
+            BotMessageResponse incomingRequest = null;
 
-                BotMessageResponse incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
-//            System.out.println("\n\nincomingRequest +" + incomingRequest + " + clientid = " + incomingRequest.getClientId());
-
+            if(t.getRequestMethod().equalsIgnoreCase("post")){
+                incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
                 if (Server.incomingRequests.isEmpty() || !Server.incomingRequests.containsKey(incomingRequest.getClientId())) {
                     System.out.println("?? Map is empty ?? \n");
                     Server.incomingRequests.put(incomingRequest.getClientId(), incomingRequest);
-//                System.out.println("After output was written  " + Server.incomingRequests.get(incomingRequest.getClientId()).getMessage());
                 }
-//            }
+            }
 
         }
 
@@ -92,12 +92,13 @@ public class Server {
                 body = body.replace("[", "");
                 body = body.replace("]", "");
             }
+            System.out.println("Incomming body :" + body);
             BotMessageResponse botMessage = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
                 botMessage = mapper.readValue(body, BotMessageResponse.class);
             } catch (IOException e) {
-                Assert.assertTrue(false, "Incorrect schema of response from .Control \n" + body);
+                Assert.assertTrue(false, "Incorrect schema of response from .Control \n" +"Catched Body "+ body);
             }
 
             return botMessage;

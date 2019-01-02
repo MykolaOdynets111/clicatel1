@@ -1,5 +1,6 @@
 package steps.dot_control;
 
+import api_helper.ApiHelperTie;
 import api_helper.DotControlAPI;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -15,11 +16,6 @@ public class DotControlSteps {
     private ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
     private ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
 
-    @Given("^Test server is ready to accept .Control responses$")
-    public void startServerForDotControl(){
-        new Server().startServer();
-        DotControlAPI.waitForServerToBeReady();
-    }
 
     @Given("Create .Control integration for (.*) tenant")
     public void createIntegration(String tenantOrgName){
@@ -37,7 +33,9 @@ public class DotControlSteps {
 
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
-        for(int i = 0; i<10; i++) {
+        String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
+        String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(intent);
+        for(int i = 0; i<35; i++) {
             if (!Server.incomingRequests.isEmpty() ||
                     Server.incomingRequests.keySet().contains(dotControlRequestMessage.get().getClientId())) {
                     break;
@@ -48,7 +46,9 @@ public class DotControlSteps {
                 e.printStackTrace();
             }
         }
-        String expectedMessage = "Our branches are conveniently located nationwide near main commuter routes and in shopping malls. Use our branch locator to find your nearest branch.";
+        if(Server.incomingRequests.isEmpty()){
+            Assert.assertTrue(false, ".Control is not responding after 15 seconds wait.");
+        }
         Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                 "Message is not as expected");
     }
