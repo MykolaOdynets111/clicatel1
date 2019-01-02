@@ -13,8 +13,8 @@ import org.testng.Assert;
 
 public class DotControlSteps {
 
-    private ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
-    private ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
+    private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
+    private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
 
 
     @Given("Create .Control integration for (.*) tenant")
@@ -51,6 +51,16 @@ public class DotControlSteps {
         }
         Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                 "Message is not as expected");
+    }
+
+
+    @Given("^Test step$")
+    public void testStep(){
+        int aa = 1;
+    }
+
+    public static DotControlRequestMessage getFromClientRequestMessage(){
+        return dotControlRequestMessage.get();
     }
 
     private ThreadLocal<DotControlCreateIntegrationInfo> generateInfoForCreatingIntegration(String callBackURL){
