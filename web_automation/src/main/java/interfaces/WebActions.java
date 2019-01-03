@@ -95,7 +95,8 @@ public interface WebActions extends WebWait {
 
     default boolean isElementShownAgentByXpath(String xpath, int wait, String agent){
         try {
-            return waitForElementToBeVisibleAgent(findElemByXPATHAgent(xpath, agent), wait, agent).isDisplayed();
+            waitForElementToBeVisibleByXpathAgent(xpath, wait, agent);
+            return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }

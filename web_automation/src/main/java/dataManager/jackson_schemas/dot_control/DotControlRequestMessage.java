@@ -145,4 +145,12 @@ public class DotControlRequestMessage {
         this.additionalProperties.put(name, value);
     }
 
+
+    @Override
+    public String toString(){
+        return "apiToken: " + getApiToken() + ", conversationId: " + getConversationId() + ",\n" +
+                "clientId: " + getClientId() + ", referenceId: " +getReferenceId() + ",\n" +
+                "messageId: " +getMessageId() + ", messageType: " + getMessageType() + ",\n" +
+                "message: " +getMessage();
+    }
 }
