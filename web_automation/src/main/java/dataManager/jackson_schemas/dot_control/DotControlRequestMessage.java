@@ -45,7 +45,7 @@ public class DotControlRequestMessage {
     public DotControlRequestMessage(String apiToken, String message){
         this.apiToken = apiToken;
         this.conversationId = "conv_" + faker.lorem().word();
-        this.clientId = "dotclient_" +  faker.number().randomNumber(7, false);
+        this.clientId = "testing_dotc" +  faker.number().randomNumber(7, false);
         this.referenceId = "";
         this.messageId = faker.code().ean8();
         this.messageType = "PLAIN";
