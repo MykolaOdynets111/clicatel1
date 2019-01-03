@@ -48,7 +48,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
     public void verifyUserMessageOnAgentDeskFromFB(String userMessage) {
-        Assert.assertTrue(getChatBody().isUserMessageShown(FacebookSteps.getCurrentUserMessageText(), "main agent"),
+        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(FacebookSteps.getCurrentUserMessageText(), "main agent"),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 

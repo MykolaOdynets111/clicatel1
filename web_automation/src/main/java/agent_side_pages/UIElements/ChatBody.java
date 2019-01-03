@@ -53,7 +53,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
-        waitForElementsToBeVisibleAgent(fromUserMessages, 15, agent);
+//        waitForElementsToBeVisibleAgent(fromUserMessages, 15, agent);
         return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 20, agent);
     }
 
