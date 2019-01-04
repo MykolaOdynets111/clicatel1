@@ -213,13 +213,12 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
-                agentHomePage = getAgentHomePage(agent);
-                leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
+                leftMenuWithChats = getLeftMenu(agent);
                 String userName=null;
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,60),
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,60, agent),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
 
