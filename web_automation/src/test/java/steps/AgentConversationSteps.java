@@ -33,8 +33,8 @@ public class AgentConversationSteps implements JSHelper{
                     ""+getUserNameFromLocalStorage()+"\n" +
                     "health@test.com";
         }
-        Assert.assertTrue(getChatBody().isUserMessageShown(userMessage, "main agent"),
-                "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
+        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage, "main agent"),
+                "'" +userMessage+ "' User message is not shown in conversation area");
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from tweet user$")
@@ -48,7 +48,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
     public void verifyUserMessageOnAgentDeskFromFB(String userMessage) {
-        Assert.assertTrue(getChatBody().isUserMessageShown(FacebookSteps.getCurrentUserMessageText(), "main agent"),
+        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(FacebookSteps.getCurrentUserMessageText(), "main agent"),
                 "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 

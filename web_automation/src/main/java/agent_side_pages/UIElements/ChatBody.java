@@ -54,6 +54,7 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
         return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent);
+
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {

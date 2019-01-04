@@ -125,7 +125,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickSendButton() {
-        click(submitMessageButton);
+        submitMessageButton.click();
     }
 
 

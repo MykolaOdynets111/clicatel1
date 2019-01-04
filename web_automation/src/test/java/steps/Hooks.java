@@ -12,6 +12,7 @@ import driverManager.DriverFactory;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
+import java_server.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
@@ -19,6 +20,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import steps.dot_control.DotControlSteps;
 import steps.tie_steps.BaseTieSteps;
 import steps.tie_steps.TIEApiSteps;
 import touch_pages.pages.MainPage;
@@ -38,7 +40,9 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
 
-            if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
+
+
+        if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
             }
@@ -82,13 +86,18 @@ public class Hooks implements JSHelper{
                 BaseTieSteps.request = new ByteArrayOutputStream();
                 BaseTieSteps.response = new ByteArrayOutputStream();
             }
+
+        if(scenario.getSourceTagNames().contains("@start_server")){
+            new Server().startServer();
+            DotControlAPI.waitForServerToBeReady();
+        }
     }
 
     @After()
     public void afterScenario(Scenario scenario){
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
-                !scenario.getSourceTagNames().equals(Arrays.asList("@no_widget")) &&
+                !scenario.getSourceTagNames().contains("@no_widget") &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter") &&
                 !scenario.getSourceTagNames().contains("@healthcheck")){
@@ -131,6 +140,9 @@ public class Hooks implements JSHelper{
             ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
         }
 
+        if(scenario.getSourceTagNames().contains("@dot_control")){
+            DotControlSteps.cleanUPMessagesInfo();
+        }
 
         closeMainBrowserIfOpened();
     }

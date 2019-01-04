@@ -45,6 +45,12 @@ public class BasePortalSteps {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         agentEmail = "aqa_"+System.currentTimeMillis()+"@aqa.com";
         ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, agentEmail);
+        // added wait for new agent to be successfully saved in touch DB before further actions with this agent
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), agentEmail);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
     }

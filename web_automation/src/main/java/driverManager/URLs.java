@@ -19,7 +19,7 @@ public class URLs {
 
     private static String FINAL_AGENT_URL = null;
 
-    private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com";
+    private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com/";
 
     // ================== API BASE URLs ========================= //
 

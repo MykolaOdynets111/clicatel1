@@ -19,6 +19,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.dot_control.DotControlSteps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -217,6 +218,7 @@ public class DefaultAgentSteps implements JSHelper {
                 String userName=null;
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
+                if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getFromClientRequestMessage().getClientId();
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,60),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
@@ -253,6 +255,9 @@ public class DefaultAgentSteps implements JSHelper {
             case "facebook":
                 userName = FacebookUsers.getLoggedInUserName();
                 break;
+            case "dotcontrol":
+               userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+
         }
         getLeftMenu(agent).openNewFromSocialConversationRequest(userName);
     }

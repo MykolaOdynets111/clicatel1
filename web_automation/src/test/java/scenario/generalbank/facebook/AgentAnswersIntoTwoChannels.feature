@@ -20,8 +20,6 @@ Feature: Communication between user and agent in two channel
     Given Agent closes chat
     When Agent click on new conversation request from facebook
     Then Conversation area becomes active with can you help me? message from facebook user
-    And There is no more than one from user message
-    And There is no from agent response added by default for can you help me? message from fb user
     When Agent responds with yes, sure to User
     Then Post response arrives
     And User initial message regarding can you help me? with following agent response 'yes, sure' in comments are shown
