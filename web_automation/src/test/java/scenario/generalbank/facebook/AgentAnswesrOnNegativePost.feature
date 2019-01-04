@@ -12,7 +12,6 @@ Feature:  Agent answers on negative post
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook
     Then Conversation area becomes active with your service is awful! message from facebook user
-    And There is no from agent response added by default for your service is awful! message from fb user
     When Agent responds with how can i help you? to User
     Then Post response arrives
     And User initial message regarding your service is awful! with following agent response 'how can i help you?' in comments are shown

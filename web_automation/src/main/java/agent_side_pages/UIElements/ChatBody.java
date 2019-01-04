@@ -1,6 +1,8 @@
 package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -53,8 +55,10 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
-//        waitForElementsToBeVisibleAgent(fromUserMessages, 15, agent);
-        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 20, agent);
+        if(!isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent)){
+            scrollInsideElement(this.getWrappedElement(), DriverFactory.getDriverForAgent(agent), 1000);
+        }
+        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 10, agent);
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
