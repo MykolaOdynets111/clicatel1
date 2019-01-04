@@ -76,9 +76,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         }
     }
 
-    public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait) {
+    public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait, String agent) {
         try{
-            waitForElementToBeVisibleByXpathAgent(String.format(targetProfile, userName), wait);
+            waitForElementToBeVisibleByXpathAgent(String.format(targetProfile, userName), wait, agent);
             return true;
         } catch(TimeoutException e) {
             return false;

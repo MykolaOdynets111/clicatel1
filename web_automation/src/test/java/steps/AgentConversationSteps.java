@@ -57,7 +57,7 @@ public class AgentConversationSteps implements JSHelper{
         if(ConfigManager.getSuite().equalsIgnoreCase("twitter")&userMessage.contains("support")){
             userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
         }
-        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")&userMessage.contains("support")){
+        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")){
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage, agent),
