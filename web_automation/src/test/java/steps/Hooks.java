@@ -275,7 +275,7 @@ public class Hooks implements JSHelper{
                     fbTenantPage.getMessengerWindow().deleteConversation();
                 }
                 if(scenario.getSourceTagNames().contains("@fb_post")){
-                    fbTenantPage.getPostFeed().endSessionIfPostFeedIsShown();
+//                    fbTenantPage.getPostFeed().endSessionIfPostFeedIsShown();
                     fbTenantPage.getFBYourPostPage().deletePost();
                 }
 

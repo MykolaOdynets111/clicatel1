@@ -41,7 +41,7 @@ public class MessengerWindow extends AbstractUIElement {
 
     public void deleteConversation(){
 //        moveToElement(DriverFactory.getTouchDriverInstance(),headerActionButonsContainer);
-        enterMessage("end");
+//        enterMessage("end");
         gearIcon.click();
         if(!isElementShown(popupMenu,2)) gearIcon.click();
         waitForElementToBeVisible(popupMenu, 9);

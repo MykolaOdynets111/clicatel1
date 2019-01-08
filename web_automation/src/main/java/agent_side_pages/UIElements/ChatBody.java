@@ -14,6 +14,8 @@ import java.util.NoSuchElementException;
 @FindBy(css = "div.chat-body")
 public class ChatBody extends AbstractUIElement {
 
+    private String scrollElement = "div.chat-body";
+
     private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
     @FindBy(css = "li.from")
@@ -55,10 +57,14 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
-        if(!isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent)){
-            scrollInsideElement(this.getWrappedElement(), DriverFactory.getDriverForAgent(agent), 1000);
-        }
-        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 10, agent);
+        scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
+                DriverFactory.getDriverForAgent(agent), 1000);
+
+//        if(!isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent)){
+//            scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
+//                    DriverFactory.getDriverForAgent(agent), 1000);
+//        }
+        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent);
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {

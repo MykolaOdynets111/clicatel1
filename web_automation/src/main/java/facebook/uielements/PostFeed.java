@@ -31,6 +31,7 @@ public class PostFeed extends AbstractUIElement {
             postInputField.clear();
             postInputField.sendKeys(userPostText);
         }
+        waitFor(1000); //A wait for fb, because it blocs when going to fast
         postInputField.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
 
