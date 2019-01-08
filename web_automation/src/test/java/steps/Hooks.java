@@ -294,7 +294,7 @@ public class Hooks implements JSHelper{
             if(scenario.isFailed()){
                 TweetsSection tweetsSection =  new TweetsSection();
                 if(tweetsSection.getOpenedTweet().isDisplayed()){
-                    tweetsSection.sendReplyForTweet("", "end");
+//                    tweetsSection.sendReplyForTweet("", "end");
                     tweetsSection.getOpenedTweet().clickSendReplyButton();
                 }
             }
@@ -304,7 +304,7 @@ public class Hooks implements JSHelper{
         try {
             if(twitterTenantPage.isDMWindowOpened()) {
                 DMWindow dmWindow = twitterTenantPage.getDmWindow();
-                dmWindow.sendUserMessage("end");
+//                dmWindow.sendUserMessage("end");
                 dmWindow.deleteConversation();
             }
         } catch (WebDriverException e) {}
