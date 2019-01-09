@@ -105,7 +105,8 @@ public interface WebActions extends WebWait {
 
     default boolean isElementShownAgentByCSS(String css, int wait, String agent){
         try {
-            return waitForElementToBeVisibleAgent(findElemByCSSAgent(css), wait, agent).isDisplayed();
+            waitForElementToBeVisibleByCssAgent(css, wait);
+            return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }

@@ -369,13 +369,16 @@ public class BasePortalSteps {
     @When("^Disable the (.*)$")
     public void disableTheIntegration(String integration){
         getPortalIntegrationsPage().clickToggleFor(integration);
+        getPortalIntegrationsPage().waitWhileProcessing();
     }
 
     @Then("^Status of (.*) integration is changed to \"(.*)\"$")
     public void verifyTheIntegrationStatus(String integration, String expectedStatus){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getPortalIntegrationsPage().getIntegrationRowStatus(integration).equalsIgnoreCase(expectedStatus));
-        soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
+        soft.assertEquals(getPortalIntegrationsPage().getIntegrationRowStatus(integration).toLowerCase(), expectedStatus.toLowerCase(),
+                "'"+integration+"' integration status in integrations table is not as expected");
+        soft.assertEquals(getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase(), expectedStatus.toLowerCase(),
+                "'"+integration+"' integration status in integrations table is not as expected");
         soft.assertAll();
     }
 
