@@ -20,7 +20,7 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
 
     public UpgradeYourPlanWindow selectAgentSeats(int seats){
         try {
-            waitForElementToBeClickableAgent(addAgentSeatsButton, 5, "main");
+            waitForElementToBeClickableAgent(addAgentSeatsButton, 25, "main");
         } catch(TimeoutException e){
             Assert.assertTrue(false, "'Add agent seats' button is not clickable.\n " +
                     "Please check the screenshot");
