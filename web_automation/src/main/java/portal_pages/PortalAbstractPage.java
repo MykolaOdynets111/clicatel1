@@ -44,7 +44,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     public void waitWhileProcessing(){
         try {
         waitForElementToBeVisibleByCssAgent(notificationAlert, 4);
-        waitForElementToBeInVisibleByCssAgent(notificationAlert, 10);
+        waitForElementToBeInVisibleByCssAgent(notificationAlert, 20);
         } catch(NoSuchElementException|TimeoutException e){}
     }
 }
