@@ -32,3 +32,12 @@ Default parameters' values:
 -Denv=testing
 -Dremote=false
 -Ddeploy_to=active
+
+FYI
+It is also possible to attach issue to the allure report. You just need to user “@Issue” annotation.
+Example:
+@Issue("https://jira.clickatell.com/browse/TPORT-1916")
+Scenario: Scenario name
+Further more, you can attache TC id by "@TestCaseId("example-99")" annotation and
+change displayed severity by using @SeverityLevel.CRITICAL annotation. Possible values are:
+@SeverityLevel.BLOCKER, @SeverityLevel.CRITICAL, @SeverityLevel.NORMAL, @SeverityLevel.MINOR, @SeverityLevel.TRIVIAL

@@ -3,13 +3,14 @@
 @dot_control
 Feature: Creating .Control integration and sending message to bot
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-3555")
   @no_chatdesk
   Scenario: Sending message to .Control (bot only)
     Given Create .Control integration for General Bank Demo tenant
     When Send branch location message for .Control
     Then Verify dot .Control returns response with correct text for initial branch location user message
 
-
+  @Issue("https://jira.clickatell.com/browse/TPLAT-3555")
   Scenario: Sending message to .Control (to agent)
     Given Create .Control integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
