@@ -1,7 +1,7 @@
 package steps.dot_control;
 
 import api_helper.ApiHelperTie;
-import api_helper.DotControlAPI;
+import api_helper.DotControlAPIHelper;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -22,7 +22,7 @@ public class DotControlSteps {
     @Given("Create .Control integration for (.*) tenant")
     public void createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        DotControlAPI.createIntegration(tenantOrgName,
+        DotControlAPIHelper.createIntegration(tenantOrgName,
                 generateInfoForCreatingIntegration(Server.getServerURL()).get());
     }
 
@@ -36,7 +36,7 @@ public class DotControlSteps {
                     dotControlRequestMessage.get().getMessageId() + faker.number().randomNumber(7, false));
 
         }
-        DotControlAPI.sendMessage(dotControlRequestMessage.get());
+        DotControlAPIHelper.sendMessage(dotControlRequestMessage.get());
     }
 
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")

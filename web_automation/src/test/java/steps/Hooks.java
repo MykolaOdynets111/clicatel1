@@ -89,7 +89,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@start_server")){
             new Server().startServer();
-            DotControlAPI.waitForServerToBeReady();
+            DotControlAPIHelper.waitForServerToBeReady();
         }
     }
 

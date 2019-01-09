@@ -589,6 +589,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertAll();
     }
 
+    @Then("^Welcome message is not shown$")
+    public void verifyWelcomeMessageNotShown(){
+        Assert.assertFalse(getWelcomeMessages().isWelcomeTextMessageShown(),
+                "Welcome text message is still shown after disabling");
+    }
+
 
     @Then("^Welcome back message with correct text is shown after user's input '(.*)'$")
     public void verifyWelcomeBackTextMessage(String userMessage) {
@@ -619,7 +625,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
     // ========================== Chat history Steps ========================= //
 
-    @When("^User refreshes the page$")
+    @When("^User refreshes the widget page$")
     public void refreshThePage() {
         DriverFactory.getTouchDriverInstance().navigate().refresh();
     }

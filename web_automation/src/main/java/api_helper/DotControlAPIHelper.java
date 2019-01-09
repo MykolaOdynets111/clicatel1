@@ -9,7 +9,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
-public class DotControlAPI {
+public class DotControlAPIHelper {
 
     public static void waitForServerToBeReady(){
         for(int i = 0; i<10; i++){
