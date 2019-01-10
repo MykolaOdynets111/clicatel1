@@ -1,5 +1,6 @@
 package driverManager;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
@@ -115,8 +116,9 @@ public class DriverFactory {
         DriverFactory.getTouchDriverInstance().get(URLs.getWidgetURL(tenantOrgName));
             JavascriptExecutor jsExec = (JavascriptExecutor)  DriverFactory.getTouchDriverInstance();
         Random r = new Random( System.currentTimeMillis() );
+        Faker f = new Faker();
         jsExec.executeScript("window.localStorage.setItem('ctlUsername', 'testing_"+
-                ((1 + r.nextInt(2)) * 1000000 + r.nextInt(1000000))+"');");
+                ((1 + r.nextInt(2)) * 1000000 + r.nextInt(1000000))+ f.lorem().character()+f.lorem().character()+"');");
     }
 
     public static void openUrlForDynamicTenant() {
