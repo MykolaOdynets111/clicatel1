@@ -57,7 +57,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
-        waitForElementToBeVisibleByCssAgent(scrollElement, 5);
+        waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
         scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
                 DriverFactory.getDriverForAgent(agent), 10000);
 
