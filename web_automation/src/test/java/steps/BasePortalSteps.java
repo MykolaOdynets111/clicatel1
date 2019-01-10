@@ -448,7 +448,7 @@ public class BasePortalSteps {
                 break;
             }
         }
-н        Assert.assertTrue(actualType.equalsIgnoreCase(expectedTouchGoPlan),
+        Assert.assertTrue(actualType.equalsIgnoreCase(expectedTouchGoPlan),
                 "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
                         "Expected: " + expectedTouchGoPlan + "\n" +
                         "Found:" + actualType
