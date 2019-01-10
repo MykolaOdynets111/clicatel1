@@ -4,6 +4,7 @@ import dataManager.MC2Account;
 import dataManager.Tenants;
 import dataManager.Territories;
 import dataManager.jackson_schemas.Country;
+import dataManager.jackson_schemas.IntegrationChannel;
 import dataManager.jackson_schemas.TafMessage;
 import dataManager.jackson_schemas.Territory;
 import dataManager.jackson_schemas.tenant_address.TenantAddress;
@@ -283,14 +284,22 @@ public class ApiHelper {
                 .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
     }
 
+    public static String getChannelID(String tenantOrgName, String integrationChanel){
+        List<IntegrationChannel> existedChannels = RestAssured.given()
+                                                            .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                                                            .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
+                                                            .getBody().jsonPath().getList("", IntegrationChannel.class);
+    return  existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
+            .findFirst().get().getId();
+    }
+
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
-                        "  \"integrationType\": \""+ integration.toUpperCase() +"\",\n" +
-                        "  \"channelType\": \"webchat\",\n" +
-                        "  \"enable\": "+ integrationStatus + "" +
+                        "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
+                        "  \"enable\": true\n" +
                         "}")
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }

@@ -143,7 +143,7 @@ public class BasePortalSteps {
 
     @Given("Widget is enabled for (.*) tenant")
     public void enableWidget(String tenantOrgNAme){
-        ApiHelper.setIntegrationStatus(tenantOrgNAme, "touch", true);
+        ApiHelper.setIntegrationStatus(tenantOrgNAme, "webchat", true);
     }
 
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")

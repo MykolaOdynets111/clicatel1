@@ -70,7 +70,7 @@ public class PortalMainPage extends PortalAbstractPage {
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickNexButton();
-
+        waitWhileProcessing();
     }
 
     public void upgradePlanWithoutTerms(int agentSeats){
@@ -91,6 +91,7 @@ public class PortalMainPage extends PortalAbstractPage {
         getPageHeader().clickUpgradeButton();
         getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
                 .clickAddToCardButton();
+        waitWhileProcessing();
         try {
             waitForElementToBeVisibleAgent(addedToCartAlert, 15);
         } catch (TimeoutException e){

@@ -209,7 +209,7 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
-                ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "touch", true);
+                ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
             DriverFactory.closeAgentBrowser();
@@ -242,7 +242,7 @@ public class Hooks implements JSHelper{
                     touchConsoleOutput();
                 }
                 if(typeEndInWidget){
-                    closeWidgetSession();
+//                    closeWidgetSession();
                 }
         }catch (WebDriverException e) { }
         }
