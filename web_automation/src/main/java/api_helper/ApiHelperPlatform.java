@@ -83,7 +83,7 @@ public class ApiHelperPlatform {
                 .get(Endpoints.PLATFORM_SUBSCRIPTIONS_LIST);
 
         return resp.getBody().jsonPath().getList("data", Map.class)
-                .stream().filter(e -> e.get("status").equals("SERVICE_ACTIVE"))
+                .stream().filter(e -> e.get("status").equals("SERVICE_ACTIVE")|e.get("status").equals("WILL_AUTORENEW"))
                 .map(e -> ((Integer) e.get("serviceEid")))
                 .collect(Collectors.toList());
     }
