@@ -61,11 +61,11 @@ public class ChatBody extends AbstractUIElement {
         scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
                 DriverFactory.getDriverForAgent(agent), 10000);
 
-//        if(!isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent)){
-//            scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
-//                    DriverFactory.getDriverForAgent(agent), 1000);
-//        }
-        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent);
+        if(!isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent)){
+            scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
+                    DriverFactory.getDriverForAgent(agent), 10000);
+        }
+        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 10, agent);
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
