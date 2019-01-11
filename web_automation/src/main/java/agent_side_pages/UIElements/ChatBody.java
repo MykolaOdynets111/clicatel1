@@ -2,7 +2,6 @@ package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
 import driverManager.DriverFactory;
-import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -58,14 +57,14 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
         waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
-        scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
-                DriverFactory.getDriverForAgent(agent), 10000);
 
-        if(!isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 40, agent)){
-            scrollInsideElement(DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(scrollElement)),
-                    DriverFactory.getDriverForAgent(agent), 10000);
+        String locator = String.format(fromUserMessagesXPATH, usrMessage);
+
+        if(!isElementShownAgentByXpath(locator, 40, agent)){
+            scrollToElem(DriverFactory.getDriverForAgent(agent), locator,
+                    "'" +usrMessage + "' user message from fb on chatdesk");
         }
-        return isElementShownAgentByXpath(String.format(fromUserMessagesXPATH, usrMessage), 10, agent);
+        return isElementShownAgentByXpath(locator, 10, agent);
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {

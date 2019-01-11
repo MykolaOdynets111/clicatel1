@@ -1,9 +1,8 @@
 package interfaces;
 
 import driverManager.DriverFactory;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.testng.Assert;
 
 public interface JSHelper {
 
@@ -59,5 +58,14 @@ public interface JSHelper {
     default void scrollPageToTheTop(WebDriver driver){
         JavascriptExecutor js = ((JavascriptExecutor) driver);
         js.executeScript("window.scrollBy(0,-250)", "");
+    }
+
+    default void scrollToElem(WebDriver driver, String xpath, String elemName){
+        try {
+            WebElement element = driver.findElement(By.xpath(xpath));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        }catch(NoSuchElementException e){
+            Assert.assertTrue(false, elemName +" is not fot found");
+        }
     }
 }
