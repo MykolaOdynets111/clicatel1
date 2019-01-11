@@ -421,6 +421,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     @When("^User select random (.*) in the card on user message (.*)$")
     public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
+        if(entities.contains("mobile banking 120 3279")){
+            entities.remove("mobile banking 120 3279");
+        }
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
 //        enteredUserMessageInTouchWidget.set("generic");
         widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
