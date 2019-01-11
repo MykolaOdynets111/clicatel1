@@ -301,6 +301,16 @@ task runDotControlTests(type:Test) {
     reports.html.enabled = false
 }
 
+task runCamundaFlowsTests(type:Test) {
+    systemProperties = System.getProperties()
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+"/camundaflows/camundaflows.xml"
+    }
+    reports.html.enabled = false
+}
+
 
 // ========= !! MAIN TASKS !! ============== //
 
@@ -365,6 +375,10 @@ task runTests(type: Test) {
         runTests.dependsOn(runDotControlTests)
     }
 
+    if(suite == "camundaflows"){
+        runTests.dependsOn(runCamundaFlowsTests)
+    }
+
     runTests.finalizedBy(allureReport)
     defaultTasks 'clean', 'runTests'
 }
@@ -396,6 +410,7 @@ task runTestsForAllTenants(type: Test) {
             runTouchGenBankTests.execute()
         }
         runVisibilityTests.execute()
+        runCamundaFlowsTests.execute()
         runDotControlTests.execute()
     }
     runTestsForAllTenants.finalizedBy(allureReport)
