@@ -100,7 +100,8 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@no_widget") &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter") &&
-                !scenario.getSourceTagNames().contains("@healthcheck")){
+                !scenario.getSourceTagNames().contains("@healthcheck") &&
+                !scenario.getSourceTagNames().contains("@camunda")){
 
             takeScreenshot();
             endTouchFlow(scenario, scenario.isFailed());
@@ -143,6 +144,13 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().contains("@dot_control")){
             DotControlSteps.cleanUPMessagesInfo();
         }
+
+        if(scenario.getSourceTagNames().contains("@camunda")){
+            takeScreenshot();
+            endTouchFlow(scenario, true);
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
+        }
+
 
         closeMainBrowserIfOpened();
     }
@@ -242,7 +250,7 @@ public class Hooks implements JSHelper{
                     touchConsoleOutput();
                 }
                 if(typeEndInWidget){
-//                    closeWidgetSession();
+                    closeWidgetSession();
                 }
         }catch (WebDriverException e) { }
         }
