@@ -93,11 +93,11 @@ public class PortalMainPage extends PortalAbstractPage {
                 .clickAddToCardButton();
         waitWhileProcessing();
         try {
-            waitForElementToBeVisibleAgent(addedToCartAlert, 15);
+            waitForElementToBeVisibleByXpathAgent(addedToCartAlertXPATH, 15, "admin");
+            waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 10);
         } catch (TimeoutException e){
             Assert.assertTrue(false, "Item is not added to the cart");
         }
-        waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 10);
     }
 
     public void openAgentsPurchasingConfirmationWindow(){
