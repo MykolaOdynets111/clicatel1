@@ -310,6 +310,11 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();

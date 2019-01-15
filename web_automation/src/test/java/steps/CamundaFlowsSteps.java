@@ -58,7 +58,8 @@ public class CamundaFlowsSteps implements JSHelper {
     public void changeLastVisitDate(int hoursShift){
         String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
         long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
-        long lastVisitWithShift = minusHoursFromTimestamp(lastVisit, hoursShift);
+//        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
+        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
         DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), clientProfileID, lastVisitWithShift);
     }
 
@@ -71,11 +72,5 @@ public class CamundaFlowsSteps implements JSHelper {
         return "randow welcome message:" + faker.lorem().characters(8, 13, true);
     }
 
-    private static Long minusHoursFromTimestamp(Long initialTime, int hoursShift){
-        LocalDateTime initialDateTime =
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(initialTime), ZoneId.of("Etc/Greenwich"));
-
-        return initialDateTime.minusHours(hoursShift).minusMinutes(1).atZone(ZoneId.of("Etc/Greenwich")).toEpochSecond()*1000;
-    }
 
 }
