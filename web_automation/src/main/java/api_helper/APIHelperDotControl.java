@@ -9,7 +9,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
-public class DotControlAPIHelper {
+public class APIHelperDotControl {
 
     public static void waitForServerToBeReady(){
         for(int i = 0; i<10; i++){
@@ -41,7 +41,7 @@ public class DotControlAPIHelper {
                         "    }\n" +
                         "  ]\n" +
                         "}")
-                .post(Endpoints.CREATE_DOT_CONTROL_INTEGRATION);
+                .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
         if(!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "Integration creating was not successful\n" +
             "Status code " + resp.statusCode()+
@@ -69,5 +69,10 @@ public class DotControlAPIHelper {
         int a = 2;
     }
 
+    public static void deleteHTTPIntegrations(String tenantOrgName){
+        RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+    }
 
 }

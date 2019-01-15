@@ -137,7 +137,7 @@ public class Endpoints {
 
     // ====================  .Control ================= //
 
-    public static String CREATE_DOT_CONTROL_INTEGRATION = URLs.getTouchApiBaseURL() + "http-integrations";
+    public static String DOT_CONTROL_HTTP_INTEGRATION = URLs.getTouchApiBaseURL() + "http-integrations";
 
     public static String DOT_CONTROL_TO_BOT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/message";
 

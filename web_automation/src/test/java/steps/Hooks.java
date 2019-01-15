@@ -89,7 +89,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@start_server")){
             new Server().startServer();
-            DotControlAPIHelper.waitForServerToBeReady();
+            APIHelperDotControl.waitForServerToBeReady();
         }
     }
 
@@ -143,6 +143,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@dot_control")){
             DotControlSteps.cleanUPMessagesInfo();
+            APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@camunda")){
