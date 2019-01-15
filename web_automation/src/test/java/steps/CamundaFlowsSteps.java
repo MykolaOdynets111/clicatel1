@@ -75,7 +75,7 @@ public class CamundaFlowsSteps implements JSHelper {
         LocalDateTime initialDateTime =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(initialTime), ZoneId.of("Etc/Greenwich"));
 
-        return initialDateTime.minusHours(hoursShift).atZone(ZoneId.of("Etc/Greenwich")).toEpochSecond();
+        return initialDateTime.minusHours(hoursShift).minusMinutes(1).atZone(ZoneId.of("Etc/Greenwich")).toEpochSecond()*1000;
     }
 
 }

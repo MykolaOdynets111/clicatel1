@@ -9,4 +9,4 @@ Feature: General Bank FAQ: "I lost/deleted the SMS with my electricity token. Ca
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                                        |expected response|
-      |I lost/deleted the SMS with my electricity token. Can I view it again? |You can only view the last electricity token that you bought.|
+      |I lost/deleted the SMS with my electricity token. Can I view it again? |Hi ${firstName}. You can only view the last electricity token that you bought.|

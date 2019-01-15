@@ -17,11 +17,11 @@ Feature: Welcome flow: bot mode
 #    And Last visit date is saved to DB after 2 minutes
 #    When User refreshes the widget page
 #    And Click chat icon
-#    Then Welcome message is not shown
+#    Then User should not receive 'welcome' message after his 'trading hours' message in widget
 #    When Last visit date is changed to minus 12 hours
 #    And User refreshes the widget page
 #    And Click chat icon
-#    Then Welcome message with correct text is shown
+#    Then User have to receive 'welcome' text response as a second response for his 'trading hours' input
 
   Scenario: Welcome message text changing for Bot mode tenant
     Given User select Automation tenant

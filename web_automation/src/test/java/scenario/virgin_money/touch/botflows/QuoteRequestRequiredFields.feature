@@ -6,7 +6,7 @@ Feature: Quote request: required user input fields
 
   Scenario:  Quote request user info required field
     When User enter quote request into widget input field
-    Then Card with a Sure! Please, tell us who we are chatting to? text is shown on user quote request message
+    Then Card with a Hi ${firstName}. Sure! Please, tell us who we are chatting to? text is shown on user quote request message
     When User click 'Submit' button in the card after user message: quote request
     Then 3 field required errors is shown in personal info input card on user message: quote request
     When User fill in field Last Name with 'AQA' in card on user message: quote request

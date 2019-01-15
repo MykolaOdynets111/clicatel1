@@ -118,6 +118,14 @@ public class DefaultTouchUserSteps implements JSHelper{
         widgetConversationArea.waitForMessageToAppearInWidget(FacebookSteps.getCurrentUserMessageText());
     }
 
+    @Then("^User should not receive '(.*)' message after his '(.*)' message in widget$")
+    public void verifyMessageIsNotShownAfterUserMessage(String messageShouldNotBeShown, String userInput){
+        widgetConversationArea = widget.getWidgetConversationArea();
+
+        Assert.assertFalse(widgetConversationArea.isSecondTextResponseNotShownFor(userInput, 6000),
+                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=60;
@@ -267,6 +275,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     private String formExpectedTextResponseForBotWidget(String fromFeatureText){
         String expectedTextResponse;
         switch (fromFeatureText) {
+            case "welcome":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_message");
+                break;
             case "start new conversation":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
                 break;
@@ -303,10 +314,10 @@ public class DefaultTouchUserSteps implements JSHelper{
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
-                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+                "No second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertEquals(widgetConversationArea.getSecondResponseTextOnUserInput(userInput).replace("\n", "")
                 , expectedTextResponse,
-                "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+                "Incorrect second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
     }
 
