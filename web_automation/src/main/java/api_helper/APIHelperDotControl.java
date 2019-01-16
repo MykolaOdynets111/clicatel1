@@ -35,7 +35,6 @@ public class APIHelperDotControl {
                         "    {\n" +
                         "      \"name\": \"" + newIntegrationInfo.getName() + "\",\n" +
                         "      \"enabled\": " + newIntegrationInfo.getIsEnabled() + ",\n" +
-//                        "      \"apiToken\": \"" + newIntegrationInfo.getApiToken() + "\",\n" +
                         "      \"url\": \"" + newIntegrationInfo.getCallBackURL() + "\",\n" +
                         "      \"config\": {}\n" +
                         "    }\n" +
@@ -48,6 +47,11 @@ public class APIHelperDotControl {
             "\n Body: " + resp.getBody().asString());
         }
         String apiToken = resp.getBody().jsonPath().get("channels[0].config.apiToken");
+        if(apiToken==null){
+            Assert.assertTrue(false, "apiToken is absent in create integration response " +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
         return apiToken;
     }
 
