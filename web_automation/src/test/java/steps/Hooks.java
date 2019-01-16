@@ -47,10 +47,6 @@ public class Hooks implements JSHelper{
                             " connection to DB is used and demo1 DB located in different network than other DBs");
             }
 
-            if(scenario.getSourceTagNames().contains("@lodash")&ConfigManager.getEnv().equalsIgnoreCase("integration")){
-                throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
-            }
-
 //        if(scenario.getSourceTagNames().contains("@agent_mode")&!
 //                (ConfigManager.getEnv().equalsIgnoreCase("integration") |
 //                 ConfigManager.getEnv().equalsIgnoreCase("dev"))){
