@@ -13,7 +13,7 @@ For example, the following command will run all tests on qa env:
 
 For specifying the env use -Denv parameter.
 
-For specifying the test suites testng xmls (may be found in src/test/resources/<tenantName> and gradle tasks are used .
+For specifying the test suites testng xmls (may be found in src/test/resources/<tenantName>) and gradle tasks are used .
 And in order to run particular tests suite add the following into your run command: "-Dsuite=targetsuite".
 For example, the following command will run only tie tests :
 "./gradlew -Dsuite=tie"
@@ -23,7 +23,7 @@ For running test in selenium grid add "-Dremote=true" to the run command
 In order to specify where to run tests, active or standby, please use -Ddeploy_to parameter.
 In order to run tests on "standby" pass "standby_group" value to the parameter (e.g. "./gradlew -Ddeploy_to=standby_group"
 
-All test results will collect in Allure report.
+All test results will be collected in Allure report.
 You can find Allure report by path "build/allure-report/index.html"
 
 Default parameters' values:

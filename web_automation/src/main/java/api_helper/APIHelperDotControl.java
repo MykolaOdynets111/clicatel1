@@ -25,8 +25,8 @@ public class APIHelperDotControl {
         }
     }
 
-    public static String createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
-        Response resp =
+    public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
+        return
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
@@ -41,18 +41,6 @@ public class APIHelperDotControl {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
-        if(!(resp.statusCode()==200)) {
-            Assert.assertTrue(false, "Integration creating was not successful\n" +
-            "Status code " + resp.statusCode()+
-            "\n Body: " + resp.getBody().asString());
-        }
-        String apiToken = resp.getBody().jsonPath().get("channels[0].config.apiToken");
-        if(apiToken==null){
-            Assert.assertTrue(false, "apiToken is absent in create integration response " +
-                    "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
-        }
-        return apiToken;
     }
 
     public static void sendMessage(DotControlRequestMessage requestMessage){
@@ -75,8 +63,8 @@ public class APIHelperDotControl {
         int a = 2;
     }
 
-    public static void deleteHTTPIntegrations(String tenantOrgName){
-        RestAssured.given().log().all()
+    public static Response deleteHTTPIntegrations(String tenantOrgName){
+        return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }

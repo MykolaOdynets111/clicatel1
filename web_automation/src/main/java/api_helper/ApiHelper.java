@@ -3,10 +3,7 @@ package api_helper;
 import dataManager.MC2Account;
 import dataManager.Tenants;
 import dataManager.Territories;
-import dataManager.jackson_schemas.Country;
-import dataManager.jackson_schemas.IntegrationChannel;
-import dataManager.jackson_schemas.TafMessage;
-import dataManager.jackson_schemas.Territory;
+import dataManager.jackson_schemas.*;
 import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import dataManager.jackson_schemas.user_session_info.UserSession;
 import driverManager.ConfigManager;
@@ -332,5 +329,15 @@ public class ApiHelper {
                         "  }\n" +
                         "]")
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
+    }
+
+    public static Integration getIntegration(String tenantOrgName, String integrationType){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.INTEGRATIONS)
+                .getBody().jsonPath().getList("", Integration.class)
+                .stream()
+                .filter(e -> e.getType().equalsIgnoreCase(integrationType))
+                .findFirst().get();
     }
 }

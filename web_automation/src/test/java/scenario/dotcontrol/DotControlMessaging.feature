@@ -20,3 +20,11 @@ Feature: Creating .Control integration and sending message to bot
     Then Verify dot .Control returns hello from agent response
     When Send hi, need your help with my card message for .Control
     Then Conversation area contains hi, need your help with my card user's message
+
+  @no_chatdesk
+  Scenario: Creating .Control integration
+    When Create .Control integration for General Bank Demo tenant
+    Then Created .Control integration is correctly returned with GET response
+    And 409 status code for multiple integration creation
+    When I delete .Control integration
+    Then Http integration status is updated after deleting
