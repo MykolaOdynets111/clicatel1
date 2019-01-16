@@ -55,11 +55,6 @@ public class Server {
                         System.err.println("Unable to process client request");
                         e.printStackTrace();
                     } finally {
-                        try {
-                            Thread.sleep(4000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                         server.stop(1);
                     }
                 }
