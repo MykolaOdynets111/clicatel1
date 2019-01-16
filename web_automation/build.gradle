@@ -1,4 +1,4 @@
-group 'web_authomation'
+group 'web_automation'
 version '1.0-SNAPSHOT'
 import java.io.*
 import groovy.json.*
