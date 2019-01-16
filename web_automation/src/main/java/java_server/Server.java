@@ -31,7 +31,7 @@ public class Server {
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://16c13358.ngrok.io";
+            return "http://2f38df57.ngrok.io";
         }
     }
 
@@ -76,7 +76,9 @@ public class Server {
             String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
             System.out.println("\n Inside handler  incomingBody \n "+ incomingBody);
 
-            String response = "This is the response";
+            String encoding = "UTF-8";
+            String response = "{\"responseMessage\": \"This is the response\"}";
+            t.getResponseHeaders().set("Content-Type", "application/json; charset=" + encoding);
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());

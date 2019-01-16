@@ -25,7 +25,7 @@ public class APIHelperDotControl {
         }
     }
 
-    public static void createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
+    public static String createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
         Response resp =
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
@@ -35,7 +35,7 @@ public class APIHelperDotControl {
                         "    {\n" +
                         "      \"name\": \"" + newIntegrationInfo.getName() + "\",\n" +
                         "      \"enabled\": " + newIntegrationInfo.getIsEnabled() + ",\n" +
-                        "      \"apiToken\": \"" + newIntegrationInfo.getApiToken() + "\",\n" +
+//                        "      \"apiToken\": \"" + newIntegrationInfo.getApiToken() + "\",\n" +
                         "      \"url\": \"" + newIntegrationInfo.getCallBackURL() + "\",\n" +
                         "      \"config\": {}\n" +
                         "    }\n" +
@@ -47,6 +47,8 @@ public class APIHelperDotControl {
             "Status code " + resp.statusCode()+
             "\n Body: " + resp.getBody().asString());
         }
+        String apiToken = resp.getBody().jsonPath().get("channels[0].config.apiToken");
+        return apiToken;
     }
 
     public static void sendMessage(DotControlRequestMessage requestMessage){

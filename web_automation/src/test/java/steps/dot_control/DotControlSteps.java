@@ -17,19 +17,21 @@ public class DotControlSteps {
 
     private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
+    private static ThreadLocal<String> apiToken = new ThreadLocal<>();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
     public void createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        APIHelperDotControl.createIntegration(tenantOrgName,
-                generateInfoForCreatingIntegration(Server.getServerURL()).get());
+        apiToken.set(APIHelperDotControl.createIntegration(tenantOrgName,
+                generateInfoForCreatingIntegration(Server.getServerURL()).get())
+        );
     }
 
     @When("Send (.*) message for .Control")
     public void sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null){
-            createRequestMessage(infoForCreatingIntegration.get().getApiToken(), message);
+            createRequestMessage(apiToken.get(), message);
         } else{
             dotControlRequestMessage.get().setMessage(message);
             dotControlRequestMessage.get().setMessageId(
@@ -42,7 +44,7 @@ public class DotControlSteps {
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
-        String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(intent);
+        String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
         waitFotResponseToComeToServer();
         try {
         Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
