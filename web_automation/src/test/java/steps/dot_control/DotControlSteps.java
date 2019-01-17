@@ -26,20 +26,7 @@ public class DotControlSteps {
 
     @Given("Create .Control integration for (.*) tenant")
     public void createIntegration(String tenantOrgName){
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Server.stopServer();
-
         Tenants.setTenantUnderTestNames(tenantOrgName);
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
         Response resp = APIHelperDotControl.createIntegration(tenantOrgName,

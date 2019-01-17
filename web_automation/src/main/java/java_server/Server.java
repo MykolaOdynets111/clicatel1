@@ -41,6 +41,7 @@ public class Server {
     }
 
     public void startServer() {
+        running = true;
         final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
 
         clientProcessingPool.execute(
@@ -62,11 +63,12 @@ public class Server {
                             }
                             if(!running){
                                 System.out.println("\n!!! will stop the server \n");
-                                server.stop(1);
+                                server.stop(0);
                                 clientProcessingPool.shutdownNow();
                                 try {
-                                    clientProcessingPool.awaitTermination(2, TimeUnit.SECONDS);
+                                    clientProcessingPool.awaitTermination(8, TimeUnit.SECONDS);
                                 } catch (Exception e) {}
+                                break;
                             }
                         }
 
@@ -75,6 +77,7 @@ public class Server {
                         e.printStackTrace();
                     } finally {
                         server.stop(1);
+                        clientProcessingPool.shutdownNow();
                     }
                 }
         );
