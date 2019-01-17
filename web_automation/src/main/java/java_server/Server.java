@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class Server {
 
     public static final String INTERNAL_CI_IP = "172.31.16.120";
-    public static final int SERVER_PORT = 8888;
+    public static final int SERVER_PORT = 5000;
 
     public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class Server {
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://2f38df57.ngrok.io";
+            return "http://203cf74c.ngrok.io";
         }
     }
 
@@ -92,6 +92,9 @@ public class Server {
         }
 
         private BotMessageResponse convertStringBotResponseBodyToObject(String body) {
+            if(body.contains("CHAT_SUMMARY")){
+                return new BotMessageResponse();
+            }
             if ((body.charAt(0) + "").equals("[")) {
                 body = body.replace("[", "");
                 body = body.replace("]", "");
