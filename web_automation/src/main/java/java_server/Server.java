@@ -17,14 +17,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Server {
 
     public static final String INTERNAL_CI_IP = "172.31.16.120";
     public static final int SERVER_PORT = 5000;
-
+    private static boolean running = true;
     public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
+
+    public static void stopServer(){
+        running = false;
+    }
 
     public static String getServerURL(){
         if(ConfigManager.isRemote()){
@@ -49,6 +54,20 @@ public class Server {
                         server.setExecutor(null); // creates a default executor
                         server.start();
                         while (true) {
+                            // for some reason without this wait inside loop serve is not stopping
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if(!running){
+                                System.out.println("\n!!! will stop the server \n");
+                                server.stop(1);
+                                clientProcessingPool.shutdownNow();
+                                try {
+                                    clientProcessingPool.awaitTermination(2, TimeUnit.SECONDS);
+                                } catch (Exception e) {}
+                            }
                         }
 
                     } catch (IOException e) {

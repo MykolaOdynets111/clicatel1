@@ -25,6 +25,20 @@ public class APIHelperDotControl {
         }
     }
 
+    public static void waitForServerToBeClosed() {
+        for(int i = 0; i<10; i++){
+            if(RestAssured.get(Server.getServerURL()).statusCode()==502){
+                break;
+            }else{
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
         return
         RestAssured.given().log().all()

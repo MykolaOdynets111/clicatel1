@@ -26,10 +26,25 @@ public class DotControlSteps {
 
     @Given("Create .Control integration for (.*) tenant")
     public void createIntegration(String tenantOrgName){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Server.stopServer();
+
         Tenants.setTenantUnderTestNames(tenantOrgName);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+
         Response resp = APIHelperDotControl.createIntegration(tenantOrgName,
                 generateInfoForCreatingIntegration(Server.getServerURL()).get());
+
         if(!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "Integration creating was not successful\n" +
                     "Status code " + resp.statusCode()+
