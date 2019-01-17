@@ -12,16 +12,21 @@ import org.testng.Assert;
 public class APIHelperDotControl {
 
     public static void waitForServerToBeReady(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for(int i = 0; i<10; i++){
-            if(RestAssured.get(Server.getServerURL()).statusCode()==200){
-                break;
-            }else{
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (RestAssured.get(Server.getServerURL()).statusCode() == 200) {
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
         }
     }
 

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class Server {
 
     public static final String INTERNAL_CI_IP = "172.31.16.120";
-    public static final int SERVER_PORT = 5000;
+    public static final int SERVER_PORT = 8888;
     private static boolean running = true;
     public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
 
@@ -55,7 +55,7 @@ public class Server {
                         server.setExecutor(null); // creates a default executor
                         server.start();
                         while (true) {
-                            // for some reason without this wait inside loop serve is not stopping
+                            // for some reason without this wait inside loop the server is not stopping
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {
