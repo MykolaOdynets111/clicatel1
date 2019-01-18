@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class Server {
 
     public static final String INTERNAL_CI_IP = "172.31.16.120";
-    public static final int SERVER_PORT = 8888;
+    public static final int SERVER_PORT = 5000;
     private static boolean running = true;
     public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
 
@@ -36,7 +36,7 @@ public class Server {
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://203cf74c.ngrok.io";
+            return "http://3198e39d.ngrok.io";
         }
     }
 
@@ -57,7 +57,7 @@ public class Server {
                         while (true) {
                             // for some reason without this wait inside loop the server is not stopping
                             try {
-                                Thread.sleep(2000);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
