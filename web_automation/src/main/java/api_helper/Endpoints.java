@@ -22,6 +22,10 @@ public class Endpoints {
 
     public static String INTEGRATIONS_ENABLING_DISABLING = URLs.getTouchApiBaseURL() + "integrations/channel/enable";
 
+    public static String INTEGRATION_EXISTING_CHANNELS = URLs.getTouchApiBaseURL() + "integrations/channels";
+
+    public static String INTEGRATIONS = URLs.getTouchApiBaseURL() + "integrations";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
@@ -34,16 +38,9 @@ public class Endpoints {
 
     public static String INTERNAL_COUNT_OF_LOGGED_IN_AGENTS = URLs.getBaseInternalApiUrl() + "loggedin-agents-count/%s";
 
-//    public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s?key=%s&value=%s";
-
     public static String INTERNAL_CREATE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles";
 
-//    public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TENANT/%s";
-
     public static String INTERNAL_DELETE_USER_PROFILE_ENDPOINT = URLs.getBaseInternalApiUrl() + "client-profiles/%s/TOUCH/%s";
-
-
-//    public static String INTERNAL_TENANT_CONFIGURED_MESSAGES = URLs.getBaseInternalApiUrl() + "taf/message-responses/%s";
 
     public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
 
@@ -135,7 +132,7 @@ public class Endpoints {
 
     // ====================  .Control ================= //
 
-    public static String CREATE_DOT_CONTROL_INTEGRATION = URLs.getTouchApiBaseURL() + "http-integrations";
+    public static String DOT_CONTROL_HTTP_INTEGRATION = URLs.getTouchApiBaseURL() + "http-integrations";
 
     public static String DOT_CONTROL_TO_BOT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/message";
 

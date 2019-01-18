@@ -7,6 +7,7 @@ import facebook.uielements.MessengerWindow;
 import facebook.uielements.PostFeed;
 import facebook.uielements.VisitorPost;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -25,6 +26,8 @@ public class FBTenantPage extends AbstractPage {
 
     @FindBy(xpath = "//ul/li[contains(@data-gt, 'feed_comment')]")
     private WebElement notificationAboutNewComment;
+
+    private String notificationAboutNewCommentXpath = "//ul/li[contains(@data-gt, 'feed_comment')]";
 
     private String postLocator = "//a//ancestor::div[@class='clearfix']//ancestor::li";
 
@@ -55,7 +58,12 @@ public class FBTenantPage extends AbstractPage {
     }
 
     public boolean isNotificationAboutNewCommentArrives(int wait){
-        return isElementShown(notificationAboutNewComment, wait);
+        try {
+            waitForElementToBeVisibleByXpath(notificationAboutNewCommentXpath, wait);
+            return true;
+        }catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public void clickNewCommentNotification(){

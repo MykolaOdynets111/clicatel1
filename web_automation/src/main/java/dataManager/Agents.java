@@ -6,59 +6,55 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Agents {
-    QA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
 
     DEV_AGENT("taras.mytlovych@perfectial.com", "passw0rd", "capitec bank", "dev"),
 
+    // =======  Active agents of General Bank Demo ======== //
+
+    QA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
     DEV_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "dev"),
-
     TESTING_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
-
     DEMO_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", "demo"),
-
     INTEGRATION_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", "integration"),
-
     DEMO1_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo1"),
-
     BETA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "beta"),
 
     // email credentials: devgeneralbankdemo@gmail.com, pass p@$$w0rd4te$t
-
     SECOND_AGENT_QA("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
-
     SECOND_AGENT_DEV("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "dev"),
-
     SECOND_AGENT_TESTING("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
-
     SECOND_AGENT_DEMO("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo"),
-
     SECOND_AGENT_DEMO1("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "demo1"),
-
     SECOND_AGENT_INTEGRATION("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", "integration"),
 
-    // Touch Go
+    // =======  Active agents for TouchGo tests ======== //
 
     QA_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
     QA_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
-
     QA_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "qa"),
-
     QA_STANDARD_ACCOUNT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "qa"),
-
     TESTING_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
     TESTING_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
-
     TESTING_STANDARD_TOUCH_GO_AGENT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "testing"),
-
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
-
     TESTING_SIGNUP_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
+
+
+    // =======  Active agents for Agent mode tests ======== //
 
     TESTING_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "testing"),
     QA_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "qa"),
     DEV_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "dev"),
     DEMO_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo"),
     DEMO1_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo1"),
+
+    // =======  Active agents for Bot mode for Camunda flows tests ======== //
+
+    TESTING_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "testing"),
+    QA_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "qa"),
+    DEV_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
+    DEMO_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo"),
+    DEMO1_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo1"),
     ;
 
     String userName;

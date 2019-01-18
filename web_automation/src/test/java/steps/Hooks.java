@@ -47,10 +47,6 @@ public class Hooks implements JSHelper{
                             " connection to DB is used and demo1 DB located in different network than other DBs");
             }
 
-            if(scenario.getSourceTagNames().contains("@lodash")&ConfigManager.getEnv().equalsIgnoreCase("integration")){
-                throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
-            }
-
 //        if(scenario.getSourceTagNames().contains("@agent_mode")&!
 //                (ConfigManager.getEnv().equalsIgnoreCase("integration") |
 //                 ConfigManager.getEnv().equalsIgnoreCase("dev"))){
@@ -89,7 +85,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@start_server")){
             new Server().startServer();
-            DotControlAPI.waitForServerToBeReady();
+            APIHelperDotControl.waitForServerToBeReady();
         }
     }
 
@@ -100,7 +96,8 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@no_widget") &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter") &&
-                !scenario.getSourceTagNames().contains("@healthcheck")){
+                !scenario.getSourceTagNames().contains("@healthcheck") &&
+                !scenario.getSourceTagNames().contains("@camunda")){
 
             takeScreenshot();
             endTouchFlow(scenario, scenario.isFailed());
@@ -142,7 +139,17 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@dot_control")){
             DotControlSteps.cleanUPMessagesInfo();
+            APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+            Server.stopServer();
+            APIHelperDotControl.waitForServerToBeClosed();
         }
+
+        if(scenario.getSourceTagNames().contains("@camunda")){
+            takeScreenshot();
+            endTouchFlow(scenario, true);
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
+        }
+
 
         closeMainBrowserIfOpened();
     }
@@ -209,7 +216,7 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@widget_disabling")){
-                ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "touch", true);
+                ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
             DriverFactory.closeAgentBrowser();
@@ -294,7 +301,7 @@ public class Hooks implements JSHelper{
             if(scenario.isFailed()){
                 TweetsSection tweetsSection =  new TweetsSection();
                 if(tweetsSection.getOpenedTweet().isDisplayed()){
-                    tweetsSection.sendReplyForTweet("", "end");
+//                    tweetsSection.sendReplyForTweet("", "end");
                     tweetsSection.getOpenedTweet().clickSendReplyButton();
                 }
             }
@@ -304,7 +311,7 @@ public class Hooks implements JSHelper{
         try {
             if(twitterTenantPage.isDMWindowOpened()) {
                 DMWindow dmWindow = twitterTenantPage.getDmWindow();
-                dmWindow.sendUserMessage("end");
+//                dmWindow.sendUserMessage("end");
                 dmWindow.deleteConversation();
             }
         } catch (WebDriverException e) {}

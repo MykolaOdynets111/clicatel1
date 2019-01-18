@@ -6,8 +6,7 @@ Feature: VM flow regarding Cost or transactions fees (spot option)
 
   Scenario Outline: "Cost or transactions fees: Spot" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
-#    Then Card with a Hi ${firstName}, which product are you enquiring about? Credit card or Virgin Money Spot? text is shown on user <user message> message
-    Then Card with a Which product are you enquiring about? Credit card or Virgin Money Spot? text is shown on user <user message> message
+    Then Card with a Hi ${firstName}. Which product are you enquiring about? Credit card or Virgin Money Spot? text is shown on user <user message> message
     And Card with a buttons Credit card; Spot is shown on user <user message> message
     When User click Spot button in the card on user message <user message>
     Then User have to receive 'There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his 'Spot' input
@@ -27,7 +26,7 @@ Feature: VM flow regarding Cost or transactions fees (spot option)
 
     Scenario Outline: "Spot" flow should work for "<user message>" user message
     When User enter <user message> into widget input field
-    Then User have to receive 'There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his '<user message>' input
+    Then User have to receive 'Hi ${firstName}. There are no fees on Virgin Money Spot for Peer-to-Peer transactions. You can send or receive money for free.' text response for his '<user message>' input
     Examples:
       |user message       |
       |Spot               |

@@ -8,17 +8,17 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(xpath = "//div[@class='clearfix fbNubFlyoutTitlebar titlebar']//ancestor::div[@role='complementary']")
+@FindBy(xpath = "//div[@class='fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent']")
 public class MessengerWindow extends AbstractUIElement {
 
     private String inputFieldXPATHLocator = "//div[@role='combobox']";
     private String toUserMessage = "//span[text()='%s']//following::span[text()=\"%s\"]";
 
-    @FindBy(xpath = ".//div[@role='heading']/following-sibling::ul")
-    private WebElement headerActionButonsContainer;
+    @FindBy(xpath = "//div[contains(@class,'clearfix titlebar')]/div/div/div[2]/div[2]/div[3]")
+    private WebElement headerGearButtonContainer;
 
-    @FindBy(xpath = ".//div[@role='heading']/following-sibling::ul//a[@aria-label='Options']")
-    private WebElement gearIcon;
+    @FindBy(xpath = "//div[@data-testid='fanta_dropdown_menu_icon']/a")
+    private WebElement gearButton;
 
     @FindBy(xpath = "//ul[@role='menu']")
     private WebElement popupMenu;
@@ -40,10 +40,10 @@ public class MessengerWindow extends AbstractUIElement {
     }
 
     public void deleteConversation(){
-//        moveToElement(DriverFactory.getTouchDriverInstance(),headerActionButonsContainer);
         enterMessage("end");
-        gearIcon.click();
-        if(!isElementShown(popupMenu,2)) gearIcon.click();
+        moveToElement(DriverFactory.getTouchDriverInstance(), headerGearButtonContainer);
+        gearButton.click();
+        if(!isElementShown(popupMenu,2)) gearButton.click();
         waitForElementToBeVisible(popupMenu, 9);
         deleteConversationButton.click();
         waitForElementToBeVisible(confirmDeletingConverstionButton, 9);

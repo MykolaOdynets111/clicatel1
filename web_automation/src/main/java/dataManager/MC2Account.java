@@ -23,6 +23,12 @@ public enum MC2Account {
     DEMO_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "demo", "", ""),
     DEMO1_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "demo", "", ""),
 
+    QA_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "qa", "", ""),
+    DEV_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "dev", "", ""),
+    DEMO_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "demo", "", ""),
+    DEMO1_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "demo1", "", ""),
+    TESTING_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "testing", "", ""),
+
     ;
 
     String touchGoPlan;

@@ -84,7 +84,7 @@ public class FBYourPostPage extends AbstractPage {
     }
 
     public void deletePost(){
-        makeAPost("end");
+//        makeAPost("end");
         scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
         treeDotsButton.click();
         waitForElementToBeVisible(contextLayover, 5);

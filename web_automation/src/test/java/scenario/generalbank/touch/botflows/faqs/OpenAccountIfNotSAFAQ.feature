@@ -1,5 +1,5 @@
 #Feature: General Bank FAQ: "Can I open an account if I'm not from South Africa?" intent
-#
+##  ToDo: Now goes to the agent. Check if this intent still exists
 #  Background:
 #    Given User select General Bank Demo tenant
 #    And Click chat icon

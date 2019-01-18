@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1547650694459" stop="1547650705449" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Creating .Control integration</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1547650694471" stop="1547650705428" status="passed">
+            <name>Creating .Control integration</name>
+            <title>Creating .Control integration</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1547650694476" stop="1547650700192" status="passed">
+                    <name>When Create .Control integration for General Bank Demo tenant</name>
+                    <title>When Create .Control integration for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547650700193" stop="1547650701352" status="passed">
+                    <name>Then Created .Control integration is correctly returned with GET response</name>
+                    <title>Then Created .Control integration is correctly returned with GET response</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547650701353" stop="1547650702341" status="passed">
+                    <name>And 409 status code for multiple integration creation</name>
+                    <title>And 409 status code for multiple integration creation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547650702342" stop="1547650703389" status="passed">
+                    <name>When I delete .Control integration</name>
+                    <title>When I delete .Control integration</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547650703390" stop="1547650704434" status="passed">
+                    <name>Then Http integration status is updated after deleting</name>
+                    <title>Then Http integration status is updated after deleting</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Creating .Control integration"/>
+                <label name="feature" value="Creating .Control integration"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="4467@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Creating .Control integration"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

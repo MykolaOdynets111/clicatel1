@@ -143,7 +143,7 @@ public class BasePortalSteps {
 
     @Given("Widget is enabled for (.*) tenant")
     public void enableWidget(String tenantOrgNAme){
-        ApiHelper.setIntegrationStatus(tenantOrgNAme, "touch", true);
+        ApiHelper.setIntegrationStatus(tenantOrgNAme, "webchat", true);
     }
 
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
@@ -369,13 +369,16 @@ public class BasePortalSteps {
     @When("^Disable the (.*)$")
     public void disableTheIntegration(String integration){
         getPortalIntegrationsPage().clickToggleFor(integration);
+        getPortalIntegrationsPage().waitWhileProcessing();
     }
 
     @Then("^Status of (.*) integration is changed to \"(.*)\"$")
     public void verifyTheIntegrationStatus(String integration, String expectedStatus){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getPortalIntegrationsPage().getIntegrationRowStatus(integration).equalsIgnoreCase(expectedStatus));
-        soft.assertTrue(getPortalIntegrationsPage().getIntegrationCardStatus(integration).equalsIgnoreCase(expectedStatus));
+        soft.assertEquals(getPortalIntegrationsPage().getIntegrationRowStatus(integration).toLowerCase(), expectedStatus.toLowerCase(),
+                "'"+integration+"' integration status in integrations table is not as expected");
+        soft.assertEquals(getPortalIntegrationsPage().getIntegrationCardStatus(integration).toLowerCase(), expectedStatus.toLowerCase(),
+                "'"+integration+"' integration status in integrations table is not as expected");
         soft.assertAll();
     }
 
@@ -436,7 +439,7 @@ public class BasePortalSteps {
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
         String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
-        for(int i=0; i<60; i++){
+        for(int i=0; i<120; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
                 DriverFactory.getAgentDriverInstance().navigate().refresh();

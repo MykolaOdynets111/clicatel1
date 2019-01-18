@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1547651383917" stop="1547651522066" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Creating .Control integration and sending messages</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1547651383917" stop="1547651402766" status="failed">
+            <name>Sending message to .Control (bot only)</name>
+            <title>Sending message to .Control (bot only)</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: Integration creating was not successful
+Status code 401
+ Body: {"messageId":"51380106","clientId":"testing_dotc4592532","conversationId":"conv_mollitia","referenceId":"","error":"Can not define tenant via api token"} expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: Integration creating was not successful
+Status code 401
+ Body: {"messageId":"51380106","clientId":"testing_dotc4592532","conversationId":"conv_mollitia","referenceId":"","error":"Can not define tenant via api token"} expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at api_helper.APIHelperDotControl.sendMessage(APIHelperDotControl.java:69)
+	at steps.dot_control.DotControlSteps.sendMessageToDotControl(DotControlSteps.java:58)
+	at ✽.When Send branch location message for .Control(DotControlMessaging.feature:9)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1547651391342" stop="1547651392547" status="passed">
+                    <name>Given Create .Control integration for General Bank Demo tenant</name>
+                    <title>Given Create .Control integration for General Bank Demo tenant</title>
+                </step>
+                <step start="1547651392547" stop="1547651394050" status="failed">
+                    <name>When Send branch location message for .Control</name>
+                    <title>When Send branch location message for .Control</title>
+                </step>
+                <step start="1547651394051" stop="1547651394051" status="canceled">
+                    <name>Then Verify dot .Control returns response with correct text for initial branch location user message</name>
+                    <title>Then Verify dot .Control returns response with correct text for initial branch location user message</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Sending message to .Control (bot only)"/>
+                <label name="feature" value="Creating .Control integration and sending messages"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="5755@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1547651402767" stop="1547651522065" status="failed">
+            <name>Sending message to .Control (to agent)</name>
+            <title>Sending message to .Control (to agent)</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: .Control is not responding after 35 seconds wait. expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: .Control is not responding after 35 seconds wait. expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at steps.dot_control.DotControlSteps.waitFotResponseToComeToServer(DotControlSteps.java:158)
+	at steps.dot_control.DotControlSteps.verifyDotControlReturnedCorrectResponse(DotControlSteps.java:77)
+	at ✽.Then Verify dot .Control returns hello from agent response(DotControlMessaging.feature:20)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1547651410200" stop="1547651411273" status="passed">
+                    <name>Given Create .Control integration for General Bank Demo tenant</name>
+                    <title>Given Create .Control integration for General Bank Demo tenant</title>
+                </step>
+                <step start="1547651411274" stop="1547651434148" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                </step>
+                <step start="1547651434148" stop="1547651435475" status="passed">
+                    <name>When Send chat to agent message for .Control</name>
+                    <title>When Send chat to agent message for .Control</title>
+                </step>
+                <step start="1547651435475" stop="1547651460026" status="passed">
+                    <name>Then Agent has new conversation request from dotcontrol user</name>
+                    <title>Then Agent has new conversation request from dotcontrol user</title>
+                </step>
+                <step start="1547651460027" stop="1547651460391" status="passed">
+                    <name>When Agent click on new conversation request from dotcontrol</name>
+                    <title>When Agent click on new conversation request from dotcontrol</title>
+                </step>
+                <step start="1547651460392" stop="1547651460574" status="passed">
+                    <name>Then Conversation area becomes active with chat to agent user's message</name>
+                    <title>Then Conversation area becomes active with chat to agent user's message</title>
+                </step>
+                <step start="1547651460574" stop="1547651461022" status="passed">
+                    <name>When Agent responds with hello from agent to User</name>
+                    <title>When Agent responds with hello from agent to User</title>
+                </step>
+                <step start="1547651461023" stop="1547651496026" status="failed">
+                    <name>Then Verify dot .Control returns hello from agent response</name>
+                    <title>Then Verify dot .Control returns hello from agent response</title>
+                </step>
+                <step start="1547651496026" stop="1547651496026" status="canceled">
+                    <name>When Send hi, need your help with my card message for .Control</name>
+                    <title>When Send hi, need your help with my card message for .Control</title>
+                </step>
+                <step start="1547651496027" stop="1547651496027" status="canceled">
+                    <name>Then Conversation area contains hi, need your help with my card user's message</name>
+                    <title>Then Conversation area contains hi, need your help with my card user's message</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Sending message to .Control (to agent)"/>
+                <label name="feature" value="Creating .Control integration and sending messages"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="5755@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Creating .Control integration and sending messages"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

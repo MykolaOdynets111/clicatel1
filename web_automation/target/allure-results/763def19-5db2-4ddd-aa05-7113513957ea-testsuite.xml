@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1547656317023" stop="1547656386638" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Creating .Control integration and sending messages</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1547656317023" stop="1547656329180" status="passed">
+            <name>Sending message to .Control (bot only)</name>
+            <title>Sending message to .Control (bot only)</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1547656317405" stop="1547656318551" status="passed">
+                    <name>Given Create .Control integration for General Bank Demo tenant</name>
+                    <title>Given Create .Control integration for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656318553" stop="1547656320042" status="passed">
+                    <name>When Send branch location message for .Control</name>
+                    <title>When Send branch location message for .Control</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656320043" stop="1547656327669" status="passed">
+                    <name>Then Verify dot .Control returns response with correct text for initial branch location user message</name>
+                    <title>Then Verify dot .Control returns response with correct text for initial branch location user message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Sending message to .Control (bot only)"/>
+                <label name="feature" value="Creating .Control integration and sending messages"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="11250@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1547656329181" stop="1547656386637" status="passed">
+            <name>Sending message to .Control (to agent)</name>
+            <title>Sending message to .Control (to agent)</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1547656329546" stop="1547656330666" status="passed">
+                    <name>Given Create .Control integration for General Bank Demo tenant</name>
+                    <title>Given Create .Control integration for General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656330666" stop="1547656355006" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656355006" stop="1547656356146" status="passed">
+                    <name>When Send chat to agent message for .Control</name>
+                    <title>When Send chat to agent message for .Control</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656356147" stop="1547656363333" status="passed">
+                    <name>Then Agent has new conversation request from dotcontrol user</name>
+                    <title>Then Agent has new conversation request from dotcontrol user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656363333" stop="1547656363642" status="passed">
+                    <name>When Agent click on new conversation request from dotcontrol</name>
+                    <title>When Agent click on new conversation request from dotcontrol</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656363642" stop="1547656363777" status="passed">
+                    <name>Then Conversation area becomes active with chat to agent user's message</name>
+                    <title>Then Conversation area becomes active with chat to agent user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656363778" stop="1547656364196" status="passed">
+                    <name>When Agent responds with hello from agent to User</name>
+                    <title>When Agent responds with hello from agent to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656364197" stop="1547656365197" status="passed">
+                    <name>Then Verify dot .Control returns hello from agent response</name>
+                    <title>Then Verify dot .Control returns hello from agent response</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656365197" stop="1547656366162" status="passed">
+                    <name>When Send hi, need your help with my card message for .Control</name>
+                    <title>When Send hi, need your help with my card message for .Control</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1547656366162" stop="1547656366737" status="passed">
+                    <name>Then Conversation area contains hi, need your help with my card user's message</name>
+                    <title>Then Conversation area contains hi, need your help with my card user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Sending message to .Control (to agent)"/>
+                <label name="feature" value="Creating .Control integration and sending messages"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="11250@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Creating .Control integration and sending messages"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

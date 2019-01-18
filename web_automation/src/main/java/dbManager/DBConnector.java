@@ -2,8 +2,11 @@ package dbManager;
 import org.testng.Assert;
 
 import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 public class DBConnector {
 
@@ -158,8 +161,109 @@ public class DBConnector {
         return isAgentPresent;
     }
 
-//    public static void main(String args[]){
-//        String a = DBConnector.getAccountActivationIdFromMC2DB("testing");
-//        DBConnector.closeConnection();
-//    }
+    public static String getClientProfileID(String env, String clientID) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' and is_tenant_profile=1;";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = results.getString("id");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static void updateClientLastVisitDate(String env, String clientProfileId, Long timestampDate){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "UPDATE `"+tableName+"`.`client_attribute` SET `value`='"+timestampDate+"' WHERE `client_profile_id`='"+clientProfileId+"' and`key`='lastVisit';";
+
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeUpdate(query);
+            results = statement.getResultSet();
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Long getLastVisitForUserProfile(String env, String clientProfileId){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "SELECT value FROM "+ tableName +".client_attribute where client_profile_id='"+clientProfileId+"' and `key` = 'lastVisit';";
+        Statement statement = null;
+        ResultSet results = null;
+        long timestamp =0;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            timestamp = results.getLong("value");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return timestamp;
+    }
+
+
+    public static boolean isLastVisitSavedInDB(String env, String clientProfileId, int secondsTimeout) {
+        String tableName = DBProperties.getPropertiesFor(env, "touch").getDBName();
+        String query = "SELECT value FROM " + tableName + ".client_attribute where client_profile_id='" + clientProfileId + "' and `key` = 'lastVisit';";
+        Statement statement = null;
+        ResultSet results = null;
+        boolean isLastVisitSaved = false;
+        int exitLoop = (secondsTimeout*60)/15;
+        try {
+            for (int i = 0; i < exitLoop+2; i++) {
+                statement = getConnection(env, "touch").createStatement();
+                statement.executeQuery(query);
+                results = statement.getResultSet();
+                isLastVisitSaved = results.next();
+                if (isLastVisitSaved) {
+                    statement.close();
+                    DBConnector.closeConnection();
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(15000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                statement.close();
+                DBConnector.closeConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isLastVisitSaved;
+    }
+
+
+    public static void main(String args[]){
+        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
+        long lastVisit = DBConnector.getLastVisitForUserProfile("testing", clientProfileID);
+//        long lastVisitWithShift = minusHoursFromTimestamp(lastVisit, 12);
+//        DBConnector.updateClientLastVisitDate("testing", clientProfileID, lastVisitWithShift);
+
+    }
+
+
 }

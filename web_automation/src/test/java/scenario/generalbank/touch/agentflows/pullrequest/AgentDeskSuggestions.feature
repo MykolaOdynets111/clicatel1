@@ -20,7 +20,7 @@ Feature: Agent suggestions
     Then There is correct suggestion shown on user message "Do you have a job for me?"
     When Agent add additional info " Thanks for asking" to suggested message
     And Agent click send button
-    Then User have to receive 'Hi ${firstName}, for information regarding vacancies and posts at General Bank you may visit us Thanks for asking' text response for his 'Do you have a job for me?' input
+    Then User have to receive 'For information regarding vacancies and posts at General Bank you may visit us Thanks for asking' text response for his 'Do you have a job for me?' input
     When User enter i lost my card into widget input field
     Then There is correct suggestion shown on user message "i lost my card"
     And The suggestion for user message "i lost my card" with the biggest confidence is added to the input field

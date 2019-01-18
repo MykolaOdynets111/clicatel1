@@ -25,7 +25,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Close chat']")
     private WebElement closeChatButton;
 
-    private String closeChatButtonXPATH = "//button[text()='Close chat']";
+    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
     private String messageInputLocator = "//textarea[contains(@class,'text-input')]";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
@@ -114,6 +114,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clearAndSendResponseToUser(String response){
+        waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.getCurrentAgent());
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
         waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
         int symbolsNumber = messageInput.getText().split("").length;
@@ -281,9 +282,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickTransferButton(){
+        waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
         findElemByXPATHAgent(transferChatButton).click();
-//        executeJSclick(transferChatButton);
-//        transferChatButton.click();
     }
 
     public boolean isAgentLimitReachedPopupShown(int wait){

@@ -3,8 +3,7 @@ package api_helper;
 import dataManager.MC2Account;
 import dataManager.Tenants;
 import dataManager.Territories;
-import dataManager.jackson_schemas.Country;
-import dataManager.jackson_schemas.Territory;
+import dataManager.jackson_schemas.*;
 import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import dataManager.jackson_schemas.user_session_info.UserSession;
 import driverManager.ConfigManager;
@@ -12,6 +11,8 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
 import java.util.HashMap;
@@ -21,7 +22,10 @@ import java.util.Map;
 public class ApiHelper {
 
     private static  List<HashMap> tenantsInfo=null;
-    private static List<HashMap> tenantMessages=null;
+//    private static List<HashMap> tenantMessages=null;
+    private static List<TafMessage> tenantMessages=null;
+
+
 
     public static String getTenantConfig(String tenantName, String config){
         String url = String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
@@ -75,17 +79,28 @@ public class ApiHelper {
         return tenantsInfo;
     }
 
-    private static List<HashMap> getTenantMessagesInfo() {
-        if(tenantMessages==null) {
+    public static List<TafMessage> getTafMessages() {
             String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
             tenantMessages = RestAssured.given().get(url)
-                    .jsonPath().get("tafResponses");
-        }
+                    .jsonPath().getList("tafResponses", TafMessage.class);
         return tenantMessages;
     }
 
+    public static void updateTafMessage(TafMessage tafMessage){
+        ObjectMapper mapper = new ObjectMapper();
+        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+        try {
+            RestAssured.given().log().all()
+                    .header("Content-Type", "application/json")
+                    .body("[" + mapper.writeValueAsString(tafMessage) + "]")
+                    .put(url);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String getTenantMessageText(String id) {
-        return (String) getTenantMessagesInfo().stream().filter(e -> e.get("id").equals(id)).findFirst().get().get("text");
+        return getTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
     }
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
@@ -266,14 +281,22 @@ public class ApiHelper {
                 .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
     }
 
+    public static String getChannelID(String tenantOrgName, String integrationChanel){
+        List<IntegrationChannel> existedChannels = RestAssured.given()
+                                                            .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                                                            .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
+                                                            .getBody().jsonPath().getList("", IntegrationChannel.class);
+    return  existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
+            .findFirst().get().getId();
+    }
+
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
-                        "  \"integrationType\": \""+ integration.toUpperCase() +"\",\n" +
-                        "  \"channelType\": \"webchat\",\n" +
-                        "  \"enable\": "+ integrationStatus + "" +
+                        "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
+                        "  \"enable\": true\n" +
                         "}")
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }
@@ -290,5 +313,31 @@ public class ApiHelper {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .delete(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
+    }
+
+    public static void setStatusForWelcomeMesage(String tenantName, String messageStatus){
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .body("[\n" +
+                        "  {\n" +
+                        "    \"id\": \"welcome_message\",\n" +
+                        "    \"category\": \"greeting\",\n" +
+                        "    \"text\": \"Thank you for reaching out. How can we help you?\",\n" +
+                        "    \"description\": \"welcome flow\",\n" +
+                        "    \"enabled\": true,\n" +
+                        "    \"type\": \"TEXT\"\n" +
+                        "  }\n" +
+                        "]")
+                .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
+    }
+
+    public static Integration getIntegration(String tenantOrgName, String integrationType){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.INTEGRATIONS)
+                .getBody().jsonPath().getList("", Integration.class)
+                .stream()
+                .filter(e -> e.getType().equalsIgnoreCase(integrationType))
+                .findFirst().get();
     }
 }

@@ -50,7 +50,6 @@ public class FacebookSteps {
             expectedResponse = ApiHelper.getTenantMessageText("agents_away");
         }
         boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,30);
-        if(!isExpectedMessageIsShown) messengerWindow.enterMessage("end");
         Assert.assertTrue(isExpectedMessageIsShown,
                 "User does not receive response on the message \""+ getCurrentUserMessageText()+"\" in FB messenger after 30 seconds wait.");
     }

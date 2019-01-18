@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1547650479331" stop="1547650486269" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Creating .Control integration</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1547650479341" stop="1547650486267" status="failed">
+            <name>Creating .Control integration</name>
+            <title>Creating .Control integration</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: Integration creating was not successful
+Status code 409
+ Body: {"errorMessage":"Http integration for tenant ff8080815fc48f59015fc58506260004 already created"} expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: Integration creating was not successful
+Status code 409
+ Body: {"errorMessage":"Http integration for tenant ff8080815fc48f59015fc58506260004 already created"} expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at steps.dot_control.DotControlSteps.createIntegration(DotControlSteps.java:33)
+	at ✽.When Create .Control integration for General Bank Demo tenant(DotControlCreatingIntegration.feature:7)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1547650479347" stop="1547650485047" status="failed">
+                    <name>When Create .Control integration for General Bank Demo tenant</name>
+                    <title>When Create .Control integration for General Bank Demo tenant</title>
+                </step>
+                <step start="1547650485047" stop="1547650485048" status="canceled">
+                    <name>Then Created .Control integration is correctly returned with GET response</name>
+                    <title>Then Created .Control integration is correctly returned with GET response</title>
+                </step>
+                <step start="1547650485048" stop="1547650485048" status="canceled">
+                    <name>And 409 status code for multiple integration creation</name>
+                    <title>And 409 status code for multiple integration creation</title>
+                </step>
+                <step start="1547650485049" stop="1547650485049" status="canceled">
+                    <name>When I delete .Control integration</name>
+                    <title>When I delete .Control integration</title>
+                </step>
+                <step start="1547650485049" stop="1547650485049" status="canceled">
+                    <name>Then Http integration status is updated after deleting</name>
+                    <title>Then Http integration status is updated after deleting</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Creating .Control integration"/>
+                <label name="feature" value="Creating .Control integration"/>
+                <label name="host" value="unassigned"/>
+                <label name="thread" value="4160@unassigned.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Creating .Control integration"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

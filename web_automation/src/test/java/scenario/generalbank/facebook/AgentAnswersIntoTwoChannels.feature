@@ -33,6 +33,7 @@ Feature: Communication between user and agent in two channel
     When Agent responds with how can i help you? to User
     Then Post response arrives
     And User initial message regarding connect to agent with following agent response 'how can i help you?' in comments are shown
+    Given Agent closes chat
     Given Delete users post
     Given Open General Bank Demo page
     When User opens Messenger and send message regarding I have a question regarding accounts

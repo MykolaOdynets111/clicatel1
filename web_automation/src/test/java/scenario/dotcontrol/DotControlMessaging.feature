@@ -1,14 +1,13 @@
 @start_server
 @no_widget
 @dot_control
-Feature: Creating .Control integration and sending message to bot
+Feature: Creating .Control integration and sending messages
 
   @no_chatdesk
   Scenario: Sending message to .Control (bot only)
     Given Create .Control integration for General Bank Demo tenant
     When Send branch location message for .Control
     Then Verify dot .Control returns response with correct text for initial branch location user message
-
 
   Scenario: Sending message to .Control (to agent)
     Given Create .Control integration for General Bank Demo tenant

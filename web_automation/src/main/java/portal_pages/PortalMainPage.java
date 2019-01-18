@@ -4,10 +4,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import portal_pages.uielements.ConfigureTouchWindow;
-import portal_pages.uielements.LeftMenu;
-import portal_pages.uielements.PageHeader;
-import portal_pages.uielements.UpgradeYourPlanWindow;
+import portal_pages.uielements.*;
 
 public class PortalMainPage extends PortalAbstractPage {
 
@@ -73,32 +70,34 @@ public class PortalMainPage extends PortalAbstractPage {
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickNexButton();
-
+        waitWhileProcessing();
     }
 
     public void upgradePlanWithoutTerms(int agentSeats){
         addAgentSeatsIntoCart(agentSeats);
         openAgentsPurchasingConfirmationWindow();
-        cartPage.getConfirmPaymentDetailsWindow()
+        ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow = cartPage.getConfirmPaymentDetailsWindow()
                 .clickSelectPaymentField()
                 .selectPaymentMethod("VISA")
                 .clickNexButton()
                 .acceptTerms()
-                .clickNexButton()
-                .waitFotPaymentSummaryScreenToLoad()
                 .clickNexButton();
+        waitWhileProcessing();
+        confirmPaymentDetailsWindow.waitFotPaymentSummaryScreenToLoad()
+                                    .clickNexButton();
     }
 
     public void addAgentSeatsIntoCart(int agentSeats){
         getPageHeader().clickUpgradeButton();
         getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
                 .clickAddToCardButton();
+        waitWhileProcessing();
         try {
-            waitForElementToBeVisibleAgent(addedToCartAlert, 15);
+            waitForElementToBeVisibleByXpathAgent(addedToCartAlertXPATH, 10, "admin");
+            waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 20);
         } catch (TimeoutException e){
-            Assert.assertTrue(false, "Item is not added to the cart");
+//            Assert.assertTrue(false, "Item is not added to the cart");
         }
-        waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 10);
     }
 
     public void openAgentsPurchasingConfirmationWindow(){

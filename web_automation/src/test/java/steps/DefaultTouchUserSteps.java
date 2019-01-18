@@ -118,6 +118,14 @@ public class DefaultTouchUserSteps implements JSHelper{
         widgetConversationArea.waitForMessageToAppearInWidget(FacebookSteps.getCurrentUserMessageText());
     }
 
+    @Then("^User should not receive '(.*)' message after his '(.*)' message in widget$")
+    public void verifyMessageIsNotShownAfterUserMessage(String messageShouldNotBeShown, String userInput){
+        widgetConversationArea = widget.getWidgetConversationArea();
+
+        Assert.assertFalse(widgetConversationArea.isSecondTextResponseNotShownFor(userInput, 6000),
+                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+    }
+
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=60;
@@ -267,6 +275,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     private String formExpectedTextResponseForBotWidget(String fromFeatureText){
         String expectedTextResponse;
         switch (fromFeatureText) {
+            case "welcome":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_message");
+                break;
             case "start new conversation":
                 expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
                 break;
@@ -299,14 +310,19 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
-                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+                "No second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertEquals(widgetConversationArea.getSecondResponseTextOnUserInput(userInput).replace("\n", "")
                 , expectedTextResponse,
-                "Incorrect text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
+                "Incorrect second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertAll();
     }
 
@@ -421,6 +437,9 @@ public class DefaultTouchUserSteps implements JSHelper{
     @When("^User select random (.*) in the card on user message (.*)$")
     public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
+        if(entities.contains("mobile banking 120 3279")){
+            entities.remove("mobile banking 120 3279");
+        }
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
 //        enteredUserMessageInTouchWidget.set("generic");
         widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
@@ -589,6 +608,12 @@ public class DefaultTouchUserSteps implements JSHelper{
         soft.assertAll();
     }
 
+    @Then("^Welcome message is not shown$")
+    public void verifyWelcomeMessageNotShown(){
+        Assert.assertFalse(getWelcomeMessages().isWelcomeTextMessageShown(),
+                "Welcome text message is still shown after disabling");
+    }
+
 
     @Then("^Welcome back message with correct text is shown after user's input '(.*)'$")
     public void verifyWelcomeBackTextMessage(String userMessage) {
@@ -619,7 +644,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
     // ========================== Chat history Steps ========================= //
 
-    @When("^User refreshes the page$")
+    @When("^User refreshes the widget page$")
     public void refreshThePage() {
         DriverFactory.getTouchDriverInstance().navigate().refresh();
     }

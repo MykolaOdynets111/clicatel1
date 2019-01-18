@@ -17,25 +17,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Server {
 
     public static final String INTERNAL_CI_IP = "172.31.16.120";
-    public static final int SERVER_PORT = 8888;
-
+    public static final int SERVER_PORT = 5000;
+    private static boolean running = true;
     public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
+
+    public static void stopServer(){
+        running = false;
+    }
 
     public static String getServerURL(){
         if(ConfigManager.isRemote()){
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://761aabfa.ngrok.io";
+            return "http://3198e39d.ngrok.io";
         }
     }
 
     public void startServer() {
+        running = true;
         final ExecutorService clientProcessingPool = Executors.newFixedThreadPool(10);
 
         clientProcessingPool.execute(
@@ -49,6 +55,21 @@ public class Server {
                         server.setExecutor(null); // creates a default executor
                         server.start();
                         while (true) {
+                            // for some reason without this wait inside loop the server is not stopping
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if(!running){
+                                System.out.println("\n!!! will stop the server \n");
+                                server.stop(0);
+                                clientProcessingPool.shutdownNow();
+                                try {
+                                    clientProcessingPool.awaitTermination(8, TimeUnit.SECONDS);
+                                } catch (Exception e) {}
+                                break;
+                            }
                         }
 
                     } catch (IOException e) {
@@ -56,6 +77,7 @@ public class Server {
                         e.printStackTrace();
                     } finally {
                         server.stop(1);
+                        clientProcessingPool.shutdownNow();
                     }
                 }
         );
@@ -71,7 +93,9 @@ public class Server {
             String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
             System.out.println("\n Inside handler  incomingBody \n "+ incomingBody);
 
-            String response = "This is the response";
+            String encoding = "UTF-8";
+            String response = "{\"responseMessage\": \"This is the response\"}";
+            t.getResponseHeaders().set("Content-Type", "application/json; charset=" + encoding);
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
@@ -90,6 +114,9 @@ public class Server {
         }
 
         private BotMessageResponse convertStringBotResponseBodyToObject(String body) {
+            if(body.contains("CHAT_SUMMARY")){
+                return new BotMessageResponse();
+            }
             if ((body.charAt(0) + "").equals("[")) {
                 body = body.replace("[", "");
                 body = body.replace("]", "");

@@ -1,7 +1,7 @@
 package facebook.uielements;
 import abstract_classes.AbstractUIElement;
+import driverManager.DriverFactory;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 @FindBy(xpath = "//div[@id='PageComposerPagelet_']")
@@ -16,7 +16,9 @@ public class PostFeed extends AbstractUIElement {
     @FindBy(xpath = "//div[@role='presentation']//div[@role='textbox']")
     private WebElement postInputField;
 
-    private String closeDMPopupButton = "//div[@class='fbNubFlyoutOuter']//span[text()='General Bank QA']/ancestor::div[@role='presentation']";
+    private String dmWindow = "//div[@class='fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent']";
+
+    private String closeDMPopupButton = "//div[contains(@class,'close')]";
 
     private String closeDMPopupButtonConfirmation = "//a[@action='cancel'][text()='OK']";
 
@@ -31,7 +33,7 @@ public class PostFeed extends AbstractUIElement {
             postInputField.clear();
             postInputField.sendKeys(userPostText);
         }
-
+        waitFor(1000); //A wait for fb, because it blocs when going to fast
         postInputField.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
 
@@ -45,8 +47,9 @@ public class PostFeed extends AbstractUIElement {
 
 
     private void closeFBDMWindowIfOpened(){
-        if (isElementShownByXpath(closeDMPopupButton, 10)){
-            findElemByXPATH(closeDMPopupButton).click();
+        if (isElementShownByXpath(dmWindow, 10)){
+            executeJSHover(findElemByXPATH(closeDMPopupButton), DriverFactory.getTouchDriverInstance());
+            executeJSclick(findElemByXPATH(closeDMPopupButton));
         }
     }
 }

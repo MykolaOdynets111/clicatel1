@@ -45,6 +45,35 @@ public class ToUserTextMessage  extends Widget implements WebActions {
         }
     }
 
+    public boolean isSecondResponseShown(int wait){
+        for(int i = 0; i < 6; i++ ){
+            if(toUserTextMessages.size()==2){
+                return true;
+            }else {
+                waitFor(1000);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Method designed to make sure that second response is not shown after 6 seconds wait
+     * @param wait
+     * @return
+     */
+    public boolean isSecondResponseNotShown(int wait){
+        boolean isShown = true;
+        for(int i = 0; i <= wait/1000; i++ ){
+            if(toUserTextMessages.size()==2){
+                isShown=true;
+            }else {
+                isShown=false;
+            }
+            waitFor(1000);
+        }
+        return isShown;
+    }
+
     public boolean isTextResponseShown(int wait) {
         try{
             waitForElementsToBeVisible(toUserTextMessages, wait);

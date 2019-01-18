@@ -36,7 +36,7 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, J
 
     private String totalOrderSum = "th[ng-bind='model.totalCurrency']";
 
-    private String acceptTermsCheckboxCSS = "label.cl-label.checkbox-dot_control";
+    private String acceptTermsCheckboxCSS = "label.checkbox-control.control--checkbox";
 
     private String paymentSuccessfulMessageCSS = "div[ng-bind='processingStatusMessage']";
 
