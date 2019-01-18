@@ -10,7 +10,7 @@ Feature: Interaction with End chat button on chatdesk
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
-    When Agent click "End chat" button
+    When Agent closes chat
     Then Agent should not see from user chat in agent desk
     Then User have to receive 'exit' text response for his 'connect to Support' input
 
