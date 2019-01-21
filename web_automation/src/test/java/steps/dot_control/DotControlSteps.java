@@ -9,19 +9,28 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Tenants;
 import dataManager.dot_control.DotControlCreateIntegrationInfo;
+import dataManager.jackson_schemas.ChatHistoryItem;
 import dataManager.jackson_schemas.Integration;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
+import dbManager.DBConnector;
+import driverManager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import java_server.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class DotControlSteps {
 
     private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
+    private static ThreadLocal<String> initCallClientId= new ThreadLocal<>();
+    private static ThreadLocal<String> initCallMessageId= new ThreadLocal<>();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
@@ -132,9 +141,39 @@ public class DotControlSteps {
     }
 
 
-    @When("^Send init call$")
-    public void sendInitCall(){
-        int a = 2;
+    @When("^Send init call with (.*) messageId correct response is returned$")
+    public void sendInitCall(String messageIdStrategy){
+        initCallClientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId(messageIdStrategy);
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), initCallClientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), initCallClientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains incorrect conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "OK",
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("businessHours") == null,
+                "\nResponse on INIT call contains incorrect businessHours\n");
+        soft.assertAll();
+    }
+
+    @Then("^MessageId is correctly saved$")
+    public void checkMessageIdSavingInINITCall(){
+        String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), initCallClientId.get());
+        List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
+        String actualMessageId = chatHistoryItemList.stream()
+                .filter(e -> e.getClientId().equalsIgnoreCase(initCallClientId.get()))
+                .findFirst().get().getMessageId();
+        if(initCallMessageId.get()!=null){
+            Assert.assertEquals(actualMessageId, initCallMessageId.get(),
+                "Message id is not as expected\n");
+        } else{
+            Assert.assertTrue(!actualMessageId.equalsIgnoreCase("null"),
+                    "Message id is not auto generated");
+        }
     }
 
     public static DotControlRequestMessage getFromClientRequestMessage(){
@@ -168,13 +207,20 @@ public class DotControlSteps {
         }
     }
 
-    @Given("^Test step$")
-    public void testStep(){
-        Assert.assertTrue(RestAssured.get(Server.getServerURL()).statusCode()==200, "Server check from another feature");
+    public void generateInitCallMessageId(String messageIdStrategy){
+        switch(messageIdStrategy){
+            case "provided":
+                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+                break;
+            default:
+                initCallMessageId.set(null);
+        }
     }
 
     public static void cleanUPMessagesInfo(){
         infoForCreatingIntegration.set(null);
         dotControlRequestMessage.set(null);
+        apiToken.set(null);
+        initCallClientId.set(null);
     }
 }

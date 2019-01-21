@@ -340,4 +340,11 @@ public class ApiHelper {
                 .filter(e -> e.getType().equalsIgnoreCase(integrationType))
                 .findFirst().get();
     }
+
+    public static List<ChatHistoryItem> getChatHistory(String tenantOrgName, String sessionId){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.CHAT_HISTORY, sessionId))
+                .getBody().jsonPath().getList("records", ChatHistoryItem.class);
+    }
 }

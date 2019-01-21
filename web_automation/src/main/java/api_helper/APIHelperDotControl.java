@@ -1,5 +1,6 @@
 package api_helper;
 
+import com.github.javafaker.Faker;
 import dataManager.dot_control.DotControlCreateIntegrationInfo;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
 import io.restassured.RestAssured;
@@ -9,7 +10,11 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
+import java.util.Map;
+
 public class APIHelperDotControl {
+
+    static Faker faker = new Faker();
 
     public static void waitForServerToBeReady(){
         try {
@@ -86,6 +91,31 @@ public class APIHelperDotControl {
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+    }
+
+    public static Response sendInitCall(String tenantOrgName, String apiToken, String clientId, String messageId){
+
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Content-Type", "application/json")
+                .body("{\n" +
+                        "  \"apiToken\": \""+apiToken+"\",\n" +
+                        "  \"clientId\": \""+clientId+"\",\n" +
+                        "  \"context\": {},\n" +
+                        "  \"conversationId\": \"string\",\n" +
+                        "  \"history\": [\n" +
+                        "    {\n" +
+                        "      \"message\": \"string\",\n" +
+                        "      \"messageId\": \""+ messageId + "\",\n" +
+                        "      \"messageType\": \"PLAIN\",\n" +
+                        "      \"source\": \"AGENT\",\n" +
+                        "      \"timestamp\": 0\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"referenceId\": \"string\",\n" +
+                        "  \"tenantMode\": \"BOT\"\n" +
+                        "}")
+                .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
     }
 
 }
