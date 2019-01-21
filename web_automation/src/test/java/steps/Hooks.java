@@ -100,7 +100,7 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@camunda")){
 
             takeScreenshot();
-            endTouchFlow(scenario, scenario.isFailed());
+            endTouchFlow(scenario, true);
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 

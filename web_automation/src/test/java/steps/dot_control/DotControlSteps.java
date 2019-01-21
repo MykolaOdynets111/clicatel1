@@ -131,6 +131,12 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
+
+    @When("^Send init call$")
+    public void sendInitCall(){
+        int a = 2;
+    }
+
     public static DotControlRequestMessage getFromClientRequestMessage(){
         return dotControlRequestMessage.get();
     }
