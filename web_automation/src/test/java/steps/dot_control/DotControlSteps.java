@@ -14,22 +14,19 @@ import dataManager.jackson_schemas.Integration;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import java_server.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DotControlSteps {
 
     private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
-    private static ThreadLocal<String> initCallClientId= new ThreadLocal<>();
+    private static ThreadLocal<String> clientId = new ThreadLocal<>();
     private static ThreadLocal<String> initCallMessageId= new ThreadLocal<>();
     Faker faker = new Faker();
 
@@ -68,6 +65,7 @@ public class DotControlSteps {
 
         }
         APIHelperDotControl.sendMessage(dotControlRequestMessage.get());
+        clientId.set(dotControlRequestMessage.get().getClientId());
     }
 
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
@@ -87,13 +85,12 @@ public class DotControlSteps {
     @Then("Verify dot .Control returns (.*) response")
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
         waitFotResponseToComeToServer();
-        try {
-            Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedResponse,
+        if(expectedResponse.equalsIgnoreCase("agents_available")){
+            Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
                     "Message is not as expected");
-        }catch (NullPointerException e){
-            Assert.assertTrue(false, "Some nullpointer exception was faced\n" + Server.incomingRequests.toString() + "\n" +
-                            Server.incomingRequests.get(Server.incomingRequests.keySet().iterator().next()).toString() + "\n But Expected \n" +
-            "\n"+ dotControlRequestMessage.get().toString());
+        }else {
+            Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
+                    "Message is not as expected");
         }
     }
 
@@ -143,13 +140,13 @@ public class DotControlSteps {
 
     @When("^Send init call with (.*) messageId correct response is returned$")
     public void sendInitCall(String messageIdStrategy){
-        initCallClientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
         generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), initCallClientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), initCallClientId.get(),
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
                 "\nResponse on INIT call contains incorrect clientId\n");
         soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
                 "\nResponse on INIT call contains incorrect conversationId\n");
@@ -160,14 +157,34 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
+    @When("^Send init call with (.*) messageId and no active agents correct response is returned$")
+    public void sendInitCallWithoutAgent(String messageIdStrategy){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId(messageIdStrategy);
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains 'null' conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "NO_AGENTS_AVAILABLE",
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("businessHours") == null,
+                "\nResponse on INIT call contains not null businessHours\n");
+        soft.assertAll();
+    }
+
     @Then("^MessageId is correctly saved$")
     public void checkMessageIdSavingInINITCall(){
         // skipping for demo1 because its db is located in another network
         if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
-            String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), initCallClientId.get());
+            String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), clientId.get());
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
             String actualMessageId = chatHistoryItemList.stream()
-                    .filter(e -> e.getClientId().equalsIgnoreCase(initCallClientId.get()))
+                    .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
                     .findFirst().get().getMessageId();
             if (initCallMessageId.get() != null) {
                 Assert.assertEquals(actualMessageId, initCallMessageId.get(),
@@ -196,7 +213,7 @@ public class DotControlSteps {
     private void waitFotResponseToComeToServer() {
         for(int i = 0; i<35; i++) {
             if (!Server.incomingRequests.isEmpty() &
-                    Server.incomingRequests.keySet().contains(dotControlRequestMessage.get().getClientId())) {
+                    Server.incomingRequests.keySet().contains(clientId)) {
                 break;
             }
             try {
@@ -224,6 +241,6 @@ public class DotControlSteps {
         infoForCreatingIntegration.set(null);
         dotControlRequestMessage.set(null);
         apiToken.set(null);
-        initCallClientId.set(null);
+        clientId.set(null);
     }
 }
