@@ -1,7 +1,7 @@
 @portal
 @no_widget
 @no_chatdesk
-@signup_account
+@testing_env_only
 @closing_account
 Feature: Closing account
 

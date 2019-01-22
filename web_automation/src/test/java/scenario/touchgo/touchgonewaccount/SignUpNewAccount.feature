@@ -1,7 +1,7 @@
 @portal
 @no_widget
 @no_chatdesk
-@signup_account
+@testing_env_only
 Feature: Signing up the account
 
   Scenario: I should be able to sign up and activate new account
