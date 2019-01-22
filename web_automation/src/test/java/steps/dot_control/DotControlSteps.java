@@ -162,17 +162,20 @@ public class DotControlSteps {
 
     @Then("^MessageId is correctly saved$")
     public void checkMessageIdSavingInINITCall(){
-        String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), initCallClientId.get());
-        List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
-        String actualMessageId = chatHistoryItemList.stream()
-                .filter(e -> e.getClientId().equalsIgnoreCase(initCallClientId.get()))
-                .findFirst().get().getMessageId();
-        if(initCallMessageId.get()!=null){
-            Assert.assertEquals(actualMessageId, initCallMessageId.get(),
-                "Message id is not as expected\n");
-        } else{
-            Assert.assertTrue(!actualMessageId.equalsIgnoreCase("null"),
-                    "Message id is not auto generated");
+        // skipping for demo1 because its db is located in another network
+        if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
+            String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), initCallClientId.get());
+            List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
+            String actualMessageId = chatHistoryItemList.stream()
+                    .filter(e -> e.getClientId().equalsIgnoreCase(initCallClientId.get()))
+                    .findFirst().get().getMessageId();
+            if (initCallMessageId.get() != null) {
+                Assert.assertEquals(actualMessageId, initCallMessageId.get(),
+                        "Message id is not as expected\n");
+            } else {
+                Assert.assertTrue(!actualMessageId.equalsIgnoreCase("null"),
+                        "Message id is not auto generated");
+            }
         }
     }
 

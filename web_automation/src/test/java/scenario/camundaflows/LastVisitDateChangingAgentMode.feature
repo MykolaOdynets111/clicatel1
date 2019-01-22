@@ -1,3 +1,4 @@
+@skip_for_demo1
 @camunda
 Feature: Welcome flow: changing lastVisit date in agent mode
 
