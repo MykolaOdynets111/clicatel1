@@ -18,6 +18,9 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
     @FindBy(xpath =  ".//button[@ng-click='wizardSubmit()'][not(@id='integration-save')]")
     private WebElement addToCardButton;
 
+    @FindBy(xpath = "//span[contains(@value, 'MONTH')]//span[contains(@class, 'cl-input-label')]")
+    private WebElement monthlyRadioButton;
+
     public UpgradeYourPlanWindow selectAgentSeats(int seats){
         try {
             waitForElementToBeClickableAgent(addAgentSeatsButton, 25, "main");
@@ -34,5 +37,10 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
     public void clickAddToCardButton(){
         executeJSclick(addToCardButton, DriverFactory.getAgentDriverInstance());
 //        addToCardButton.click();
+    }
+
+    public UpgradeYourPlanWindow selectMonthly(){
+        monthlyRadioButton.click();
+        return this;
     }
 }

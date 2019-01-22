@@ -89,7 +89,9 @@ public class PortalMainPage extends PortalAbstractPage {
 
     public void addAgentSeatsIntoCart(int agentSeats){
         getPageHeader().clickUpgradeButton();
-        getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
+        getUpgradeYourPlanWindow()
+                .selectAgentSeats(agentSeats)
+                .selectMonthly()
                 .clickAddToCardButton();
         waitWhileProcessing();
         try {
