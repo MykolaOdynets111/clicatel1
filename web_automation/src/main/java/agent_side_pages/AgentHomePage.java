@@ -22,7 +22,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='End chat']")
     private WebElement endChatButton;
 
-    @FindBy(xpath = "//button[text()='Close chat']")
+    @FindBy(xpath = "//span[text()='Close Chat']")
     private WebElement closeChatButton;
 
     private String closeChatButtonXPATH = "//span[text()='Close Chat']";
