@@ -145,7 +145,8 @@ public class DotControlSteps {
         SoftAssert soft = new SoftAssert();
         Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 200,
-                "\nResponse status code is not as expected after sending INIT message\n");
+                "\nResponse status code is not as expected after sending INIT message\n"+
+                resp.getBody().asString() + "\n");
         soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
                 "\nResponse on INIT call contains incorrect clientId\n");
         soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
