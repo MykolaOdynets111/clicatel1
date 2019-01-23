@@ -2,7 +2,7 @@
 Feature: User should be able to continue previously started chat
 
   Background:
-    Given User opens General Bank Demo tenant page for user testing_aqaUser
+    Given User opens General Bank Demo tenant page for user testing_User
     Given Last visit date is changed to minus 13 hours
     And Click chat icon
 
