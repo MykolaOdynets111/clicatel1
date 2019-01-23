@@ -178,6 +178,34 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
+    @When("^Send init call with provided messageId and not registered apiToken then correct response is returned$")
+    public void sendInitCallWithNotRegisteredApiToken(){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId("provided");
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), "eQscd8r4_notRegistered", clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 401,
+                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "API token is not registered",
+                "\nResponse on INIT call contains incorrect error message\n");
+        soft.assertAll();
+    }
+
+    @When("^Send init call with provided messageId and empty clientId then correct response is returned$")
+    public void sendInitCallWithEmptyClientId(){
+        clientId.set("");
+        generateInitCallMessageId("provided");
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 400,
+                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Invalid client id",
+                "\nResponse on INIT call contains incorrect error message\n");
+        soft.assertAll();
+    }
+
     @Then("^MessageId is correctly saved$")
     public void checkMessageIdSavingInINITCall(){
         // skipping for demo1 because its db is located in another network

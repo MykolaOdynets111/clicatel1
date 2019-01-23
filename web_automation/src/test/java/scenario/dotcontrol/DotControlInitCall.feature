@@ -24,3 +24,13 @@ Feature: Creating .Control integration and sending messages
     And MessageId is correctly saved
     Given I login as agent of General Bank Demo
     Then Verify dot .Control returns agents_available response
+
+  @start_server
+  Scenario: Sending init call with not registered apiToken
+    Given Create .Control integration for General Bank Demo tenant
+    When Send init call with provided messageId and not registered apiToken then correct response is returned
+
+  @start_server
+  Scenario: Sending init call with empty clientId
+    Given Create .Control integration for General Bank Demo tenant
+    When Send init call with provided messageId and empty clientId then correct response is returned
