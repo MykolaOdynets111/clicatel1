@@ -104,7 +104,7 @@ public class ApiHelper {
     }
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
-        String body = createPutBodyForWidgetDisplayHours(day, startTime, endTime);
+        String body = createPutBodyForHours(day, startTime, endTime);
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
@@ -112,7 +112,35 @@ public class ApiHelper {
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
     }
 
-    private static String createPutBodyForWidgetDisplayHours(String day, String startTime,  String endTime) {
+    public static void setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
+        String body = createPutBodyForHours(day, startTime, endTime);
+        Response resp = RestAssured.given().log().all()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body(body)
+                .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+        resp.getBody().asString();
+    }
+
+    public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
+        Response resp = RestAssured.given().log().all()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+        try {
+            return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
+        } catch(java.lang.ClassCastException e){
+            Assert.assertTrue(false, "Incorrect body on updating support hours \n"
+            +"Status code: " +resp.statusCode() + "\n"
+                    +"tenantOrgName: "+ tenantOrgName
+                    + "Authorization :"  + RequestSpec.getAccessTokenForPortalUser(tenantOrgName) + "\n"
+          + resp.getBody().asString()  );
+//            System.out.println(resp.getBody().asString());
+            return null;
+        }
+    }
+
+    private static String createPutBodyForHours(String day, String startTime, String endTime) {
         String body;
         if (day.equalsIgnoreCase("all week")) {
             body = "[\n" +

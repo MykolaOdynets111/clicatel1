@@ -71,7 +71,6 @@ public class RequestSpec {
         }
 
     public static String getAccessTokenForPortalUser(String tenantOrgName) {
-        if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
             Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "main agent");
             Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
             Response resp = RestAssured.given()
@@ -84,9 +83,6 @@ public class RequestSpec {
 
             PORTAL_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
             return PORTAL_USER_ACCESS_TOKEN.get();
-        } else {
-            return PORTAL_USER_ACCESS_TOKEN.get();
-        }
     }
 
     public static String getAccessTokenForPortalUserByAccount(String accountName) {

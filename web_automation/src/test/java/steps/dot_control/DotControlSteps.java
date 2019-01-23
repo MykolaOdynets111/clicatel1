@@ -11,6 +11,7 @@ import dataManager.Tenants;
 import dataManager.dot_control.DotControlCreateIntegrationInfo;
 import dataManager.jackson_schemas.ChatHistoryItem;
 import dataManager.jackson_schemas.Integration;
+import dataManager.jackson_schemas.SupportHoursItem;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
 import dbManager.DBConnector;
 import driverManager.ConfigManager;
@@ -19,6 +20,7 @@ import java_server.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class DotControlSteps {
@@ -225,6 +227,35 @@ public class DotControlSteps {
         }
     }
 
+    @Given("^Set agent support hours with day shift$")
+    public void setSupportHoursWithShift(){
+        LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
+
+        ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
+                currentTimeWithADayShift.getHour()+ ":00", "23:59");
+    }
+
+
+    @When("^Send init call with (.*) messageId correct response without of support hours is returned$")
+    public void sendInitCallOutOfSupport(String messageIdStrategy){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId(messageIdStrategy);
+        SoftAssert soft = new SoftAssert();
+        List<SupportHoursItem> expectedBusinessHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n"+
+                        resp.getBody().asString() + "\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains incorrect conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "OUT_OF_BUSINESS_HOURS",
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertEquals(resp.getBody().jsonPath().getList("businessHours", SupportHoursItem.class), expectedBusinessHours,
+                "\nResponse on INIT call contains incorrect businessHours\n");
+        soft.assertAll();
+    }
     public static DotControlRequestMessage getFromClientRequestMessage(){
         return dotControlRequestMessage.get();
     }

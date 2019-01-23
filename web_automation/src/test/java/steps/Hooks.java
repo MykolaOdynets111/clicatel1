@@ -150,6 +150,10 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
+        if(scenario.getSourceTagNames().contains("@agent_support_hours")){
+            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        }
+
 
         closeMainBrowserIfOpened();
     }
@@ -230,7 +234,6 @@ public class Hooks implements JSHelper{
                 given().delete(url);
             }
 
-            RequestSpec.clearAccessTokenForPortalUser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

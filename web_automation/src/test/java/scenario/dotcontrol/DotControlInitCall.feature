@@ -25,6 +25,14 @@ Feature: Creating .Control integration and sending messages
     Given I login as agent of General Bank Demo
     Then Verify dot .Control returns agents_available response
 
+  @agent_support_hours
+  @start_server
+  Scenario: Sending init call to .Control out of support hours
+    Given Create .Control integration for Automation Bot tenant
+    Given Set agent support hours with day shift
+    When Send init call with provided messageId correct response without of support hours is returned
+    And MessageId is correctly saved
+
   @start_server
   Scenario: Sending init call with not registered apiToken
     Given Create .Control integration for General Bank Demo tenant

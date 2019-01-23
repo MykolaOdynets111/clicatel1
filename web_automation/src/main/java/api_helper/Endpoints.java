@@ -12,6 +12,8 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_HOURS = URLs.getTouchApiBaseURL() + "tenants/%s/hours/webchat";
 
+    public static String AGENT_SUPPORT_HOURS = URLs.getTouchApiBaseURL() + "tenants/%s/hours/agent-support";
+
     public static String WIDGET_VISIBILITY_TERRITORIES = URLs.getTouchApiBaseURL() + "territories/availability";
 
     public static String FACEBOOK_INTEGRATION =  URLs.getTouchApiBaseURL() + "facebook-registration/integration";
