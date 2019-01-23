@@ -148,6 +148,7 @@ public class BasePortalSteps {
 
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
     public void downgradeTouchGoPlan(String tenantOrgName){
+            Tenants.setTenantUnderTestNames(tenantOrgName);
             DriverFactory.closeAgentBrowser();
             ApiHelper.decreaseTouchGoPLan(tenantOrgName);
             List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(tenantOrgName);
