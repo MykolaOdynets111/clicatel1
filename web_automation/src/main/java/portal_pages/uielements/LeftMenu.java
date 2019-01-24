@@ -39,7 +39,7 @@ public class LeftMenu extends AbstractUIElement {
             }
         }
 
-        waitForElementToBeVisibleAgent(leftSubMenu, 5);
+        waitForElementToBeVisibleAgent(leftSubMenu, 10);
         submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get().click();
     }
 

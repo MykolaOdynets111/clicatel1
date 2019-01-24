@@ -35,9 +35,9 @@ Feature: Creating .Control integration and sending messages
 
 #  @agent_support_hours
 #  @start_server
-#  Scenario: Sending init call to .Control with no session capasity
+#  Scenario: Sending init call to .Control with no session capacity
+#    Given Set session capacity to 0 for Automation Bot tenant
 #    Given Create .Control integration for Automation Bot tenant
-#    Given Set agent support hours with day shift
 #    When Send init call with provided messageId correct response without of support hours is returned
 #    And MessageId is correctly saved
 

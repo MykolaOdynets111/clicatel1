@@ -56,8 +56,10 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         findElemByCSSAgent(firstName).sendKeys("AQA");
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
-        nextButton.click();
-        waitForAddingNewPaymentConfirmationPopup();
+        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), nextButton);
+//        executeJSclick(nextButton, DriverFactory.getAgentDriverInstance());
+////        .click();
+//        waitForAddingNewPaymentConfirmationPopup();
         return this;
     }
 

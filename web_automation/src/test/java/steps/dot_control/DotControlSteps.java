@@ -256,6 +256,15 @@ public class DotControlSteps {
                 "\nResponse on INIT call contains incorrect businessHours\n");
         soft.assertAll();
     }
+
+
+    @When("^Set session capacity to (.*) for (.*) tenant$")
+    public void updateSessionCapacity(int chats, String tenantOrgName){
+        ApiHelper.updateSessionCapasity(tenantOrgName, chats);
+    }
+
+
+
     public static DotControlRequestMessage getFromClientRequestMessage(){
         return dotControlRequestMessage.get();
     }
