@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testcontainers.containers.SeleniumUtils;
 import portal_pages.PortalAbstractPage;
 
-
+@FindBy(css = "div.cl-wizzard.create-integration-container")
 public class CreateIntegrationWindow extends BasePortalWindow {
 
     @FindBy(css = "button.facebook-login-bttn")

@@ -62,7 +62,8 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     }
 
     public boolean isNewPaymentAdded() {
-//        waitForNotificationAlertToDisappear();
+        waitWhileProcessing();
+        waitForNotificationAlertToDisappear();
         return isElementShownAgent(addedPayment, 20);
     }
 

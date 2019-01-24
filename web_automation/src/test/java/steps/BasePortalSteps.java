@@ -507,6 +507,7 @@ public class BasePortalSteps {
     @When("^Admin tries to add new card$")
     public void addNewCard(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+        getPortalBillingDetailsPage().waitWhileProcessing();
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
@@ -525,9 +526,15 @@ public class BasePortalSteps {
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickCheckBox(checkboxNumber);
     }
 
-    @When("^Admin clicks (?:'Add payment method'|'Next') button$")
+    @When("^Admin clicks 'Add payment method' button$")
     public void clickAddPaymentButtonInAddPaymentWindow(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickAddPaymentButton();
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
+    }
+
+    @When("^Admin clicks 'Next' button$")
+    public void clickNextButtonInAddPaymentWindow(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickNextButton();
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
     }
 

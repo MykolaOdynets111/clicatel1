@@ -13,22 +13,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-
-public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, JSHelper {
-
-    public ConfirmPaymentDetailsWindow(WebElement element) {
-        super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
-    }
+@FindBy(css = "div.cl-wizzard.create-integration-container")
+public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectPaymentBox;
 
-    @FindBy(css = "li.ui-select-choices-group")
-    private WebElement choisesGroup;
-    
-    @FindBy(css = "button.button.button-primary.ng-scope")
-    private WebElement nextButton;
+    private String billingContactHeader = "//legend[text()='Billing contact']";
+
+    private String choisesGroup = "li.ui-select-choices-group";
 
     private String closeWindowButton = "span.svg-close";
 
@@ -53,15 +46,20 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, J
 
     public ConfirmPaymentDetailsWindow clickSelectPaymentField(){
         selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(choisesGroup, 9);
+        if(!isElementShownAgentByCSS(choisesGroup, 5, "admin")){
+            selectPaymentBox.click();
+        }
+        waitForElementToBeVisibleByCssAgent(choisesGroup, 9);
         return this;
     }
     
     public ConfirmPaymentDetailsWindow clickNexButton(){
         waitFor(500);
         waitForElementToBeClickableAgent(nextButton, 7, "admin");
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-        executor.executeScript("arguments[0].click();", nextButton);
+        nextButton.click();
+        if(isElementShownAgentByXpath(billingContactHeader, 6, "admin")){
+            nextButton.click();
+        }
         return this;
     }
 

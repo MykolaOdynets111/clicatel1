@@ -57,9 +57,6 @@ Feature: Admin should be able to manage payment methods
     Then 'Add Payment Method' window is opened
     When Admin selects 2 terms checkbox
     And Admin clicks 'Add payment method' button
-#    Then 'Add Payment Method' window is opened
-#    When Admin selects 3 terms checkbox
-#    And Admin clicks 'Add payment method' button
     Then New card is shown in Payment methods tab
 
 

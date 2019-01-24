@@ -1,15 +1,12 @@
 package portal_pages.uielements;
 
-import abstract_classes.AbstractUIElement;
-import driverManager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portal_pages.CartPage;
 
 import java.util.List;
 
-
+@FindBy(css = "div.cl-wizzard.create-integration-container")
 public class AddPaymentMethodWindow extends BasePortalWindow {
 
     @FindBy(css = "span[aria-label='Select box activate']")
@@ -56,10 +53,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         findElemByCSSAgent(firstName).sendKeys("AQA");
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
-        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), nextButton);
-//        executeJSclick(nextButton, DriverFactory.getAgentDriverInstance());
-////        .click();
-//        waitForAddingNewPaymentConfirmationPopup();
+        addPaymentMethod.click();
         return this;
     }
 
@@ -87,9 +81,14 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         checkboxes.get(checkboxOrder-1).click();
     }
 
-    public void clickAddPaymentButton(){
-        executeJSclick(nextButton, DriverFactory.getAgentDriverInstance());
+    public void clickNextButton(){
+        nextButton.click();
     }
+
+    public void clickAddPaymentButton(){
+        addPaymentMethod.click();
+    }
+
 
     public void waitForAddingNewPaymentConfirmationPopup(){
         try {

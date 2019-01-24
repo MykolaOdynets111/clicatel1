@@ -6,11 +6,14 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css = "div.cl-wizzard.create-integration-container")
+
 public class BasePortalWindow extends AbstractUIElement{
 
-    @FindBy(css = "button.button.button-primary.ng-scope")
+    @FindBy(xpath = "//button[@class='button button-primary ng-scope']")
     protected WebElement nextButton;
+
+    @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
+    protected WebElement addPaymentMethod;
 
     @FindBy(css = "li.ui-select-choices-group div.ui-select-choices-row")
     protected List<WebElement> selectOptionsInDropdown;
