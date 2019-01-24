@@ -40,11 +40,13 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     private String termsAndConditions = "//a[text()='Terms and Conditions']";
 
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
+        waitForElementToBeVisibleByXpathAgent(String.format(paymentMethodXpath, payment), 8);
         findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
         return this;
     }
 
     public ConfirmPaymentDetailsWindow clickSelectPaymentField(){
+        waitForElementToBeVisibleAgent(selectPaymentBox, 5);
         selectPaymentBox.click();
         if(!isElementShownAgentByCSS(choisesGroup, 5, "admin")){
             selectPaymentBox.click();
@@ -52,14 +54,21 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
         waitForElementToBeVisibleByCssAgent(choisesGroup, 9);
         return this;
     }
+
+    public boolean isSelectPaymentShown(){
+        return isElementShownAgent(selectPaymentBox, 5);
+    }
     
     public ConfirmPaymentDetailsWindow clickNexButton(){
         waitFor(500);
-        waitForElementToBeClickableAgent(nextButton, 7, "admin");
-        nextButton.click();
-        if(isElementShownAgentByXpath(billingContactHeader, 6, "admin")){
-            nextButton.click();
-        }
+        waitForElementToBeClickableAgent(nextButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+        return this;
+    }
+
+    public ConfirmPaymentDetailsWindow clickPayNowButton(){
+        waitForElementToBeClickableAgent(payNowButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), payNowButton);
         return this;
     }
 

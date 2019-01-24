@@ -2,6 +2,7 @@ package interfaces;
 
 import driverManager.DriverFactory;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
 import java.util.List;
@@ -205,5 +206,10 @@ public interface WebActions extends WebWait {
         JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
         jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
                 DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(widgetScroller)));
+    }
+
+    default void clickHoldRelease(WebDriver driver, WebElement elem){
+        Actions actions = new Actions(driver);
+        actions.clickAndHold(elem).release().perform();
     }
 }

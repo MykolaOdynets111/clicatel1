@@ -1,5 +1,6 @@
 package portal_pages.uielements;
 
+import driverManager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -86,7 +87,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void clickAddPaymentButton(){
-        addPaymentMethod.click();
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
     }
 
 
