@@ -18,7 +18,7 @@ Feature: Creating .Control integration and sending messages
     And MessageId is correctly saved
 
   @start_server
-  Scenario: Sending init call to .Control with active agent (with provided messageId)
+  Scenario: Sending init call to .Control with scheduler agent (with provided messageId)
     Given Create .Control integration for General Bank Demo tenant
     When Send init call with provided messageId and no active agents correct response is returned
     And MessageId is correctly saved
@@ -33,13 +33,14 @@ Feature: Creating .Control integration and sending messages
     When Send init call with provided messageId correct response without of support hours is returned
     And MessageId is correctly saved
 
-#  @agent_support_hours
-#  @start_server
-#  Scenario: Sending init call to .Control with no session capacity
-#    Given Set session capacity to 0 for Automation Bot tenant
-#    Given Create .Control integration for Automation Bot tenant
-#    When Send init call with provided messageId correct response without of support hours is returned
-#    And MessageId is correctly saved
+  @agent_support_hours
+  @start_server
+  Scenario: Sending init call to .Control with no session capacity
+    Given Set session capacity to 0 for Automation Bot tenant
+    Given I login as agent of Automation Bot
+    Given Create .Control integration for Automation Bot tenant
+    When Send init call with provided messageId and no active agents correct response is returned
+    And MessageId is correctly saved
 
   @start_server
   Scenario: Sending init call with not registered apiToken

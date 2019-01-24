@@ -3,6 +3,7 @@ package steps.dot_control;
 import api_helper.APIHelperDotControl;
 import api_helper.ApiHelper;
 import api_helper.ApiHelperTie;
+import api_helper.RequestSpec;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

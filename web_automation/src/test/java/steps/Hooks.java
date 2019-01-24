@@ -154,7 +154,7 @@ public class Hooks implements JSHelper{
             ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
         }
 
-
+        RequestSpec.clearAccessTokenForPortalUser();
         closeMainBrowserIfOpened();
     }
 

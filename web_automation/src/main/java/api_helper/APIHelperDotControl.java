@@ -50,8 +50,8 @@ public class APIHelperDotControl {
     }
 
     public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
-        return
-        RestAssured.given().log().all()
+        RequestSpec.clearAccessTokenForPortalUser();
+        return RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
