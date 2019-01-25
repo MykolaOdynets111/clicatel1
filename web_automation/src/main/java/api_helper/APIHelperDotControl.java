@@ -74,7 +74,7 @@ public class APIHelperDotControl {
         return resp;
     }
 
-    public static void sendMessage(DotControlRequestMessage requestMessage){
+    public static Response sendMessage(DotControlRequestMessage requestMessage){
         ObjectMapper mapper = new ObjectMapper();
         Response resp = null;
         try {
@@ -82,16 +82,10 @@ public class APIHelperDotControl {
                     .header("Content-Type", "application/json")
                     .body(mapper.writeValueAsString(requestMessage))
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
-            if(!(resp.statusCode()==200)) {
-                Assert.assertTrue(false, "Integration creating was not successful\n" +
-                        "Status code " + resp.statusCode()+
-                        "\n Body: " + resp.getBody().asString());
-            }
-
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        int a = 2;
+        return resp;
     }
 
     public static Response deleteHTTPIntegrations(String tenantOrgName){

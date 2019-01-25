@@ -30,7 +30,8 @@ public class DotControlSteps {
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
-    private static ThreadLocal<String> initCallMessageId= new ThreadLocal<>();
+    private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
+    private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
@@ -59,30 +60,66 @@ public class DotControlSteps {
 
     @When("Send (.*) message for .Control")
     public void sendMessageToDotControl(String message){
-        if (dotControlRequestMessage.get()==null){
-            createRequestMessage(apiToken.get(), message);
-        } else{
-            dotControlRequestMessage.get().setMessage(message);
-            dotControlRequestMessage.get().setMessageId(
-                    dotControlRequestMessage.get().getMessageId() + faker.number().randomNumber(7, false));
-
+        if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
+        else{
+                dotControlRequestMessage.get().setMessage(message);
+                dotControlRequestMessage.get().setMessageId(
+                        dotControlRequestMessage.get().getMessageId() + faker.number().randomNumber(7, false));
         }
-        APIHelperDotControl.sendMessage(dotControlRequestMessage.get());
+        if (message.contains("invalid apiToken")) dotControlRequestMessage.get().setApiToken("invalid_token");
+        if (message.contains("empty")) dotControlRequestMessage.get().setMessage("");
+        if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
+
+        responseOnSentRequest.set(
+                APIHelperDotControl.sendMessage(dotControlRequestMessage.get())
+        );
         clientId.set(dotControlRequestMessage.get().getClientId());
+    }
+
+    @Then("^Message should be sent$")
+    public void verifyMessageIsSent(){
+        Assert.assertEquals(responseOnSentRequest.get().statusCode(), 200,
+        "Sending empty message causes error\n" +
+        responseOnSentRequest.get().getBody().asString() + "\n");
+    }
+
+    @Then("^Error with not defined tenant is returned$")
+    public void verifyInvalidApiKeyForSendMessage(){
+        SoftAssert soft = new SoftAssert();
+        Response resp = responseOnSentRequest.get();
+        soft.assertEquals(resp.getStatusCode(), 401,
+                "\nResponse status code is not as expected after sending message with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Can not define tenant via API token",
+                "\nResponse on invalid apiToken contains incorrect error message\n");
+        soft.assertAll();
     }
 
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
+        if(!(responseOnSentRequest.get().statusCode()==200)) {
+                Assert.assertTrue(false, "Integration creating was not successful\n" +
+                        "Status code " + responseOnSentRequest.get().statusCode()+
+                        "\n Body: " + responseOnSentRequest.get().getBody().asString());
+            }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
         waitFotResponseToComeToServer();
-        try {
         Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                 "Message is not as expected");
-        }catch (NullPointerException e){
-            Assert.assertTrue(false, "Some nullpointer exception was faced\n" + Server.incomingRequests.toString() +
-                    "\n"+ dotControlRequestMessage.get().toString());
-        }
+    }
+
+    @Then("^Error about client  is returned$")
+    public void verifyErrorOnInvalidClientID(){
+        SoftAssert soft = new SoftAssert();
+        Response resp = responseOnSentRequest.get();
+        soft.assertEquals(resp.getStatusCode(), 400,
+                "\nResponse status code is not as expected after sending message with invalid clientID \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Invalid client id",
+                "\nResponse on call with invalid clientID contains incorrect error message\n");
+        soft.assertAll();
+        responseOnSentRequest.get();
     }
 
     @Then("Verify dot .Control returns (.*) response")
@@ -308,9 +345,10 @@ public class DotControlSteps {
     }
 
     public static void cleanUPMessagesInfo(){
-        infoForCreatingIntegration.set(null);
-        dotControlRequestMessage.set(null);
-        apiToken.set(null);
-        clientId.set(null);
+        responseOnSentRequest.remove();
+        infoForCreatingIntegration.remove();
+        dotControlRequestMessage.remove();
+        apiToken.remove();
+        clientId.remove();
     }
 }
