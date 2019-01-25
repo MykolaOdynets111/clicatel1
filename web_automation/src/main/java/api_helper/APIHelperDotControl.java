@@ -51,7 +51,7 @@ public class APIHelperDotControl {
 
     public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
         RequestSpec.clearAccessTokenForPortalUser();
-        return RestAssured.given().log().all()
+        Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
@@ -65,6 +65,13 @@ public class APIHelperDotControl {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            //Wait for integration apiKey to be processed
+        }
+
+        return resp;
     }
 
     public static void sendMessage(DotControlRequestMessage requestMessage){
