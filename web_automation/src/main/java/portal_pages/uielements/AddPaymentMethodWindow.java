@@ -89,10 +89,16 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     public void clickAddPaymentButton(){
         waitForElementToBeClickableAgent(addPaymentMethod, 15, "admin");
-        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
-        addPaymentMethod.sendKeys(Keys.ENTER);
+//        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
+//        addPaymentMethod.sendKeys(Keys.ENTER);
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
     }
 
+
+    public boolean isAddPaymentButtonEnabled(){
+        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
+        return addPaymentMethod.isEnabled();
+    }
 
     public void waitForAddingNewPaymentConfirmationPopup(){
         try {

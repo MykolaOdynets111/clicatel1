@@ -133,7 +133,9 @@ public class AgentHomePage extends AgentAbstractPage {
     public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
         if (isElementShownAgent(conversationAreaContainer,15, ordinalAgentNumber)) {
             try{
-                waitForElementToBeVisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
+                try {
+                    waitForElementToBeVisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
+                }catch (TimeoutException e){ }
                 waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 15, ordinalAgentNumber);
                 return true;
             }

@@ -516,6 +516,13 @@ public class BasePortalSteps {
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo();
     }
 
+    @Then("^'Add payment method' button is disabled$")
+    public void verifyAddPaymentDisabled(){
+        Assert.assertFalse(getPortalBillingDetailsPage().getAddPaymentMethodWindow().isAddPaymentButtonEnabled(),
+                "Add payment button is not disabled");
+    }
+
+
     @When("^Selects all checkboxes for adding new payment$")
     public void checkAllCheckBoxesForAddindNewPayment(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().checkAllCheckboxesForAddingNewPayment();
