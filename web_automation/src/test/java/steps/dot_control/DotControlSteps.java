@@ -3,7 +3,6 @@ package steps.dot_control;
 import api_helper.APIHelperDotControl;
 import api_helper.ApiHelper;
 import api_helper.ApiHelperTie;
-import api_helper.RequestSpec;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -71,7 +70,7 @@ public class DotControlSteps {
         if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
 
         responseOnSentRequest.set(
-                APIHelperDotControl.sendMessage(dotControlRequestMessage.get())
+                APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
         clientId.set(dotControlRequestMessage.get().getClientId());
     }
@@ -183,7 +182,7 @@ public class DotControlSteps {
         clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
         generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n"+
                 resp.getBody().asString() + "\n");
@@ -203,7 +202,7 @@ public class DotControlSteps {
         clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
         generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
                         resp.getBody().asString() + "\n\n");
@@ -223,7 +222,7 @@ public class DotControlSteps {
         clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
         generateInitCallMessageId("provided");
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), "eQscd8r4_notRegistered", clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), "eQscd8r4_notRegistered", clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 401,
                 "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
                         resp.getBody().asString() + "\n\n");
@@ -237,7 +236,7 @@ public class DotControlSteps {
         clientId.set("");
         generateInitCallMessageId("provided");
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 400,
                 "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
                         resp.getBody().asString() + "\n\n");
@@ -280,7 +279,7 @@ public class DotControlSteps {
         generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
         List<SupportHoursItem> expectedBusinessHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
-        Response resp = APIHelperDotControl.sendInitCall(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n"+
                         resp.getBody().asString() + "\n");

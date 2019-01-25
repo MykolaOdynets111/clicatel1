@@ -65,11 +65,6 @@ public class APIHelperDotControl {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            //Wait for integration apiKey to be processed
-        }
 
         return resp;
     }
@@ -88,13 +83,47 @@ public class APIHelperDotControl {
         return resp;
     }
 
+    public static Response sendMessageWithWait(DotControlRequestMessage requestMessage){
+        Response resp = sendMessage(requestMessage);
+        for (int i =0; i<10; i++){
+            if (resp.statusCode() != 401) break;
+            else{
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                resp = sendMessage(requestMessage);
+            }
+
+        }
+        return resp;
+    }
+
     public static Response deleteHTTPIntegrations(String tenantOrgName){
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }
 
-    public static Response sendInitCall(String tenantOrgName, String apiToken, String clientId, String messageId){
+    public static Response sendInitCallWithWait(String tenantOrgName, String apiToken, String clientId, String messageId){
+        Response resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+        for (int i =0; i<10; i++){
+            if (resp.statusCode() != 401) break;
+            else{
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+            }
+
+        }
+        return resp;
+    }
+
+    private static Response sendInitCall(String tenantOrgName, String apiToken, String clientId, String messageId){
 
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
