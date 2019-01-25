@@ -20,4 +20,7 @@ public class BasePortalWindow extends AbstractUIElement{
 
     @FindBy(css = "li.ui-select-choices-group div.ui-select-choices-row")
     protected List<WebElement> selectOptionsInDropdown;
+
+    @FindBy(xpath = "//span[@class='create-title ng-binding']")
+    protected WebElement windowHeader;
 }
