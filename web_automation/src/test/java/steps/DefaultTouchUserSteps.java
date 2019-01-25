@@ -400,11 +400,6 @@ public class DefaultTouchUserSteps implements JSHelper{
         if (cardText.contains("${firstName}")) {
             expectedCardText = cardText.replace("${firstName}", getUserNameFromLocalStorage());
         }
-        if (cardText.contains("${firstName_qr}")) {
-            expectedCardText = cardText.replace("${firstName_qr}",
-                    getUserDataForQuoteRequest(Thread.currentThread().getId()).getFirstName());
-        }
-
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 15),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
