@@ -16,7 +16,7 @@ import org.openqa.selenium.support.PageFactory;
 @FindBy(css = "div.cl-wizzard.create-integration-container")
 public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
-    @FindBy(css = "span[aria-label='Select box activate']")
+    @FindBy(xpath = "//label[text()='Payment Method']")
     private WebElement selectPaymentBox;
 
     private String billingContactHeader = "//legend[text()='Billing contact']";
