@@ -26,7 +26,7 @@ public class ToUserTextMessage  extends Widget implements WebActions {
             if(toUserTextMessages.get(0).getText().isEmpty()){
                 waitFor(1000);
             }
-            return toUserTextMessages.get(0).getText();
+            return toUserTextMessages.get(0).getAttribute("innerText");
         } catch (IndexOutOfBoundsException e) {
             return "no text response found";
         }
