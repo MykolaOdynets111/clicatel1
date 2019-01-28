@@ -17,6 +17,9 @@ import org.openqa.selenium.support.PageFactory;
 public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     @FindBy(xpath = "//label[text()='Payment Method']")
+    private WebElement paymentethodWindowHeader;
+
+    @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectPaymentBox;
 
     private String billingContactHeader = "//legend[text()='Billing contact']";
@@ -56,7 +59,7 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     }
 
     public boolean isSelectPaymentShown(){
-        return isElementShownAgent(selectPaymentBox, 5);
+        return isElementShownAgent(paymentethodWindowHeader, 5);
     }
     
     public ConfirmPaymentDetailsWindow clickNexButton(){
