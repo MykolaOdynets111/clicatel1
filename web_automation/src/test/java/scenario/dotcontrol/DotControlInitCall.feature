@@ -33,7 +33,7 @@ Feature: Creating .Control integration and sending messages
     When Send init call with provided messageId correct response without of support hours is returned
     And MessageId is correctly saved
 
-  @agent_support_hours
+  @agent_session_capacity
   @start_server
   Scenario: Sending init call to .Control with no session capacity
     Given Set session capacity to 0 for Automation Bot tenant

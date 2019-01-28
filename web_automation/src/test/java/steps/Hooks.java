@@ -104,6 +104,14 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
+        if(scenario.getSourceTagNames().contains("@agent_support_hours")){
+            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        }
+
+        if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
+            ApiHelper.updateSessionCapasity(Tenants.getTenantUnderTestOrgName(), 100);
+        }
+
         finishAgentFlowIfExists(scenario);
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
@@ -150,9 +158,6 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
-        if(scenario.getSourceTagNames().contains("@agent_support_hours")){
-            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-        }
 
         RequestSpec.clearAccessTokenForPortalUser();
         closeMainBrowserIfOpened();
