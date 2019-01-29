@@ -305,6 +305,16 @@ task runCamundaFlowsTests(type:Test) {
 }
 
 
+task runChatdeskTests(type:Test) {
+    runTouchTests.dependsOn(getTouchGoPlan)
+    systemProperties = System.getProperties()
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/onethreadtests.xml"
+        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+    }
+}
+
 // ========= !! MAIN TASKS !! ============== //
 
 task runTests(type: Test) {
@@ -370,6 +380,10 @@ task runTests(type: Test) {
 
     if(suite == "camundaflows"){
         runTests.dependsOn(runCamundaFlowsTests)
+    }
+
+    if(suite == "chatdesk"){
+        runTests.dependsOn(runChatdeskTests)
     }
 
     runTests.finalizedBy(allureReport)
