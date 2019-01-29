@@ -68,7 +68,7 @@ public class PortalMainPage extends PortalAbstractPage {
                 .clickNexButton()
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
-                .clickNexButton();
+                .clickPayNowButton();
         waitWhileProcessing();
     }
 
