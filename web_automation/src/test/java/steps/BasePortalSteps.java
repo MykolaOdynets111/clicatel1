@@ -584,7 +584,7 @@ public class BasePortalSteps {
 
     @When("^Click Next button on Details tab$")
     public void clickNextButtonOnConfirmDetailsWindow(){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButton();
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButtonOnDetailsTab();
     }
 
     @When("^\"(.*)\" shown in payment methods dropdown$")

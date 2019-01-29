@@ -69,6 +69,19 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
         return this;
     }
 
+    public ConfirmPaymentDetailsWindow clickNexButtonOnDetailsTab(){
+        waitFor(500);
+        waitForElementToBeClickableAgent(nextButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+        try {
+            waitForElementToBeInvisibleAgent(cartPaymentDetailsForm, 3);
+        }catch (TimeoutException e){
+            clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+
+        }
+        return this;
+    }
+
     public ConfirmPaymentDetailsWindow clickPayNowButton(){
         waitForElementToBeClickableAgent(payNowButton, 15, "admin");
         clickHoldRelease(DriverFactory.getAgentDriverInstance(), payNowButton);

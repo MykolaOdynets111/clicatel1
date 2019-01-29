@@ -26,4 +26,7 @@ public class BasePortalWindow extends AbstractUIElement{
 
     @FindBy(xpath = "//span[@class='create-title ng-binding']")
     protected WebElement windowHeader;
+
+    @FindBy(name = "form.cartPaymentDetails")
+    protected WebElement cartPaymentDetailsForm;
 }
