@@ -3,6 +3,7 @@ package dataManager;
 import api_helper.Endpoints;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
+import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 
@@ -27,10 +28,14 @@ public class Accounts {
             Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal."
                    );
         }
-        tokenAndAccount.put("token", resp.jsonPath().get("token"));
-        List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
-        HashMap<String, String> targetAccount =accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
-        tokenAndAccount.put("accountId", targetAccount.get("id"));
+        try {
+            tokenAndAccount.put("token", resp.jsonPath().get("token"));
+            List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
+            HashMap<String, String> targetAccount = accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
+            tokenAndAccount.put("accountId", targetAccount.get("id"));
+        }catch(JsonPathException e){
+            Assert.assertTrue(false, "Unexpected response received while getting portal access token");
+        }
 
         return tokenAndAccount;
     }
