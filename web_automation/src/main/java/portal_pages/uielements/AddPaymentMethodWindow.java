@@ -97,8 +97,8 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
 
     public boolean isAddPaymentButtonEnabled(){
-        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
-        return addPaymentMethod.isEnabled();
+        executeJSHover(addPaymentMethodButton, DriverFactory.getAgentDriverInstance());
+        return addPaymentMethodButton.isEnabled();
     }
 
     public void waitForAddingNewPaymentConfirmationPopup(){

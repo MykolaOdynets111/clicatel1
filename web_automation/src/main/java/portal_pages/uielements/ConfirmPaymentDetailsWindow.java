@@ -76,8 +76,13 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     }
 
     public ConfirmPaymentDetailsWindow acceptTerms(){
-        waitForElementsToBeVisibleByCssAgent(acceptTermsCheckboxCSS, 7);
-        findElemsByCSSAgent(acceptTermsCheckboxCSS).forEach(WebElement::click);
+        try {
+            waitForElementsToBeVisibleByCssAgent(acceptTermsCheckboxCSS, 7);
+            findElemsByCSSAgent(acceptTermsCheckboxCSS).forEach(WebElement::click);
+        } catch(TimeoutException e){
+
+        }
+
         return this;
     }
 

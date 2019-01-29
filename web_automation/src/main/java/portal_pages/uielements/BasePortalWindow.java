@@ -16,6 +16,9 @@ public class BasePortalWindow extends AbstractUIElement{
     protected WebElement addPaymentMethod;
 
     @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
+    protected WebElement addPaymentMethodButton;
+
+    @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
     protected  WebElement payNowButton;
 
     @FindBy(css = "li.ui-select-choices-group div.ui-select-choices-row")
