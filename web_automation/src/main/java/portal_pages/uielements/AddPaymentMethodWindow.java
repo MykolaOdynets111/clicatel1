@@ -55,6 +55,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        waitFor(2000);
         executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
         return this;
     }
@@ -91,7 +92,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     public void clickAddPaymentButton(){
         waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
         waitForElementToBeClickableAgent(addPaymentMethod, 15, "admin");
-        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
+        waitFor(2000);
         executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
     }
 
