@@ -1,7 +1,6 @@
 package portal_pages.uielements;
 
 import driverManager.DriverFactory;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -55,8 +54,8 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         findElemByCSSAgent(firstName).sendKeys("AQA");
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
-        addPaymentMethod.click();
-//        clickHoldRelease(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
+        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
         return this;
     }
 
@@ -85,14 +84,15 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void clickNextButton(){
-        nextButton.click();
+        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        executeAngularClick(DriverFactory.getAgentDriverInstance(), nextButton);
     }
 
     public void clickAddPaymentButton(){
+        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
         waitForElementToBeClickableAgent(addPaymentMethod, 15, "admin");
-//        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
-//        addPaymentMethod.sendKeys(Keys.ENTER);
-        clickHoldRelease(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
+        executeJSHover(addPaymentMethod, DriverFactory.getAgentDriverInstance());
+        executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
     }
 
 

@@ -12,7 +12,7 @@ public class BasePortalWindow extends AbstractUIElement{
     @FindBy(xpath = "//button[@class='button button-primary ng-scope']")
     protected WebElement nextButton;
 
-    @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']/parent::span")
+    @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
     protected WebElement addPaymentMethod;
 
     @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
