@@ -89,7 +89,7 @@ public class DotControlSteps {
         soft.assertEquals(resp.getStatusCode(), 401,
                 "\nResponse status code is not as expected after sending message with not registered ApiToken \n" +
                         resp.getBody().asString() + "\n\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Can not define tenant via API token",
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Can not define tenant via enabled channel API token invalid_token",
                 "\nResponse on invalid apiToken contains incorrect error message\n");
         soft.assertAll();
     }
