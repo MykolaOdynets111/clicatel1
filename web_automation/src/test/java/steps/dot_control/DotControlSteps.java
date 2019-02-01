@@ -251,9 +251,16 @@ public class DotControlSteps {
         if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
             String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), clientId.get());
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
-            String actualMessageId = chatHistoryItemList.stream()
-                    .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
-                    .findFirst().get().getMessageId();
+            String actualMessageId = null;
+//            try {
+                actualMessageId = chatHistoryItemList.stream()
+                        .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
+                        .findFirst().get().getMessageId();
+//            }catch(java.util.NoSuchElementException e){
+//                Assert.assertTrue(false, "Not found message by clientId\n"
+//                + String.join(", ", chatHistoryItemList));
+//            }
+
             if (initCallMessageId.get() != null) {
                 Assert.assertEquals(actualMessageId, initCallMessageId.get(),
                         "Message id is not as expected\n");
