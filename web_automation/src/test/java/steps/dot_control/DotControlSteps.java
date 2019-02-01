@@ -19,7 +19,6 @@ import io.restassured.response.Response;
 import java_server.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -252,14 +251,14 @@ public class DotControlSteps {
             String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), clientId.get());
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
             String actualMessageId = null;
-//            try {
+            try {
                 actualMessageId = chatHistoryItemList.stream()
                         .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
                         .findFirst().get().getMessageId();
-//            }catch(java.util.NoSuchElementException e){
-//                Assert.assertTrue(false, "Not found message by clientId\n"
-//                + String.join(", ", chatHistoryItemList));
-//            }
+            }catch(java.util.NoSuchElementException e){
+                Assert.assertTrue(false, "Not found message by clientId\n"
+                + String.join(", ", chatHistoryItemList.toString()));
+            }
 
             if (initCallMessageId.get() != null) {
                 Assert.assertEquals(actualMessageId, initCallMessageId.get(),
