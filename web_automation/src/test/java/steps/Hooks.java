@@ -107,6 +107,7 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
             ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){

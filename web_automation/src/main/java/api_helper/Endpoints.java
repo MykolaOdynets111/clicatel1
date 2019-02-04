@@ -30,7 +30,11 @@ public class Endpoints {
 
     public static String CHAT_HISTORY = URLs.getTouchApiBaseURL() + "chats/history?sessionId=%s";
 
-    public static String SESSION_CAPASITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
+    public static String SESSION_CAPACITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
+
+    public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
+
+    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "ticket/process-by-id/";
 
     // ================== INTERNAL ============== //
 

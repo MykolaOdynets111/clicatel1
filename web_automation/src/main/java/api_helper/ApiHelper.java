@@ -380,6 +380,22 @@ public class ApiHelper {
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .put(Endpoints.SESSION_CAPASITY + availableChats);
+                .put(Endpoints.SESSION_CAPACITY + availableChats);
+    }
+
+    public static List<OvernightTicket> getOvernightTicketsByStatus(String tenantOrgName, String ticketStatus){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase())
+                .getBody().jsonPath().getList("", OvernightTicket.class);
+    }
+
+    public static void closeAllOvernightTickets(String tenantOrgName){
+        List<OvernightTicket> allTicketsByStatus = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
+        for(OvernightTicket ticket : allTicketsByStatus){
+            RestAssured.given()
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .post(Endpoints.PROCESS_OVERNIGHT_TICKET + ticket.getId());
+        }
     }
 }
