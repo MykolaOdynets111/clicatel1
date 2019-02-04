@@ -123,12 +123,20 @@ public class DotControlSteps {
     @Then("Verify dot .Control returns (.*) response")
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
         waitFotResponseToComeToServer();
-        if(expectedResponse.equalsIgnoreCase("agents_available")){
-            Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
-                    "Message is not as expected");
-        }else {
-            Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
-                    "Message is not as expected");
+        try {
+            if (expectedResponse.equalsIgnoreCase("agents_available")) {
+                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
+                        "Message is not as expected");
+            } else {
+                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
+                        "Message is not as expected");
+            }
+        }catch(NullPointerException e){
+            Assert.assertTrue(false, "NullPointerException was faced\n" +
+            "Keyset from server: " + Server.incomingRequests.keySet() + "\n" +
+            "clientId from created integration" + clientId.get() + "\n" +
+            "" + Server.incomingRequests.toString()
+            );
         }
     }
 

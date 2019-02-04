@@ -9,7 +9,6 @@ Feature: Creating .Control integration and sending messages
     When Send init call with provided messageId correct response is returned
     And MessageId is correctly saved
 
-  @Issue("https://jira.clickatell.com/browse/TPLAT-3627")
   @start_server
   Scenario: Sending init call to .Control with active agent (with auto generated messageId)
     Given Create .Control integration for General Bank Demo tenant
