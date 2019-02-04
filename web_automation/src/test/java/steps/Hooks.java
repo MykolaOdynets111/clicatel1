@@ -241,10 +241,6 @@ public class Hooks implements JSHelper{
                 given().delete(url);
             }
 
-
-            if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")){
-                DBConnector.deleteOvernightTickets(ConfigManager.getEnv());
-            }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

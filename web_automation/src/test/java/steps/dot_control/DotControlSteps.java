@@ -270,13 +270,20 @@ public class DotControlSteps {
         }
     }
 
-    @Given("^Set agent support hours with day shift$")
-    public void setSupportHoursWithShift(){
-        DBConnector.deleteOvernightTickets(ConfigManager.getEnv());
-        LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
+    @Given("^Set agent support hours (.*)$")
+    public void setSupportHoursWithShift(String shiftStrategy){
+        switch (shiftStrategy){
+            case "with day shift":
+                LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
-        ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
-                currentTimeWithADayShift.getHour()+ ":00", "23:59");
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
+                        currentTimeWithADayShift.getHour() + ":00", "23:59");
+                break;
+            case "all week":
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                        "00:01", "23:59");
+                break;
+        }
     }
 
 

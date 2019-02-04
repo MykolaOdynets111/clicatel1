@@ -224,7 +224,7 @@ public class DefaultAgentSteps implements JSHelper {
         softAssert.assertAll();
     }
 
-    @Then("Conversation area contains (.*) message")
+    @Then("Conversation area contains (.*) to user message")
     public void verifyOutOfSupportMessageShownOnChatdesk(String message){
         String userMessage = message;
         if(message.contains("out_of_support_hours")) {

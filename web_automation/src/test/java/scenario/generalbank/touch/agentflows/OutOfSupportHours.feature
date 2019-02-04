@@ -15,7 +15,7 @@ Feature: Chat handling in out of support hours
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with chat to agent user's message
     And Message that it is overnight ticket is shown for Agent
-    And Conversation area contains out_of_support_hours message
+    And Conversation area contains out_of_support_hours to user message
 
   @agent_support_hours
   Scenario: Verify overnight ticket is created on chatdesk for Bot mode tenant
@@ -29,7 +29,7 @@ Feature: Chat handling in out of support hours
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with chat to agent user's message
     And Message that it is overnight ticket is shown for Agent
-    And Conversation area contains out_of_support_hours message
+    And Conversation area contains out_of_support_hours to user message
 
   @agent_support_hours
   Scenario: Verify out_of_support_hours message shown for Agent mode tenant user
@@ -50,6 +50,18 @@ Feature: Chat handling in out of support hours
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
     Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
+
+#  @agent_support_hours
+#  Scenario: Verify out_of_support_hours message shown for Agent mode tenant user
+#    Given I login as agent of Automation
+#    Given Set agent support hours with day shift
+#    Given User select Automation tenant
+#    And Click chat icon
+#    When User enter chat to agent into widget input field
+#    Then Agent has new conversation request
+#    Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
+#    Given Set agent support hours for all week
+
 
 
 
