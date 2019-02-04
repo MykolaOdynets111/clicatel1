@@ -58,11 +58,15 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public boolean isNewConversationRequestIsShown(int wait, String agent) {
         String userName = getUserNameFromLocalStorage();
         try{
-            waitForElementToBeVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait, agent);
+            waitForElementToBeVisibleByXpathAgent(String.format(targetProfile, userName), wait, agent);
             return true;
         } catch(TimeoutException e) {
             return false;
         }
+    }
+
+    public boolean isOvernightTicketIconShown(String userName){
+        return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketIconShown();
     }
 
     public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait){

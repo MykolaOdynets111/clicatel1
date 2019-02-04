@@ -121,9 +121,9 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default boolean isElementEnabled(WebElement element){
+    default boolean isElementEnabledAgent(WebElement element, int wait, String agent){
         try {
-            return waitForElementToBeVisible(element, 5).isEnabled();
+            return waitForElementToBeClickableAgent(element, wait, agent).isEnabled();
         } catch (TimeoutException e) {
             return false;
         }

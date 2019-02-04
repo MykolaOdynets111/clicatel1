@@ -20,6 +20,9 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.context-info div.icons>span")
     private WebElement channelIcon;
 
+    @FindBy(css = "span.icon>svg.overnight")
+    private WebElement overnightTickenIcon;
+
     public ChatInLeftMenu(WebElement element) {
         super(element);
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
@@ -46,5 +49,9 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
             default:
                 return "unknown icon with tag span[@class='"+iconClass+"']";
         }
+    }
+
+    public boolean isOvernightTicketIconShown(){
+        return isElementShownAgent(overnightTickenIcon, 10);
     }
 }

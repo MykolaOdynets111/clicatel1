@@ -376,7 +376,7 @@ public class ApiHelper {
                 .getBody().jsonPath().getList("records", ChatHistoryItem.class);
     }
 
-    public static void updateSessionCapasity(String tenantOrgName, int availableChats){
+    public static void updateSessionCapacity(String tenantOrgName, int availableChats){
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))

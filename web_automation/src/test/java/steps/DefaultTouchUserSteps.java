@@ -293,6 +293,9 @@ public class DefaultTouchUserSteps implements JSHelper{
             case "agents_away":
                 expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
                 break;
+            case "out_of_support_hours":
+                expectedTextResponse = ApiHelper.getTenantMessageText("out_of_support_hours");
+                break;
             default:
                 expectedTextResponse = fromFeatureText;
                 break;

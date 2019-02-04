@@ -7,6 +7,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataManager.Tenants;
+import dbManager.DBConnector;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
@@ -109,7 +110,7 @@ public class Hooks implements JSHelper{
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
-            ApiHelper.updateSessionCapasity(Tenants.getTenantUnderTestOrgName(), 100);
+            ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 100);
         }
 
         finishAgentFlowIfExists(scenario);
@@ -239,6 +240,10 @@ public class Hooks implements JSHelper{
                 given().delete(url);
             }
 
+
+            if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")){
+                DBConnector.deleteOvernightTickets(ConfigManager.getEnv());
+            }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

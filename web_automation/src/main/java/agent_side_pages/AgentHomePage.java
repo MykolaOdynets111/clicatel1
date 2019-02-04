@@ -59,6 +59,12 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[@class='modal-header'][text()='Agent limit reached']")
     private WebElement agentLimitReachedPopup;
 
+    @FindBy(css = "div.overnight-chat-controls p")
+    public WebElement overnightTicketLable;
+
+    @FindBy(xpath = "//div[contains(@class, 'overnight-chat-controls')]//a[text() = 'Send email']")
+    public WebElement overnightTicketSendEmail;
+
     private String transferChatButton =  "//button[text()='Transfer chat']";
 
     private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
@@ -194,6 +200,10 @@ public class AgentHomePage extends AgentAbstractPage {
     private boolean isEndChatShown(String agent){
        return isElementShownAgent(endChatButton,1, agent);
     }
+
+    public boolean isOvernightTickeMessageShown(){ return isElementShownAgent(overnightTicketLable, 3, getCurrentAgent()); }
+
+    public boolean isSendEmailForOvernightTickeMessageShown(){ return isElementEnabledAgent(overnightTicketSendEmail, 3, getCurrentAgent()); }
 
     public boolean isClearButtonShown(){
         return isElementShownAgent(clearButton,10);

@@ -277,14 +277,33 @@ public class DBConnector {
         return id;
     }
 
+    public static void deleteOvernightTickets(String env) {
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
 
-    public static void main(String args[]){
-        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
-        long lastVisit = DBConnector.getLastVisitForUserProfile("testing", clientProfileID);
+        String query = "DELETE FROM "+tableName+".ticket WHERE \n" +
+                "session_id in (SELECT session_id FROM "+tableName+".session WHERE client_id  like 'testing%');";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeUpdate(query);
+            results = statement.getResultSet();
+            results.next();
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+//    public static void main(String args[]){
+//        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
+//        long lastVisit = DBConnector.getLastVisitForUserProfile("testing", clientProfileID);
 //        long lastVisitWithShift = minusHoursFromTimestamp(lastVisit, 12);
 //        DBConnector.updateClientLastVisitDate("testing", clientProfileID, lastVisitWithShift);
-
-    }
+//    }
 
 
 }

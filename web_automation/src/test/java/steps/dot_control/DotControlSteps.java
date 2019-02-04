@@ -260,7 +260,7 @@ public class DotControlSteps {
                 + String.join(", ", chatHistoryItemList.toString()));
             }
 
-            if (initCallMessageId.get() != null) {
+            if (!initCallMessageId.get().isEmpty()) {
                 Assert.assertEquals(actualMessageId, initCallMessageId.get(),
                         "Message id is not as expected\n");
             } else {
@@ -272,6 +272,7 @@ public class DotControlSteps {
 
     @Given("^Set agent support hours with day shift$")
     public void setSupportHoursWithShift(){
+        DBConnector.deleteOvernightTickets(ConfigManager.getEnv());
         LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
         ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
@@ -303,7 +304,7 @@ public class DotControlSteps {
 
     @When("^Set session capacity to (.*) for (.*) tenant$")
     public void updateSessionCapacity(int chats, String tenantOrgName){
-        ApiHelper.updateSessionCapasity(tenantOrgName, chats);
+        ApiHelper.updateSessionCapacity(tenantOrgName, chats);
     }
 
 
@@ -345,7 +346,7 @@ public class DotControlSteps {
                 initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
                 break;
             default:
-                initCallMessageId.set(null);
+                initCallMessageId.set("");
         }
     }
 

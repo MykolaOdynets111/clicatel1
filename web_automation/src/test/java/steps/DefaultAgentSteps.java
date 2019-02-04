@@ -11,6 +11,7 @@ import cucumber.api.java.en.When;
 import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dataManager.TwitterUsers;
+import dataManager.jackson_schemas.TafMessage;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
@@ -204,6 +205,32 @@ public class DefaultAgentSteps implements JSHelper {
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(30, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+    }
+
+    @Then("(.*) sees 'overnight' icon in this chat")
+    public void verifyOvernightIconShown(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage()),
+                "Overnight icon is not shown for overnight ticket");
+    }
+
+    @Then("Message that it is overnight ticket is shown for (.*)")
+    public void verifyMessageThatThisIsOvernightTicket(String agent){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).isOvernightTickeMessageShown(),
+                "Message that this is Overnight ticket is not shown");
+        softAssert.assertTrue(getAgentHomePage(agent).isSendEmailForOvernightTickeMessageShown(),
+                "'Send email' button is not enabled");
+        softAssert.assertAll();
+    }
+
+    @Then("Conversation area contains (.*) message")
+    public void verifyOutOfSupportMessageShownOnChatdesk(String message){
+        String userMessage = message;
+        if(message.contains("out_of_support_hours")) {
+            userMessage = ApiHelper.getTafMessages().stream().filter(e -> e.getId().equals(message)).findFirst().get().getText();
+        }
+        Assert.assertTrue(getAgentHomePage("main agent").getChatBody().isToUserMessageShown(userMessage),
+                "Expected to user message '"+userMessage+"' is not shown in chatdesk");
     }
 
     @Then("^Agent select \"(.*)\" filter option$")
