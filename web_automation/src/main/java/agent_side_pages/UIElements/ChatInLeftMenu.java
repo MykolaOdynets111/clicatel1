@@ -5,6 +5,7 @@ import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -53,5 +54,17 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
 
     public boolean isOvernightTicketIconShown(){
         return isElementShownAgent(overnightTickenIcon, 10);
+    }
+
+    public boolean isOvernightTicketRemoved(){
+        for(int i = 0; i<10; i++){
+            try{
+                if(overnightTickenIcon.isDisplayed()) waitFor(1000);
+            }catch (NoSuchElementException e){
+                return true;
+            }
+        }
+        return false;
+
     }
 }

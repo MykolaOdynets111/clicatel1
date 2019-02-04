@@ -11,7 +11,6 @@ import cucumber.api.java.en.When;
 import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dataManager.TwitterUsers;
-import dataManager.jackson_schemas.TafMessage;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import interfaces.JSHelper;
@@ -22,6 +21,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dot_control.DotControlSteps;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -214,6 +214,12 @@ public class DefaultAgentSteps implements JSHelper {
                 "Overnight icon is not shown for overnight ticket");
     }
 
+    @Then("^Overnight ticket is removed from (.*) chatdesk$")
+    public void checkThatOvernightTicketIsRemoved(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconRemoved(getUserNameFromLocalStorage()),
+                "Overnight ticket is still shown");
+    }
+
     @Then("Message that it is overnight ticket is shown for (.*)")
     public void verifyMessageThatThisIsOvernightTicket(String agent){
         SoftAssert softAssert = new SoftAssert();
@@ -316,6 +322,24 @@ public class DefaultAgentSteps implements JSHelper {
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentLimitReachedPopupShown(12),
                 "'Agent limit reached' pop up is not shown.");
     }
+
+    @Given("^Set agent support hours (.*)$")
+    public void setSupportHoursWithShift(String shiftStrategy){
+        switch (shiftStrategy){
+            case "with day shift":
+                LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
+
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
+                        currentTimeWithADayShift.getHour() + ":00", "23:59");
+                break;
+            case "for all week":
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                        "00:01", "23:59");
+                getAgentHomePage("main").waitFor(1500);
+                break;
+        }
+    }
+
 
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
