@@ -96,6 +96,13 @@ public class BasePortalSteps {
     }
 
 
+    @When("Test accounts is closed")
+    public void closeAllTestAccount(){
+        ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+                BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    }
+
     @When("Portal Sign Up page is opened")
     public void openPortalSignUpPage(){
         portalSignUpPage.set(PortalSignUpPage.openPortalSignUpPage());
