@@ -330,11 +330,11 @@ public class DefaultAgentSteps implements JSHelper {
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
                 ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
-                        currentTimeWithADayShift.getHour() + ":00", "23:59");
+                        "00:00", "23:59");
                 break;
             case "for all week":
                 ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
-                        "00:01", "23:59");
+                        "00:00", "23:59");
                 getAgentHomePage("main").waitFor(1500);
                 break;
         }
