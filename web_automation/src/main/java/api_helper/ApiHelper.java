@@ -122,7 +122,8 @@ public class ApiHelper {
         resp.getBody().asString();
         Assert.assertTrue(false, "Changing support hours info: \n"+
         "status code:" + resp.statusCode() + "\n" +
-        "resp body: " + resp.getBody().asString());
+        "resp body: " + resp.getBody().asString() +
+        "request body: " + body);
     }
 
     public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
