@@ -120,10 +120,6 @@ public class ApiHelper {
                 .body(body)
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
         resp.getBody().asString();
-        Assert.assertTrue(false, "Changing support hours info: \n"+
-        "status code:" + resp.statusCode() + "\n" +
-        "resp body: " + resp.getBody().asString() +
-        "request body: " + body);
     }
 
     public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
