@@ -52,7 +52,7 @@ Feature: Chat handling in out of support hours
     Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
 
   @agent_support_hours
-  Scenario: Verify message shown for Agent mode tenant user
+  Scenario: Overnight ticket is replaced by active chat when support ours is valid (Agent mode tenant)
     Given I login as agent of Automation
     Given Set agent support hours with day shift
     Given User select Automation tenant
@@ -70,7 +70,7 @@ Feature: Chat handling in out of support hours
     Then User should see 'hello' text response for his 'chat to support' input
 
   @agent_support_hours
-  Scenario: Verify message shown for Bot mode tenant user
+  Scenario: Overnight ticket is replaced by active chat when support ours is valid (Bot mode tenant)
     Given I login as agent of Automation Bot
     Given Set agent support hours with day shift
     Given User select Automation Bot tenant
