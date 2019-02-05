@@ -334,7 +334,7 @@ public class DefaultAgentSteps implements JSHelper {
                 break;
             case "for all week":
                 ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
-                        "00:01", "23:59");
+                        "00:00", "23:59");
                 getAgentHomePage("main").waitFor(1500);
                 break;
         }
