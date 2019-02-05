@@ -87,6 +87,13 @@ public interface JSHelper {
 
     default void executeAngularClick(WebDriver driver, WebElement elem){
         JavascriptExecutor jsExec = (JavascriptExecutor) driver;
-        jsExec.executeScript("angular.element(arguments[0]).click();", elem);
+//        jsExec.executeScript("angular.element(arguments[0]).click();", elem);
+        jsExec.executeScript("angular.element(arguments[0]).triggerHandler('click')", elem);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }
