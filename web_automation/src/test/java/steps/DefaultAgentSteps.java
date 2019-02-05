@@ -211,7 +211,7 @@ public class DefaultAgentSteps implements JSHelper {
     @Then("(.*) sees 'overnight' icon in this chat")
     public void verifyOvernightIconShown(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage()),
-                "Overnight icon is not shown for overnight ticket");
+                "Overnight icon is not shown for overnight ticket. \n clientId: "+ getUserNameFromLocalStorage());
     }
 
     @Then("^Overnight ticket is removed from (.*) chatdesk$")
