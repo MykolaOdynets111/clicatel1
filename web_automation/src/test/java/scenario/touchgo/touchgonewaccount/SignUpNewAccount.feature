@@ -5,7 +5,7 @@
 Feature: Signing up the account
 
   Background:
-    Given Test accounts is closed
+    Given SignedUp AQA test accounts is closed
 
   Scenario: I should be able to sign up and activate new account
     Given Portal Sign Up page is opened
