@@ -41,7 +41,7 @@ public class WelcomeMessages extends AbstractPage {
     }
 
     public boolean isWelcomeTextMessageShown() {
-        return isElementShown(welcomeTextMessage, 8);
+        return isElementShown(welcomeTextMessage, 4);
     }
 
     public String getWelcomeMessageText() {
