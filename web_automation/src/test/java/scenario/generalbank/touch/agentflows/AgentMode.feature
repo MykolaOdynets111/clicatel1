@@ -17,7 +17,6 @@ Feature: User messages handling in "Agent" tenant mode
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'account balance' input
 
-  @Issue("https://jira.clickatell.com/browse/TPLAT-3575")
   @suggestions
   Scenario: Verify if suggestion are shown in "Agent" mode
     Given AGENT_ASSISTANT tenant feature is set to true for Automation
