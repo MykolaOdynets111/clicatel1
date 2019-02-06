@@ -30,7 +30,7 @@ public class MainPage extends AbstractPage {
 
     public Widget openWidget() {
     try {
-        waitForElementToBeVisible(chatIcon, 25);
+        waitForElementToBeVisible(chatIcon, 15);
         moveToElemAndClick(chatIcon);
         return new Widget();
     } catch (TimeoutException e) {
