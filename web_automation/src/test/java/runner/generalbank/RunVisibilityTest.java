@@ -12,7 +12,7 @@ import java.util.List;
 
 @Test(groups = "widget visibility")
 @CucumberOptions(
-        plugin={"pretty",
+        format={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
