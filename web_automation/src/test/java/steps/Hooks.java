@@ -67,6 +67,7 @@ public class Hooks implements JSHelper{
 
 
             if (scenario.getSourceTagNames().contains("@facebook")) {
+                ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
@@ -74,6 +75,7 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@twitter")) {
+                ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
