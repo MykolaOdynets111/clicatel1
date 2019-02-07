@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="General Bank UI Pull Request Suite" parallel="instances" thread-count="6">
+<suite name="General Bank UI Pull Request Suite" parallel="instances" thread-count="4">
     <test name="Widget interactions tests">
         <classes>
             <class name="runner.generalbank.RunGenBankWidgetInteractionTest" />
