@@ -1,6 +1,5 @@
 @agent_session_capacity
-@agent_mode
-Feature: Chats numbers limitation
+Feature: Max chat functionality
 
 
   Scenario: Verify chat limitation feature for Agent mode tenant
