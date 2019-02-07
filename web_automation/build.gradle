@@ -34,7 +34,7 @@ dependencies {
     compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
     compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
     compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
-    compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
+    compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.3'
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
@@ -81,10 +81,13 @@ task getTouchGoPlan() {
     }
 }
 
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+}
+
 // ========= !! TASKS FOR SUITES !! ============== //
 
 task runFacebookTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + tenantName + "/facebook.xml"
@@ -92,7 +95,6 @@ task runFacebookTests(type:Test) {
 }
 
 task runTwitterTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + tenantName + "/twitter.xml"
@@ -100,8 +102,6 @@ task runTwitterTests(type:Test) {
 }
 
 task runBaseTests(type:Test) {
-
-    systemProperties = System.getProperties()
     useTestNG() {
         println("base TEST ENV " + System.getProperty("env"))
         useDefaultListeners = true
@@ -112,7 +112,6 @@ task runBaseTests(type:Test) {
 }
 
 task runTieTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tie.xml"
@@ -120,7 +119,6 @@ task runTieTests(type:Test) {
 }
 
 task runVisibilityTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/visibilitytests.xml"
@@ -129,7 +127,6 @@ task runVisibilityTests(type:Test) {
 
 task runTouchTests(type:Test) {
     runTouchTests.dependsOn(getTouchGoPlan)
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
@@ -141,8 +138,6 @@ task runTouchTests(type:Test) {
 task runTouchPullRequestTests(type:Test) {
 
 //    runTouchTests.dependsOn(getTouchGoPlan)
-
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
@@ -190,7 +185,6 @@ task runPullRequestTests(type:Test){
 }
 
 task runTiePullRequestTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tiepullrequest.xml"
@@ -198,7 +192,6 @@ task runTiePullRequestTests(type:Test) {
 }
 
 task runTouchVirginMoneyTests(type:Test){
-    systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
             ignoreFailures = true
@@ -209,7 +202,6 @@ task runTouchVirginMoneyTests(type:Test){
     }
 }
 task runTouchGenBankTests(type:Test){
-    systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
             ignoreFailures = true
@@ -221,7 +213,6 @@ task runTouchGenBankTests(type:Test){
 }
 
 task runFAQsTests(type:Test){
-    systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
             ignoreFailures = true
@@ -231,7 +222,6 @@ task runFAQsTests(type:Test){
 }
 
 task runTIETestsForAllTenants(type: Test) {
-    systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
             ignoreFailures = true
@@ -242,7 +232,6 @@ task runTIETestsForAllTenants(type: Test) {
 }
 
 task runTestsAgainstNewlyCreatedAccount(type:Test){
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + "touchgo/touchgofornewaccount.xml"
@@ -251,7 +240,6 @@ task runTestsAgainstNewlyCreatedAccount(type:Test){
 
 task runTouchGoTests(type:Test) {
     runTouchTests.dependsOn(getTouchGoPlan)
-    systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
             useDefaultListeners = true
@@ -275,7 +263,6 @@ task runTouchGoTests(type:Test) {
 }
 
 task runHealthCheckTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         useDefaultListeners = true
         ignoreFailures = true
@@ -285,7 +272,6 @@ task runHealthCheckTests(type:Test) {
 }
 
 task runDotControlTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         useDefaultListeners = true
         ignoreFailures = true
@@ -295,7 +281,6 @@ task runDotControlTests(type:Test) {
 }
 
 task runCamundaFlowsTests(type:Test) {
-    systemProperties = System.getProperties()
     useTestNG() {
         useDefaultListeners = true
         ignoreFailures = true
@@ -307,7 +292,6 @@ task runCamundaFlowsTests(type:Test) {
 
 task runChatdeskTests(type:Test) {
     runTouchTests.dependsOn(getTouchGoPlan)
-    systemProperties = System.getProperties()
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/onethreadtests.xml"
