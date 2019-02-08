@@ -1,5 +1,6 @@
 package api_helper;
 
+import dataManager.Customer360PersonalInfo;
 import dataManager.MC2Account;
 import dataManager.Tenants;
 import dataManager.Territories;
@@ -8,6 +9,7 @@ import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import dataManager.jackson_schemas.user_session_info.UserSession;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
@@ -15,9 +17,13 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ApiHelper {
 
@@ -397,5 +403,36 @@ public class ApiHelper {
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                     .post(Endpoints.PROCESS_OVERNIGHT_TICKET + ticket.getId());
         }
+    }
+
+    public static String getActiveSessionIdByClientId(String tenantName, String clineId, String integrationType){
+        String url = String.format(Endpoints.INTERNAL_ACTIVE_SESSIONS, tenantName, clineId, integrationType);
+        return RestAssured.get(url).
+                getBody().jsonPath().get("sessionId");
+    }
+
+    public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
+        String sessionId = getActiveSessionIdByClientId(Tenants.getTenantUnderTestName(), clineId, integrationType);
+        JsonPath respJSON = RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.CUSTOMER_VIEW + sessionId)
+                .getBody().jsonPath();
+
+        String lastName = respJSON.getString("personalDetails.lastName") == null ? "" : " " + respJSON.getString("personalDetails.lastName");
+        String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
+
+        long customerSinceTimestamp  = respJSON.getLong("personalDetails.customerSince");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+        String customerSince =  LocalDateTime.ofInstant(Instant.ofEpochMilli(customerSinceTimestamp),
+                                TimeZone.getDefault().toZoneId()).
+                format(formatter);
+
+        String channelUsername = respJSON.getString("personalDetails.channelUsername").isEmpty() ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+
+        String phone =  respJSON.getString("clientProfiles.attributes.phone[0]")==null ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
+
+        return new Customer360PersonalInfo(respJSON.getString("personalDetails.firstName") + lastName,
+                location, "Customer since: " + customerSince, respJSON.getString("personalDetails.email"),
+                channelUsername, phone.replaceAll(" ", "") );
     }
 }

@@ -18,6 +18,9 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.profile-info>h2")
     private WebElement userName;
 
+    @FindBy(css = "div.location")
+    private WebElement location;
+
     @FindBy(css = "div.context-info div.icons>span")
     private WebElement channelIcon;
 
@@ -36,6 +39,10 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
 
     public String getUserName() {
         return userName.getText();
+    }
+
+    public String getLocation() {
+        return location.getText();
     }
 
     public String getChatsChannel(){

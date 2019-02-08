@@ -1,0 +1,87 @@
+package dataManager;
+
+public class Customer360PersonalInfo {
+
+    private String fullName;
+    private String location;
+    private String customerSince;
+    private String email;
+    private String channelUsername;
+    private String phone;
+
+    public Customer360PersonalInfo(String fullName, String location, String customerSince, String email, String channelUsername, String phone) {
+        this.fullName = fullName;
+        this.location = location;
+        this.customerSince = customerSince;
+        this.email = email;
+        this.channelUsername = channelUsername;
+        this.phone = phone;
+    }
+
+    public Customer360PersonalInfo setFullName(String fullName) {
+        this.fullName = fullName;
+        return this;
+    }
+
+
+    public Customer360PersonalInfo setLocation(String location) {
+        this.location = location;
+        return this;
+    }
+
+    public Customer360PersonalInfo setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public Customer360PersonalInfo setPhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
+
+    public String getFullName() {
+        return fullName;
+    }
+
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getCustomerSince() {
+        return customerSince;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getChannelUsername() {
+        return channelUsername;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        Customer360PersonalInfo another =  (Customer360PersonalInfo) object;
+        return this.fullName.equals(another.getFullName()) && this.location.equals(another.getLocation()) &&
+                this.customerSince.equals(another.getCustomerSince()) && this.email.equals(another.getEmail()) &&
+                this.channelUsername.equals(another.getChannelUsername()) && this.phone.equals(another.getPhone()) ;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer360PersonalInfo{" +
+                "fullName='" + fullName + '\'' +
+                ", location='" + location + '\'' +
+                ", customerSince='" + customerSince + '\'' +
+                ", email='" + email + '\'' +
+                ", channelUsername='" + channelUsername + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+}

@@ -32,6 +32,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     @FindBy(xpath = ".//li/div[@class='roster-item']")
     private List<WebElement> chatsList;
 
+    @FindBy(xpath = ".//ul[@class='chats-roster']/li[@class='active']")
+    private WebElement activeCaht;
+
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
 
@@ -113,5 +116,11 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
                 .click();
     }
 
+    public String getActiveChatUserName(){
+        return new ChatInLeftMenu(activeCaht).getUserName();
+    }
 
+    public String getActiveChatLocation(){
+        return new ChatInLeftMenu(activeCaht).getLocation();
+    }
 }

@@ -108,7 +108,7 @@ public class APIHelperDotControl {
 
     public static Response sendInitCallWithWait(String tenantOrgName, String apiToken, String clientId, String messageId){
         Response resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
-        for (int i =0; i<10; i++){
+        for (int i =0; i<15; i++){
             if (resp.statusCode() != 401) break;
             else{
                 try {

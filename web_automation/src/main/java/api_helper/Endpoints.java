@@ -36,6 +36,8 @@ public class Endpoints {
 
     public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "ticket/process-by-id/";
 
+    public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
@@ -55,6 +57,8 @@ public class Endpoints {
     public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
 
     public static String INTERNAL_DECREASING_TOUCHGO_PLAN = URLs.getBaseInternalApiUrl() + "tenants/touchGo/standard";
+
+    public static String INTERNAL_ACTIVE_SESSIONS = URLs.getBaseInternalApiUrl() + "sessions/active?tenantName=%s&clientId=%s&integrationType=%s";
 
     // ==================  PLATFORM ============== //
 

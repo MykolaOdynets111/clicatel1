@@ -7,7 +7,6 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import dataManager.Tenants;
-import dbManager.DBConnector;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
 import facebook.FBLoginPage;
@@ -202,9 +201,9 @@ public class Hooks implements JSHelper{
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
-                    agentHomePage.getHeader().clickIconWithInitials();
-                    agentHomePage.getHeader().selectStatus("available");
-                    agentHomePage.getHeader().clickIconWithInitials();
+                    agentHomePage.getPageHeader().clickIconWithInitials();
+                    agentHomePage.getPageHeader().selectStatus("available");
+                    agentHomePage.getPageHeader().clickIconWithInitials();
             }
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
@@ -275,7 +274,7 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            agentHomePage.endChat(agent);
+            agentHomePage.endChat();
             ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch (WebDriverException e) { }

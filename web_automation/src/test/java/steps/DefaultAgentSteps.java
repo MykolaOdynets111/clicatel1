@@ -5,9 +5,11 @@ import agent_side_pages.AgentLoginPage;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import agent_side_pages.UIElements.ProfileWindow;
 import api_helper.ApiHelper;
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataManager.Customer360PersonalInfo;
 import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dataManager.TwitterUsers;
@@ -34,6 +36,8 @@ public class DefaultAgentSteps implements JSHelper {
     private LeftMenuWithChats leftMenuWithChats;
     private static Map<String, Boolean> PRE_TEST_FEATURE_STATUS = new HashMap<>();
     private static Map<String, Boolean> TEST_FEATURE_STATUS_CHANGES = new HashMap<>();
+    private static Customer360PersonalInfo customer360InfoForUpdating;
+    private Faker faker = new Faker();
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         PRE_TEST_FEATURE_STATUS.put(featureName, status);
@@ -96,12 +100,12 @@ public class DefaultAgentSteps implements JSHelper {
         String expectedInitials = Character.toString(agentInfoResp.getBody().jsonPath().get("firstName").toString().charAt(0)) +
                 Character.toString(agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0));
 
-        Assert.assertEquals(agentHomePage.getHeader().getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
+        Assert.assertEquals(agentHomePage.getPageHeader().getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
     }
 
     @When("^I click icon with initials$")
     public void clickIconWithInitials(){
-        agentHomePage.getHeader().clickIconWithInitials();
+        agentHomePage.getPageHeader().clickIconWithInitials();
     }
 
     @Then("^I see (.*) agent's info$")
@@ -110,16 +114,16 @@ public class DefaultAgentSteps implements JSHelper {
         Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
         String agentName = agentInfoResp.getBody().jsonPath().get("firstName") + " "
                 + agentInfoResp.getBody().jsonPath().get("lastName");
-        soft.assertEquals(agentHomePage.getHeader().getAgentName(), agentName,
+        soft.assertEquals(agentHomePage.getPageHeader().getAgentName(), agentName,
                 "Agent name is not as expected");
-        soft.assertEquals(agentHomePage.getHeader().getAgentEmail(), agentInfoResp.getBody().jsonPath().get("email"),
+        soft.assertEquals(agentHomePage.getPageHeader().getAgentEmail(), agentInfoResp.getBody().jsonPath().get("email"),
                 "Agent name is not as expected");
         soft.assertAll();
     }
 
     @When("^I click \"Profile Settings\" button$")
     public void clickProfileSettingsButton(){
-        agentHomePage.getHeader().clickProfileSettingsButton();
+        agentHomePage.getPageHeader().clickProfileSettingsButton();
     }
 
 
@@ -152,7 +156,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @When("^Agent transfers chat$")
     public void transferChat(){
-        getAgentHomeForMainAgent().clickTransferButton();
+        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
         getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
     }
 
@@ -223,9 +227,9 @@ public class DefaultAgentSteps implements JSHelper {
     @Then("Message that it is overnight ticket is shown for (.*)")
     public void verifyMessageThatThisIsOvernightTicket(String agent){
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getAgentHomePage(agent).isOvernightTickeMessageShown(),
+        softAssert.assertTrue(getAgentHomePage(agent).isOvernightTicketMessageShown(),
                 "Message that this is Overnight ticket is not shown");
-        softAssert.assertTrue(getAgentHomePage(agent).isSendEmailForOvernightTickeMessageShown(),
+        softAssert.assertTrue(getAgentHomePage(agent).isSendEmailForOvernightTicketMessageShown(),
                 "'Send email' button is not enabled");
         softAssert.assertAll();
     }
@@ -304,9 +308,9 @@ public class DefaultAgentSteps implements JSHelper {
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
         try {
-            getAgentHomePage(agent).getHeader().clickIconWithInitials();
-            getAgentHomePage(agent).getHeader().selectStatus(newStatus);
-            getAgentHomePage(agent).getHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
+            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
         } catch (WebDriverException e) {
             Assert.assertTrue(false, "Unable to change agent status. Please check the screenshot.");
         }
@@ -340,6 +344,56 @@ public class DefaultAgentSteps implements JSHelper {
         }
     }
 
+
+    @Then("Correct client details are shown")
+    public void verifyClientDetails(){
+        Customer360PersonalInfo expectedCustomerInfo = ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+                                                                            getUserNameFromLocalStorage(), "TOUCH");
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+        Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedCustomerInfo,
+                "User info is not as expected \n");
+    }
+
+    @When("Click (?:'Edit'|'Save') button in Customer 360 view")
+    public void clickEditCustomerView(){
+        getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
+    }
+
+    @When("Fill in the form with new customer 360 info")
+    public void updateCustomer360Info(){
+        Customer360PersonalInfo currentCustomerInfo = ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+                getUserNameFromLocalStorage(), "TOUCH");
+        customer360InfoForUpdating = currentCustomerInfo.setFullName("AQA Run").setLocation("Lviv")
+                            .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
+                            .setPhone("+380931576633");
+        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+
+    }
+
+    @Then("^Customer info is updated on backend$")
+    public void verifyCustomerInfoChangesOnBackend(){
+        Customer360PersonalInfo actualInfoFromBackend = ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+                getUserNameFromLocalStorage(), "TOUCH");
+        Assert.assertEquals(actualInfoFromBackend, customer360InfoForUpdating,
+                "Customer 360 info is not updated on backend after making changes on chatdesk. \n");
+    }
+
+    @Then("^New info is shown in left menu with chats$")
+    public void checkUpdatingUserInfoInLeftMenu(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName(),
+                "Full user name is not updated in left menu with chats after updating Customer 360 info \n");
+        soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), customer360InfoForUpdating.getLocation(),
+                "Location is not updated in left menu with chats after updating Customer 360 info \n");
+        soft.assertAll();
+    }
+
+    @Then("^Customer name is updated in active chat header$")
+    public void verifyCustomerNameUpdated(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName()),
+                "Updated customer name is not shown in chat header");
+
+    }
 
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){

@@ -223,7 +223,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent click \"End chat\" button$")
     public void clickEndChatButton(){
-        getAgentHomePage().clickEndChat();
+        getAgentHomePage().getChatHeader().clickEndChatButton();
     }
 
     @Then("^End chat popup should be opened$")
@@ -239,8 +239,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("(.*) closes chat")
     public void closeChat(String agent){
-        getAgentHomePage(agent).clickEndChat();
-        getAgentHomePage(agent).clickCloseButtonInCloseChatPopup();
+        getAgentHomePage(agent).endChat();
     }
 
     @Then("^Suggestions are not shown$")

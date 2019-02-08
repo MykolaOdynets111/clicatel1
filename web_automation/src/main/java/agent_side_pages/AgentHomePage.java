@@ -19,9 +19,6 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.text-field")
     private WebElement suggestionInputFieldContainer;
 
-    @FindBy(xpath = "//button[text()='End chat']")
-    private WebElement endChatButton;
-
     @FindBy(xpath = "//span[text()='Close Chat']")
     private WebElement closeChatButton;
 
@@ -47,7 +44,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[text()='Agent Assistant']")
     private WebElement agentAssistantButton;
 
-    @FindBy(xpath = "//div[@class='modal-header' and text()='Profanity not allowed']")
+    @FindBy(xpath = "//div[@class='modal-pageHeader' and text()='Profanity not allowed']")
     private WebElement profanityPopup;
 
     @FindBy(xpath = "//button[text()='Accept']")
@@ -56,7 +53,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "span.connection-error-img")
     private WebElement connectionErrorImage;
 
-    @FindBy(xpath = "//div[@class='modal-header'][text()='Agent limit reached']")
+    @FindBy(xpath = "//div[@class='modal-pageHeader'][text()='Agent limit reached']")
     private WebElement agentLimitReachedPopup;
 
     @FindBy(css = "div.overnight-chat-controls p")
@@ -65,20 +62,28 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[contains(@class, 'overnight-chat-controls')]//a[text() = 'Send email']")
     public WebElement overnightTicketSendEmail;
 
-    private String transferChatButton =  "//button[text()='Transfer chat']";
-
-    private String openedProfileWindow = "//div[@class='profile-modal-header modal-header']/parent::div";
+    private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
-    private Header header;
+    private PageHeader pageHeader;
     private SuggestedGroup suggestedGroup;
     private ProfileWindow profileWindow;
     private TransferChatWindow transferChatWindow;
     private IncomingTransferWindow incomingTransferWindow;
+    private Customer360Container customer360Container;
+    private ChatHeader chatHeader;
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public ChatHeader getChatHeader() {
+        return chatHeader;
+    }
+
+    public Customer360Container getCustomer360Container() {
+        return customer360Container;
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
@@ -95,8 +100,8 @@ public class AgentHomePage extends AgentAbstractPage {
         return suggestedGroup;
     }
 
-    public Header getHeader() {
-        return header;
+    public PageHeader getPageHeader() {
+        return pageHeader;
     }
 
     public LeftMenuWithChats getLeftMenuWithChats() {
@@ -189,21 +194,17 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
 
-    public void endChat(String agent){
-        if(isEndChatShown(agent)){
-            endChatButton.click();
-            waitForElementToBeVisibleAgent(closeChatButton, 2, agent);
+    public void endChat(){
+        if(getChatHeader().isEndChatShown(getCurrentAgent())){
+            getChatHeader().clickEndChatButton();
+            waitForElementToBeVisibleAgent(closeChatButton, 2, getCurrentAgent());
             closeChatButton.click();
         }
     }
 
-    private boolean isEndChatShown(String agent){
-       return isElementShownAgent(endChatButton,1, agent);
-    }
+    public boolean isOvernightTicketMessageShown(){ return isElementShownAgent(overnightTicketLable, 3, getCurrentAgent()); }
 
-    public boolean isOvernightTickeMessageShown(){ return isElementShownAgent(overnightTicketLable, 3, getCurrentAgent()); }
-
-    public boolean isSendEmailForOvernightTickeMessageShown(){ return isElementEnabledAgent(overnightTicketSendEmail, 3, getCurrentAgent()); }
+    public boolean isSendEmailForOvernightTicketMessageShown(){ return isElementEnabledAgent(overnightTicketSendEmail, 3, getCurrentAgent()); }
 
     public boolean isClearButtonShown(){
         return isElementShownAgent(clearButton,10);
@@ -258,12 +259,6 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public void clickEndChat(){
-        if (!isElementShownAgent(endChatButton)){
-            Assert.assertTrue(false, "'End chat' button is not shown.");
-        } else {endChatButton.click();}
-    }
-
     public boolean isEndChatPopupShown (){
         return isElementShownAgent(closeChatButton,12);
     }
@@ -274,29 +269,6 @@ public class AgentHomePage extends AgentAbstractPage {
             findElemByXPATHAgent(closeChatButtonXPATH).click();
             waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
         }
-    }
-
-    public boolean isProfileWindowOpened(){
-        try{
-            findElemByXPATHAgent(openedProfileWindow);
-            return true;
-        } catch (WebDriverException e){
-            return false;
-        }
-    }
-
-    public boolean isProfileWindowOpened(String agent){
-        try{
-            findElemByXPATHAgent(openedProfileWindow, agent);
-            return true;
-        } catch (WebDriverException e){
-            return false;
-        }
-    }
-
-    public void clickTransferButton(){
-        waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
-        findElemByXPATHAgent(transferChatButton).click();
     }
 
     public boolean isAgentLimitReachedPopupShown(int wait){
