@@ -5,7 +5,7 @@ Feature: Tenant with Starter plan should be able to have only 1 logged in agent
     Given User select Starter AQA tenant
     And Click chat icon
 
-  Scenario: Admin should be able to open chat desk from portal
+  Scenario: Agent seats limitation for Starter plan
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
