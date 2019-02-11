@@ -1,7 +1,6 @@
 @agent_session_capacity
 Feature: Max chat functionality
 
-
   Scenario: Verify chat limitation feature for Agent mode tenant
     Given Set session capacity to 0 for Automation tenant
     Given I login as agent of Automation

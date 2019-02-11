@@ -88,6 +88,8 @@ public class DefaultTouchUserSteps implements JSHelper{
     @Given("^Click chat icon$")
     public DefaultTouchUserSteps clickChatIcon() {
         widget = getMainPage().openWidget();
+        widgetConversationArea = widget.getWidgetConversationArea();
+        widgetConversationArea.waitForSalutation();
         return this;
     }
 
@@ -103,8 +105,6 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @When("^User enter (.*) into widget input field$")
     public DefaultTouchUserSteps enterText(String text) {
-        widgetConversationArea = widget.getWidgetConversationArea();
-        widgetConversationArea.waitForSalutation();
         widget.getWidgetFooter().enterMessage(text).sendMessage();
         widgetConversationArea.waitForMessageToAppearInWidget(text);
         return this;
