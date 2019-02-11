@@ -68,7 +68,7 @@ public class Customer360PersonalInfo {
     @Override
     public boolean equals(Object object) {
         Customer360PersonalInfo another =  (Customer360PersonalInfo) object;
-        return this.fullName.equals(another.getFullName()) && this.location.equals(another.getLocation()) &&
+        return this.fullName.trim().equals(another.getFullName().trim()) && this.location.equals(another.getLocation()) &&
                 this.customerSince.equals(another.getCustomerSince()) && this.email.equals(another.getEmail()) &&
                 this.channelUsername.equals(another.getChannelUsername()) && this.phone.equals(another.getPhone()) ;
     }

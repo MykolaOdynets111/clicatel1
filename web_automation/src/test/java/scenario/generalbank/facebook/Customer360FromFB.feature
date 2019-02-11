@@ -10,13 +10,13 @@
 #    Then Agent has new conversation request from facebook user
 #    When Agent click on new conversation request from facebook
 #    Then Correct client details are shown
-#
-#
-##    Given User select General Bank Demo tenant
-##    And Click chat icon
-##    When User enter chat to support into widget input field
-##    Then Agent has new conversation request
-##    When Agent click on new conversation
-#
-#
-#
+##
+##
+###    Given User select General Bank Demo tenant
+###    And Click chat icon
+###    When User enter chat to support into widget input field
+###    Then Agent has new conversation request
+###    When Agent click on new conversation
+##
+##
+##

@@ -207,7 +207,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(15, agent),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
@@ -345,36 +345,35 @@ public class DefaultAgentSteps implements JSHelper {
     }
 
 
-    @Then("Correct client details are shown")
-    public void verifyClientDetails(){
-        Customer360PersonalInfo expectedCustomerInfo = ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
-                                                                            getUserNameFromLocalStorage(), "TOUCH");
+    @Then("Correct (.*) client details are shown")
+    public void verifyClientDetails(String clientFrom){
         Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
-        Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedCustomerInfo,
+
+        Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
                 "User info is not as expected \n");
     }
+
+
 
     @When("Click (?:'Edit'|'Save') button in Customer 360 view")
     public void clickEditCustomerView(){
         getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
     }
 
-    @When("Fill in the form with new customer 360 info")
-    public void updateCustomer360Info(){
-        Customer360PersonalInfo currentCustomerInfo = ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
-                getUserNameFromLocalStorage(), "TOUCH");
-        customer360InfoForUpdating = currentCustomerInfo.setFullName("AQA Run").setLocation("Lviv")
+    @When("Fill in the form with new (.*) customer 360 info")
+    public void updateCustomer360Info(String customerFrom){
+        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        customer360InfoForUpdating = currentCustomerInfo.setLocation("Lviv")
                             .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
                             .setPhone("+380931576633");
+        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) customer360InfoForUpdating.setFullName("AQA Run");
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
 
     }
 
-    @Then("^Customer info is updated on backend$")
-    public void verifyCustomerInfoChangesOnBackend(){
-        Customer360PersonalInfo actualInfoFromBackend = ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
-                getUserNameFromLocalStorage(), "TOUCH");
-        Assert.assertEquals(actualInfoFromBackend, customer360InfoForUpdating,
+    @Then("^(.*) customer info is updated on backend$")
+    public void verifyCustomerInfoChangesOnBackend(String customerFrom){
+        Assert.assertEquals(getCustomer360Info(customerFrom), customer360InfoForUpdating,
                 "Customer 360 info is not updated on backend after making changes on chatdesk. \n");
     }
 
@@ -434,5 +433,22 @@ public class DefaultAgentSteps implements JSHelper {
 
     private LeftMenuWithChats getLeftMenu(String agent) {
         return getAgentHomePage(agent).getLeftMenuWithChats();
+    }
+
+    private Customer360PersonalInfo getCustomer360Info(String clientFrom){
+        String clientId = getUserNameFromLocalStorage();
+        String integrationType = "TOUCH";
+        switch (clientFrom){
+            case "fb dm":
+                clientId = FacebookUsers.getLoggedInUser().getFBUserID();
+                integrationType = "FACEBOOK";
+                break;
+            case "twitter dm":
+                clientId = TwitterUsers.getLoggedInUser().getDmUserId();
+                integrationType = "TWITTER";
+                break;
+        }
+        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+                clientId, integrationType);
     }
 }

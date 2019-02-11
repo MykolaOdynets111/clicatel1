@@ -418,7 +418,7 @@ public class ApiHelper {
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
                 .getBody().jsonPath();
 
-        String lastName = respJSON.getString("personalDetails.lastName") == null ? "" : " " + respJSON.getString("personalDetails.lastName");
+        String lastName = respJSON.getString("personalDetails.lastName") == null ? "" : respJSON.getString("personalDetails.lastName");
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
 
         long customerSinceTimestamp  = respJSON.getLong("personalDetails.customerSince");
@@ -428,11 +428,11 @@ public class ApiHelper {
                 format(formatter);
 
         String channelUsername = respJSON.getString("personalDetails.channelUsername").isEmpty() ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
+        String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
-        String phone =  respJSON.getString("clientProfiles.attributes.phone[0]")==null ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
-
-        return new Customer360PersonalInfo(respJSON.getString("personalDetails.firstName") + lastName,
-                location, "Customer since: " + customerSince, respJSON.getString("personalDetails.email"),
+        return new Customer360PersonalInfo(respJSON.getString("personalDetails.firstName") + " " + lastName,
+                location, "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
     }
 }

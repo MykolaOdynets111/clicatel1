@@ -7,7 +7,7 @@ Feature: Customer 360 from widget
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation
-    Then Correct client details are shown
+    Then Correct touch client details are shown
 
   Scenario: Editing Customer 360 info (touch user)
     Given I login as agent of General Bank Demo
@@ -17,10 +17,10 @@ Feature: Customer 360 from widget
     Then Agent has new conversation request
     When Agent click on new conversation
     And Click 'Edit' button in Customer 360 view
-    When Fill in the form with new customer 360 info
+    When Fill in the form with new touch customer 360 info
     And Click 'Save' button in Customer 360 view
-    Then Customer info is updated on backend
-    And Correct client details are shown
+    Then Touch customer info is updated on backend
+    And Correct touch client details are shown
     And New info is shown in left menu with chats
     And Customer name is updated in active chat header
 
