@@ -44,7 +44,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[text()='Agent Assistant']")
     private WebElement agentAssistantButton;
 
-    @FindBy(xpath = "//div[@class='modal-pageHeader' and text()='Profanity not allowed']")
+    @FindBy(xpath = "//div[text()='Profanity not allowed']")
     private WebElement profanityPopup;
 
     @FindBy(xpath = "//button[text()='Accept']")
@@ -197,8 +197,7 @@ public class AgentHomePage extends AgentAbstractPage {
     public void endChat(){
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
-            waitForElementToBeVisibleAgent(closeChatButton, 2, getCurrentAgent());
-            closeChatButton.click();
+            clickCloseButtonInCloseChatPopup();
         }
     }
 

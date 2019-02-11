@@ -210,7 +210,7 @@ public class AgentConversationSteps implements JSHelper{
     }
 
     @Then("^'Profanity not allowed' pop up is shown$")
-    public void verifyProfanityNotAllowedPopupShwon(){
+    public void verifyProfanityNotAllowedPopupShown(){
         Assert.assertTrue(getAgentHomePage().isProfanityPopupShown(),
                 "'Profanity not allowed' popup not shown.");
     }

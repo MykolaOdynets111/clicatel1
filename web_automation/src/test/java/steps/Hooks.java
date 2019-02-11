@@ -275,7 +275,8 @@ public class Hooks implements JSHelper{
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
             agentHomePage.endChat();
-            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
+//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
+            agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch (WebDriverException e) { }
     }
