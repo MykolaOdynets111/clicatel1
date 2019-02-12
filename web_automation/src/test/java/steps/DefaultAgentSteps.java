@@ -5,6 +5,7 @@ import agent_side_pages.AgentLoginPage;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import agent_side_pages.UIElements.ProfileWindow;
 import api_helper.ApiHelper;
+import api_helper.RequestSpec;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -57,6 +58,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
+        RequestSpec.clearAccessTokenForPortalUser();
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
@@ -86,6 +88,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
+        RequestSpec.clearAccessTokenForPortalUser();
         boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
         savePreTestFeatureStatus(feature, featureStatus);
         saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));

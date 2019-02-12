@@ -383,6 +383,7 @@ public class ApiHelper {
     }
 
     public static void updateSessionCapacity(String tenantOrgName, int availableChats){
+        RequestSpec.clearAccessTokenForPortalUser();
         RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
