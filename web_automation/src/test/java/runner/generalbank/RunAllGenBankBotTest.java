@@ -10,7 +10,7 @@ import org.testng.annotations.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "cucumber")
+@Test(groups = "General Bank widget UI tests")
 @CucumberOptions(
         format={
                 "com.github.kirlionik.cucumberallure.AllureReporter"

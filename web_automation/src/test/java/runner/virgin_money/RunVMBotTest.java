@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "Virgin_money_bot_flows")
+@Test(groups = "Virgin Money widget UI tests")
 @CucumberOptions(
         plugin={
                 "com.github.kirlionik.cucumberallure.AllureReporter"
