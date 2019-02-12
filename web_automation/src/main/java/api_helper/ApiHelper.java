@@ -419,7 +419,14 @@ public class ApiHelper {
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
                 .getBody().jsonPath();
 
-        String lastName = respJSON.getString("personalDetails.lastName") == null ? "" : respJSON.getString("personalDetails.lastName");
+        String fullName = "";
+        if(respJSON.getString("personalDetails.firstName") == null &&
+                respJSON.getString("personalDetails.lastName") == null){
+            fullName = respJSON.getString("clientProfiles.clientId[0]");
+        } else {
+            String lastName =respJSON.getString("personalDetails.lastName") == null ? "" : respJSON.getString("personalDetails.lastName");
+            fullName = respJSON.getString("personalDetails.firstName") + " " + lastName;
+        }
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
 
         long customerSinceTimestamp  = respJSON.getLong("personalDetails.customerSince");
@@ -428,12 +435,18 @@ public class ApiHelper {
                                 TimeZone.getDefault().toZoneId()).
                 format(formatter);
 
-        String channelUsername = respJSON.getString("personalDetails.channelUsername").isEmpty() ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+        String channelUsername = "";
+        try {
+            channelUsername = respJSON.getString("personalDetails.channelUsername").isEmpty() ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+        }catch (NullPointerException e){
+            channelUsername = respJSON.getString("personalDetails.channelUsername") == null ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+
+        }
         String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
         String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
-        return new Customer360PersonalInfo(respJSON.getString("personalDetails.firstName") + " " + lastName,
-                location, "Customer since: " + customerSince, email,
+        return new Customer360PersonalInfo(fullName, location,
+                "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
     }
 }

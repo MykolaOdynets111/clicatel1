@@ -450,6 +450,10 @@ public class DefaultAgentSteps implements JSHelper {
                 clientId = TwitterUsers.getLoggedInUser().getDmUserId();
                 integrationType = "TWITTER";
                 break;
+            case "dotcontrol":
+                clientId = DotControlSteps.getFromClientRequestMessage().getClientId();
+                integrationType = "HTTP";
+                break;
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
