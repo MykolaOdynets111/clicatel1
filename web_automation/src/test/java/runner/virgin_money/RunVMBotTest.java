@@ -13,7 +13,7 @@ import java.util.List;
 
 @Test(groups = "Virgin_money_bot_flows")
 @CucumberOptions(
-        plugin={"pretty",
+        plugin={
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,

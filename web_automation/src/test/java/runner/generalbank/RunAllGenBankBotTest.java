@@ -12,7 +12,7 @@ import java.util.List;
 
 @Test(groups = "cucumber")
 @CucumberOptions(
-        format={"pretty",
+        format={
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
