@@ -2,7 +2,6 @@ package portal_pages;
 
 import api_helper.Endpoints;
 import driverManager.DriverFactory;
-import driverManager.URLs;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -30,7 +29,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         waitForElementToBeVisibleAgent(emailInput, 10);
         emailInput.sendKeys(email);
         passInput.sendKeys(pass);
-//        executeJSclick(loginButton);
+        waitFor(5000); //for test purpose
         loginButton.click();
         return new PortalMainPage();
     }
