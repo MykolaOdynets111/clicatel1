@@ -1,9 +1,9 @@
 @start_server
 @no_widget
 @dot_control
-Feature: Creating .Control integration and sending messages
+Feature: .Control customer 360
 
-  Scenario: Sending message to .Control (to agent)
+  Scenario: Viewing .Control customer 360 info and editing it
     Given Create .Control integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
     When Send chat to agent message for .Control
