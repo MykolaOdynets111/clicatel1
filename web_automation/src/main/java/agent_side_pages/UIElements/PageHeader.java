@@ -34,6 +34,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.header div.radio-group label")
     private List<WebElement> statusElems;
 
+    @FindBy(css = "button#top-menu-dropdown>img")
+    private WebElement agentIcon;
+
     public PageHeader logOut(String agent) {
         waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
         click(iconWithAgentInitials);
@@ -77,5 +80,9 @@ public class PageHeader extends AbstractUIElement {
         targetElem.click();
         //    executeJSclick(targetElem);
 //        targetElem.findElement(By.cssSelector("input")).click();
+    }
+
+    public boolean isAgentImageShown(){
+        return isElementShownAgent(agentIcon, 10, "main agent");
     }
 }

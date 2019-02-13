@@ -33,6 +33,8 @@ public class BasePortalSteps {
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserManagementPage> portalUserManagementThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
@@ -621,6 +623,43 @@ public class BasePortalSteps {
         getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
     }
 
+    @When("^Click 'Manage' button for (.*) user$")
+    public void clickManageButtonForUser(String fullName){
+        portalUserManagementThreadLocal.set(
+                getPortalManagingUsersPage().clickManageButtonForUser(fullName)
+        );
+    }
+
+    @When("^Click 'Upload' button$")
+    public void clickUploadButtonForUser(){
+        portalUserManagementThreadLocal.get().clickUploadPhotoButton();
+    }
+
+    @When("^Upload (.*)")
+    public void uploadPhoto(String photoStrategy){
+        String photoPath = "";
+        if(photoStrategy.equals("new photo")) photoPath = System.getProperty("user.dir")+"/src/test/resources/agentphoto/agent_photo.png";
+
+        portalUserManagementThreadLocal.get().uploadPhoto(photoPath);
+    }
+
+    @Given("^Agent of (.*) tenant has no photo uploaded$")
+    public void deleteAgentPhoto(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
+    }
+
+    @Then("^New image is saved on portal and backend$")
+    public void verifyImageSaveOnPortal(){
+        SoftAssert soft = new SoftAssert();
+        String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("imageUrl");
+        soft.assertFalse(imageURLFromBackend==null,
+                        "Agent photo is not saved on backend");
+        soft.assertFalse(portalUserManagementThreadLocal.get().getImageURL().isEmpty(),
+                "Agent photo is not shown in portal");
+        soft.assertAll();
+    }
+
     private LeftMenu getLeftMenu() {
         if (leftMenu.get()==null) {
             leftMenu.set(getPortalMainPage().getLeftMenu());
@@ -690,6 +729,15 @@ public class BasePortalSteps {
             return portalFBIntegrationPageThreadLocal.get();
         } else{
             return portalFBIntegrationPageThreadLocal.get();
+        }
+    }
+
+    private PortalManagingUsersPage getPortalManagingUsersPage(){
+        if (portalManagingUsersThreadLocal.get()==null) {
+            portalManagingUsersThreadLocal.set(new PortalManagingUsersPage());
+            return portalManagingUsersThreadLocal.get();
+        } else{
+            return portalManagingUsersThreadLocal.get();
         }
     }
 

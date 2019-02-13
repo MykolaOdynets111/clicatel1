@@ -397,6 +397,11 @@ public class DefaultAgentSteps implements JSHelper {
 
     }
 
+    @Then("^Agent photo is updated on chatdesk$")
+    public void verifyPhotoLoadedOnChatdesk(){
+        Assert.assertTrue(getAgentHomePage("main").getPageHeader().isAgentImageShown(),
+                "Agent image is not shown on chatdesk");
+    }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){

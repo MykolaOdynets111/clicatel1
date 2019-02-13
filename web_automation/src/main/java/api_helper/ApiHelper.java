@@ -449,4 +449,12 @@ public class ApiHelper {
                 "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
     }
+
+    public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){
+        String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(String.format(Endpoints.DELET_AGENT_IMAGE, agentId));
+    }
+
 }
