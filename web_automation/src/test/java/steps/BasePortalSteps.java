@@ -648,7 +648,7 @@ public class BasePortalSteps {
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")
     public void deleteAgentPhoto(String tenantOrgName){
-        Assert.assertTrue(false, "User dir " + System.getProperty("userDir"));
+//        Assert.assertTrue(false, "User dir " + System.getProperty("userDir"));
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
