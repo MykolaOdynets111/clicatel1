@@ -12,5 +12,5 @@ Feature: Tenant Widget health check
     Given User opens page with desired tenant widget
     And Click chat icon
     When User enter chat to agent into widget input field
-    Then Card with a Before I transfer you, please give us some basic info: text is shown on user chat to agent message
+    Then Card with a Let me connect you with a live agent to assist you further. Before I transfer you, please give us some basic info: text is shown on user chat to agent message
     And User is able to provide some info about himself in the card after his chat to agent message
