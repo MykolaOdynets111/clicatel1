@@ -82,6 +82,7 @@ task getTouchGoPlan() {
 }
 
 tasks.withType(Test) {
+    systemProperty "userDir", System.getProperty("user.dir")
     systemProperties = System.getProperties()
 }
 

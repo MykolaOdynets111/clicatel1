@@ -642,13 +642,13 @@ public class BasePortalSteps {
 //        String basePath = System.getProperty("user.dir");
 //        if(ConfigManager.isRemote()) basePath = basePath.replace("web_automation", "Workspace/web_automation");
 //        if(photoStrategy.equals("new photo")) photoPath = basePath + "/src/test/resources/agentphoto/agent_photo.png";
-        Assert.assertTrue(new File("/src/test/resources/generalbank/tie.xml").exists(),
-                "File not found");
+
         portalUserManagementThreadLocal.get().uploadPhoto("/src/test/resources/agentphoto/agent_photo.png");
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")
     public void deleteAgentPhoto(String tenantOrgName){
+        Assert.assertTrue(false, "User dir " + System.getProperty("userDir"));
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
