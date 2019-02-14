@@ -3,7 +3,6 @@ package portal_pages;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import portal_pages.uielements.*;
 
 public class PortalMainPage extends PortalAbstractPage {
@@ -69,14 +68,18 @@ public class PortalMainPage extends PortalAbstractPage {
                 .clickNexButton()
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
-                .clickNexButton();
+                .clickPayNowButton();
         waitWhileProcessing();
     }
 
     public void upgradePlanWithoutTerms(int agentSeats){
         addAgentSeatsIntoCart(agentSeats);
         openAgentsPurchasingConfirmationWindow();
-        ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow = cartPage.getConfirmPaymentDetailsWindow()
+        ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow = cartPage.getConfirmPaymentDetailsWindow();
+        if (!confirmPaymentDetailsWindow.isSelectPaymentShown()){
+            confirmPaymentDetailsWindow.clickNexButton();
+        }
+        confirmPaymentDetailsWindow
                 .clickSelectPaymentField()
                 .selectPaymentMethod("VISA")
                 .clickNexButton()
@@ -84,12 +87,14 @@ public class PortalMainPage extends PortalAbstractPage {
                 .clickNexButton();
         waitWhileProcessing();
         confirmPaymentDetailsWindow.waitFotPaymentSummaryScreenToLoad()
-                                    .clickNexButton();
+                                    .clickPayNowButton();
     }
 
     public void addAgentSeatsIntoCart(int agentSeats){
         getPageHeader().clickUpgradeButton();
-        getUpgradeYourPlanWindow().selectAgentSeats(agentSeats)
+        getUpgradeYourPlanWindow()
+                .selectAgentSeats(agentSeats)
+                .selectMonthly()
                 .clickAddToCardButton();
         waitWhileProcessing();
         try {

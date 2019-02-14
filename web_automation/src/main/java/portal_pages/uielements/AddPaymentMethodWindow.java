@@ -1,15 +1,13 @@
 package portal_pages.uielements;
 
-import abstract_classes.AbstractUIElement;
 import driverManager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portal_pages.CartPage;
 
 import java.util.List;
 
-
+@FindBy(css = "div.cl-wizzard.create-integration-container")
 public class AddPaymentMethodWindow extends BasePortalWindow {
 
     @FindBy(css = "span[aria-label='Select box activate']")
@@ -56,8 +54,9 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         findElemByCSSAgent(firstName).sendKeys("AQA");
         findElemByCSSAgent(lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
-        nextButton.click();
-        waitForAddingNewPaymentConfirmationPopup();
+        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        waitFor(2000);
+        executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
         return this;
     }
 
@@ -85,8 +84,22 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         checkboxes.get(checkboxOrder-1).click();
     }
 
+    public void clickNextButton(){
+        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        executeAngularClick(DriverFactory.getAgentDriverInstance(), nextButton);
+    }
+
     public void clickAddPaymentButton(){
-        executeJSclick(nextButton, DriverFactory.getAgentDriverInstance());
+        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        waitForElementToBeClickableAgent(addPaymentMethod, 15, "admin");
+        waitFor(2000);
+        executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
+    }
+
+
+    public boolean isAddPaymentButtonEnabled(){
+        executeJSHover(addPaymentMethodButton, DriverFactory.getAgentDriverInstance());
+        return addPaymentMethodButton.isEnabled();
     }
 
     public void waitForAddingNewPaymentConfirmationPopup(){

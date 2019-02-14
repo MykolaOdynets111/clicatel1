@@ -116,9 +116,15 @@ public class ApiHelperPlatform {
     }
 
     public static void closeAccount(String accountName, String email, String pass){
+        String accessToken = "";
+        try {
+            accessToken = RequestSpec.getAccessTokenForPortalUserByAccount(accountName);
+        }catch (java.lang.NullPointerException e){
+            return; // nothing to close - account doesn't exist
+        }
         RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUserByAccount(accountName))
+                .header("Authorization",accessToken)
                 .body("{\n" +
                         "  \"email\": \""+email+"\",\n" +
                         "  \"password\": \""+pass+"\",\n" +

@@ -2,7 +2,10 @@
 @updating_touchgo
 @no_widget
 @no_chatdesk
+@testing_env_only
 Feature: User should be able to upgrade Touch Go PLan
+
+#  ToDo: Add logic for creating DB dump and after test destroying it
 
   Background:
     Given Updating AQA tenant has Starter Touch Go PLan and no active subscription

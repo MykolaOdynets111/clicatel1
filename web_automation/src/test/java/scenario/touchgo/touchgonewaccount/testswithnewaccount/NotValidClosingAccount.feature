@@ -1,7 +1,7 @@
 @portal
 @no_widget
 @no_chatdesk
-@signup_account
+@testing_env_only
 Feature: Closing account should require verification
 
   Scenario: Admin of the account should be able to cancel closing the account

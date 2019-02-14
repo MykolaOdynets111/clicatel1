@@ -16,15 +16,15 @@ public class ConfigManager {
 
 
     public static void setTenantId(String tenantId) {
-        System.setProperty("tenantid", tenantId);
+        System.setProperty(TENANT_ID, tenantId);
     }
 
     public static void setBrowserType(String browserType) {
-        System.setProperty("browsertype", browserType);
+        System.setProperty(BROWSER_TYPE, browserType);
     }
 
     public static void setEnv(String env) {
-        System.setProperty("env", env);
+        System.setProperty(ENV, env);
     }
 
 

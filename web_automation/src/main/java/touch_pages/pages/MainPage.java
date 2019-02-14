@@ -23,14 +23,14 @@ public class MainPage extends AbstractPage {
 
     public boolean isChatIconShown() {
         try{
-        waitForElementToBeInvisible(chatIcon, 8);}
+        waitForElementToBeInvisible(chatIcon, 3);}
         catch (TimeoutException e){}
-        return isElementShown(chatIcon, 8);
+        return isElementShown(chatIcon, 3);
     }
 
     public Widget openWidget() {
     try {
-        waitForElementToBeVisible(chatIcon, 25);
+        waitForElementToBeVisible(chatIcon, 15);
         moveToElemAndClick(chatIcon);
         return new Widget();
     } catch (TimeoutException e) {

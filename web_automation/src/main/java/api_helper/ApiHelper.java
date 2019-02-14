@@ -1,5 +1,6 @@
 package api_helper;
 
+import dataManager.Customer360PersonalInfo;
 import dataManager.MC2Account;
 import dataManager.Tenants;
 import dataManager.Territories;
@@ -8,6 +9,7 @@ import dataManager.jackson_schemas.tenant_address.TenantAddress;
 import dataManager.jackson_schemas.user_session_info.UserSession;
 import driverManager.ConfigManager;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
@@ -15,9 +17,13 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ApiHelper {
 
@@ -104,7 +110,7 @@ public class ApiHelper {
     }
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
-        String body = createPutBodyForWidgetDisplayHours(day, startTime, endTime);
+        String body = createPutBodyForHours(day, startTime, endTime);
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
@@ -112,7 +118,35 @@ public class ApiHelper {
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
     }
 
-    private static String createPutBodyForWidgetDisplayHours(String day, String startTime,  String endTime) {
+    public static void setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
+        String body = createPutBodyForHours(day, startTime, endTime);
+        Response resp = RestAssured.given().log().all()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body(body)
+                .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+        resp.getBody().asString();
+    }
+
+    public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
+        Response resp = RestAssured.given().log().all()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+        try {
+            return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
+        } catch(java.lang.ClassCastException e){
+            Assert.assertTrue(false, "Incorrect body on updating support hours \n"
+            +"Status code: " +resp.statusCode() + "\n"
+                    +"tenantOrgName: "+ tenantOrgName
+                    + "Authorization :"  + RequestSpec.getAccessTokenForPortalUser(tenantOrgName) + "\n"
+          + resp.getBody().asString()  );
+//            System.out.println(resp.getBody().asString());
+            return null;
+        }
+    }
+
+    private static String createPutBodyForHours(String day, String startTime, String endTime) {
         String body;
         if (day.equalsIgnoreCase("all week")) {
             body = "[\n" +
@@ -340,4 +374,87 @@ public class ApiHelper {
                 .filter(e -> e.getType().equalsIgnoreCase(integrationType))
                 .findFirst().get();
     }
+
+    public static List<ChatHistoryItem> getChatHistory(String tenantOrgName, String sessionId){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.CHAT_HISTORY, sessionId))
+                .getBody().jsonPath().getList("records", ChatHistoryItem.class);
+    }
+
+    public static void updateSessionCapacity(String tenantOrgName, int availableChats){
+        RequestSpec.clearAccessTokenForPortalUser();
+        RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .put(Endpoints.SESSION_CAPACITY + availableChats);
+    }
+
+    public static List<OvernightTicket> getOvernightTicketsByStatus(String tenantOrgName, String ticketStatus){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase())
+                .getBody().jsonPath().getList("", OvernightTicket.class);
+    }
+
+    public static void closeAllOvernightTickets(String tenantOrgName){
+        List<OvernightTicket> allTicketsByStatus = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
+        for(OvernightTicket ticket : allTicketsByStatus){
+            RestAssured.given()
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .post(Endpoints.PROCESS_OVERNIGHT_TICKET + ticket.getId());
+        }
+    }
+
+    public static String getActiveSessionIdByClientId(String tenantName, String clineId, String integrationType){
+        String url = String.format(Endpoints.INTERNAL_ACTIVE_SESSIONS, tenantName, clineId, integrationType);
+        return RestAssured.get(url).
+                getBody().jsonPath().get("sessionId");
+    }
+
+    public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
+        String sessionId = getActiveSessionIdByClientId(Tenants.getTenantUnderTestName(), clineId, integrationType);
+        JsonPath respJSON = RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.CUSTOMER_VIEW + sessionId)
+                .getBody().jsonPath();
+
+        String fullName = "";
+        if(respJSON.getString("personalDetails.firstName") == null &&
+                respJSON.getString("personalDetails.lastName") == null){
+            fullName = respJSON.getString("clientProfiles.clientId[0]");
+        } else {
+            String lastName =respJSON.getString("personalDetails.lastName") == null ? "" : respJSON.getString("personalDetails.lastName");
+            fullName = respJSON.getString("personalDetails.firstName") + " " + lastName;
+        }
+        String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
+
+        long customerSinceTimestamp  = respJSON.getLong("personalDetails.customerSince");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+        String customerSince =  LocalDateTime.ofInstant(Instant.ofEpochMilli(customerSinceTimestamp),
+                                TimeZone.getDefault().toZoneId()).
+                format(formatter);
+
+        String channelUsername = "";
+        try {
+            channelUsername = respJSON.getString("personalDetails.channelUsername").isEmpty() ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+        }catch (NullPointerException e){
+            channelUsername = respJSON.getString("personalDetails.channelUsername") == null ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
+
+        }
+        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
+        String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
+
+        return new Customer360PersonalInfo(fullName, location,
+                "Customer since: " + customerSince, email,
+                channelUsername, phone.replaceAll(" ", "") );
+    }
+
+    public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){
+        String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(String.format(Endpoints.DELET_AGENT_IMAGE, agentId));
+    }
+
 }

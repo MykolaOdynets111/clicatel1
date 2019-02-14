@@ -52,7 +52,7 @@ public class PortalSignUpPage extends PortalAbstractPage {
     }
 
     public boolean isSuccessSignUpMessageShown(){
-        return isElementShownAgent(successSignUpMessage, 10);
+        return isElementShownAgent(successSignUpMessage, 20);
     }
 
     public boolean areRequiredErrorsShown(){

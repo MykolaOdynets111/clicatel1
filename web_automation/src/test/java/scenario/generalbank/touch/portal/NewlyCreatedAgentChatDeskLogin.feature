@@ -5,6 +5,7 @@ Feature: Newly created agent should be able to login into to chat desk
     Given User opens General Bank Demo tenant page
     And Click chat icon
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-3642")
   @skip_for_demo1
   Scenario: Newly created agent should be able to login into to chat desk
     Given New General Bank Demo agent is created

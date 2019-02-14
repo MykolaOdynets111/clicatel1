@@ -256,14 +256,34 @@ public class DBConnector {
         return isLastVisitSaved;
     }
 
+    public static String getSessionIdByClientProfileID(String env, String clientID) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
-    public static void main(String args[]){
-        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
-        long lastVisit = DBConnector.getLastVisitForUserProfile("testing", clientProfileID);
+        String query = "SELECT session_id FROM "+tableName+".session where client_id = '"+clientID+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = results.getString("session_id");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+
+//    public static void main(String args[]){
+//        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
+//        long lastVisit = DBConnector.getLastVisitForUserProfile("testing", clientProfileID);
 //        long lastVisitWithShift = minusHoursFromTimestamp(lastVisit, 12);
 //        DBConnector.updateClientLastVisitDate("testing", clientProfileID, lastVisitWithShift);
-
-    }
+//    }
 
 
 }

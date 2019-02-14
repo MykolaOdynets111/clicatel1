@@ -12,6 +12,8 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_HOURS = URLs.getTouchApiBaseURL() + "tenants/%s/hours/webchat";
 
+    public static String AGENT_SUPPORT_HOURS = URLs.getTouchApiBaseURL() + "tenants/%s/hours/agent-support";
+
     public static String WIDGET_VISIBILITY_TERRITORIES = URLs.getTouchApiBaseURL() + "territories/availability";
 
     public static String FACEBOOK_INTEGRATION =  URLs.getTouchApiBaseURL() + "facebook-registration/integration";
@@ -25,6 +27,18 @@ public class Endpoints {
     public static String INTEGRATION_EXISTING_CHANNELS = URLs.getTouchApiBaseURL() + "integrations/channels";
 
     public static String INTEGRATIONS = URLs.getTouchApiBaseURL() + "integrations";
+
+    public static String CHAT_HISTORY = URLs.getTouchApiBaseURL() + "chats/history?sessionId=%s";
+
+    public static String SESSION_CAPACITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
+
+    public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
+
+    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "ticket/process-by-id/";
+
+    public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
+
+    public static String DELET_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
 
     // ================== INTERNAL ============== //
 
@@ -45,6 +59,8 @@ public class Endpoints {
     public static String INTERNAL_LOGOUT_AGENT = URLs.getBaseInternalApiUrl() + "v6/agents/logout/%s";
 
     public static String INTERNAL_DECREASING_TOUCHGO_PLAN = URLs.getBaseInternalApiUrl() + "tenants/touchGo/standard";
+
+    public static String INTERNAL_ACTIVE_SESSIONS = URLs.getBaseInternalApiUrl() + "sessions/active?tenantName=%s&clientId=%s&integrationType=%s";
 
     // ==================  PLATFORM ============== //
 
@@ -135,6 +151,8 @@ public class Endpoints {
     public static String DOT_CONTROL_HTTP_INTEGRATION = URLs.getTouchApiBaseURL() + "http-integrations";
 
     public static String DOT_CONTROL_TO_BOT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/message";
+
+    public static String DOT_CONTROL_INIT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/init";
 
 }
 

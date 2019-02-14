@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 public class MessengerWindow extends AbstractUIElement {
 
     private String inputFieldXPATHLocator = "//div[@role='combobox']";
-    private String toUserMessage = "//span[text()='%s']//following::span[text()=\"%s\"]";
+    private String toUserMessage = "//span[text()='%s']//following::span[contains(text(), \"%s\")]";
 
     @FindBy(xpath = "//div[contains(@class,'clearfix titlebar')]/div/div/div[2]/div[2]/div[3]")
     private WebElement headerGearButtonContainer;

@@ -9,19 +9,27 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dataManager.Tenants;
 import dataManager.dot_control.DotControlCreateIntegrationInfo;
+import dataManager.jackson_schemas.ChatHistoryItem;
 import dataManager.jackson_schemas.Integration;
+import dataManager.jackson_schemas.SupportHoursItem;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
-import io.restassured.RestAssured;
+import dbManager.DBConnector;
+import driverManager.ConfigManager;
 import io.restassured.response.Response;
 import java_server.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class DotControlSteps {
 
     private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
+    private static ThreadLocal<String> clientId = new ThreadLocal<>();
+    private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
+    private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
@@ -50,41 +58,85 @@ public class DotControlSteps {
 
     @When("Send (.*) message for .Control")
     public void sendMessageToDotControl(String message){
-        if (dotControlRequestMessage.get()==null){
-            createRequestMessage(apiToken.get(), message);
-        } else{
-            dotControlRequestMessage.get().setMessage(message);
-            dotControlRequestMessage.get().setMessageId(
-                    dotControlRequestMessage.get().getMessageId() + faker.number().randomNumber(7, false));
-
+        if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
+        else{
+                dotControlRequestMessage.get().setMessage(message);
+                dotControlRequestMessage.get().setMessageId(
+                        dotControlRequestMessage.get().getMessageId() + faker.number().randomNumber(7, false));
         }
-        APIHelperDotControl.sendMessage(dotControlRequestMessage.get());
+        if (message.contains("invalid apiToken")) dotControlRequestMessage.get().setApiToken("invalid_token");
+        if (message.contains("empty")) dotControlRequestMessage.get().setMessage("");
+        if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
+
+        responseOnSentRequest.set(
+                APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
+        );
+        clientId.set(dotControlRequestMessage.get().getClientId());
+    }
+
+    @Then("^Message should be sent$")
+    public void verifyMessageIsSent(){
+        Assert.assertEquals(responseOnSentRequest.get().statusCode(), 200,
+        "Sending empty message causes error\n" +
+        responseOnSentRequest.get().getBody().asString() + "\n");
+    }
+
+    @Then("^Error with not defined tenant is returned$")
+    public void verifyInvalidApiKeyForSendMessage(){
+        SoftAssert soft = new SoftAssert();
+        Response resp = responseOnSentRequest.get();
+        soft.assertEquals(resp.getStatusCode(), 401,
+                "\nResponse status code is not as expected after sending message with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Can not define tenant via enabled channel API token invalid_token",
+                "\nResponse on invalid apiToken contains incorrect error message\n");
+        soft.assertAll();
     }
 
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
+        if(!(responseOnSentRequest.get().statusCode()==200)) {
+                Assert.assertTrue(false, "Integration creating was not successful\n" +
+                        "Status code " + responseOnSentRequest.get().statusCode()+
+                        "\n Body: " + responseOnSentRequest.get().getBody().asString());
+            }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
         waitFotResponseToComeToServer();
-        try {
         Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                 "Message is not as expected");
-        }catch (NullPointerException e){
-            Assert.assertTrue(false, "Some nullpointer exception was faced\n" + Server.incomingRequests.toString() +
-                    "\n"+ dotControlRequestMessage.get().toString());
-        }
+    }
+
+    @Then("^Error about client  is returned$")
+    public void verifyErrorOnInvalidClientID(){
+        SoftAssert soft = new SoftAssert();
+        Response resp = responseOnSentRequest.get();
+        soft.assertEquals(resp.getStatusCode(), 400,
+                "\nResponse status code is not as expected after sending message with invalid clientID \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Invalid client id",
+                "\nResponse on call with invalid clientID contains incorrect error message\n");
+        soft.assertAll();
+        responseOnSentRequest.get();
     }
 
     @Then("Verify dot .Control returns (.*) response")
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
         waitFotResponseToComeToServer();
         try {
-            Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedResponse,
-                    "Message is not as expected");
-        }catch (NullPointerException e){
-            Assert.assertTrue(false, "Some nullpointer exception was faced\n" + Server.incomingRequests.toString() + "\n" +
-                            Server.incomingRequests.get(Server.incomingRequests.keySet().iterator().next()).toString() + "\n But Expected \n" +
-            "\n"+ dotControlRequestMessage.get().toString());
+            if (expectedResponse.equalsIgnoreCase("agents_available")) {
+                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
+                        "Message is not as expected");
+            } else {
+                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
+                        "Message is not as expected");
+            }
+        }catch(NullPointerException e){
+            Assert.assertTrue(false, "NullPointerException was faced\n" +
+            "Keyset from server: " + Server.incomingRequests.keySet() + "\n" +
+            "clientId from created integration" + clientId.get() + "\n" +
+            "" + Server.incomingRequests.toString()
+            );
         }
     }
 
@@ -131,6 +183,131 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
+
+    @When("^Send init call with (.*) messageId correct response is returned$")
+    public void sendInitCall(String messageIdStrategy){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId(messageIdStrategy);
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n"+
+                resp.getBody().asString() + "\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains incorrect conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "OK",
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("businessHours") == null,
+                "\nResponse on INIT call contains incorrect businessHours\n");
+        soft.assertAll();
+    }
+
+    @When("^Send init call with (.*) messageId and no active agents correct response is returned$")
+    public void sendInitCallWithoutAgent(String messageIdStrategy){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId(messageIdStrategy);
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains 'null' conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "NO_AGENTS_AVAILABLE",
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("businessHours") == null,
+                "\nResponse on INIT call contains not null businessHours\n");
+        soft.assertAll();
+    }
+
+    @When("^Send init call with provided messageId and not registered apiToken then correct response is returned$")
+    public void sendInitCallWithNotRegisteredApiToken(){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId("provided");
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), "eQscd8r4_notRegistered", clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 401,
+                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "API token is not registered",
+                "\nResponse on INIT call contains incorrect error message\n");
+        soft.assertAll();
+    }
+
+    @When("^Send init call with provided messageId and empty clientId then correct response is returned$")
+    public void sendInitCallWithEmptyClientId(){
+        clientId.set("");
+        generateInitCallMessageId("provided");
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 400,
+                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Invalid client id",
+                "\nResponse on INIT call contains incorrect error message\n");
+        soft.assertAll();
+    }
+
+    @Then("^MessageId is correctly saved$")
+    public void checkMessageIdSavingInINITCall(){
+        // skipping for demo1 because its db is located in another network
+        if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
+            String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), clientId.get());
+            List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
+            String actualMessageId = null;
+            try {
+                actualMessageId = chatHistoryItemList.stream()
+                        .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
+                        .findFirst().get().getMessageId();
+            }catch(java.util.NoSuchElementException e){
+                Assert.assertTrue(false, "Not found message by clientId\n"
+                + String.join(", ", chatHistoryItemList.toString()));
+            }
+
+            if (!initCallMessageId.get().isEmpty()) {
+                Assert.assertEquals(actualMessageId, initCallMessageId.get(),
+                        "Message id is not as expected\n");
+            } else {
+                Assert.assertTrue(!actualMessageId.equalsIgnoreCase("null"),
+                        "Message id is not auto generated");
+            }
+        }
+    }
+
+
+    @When("^Send init call with (.*) messageId correct response without of support hours is returned$")
+    public void sendInitCallOutOfSupport(String messageIdStrategy){
+        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+        generateInitCallMessageId(messageIdStrategy);
+        SoftAssert soft = new SoftAssert();
+        List<SupportHoursItem> expectedBusinessHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n"+
+                        resp.getBody().asString() + "\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains incorrect conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "OUT_OF_BUSINESS_HOURS",
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertEquals(resp.getBody().jsonPath().getList("businessHours", SupportHoursItem.class), expectedBusinessHours,
+                "\nResponse on INIT call contains incorrect businessHours\n");
+        soft.assertAll();
+    }
+
+
+    @When("^Set session capacity to (.*) for (.*) tenant$")
+    public void updateSessionCapacity(int chats, String tenantOrgName){
+        ApiHelper.updateSessionCapacity(tenantOrgName, chats);
+    }
+
+
+
     public static DotControlRequestMessage getFromClientRequestMessage(){
         return dotControlRequestMessage.get();
     }
@@ -148,7 +325,7 @@ public class DotControlSteps {
     private void waitFotResponseToComeToServer() {
         for(int i = 0; i<35; i++) {
             if (!Server.incomingRequests.isEmpty() &
-                    Server.incomingRequests.keySet().contains(dotControlRequestMessage.get().getClientId())) {
+                    Server.incomingRequests.keySet().contains(clientId)) {
                 break;
             }
             try {
@@ -162,13 +339,21 @@ public class DotControlSteps {
         }
     }
 
-    @Given("^Test step$")
-    public void testStep(){
-        Assert.assertTrue(RestAssured.get(Server.getServerURL()).statusCode()==200, "Server check from another feature");
+    public void generateInitCallMessageId(String messageIdStrategy){
+        switch(messageIdStrategy){
+            case "provided":
+                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+                break;
+            default:
+                initCallMessageId.set("");
+        }
     }
 
     public static void cleanUPMessagesInfo(){
-        infoForCreatingIntegration.set(null);
-        dotControlRequestMessage.set(null);
+        responseOnSentRequest.remove();
+        infoForCreatingIntegration.remove();
+        dotControlRequestMessage.remove();
+        apiToken.remove();
+        clientId.remove();
     }
 }

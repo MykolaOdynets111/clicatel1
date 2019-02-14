@@ -1,5 +1,6 @@
 package api_helper;
 
+import com.github.javafaker.Faker;
 import dataManager.dot_control.DotControlCreateIntegrationInfo;
 import dataManager.jackson_schemas.dot_control.DotControlRequestMessage;
 import io.restassured.RestAssured;
@@ -9,7 +10,11 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
+import java.util.Map;
+
 public class APIHelperDotControl {
+
+    static Faker faker = new Faker();
 
     public static void waitForServerToBeReady(){
         try {
@@ -45,8 +50,8 @@ public class APIHelperDotControl {
     }
 
     public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
-        return
-        RestAssured.given().log().all()
+        RequestSpec.clearAccessTokenForPortalUser();
+        Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
@@ -60,9 +65,11 @@ public class APIHelperDotControl {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+
+        return resp;
     }
 
-    public static void sendMessage(DotControlRequestMessage requestMessage){
+    public static Response sendMessage(DotControlRequestMessage requestMessage){
         ObjectMapper mapper = new ObjectMapper();
         Response resp = null;
         try {
@@ -70,22 +77,75 @@ public class APIHelperDotControl {
                     .header("Content-Type", "application/json")
                     .body(mapper.writeValueAsString(requestMessage))
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
-            if(!(resp.statusCode()==200)) {
-                Assert.assertTrue(false, "Integration creating was not successful\n" +
-                        "Status code " + resp.statusCode()+
-                        "\n Body: " + resp.getBody().asString());
-            }
-
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        int a = 2;
+        return resp;
+    }
+
+    public static Response sendMessageWithWait(DotControlRequestMessage requestMessage){
+        Response resp = sendMessage(requestMessage);
+        for (int i =0; i<10; i++){
+            if (resp.statusCode() != 401) break;
+            else{
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                resp = sendMessage(requestMessage);
+            }
+
+        }
+        return resp;
     }
 
     public static Response deleteHTTPIntegrations(String tenantOrgName){
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+    }
+
+    public static Response sendInitCallWithWait(String tenantOrgName, String apiToken, String clientId, String messageId){
+        Response resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+        for (int i =0; i<15; i++){
+            if (resp.statusCode() != 401) break;
+            else{
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+            }
+
+        }
+        return resp;
+    }
+
+    private static Response sendInitCall(String tenantOrgName, String apiToken, String clientId, String messageId){
+
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Content-Type", "application/json")
+                .body("{\n" +
+                        "  \"apiToken\": \""+apiToken+"\",\n" +
+                        "  \"clientId\": \""+clientId+"\",\n" +
+                        "  \"context\": {},\n" +
+                        "  \"conversationId\": \"string\",\n" +
+                        "  \"history\": [\n" +
+                        "    {\n" +
+                        "      \"message\": \"string\",\n" +
+                        "      \"messageId\": \""+ messageId + "\",\n" +
+                        "      \"messageType\": \"PLAIN\",\n" +
+                        "      \"source\": \"AGENT\",\n" +
+                        "      \"timestamp\": 0\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"referenceId\": \"string\",\n" +
+                        "  \"tenantMode\": \"BOT\"\n" +
+                        "}")
+                .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
     }
 
 }

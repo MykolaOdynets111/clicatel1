@@ -23,7 +23,12 @@ public class PageHeader extends AbstractUIElement {
 
     public void clickUpgradeButton(){
         waitForElementToBeClickableAgent(upgradeButton, 5, "main");
-        upgradeButton.click();
+        try {
+            upgradeButton.click();
+        }catch (org.openqa.selenium.WebDriverException e) {
+            waitForElementToBeVisibleAgent(upgradeButton, 7, "admin");
+            upgradeButton.click();
+        }
     }
 
     public CartPage openCart(){

@@ -5,9 +5,12 @@ import agent_side_pages.AgentLoginPage;
 import agent_side_pages.UIElements.LeftMenuWithChats;
 import agent_side_pages.UIElements.ProfileWindow;
 import api_helper.ApiHelper;
+import api_helper.RequestSpec;
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import dataManager.Customer360PersonalInfo;
 import dataManager.FacebookUsers;
 import dataManager.Tenants;
 import dataManager.TwitterUsers;
@@ -21,6 +24,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dot_control.DotControlSteps;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +37,8 @@ public class DefaultAgentSteps implements JSHelper {
     private LeftMenuWithChats leftMenuWithChats;
     private static Map<String, Boolean> PRE_TEST_FEATURE_STATUS = new HashMap<>();
     private static Map<String, Boolean> TEST_FEATURE_STATUS_CHANGES = new HashMap<>();
+    private static Customer360PersonalInfo customer360InfoForUpdating;
+    private Faker faker = new Faker();
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         PRE_TEST_FEATURE_STATUS.put(featureName, status);
@@ -52,7 +58,9 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
+        RequestSpec.clearAccessTokenForPortalUser();
         Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
@@ -80,6 +88,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
+        RequestSpec.clearAccessTokenForPortalUser();
         boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
         savePreTestFeatureStatus(feature, featureStatus);
         saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));
@@ -94,12 +103,12 @@ public class DefaultAgentSteps implements JSHelper {
         String expectedInitials = Character.toString(agentInfoResp.getBody().jsonPath().get("firstName").toString().charAt(0)) +
                 Character.toString(agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0));
 
-        Assert.assertEquals(agentHomePage.getHeader().getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
+        Assert.assertEquals(agentHomePage.getPageHeader().getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
     }
 
     @When("^I click icon with initials$")
     public void clickIconWithInitials(){
-        agentHomePage.getHeader().clickIconWithInitials();
+        agentHomePage.getPageHeader().clickIconWithInitials();
     }
 
     @Then("^I see (.*) agent's info$")
@@ -108,16 +117,16 @@ public class DefaultAgentSteps implements JSHelper {
         Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
         String agentName = agentInfoResp.getBody().jsonPath().get("firstName") + " "
                 + agentInfoResp.getBody().jsonPath().get("lastName");
-        soft.assertEquals(agentHomePage.getHeader().getAgentName(), agentName,
+        soft.assertEquals(agentHomePage.getPageHeader().getAgentName(), agentName,
                 "Agent name is not as expected");
-        soft.assertEquals(agentHomePage.getHeader().getAgentEmail(), agentInfoResp.getBody().jsonPath().get("email"),
+        soft.assertEquals(agentHomePage.getPageHeader().getAgentEmail(), agentInfoResp.getBody().jsonPath().get("email"),
                 "Agent name is not as expected");
         soft.assertAll();
     }
 
     @When("^I click \"Profile Settings\" button$")
     public void clickProfileSettingsButton(){
-        agentHomePage.getHeader().clickProfileSettingsButton();
+        agentHomePage.getPageHeader().clickProfileSettingsButton();
     }
 
 
@@ -150,7 +159,7 @@ public class DefaultAgentSteps implements JSHelper {
 
     @When("^Agent transfers chat$")
     public void transferChat(){
-        getAgentHomeForMainAgent().clickTransferButton();
+        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
         getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
     }
 
@@ -201,9 +210,41 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(30, agent),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+    }
+
+    @Then("(.*) sees 'overnight' icon in this chat")
+    public void verifyOvernightIconShown(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage()),
+                "Overnight icon is not shown for overnight ticket. \n clientId: "+ getUserNameFromLocalStorage());
+    }
+
+    @Then("^Overnight ticket is removed from (.*) chatdesk$")
+    public void checkThatOvernightTicketIsRemoved(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconRemoved(getUserNameFromLocalStorage()),
+                "Overnight ticket is still shown");
+    }
+
+    @Then("Message that it is overnight ticket is shown for (.*)")
+    public void verifyMessageThatThisIsOvernightTicket(String agent){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).isOvernightTicketMessageShown(),
+                "Message that this is Overnight ticket is not shown");
+        softAssert.assertTrue(getAgentHomePage(agent).isSendEmailForOvernightTicketMessageShown(),
+                "'Send email' button is not enabled");
+        softAssert.assertAll();
+    }
+
+    @Then("Conversation area contains (.*) to user message")
+    public void verifyOutOfSupportMessageShownOnChatdesk(String message){
+        String userMessage = message;
+        if(message.contains("out_of_support_hours")) {
+            userMessage = ApiHelper.getTafMessages().stream().filter(e -> e.getId().equals(message)).findFirst().get().getText();
+        }
+        Assert.assertTrue(getAgentHomePage("main agent").getChatBody().isToUserMessageShown(userMessage),
+                "Expected to user message '"+userMessage+"' is not shown in chatdesk");
     }
 
     @Then("^Agent select \"(.*)\" filter option$")
@@ -270,9 +311,9 @@ public class DefaultAgentSteps implements JSHelper {
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
         try {
-            getAgentHomePage(agent).getHeader().clickIconWithInitials();
-            getAgentHomePage(agent).getHeader().selectStatus(newStatus);
-            getAgentHomePage(agent).getHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
+            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
         } catch (WebDriverException e) {
             Assert.assertTrue(false, "Unable to change agent status. Please check the screenshot.");
         }
@@ -289,6 +330,78 @@ public class DefaultAgentSteps implements JSHelper {
                 "'Agent limit reached' pop up is not shown.");
     }
 
+    @Given("^Set agent support hours (.*)$")
+    public void setSupportHoursWithShift(String shiftStrategy){
+        switch (shiftStrategy){
+            case "with day shift":
+                LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
+
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
+                        "00:00", "23:59");
+                break;
+            case "for all week":
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                        "00:00", "23:59");
+                getAgentHomePage("main").waitFor(1500);
+                break;
+        }
+    }
+
+
+    @Then("Correct (.*) client details are shown")
+    public void verifyClientDetails(String clientFrom){
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+
+        Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
+                "User info is not as expected \n");
+    }
+
+
+
+    @When("Click (?:'Edit'|'Save') button in Customer 360 view")
+    public void clickEditCustomerView(){
+        getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
+    }
+
+    @When("Fill in the form with new (.*) customer 360 info")
+    public void updateCustomer360Info(String customerFrom){
+        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        customer360InfoForUpdating = currentCustomerInfo.setLocation("Lviv")
+                            .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
+                            .setPhone("+380931576633");
+        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) customer360InfoForUpdating.setFullName("AQA Run");
+        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+
+    }
+
+    @Then("^(.*) customer info is updated on backend$")
+    public void verifyCustomerInfoChangesOnBackend(String customerFrom){
+        Assert.assertEquals(getCustomer360Info(customerFrom), customer360InfoForUpdating,
+                "Customer 360 info is not updated on backend after making changes on chatdesk. \n");
+    }
+
+    @Then("^New info is shown in left menu with chats$")
+    public void checkUpdatingUserInfoInLeftMenu(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName(),
+                "Full user name is not updated in left menu with chats after updating Customer 360 info \n");
+        soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), customer360InfoForUpdating.getLocation(),
+                "Location is not updated in left menu with chats after updating Customer 360 info \n");
+        soft.assertAll();
+    }
+
+    @Then("^Customer name is updated in active chat header$")
+    public void verifyCustomerNameUpdated(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName()),
+                "Updated customer name is not shown in chat header");
+
+    }
+
+    @Then("^Agent photo is updated on chatdesk$")
+    public void verifyPhotoLoadedOnChatdesk(){
+        Assert.assertTrue(getAgentHomePage("main").getPageHeader().isAgentImageShown(),
+                "Agent image is not shown on chatdesk");
+    }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -328,5 +441,26 @@ public class DefaultAgentSteps implements JSHelper {
 
     private LeftMenuWithChats getLeftMenu(String agent) {
         return getAgentHomePage(agent).getLeftMenuWithChats();
+    }
+
+    private Customer360PersonalInfo getCustomer360Info(String clientFrom){
+        String clientId = getUserNameFromLocalStorage();
+        String integrationType = "TOUCH";
+        switch (clientFrom){
+            case "fb dm":
+                clientId = FacebookUsers.getLoggedInUser().getFBUserID();
+                integrationType = "FACEBOOK";
+                break;
+            case "twitter dm":
+                clientId = TwitterUsers.getLoggedInUser().getDmUserId();
+                integrationType = "TWITTER";
+                break;
+            case "dotcontrol":
+                clientId = DotControlSteps.getFromClientRequestMessage().getClientId();
+                integrationType = "HTTP";
+                break;
+        }
+        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+                clientId, integrationType);
     }
 }

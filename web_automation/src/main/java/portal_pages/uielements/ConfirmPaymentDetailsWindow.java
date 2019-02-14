@@ -13,22 +13,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+@FindBy(css = "div.cl-wizzard.create-integration-container")
+public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
-public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, JSHelper {
-
-    public ConfirmPaymentDetailsWindow(WebElement element) {
-        super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
-    }
+    @FindBy(xpath = "//label[text()='Payment Method']")
+    private WebElement paymentethodWindowHeader;
 
     @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectPaymentBox;
 
-    @FindBy(css = "li.ui-select-choices-group")
-    private WebElement choisesGroup;
-    
-    @FindBy(css = "button.button.button-primary.ng-scope")
-    private WebElement nextButton;
+    private String billingContactHeader = "//legend[text()='Billing contact']";
+
+    private String choisesGroup = "li.ui-select-choices-group";
 
     private String closeWindowButton = "span.svg-close";
 
@@ -47,27 +43,59 @@ public class ConfirmPaymentDetailsWindow extends Widget implements WebActions, J
     private String termsAndConditions = "//a[text()='Terms and Conditions']";
 
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
+        waitForElementToBeVisibleByXpathAgent(String.format(paymentMethodXpath, payment), 8);
         findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
         return this;
     }
 
     public ConfirmPaymentDetailsWindow clickSelectPaymentField(){
+        waitForElementToBeVisibleAgent(selectPaymentBox, 5);
         selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(choisesGroup, 9);
+        if(!isElementShownAgentByCSS(choisesGroup, 5, "admin")){
+            selectPaymentBox.click();
+        }
+        waitForElementToBeVisibleByCssAgent(choisesGroup, 9);
         return this;
+    }
+
+    public boolean isSelectPaymentShown(){
+        return isElementShownAgent(paymentethodWindowHeader, 5);
     }
     
     public ConfirmPaymentDetailsWindow clickNexButton(){
         waitFor(500);
-        waitForElementToBeClickableAgent(nextButton, 7, "admin");
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-        executor.executeScript("arguments[0].click();", nextButton);
+        waitForElementToBeClickableAgent(nextButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+        return this;
+    }
+
+    public ConfirmPaymentDetailsWindow clickNexButtonOnDetailsTab(){
+        waitFor(500);
+        waitForElementToBeClickableAgent(nextButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+        try {
+            waitForElementToBeInvisibleAgent(cartPaymentDetailsForm, 3);
+        }catch (TimeoutException e){
+            clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+
+        }
+        return this;
+    }
+
+    public ConfirmPaymentDetailsWindow clickPayNowButton(){
+        waitForElementToBeClickableAgent(payNowButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), payNowButton);
         return this;
     }
 
     public ConfirmPaymentDetailsWindow acceptTerms(){
-        waitForElementsToBeVisibleByCssAgent(acceptTermsCheckboxCSS, 7);
-        findElemsByCSSAgent(acceptTermsCheckboxCSS).forEach(WebElement::click);
+        try {
+            waitForElementsToBeVisibleByCssAgent(acceptTermsCheckboxCSS, 7);
+            findElemsByCSSAgent(acceptTermsCheckboxCSS).forEach(WebElement::click);
+        } catch(TimeoutException e){
+
+        }
+
         return this;
     }
 

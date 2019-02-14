@@ -1,8 +1,11 @@
 @portal
 @no_widget
 @no_chatdesk
-@signup_account
+@testing_env_only
 Feature: Signing up the account
+
+  Background:
+    Given SignedUp AQA test accounts is closed
 
   Scenario: I should be able to sign up and activate new account
     Given Portal Sign Up page is opened

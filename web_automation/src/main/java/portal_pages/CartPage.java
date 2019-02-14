@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portal_pages.uielements.ConfirmPaymentDetailsWindow;
 
-public class CartPage implements WebActions, ActionsHelper, JSHelper {
+public class CartPage extends PortalAbstractPage {
 
    private String checkOutButtonCSS = "button.small-centered.button.button-primary";
 
@@ -16,13 +16,8 @@ public class CartPage implements WebActions, ActionsHelper, JSHelper {
    private ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow;
 
     public ConfirmPaymentDetailsWindow getConfirmPaymentDetailsWindow() {
-        if (confirmPaymentDetailsWindow==null) {
             waitForElementsToBeVisibleByCssAgent(confirmDetailsPopUp, 5);
-            confirmPaymentDetailsWindow =  new ConfirmPaymentDetailsWindow(findElemByCSSAgent(confirmDetailsPopUp));
             return confirmPaymentDetailsWindow;
-        } else{
-            return confirmPaymentDetailsWindow;
-        }
     }
 
     public void clickCheckoutButton(){

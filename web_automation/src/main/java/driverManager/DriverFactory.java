@@ -18,6 +18,7 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondAgentDriver = new ThreadLocal<>();
     private static final String REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
+//    private static final String REMOTE_URL = "http://172.31.44.151:4444/wd/hub";
 //    private static final String REMOTE_URL = "http://35.164.148.100:4441/wd/hub";
 
 

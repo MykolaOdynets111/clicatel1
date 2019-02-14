@@ -33,6 +33,8 @@ public class BasePortalSteps {
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserManagementPage> portalUserManagementThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
@@ -96,6 +98,14 @@ public class BasePortalSteps {
     }
 
 
+    @When("(.*) test accounts is closed")
+    public void closeAllTestAccount(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+                BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+                BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    }
+
     @When("Portal Sign Up page is opened")
     public void openPortalSignUpPage(){
         portalSignUpPage.set(PortalSignUpPage.openPortalSignUpPage());
@@ -148,6 +158,7 @@ public class BasePortalSteps {
 
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
     public void downgradeTouchGoPlan(String tenantOrgName){
+            Tenants.setTenantUnderTestNames(tenantOrgName);
             DriverFactory.closeAgentBrowser();
             ApiHelper.decreaseTouchGoPLan(tenantOrgName);
             List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(tenantOrgName);
@@ -506,6 +517,7 @@ public class BasePortalSteps {
     @When("^Admin tries to add new card$")
     public void addNewCard(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+        getPortalBillingDetailsPage().waitWhileProcessing();
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
@@ -513,6 +525,13 @@ public class BasePortalSteps {
     public void fillInNewCardInfo(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo();
     }
+
+    @Then("^'Add payment method' button is disabled$")
+    public void verifyAddPaymentDisabled(){
+        Assert.assertFalse(getPortalBillingDetailsPage().getAddPaymentMethodWindow().isAddPaymentButtonEnabled(),
+                "Add payment button is not disabled");
+    }
+
 
     @When("^Selects all checkboxes for adding new payment$")
     public void checkAllCheckBoxesForAddindNewPayment(){
@@ -524,9 +543,15 @@ public class BasePortalSteps {
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickCheckBox(checkboxNumber);
     }
 
-    @When("^Admin clicks (?:'Add payment method'|'Next') button$")
+    @When("^Admin clicks 'Add payment method' button$")
     public void clickAddPaymentButtonInAddPaymentWindow(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickAddPaymentButton();
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
+    }
+
+    @When("^Admin clicks 'Next' button$")
+    public void clickNextButtonInAddPaymentWindow(){
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().clickNextButton();
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
     }
 
@@ -569,7 +594,7 @@ public class BasePortalSteps {
 
     @When("^Click Next button on Details tab$")
     public void clickNextButtonOnConfirmDetailsWindow(){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButton();
+        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButtonOnDetailsTab();
     }
 
     @When("^\"(.*)\" shown in payment methods dropdown$")
@@ -596,6 +621,43 @@ public class BasePortalSteps {
     @When("^Admin closes Confirm details window$")
     public void closeConfirmDetailsWindow(){
         getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
+    }
+
+    @When("^Click 'Manage' button for (.*) user$")
+    public void clickManageButtonForUser(String fullName){
+        portalUserManagementThreadLocal.set(
+                getPortalManagingUsersPage().clickManageButtonForUser(fullName)
+        );
+    }
+
+    @When("^Click 'Upload' button$")
+    public void clickUploadButtonForUser(){
+        portalUserManagementThreadLocal.get().clickUploadPhotoButton();
+    }
+
+    @When("^Upload (.*)")
+    public void uploadPhoto(String photoStrategy){
+        String photoPath = "";
+        if(photoStrategy.equals("new photo")) photoPath = System.getProperty("user.dir")+"/src/test/resources/agentphoto/agent_photo.png";
+
+        portalUserManagementThreadLocal.get().uploadPhoto(photoPath);
+    }
+
+    @Given("^Agent of (.*) tenant has no photo uploaded$")
+    public void deleteAgentPhoto(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
+    }
+
+    @Then("^New image is saved on portal and backend$")
+    public void verifyImageSaveOnPortal(){
+        SoftAssert soft = new SoftAssert();
+        String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("imageUrl");
+        soft.assertFalse(imageURLFromBackend==null,
+                        "Agent photo is not saved on backend");
+        soft.assertFalse(portalUserManagementThreadLocal.get().getImageURL().isEmpty(),
+                "Agent photo is not shown in portal");
+        soft.assertAll();
     }
 
     private LeftMenu getLeftMenu() {
@@ -667,6 +729,15 @@ public class BasePortalSteps {
             return portalFBIntegrationPageThreadLocal.get();
         } else{
             return portalFBIntegrationPageThreadLocal.get();
+        }
+    }
+
+    private PortalManagingUsersPage getPortalManagingUsersPage(){
+        if (portalManagingUsersThreadLocal.get()==null) {
+            portalManagingUsersThreadLocal.set(new PortalManagingUsersPage());
+            return portalManagingUsersThreadLocal.get();
+        } else{
+            return portalManagingUsersThreadLocal.get();
         }
     }
 

@@ -11,9 +11,9 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "cucumber")
+@Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
-        plugin={"pretty",
+        format={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,

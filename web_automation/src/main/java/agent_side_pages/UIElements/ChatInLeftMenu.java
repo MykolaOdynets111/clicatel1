@@ -5,6 +5,7 @@ import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -17,8 +18,14 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.profile-info>h2")
     private WebElement userName;
 
+    @FindBy(css = "div.location")
+    private WebElement location;
+
     @FindBy(css = "div.context-info div.icons>span")
     private WebElement channelIcon;
+
+    @FindBy(css = "span.icon>svg.overnight")
+    private WebElement overnightTickenIcon;
 
     public ChatInLeftMenu(WebElement element) {
         super(element);
@@ -34,6 +41,10 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
         return userName.getText();
     }
 
+    public String getLocation() {
+        return location.getText();
+    }
+
     public String getChatsChannel(){
         String iconClass = channelIcon.getAttribute("class");
         switch (iconClass){
@@ -46,5 +57,21 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
             default:
                 return "unknown icon with tag span[@class='"+iconClass+"']";
         }
+    }
+
+    public boolean isOvernightTicketIconShown(){
+        return isElementShownAgent(overnightTickenIcon, 10);
+    }
+
+    public boolean isOvernightTicketRemoved(){
+        for(int i = 0; i<10; i++){
+            try{
+                if(overnightTickenIcon.isDisplayed()) waitFor(1000);
+            }catch (NoSuchElementException e){
+                return true;
+            }
+        }
+        return false;
+
     }
 }

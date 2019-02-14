@@ -11,9 +11,9 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "cucumber")
+@Test(groups = "Virgin Money widget UI tests")
 @CucumberOptions(
-        plugin={"pretty",
+        plugin={
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,

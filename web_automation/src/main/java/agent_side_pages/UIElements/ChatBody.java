@@ -17,11 +17,15 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
+    private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
+
+
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
 
     @FindBy(css = "li.to")
     private List<WebElement> toUserMessages;
+
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -81,7 +85,11 @@ public class ChatBody extends AbstractUIElement {
         }
     }
 
-    public boolean isResponseOnUserMessageShown(String userMesage) {
-        return new AgentDeskToUserMessage(getFromUserWebElement(userMesage)).isTextResponseShown(5);
+    public boolean isResponseOnUserMessageShown(String userMessage) {
+        return new AgentDeskToUserMessage(getFromUserWebElement(userMessage)).isTextResponseShown(5);
+    }
+
+    public boolean isToUserMessageShown(String userMessage){
+        return toUserMessages.stream().anyMatch(e -> e.getText().contains(userMessage));
     }
 }

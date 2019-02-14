@@ -20,7 +20,7 @@ public class RequestSpec {
 
     private static ThreadLocal<RequestSpecification> requestSpecification = new ThreadLocal<RequestSpecification>();
     private static Faker faker = new Faker();
-    private static ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
+    private static volatile ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
 
 
     public static RequestSpecification getRequestSpecification(){
@@ -71,7 +71,7 @@ public class RequestSpec {
         }
 
     public static String getAccessTokenForPortalUser(String tenantOrgName) {
-        if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
+        if(PORTAL_USER_ACCESS_TOKEN.get()==null) {
             Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "main agent");
             Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
             Response resp = RestAssured.given()
@@ -84,9 +84,9 @@ public class RequestSpec {
 
             PORTAL_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
             return PORTAL_USER_ACCESS_TOKEN.get();
-        } else {
+        }else{
             return PORTAL_USER_ACCESS_TOKEN.get();
-        }
+    }
     }
 
     public static String getAccessTokenForPortalUserByAccount(String accountName) {
@@ -110,8 +110,8 @@ public class RequestSpec {
     }
 
     public static void clearAccessTokenForPortalUser(){
-        PORTAL_USER_ACCESS_TOKEN.set(null);
-    }
+        PORTAL_USER_ACCESS_TOKEN.remove();
+        }
 
 
 }

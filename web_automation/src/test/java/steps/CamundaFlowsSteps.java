@@ -59,8 +59,10 @@ public class CamundaFlowsSteps implements JSHelper {
         String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
         long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
 //        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
-        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
-        DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), clientProfileID, lastVisitWithShift);
+        if(lastVisit!=0) {
+            long lastVisitWithShift = lastVisit - (hoursShift * 60 * 60 * 1000) - (3 * 60 * 60 * 1000);
+            DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), clientProfileID, lastVisitWithShift);
+        }
     }
 
     private TafMessage getTafMessageToUpdate(String messageId){

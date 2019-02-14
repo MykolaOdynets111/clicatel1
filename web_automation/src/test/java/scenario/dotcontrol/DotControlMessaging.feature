@@ -20,3 +20,22 @@ Feature: Creating .Control integration and sending messages
     Then Verify dot .Control returns hello from agent response
     When Send hi, need your help with my card message for .Control
     Then Conversation area contains hi, need your help with my card user's message
+
+  @no_chatdesk
+  Scenario: Sending message to .Control with empty message
+    Given Create .Control integration for General Bank Demo tenant
+    When Send empty message for .Control
+    Then Message should be sent
+
+  @no_chatdesk
+  Scenario: Sending message to .Control with invalid apiToken
+    Given Create .Control integration for General Bank Demo tenant
+    When Send invalid apiToken in message for .Control
+    Then Error with not defined tenant is returned
+
+  @no_chatdesk
+  Scenario: Sending message to .Control with empty clientID
+    Given Create .Control integration for General Bank Demo tenant
+    When Send empty clientID in message for .Control
+    Then Error about client  is returned
+

@@ -53,7 +53,7 @@ public class Hooks implements JSHelper{
 //            throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
 //        }
 
-        if(scenario.getSourceTagNames().contains("@signup_account")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
+        if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
                     "On other envs the test may break the limit of sent activation emails and cause " +
                     "Clickatell to be billed for that");
@@ -66,6 +66,7 @@ public class Hooks implements JSHelper{
 
 
             if (scenario.getSourceTagNames().contains("@facebook")) {
+                ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
@@ -73,6 +74,7 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@twitter")) {
+                ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
@@ -100,8 +102,17 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@camunda")){
 
             takeScreenshot();
-            endTouchFlow(scenario, scenario.isFailed());
+            endTouchFlow(scenario, true);
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
+        }
+
+        if(scenario.getSourceTagNames().contains("@agent_support_hours")){
+            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+        }
+
+        if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
+            ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 100);
         }
 
         finishAgentFlowIfExists(scenario);
@@ -151,6 +162,7 @@ public class Hooks implements JSHelper{
         }
 
 
+        RequestSpec.clearAccessTokenForPortalUser();
         closeMainBrowserIfOpened();
     }
 
@@ -189,9 +201,9 @@ public class Hooks implements JSHelper{
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
-                    agentHomePage.getHeader().clickIconWithInitials();
-                    agentHomePage.getHeader().selectStatus("available");
-                    agentHomePage.getHeader().clickIconWithInitials();
+                    agentHomePage.getPageHeader().clickIconWithInitials();
+                    agentHomePage.getPageHeader().selectStatus("available");
+                    agentHomePage.getPageHeader().clickIconWithInitials();
             }
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
@@ -230,7 +242,6 @@ public class Hooks implements JSHelper{
                 given().delete(url);
             }
 
-            RequestSpec.clearAccessTokenForPortalUser();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
@@ -263,8 +274,9 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            agentHomePage.endChat(agent);
-            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
+            agentHomePage.endChat();
+//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
+            agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch (WebDriverException e) { }
     }

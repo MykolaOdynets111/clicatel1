@@ -106,7 +106,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
 
     public void  waitForSalutation() {
         try {
-            waitForElementToBeVisible(salutationElement, 10);
+            waitForElementToBeVisible(salutationElement, 13);
         } catch (TimeoutException e) {
         }
     }

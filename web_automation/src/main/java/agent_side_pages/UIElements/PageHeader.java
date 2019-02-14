@@ -1,15 +1,13 @@
 package agent_side_pages.UIElements;
 
 import abstract_classes.AbstractUIElement;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 @FindBy(css = "div.header")
-public class Header extends AbstractUIElement {
+public class PageHeader extends AbstractUIElement {
 
     @FindBy(css = "button#top-menu-dropdown>div")
     private WebElement iconWithAgentInitials;
@@ -36,7 +34,10 @@ public class Header extends AbstractUIElement {
     @FindBy(css = "div.header div.radio-group label")
     private List<WebElement> statusElems;
 
-    public Header logOut(String agent) {
+    @FindBy(css = "button#top-menu-dropdown>img")
+    private WebElement agentIcon;
+
+    public PageHeader logOut(String agent) {
         waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
         click(iconWithAgentInitials);
         waitForElementToBeVisibleAgent(logOutButton, 6, agent);
@@ -79,5 +80,9 @@ public class Header extends AbstractUIElement {
         targetElem.click();
         //    executeJSclick(targetElem);
 //        targetElem.findElement(By.cssSelector("input")).click();
+    }
+
+    public boolean isAgentImageShown(){
+        return isElementShownAgent(agentIcon, 10, "main agent");
     }
 }
