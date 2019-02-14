@@ -19,6 +19,7 @@ import org.testng.asserts.SoftAssert;
 import portal_pages.*;
 import portal_pages.uielements.LeftMenu;
 
+import java.io.File;
 import java.util.List;
 
 public class BasePortalSteps {
@@ -641,7 +642,7 @@ public class BasePortalSteps {
 //        String basePath = System.getProperty("user.dir");
 //        if(ConfigManager.isRemote()) basePath = basePath.replace("web_automation", "Workspace/web_automation");
 //        if(photoStrategy.equals("new photo")) photoPath = basePath + "/src/test/resources/agentphoto/agent_photo.png";
-
+        Assert.assertTrue(new File("/src/test/resources/agentphoto/agent_photo.png").exists());
         portalUserManagementThreadLocal.get().uploadPhoto("/src/test/resources/agentphoto/agent_photo.png");
     }
 
