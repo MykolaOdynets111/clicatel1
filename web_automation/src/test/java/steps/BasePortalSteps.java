@@ -638,12 +638,7 @@ public class BasePortalSteps {
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-//        String photoPath = "";
-//        String basePath = System.getProperty("user.dir");
-//        if(ConfigManager.isRemote()) basePath = basePath.replace("web_automation", "Workspace/web_automation");
-//        if(photoStrategy.equals("new photo")) photoPath = basePath + "/src/test/resources/agentphoto/agent_photo.png";
-
-        portalUserManagementThreadLocal.get().uploadPhoto("/src/test/resources/agentphoto/agent_photo.png");
+        portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")

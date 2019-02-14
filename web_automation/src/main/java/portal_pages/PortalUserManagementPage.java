@@ -3,7 +3,11 @@ package portal_pages;
 import driverManager.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.io.File;
 
 public class PortalUserManagementPage extends PortalAbstractPage {
 
@@ -32,9 +36,11 @@ public class PortalUserManagementPage extends PortalAbstractPage {
     public void uploadPhoto(String photoPath){
         waitForElementToBeVisibleAgent(uploadPhotoWindow, 8, "main");
         String selectPictureButtonNGModel = selectPictureButton.getAttribute("ng-model");
-        DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
+        RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)
-        )).sendKeys(photoPath);
+        ));
+        element.setFileDetector(new LocalFileDetector());
+        element.sendKeys(new File(photoPath).getAbsolutePath());
         saveButton.click();
 
         waitWhileProcessing();
