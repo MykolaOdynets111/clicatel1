@@ -82,7 +82,7 @@ task getTouchGoPlan() {
 }
 
 tasks.withType(Test) {
-    systemProperty "userDir", System.properties.getProperty("user.home")
+    systemProperty "userDir", file(".").absolutePath
     systemProperties = System.getProperties()
 }
 
