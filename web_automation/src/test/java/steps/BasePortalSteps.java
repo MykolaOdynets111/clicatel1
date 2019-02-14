@@ -638,7 +638,7 @@ public class BasePortalSteps {
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         String photoPath = "";
-        if(photoStrategy.equals("new photo")) photoPath = System.getProperty("user.dir")+"/src/test/resources/agentphoto/agent_photo.png";
+        if(photoStrategy.equals("new photo")) photoPath = "/src/test/resources/agentphoto/agent_photo.png";
 
         portalUserManagementThreadLocal.get().uploadPhoto(photoPath);
     }
