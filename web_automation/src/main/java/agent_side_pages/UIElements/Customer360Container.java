@@ -3,6 +3,7 @@ package agent_side_pages.UIElements;
 import abstract_classes.AbstractUIElement;
 import dataManager.Customer360PersonalInfo;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = "div.user-info-container>div")
@@ -11,7 +12,10 @@ public class Customer360Container extends AbstractUIElement {
 
     @FindBy(css = "h2.context-profile-name")
     private WebElement profileNameLabel;
-    @FindBy(name = "firstName")
+    @FindAll({
+            @FindBy(name = "firstName"),
+            @FindBy(css = "input.info-name-input")
+    })
     private WebElement profileNameInput;
 
     @FindBy(css = "span.icon.icon-location+span")
