@@ -93,6 +93,9 @@ public class Hooks implements JSHelper{
 
     @After()
     public void afterScenario(Scenario scenario){
+
+        makeScreenshotAndConsoleOutputFromChatdesk(scenario);
+
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
@@ -185,18 +188,24 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
-    private void finishAgentFlowIfExists(Scenario scenario) {
+    private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
             takeScreenshotFromSecondDriver();
-            if(scenario.isFailed()){
+            if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
             }
-            if (DriverFactory.isSecondAgentDriverExists()) {
+        }
+        if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
                 }
                 takeScreenshotFromThirdDriverIfExists();
-            }
+        }
+    }
+
+
+    private void finishAgentFlowIfExists(Scenario scenario) {
+        if (DriverFactory.isAgentDriverExists()) {
 
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists

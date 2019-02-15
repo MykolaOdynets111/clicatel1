@@ -66,7 +66,7 @@ public class ChatBody extends AbstractUIElement {
 
         if(!isElementShownAgentByXpath(locator, 40, agent)){
             scrollToElem(DriverFactory.getDriverForAgent(agent), locator,
-                    "'" +usrMessage + "' user message from fb on chatdesk");
+                    "'" +usrMessage + "' user message on chatdesk");
         }
         return isElementShownAgentByXpath(locator, 10, agent);
     }
