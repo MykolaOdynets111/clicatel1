@@ -442,6 +442,8 @@ public class DefaultTouchUserSteps implements JSHelper{
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
         if(entities.contains("mobile banking 120 3279")){
             entities.remove("mobile banking 120 3279");
+            entities.remove("general bank masterpass app");
+            entities.remove("global one");
         }
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
 //        enteredUserMessageInTouchWidget.set("generic");
