@@ -259,7 +259,8 @@ public class DefaultAgentSteps implements JSHelper {
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) {
                     Assert.assertTrue(waitForDotControlRequestOnChatDesk(),
-                            "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+getUserNameFromLocalStorage()+")");
+                            "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
+                                    DotControlSteps.getFromClientRequestMessage().getClientId()+")");
                     return;
                 }
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,40, agent),
