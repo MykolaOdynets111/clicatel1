@@ -103,8 +103,14 @@ public class DotControlSteps {
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
         waitFotResponseToComeToServer();
-        Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
-                "Message is not as expected");
+        try {
+            Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
+                    "Message is not as expected");
+        }catch(NullPointerException e){
+            Assert.assertTrue(false, "Nullpointer exception was faced\n " +
+                    "clientId from request:" + dotControlRequestMessage.get().getClientId() + "\n" +
+            "Received clientId from .Control response" + Server.incomingRequests.keySet());
+        }
     }
 
     @Then("^Error about client  is returned$")
