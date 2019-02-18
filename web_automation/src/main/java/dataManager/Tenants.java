@@ -103,6 +103,10 @@ public class Tenants {
         }
     }
 
+    public static void clearTenantUnderTest(){
+        TENANT_UNDER_TEST.remove();
+    }
+
     public static String getTenantNameByTenantOrgName(String tenantOrgName){
         return TENANT_UNDER_TEST.get().get(tenantOrgName);
     }

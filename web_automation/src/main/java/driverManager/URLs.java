@@ -129,4 +129,8 @@ public class URLs {
         return String.format(BASE_TAF_URL, ConfigManager.getEnv());
     }
 
+    public static  void clearFinalAgentURL(){
+        FINAL_AGENT_URL=null;
+    }
+
 }

@@ -9,6 +9,7 @@ import cucumber.api.java.Before;
 import dataManager.Tenants;
 import driverManager.ConfigManager;
 import driverManager.DriverFactory;
+import driverManager.URLs;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
@@ -40,18 +41,10 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
 
-
-
         if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
             }
-
-//        if(scenario.getSourceTagNames().contains("@agent_mode")&!
-//                (ConfigManager.getEnv().equalsIgnoreCase("integration") |
-//                 ConfigManager.getEnv().equalsIgnoreCase("dev"))){
-//            throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
-//        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
@@ -59,31 +52,30 @@ public class Hooks implements JSHelper{
                     "Clickatell to be billed for that");
         }
 
+        Tenants.clearTenantUnderTest();
+        RequestSpec.clearAccessTokenForPortalUser();
+        URLs.clearFinalAgentURL();
 
-        if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")) {
-                    DriverFactory.getAgentDriverInstance();
-            }
-
-
-            if (scenario.getSourceTagNames().contains("@facebook")) {
+        if (scenario.getSourceTagNames().contains("@facebook")) {
                 ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
                 }
-            }
+        }
 
-            if (scenario.getSourceTagNames().contains("@twitter")) {
+        if (scenario.getSourceTagNames().contains("@twitter")) {
                 ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
                 }
-            }
-            if(scenario.getSourceTagNames().contains("@tie")){
+        }
+
+        if(scenario.getSourceTagNames().contains("@tie")){
                 BaseTieSteps.request = new ByteArrayOutputStream();
                 BaseTieSteps.response = new ByteArrayOutputStream();
-            }
+        }
 
         if(scenario.getSourceTagNames().contains("@start_server")){
             new Server().startServer();
