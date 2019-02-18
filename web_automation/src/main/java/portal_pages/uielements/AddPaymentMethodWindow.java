@@ -56,7 +56,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
         waitFor(2000);
-        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
+//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
         return this;
     }
@@ -86,12 +86,12 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void clickNextButton(){
-        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
+//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         executeAngularClick(DriverFactory.getAgentDriverInstance(), nextButton);
     }
 
     public void clickAddPaymentButton(){
-        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
+//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         waitForElementToBeClickableAgent(addPaymentMethod, 15, "admin");
         waitFor(2000);
         executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);

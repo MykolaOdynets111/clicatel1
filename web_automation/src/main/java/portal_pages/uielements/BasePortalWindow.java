@@ -1,7 +1,7 @@
 package portal_pages.uielements;
 
 import abstract_classes.AbstractUIElement;
-import com.paulhammant.ngwebdriver.NgWebDriver;
+//import com.paulhammant.ngwebdriver.NgWebDriver;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,12 +33,12 @@ public class BasePortalWindow extends AbstractUIElement{
     @FindBy(name = "form.cartPaymentDetails")
     protected WebElement cartPaymentDetailsForm;
 
-    private ThreadLocal<NgWebDriver> ngWebDriverThreadLocal = new ThreadLocal<>();
-
-    public NgWebDriver getNgDriver(WebDriver driver) {
-        if(ngWebDriverThreadLocal.get()==null){
-            ngWebDriverThreadLocal.set(new NgWebDriver((JavascriptExecutor) driver));
-        }
-        return ngWebDriverThreadLocal.get();
-    }
+//    private ThreadLocal<NgWebDriver> ngWebDriverThreadLocal = new ThreadLocal<>();
+//
+//    public NgWebDriver getNgDriver(WebDriver driver) {
+//        if(ngWebDriverThreadLocal.get()==null){
+//            ngWebDriverThreadLocal.set(new NgWebDriver((JavascriptExecutor) driver));
+//        }
+//        return ngWebDriverThreadLocal.get();
+//    }
 }
