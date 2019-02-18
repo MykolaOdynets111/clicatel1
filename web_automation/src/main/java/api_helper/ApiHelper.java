@@ -282,7 +282,15 @@ public class ApiHelper {
         Response resp = RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.FEATURE);
-        return resp.getBody().jsonPath().getBoolean(FEATURE);
+        boolean featureStatus = false;
+        try{
+            featureStatus = resp.getBody().jsonPath().getBoolean(FEATURE);
+        } catch(NullPointerException e){
+            Assert.assertTrue(false, "Failed to get feature status from GET " +Endpoints.FEATURE+ " response\n"+
+            "statusCode" + resp.statusCode() + "\n" +
+            "respBody" + resp.getBody().asString());
+        }
+        return featureStatus;
     }
 
     public static int getNumberOfLoggedInAgents(){
