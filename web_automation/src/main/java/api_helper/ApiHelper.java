@@ -416,8 +416,15 @@ public class ApiHelper {
 
     public static String getActiveSessionIdByClientId(String tenantName, String clineId, String integrationType){
         String url = String.format(Endpoints.INTERNAL_ACTIVE_SESSIONS, tenantName, clineId, integrationType);
-        return RestAssured.get(url).
-                getBody().jsonPath().get("sessionId");
+        String sessionId = "";
+        ResponseBody respBody =  RestAssured.get(url).getBody();
+        try{
+            sessionId = respBody.jsonPath().get("sessionId");
+        }catch(JsonPathException e){
+            Assert.assertTrue(false, "Failed to get session Id\n"+
+            "resp body:" + respBody.asString());
+        }
+        return sessionId;
     }
 
     public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
