@@ -56,6 +56,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
         waitFor(2000);
+        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
         return this;
     }
@@ -85,12 +86,12 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void clickNextButton(){
-        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         executeAngularClick(DriverFactory.getAgentDriverInstance(), nextButton);
     }
 
     public void clickAddPaymentButton(){
-        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         waitForElementToBeClickableAgent(addPaymentMethod, 15, "admin");
         waitFor(2000);
         executeAngularClick(DriverFactory.getAgentDriverInstance(), addPaymentMethod);
@@ -110,4 +111,5 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
             // nothing to do 'cause it were stabilizing waits before continuing
         }
     }
+
 }
