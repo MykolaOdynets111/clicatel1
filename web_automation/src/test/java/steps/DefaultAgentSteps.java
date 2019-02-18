@@ -259,12 +259,24 @@ public class DefaultAgentSteps implements JSHelper {
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) {
-                    DriverFactory.getAgentDriverInstance().navigate().refresh();
-                    userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+                    Assert.assertTrue(waitForDotControlRequestOnChatDesk(),
+                            "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+getUserNameFromLocalStorage()+")");
+                    return;
                 }
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,40, agent),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
+
+    private boolean waitForDotControlRequestOnChatDesk(){
+        for(int i = 0; i<5; i++) {
+            String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,10, "main")) return true;
+            else {
+                DriverFactory.getAgentDriverInstance().navigate().refresh();
+            }
+        }
+        return false;
+    }
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social, String channel){
