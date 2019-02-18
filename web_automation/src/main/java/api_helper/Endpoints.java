@@ -38,7 +38,7 @@ public class Endpoints {
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
-    public static String DELET_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
+    public static String DELETE_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
 
     // ================== INTERNAL ============== //
 

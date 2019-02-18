@@ -1,5 +1,6 @@
 package dataManager;
 
+import api_helper.ApiHelper;
 import driverManager.ConfigManager;
 
 public enum FacebookUsers {
@@ -63,6 +64,9 @@ public enum FacebookUsers {
     }
 
     public static String getLoggedInUserName(){
-        return LOGGED_IN_USER.getFBUserName() + " " + LOGGED_IN_USER.getFBUserSurname();
+        String clientId = FacebookUsers.getLoggedInUser().getFBUserID();
+        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+            clientId, "FACEBOOK").getFullName();
     }
-    }
+
+}

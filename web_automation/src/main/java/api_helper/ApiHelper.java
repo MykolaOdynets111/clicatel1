@@ -454,7 +454,7 @@ public class ApiHelper {
         String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
         RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .delete(String.format(Endpoints.DELET_AGENT_IMAGE, agentId));
+                .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
     }
 
 }

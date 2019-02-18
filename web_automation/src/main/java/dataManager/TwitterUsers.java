@@ -1,5 +1,7 @@
 package dataManager;
 
+import api_helper.ApiHelper;
+
 public enum TwitterUsers {
 
     FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "p@$$w0rd4te$t", "@tomaqa0", "p@$$w0rd4te$t", "979311039996157952", "");
@@ -27,7 +29,9 @@ public enum TwitterUsers {
     private static TwitterUsers LOGGED_IN_USER = null;
 
     public static String getLoggedInUserName() {
-        return LOGGED_IN_USER.userName+" "+LOGGED_IN_USER.userSurname;
+        String clientId = TwitterUsers.getLoggedInUser().getDmUserId();
+        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+    clientId, "TWITTER").getFullName();
     }
     public static TwitterUsers getLoggedInUser() {
         return LOGGED_IN_USER;
