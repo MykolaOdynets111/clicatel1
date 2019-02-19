@@ -55,6 +55,9 @@ public enum Agents {
     DEV_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
     DEMO_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo"),
     DEMO1_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo1"),
+
+    DEV_BOT_MODE_SECOND_AGENT("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
+
     ;
 
     String userName;

@@ -41,6 +41,8 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
 
+        clearAllSessionData();
+
         if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
@@ -51,10 +53,6 @@ public class Hooks implements JSHelper{
                     "On other envs the test may break the limit of sent activation emails and cause " +
                     "Clickatell to be billed for that");
         }
-
-        Tenants.clearTenantUnderTest();
-        RequestSpec.clearAccessTokenForPortalUser();
-        URLs.clearFinalAgentURL();
 
         if (scenario.getSourceTagNames().contains("@facebook")) {
                 ApiHelper.closeAllOvernightTickets("General Bank Demo");
@@ -157,7 +155,7 @@ public class Hooks implements JSHelper{
         }
 
 
-        RequestSpec.clearAccessTokenForPortalUser();
+        clearAllSessionData();
         closeMainBrowserIfOpened();
     }
 
@@ -186,14 +184,12 @@ public class Hooks implements JSHelper{
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
             }
-            DriverFactory.getDriverForAgent("main").manage().deleteAllCookies();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
                 }
                 takeScreenshotFromThirdDriverIfExists();
-                DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
         }
     }
 
@@ -234,7 +230,9 @@ public class Hooks implements JSHelper{
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
+            DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
+
             if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
                 ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
@@ -244,10 +242,10 @@ public class Hooks implements JSHelper{
                 String url = String.format(Endpoints.TIE_DELETE_TENANT, BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
                 given().delete(url);
             }
-
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();
         }
     }
@@ -347,6 +345,11 @@ public class Hooks implements JSHelper{
 //        logResponse(BaseTieSteps.response);
     }
 
+    private void clearAllSessionData(){
+        Tenants.clearTenantUnderTest();
+        RequestSpec.clearAccessTokenForPortalUser();
+        URLs.clearFinalAgentURL();
+    }
 
     @Attachment(value = "request")
     public byte[] logRequest(ByteArrayOutputStream stream) {
