@@ -9,7 +9,7 @@ import java.util.List;
 @FindBy(css = "div.header")
 public class PageHeader extends AbstractUIElement {
 
-    @FindBy(css = "button#top-menu-dropdown>div")
+    @FindBy(css = "button#top-menu-dropdown")
     private WebElement iconWithAgentInitials;
 
     private String topMenuDropdownCSS = "button#top-menu-dropdown";
