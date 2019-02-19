@@ -459,8 +459,8 @@ public class DefaultAgentSteps implements JSHelper {
     }
 
     private Customer360PersonalInfo getCustomer360Info(String clientFrom){
-        String clientId = getUserNameFromLocalStorage();
-        String integrationType = "TOUCH";
+        String clientId = "";
+        String integrationType = "";
         switch (clientFrom){
             case "fb dm":
                 clientId = FacebookUsers.getLoggedInUser().getFBUserID();
@@ -473,6 +473,10 @@ public class DefaultAgentSteps implements JSHelper {
             case "dotcontrol":
                 clientId = DotControlSteps.getFromClientRequestMessage().getClientId();
                 integrationType = "HTTP";
+                break;
+            default:
+                clientId = getUserNameFromLocalStorage();
+                integrationType = "TOUCH";
                 break;
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
