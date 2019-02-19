@@ -20,6 +20,7 @@ import portal_pages.*;
 import portal_pages.uielements.LeftMenu;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class BasePortalSteps {
@@ -56,6 +57,17 @@ public class BasePortalSteps {
         }
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), agentEmail);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
+    }
+
+    @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
+    public void verifyAgentCRMPermissions(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        List<String> expectedPermissions = Arrays.asList("delete-user-profile", "create-user-profile", "update-user-profile", "read-user-profile");
+        List<String> permissions = ApiHelperPlatform.getAllRolePermission(tenantOrgName, "Touch agent role");
+        Assert.assertTrue(expectedPermissions.stream().allMatch(e -> permissions.contains(e)),
+                "Not all CRM permissions are present for Agent role\n" +
+                        "Expected permitions: " + expectedPermissions.toString() + "\n" +
+                        "Full permitions list: " + permissions.toString());
     }
 
     @Then("^New agent is added into touch database$")

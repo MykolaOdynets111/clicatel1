@@ -32,9 +32,20 @@ public class ApiHelperPlatform {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.PLATFORM_SEND_INVITATION);
-        int a = 2;
     }
 
+    public static List<String> getAllRolePermission(String tenantOrgName, String role){
+        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
+        List<String> permissions = new ArrayList<>();
+        for(String id : ids){
+            Response resp = RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .get(String.format(Endpoints.PLATFORM_ROLES_PERMITIONS, id));
+            permissions.addAll(resp.jsonPath().getList(" permissions"));
+        }
+        return permissions;
+    }
 
     public static void acceptInvitation(String tenantOrgName, String invitationID, String pass){
         RestAssured.given()

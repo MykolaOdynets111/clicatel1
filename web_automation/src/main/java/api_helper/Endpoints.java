@@ -84,6 +84,8 @@ public class Endpoints {
 
     public static String PLATFORM_CLOSE_ACCOUNT = URLs.getBasePlatformUrl() + "/accounts/close";
 
+    public static String PLATFORM_ROLES_PERMITIONS = URLs.getBasePlatformUrl() + "/roles/%s/permissions?details=false";
+
     // ====================  TIE ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";
