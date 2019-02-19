@@ -186,12 +186,14 @@ public class Hooks implements JSHelper{
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
             }
+            DriverFactory.getDriverForAgent("main").manage().deleteAllCookies();
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
                 }
                 takeScreenshotFromThirdDriverIfExists();
+                DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
         }
     }
 
