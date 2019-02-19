@@ -26,6 +26,7 @@ public class AgentLoginPage extends AgentAbstractPage {
     }
 
     public static AgentLoginPage openAgentLoginPage(String ordinalAgentNumber, String tenantOrgName) {
+       DriverFactory.getDriverForAgent(ordinalAgentNumber).manage().deleteAllCookies();
        DriverFactory.getDriverForAgent(ordinalAgentNumber).get(URLs.getAgentURL(tenantOrgName, true));
        return new AgentLoginPage(ordinalAgentNumber);
    }
