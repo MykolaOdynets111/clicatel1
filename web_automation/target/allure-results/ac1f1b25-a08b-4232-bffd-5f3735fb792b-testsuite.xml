@@ -74,11 +74,12 @@
                 <message>AssertionError: The following asserts failed:
 	Number of intents for 'connect to agent' user message is not as expected expected [1] but found [5]</message>
                 <stack-trace>java.lang.AssertionError: The following asserts failed:
-	Number of intents for 'connect to agent' user message is not as expected expected [1] but found [5]
-	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:43)
-	at steps.tie_steps.BaseTieSteps.verifyConnectAgentIntent(BaseTieSteps.java:42)
-	at ✽.Then TIE returns 1 intent: "connect agent" on 'connect to agent' for General Bank Demo tenant(tie/TieConnectToAgentIntents.feature:5)
-</stack-trace>
+                    Number of intents for 'connect to agent' user message is not as expected expected [1] but found [5]
+                    at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:43)
+                    at steps.tiesteps.BaseTieSteps.verifyConnectAgentIntent(BaseTieSteps.java:42)
+                    at ✽.Then TIE returns 1 intent: "connect agent" on 'connect to agent' for General Bank Demo
+                    tenant(tie/TieConnectToAgentIntents.feature:5)
+                </stack-trace>
             </failure>
             <steps>
                 <step start="1519734741188" stop="1519734741617" status="failed">
@@ -124,11 +125,12 @@
                 <message>AssertionError: The following asserts failed:
 	Number of intents for 'Connect to Agent' user message is not as expected expected [1] but found [5]</message>
                 <stack-trace>java.lang.AssertionError: The following asserts failed:
-	Number of intents for 'Connect to Agent' user message is not as expected expected [1] but found [5]
-	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:43)
-	at steps.tie_steps.BaseTieSteps.verifyConnectAgentIntent(BaseTieSteps.java:42)
-	at ✽.Then TIE returns 1 intent: "connect agent" on 'Connect to Agent' for General Bank Demo tenant(tie/TieConnectToAgentIntents.feature:5)
-</stack-trace>
+                    Number of intents for 'Connect to Agent' user message is not as expected expected [1] but found [5]
+                    at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:43)
+                    at steps.tiesteps.BaseTieSteps.verifyConnectAgentIntent(BaseTieSteps.java:42)
+                    at ✽.Then TIE returns 1 intent: "connect agent" on 'Connect to Agent' for General Bank Demo
+                    tenant(tie/TieConnectToAgentIntents.feature:5)
+                </stack-trace>
             </failure>
             <steps>
                 <step start="1519734742054" stop="1519734742475" status="failed">
