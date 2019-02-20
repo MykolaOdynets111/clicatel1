@@ -138,7 +138,9 @@ public class DriverFactory {
             if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()){
                 Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
             }
-            return new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
+            RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
+//            remoteWebDriver.manage().deleteAllCookies();
+            return remoteWebDriver;
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;

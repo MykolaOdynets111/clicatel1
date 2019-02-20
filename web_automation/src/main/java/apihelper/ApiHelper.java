@@ -431,12 +431,13 @@ public class ApiHelper {
     public static String getActiveSessionIdByClientId(String tenantName, String clineId, String integrationType){
         String url = String.format(Endpoints.INTERNAL_ACTIVE_SESSIONS, tenantName, clineId, integrationType);
         String sessionId = "";
-        ResponseBody respBody =  RestAssured.get(url).getBody();
+        Response resp =  RestAssured.get(url);
         try{
-            sessionId = respBody.jsonPath().get("sessionId");
+            sessionId = resp.getBody().jsonPath().get("sessionId");
         }catch(JsonPathException e){
             Assert.assertTrue(false, "Failed to get session Id\n"+
-            "resp body:" + respBody.asString());
+                    "resp status: " + resp.statusCode() + "\n" +
+            "resp body:" + resp.getBody().asString() + "\n");
         }
         return sessionId;
     }
