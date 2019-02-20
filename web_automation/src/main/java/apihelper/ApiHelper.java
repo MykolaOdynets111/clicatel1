@@ -44,13 +44,21 @@ public class ApiHelper {
                 .get(Endpoints.TENANT_CONFIG);
     }
 
-    public static Map<String, String> getTenantInfoMap(String theValue) {
+    public static Map<String, String> getAllTenantsInfoMap(String theValue) {
         Map<String, String> tenantsMap = new HashMap<>();
         List<HashMap> tenants = getAllTenantInfo();
         tenants.forEach(e-> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
                 (String) e.get(theValue)));
         return tenantsMap;
     }
+
+    public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
+       return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.TENANT_INFO)
+                .getBody().jsonPath().getMap("");
+    }
+
 
     public static void createUserProfile(String tenantName, String clientID) {
         RestAssured.given()
@@ -121,7 +129,7 @@ public class ApiHelper {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body(body)
-                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
 
     public static void setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
@@ -130,7 +138,7 @@ public class ApiHelper {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body(body)
-                .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+                .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         resp.getBody().asString();
     }
 
@@ -138,7 +146,7 @@ public class ApiHelper {
         Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, getTenantInfoMap("id").get(tenantOrgName.toLowerCase())));
+                .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         try {
             return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
         } catch(java.lang.ClassCastException e){
@@ -279,7 +287,7 @@ public class ApiHelper {
 
 
     public static void updateFeatureStatus(String tenantOrgName, String feature, String status){
-        String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         String url = String.format(Endpoints.INTERNAL_FEATURE_STATE,tenantID, feature, status);
         RestAssured.put(url);
     }
@@ -313,7 +321,7 @@ public class ApiHelper {
     }
 
     public static void logoutTheAgent(String tenantOrgName) {
-        String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         RestAssured.given().header("Accept", "application/json")
                .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT, tenantID));
     }

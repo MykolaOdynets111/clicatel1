@@ -1,5 +1,6 @@
 package drivermanager;
 
+import apihelper.ApiHelper;
 import apihelper.Endpoints;
 import datamanager.FacebookPages;
 import datamanager.Tenants;
@@ -38,7 +39,7 @@ public class URLs {
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
     public static String getWidgetURL(String tenantOrgName){
-        String tenantID = Tenants.getTenantInfo(tenantOrgName, "id");
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         String targetEnvConfiguration = ConfigManager.getEnv();
         String env;
         if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
@@ -71,7 +72,7 @@ public class URLs {
 //            if(tenantOrgName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
 //                tenantOrgName="standard bank";
 //            }
-            FINAL_AGENT_URL = baseUrl + Tenants.getTenantInfo(tenantOrgName, "id");
+            FINAL_AGENT_URL = baseUrl + ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         }
         return FINAL_AGENT_URL;
     }

@@ -29,7 +29,7 @@ public class Tenants {
     }
 
     public static String getTenantInfo(String tenantORGName, String info) {
-        return ApiHelper.getTenantInfoMap(info).get(tenantORGName.toLowerCase().trim());
+        return ApiHelper.getAllTenantsInfoMap(info).get(tenantORGName.toLowerCase().trim());
     }
 
     public static String getTenantUnderTestOrgName() {

@@ -42,6 +42,9 @@ public class Endpoints {
 
     public static String TENANT_CONFIG = URLs.getTouchApiBaseURL() + "tenants/%s/config";
 
+    public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
+
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";

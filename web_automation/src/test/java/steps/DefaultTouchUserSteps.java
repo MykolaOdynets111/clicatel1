@@ -488,13 +488,13 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     @Then("^User sees name of tenant: (.*) and its short description in the header$")
-    public void verifyWidgetHeader(String tenantName){
-        String expectedDescription = Tenants.getTenantInfo(tenantName, "shortDescription");
+    public void verifyWidgetHeader(String tenantOrgName){
+        String expectedDescription = ApiHelper.getTenantInfoMap(tenantOrgName).get("shortDescription");
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), tenantName,
-                tenantName + " tenant name is not shown in the widget header");
+        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), tenantOrgName,
+                tenantOrgName + " tenant name is not shown in the widget header");
         soft.assertEquals(getWidgetHeader().getDisplayedTenantDescription(), expectedDescription,
-                expectedDescription + " description is not shown for " +tenantName+ " tenant");
+                expectedDescription + " description is not shown for " +tenantOrgName+ " tenant");
         soft.assertAll();
     }
 

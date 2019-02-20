@@ -109,7 +109,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
                                                                     // showing welcome_message calls this API and
                                                                     // it sometimes take longer time
         try {
-            waitForElementToBeVisible(salutationElement, 10);
+            waitForElementToBeVisible(salutationElement, 15);
         } catch (TimeoutException e) {
         }
     }
