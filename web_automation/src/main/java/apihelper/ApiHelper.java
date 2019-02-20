@@ -33,9 +33,15 @@ public class ApiHelper {
 
 
 
-    public static String getTenantConfig(String tenantName, String config){
+    public static String getInternalTenantConfig(String tenantName, String config){
         String url = String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
         return RestAssured.get(url).jsonPath().get(config);
+    }
+
+    public static void getTenantConfig(String tenantOrgName){
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.TENANT_CONFIG);
     }
 
     public static Map<String, String> getTenantInfoMap(String theValue) {

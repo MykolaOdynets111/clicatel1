@@ -40,6 +40,8 @@ public class Endpoints {
 
     public static String DELETE_AGENT_IMAGE = URLs.getTouchApiBaseURL() + "agents/%s/image";
 
+    public static String TENANT_CONFIG = URLs.getTouchApiBaseURL() + "tenants/%s/config";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";

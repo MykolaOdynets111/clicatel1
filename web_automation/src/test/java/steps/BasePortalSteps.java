@@ -461,12 +461,12 @@ public class BasePortalSteps {
 
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
-        String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
+        String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
         for(int i=0; i<120; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
-                actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
+                actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
             } else{
                 break;
             }

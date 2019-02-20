@@ -1,6 +1,8 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import apihelper.ApiHelper;
+import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import interfaces.WebActions;
 import org.openqa.selenium.NoSuchElementException;
@@ -103,8 +105,11 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
     }
 
     public void  waitForSalutation() {
+        ApiHelper.getTenantConfig(Tenants.getTenantUnderTestOrgName()); // need to add this call because backend before
+                                                                    // showing welcome_message calls this API and
+                                                                    // it sometimes take longer time
         try {
-            waitForElementToBeVisible(salutationElement, 13);
+            waitForElementToBeVisible(salutationElement, 10);
         } catch (TimeoutException e) {
         }
     }
