@@ -5,8 +5,8 @@ import drivermanager.ConfigManager;
 
 public enum FacebookUsers {
 
-    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", ""),
-    SECOND_USER("Tom", "Jones", "automation258@gmail.com", "100034206843837", ""),
+//    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", ""),
+    FIRST_USER("Tom", "Jones", "automation258@gmail.com", "2438051536267464", ""),
     USER_FOR_INTEGRATION("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
 //    ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
     ;
@@ -64,9 +64,10 @@ public enum FacebookUsers {
     }
 
     public static String getLoggedInUserName(){
-        String clientId = FacebookUsers.getLoggedInUser().getFBUserID();
-        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
-            clientId, "FACEBOOK").getFullName();
+//        String clientId = FacebookUsers.getLoggedInUser().getFBUserID();
+//        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+//            clientId, "FACEBOOK").getFullName();
+        return LOGGED_IN_USER.getFBUserName() + " " + LOGGED_IN_USER.getFBUserSurname();
     }
 
 }
