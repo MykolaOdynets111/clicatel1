@@ -260,6 +260,14 @@ public class AgentConversationSteps implements JSHelper{
                 "Agent Feedback popup is opened");
     }
 
+//    @Then("^Correct sentiment on (.*) user's message is stored in DB$")
+//    public void verifyCorrectSentimentStoredInDb(String userMessage){
+//        String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
+//        ApiHelper.getSessionDeatils(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment")
+//        ApiHelper.getSessionDeatils(getUserNameFromLocalStorage()).getBody().jsonPath();
+//        String agentId = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("id");
+//    }
+
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
             agentHomePage =  new AgentHomePage("");

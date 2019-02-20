@@ -50,4 +50,10 @@ public class ApiHelperTie {
         String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, Tenants.getTenantUnderTestName(), category);
         return get(url).getBody().jsonPath().getList("data", TIEIntentPerCategory.class);
     }
+
+    public static String getTIESentimentOnMessage(String userMessage){
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        return resp.jsonPath().get("sentiment_verdict");
+
+    }
 }

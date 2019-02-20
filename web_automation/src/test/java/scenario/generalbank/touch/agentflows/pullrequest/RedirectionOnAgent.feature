@@ -55,3 +55,5 @@ Feature: User on his demand should be redirected on the agent
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with Hate your banking user's message
+#    When Agent closes chat
+#    Then Correct sentiment on Hate your banking user's message is stored in DB

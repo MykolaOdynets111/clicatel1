@@ -487,4 +487,8 @@ public class ApiHelper {
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
     }
 
+    public static Response getSessionDeatils(String clientID){
+        return RestAssured.get(String.format(Endpoints.INTERNAL_SESSION_DETAILS, Tenants.getTenantUnderTestName(), clientID));
+    }
+
 }
