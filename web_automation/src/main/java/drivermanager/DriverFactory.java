@@ -17,7 +17,7 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> agentDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondAgentDriver = new ThreadLocal<>();
-    private static final String REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
+    private static String REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
 //    private static final String REMOTE_URL = "http://172.31.44.151:4444/wd/hub";
 //    private static final String REMOTE_URL = "http://35.164.148.100:4441/wd/hub";
 
@@ -137,6 +137,10 @@ public class DriverFactory {
         try {
             if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()){
                 Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
+            }
+            if(ConfigManager.getEnv().equalsIgnoreCase("dev")||
+                    ConfigManager.getEnv().equalsIgnoreCase("testing")){
+                REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
             }
             RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
 //            remoteWebDriver.manage().deleteAllCookies();
