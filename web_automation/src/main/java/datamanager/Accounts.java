@@ -34,7 +34,9 @@ public class Accounts {
             HashMap<String, String> targetAccount = accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
             tokenAndAccount.put("accountId", targetAccount.get("id"));
         }catch(JsonPathException e){
-            Assert.assertTrue(false, "Unexpected response received while getting portal access token");
+            Assert.assertTrue(false, "Unexpected response received while getting portal access token\n"+
+            "resp status: " + resp.statusCode() + "\n" +
+            "resp body: " + resp.getBody().asString());
         }
 
         return tokenAndAccount;

@@ -73,9 +73,14 @@ public class AgentHomePage extends AgentAbstractPage {
     private IncomingTransferWindow incomingTransferWindow;
     private Customer360Container customer360Container;
     private ChatHeader chatHeader;
+    private ConcludeChatWindow concludeChatWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public ConcludeChatWindow getConcludeChatWindow() {
+        return concludeChatWindow;
     }
 
     public ChatHeader getChatHeader() {
