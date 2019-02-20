@@ -1,10 +1,10 @@
 package runner.plainTestNgTests;
 
-import driverManager.ConfigManager;
+import drivermanager.ConfigManager;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
-import testNGtest_helper.AQAHealthTest;
-import testNGtest_helper.PlainTestNGConfigs;
+import testNGtesthelper.AQAHealthTest;
+import testNGtesthelper.PlainTestNGConfigs;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,11 +1,10 @@
 package twitter.uielements;
 
-import abstract_classes.AbstractUIElement;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @FindBy(css = "div.DMDock-conversations")
 public class DMWindow extends AbstractUIElement {

@@ -1,19 +1,19 @@
 package steps;
 
-import agent_side_pages.AgentHomePage;
-import agent_side_pages.AgentLoginPage;
-import api_helper.*;
+import agentpages.AgentHomePage;
+import agentpages.AgentLoginPage;
+import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import dataManager.Tenants;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
-import driverManager.URLs;
+import datamanager.Tenants;
+import drivermanager.ConfigManager;
+import drivermanager.DriverFactory;
+import drivermanager.URLs;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
-import java_server.Server;
+import javaserver.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
@@ -21,11 +21,11 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
-import steps.dot_control.DotControlSteps;
-import steps.tie_steps.BaseTieSteps;
-import steps.tie_steps.TIEApiSteps;
-import touch_pages.pages.MainPage;
-import touch_pages.pages.Widget;
+import steps.dotcontrol.DotControlSteps;
+import steps.tiesteps.BaseTieSteps;
+import steps.tiesteps.TIEApiSteps;
+import touchpages.pages.MainPage;
+import touchpages.pages.Widget;
 import twitter.TweetsSection;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
@@ -87,7 +87,7 @@ public class Hooks implements JSHelper{
         makeScreenshotAndConsoleOutputFromChatdesk(scenario);
 
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@widgetvisibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter") &&
@@ -110,7 +110,7 @@ public class Hooks implements JSHelper{
 
         finishAgentFlowIfExists(scenario);
 
-        if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
+        if(scenario.getSourceTagNames().equals(Arrays.asList("@widgetvisibility"))) {
             takeScreenshot();
             finishVisibilityFlow();
         }
@@ -141,7 +141,7 @@ public class Hooks implements JSHelper{
             ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
         }
 
-        if(scenario.getSourceTagNames().contains("@dot_control")){
+        if(scenario.getSourceTagNames().contains("@dotcontrol")){
             DotControlSteps.cleanUPMessagesInfo();
             APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
             Server.stopServer();

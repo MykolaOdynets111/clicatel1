@@ -1,21 +1,18 @@
 package steps;
 
-import api_helper.ApiHelper;
+import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.jackson_schemas.TafMessage;
-import dbManager.DBConnector;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
+import datamanager.jacksonschemas.TafMessage;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
+import drivermanager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Random;
 
 public class CamundaFlowsSteps implements JSHelper {

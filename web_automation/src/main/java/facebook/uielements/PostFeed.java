@@ -1,6 +1,6 @@
 package facebook.uielements;
-import abstract_classes.AbstractUIElement;
-import driverManager.DriverFactory;
+import abstractclasses.AbstractUIElement;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

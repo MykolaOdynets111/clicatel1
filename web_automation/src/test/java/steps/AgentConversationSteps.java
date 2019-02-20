@@ -1,18 +1,16 @@
 package steps;
 
-import agent_side_pages.AgentHomePage;
-import agent_side_pages.UIElements.ChatBody;
-import agent_side_pages.UIElements.SuggestedGroup;
-import agent_side_pages.UIElements.Suggestion;
-import api_helper.ApiHelperTie;
+import agentpages.AgentHomePage;
+import agentpages.uielements.ChatBody;
+import agentpages.uielements.SuggestedGroup;
+import agentpages.uielements.Suggestion;
+import apihelper.ApiHelperTie;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.Intents;
-import dataManager.jackson_schemas.Intent;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
+import datamanager.Intents;
+import datamanager.jacksonschemas.Intent;
+import drivermanager.ConfigManager;
 import interfaces.JSHelper;
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -119,7 +117,7 @@ public class AgentConversationSteps implements JSHelper{
             if (expectedResponse.contains("${firstName}")) {
                 expectedResponse = expectedResponse.replace("${firstName}", getUserNameFromLocalStorage());
             }
-//            ToDo: remove this after TIE fixes the issue
+//            ToDo: remove this after tie fixes the issue
             expectedResponse = expectedResponse.replace("  ", " ");
             answersFromTie.add(i, expectedResponse);
         }

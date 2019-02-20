@@ -1,25 +1,25 @@
 package steps;
 
-import api_helper.ApiHelper;
-import api_helper.ApiHelperTie;
+import apihelper.ApiHelper;
+import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.Tenants;
-import dataManager.VMQuoteRequestUserData;
-import dataManager.jackson_schemas.TIE.TIEIntentPerCategory;
-import driverManager.DriverFactory;
+import datamanager.Tenants;
+import datamanager.VMQuoteRequestUserData;
+import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
+import drivermanager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import touch_pages.pages.MainPage;
-import touch_pages.pages.Widget;
-import touch_pages.uielements.TouchActionsMenu;
-import touch_pages.uielements.WidgetConversationArea;
-import touch_pages.uielements.WidgetHeader;
-import touch_pages.uielements.messages.WelcomeMessages;
+import touchpages.pages.MainPage;
+import touchpages.pages.Widget;
+import touchpages.uielements.TouchActionsMenu;
+import touchpages.uielements.WidgetConversationArea;
+import touchpages.uielements.WidgetHeader;
+import touchpages.uielements.messages.WelcomeMessages;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -151,7 +151,7 @@ public class DefaultTouchUserSteps implements JSHelper{
             String expectedAnswerOnSelectedIntent = selectedIntentItem.getText();
             String selectedIntentName = selectedIntentItem.getIntent();
             if(expectedAnswerOnSelectedIntent==null){
-                Assert.assertTrue(false, "Answer is not provided by the TIE for '"+selectedIntentName+"' intent");
+                Assert.assertTrue(false, "Answer is not provided by the tie for '"+selectedIntentName+"' intent");
             }
             widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
             verifyTextResponseWithIntent(expectedAnswerOnSelectedIntent, selectedIntentName, selectedIntentTitle);
@@ -159,7 +159,7 @@ public class DefaultTouchUserSteps implements JSHelper{
     }
 
     /**This method is designed in order to exclude some tenant specific intents from randomiser
-     * For e.g., on message 'Cost or transactions fees' TIE API returns one intent, but on the camunda level
+     * For e.g., on message 'Cost or transactions fees' tie API returns one intent, but on the camunda level
      * there is choice card mapped on this message and test will fail because it expects 1 text response (because 1 intent is shown),
      * but in fact choice map is shown
      * @param intentsTitles
@@ -182,10 +182,10 @@ public class DefaultTouchUserSteps implements JSHelper{
         verifyTextResponse(FacebookSteps.getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
     }
 
-    /**Method for verifying TIE response in widget on user's message
-     * Method is designed to respect TIE mod for tenant under test
-     * If TIE is in semi autonomus mode we expect ONLY text response from TIE
-     * If TIE is in autonomus mode, we take into account choice card
+    /**Method for verifying tie response in widget on user's message
+     * Method is designed to respect tie mod for tenant under test
+     * If tie is in semi autonomus mode we expect ONLY text response from tie
+     * If tie is in autonomus mode, we take into account choice card
      * @param textResponse
      * @param userInput
      * @param intent - intent should be passed as it will be shown in the widget (with upper case letters where they should be)
@@ -196,7 +196,7 @@ public class DefaultTouchUserSteps implements JSHelper{
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
 
-//      ToDo: As soon as there is an API to check the TIE mode implement the following logic
+//      ToDo: As soon as there is an API to check the tie mode implement the following logic
 //        String tenantTIEMode = ApiHelperTie.getTIEModeForTenant(Tenants.getTenantUnderTestOrgName()).equals("automomus")
 //        if(!isTextResponseShown & tenantTIEMode.equals("autonomus"))
         if (!isTextResponseShown & widgetConversationArea.isCardShownFor(userInput, 15)){

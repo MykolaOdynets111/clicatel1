@@ -3,7 +3,7 @@
 <suite name="Virgin Money Master check">
     <test name="Virgin Money Acceptance test">
         <classes>
-            <class name="runner.virgin_money.RunAcceptanceTest" />
+            <class name="runner.virginmoney.RunAcceptanceTest" />
         </classes>
     </test>
 </suite>

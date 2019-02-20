@@ -1,9 +1,9 @@
 package steps;
 
-import api_helper.ApiHelper;
+import apihelper.ApiHelper;
 import cucumber.api.java.en.Given;
-import dataManager.Tenants;
-import driverManager.ConfigManager;
+import datamanager.Tenants;
+import drivermanager.ConfigManager;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

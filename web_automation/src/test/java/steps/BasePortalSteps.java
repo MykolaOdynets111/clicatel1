@@ -1,25 +1,24 @@
 package steps;
 
-import api_helper.ApiHelper;
-import api_helper.ApiHelperPlatform;
-import api_helper.Endpoints;
+import apihelper.ApiHelper;
+import apihelper.ApiHelperPlatform;
+import apihelper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.Agents;
-import dataManager.FacebookUsers;
-import dataManager.Tenants;
-import dbManager.DBConnector;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
+import datamanager.Agents;
+import datamanager.FacebookUsers;
+import datamanager.Tenants;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
+import drivermanager.DriverFactory;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portal_pages.*;
-import portal_pages.uielements.LeftMenu;
+import portalpages.*;
+import portalpages.uielements.LeftMenu;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 

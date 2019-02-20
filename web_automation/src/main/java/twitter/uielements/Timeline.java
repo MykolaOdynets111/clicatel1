@@ -1,6 +1,6 @@
 package twitter.uielements;
 
-import abstract_classes.AbstractUIElement;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

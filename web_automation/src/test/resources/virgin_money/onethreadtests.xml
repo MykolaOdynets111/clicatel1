@@ -4,7 +4,7 @@
     <test name="Virgin Money: User to Agent conversation ">
         <classes>
             <!-- not implemented for now -->
-            <!--<class name="runner.virgin_money.RunGenBankAgentTest" /> -->
+            <!--<class name="runner.virginmoney.RunGenBankAgentTest" /> -->
         </classes>
     </test>
 </suite>

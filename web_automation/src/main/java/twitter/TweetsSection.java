@@ -1,17 +1,13 @@
 package twitter;
 
-import abstract_classes.AbstractPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import twitter.uielements.OpenedTweet;
 import twitter.uielements.TimelineTweet;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TweetsSection extends TwitterHomePage {
 

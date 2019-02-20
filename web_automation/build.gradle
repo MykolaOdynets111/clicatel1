@@ -226,7 +226,7 @@ task runTIETestsForAllTenants(type: Test) {
         useTestNG() {
             ignoreFailures = true
             suites baseXmlPath + "generalbank/tie.xml"
-            suites baseXmlPath + "virgin_money/tie.xml"
+            suites baseXmlPath + "virginmoney/tie.xml"
         }
     }
 }
@@ -384,16 +384,16 @@ task runTestsForAllTenants(type: Test) {
             useDefaultListeners = true
             ignoreFailures = true
             suites baseXmlPath + "generalbank/mastercheck.xml"
-            suites baseXmlPath + "virgin_money/mastercheck.xml"
+            suites baseXmlPath + "virginmoney/mastercheck.xml"
             suites baseXmlPath + "generalbank/tie.xml"
-            suites baseXmlPath + "virgin_money/tie.xml"
+            suites baseXmlPath + "virginmoney/tie.xml"
         }
         reports.html.enabled = false
 //        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")
     }
     doLast {
         if (!file("build/reports/tests/runTestsForAllTenants/Virgin Money Master check/testng-failed.xml").exists()){
-            tenantName="virgin_money"
+            tenantName="virginmoney"
             runTouchVirginMoneyTests.execute()
         }
         if (!file("build/reports/tests/runTestsForAllTenants/General Bank Master check/testng-failed.xml").exists()){

@@ -1,7 +1,7 @@
 package steps;
 
 import cucumber.api.java.en.Then;
-import dbManager.DBConnector;
+import dbmanager.DBConnector;
 import org.testng.Assert;
 
 public class DBSteps {

@@ -1,6 +1,6 @@
 package interfaces;
 
-import driverManager.DriverFactory;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.testng.Assert;
 

@@ -1,6 +1,6 @@
 package steps;
 
-import api_helper.Endpoints;
+import apihelper.Endpoints;
 import cucumber.api.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;

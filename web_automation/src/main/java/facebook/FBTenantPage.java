@@ -1,8 +1,8 @@
 package facebook;
 
-import abstract_classes.AbstractPage;
-import dataManager.FacebookUsers;
-import driverManager.DriverFactory;
+import abstractclasses.AbstractPage;
+import datamanager.FacebookUsers;
+import drivermanager.DriverFactory;
 import facebook.uielements.MessengerWindow;
 import facebook.uielements.PostFeed;
 import facebook.uielements.VisitorPost;

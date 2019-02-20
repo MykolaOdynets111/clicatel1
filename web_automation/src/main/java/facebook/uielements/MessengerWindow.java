@@ -1,8 +1,8 @@
 package facebook.uielements;
 
-import abstract_classes.AbstractUIElement;
-import api_helper.ApiHelper;
-import driverManager.DriverFactory;
+import abstractclasses.AbstractUIElement;
+import apihelper.ApiHelper;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
