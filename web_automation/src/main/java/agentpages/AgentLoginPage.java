@@ -9,6 +9,8 @@ import org.openqa.selenium.support.FindBy;
 
 public class AgentLoginPage extends AgentAbstractPage {
 
+    private String loginFormXPATH = "//div[@class='login-form']";
+
     @FindBy(css = "div.login-form")
     private WebElement loginForm;
 
@@ -23,6 +25,7 @@ public class AgentLoginPage extends AgentAbstractPage {
 
     public AgentLoginPage(String ordinalAgentNumber) {
         super(ordinalAgentNumber);
+        waitForElementToBeVisibleByXpathAgent(loginFormXPATH, 10, ordinalAgentNumber);
     }
 
     public static AgentLoginPage openAgentLoginPage(String ordinalAgentNumber, String tenantOrgName) {
@@ -32,6 +35,7 @@ public class AgentLoginPage extends AgentAbstractPage {
 
    public AgentHomePage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+       waitForElementToBeVisibleAgent(userNameInput, 8, ordinalAgentNumber);
        userNameInput.sendKeys(agent.getAgentName());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();

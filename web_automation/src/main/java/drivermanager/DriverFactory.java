@@ -55,6 +55,7 @@ public class DriverFactory {
     }
 
     public static  WebDriver getDriverForAgent(String agent){
+        System.out.println("!! inside getDriverForAgent \n");
         if (agent.equalsIgnoreCase("second agent")){
             return DriverFactory.getSecondAgentDriverInstance();
         } else {
@@ -81,6 +82,7 @@ public class DriverFactory {
 
 
     public static WebDriver startNewAgentDriverInstance(){
+        System.out.println("!!?? INSIDE startNewAgentDriverInstance");
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {
