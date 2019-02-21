@@ -4,7 +4,7 @@ For starting tests navigate in the terminal to the project's folder (web_automat
 and use "./gradlew" and all tests will be started (in order to know what tests will be started
 check out the default parameter values).
 
-In order to start tests against some specific tenant use -Dtenant parameter (e.g. "./gradlew -Dtenant=virgin_money")
+In order to start tests against some specific tenant use -Dtenant parameter (e.g. "./gradlew -Dtenant=virginmoney")
 NOTE: tenants which have "-" in the tenantname should be passed with underscore "_" instead
 
 In order to run tests against all supported tenant at once, add to the basic run command "runTestsForAllTenants"
