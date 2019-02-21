@@ -105,6 +105,8 @@ public class Tenants {
 
     public static void clearTenantUnderTest(){
         TENANT_UNDER_TEST.remove();
+        TENANT_UNDER_TEST_ORG_NAME.remove();
+        TENANT_UNDER_TEST_NAME.remove();
     }
 
     public static String getTenantNameByTenantOrgName(String tenantOrgName){
