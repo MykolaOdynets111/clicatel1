@@ -110,7 +110,7 @@ public class Hooks implements JSHelper{
 
         finishAgentFlowIfExists(scenario);
 
-        if(scenario.getSourceTagNames().equals(Arrays.asList("@widgetvisibility"))) {
+        if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
             takeScreenshot();
             finishVisibilityFlow();
         }
