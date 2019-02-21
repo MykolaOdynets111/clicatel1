@@ -140,7 +140,8 @@ public class DriverFactory {
             if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()){
                 Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
             }
-            if(ConfigManager.getEnv().equalsIgnoreCase("testing")){
+            if(ConfigManager.getEnv().equalsIgnoreCase("testing")||
+                    ConfigManager.getEnv().equalsIgnoreCase("dev")){
                 REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
             }
             RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
