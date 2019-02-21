@@ -53,9 +53,9 @@ public class ApiHelper {
     }
 
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
-       return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.TENANT_INFO)
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        return RestAssured.given().log().all()
+                .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName())
                 .getBody().jsonPath().getMap("");
     }
 

@@ -69,6 +69,9 @@ public class Endpoints {
 
     public static String INTERNAL_SESSION_DETAILS = URLs.getBaseInternalApiUrl() + "sessions?tenantName=%s&clientId=%s&page=1&count=10&dateFrom=0&dateTo=0";
 
+    public static String INTERNAL_TENANTS = URLs.getBaseInternalApiUrl() + "tenants/";
+
+
     // ==================  PLATFORM ============== //
 
     public static  String PLATFORM_ACCOUNTS = URLs.getBasePlatformUrl() + "/auth/accounts";
