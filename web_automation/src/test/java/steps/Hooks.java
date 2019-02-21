@@ -87,7 +87,7 @@ public class Hooks implements JSHelper{
         makeScreenshotAndConsoleOutputFromChatdesk(scenario);
 
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
-                !scenario.getSourceTagNames().equals(Arrays.asList("@widgetvisibility")) &&
+                !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
                 !scenario.getSourceTagNames().contains("@facebook") &&
                 !scenario.getSourceTagNames().contains("@twitter") &&
