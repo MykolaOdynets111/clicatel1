@@ -1,4 +1,3 @@
-@portal
 @no_widget
 @agent_photo
 Feature: Managing Agent's photo

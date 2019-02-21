@@ -1,4 +1,3 @@
-@portal
 @no_widget
 @no_chatdesk
 Feature: CRM Ticket permission for agent role
