@@ -4,10 +4,12 @@ import agentpages.AgentHomePage;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.SuggestedGroup;
 import agentpages.uielements.Suggestion;
+import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Intents;
+import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
@@ -260,13 +262,13 @@ public class AgentConversationSteps implements JSHelper{
                 "Agent Feedback popup is opened");
     }
 
-//    @Then("^Correct sentiment on (.*) user's message is stored in DB$")
-//    public void verifyCorrectSentimentStoredInDb(String userMessage){
-//        String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-//        ApiHelper.getSessionDeatils(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment")
-//        ApiHelper.getSessionDeatils(getUserNameFromLocalStorage()).getBody().jsonPath();
-//        String agentId = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("id");
-//    }
+    @Then("^Correct sentiment on (.*) user's message is stored in DB$")
+    public void verifyCorrectSentimentStoredInDb(String userMessage){
+        String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
+        String sentimentFromAPI = ApiHelper.getSessionDeatils(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
+        Assert.assertEquals(sentimentFromAPI, expectedSentiment,
+                "Sentiment on '" + userMessage + "' user message is saved incorrectly\n");
+    }
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
