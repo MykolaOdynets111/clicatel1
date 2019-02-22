@@ -110,6 +110,7 @@ public class DotControlSteps {
                     "Message is not as expected");
         }catch(NullPointerException e){
             Assert.assertTrue(false, "Nullpointer exception was faced\n " +
+                    "The request: " + dotControlRequestMessage.get().toString() + "\n" +
                     "clientId from request:" + dotControlRequestMessage.get().getClientId() + "\n" +
             "Received clientId from .Control response" + Server.incomingRequests.keySet());
         }

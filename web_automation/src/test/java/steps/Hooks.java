@@ -156,6 +156,7 @@ public class Hooks implements JSHelper{
         }
 
         closeMainBrowserIfOpened();
+        clearAllSessionData();
     }
 
 
