@@ -1,6 +1,9 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import drivermanager.DriverFactory;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -38,10 +41,10 @@ public class PageHeader extends AbstractUIElement {
     private WebElement agentIcon;
 
     public PageHeader logOut(String agent) {
-        waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
-        click(iconWithAgentInitials);
-        waitForElementToBeVisibleAgent(logOutButton, 6, agent);
-        logOutButton.click();
+            waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
+            iconWithAgentInitials.click();
+            waitForElementToBeVisibleAgent(logOutButton, 6, agent);
+            logOutButton.click();
 //        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6,agent);
         return this;
     }

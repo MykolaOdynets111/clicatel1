@@ -2,6 +2,7 @@ package steps;
 
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
+import agentpages.uielements.PageHeader;
 import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -195,6 +196,10 @@ public class Hooks implements JSHelper{
     private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isAgentDriverExists()) {
 
+            if (scenario.getSourceTagNames().contains("@agent_info")) {
+                new AgentHomePage("main").getProfileWindow().closeIfOpened();
+            }
+
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
@@ -271,13 +276,16 @@ public class Hooks implements JSHelper{
     }
 
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
-//        try {
+        try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
             agentHomePage.endChat();
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
-//        } catch (WebDriverException e) { }
+        } catch(WebDriverException e){
+                DriverFactory.closeAgentBrowser();
+                DriverFactory.closeSecondAgentBrowser();
+        }
     }
 
     private void finishVisibilityFlow() {

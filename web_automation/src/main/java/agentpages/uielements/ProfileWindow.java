@@ -37,4 +37,8 @@ public class ProfileWindow extends AbstractUIElement {
     public void closeProfileWindow(){
         closeProfileWindowButton.click();
     }
+
+    public void closeIfOpened(){
+        if (isCloseProfileButtonShown()) closeProfileWindow();
+    }
 }
