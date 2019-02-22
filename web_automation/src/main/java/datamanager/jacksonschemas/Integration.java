@@ -75,4 +75,14 @@ public class Integration {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "Integration{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                ", purchased=" + purchased +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

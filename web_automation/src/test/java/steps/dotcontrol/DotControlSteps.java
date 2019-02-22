@@ -100,7 +100,7 @@ public class DotControlSteps {
                 Assert.assertTrue(false, "Sending message was not successful\n" +
                         "Status code " + responseOnSentRequest.get().statusCode()+
                         "\n Body: " + responseOnSentRequest.get().getBody().asString() + "\n" +
-                "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP"));
+                "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP").toString());
             }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
