@@ -82,7 +82,7 @@ public class APIHelperDotControl {
 
     public static Response sendMessageWithWait(DotControlRequestMessage requestMessage){
         Response resp = sendMessage(requestMessage);
-        for (int i =0; i<10; i++){
+        for (int i =0; i<13; i++){
             if (resp.statusCode() != 401) break;
             else{
                 try {

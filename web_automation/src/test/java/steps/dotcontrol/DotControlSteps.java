@@ -46,6 +46,7 @@ public class DotControlSteps {
                     "\n Body: " + resp.getBody().asString());
         }
         String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
+        System.out.println("!! Api token from creating integration: " + token);
         if(token==null){
             Assert.assertTrue(false, "apiToken is absent in create integration response " +
                     "Status code " + resp.statusCode()+
@@ -96,9 +97,10 @@ public class DotControlSteps {
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
         if(!(responseOnSentRequest.get().statusCode()==200)) {
-                Assert.assertTrue(false, "Integration creating was not successful\n" +
+                Assert.assertTrue(false, "Sending message was not successful\n" +
                         "Status code " + responseOnSentRequest.get().statusCode()+
-                        "\n Body: " + responseOnSentRequest.get().getBody().asString());
+                        "\n Body: " + responseOnSentRequest.get().getBody().asString() + "\n" +
+                "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP"));
             }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
