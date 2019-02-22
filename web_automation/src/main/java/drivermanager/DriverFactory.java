@@ -157,7 +157,7 @@ public class DriverFactory {
         if(touchDriver.get() != null) {
             touchDriver.get().quit();
         }
-        touchDriver.set(null);
+        touchDriver.remove();
     }
 
 
@@ -165,21 +165,21 @@ public class DriverFactory {
         if(agentDriver.get() != null) {
             agentDriver.get().quit();
         }
-        agentDriver.set(null);
+        agentDriver.remove();
     }
 
     public static void closePortalBrowser(){
         if(portalDriver.get() != null) {
             portalDriver.get().quit();
         }
-        portalDriver.set(null);
+        portalDriver.remove();
     }
 
     public static void closeSecondAgentBrowser(){
         if(secondAgentDriver.get() != null) {
             secondAgentDriver.get().quit();
         }
-        secondAgentDriver.set(null);
+        secondAgentDriver.remove();
     }
 
     public static void closeBrowser(String agent){
