@@ -181,4 +181,12 @@ public class DriverFactory {
         }
         secondAgentDriver.set(null);
     }
+
+    public static void closeBrowser(String agent){
+        if (agent.equalsIgnoreCase("second agent")){
+            closeSecondAgentBrowser();
+        } else {
+            closeAgentBrowser();
+        }
+    }
 }

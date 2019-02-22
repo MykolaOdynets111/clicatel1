@@ -283,8 +283,7 @@ public class Hooks implements JSHelper{
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch(WebDriverException e){
-                DriverFactory.closeAgentBrowser();
-                DriverFactory.closeSecondAgentBrowser();
+                DriverFactory.closeBrowser(agent);
         }
     }
 
