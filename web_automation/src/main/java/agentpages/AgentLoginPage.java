@@ -27,7 +27,6 @@ public class AgentLoginPage extends AgentAbstractPage {
 
     public AgentLoginPage(String ordinalAgentNumber) {
         super(ordinalAgentNumber);
-        waitForElementToBeVisibleByXpathAgent(loginFormXPATH, 10, ordinalAgentNumber);
     }
 
     public static AgentLoginPage openAgentLoginPage(String ordinalAgentNumber, String tenantOrgName) {

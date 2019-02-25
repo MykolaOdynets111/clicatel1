@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.TwitterUsers;
 import datamanager.jacksonschemas.TafMessage;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -51,9 +52,21 @@ public class CamundaFlowsSteps implements JSHelper {
 
     }
 
-    @Then("Last visit date is changed to minus (.*) hours")
+    @Then("^Last visit date is changed to minus (.*) hours$")
     public void changeLastVisitDate(int hoursShift){
         String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
+//        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
+        if(lastVisit!=0) {
+            long lastVisitWithShift = lastVisit - (hoursShift * 60 * 60 * 1000) - (3 * 60 * 60 * 1000);
+            DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), clientProfileID, lastVisitWithShift);
+        }
+    }
+
+
+    @Then("Last visit date is changed to minus (.*) hours for twitter dm user")
+    public void changeLastVisitDateForSocial(int hoursShift){
+        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), TwitterUsers.getLoggedInUser().getDmUserId());
         long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
 //        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
         if(lastVisit!=0) {
