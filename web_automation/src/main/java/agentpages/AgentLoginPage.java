@@ -4,6 +4,8 @@ import abstractclasses.AgentAbstractPage;
 import datamanager.Agents;
 import drivermanager.DriverFactory;
 import drivermanager.URLs;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -35,11 +37,20 @@ public class AgentLoginPage extends AgentAbstractPage {
 
    public AgentHomePage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+       try{
+           logIn(agent, ordinalAgentNumber);
+       }catch(NoSuchElementException|TimeoutException e){
+           new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut(ordinalAgentNumber);
+           logIn(agent, ordinalAgentNumber);
+       }
+       return new AgentHomePage(ordinalAgentNumber);
+   }
+
+   private void logIn(Agents agent, String ordinalAgentNumber){
        waitForElementToBeVisibleAgent(userNameInput, 8, ordinalAgentNumber);
        userNameInput.sendKeys(agent.getAgentName());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();
-       return new AgentHomePage(ordinalAgentNumber);
    }
 
    public void waitForLoginPageToOpen(String agent) {
