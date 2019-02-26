@@ -26,6 +26,8 @@ public class URLs {
 
     private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
 
+    private static String BASE_INTERNAL_TIE_URL = "http://%s-int-tie.clickatelllabs.com/tenants/";
+
     private static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
 
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
@@ -91,6 +93,9 @@ public class URLs {
     }
 
     public static String getBaseTieURL(){
+        if(ConfigManager.getEnv().equalsIgnoreCase("integration")){
+            return String.format(BASE_INTERNAL_TIE_URL, ConfigManager.getEnv());
+        }
         return String.format(BASE_TIE_URL, ConfigManager.getEnv());
     }
 
