@@ -7,6 +7,7 @@ import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -84,7 +85,12 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
     }
 
     public String getTextFromCard(){
-        return toUserMessageInCard.getAttribute("innerText");
+        try {
+            return toUserMessageInCard.getAttribute("innerText");
+        }catch (NoSuchElementException e){
+            Assert.assertTrue(false, "Card is not shown");
+        }
+        return "";
     }
 
     public String getTextFromAboveCardButton(){
