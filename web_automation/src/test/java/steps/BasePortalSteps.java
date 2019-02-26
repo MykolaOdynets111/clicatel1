@@ -1,24 +1,25 @@
 package steps;
 
-import api_helper.ApiHelper;
-import api_helper.ApiHelperPlatform;
-import api_helper.Endpoints;
+import apihelper.ApiHelper;
+import apihelper.ApiHelperPlatform;
+import apihelper.Endpoints;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.Agents;
-import dataManager.FacebookUsers;
-import dataManager.Tenants;
-import dbManager.DBConnector;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
+import datamanager.Agents;
+import datamanager.FacebookUsers;
+import datamanager.Tenants;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
+import drivermanager.DriverFactory;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portal_pages.*;
-import portal_pages.uielements.LeftMenu;
+import portalpages.*;
+import portalpages.uielements.LeftMenu;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BasePortalSteps {
@@ -55,6 +56,17 @@ public class BasePortalSteps {
         }
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), agentEmail);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
+    }
+
+    @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
+    public void verifyAgentCRMPermissions(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        List<String> expectedPermissions = Arrays.asList("delete-user-profile", "create-user-profile", "update-user-profile", "read-user-profile");
+        List<String> permissions = ApiHelperPlatform.getAllRolePermission(tenantOrgName, "Touch agent role");
+        Assert.assertTrue(expectedPermissions.stream().allMatch(e -> permissions.contains(e)),
+                "Not all CRM permissions are present for Agent role\n" +
+                        "Expected permitions: " + expectedPermissions.toString() + "\n" +
+                        "Full permitions list: " + permissions.toString());
     }
 
     @Then("^New agent is added into touch database$")
@@ -449,12 +461,12 @@ public class BasePortalSteps {
 
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
     public void verifyTouchGoPlanUpdatingInTenantConfig(String expectedTouchGoPlan, String tenantOrgName){
-        String actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
+        String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
         for(int i=0; i<120; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
                 getPortalMainPage().waitFor(15000);
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
-                actualType = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
+                actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
             } else{
                 break;
             }
@@ -637,10 +649,7 @@ public class BasePortalSteps {
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        String photoPath = "";
-        if(photoStrategy.equals("new photo")) photoPath = System.getProperty("user.dir")+"/src/test/resources/agentphoto/agent_photo.png";
-
-        portalUserManagementThreadLocal.get().uploadPhoto(photoPath);
+        portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")

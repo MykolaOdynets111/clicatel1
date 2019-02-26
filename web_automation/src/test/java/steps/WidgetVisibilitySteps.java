@@ -1,9 +1,9 @@
 package steps;
 
-import api_helper.ApiHelper;
+import apihelper.ApiHelper;
 import cucumber.api.java.en.Given;
-import dataManager.Tenants;
-import driverManager.ConfigManager;
+import datamanager.Tenants;
+import drivermanager.ConfigManager;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,7 +49,7 @@ public class WidgetVisibilitySteps {
     }
 
     private LocalDateTime getCurrentTimeInTenantTimeZone(String tenantOrgName){
-        String tenantTimeZone = ApiHelper.getTenantConfig(Tenants.getTenantInfo(tenantOrgName, "id"), "timezone");
+        String tenantTimeZone = ApiHelper.getInternalTenantConfig(ApiHelper.getTenantInfoMap(tenantOrgName).get("id"), "timezone");
         String zoneOffset = tenantTimeZone.split(":")[0].replace("GMT", "");
         ZoneId.of(zoneOffset);
         return LocalDateTime.now(ZoneId.of(zoneOffset));

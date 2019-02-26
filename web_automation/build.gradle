@@ -28,13 +28,13 @@ repositories {
 dependencies {
     compile group: 'io.appium', name: 'java-client', version: '6.1.0'
     compile group: 'javax.mail', name: 'mail', version: '1.4.5'
-    compile group: 'org.testcontainers', name: 'selenium', version: '1.4.3'
+    compile group: 'org.testcontainers', name: 'selenium', version: '1.10.5'
     compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.7.2'
     compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.18'
     compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
     compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
     compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
-    compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.3'
+    compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
     compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.2'
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
@@ -226,7 +226,7 @@ task runTIETestsForAllTenants(type: Test) {
         useTestNG() {
             ignoreFailures = true
             suites baseXmlPath + "generalbank/tie.xml"
-            suites baseXmlPath + "virgin_money/tie.xml"
+            suites baseXmlPath + "virginmoney/tie.xml"
         }
     }
 }
@@ -384,16 +384,16 @@ task runTestsForAllTenants(type: Test) {
             useDefaultListeners = true
             ignoreFailures = true
             suites baseXmlPath + "generalbank/mastercheck.xml"
-            suites baseXmlPath + "virgin_money/mastercheck.xml"
+            suites baseXmlPath + "virginmoney/mastercheck.xml"
             suites baseXmlPath + "generalbank/tie.xml"
-            suites baseXmlPath + "virgin_money/tie.xml"
+            suites baseXmlPath + "virginmoney/tie.xml"
         }
         reports.html.enabled = false
 //        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")
     }
     doLast {
         if (!file("build/reports/tests/runTestsForAllTenants/Virgin Money Master check/testng-failed.xml").exists()){
-            tenantName="virgin_money"
+            tenantName="virginmoney"
             runTouchVirginMoneyTests.execute()
         }
         if (!file("build/reports/tests/runTestsForAllTenants/General Bank Master check/testng-failed.xml").exists()){

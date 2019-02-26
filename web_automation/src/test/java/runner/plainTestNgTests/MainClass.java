@@ -1,6 +1,6 @@
 //package runner.plainTestNgTests;
 //
-//import testNGtest_helper.PlainTestNGConfigs;
+//import testNGtesthelper.PlainTestNGConfigs;
 //
 //import java.util.Map;
 //

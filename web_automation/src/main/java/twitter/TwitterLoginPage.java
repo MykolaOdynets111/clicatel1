@@ -1,13 +1,11 @@
 package twitter;
 
-import abstract_classes.AbstractPage;
-import dataManager.TwitterUsers;
-import driverManager.DriverFactory;
+import abstractclasses.AbstractPage;
+import datamanager.TwitterUsers;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-
-import javax.print.DocFlavor;
 
 public class TwitterLoginPage extends AbstractPage {
 

@@ -16,7 +16,7 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/generalbank/widget_visibility",
+        features ="src/test/java/scenario/generalbank/widgetvisibility",
         glue ="steps")
 public class RunVisibilityTest {
 

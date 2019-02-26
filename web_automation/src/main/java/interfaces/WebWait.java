@@ -1,6 +1,6 @@
 package interfaces;
 
-import driverManager.DriverFactory;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;

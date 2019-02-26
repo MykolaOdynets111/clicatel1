@@ -1,6 +1,6 @@
 package facebook;
 
-import driverManager.DriverFactory;
+import drivermanager.DriverFactory;
 
 public class FBHomePage {
 

@@ -1,6 +1,6 @@
 package runner.plainTestNgTests;
 
-import driverManager.DriverFactory;
+import drivermanager.DriverFactory;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import steps.DefaultTouchUserSteps;
 import steps.Hooks;
-import testNGtest_helper.PlainTestNGConfigs;
+import testNGtesthelper.PlainTestNGConfigs;
 
 import java.io.File;
 import java.io.IOException;

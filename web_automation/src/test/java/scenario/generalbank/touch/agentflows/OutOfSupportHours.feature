@@ -39,7 +39,7 @@ Feature: Chat handling in out of support hours
     And Click chat icon
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
-    Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
+    Then User should see 'out_of_support_hours' text response for his 'chat to agent' input
 
   @agent_support_hours
   Scenario: Verify out_of_support_hours message shown for Bot mode tenant user
@@ -49,7 +49,7 @@ Feature: Chat handling in out of support hours
     And Click chat icon
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
-    Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
+    Then User should see 'out_of_support_hours' text response for his 'chat to agent' input
 
   @agent_support_hours
   Scenario: Overnight ticket is replaced by active chat when support ours is valid (Agent mode tenant)
@@ -59,7 +59,7 @@ Feature: Chat handling in out of support hours
     And Click chat icon
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
-    Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
+    Then User should see 'out_of_support_hours' text response for his 'chat to agent' input
     When Set agent support hours for all week
     When User enter chat to support into widget input field
     Then Agent has new conversation request
@@ -77,7 +77,7 @@ Feature: Chat handling in out of support hours
     And Click chat icon
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
-    Then User have to receive 'out_of_support_hours' text response for his 'chat to agent' input
+    Then User should see 'out_of_support_hours' text response for his 'chat to agent' input
     When Set agent support hours for all week
     When User enter chat to support into widget input field
     Then Agent has new conversation request

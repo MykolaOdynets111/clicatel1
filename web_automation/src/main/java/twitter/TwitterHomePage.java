@@ -1,12 +1,11 @@
 package twitter;
 
-import abstract_classes.AbstractPage;
-import driverManager.DriverFactory;
+import abstractclasses.AbstractPage;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import twitter.uielements.TwitterHeader;
-import twitter4j.Twitter;
 
 public class TwitterHomePage extends AbstractPage {
 

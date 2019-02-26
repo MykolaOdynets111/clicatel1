@@ -1,3 +1,4 @@
+@agent_info
 Feature: Agent information should be present in the info popup
 
   Scenario: Viewing agent's details in information popup

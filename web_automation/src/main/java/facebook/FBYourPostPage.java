@@ -1,8 +1,7 @@
 package facebook;
 
-import abstract_classes.AbstractPage;
-import abstract_classes.AbstractUIElement;
-import driverManager.DriverFactory;
+import abstractclasses.AbstractPage;
+import drivermanager.DriverFactory;
 import facebook.uielements.CommentInYourPostWindow;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;

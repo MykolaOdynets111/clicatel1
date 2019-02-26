@@ -1,11 +1,11 @@
 package steps;
 
-import api_helper.ApiHelper;
+import apihelper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.Tenants;
-import driverManager.URLs;
+import datamanager.Tenants;
+import drivermanager.URLs;
 import facebook.FBHomePage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;

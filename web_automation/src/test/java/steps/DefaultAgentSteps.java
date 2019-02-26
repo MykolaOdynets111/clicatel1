@@ -1,28 +1,28 @@
 package steps;
 
-import agent_side_pages.AgentHomePage;
-import agent_side_pages.AgentLoginPage;
-import agent_side_pages.UIElements.LeftMenuWithChats;
-import agent_side_pages.UIElements.ProfileWindow;
-import api_helper.ApiHelper;
-import api_helper.RequestSpec;
+import agentpages.AgentHomePage;
+import agentpages.AgentLoginPage;
+import agentpages.uielements.LeftMenuWithChats;
+import agentpages.uielements.ProfileWindow;
+import apihelper.ApiHelper;
+import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import dataManager.Customer360PersonalInfo;
-import dataManager.FacebookUsers;
-import dataManager.Tenants;
-import dataManager.TwitterUsers;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
+import datamanager.Customer360PersonalInfo;
+import datamanager.FacebookUsers;
+import datamanager.Tenants;
+import datamanager.TwitterUsers;
+import drivermanager.ConfigManager;
+import drivermanager.DriverFactory;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import steps.dot_control.DotControlSteps;
+import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -58,7 +58,6 @@ public class DefaultAgentSteps implements JSHelper {
 
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
-        RequestSpec.clearAccessTokenForPortalUser();
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
@@ -258,10 +257,26 @@ public class DefaultAgentSteps implements JSHelper {
                 String userName=null;
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-                if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,70, agent),
+                if(social.equalsIgnoreCase("dotcontrol")) {
+                    Assert.assertTrue(waitForDotControlRequestOnChatDesk(),
+                            "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
+                                    DotControlSteps.getFromClientRequestMessage().getClientId()+")");
+                    return;
+                }
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,40, agent),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
+
+    private boolean waitForDotControlRequestOnChatDesk(){
+        for(int i = 0; i<5; i++) {
+            String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,10, "main")) return true;
+            else {
+                DriverFactory.getAgentDriverInstance().navigate().refresh();
+            }
+        }
+        return false;
+    }
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social, String channel){
@@ -403,6 +418,11 @@ public class DefaultAgentSteps implements JSHelper {
                 "Agent image is not shown on chatdesk");
     }
 
+    @When("^(.*) selects random chat is chat history list$")
+    public void selectRandomChatFromHistory(String ordinalAgentNumber){
+        getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
+    }
+
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
             return getAgentHomeForSecondAgent();
@@ -444,8 +464,8 @@ public class DefaultAgentSteps implements JSHelper {
     }
 
     private Customer360PersonalInfo getCustomer360Info(String clientFrom){
-        String clientId = getUserNameFromLocalStorage();
-        String integrationType = "TOUCH";
+        String clientId = "";
+        String integrationType = "";
         switch (clientFrom){
             case "fb dm":
                 clientId = FacebookUsers.getLoggedInUser().getFBUserID();
@@ -458,6 +478,10 @@ public class DefaultAgentSteps implements JSHelper {
             case "dotcontrol":
                 clientId = DotControlSteps.getFromClientRequestMessage().getClientId();
                 integrationType = "HTTP";
+                break;
+            default:
+                clientId = getUserNameFromLocalStorage();
+                integrationType = "TOUCH";
                 break;
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),

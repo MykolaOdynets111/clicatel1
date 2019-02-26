@@ -1,5 +1,5 @@
-@portal
 @no_widget
+@agent_photo
 Feature: Managing Agent's photo
 
   Scenario: Adding agent new photo

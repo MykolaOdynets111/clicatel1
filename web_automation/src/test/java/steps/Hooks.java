@@ -1,18 +1,20 @@
 package steps;
 
-import agent_side_pages.AgentHomePage;
-import agent_side_pages.AgentLoginPage;
-import api_helper.*;
+import agentpages.AgentHomePage;
+import agentpages.AgentLoginPage;
+import agentpages.uielements.PageHeader;
+import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import dataManager.Tenants;
-import driverManager.ConfigManager;
-import driverManager.DriverFactory;
+import datamanager.Tenants;
+import drivermanager.ConfigManager;
+import drivermanager.DriverFactory;
+import drivermanager.URLs;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
-import java_server.Server;
+import javaserver.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
@@ -20,11 +22,11 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
-import steps.dot_control.DotControlSteps;
-import steps.tie_steps.BaseTieSteps;
-import steps.tie_steps.TIEApiSteps;
-import touch_pages.pages.MainPage;
-import touch_pages.pages.Widget;
+import steps.dotcontrol.DotControlSteps;
+import steps.tiesteps.BaseTieSteps;
+import steps.tiesteps.TIEApiSteps;
+import touchpages.pages.MainPage;
+import touchpages.pages.Widget;
 import twitter.TweetsSection;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
@@ -40,18 +42,12 @@ public class Hooks implements JSHelper{
     @Before
     public void beforeScenario(Scenario scenario){
 
-
+        clearAllSessionData();
 
         if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
             }
-
-//        if(scenario.getSourceTagNames().contains("@agent_mode")&!
-//                (ConfigManager.getEnv().equalsIgnoreCase("integration") |
-//                 ConfigManager.getEnv().equalsIgnoreCase("dev"))){
-//            throw new cucumber.api.PendingException("Integration tweb should be updated for this lodash test");
-//        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
@@ -59,31 +55,26 @@ public class Hooks implements JSHelper{
                     "Clickatell to be billed for that");
         }
 
-
-        if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")) {
-                    DriverFactory.getAgentDriverInstance();
-            }
-
-
-            if (scenario.getSourceTagNames().contains("@facebook")) {
+        if (scenario.getSourceTagNames().contains("@facebook")) {
                 ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
                 }
-            }
+        }
 
-            if (scenario.getSourceTagNames().contains("@twitter")) {
+        if (scenario.getSourceTagNames().contains("@twitter")) {
                 ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
                 }
-            }
-            if(scenario.getSourceTagNames().contains("@tie")){
+        }
+
+        if(scenario.getSourceTagNames().contains("@tie")){
                 BaseTieSteps.request = new ByteArrayOutputStream();
                 BaseTieSteps.response = new ByteArrayOutputStream();
-            }
+        }
 
         if(scenario.getSourceTagNames().contains("@start_server")){
             new Server().startServer();
@@ -93,6 +84,9 @@ public class Hooks implements JSHelper{
 
     @After()
     public void afterScenario(Scenario scenario){
+
+        makeScreenshotAndConsoleOutputFromChatdesk(scenario);
+
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
@@ -148,7 +142,7 @@ public class Hooks implements JSHelper{
             ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
         }
 
-        if(scenario.getSourceTagNames().contains("@dot_control")){
+        if(scenario.getSourceTagNames().contains("@dotcontrol")){
             DotControlSteps.cleanUPMessagesInfo();
             APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
             Server.stopServer();
@@ -161,9 +155,8 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
-
-        RequestSpec.clearAccessTokenForPortalUser();
         closeMainBrowserIfOpened();
+        clearAllSessionData();
     }
 
 
@@ -185,17 +178,27 @@ public class Hooks implements JSHelper{
         return ((TakesScreenshot) DriverFactory.getSecondAgentDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
-    private void finishAgentFlowIfExists(Scenario scenario) {
+    private void makeScreenshotAndConsoleOutputFromChatdesk(Scenario scenario){
         if (DriverFactory.isAgentDriverExists()) {
             takeScreenshotFromSecondDriver();
-            if(scenario.isFailed()){
+            if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
             }
-            if (DriverFactory.isSecondAgentDriverExists()) {
+        }
+        if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
                 }
                 takeScreenshotFromThirdDriverIfExists();
+        }
+    }
+
+
+    private void finishAgentFlowIfExists(Scenario scenario) {
+        if (DriverFactory.isAgentDriverExists()) {
+
+            if (scenario.getSourceTagNames().contains("@agent_info")) {
+                new AgentHomePage("main").getProfileWindow().closeIfOpened();
             }
 
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
@@ -231,7 +234,9 @@ public class Hooks implements JSHelper{
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
+            DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
+
             if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
                 ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
                                                     BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
@@ -241,10 +246,10 @@ public class Hooks implements JSHelper{
                 String url = String.format(Endpoints.TIE_DELETE_TENANT, BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
                 given().delete(url);
             }
-
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();
         }
     }
@@ -278,7 +283,9 @@ public class Hooks implements JSHelper{
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
-        } catch (WebDriverException e) { }
+        } catch(WebDriverException e){
+                DriverFactory.closeBrowser(agent);
+        }
     }
 
     private void finishVisibilityFlow() {
@@ -344,6 +351,11 @@ public class Hooks implements JSHelper{
 //        logResponse(BaseTieSteps.response);
     }
 
+    private void clearAllSessionData(){
+        Tenants.clearTenantUnderTest();
+        RequestSpec.clearAccessTokenForPortalUser();
+        URLs.clearFinalAgentURL();
+    }
 
     @Attachment(value = "request")
     public byte[] logRequest(ByteArrayOutputStream stream) {

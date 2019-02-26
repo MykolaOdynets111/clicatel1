@@ -4,7 +4,7 @@ For starting tests navigate in the terminal to the project's folder (web_automat
 and use "./gradlew" and all tests will be started (in order to know what tests will be started
 check out the default parameter values).
 
-In order to start tests against some specific tenant use -Dtenant parameter (e.g. "./gradlew -Dtenant=virgin_money")
+In order to start tests against some specific tenant use -Dtenant parameter (e.g. "./gradlew -Dtenant=virginmoney")
 NOTE: tenants which have "-" in the tenantname should be passed with underscore "_" instead
 
 In order to run tests against all supported tenant at once, add to the basic run command "runTestsForAllTenants"
@@ -22,6 +22,8 @@ For running test in selenium grid add "-Dremote=true" to the run command
 
 In order to specify where to run tests, active or standby, please use -Ddeploy_to parameter.
 In order to run tests on "standby" pass "standby_group" value to the parameter (e.g. "./gradlew -Ddeploy_to=standby_group"
+
+In order to run some features by tag please add the following to run command:  -Dcucumber.options='--tags @target_tag'
 
 All test results will be collected in Allure report.
 You can find Allure report by path "build/allure-report/index.html"

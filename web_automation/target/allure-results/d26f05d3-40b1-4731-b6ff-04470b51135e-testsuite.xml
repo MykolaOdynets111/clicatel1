@@ -65,29 +65,32 @@
             <failure>
                 <message>IllegalArgumentException: key cannot be null</message>
                 <stack-trace>java.lang.IllegalArgumentException: key cannot be null
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:83)
-	at org.codehaus.groovy.reflection.CachedConstructor.doConstructorInvoke(CachedConstructor.java:77)
-	at org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrap.callConstructor(ConstructorSite.java:84)
-	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:60)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:235)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:247)
-	at io.restassured.internal.assertion.AssertParameter.notNull(AssertParameter.groovy:26)
-	at io.restassured.internal.assertion.AssertParameter$notNull.callStatic(Unknown Source)
-	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallStatic(CallSiteArray.java:56)
-	at io.restassured.internal.assertion.AssertParameter$notNull.callStatic(Unknown Source)
-	at io.restassured.internal.ResponseSpecificationImpl.content(ResponseSpecificationImpl.groovy:260)
-	at io.restassured.specification.ResponseSpecification$content$2.callCurrent(Unknown Source)
-	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallCurrent(CallSiteArray.java:52)
-	at io.restassured.specification.ResponseSpecification$content$2.callCurrent(Unknown Source)
-	at io.restassured.internal.ResponseSpecificationImpl.body(ResponseSpecificationImpl.groovy:248)
-	at io.restassured.internal.ValidatableResponseOptionsImpl.body(ValidatableResponseOptionsImpl.java:268)
-	at steps.tie_steps.TIEApiSteps.verifyTenantTrainingScheduled(TIEApiSteps.java:201)
-	at ✽.Then Training for new tenant is scheduled(TIEApiTrainings.feature:23)
-</stack-trace>
+                    at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+                    at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+                    at
+                    sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+                    at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+                    at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:83)
+                    at org.codehaus.groovy.reflection.CachedConstructor.doConstructorInvoke(CachedConstructor.java:77)
+                    at
+                    org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrap.callConstructor(ConstructorSite.java:84)
+                    at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:60)
+                    at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:235)
+                    at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:247)
+                    at io.restassured.internal.assertion.AssertParameter.notNull(AssertParameter.groovy:26)
+                    at io.restassured.internal.assertion.AssertParameter$notNull.callStatic(Unknown Source)
+                    at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallStatic(CallSiteArray.java:56)
+                    at io.restassured.internal.assertion.AssertParameter$notNull.callStatic(Unknown Source)
+                    at io.restassured.internal.ResponseSpecificationImpl.content(ResponseSpecificationImpl.groovy:260)
+                    at io.restassured.specification.ResponseSpecification$content$2.callCurrent(Unknown Source)
+                    at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallCurrent(CallSiteArray.java:52)
+                    at io.restassured.specification.ResponseSpecification$content$2.callCurrent(Unknown Source)
+                    at io.restassured.internal.ResponseSpecificationImpl.body(ResponseSpecificationImpl.groovy:248)
+                    at
+                    io.restassured.internal.ValidatableResponseOptionsImpl.body(ValidatableResponseOptionsImpl.java:268)
+                    at steps.tiesteps.TIEApiSteps.verifyTenantTrainingScheduled(TIEApiSteps.java:201)
+                    at ✽.Then Training for new tenant is scheduled(TIEApiTrainings.feature:23)
+                </stack-trace>
             </failure>
             <steps>
                 <step start="1526913151029" stop="1526913151030" status="passed">
