@@ -55,12 +55,6 @@ public class RequestSpec {
         return accessToken;
     }
 
-    public static void removeRequestSpecification(){
-        if(!(requestSpecification.get() == null)) {
-            requestSpecification.set(null);
-        }
-    }
-
     private static String getAuthToken() {
         switch (ConfigManager.getEnv()) {
                 case "dev":
@@ -110,6 +104,7 @@ public class RequestSpec {
     }
 
     public static void clearAccessTokenForPortalUser(){
+        requestSpecification.remove();
         PORTAL_USER_ACCESS_TOKEN.remove();
         }
 

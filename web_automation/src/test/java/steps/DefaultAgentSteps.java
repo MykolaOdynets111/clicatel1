@@ -418,6 +418,11 @@ public class DefaultAgentSteps implements JSHelper {
                 "Agent image is not shown on chatdesk");
     }
 
+    @When("^(.*) selects random chat is chat history list$")
+    public void selectRandomChatFromHistory(String ordinalAgentNumber){
+        getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
+    }
+
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
             return getAgentHomeForSecondAgent();

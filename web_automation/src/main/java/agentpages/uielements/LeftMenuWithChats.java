@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import drivermanager.DriverFactory;
 import interfaces.JSHelper;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -10,6 +11,7 @@ import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 @FindBy(css = "div.scrollable-roster")
 public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
@@ -35,8 +37,12 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     @FindBy(xpath = ".//ul[@class='chats-roster']/li[@class='active']")
     private WebElement activeCaht;
 
+    @FindBy(css = "div.scrollable-content")
+    private WebElement scrollableArea;
+
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
+    private String loadingSpinner = "//*[text()='Connecting...']";
 
     private WebElement getTargetChat(String userName){
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
@@ -114,6 +120,16 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
                 .filter(e -> e.getText().toLowerCase().contains(option.toLowerCase()))
                 .findFirst().get()
                 .click();
+    }
+
+    public void selectRandomChat(String agent){
+        scrollInsideElement(scrollableArea, DriverFactory.getAgentDriverInstance(), 2000);
+        waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 15, agent);
+        int numberOfChats = newConversationRequests.size();
+        Random rand = new Random();
+        int max = numberOfChats - 1;
+        int randomNum = rand.nextInt((max - 0) + 1) + 0;
+        newConversationRequests.get(randomNum).click();
     }
 
     public String getActiveChatUserName(){
