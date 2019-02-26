@@ -186,7 +186,11 @@ public class BasePortalSteps {
 
     @When("^Login as newly created agent$")
     public void loginAsCreatedAgent(){
-        portalLoginPage.get().login(agentEmail, agentPass);
+        try {
+            portalLoginPage.get().login(agentEmail, agentPass);
+        }catch (org.openqa.selenium.TimeoutException e){
+
+        }
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")

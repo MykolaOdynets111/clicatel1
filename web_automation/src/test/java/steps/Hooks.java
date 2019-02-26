@@ -142,7 +142,7 @@ public class Hooks implements JSHelper{
             ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
         }
 
-        if(scenario.getSourceTagNames().contains("@dotcontrol")){
+        if(scenario.getSourceTagNames().contains("@dot_control")){
             DotControlSteps.cleanUPMessagesInfo();
             APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
             Server.stopServer();

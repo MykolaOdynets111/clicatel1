@@ -684,7 +684,7 @@ public class TIEApiSteps {
                 .jsonPath().getList("NER_trainset").stream()
                 .filter(e -> ((HashMap) e).get("text").equals(NER_DATA_SET.getText()))
                 .findFirst().get()).get("id");
-        String url = String.format(Endpoints.TIE_NER_DELETE, id);
+        String url = String.format(Endpoints.TIE_NER_DELETE, newTenant, id);
         when()
                 .delete(url).
         then()

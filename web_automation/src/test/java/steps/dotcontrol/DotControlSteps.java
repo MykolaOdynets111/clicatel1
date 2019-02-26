@@ -33,7 +33,8 @@ public class DotControlSteps {
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
-    public void createIntegration(String tenantOrgName){
+    public void
+    createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
@@ -52,9 +53,8 @@ public class DotControlSteps {
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
+        apiToken.remove();
         apiToken.set(token);
-
-
     }
 
     @When("Send (.*) message for .Control")
@@ -98,8 +98,9 @@ public class DotControlSteps {
     public void verifyDotControlResponse(String initialMessage){
         if(!(responseOnSentRequest.get().statusCode()==200)) {
                 Assert.assertTrue(false, "Sending message was not successful\n" +
+                        "Sent data in the request: " + dotControlRequestMessage.get().toString() + "\n\n" +
                         "Status code " + responseOnSentRequest.get().statusCode()+
-                        "\n Body: " + responseOnSentRequest.get().getBody().asString() + "\n" +
+                        "\nResponse Body: " + responseOnSentRequest.get().getBody().asString() + "\n\n" +
                 "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP").toString());
             }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
