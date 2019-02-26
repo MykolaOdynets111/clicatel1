@@ -33,7 +33,8 @@ public class DotControlSteps {
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
-    public void createIntegration(String tenantOrgName){
+    public void
+    createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
@@ -52,9 +53,8 @@ public class DotControlSteps {
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
+        apiToken.remove();
         apiToken.set(token);
-
-
     }
 
     @When("Send (.*) message for .Control")
