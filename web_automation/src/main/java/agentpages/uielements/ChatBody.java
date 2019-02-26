@@ -17,6 +17,8 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
+    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[@data-status='read']";
+
     private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
 

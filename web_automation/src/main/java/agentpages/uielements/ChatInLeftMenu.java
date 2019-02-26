@@ -38,7 +38,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public String getUserName() {
-        return userName.getText();
+        return userName.getAttribute("innerText");
     }
 
     public String getLocation() {

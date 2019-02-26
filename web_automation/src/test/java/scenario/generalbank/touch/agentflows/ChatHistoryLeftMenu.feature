@@ -4,4 +4,5 @@
 #  Scenario: Verify agent can filter chats
 #    Given I login as agent of General Bank Demo
 #    When Agent select "Chat history" filter option
-#    When Agent selects random chat is chat history list
+#    When Agent searches and selects random chat is chat history list
+#    When Get selected chat history from back end

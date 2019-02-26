@@ -9,7 +9,6 @@ import apihelper.ApiHelperTie;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Intents;
-import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
@@ -265,7 +264,7 @@ public class AgentConversationSteps implements JSHelper{
     @Then("^Correct sentiment on (.*) user's message is stored in DB$")
     public void verifyCorrectSentimentStoredInDb(String userMessage){
         String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-        String sentimentFromAPI = ApiHelper.getSessionDeatils(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
+        String sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
         Assert.assertEquals(sentimentFromAPI, expectedSentiment,
                 "Sentiment on '" + userMessage + "' user message is saved incorrectly\n");
     }

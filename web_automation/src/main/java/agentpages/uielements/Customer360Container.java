@@ -71,4 +71,8 @@ public class Customer360Container extends AbstractUIElement {
         phoneInput.clear();
         phoneInput.sendKeys(valuesToSet.getPhone());
     }
+
+    public String getUserFullName(){
+        return profileNameLabel.getText().replace("\n", " ");
+    }
 }

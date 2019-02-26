@@ -1,8 +1,8 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import drivermanager.DriverFactory;
 import interfaces.JSHelper;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -12,9 +12,12 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @FindBy(css = "div.scrollable-roster")
 public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
+
+    private String sixthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
 
     @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
     private List<WebElement> newConversationRequests;
@@ -39,6 +42,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     @FindBy(css = "div.scrollable-content")
     private WebElement scrollableArea;
+
+    @FindBy(xpath = "//div[@class='Select-control']//input")
+    private WebElement searchChatInput;
 
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
@@ -123,13 +129,20 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public void selectRandomChat(String agent){
-        scrollInsideElement(scrollableArea, DriverFactory.getAgentDriverInstance(), 2000);
-        waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 15, agent);
-        int numberOfChats = newConversationRequests.size();
+        waitForElementToBePresentByXpathAgent(sixthChat, 8);
+       List<ChatInLeftMenu> chatsFromWidget =
+                                newConversationRequests.stream()
+                                .map(e -> new ChatInLeftMenu(e))
+                                .filter(e1 -> e1.getUserName().startsWith("test"))
+                                .collect(Collectors.toList());
+        int numberOfChats = chatsFromWidget.size();
         Random rand = new Random();
         int max = numberOfChats - 1;
-        int randomNum = rand.nextInt((max - 0) + 1) + 0;
-        newConversationRequests.get(randomNum).click();
+        int randomNum = rand.nextInt((max - 0) + 1);
+        String userName = chatsFromWidget.get(randomNum).getUserName();
+        searchChatInput.sendKeys(userName);
+        searchChatInput.sendKeys(Keys.ENTER);
+        getTargetChat(userName).click();
     }
 
     public String getActiveChatUserName(){

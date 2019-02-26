@@ -14,6 +14,7 @@ import datamanager.Customer360PersonalInfo;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.TwitterUsers;
+import datamanager.jacksonschemas.ChatHistoryItem;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.JSHelper;
@@ -418,9 +419,25 @@ public class DefaultAgentSteps implements JSHelper {
                 "Agent image is not shown on chatdesk");
     }
 
-    @When("^(.*) selects random chat is chat history list$")
+    @When("^(.*) searches and selects random chat is chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber){
         getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
+    }
+
+    @When("^Get selected chat history from back end$")
+    public void getChatHistoryFromBackend(){
+        String userName = agentHomePage.getCustomer360Container().getUserFullName();
+        Response resp  = ApiHelper.getSessionDetails(userName);
+        List<String> sessionIds = resp.getBody().jsonPath().getList("data.sessionId");
+        List<ChatHistoryItem> chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
+        for (ChatHistoryItem item :chatHistoryItems){
+            verifyChatHistoryItem(item);
+        }
+    }
+
+    private void verifyChatHistoryItem(ChatHistoryItem item){
+        SoftAssert soft = new SoftAssert();
+
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
