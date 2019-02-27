@@ -25,11 +25,11 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class DefaultAgentSteps implements JSHelper {
     private AgentHomePage agentHomePage;
@@ -426,17 +426,44 @@ public class DefaultAgentSteps implements JSHelper {
 
     @When("^Get selected chat history from back end$")
     public void getChatHistoryFromBackend(){
-        SoftAssert softAssert = new SoftAssert();
-
-        String userName = agentHomePage.getCustomer360Container().getUserFullName();
-        Response resp  = ApiHelper.getSessionDetails(userName);
-        List<String> sessionIds = resp.getBody().jsonPath().getList("data.sessionId");
+        String clientID = agentHomePage.getCustomer360Container().getUserFullName();
+        Response sessionDetails  = ApiHelper.getSessionDetails(clientID);
+        List<String> sessionIds = sessionDetails.getBody().jsonPath().getList("data.sessionId");
         List<ChatHistoryItem> chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
-        agentHomePage.getChatBody().getAllMessages();
-        for (ChatHistoryItem item :chatHistoryItems){
-//            softAssert.assertTrue(item.d);
-            verifyChatHistoryItem(item);
+        List<String> messagesFromChatBody = agentHomePage.getChatBody().getAllMessages();
+        List<String> expectedMessagesList = new ArrayList<>();
+
+        ZoneId zoneId = Tenants.getTenantZoneId(Tenants.getTenantUnderTestOrgName());
+
+        expectedMessagesList.add(0, formDaySeparator(chatHistoryItems.get(0).getMessageTime(), zoneId));
+        for(int i=0; i<chatHistoryItems.size(); i++){
+            String expectedChatItem = formExpectedChatItem(chatHistoryItems.get(i), zoneId).replace("\n", " ");
+            expectedMessagesList.add(i+1, expectedChatItem);
         }
+
+        Assert.assertEquals(messagesFromChatBody, expectedMessagesList,
+                "Shown on chatdesk messages are not as expected from API");
+    }
+
+    private String formDaySeparator(long time, ZoneId zoneId){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy");
+        LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId);
+        LocalDateTime currentDayTime = LocalDateTime.now(zoneId);
+        String timeSeparator = itemDateTime.format(formatter);
+
+        if(itemDateTime.getDayOfYear() == currentDayTime.getDayOfYear()) timeSeparator="Today";
+        if(itemDateTime.getDayOfYear() == (currentDayTime.minusDays(1).getDayOfYear())) timeSeparator="Yesterday";
+
+        return timeSeparator;
+    }
+
+    private String formExpectedChatItem(ChatHistoryItem item, ZoneId zoneId){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String message = item.getDisplayMessage();
+        long time = item.getMessageTime();
+        String chatTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId)
+                .format(formatter);
+        return message + " " + chatTime;
     }
 
     private void verifyChatHistoryItem(ChatHistoryItem item){

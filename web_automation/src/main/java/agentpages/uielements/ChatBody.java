@@ -18,10 +18,9 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
-    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[@data-status='read']";
+    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li";
 
     private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
-
 
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
@@ -29,6 +28,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.to")
     private List<WebElement> toUserMessages;
 
+    @FindBy(css = "li.to div.empty-icon")
+    private WebElement agentIconWIthInitials;
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -97,9 +98,13 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
+        String agentInitials = "";
+        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getText();
+        String finalAgentInitials = agentInitials;
         return findElemsByXPATHAgent(messagesInChatBodyXPATH)
                 .stream()
-                .map(e -> e.getAttribute("innerText").replace("\n", ""))
+                .map(e -> e.getAttribute("innerText").replace("\n", " ").replace(finalAgentInitials, "").trim())
+                .filter(e -> !e.equals(""))
                 .collect(Collectors.toList());
     }
 }

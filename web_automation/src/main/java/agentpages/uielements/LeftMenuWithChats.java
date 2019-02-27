@@ -140,6 +140,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         int max = numberOfChats - 1;
         int randomNum = rand.nextInt((max - 0) + 1);
         String userName = chatsFromWidget.get(randomNum).getUserName();
+        waitForElementToBeClickableAgent(searchChatInput, 8, agent);
         searchChatInput.sendKeys(userName);
         searchChatInput.sendKeys(Keys.ENTER);
         getTargetChat(userName).click();

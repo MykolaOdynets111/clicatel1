@@ -120,7 +120,7 @@ public class BaseTieSteps {
 
     @When("^If I send a \"(.*)\" to (.*) tenant TIE should return \"(.*)\" entity$")
     public void verifyTieEntity(String message, String tenant, String expectedEntity){
-        Response resp = RestAssured.get(String.format(Endpoints.TIE_CHAT_URL, tenant)+message+"&sentiment=true");
+        Response resp = RestAssured.get(String.format(Endpoints.TIE_CHAT_URL, tenant)+message+"&sentiment=true&entity=true");
         if (resp.getBody().asString().contains("502 Bad Gateway")||!(resp.statusCode()==200)) {
             Assert.assertTrue(false, "tie is not responding. \n" + resp.getBody().asString());
         }

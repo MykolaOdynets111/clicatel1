@@ -5,6 +5,7 @@ import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,12 @@ public class Tenants {
             respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName);
         }
             return respWithAgentInfo;
+    }
+
+    public static ZoneId getTenantZoneId(String tenantOrgName){
+        String tenantTimeZone = ApiHelper.getInternalTenantConfig(ApiHelper.getTenantInfoMap(tenantOrgName).get("id"), "timezone");
+        String zoneOffset = tenantTimeZone.split(":")[0].replace("GMT", "");
+        return ZoneId.of(zoneOffset);
     }
 
     public static void setTenantUnderTestNames(String tenantOrgName) {
