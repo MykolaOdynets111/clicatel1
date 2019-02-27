@@ -9,6 +9,7 @@ import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @FindBy(css = "div.chat-body")
 public class ChatBody extends AbstractUIElement {
@@ -93,5 +94,12 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isToUserMessageShown(String userMessage){
         return toUserMessages.stream().anyMatch(e -> e.getText().contains(userMessage));
+    }
+
+    public List<String> getAllMessages(){
+        return findElemsByXPATHAgent(messagesInChatBodyXPATH)
+                .stream()
+                .map(e -> e.getAttribute("innerText").replace("\n", ""))
+                .collect(Collectors.toList());
     }
 }

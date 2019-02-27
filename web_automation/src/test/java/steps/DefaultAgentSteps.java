@@ -426,11 +426,15 @@ public class DefaultAgentSteps implements JSHelper {
 
     @When("^Get selected chat history from back end$")
     public void getChatHistoryFromBackend(){
+        SoftAssert softAssert = new SoftAssert();
+
         String userName = agentHomePage.getCustomer360Container().getUserFullName();
         Response resp  = ApiHelper.getSessionDetails(userName);
         List<String> sessionIds = resp.getBody().jsonPath().getList("data.sessionId");
         List<ChatHistoryItem> chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
+        agentHomePage.getChatBody().getAllMessages();
         for (ChatHistoryItem item :chatHistoryItems){
+//            softAssert.assertTrue(item.d);
             verifyChatHistoryItem(item);
         }
     }
