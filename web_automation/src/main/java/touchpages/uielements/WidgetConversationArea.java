@@ -109,7 +109,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
             ApiHelper.getTenantConfig(Tenants.getTenantUnderTestOrgName()); // need to add this call because backend before
             // showing welcome_message calls this API and
             // it sometimes take longer time
-        }catch(java.util.NoSuchElementException e){
+        }catch(java.util.NoSuchElementException|NullPointerException e){
             // Added in case there is no agent added (for e.g., Virgin Money tenant)
         }
         try {
