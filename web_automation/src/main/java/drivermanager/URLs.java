@@ -24,7 +24,7 @@ public class URLs {
 
     // ================== API BASE URLs ========================= //
 
-    private static String BASE_TIE_URL = "https://%s-int-tie.clickatelllabs.com/tenants/";
+    private static String BASE_TIE_URL = "https://%s-tie.clickatelllabs.com/tenants/";
 
     private static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
 
