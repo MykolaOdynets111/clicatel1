@@ -433,7 +433,7 @@ public class DefaultAgentSteps implements JSHelper {
         List<String> messagesFromChatBody = agentHomePage.getChatBody().getAllMessages();
         List<String> expectedMessagesList = new ArrayList<>();
 
-        ZoneId zoneId = Tenants.getTenantZoneId(Tenants.getTenantUnderTestOrgName());
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
 
         expectedMessagesList.add(0, formDaySeparator(chatHistoryItems.get(0).getMessageTime(), zoneId));
         for(int i=0; i<chatHistoryItems.size(); i++){

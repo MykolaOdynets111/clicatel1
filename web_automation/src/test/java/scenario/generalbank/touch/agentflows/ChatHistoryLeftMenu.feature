@@ -1,4 +1,5 @@
 @no_widget
+@chat_history
 Feature: Agent should be able to see chat history in left menu
 
   Scenario: Verify agent can filter chats
