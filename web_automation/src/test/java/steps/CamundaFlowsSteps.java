@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.Tenants;
 import datamanager.TwitterUsers;
 import datamanager.jacksonschemas.TafMessage;
 import dbmanager.DBConnector;
@@ -22,6 +23,7 @@ public class CamundaFlowsSteps implements JSHelper {
 
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String tafMessageId, boolean status, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
         TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
         tafMessageUpdates.setEnabled(status);
         ApiHelper.updateTafMessage(tafMessageUpdates);
