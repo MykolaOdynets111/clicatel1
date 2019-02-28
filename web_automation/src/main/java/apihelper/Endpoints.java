@@ -71,7 +71,7 @@ public class Endpoints {
 
     public static String INTERNAL_TENANTS = URLs.getBaseInternalApiUrl() + "tenants/";
 
-    public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=";
+    public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
 
 
     // ==================  PLATFORM ============== //
