@@ -76,12 +76,17 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Given("^User opens (.*) tenant page for user (.*)$")
     public void openTenantPage(String tenantOrgName, String clientID) {
+        if(clientID.equalsIgnoreCase("with history")) clientID = getClientWithHistory();
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
 //        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "firstName", clientID);
 //        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "email", "aqa"+clientID+"@gmail.com");
 
+    }
+
+    private String getClientWithHistory(){
+        return "";
     }
 
 

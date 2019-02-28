@@ -5,4 +5,4 @@ Feature: Agent should be able to see chat history in left menu
     Given I login as agent of General Bank Demo
     When Agent select "Chat history" filter option
     When Agent searches and selects random chat is chat history list
-    Then Get selected chat history from back end
+    Then Correct chat history is shown

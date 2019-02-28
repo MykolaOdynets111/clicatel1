@@ -424,7 +424,7 @@ public class DefaultAgentSteps implements JSHelper {
         getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
     }
 
-    @When("^Get selected chat history from back end$")
+    @When("^Correct chat history is shown$")
     public void getChatHistoryFromBackend(){
         String clientID = agentHomePage.getCustomer360Container().getUserFullName();
         Response sessionDetails  = ApiHelper.getSessionDetails(clientID);
