@@ -269,6 +269,8 @@ public class AgentConversationSteps implements JSHelper{
             if(!expectedSentiment.equalsIgnoreCase(sentimentFromAPI)){
                 getAgentHomePage().waitFor(1000);
                 sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
+            }else {
+                break;
             }
         }
         Assert.assertEquals(sentimentFromAPI, expectedSentiment,
