@@ -493,7 +493,8 @@ public class ApiHelper {
         return RestAssured.get(String.format(Endpoints.INTERNAL_SESSION_DETAILS, Tenants.getTenantUnderTestName(), clientID));
     }
 
-    public static Response getFinishedChatByAgent(String agentId, int page, int size){
+    public static Response getFinishedChatsByLoggedInAgentAgent(String tenantOrgName, int page, int size){
+        String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
         String url = String.format(Endpoints.INTERNAL_GET_CHATS_FINISHED_BY_AGENT, agentId, page, size);
         return RestAssured.get(url);
     }

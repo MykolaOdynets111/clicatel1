@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import apihelper.ApiHelper;
 import interfaces.JSHelper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @FindBy(css = "div.scrollable-roster")
 public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
-    private String sixthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
+    private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
 
     @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
     private List<WebElement> newConversationRequests;
@@ -129,21 +130,21 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public void selectRandomChat(String agent){
-        waitForElementToBePresentByXpathAgent(sixthChat, 8);
-       List<ChatInLeftMenu> chatsFromWidget =
-                                newConversationRequests.stream()
-                                .map(e -> new ChatInLeftMenu(e))
-                                .filter(e1 -> e1.getUserName().startsWith("test"))
-                                .collect(Collectors.toList());
-        int numberOfChats = chatsFromWidget.size();
-        Random rand = new Random();
-        int max = numberOfChats - 1;
-        int randomNum = rand.nextInt((max - 0) + 1);
-        String userName = chatsFromWidget.get(randomNum).getUserName();
+        waitForElementToBePresentByXpathAgent(tenthChat, 8);
+       List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
+                                                            .map(webElement -> new ChatInLeftMenu(webElement))
+                                                            .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
+                                                            .filter(userName -> userName.startsWith("test"))
+                                                            .collect(Collectors.toList());
+       String randomClientIdWithOneSession = displayedClientIdsFromAQATests.stream()
+                                            .filter(clientId ->
+                                                ApiHelper.getSessionDetails(clientId).getBody().jsonPath().getList("data.sessionId").size()==1)
+                                            .findAny()
+                                            .get();
         waitForElementToBeClickableAgent(searchChatInput, 8, agent);
-        searchChatInput.sendKeys(userName);
+        searchChatInput.sendKeys(randomClientIdWithOneSession);
         searchChatInput.sendKeys(Keys.ENTER);
-        getTargetChat(userName).click();
+        getTargetChat(randomClientIdWithOneSession).click();
     }
 
     public String getActiveChatUserName(){

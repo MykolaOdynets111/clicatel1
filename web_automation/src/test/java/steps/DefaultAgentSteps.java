@@ -2,6 +2,7 @@ package steps;
 
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
+import agentpages.uielements.ChatInActiveChatHistory;
 import agentpages.uielements.LeftMenuWithChats;
 import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
@@ -17,6 +18,7 @@ import datamanager.TwitterUsers;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
+import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
@@ -31,7 +33,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class DefaultAgentSteps implements JSHelper {
+public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private AgentHomePage agentHomePage;
     private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
@@ -40,6 +42,8 @@ public class DefaultAgentSteps implements JSHelper {
     private static Map<String, Boolean> TEST_FEATURE_STATUS_CHANGES = new HashMap<>();
     private static Customer360PersonalInfo customer360InfoForUpdating;
     private Faker faker = new Faker();
+    private List<ChatHistoryItem> chatHistoryItems;
+    private Map selectedChatForHistoryTest;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         PRE_TEST_FEATURE_STATUS.put(featureName, status);
@@ -429,27 +433,30 @@ public class DefaultAgentSteps implements JSHelper {
         String clientID = agentHomePage.getCustomer360Container().getUserFullName();
         Response sessionDetails  = ApiHelper.getSessionDetails(clientID);
         List<String> sessionIds = sessionDetails.getBody().jsonPath().getList("data.sessionId");
-        List<ChatHistoryItem> chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
+        List<ChatHistoryItem> chatItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
         List<String> messagesFromChatBody = agentHomePage.getChatBody().getAllMessages();
-        List<String> expectedMessagesList = new ArrayList<>();
-
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
-
-        expectedMessagesList.add(0, formDaySeparator(chatHistoryItems.get(0).getMessageTime(), zoneId));
-        for(int i=0; i<chatHistoryItems.size(); i++){
-            String expectedChatItem = formExpectedChatItem(chatHistoryItems.get(i), zoneId).replace("\n", " ");
-            expectedMessagesList.add(i+1, expectedChatItem);
-        }
+        List<String> expectedMessagesList = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatItems);
 
         Assert.assertEquals(messagesFromChatBody, expectedMessagesList,
-                "Shown on chatdesk messages are not as expected from API");
+                "Shown on chatdesk messages are not as expected from API \n" +
+                "Expected list: " + expectedMessagesList + "\n" +
+                "Actual list: " + messagesFromChatBody);
+    }
+
+    private List<String> getExpectedChatHistoryItems(ZoneId zoneId, List<ChatHistoryItem> items){
+        List<String> expectedMessagesList = new ArrayList<>();
+        expectedMessagesList.add(0, formDaySeparator(items.get(0).getMessageTime(), zoneId));
+        for(int i=0; i<items.size(); i++){
+            String expectedChatItem = formExpectedChatItem(items.get(i), zoneId).replace("\n", " ");
+            expectedMessagesList.add(i+1, expectedChatItem);
+        }
+        return expectedMessagesList;
     }
 
     private String formDaySeparator(long time, ZoneId zoneId){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy");
         LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId);
         LocalDateTime currentDayTime = LocalDateTime.now(zoneId);
-        String timeSeparator = itemDateTime.format(formatter);
+        String timeSeparator = formTimeStringFromMillis(time, zoneId, DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy"));
 
         if(itemDateTime.getDayOfYear() == currentDayTime.getDayOfYear()) timeSeparator="Today";
         if(itemDateTime.getDayOfYear() == (currentDayTime.minusDays(1).getDayOfYear())) timeSeparator="Yesterday";
@@ -466,9 +473,44 @@ public class DefaultAgentSteps implements JSHelper {
         return message + " " + chatTime;
     }
 
-    private void verifyChatHistoryItem(ChatHistoryItem item){
+    @Then("^(.*) sees correct chat with basic info is shown in chat history container$")
+    public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        selectedChatForHistoryTest = DefaultTouchUserSteps.getSelectedClientForChatHistoryTest();
+        String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
+                DateTimeFormatter.ofPattern("dd MMM yyyy | HH:mm"));
+        ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems();
+        chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(),
+                (String) selectedChatForHistoryTest.get("sessionId"));
+        String expectedDisplayedUserMessage =  chatHistoryItems.stream().filter(e -> e.getMessageType().equalsIgnoreCase("CLIENT_MESSAGE"))
+                .findFirst().get().getDisplayMessage();
 
+        soft.assertEquals(actualChatHistoryItem.getChatHistoryTime(), expectedChatHistoryTime,
+                "Incorrect time for chat in chat history shown.");
+        soft.assertEquals(actualChatHistoryItem.getChatHistoryUserMessage(), expectedDisplayedUserMessage,
+                "Incorrect user message in chat history shown.");
+        soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(agent),
+                "'View chat' button is not enabled.");
+        soft.assertAll();
+    }
+
+    @When("^(.*) click 'View chat' button$")
+    public void clickViewChatButton(String agent){
+        getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems().clickViewButton();
+    }
+
+    @Then("^Correct messages is shown in history details window$")
+    public void verifyHistoryInOpenedWindow(){
+        SoftAssert soft = new SoftAssert();
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
+                DateTimeFormatter.ofPattern("dd MMM yyyy | HH:mm"));
+        List<String> messagesFromChatHistoryDetails = agentHomePage.getHistoryDetailsWindow().getAllMessages();
+        List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
+//        SoftAssert soft = new SoftAssert();
+        Assert.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
+                "Chat history is not as expected in chat history details (in active chat)");
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
