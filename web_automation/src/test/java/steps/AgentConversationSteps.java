@@ -265,6 +265,12 @@ public class AgentConversationSteps implements JSHelper{
     public void verifyCorrectSentimentStoredInDb(String userMessage){
         String expectedSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
         String sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
+        for(int i = 0; i<8; i++){
+            if(!expectedSentiment.equalsIgnoreCase(sentimentFromAPI)){
+                getAgentHomePage().waitFor(1000);
+                sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
+            }
+        }
         Assert.assertEquals(sentimentFromAPI, expectedSentiment,
                 "Sentiment on '" + userMessage + "' user message is saved incorrectly\n");
     }
