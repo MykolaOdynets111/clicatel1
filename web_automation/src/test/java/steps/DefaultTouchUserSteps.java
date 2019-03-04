@@ -94,6 +94,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     private String getClientWithHistory(){
         Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 3, 100);
 
+        if(resp.statusCode()!=200){
+            Assert.assertTrue(false, "Getting finished chats was not successful\n" +
+            "statusCode: " + resp.statusCode() + "\n" +
+            "errorMessage: " + resp.getBody().asString());
+        }
+
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
                 LocalDateTime aa = LocalDateTime.now(zoneId);
