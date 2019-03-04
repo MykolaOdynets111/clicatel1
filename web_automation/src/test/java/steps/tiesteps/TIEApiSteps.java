@@ -902,10 +902,11 @@ public class TIEApiSteps {
     public void createNewIntent(String tenantOrgName){
         mapForCreatingIntent.put("intent", "test_intent_" + faker.lorem().word());
         mapForCreatingIntent.put("intent_answer", "test_answer_" + faker.lorem().word());
+        mapForCreatingIntent.put("type", "faq");
 
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
-                (String) mapForCreatingIntent.get("intent_answer"));
+                (String) mapForCreatingIntent.get("intent_answer"), (String) mapForCreatingIntent.get("faq"));
 
         Assert.assertTrue(resp.statusCode() == 200,
                 "Creating new intent for '" + tenantOrgName + "' intent was not successful\n"+
@@ -920,9 +921,39 @@ public class TIEApiSteps {
                                                 "aqa_sample2 " + faker.book());
         mapForCreatingIntent.put("samples", samples);
         for (String sample : samples) {
-            ApiHelperTie.addNewSample(Tenants.getTenantUnderTestOrgName(),
-                    (String) mapForCreatingIntent.get("intent"), sample).statusCode();
+            Response resp = ApiHelperTie.addNewSample(Tenants.getTenantUnderTestOrgName(),
+                    (String) mapForCreatingIntent.get("intent"), sample);
+            Assert.assertTrue(resp.statusCode()==200,
+                    "Adding '"+sample+"' sample for '" +mapForCreatingIntent.get("intent")+ "' was not successful\n" +
+            "status code: " + resp.statusCode() + "\n" +
+            "resp body: " + resp.statusCode());
         }
+    }
+
+    @When("^Newly added intent is saved$")
+    public void verifyAddedIntentIsSaved(){
+        boolean isIntentAdded = false;
+        for(int i = 0; i<10; i++){
+            int statusCode = ApiHelperTie.getIntentAfterCreation(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
+                    ((List<String>) mapForCreatingIntent.get("samples")).get(0), (String) mapForCreatingIntent.get("type")).statusCode();
+            if(statusCode==200){
+                isIntentAdded=true;
+                break;
+            }else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Assert.assertTrue(isIntentAdded, "Created intent '"+mapForCreatingIntent.get("intent")+"' is not returned after 10 secs wait");
+    }
+
+    @When("^Schedule new training$")
+    public void scheduleNewTraining(){
+
     }
 
 }

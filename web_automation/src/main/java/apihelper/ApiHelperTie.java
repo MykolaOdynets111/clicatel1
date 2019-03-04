@@ -56,14 +56,14 @@ public class ApiHelperTie {
         return resp.jsonPath().get("sentiment_verdict");
     }
 
-    public static Response createNewIntent(String tenantOrgName, String newIntent, String answer){
+    public static Response createNewIntent(String tenantOrgName, String newIntent, String answer, String type){
         return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{" +
                             "\"intent\":\""+newIntent+"\"," +
                             "\"category\":\"some faq\"," +
-                            "\"type\":\"faq\"," +
+                            "\"type\":\"" +type+ "\"," +
                             "\"answer\":\""+ answer +"\"," +
                             "\"answer_url\":\"\"," +
                             "\"tenant\":\""+Tenants.getTenantUnderTestName()+"\"" +
@@ -83,6 +83,15 @@ public class ApiHelperTie {
                             "\"tags\":\"\"," +
                             "\"tenant\":\"" +Tenants.getTenantUnderTestName()+ "\"" +
                         "}")
-                .post(String.format(Endpoints.TIE_CREATE_NEW_INTENT, Tenants.getTenantUnderTestName()));
+                .post(String.format(Endpoints.TIE_ADD_NEW_SAMPLE, Tenants.getTenantUnderTestName()));
+    }
+
+    public static Response getIntentAfterCreation(String tenantOrgName, String intent, String sample, String faq){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.TIE_ADD_NEW_SAMPLE, Tenants.getTenantUnderTestName(),
+                        intent,sample,faq));
+
     }
 }
