@@ -448,6 +448,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         expectedMessagesList.add(0, formDaySeparator(items.get(0).getMessageTime(), zoneId));
         for(int i=0; i<items.size(); i++){
             String expectedChatItem = formExpectedChatItem(items.get(i), zoneId).replace("\n", " ");
+            if(expectedChatItem.contains("Input card")) expectedChatItem =
+                    expectedChatItem.replace("Input card", "Let me connect you with a live agent to assist you further. Before I transfer you, please give us some basic info:");
             expectedMessagesList.add(i+1, expectedChatItem);
         }
         return expectedMessagesList;
