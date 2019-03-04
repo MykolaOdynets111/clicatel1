@@ -144,6 +144,10 @@ public class Endpoints {
 
     public static String TIE_USER_INPUT = URLs.getBaseTieURL() + "%s/user_inputs/";
 
+    public static String TIE_CREATE_NEW_INTENT = URLs.getBaseTieURL() + "%s/answers-management/";
+
+    public static String TIE_ADD_NEW_SAMPLE = URLs.getBaseTieURL() + "%s/train-data-management/";
+
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "actuator/health";
