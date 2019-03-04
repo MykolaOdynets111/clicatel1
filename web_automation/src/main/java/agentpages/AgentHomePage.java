@@ -62,6 +62,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[contains(@class, 'overnight-chat-controls')]//a[text() = 'Send email']")
     public WebElement overnightTicketSendEmail;
 
+    @FindBy(css = "div.history-details")
+    private WebElement historyDetails;
+
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private LeftMenuWithChats leftMenuWithChats;
@@ -74,9 +77,19 @@ public class AgentHomePage extends AgentAbstractPage {
     private Customer360Container customer360Container;
     private ChatHeader chatHeader;
     private ConcludeChatWindow concludeChatWindow;
+    private ChatHistoryContainer chatHistoryContainer;
+    private HistoryDetailsWindow historyDetailsWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public HistoryDetailsWindow getHistoryDetailsWindow() {
+        return historyDetailsWindow;
+    }
+
+    public ChatHistoryContainer getChatHistoryContainer() {
+        return chatHistoryContainer;
     }
 
     public ConcludeChatWindow getConcludeChatWindow() {

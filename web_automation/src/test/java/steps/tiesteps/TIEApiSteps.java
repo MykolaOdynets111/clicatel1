@@ -1,9 +1,11 @@
 package steps.tiesteps;
 
+import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.Tenants;
 import datamanager.jacksonschemas.tie.TieNERItem;
 import datamanager.jacksonschemas.tie.Entity;
 
@@ -27,7 +29,6 @@ import static org.hamcrest.Matchers.*;
 public class TIEApiSteps {
 
     private static Map<Long, String> NEW_TENANT_NAMES = new ConcurrentHashMap<>();
-//    private static Map<Long, String> NEW_TENANT_NAMES = Collections.synchronizedMap();
 
     public static Map<Long, String> getNewTenantNames() {
         return NEW_TENANT_NAMES;
@@ -36,6 +37,10 @@ public class TIEApiSteps {
     public static void clearTenantNames(){
         NEW_TENANT_NAMES.clear();
     }
+
+    Faker faker = new Faker();
+
+    public static Map mapForCreatingIntent = new HashMap();
 
     private static String createNewTenantName() {
         Faker faker = new Faker();
@@ -891,6 +896,33 @@ public class TIEApiSteps {
                 Assert.assertEquals(actualResults, expectedResults);
                 break;
         }
-
     }
+
+    @When("^Create new intent for (.*) tenant$")
+    public void createNewIntent(String tenantOrgName){
+        mapForCreatingIntent.put("intent", "test_intent_" + faker.lorem().word());
+        mapForCreatingIntent.put("intent_answer", "test_answer_" + faker.lorem().word());
+
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
+                (String) mapForCreatingIntent.get("intent_answer"));
+
+        Assert.assertTrue(resp.statusCode() == 200,
+                "Creating new intent for '" + tenantOrgName + "' intent was not successful\n"+
+        "resp status code: " + resp.statusCode() + "\n" +
+        "resp body: " + resp.getBody().asString());
+    }
+
+    @When("^Adding a few samples for created intent$")
+    public void addNewSamples(){
+        List<String> samples = Arrays.asList("aqa_sample1 " + faker.book(),
+                                                "aqa_sample2 " + faker.book(),
+                                                "aqa_sample2 " + faker.book());
+        mapForCreatingIntent.put("samples", samples);
+        for (String sample : samples) {
+            ApiHelperTie.addNewSample(Tenants.getTenantUnderTestOrgName(),
+                    (String) mapForCreatingIntent.get("intent"), sample).statusCode();
+        }
+    }
+
 }

@@ -9,6 +9,7 @@ import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @FindBy(css = "div.chat-body")
 public class ChatBody extends AbstractUIElement {
@@ -17,8 +18,9 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
-    private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
+    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li";
 
+    private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
@@ -26,6 +28,8 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.to")
     private List<WebElement> toUserMessages;
 
+    @FindBy(css = "li.to div.empty-icon")
+    private WebElement agentIconWIthInitials;
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -91,5 +95,16 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isToUserMessageShown(String userMessage){
         return toUserMessages.stream().anyMatch(e -> e.getText().contains(userMessage));
+    }
+
+    public List<String> getAllMessages(){
+        String agentInitials = "";
+        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getText();
+        String finalAgentInitials = agentInitials;
+        return findElemsByXPATHAgent(messagesInChatBodyXPATH)
+                .stream()
+                .map(e -> e.getAttribute("innerText").replace("\n", " ").replace(finalAgentInitials, "").trim())
+                .filter(e -> !e.equals(""))
+                .collect(Collectors.toList());
     }
 }

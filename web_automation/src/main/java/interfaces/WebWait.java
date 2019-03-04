@@ -113,6 +113,18 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     }
 
+    default void waitForElementToBePresentByXpathAgent(String xpath, int time){
+        initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+    }
+
+    default void waitForElementsToBePresentByXpathAgent(String xpath, int time){
+        initAgentWait(time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpath)));
+    }
+
     default void waitForElementToBeVisibleByCssAgent(String css, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)

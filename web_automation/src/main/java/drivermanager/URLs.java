@@ -24,9 +24,7 @@ public class URLs {
 
     // ================== API BASE URLs ========================= //
 
-    private static String BASE_TIE_URL = "http://%s-tie.clickatelllabs.com/tenants/";
-
-    private static String BASE_INTERNAL_TIE_URL = "https://%s-int-tie.clickatelllabs.com/tenants/";
+    private static String BASE_TIE_URL = "https://%s-tie.clickatelllabs.com/tenants/";
 
     private static String BASE_TIE_PROD_URL = "http://tie.clickatelllabs.com/tenants/";
 
@@ -93,9 +91,6 @@ public class URLs {
     }
 
     public static String getBaseTieURL(){
-        if(ConfigManager.getEnv().equalsIgnoreCase("integration")){
-            return String.format(BASE_INTERNAL_TIE_URL, ConfigManager.getEnv());
-        }
         return String.format(BASE_TIE_URL, ConfigManager.getEnv());
     }
 

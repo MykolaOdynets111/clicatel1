@@ -2,8 +2,8 @@
 Feature: Welcome flow: agent mode
 
   Scenario: Welcome message disabling for Agent mode tenant
-    Given User select Automation tenant
     Given Taf welcome_message is set to false for Automation tenant
+    Given User select Automation tenant
     And Click chat icon
     Then Welcome message is not shown
 

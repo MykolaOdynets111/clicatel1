@@ -10,7 +10,9 @@ import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.DriverFactory;
+import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -21,13 +23,13 @@ import touchpages.uielements.WidgetConversationArea;
 import touchpages.uielements.WidgetHeader;
 import touchpages.uielements.messages.WelcomeMessages;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import static io.restassured.RestAssured.get;
-
-public class DefaultTouchUserSteps implements JSHelper{
+public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     private MainPage mainPage;
     private Widget widget;
@@ -37,9 +39,14 @@ public class DefaultTouchUserSteps implements JSHelper{
     private WelcomeMessages welcomeMessages;
     private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
     private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
+    private static Map selectedClient;
 
     public static VMQuoteRequestUserData getUserDataForQuoteRequest(long threadID){
         return userDataForQuoteRequest.get(threadID);
+    }
+
+    public static Map getSelectedClientForChatHistoryTest(){
+        return selectedClient;
     }
 
     @When("^User click close chat button$")
@@ -76,12 +83,36 @@ public class DefaultTouchUserSteps implements JSHelper{
 
     @Given("^User opens (.*) tenant page for user (.*)$")
     public void openTenantPage(String tenantOrgName, String clientID) {
+        if(clientID.equalsIgnoreCase("with history")) clientID = getClientWithHistory();
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
 //        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "firstName", clientID);
 //        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "email", "aqa"+clientID+"@gmail.com");
+    }
 
+    private String getClientWithHistory(){
+        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 3, 100);
+
+        if(resp.statusCode()!=200){
+            Assert.assertTrue(false, "Getting finished chats was not successful\n" +
+            "statusCode: " + resp.statusCode() + "\n" +
+            "errorMessage: " + resp.getBody().asString());
+        }
+
+        ZoneId zoneId = TimeZone.getDefault().toZoneId();
+        Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
+                LocalDateTime aa = LocalDateTime.now(zoneId);
+
+        selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
+                .map(sessionContainer ->  ((ArrayList) sessionContainer))
+                .filter(e -> e.size()==1)
+                .map(session -> ((HashMap) session.get(0)))
+                .filter(session -> ((Long) session.get("endedDate")) < timeMilestone)
+                .findAny()
+                .get();
+
+        return   (String) selectedClient.get("clientId");
     }
 
 

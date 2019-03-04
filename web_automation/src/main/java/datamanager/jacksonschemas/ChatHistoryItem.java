@@ -9,7 +9,7 @@ public class ChatHistoryItem {
     @JsonProperty("sessionId")
     private String sessionId;
     @JsonProperty("messageTime")
-    private Integer messageTime;
+    private Long messageTime;
     @JsonProperty("messageId")
     private String messageId;
     @JsonProperty("messageText")
@@ -42,12 +42,12 @@ public class ChatHistoryItem {
     }
 
     @JsonProperty("messageTime")
-    public Integer getMessageTime() {
+    public Long getMessageTime() {
         return messageTime;
     }
 
     @JsonProperty("messageTime")
-    public void setMessageTime(Integer messageTime) {
+    public void setMessageTime(Long messageTime) {
         this.messageTime = messageTime;
     }
 

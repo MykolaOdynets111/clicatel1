@@ -54,6 +54,35 @@ public class ApiHelperTie {
     public static String getTIESentimentOnMessage(String userMessage){
         Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().get("sentiment_verdict");
+    }
 
+    public static Response createNewIntent(String tenantOrgName, String newIntent, String answer){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{" +
+                            "\"intent\":\""+newIntent+"\"," +
+                            "\"category\":\"some faq\"," +
+                            "\"type\":\"faq\"," +
+                            "\"answer\":\""+ answer +"\"," +
+                            "\"answer_url\":\"\"," +
+                            "\"tenant\":\""+Tenants.getTenantUnderTestName()+"\"" +
+                        "}")
+                .post(String.format(Endpoints.TIE_CREATE_NEW_INTENT, Tenants.getTenantUnderTestName()));
+    }
+
+    public static Response addNewSample(String tenantOrgName, String intent, String sample){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{" +
+                            "\"intent\":\"" +intent+ "\"," +
+                            "\"category\":\"Some FAQ\"," +
+                            "\"type\":\"FAQ\"," +
+                            "\"text\":\"" +sample+ "\"," +
+                            "\"tags\":\"\"," +
+                            "\"tenant\":\"" +Tenants.getTenantUnderTestName()+ "\"" +
+                        "}")
+                .post(String.format(Endpoints.TIE_CREATE_NEW_INTENT, Tenants.getTenantUnderTestName()));
     }
 }

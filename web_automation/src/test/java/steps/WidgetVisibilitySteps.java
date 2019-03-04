@@ -49,10 +49,7 @@ public class WidgetVisibilitySteps {
     }
 
     private LocalDateTime getCurrentTimeInTenantTimeZone(String tenantOrgName){
-        String tenantTimeZone = ApiHelper.getInternalTenantConfig(ApiHelper.getTenantInfoMap(tenantOrgName).get("id"), "timezone");
-        String zoneOffset = tenantTimeZone.split(":")[0].replace("GMT", "");
-        ZoneId.of(zoneOffset);
-        return LocalDateTime.now(ZoneId.of(zoneOffset));
+        return LocalDateTime.now(Tenants.getTenantZoneId(tenantOrgName));
     }
 
     @Given("^(.*) territory availability is applied$")

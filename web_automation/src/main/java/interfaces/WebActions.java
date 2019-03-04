@@ -62,6 +62,15 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementsExistsInDOM(String xpath, int time){
+        try {
+            waitForElementsToBePresentByXpathAgent(xpath, time);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShownByXpath(String xpath, int wait){
         try {
             waitForElementToBeVisibleByXpath(xpath, wait);

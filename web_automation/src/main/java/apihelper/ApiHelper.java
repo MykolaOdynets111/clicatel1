@@ -8,11 +8,13 @@ import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
+import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
+import org.omg.CORBA.INTERNAL;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
@@ -487,8 +489,14 @@ public class ApiHelper {
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
     }
 
-    public static Response getSessionDeatils(String clientID){
+    public static Response getSessionDetails(String clientID){
         return RestAssured.get(String.format(Endpoints.INTERNAL_SESSION_DETAILS, Tenants.getTenantUnderTestName(), clientID));
+    }
+
+    public static Response getFinishedChatsByLoggedInAgentAgent(String tenantOrgName, int page, int size){
+        String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
+        String url = String.format(Endpoints.INTERNAL_GET_CHATS_FINISHED_BY_AGENT, agentId, page, size);
+        return RestAssured.get(url);
     }
 
 }

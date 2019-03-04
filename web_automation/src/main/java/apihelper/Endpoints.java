@@ -71,6 +71,8 @@ public class Endpoints {
 
     public static String INTERNAL_TENANTS = URLs.getBaseInternalApiUrl() + "tenants/";
 
+    public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
+
 
     // ==================  PLATFORM ============== //
 
@@ -141,6 +143,10 @@ public class Endpoints {
     public static String TIE_POST_SEMANTIC = URLs.getBaseTieURL() + "%s/chats/?q=%s";
 
     public static String TIE_USER_INPUT = URLs.getBaseTieURL() + "%s/user_inputs/";
+
+    public static String TIE_CREATE_NEW_INTENT = URLs.getBaseTieURL() + "%s/answers-management/";
+
+    public static String TIE_ADD_NEW_SAMPLE = URLs.getBaseTieURL() + "%s/train-data-management/";
 
     // ====================  SOCIAL ================= //
 
