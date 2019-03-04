@@ -17,15 +17,13 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     @FindBy(css = "div.title span")
     public WebElement chatStartDate;
 
-    @FindBy(xpath = ".//li[@class='to']//div[@class='empty-icon']")
-    private WebElement agentIconWIthInitials;
-
     @FindBy(xpath = ".//ul[@class='chat-container']//li")
     private List<WebElement> messagesInChatBody;
 
     @FindBy(css = "span.icon.icon-close")
     public WebElement closeHistoryDetailsButton;
 
+    private String agentIconWIthInitials = ".//li[@class='to']//div[@class='empty-icon']";
 
     public String getUserName(){
         return chatTitle.getText();
@@ -37,9 +35,9 @@ public class HistoryDetailsWindow extends AbstractUIElement {
 
     public List<String> getAllMessages(){
         String agentInitials = "";
-        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getText();
+        if(isElementsExistsInDOM(agentIconWIthInitials, 7)) agentInitials=
+                findElemsByXPATHAgent(agentIconWIthInitials).get(0).getAttribute("innerText");
         String finalAgentInitials = agentInitials;
-//        return findElemsByXPATHAgent(messagesInChatBodyXPATH)
         return messagesInChatBody
                 .stream()
                 .map(e -> e.getAttribute("innerText").replace("\n", " ").replace(finalAgentInitials, "").trim())
