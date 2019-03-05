@@ -144,15 +144,16 @@ public class Endpoints {
 
     public static String TIE_USER_INPUT = URLs.getBaseTieURL() + "%s/user_inputs/";
 
-    public static String TIE_CREATE_NEW_INTENT = URLs.getBaseTieURL() + "%s/answers-management/";
+    public static String TIE_NEW_INTENT_MANAGEMENT = URLs.getBaseTieURL() + "%s/answers-management/";
 
-    public static String TIE_ADD_NEW_SAMPLE = URLs.getBaseTieURL() + "%s/train-data-management/";
-
-    public static String TIE_CREATED_INTENT =  URLs.getBaseTieURL() + "%s/intents/confirm?intent=%s&text=%s&type=%s";
+    public static String TIE_SAMPLES = URLs.getBaseTieURL() + "%s/train-data-management/";
 
     public static String TIE_TRAINING =  URLs.getBaseTieURL() + "%s/training";
 
     public static String TIE_MODELS =  URLs.getBaseTieURL() + "%s/models";
+
+    public static String TIE_ALL_INTENTS =  URLs.getBaseTieURL() + "%s/intents";
+
 
     // ====================  SOCIAL ================= //
 

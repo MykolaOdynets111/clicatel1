@@ -1,8 +1,10 @@
 package steps.tiesteps;
 
+import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
@@ -40,7 +42,7 @@ public class TIEApiSteps {
 
     Faker faker = new Faker();
 
-    public static Map mapForCreatingIntent = new HashMap();
+    private static Map mapForCreatedIntent = new HashMap();
 
     private static String createNewTenantName() {
         Faker faker = new Faker();
@@ -48,6 +50,10 @@ public class TIEApiSteps {
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
+
+    public static Map getMapForCreatedIntent(){
+        return  mapForCreatedIntent;
+    }
 
     // ======================= Chats ======================== //
 
@@ -900,55 +906,68 @@ public class TIEApiSteps {
 
     @When("^Create new intent for (.*) tenant$")
     public void createNewIntent(String tenantOrgName){
-        mapForCreatingIntent.put("intent", "test_intent_" + faker.lorem().word());
-        mapForCreatingIntent.put("intent_answer", "test_answer_" + faker.lorem().word());
-        mapForCreatingIntent.put("type", "faq");
-
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
-                (String) mapForCreatingIntent.get("intent_answer"), (String) mapForCreatingIntent.get("type"));
-
+        formDataForIntentCreationTest();
+        Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(),
+                                                            (String) mapForCreatedIntent.get("intent"),
+                                                            (String) mapForCreatedIntent.get("categoty"),
+                                                            (String) mapForCreatedIntent.get("intent_answer"),
+                                                            (String) mapForCreatedIntent.get("type"));
+        mapForCreatedIntent.put("intent_id", resp.getBody().jsonPath().get("id"));
         Assert.assertTrue(resp.statusCode() == 200,
                 "Creating new intent for '" + tenantOrgName + "' intent was not successful\n"+
         "resp status code: " + resp.statusCode() + "\n" +
         "resp body: " + resp.getBody().asString());
     }
 
+    private Map formDataForIntentCreationTest(){
+        long currentTimeMillis = System.currentTimeMillis();
+        mapForCreatedIntent.put("raw_intent", "test_intent_" + currentTimeMillis);
+        mapForCreatedIntent.put("intent", "test intent " + currentTimeMillis);
+        mapForCreatedIntent.put("answer", "test_answer_" + faker.lorem().word());
+        mapForCreatedIntent.put("type", "faq");
+
+        return mapForCreatedIntent;
+    }
+
+    @When("^New intent is created$")
+    public void verifyNewIntentAdding(){
+        waitFor(1000);
+        List<String> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("");
+        Assert.assertTrue(allIntents.contains(mapForCreatedIntent.get("intent")),
+                "Created '"+ mapForCreatedIntent.get("intent")+"'intent is not returned");
+    }
+
     @When("^Adding a few samples for created intent$")
     public void addNewSamples(){
-        List<String> samples = Arrays.asList("aqa_sample1 " + faker.book(),
-                                                "aqa_sample2 " + faker.book(),
-                                                "aqa_sample2 " + faker.book());
-        mapForCreatingIntent.put("samples", samples);
+        SoftAssert soft = new SoftAssert();
+        List<String> samples = Arrays.asList("aqa_sample1 " + faker.book().title(),
+                                                "aqa_sample2 " + faker.book().title());
+        List<String> sampleIds = new ArrayList<>();
+        mapForCreatedIntent.put("samples", samples);
         for (String sample : samples) {
             Response resp = ApiHelperTie.addNewSample(Tenants.getTenantUnderTestOrgName(),
-                    (String) mapForCreatingIntent.get("intent"), sample);
-            Assert.assertTrue(resp.statusCode()==200,
-                    "Adding '"+sample+"' sample for '" +mapForCreatingIntent.get("intent")+ "' was not successful\n" +
+                    (String) mapForCreatedIntent.get("intent"), sample);
+            sampleIds.add(resp.getBody().jsonPath().get("id"));
+            soft.assertTrue(resp.statusCode()==200,
+                    "Adding '"+sample+"' sample for '" + mapForCreatedIntent.get("intent")+ "' was not successful\n" +
             "status code: " + resp.statusCode() + "\n" +
             "resp body: " + resp.statusCode());
         }
+        mapForCreatedIntent.put("sample_ids", sampleIds);
+        soft.assertAll();
     }
 
-    @When("^Newly added intent is saved$")
+    @When("^Samples are saved$")
     public void verifyAddedIntentIsSaved(){
-        boolean isIntentAdded = false;
-        for(int i = 0; i<10; i++){
-            int statusCode = ApiHelperTie.getIntentAfterCreation(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
-                    ((List<String>) mapForCreatingIntent.get("samples")).get(0), (String) mapForCreatingIntent.get("type")).statusCode();
-            if(statusCode==200){
-                isIntentAdded=true;
-                break;
-            }else {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        Assert.assertTrue(isIntentAdded, "Created intent '"+mapForCreatingIntent.get("intent")+"' is not returned after 10 secs wait");
+        List samplesOnIntent = ApiHelperTie.getTrainData().getBody().jsonPath().getList("data")
+                .stream()
+                .map(e -> ((List) e))
+                .filter(e1 -> e1.contains(mapForCreatedIntent.get("intent")))
+                .collect(Collectors.toList());
+        Assert.assertTrue( ((List) mapForCreatedIntent.get("samples")).stream().allMatch(e -> samplesOnIntent.toString().contains(e.toString())),
+                "Created samples are not returned \n" +
+        "mapForCreatedIntent: " +  mapForCreatedIntent.toString());
     }
 
     @When("^Schedule new training$")
@@ -962,4 +981,13 @@ public class TIEApiSteps {
         Response resp = ApiHelperTie.getModels();
     }
 
+
+    public static void clearCreatedIntentAndSample(){
+        ApiHelperTie.deleteIntent((String) mapForCreatedIntent.get("intent_id"));
+        List<String> sampleIds = (List<String>) mapForCreatedIntent.get("sample_ids");
+        for(String sampleId : sampleIds){
+            ApiHelperTie.deleteSample(sampleId);
+        }
+        mapForCreatedIntent.clear();
+    }
 }

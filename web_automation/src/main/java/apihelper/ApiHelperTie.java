@@ -56,19 +56,19 @@ public class ApiHelperTie {
         return resp.jsonPath().get("sentiment_verdict");
     }
 
-    public static Response createNewIntent(String tenantOrgName, String newIntent, String answer, String type){
+    public static Response createNewIntent(String tenantOrgName, String newIntent, String category, String answer, String type){
         return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{" +
                             "\"intent\":\""+newIntent+"\"," +
-                            "\"category\":\"some faq\"," +
+                            "\"category\":\"" +category+ "\"," +
                             "\"type\":\"" +type+ "\"," +
                             "\"answer\":\""+ answer +"\"," +
                             "\"answer_url\":\"\"," +
                             "\"tenant\":\""+Tenants.getTenantUnderTestName()+"\"" +
                         "}")
-                .post(String.format(Endpoints.TIE_CREATE_NEW_INTENT, Tenants.getTenantUnderTestName()));
+                .post(String.format(Endpoints.TIE_NEW_INTENT_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
 
     public static Response addNewSample(String tenantOrgName, String intent, String sample){
@@ -83,15 +83,7 @@ public class ApiHelperTie {
                             "\"tags\":\"\"," +
                             "\"tenant\":\"" +Tenants.getTenantUnderTestName()+ "\"" +
                         "}")
-                .post(String.format(Endpoints.TIE_ADD_NEW_SAMPLE, Tenants.getTenantUnderTestName()));
-    }
-
-    public static Response getIntentAfterCreation(String tenantOrgName, String intent, String sample, String faq){
-        return RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(String.format(Endpoints.TIE_CREATED_INTENT, Tenants.getTenantUnderTestName(),
-                        intent,sample,faq));
+                .post(String.format(Endpoints.TIE_SAMPLES, Tenants.getTenantUnderTestName()));
     }
 
     public static Response scheduleTraining(){
@@ -107,4 +99,37 @@ public class ApiHelperTie {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()));
     }
+
+    public static Response getAllIntents(){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.TIE_ALL_INTENTS, Tenants.getTenantUnderTestName()));
+    }
+
+    public static Response deleteIntent(String intentId){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .body("{\"ids\":[\"" +intentId+ "\"]}")
+                .delete(String.format(Endpoints.TIE_NEW_INTENT_MANAGEMENT, Tenants.getTenantUnderTestName()));
+    }
+
+
+    public static Response getTrainData(){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.TIE_SAMPLES, Tenants.getTenantUnderTestName()));
+    }
+
+    public static Response deleteSample(String sampleId){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .body("{\"ids\":[\"" +sampleId+ "\"]}")
+                .delete(String.format(Endpoints.TIE_SAMPLES, Tenants.getTenantUnderTestName()));
+
+    }
+
 }

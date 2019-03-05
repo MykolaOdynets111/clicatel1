@@ -155,6 +155,11 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
+        if(scenario.getSourceTagNames().contains("@creating_intent")){
+            TIEApiSteps.clearCreatedIntentAndSample();
+        }
+
+
         closeMainBrowserIfOpened();
         clearAllSessionData();
     }
