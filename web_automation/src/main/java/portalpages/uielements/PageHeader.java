@@ -21,6 +21,15 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.balance-text.ng-binding")
     private WebElement touchGoPlanName;
 
+    @FindBy(css = "div.cl-card--details-avatar")
+    private WebElement adminIcon;
+
+    @FindBy(css = "ul.dropdown-menu.cl-user-dropdown")
+    private WebElement adminDropdown;
+
+    @FindBy(xpath = "//a[text() = 'Logout']")
+    private WebElement logoutButton;
+
     public void clickUpgradeButton(){
         waitForElementToBeClickableAgent(upgradeButton, 5, "main");
         try {
@@ -45,5 +54,11 @@ public class PageHeader extends AbstractUIElement {
 
     public String getTextOfUpgradeButton(){
         return upgradeButton.getText();
+    }
+
+    public void logoutAdmin(){
+        adminIcon.click();
+        waitForElementToBeVisibleAgent(adminDropdown, 5);
+        logoutButton.click();
     }
 }

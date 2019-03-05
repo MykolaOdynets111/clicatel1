@@ -906,7 +906,7 @@ public class TIEApiSteps {
 
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
-                (String) mapForCreatingIntent.get("intent_answer"), (String) mapForCreatingIntent.get("faq"));
+                (String) mapForCreatingIntent.get("intent_answer"), (String) mapForCreatingIntent.get("type"));
 
         Assert.assertTrue(resp.statusCode() == 200,
                 "Creating new intent for '" + tenantOrgName + "' intent was not successful\n"+
