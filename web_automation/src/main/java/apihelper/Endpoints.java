@@ -150,6 +150,10 @@ public class Endpoints {
 
     public static String TIE_CREATED_INTENT =  URLs.getBaseTieURL() + "%s/intents/confirm?intent=%s&text=%s&type=%s";
 
+    public static String TIE_TRAINING =  URLs.getBaseTieURL() + "%s/training";
+
+    public static String TIE_MODELS =  URLs.getBaseTieURL() + "%s/models";
+
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "actuator/health";

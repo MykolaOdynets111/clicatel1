@@ -953,7 +953,13 @@ public class TIEApiSteps {
 
     @When("^Schedule new training$")
     public void scheduleNewTraining(){
+        Assert.assertTrue( ApiHelperTie.scheduleTraining().statusCode()==200,
+                "Training is not scheduled");
+    }
 
+    @Then("^New model is ready after 10 secs wait$")
+    public void getModels(){
+        Response resp = ApiHelperTie.getModels();
     }
 
 }
