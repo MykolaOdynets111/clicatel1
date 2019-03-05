@@ -475,7 +475,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return message + " " + chatTime;
     }
 
-    @Then("^(.*) sees correct chat with basic info is shown in chat history container$")
+    @Then("^(.*) sees correct chat with basic info in chat history container$")
     public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
