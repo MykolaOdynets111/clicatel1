@@ -107,4 +107,15 @@ public class CreateSlotBody {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "CreateSlotBody{" +
+                "intent='" + intent + '\'' +
+                ", name='" + name + '\'' +
+                ", entityType='" + entityType + '\'' +
+                ", prompt='" + prompt + '\'' +
+                ", confirm='" + confirm + '\'' +
+                ", tenant='" + tenant + '\'' +
+                '}';
+    }
 }

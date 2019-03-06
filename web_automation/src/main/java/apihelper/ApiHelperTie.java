@@ -2,10 +2,13 @@ package apihelper;
 
 import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
+import datamanager.jacksonschemas.tie.CreateSlotBody;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Comparator;
 import java.util.List;
@@ -130,6 +133,29 @@ public class ApiHelperTie {
                 .body("{\"ids\":[\"" +sampleId+ "\"]}")
                 .delete(String.format(Endpoints.TIE_SAMPLES, Tenants.getTenantUnderTestName()));
 
+    }
+
+    public static Response createNewSlot(CreateSlotBody createSlotBody){
+        ObjectMapper mapper = new ObjectMapper();
+        Response resp = null;
+        try {
+            resp =  RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                    .body("{" +mapper.writeValueAsString(createSlotBody) + "}")
+                    .post(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return resp;
+    }
+
+    public static void deletSlot(String slotId){
+        RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                    .body("{\"ids\":[\"" +slotId+ "\"]}: ")
+                    .delete(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
 
 }

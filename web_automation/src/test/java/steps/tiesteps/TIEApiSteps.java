@@ -1,13 +1,13 @@
 package steps.tiesteps;
 
-import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.tie.CreateSlotBody;
+import datamanager.jacksonschemas.tie.SlotInTieResponse;
 import datamanager.jacksonschemas.tie.TieNERItem;
 import datamanager.jacksonschemas.tie.Entity;
 
@@ -30,6 +30,8 @@ import static org.hamcrest.Matchers.*;
 
 public class TIEApiSteps {
 
+    Faker faker = new Faker();
+
     private static Map<Long, String> NEW_TENANT_NAMES = new ConcurrentHashMap<>();
 
     public static Map<Long, String> getNewTenantNames() {
@@ -40,8 +42,6 @@ public class TIEApiSteps {
         NEW_TENANT_NAMES.clear();
     }
 
-    Faker faker = new Faker();
-
     private static Map mapForCreatedIntent = new HashMap();
 
     private static String createNewTenantName() {
@@ -50,6 +50,10 @@ public class TIEApiSteps {
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
+
+    private CreateSlotBody createSlotBody;
+    private SlotInTieResponse expectedSlotInTieResponse;
+    private static List<String> createdSlotIds =new ArrayList<>();
 
     public static Map getMapForCreatedIntent(){
         return  mapForCreatedIntent;
@@ -981,13 +985,53 @@ public class TIEApiSteps {
         Response resp = ApiHelperTie.getModels();
     }
 
+    @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")
+    public void createNewSlot(String type, String intent, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        formNewSlotValues(intent, type, "");
+        Response resp = ApiHelperTie.createNewSlot(createSlotBody);
+        try {
+            createdSlotIds.add(resp.getBody().jsonPath().get("id"));
+        } catch (JsonPathException e) {
+            Assert.assertTrue(resp.statusCode() == 200,
+                    "Creating new slot was not successful \n" +
+                            "Create slot body: " + createSlotBody.toString());
+        }
+
+    }
+
+    private void formNewSlotValues(String intent, String type, String expectedValue){
+        switch (type){
+            case "MONEY":
+                createSlotBody = new CreateSlotBody().setIntent(intent).setName("Money slot").setEntityType("MONEY")
+                        .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
+                        .setTenant(Tenants.getTenantUnderTestName());
+                break;
+            case "DATE":
+                createSlotBody = new CreateSlotBody().setIntent(intent).setName("DATE slot").setEntityType("DATE")
+                        .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
+                        .setTenant(Tenants.getTenantUnderTestName());
+                break;
+        }
+        expectedSlotInTieResponse = new SlotInTieResponse().setPrompt(createSlotBody.getPrompt()).setName(createSlotBody.getName())
+                .setValue(expectedValue).setValue(createSlotBody.getConfirm());
+    }
+
 
     public static void clearCreatedIntentAndSample(){
-        ApiHelperTie.deleteIntent((String) mapForCreatedIntent.get("intent_id"));
         List<String> sampleIds = (List<String>) mapForCreatedIntent.get("sample_ids");
         for(String sampleId : sampleIds){
             ApiHelperTie.deleteSample(sampleId);
         }
         mapForCreatedIntent.clear();
     }
+
+    public static void clearCreatedSlots(){
+        for(String slotId : createdSlotIds){
+            ApiHelperTie.deletSlot(slotId);
+        }
+        createdSlotIds.clear();
+    }
+
+
 }

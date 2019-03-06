@@ -159,6 +159,9 @@ public class Hooks implements JSHelper{
             TIEApiSteps.clearCreatedIntentAndSample();
         }
 
+        if(scenario.getSourceTagNames().contains("@slot_management")){
+            TIEApiSteps.clearCreatedSlots();
+        }
 
         closeMainBrowserIfOpened();
         clearAllSessionData();
