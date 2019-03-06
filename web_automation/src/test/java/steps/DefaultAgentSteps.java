@@ -268,7 +268,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                                     DotControlSteps.getFromClientRequestMessage().getClientId()+")");
                     return;
                 }
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,40, agent),
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,70, agent),
                                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
             }
 
