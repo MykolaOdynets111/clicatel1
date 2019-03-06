@@ -6,6 +6,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.tie.CreateSlotBody;
+import datamanager.jacksonschemas.tie.SlotInTieResponse;
 import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;
@@ -23,6 +25,8 @@ public class BaseTieSteps {
 
     public static ByteArrayOutputStream request;
     public static ByteArrayOutputStream response;
+    private CreateSlotBody createSlotBody;
+    private SlotInTieResponse expectedSlotInTieResponse;
 
     @Given("Listener for logging request and response is ready")
     public void logRequests(){
@@ -158,9 +162,32 @@ public class BaseTieSteps {
     }
 
     @Then("^TIE returns (.*) answer for (.*) tenant (.*) intent$")
-    public void verifYtieAnswer(String expectedAnswer,  String tenant,  String intent){
+    public void verifyTieAnswer(String expectedAnswer, String tenant, String intent){
         Assert.assertEquals(ApiHelperTie.getExpectedMessageOnIntent(tenant, intent), expectedAnswer,
                 "From tie answer on \""+intent+"\" intent is not as expected\n");
+    }
+
+    @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")
+    public void createNewSlot(String type, String intent, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+
+    }
+
+    private void formNewSlotValues(String intent, String type, String expectedValue){
+        switch (type){
+            case "MONEY":
+                createSlotBody.setIntent(intent).setName("Money slot").setEntityType("MONEY")
+                                .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
+                                .setTenant(Tenants.getTenantUnderTestName());
+                break;
+            case "DATE":
+                createSlotBody.setIntent(intent).setName("DATE slot").setEntityType("DATE")
+                        .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
+                        .setTenant(Tenants.getTenantUnderTestName());
+                break;
+        }
+        expectedSlotInTieResponse.setPrompt(createSlotBody.getPrompt()).setName(createSlotBody.getName())
+                .setValue(expectedValue).setValue(createSlotBody.getConfirm());
     }
 
 }
