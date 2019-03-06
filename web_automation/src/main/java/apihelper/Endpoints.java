@@ -154,6 +154,8 @@ public class Endpoints {
 
     public static String TIE_ALL_INTENTS =  URLs.getBaseTieURL() + "%s/intents";
 
+    public static String TIE_SLOTS_MANAGEMENT =  URLs.getBaseTieURL() + "%s/slots-management";
+
 
     // ====================  SOCIAL ================= //
 
