@@ -142,7 +142,7 @@ public class ApiHelperTie {
             resp =  RestAssured.given()
                     .header("Content-Type", "application/json")
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                    .body("{" +mapper.writeValueAsString(createSlotBody) + "}")
+                    .body(mapper.writeValueAsString(createSlotBody))
                     .post(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -150,12 +150,19 @@ public class ApiHelperTie {
         return resp;
     }
 
-    public static void deletSlot(String slotId){
+    public static void deleteSlot(String slotId){
         RestAssured.given()
-                    .header("Content-Type", "application/json")
+                    .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                    .body("{\"ids\":[\"" +slotId+ "\"]}: ")
+                    .body("{\"ids\":[\"" +slotId+ "\"]}")
                     .delete(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
+    }
+
+    public static Response getAllSlots(){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
 
 }

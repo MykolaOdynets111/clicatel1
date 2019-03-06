@@ -988,7 +988,7 @@ public class TIEApiSteps {
     @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")
     public void createNewSlot(String type, String intent, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        formNewSlotValues(intent, type, "");
+        formNewSlotValues(intent, type, null);
         Response resp = ApiHelperTie.createNewSlot(createSlotBody);
         try {
             createdSlotIds.add(resp.getBody().jsonPath().get("id"));
@@ -1014,9 +1014,57 @@ public class TIEApiSteps {
                 break;
         }
         expectedSlotInTieResponse = new SlotInTieResponse().setPrompt(createSlotBody.getPrompt()).setName(createSlotBody.getName())
-                .setValue(expectedValue).setValue(createSlotBody.getConfirm());
+                .setValue(expectedValue).setConfirm(createSlotBody.getConfirm());
     }
 
+    @When("^Created slot is saved$")
+    public void verifySlotIsSaved(){
+        String allSlotsInfo = ApiHelperTie.getAllSlots().getBody().asString();
+        boolean isSlotAdded = false;
+        for(int i=0; i<4; i++){
+            if(allSlotsInfo.contains(createdSlotIds.get(0))){
+                isSlotAdded = true;
+                break;
+            } else{
+                waitFor(1000);
+                allSlotsInfo = ApiHelperTie.getAllSlots().getBody().asString();
+            }
+        }
+        Assert.assertTrue(isSlotAdded, "Slot is not added after 4 secs wait\n"+
+                "Slot info: " + createSlotBody.toString() + "\n" +
+                "Created slot id: " + createdSlotIds.toString());
+    }
+
+    @Then("^New slot is returned in TIE response on (.*) message$")
+    public void verifySlotReturnedInTieResponse(String userMessage){
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        List<SlotInTieResponse> slotInTieResponse = resp.getBody().jsonPath().getList("intents_result.slots", SlotInTieResponse.class);
+        Assert.assertTrue(slotInTieResponse.contains(expectedSlotInTieResponse),
+                "Expected slot is not returned in tie response on '"+userMessage+"' user message \n" +
+                        "Created Slot info: " + createSlotBody.toString() + "\n" +
+                        "Created slot id: " + createdSlotIds.toString() + "\n" +
+                        "Received resp from tie" + resp.getBody().asString()
+        );
+    }
+
+    @Then("^Slot for \"(.*)\" message is not returning anymore$")
+    public void verifySlotRemoved(String userMessage){
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        List<SlotInTieResponse> slotInTieResponse = resp.getBody().jsonPath().getList("intents_result.slots", SlotInTieResponse.class);
+        Assert.assertFalse(slotInTieResponse.contains(expectedSlotInTieResponse),
+                "Expected slot is not removed in tie response on '"+userMessage+"' user message \n" +
+                        "Created Slot info: " + createSlotBody.toString() + "\n" +
+                        "Created slot id: " + createdSlotIds.toString() + "\n" +
+                        "Received resp from tie" + resp.getBody().asString()
+        );
+    }
+
+    @Then("^I delete slot$")
+    public void deleteCreatedSlots() {
+        for (String slotId : createdSlotIds) {
+            ApiHelperTie.deleteSlot(slotId);
+        }
+    }
 
     public static void clearCreatedIntentAndSample(){
         List<String> sampleIds = (List<String>) mapForCreatedIntent.get("sample_ids");
@@ -1028,7 +1076,7 @@ public class TIEApiSteps {
 
     public static void clearCreatedSlots(){
         for(String slotId : createdSlotIds){
-            ApiHelperTie.deletSlot(slotId);
+            ApiHelperTie.deleteSlot(slotId);
         }
         createdSlotIds.clear();
     }
