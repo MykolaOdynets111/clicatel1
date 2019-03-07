@@ -34,7 +34,7 @@ public class Customer360Container extends AbstractUIElement {
     @FindBy(css = "span.icon.icon-twitter+span")
     private WebElement twitterLabel;
 
-    @FindBy(css = "span.icon.icon-twitter+span")
+    @FindBy(css = "span.icon.icon-facebook+span")
     private WebElement fbLabel;
 
     @FindBy(css = "span.icon.svg-icon-mobile+span")

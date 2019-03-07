@@ -499,4 +499,10 @@ public class ApiHelper {
         return RestAssured.get(url);
     }
 
+    public static Response getActiveChatByAgent(){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+    }
+
 }

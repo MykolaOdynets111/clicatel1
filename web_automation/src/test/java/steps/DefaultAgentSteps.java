@@ -565,7 +565,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String integrationType = "";
         switch (clientFrom){
             case "fb dm":
-                clientId = FacebookUsers.getLoggedInUser().getFBUserID();
+                Map chatInfo = (Map) ApiHelper.getActiveChatByAgent().getBody().jsonPath().getList("content")
+                                        .stream()
+                                        .filter(e -> ((Map)
+                                                            ((Map) e).get("client")
+                                                     ).get("type")
+                                                .equals("FACEBOOK"))
+                                        .findFirst().get();
+                clientId = (String) chatInfo.get("clientId");
                 integrationType = "FACEBOOK";
                 break;
             case "twitter dm":
