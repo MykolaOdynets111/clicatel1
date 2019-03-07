@@ -8,7 +8,7 @@ Feature: Customer 360 info for twitter user
     Given Open direct message channel
 
   Scenario: Agent answers on user messages
-    When User sends twitter direct message regarding chat to support
+    When User sends twitter direct message regarding Hate your banking!
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
     Then Correct twitter dm client details are shown
