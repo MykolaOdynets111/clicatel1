@@ -1,9 +1,9 @@
 @agent_to_user_conversation
 @facebook
 @fb_dm
-Feature: Customer 360 from widget
+Feature: Customer 360 from fb
 
-  Scenario: User's info presence on chatdesk (touch user)
+  Scenario: User's info presence on chatdesk (fb user)
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
     When User opens Messenger and send message regarding chat to agent
