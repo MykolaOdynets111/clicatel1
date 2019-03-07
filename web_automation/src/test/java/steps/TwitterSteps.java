@@ -144,8 +144,10 @@ public class TwitterSteps {
         }
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
                 "There is no response on "+userMessage+" user message");
-        soft.assertEquals(getDmWindow().getToUserResponse(userMessage), expectedResponse,
-                "To user response is not as expected");
+        soft.assertTrue(getDmWindow().getToUserResponse(userMessage).contains(expectedResponse),
+                "To user response is not as expected \n" +
+        "Actual message: " + getDmWindow().getToUserResponse(userMessage) + "\n" +
+        "Expected message: " + expectedResponse);
         soft.assertAll();
     }
 
