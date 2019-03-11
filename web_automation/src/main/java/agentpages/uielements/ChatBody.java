@@ -99,7 +99,7 @@ public class ChatBody extends AbstractUIElement {
 
     public List<String> getAllMessages(){
         String agentInitials = "";
-        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getText();
+        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getAttribute("innerText");
         String finalAgentInitials = agentInitials;
         return findElemsByXPATHAgent(messagesInChatBodyXPATH)
                 .stream()
