@@ -24,6 +24,7 @@ public enum DriverType {
             logPrefs.enable(LogType.BROWSER, Level.ALL);
 
             ChromeOptions options = new ChromeOptions();
+            options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
