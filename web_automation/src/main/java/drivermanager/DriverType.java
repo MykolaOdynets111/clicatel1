@@ -22,6 +22,7 @@ public enum DriverType {
 		public MutableCapabilities getDesiredCapabilities() {
             LoggingPreferences logPrefs = new LoggingPreferences();
             logPrefs.enable(LogType.BROWSER, Level.ALL);
+            logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
 
             ChromeOptions options = new ChromeOptions();
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);

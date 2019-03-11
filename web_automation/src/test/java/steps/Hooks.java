@@ -17,6 +17,7 @@ import interfaces.JSHelper;
 import javaserver.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -191,11 +192,13 @@ public class Hooks implements JSHelper{
             takeScreenshotFromSecondDriver();
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
+                chatDeskNetworkOutput(DriverFactory.getAgentDriverInstance());
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
+                    chatDeskNetworkOutput(DriverFactory.getSecondAgentDriverInstance());
                 }
                 takeScreenshotFromThirdDriverIfExists();
         }
@@ -204,7 +207,6 @@ public class Hooks implements JSHelper{
 
     private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isAgentDriverExists()) {
-
             if (scenario.getSourceTagNames().contains("@agent_info")) {
                 new AgentHomePage("main").getProfileWindow().closeIfOpened();
             }
@@ -414,4 +416,15 @@ public class Hooks implements JSHelper{
         }
         return  result.toString();
     }
+
+    @Attachment
+    private String chatDeskNetworkOutput(WebDriver driver){
+        StringBuilder result = new StringBuilder();
+        List<LogEntry> entries = driver.manage().logs().get(LogType.PERFORMANCE).getAll();
+        StringBuffer buffer = new StringBuffer();
+        for(LogEntry entry : entries)
+            buffer.append(entry.getLevel() + " " +entry.getTimestamp() + "\n" + entry.getMessage() + "\n\n");
+        return  buffer.toString();
+    }
+
 }
