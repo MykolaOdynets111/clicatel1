@@ -72,11 +72,9 @@ public class URLs {
             if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
             else env = targetEnvConfiguration;
             baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
-//            if(tenantOrgName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
-//                tenantOrgName="standard bank";
-//            }
             FINAL_AGENT_URL = baseUrl + ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         }
+        System.out.println("!!! URL to be returned getting it: " + FINAL_AGENT_URL);
         return FINAL_AGENT_URL;
     }
 
