@@ -2,9 +2,11 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 @FindBy(css = "div.user-info-container>div")
 public class Customer360Container extends AbstractUIElement {
@@ -47,7 +49,11 @@ public class Customer360Container extends AbstractUIElement {
 
 
     public Customer360PersonalInfo getActualPersonalInfo(){
-        waitForElementToBeVisibleAgent(profileNameLabel, 3, "main");
+        try {
+            waitForElementToBeVisibleAgent(profileNameLabel, 3, "main");
+        } catch (TimeoutException e){
+            Assert.assertTrue(false, "Customer 360 details is not visible.");
+        }
 
         String channelUsername = "Unknown";
         if(!twitterLabel.getText().equals("Unknown")) channelUsername = twitterLabel.getText();
