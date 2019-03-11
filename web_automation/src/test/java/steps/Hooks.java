@@ -399,12 +399,12 @@ public class Hooks implements JSHelper{
 
     @Attachment
     private String chatDeskConsoleOutput(){
-        StringBuilder result = new StringBuilder();
+        StringBuffer buffer = new StringBuffer();
         LogEntries logEntries = DriverFactory.getAgentDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
-            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+            buffer.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }
-        return  result.toString();
+        return  buffer.toString();
     }
 
     @Attachment
@@ -419,7 +419,6 @@ public class Hooks implements JSHelper{
 
     @Attachment
     private String chatDeskNetworkOutput(WebDriver driver){
-        StringBuilder result = new StringBuilder();
         List<LogEntry> entries = driver.manage().logs().get(LogType.PERFORMANCE).getAll();
         StringBuffer buffer = new StringBuffer();
         for(LogEntry entry : entries)
