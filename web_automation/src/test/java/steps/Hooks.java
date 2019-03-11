@@ -291,8 +291,7 @@ public class Hooks implements JSHelper{
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
-        } catch(WebDriverException e){
-                DriverFactory.closeBrowser(agent);
+        } catch(WebDriverException|AssertionError e){
         }
     }
 
