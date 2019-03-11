@@ -1047,6 +1047,12 @@ public class TIEApiSteps {
         );
     }
 
+    @When("I update slot")
+    public void updateSlot(){
+        formNewSlotValues("trading hours", "DATE", "Monday");
+        ApiHelperTie.updateSlot(createSlotBody, createdSlotIds.get(0));
+    }
+
     @Then("^Slot for \"(.*)\" message is not returning anymore$")
     public void verifySlotRemoved(String userMessage){
         Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));

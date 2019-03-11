@@ -150,6 +150,22 @@ public class ApiHelperTie {
         return resp;
     }
 
+    public static Response updateSlot(CreateSlotBody createSlotBody, String slotId){
+        ObjectMapper mapper = new ObjectMapper();
+        Response resp = null;
+        try {
+            resp =  RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                    .body(mapper.writeValueAsString(createSlotBody))
+                    .put(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()) + "/" + slotId);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return resp;
+    }
+
+
     public static void deleteSlot(String slotId){
         RestAssured.given()
                     .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
