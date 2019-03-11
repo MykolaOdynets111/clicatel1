@@ -458,7 +458,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private String formDaySeparator(long time, ZoneId zoneId){
         LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId);
         LocalDateTime currentDayTime = LocalDateTime.now(zoneId);
-        String timeSeparator = formTimeStringFromMillis(time, zoneId, DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy"));
+        String timeSeparator = formTimeStringFromMillis(time, zoneId, DateTimeFormatter.ofPattern("EEEE, MM d, yyyy"));
 
         if(itemDateTime.getDayOfYear() == currentDayTime.getDayOfYear()) timeSeparator="Today";
         if(itemDateTime.getDayOfYear() == (currentDayTime.minusDays(1).getDayOfYear())) timeSeparator="Yesterday";
@@ -481,7 +481,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         selectedChatForHistoryTest = DefaultTouchUserSteps.getSelectedClientForChatHistoryTest();
         String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
-                DateTimeFormatter.ofPattern("dd MMM yyyy | HH:mm"));
+                DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
         ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems();
         chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(),
                 (String) selectedChatForHistoryTest.get("sessionId"));
@@ -507,7 +507,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         SoftAssert soft = new SoftAssert();
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
-                DateTimeFormatter.ofPattern("dd MMM yyyy | HH:mm"));
+                DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
         List<String> messagesFromChatHistoryDetails = agentHomePage.getHistoryDetailsWindow().getAllMessages();
         List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
 
