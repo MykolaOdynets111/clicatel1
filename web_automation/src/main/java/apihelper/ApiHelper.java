@@ -63,19 +63,37 @@ public class ApiHelper {
 
 
     public static void createUserProfile(String tenantName, String clientID) {
-        RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .body("{ "+
-                        "\"tenantName\": \""+tenantName+"\","+
-                        "\"type\": \"TOUCH\"," +
-                        "\"clientId\": \""+clientID+"\","+
-                        "\"attributes\": {" +
-                            "\"firstName\": \""+clientID+"\","+
+        if(ConfigManager.getEnv().equals("demo1")){
+//            String tenantId = Tenants.getTenantInfo(tenantOrgName, "id");
+
+            RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .body("{ " +
+                            "\"tenantName\": \"" + tenantName + "\"," +
+                            "\"type\": \"TOUCH\"," +
+                            "\"clientId\": \"" + clientID + "\"," +
+                            "\"attributes\": {" +
+                            "\"firstName\": \"" + clientID + "\"," +
                             "\"email\": \"aqa_test@gmail.com\"" +
                             "}" +
-                        "}")
-                .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+                            "}")
+                    .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+        }else {
+            RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .body("{ " +
+                            "\"tenantName\": \"" + tenantName + "\"," +
+                            "\"type\": \"TOUCH\"," +
+                            "\"clientId\": \"" + clientID + "\"," +
+                            "\"attributes\": {" +
+                            "\"firstName\": \"" + clientID + "\"," +
+                            "\"email\": \"aqa_test@gmail.com\"" +
+                            "}" +
+                            "}")
+                    .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+        }
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
