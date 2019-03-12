@@ -67,6 +67,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
+//        ApiHelper.closeActiveChats();
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }
 

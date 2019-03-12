@@ -528,4 +528,13 @@ public class ApiHelper {
                 .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
+    public static void closeActiveChats(){
+        List<String> conversationIds = getActiveChatByAgent().getBody().jsonPath().getList("content.sessions.conversationId");
+        for(String conversationId : conversationIds){
+            RestAssured.given()
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                    .delete(Endpoints.CLOSE_ACTIVE_CHAT + conversationId);
+            }
+    }
+
 }
