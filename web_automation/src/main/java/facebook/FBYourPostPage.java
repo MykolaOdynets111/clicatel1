@@ -63,7 +63,7 @@ public class FBYourPostPage extends AbstractPage {
 
     public boolean isExpectedResponseShownInComments(String expectedResponse){
        return findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
-               .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+               .anyMatch(e1 -> e1.getCommentText().contains(expectedResponse));
     }
 
     public void makeAPost(String message){
