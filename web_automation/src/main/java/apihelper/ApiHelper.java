@@ -63,14 +63,15 @@ public class ApiHelper {
 
 
     public static void createUserProfile(String tenantName, String clientID) {
+        Response resp;
         if(ConfigManager.getEnv().equals("demo1")){
-//            String tenantId = Tenants.getTenantInfo(tenantOrgName, "id");
+            String tenantId = Tenants.getTenantInfo(Tenants.getTenantUnderTestOrgName(), "id");
 
-            RestAssured.given()
+            resp = RestAssured.given()
                     .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
                     .body("{ " +
-                            "\"tenantName\": \"" + tenantName + "\"," +
+                            "\"tenantId\": \"" + tenantId + "\"," +
                             "\"type\": \"TOUCH\"," +
                             "\"clientId\": \"" + clientID + "\"," +
                             "\"attributes\": {" +
@@ -80,7 +81,7 @@ public class ApiHelper {
                             "}")
                     .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
         }else {
-            RestAssured.given()
+            resp = RestAssured.given()
                     .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
                     .body("{ " +
@@ -94,6 +95,10 @@ public class ApiHelper {
                             "}")
                     .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
         }
+        Assert.assertTrue(resp.statusCode()==200,
+                "Creating of user profile was not successful\n" +
+        "resp status code: " + resp.statusCode() + "\n" +
+        "resp body: " + resp.getBody().asString());
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
