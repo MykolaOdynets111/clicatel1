@@ -8,13 +8,11 @@ import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
-import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import org.omg.CORBA.INTERNAL;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
@@ -342,7 +340,7 @@ public class ApiHelper {
         return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", token)
-                .get(String.format(Endpoints.AGENT_INFO, token));
+                .get(Endpoints.AGENT_INFO_ME);
     }
 
     public static void logoutTheAgent(String tenantOrgName) {

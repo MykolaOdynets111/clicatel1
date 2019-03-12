@@ -18,7 +18,7 @@ public class Endpoints {
 
     public static String FACEBOOK_INTEGRATION =  URLs.getTouchApiBaseURL() + "facebook-registration/integration";
 
-    public static String AGENT_INFO = URLs.getTouchApiBaseURL() + "agents/info?mc2Token=%s";
+    public static String AGENT_INFO_ME = URLs.getTouchApiBaseURL() + "agents/infoMe";
 
     public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
 
