@@ -1,5 +1,6 @@
 package steps.tiesteps;
 
+import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
@@ -1077,6 +1078,7 @@ public class TIEApiSteps {
         for(String sampleId : sampleIds){
             ApiHelperTie.deleteSample(sampleId);
         }
+        ApiHelperTie.deleteIntent((String) mapForCreatedIntent.get("intent_id"));
         mapForCreatedIntent.clear();
     }
 
