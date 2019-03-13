@@ -270,7 +270,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                     return;
                 }
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,70, agent),
-                                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+                                "There is no new conversation request on Agent Desk (Client name: "+userName+")");
             }
 
     private boolean waitForDotControlRequestOnChatDesk(){
