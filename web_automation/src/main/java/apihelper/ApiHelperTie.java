@@ -37,7 +37,9 @@ public class ApiHelperTie {
 
     public static String getTenantConfig(String tenantName, String configName){
         String url = String.format(Endpoints.TIE_CONFIG, tenantName);
-        return RestAssured.get(url).jsonPath().get(configName).toString();
+        Response resp = RestAssured.get(url);
+        if(resp.statusCode()!=200) Assert.assertTrue(false, "Tie call was not successful\n " + resp.getBody().asString());
+        return resp.jsonPath().get(configName).toString();
     }
 
     public static double getIntentConfidenceOnUserMessage(String userMessage) {

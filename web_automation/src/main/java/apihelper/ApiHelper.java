@@ -62,7 +62,7 @@ public class ApiHelper {
 
     public static void createUserProfile(String tenantName, String clientID) {
         Response resp;
-        String tenantId = Tenants.getTenantInfo(Tenants.getTenantUnderTestOrgName(), "id");
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
         resp = RestAssured.given()
                     .header("Content-Type", "application/json")
