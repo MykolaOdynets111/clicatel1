@@ -9,6 +9,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testng.Assert;
 
 import java.util.Comparator;
 import java.util.List;
@@ -46,7 +47,9 @@ public class ApiHelperTie {
 
     public static List<String> getLIstOfAllFAGCategories(){
         String url = String.format(Endpoints.TIE_ANSWER_BY_CATEGORY_URL, Tenants.getTenantUnderTestName(), "all");
-        return get(url).getBody().jsonPath().getList("categories");
+        Response resp = get(url);
+        if(resp.statusCode()!=200) Assert.assertTrue(false, "Tie call was not successful\n " + resp.getBody().asString());
+        return resp.getBody().jsonPath().getList("categories");
     }
 
     public static List<TIEIntentPerCategory> getListOfIntentsForCategory(String category){
