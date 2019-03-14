@@ -62,10 +62,9 @@ public class ApiHelper {
 
     public static void createUserProfile(String tenantName, String clientID) {
         Response resp;
-        if(ConfigManager.getEnv().equals("demo1")){
-            String tenantId = Tenants.getTenantInfo(Tenants.getTenantUnderTestOrgName(), "id");
+        String tenantId = Tenants.getTenantInfo(Tenants.getTenantUnderTestOrgName(), "id");
 
-            resp = RestAssured.given()
+        resp = RestAssured.given()
                     .header("Content-Type", "application/json")
                     .header("Accept", "application/json")
                     .body("{ " +
@@ -78,21 +77,6 @@ public class ApiHelper {
                             "}" +
                             "}")
                     .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
-        }else {
-            resp = RestAssured.given()
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
-                    .body("{ " +
-                            "\"tenantName\": \"" + tenantName + "\"," +
-                            "\"type\": \"TOUCH\"," +
-                            "\"clientId\": \"" + clientID + "\"," +
-                            "\"attributes\": {" +
-                            "\"firstName\": \"" + clientID + "\"," +
-                            "\"email\": \"aqa_test@gmail.com\"" +
-                            "}" +
-                            "}")
-                    .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
-        }
         Assert.assertTrue(resp.statusCode()==200,
                 "Creating of user profile was not successful\n" +
         "resp status code: " + resp.statusCode() + "\n" +

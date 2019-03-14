@@ -25,10 +25,6 @@ public class WidgetFooter extends AbstractUIElement {
     }
 
     public void tryToCloseSession(){
-        if(ConfigManager.getEnv().equals("demo1")) {
             if (textInput.isEnabled()) enterMessage("/cmd:end").sendMessage();
-        }else {
-            if (textInput.isEnabled()) enterMessage("end").sendMessage();
-        }
     }
 }
