@@ -5,6 +5,8 @@ import apihelper.Endpoints;
 import datamanager.FacebookPages;
 import datamanager.Tenants;
 import datamanager.TwitterPages;
+import io.restassured.path.json.exception.JsonPathException;
+import org.testng.Assert;
 
 public class URLs {
 
@@ -39,7 +41,13 @@ public class URLs {
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
     public static String getWidgetURL(String tenantOrgName){
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = "";
+        try {
+            tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        }catch (JsonPathException e){
+            Assert.assertTrue(false, "Getting tenant info was not successful\n" +
+            "Response with tenant info: " + ApiHelper.getTenantInfoMap(tenantOrgName).toString());
+        }
         String targetEnvConfiguration = ConfigManager.getEnv();
         String env;
         if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
