@@ -409,9 +409,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         if(buttonNames.contains("FAQ categories")){
             return ApiHelperTie.getLIstOfAllFAGCategories();
         }
-        if(buttonNames.contains("FAQ categories")){
-            return  null;
-        }
         return Arrays.asList(buttonNames.split(";"));
     }
 
