@@ -435,12 +435,17 @@ public class ApiHelper {
         }
     }
 
-    public static String getActiveSessionIdByClientId(String tenantName, String clineId, String integrationType){
-        String url = String.format(Endpoints.INTERNAL_ACTIVE_SESSIONS, tenantName, clineId, integrationType);
+    public static String getActiveSessionIdByClientId(String tenantName, String clientId, String integrationType){
+        String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String url = String.format(Endpoints.INTERNAL_CHAT_BY_CLIENT, tenantID, clientId);
         String sessionId = "";
         Response resp =  RestAssured.get(url);
         try{
-            sessionId = resp.getBody().jsonPath().get("sessionId");
+            sessionId = (String) ((Map) resp.getBody().jsonPath().getList("content.sessions[0]")
+                    .stream()
+                    .map(e -> (Map) e)
+                    .filter(map -> map.get("state").equals("ACTIVE"))
+                    .findFirst().get()).get("sessionId");
         }catch(JsonPathException e){
             Assert.assertTrue(false, "Failed to get session Id\n"+
                     "resp status: " + resp.statusCode() + "\n" +
