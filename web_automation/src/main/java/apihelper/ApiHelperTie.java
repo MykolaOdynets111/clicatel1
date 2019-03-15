@@ -195,4 +195,13 @@ public class ApiHelperTie {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
     }
+
+
+    public static Response publishModel(String model){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .body("{\"model\":\"" + model + "\"}")
+                .post(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()));
+    }
 }

@@ -158,7 +158,6 @@ public class Endpoints {
 
     public static String TIE_SLOTS_MANAGEMENT =  URLs.getBaseTieURL() + "%s/slots-management";
 
-
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "actuator/health";

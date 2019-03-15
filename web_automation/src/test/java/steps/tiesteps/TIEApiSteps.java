@@ -23,6 +23,8 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -915,8 +917,8 @@ public class TIEApiSteps {
         formDataForIntentCreationTest();
         Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(),
                                                             (String) mapForCreatedIntent.get("intent"),
-                                                            (String) mapForCreatedIntent.get("categoty"),
-                                                            (String) mapForCreatedIntent.get("intent_answer"),
+                                                            (String) mapForCreatedIntent.get("category"),
+                                                            (String) mapForCreatedIntent.get("answer"),
                                                             (String) mapForCreatedIntent.get("type"));
         mapForCreatedIntent.put("intent_id", resp.getBody().jsonPath().get("id"));
         Assert.assertTrue(resp.statusCode() == 200,
@@ -929,8 +931,9 @@ public class TIEApiSteps {
         long currentTimeMillis = System.currentTimeMillis();
         mapForCreatedIntent.put("raw_intent", "test_intent_" + currentTimeMillis);
         mapForCreatedIntent.put("intent", "test intent " + currentTimeMillis);
-        mapForCreatedIntent.put("answer", "test_answer_" + faker.lorem().word());
+        mapForCreatedIntent.put("answer", "test answer " + faker.lorem().word());
         mapForCreatedIntent.put("type", "faq");
+        mapForCreatedIntent.put("category", "faq");
 
         return mapForCreatedIntent;
     }
@@ -981,10 +984,12 @@ public class TIEApiSteps {
                 "Training is not scheduled");
     }
 
-    @Then("^New model is ready after 10 secs wait$")
-    public void getModels(){
+    @Then("^New model is ready after (.*) minutes wait$")
+    public void getModels(int minutes){
+        int numberOfModelsBeforeTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
         Response resp = ApiHelperTie.getTrainings();
-        for(int i = 0; i < 25; i++){
+        int timeout = (minutes*60)/18 - 1;
+        for(int i = 0; i < timeout; i++){
             if(!(resp.getBody().jsonPath().get("train").equals("finished"))){
                 waitFor(18000);
                 resp = ApiHelperTie.getTrainings();
@@ -992,8 +997,42 @@ public class TIEApiSteps {
                 break;
             }
         }
-        Response resp1 = ApiHelperTie.getModels();
+        int numberOfModelsAfterTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
+        Assert.assertTrue(numberOfModelsAfterTraining == numberOfModelsBeforeTraining + 1,
+                "New model is not created");
     }
+
+    @When("^I publish new model$")
+    public void publishNewModel(){
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
+                .filter(e -> getModelDateTime(e).getDayOfYear()==now.getDayOfYear() &&
+                        getModelDateTime(e).getHour()==now.getHour())
+                .findFirst().get();
+        mapForCreatedIntent.put("model", model);
+        Assert.assertTrue(ApiHelperTie.publishModel(model).statusCode()==200,
+                "Publishing '"+model+"' model was not successful");
+    }
+
+    private LocalDateTime getModelDateTime(String model){
+        //model_20190315-131248 - model name example
+        String modelDate = model.split("_")[1];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+        return LocalDateTime.parse(modelDate, formatter);
+    }
+
+    @Then("^Tie returns new intent$")
+    public void verifyNewIntent(){
+        String sample = (String) ((List) mapForCreatedIntent.get("samples")).get(0);
+        List<String> actualIntents = ApiHelperTie.getListOfIntentsOnUserMessage(sample).stream()
+                .map(e -> e.getIntent())
+                .collect(Collectors.toList());
+        String expectedIntent = (String) mapForCreatedIntent.get("intent");
+        Assert.assertTrue(actualIntents.contains(expectedIntent),
+                "Expected '"+expectedIntent+"' is not returned on the sample '" + sample +"'");
+    }
+
 
     @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")
     public void createNewSlot(String type, String intent, String tenantOrgName){
