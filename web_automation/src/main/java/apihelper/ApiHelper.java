@@ -54,9 +54,18 @@ public class ApiHelper {
 
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        return RestAssured.given().log().all()
-                .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName())
-                .getBody().jsonPath().getMap("");
+        Response resp = RestAssured.given().log().all()
+                .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName());
+        Map<String, String> tenantInf = new HashMap<>();
+        try{
+             tenantInf = resp.getBody().jsonPath().getMap("");
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "Failed to get tenant info\n"+
+            "URL: " + Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName() + "\n" +
+            "resp status code:" + resp.statusCode() + "\n"+
+            "resp body: " + resp.getBody().asString());
+        }
+        return tenantInf;
     }
 
 

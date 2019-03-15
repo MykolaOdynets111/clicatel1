@@ -59,6 +59,10 @@ public enum Agents {
 
     DEV_BOT_MODE_SECOND_AGENT("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
 
+    // =======  Active agents for Bot mode with default settings ======== //
+
+    INTEGRATION_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "integration"),
+
     ;
 
     String userName;

@@ -983,7 +983,16 @@ public class TIEApiSteps {
 
     @Then("^New model is ready after 10 secs wait$")
     public void getModels(){
-        Response resp = ApiHelperTie.getModels();
+        Response resp = ApiHelperTie.getTrainings();
+        for(int i = 0; i < 25; i++){
+            if(!(resp.getBody().jsonPath().get("train").equals("finished"))){
+                waitFor(18000);
+                resp = ApiHelperTie.getTrainings();
+            } else{
+                break;
+            }
+        }
+        Response resp1 = ApiHelperTie.getModels();
     }
 
     @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")

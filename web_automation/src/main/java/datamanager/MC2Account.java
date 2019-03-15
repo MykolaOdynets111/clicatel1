@@ -30,6 +30,9 @@ public enum MC2Account {
     TESTING_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "testing", "", ""),
     INTEGRATION_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "integration", "", ""),
 
+
+    INTEGRATION_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "integration", "", ""),
+
     ;
 
     String touchGoPlan;

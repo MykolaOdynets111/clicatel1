@@ -39,6 +39,7 @@ public class ApiHelperTie {
         String url = String.format(Endpoints.TIE_CONFIG, tenantName);
         Response resp = RestAssured.get(url);
         if(resp.statusCode()!=200) Assert.assertTrue(false, "Tie call was not successful\n " + resp.getBody().asString());
+
         return resp.jsonPath().get(configName).toString();
     }
 
@@ -186,4 +187,12 @@ public class ApiHelperTie {
                 .get(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
 
+
+
+    public static Response getTrainings(){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
+    }
 }

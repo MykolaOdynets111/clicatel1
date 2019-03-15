@@ -107,6 +107,11 @@ public class Tenants {
                 Tenants.setTenantUnderTestOrgName("SignedUp AQA");
                 TENANT_UNDER_TEST.get().put("SignedUp AQA", "automationtest");
                 break;
+            case "Automation Common":
+                Tenants.setTenantUnderTestName("aqacomon");
+                Tenants.setTenantUnderTestOrgName("Automation Common");
+                TENANT_UNDER_TEST.get().put("Automation Common", "aqacomon");
+                break;
         }
     }
 
