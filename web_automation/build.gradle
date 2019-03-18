@@ -221,16 +221,6 @@ task runFAQsTests(type:Test){
     }
 }
 
-task runTIETestsForAllTenants(type: Test) {
-    doFirst {
-        useTestNG() {
-            ignoreFailures = true
-            suites baseXmlPath + "generalbank/tie.xml"
-            suites baseXmlPath + "virginmoney/tie.xml"
-        }
-    }
-}
-
 task runTestsAgainstNewlyCreatedAccount(type:Test){
     useTestNG() {
         ignoreFailures = true
@@ -284,7 +274,7 @@ task runCamundaFlowsTests(type:Test) {
     useTestNG() {
         useDefaultListeners = true
         ignoreFailures = true
-        suites baseXmlPath+"/camundaflows/camundaflows.xml"
+        suites baseXmlPath+tenantName+"/camundaflows.xml"
     }
     reports.html.enabled = false
 }
