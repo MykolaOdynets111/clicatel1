@@ -1,12 +1,12 @@
 package steps.tiesteps;
 
-import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.Intent;
 import datamanager.jacksonschemas.tie.CreateSlotBody;
 import datamanager.jacksonschemas.tie.SlotInTieResponse;
 import datamanager.jacksonschemas.tie.TieNERItem;
@@ -15,6 +15,7 @@ import datamanager.jacksonschemas.tie.Entity;
 import drivermanager.URLs;
 import static io.restassured.RestAssured.*;
 
+import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
-public class TIEApiSteps {
+public class TIEApiSteps implements DateTimeHelper{
 
     Faker faker = new Faker();
 
@@ -928,10 +929,11 @@ public class TIEApiSteps {
     }
 
     private Map formDataForIntentCreationTest(){
-        long currentTimeMillis = System.currentTimeMillis();
-        mapForCreatedIntent.put("raw_intent", "test_intent_" + currentTimeMillis);
-        mapForCreatedIntent.put("intent", "test intent " + currentTimeMillis);
-        mapForCreatedIntent.put("answer", "test answer " + faker.lorem().word());
+        String book = faker.book().title().replaceAll("\\p{Punct}", "");
+        mapForCreatedIntent.put("raw_intent", book);
+        mapForCreatedIntent.put("intent", book.toLowerCase());
+        mapForCreatedIntent.put("answer", "With our goods you may always expect the high quality of paper and ink. " +
+                                            "For more info please schedule a call with out manager.");
         mapForCreatedIntent.put("type", "faq");
         mapForCreatedIntent.put("category", "faq");
 
@@ -942,15 +944,15 @@ public class TIEApiSteps {
     public void verifyNewIntentAdding(){
         waitFor(1000);
         List<String> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("");
-        Assert.assertTrue(allIntents.contains(mapForCreatedIntent.get("intent")),
+        Assert.assertTrue(allIntents.contains(mapForCreatedIntent.get("intent").toString()),
                 "Created '"+ mapForCreatedIntent.get("intent")+"'intent is not returned");
     }
 
     @When("^Adding a few samples for created intent$")
     public void addNewSamples(){
         SoftAssert soft = new SoftAssert();
-        List<String> samples = Arrays.asList("aqa_sample1 " + faker.book().title(),
-                                                "aqa_sample2 " + faker.book().title());
+        List<String> samples = Arrays.asList("How much costs '"+mapForCreatedIntent.get("intent")+"' book?",
+                                                "Do you provide any discounts if I but 500 of '"+mapForCreatedIntent.get("intent")+ "' books?'");
         List<String> sampleIds = new ArrayList<>();
         mapForCreatedIntent.put("samples", samples);
         for (String sample : samples) {
@@ -1005,10 +1007,12 @@ public class TIEApiSteps {
     @When("^I publish new model$")
     public void publishNewModel(){
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+
         String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
                 .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                .filter(e -> getModelDateTime(e).getDayOfYear()==now.getDayOfYear() &&
-                        getModelDateTime(e).getHour()==now.getHour())
+                .filter(e ->        convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                                    >
+                                    convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
                 .findFirst().get();
         mapForCreatedIntent.put("model", model);
         Assert.assertTrue(ApiHelperTie.publishModel(model).statusCode()==200,
@@ -1024,13 +1028,30 @@ public class TIEApiSteps {
 
     @Then("^Tie returns new intent$")
     public void verifyNewIntent(){
+        System.out.println("Verifying new intent");
         String sample = (String) ((List) mapForCreatedIntent.get("samples")).get(0);
-        List<String> actualIntents = ApiHelperTie.getListOfIntentsOnUserMessage(sample).stream()
-                .map(e -> e.getIntent())
-                .collect(Collectors.toList());
         String expectedIntent = (String) mapForCreatedIntent.get("intent");
-        Assert.assertTrue(actualIntents.contains(expectedIntent),
-                "Expected '"+expectedIntent+"' is not returned on the sample '" + sample +"'");
+
+        boolean result = false;
+        Response resp = null;
+        List<String> actualIntents = new ArrayList<>();
+        for (int i = 0; i<30; i++){
+            if(!result){
+                waitFor(200);
+                resp =ApiHelperTie.getRespWithIntentsOnUserMessageWithAutorization(sample);
+                actualIntents = resp.jsonPath().getList("intents_result.intents", Intent.class).stream()
+                                    .sorted(Comparator.comparing(Intent::getConfidence).reversed())
+                                    .map(e -> e.getIntent())
+                                    .collect(Collectors.toList());
+                result = actualIntents.contains(expectedIntent);
+            }
+
+        }
+
+        Assert.assertTrue(result,
+                "Expected '"+expectedIntent+"' intent is not returned on the sample '" + sample +"'\n" +
+        "Resp body: " + resp.getBody().asString() + "\n" +
+        "Published model: " + mapForCreatedIntent.get("model"));
     }
 
 
@@ -1123,8 +1144,10 @@ public class TIEApiSteps {
 
     public static void clearCreatedIntentAndSample(){
         List<String> sampleIds = (List<String>) mapForCreatedIntent.get("sample_ids");
-        for(String sampleId : sampleIds){
-            ApiHelperTie.deleteSample(sampleId);
+            if(sampleIds!=null) {
+                for (String sampleId : sampleIds) {
+                    ApiHelperTie.deleteSample(sampleId);
+                }
         }
         ApiHelperTie.deleteIntent((String) mapForCreatedIntent.get("intent_id"));
         mapForCreatedIntent.clear();

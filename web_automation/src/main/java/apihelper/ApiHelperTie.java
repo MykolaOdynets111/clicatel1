@@ -25,6 +25,12 @@ public class ApiHelperTie {
                 .sorted(Comparator.comparing(Intent::getConfidence).reversed()).collect(Collectors.toList());
     }
 
+    public static Response getRespWithIntentsOnUserMessageWithAutorization(String userMessage) {
+         return RestAssured
+                .given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName()))
+                .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+         }
 
     public static String getExpectedMessageOnIntent(String intent) {
         return RestAssured.get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestName(), intent)).jsonPath().get("text");
