@@ -172,7 +172,7 @@ public class Endpoints {
 
     // ====================  TAF ================= //
 
-    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "taf-camunda-rest/taf/resources/taf-messages?tenant=%s";
+    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "resources/taf-messages?tenant=%s";
 
     // ====================  .Control ================= //
 
