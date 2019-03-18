@@ -116,9 +116,11 @@ public class ApiHelper {
     }
 
     public static List<TafMessage> getTafMessages() {
-            String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-            tenantMessages = RestAssured.given().get(url)
-                    .jsonPath().getList("tafResponses", TafMessage.class);
+        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+        tenantMessages = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .get(url)
+                .jsonPath().getList("tafResponses", TafMessage.class);
         return tenantMessages;
     }
 
