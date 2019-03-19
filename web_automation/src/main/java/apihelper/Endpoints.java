@@ -160,7 +160,7 @@ public class Endpoints {
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "actuator/health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "health";
 
     // ====================  PORTAL ================= //
 
