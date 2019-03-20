@@ -25,6 +25,7 @@ import touchpages.uielements.messages.WelcomeMessages;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -101,14 +102,25 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         }
 
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
-        Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
-                LocalDateTime aa = LocalDateTime.now(zoneId);
+//        Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
+//                LocalDateTime aa = LocalDateTime.now(zoneId);
+//
+//        selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
+//                .map(sessionContainer ->  ((ArrayList) sessionContainer))
+//                .filter(e -> e.size()==1)
+//                .map(session -> ((HashMap) session.get(0)))
+//                .filter(session -> ((Long) session.get("endedDate")) < timeMilestone)
+//                .findAny()
+//                .get();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+        LocalDateTime nowMinusTwoDays = LocalDateTime.now(zoneId).minusDays(2);
         selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
                 .map(sessionContainer ->  ((ArrayList) sessionContainer))
                 .filter(e -> e.size()==1)
                 .map(session -> ((HashMap) session.get(0)))
-                .filter(session -> ((Long) session.get("endedDate")) < timeMilestone)
+                .filter(session ->  LocalDateTime.parse((String) session.get("endedDate"), formatter).isBefore(nowMinusTwoDays))
                 .findAny()
                 .get();
 

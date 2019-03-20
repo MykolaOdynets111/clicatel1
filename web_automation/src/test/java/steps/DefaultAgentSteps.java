@@ -479,20 +479,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^(.*) sees correct chat with basic info in chat history container$")
     public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         selectedChatForHistoryTest = DefaultTouchUserSteps.getSelectedClientForChatHistoryTest();
-        String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
-                DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
+        String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
         ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems();
         chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(),
                 (String) selectedChatForHistoryTest.get("sessionId"));
-        String expectedDisplayedUserMessage =  chatHistoryItems.stream().filter(e -> e.getMessageType().equalsIgnoreCase("CLIENT_MESSAGE"))
-                .findFirst().get().getDisplayMessage();
 
         soft.assertEquals(actualChatHistoryItem.getChatHistoryTime(), expectedChatHistoryTime,
                 "Incorrect time for chat in chat history shown.");
-//        soft.assertEquals(actualChatHistoryItem.getChatHistoryUserMessage(), expectedDisplayedUserMessage,
-//                "Incorrect user message in chat history shown.");
         soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(agent),
                 "'View chat' button is not enabled.");
         soft.assertAll();
@@ -506,9 +500,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^Correct messages is shown in history details window$")
     public void verifyHistoryInOpenedWindow(){
         SoftAssert soft = new SoftAssert();
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
-        String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
-                DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
+        String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
         List<String> messagesFromChatHistoryDetails = agentHomePage.getHistoryDetailsWindow().getAllMessages();
         List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
 
@@ -519,6 +511,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
                 "Chat history is not as expected in chat history details (in active chat)");
         soft.assertAll();
+    }
+
+    private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime chatTimeFromBackendUTC = LocalDateTime.parse((String) selectedChatForHistoryTest.get("startedDate"), formatter);
+        return chatTimeFromBackendUTC.atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
