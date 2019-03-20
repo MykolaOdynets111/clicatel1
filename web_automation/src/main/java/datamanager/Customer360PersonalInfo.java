@@ -76,12 +76,12 @@ public class Customer360PersonalInfo {
     @Override
     public String toString() {
         return "Customer360PersonalInfo{" +
-                "fullName='" + fullName + '\'' +
-                ", location='" + location + '\'' +
-                ", customerSince='" + customerSince + '\'' +
+                "fullName='" + fullName + "'\n" +
+                ", location='" + location + "'\n" +
+                ", customerSince='" + customerSince + "'\n" +
                 ", email='" + email + '\'' +
-                ", channelUsername='" + channelUsername + '\'' +
+                ", channelUsername='" + channelUsername + "'\n" +
                 ", phone='" + phone + '\'' +
-                '}';
+                "}\n";
     }
 }

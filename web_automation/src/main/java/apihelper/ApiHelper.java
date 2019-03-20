@@ -19,6 +19,7 @@ import org.testng.Assert;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -482,11 +483,12 @@ public class ApiHelper {
         }
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
 
-        long customerSinceTimestamp  = respJSON.getLong("personalDetails.customerSince");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
-        String customerSince =  LocalDateTime.ofInstant(Instant.ofEpochMilli(customerSinceTimestamp),
-                                TimeZone.getDefault().toZoneId()).
-                format(formatter);
+        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String customerSince =  LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
+                                                        .withZoneSameInstant(zoneId).toLocalDateTime()
+                                                        .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         String channelUsername = "";
         try {
