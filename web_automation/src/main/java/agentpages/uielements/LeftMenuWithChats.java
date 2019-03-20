@@ -129,6 +129,12 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
                 .click();
     }
 
+    public List<String> getFilterOption(){
+        expandFilterButton.click();
+        waitForElementToBeVisibleAgent(filterDropdownMenu, 4);
+        return filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
+    }
+
     public void selectRandomChat(String agent){
         waitForElementToBePresentByXpathAgent(tenthChat, 8);
        List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()

@@ -8,6 +8,7 @@ import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -23,6 +24,7 @@ import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
@@ -255,6 +257,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^Agent select \"(.*)\" filter option$")
     public void selectFilterOption(String option){
         getLeftMenu("main agent").selectFilterOption(option);
+    }
+
+    @Then("^Agent see \"(.*)\" filter options$")
+    public void seeFilterOptions(String option){
+       // String filterOp = "[Live Chats, Webchat, Facebook, Twitter, Chat history, Tickets, Flagged chats]";
+
+        Assert.assertEquals(getLeftMenu("main agent").getFilterOption().toString().replaceAll("^.|.$", ""),option, "Wrong felter options");
     }
 
     @Then("^(.*) has new conversation request from (.*) user$")
