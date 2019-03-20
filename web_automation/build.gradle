@@ -381,16 +381,12 @@ task runTestsForAllTenants(type: Test) {
 //        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")
     }
     doLast {
-        if (!file("build/reports/tests/runTestsForAllTenants/Virgin Money Master check/testng-failed.xml").exists()){
-            tenantName="virginmoney"
-            runTouchVirginMoneyTests.execute()
-        }
         if (!file("build/reports/tests/runTestsForAllTenants/General Bank Master check/testng-failed.xml").exists()){
             tenantName="generalbank"
-            runTouchGenBankTests.execute()
+            runTouchTests.execute()
+            runCamundaFlowsTests.execute()
         }
         runVisibilityTests.execute()
-        runCamundaFlowsTests.execute()
         runDotControlTests.execute()
     }
     runTestsForAllTenants.finalizedBy(allureReport)
