@@ -375,8 +375,7 @@ task runTestsForAllTenants(type: Test) {
             ignoreFailures = true
             suites baseXmlPath + "generalbank/mastercheck.xml"
             suites baseXmlPath + "virginmoney/mastercheck.xml"
-            suites baseXmlPath + "generalbank/tie.xml"
-            suites baseXmlPath + "virginmoney/tie.xml"
+            suites baseXmlPath + "all/tie.xml"
         }
         reports.html.enabled = false
 //        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")

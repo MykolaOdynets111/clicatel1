@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="Suite of suites for TIE tests"  parallel="instances" thread-count="15">
-    <suite-files>
-        <suite-file path="../generalbank/tie.xml"></suite-file>
-        <suite-file path="../virginmoney/tie.xml"></suite-file>
-    </suite-files>
+<suite name="Suite of suites for TIE tests" >
+    <test name="TIE parallel tests" parallel="instances" thread-count="20">
+        <classes>
+            <class name="runner.generalbank.RunTIETest" />
+            <class name="runner.virginmoney.RunTIETest" />
+            <class name="runner.generalbank.RunTIEOneThreadTest" />
+        </classes>
+    </test>
+    <!--<test name="TIE one thread tests" parallel="instances" thread-count="4">-->
+        <!--<classes>-->
+            <!--<class name="runner.generalbank.RunTIEOneThreadTest" />-->
+            <!--<class name="runner.RunTIETrainingManagement" />-->
+        <!--</classes>-->
+    <!--</test>-->
 </suite>
