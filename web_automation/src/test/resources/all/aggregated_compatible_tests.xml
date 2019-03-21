@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="One Thread Suite" parallel="tests" thread-count="2">
+<suite name="Tests paralleled by features" parallel="tests" thread-count="2">
     <test name="Widget visibility test">
         <classes>
             <class name="runner.generalbank.RunVisibilityTest" />
