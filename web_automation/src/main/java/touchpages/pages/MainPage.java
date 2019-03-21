@@ -29,7 +29,7 @@ public class MainPage extends AbstractPage {
 
     public Widget openWidget() {
     try {
-        waitForElementToBeVisible(chatIcon, 15);
+        waitForElementToBeVisible(chatIcon, 10);
         moveToElemAndClick(chatIcon);
         return new Widget();
     } catch (TimeoutException e) {

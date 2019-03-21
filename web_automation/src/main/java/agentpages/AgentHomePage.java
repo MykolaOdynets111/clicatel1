@@ -163,9 +163,9 @@ public class AgentHomePage extends AgentAbstractPage {
         if (isElementShownAgent(conversationAreaContainer,15, ordinalAgentNumber)) {
             try{
                 try {
-                    waitForElementToBeVisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
+                    waitForElementToBeVisibleByXpathAgent(loadingSpinner, 6, ordinalAgentNumber);
                 }catch (TimeoutException e){ }
-                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 15, ordinalAgentNumber);
+                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
                 return true;
             }
             catch (TimeoutException e){

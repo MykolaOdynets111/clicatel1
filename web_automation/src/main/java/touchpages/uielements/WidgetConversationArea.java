@@ -113,7 +113,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
             // Added in case there is no agent added (for e.g., Virgin Money tenant)
         }
         try {
-            waitForElementToBeVisible(salutationElement, 15);
+            waitForElementToBeVisible(salutationElement, 10);
         } catch (TimeoutException e) {
         }
     }

@@ -130,7 +130,8 @@ task runTouchTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
-        suites baseXmlPath+tenantName+"/onethreadtests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
         suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
 }
@@ -373,25 +374,13 @@ task runTestsForAllTenants(type: Test) {
         useTestNG() {
             useDefaultListeners = true
             ignoreFailures = true
-            suites baseXmlPath + "generalbank/mastercheck.xml"
-            suites baseXmlPath + "virginmoney/mastercheck.xml"
+            suites baseXmlPath + "all/mastercheck.xml"
             suites baseXmlPath + "all/tie.xml"
         }
         reports.html.enabled = false
-//        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")
     }
     doLast {
-        if (!file("build/reports/tests/runTestsForAllTenants/Virgin Money Master check/testng-failed.xml").exists()){
-            tenantName="virginmoney"
-            runTouchVirginMoneyTests.execute()
-        }
-        if (!file("build/reports/tests/runTestsForAllTenants/General Bank Master check/testng-failed.xml").exists()){
-            tenantName="generalbank"
-            runTouchGenBankTests.execute()
-        }
-        runVisibilityTests.execute()
-        runCamundaFlowsTests.execute()
-        runDotControlTests.execute()
+        runTouchTests.execute()
     }
     runTestsForAllTenants.finalizedBy(allureReport)
 }

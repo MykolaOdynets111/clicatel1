@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="One Thread Suite (chatdesk)">
+    <test name="User to Agent conversation ">
+        <classes>
+            <class name="runner.generalbank.RunGenBankAgentTest" />
+        </classes>
+    </test>
+    <test name="Creating new agent">
+        <classes>
+            <class name="runner.generalbank.RunPortalTest" />
+        </classes>
+    </test>
+    <test name="Welcome flow">
+        <classes>
+            <class name="runner.camundaflows.RunCamundaFlowsTest" />
+        </classes>
+    </test>
+</suite>
