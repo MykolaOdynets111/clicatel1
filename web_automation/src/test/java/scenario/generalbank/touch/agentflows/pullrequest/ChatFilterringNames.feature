@@ -1,3 +1,4 @@
+@no_widget
 Feature: Agent should be able to see all filters
 
   Scenario: Verify agent can see all filters
