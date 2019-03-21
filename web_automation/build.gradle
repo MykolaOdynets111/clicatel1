@@ -130,7 +130,8 @@ task runTouchTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
-//        suites baseXmlPath+tenantName+"/onethreadtests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
         suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
 }
@@ -379,11 +380,7 @@ task runTestsForAllTenants(type: Test) {
         reports.html.enabled = false
     }
     doLast {
-
         runTouchTests.execute()
-        runCamundaFlowsTests.execute()
-        runVisibilityTests.execute()
-        runDotControlTests.execute()
     }
     runTestsForAllTenants.finalizedBy(allureReport)
 }

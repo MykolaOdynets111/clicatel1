@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="One Thread Suite" parallel="tests" thread-count="2">
+    <test name="Widget visibility test">
+        <classes>
+            <class name="runner.generalbank.RunVisibilityTest" />
+        </classes>
+    </test>
+    <test name=".Control">
+        <classes>
+            <class name="runner.dotcontrol.RunDotControlTest" />
+        </classes>
+    </test>
+</suite>
