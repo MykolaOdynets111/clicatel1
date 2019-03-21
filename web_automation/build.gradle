@@ -373,19 +373,15 @@ task runTestsForAllTenants(type: Test) {
         useTestNG() {
             useDefaultListeners = true
             ignoreFailures = true
-            suites baseXmlPath + "generalbank/mastercheck.xml"
-            suites baseXmlPath + "virginmoney/mastercheck.xml"
+            suites baseXmlPath + "all/mastercheck.xml"
             suites baseXmlPath + "all/tie.xml"
         }
         reports.html.enabled = false
-//        System.out.print("\n!!! ++ reports.html.enabled = false + !!!\n")
     }
     doLast {
-        if (!file("build/reports/tests/runTestsForAllTenants/General Bank Master check/testng-failed.xml").exists()){
-            tenantName="generalbank"
-            runTouchTests.execute()
-            runCamundaFlowsTests.execute()
-        }
+
+        runTouchTests.execute()
+        runCamundaFlowsTests.execute()
         runVisibilityTests.execute()
         runDotControlTests.execute()
     }

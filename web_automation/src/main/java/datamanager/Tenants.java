@@ -1,10 +1,15 @@
 package datamanager;
 
 import apihelper.ApiHelper;
+import cucumber.runtime.CucumberException;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
+import org.apache.commons.io.FileUtils;
+import org.testng.SkipException;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -124,4 +129,18 @@ public class Tenants {
     public static String getTenantNameByTenantOrgName(String tenantOrgName){
         return TENANT_UNDER_TEST.get().get(tenantOrgName);
     }
+
+    public static void checkWidgetConnectionStatus(){
+        File testng_xml = new File("build/reports/tests/runTestsForAllTenants/All tenants Master check/testng-failed.xml");
+
+        if(testng_xml.exists()){
+                try {
+                    if( FileUtils.readFileToString(testng_xml, "UTF-8").contains(getTenantUnderTestOrgName())) {
+                        throw new CucumberException(new SkipException("Widget is not connecting for '" + getTenantUnderTestOrgName() + "' tenant"));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 }
