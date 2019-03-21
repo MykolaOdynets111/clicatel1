@@ -130,7 +130,7 @@ task runTouchTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
-        suites baseXmlPath+tenantName+"/onethreadtests.xml"
+//        suites baseXmlPath+tenantName+"/onethreadtests.xml"
         suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
 }
