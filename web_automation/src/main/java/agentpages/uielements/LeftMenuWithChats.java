@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -131,8 +132,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     public List<String> getFilterOption(){
         expandFilterButton.click();
-        waitForElementToBeVisibleAgent(filterDropdownMenu, 4);
-        return filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
+        waitForElementToBeVisibleAgent(filterDropdownMenu, 10);
+        List<String> displayedFilterOptions = filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
+        return  displayedFilterOptions;
     }
 
     public void selectRandomChat(String agent){

@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Collections;
 
 public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private AgentHomePage agentHomePage;
@@ -258,9 +259,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
     @Then("^Agent see \"(.*)\" filter options$")
-    public void seeFilterOptions(String option){
-
-        Assert.assertEquals(getLeftMenu("main agent").getFilterOption().toString().replaceAll("^.|.$", ""),option, "Wrong filter options \\n ");
+    public void seeFilterOptions(List<String> option){
+        List<String> displayedFilterOptions = getLeftMenu("main agent").getFilterOption();
+        Collections.sort(option);
+        Collections.sort(displayedFilterOptions);
+        Assert.assertEquals(displayedFilterOptions , option, "Wrong filter options \n ");
     }
 
     @Then("^(.*) has new conversation request from (.*) user$")
