@@ -14,8 +14,3 @@ Feature: Max chat functionality for Agent mode tenant
     Then Conversation area becomes active with chat to agent user's message
     When Agent responds with hello to User
     Then User should see 'hello' text response for his 'chat to agent' input
-
-
-
-
-

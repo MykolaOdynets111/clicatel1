@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-@FindBy(css = "div.agentflows-pop-up")
+@FindBy(css = "div.touch-pop-up")
 public class IncomingTransferWindow extends AbstractUIElement {
 
     @FindBy(xpath = "//button[text()='Accept transfer']")

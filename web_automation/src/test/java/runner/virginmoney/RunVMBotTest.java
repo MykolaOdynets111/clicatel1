@@ -17,7 +17,7 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/virginmoney/agentflows/botflows",
+        features ="src/test/java/scenario/virginmoney/touch/botflows",
         glue ="steps")
 public class RunVMBotTest {
 

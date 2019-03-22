@@ -48,7 +48,7 @@ public class BasePortalSteps {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         agentEmail = "aqa_"+System.currentTimeMillis()+"@aqa.com";
         ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, agentEmail);
-        // added wait for new agent to be successfully saved in agentflows DB before further actions with this agent
+        // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -72,7 +72,7 @@ public class BasePortalSteps {
     @Then("^New agent is added into touch database$")
     public void verifyThatNewAgentAddedToDatabase(){
         Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), agentEmail),
-                "Agent with '" + agentEmail + "' Email is not created in agentflows DB after 10 seconds wait.");
+                "Agent with '" + agentEmail + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
     @Given("^Delete user$")
