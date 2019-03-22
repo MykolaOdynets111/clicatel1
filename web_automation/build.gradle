@@ -53,7 +53,7 @@ allure{
 }
 
 def baseXmlPath = "/src/test/resources/"
-def tenantName = "generalbank"
+def tenantName = "all"
 def suite="all"
 def env = 'testing'
 
@@ -336,10 +336,6 @@ task runTests(type: Test) {
 task runTestsForAllTenants(type: Test) {
     runTestsForAllTenants.dependsOn 'clean'
     classes.mustRunAfter 'clean'
-
-    if (System.getProperty("tenant") != null) {
-        tenantName = System.properties.getProperty("tenant")
-    }
 
     systemProperties = System.getProperties()
     doFirst {
