@@ -55,31 +55,9 @@ allure{
 def baseXmlPath = "/src/test/resources/"
 def tenantName = "generalbank"
 def suite="all"
-def touchGoPlan = "unknown"
 def env = 'testing'
 
 // ========= !! SERVICE TASKS !! ============== //
-
-task getTouchGoPlan() {
-    def localTenantName // Created for handling cases when tenant name contains "-". Like "virgin-money".
-    if (System.getProperty("env") != null){
-        env=System.getProperty("env")
-    }
-    if (System.getProperty("tenant") != null) {
-        tenantName = System.properties.getProperty("tenant")
-    }
-    localTenantName=tenantName
-    if(localTenantName.contains("_")) localTenantName = localTenantName.replace("_", "-")
-    def uri = 'https://'+env+'-touch.clickatelllabs.com/internal/tenants/'+ localTenantName +'/config/'
-    def headers = [ Accept: 'application/json' ]
-    try {
-        def jsonText = new URL(uri).getText(requestProperties: headers)
-        def parsedJson = new JsonSlurper().parseText(jsonText) as Map
-        touchGoPlan = parsedJson.get('touchGoType')
-    } catch(IOException e){
-        touchGoPlan = "started"
-    }
-}
 
 tasks.withType(Test) {
     systemProperties = System.getProperties()
@@ -132,18 +110,14 @@ task runTouchTests(type:Test) {
         suites baseXmlPath+tenantName+"/uitests.xml"
         suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
         suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
-        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
 }
 
 task runTouchPullRequestTests(type:Test) {
-
-//    runTouchTests.dependsOn(getTouchGoPlan)
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
         suites baseXmlPath+tenantName+"/onethreadtests_pullrequest.xml"
-//        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
     }
 }
 
@@ -198,7 +172,6 @@ task runTouchVirginMoneyTests(type:Test){
             ignoreFailures = true
             suites baseXmlPath+tenantName+"/uitests.xml"
             suites baseXmlPath+tenantName+"/onethreadtests.xml"
-            suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
         }
     }
 }
@@ -208,7 +181,6 @@ task runTouchGenBankTests(type:Test){
             ignoreFailures = true
             suites baseXmlPath+tenantName+"/uitests.xml"
             suites baseXmlPath+tenantName+"/onethreadtests.xml"
-            suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
         }
     }
 }
@@ -285,8 +257,7 @@ task runChatdeskTests(type:Test) {
     runTouchTests.dependsOn(getTouchGoPlan)
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath+tenantName+"/onethreadtests.xml"
-        suites baseXmlPath+tenantName+"/"+touchGoPlan.toLowerCase()+".xml"
+        suites baseXmlPath+tenantName+"/chatdesk.xml"
     }
 }
 
