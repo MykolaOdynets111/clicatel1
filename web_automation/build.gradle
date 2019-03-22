@@ -53,7 +53,7 @@ allure{
 }
 
 def baseXmlPath = "/src/test/resources/"
-def tenantName = "all"
+def tenantName = "generalbank"
 def suite="all"
 def env = 'testing'
 
@@ -116,7 +116,6 @@ task runTouchTests(type:Test) {
 }
 
 task runTouchPullRequestTests(type:Test) {
-    System.out.print("!!! tenant from runTouchPullRequestTests " + tenantName + " !!!")
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
@@ -130,16 +129,16 @@ task runAllTests(type:Test){
         runBaseTests.execute()
     }
     doLast {
-        if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-            runTouchTests.execute()
-        }
-        if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-            String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-            if (!failedTestXMLContent.contains("Failed suite [General Bank Master check]")) {
+//        if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
+//            runTouchTests.execute()
+//        }
+//        if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
+//            String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
+//            if (!failedTestXMLContent.contains("Failed suite [General Bank Master check]")) {
                 runTouchTests.execute()
-            }
-        }
-        runVisibilityTests.execute()
+//            }
+//        }
+//        runVisibilityTests.execute()
     }
 }
 
@@ -149,15 +148,6 @@ task runPullRequestTests(type:Test){
         runBaseTests.execute()
     }
     doLast {
-//        if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-//            runTouchPullRequestTests.execute()
-//        }
-//        if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-//            String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-//            if (!failedTestXMLContent.contains("Failed suite [General Bank Master check]")) {
-//                runTouchPullRequestTests.execute()
-//            }
-//        }
         runTouchPullRequestTests.execute()
         runVisibilityTests.execute()
     }
@@ -267,7 +257,9 @@ task runChatdeskTests(type:Test) {
 
 task runTests(type: Test) {
 
-
+//    if (System.getProperty("tenant") != null) {
+//        tenantName = System.properties.getProperty("tenant")
+//    }
     if (System.getProperty("suite") != null) {
         suite = System.properties.getProperty("suite")
     }
