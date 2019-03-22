@@ -68,11 +68,11 @@ public class ChatBody extends AbstractUIElement {
 
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
 
-        if(!isElementShownAgentByXpath(locator, 40, agent)){
+        if(!isElementShownAgentByXpath(locator, 40, agent)){// clarify_timeout
             scrollToElem(DriverFactory.getDriverForAgent(agent), locator,
                     "'" +usrMessage + "' user message on chatdesk");
         }
-        return isElementShownAgentByXpath(locator, 10, agent);
+        return isElementShownAgentByXpath(locator, 10, agent);// clarify_timeout 1 method for web and social
     }
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {

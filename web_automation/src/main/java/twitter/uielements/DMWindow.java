@@ -52,7 +52,7 @@ public class DMWindow extends AbstractUIElement {
     }
 
     public boolean isTextResponseForUserMessageShown(String userMessage){
-       return new DMToUserMessage(userMessage).isTextResponseShown(40);
+       return new DMToUserMessage(userMessage).isTextResponseShown(40);// clarify_timeout
     }
 
 

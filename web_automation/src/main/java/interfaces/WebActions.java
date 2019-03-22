@@ -56,7 +56,7 @@ public interface WebActions extends WebWait {
 
     default boolean isElementShown(WebElement element){
         try {
-            return waitForElementToBeVisible(element, 5).isDisplayed();
+            return waitForElementToBeVisible(element, 5).isDisplayed();//errorWait 10 for isWelcomeCardContainerShown()
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }

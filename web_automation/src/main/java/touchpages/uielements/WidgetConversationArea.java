@@ -120,7 +120,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
 
     public void waitForMessageToAppearInWidget(String text){
         try {
-            waitForElementToBeVisibleByXpath(String.format(targetFromUserMessage, text), 10);
+            waitForElementToBeVisibleByXpath(String.format(targetFromUserMessage, text), 10);// clarify_timeout
         } catch (TimeoutException e) {
         }
     }
