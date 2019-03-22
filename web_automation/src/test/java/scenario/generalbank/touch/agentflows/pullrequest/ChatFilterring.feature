@@ -1,8 +1,8 @@
 Feature: Agent should be able to filter chats
 
   Background:
-    Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant
+    Given I login as agent of General Bank Demo
     And Click chat icon
 
   Scenario: Verify agent can filter chats

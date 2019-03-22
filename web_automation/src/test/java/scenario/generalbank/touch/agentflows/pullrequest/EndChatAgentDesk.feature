@@ -1,8 +1,8 @@
 Feature: Interaction with End chat button on chatdesk
 
   Background:
-    Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant
+    Given I login as agent of General Bank Demo
     And Click chat icon
 
   Scenario: Verify if agent is able to close chat in chat desk
