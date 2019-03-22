@@ -337,6 +337,10 @@ task runTestsForAllTenants(type: Test) {
     runTestsForAllTenants.dependsOn 'clean'
     classes.mustRunAfter 'clean'
 
+    if (System.getProperty("tenant") != null) {
+        tenantName = System.properties.getProperty("tenant")
+    }
+
     systemProperties = System.getProperties()
     doFirst {
         useTestNG() {
