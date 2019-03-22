@@ -53,7 +53,7 @@ allure{
 }
 
 def baseXmlPath = "/src/test/resources/"
-def tenantName = "generalbank"
+def tenantName = "all"
 def suite="all"
 def env = 'testing'
 
