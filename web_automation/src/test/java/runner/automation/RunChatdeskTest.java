@@ -17,7 +17,7 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/scenario/automation/agentflows",
+        features ="src/test/java/scenario/automation/agentflows",
         glue ="steps")
 public class RunChatdeskTest {
 
