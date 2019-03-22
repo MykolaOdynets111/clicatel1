@@ -333,7 +333,7 @@ public class DotControlSteps {
     }
 
     private void waitFotResponseToComeToServer() {
-        for(int i = 0; i<35; i++) {
+        for(int i = 0; i<15; i++) {
             if (!Server.incomingRequests.isEmpty() &
                     Server.incomingRequests.keySet().contains(clientId)) {
                 break;
@@ -345,7 +345,7 @@ public class DotControlSteps {
             }
         }
         if(Server.incomingRequests.isEmpty()){
-            Assert.assertTrue(false, ".Control is not responding after 35 seconds wait.");
+            Assert.assertTrue(false, ".Control is not responding after 15 seconds wait.");
         }
     }
 

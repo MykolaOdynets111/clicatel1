@@ -173,7 +173,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
-        int waitForResponse=60;
+        int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
     }

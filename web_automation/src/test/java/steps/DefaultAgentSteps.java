@@ -215,7 +215,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(45, agent),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
@@ -269,14 +269,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                                     DotControlSteps.getFromClientRequestMessage().getClientId()+")");
                     return;
                 }
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,70, agent),
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,20, agent),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
             }
 
     private boolean waitForDotControlRequestOnChatDesk(){
         for(int i = 0; i<5; i++) {
             String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,10, "main")) return true;
+            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,3, "main")) return true;
             else {
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
             }
