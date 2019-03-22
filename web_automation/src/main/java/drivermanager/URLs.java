@@ -12,9 +12,9 @@ public class URLs {
 
     private static final String BASE_FB_URL = "https://www.facebook.com/";
 
-    private static final String BASE_ENV_URL = "https://%s-touch-web.clickatelllabs.com/?tenantId=%s";
+    private static final String BASE_ENV_URL = "https://%s-agentflows-web.clickatelllabs.com/?tenantId=%s";
 
-    private static final String BASE_PROD_URL = "https://touch-web.clickatell.com/?tenantId=%s";
+    private static final String BASE_PROD_URL = "https://agentflows-web.clickatell.com/?tenantId=%s";
 
     private static String BASE_PORTAL_URL = "https://%s-portal.clickatelllabs.com/";
 
@@ -22,7 +22,7 @@ public class URLs {
 
     private static String FINAL_AGENT_URL = null;
 
-    private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com/";
+    private static String BASE_SOCIAL_URL = "https://%s-agentflows-social.clickatelllabs.com/";
 
     // ================== API BASE URLs ========================= //
 
@@ -32,9 +32,9 @@ public class URLs {
 
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
-    private static String BASE_TOUCH_API_URL = "https://%s-touch.clickatelllabs.com/v6/";
+    private static String BASE_TOUCH_API_URL = "https://%s-agentflows.clickatelllabs.com/v6/";
 
-    private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
+    private static String BASE_INTERNAL_API_URL = "https://%s-agentflows.clickatelllabs.com/internal/";
 
     private static String BASE_PLATFORM_URL = "https://%s-platform.clickatelllabs.com";
 

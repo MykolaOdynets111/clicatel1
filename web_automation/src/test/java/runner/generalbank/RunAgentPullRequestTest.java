@@ -17,7 +17,7 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/generalbank/touch/agentflows/pullrequest",
+        features ="src/test/java/scenario/generalbank/agentflows/agentflows/pullrequest",
         glue ="steps")
 public class RunAgentPullRequestTest {
 

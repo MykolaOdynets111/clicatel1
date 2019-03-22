@@ -3,7 +3,7 @@
 <suite name="Camunda flows" >
     <test name="Welcome flow">
         <classes>
-            <class name="runner.camundaflows.RunCamundaFlowsTest" />
+            <class name="runner.generalbank.RunCamundaFlowsTest" />
         </classes>
     </test>
 </suite>

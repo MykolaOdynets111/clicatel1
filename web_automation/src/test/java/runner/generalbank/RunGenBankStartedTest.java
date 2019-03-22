@@ -17,7 +17,7 @@ import java.util.List;
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/generalbank/touch/touchstarted",
+        features ="src/test/java/scenario/generalbank/agentflows/touchstarted",
         glue ="steps")
 public class RunGenBankStartedTest {
 

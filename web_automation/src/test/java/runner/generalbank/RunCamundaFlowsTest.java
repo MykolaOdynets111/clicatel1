@@ -1,4 +1,4 @@
-package runner.camundaflows;
+package runner.generalbank;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;

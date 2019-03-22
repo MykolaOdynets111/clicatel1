@@ -104,7 +104,6 @@ task runVisibilityTests(type:Test) {
 }
 
 task runTouchTests(type:Test) {
-    runTouchTests.dependsOn(getTouchGoPlan)
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/uitests.xml"
@@ -202,7 +201,6 @@ task runTestsAgainstNewlyCreatedAccount(type:Test){
 }
 
 task runTouchGoTests(type:Test) {
-    runTouchTests.dependsOn(getTouchGoPlan)
     doFirst {
         useTestNG() {
             useDefaultListeners = true
@@ -254,7 +252,6 @@ task runCamundaFlowsTests(type:Test) {
 
 
 task runChatdeskTests(type:Test) {
-    runTouchTests.dependsOn(getTouchGoPlan)
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/chatdesk.xml"

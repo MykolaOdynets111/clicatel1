@@ -31,7 +31,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
     private String targetTextInConversationArea = "//li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod' and contains(text(), \"%s\")]";
 
     /*
-    Getting the last (the newest) from user message in touch with searched text
+    Getting the last (the newest) from user message in agentflows with searched text
      */
     private WebElement getFromUserWebElement(String messageText) {
         try {

@@ -537,7 +537,7 @@ public class TIEApiSteps implements DateTimeHelper{
         String newTenant = NEW_TENANT_NAMES.get(Thread.currentThread().getId());
         Response resp =
         given().header("Content-Type", "application/json").log().all()
-                .body("{\"category\":\"touch button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\",\"type\":\"AQA\", \"tags\":[\"AQA\"]}").
+                .body("{\"category\":\"agentflows button\",\"text\":\"HO-HO-HO\",\"intent\":\"SANTA\",\"type\":\"AQA\", \"tags\":[\"AQA\"]}").
         when()
                 .post(String.format(Endpoints.TIE_POST_TRAINSET, newTenant));
         SoftAssert soft = new SoftAssert();

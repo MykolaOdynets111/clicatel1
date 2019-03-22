@@ -250,7 +250,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("And message that feature is not available is shown")
     public void verifySuggestionFeatureNotAvailable(){
-        String expectedMessage = "Agent assist is not available on your current touch package";
+        String expectedMessage = "Agent assist is not available on your current agentflows package";
         Assert.assertEquals(getSuggestedGroup().getSuggestionsNotAvailableMessage(), expectedMessage,
                 "Error message that Agent Assist feature is not available is not as expected");
     }

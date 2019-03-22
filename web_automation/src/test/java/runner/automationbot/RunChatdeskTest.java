@@ -1,4 +1,4 @@
-package runner.virginmoney;
+package runner.automationbot;
 
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
@@ -11,15 +11,15 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "Virgin Money widget UI tests")
+@Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
-        plugin={
+        format={"pretty",
                 "com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/virginmoney/agentflows/botflows",
+        features ="src/test/java/scenario/scenario/automationbot/agentflows",
         glue ="steps")
-public class RunVMBotTest {
+public class RunChatdeskTest {
 
         @Factory
         public Object[] features() {

@@ -1,9 +1,10 @@
 @smoke
-Feature: User should be asked personal info before redirecting to the bot mode agent
+Feature: User should be asked personal info before redirecting to the agent mode agent
 
-  Scenario: Verify if user is able to communicate with agent after providing info details
-    Given I login as agent of General Bank Demo
-    Given User select General Bank Demo tenant without creating profile
+  @agent_mode
+  Scenario: Verify if user is able to communicate with agent in "Agent" mode after providing info details
+    Given I login as agent of Automation
+    Given User select Automation tenant without creating profile
     And Click chat icon
     When User enter chat to agent into widget input field
     Then Card with a Let me connect you with a live agent to assist you further. Before I transfer you, please give us some basic info: text is shown on user chat to agent message

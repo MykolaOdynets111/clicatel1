@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Chatdesk tests">
-    <test name="User to Agent conversation ">
+<suite name="Chatdesk tests" parallel="tests" thread-count="3" >
+    <test name="User to Agent conversation (General Bank Demo tenant)">
         <classes>
             <class name="runner.generalbank.RunGenBankAgentTest" />
-        </classes>
-    </test>
-    <test name="Creating new agent">
-        <classes>
             <class name="runner.generalbank.RunPortalTest" />
+            <class name="runner.generalbank.RunCamundaFlowsTest" />
         </classes>
     </test>
-    <test name="Welcome flow">
+    <test name="User to Agent conversation (Automation tenant) ">
         <classes>
-            <class name="runner.camundaflows.RunCamundaFlowsTest" />
+            <class name="runner.automation.RunChatdeskTest" />
+        </classes>
+    </test>
+    <test name="User to Agent conversation (Automation Bot tenant)">
+        <classes>
+            <class name="runner.automationbot.RunChatdeskTest" />
         </classes>
     </test>
 </suite>

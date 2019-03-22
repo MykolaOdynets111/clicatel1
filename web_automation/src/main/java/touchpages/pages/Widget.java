@@ -24,7 +24,7 @@ public class Widget extends AbstractPage {
     @FindBy(css = "div.ctl-chat-container.ctl-visible")
     public WebElement widgetWindow;
 
-    @FindBy(css = "div.ctl-touch-button")
+    @FindBy(css = "div.ctl-agentflows-button")
     private WebElement touchButton;
 
     @FindBy(css = "div.ctl-conversation-area")
