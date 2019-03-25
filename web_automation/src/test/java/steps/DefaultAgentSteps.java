@@ -300,7 +300,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String userName=null;
         if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
         if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,60),
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,60),// clarify_timeout
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 

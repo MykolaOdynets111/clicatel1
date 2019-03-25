@@ -49,7 +49,7 @@ public class FacebookSteps {
         if (expectedResponse.equalsIgnoreCase("agents_away")){
             expectedResponse = ApiHelper.getTenantMessageText("agents_away");
         }
-        boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,60);
+        boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,60);// clarify_timeout
         Assert.assertTrue(isExpectedMessageIsShown,
                 "User does not receive response on the message \""+ getCurrentUserMessageText()+"\" in FB messenger after 30 seconds wait.");
     }
@@ -62,7 +62,7 @@ public class FacebookSteps {
 
     @Then("^Post response arrives$")
     public void checkThatPostResponseArrives(){
-        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(40),
+        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(40),// clarify_timeout
                 "Notification about new post reply is not shown.");
 
     }
