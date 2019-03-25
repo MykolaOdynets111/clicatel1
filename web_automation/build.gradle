@@ -129,16 +129,7 @@ task runAllTests(type:Test){
         runBaseTests.execute()
     }
     doLast {
-//        if (!(file("build/reports/tests/runBaseTests/testng-failed.xml").exists())) {
-//            runTouchTests.execute()
-//        }
-//        if (file("build/reports/tests/runBaseTests/testng-failed.xml").exists()) {
-//            String failedTestXMLContent = file("build/reports/tests/runBaseTests/testng-failed.xml").text
-//            if (!failedTestXMLContent.contains("Failed suite [General Bank Master check]")) {
-                runTouchTests.execute()
-//            }
-//        }
-//        runVisibilityTests.execute()
+        runTouchTests.execute()
     }
 }
 
@@ -300,10 +291,6 @@ task runTests(type: Test) {
         runTests.dependsOn(runTiePullRequestTests)
     }
 
-    if(suite=="tiealltenants"){
-        runTests.dependsOn(runTIETestsForAllTenants)
-    }
-
     if(suite=="touchgo"){
         runTests.dependsOn(runTouchGoTests)
     }
@@ -328,22 +315,3 @@ task runTests(type: Test) {
     defaultTasks 'clean', 'runTests'
 }
 
-task runTestsForAllTenants(type: Test) {
-    runTestsForAllTenants.dependsOn 'clean'
-    classes.mustRunAfter 'clean'
-
-    systemProperties = System.getProperties()
-    doFirst {
-        useTestNG() {
-            useDefaultListeners = true
-            ignoreFailures = true
-            suites baseXmlPath + "all/mastercheck.xml"
-            suites baseXmlPath + "all/tie.xml"
-        }
-        reports.html.enabled = false
-    }
-    doLast {
-        runTouchTests.execute()
-    }
-    runTestsForAllTenants.finalizedBy(allureReport)
-}
