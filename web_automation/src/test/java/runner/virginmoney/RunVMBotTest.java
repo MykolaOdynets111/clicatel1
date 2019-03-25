@@ -13,8 +13,7 @@ import java.util.List;
 
 @Test(groups = "Virgin Money widget UI tests")
 @CucumberOptions(
-        plugin={
-                "com.github.kirlionik.cucumberallure.AllureReporter"
+        format={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
         features ="src/test/java/scenario/virginmoney/touch/botflows",

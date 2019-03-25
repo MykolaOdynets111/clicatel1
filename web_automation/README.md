@@ -30,7 +30,7 @@ You can find Allure report by path "build/allure-report/index.html"
 
 Default parameters' values:
 -Dsuite=all
--Dtenant=generalbank
+-Dtenant=all
 -Denv=testing
 -Dremote=false
 -Ddeploy_to=active
