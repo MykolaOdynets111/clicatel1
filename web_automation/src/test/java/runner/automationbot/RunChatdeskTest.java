@@ -13,8 +13,7 @@ import java.util.List;
 
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
-        format={"pretty",
-                "com.github.kirlionik.cucumberallure.AllureReporter"
+        format={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
         features ="src/test/java/scenario/automationbot/agentflows",
