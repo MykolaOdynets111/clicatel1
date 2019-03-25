@@ -313,6 +313,5 @@ task runTests(type: Test) {
 
     runTests.finalizedBy(allureReport)
     defaultTasks 'clean', 'runTests'
-
 }
 
