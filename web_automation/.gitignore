@@ -3,3 +3,4 @@ out/
 .idea/
 *.impl
 .gradle/
+**/.gradle/
