@@ -122,6 +122,14 @@ public class ApiHelperTie {
                 .get(String.format(Endpoints.TIE_ALL_INTENTS, Tenants.getTenantUnderTestName()));
     }
 
+    public static Response getAllIntentsWithIDs(){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.TIE_NEW_INTENT_MANAGEMENT, Tenants.getTenantUnderTestName()));
+    }
+
+
     public static Response deleteIntent(String intentId){
         return RestAssured.given()
                 .header("Content-Type", "application/json")
@@ -129,6 +137,16 @@ public class ApiHelperTie {
                 .body("{\"ids\":[\"" +intentId+ "\"]}")
                 .delete(String.format(Endpoints.TIE_NEW_INTENT_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
+
+    public static void deleteAllIntents(){
+        List<String> faqIntents = ApiHelperTie.getAllIntentsWithIDs().getBody().jsonPath().getList("data").stream()
+                .map(e -> (List) e)
+                .filter(e -> ((String) e.get(2)).equals("faq"))
+                .map(e -> (String) e.get(5))
+                .collect(Collectors.toList());
+        for(String id : faqIntents) {
+            ApiHelperTie.deleteIntent(id);
+        }    }
 
 
     public static Response getTrainData(){
