@@ -16,7 +16,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void clickCancel() {
         waitForElementToBeVisibleAgent(cancelButton,7);
         cancelButton.click();
-        waitForElementToBeVisibleAgent(cancelButton,7);
     }
 
 
