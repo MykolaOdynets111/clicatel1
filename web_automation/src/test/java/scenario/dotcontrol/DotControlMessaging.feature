@@ -25,7 +25,7 @@ Feature: Creating .Control integration and sending messages
   Scenario: Sending message to .Control with empty message
     Given Create .Control integration for General Bank Demo tenant
     When Send empty message for .Control
-    Then Message should be sent
+    Then Message should not be sent
 
   @no_chatdesk
   Scenario: Sending message to .Control with invalid apiToken

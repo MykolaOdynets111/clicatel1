@@ -75,10 +75,10 @@ public class DotControlSteps {
         clientId.set(dotControlRequestMessage.get().getClientId());
     }
 
-    @Then("^Message should be sent$")
-    public void verifyMessageIsSent(){
-        Assert.assertEquals(responseOnSentRequest.get().statusCode(), 200,
-        "Sending empty message causes error\n" +
+    @Then("^Message should not be sent$")
+    public void verifyMessageIsNotSent(){
+        Assert.assertEquals(responseOnSentRequest.get().statusCode(), 400,
+        "Sending empty message does not return 400 status code\n" +
         responseOnSentRequest.get().getBody().asString() + "\n");
     }
 
