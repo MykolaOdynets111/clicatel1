@@ -1,4 +1,4 @@
-Feature: Interaction with End chat button on chatdesk
+Feature: Canceling chat ending
 
   Background:
     Given User select General Bank Demo tenant
