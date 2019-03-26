@@ -273,14 +273,6 @@ public class AgentHomePage extends AgentAbstractPage {
         }
     }
 
-    public void clickCancelCloseButtonInCloseChatPopup (){
-        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
-            waitForElementToBeVisibleByXpathAgent(cancelCloseChatButtonXPATH, 10, "main agent");
-            findElemByXPATHAgent(cancelCloseChatButtonXPATH).click();
-            waitForElementToBeInVisibleByXpathAgent(cancelCloseChatButtonXPATH, 5);
-        }
-    }
-
     public boolean isAgentLimitReachedPopupShown(int wait){
         return isElementShownAgent(agentLimitReachedPopup,wait);
     }

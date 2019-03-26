@@ -1,3 +1,4 @@
+@agent_feedback
 Feature: Canceling chat ending
 
   Background:
