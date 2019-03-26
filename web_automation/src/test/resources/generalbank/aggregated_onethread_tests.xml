@@ -11,9 +11,4 @@
             <class name="runner.generalbank.RunPortalTest" />
         </classes>
     </test>
-    <test name="Welcome flow">
-        <classes>
-            <class name="runner.generalbank.RunCamundaFlowsTest" />
-        </classes>
-    </test>
 </suite>

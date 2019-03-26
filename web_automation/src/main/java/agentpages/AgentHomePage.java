@@ -19,10 +19,6 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.text-field")
     private WebElement suggestionInputFieldContainer;
 
-    @FindBy(xpath = "//span[text()='Close Chat']")
-    private WebElement closeChatButton;
-
-    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String messageInputLocator = "//textarea[contains(@class,'text-input')]";
     private String loadingSpinner = "//*[text()='Connecting...']";
@@ -216,7 +212,7 @@ public class AgentHomePage extends AgentAbstractPage {
     public void endChat(){
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
-            clickCloseButtonInCloseChatPopup();
+            getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
         }
     }
 
@@ -274,18 +270,6 @@ public class AgentHomePage extends AgentAbstractPage {
             if (!isElementShownAgent(profanityPopup, 1, "main agent")){
                 break;
             }
-        }
-    }
-
-    public boolean isEndChatPopupShown (){
-        return isElementShownAgent(closeChatButton,12);
-    }
-
-    public void clickCloseButtonInCloseChatPopup (){
-        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
-            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
-            findElemByXPATHAgent(closeChatButtonXPATH).click();
-            waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
         }
     }
 
