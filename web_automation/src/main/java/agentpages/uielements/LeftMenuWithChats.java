@@ -138,12 +138,16 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public void selectRandomChat(String agent){
-        waitForElementToBePresentByXpathAgent(tenthChat, 8);
-       List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
-                                                            .map(webElement -> new ChatInLeftMenu(webElement))
-                                                            .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
-                                                            .filter(userName -> userName.startsWith("test"))
-                                                            .collect(Collectors.toList());
+        try {
+            waitForElementToBePresentByXpathAgent(tenthChat, 8);
+        }catch(TimeoutException e){
+            // nothing to do, just stabilizing wait
+        }
+        List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
+                .map(webElement -> new ChatInLeftMenu(webElement))
+                .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
+                .filter(userName -> userName.startsWith("test"))
+                .collect(Collectors.toList());
        String randomClientIdWithOneSession = displayedClientIdsFromAQATests.stream()
                                             .filter(clientId ->
                                                 ApiHelper.getSessionDetails(clientId).getBody().jsonPath().getList("data.sessionId").size()==1)

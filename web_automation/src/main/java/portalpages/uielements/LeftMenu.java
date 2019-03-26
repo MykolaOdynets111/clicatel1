@@ -1,6 +1,7 @@
 package portalpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -30,8 +31,9 @@ public class LeftMenu extends AbstractUIElement {
 //        waitForElementToBeVisible(findElement(By.xpath("//div[@ng-repeat='menuItem in menu']/div[not(contains(@class, 'collapse'))]/a[not(contains(@class, 'hidden'))]/span")), 5);
         for(int i=0; i<10; i++){
             try{
-                activeLeftMenuItems
-                        .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get().click();
+                executeJSclick(activeLeftMenuItems
+                        .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get(),
+                        DriverFactory.getAgentDriverInstance());
                 break;
             } catch(NoSuchElementException|StaleElementReferenceException e){
                 waitFor(200);
@@ -39,7 +41,8 @@ public class LeftMenu extends AbstractUIElement {
         }
 
         waitForElementToBeVisibleAgent(leftSubMenu, 10);
-        submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get().click();
+        executeJSclick(submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get(),
+                DriverFactory.getAgentDriverInstance());
     }
 
     public void navigateINLeftMenu(String menuItem){

@@ -915,6 +915,7 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^Create new intent for (.*) tenant$")
     public void createNewIntent(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelperTie.deleteAllIntents();
         formDataForIntentCreationTest();
         Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(),
                                                             (String) mapForCreatedIntent.get("intent"),
@@ -1149,7 +1150,7 @@ public class TIEApiSteps implements DateTimeHelper{
                     ApiHelperTie.deleteSample(sampleId);
                 }
         }
-        ApiHelperTie.deleteIntent((String) mapForCreatedIntent.get("intent_id"));
+        ApiHelperTie.deleteAllIntents();
         mapForCreatedIntent.clear();
     }
 

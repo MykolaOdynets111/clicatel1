@@ -170,11 +170,11 @@ task runTouchGenBankTests(type:Test){
     }
 }
 
-task runFAQsTests(type:Test){
+task runWidgetOnlyTests(type:Test){
     doFirst {
         useTestNG() {
             ignoreFailures = true
-            suites baseXmlPath+tenantName+"/faqs.xml"
+            suites baseXmlPath+tenantName+"/uitests.xml"
         }
     }
 }
@@ -283,7 +283,7 @@ task runTests(type: Test) {
         runTests.dependsOn(runPullRequestTests)
     }
 
-    if(suite=="faqs") {
+    if(suite=="widgetonly") {
         runTests.dependsOn(runFAQsTests)
     }
 
