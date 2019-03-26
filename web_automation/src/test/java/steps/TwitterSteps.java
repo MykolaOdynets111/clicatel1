@@ -77,7 +77,7 @@ public class TwitterSteps {
 
     @Then("^(?:Agent's|Bot's) answer arrives to twitter$")
     public void verifyReceivingAnswerInTimelineFromAgent(){
-        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),// clarify_timeout
                 "Expected tweet answer from the agent is missing after 100 secs wait");
     }
 
@@ -88,7 +88,7 @@ public class TwitterSteps {
             initialUserTweet = getCurrentConnectToAgentTweetText();
         }
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
-        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,15),
+        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,15),// clarify_timeout we have 40+sec timeout
                 "Expected response "+expectedAgentMessage+" for user is not shown as comment for tweet");
     }
 
@@ -109,10 +109,10 @@ public class TwitterSteps {
     @When("^User have to receive (.*) agent response as comment for (.*) tweet$")
     public void verifyAgentResponse(String expectedResponse, String targetTweet){
         boolean result = false;
-            for (int i =0; i < 10; i++){
+            for (int i =0; i < 10; i++){ // clarify_timeout
                 openedTweet.closeTweet();
                 try{
-                    getTweetsSection().clickNewTweetsButtonIfShown(50);
+                    getTweetsSection().clickNewTweetsButtonIfShown(50);// clarify_timeout
                     if(targetTweet.contains("agent")||targetTweet.contains("support")){
                         targetTweet = getCurrentConnectToAgentTweetText();
                     }

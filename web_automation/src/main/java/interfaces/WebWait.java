@@ -13,7 +13,7 @@ import java.util.List;
 public interface WebWait {
 
     default WebDriverWait initWait(){
-        return new WebDriverWait(DriverFactory.getTouchDriverInstance(), 30);
+        return new WebDriverWait(DriverFactory.getTouchDriverInstance(), 30);//// clarify_timeout
     }
 
     default WebDriverWait initWait(int waitTime){

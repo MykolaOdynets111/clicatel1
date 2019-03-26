@@ -241,6 +241,11 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage(agent).endChat();
     }
 
+    @When("(.*) click 'Cancel' button$")
+    public void agentClickCancelButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickCancel();
+    }
+
     @Then("^Suggestions are not shown$")
     public void verifySuggestionNotShown(){
         getAgentHomePage().clickAgentAssistantButton();
@@ -333,4 +338,6 @@ public class AgentConversationSteps implements JSHelper{
             return suggestedGroup;
         }
     }
+
+
 }

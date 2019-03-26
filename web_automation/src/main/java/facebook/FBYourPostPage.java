@@ -53,7 +53,7 @@ public class FBYourPostPage extends AbstractPage {
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
 
         try {
-            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);// clarify_timeout before(40sec) AgentAnswersIntoTwoChannels.feature/Post response arrives
         }catch (TimeoutException|NoSuchElementException e){
             scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
             waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 5);
@@ -94,7 +94,7 @@ public class FBYourPostPage extends AbstractPage {
         waitForElementToBeInVisibleByXpath(deletePostConfirmationPopupXPATH, 25);
     }
 
-    public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){
+    public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){// clarify_timeout
         boolean isStaleReferenceErrorThrown=true;
         boolean isVerificationPassed=false;
         int loopsCounter=0;

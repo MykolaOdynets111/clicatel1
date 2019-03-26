@@ -57,7 +57,7 @@ public class Widget extends AbstractPage {
     }
 
     private void waitUntilOpenedAndConnected() {
-        waitForElementToBeVisible(widgetWindow, 7);
+        waitForElementToBeVisible(widgetWindow, 7);//errorWait 15sec for widget connection
         if (isConnectingMessageShown()) {
             waitConnectingMessageToDisappear();
         }

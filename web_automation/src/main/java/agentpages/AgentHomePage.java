@@ -23,6 +23,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement closeChatButton;
 
     private String closeChatButtonXPATH = "//span[text()='Close Chat']";
+    private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String messageInputLocator = "//textarea[contains(@class,'text-input')]";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
@@ -76,7 +77,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private IncomingTransferWindow incomingTransferWindow;
     private Customer360Container customer360Container;
     private ChatHeader chatHeader;
-    private ConcludeChatWindow concludeChatWindow;
+    private AgentFeedbackWindow agentFeedbackWindow;
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
 
@@ -92,8 +93,8 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatHistoryContainer;
     }
 
-    public ConcludeChatWindow getConcludeChatWindow() {
-        return concludeChatWindow;
+    public AgentFeedbackWindow getAgentFeedbackWindow() {
+        return agentFeedbackWindow;
     }
 
     public ChatHeader getChatHeader() {
@@ -285,6 +286,14 @@ public class AgentHomePage extends AgentAbstractPage {
             waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
             findElemByXPATHAgent(closeChatButtonXPATH).click();
             waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
+        }
+    }
+
+    public void clickCancelCloseButtonInCloseChatPopup (){
+        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
+            waitForElementToBeVisibleByXpathAgent(cancelCloseChatButtonXPATH, 10, "main agent");
+            findElemByXPATHAgent(cancelCloseChatButtonXPATH).click();
+            waitForElementToBeInVisibleByXpathAgent(cancelCloseChatButtonXPATH, 5);
         }
     }
 
