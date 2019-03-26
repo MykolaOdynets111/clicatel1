@@ -225,7 +225,7 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().getChatHeader().clickEndChatButton();
     }
 
-    @Then("^End chat popup should be opened$")
+    @Then("^(?:End chat|Agent Feedback) popup should be opened$")
     public void verifyAgentFeedbackPopupOpened(){
         Assert.assertTrue(getAgentHomePage().getAgentFeedbackWindow().isEndChatPopupShown(),
                 "End chat popup is not opened");
