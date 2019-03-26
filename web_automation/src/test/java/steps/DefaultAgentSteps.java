@@ -180,16 +180,16 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = "";
-            if(!ConfigManager.getSuite().equalsIgnoreCase("all tests")) {
-                if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-                    expectedUserName = TwitterUsers.getLoggedInUserName();
-                    userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-                }
-                if (ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
+            if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
+                expectedUserName = TwitterUsers.getLoggedInUserName();
+                userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
+            }
+            if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
                     expectedUserName = FacebookUsers.getLoggedInUserName();
                     userMessage = FacebookSteps.getCurrentUserMessageText();
-                }
-            }else {
+            }
+            if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
+                    !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
                 expectedUserName = getUserNameFromLocalStorage();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
