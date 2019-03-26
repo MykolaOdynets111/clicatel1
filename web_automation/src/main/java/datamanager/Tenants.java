@@ -131,7 +131,7 @@ public class Tenants {
     }
 
     public static void checkWidgetConnectionStatus(){
-        File testng_xml = new File("build/reports/tests/runTestsForAllTenants/All tenants Master check/testng-failed.xml");
+        File testng_xml = new File("build/reports/tests/runBaseTests/All tenants Master check/testng-failed.xml");
         if(ConfigManager.getEnv().equalsIgnoreCase("integration")){
             testng_xml = new File("build/reports/tests/runBaseTests/General Bank Master check/testng-failed.xml");
         }
