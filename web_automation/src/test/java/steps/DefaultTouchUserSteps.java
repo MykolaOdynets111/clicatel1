@@ -356,15 +356,10 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
+        softAssert.assertTrue(widgetConversationArea.isSecondTextResponseShownFor(userInput, waitForResponse),
                 "No second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertEquals(widgetConversationArea.getSecondResponseTextOnUserInput(userInput).replace("\n", "")
                 , expectedTextResponse,
@@ -385,7 +380,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
                     ""+getUserNameFromLocalStorage()+"\n" +
                     "health@test.com";
         }
-        int waitForResponse=10; // clarify_timeout
+        int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
@@ -398,7 +393,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Text response that contains \"(.*)\" is shown$")
     public void quickVerifyIsResponseShown(String text){
-       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 15), //errorWait 10
+       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 10),
                "Bot response is not shown");
     }
 
@@ -410,7 +405,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         }
 
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6), //errorWait 10
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 10),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertTrue(widgetConversationArea.checkIfCardButtonsShownFor(userMessage, buttons),
                 buttons + " buttons are not shown in card (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -444,7 +439,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
             expectedCardText = cardText.replace("${firstName}", getUserNameFromLocalStorage());
         }
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 15),//errorWait 10
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 10),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -465,7 +460,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^No (?:additional card|card) should be shown (?:on|after) user (.*) (?:message|input)$")
     public void verifyNoCardIsShown(String userMessage){
-        Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 6),//errorWait 10
+        Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 10),
                 "Unexpected Card is show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -523,7 +518,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Widget is connected$")
     public DefaultTouchUserSteps verifyIfWidgetIsConnected() {
-        Assert.assertTrue(widget.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");//errorWait 15
+        Assert.assertTrue(widget.isWidgetConnected(15), "Widget is not connected after 15 seconds wait");//errorWait 15
         return this;
     }
 

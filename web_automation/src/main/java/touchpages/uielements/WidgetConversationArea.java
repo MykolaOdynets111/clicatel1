@@ -60,6 +60,10 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
     }
 
+    public boolean isSecondTextResponseShownFor(String userMessageText, int wait) {
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseShown(wait);
+    }
+
     public boolean isSecondTextResponseNotShownFor(String userMessageText, int wait) {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseNotShown(wait);
     }

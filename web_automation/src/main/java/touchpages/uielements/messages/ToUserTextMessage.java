@@ -45,7 +45,7 @@ public class ToUserTextMessage  extends Widget implements WebActions {
     }
 
     public boolean isSecondResponseShown(int wait){
-        for(int i = 0; i < 6; i++ ){
+        for(int i = 0; i <= wait; i++ ){
             if(toUserTextMessages.size()==2){
                 return true;
             }else {
