@@ -56,7 +56,7 @@ public class ToUserTextMessage  extends Widget implements WebActions {
     }
 
     /**
-     * Method designed to make sure that second response is not shown after 6 seconds wait
+     * Method designed to make sure that second response is not shown after specifyed wait
      * @param wait
      * @return
      */
