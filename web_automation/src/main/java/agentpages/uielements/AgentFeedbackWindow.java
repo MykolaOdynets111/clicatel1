@@ -35,21 +35,20 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     private WebElement sentimentHappy;
 
     @FindBy(css = ".Select-arrow")
-    private WebElement TagsDropdown;
+    private WebElement tagsDropdown;
 
     @FindBy(id = "CRMNote")
-    private WebElement CRMNoteTextField;
+    private WebElement crmNoteTextField;
 
     @FindBy(id = "CRMLink")
-    private WebElement CRMLink;
+    private WebElement crmLink;
 
     @FindBy(id = "CRMTicketNumber")
-    private WebElement CRMTicketNumber;
+    private WebElement crmTicketNumber;
 
 
     public void clickCancel() {
-        waitForElementToBeVisibleAgent(cancelButton,7);
-        cancelButton.click();
+        clickElemAgent(cancelButton, 5, "main agent", "Cancel button" );
     }
 
     public void clickCloseButtonInCloseChatPopup (){
@@ -65,36 +64,27 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void typeCRMNoteTextField(String msg) {
-        try {
-            CRMNoteTextField.sendKeys(msg);
-        } catch (InvalidElementStateException e){
-            Assert.assertTrue(false, "There is a problem with CRMNoteTextField.");
-        }
+        inputTextAgent(crmNoteTextField, 5,"main agent", "Note", msg);
     }
 
     public void typeCRMLink(String msg) {
-        try {
-            CRMLink.sendKeys(msg);
-        } catch (InvalidElementStateException e){
-            Assert.assertTrue(false, "There is a problem with CRMLink.");
-        }
+        inputTextAgent(crmLink,5 , "main agent", "Note link", msg);
     }
 
     public void typeCRMTicketNumber(String msg) {
-        try {
-            CRMTicketNumber.sendKeys(msg);
-        } catch (InvalidElementStateException e){
-            Assert.assertTrue(false, "There is a problem with CRMTicketNumber.");
-        }
+        inputTextAgent(crmTicketNumber, 5, "main agent", "Note number", msg);
     }
 
-    public void setSentimentUnsatisfied() { sentimentUnsatisfied.click();
+    public void setSentimentUnsatisfied() {
+        clickElemAgent(sentimentUnsatisfied, 5, "main agent", "Sentiment Unsatisfied" );
     }
 
-    public void setSentimentNeutral() { sentimentNeutral.click();
+    public void setSentimentNeutral() {
+        clickElemAgent(sentimentNeutral, 5, "main agent", "Sentiment Neutral" );
     }
 
-    public void setSentimentHappy() { sentimentHappy.click();
+    public void setSentimentHappy() {
+        clickElemAgent(sentimentHappy, 5, "main agent", "Sentiment Happy" );
     }
 
 }
