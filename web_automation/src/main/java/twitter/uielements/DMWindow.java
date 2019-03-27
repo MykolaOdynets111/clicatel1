@@ -52,7 +52,8 @@ public class DMWindow extends AbstractUIElement {
     }
 
     public boolean isTextResponseForUserMessageShown(String userMessage){
-       return new DMToUserMessage(userMessage).isTextResponseShown(40);// clarify_timeout
+        // ToDo: update timeout after it is provided in System timeouts confluence page
+        return new DMToUserMessage(userMessage).isTextResponseShown(40);// clarify_timeout
     }
 
 

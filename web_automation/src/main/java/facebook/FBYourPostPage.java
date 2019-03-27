@@ -53,7 +53,7 @@ public class FBYourPostPage extends AbstractPage {
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
 
         try {
-            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);// clarify_timeout before(40sec) AgentAnswersIntoTwoChannels.feature/Post response arrives
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 10);
         }catch (TimeoutException|NoSuchElementException e){
             scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
             waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 5);

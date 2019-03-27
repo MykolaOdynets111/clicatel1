@@ -193,11 +193,11 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @When("^I Create new mapping for intent-answer pare: (.*)$")
     public void createIntentAnswerTraining(List<String> info){
-        when()
-                .put(formURLForCreatingNewIntentAnswer(info)).
-        then()
-                .statusCode(200);
+        Response resp = RestAssured.put(formURLForCreatingNewIntentAnswer(info));
         waitFor(5000);
+        Assert.assertTrue(resp.statusCode()==200, "" +
+                "Creating new intent was not successfull\n "
+        +resp.getBody().asString());
     }
 
 

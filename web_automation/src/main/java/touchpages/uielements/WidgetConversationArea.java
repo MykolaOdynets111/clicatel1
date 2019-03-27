@@ -119,8 +119,9 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
     }
 
     public void waitForMessageToAppearInWidget(String text){
+        // ToDo: update timeout after it is provided in System timeouts confluence page
         try {
-            waitForElementToBeVisibleByXpath(String.format(targetFromUserMessage, text), 10);// clarify_timeout
+            waitForElementToBeVisibleByXpath(String.format(targetFromUserMessage, text), 10);
         } catch (TimeoutException e) {
         }
     }

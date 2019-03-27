@@ -82,9 +82,9 @@ public class ToUserTextMessage  extends Widget implements WebActions {
         }
     }
 
-    public boolean isTextResponseShownAmongOthers(String expectedMessage) { //maybe? errorWait 10 for welcome message
+    public boolean isTextResponseShownAmongOthers(String expectedMessage) {
         boolean result = false;
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < 15; i++){
             result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
             if (result) return true;
             waitFor(500);

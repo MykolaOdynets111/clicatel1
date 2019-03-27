@@ -62,7 +62,8 @@ public class FacebookSteps {
 
     @Then("^Post response arrives$")
     public void checkThatPostResponseArrives(){
-        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(40),// clarify_timeout
+        // ToDo: update timeout after it is provided in System timeouts confluence page
+        Assert.assertTrue(getFbTenantPage().isNotificationAboutNewCommentArrives(40),
                 "Notification about new post reply is not shown.");
 
     }

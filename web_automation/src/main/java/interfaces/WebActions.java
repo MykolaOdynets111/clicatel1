@@ -56,7 +56,15 @@ public interface WebActions extends WebWait {
 
     default boolean isElementShown(WebElement element){
         try {
-            return waitForElementToBeVisible(element, 5).isDisplayed();//errorWait 10 for isWelcomeCardContainerShown()
+            return waitForElementToBeVisible(element, 5).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    default boolean isElementShown(WebElement element, int wait){
+        try {
+            return waitForElementToBeVisible(element, wait).isDisplayed();
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
@@ -122,13 +130,6 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default boolean isElementShown(WebElement element, int wait){
-        try {
-            return waitForElementToBeVisible(element, wait).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
-        }
-    }
 
     default boolean isElementEnabledAgent(WebElement element, int wait, String agent){
         try {
