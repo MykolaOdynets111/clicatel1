@@ -12,10 +12,6 @@ import java.util.List;
 
 public interface WebWait {
 
-    default WebDriverWait initWait(){
-        return new WebDriverWait(DriverFactory.getTouchDriverInstance(), 30);//// clarify_timeout
-    }
-
     default WebDriverWait initWait(int waitTime){
         return new WebDriverWait(DriverFactory.getTouchDriverInstance(), waitTime);
     }
@@ -30,7 +26,7 @@ public interface WebWait {
     }
 
     default WebElement waitForElementToBeClickable(WebElement element){
-        return initWait().ignoring(NoSuchElementException.class)
+        return initWait(5).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.elementToBeClickable(element));
     }
@@ -42,7 +38,7 @@ public interface WebWait {
     }
 
     default WebElement waitForElementToBeVisible(WebElement element){
-        return initWait()
+        return initWait(5)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOf(element));
     }
@@ -79,7 +75,7 @@ public interface WebWait {
     }
 
     default List<WebElement> waitForElementsToBeClickable(List<WebElement> elements){
-        WebDriverWait wait = initWait();
+        WebDriverWait wait = initWait(5);
         for(WebElement element: elements) {
             wait.ignoring(NoSuchElementException.class)
                     .ignoring(StaleElementReferenceException.class)

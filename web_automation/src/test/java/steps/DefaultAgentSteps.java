@@ -273,7 +273,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) {
-                    Assert.assertTrue(waitForDotControlRequestOnChatDesk(),// clarify_timeout 3*5=15 exp 20?
+                    Assert.assertTrue(waitForDotControlRequestOnChatDesk(),
                             "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
                                     DotControlSteps.getFromClientRequestMessage().getClientId()+")");
                     return;
@@ -283,9 +283,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
             }
 
     private boolean waitForDotControlRequestOnChatDesk(){
-        for(int i = 0; i<5; i++) {// clarify_timeout 3*5=15 exp 20?
+        for(int i = 0; i<5; i++) {
             String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,3, "main")) return true;
+            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,4, "main")) return true;
             else {
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
             }
@@ -300,14 +300,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String userName=null;
         if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
         if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,60),// clarify_timeout
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
-        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(30),// clarify_timeout
+        // ToDo: Update after clarifying timeout in System timeouts
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }
