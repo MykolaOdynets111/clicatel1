@@ -281,7 +281,7 @@ public class Hooks implements JSHelper{
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
                 }
-                if(typeEndInWidget){
+                if (scenario.isFailed()&&DriverFactory.isAgentDriverExists()) {
                     closeWidgetSession();
                 }
         }catch (WebDriverException e) { }
