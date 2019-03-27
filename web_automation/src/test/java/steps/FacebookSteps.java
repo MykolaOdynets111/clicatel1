@@ -49,7 +49,8 @@ public class FacebookSteps {
         if (expectedResponse.equalsIgnoreCase("agents_away")){
             expectedResponse = ApiHelper.getTenantMessageText("agents_away");
         }
-        boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,60);// clarify_timeout
+        // ToDo: Update timeout when it is specified in System timeouts page on Confluence
+        boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,60);
         Assert.assertTrue(isExpectedMessageIsShown,
                 "User does not receive response on the message \""+ getCurrentUserMessageText()+"\" in FB messenger after 30 seconds wait.");
     }

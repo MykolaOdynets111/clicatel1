@@ -77,7 +77,8 @@ public class TwitterSteps {
 
     @Then("^(?:Agent's|Bot's) answer arrives to twitter$")
     public void verifyReceivingAnswerInTimelineFromAgent(){
-        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),// clarify_timeout
+        // ToDo: Update timeout when it is specified in System timeouts page on Confluence
+        Assert.assertTrue(getTweetsSection().verifyFromAgentTweetArrives(100),
                 "Expected tweet answer from the agent is missing after 100 secs wait");
     }
 
@@ -88,7 +89,8 @@ public class TwitterSteps {
             initialUserTweet = getCurrentConnectToAgentTweetText();
         }
         openedTweet = getTweetsSection().clickTimeLineTweetWithText(initialUserTweet);
-        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,15),// clarify_timeout we have 40+sec timeout
+        // ToDo: Update timeout when it is specified in System timeouts page on Confluence
+        Assert.assertTrue(openedTweet.ifAgentReplyShown(expectedAgentMessage,15),
                 "Expected response "+expectedAgentMessage+" for user is not shown as comment for tweet");
     }
 
@@ -112,7 +114,8 @@ public class TwitterSteps {
             for (int i =0; i < 10; i++){ // clarify_timeout
                 openedTweet.closeTweet();
                 try{
-                    getTweetsSection().clickNewTweetsButtonIfShown(50);// clarify_timeout
+                    // ToDo: Update timeout when it is specified in System timeouts page on Confluence
+                    getTweetsSection().clickNewTweetsButtonIfShown(50);
                     if(targetTweet.contains("agent")||targetTweet.contains("support")){
                         targetTweet = getCurrentConnectToAgentTweetText();
                     }
