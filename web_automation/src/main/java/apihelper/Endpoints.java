@@ -48,6 +48,8 @@ public class Endpoints {
 
     public static String CLOSE_ACTIVE_CHAT = URLs.getTouchApiBaseURL() +  "chats/close-conversation/";
 
+    public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "%s/crm-tickets";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
