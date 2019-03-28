@@ -7,6 +7,7 @@ Feature: Canceling chat ending
     And Click chat icon
 
   Scenario: Verify if agent is able to cancel close chat in chat desk
+    Given AGENT_FEEDBACK tenant feature is set to false for Automation
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
@@ -15,7 +16,7 @@ Feature: Canceling chat ending
     Then End chat popup should be opened
     When Agent click 'Cancel' button
     Then Conversation area contains connect to Support user's message
-    When Agent replays with Wat do you want? message
-    Then Text response that contains "Wat do you want?" is shown
+    When Agent sends a new message What do you want? to User
+    Then Text response that contains "What do you want?" is shown
 
 
