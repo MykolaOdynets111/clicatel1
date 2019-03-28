@@ -432,13 +432,13 @@ public class ApiHelper {
     }
 
     public static List<OvernightTicket> getOvernightTicketsByStatus(String tenantOrgName, String ticketStatus){
-        return RestAssured.given()
+        return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase())
                 .getBody().jsonPath().getList("", OvernightTicket.class);
     }
 
-    public static void closeAllOvernightTickets(String tenantOrgName){
+    public static void closeAllOvernightTickets(String tenantOrgName) {
         List<OvernightTicket> allTicketsByStatus = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
         for(OvernightTicket ticket : allTicketsByStatus){
             RestAssured.given()
@@ -537,12 +537,24 @@ public class ApiHelper {
             }
     }
 
-    public static CRMTicket getCRMTicket(String clientID){
-        String clientProfileId = getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
+    public static String getClientProfileId(String clientID){
+        return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
+    }
+
+    public static List<CRMTicket> getCRMTicket(String clientID){
+        String clientProfileId = getClientProfileId(clientID);
         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
-                .getBody().jsonPath().getObject("", CRMTicket.class);
+                .getBody().jsonPath().getList("", CRMTicket.class);
+    }
+
+    public static void createCRMTicket(String clientID){
+        String clientProfileId = getClientProfileId(clientID);
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .post(String.format(Endpoints.CRM_TICKET, clientProfileId))
+                .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
 }

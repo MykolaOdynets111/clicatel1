@@ -48,7 +48,7 @@ public class CamundaFlowsSteps implements JSHelper {
 
     @Then("^Last visit date is saved to DB after (.*) minutes$")
     public void checkThanLastVisitDateIsSaved(int minutes){
-        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        String clientProfileID = ApiHelper.getClientProfileId(getUserNameFromLocalStorage());
         Assert.assertTrue(DBConnector.isLastVisitSavedInDB(ConfigManager.getEnv(), clientProfileID, minutes),
                 "It takes more than " + minutes +" minutes to save lastVisit after last response to user in widget");
 
@@ -56,7 +56,7 @@ public class CamundaFlowsSteps implements JSHelper {
 
     @Then("^Last visit date is changed to minus (.*) hours$")
     public void changeLastVisitDate(int hoursShift){
-        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        String clientProfileID =ApiHelper.getClientProfileId(getUserNameFromLocalStorage());;
         long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
 //        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
         if(lastVisit!=0) {

@@ -34,7 +34,7 @@ public class Endpoints {
 
     public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
 
-    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "ticket/process-by-id/";
+    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
@@ -48,7 +48,7 @@ public class Endpoints {
 
     public static String CLOSE_ACTIVE_CHAT = URLs.getTouchApiBaseURL() +  "chats/close-conversation/";
 
-    public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "%s/crm-tickets";
+    public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
     // ================== INTERNAL ============== //
 
