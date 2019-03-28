@@ -537,11 +537,23 @@ public class ApiHelper {
             }
     }
 
+    public static String getClientProfileId(String clientID){
+        return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
+    }
+
     public static List<CRMTicket> getCRMTicket(String clientID){
-        String clientProfileId = getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
+        String clientProfileId = getClientProfileId(clientID);
         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
+                .getBody().jsonPath().getList("", CRMTicket.class);
+    }
+
+    public static void createCRMTicket(String clientID){
+        String clientProfileId = getClientProfileId(clientID);
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .post(String.format(Endpoints.CRM_TICKET, clientProfileId))
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 

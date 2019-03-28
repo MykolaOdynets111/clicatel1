@@ -15,6 +15,7 @@ import datamanager.Customer360PersonalInfo;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.TwitterUsers;
+import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -45,6 +46,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
+//    private static CRMTicket crmTicket
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         PRE_TEST_FEATURE_STATUS.put(featureName, status);
