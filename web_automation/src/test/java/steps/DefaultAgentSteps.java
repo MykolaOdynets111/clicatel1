@@ -40,28 +40,32 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
     private LeftMenuWithChats leftMenuWithChats;
-    private static Map<String, Boolean> PRE_TEST_FEATURE_STATUS = new HashMap<>();
-    private static Map<String, Boolean> TEST_FEATURE_STATUS_CHANGES = new HashMap<>();
+    private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static Customer360PersonalInfo customer360InfoForUpdating;
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-//    private static CRMTicket crmTicket
+    private static ThreadLocal<CRMTicket> crmTicket = new ThreadLocal<>();
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
-        PRE_TEST_FEATURE_STATUS.put(featureName, status);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put(featureName, status);
+        PRE_TEST_FEATURE_STATUS.set(map);
     }
 
     public static boolean getPreTestFeatureStatus(String featureName){
-        return PRE_TEST_FEATURE_STATUS.get(featureName);
+        return PRE_TEST_FEATURE_STATUS.get().get(featureName);
     }
 
     private static void saveTestFeatureStatusChanging(String featureName, boolean status){
-        TEST_FEATURE_STATUS_CHANGES.put(featureName, status);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put(featureName, status);
+        TEST_FEATURE_STATUS_CHANGES.set(map);
     }
 
     public static boolean getTestFeatureStatusChanging(String featureName){
-        return TEST_FEATURE_STATUS_CHANGES.get(featureName);
+        return TEST_FEATURE_STATUS_CHANGES.get().get(featureName);
     }
 
     @Given("^I login as (.*) of (.*)")
