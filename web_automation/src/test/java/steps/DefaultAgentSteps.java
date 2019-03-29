@@ -46,7 +46,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-//    private static CRMTicket crmTicket
+    private static List<CRMTicket> crmTicket;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         PRE_TEST_FEATURE_STATUS.put(featureName, status);
@@ -604,5 +604,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
+    }
+
+    @Then("^CRM ticket did not created$")
+    public void crmTicketDidNotCreated() {
+        Assert.assertEquals( ApiHelper.getCRMTicket(getUserNameFromLocalStorage()).size(), 0, "CRM ticket was created on back end");;
     }
 }

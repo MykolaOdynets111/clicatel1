@@ -222,6 +222,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent click \"End chat\" button$")
     public void clickEndChatButton(){
+
         getAgentHomePage().getChatHeader().clickEndChatButton();
     }
 
