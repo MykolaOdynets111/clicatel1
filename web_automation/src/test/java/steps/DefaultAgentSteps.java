@@ -15,7 +15,6 @@ import datamanager.Customer360PersonalInfo;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.TwitterUsers;
-import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -46,7 +45,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-    private static ThreadLocal<CRMTicket> crmTicket = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, String>> crmTicket = new ThreadLocal<>();
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -531,7 +530,19 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Given("CRM ticket is created")
     public void createCRMTicketsViaAPI(){
+        Map activeSession = ApiHelper.getActiveSessionByClientId(getUserNameFromLocalStorage());
+        Map<String, String> dataForNewCRMTicket = new HashMap<>();
+        dataForNewCRMTicket.put("conversationId", (String) activeSession.get("conversationId"));
+        dataForNewCRMTicket.put("sessionId",  (String) activeSession.get("sessionId"));
+        dataForNewCRMTicket.put("link",  "http://mysaite" + faker.lorem().word() + ".ua");
+        dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
+        dataForNewCRMTicket.put("agentNote", "Note from automation test)");
+        crmTicket.set(dataForNewCRMTicket);
 
+        Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
+        Assert.assertTrue(resp.statusCode()==200, "Creating CRM ticket via API was not successful\n" +
+                                resp.statusCode() + "\n" +
+                                "rest body: " +resp.getBody().asString());
     }
 
     private String getExpectedChatStartTimeForChatHistoryInActiveChat(){

@@ -445,27 +445,27 @@ public class ApiHelper {
         }
     }
 
-    public static String getActiveSessionIdByClientId(String tenantName, String clientId, String integrationType){
+    public static Map getActiveSessionByClientId(String clientId){
         String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         String url = String.format(Endpoints.INTERNAL_CHAT_BY_CLIENT, tenantID, clientId);
-        String sessionId = "";
         Response resp =  RestAssured.get(url);
+        Map activeSession = null;
         try{
-            sessionId = (String) ((Map) resp.getBody().jsonPath().getList("content.sessions[0]")
+            activeSession =  (HashMap) ((Map) resp.getBody().jsonPath().getList("content.sessions[0]")
                     .stream()
                     .map(e -> (Map) e)
                     .filter(map -> map.get("state").equals("ACTIVE"))
-                    .findFirst().get()).get("sessionId");
+                    .findFirst().get());
         }catch(JsonPathException e){
             Assert.assertTrue(false, "Failed to get session Id\n"+
                     "resp status: " + resp.statusCode() + "\n" +
             "resp body:" + resp.getBody().asString() + "\n");
         }
-        return sessionId;
+        return activeSession;
     }
 
     public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
-        String sessionId = getActiveSessionIdByClientId(Tenants.getTenantUnderTestName(), clineId, integrationType);
+        String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
         JsonPath respJSON = RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
@@ -548,12 +548,19 @@ public class ApiHelper {
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
-    public static void createCRMTicket(String clientID){
+    public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
         String clientProfileId = getClientProfileId(clientID);
-        RestAssured.given()
+        return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                .post(String.format(Endpoints.CRM_TICKET, clientProfileId))
-                .getBody().jsonPath().getList("", CRMTicket.class);
+                .header("Content-Type", "application/json")
+                .body("{\n" +
+                        "  \"conversationId\": \""+ ticketInfo.get("conversationId") +"\",\n" +
+                        "  \"sessionId\": \""+ ticketInfo.get("sessionId") +"\",\n" +
+                        "  \"link\": \"" + ticketInfo.get("link") + "\",\n" +
+                        "  \"ticketNumber\": \""+ ticketInfo.get("ticketNumber") +"\",\n" +
+                        "  \"agentNote\": \"" + ticketInfo.get("agentNote") + "\"\n" +
+                        "}")
+                .post(String.format(Endpoints.CRM_TICKET, clientProfileId));
     }
 
 }
