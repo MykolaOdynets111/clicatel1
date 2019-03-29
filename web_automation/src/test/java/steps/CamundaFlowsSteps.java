@@ -48,7 +48,9 @@ public class CamundaFlowsSteps implements JSHelper {
 
     @Then("^Last visit date is saved to DB after (.*) minutes$")
     public void checkThanLastVisitDateIsSaved(int minutes){
-        String clientProfileID = ApiHelper.getClientProfileId(getUserNameFromLocalStorage());
+        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(),
+                getUserNameFromLocalStorage(), "TOUCH", 1);
+//        ApiHelper.getClientProfileId(getUserNameFromLocalStorage());
         Assert.assertTrue(DBConnector.isLastVisitSavedInDB(ConfigManager.getEnv(), clientProfileID, minutes),
                 "It takes more than " + minutes +" minutes to save lastVisit after last response to user in widget");
 
@@ -56,9 +58,11 @@ public class CamundaFlowsSteps implements JSHelper {
 
     @Then("^Last visit date is changed to minus (.*) hours$")
     public void changeLastVisitDate(int hoursShift){
-        String clientProfileID =ApiHelper.getClientProfileId(getUserNameFromLocalStorage());;
+        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(), "TOUCH", 1);
+//          String clientProfileID =ApiHelper.getClientProfileId(getUserNameFromLocalStorage());;
+//          Replace with API after the call is updated to return clientProfileId
+//          https://demo-touch.clickatelllabs.com/internal/client-profiles/generalbank/TOUCH/1/testing_User
         long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
-//        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
         if(lastVisit!=0) {
             long lastVisitWithShift = lastVisit - (hoursShift * 60 * 60 * 1000) - (3 * 60 * 60 * 1000);
             DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), clientProfileID, lastVisitWithShift);
@@ -68,7 +72,7 @@ public class CamundaFlowsSteps implements JSHelper {
 
     @Then("Last visit date is changed to minus (.*) hours for twitter dm user")
     public void changeLastVisitDateForSocial(int hoursShift){
-        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), TwitterUsers.getLoggedInUser().getDmUserId());
+        String clientProfileID = DBConnector.getClientProfileID(ConfigManager.getEnv(), TwitterUsers.getLoggedInUser().getDmUserId(), "TWITTER", 1);
         long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), clientProfileID);
 //        long lastVisitWithShift = lastVisit - (hoursShift*60*60*1000) - (3*60*60*1000);
         if(lastVisit!=0) {

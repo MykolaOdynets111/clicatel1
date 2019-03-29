@@ -156,10 +156,11 @@ public class DBConnector {
         return isAgentPresent;
     }
 
-    public static String getClientProfileID(String env, String clientID) {
+    public static String getClientProfileID(String env, String clientID, String type, int isTenantProfile) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
-        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' and is_tenant_profile=1;";
+        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' " +
+                "and is_tenant_profile="+isTenantProfile+" and type = '"+type+"';";
         Statement statement = null;
         ResultSet results = null;
         String id = null;
