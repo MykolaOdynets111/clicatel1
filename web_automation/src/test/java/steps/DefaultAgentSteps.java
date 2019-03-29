@@ -525,6 +525,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertAll();
     }
 
+    @Given("CRM ticket is created")
+    public void createCRMTicketsViaAPI(){
+
+    }
+
     private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
