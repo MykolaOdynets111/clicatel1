@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550844827262" stop="1550845039399" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent suggestions</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550844827272" stop="1550844969320" status="passed">
+            <name>Agent should be able to work with suggestion</name>
+            <title>Agent should be able to work with suggestion</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550844827650" stop="1550844833483" status="passed">
+                    <name>Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo</name>
+                    <title>Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844833486" stop="1550844866454" status="passed">
+                    <name>And I login as agent of General Bank Demo</name>
+                    <title>And I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844866455" stop="1550844880487" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844880487" stop="1550844886492" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844886494" stop="1550844886806" status="passed">
+                    <name>When User enter Chat to Support into widget input field</name>
+                    <title>When User enter Chat to Support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844886807" stop="1550844892973" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844892973" stop="1550844893419" status="passed">
+                    <name>And Agent click on new conversation request from touch</name>
+                    <title>And Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844893420" stop="1550844893724" status="passed">
+                    <name>When User enter trading hours into widget input field</name>
+                    <title>When User enter trading hours into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844893724" stop="1550844897553" status="passed">
+                    <name>Then There is correct suggestion shown on user message "trading hours"</name>
+                    <title>Then There is correct suggestion shown on user message "trading hours"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844897554" stop="1550844899086" status="passed">
+                    <name>And The suggestion for user message "trading hours" with the biggest confidence is added to the input field</name>
+                    <title>And The suggestion for user message "trading hours" with the biggest confidence is added to the input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844899086" stop="1550844899168" status="passed">
+                    <name>When Agent click send button</name>
+                    <title>When Agent click send button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844899168" stop="1550844899979" status="passed">
+                    <name>Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us' text response for his 'trading hours' input</name>
+                    <title>Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us' text response for his 'trading hours' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844899980" stop="1550844900838" status="passed">
+                    <name>When User enter Do you have a job for me? into widget input field</name>
+                    <title>When User enter Do you have a job for me? into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844900839" stop="1550844904917" status="passed">
+                    <name>Then There is correct suggestion shown on user message "Do you have a job for me?"</name>
+                    <title>Then There is correct suggestion shown on user message "Do you have a job for me?"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844904918" stop="1550844905254" status="passed">
+                    <name>When Agent add additional info " Thanks for asking" to suggested message</name>
+                    <title>When Agent add additional info " Thanks for asking" to suggested message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844905254" stop="1550844905361" status="passed">
+                    <name>And Agent click send button</name>
+                    <title>And Agent click send button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844905362" stop="1550844906313" status="passed">
+                    <name>Then User have to receive 'For information regarding vacancies and posts at General Bank you may visit us Thanks for asking' text response for his 'Do you have a job for me?' input</name>
+                    <title>Then User have to receive 'For information regarding vacancies and posts at General Bank you may visit us Thanks for asking' text response for his 'Do you have a job for me?' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844906313" stop="1550844907175" status="passed">
+                    <name>When User enter i lost my card into widget input field</name>
+                    <title>When User enter i lost my card into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844907175" stop="1550844910371" status="passed">
+                    <name>Then There is correct suggestion shown on user message "i lost my card"</name>
+                    <title>Then There is correct suggestion shown on user message "i lost my card"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844910372" stop="1550844912103" status="passed">
+                    <name>And The suggestion for user message "i lost my card" with the biggest confidence is added to the input field</name>
+                    <title>And The suggestion for user message "i lost my card" with the biggest confidence is added to the input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844912104" stop="1550844912659" status="passed">
+                    <name>And Agent is able to delete the suggestion from input field and sends his own "Let me see what I can do" message</name>
+                    <title>And Agent is able to delete the suggestion from input field and sends his own "Let me see what I can do" message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844912660" stop="1550844913571" status="passed">
+                    <name>Then User have to receive 'Let me see what I can do' text response for his 'i lost my card' input</name>
+                    <title>Then User have to receive 'Let me see what I can do' text response for his 'i lost my card' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent should be able to work with suggestion"/>
+                <label name="feature" value="Agent suggestions"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1550844969369" stop="1550845039397" status="passed">
+            <name>Interaction with "Clear" and "Edit" suggestion buttons</name>
+            <title>Interaction with "Clear" and "Edit" suggestion buttons</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550844969370" stop="1550844972653" status="passed">
+                    <name>Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo</name>
+                    <title>Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844972653" stop="1550844991321" status="passed">
+                    <name>And I login as agent of General Bank Demo</name>
+                    <title>And I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844991322" stop="1550844998406" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550844998407" stop="1550845003686" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845003686" stop="1550845004039" status="passed">
+                    <name>When User enter Chat to Support into widget input field</name>
+                    <title>When User enter Chat to Support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845004040" stop="1550845010168" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845010168" stop="1550845010484" status="passed">
+                    <name>And Agent click on new conversation request from touch</name>
+                    <title>And Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845010484" stop="1550845010871" status="passed">
+                    <name>When User enter trading hours into widget input field</name>
+                    <title>When User enter trading hours into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845010871" stop="1550845014262" status="passed">
+                    <name>Then There is correct suggestion shown on user message "trading hours"</name>
+                    <title>Then There is correct suggestion shown on user message "trading hours"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845014262" stop="1550845015764" status="passed">
+                    <name>Then The suggestion for user message "trading hours" with the biggest confidence is added to the input field</name>
+                    <title>Then The suggestion for user message "trading hours" with the biggest confidence is added to the input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845015765" stop="1550845015876" status="passed">
+                    <name>And 'Clear' and 'Edit' buttons are shown</name>
+                    <title>And 'Clear' and 'Edit' buttons are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845015876" stop="1550845015942" status="passed">
+                    <name>When Agent click Edit suggestions button</name>
+                    <title>When Agent click Edit suggestions button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845015942" stop="1550845016238" status="passed">
+                    <name>Then Agent is able to add " Please visit us."</name>
+                    <title>Then Agent is able to add " Please visit us."</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845016238" stop="1550845016988" status="passed">
+                    <name>Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us Please visit us.' text response for his 'trading hours' input</name>
+                    <title>Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us Please visit us.' text response for his 'trading hours' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845016988" stop="1550845017862" status="passed">
+                    <name>When User enter i lost my card into widget input field</name>
+                    <title>When User enter i lost my card into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845017862" stop="1550845021638" status="passed">
+                    <name>Then There is correct suggestion shown on user message "i lost my card"</name>
+                    <title>Then There is correct suggestion shown on user message "i lost my card"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845021638" stop="1550845021700" status="passed">
+                    <name>When Agent click Clear suggestions button</name>
+                    <title>When Agent click Clear suggestions button</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845021700" stop="1550845021767" status="passed">
+                    <name>Then Message input field is cleared</name>
+                    <title>Then Message input field is cleared</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845021767" stop="1550845022110" status="passed">
+                    <name>When Agent responds with please verify your identity to User</name>
+                    <title>When Agent responds with please verify your identity to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845022110" stop="1550845023453" status="passed">
+                    <name>Then User have to receive 'please verify your identity' text response for his 'i lost my card' input</name>
+                    <title>Then User have to receive 'please verify your identity' text response for his 'i lost my card' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Interaction with &quot;Clear&quot; and &quot;Edit&quot; suggestion buttons"/>
+                <label name="feature" value="Agent suggestions"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent suggestions"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

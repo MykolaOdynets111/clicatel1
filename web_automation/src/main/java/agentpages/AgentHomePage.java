@@ -129,7 +129,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
-            messageInput.sendKeys(responseToUser);
+            findElemByXPATHAgent(messageInputLocator).sendKeys(responseToUser);
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
@@ -270,14 +270,6 @@ public class AgentHomePage extends AgentAbstractPage {
             if (!isElementShownAgent(profanityPopup, 1, "main agent")){
                 break;
             }
-        }
-    }
-
-    public void clickCancelCloseButtonInCloseChatPopup (){
-        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
-            waitForElementToBeVisibleByXpathAgent(cancelCloseChatButtonXPATH, 10, "main agent");
-            findElemByXPATHAgent(cancelCloseChatButtonXPATH).click();
-            waitForElementToBeInVisibleByXpathAgent(cancelCloseChatButtonXPATH, 5);
         }
     }
 

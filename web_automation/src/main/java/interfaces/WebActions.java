@@ -24,6 +24,15 @@ public interface WebActions extends WebWait {
         waitForElementToBeClickable(element).click();
     }
 
+    default void clickElemAgent(WebElement element, int time, String agent, String buttonName){
+        try {
+            waitForElementToBeClickableAgent(element, time, agent)
+            .click();
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.assertTrue(false, "Cannot click '"+buttonName+"' because button is not clickable.");
+        }
+    }
+
     default void clickOnElementFromListByText(List<WebElement> elements, String text){
         waitForElementsToBeClickable(elements).stream().filter(e -> e.getText().toUpperCase().equals(text.toUpperCase())).findFirst().get().click();
     }
@@ -34,6 +43,16 @@ public interface WebActions extends WebWait {
             element.sendKeys(text);
         } catch (TimeoutException e){
             Assert.assertTrue(false, "Cannot insert text '"+text+"' because input is not clickable.");
+        }
+
+    }
+
+    default void inputTextAgent(WebElement element, int time, String agent, String fieldName,String text ){
+        try {
+            waitForElementToBeClickableAgent(element, time, agent)
+            .sendKeys(text);
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.assertTrue(false, "Cannot insert text in '"+fieldName+"' because input is not clickable.");
         }
 
     }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550851429380" stop="1550851506043" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Customer 360 info for twitter user</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550851429381" stop="1550851506042" status="passed">
+            <name>Agent answers on user messages</name>
+            <title>Agent answers on user messages</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550851440185" stop="1550851457862" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851457862" stop="1550851459007" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851459008" stop="1550851459923" status="passed">
+                    <name>Given Open direct message channel</name>
+                    <title>Given Open direct message channel</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851459924" stop="1550851460327" status="passed">
+                    <name>When User sends twitter direct message regarding chat to support</name>
+                    <title>When User sends twitter direct message regarding chat to support</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851460327" stop="1550851487414" status="passed">
+                    <name>Then Agent has new conversation request from twitter user</name>
+                    <title>Then Agent has new conversation request from twitter user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851487414" stop="1550851487739" status="passed">
+                    <name>When Agent click on new conversation request from twitter</name>
+                    <title>When Agent click on new conversation request from twitter</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851487740" stop="1550851490612" status="passed">
+                    <name>Then Correct twitter dm client details are shown</name>
+                    <title>Then Correct twitter dm client details are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851490612" stop="1550851490690" status="passed">
+                    <name>And Click 'Edit' button in Customer 360 view</name>
+                    <title>And Click 'Edit' button in Customer 360 view</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851490690" stop="1550851493656" status="passed">
+                    <name>When Fill in the form with new twitter dm customer 360 info</name>
+                    <title>When Fill in the form with new twitter dm customer 360 info</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851493656" stop="1550851493718" status="passed">
+                    <name>And Click 'Save' button in Customer 360 view</name>
+                    <title>And Click 'Save' button in Customer 360 view</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851493718" stop="1550851495830" status="passed">
+                    <name>Then twitter dm customer info is updated on backend</name>
+                    <title>Then twitter dm customer info is updated on backend</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851495830" stop="1550851498196" status="passed">
+                    <name>And Correct twitter dm client details are shown</name>
+                    <title>And Correct twitter dm client details are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851498196" stop="1550851498345" status="passed">
+                    <name>And New info is shown in left menu with chats</name>
+                    <title>And New info is shown in left menu with chats</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851498346" stop="1550851498381" status="passed">
+                    <name>And Customer name is updated in active chat header</name>
+                    <title>And Customer name is updated in active chat header</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent answers on user messages"/>
+                <label name="feature" value="Customer 360 info for twitter user"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Customer 360 info for twitter user"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550846450178" stop="1550846569776" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Max chat functionality</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550846450190" stop="1550846510061" status="passed">
+            <name>Verify chat limitation feature for Agent mode tenant</name>
+            <title>Verify chat limitation feature for Agent mode tenant</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550846450190" stop="1550846453266" status="passed">
+                    <name>Given Set session capacity to 0 for Automation tenant</name>
+                    <title>Given Set session capacity to 0 for Automation tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846453266" stop="1550846471831" status="passed">
+                    <name>Given I login as agent of Automation</name>
+                    <title>Given I login as agent of Automation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846471831" stop="1550846477660" status="passed">
+                    <name>Given User select Automation tenant</name>
+                    <title>Given User select Automation tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846477661" stop="1550846482887" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846482888" stop="1550846483272" status="passed">
+                    <name>When User enter chat to agent into widget input field</name>
+                    <title>When User enter chat to agent into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846483272" stop="1550846486558" status="passed">
+                    <name>Then User have to receive 'agents_away' text response for his 'chat to agent' input</name>
+                    <title>Then User have to receive 'agents_away' text response for his 'chat to agent' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846486559" stop="1550846489579" status="passed">
+                    <name>Given Set session capacity to 10 for Automation tenant</name>
+                    <title>Given Set session capacity to 10 for Automation tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846489579" stop="1550846496206" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846496206" stop="1550846496540" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846496540" stop="1550846496770" status="passed">
+                    <name>Then Conversation area becomes active with chat to agent user's message</name>
+                    <title>Then Conversation area becomes active with chat to agent user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846496770" stop="1550846497136" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846497137" stop="1550846497794" status="passed">
+                    <name>Then User should see 'hello' text response for his 'chat to agent' input</name>
+                    <title>Then User should see 'hello' text response for his 'chat to agent' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify chat limitation feature for Agent mode tenant"/>
+                <label name="feature" value="Max chat functionality"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1550846510063" stop="1550846569775" status="passed">
+            <name>Verify chat limitation feature for Bot mode tenant</name>
+            <title>Verify chat limitation feature for Bot mode tenant</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550846510063" stop="1550846513116" status="passed">
+                    <name>Given Set session capacity to 0 for Automation Bot tenant</name>
+                    <title>Given Set session capacity to 0 for Automation Bot tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846513116" stop="1550846531405" status="passed">
+                    <name>Given I login as agent of Automation Bot</name>
+                    <title>Given I login as agent of Automation Bot</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846531405" stop="1550846537169" status="passed">
+                    <name>Given User select Automation Bot tenant</name>
+                    <title>Given User select Automation Bot tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846537169" stop="1550846543930" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846543930" stop="1550846544324" status="passed">
+                    <name>When User enter chat to agent into widget input field</name>
+                    <title>When User enter chat to agent into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846544324" stop="1550846547472" status="passed">
+                    <name>Then User have to receive 'agents_away' text response for his 'chat to agent' input</name>
+                    <title>Then User have to receive 'agents_away' text response for his 'chat to agent' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846547472" stop="1550846550437" status="passed">
+                    <name>Given Set session capacity to 10 for Automation Bot tenant</name>
+                    <title>Given Set session capacity to 10 for Automation Bot tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846550438" stop="1550846556018" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846556018" stop="1550846556378" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846556379" stop="1550846556593" status="passed">
+                    <name>Then Conversation area becomes active with chat to agent user's message</name>
+                    <title>Then Conversation area becomes active with chat to agent user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846556593" stop="1550846556950" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846556950" stop="1550846557603" status="passed">
+                    <name>Then User should see 'hello' text response for his 'chat to agent' input</name>
+                    <title>Then User should see 'hello' text response for his 'chat to agent' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify chat limitation feature for Bot mode tenant"/>
+                <label name="feature" value="Max chat functionality"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Max chat functionality"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>
