@@ -129,7 +129,8 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
-            findElemByXPATHAgent(messageInputLocator).sendKeys(responseToUser);
+            waitForElementToBeClickableAgent(messageInput, 5, this.getCurrentAgent());
+            messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){

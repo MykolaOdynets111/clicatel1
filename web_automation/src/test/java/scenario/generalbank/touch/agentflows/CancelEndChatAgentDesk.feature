@@ -7,7 +7,7 @@ Feature: Canceling chat ending
     And Click chat icon
 
   Scenario: Verify if agent is able to cancel close chat in chat desk
-    Given AGENT_FEEDBACK tenant feature is set to false for Automation
+    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
