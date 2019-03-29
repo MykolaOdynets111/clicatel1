@@ -129,7 +129,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
-            messageInput.sendKeys(responseToUser);
+            findElemByXPATHAgent(messageInputLocator).sendKeys(responseToUser);
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
@@ -143,7 +143,8 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.getCurrentAgent());
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
         waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
-        int symbolsNumber = messageInput.getText().split("").length;
+        int symbolsNumber = messageInput.getText().split("").length; //errorEgor 1 if no message // try messageInput.getText().length()
+        waitFor(200);
         if(symbolsNumber>0) {
                 messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         }
@@ -270,14 +271,6 @@ public class AgentHomePage extends AgentAbstractPage {
             if (!isElementShownAgent(profanityPopup, 1, "main agent")){
                 break;
             }
-        }
-    }
-
-    public void clickCancelCloseButtonInCloseChatPopup (){
-        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
-            waitForElementToBeVisibleByXpathAgent(cancelCloseChatButtonXPATH, 10, "main agent");
-            findElemByXPATHAgent(cancelCloseChatButtonXPATH).click();
-            waitForElementToBeInVisibleByXpathAgent(cancelCloseChatButtonXPATH, 5);
         }
     }
 
