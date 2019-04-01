@@ -241,9 +241,16 @@ public class Hooks implements JSHelper{
             }
 
             if (scenario.getSourceTagNames().contains("@agent_feedback")){
-                boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_FEEDBACK");
-                if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_FEEDBACK")) {
-                    ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK", Boolean.toString(pretestFeatureStatus));
+                try{
+                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_FEEDBACK");
+                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_FEEDBACK")) {
+                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK", Boolean.toString(pretestFeatureStatus));
+                    }
+                }catch(NullPointerException e){
+                    //no feature status interaction
+                }
+                if(!(DefaultAgentSteps.getCreatedCRMTicket()==null)){
+                    ApiHelper.deleteCRMTicket(DefaultAgentSteps.getCreatedCRMTicket().getId());
                 }
             }
 
@@ -281,9 +288,9 @@ public class Hooks implements JSHelper{
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
                 }
-                if (scenario.isFailed()&&DriverFactory.isAgentDriverExists()) {
-                    closeWidgetSession();
-                }
+//                if (scenario.isFailed()&&DriverFactory.isAgentDriverExists()) {
+//                    closeWidgetSession();
+//                }
         }catch (WebDriverException e) { }
         }
     }

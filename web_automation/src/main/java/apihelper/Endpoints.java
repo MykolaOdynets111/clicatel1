@@ -50,6 +50,8 @@ public class Endpoints {
 
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
+    public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";

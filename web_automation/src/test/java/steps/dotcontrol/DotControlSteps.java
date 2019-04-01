@@ -266,7 +266,7 @@ public class DotControlSteps {
     public void checkMessageIdSavingInINITCall(){
         // skipping for demo1 because its db is located in another network
         if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
-            String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), clientId.get());
+            String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
             String actualMessageId = null;
             try {

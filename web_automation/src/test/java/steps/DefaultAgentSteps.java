@@ -15,7 +15,9 @@ import datamanager.Customer360PersonalInfo;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.TwitterUsers;
+import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.DateTimeHelper;
@@ -31,6 +33,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Collections;
 
@@ -46,6 +50,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
     private static ThreadLocal<Map<String, String>> crmTicket = new ThreadLocal<>();
+    private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
+
+    public static CRMTicket getCreatedCRMTicket(){
+        return createdCrmTicket.get();
+    }
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -530,20 +539,88 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Given("CRM ticket is created")
     public void createCRMTicketsViaAPI(){
-        Map activeSession = ApiHelper.getActiveSessionByClientId(getUserNameFromLocalStorage());
+        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
+                                                                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
-        dataForNewCRMTicket.put("conversationId", (String) activeSession.get("conversationId"));
-        dataForNewCRMTicket.put("sessionId",  (String) activeSession.get("sessionId"));
+        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
+        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
+        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
         dataForNewCRMTicket.put("link",  "http://mysaite" + faker.lorem().word() + ".ua");
         dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
         dataForNewCRMTicket.put("agentNote", "Note from automation test)");
         crmTicket.set(dataForNewCRMTicket);
 
         Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
+        createdCrmTicket.set(resp.getBody().as(CRMTicket.class));
         Assert.assertTrue(resp.statusCode()==200, "Creating CRM ticket via API was not successful\n" +
                                 resp.statusCode() + "\n" +
                                 "rest body: " +resp.getBody().asString());
     }
+
+    @Then("New CRM ticket is shown")
+    public void verifyCRMTicketIsSown(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
+                "CRM ticket container is not shown");
+    }
+
+    @Then("Correct ticket info is shown")
+    public void verifyTicketInfoInActiveChat(){
+        SoftAssert soft = new SoftAssert();
+        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicketInfoMap();
+        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
+        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
+                "Shown Ticket created date is not correct \n");
+        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
+                "Shown Ticket Number date is not correct \n");
+        soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
+                "Shown Ticket note date is not correct \n");
+        soft.assertAll();
+    }
+
+    private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(createdCrmTicket.get().getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+
+        DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+        Map<Long, String> newDaysMap = new HashMap<>();
+        newDaysMap.put(1L, "1st");
+        newDaysMap.put(2L, "2nd");
+        newDaysMap.put(3L, "3rd");
+        newDaysMap.put(4L, "4th");
+        newDaysMap.put(5L, "5th");
+        newDaysMap.put(6L, "6th");
+        newDaysMap.put(7L, "7th");
+        newDaysMap.put(8L, "8th");
+        newDaysMap.put(9L, "9th");
+        newDaysMap.put(10L, "10th");
+        newDaysMap.put(11L, "11th");
+        newDaysMap.put(12L, "12th");
+        newDaysMap.put(13L, "13th");
+        newDaysMap.put(14L, "14th");
+        newDaysMap.put(15L, "15th");
+        newDaysMap.put(16L, "16th");
+        newDaysMap.put(17L, "17th");
+        newDaysMap.put(18L, "18th");
+        newDaysMap.put(20L, "20th");
+        newDaysMap.put(21L, "21st");
+        newDaysMap.put(22L, "22nd");
+        newDaysMap.put(23L, "23rd");
+        newDaysMap.put(24L, "24th");
+        newDaysMap.put(25L, "25th");
+        newDaysMap.put(26L, "26th");
+        newDaysMap.put(27L, "27th");
+        newDaysMap.put(28L, "28th");
+        newDaysMap.put(29L, "29th");
+        newDaysMap.put(30L, "30th");
+        newDaysMap.put(31L, "31st");
+
+        builder.appendText(ChronoField.DAY_OF_MONTH, newDaysMap );
+        builder.append(DateTimeFormatter.ofPattern(" yyyy, h:mm a"));
+        DateTimeFormatter formatter1 = builder.toFormatter();
+
+
+        return (dateTimeFromBackend.getMonth() + " " + dateTimeFromBackend.format(formatter1)).toLowerCase();    }
 
     private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();

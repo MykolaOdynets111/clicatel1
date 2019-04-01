@@ -63,7 +63,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement historyDetails;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
-
+    private CRMTicketContainer crmTicketContainer;
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private PageHeader pageHeader;
@@ -79,6 +79,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public CRMTicketContainer getCrmTicketContainer() {
+        return crmTicketContainer;
     }
 
     public HistoryDetailsWindow getHistoryDetailsWindow() {

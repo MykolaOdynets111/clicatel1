@@ -14,8 +14,6 @@ import io.restassured.response.ResponseBody;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -484,9 +482,9 @@ public class ApiHelper {
         String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        String customerSince =  LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
-                                                        .withZoneSameInstant(zoneId).toLocalDateTime()
-                                                        .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+        String customerSince = LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         String channelUsername = "";
         try {
@@ -549,18 +547,25 @@ public class ApiHelper {
     }
 
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
-        String clientProfileId = getClientProfileId(clientID);
-        return RestAssured.given()
+        return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .header("Content-Type", "application/json")
-                .body("{\n" +
+                .header("accept", "application/json")
+                .body("{" +
                         "  \"conversationId\": \""+ ticketInfo.get("conversationId") +"\",\n" +
                         "  \"sessionId\": \""+ ticketInfo.get("sessionId") +"\",\n" +
                         "  \"link\": \"" + ticketInfo.get("link") + "\",\n" +
                         "  \"ticketNumber\": \""+ ticketInfo.get("ticketNumber") +"\",\n" +
                         "  \"agentNote\": \"" + ticketInfo.get("agentNote") + "\"\n" +
                         "}")
-                .post(String.format(Endpoints.CRM_TICKET, clientProfileId));
+                .post(String.format(Endpoints.CRM_TICKET, ticketInfo.get("clientProfileId")));
+    }
+
+    public static void deleteCRMTicket(String crmTicketId){
+        RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("accept", "application/json")
+                .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
 
 }
