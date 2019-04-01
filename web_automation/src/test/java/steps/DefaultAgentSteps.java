@@ -287,7 +287,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) {
-                    Assert.assertTrue(waitForDotControlRequestOnChatDesk(),
+                    userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+                    Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,15, "main"),
                             "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
                                     DotControlSteps.getFromClientRequestMessage().getClientId()+")");
                     return;
@@ -414,7 +415,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         customer360InfoForUpdating = currentCustomerInfo.setLocation("Lviv")
                             .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
                             .setPhone("+380931576633");
-        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) customer360InfoForUpdating.setFullName("AQA Run");
+        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) {
+            customer360InfoForUpdating.setFullName("AQA Run");
+            customer360InfoForUpdating.setChannelUsername(customer360InfoForUpdating.getFullName());
+
+        }
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
 
     }
