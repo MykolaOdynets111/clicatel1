@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -129,13 +130,24 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
                 .click();
     }
 
+    public List<String> getFilterOption(){
+        expandFilterButton.click();
+        waitForElementToBeVisibleAgent(filterDropdownMenu, 10);
+        List<String> displayedFilterOptions = filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
+        return  displayedFilterOptions;
+    }
+
     public void selectRandomChat(String agent){
-        waitForElementToBePresentByXpathAgent(tenthChat, 8);
-       List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
-                                                            .map(webElement -> new ChatInLeftMenu(webElement))
-                                                            .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
-                                                            .filter(userName -> userName.startsWith("test"))
-                                                            .collect(Collectors.toList());
+        try {
+            waitForElementToBePresentByXpathAgent(tenthChat, 8);
+        }catch(TimeoutException e){
+            // nothing to do, just stabilizing wait
+        }
+        List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
+                .map(webElement -> new ChatInLeftMenu(webElement))
+                .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
+                .filter(userName -> userName.startsWith("test"))
+                .collect(Collectors.toList());
        String randomClientIdWithOneSession = displayedClientIdsFromAQATests.stream()
                                             .filter(clientId ->
                                                 ApiHelper.getSessionDetails(clientId).getBody().jsonPath().getList("data.sessionId").size()==1)

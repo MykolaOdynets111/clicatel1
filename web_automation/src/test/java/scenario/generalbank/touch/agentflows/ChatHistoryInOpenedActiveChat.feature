@@ -7,6 +7,6 @@ Feature: Agent should be able to see chat history in opened active chat
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
-    Then Agent sees correct chat with basic info is shown in chat history container
+    Then Agent sees correct chat with basic info in chat history container
     When Agent click 'View chat' button
     Then Correct messages is shown in history details window

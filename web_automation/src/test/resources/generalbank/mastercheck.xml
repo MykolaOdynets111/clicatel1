@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="General Bank Master check">
-    <test name="General Bank Acceptance test">
+    <test name="General Bank Demo Acceptance test">
         <classes>
             <class name="runner.generalbank.RunAcceptanceTest" />
         </classes>

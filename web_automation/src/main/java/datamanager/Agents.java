@@ -55,8 +55,17 @@ public enum Agents {
     DEV_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
     DEMO_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo"),
     DEMO1_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo1"),
+    INTEGRATION_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "integration"),
 
-    DEV_BOT_MODE_SECOND_AGENT("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
+    DEV_BOT_MODE_SECOND_AGENT("updateplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
+
+    // =======  Active agents for Bot mode with default settings ======== //
+
+    INTEGRATION_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "integration"),
+    DEV_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "dev"),
+    DEMO_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "demo"),
+    QA_COMMON_ADMIN("account_signup@aqa.test", "p@$$w0rd4te$t", "Automation Common", "qa"),
+    TESTING_COMMON_ADMIN("commontenant@gmail.com", "p@$$w0rd4te$t", "Automation Common", "qa"),
 
     ;
 

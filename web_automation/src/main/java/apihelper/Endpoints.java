@@ -18,7 +18,7 @@ public class Endpoints {
 
     public static String FACEBOOK_INTEGRATION =  URLs.getTouchApiBaseURL() + "facebook-registration/integration";
 
-    public static String AGENT_INFO = URLs.getTouchApiBaseURL() + "agents/info?mc2Token=%s";
+    public static String AGENT_INFO_ME = URLs.getTouchApiBaseURL() + "agents/infoMe";
 
     public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
 
@@ -34,7 +34,7 @@ public class Endpoints {
 
     public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
 
-    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "ticket/process-by-id/";
+    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
@@ -44,6 +44,13 @@ public class Endpoints {
 
     public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
 
+    public static String ACTIVE_CHATS_BY_AGENT = "https://%s-touch.clickatelllabs.com/chats/active-by-agent?page=0&size=10";
+
+    public static String CLOSE_ACTIVE_CHAT = URLs.getTouchApiBaseURL() +  "chats/close-conversation/";
+
+    public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
+
+    public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
 
     // ================== INTERNAL ============== //
 
@@ -65,14 +72,13 @@ public class Endpoints {
 
     public static String INTERNAL_DECREASING_TOUCHGO_PLAN = URLs.getBaseInternalApiUrl() + "tenants/touchGo/standard";
 
-    public static String INTERNAL_ACTIVE_SESSIONS = URLs.getBaseInternalApiUrl() + "sessions/active?tenantName=%s&clientId=%s&integrationType=%s";
-
     public static String INTERNAL_SESSION_DETAILS = URLs.getBaseInternalApiUrl() + "sessions?tenantName=%s&clientId=%s&page=1&count=10&dateFrom=0&dateTo=0";
 
     public static String INTERNAL_TENANTS = URLs.getBaseInternalApiUrl() + "tenants/";
 
     public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
 
+    public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
 
     // ==================  PLATFORM ============== //
 
@@ -144,13 +150,21 @@ public class Endpoints {
 
     public static String TIE_USER_INPUT = URLs.getBaseTieURL() + "%s/user_inputs/";
 
-    public static String TIE_CREATE_NEW_INTENT = URLs.getBaseTieURL() + "%s/answers-management/";
+    public static String TIE_NEW_INTENT_MANAGEMENT = URLs.getBaseTieURL() + "%s/answers-management/";
 
-    public static String TIE_ADD_NEW_SAMPLE = URLs.getBaseTieURL() + "%s/train-data-management/";
+    public static String TIE_SAMPLES = URLs.getBaseTieURL() + "%s/train-data-management/";
+
+    public static String TIE_TRAINING =  URLs.getBaseTieURL() + "%s/training";
+
+    public static String TIE_MODELS =  URLs.getBaseTieURL() + "%s/models";
+
+    public static String TIE_ALL_INTENTS =  URLs.getBaseTieURL() + "%s/intents";
+
+    public static String TIE_SLOTS_MANAGEMENT =  URLs.getBaseTieURL() + "%s/slots-management";
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "actuator/health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "health";
 
     // ====================  PORTAL ================= //
 
@@ -162,7 +176,7 @@ public class Endpoints {
 
     // ====================  TAF ================= //
 
-    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "taf-camunda-rest/taf/resources/taf-messages?tenant=%s";
+    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "resources/taf-messages?tenant=%s";
 
     // ====================  .Control ================= //
 

@@ -4,8 +4,8 @@ Feature: User on his demand should be redirected on the agent
   Verification of basic communication between user and agent
 
   Background:
-    Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant
+    Given I login as agent of General Bank Demo
     And Click chat icon
 
 #  Scenario Outline: Verify if user is able to communicate with agent by typing "<user_message>" into widget

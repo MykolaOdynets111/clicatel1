@@ -39,6 +39,12 @@ public class Customer360PersonalInfo {
         return this;
     }
 
+    public Customer360PersonalInfo setChannelUsername(String channelUsername) {
+        this.channelUsername = channelUsername;
+        return this;
+    }
+
+
 
     public String getFullName() {
         return fullName;
@@ -70,18 +76,19 @@ public class Customer360PersonalInfo {
         Customer360PersonalInfo another =  (Customer360PersonalInfo) object;
         return this.fullName.trim().equals(another.getFullName().trim()) && this.location.equals(another.getLocation()) &&
                 this.customerSince.equals(another.getCustomerSince()) && this.email.equals(another.getEmail()) &&
-                this.channelUsername.equals(another.getChannelUsername()) && this.phone.equals(another.getPhone()) ;
+//                this.channelUsername.equals(another.getChannelUsername()) &&
+                this.phone.equals(another.getPhone()) ;
     }
 
     @Override
     public String toString() {
         return "Customer360PersonalInfo{" +
-                "fullName='" + fullName + '\'' +
-                ", location='" + location + '\'' +
-                ", customerSince='" + customerSince + '\'' +
+                "fullName='" + fullName + "'\n" +
+                ", location='" + location + "'\n" +
+                ", customerSince='" + customerSince + "'\n" +
                 ", email='" + email + '\'' +
-                ", channelUsername='" + channelUsername + '\'' +
+                ", channelUsername='" + channelUsername + "'\n" +
                 ", phone='" + phone + '\'' +
-                '}';
+                "}\n";
     }
 }

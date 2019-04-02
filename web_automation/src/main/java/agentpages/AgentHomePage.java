@@ -19,10 +19,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.text-field")
     private WebElement suggestionInputFieldContainer;
 
-    @FindBy(xpath = "//span[text()='Close Chat']")
-    private WebElement closeChatButton;
-
-    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
+    private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String messageInputLocator = "//textarea[contains(@class,'text-input')]";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
@@ -66,7 +63,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement historyDetails;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
-
+    private CRMTicketContainer crmTicketContainer;
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
     private PageHeader pageHeader;
@@ -76,12 +73,16 @@ public class AgentHomePage extends AgentAbstractPage {
     private IncomingTransferWindow incomingTransferWindow;
     private Customer360Container customer360Container;
     private ChatHeader chatHeader;
-    private ConcludeChatWindow concludeChatWindow;
+    private AgentFeedbackWindow agentFeedbackWindow;
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public CRMTicketContainer getCrmTicketContainer() {
+        return crmTicketContainer;
     }
 
     public HistoryDetailsWindow getHistoryDetailsWindow() {
@@ -92,8 +93,8 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatHistoryContainer;
     }
 
-    public ConcludeChatWindow getConcludeChatWindow() {
-        return concludeChatWindow;
+    public AgentFeedbackWindow getAgentFeedbackWindow() {
+        return agentFeedbackWindow;
     }
 
     public ChatHeader getChatHeader() {
@@ -132,6 +133,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
+            waitForElementToBeClickableAgent(messageInput, 5, this.getCurrentAgent());
             messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
@@ -146,7 +148,7 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.getCurrentAgent());
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
         waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
-        int symbolsNumber = messageInput.getText().split("").length;
+        int symbolsNumber = messageInput.getText().length();
         if(symbolsNumber>0) {
                 messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         }
@@ -163,9 +165,9 @@ public class AgentHomePage extends AgentAbstractPage {
         if (isElementShownAgent(conversationAreaContainer,15, ordinalAgentNumber)) {
             try{
                 try {
-                    waitForElementToBeVisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
+                    waitForElementToBeVisibleByXpathAgent(loadingSpinner, 6, ordinalAgentNumber);
                 }catch (TimeoutException e){ }
-                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 15, ordinalAgentNumber);
+                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
                 return true;
             }
             catch (TimeoutException e){
@@ -215,7 +217,7 @@ public class AgentHomePage extends AgentAbstractPage {
     public void endChat(){
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
-            clickCloseButtonInCloseChatPopup();
+            getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
         }
     }
 
@@ -273,18 +275,6 @@ public class AgentHomePage extends AgentAbstractPage {
             if (!isElementShownAgent(profanityPopup, 1, "main agent")){
                 break;
             }
-        }
-    }
-
-    public boolean isEndChatPopupShown (){
-        return isElementShownAgent(closeChatButton,12);
-    }
-
-    public void clickCloseButtonInCloseChatPopup (){
-        if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
-            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
-            findElemByXPATHAgent(closeChatButtonXPATH).click();
-            waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
         }
     }
 

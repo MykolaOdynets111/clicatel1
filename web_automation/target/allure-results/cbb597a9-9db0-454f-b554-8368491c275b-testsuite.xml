@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550851742372" stop="1550851763444" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Communication with bot via messages</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550851742374" stop="1550851763444" status="failed">
+            <name>Bot answers on user messages</name>
+            <title>Bot answers on user messages</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: The following asserts failed:
+To user response is not as expected expected [Hi Tom. Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.] but found [Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.]</message>
+                <stack-trace>java.lang.AssertionError: The following asserts failed:
+To user response is not as expected expected [Hi Tom. Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.] but found [Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances.]
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:38)
+	at steps.TwitterSteps.verifyDMTwitterResponse(TwitterSteps.java:149)
+	at ✽.Then User have to receive correct response "Hi Tom. Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances." on his message "account balance"(TwitterBotDirectMessage.feature:10)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1550851750845" stop="1550851751648" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                </step>
+                <step start="1550851751648" stop="1550851752630" status="passed">
+                    <name>Given Open direct message channel</name>
+                    <title>Given Open direct message channel</title>
+                </step>
+                <step start="1550851752631" stop="1550851752884" status="passed">
+                    <name>When User sends twitter direct message: account balance</name>
+                    <title>When User sends twitter direct message: account balance</title>
+                </step>
+                <step start="1550851752884" stop="1550851760877" status="failed">
+                    <name>Then User have to receive correct response "Hi Tom. Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances." on his message "account balance"</name>
+                    <title>Then User have to receive correct response "Hi Tom. Checking your balance on your phone is easy. You'll need to download and register the General bank app. Then, select save, sign in and voila, you'll be able to see your balances." on his message "account balance"</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Bot answers on user messages"/>
+                <label name="feature" value="Communication with bot via messages"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Communication with bot via messages"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

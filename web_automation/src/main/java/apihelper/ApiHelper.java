@@ -1,26 +1,21 @@
 package apihelper;
 
-import datamanager.Customer360PersonalInfo;
-import datamanager.MC2Account;
-import datamanager.Tenants;
-import datamanager.Territories;
+import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
+import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
-import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import org.omg.CORBA.INTERNAL;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -56,26 +51,42 @@ public class ApiHelper {
 
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        return RestAssured.given().log().all()
-                .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName())
-                .getBody().jsonPath().getMap("");
+        Response resp = RestAssured.given().log().all()
+                .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName());
+        Map<String, String> tenantInf = new HashMap<>();
+        try{
+             tenantInf = resp.getBody().jsonPath().getMap("");
+        } catch (JsonPathException e){
+            Assert.assertTrue(false, "Failed to get tenant info\n"+
+            "URL: " + Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName() + "\n" +
+            "resp status code:" + resp.statusCode() + "\n"+
+            "resp body: " + resp.getBody().asString());
+        }
+        return tenantInf;
     }
 
 
     public static void createUserProfile(String tenantName, String clientID) {
-        RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .body("{ "+
-                        "\"tenantName\": \""+tenantName+"\","+
-                        "\"type\": \"TOUCH\"," +
-                        "\"clientId\": \""+clientID+"\","+
-                        "\"attributes\": {" +
-                            "\"firstName\": \""+clientID+"\","+
+        Response resp;
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+
+        resp = RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Accept", "application/json")
+                    .body("{ " +
+                            "\"tenantId\": \"" + tenantId + "\"," +
+                            "\"type\": \"TOUCH\"," +
+                            "\"clientId\": \"" + clientID + "\"," +
+                            "\"attributes\": {" +
+                            "\"firstName\": \"" + clientID + "\"," +
                             "\"email\": \"aqa_test@gmail.com\"" +
                             "}" +
-                        "}")
-                .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+                            "}")
+                    .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+        Assert.assertTrue(resp.statusCode()==200,
+                "Creating of user profile was not successful\n" +
+        "resp status code: " + resp.statusCode() + "\n" +
+        "resp body: " + resp.getBody().asString());
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
@@ -102,9 +113,11 @@ public class ApiHelper {
     }
 
     public static List<TafMessage> getTafMessages() {
-            String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-            tenantMessages = RestAssured.given().get(url)
-                    .jsonPath().getList("tafResponses", TafMessage.class);
+        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+        tenantMessages = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .get(url)
+                .jsonPath().getList("tafResponses", TafMessage.class);
         return tenantMessages;
     }
 
@@ -319,7 +332,7 @@ public class ApiHelper {
         return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", token)
-                .get(String.format(Endpoints.AGENT_INFO, token));
+                .get(Endpoints.AGENT_INFO_ME);
     }
 
     public static void logoutTheAgent(String tenantOrgName) {
@@ -415,13 +428,13 @@ public class ApiHelper {
     }
 
     public static List<OvernightTicket> getOvernightTicketsByStatus(String tenantOrgName, String ticketStatus){
-        return RestAssured.given()
+        return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase())
                 .getBody().jsonPath().getList("", OvernightTicket.class);
     }
 
-    public static void closeAllOvernightTickets(String tenantOrgName){
+    public static void closeAllOvernightTickets(String tenantOrgName) {
         List<OvernightTicket> allTicketsByStatus = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
         for(OvernightTicket ticket : allTicketsByStatus){
             RestAssured.given()
@@ -430,22 +443,27 @@ public class ApiHelper {
         }
     }
 
-    public static String getActiveSessionIdByClientId(String tenantName, String clineId, String integrationType){
-        String url = String.format(Endpoints.INTERNAL_ACTIVE_SESSIONS, tenantName, clineId, integrationType);
-        String sessionId = "";
+    public static Map getActiveSessionByClientId(String clientId){
+        String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String url = String.format(Endpoints.INTERNAL_CHAT_BY_CLIENT, tenantID, clientId);
         Response resp =  RestAssured.get(url);
+        Map activeSession = null;
         try{
-            sessionId = resp.getBody().jsonPath().get("sessionId");
+            activeSession =  (HashMap) ((Map) resp.getBody().jsonPath().getList("content.sessions[0]")
+                    .stream()
+                    .map(e -> (Map) e)
+                    .filter(map -> map.get("state").equals("ACTIVE"))
+                    .findFirst().get());
         }catch(JsonPathException e){
             Assert.assertTrue(false, "Failed to get session Id\n"+
                     "resp status: " + resp.statusCode() + "\n" +
             "resp body:" + resp.getBody().asString() + "\n");
         }
-        return sessionId;
+        return activeSession;
     }
 
     public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
-        String sessionId = getActiveSessionIdByClientId(Tenants.getTenantUnderTestName(), clineId, integrationType);
+        String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
         JsonPath respJSON = RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
@@ -461,11 +479,12 @@ public class ApiHelper {
         }
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
 
-        long customerSinceTimestamp  = respJSON.getLong("personalDetails.customerSince");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
-        String customerSince =  LocalDateTime.ofInstant(Instant.ofEpochMilli(customerSinceTimestamp),
-                                TimeZone.getDefault().toZoneId()).
-                format(formatter);
+        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String customerSince = LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
 
         String channelUsername = "";
         try {
@@ -497,6 +516,56 @@ public class ApiHelper {
         String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
         String url = String.format(Endpoints.INTERNAL_GET_CHATS_FINISHED_BY_AGENT, agentId, page, size);
         return RestAssured.get(url);
+    }
+
+    public static Response getActiveChatByAgent(){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+    }
+
+    public static void closeActiveChats(){
+        List<String> conversationIds = getActiveChatByAgent().getBody().jsonPath().getList("content.sessions.conversationId");
+        for(String conversationId : conversationIds){
+            RestAssured.given()
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                    .delete(Endpoints.CLOSE_ACTIVE_CHAT + conversationId);
+            }
+    }
+
+    public static String getClientProfileId(String clientID){
+        return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
+    }
+
+    public static List<CRMTicket> getCRMTicket(String clientID, String type){
+        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
+//        String clientProfileId = getClientProfileId(clientID);
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
+                .getBody().jsonPath().getList("", CRMTicket.class);
+    }
+
+    public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Content-Type", "application/json")
+                .header("accept", "application/json")
+                .body("{" +
+                        "  \"conversationId\": \""+ ticketInfo.get("conversationId") +"\",\n" +
+                        "  \"sessionId\": \""+ ticketInfo.get("sessionId") +"\",\n" +
+                        "  \"link\": \"" + ticketInfo.get("link") + "\",\n" +
+                        "  \"ticketNumber\": \""+ ticketInfo.get("ticketNumber") +"\",\n" +
+                        "  \"agentNote\": \"" + ticketInfo.get("agentNote") + "\"\n" +
+                        "}")
+                .post(String.format(Endpoints.CRM_TICKET, ticketInfo.get("clientProfileId")));
+    }
+
+    public static void deleteCRMTicket(String crmTicketId){
+        RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("accept", "application/json")
+                .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
 
 }

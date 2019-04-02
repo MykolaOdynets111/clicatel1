@@ -5,6 +5,8 @@ import apihelper.Endpoints;
 import datamanager.FacebookPages;
 import datamanager.Tenants;
 import datamanager.TwitterPages;
+import io.restassured.path.json.exception.JsonPathException;
+import org.testng.Assert;
 
 public class URLs {
 
@@ -39,7 +41,13 @@ public class URLs {
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
     public static String getWidgetURL(String tenantOrgName){
-        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String tenantID = "";
+        try {
+            tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        }catch (JsonPathException e){
+            Assert.assertTrue(false, "Getting tenant info was not successful\n" +
+            "Response with tenant info: " + ApiHelper.getTenantInfoMap(tenantOrgName).toString());
+        }
         String targetEnvConfiguration = ConfigManager.getEnv();
         String env;
         if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
@@ -62,6 +70,9 @@ public class URLs {
      * @param updateURL - boolean value to indicate if we need to log into different tenant Agent desk
      */
     public static String getAgentURL(String tenantOrgName, boolean updateURL) {
+        System.out.println("!!! tenantOrgName before getting agent URL: " + tenantOrgName);
+        System.out.println("!!! agent URL before getting it: " + FINAL_AGENT_URL);
+
         if (FINAL_AGENT_URL == null || updateURL) {
             String baseUrl;
             String targetEnvConfiguration = ConfigManager.getEnv();
@@ -69,11 +80,9 @@ public class URLs {
             if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
             else env = targetEnvConfiguration;
             baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
-//            if(tenantOrgName.equalsIgnoreCase("general bank demo") && ConfigManager.getEnv().equalsIgnoreCase("demo")){
-//                tenantOrgName="standard bank";
-//            }
             FINAL_AGENT_URL = baseUrl + ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         }
+        System.out.println("!!! URL to be returned getting it: " + FINAL_AGENT_URL);
         return FINAL_AGENT_URL;
     }
 

@@ -141,11 +141,10 @@ public class DriverFactory {
                 Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
             }
             if(ConfigManager.getEnv().equalsIgnoreCase("testing")||
-                    ConfigManager.getEnv().equalsIgnoreCase("dev")){
+                    ConfigManager.getEnv().equalsIgnoreCase("demo")){
                 REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
             }
             RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
-//            remoteWebDriver.manage().deleteAllCookies();
             return remoteWebDriver;
         } catch (MalformedURLException e) {
             e.printStackTrace();

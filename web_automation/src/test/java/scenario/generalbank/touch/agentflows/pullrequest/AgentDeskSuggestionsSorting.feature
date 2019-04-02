@@ -2,9 +2,9 @@
 Feature: Agent suggestions sorting by confidence
 
   Background:
+    Given User select General Bank Demo tenant
     Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo
     And I login as agent of General Bank Demo
-    Given User select General Bank Demo tenant
     And Click chat icon
 
   Scenario: Suggestions should be shown in descending order by confidence

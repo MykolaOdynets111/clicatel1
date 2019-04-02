@@ -2,6 +2,8 @@ package dbmanager;
 import org.testng.Assert;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBConnector {
 
@@ -156,10 +158,11 @@ public class DBConnector {
         return isAgentPresent;
     }
 
-    public static String getClientProfileID(String env, String clientID) {
+    public static String getClientProfileID(String env, String clientID, String type, int isTenantProfile) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
-        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' and is_tenant_profile=1;";
+        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' " +
+                "and is_tenant_profile="+isTenantProfile+" and type = '"+type+"';";
         Statement statement = null;
         ResultSet results = null;
         String id = null;
@@ -251,25 +254,26 @@ public class DBConnector {
         return isLastVisitSaved;
     }
 
-    public static String getSessionIdByClientProfileID(String env, String clientID) {
+    public static Map<String, String> getActiveSessionDetailsByClientProfileID(String env, String clientID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-
-        String query = "SELECT session_id FROM "+tableName+".session where client_id = '"+clientID+"';";
+        Map<String, String> sessionDetails = new HashMap<>();
+        String query = "SELECT * FROM "+tableName+".session where client_id = '"+clientID+"' and state = 'ACTIVE';";
         Statement statement = null;
         ResultSet results = null;
-        String id = null;
         try {
             statement = getConnection(env, "touch").createStatement();
             statement.executeQuery(query);
             results = statement.getResultSet();
             results.next();
-            id = results.getString("session_id");
+            sessionDetails.put("sessionId", results.getString("session_id"));
+            sessionDetails.put("clientProfileId", results.getString("client_profile_id"));
+            sessionDetails.put("conversationId", results.getString("conversation_id"));
             statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return id;
+        return sessionDetails;
     }
 
 

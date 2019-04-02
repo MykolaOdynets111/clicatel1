@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550846302138" stop="1550846419177" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Customer 360 from widget</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550846302140" stop="1550846355796" status="passed">
+            <name>User's info presence on chatdesk (touch user)</name>
+            <title>User's info presence on chatdesk (touch user)</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550846302140" stop="1550846324727" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846324727" stop="1550846330837" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846330838" stop="1550846337234" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846337234" stop="1550846337560" status="passed">
+                    <name>When User enter chat to support into widget input field</name>
+                    <title>When User enter chat to support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846337560" stop="1550846343680" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846343680" stop="1550846344021" status="passed">
+                    <name>When Agent click on new conversation</name>
+                    <title>When Agent click on new conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846344022" stop="1550846346607" status="passed">
+                    <name>Then Correct touch client details are shown</name>
+                    <title>Then Correct touch client details are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="User's info presence on chatdesk (touch user)"/>
+                <label name="feature" value="Customer 360 from widget"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1550846355797" stop="1550846419176" status="passed">
+            <name>Editing Customer 360 info (touch user)</name>
+            <title>Editing Customer 360 info (touch user)</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550846355798" stop="1550846377640" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846377640" stop="1550846383253" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846383253" stop="1550846394241" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846394241" stop="1550846394533" status="passed">
+                    <name>When User enter chat to support into widget input field</name>
+                    <title>When User enter chat to support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846394533" stop="1550846400643" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846400643" stop="1550846400995" status="passed">
+                    <name>When Agent click on new conversation</name>
+                    <title>When Agent click on new conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846400995" stop="1550846401289" status="passed">
+                    <name>And Click 'Edit' button in Customer 360 view</name>
+                    <title>And Click 'Edit' button in Customer 360 view</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846401289" stop="1550846404446" status="passed">
+                    <name>When Fill in the form with new touch customer 360 info</name>
+                    <title>When Fill in the form with new touch customer 360 info</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846404446" stop="1550846404507" status="passed">
+                    <name>And Click 'Save' button in Customer 360 view</name>
+                    <title>And Click 'Save' button in Customer 360 view</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846404507" stop="1550846406644" status="passed">
+                    <name>Then Touch customer info is updated on backend</name>
+                    <title>Then Touch customer info is updated on backend</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846406644" stop="1550846409064" status="passed">
+                    <name>And Correct touch client details are shown</name>
+                    <title>And Correct touch client details are shown</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846409064" stop="1550846409399" status="passed">
+                    <name>And New info is shown in left menu with chats</name>
+                    <title>And New info is shown in left menu with chats</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846409399" stop="1550846409483" status="passed">
+                    <name>And Customer name is updated in active chat header</name>
+                    <title>And Customer name is updated in active chat header</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Editing Customer 360 info (touch user)"/>
+                <label name="feature" value="Customer 360 from widget"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Customer 360 from widget"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

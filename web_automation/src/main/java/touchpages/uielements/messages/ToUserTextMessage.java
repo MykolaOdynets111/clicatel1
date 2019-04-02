@@ -45,7 +45,7 @@ public class ToUserTextMessage  extends Widget implements WebActions {
     }
 
     public boolean isSecondResponseShown(int wait){
-        for(int i = 0; i < 6; i++ ){
+        for(int i = 0; i <= wait; i++ ){
             if(toUserTextMessages.size()==2){
                 return true;
             }else {
@@ -56,7 +56,7 @@ public class ToUserTextMessage  extends Widget implements WebActions {
     }
 
     /**
-     * Method designed to make sure that second response is not shown after 6 seconds wait
+     * Method designed to make sure that second response is not shown after specifyed wait
      * @param wait
      * @return
      */
@@ -84,7 +84,7 @@ public class ToUserTextMessage  extends Widget implements WebActions {
 
     public boolean isTextResponseShownAmongOthers(String expectedMessage) {
         boolean result = false;
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < 15; i++){
             result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
             if (result) return true;
             waitFor(500);

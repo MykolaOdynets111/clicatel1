@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550845733965" stop="1550845809777" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent should see active chat after page was refreshed</name>
+    <description type="text">
+Verification of basic communication between user and agent</description>
+    <test-cases>
+        <test-case start="1550845733969" stop="1550845809776" status="passed">
+            <name>Verify user is chat remains in chatdesk after refresh</name>
+            <title>Verify user is chat remains in chatdesk after refresh</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550845733969" stop="1550845773137" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845773137" stop="1550845778689" status="passed">
+                    <name>Given User opens General Bank Demo tenant page</name>
+                    <title>Given User opens General Bank Demo tenant page</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845778689" stop="1550845784973" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845784974" stop="1550845785304" status="passed">
+                    <name>When User enter chat to support into widget input field</name>
+                    <title>When User enter chat to support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845785304" stop="1550845791410" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845791410" stop="1550845792402" status="passed">
+                    <name>When Agent refreshes the page</name>
+                    <title>When Agent refreshes the page</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845792402" stop="1550845800573" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845800574" stop="1550845800880" status="passed">
+                    <name>When Agent click on new conversation</name>
+                    <title>When Agent click on new conversation</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845800881" stop="1550845801135" status="passed">
+                    <name>Then Conversation area becomes active with chat to support user's message</name>
+                    <title>Then Conversation area becomes active with chat to support user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="issue" value="https://jira.clickatell.com/browse/TPLAT-3581"/>
+                <label name="story" value="Verify user is chat remains in chatdesk after refresh"/>
+                <label name="feature" value="Agent should see active chat after page was refreshed"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent should see active chat after page was refreshed"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

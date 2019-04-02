@@ -4,8 +4,8 @@ Feature: Transferring chat
   Verification of basic transfer chat functionality
 
   Background:
-    Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant
+    Given I login as agent of General Bank Demo
     And Click chat icon
 
   Scenario: Verify if agent is able to transfer chat via "Transfer chat" button

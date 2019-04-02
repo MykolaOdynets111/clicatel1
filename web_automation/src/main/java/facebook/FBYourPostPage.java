@@ -53,7 +53,7 @@ public class FBYourPostPage extends AbstractPage {
         if (isElementShownByXpath(closeDMPopupButton, 2)) findElemByXPATH(closeDMPopupButton).click();
 
         try {
-            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 25);
+            waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 10);
         }catch (TimeoutException|NoSuchElementException e){
             scrollPageToTheTop(DriverFactory.getTouchDriverInstance());
             waitForElementToBeVisible(findElemByCSS(userInitialPostMessageCSS), 5);
@@ -63,7 +63,7 @@ public class FBYourPostPage extends AbstractPage {
 
     public boolean isExpectedResponseShownInComments(String expectedResponse){
        return findElemsByCSS(commentsCSS).stream().map(CommentInYourPostWindow::new)
-               .anyMatch(e1 -> e1.getCommentText().equals(expectedResponse));
+               .anyMatch(e1 -> e1.getCommentText().contains(expectedResponse));
     }
 
     public void makeAPost(String message){
@@ -94,7 +94,7 @@ public class FBYourPostPage extends AbstractPage {
         waitForElementToBeInVisibleByXpath(deletePostConfirmationPopupXPATH, 25);
     }
 
-    public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){
+    public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){// clarify_timeout
         boolean isStaleReferenceErrorThrown=true;
         boolean isVerificationPassed=false;
         int loopsCounter=0;

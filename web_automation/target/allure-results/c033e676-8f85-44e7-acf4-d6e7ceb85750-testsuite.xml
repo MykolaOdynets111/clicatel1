@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550852116220" stop="1550852160891" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Communication with agent via direct messages</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550852116230" stop="1550852160891" status="passed">
+            <name>Agent answers on user messages</name>
+            <title>Agent answers on user messages</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550852126699" stop="1550852144252" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852144252" stop="1550852145228" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852145229" stop="1550852146277" status="passed">
+                    <name>Given Open direct message channel</name>
+                    <title>Given Open direct message channel</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852146277" stop="1550852146694" status="passed">
+                    <name>When User sends twitter direct message regarding chat to support</name>
+                    <title>When User sends twitter direct message regarding chat to support</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852146694" stop="1550852146724" status="passed">
+                    <name>Then Agent has new conversation request from twitter user</name>
+                    <title>Then Agent has new conversation request from twitter user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852146725" stop="1550852147144" status="passed">
+                    <name>When Agent click on new conversation request from twitter</name>
+                    <title>When Agent click on new conversation request from twitter</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852147145" stop="1550852147983" status="passed">
+                    <name>Then Conversation area becomes active with chat to support message from tweet user</name>
+                    <title>Then Conversation area becomes active with chat to support message from tweet user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852147983" stop="1550852148304" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852148305" stop="1550852149512" status="passed">
+                    <name>Then User have to receive correct response "hello" on his message "chat to support"</name>
+                    <title>Then User have to receive correct response "hello" on his message "chat to support"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852149512" stop="1550852149933" status="passed">
+                    <name>When User sends twitter direct message: where can i find all interest rates?</name>
+                    <title>When User sends twitter direct message: where can i find all interest rates?</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852149933" stop="1550852151016" status="passed">
+                    <name>Then Conversation area contains where can i find all interest rates? user's message</name>
+                    <title>Then Conversation area contains where can i find all interest rates? user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852151016" stop="1550852153579" status="passed">
+                    <name>When Agent replays with please have a look on our website message</name>
+                    <title>When Agent replays with please have a look on our website message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550852153580" stop="1550852154218" status="passed">
+                    <name>Then User have to receive correct response "please have a look on our website" on his message "where can i find all interest rates?"</name>
+                    <title>Then User have to receive correct response "please have a look on our website" on his message "where can i find all interest rates?"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Agent answers on user messages"/>
+                <label name="feature" value="Communication with agent via direct messages"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Communication with agent via direct messages"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

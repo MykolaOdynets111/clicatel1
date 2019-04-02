@@ -46,7 +46,7 @@ public class AgentLoginPage extends AgentAbstractPage {
    }
 
    private void logIn(Agents agent, String ordinalAgentNumber){
-       waitForElementToBeVisibleAgent(userNameInput, 8, ordinalAgentNumber);
+       waitForElementToBeVisibleAgent(userNameInput, 5, ordinalAgentNumber);
        userNameInput.sendKeys(agent.getAgentName());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();

@@ -15,7 +15,9 @@ import datamanager.Customer360PersonalInfo;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.TwitterUsers;
+import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.DateTimeHelper;
@@ -31,34 +33,47 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.*;
+import java.util.Collections;
 
 public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private AgentHomePage agentHomePage;
     private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
     private LeftMenuWithChats leftMenuWithChats;
-    private static Map<String, Boolean> PRE_TEST_FEATURE_STATUS = new HashMap<>();
-    private static Map<String, Boolean> TEST_FEATURE_STATUS_CHANGES = new HashMap<>();
+    private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static Customer360PersonalInfo customer360InfoForUpdating;
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
+    private static ThreadLocal<Map<String, String>> crmTicket = new ThreadLocal<>();
+    private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
+
+    public static CRMTicket getCreatedCRMTicket(){
+        return createdCrmTicket.get();
+    }
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
-        PRE_TEST_FEATURE_STATUS.put(featureName, status);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put(featureName, status);
+        PRE_TEST_FEATURE_STATUS.set(map);
     }
 
     public static boolean getPreTestFeatureStatus(String featureName){
-        return PRE_TEST_FEATURE_STATUS.get(featureName);
+        return PRE_TEST_FEATURE_STATUS.get().get(featureName);
     }
 
     private static void saveTestFeatureStatusChanging(String featureName, boolean status){
-        TEST_FEATURE_STATUS_CHANGES.put(featureName, status);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put(featureName, status);
+        TEST_FEATURE_STATUS_CHANGES.set(map);
     }
 
     public static boolean getTestFeatureStatusChanging(String featureName){
-        return TEST_FEATURE_STATUS_CHANGES.get(featureName);
+        return TEST_FEATURE_STATUS_CHANGES.get().get(featureName);
     }
 
     @Given("^I login as (.*) of (.*)")
@@ -67,6 +82,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
+//        ApiHelper.closeActiveChats();
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }
 
@@ -178,16 +194,16 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = "";
-            if(!ConfigManager.getSuite().equalsIgnoreCase("all tests")) {
-                if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-                    expectedUserName = TwitterUsers.getLoggedInUserName();
-                    userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-                }
-                if (ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
+            if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
+                expectedUserName = TwitterUsers.getLoggedInUserName();
+                userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
+            }
+            if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
                     expectedUserName = FacebookUsers.getLoggedInUserName();
                     userMessage = FacebookSteps.getCurrentUserMessageText();
-                }
-            }else {
+            }
+            if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
+                    !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
                 expectedUserName = getUserNameFromLocalStorage();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
@@ -214,7 +230,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(45, agent),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
@@ -256,6 +272,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getLeftMenu("main agent").selectFilterOption(option);
     }
 
+    @Then("^Agent see \"(.*)\" filter options$")
+    public void seeFilterOptions(List<String> option){
+        List<String> displayedFilterOptions = getLeftMenu("main agent").getFilterOption();
+        Collections.sort(option);
+        Collections.sort(displayedFilterOptions);
+        Assert.assertEquals(displayedFilterOptions , option, "Wrong filter options \n ");
+    }
+
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
                 leftMenuWithChats = getLeftMenu(agent);
@@ -263,19 +287,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) {
-                    Assert.assertTrue(waitForDotControlRequestOnChatDesk(),
+                    userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+                    Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,15, "main"),
                             "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
                                     DotControlSteps.getFromClientRequestMessage().getClientId()+")");
                     return;
                 }
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,40, agent),
-                                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
+                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,20, agent),
+                                "There is no new conversation request on Agent Desk (Client name: "+userName+")");
             }
 
     private boolean waitForDotControlRequestOnChatDesk(){
         for(int i = 0; i<5; i++) {
             String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,10, "main")) return true;
+            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,4, "main")) return true;
             else {
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
             }
@@ -290,14 +315,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String userName=null;
         if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
         if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,60),
+        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
-        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(30),
+        // ToDo: Update after clarifying timeout in System timeouts
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }
@@ -389,7 +415,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         customer360InfoForUpdating = currentCustomerInfo.setLocation("Lviv")
                             .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
                             .setPhone("+380931576633");
-        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) customer360InfoForUpdating.setFullName("AQA Run");
+        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) {
+            customer360InfoForUpdating.setFullName("AQA Run");
+            customer360InfoForUpdating.setChannelUsername(customer360InfoForUpdating.getFullName());
+
+        }
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
 
     }
@@ -458,7 +488,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private String formDaySeparator(long time, ZoneId zoneId){
         LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId);
         LocalDateTime currentDayTime = LocalDateTime.now(zoneId);
-        String timeSeparator = formTimeStringFromMillis(time, zoneId, DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy"));
+        String timeSeparator = formTimeStringFromMillis(time, zoneId, DateTimeFormatter.ofPattern("EEEE, MM d, yyyy"));
 
         if(itemDateTime.getDayOfYear() == currentDayTime.getDayOfYear()) timeSeparator="Today";
         if(itemDateTime.getDayOfYear() == (currentDayTime.minusDays(1).getDayOfYear())) timeSeparator="Yesterday";
@@ -475,23 +505,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return message + " " + chatTime;
     }
 
-    @Then("^(.*) sees correct chat with basic info is shown in chat history container$")
+    @Then("^(.*) sees correct chat with basic info in chat history container$")
     public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         selectedChatForHistoryTest = DefaultTouchUserSteps.getSelectedClientForChatHistoryTest();
-        String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
-                DateTimeFormatter.ofPattern("dd MMM yyyy | HH:mm"));
+        String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
         ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems();
         chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(),
                 (String) selectedChatForHistoryTest.get("sessionId"));
-        String expectedDisplayedUserMessage =  chatHistoryItems.stream().filter(e -> e.getMessageType().equalsIgnoreCase("CLIENT_MESSAGE"))
-                .findFirst().get().getDisplayMessage();
 
         soft.assertEquals(actualChatHistoryItem.getChatHistoryTime(), expectedChatHistoryTime,
                 "Incorrect time for chat in chat history shown.");
-//        soft.assertEquals(actualChatHistoryItem.getChatHistoryUserMessage(), expectedDisplayedUserMessage,
-//                "Incorrect user message in chat history shown.");
         soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(agent),
                 "'View chat' button is not enabled.");
         soft.assertAll();
@@ -505,9 +529,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^Correct messages is shown in history details window$")
     public void verifyHistoryInOpenedWindow(){
         SoftAssert soft = new SoftAssert();
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
-        String expectedChatHistoryTime = formTimeStringFromMillis((Long) selectedChatForHistoryTest.get("startedDate"), zoneId,
-                DateTimeFormatter.ofPattern("dd MMM yyyy | HH:mm"));
+        String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
         List<String> messagesFromChatHistoryDetails = agentHomePage.getHistoryDetailsWindow().getAllMessages();
         List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
 
@@ -518,6 +540,100 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
                 "Chat history is not as expected in chat history details (in active chat)");
         soft.assertAll();
+    }
+
+    @Given("CRM ticket is created")
+    public void createCRMTicketsViaAPI(){
+        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
+                                                                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        Map<String, String> dataForNewCRMTicket = new HashMap<>();
+        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
+        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
+        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
+        dataForNewCRMTicket.put("link",  "http://mysaite" + faker.lorem().word() + ".ua");
+        dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
+        dataForNewCRMTicket.put("agentNote", "Note from automation test)");
+        crmTicket.set(dataForNewCRMTicket);
+
+        Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
+        createdCrmTicket.set(resp.getBody().as(CRMTicket.class));
+        Assert.assertTrue(resp.statusCode()==200, "Creating CRM ticket via API was not successful\n" +
+                                resp.statusCode() + "\n" +
+                                "rest body: " +resp.getBody().asString());
+    }
+
+    @Then("New CRM ticket is shown")
+    public void verifyCRMTicketIsSown(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
+                "CRM ticket container is not shown");
+    }
+
+    @Then("Correct ticket info is shown")
+    public void verifyTicketInfoInActiveChat(){
+        SoftAssert soft = new SoftAssert();
+        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicketInfoMap();
+        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
+        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
+                "Shown Ticket created date is not correct \n");
+        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
+                "Shown Ticket Number date is not correct \n");
+        soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
+                "Shown Ticket note date is not correct \n");
+        soft.assertAll();
+    }
+
+    private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(createdCrmTicket.get().getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+
+        DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
+        Map<Long, String> newDaysMap = new HashMap<>();
+        newDaysMap.put(1L, "1st");
+        newDaysMap.put(2L, "2nd");
+        newDaysMap.put(3L, "3rd");
+        newDaysMap.put(4L, "4th");
+        newDaysMap.put(5L, "5th");
+        newDaysMap.put(6L, "6th");
+        newDaysMap.put(7L, "7th");
+        newDaysMap.put(8L, "8th");
+        newDaysMap.put(9L, "9th");
+        newDaysMap.put(10L, "10th");
+        newDaysMap.put(11L, "11th");
+        newDaysMap.put(12L, "12th");
+        newDaysMap.put(13L, "13th");
+        newDaysMap.put(14L, "14th");
+        newDaysMap.put(15L, "15th");
+        newDaysMap.put(16L, "16th");
+        newDaysMap.put(17L, "17th");
+        newDaysMap.put(18L, "18th");
+        newDaysMap.put(20L, "20th");
+        newDaysMap.put(21L, "21st");
+        newDaysMap.put(22L, "22nd");
+        newDaysMap.put(23L, "23rd");
+        newDaysMap.put(24L, "24th");
+        newDaysMap.put(25L, "25th");
+        newDaysMap.put(26L, "26th");
+        newDaysMap.put(27L, "27th");
+        newDaysMap.put(28L, "28th");
+        newDaysMap.put(29L, "29th");
+        newDaysMap.put(30L, "30th");
+        newDaysMap.put(31L, "31st");
+
+        builder.appendText(ChronoField.DAY_OF_MONTH, newDaysMap );
+        builder.append(DateTimeFormatter.ofPattern(" yyyy, h:mm a"));
+        DateTimeFormatter formatter1 = builder.toFormatter();
+
+
+        return (dateTimeFromBackend.getMonth() + " " + dateTimeFromBackend.format(formatter1)).toLowerCase();    }
+
+    private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime chatTimeFromBackendUTC = LocalDateTime.parse((String) selectedChatForHistoryTest.get("startedDate"), formatter);
+        return chatTimeFromBackendUTC.atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
     }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
@@ -565,7 +681,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String integrationType = "";
         switch (clientFrom){
             case "fb dm":
-                clientId = FacebookUsers.getLoggedInUser().getFBUserID();
+                Map chatInfo = (Map) ApiHelper.getActiveChatByAgent().getBody().jsonPath().getList("content")
+                                        .stream()
+                                        .filter(e -> ((Map)
+                                                            ((Map) e).get("client")
+                                                     ).get("type")
+                                                .equals("FACEBOOK"))
+                                        .findFirst().get();
+                clientId = (String) chatInfo.get("clientId");
                 integrationType = "FACEBOOK";
                 break;
             case "twitter dm":

@@ -6,8 +6,10 @@ import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import javaserver.Server;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 public class APIHelperDotControl {
 
@@ -57,6 +59,7 @@ public class APIHelperDotControl {
                         "      \"name\": \"" + newIntegrationInfo.getName() + "\",\n" +
                         "      \"enabled\": " + newIntegrationInfo.getIsEnabled() + ",\n" +
                         "      \"url\": \"" + newIntegrationInfo.getCallBackURL() + "\",\n" +
+                        "      \"adapter\": \"fbmsg\",\n" +
                         "      \"config\": {}\n" +
                         "    }\n" +
                         "  ]\n" +
@@ -67,17 +70,24 @@ public class APIHelperDotControl {
     }
 
     public static Response sendMessage(DotControlRequestMessage requestMessage){
-        ObjectMapper mapper = new ObjectMapper();
-        Response resp = null;
-        try {
-            resp = RestAssured.given().log().all()
+        ZoneId zoneId = TimeZone.getDefault().toZoneId();
+        LocalDateTime ldt = LocalDateTime.now(zoneId);
+        ZonedDateTime zdt = ldt.atZone(zoneId);
+        long timestamp = zdt.toInstant().toEpochMilli();
+        return RestAssured.given().log().all()
                     .header("Content-Type", "application/json")
-                    .body(mapper.writeValueAsString(requestMessage))
+                    .body("{\n" +
+                            "  \"apiToken\": \""+ requestMessage.getApiToken() +"\",\n" +
+                            "  \"clientId\": \"" +requestMessage.getClientId()+ "\",\n" +
+                            "  \"context\": {},\n" +
+                            "  \"message\": \""+ requestMessage.getMessage() +"\",\n" +
+                            "  \"messageId\": null,\n" +
+                            "  \"messageType\": \"PLAIN\",\n" +
+                            "  \"referenceId\": \"string\",\n" +
+                            "  \"subscriptionSpecificId\": \"string\",\n" +
+                            "  \"timestamp\": " + timestamp +  "\n" +
+                            "}")
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return resp;
     }
 
     public static Response sendMessageWithWait(DotControlRequestMessage requestMessage){

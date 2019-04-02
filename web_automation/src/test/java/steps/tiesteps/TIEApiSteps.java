@@ -3,15 +3,20 @@ package steps.tiesteps;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.Intent;
+import datamanager.jacksonschemas.tie.CreateSlotBody;
+import datamanager.jacksonschemas.tie.SlotInTieResponse;
 import datamanager.jacksonschemas.tie.TieNERItem;
 import datamanager.jacksonschemas.tie.Entity;
 
 import drivermanager.URLs;
 import static io.restassured.RestAssured.*;
 
+import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
@@ -20,13 +25,17 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
-public class TIEApiSteps {
+public class TIEApiSteps implements DateTimeHelper{
+
+    Faker faker = new Faker();
 
     private static Map<Long, String> NEW_TENANT_NAMES = new ConcurrentHashMap<>();
 
@@ -38,9 +47,7 @@ public class TIEApiSteps {
         NEW_TENANT_NAMES.clear();
     }
 
-    Faker faker = new Faker();
-
-    public static Map mapForCreatingIntent = new HashMap();
+    private static Map mapForCreatedIntent = new HashMap();
 
     private static String createNewTenantName() {
         Faker faker = new Faker();
@@ -48,6 +55,14 @@ public class TIEApiSteps {
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
+
+    private CreateSlotBody createSlotBody;
+    private SlotInTieResponse expectedSlotInTieResponse;
+    private static List<String> createdSlotIds =new ArrayList<>();
+
+    public static Map getMapForCreatedIntent(){
+        return  mapForCreatedIntent;
+    }
 
     // ======================= Chats ======================== //
 
@@ -179,11 +194,11 @@ public class TIEApiSteps {
 
     @When("^I Create new mapping for intent-answer pare: (.*)$")
     public void createIntentAnswerTraining(List<String> info){
-        when()
-                .put(formURLForCreatingNewIntentAnswer(info)).
-        then()
-                .statusCode(200);
+        Response resp = RestAssured.put(formURLForCreatingNewIntentAnswer(info));
         waitFor(5000);
+        Assert.assertTrue(resp.statusCode()==200, "" +
+                "Creating new intent was not successfull\n "
+        +resp.getBody().asString());
     }
 
 
@@ -900,29 +915,264 @@ public class TIEApiSteps {
 
     @When("^Create new intent for (.*) tenant$")
     public void createNewIntent(String tenantOrgName){
-        mapForCreatingIntent.put("intent", "test_intent_" + faker.lorem().word());
-        mapForCreatingIntent.put("intent_answer", "test_answer_" + faker.lorem().word());
-
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(), (String) mapForCreatingIntent.get("intent"),
-                (String) mapForCreatingIntent.get("intent_answer"));
-
+        ApiHelperTie.deleteAllIntents();
+        formDataForIntentCreationTest();
+        Response resp = ApiHelperTie.createNewIntent(Tenants.getTenantUnderTestOrgName(),
+                                                            (String) mapForCreatedIntent.get("intent"),
+                                                            (String) mapForCreatedIntent.get("category"),
+                                                            (String) mapForCreatedIntent.get("answer"),
+                                                            (String) mapForCreatedIntent.get("type"));
+        mapForCreatedIntent.put("intent_id", resp.getBody().jsonPath().get("id"));
         Assert.assertTrue(resp.statusCode() == 200,
                 "Creating new intent for '" + tenantOrgName + "' intent was not successful\n"+
         "resp status code: " + resp.statusCode() + "\n" +
         "resp body: " + resp.getBody().asString());
     }
 
+    private Map formDataForIntentCreationTest(){
+        String book = faker.book().title().replaceAll("\\p{Punct}", "");
+        mapForCreatedIntent.put("raw_intent", book);
+        mapForCreatedIntent.put("intent", book.toLowerCase());
+        mapForCreatedIntent.put("answer", "With our goods you may always expect the high quality of paper and ink. " +
+                                            "For more info please schedule a call with out manager.");
+        mapForCreatedIntent.put("type", "faq");
+        mapForCreatedIntent.put("category", "faq");
+
+        return mapForCreatedIntent;
+    }
+
+    @When("^New intent is created$")
+    public void verifyNewIntentAdding(){
+        waitFor(1000);
+        List<String> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("");
+        Assert.assertTrue(allIntents.contains(mapForCreatedIntent.get("intent").toString()),
+                "Created '"+ mapForCreatedIntent.get("intent")+"'intent is not returned");
+    }
+
     @When("^Adding a few samples for created intent$")
     public void addNewSamples(){
-        List<String> samples = Arrays.asList("aqa_sample1 " + faker.book(),
-                                                "aqa_sample2 " + faker.book(),
-                                                "aqa_sample2 " + faker.book());
-        mapForCreatingIntent.put("samples", samples);
+        SoftAssert soft = new SoftAssert();
+        List<String> samples = Arrays.asList("How much costs '"+mapForCreatedIntent.get("intent")+"' book?",
+                                                "Do you provide any discounts if I but 500 of '"+mapForCreatedIntent.get("intent")+ "' books?'");
+        List<String> sampleIds = new ArrayList<>();
+        mapForCreatedIntent.put("samples", samples);
         for (String sample : samples) {
-            ApiHelperTie.addNewSample(Tenants.getTenantUnderTestOrgName(),
-                    (String) mapForCreatingIntent.get("intent"), sample).statusCode();
+            Response resp = ApiHelperTie.addNewSample(Tenants.getTenantUnderTestOrgName(),
+                    (String) mapForCreatedIntent.get("intent"), sample);
+            sampleIds.add(resp.getBody().jsonPath().get("id"));
+            soft.assertTrue(resp.statusCode()==200,
+                    "Adding '"+sample+"' sample for '" + mapForCreatedIntent.get("intent")+ "' was not successful\n" +
+            "status code: " + resp.statusCode() + "\n" +
+            "resp body: " + resp.statusCode());
+        }
+        mapForCreatedIntent.put("sample_ids", sampleIds);
+        soft.assertAll();
+    }
+
+    @When("^Samples are saved$")
+    public void verifyAddedIntentIsSaved(){
+        List samplesOnIntent = ApiHelperTie.getTrainData().getBody().jsonPath().getList("data")
+                .stream()
+                .map(e -> ((List) e))
+                .filter(e1 -> e1.contains(mapForCreatedIntent.get("intent")))
+                .collect(Collectors.toList());
+        Assert.assertTrue( ((List) mapForCreatedIntent.get("samples")).stream().allMatch(e -> samplesOnIntent.toString().contains(e.toString())),
+                "Created samples are not returned \n" +
+        "mapForCreatedIntent: " +  mapForCreatedIntent.toString());
+    }
+
+    @When("^Schedule new training$")
+    public void scheduleNewTraining(){
+        Assert.assertTrue( ApiHelperTie.scheduleTraining().statusCode()==200,
+                "Training is not scheduled");
+    }
+
+    @Then("^New model is ready after (.*) minutes wait$")
+    public void getModels(int minutes){
+        int numberOfModelsBeforeTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
+        Response resp = ApiHelperTie.getTrainings();
+        int timeout = (minutes*60)/18 - 1;
+        for(int i = 0; i < timeout; i++){
+            if(!(resp.getBody().jsonPath().get("train").equals("finished"))){
+                waitFor(18000);
+                resp = ApiHelperTie.getTrainings();
+            } else{
+                break;
+            }
+        }
+        int numberOfModelsAfterTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
+        Assert.assertTrue(numberOfModelsAfterTraining == numberOfModelsBeforeTraining + 1,
+                "New model is not created");
+    }
+
+    @When("^I publish new model$")
+    public void publishNewModel(){
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+
+        String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
+                .filter(e ->        convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                                    >
+                                    convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
+                .findFirst().get();
+        mapForCreatedIntent.put("model", model);
+        Assert.assertTrue(ApiHelperTie.publishModel(model).statusCode()==200,
+                "Publishing '"+model+"' model was not successful");
+    }
+
+    private LocalDateTime getModelDateTime(String model){
+        //model_20190315-131248 - model name example
+        String modelDate = model.split("_")[1];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+        return LocalDateTime.parse(modelDate, formatter);
+    }
+
+    @Then("^Tie returns new intent$")
+    public void verifyNewIntent(){
+        System.out.println("Verifying new intent");
+        String sample = (String) ((List) mapForCreatedIntent.get("samples")).get(0);
+        String expectedIntent = (String) mapForCreatedIntent.get("intent");
+
+        boolean result = false;
+        Response resp = null;
+        List<String> actualIntents = new ArrayList<>();
+        for (int i = 0; i<30; i++){
+            if(!result){
+                waitFor(200);
+                resp =ApiHelperTie.getRespWithIntentsOnUserMessageWithAutorization(sample);
+                actualIntents = resp.jsonPath().getList("intents_result.intents", Intent.class).stream()
+                                    .sorted(Comparator.comparing(Intent::getConfidence).reversed())
+                                    .map(e -> e.getIntent())
+                                    .collect(Collectors.toList());
+                result = actualIntents.contains(expectedIntent);
+            }
+
+        }
+
+        Assert.assertTrue(result,
+                "Expected '"+expectedIntent+"' intent is not returned on the sample '" + sample +"'\n" +
+        "Resp body: " + resp.getBody().asString() + "\n" +
+        "Published model: " + mapForCreatedIntent.get("model"));
+    }
+
+
+    @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")
+    public void createNewSlot(String type, String intent, String tenantOrgName){
+        formNewSlotValues(intent, type, null);
+        Response resp = ApiHelperTie.createNewSlot(createSlotBody);
+        try {
+            createdSlotIds.add(resp.getBody().jsonPath().get("id"));
+        } catch (JsonPathException e) {
+            Assert.assertTrue(resp.statusCode() == 200,
+                    "Creating new slot was not successful \n" +
+                            "Create slot body: " + createSlotBody.toString());
+        }
+
+    }
+
+    private void formNewSlotValues(String intent, String type, String expectedValue){
+        switch (type){
+            case "MONEY":
+                createSlotBody = new CreateSlotBody().setIntent(intent).setName("Money slot").setEntityType("MONEY")
+                        .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
+                        .setTenant(Tenants.getTenantUnderTestName());
+                break;
+            case "DATE":
+                createSlotBody = new CreateSlotBody().setIntent(intent).setName("DATE slot").setEntityType("DATE")
+                        .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
+                        .setTenant(Tenants.getTenantUnderTestName());
+                break;
+        }
+        expectedSlotInTieResponse = new SlotInTieResponse().setPrompt(createSlotBody.getPrompt()).setName(createSlotBody.getName())
+                .setValue(expectedValue).setConfirm(createSlotBody.getConfirm());
+    }
+
+    @When("^Created slot is saved$")
+    public void verifySlotIsSaved(){
+        String allSlotsInfo = ApiHelperTie.getAllSlots().getBody().asString();
+        boolean isSlotAdded = false;
+        for(int i=0; i<4; i++){
+            if(allSlotsInfo.contains(createdSlotIds.get(0))){
+                isSlotAdded = true;
+                break;
+            } else{
+                waitFor(1000);
+                allSlotsInfo = ApiHelperTie.getAllSlots().getBody().asString();
+            }
+        }
+        Assert.assertTrue(isSlotAdded, "Slot is not added after 4 secs wait\n"+
+                "Slot info: " + createSlotBody.toString() + "\n" +
+                "Created slot id: " + createdSlotIds.toString());
+    }
+
+    @Given("All slots for (.*) tenant are cleared")
+    public void deleteAllSlots(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        List<String> ids = ApiHelperTie.getAllSlots().getBody().
+                jsonPath().getList("data")
+                .stream().map(e -> (ArrayList<String>) e)
+                .map(e -> e.get(5))
+                .collect(Collectors.toList());
+        for(String id : ids){
+            ApiHelperTie.deleteSlot(id);
         }
     }
+
+    @Then("^New slot is returned in TIE response on (.*) message$")
+    public void verifySlotReturnedInTieResponse(String userMessage){
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        List<SlotInTieResponse> slotInTieResponse = resp.getBody().jsonPath().getList("intents_result.slots", SlotInTieResponse.class);
+        Assert.assertTrue(slotInTieResponse.contains(expectedSlotInTieResponse),
+                "Expected slot is not returned in tie response on '"+userMessage+"' user message \n" +
+                        "Created Slot info: " + createSlotBody.toString() + "\n" +
+                        "Created slot id: " + createdSlotIds.toString() + "\n" +
+                        "Received resp from tie" + resp.getBody().asString()
+        );
+    }
+
+    @When("I update slot")
+    public void updateSlot(){
+        formNewSlotValues("trading hours", "DATE", "Monday");
+        ApiHelperTie.updateSlot(createSlotBody, createdSlotIds.get(0));
+    }
+
+    @Then("^Slot for \"(.*)\" message is not returning anymore$")
+    public void verifySlotRemoved(String userMessage){
+        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        List<SlotInTieResponse> slotInTieResponse = resp.getBody().jsonPath().getList("intents_result.slots", SlotInTieResponse.class);
+        Assert.assertFalse(slotInTieResponse.contains(expectedSlotInTieResponse),
+                "Expected slot is not removed in tie response on '"+userMessage+"' user message \n" +
+                        "Created Slot info: " + createSlotBody.toString() + "\n" +
+                        "Created slot id: " + createdSlotIds.toString() + "\n" +
+                        "Received resp from tie" + resp.getBody().asString()
+        );
+    }
+
+    @Then("^I delete slot$")
+    public void deleteCreatedSlots() {
+        for (String slotId : createdSlotIds) {
+            ApiHelperTie.deleteSlot(slotId);
+        }
+    }
+
+    public static void clearCreatedIntentAndSample(){
+        List<String> sampleIds = (List<String>) mapForCreatedIntent.get("sample_ids");
+            if(sampleIds!=null) {
+                for (String sampleId : sampleIds) {
+                    ApiHelperTie.deleteSample(sampleId);
+                }
+        }
+        ApiHelperTie.deleteAllIntents();
+        mapForCreatedIntent.clear();
+    }
+
+    public static void clearCreatedSlots(){
+        for(String slotId : createdSlotIds){
+            ApiHelperTie.deleteSlot(slotId);
+        }
+        createdSlotIds.clear();
+    }
+
 
 }

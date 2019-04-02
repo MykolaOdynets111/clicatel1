@@ -22,8 +22,10 @@ public enum DriverType {
 		public MutableCapabilities getDesiredCapabilities() {
             LoggingPreferences logPrefs = new LoggingPreferences();
             logPrefs.enable(LogType.BROWSER, Level.ALL);
+            logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
 
             ChromeOptions options = new ChromeOptions();
+            options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
@@ -40,7 +42,8 @@ public enum DriverType {
 
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
-            ChromeDriverManager.getInstance().setup();
+//        ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+      ChromeDriverManager.getInstance().setup();
 
            return new ChromeDriver((ChromeOptions) capabilities);
         }

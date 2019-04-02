@@ -6,6 +6,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.tie.CreateSlotBody;
+import datamanager.jacksonschemas.tie.SlotInTieResponse;
 import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;
@@ -16,8 +18,6 @@ import org.testng.asserts.SoftAssert;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static io.restassured.RestAssured.given;
 
 public class BaseTieSteps {
 
@@ -158,9 +158,10 @@ public class BaseTieSteps {
     }
 
     @Then("^TIE returns (.*) answer for (.*) tenant (.*) intent$")
-    public void verifYtieAnswer(String expectedAnswer,  String tenant,  String intent){
+    public void verifyTieAnswer(String expectedAnswer, String tenant, String intent){
         Assert.assertEquals(ApiHelperTie.getExpectedMessageOnIntent(tenant, intent), expectedAnswer,
                 "From tie answer on \""+intent+"\" intent is not as expected\n");
     }
+
 
 }

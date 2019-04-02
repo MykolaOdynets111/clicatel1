@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="One Thread Suite (Automation tenant)">
+    <test name="User to Agent conversation (Automation tenant) ">
+        <classes>
+            <class name="runner.automation.RunChatdeskTest" />
+        </classes>
+    </test>
+</suite>

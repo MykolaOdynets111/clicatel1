@@ -67,8 +67,9 @@ public class ChatBody extends AbstractUIElement {
         waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
 
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
-
-        if(!isElementShownAgentByXpath(locator, 40, agent)){
+        // ToDo: update timeout after it is provided in System timeouts confluence page
+        // ToDo: If for social chatting timeout is bigger - introduce another method for social
+        if(!isElementShownAgentByXpath(locator, 15, agent)){
             scrollToElem(DriverFactory.getDriverForAgent(agent), locator,
                     "'" +usrMessage + "' user message on chatdesk");
         }
@@ -99,7 +100,7 @@ public class ChatBody extends AbstractUIElement {
 
     public List<String> getAllMessages(){
         String agentInitials = "";
-        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getText();
+        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getAttribute("innerText");
         String finalAgentInitials = agentInitials;
         return findElemsByXPATHAgent(messagesInChatBodyXPATH)
                 .stream()

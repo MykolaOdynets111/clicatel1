@@ -1,6 +1,7 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -24,6 +25,6 @@ public class WidgetFooter extends AbstractUIElement {
     }
 
     public void tryToCloseSession(){
-        if(textInput.isEnabled()) enterMessage("end").sendMessage();
+            if (textInput.isEnabled()) enterMessage("/cmd:end").sendMessage();
     }
 }

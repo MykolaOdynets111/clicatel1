@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550852003810" stop="1550852116166" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Twitter chat transferring</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550852003812" stop="1550852116165" status="failed">
+            <name>Verify if agent is able to transfer twitter chat via "Transfer chat" button</name>
+            <title>Verify if agent is able to transfer twitter chat via "Transfer chat" button</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: Transfer notes are not visible.
+ Please see the screenshot expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: Transfer notes are not visible.
+ Please see the screenshot expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at agentpages.uielements.IncomingTransferWindow.getTransferNotes(IncomingTransferWindow.java:36)
+	at steps.DefaultAgentSteps.verifyIncomingTransferReceived(DefaultAgentSteps.java:167)
+	at ✽.Then Second agent receives incoming transfer with "Please take care of this one" note from the first agent(TwitterChatTransfering.feature:16)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1550852013330" stop="1550852030543" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                </step>
+                <step start="1550852030544" stop="1550852031482" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                </step>
+                <step start="1550852031482" stop="1550852032398" status="passed">
+                    <name>Given Open direct message channel</name>
+                    <title>Given Open direct message channel</title>
+                </step>
+                <step start="1550852032398" stop="1550852032830" status="passed">
+                    <name>When User sends twitter direct message regarding chat to support</name>
+                    <title>When User sends twitter direct message regarding chat to support</title>
+                </step>
+                <step start="1550852032830" stop="1550852060900" status="passed">
+                    <name>Then Agent has new conversation request from twitter user</name>
+                    <title>Then Agent has new conversation request from twitter user</title>
+                </step>
+                <step start="1550852060900" stop="1550852061302" status="passed">
+                    <name>When Agent click on new conversation request from twitter</name>
+                    <title>When Agent click on new conversation request from twitter</title>
+                </step>
+                <step start="1550852061302" stop="1550852077573" status="passed">
+                    <name>Given I login as second agent of General Bank Demo</name>
+                    <title>Given I login as second agent of General Bank Demo</title>
+                </step>
+                <step start="1550852077573" stop="1550852086773" status="passed">
+                    <name>And Agent transfers chat</name>
+                    <title>And Agent transfers chat</title>
+                </step>
+                <step start="1550852086773" stop="1550852102509" status="failed">
+                    <name>Then Second agent receives incoming transfer with "Please take care of this one" note from the first agent</name>
+                    <title>Then Second agent receives incoming transfer with "Please take care of this one" note from the first agent</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>And Second agent can see transferring agent name, twitter user name and following user's message: 'connect to agent'</name>
+                    <title>And Second agent can see transferring agent name, twitter user name and following user's message: 'connect to agent'</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>When Second agent click "Accept transfer" button</name>
+                    <title>When Second agent click "Accept transfer" button</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>Then Second agent has new conversation request from twitter user</name>
+                    <title>Then Second agent has new conversation request from twitter user</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>And Agent should not see from user chat in agent desk</name>
+                    <title>And Agent should not see from user chat in agent desk</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>When Second agent click on new conversation request from twitter</name>
+                    <title>When Second agent click on new conversation request from twitter</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>Then Conversation area becomes active with connect to support user's message in it for second agent</name>
+                    <title>Then Conversation area becomes active with connect to support user's message in it for second agent</title>
+                </step>
+                <step start="1550852102510" stop="1550852102510" status="canceled">
+                    <name>When Second agent responds with hello to User</name>
+                    <title>When Second agent responds with hello to User</title>
+                </step>
+                <step start="1550852102511" stop="1550852102511" status="canceled">
+                    <name>Then User have to receive correct response "hello" on his message "chat to support"</name>
+                    <title>Then User have to receive correct response "hello" on his message "chat to support"</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Verify if agent is able to transfer twitter chat via &quot;Transfer chat&quot; button"/>
+                <label name="feature" value="Twitter chat transferring"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Twitter chat transferring"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

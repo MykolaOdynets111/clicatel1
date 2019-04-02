@@ -12,8 +12,7 @@ import java.util.List;
 
 @Test(groups = {"acceptance"})
 @CucumberOptions(
-        plugin={"pretty",
-                "com.github.kirlionik.cucumberallure.AllureReporter"
+        format={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
         features ="src/test/java/scenario/dotcontrol/",

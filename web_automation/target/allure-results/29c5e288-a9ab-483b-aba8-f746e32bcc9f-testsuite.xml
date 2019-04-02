@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550851763491" stop="1550852003778" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Receiving answer when two channels are active</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550851763494" stop="1550851829568" status="passed">
+            <name>User receive agent response in DM after he sends last message into dm</name>
+            <title>User receive agent response in DM after he sends last message into dm</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550851773048" stop="1550851790589" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851790589" stop="1550851791736" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851791737" stop="1550851792486" status="passed">
+                    <name>Given Open new tweet window</name>
+                    <title>Given Open new tweet window</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851792486" stop="1550851793153" status="passed">
+                    <name>When User sends tweet regarding "chat to agent"</name>
+                    <title>When User sends tweet regarding "chat to agent"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851793153" stop="1550851818730" status="passed">
+                    <name>Then Agent has new conversation request from twitter user</name>
+                    <title>Then Agent has new conversation request from twitter user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851818730" stop="1550851819128" status="passed">
+                    <name>When Agent click on new conversation request from twitter</name>
+                    <title>When Agent click on new conversation request from twitter</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851819128" stop="1550851819311" status="passed">
+                    <name>Then Conversation area becomes active with chat to agent message from tweet user</name>
+                    <title>Then Conversation area becomes active with chat to agent message from tweet user</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851819311" stop="1550851819594" status="passed">
+                    <name>When Open direct message channel</name>
+                    <title>When Open direct message channel</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851819594" stop="1550851819822" status="passed">
+                    <name>When User sends twitter direct message: hello</name>
+                    <title>When User sends twitter direct message: hello</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851819822" stop="1550851821443" status="passed">
+                    <name>Then Conversation area contains hello user's message</name>
+                    <title>Then Conversation area contains hello user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851821443" stop="1550851821863" status="passed">
+                    <name>When Agent responds with How can I help you? to User</name>
+                    <title>When Agent responds with How can I help you? to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550851821863" stop="1550851822977" status="passed">
+                    <name>Then User have to receive correct response "How can I help you?" on his message "hello"</name>
+                    <title>Then User have to receive correct response "How can I help you?" on his message "hello"</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="User receive agent response in DM after he sends last message into dm"/>
+                <label name="feature" value="Receiving answer when two channels are active"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+        <test-case start="1550851829571" stop="1550852003777" status="failed">
+            <name>User receive agent response via tweet after he sends last message via tweet</name>
+            <title>User receive agent response via tweet after he sends last message via tweet</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: Expected tweet answer from the agent is missing after 100 secs wait expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: Expected tweet answer from the agent is missing after 100 secs wait expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at steps.TwitterSteps.verifyReceivingAnswerInTimelineFromAgent(TwitterSteps.java:80)
+	at ✽.Then Agent's answer arrives to twitter(TwitterRecpondingWhen2ChannelAreActive.feature:32)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1550851840103" stop="1550851862578" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                </step>
+                <step start="1550851862578" stop="1550851863646" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                </step>
+                <step start="1550851863647" stop="1550851864594" status="passed">
+                    <name>Given Open direct message channel</name>
+                    <title>Given Open direct message channel</title>
+                </step>
+                <step start="1550851864594" stop="1550851864967" status="passed">
+                    <name>When User sends twitter direct message: chat to support</name>
+                    <title>When User sends twitter direct message: chat to support</title>
+                </step>
+                <step start="1550851864967" stop="1550851888562" status="passed">
+                    <name>Then Agent has new conversation request from twitter user</name>
+                    <title>Then Agent has new conversation request from twitter user</title>
+                </step>
+                <step start="1550851888562" stop="1550851888834" status="passed">
+                    <name>When Agent click on new conversation request from twitter</name>
+                    <title>When Agent click on new conversation request from twitter</title>
+                </step>
+                <step start="1550851888834" stop="1550851889108" status="passed">
+                    <name>Then Conversation area becomes active with chat to support message from tweet user</name>
+                    <title>Then Conversation area becomes active with chat to support message from tweet user</title>
+                </step>
+                <step start="1550851889109" stop="1550851889190" status="passed">
+                    <name>When User closes DM window</name>
+                    <title>When User closes DM window</title>
+                </step>
+                <step start="1550851889190" stop="1550851889517" status="passed">
+                    <name>And Open new tweet window</name>
+                    <title>And Open new tweet window</title>
+                </step>
+                <step start="1550851889517" stop="1550851890101" status="passed">
+                    <name>And User sends tweet regarding "hello, can you help me?"</name>
+                    <title>And User sends tweet regarding "hello, can you help me?"</title>
+                </step>
+                <step start="1550851890101" stop="1550851891185" status="passed">
+                    <name>Then Conversation area contains hello, can you help me? user's message</name>
+                    <title>Then Conversation area contains hello, can you help me? user's message</title>
+                </step>
+                <step start="1550851891185" stop="1550851891485" status="passed">
+                    <name>When Agent responds with yes, sure to User</name>
+                    <title>When Agent responds with yes, sure to User</title>
+                </step>
+                <step start="1550851891486" stop="1550851997004" status="failed">
+                    <name>Then Agent's answer arrives to twitter</name>
+                    <title>Then Agent's answer arrives to twitter</title>
+                </step>
+                <step start="1550851997004" stop="1550851997004" status="canceled">
+                    <name>And User has to receive "yes, sure" answer from the agent as a comment on his initial tweet hello, can you help me?</name>
+                    <title>And User has to receive "yes, sure" answer from the agent as a comment on his initial tweet hello, can you help me?</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="User receive agent response via tweet after he sends last message via tweet"/>
+                <label name="feature" value="Receiving answer when two channels are active"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Receiving answer when two channels are active"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

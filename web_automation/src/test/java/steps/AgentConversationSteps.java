@@ -225,20 +225,25 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().getChatHeader().clickEndChatButton();
     }
 
-    @Then("^End chat popup should be opened$")
-    public void verifyEndChatPopupOpened(){
-        Assert.assertTrue(getAgentHomePage().isEndChatPopupShown(),
+    @Then("^(?:End chat|Agent Feedback) popup should be opened$")
+    public void verifyAgentFeedbackPopupOpened(){
+        Assert.assertTrue(getAgentHomePage().getAgentFeedbackWindow().isEndChatPopupShown(),
                 "End chat popup is not opened");
     }
 
     @When("^Agent click 'Close chat' button$")
     public void clickCloseChatButton(){
-        getAgentHomePage().clickCloseButtonInCloseChatPopup();
+        getAgentHomePage().getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
     @When("(.*) closes chat")
     public void closeChat(String agent){
         getAgentHomePage(agent).endChat();
+    }
+
+    @When("(.*) click 'Cancel' button$")
+    public void agentClickCancelButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickCancel();
     }
 
     @Then("^Suggestions are not shown$")
@@ -256,8 +261,8 @@ public class AgentConversationSteps implements JSHelper{
     }
 
     @Then("^(?:End chat|Agent Feedback) popup is not shown$")
-    public void verifyEndChatPopupNotOpened(){
-        Assert.assertFalse(getAgentHomePage().isEndChatPopupShown(),
+    public void verifyAgentFeedbackPopupNotOpened(){
+        Assert.assertFalse(getAgentHomePage().getAgentFeedbackWindow().isEndChatPopupShown(),
                 "Agent Feedback popup is opened");
     }
 
@@ -333,4 +338,6 @@ public class AgentConversationSteps implements JSHelper{
             return suggestedGroup;
         }
     }
+
+
 }

@@ -25,6 +25,7 @@ import touchpages.uielements.messages.WelcomeMessages;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -61,16 +62,18 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page)$")
     public void openTenantPage(String tenantOrgName) {
-        DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
+        Tenants.checkWidgetConnectionStatus();
+        DriverFactory.openUrl(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
 
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
     public void openTenantPageWithoutCreatingUserProfile(String tenantOrgName) {
-        DriverFactory.openUrl(tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
+        Tenants.checkWidgetConnectionStatus();
+        DriverFactory.openUrl(tenantOrgName);
         String clientID = getUserNameFromLocalStorage();
 //        getMainPage().openTenantPage(tenantOrgName);
     }
@@ -92,7 +95,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     }
 
     private String getClientWithHistory(){
-        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 3, 100);
+        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 1, 100);
 
         if(resp.statusCode()!=200){
             Assert.assertTrue(false, "Getting finished chats was not successful\n" +
@@ -101,14 +104,25 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         }
 
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
-        Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
-                LocalDateTime aa = LocalDateTime.now(zoneId);
+//        Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
+//                LocalDateTime aa = LocalDateTime.now(zoneId);
+//
+//        selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
+//                .map(sessionContainer ->  ((ArrayList) sessionContainer))
+//                .filter(e -> e.size()==1)
+//                .map(session -> ((HashMap) session.get(0)))
+//                .filter(session -> ((Long) session.get("endedDate")) < timeMilestone)
+//                .findAny()
+//                .get();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+        LocalDateTime nowMinusTwoDays = LocalDateTime.now(zoneId).minusDays(2);
         selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
                 .map(sessionContainer ->  ((ArrayList) sessionContainer))
                 .filter(e -> e.size()==1)
                 .map(session -> ((HashMap) session.get(0)))
-                .filter(session -> ((Long) session.get("endedDate")) < timeMilestone)
+                .filter(session ->  LocalDateTime.parse((String) session.get("endedDate"), formatter).isBefore(nowMinusTwoDays))
                 .findAny()
                 .get();
 
@@ -153,13 +167,13 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     public void verifyMessageIsNotShownAfterUserMessage(String messageShouldNotBeShown, String userInput){
         widgetConversationArea = widget.getWidgetConversationArea();
 
-        Assert.assertFalse(widgetConversationArea.isSecondTextResponseNotShownFor(userInput, 6000),
+        Assert.assertFalse(widgetConversationArea.isSecondTextResponseNotShownFor(userInput, 10000),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
-        int waitForResponse=60;
+        int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
     }
@@ -208,7 +222,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
     public void verifyResponseOnUniqueMessage(String textResponse, String userInput) {
-        int waitForResponse=15;
+        int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         verifyTextResponse(FacebookSteps.getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
     }
@@ -223,14 +237,15 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
      */
     @Then("^User have to receive '(.*)' text response with (.*) intent for his '(.*)' input$")
     public void verifyTextResponseWithIntent(String textResponse, String intent, String userInput){
-        int waitForResponse=15;
+        int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
 
 //      ToDo: As soon as there is an API to check the tie mode implement the following logic
 //        String tenantTIEMode = ApiHelperTie.getTIEModeForTenant(Tenants.getTenantUnderTestOrgName()).equals("automomus")
 //        if(!isTextResponseShown & tenantTIEMode.equals("autonomus"))
-        if (!isTextResponseShown & widgetConversationArea.isCardShownFor(userInput, 15)){
+        waitForResponse = 2;
+        if (!isTextResponseShown & widgetConversationArea.isCardShownFor(userInput, waitForResponse)){
             verifyTextResponseAfterInteractionWithChoiceCard(userInput, expectedTextResponse, intent, waitForResponse);
         } else{
             verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
@@ -239,9 +254,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     private void verifyTextResponseAfterInteractionWithChoiceCard(String userInput, String expectedTextResponse, String intent, int waitForResponse){
         widgetConversationArea = widget.getWidgetConversationArea();
-        if(!widgetConversationArea.isCardShownFor(userInput, 15)){
-            Assert.assertTrue(false, "Neither plain text, nor choice card is shown on user's input "+userInput);
-        }
         int intentsCount=ApiHelperTie.getListOfIntentsOnUserMessage(userInput).size();
 
         //if tie returns more than 1 intent then choice card should be shown.
@@ -252,7 +264,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
             }
             widgetConversationArea.clickOptionInTheCard(userInput, intent);
-            verifyTextResponse(intent, expectedTextResponse, 15);
+            verifyTextResponse(intent, expectedTextResponse, 10);
         }
 
         // if tie returns 1 intent and we have card shown then we are verifying that it is
@@ -269,7 +281,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
                             "But found: " + textInCard + "\n");
                 }
                 widgetConversationArea.clickOptionInTheCard(userInput, "Yes");
-                verifyTextResponse("Yes", expectedTextResponse, 15);
+                verifyTextResponse("Yes", expectedTextResponse, 10);
 
 
             } else{
@@ -344,15 +356,10 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
+        softAssert.assertTrue(widgetConversationArea.isSecondTextResponseShownFor(userInput, waitForResponse),
                 "No second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
         softAssert.assertEquals(widgetConversationArea.getSecondResponseTextOnUserInput(userInput).replace("\n", "")
                 , expectedTextResponse,
@@ -379,15 +386,15 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
                 "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+")");
-        softAssert.assertTrue(widgetConversationArea.isTextResponseShownAmongOtherForUserMessage(userInput, expectedTextResponse),
+        softAssert.assertTrue(widgetConversationArea.isTextResponseShownAmongOtherForUserMessage(userInput, expectedTextResponse), //errorWait act ~6/ exp 10(int waitForResponse=10;)
                 "Expected '"+expectedTextResponse+"' text response on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage()+") is missing.");
         softAssert.assertAll();
     }
 
     @Then("^Text response that contains \"(.*)\" is shown$")
     public void quickVerifyIsResponseShown(String text){
-       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 15),
-               "Bot response is not shown");
+       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 10),
+               "Response to user is not shown");
     }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
@@ -398,7 +405,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         }
 
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 6),
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 10),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertTrue(widgetConversationArea.checkIfCardButtonsShownFor(userMessage, buttons),
                 buttons + " buttons are not shown in card (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -408,9 +415,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     private List<String> formListOfExpectedButtonNames(String buttonNames){
         if(buttonNames.contains("FAQ categories")){
             return ApiHelperTie.getLIstOfAllFAGCategories();
-        }
-        if(buttonNames.contains("FAQ categories")){
-            return  null;
         }
         return Arrays.asList(buttonNames.split(";"));
     }
@@ -435,7 +439,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
             expectedCardText = cardText.replace("${firstName}", getUserNameFromLocalStorage());
         }
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 15),
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 10),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage()+")");
@@ -456,7 +460,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^No (?:additional card|card) should be shown (?:on|after) user (.*) (?:message|input)$")
     public void verifyNoCardIsShown(String userMessage){
-        Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 6),
+        Assert.assertTrue(widgetConversationArea.isCardNotShownFor(userMessage, 10),
                 "Unexpected Card is show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -514,7 +518,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Widget is connected$")
     public DefaultTouchUserSteps verifyIfWidgetIsConnected() {
-        Assert.assertTrue(widget.isWidgetConnected(25), "Widget is not connected after 25 seconds wait");
+        Assert.assertTrue(widget.isWidgetConnected(15), "Widget is not connected after 15 seconds wait");//errorWait 15
         return this;
     }
 

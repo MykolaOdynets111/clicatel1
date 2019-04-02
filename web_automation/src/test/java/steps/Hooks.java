@@ -17,6 +17,7 @@ import interfaces.JSHelper;
 import javaserver.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -155,6 +156,14 @@ public class Hooks implements JSHelper{
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
         }
 
+        if(scenario.getSourceTagNames().contains("@creating_intent")){
+            TIEApiSteps.clearCreatedIntentAndSample();
+        }
+
+        if(scenario.getSourceTagNames().contains("@slot_management")){
+            TIEApiSteps.clearCreatedSlots();
+        }
+
         closeMainBrowserIfOpened();
         clearAllSessionData();
     }
@@ -183,11 +192,13 @@ public class Hooks implements JSHelper{
             takeScreenshotFromSecondDriver();
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
+                chatDeskNetworkOutput(DriverFactory.getAgentDriverInstance());
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
+                    chatDeskNetworkOutput(DriverFactory.getSecondAgentDriverInstance());
                 }
                 takeScreenshotFromThirdDriverIfExists();
         }
@@ -196,7 +207,6 @@ public class Hooks implements JSHelper{
 
     private void finishAgentFlowIfExists(Scenario scenario) {
         if (DriverFactory.isAgentDriverExists()) {
-
             if (scenario.getSourceTagNames().contains("@agent_info")) {
                 new AgentHomePage("main").getProfileWindow().closeIfOpened();
             }
@@ -227,6 +237,20 @@ public class Hooks implements JSHelper{
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
                 if(pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_ASSISTANT")) {
                     ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_ASSISTANT", Boolean.toString(pretestFeatureStatus));
+                }
+            }
+
+            if (scenario.getSourceTagNames().contains("@agent_feedback")){
+                try{
+                    boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_FEEDBACK");
+                    if (pretestFeatureStatus != DefaultAgentSteps.getTestFeatureStatusChanging("AGENT_FEEDBACK")) {
+                        ApiHelper.updateFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK", Boolean.toString(pretestFeatureStatus));
+                    }
+                }catch(NullPointerException e){
+                    //no feature status interaction
+                }
+                if(!(DefaultAgentSteps.getCreatedCRMTicket()==null)){
+                    ApiHelper.deleteCRMTicket(DefaultAgentSteps.getCreatedCRMTicket().getId());
                 }
             }
 
@@ -264,9 +288,9 @@ public class Hooks implements JSHelper{
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
                 }
-                if(typeEndInWidget){
-                    closeWidgetSession();
-                }
+//                if (scenario.isFailed()&&DriverFactory.isAgentDriverExists()) {
+//                    closeWidgetSession();
+//                }
         }catch (WebDriverException e) { }
         }
     }
@@ -283,8 +307,7 @@ public class Hooks implements JSHelper{
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
-        } catch(WebDriverException e){
-                DriverFactory.closeBrowser(agent);
+        } catch(WebDriverException|AssertionError e){
         }
     }
 
@@ -390,12 +413,12 @@ public class Hooks implements JSHelper{
 
     @Attachment
     private String chatDeskConsoleOutput(){
-        StringBuilder result = new StringBuilder();
+        StringBuffer buffer = new StringBuffer();
         LogEntries logEntries = DriverFactory.getAgentDriverInstance().manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
-            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+            buffer.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
         }
-        return  result.toString();
+        return  buffer.toString();
     }
 
     @Attachment
@@ -407,4 +430,14 @@ public class Hooks implements JSHelper{
         }
         return  result.toString();
     }
+
+    @Attachment
+    private String chatDeskNetworkOutput(WebDriver driver){
+        List<LogEntry> entries = driver.manage().logs().get(LogType.PERFORMANCE).getAll();
+        StringBuffer buffer = new StringBuffer();
+        for(LogEntry entry : entries)
+            buffer.append(entry.getLevel() + " " +entry.getTimestamp() + "\n" + entry.getMessage() + "\n\n");
+        return  buffer.toString();
+    }
+
 }

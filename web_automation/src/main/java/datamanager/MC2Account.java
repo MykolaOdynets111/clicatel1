@@ -28,6 +28,14 @@ public enum MC2Account {
     DEMO_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "demo", "ff808081682deffe01683875643d0ae6", ""),
     DEMO1_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "demo1", "", ""),
     TESTING_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "testing", "", ""),
+    INTEGRATION_BOT_MODE("starter", "automation258@gmail.com", "p@$$w0rd4te$t", "automationbot", "Automation Bot", "integration", "", ""),
+
+
+    INTEGRATION_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "integration", "", ""),
+    DEV_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "dev", "", ""),
+    DEMO_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "demo", "", ""),
+    TESTING_COMMON_BOT("starter", "commontenant@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "testing", "", ""),
+    QA_COMMON_BOT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "qa", "", ""),
 
     ;
 

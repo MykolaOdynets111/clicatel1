@@ -30,7 +30,7 @@ You can find Allure report by path "build/allure-report/index.html"
 
 Default parameters' values:
 -Dsuite=all
--Dtenant=generalbank
+-Dtenant=all
 -Denv=testing
 -Dremote=false
 -Ddeploy_to=active
@@ -43,3 +43,8 @@ Scenario: Scenario name
 Further more, you can attache TC id by "@TestCaseId("example-99")" annotation and
 change displayed severity by using @SeverityLevel.CRITICAL annotation. Possible values are:
 @SeverityLevel.BLOCKER, @SeverityLevel.CRITICAL, @SeverityLevel.NORMAL, @SeverityLevel.MINOR, @SeverityLevel.TRIVIAL
+
+In order to run .Control tests LOCALLY, you need to start ngrock on the port, specified in
+src -> main -> java -> javaserver -> Server.java -> SERVER_PORT variable
+After that, paste your ngrock url into the same class in getServerURL() method
+

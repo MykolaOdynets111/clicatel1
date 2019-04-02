@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All widget tests" parallel="instances" thread-count="12">
+    <test name="Smoke test" >
+        <classes>
+            <class name="runner.generalbank.RunAllGenBankBotTest" />
+            <class name="runner.virginmoney.RunVMBotTest" />
+        </classes>
+    </test>
+    <test name="Social Health check">
+        <classes>
+            <class name="runner.SocialHealthCheckTest" />
+        </classes>
+    </test>
+</suite>

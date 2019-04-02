@@ -75,10 +75,10 @@ public class DotControlSteps {
         clientId.set(dotControlRequestMessage.get().getClientId());
     }
 
-    @Then("^Message should be sent$")
-    public void verifyMessageIsSent(){
-        Assert.assertEquals(responseOnSentRequest.get().statusCode(), 200,
-        "Sending empty message causes error\n" +
+    @Then("^Message should not be sent$")
+    public void verifyMessageIsNotSent(){
+        Assert.assertEquals(responseOnSentRequest.get().statusCode(), 400,
+        "Sending empty message does not return 400 status code\n" +
         responseOnSentRequest.get().getBody().asString() + "\n");
     }
 
@@ -89,7 +89,7 @@ public class DotControlSteps {
         soft.assertEquals(resp.getStatusCode(), 401,
                 "\nResponse status code is not as expected after sending message with not registered ApiToken \n" +
                         resp.getBody().asString() + "\n\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Can not define tenant via enabled channel API token invalid_token",
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "API token is not registered",
                 "\nResponse on invalid apiToken contains incorrect error message\n");
         soft.assertAll();
     }
@@ -266,7 +266,7 @@ public class DotControlSteps {
     public void checkMessageIdSavingInINITCall(){
         // skipping for demo1 because its db is located in another network
         if(!ConfigManager.getEnv().equalsIgnoreCase("demo1")) {
-            String sessionId = DBConnector.getSessionIdByClientProfileID(ConfigManager.getEnv(), clientId.get());
+            String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
             String actualMessageId = null;
             try {
@@ -333,7 +333,7 @@ public class DotControlSteps {
     }
 
     private void waitFotResponseToComeToServer() {
-        for(int i = 0; i<35; i++) {
+        for(int i = 0; i<15; i++) {
             if (!Server.incomingRequests.isEmpty() &
                     Server.incomingRequests.keySet().contains(clientId)) {
                 break;
@@ -345,7 +345,7 @@ public class DotControlSteps {
             }
         }
         if(Server.incomingRequests.isEmpty()){
-            Assert.assertTrue(false, ".Control is not responding after 35 seconds wait.");
+            Assert.assertTrue(false, ".Control is not responding after 15 seconds wait.");
         }
     }
 

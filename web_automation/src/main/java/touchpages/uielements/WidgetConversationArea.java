@@ -60,6 +60,10 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
     }
 
+    public boolean isSecondTextResponseShownFor(String userMessageText, int wait) {
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseShown(wait);
+    }
+
     public boolean isSecondTextResponseNotShownFor(String userMessageText, int wait) {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseNotShown(wait);
     }
@@ -113,12 +117,13 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
             // Added in case there is no agent added (for e.g., Virgin Money tenant)
         }
         try {
-            waitForElementToBeVisible(salutationElement, 15);
+            waitForElementToBeVisible(salutationElement, 10);
         } catch (TimeoutException e) {
         }
     }
 
     public void waitForMessageToAppearInWidget(String text){
+        // ToDo: update timeout after it is provided in System timeouts confluence page
         try {
             waitForElementToBeVisibleByXpath(String.format(targetFromUserMessage, text), 10);
         } catch (TimeoutException e) {
