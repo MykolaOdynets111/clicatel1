@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "tie")
+@Test(groups = "tie_vm")
 @CucumberOptions(
         format={"com.github.kirlionik.cucumberallure.AllureReporter"
         },

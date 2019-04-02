@@ -2,6 +2,7 @@
 Feature: TIE slots management
 
   Scenario: User should be able to create, edit and remove slots
+    Given All slots for Automation Bot tenant are cleared
     When I create MONEY type slot for "balance check" intent of Automation Bot tenant
     Then Created slot is saved
     And New slot is returned in TIE response on check balance message

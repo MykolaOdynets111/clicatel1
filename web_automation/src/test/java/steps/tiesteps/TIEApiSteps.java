@@ -3,6 +3,7 @@ package steps.tiesteps;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
@@ -1058,7 +1059,6 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @When("^I create (.*) type slot for \"(.*)\" intent of (.*) tenant$")
     public void createNewSlot(String type, String intent, String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
         formNewSlotValues(intent, type, null);
         Response resp = ApiHelperTie.createNewSlot(createSlotBody);
         try {
@@ -1104,6 +1104,19 @@ public class TIEApiSteps implements DateTimeHelper{
         Assert.assertTrue(isSlotAdded, "Slot is not added after 4 secs wait\n"+
                 "Slot info: " + createSlotBody.toString() + "\n" +
                 "Created slot id: " + createdSlotIds.toString());
+    }
+
+    @Given("All slots for (.*) tenant are cleared")
+    public void deleteAllSlots(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        List<String> ids = ApiHelperTie.getAllSlots().getBody().
+                jsonPath().getList("data")
+                .stream().map(e -> (ArrayList<String>) e)
+                .map(e -> e.get(5))
+                .collect(Collectors.toList());
+        for(String id : ids){
+            ApiHelperTie.deleteSlot(id);
+        }
     }
 
     @Then("^New slot is returned in TIE response on (.*) message$")

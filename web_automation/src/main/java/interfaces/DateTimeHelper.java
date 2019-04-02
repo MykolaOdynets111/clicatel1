@@ -17,4 +17,10 @@ public interface DateTimeHelper {
         LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), zoneId);
         return itemDateTime.format(formatter);
     }
+
+    default LocalDateTime transformBackendTimeToZonedTime(String time, ZoneId zoneId){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        return LocalDateTime.parse(time, formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime();
+    }
 }

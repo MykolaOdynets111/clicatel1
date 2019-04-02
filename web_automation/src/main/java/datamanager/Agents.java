@@ -64,6 +64,8 @@ public enum Agents {
     INTEGRATION_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "integration"),
     DEV_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "dev"),
     DEMO_COMMON_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Automation Common", "demo"),
+    QA_COMMON_ADMIN("account_signup@aqa.test", "p@$$w0rd4te$t", "Automation Common", "qa"),
+    TESTING_COMMON_ADMIN("commontenant@gmail.com", "p@$$w0rd4te$t", "Automation Common", "qa"),
 
     ;
 

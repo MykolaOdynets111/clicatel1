@@ -254,7 +254,7 @@ public class BasePortalSteps {
     @Then("^Admin is not able to login into portal with deleted account$")
     public void verifyAdminCannotLoginToPortal(){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
-        if (!portalLoginPage.get().isLoginPageOpened()){
+        if (!portalLoginPage.get().isLoginPageOpened(1)){
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }

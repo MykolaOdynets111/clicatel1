@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -13,7 +14,12 @@ public class ChatHistoryContainer extends AbstractUIElement {
     private List<WebElement> chatHistoryList;
 
     public ChatInActiveChatHistory getFirstChatHistoryItems(){
-        return new ChatInActiveChatHistory(chatHistoryList.get(0));
+        try{
+            return new ChatInActiveChatHistory(chatHistoryList.get(0));
+        } catch (IndexOutOfBoundsException e){
+            Assert.assertTrue(false, "Chat history container in active chat is empty");
+            return null;
+        }
     }
 
 
