@@ -35,4 +35,8 @@ public class CRMTicket extends Widget implements WebActions {
         return infoMap;
     }
 
+    public void clickTicketNumber(){
+        crmNumber.click();
+    }
+
 }

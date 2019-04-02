@@ -14,10 +14,12 @@ public class ChatHistoryContainer extends AbstractUIElement {
     private List<WebElement> chatHistoryList;
 
     public ChatInActiveChatHistory getFirstChatHistoryItems(){
-        if(chatHistoryList.size()==0){
+        try{
+            return new ChatInActiveChatHistory(chatHistoryList.get(0));
+        } catch (IndexOutOfBoundsException e){
             Assert.assertTrue(false, "Chat history container in active chat is empty");
+            return null;
         }
-        return new ChatInActiveChatHistory(chatHistoryList.get(0));
     }
 
 

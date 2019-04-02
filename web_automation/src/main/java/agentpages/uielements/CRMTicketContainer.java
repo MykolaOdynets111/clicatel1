@@ -13,15 +13,18 @@ public class CRMTicketContainer extends AbstractUIElement {
     @FindBy(css = "div.ticket-item-block")
     private List<WebElement> crmTickets;
 
+    @FindBy(xpath = "//div[@class='user-tickets-container']/preceding-sibling::h2")
+    private WebElement containerHeader;
+
     public boolean isTicketContainerShown(){
         return isElementShown(this.getWrappedElement(), 4);
     }
 
-
-    public Map<String, String> getFirstTicketInfoMap(){
-        return new CRMTicket(crmTickets.get(0)).getTicketInfo();
+    public CRMTicket getFirstTicket(){
+        return new CRMTicket(crmTickets.get(0));
     }
 
+    public String getContainerHeader(){ return containerHeader.getText(); }
 
 
 }
