@@ -8,10 +8,6 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 
 public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JSHelper {
-//
-//    public AgentAbstractPage() {
-//        HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
-//    }
 
     private String agent="main agent";
 

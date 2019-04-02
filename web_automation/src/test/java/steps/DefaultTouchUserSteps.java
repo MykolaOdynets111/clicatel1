@@ -394,7 +394,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^Text response that contains \"(.*)\" is shown$")
     public void quickVerifyIsResponseShown(String text){
        Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 10),
-               "Bot response is not shown");
+               "Response to user is not shown");
     }
 
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")

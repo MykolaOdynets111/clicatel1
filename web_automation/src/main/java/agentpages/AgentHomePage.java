@@ -129,7 +129,8 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage sendResponseToUser(String responseToUser) {
         try {
-            findElemByXPATHAgent(messageInputLocator).sendKeys(responseToUser);
+            waitForElementToBeClickableAgent(messageInput, 5, this.getCurrentAgent());
+            messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
@@ -143,8 +144,7 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.getCurrentAgent());
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
         waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
-        int symbolsNumber = messageInput.getText().split("").length; //errorEgor 1 if no message // try messageInput.getText().length()
-        waitFor(200);
+        int symbolsNumber = messageInput.getText().length();
         if(symbolsNumber>0) {
                 messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         }

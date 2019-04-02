@@ -3,18 +3,18 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
-import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 
 @FindBy(css = "div.modal-content")
 public class AgentFeedbackWindow extends AbstractUIElement {
 
+    private String windowCss = "div.modal-content";
+
     private String closeChatButtonXPATH = "//span[text()='Close Chat']";
 
-
+    private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
     @FindBy(xpath = "//button[text()='Cancel']")
     private WebElement cancelButton;
@@ -46,16 +46,15 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(id = "CRMTicketNumber")
     private WebElement crmTicketNumber;
 
-
     public void clickCancel() {
         clickElemAgent(cancelButton, 5, "main agent", "Cancel button" );
+        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
     }
 
     public void clickCloseButtonInCloseChatPopup (){
         if(ApiHelper.getFeatureStatus(Tenants.getTenantUnderTestOrgName(), "AGENT_FEEDBACK")){
             waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
             findElemByXPATHAgent(closeChatButtonXPATH).click();
-            waitForElementToBeInVisibleByXpathAgent(closeChatButtonXPATH, 5);
         }
     }
 

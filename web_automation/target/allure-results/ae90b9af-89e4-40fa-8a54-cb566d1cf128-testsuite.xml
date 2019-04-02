@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550845494050" stop="1550845571418" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>User on his demand should be redirected on the agent</name>
+    <description type="text">
+Verification of basic communication between user and agent</description>
+    <test-cases>
+        <test-case start="1550845494051" stop="1550845571417" status="passed">
+            <name>User redirection to the Agent after negative message and storing it's sentiment</name>
+            <title>User redirection to the Agent after negative message and storing it's sentiment</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550845494051" stop="1550845525201" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845525202" stop="1550845531040" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845531040" stop="1550845536203" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845536203" stop="1550845536563" status="passed">
+                    <name>When User enter Hate your banking into widget input field</name>
+                    <title>When User enter Hate your banking into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845536563" stop="1550845543221" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845543222" stop="1550845543543" status="passed">
+                    <name>When Agent click on new conversation request from touch</name>
+                    <title>When Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845543544" stop="1550845543797" status="passed">
+                    <name>Then Conversation area becomes active with Hate your banking user's message</name>
+                    <title>Then Conversation area becomes active with Hate your banking user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845543797" stop="1550845549855" status="passed">
+                    <name>Then Correct sentiment on Hate your banking user's message is stored in DB</name>
+                    <title>Then Correct sentiment on Hate your banking user's message is stored in DB</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845549855" stop="1550845550236" status="passed">
+                    <name>When Agent responds with hello to User</name>
+                    <title>When Agent responds with hello to User</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845550236" stop="1550845550976" status="passed">
+                    <name>Then User have to receive 'hello' text response for his 'Hate your banking' input</name>
+                    <title>Then User have to receive 'hello' text response for his 'Hate your banking' input</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845550976" stop="1550845551299" status="passed">
+                    <name>When User enter how to check my balance? into widget input field</name>
+                    <title>When User enter how to check my balance? into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845551300" stop="1550845555245" status="passed">
+                    <name>Then Correct sentiment on how to check my balance? user's message is stored in DB</name>
+                    <title>Then Correct sentiment on how to check my balance? user's message is stored in DB</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845555245" stop="1550845557355" status="passed">
+                    <name>When Agent closes chat</name>
+                    <title>When Agent closes chat</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550845557355" stop="1550845562149" status="passed">
+                    <name>Then Correct sentiment on how to check my balance? user's message is stored in DB</name>
+                    <title>Then Correct sentiment on how to check my balance? user's message is stored in DB</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="User redirection to the Agent after negative message and storing it's sentiment"/>
+                <label name="feature" value="User on his demand should be redirected on the agent"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="User on his demand should be redirected on the agent"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

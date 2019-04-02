@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550851506106" stop="1550851679491" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Communication with agent via tweet</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550851506107" stop="1550851679491" status="failed">
+            <name>Receiving answer on tweet from the agent</name>
+            <title>Receiving answer on tweet from the agent</title>
+            <description type="text"></description>
+            <failure>
+                <message>AssertionError: Expected tweet answer from the agent is missing after 100 secs wait expected [true] but found [false]</message>
+                <stack-trace>java.lang.AssertionError: Expected tweet answer from the agent is missing after 100 secs wait expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:496)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at steps.TwitterSteps.verifyReceivingAnswerInTimelineFromAgent(TwitterSteps.java:80)
+	at ✽.Then Agent's answer arrives to twitter(TwitterAgentViaTweet.feature:16)
+</stack-trace>
+            </failure>
+            <steps>
+                <step start="1550851515500" stop="1550851532796" status="passed">
+                    <name>Given I login as agent of General Bank Demo</name>
+                    <title>Given I login as agent of General Bank Demo</title>
+                </step>
+                <step start="1550851532796" stop="1550851533740" status="passed">
+                    <name>Given Open twitter page of General Bank Demo</name>
+                    <title>Given Open twitter page of General Bank Demo</title>
+                </step>
+                <step start="1550851533740" stop="1550851534438" status="passed">
+                    <name>Given Open new tweet window</name>
+                    <title>Given Open new tweet window</title>
+                </step>
+                <step start="1550851534438" stop="1550851535002" status="passed">
+                    <name>When User sends tweet regarding "connect to agent"</name>
+                    <title>When User sends tweet regarding "connect to agent"</title>
+                </step>
+                <step start="1550851535002" stop="1550851559757" status="passed">
+                    <name>Then Agent has new conversation request from twitter user</name>
+                    <title>Then Agent has new conversation request from twitter user</title>
+                </step>
+                <step start="1550851559757" stop="1550851560064" status="passed">
+                    <name>When Agent click on new conversation request from twitter</name>
+                    <title>When Agent click on new conversation request from twitter</title>
+                </step>
+                <step start="1550851560064" stop="1550851560370" status="passed">
+                    <name>Then Conversation area becomes active with connect to agent message from tweet user</name>
+                    <title>Then Conversation area becomes active with connect to agent message from tweet user</title>
+                </step>
+                <step start="1550851560371" stop="1550851566176" status="passed">
+                    <name>When Agent replays with how can i help you? message</name>
+                    <title>When Agent replays with how can i help you? message</title>
+                </step>
+                <step start="1550851566176" stop="1550851672092" status="failed">
+                    <name>Then Agent's answer arrives to twitter</name>
+                    <title>Then Agent's answer arrives to twitter</title>
+                </step>
+                <step start="1550851672092" stop="1550851672092" status="canceled">
+                    <name>And User has to receive "how can i help you?" answer from the agent as a comment on his initial tweet connect to agent</name>
+                    <title>And User has to receive "how can i help you?" answer from the agent as a comment on his initial tweet connect to agent</title>
+                </step>
+                <step start="1550851672092" stop="1550851672092" status="canceled">
+                    <name>And Send "where can I find currency exchange rate?" reply on agent's tweet "how can i help you?"</name>
+                    <title>And Send "where can I find currency exchange rate?" reply on agent's tweet "how can i help you?"</title>
+                </step>
+                <step start="1550851672092" stop="1550851672092" status="canceled">
+                    <name>Then Conversation area contains where can I find currency exchange rate? user's message</name>
+                    <title>Then Conversation area contains where can I find currency exchange rate? user's message</title>
+                </step>
+                <step start="1550851672093" stop="1550851672093" status="canceled">
+                    <name>When Agent replays with please check out our web site message</name>
+                    <title>When Agent replays with please check out our web site message</title>
+                </step>
+                <step start="1550851672093" stop="1550851672093" status="canceled">
+                    <name>Then User have to receive please check out our web site agent response as comment for connect to agent tweet</name>
+                    <title>Then User have to receive please check out our web site agent response as comment for connect to agent tweet</title>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Receiving answer on tweet from the agent"/>
+                <label name="feature" value="Communication with agent via tweet"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="875@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Communication with agent via tweet"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

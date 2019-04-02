@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1550846221553" stop="1550846302104" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>Agent suggestions sorting by confidence</name>
+    <description type="text"></description>
+    <test-cases>
+        <test-case start="1550846221555" stop="1550846302103" status="passed">
+            <name>Suggestions should be shown in descending order by confidence</name>
+            <title>Suggestions should be shown in descending order by confidence</title>
+            <description type="text"></description>
+            <steps>
+                <step start="1550846221556" stop="1550846226840" status="passed">
+                    <name>Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo</name>
+                    <title>Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846226841" stop="1550846251470" status="passed">
+                    <name>And I login as agent of General Bank Demo</name>
+                    <title>And I login as agent of General Bank Demo</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846251470" stop="1550846270656" status="passed">
+                    <name>Given User select General Bank Demo tenant</name>
+                    <title>Given User select General Bank Demo tenant</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846270656" stop="1550846275966" status="passed">
+                    <name>And Click chat icon</name>
+                    <title>And Click chat icon</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846275966" stop="1550846276299" status="passed">
+                    <name>When User enter Chat to Support into widget input field</name>
+                    <title>When User enter Chat to Support into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846276299" stop="1550846282408" status="passed">
+                    <name>Then Agent has new conversation request</name>
+                    <title>Then Agent has new conversation request</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846282408" stop="1550846282760" status="passed">
+                    <name>And Agent click on new conversation request from touch</name>
+                    <title>And Agent click on new conversation request from touch</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846282761" stop="1550846283261" status="passed">
+                    <name>When User enter some question about balance into widget input field</name>
+                    <title>When User enter some question about balance into widget input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846283261" stop="1550846283858" status="passed">
+                    <name>Then Conversation area contains some question about balance user's message</name>
+                    <title>Then Conversation area contains some question about balance user's message</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846283858" stop="1550846288038" status="passed">
+                    <name>Then There is correct suggestion shown on user message "some question about balance" and sorted by confidence</name>
+                    <title>Then There is correct suggestion shown on user message "some question about balance" and sorted by confidence</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+                <step start="1550846288038" stop="1550846290205" status="passed">
+                    <name>And The suggestion for user message "some question about balance" with the biggest confidence is added to the input field</name>
+                    <title>And The suggestion for user message "some question about balance" with the biggest confidence is added to the input field</title>
+                    <attachments/>
+                    <steps/>
+                </step>
+            </steps>
+            <attachments/>
+            <labels>
+                <label name="story" value="Suggestions should be shown in descending order by confidence"/>
+                <label name="feature" value="Agent suggestions sorting by confidence"/>
+                <label name="host" value="tmytlovych"/>
+                <label name="thread" value="19686@tmytlovych.main(1)"/>
+                <label name="framework" value="CucumberJVM"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="feature" value="Agent suggestions sorting by confidence"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>

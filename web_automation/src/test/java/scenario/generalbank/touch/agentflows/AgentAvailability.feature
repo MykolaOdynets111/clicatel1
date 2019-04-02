@@ -41,7 +41,6 @@ Feature: Agent availability
 #    Then Second agent has new conversation request
 #    Given Agent changes status to: Available
 
-  @Issue("https://jira.clickatell.com/browse/TPORT-1991")
   Scenario: Changing agent's availability with correctly ended chat
     When User enter chat to support into widget input field
     Then Agent has new conversation request

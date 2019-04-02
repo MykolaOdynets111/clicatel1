@@ -1,12 +1,10 @@
 package apihelper;
 
-import datamanager.Customer360PersonalInfo;
-import datamanager.MC2Account;
-import datamanager.Tenants;
-import datamanager.Territories;
+import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
+import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
@@ -541,8 +539,9 @@ public class ApiHelper {
         return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
     }
 
-    public static List<CRMTicket> getCRMTicket(String clientID){
-        String clientProfileId = getClientProfileId(clientID);
+    public static List<CRMTicket> getCRMTicket(String clientID, String type){
+        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
+//        String clientProfileId = getClientProfileId(clientID);
         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
