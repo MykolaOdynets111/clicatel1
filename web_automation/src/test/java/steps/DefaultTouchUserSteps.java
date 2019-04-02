@@ -89,10 +89,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         if(clientID.equalsIgnoreCase("with history")) clientID = getClientWithHistory();
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
-//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "firstName", clientID);
-//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID, "email", "aqa"+clientID+"@gmail.com");
-    }
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);}
 
     private String getClientWithHistory(){
         Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 1, 100);
@@ -102,22 +99,10 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
             "statusCode: " + resp.statusCode() + "\n" +
             "errorMessage: " + resp.getBody().asString());
         }
-
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
-//        Long timeMilestone = convertLocalDateTimeToMillis( LocalDateTime.now(zoneId).minusDays(2), zoneId);
-//                LocalDateTime aa = LocalDateTime.now(zoneId);
-//
-//        selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
-//                .map(sessionContainer ->  ((ArrayList) sessionContainer))
-//                .filter(e -> e.size()==1)
-//                .map(session -> ((HashMap) session.get(0)))
-//                .filter(session -> ((Long) session.get("endedDate")) < timeMilestone)
-//                .findAny()
-//                .get();
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-        LocalDateTime nowMinusTwoDays = LocalDateTime.now(zoneId).minusDays(2);
+        LocalDateTime nowMinusTwoDays = LocalDateTime.now(zoneId).minusDays(2).minusHours(2);
         selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
                 .map(sessionContainer ->  ((ArrayList) sessionContainer))
                 .filter(e -> e.size()==1)

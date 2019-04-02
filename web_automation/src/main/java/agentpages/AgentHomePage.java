@@ -12,6 +12,7 @@ import org.testng.Assert;
 public class AgentHomePage extends AgentAbstractPage {
 
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
+    private String chatContainer = "//ul[@class='chat-container']";
 
     @FindBy(css = "div.suggestion-wrapper")
     private WebElement suggestionInputField;
@@ -218,6 +219,7 @@ public class AgentHomePage extends AgentAbstractPage {
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+            waitForElementsToBeInvisibleByXpathAgent(chatContainer, 3, getCurrentAgent());
         }
     }
 
