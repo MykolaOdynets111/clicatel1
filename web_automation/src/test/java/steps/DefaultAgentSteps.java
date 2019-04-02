@@ -595,7 +595,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
     @Then("^(.*) is redirected by CRM ticket URL$")
-    public void verifyUserRedirectedToPortalLoginPage(String agent){
+    public void verifyUserRedirectedBlankPage(String agent){
         String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
@@ -604,6 +604,19 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 }
         }
         Assert.assertEquals(pageUrl, "about:blank",
+                "Agent is not redirected by CRM tickets' url");
+    }
+
+    @Then("^(.*) is redirected to empty chatdesk page$")
+    public void verifyUserRedirectedEmptyChatdeskPage(String agent){
+        String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+            if (!winHandle.equals(currentWindow)) {
+                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+            }
+        }
+        Assert.assertTrue(pageUrl.contains("null")&pageUrl.contains("chatdesk"),
                 "Agent is not redirected by CRM tickets' url");
     }
 
