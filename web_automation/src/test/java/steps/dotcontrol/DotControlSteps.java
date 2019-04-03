@@ -344,8 +344,9 @@ public class DotControlSteps {
                 e.printStackTrace();
             }
         }
-        if(Server.incomingRequests.isEmpty()){
-            Assert.assertTrue(false, ".Control is not responding after 15 seconds wait.");
+        if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId))){
+            Assert.assertTrue(false,
+                    ".Control is not responding after 15 seconds wait. to client with id '"+clientId+"'");
         }
     }
 
@@ -360,6 +361,7 @@ public class DotControlSteps {
     }
 
     public static void cleanUPMessagesInfo(){
+        Server.incomingRequests.clear();
         responseOnSentRequest.remove();
         infoForCreatingIntegration.remove();
         dotControlRequestMessage.remove();

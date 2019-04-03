@@ -141,4 +141,19 @@ public class BotMessageResponse {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "BotMessageResponse{" +
+                "apiToken='" + apiToken + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", referenceId='" + referenceId + '\'' +
+                ", conversationId='" + conversationId + '\'' +
+                ", messageType='" + messageType + '\'' +
+                ", message='" + message + '\'' +
+                ", timestamp=" + timestamp +
+                ", source=" + source +
+                ", context=" + context +
+                ", additionalProperties=" + additionalProperties +
+                "}\n";
+    }
 }
