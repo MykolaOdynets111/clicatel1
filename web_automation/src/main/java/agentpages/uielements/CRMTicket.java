@@ -27,6 +27,12 @@ public class CRMTicket extends Widget implements WebActions {
     @FindBy(xpath = ".//a[@class='number']")
     private WebElement crmNumber;
 
+    @FindBy(css = "button.edit")
+    private WebElement editButton;
+
+    @FindBy(css = "button.delete")
+    private WebElement deleteButton;
+
     public Map<String, String> getTicketInfo(){
         Map<String, String> infoMap = new HashMap<>();
         infoMap.put("createdDate", crmCreatedDate.getText());
@@ -36,7 +42,15 @@ public class CRMTicket extends Widget implements WebActions {
     }
 
     public void clickTicketNumber(){
-        crmNumber.click();
+        clickElemAgent(crmNumber, 3, "main", "CRM ticket number");
     }
 
+
+    public void clickEditButton(){
+        clickElemAgent(editButton, 3, "main", "CRM ticket 'Edit' button");
+    }
+
+    public void clickDeleteButton(){
+        clickElemAgent(deleteButton, 3, "main", "CRM ticket 'Delete' button");
+    }
 }
