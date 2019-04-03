@@ -242,6 +242,19 @@ public class AgentConversationSteps implements JSHelper{
 //        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseСhat();
 //    }
 
+    @When("(.*) click 'Skip' button$")
+    public void agentClickSkipButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickSkip();
+    }
+
+
+    @When("(.*) fills form$")
+    public void agentFillsForm(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note text field");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("Note text Link");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
+    }
+
     @When("(.*) closes chat")
     public void closeChat(String agent){
         getAgentHomePage(agent).endChat();
