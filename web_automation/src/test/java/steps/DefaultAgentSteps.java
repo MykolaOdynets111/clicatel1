@@ -807,6 +807,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^CRM ticket did not created$")
     public void crmTicketDidNotCreated() {
-  //      Assert.assertEquals( ApiHelper.getCRMTicket(getUserNameFromLocalStorage(),"sdf").size(), 0, "CRM ticket was created on back end");
+        Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
     }
 }
