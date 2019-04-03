@@ -6,7 +6,7 @@ Feature: Interaction with 'Close chat' button on chatdesk
     Given I login as agent of General Bank Demo
     And Click chat icon
 
-  Scenario: Verify if agent is able to 'Close chat' in end-chat pop-up in chat desk
+  Scenario: Verify if agent is able to 'Close chat' in end-chat pop-up in chat desk, no CRM ticket if nothing typed
     Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
