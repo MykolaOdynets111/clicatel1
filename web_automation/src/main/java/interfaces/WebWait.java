@@ -115,10 +115,10 @@ public interface WebWait {
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
     }
 
-    default void waitForElementToBeNotPresentByCssAgent(String xpath, int time, String agent){
+    default void waitForElementToBePresentByCssAgent(String css, int time, String agent){
         initAgentWait(time, agent).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath))));
+                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(css)));
     }
 
     default void waitForElementsToBePresentByXpathAgent(String xpath, int time){

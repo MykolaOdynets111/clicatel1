@@ -112,11 +112,11 @@ public class ChatBody extends AbstractUIElement {
                     .map(e -> e.getAttribute("innerText")).distinct()
                     .collect(Collectors.toList());
             if (agentInitials.size() == 1) {
-                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), ""))
+                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
                         .collect(Collectors.toList());
             }
             if (agentInitials.size() > 1) {
-                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), ""))
+                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
                         .map(e -> e.replace(agentInitials.get(1), ""))
                         .collect(Collectors.toList());
             }
