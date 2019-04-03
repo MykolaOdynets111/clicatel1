@@ -6,7 +6,6 @@ import agentpages.uielements.ChatInActiveChatHistory;
 import agentpages.uielements.LeftMenuWithChats;
 import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
-import apihelper.Endpoints;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
@@ -21,7 +20,6 @@ import datamanager.jacksonschemas.ChatHistoryItem;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
-import drivermanager.URLs;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
@@ -29,7 +27,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portalpages.PortalLoginPage;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.Instant;
@@ -52,7 +49,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-    private static ThreadLocal<Map<String, String>> crmTicket = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, String>> crmTicketInfoForCreating = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
 
     public static CRMTicket getCreatedCRMTicket(){
@@ -566,7 +564,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         dataForNewCRMTicket.put("link", "about:blank");
         dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
         dataForNewCRMTicket.put("agentNote", "Note from automation test)");
-        crmTicket.set(dataForNewCRMTicket);
+        crmTicketInfoForCreating.set(dataForNewCRMTicket);
         if(urlStatus.toLowerCase().contains("without url")) dataForNewCRMTicket.remove("link");
         return dataForNewCRMTicket;
     }
@@ -592,6 +590,45 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                     DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
                 }
             }
+    }
+
+    @When("^(.*) click 'Edit' button for CRM ticket$")
+    public void clickEditCRMTicketButton(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickEditButton();
+    }
+
+    @Then("^'Edit ticket' window is opened$")
+    public void verifyEditWindowOpened(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getEditCRMTicketWindow().isOpened(),
+                "'Edit ticket' window is not opened after clicking 'Edit' button for CRM ticket");
+    }
+
+    @When("^(.*) fill in the form with new CRM ticket info$")
+    public void fillCRMEditingFormWithNewData(String agent){
+        formDataForCRMUpdating();
+        getAgentHomePage(agent).getEditCRMTicketWindow().provideCRMNewTicketInfo(crmTicketInfoForUpdating.get());
+    }
+
+    @When("^Cancel CRM editing$")
+    public void cancelCRMEditing(){
+        getAgentHomeForMainAgent().getEditCRMTicketWindow().clickCancel();
+    }
+
+    @Then("CRM ticket is not updated on back end")
+    public void verifyCRMTicketNotUpdated() {
+        SoftAssert soft = new SoftAssert();
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
+
+        soft.assertEquals(actualTicketInfoFromBackend.getCreatedDate().split(":")[0],
+                                createdCrmTicket.get().getCreatedDate().split(":")[0],
+                        "Ticket created date is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), createdCrmTicket.get().getTicketNumber(),
+                "Ticket Number is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(), createdCrmTicket.get().getAgentNote(),
+                " Ticket note is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getLink(), createdCrmTicket.get().getLink(),
+                " Ticket link is changed after canceling ticket editing \n");
+        soft.assertAll();
     }
 
     @Then("^(.*) is redirected by CRM ticket URL$")
@@ -628,10 +665,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
                 "Shown Ticket created date is not correct \n");
         soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
-                "Shown Ticket Number date is not correct \n");
+                "Shown Ticket Number is not correct \n");
         soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
-                "Shown Ticket note date is not correct \n");
+                "Shown Ticket note is not correct \n");
         soft.assertAll();
+    }
+
+    private void formDataForCRMUpdating(){
+        Map<String, String> info = new HashMap<>();
+        info.put("agentNote", "Note for updating ticket");
+        info.put("link", "http://updateurl.com");
+        info.put("ticketNumber", "11111");
+        crmTicketInfoForUpdating.set(info);
     }
 
     private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){

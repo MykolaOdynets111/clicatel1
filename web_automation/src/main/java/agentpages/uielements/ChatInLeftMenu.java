@@ -24,8 +24,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.context-info div.icons>span")
     private WebElement channelIcon;
 
-    @FindBy(css = "span.icon>svg.overnight")
-    private WebElement overnightTickenIcon;
+    private String overnightTicketIcon = "span.icon>svg.overnight";
 
     public ChatInLeftMenu(WebElement element) {
         super(element);
@@ -60,13 +59,13 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public boolean isOvernightTicketIconShown(){
-        return isElementShownAgent(overnightTickenIcon, 10);
+        return  isElementExistsInDOMAgentCss(overnightTicketIcon, 10, "main");
     }
 
     public boolean isOvernightTicketRemoved(){
         for(int i = 0; i<10; i++){
             try{
-                if(overnightTickenIcon.isDisplayed()) waitFor(1000);
+                if(isElementExistsInDOMAgentCss(overnightTicketIcon, 1, "main")) waitFor(1000);
             }catch (NoSuchElementException e){
                 return true;
             }

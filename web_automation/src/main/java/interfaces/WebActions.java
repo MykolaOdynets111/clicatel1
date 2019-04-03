@@ -98,6 +98,16 @@ public interface WebActions extends WebWait {
         }
     }
 
+
+    default boolean isElementExistsInDOMAgentCss(String css, int time, String agent){
+        try {
+            waitForElementToBePresentByCssAgent(css, time, agent);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShownByXpath(String xpath, int wait){
         try {
             waitForElementToBeVisibleByXpath(xpath, wait);
