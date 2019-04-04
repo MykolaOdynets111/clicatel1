@@ -12,6 +12,7 @@ import org.testng.Assert;
 public class AgentHomePage extends AgentAbstractPage {
 
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
+    private String chatContainer = "//ul[@class='chat-container']";
 
     @FindBy(css = "div.suggestion-wrapper")
     private WebElement suggestionInputField;
@@ -63,6 +64,9 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement historyDetails;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
+
+    private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
+    private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;
     private LeftMenuWithChats leftMenuWithChats;
     private ChatBody chatBody;
@@ -79,6 +83,14 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
+        return deleteCRMConfirmationPopup;
+    }
+
+    public EditCRMTicketWindow getEditCRMTicketWindow() {
+        return editCRMTicketWindow;
     }
 
     public CRMTicketContainer getCrmTicketContainer() {
@@ -218,6 +230,7 @@ public class AgentHomePage extends AgentAbstractPage {
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+            waitForElementsToBeInvisibleByXpathAgent(chatContainer, 3, getCurrentAgent());
         }
     }
 

@@ -7,8 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.chat-body")
@@ -21,6 +20,8 @@ public class ChatBody extends AbstractUIElement {
     private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li";
 
     private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
+
+    private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
 
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
@@ -99,13 +100,27 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
-        String agentInitials = "";
-        if(isElementShownAgent(agentIconWIthInitials)) agentInitials=agentIconWIthInitials.getAttribute("innerText");
-        String finalAgentInitials = agentInitials;
-        return findElemsByXPATHAgent(messagesInChatBodyXPATH)
-                .stream()
-                .map(e -> e.getAttribute("innerText").replace("\n", " ").replace(finalAgentInitials, "").trim())
-                .filter(e -> !e.equals(""))
-                .collect(Collectors.toList());
+        List<String> messages = findElemsByXPATHAgent(messagesInChatBodyXPATH)
+                                            .stream()
+                                            .map(e -> e.getAttribute("innerText").replace("\n", " ").trim())
+                                            .filter(e -> !e.equals(""))
+                                            .collect(Collectors.toList());
+
+        if(isElementShownAgent(agentIconWIthInitials)) {
+            List<String> agentInitials = findElemsByCSSAgent(agentIconWIthInitialsCSS)
+                    .stream()
+                    .map(e -> e.getAttribute("innerText")).distinct()
+                    .collect(Collectors.toList());
+            if (agentInitials.size() == 1) {
+                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
+                        .collect(Collectors.toList());
+            }
+            if (agentInitials.size() > 1) {
+                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
+                        .map(e -> e.replace(agentInitials.get(1), ""))
+                        .collect(Collectors.toList());
+            }
+        }
+        return messages;
     }
 }

@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "tie one thread")
+@Test(groups = "tie_one_thread")
 @CucumberOptions(
         format={"com.github.kirlionik.cucumberallure.AllureReporter"
         },

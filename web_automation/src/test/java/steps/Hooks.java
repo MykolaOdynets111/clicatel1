@@ -192,13 +192,11 @@ public class Hooks implements JSHelper{
             takeScreenshotFromSecondDriver();
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
-                chatDeskNetworkOutput(DriverFactory.getAgentDriverInstance());
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
-                    chatDeskNetworkOutput(DriverFactory.getSecondAgentDriverInstance());
                 }
                 takeScreenshotFromThirdDriverIfExists();
         }
@@ -431,13 +429,5 @@ public class Hooks implements JSHelper{
         return  result.toString();
     }
 
-    @Attachment
-    private String chatDeskNetworkOutput(WebDriver driver){
-        List<LogEntry> entries = driver.manage().logs().get(LogType.PERFORMANCE).getAll();
-        StringBuffer buffer = new StringBuffer();
-        for(LogEntry entry : entries)
-            buffer.append(entry.getLevel() + " " +entry.getTimestamp() + "\n" + entry.getMessage() + "\n\n");
-        return  buffer.toString();
-    }
 
 }

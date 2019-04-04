@@ -335,7 +335,7 @@ public class DotControlSteps {
     private void waitFotResponseToComeToServer() {
         for(int i = 0; i<15; i++) {
             if (!Server.incomingRequests.isEmpty() &
-                    Server.incomingRequests.keySet().contains(clientId)) {
+                    Server.incomingRequests.keySet().contains(clientId.get())) {
                 break;
             }
             try {
@@ -344,8 +344,9 @@ public class DotControlSteps {
                 e.printStackTrace();
             }
         }
-        if(Server.incomingRequests.isEmpty()){
-            Assert.assertTrue(false, ".Control is not responding after 15 seconds wait.");
+        if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
+            Assert.assertTrue(false,
+                    ".Control is not responding after 15 seconds wait. to client with id '"+clientId.get()+"'");
         }
     }
 
@@ -360,6 +361,7 @@ public class DotControlSteps {
     }
 
     public static void cleanUPMessagesInfo(){
+        Server.incomingRequests.clear();
         responseOnSentRequest.remove();
         infoForCreatingIntegration.remove();
         dotControlRequestMessage.remove();

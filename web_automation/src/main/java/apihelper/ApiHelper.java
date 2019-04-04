@@ -537,7 +537,7 @@ public class ApiHelper {
         return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
     }
 
-    public static List<CRMTicket> getCRMTicket(String clientID, String type){
+    public static List<CRMTicket> getCRMTickets(String clientID, String type){
         String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
 //        String clientProfileId = getClientProfileId(clientID);
         return RestAssured.given()

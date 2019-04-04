@@ -58,7 +58,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         }
     }
 
-    public boolean isLoginPageOpened(){
-        return isElementShownAgent(emailInput,1);
+    public  boolean isLoginPageOpened(int wait){
+        return isElementShownAgent(emailInput,wait);
     }
 }

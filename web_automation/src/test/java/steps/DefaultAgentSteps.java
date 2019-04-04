@@ -49,7 +49,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-    private static ThreadLocal<Map<String, String>> crmTicket = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, String>> crmTicketInfoForCreatingViaAPI = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
 
     public static CRMTicket getCreatedCRMTicket(){
@@ -79,7 +80,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+//        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
 //        ApiHelper.closeActiveChats();
@@ -542,18 +543,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertAll();
     }
 
-    @Given("CRM ticket is created")
-    public void createCRMTicketsViaAPI(){
+    @Given("CRM ticket (.*) is created")
+    public void createCRMTicketsViaAPI(String urlStatus){
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
                                                                 (ConfigManager.getEnv(), getUserNameFromLocalStorage());
-        Map<String, String> dataForNewCRMTicket = new HashMap<>();
-        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
-        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
-        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
-        dataForNewCRMTicket.put("link",  "http://mysaite" + faker.lorem().word() + ".ua");
-        dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
-        dataForNewCRMTicket.put("agentNote", "Note from automation test)");
-        crmTicket.set(dataForNewCRMTicket);
+        Map<String, String> dataForNewCRMTicket = prepareDataForCrmTicket(sessionDetails, urlStatus);
 
         Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
         createdCrmTicket.set(resp.getBody().as(CRMTicket.class));
@@ -562,24 +556,194 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                                 "rest body: " +resp.getBody().asString());
     }
 
+    private Map<String, String> prepareDataForCrmTicket( Map<String, String>  sessionDetails, String urlStatus){
+        Map<String, String> dataForNewCRMTicket = new HashMap<>();
+        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
+        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
+        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
+        dataForNewCRMTicket.put("link", "about:blank");
+        dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
+        dataForNewCRMTicket.put("agentNote", "Note from automation test)");
+        crmTicketInfoForCreatingViaAPI.set(dataForNewCRMTicket);
+        if(urlStatus.toLowerCase().contains("without url")) dataForNewCRMTicket.remove("link");
+        return dataForNewCRMTicket;
+    }
+
     @Then("New CRM ticket is shown")
-    public void verifyCRMTicketIsSown(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
-                "CRM ticket container is not shown");
+    public void verifyCRMTicketIsShown(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getContainerHeader(), "Notes",
+                "CRM tickets section header is not 'Notes'");
+        soft.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
+                "CRM ticket is not shown");
+        soft.assertAll();
+    }
+
+    @Then("New CRM ticket is not shown")
+    public void verifyCRMTicketIsNotShown(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerRemoved(),
+                "CRM ticket is still shown");
+    }
+
+    @When("^I click CRM ticket number URL$")
+    public void clickTicketNumber(){
+        getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().clickTicketNumber();
+
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+    }
+
+    @When("^(.*) click 'Edit' button for CRM ticket$")
+    public void clickEditCRMTicketButton(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickEditButton();
+    }
+
+    @When("^(.*) click 'Delete' button for CRM ticket$")
+    public void clickDeleteCRMTicketButton(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
+    }
+
+
+    @Then("^Confirmation deleting popup is shown$")
+    public void verifyDeletingCRMTicketPopupShown(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getDeleteCRMConfirmationPopup().isOpened(),
+                "CRM ticket deleting confirmation popup is not shown");
+    }
+
+    @When("^(.*) click 'Cancel' button' in CRM deleting popup$")
+    public void cancelCRMDeleting(String agent){
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickCancel();
+    }
+
+    @When("^(.*) click 'Delete' button' in CRM deleting popup$")
+    public void deleteCRMTicket(String agent){
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
+    }
+
+
+    @Then("^'Edit ticket' window is opened$")
+    public void verifyEditWindowOpened(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getEditCRMTicketWindow().isOpened(),
+                "'Edit ticket' window is not opened after clicking 'Edit' button for CRM ticket");
+    }
+
+    @When("^(.*) fill in the form with new CRM ticket info$")
+    public void fillCRMEditingFormWithNewData(String agent){
+        formDataForCRMUpdating();
+        getAgentHomePage(agent).getEditCRMTicketWindow().provideCRMNewTicketInfo(crmTicketInfoForUpdating.get());
+    }
+
+    @When("^Cancel CRM editing$")
+    public void cancelCRMEditing(){
+        getAgentHomeForMainAgent().getEditCRMTicketWindow().clickCancel();
+    }
+
+    @When("^Save CRM ticket changings$")
+    public void saveCRMEditing(){
+        getAgentHomeForMainAgent().getEditCRMTicketWindow().saveChanges();
+    }
+
+    @Then("CRM ticket is not updated on back end")
+    public void verifyCRMTicketNotUpdated() {
+        SoftAssert soft = new SoftAssert();
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
+
+        soft.assertEquals(actualTicketInfoFromBackend.getCreatedDate().split(":")[0],
+                                createdCrmTicket.get().getCreatedDate().split(":")[0],
+                        "Ticket created date is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), createdCrmTicket.get().getTicketNumber(),
+                "Ticket Number is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(), createdCrmTicket.get().getAgentNote(),
+                " Ticket note is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getLink(), createdCrmTicket.get().getLink(),
+                " Ticket link is changed after canceling ticket editing \n");
+        soft.assertAll();
+    }
+
+    @Then("CRM ticket is updated on back end")
+    public void verifyCRMTicketUpdated() {
+        SoftAssert soft = new SoftAssert();
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
+        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
+        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
+
+
+        soft.assertEquals(createdDateFromBackend.toLowerCase(), createdDate.toLowerCase(),
+                "Ticket created date is changed after ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
+                "Ticket Number is not changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
+                " Ticket note is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
+                " Ticket link is changed after canceling ticket editing \n");
+        soft.assertAll();
+    }
+
+    @Then("^(.*) is redirected by CRM ticket URL$")
+    public void verifyUserRedirectedBlankPage(String agent){
+        String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+        }
+        Assert.assertEquals(pageUrl, "about:blank",
+                "Agent is not redirected by CRM tickets' url");
+    }
+
+    @Then("^(.*) is redirected to empty chatdesk page$")
+    public void verifyUserRedirectedEmptyChatdeskPage(String agent){
+        String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+            if (!winHandle.equals(currentWindow)) {
+                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+            }
+        }
+        Assert.assertTrue(pageUrl.contains("null")&pageUrl.contains("chatdesk"),
+                "Agent is not redirected by CRM tickets' url");
     }
 
     @Then("Correct ticket info is shown")
     public void verifyTicketInfoInActiveChat(){
         SoftAssert soft = new SoftAssert();
-        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicketInfoMap();
+        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
         String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
         soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
                 "Shown Ticket created date is not correct \n");
         soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
-                "Shown Ticket Number date is not correct \n");
+                "Shown Ticket Number is not correct \n");
         soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
-                "Shown Ticket note date is not correct \n");
+                "Shown Ticket note is not correct \n");
         soft.assertAll();
+    }
+
+    @Then("Ticket info is updated on chatdesk")
+    public void verifyTicketInfoUpdatedInActiveChat(){
+        SoftAssert soft = new SoftAssert();
+        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
+        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
+        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
+                "Shown Ticket created date is not correct \n");
+        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + crmTicketInfoForUpdating.get().get("ticketNumber"),
+                "Shown Ticket Number is not correct \n");
+        soft.assertEquals(actualInfo.get("note"), "Note: " + crmTicketInfoForUpdating.get().get("agentNote"),
+                "Shown Ticket note is not correct \n");
+        soft.assertAll();
+    }
+
+    private void formDataForCRMUpdating(){
+        Map<String, String> info = new HashMap<>();
+        info.put("agentNote", "Note for updating ticket");
+        info.put("link", "http://updateurl.com");
+        info.put("ticketNumber", "11111");
+        crmTicketInfoForUpdating.set(info);
     }
 
     private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){
@@ -706,5 +870,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
+    }
+
+    @Then("^CRM ticket is not created$")
+    public void crmTicketDidNotCreated() {
+        Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
     }
 }

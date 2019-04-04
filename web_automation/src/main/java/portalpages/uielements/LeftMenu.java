@@ -41,8 +41,7 @@ public class LeftMenu extends AbstractUIElement {
         }
 
         waitForElementToBeVisibleAgent(leftSubMenu, 10);
-        executeJSclick(submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get(),
-                DriverFactory.getAgentDriverInstance());
+       submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get().click();
     }
 
     public void navigateINLeftMenu(String menuItem){
