@@ -614,6 +614,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomeForMainAgent().getEditCRMTicketWindow().clickCancel();
     }
 
+    @When("^Save CRM ticket changings$")
+    public void saveCRMEditing(){
+        getAgentHomeForMainAgent().getEditCRMTicketWindow().saveChanges();
+    }
+
     @Then("CRM ticket is not updated on back end")
     public void verifyCRMTicketNotUpdated() {
         SoftAssert soft = new SoftAssert();
@@ -627,6 +632,25 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(), createdCrmTicket.get().getAgentNote(),
                 " Ticket note is changed after canceling ticket editing \n");
         soft.assertEquals(actualTicketInfoFromBackend.getLink(), createdCrmTicket.get().getLink(),
+                " Ticket link is changed after canceling ticket editing \n");
+        soft.assertAll();
+    }
+
+    @Then("CRM ticket is updated on back end")
+    public void verifyCRMTicketUpdated() {
+        SoftAssert soft = new SoftAssert();
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
+        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
+        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
+
+
+        soft.assertEquals(createdDateFromBackend.toLowerCase(), createdDate.toLowerCase(),
+                "Ticket created date is changed after ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
+                "Ticket Number is not changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
+                " Ticket note is changed after canceling ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
                 " Ticket link is changed after canceling ticket editing \n");
         soft.assertAll();
     }
@@ -667,6 +691,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
                 "Shown Ticket Number is not correct \n");
         soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
+                "Shown Ticket note is not correct \n");
+        soft.assertAll();
+    }
+
+    @Then("Ticket info is updated on chatdesk")
+    public void verifyTicketInfoUpdatedInActiveChat(){
+        SoftAssert soft = new SoftAssert();
+        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
+        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
+        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
+                "Shown Ticket created date is not correct \n");
+        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + crmTicketInfoForUpdating.get().get("ticketNumber"),
+                "Shown Ticket Number is not correct \n");
+        soft.assertEquals(actualInfo.get("note"), "Note: " + crmTicketInfoForUpdating.get().get("agentNote"),
                 "Shown Ticket note is not correct \n");
         soft.assertAll();
     }

@@ -15,7 +15,7 @@ public class EditCRMTicketWindow extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='Cancel']")
     private WebElement cancelButton;
 
-    @FindBy(xpath = ".//button[text()='Edit ticket']")
+    @FindBy(xpath = ".//button[@type='submit']")
     private WebElement edidTicketButton;
 
     @FindBy(css = "textarea#CRMNote")

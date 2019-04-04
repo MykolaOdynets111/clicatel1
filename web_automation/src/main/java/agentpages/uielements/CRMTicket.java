@@ -41,6 +41,10 @@ public class CRMTicket extends Widget implements WebActions {
         return infoMap;
     }
 
+    public String getCreatedDate(){
+        return crmCreatedDate.getText();
+    }
+
     public void clickTicketNumber(){
         clickElemAgent(crmNumber, 3, "main", "CRM ticket number");
     }
