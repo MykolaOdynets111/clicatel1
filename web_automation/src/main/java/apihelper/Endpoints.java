@@ -150,7 +150,7 @@ public class Endpoints {
 
     public static String TIE_USER_INPUT = URLs.getBaseTieURL() + "%s/user_inputs/";
 
-    public static String TIE_NEW_INTENT_MANAGEMENT = URLs.getBaseTieURL() + "%s/answers-management/";
+    public static String TIE_NEW_INTENT_MANAGEMENT = URLs.getBaseTieURL() + "%s/intents-management/";
 
     public static String TIE_SAMPLES = URLs.getBaseTieURL() + "%s/train-data-management/";
 
