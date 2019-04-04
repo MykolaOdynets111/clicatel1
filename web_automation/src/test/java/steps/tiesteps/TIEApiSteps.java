@@ -944,7 +944,7 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @When("^New intent is created$")
     public void verifyNewIntentAdding(){
-        waitFor(1000);
+        waitFor(500);
         List<String> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("");
         Assert.assertTrue(allIntents.contains(mapForCreatedIntent.get("intent").toString()),
                 "Created '"+ mapForCreatedIntent.get("intent")+"'intent is not returned");
@@ -992,7 +992,7 @@ public class TIEApiSteps implements DateTimeHelper{
     public void getModels(int minutes){
         int numberOfModelsBeforeTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
         Response resp = ApiHelperTie.getTrainings();
-        int timeout = (minutes*60)/18 - 1;
+        int timeout = (minutes*60)/18/2;
         for(int i = 0; i < timeout; i++){
             if(!(resp.getBody().jsonPath().get("train").equals("finished"))){
                 waitFor(18000);
