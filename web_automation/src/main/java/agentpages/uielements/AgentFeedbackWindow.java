@@ -51,6 +51,16 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
     }
 
+    public void clickCloseСhat() {
+        clickElemAgent(closeChatButton, 5, "main agent", "Close сhat button" );
+        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
+    }
+
+    public void clickSkip() {
+        clickElemAgent(skipButton, 5, "main agent", "Skip button" );
+        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
+    }
+
     public void clickCloseButtonInCloseChatPopup (){
         if( isElementShownAgentByXpath(closeChatButtonXPATH, 3, "main")){
             waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");

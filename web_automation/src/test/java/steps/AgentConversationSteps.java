@@ -222,6 +222,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent click \"End chat\" button$")
     public void clickEndChatButton(){
+
         getAgentHomePage().getChatHeader().clickEndChatButton();
     }
 
@@ -234,6 +235,24 @@ public class AgentConversationSteps implements JSHelper{
     @When("^Agent click 'Close chat' button$")
     public void clickCloseChatButton(){
         getAgentHomePage().getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+    }
+
+//    @When("(.*) click 'Close chat' button$")
+//    public void agentClickCloseСhatButton(String agent) {
+//        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseСhat();
+//    }
+
+    @When("(.*) click 'Skip' button$")
+    public void agentClickSkipButton(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickSkip();
+    }
+
+
+    @When("(.*) fills form$")
+    public void agentFillsForm(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note text field");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("Note text Link");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
     }
 
     @When("(.*) closes chat")
