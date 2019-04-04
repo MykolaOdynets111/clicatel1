@@ -804,4 +804,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
     }
+
+    @Then("^CRM ticket did not created$")
+    public void crmTicketDidNotCreated() {
+        Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
+    }
 }
