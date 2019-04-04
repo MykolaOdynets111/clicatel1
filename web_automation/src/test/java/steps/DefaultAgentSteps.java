@@ -49,7 +49,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-    private static ThreadLocal<Map<String, String>> crmTicketInfoForCreating = new ThreadLocal<>();
+    private static ThreadLocal<Map<String, String>> crmTicketInfoForCreatingViaAPI = new ThreadLocal<>();
     private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
 
@@ -564,7 +564,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         dataForNewCRMTicket.put("link", "about:blank");
         dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
         dataForNewCRMTicket.put("agentNote", "Note from automation test)");
-        crmTicketInfoForCreating.set(dataForNewCRMTicket);
+        crmTicketInfoForCreatingViaAPI.set(dataForNewCRMTicket);
         if(urlStatus.toLowerCase().contains("without url")) dataForNewCRMTicket.remove("link");
         return dataForNewCRMTicket;
     }
