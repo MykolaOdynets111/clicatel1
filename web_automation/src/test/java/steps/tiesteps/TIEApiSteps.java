@@ -945,8 +945,10 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^New intent is created$")
     public void verifyNewIntentAdding(){
         waitFor(500);
-        List<String> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("");
-        Assert.assertTrue(allIntents.contains(mapForCreatedIntent.get("intent").toString()),
+        List<datamanager.jacksonschemas.tie.Intent> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("",
+                datamanager.jacksonschemas.tie.Intent.class);
+        Assert.assertTrue(allIntents.stream().anyMatch(e -> e.getIntent()
+                        .equals(mapForCreatedIntent.get("intent").toString())),
                 "Created '"+ mapForCreatedIntent.get("intent")+"'intent is not returned");
     }
 
