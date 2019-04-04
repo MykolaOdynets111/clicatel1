@@ -16,7 +16,7 @@ Feature: Canceling chat ending
     Then End chat popup should be opened
     When Agent click 'Cancel' button
     Then Conversation area contains connect to Support user's message
-    Then CRM ticket did not created
+    Then CRM ticket is not created
     When Agent sends a new message What do you want? to User
     Then Text response that contains "What do you want?" is shown
 
