@@ -65,6 +65,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
+    private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
     private EditCRMTicketWindow editCRMTicketWindow;
     private CRMTicketContainer crmTicketContainer;
     private LeftMenuWithChats leftMenuWithChats;
@@ -82,6 +83,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public AgentHomePage(String agent) {
         super(agent);
+    }
+
+    public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
+        return deleteCRMConfirmationPopup;
     }
 
     public EditCRMTicketWindow getEditCRMTicketWindow() {

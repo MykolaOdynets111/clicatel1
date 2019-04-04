@@ -150,6 +150,15 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementNotShownAgentByCSS(String css, int wait){
+        try {
+            waitForElementToBeInVisibleByCssAgent(css, wait);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShownAgentByCSS(String css, int wait, String agent){
         try {
             waitForElementToBeVisibleByCssAgent(css, wait);
@@ -178,6 +187,15 @@ public interface WebActions extends WebWait {
             } catch(NoSuchElementException e1) {
                 return true;
             }
+        }
+    }
+
+    default boolean isElementNotShownAgent(WebElement element, int wait){
+        try {
+            waitForElementToBeInvisibleAgent(element, wait);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
         }
     }
 

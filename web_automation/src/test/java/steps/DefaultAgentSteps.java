@@ -80,7 +80,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+//        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
 //        ApiHelper.closeActiveChats();
@@ -570,13 +570,19 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
     @Then("New CRM ticket is shown")
-    public void verifyCRMTicketIsSown(){
+    public void verifyCRMTicketIsShown(){
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getContainerHeader(), "Notes",
                 "CRM tickets section header is not 'Notes'");
         soft.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
-                "CRM ticket container is not shown");
+                "CRM ticket is not shown");
         soft.assertAll();
+    }
+
+    @Then("New CRM ticket is not shown")
+    public void verifyCRMTicketIsNotShown(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerRemoved(),
+                "CRM ticket is still shown");
     }
 
     @When("^I click CRM ticket number URL$")
@@ -596,6 +602,29 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void clickEditCRMTicketButton(String agent){
         getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickEditButton();
     }
+
+    @When("^(.*) click 'Delete' button for CRM ticket$")
+    public void clickDeleteCRMTicketButton(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
+    }
+
+
+    @Then("^Confirmation deleting popup is shown$")
+    public void verifyDeletingCRMTicketPopupShown(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getDeleteCRMConfirmationPopup().isOpened(),
+                "CRM ticket deleting confirmation popup is not shown");
+    }
+
+    @When("^(.*) click 'Cancel' button' in CRM deleting popup$")
+    public void cancelCRMDeleting(String agent){
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickCancel();
+    }
+
+    @When("^(.*) click 'Delete' button' in CRM deleting popup$")
+    public void deleteCRMTicket(String agent){
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
+    }
+
 
     @Then("^'Edit ticket' window is opened$")
     public void verifyEditWindowOpened(){

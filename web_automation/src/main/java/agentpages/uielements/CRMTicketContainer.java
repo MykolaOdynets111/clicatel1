@@ -17,7 +17,11 @@ public class CRMTicketContainer extends AbstractUIElement {
     private WebElement containerHeader;
 
     public boolean isTicketContainerShown(){
-        return isElementShown(this.getWrappedElement(), 4);
+        return isElementShownAgent(this.getWrappedElement(), 4);
+    }
+
+    public boolean isTicketContainerRemoved(){
+        return isElementNotShownAgentByCSS( "div.user-tickets-container", 4);
     }
 
     public CRMTicket getFirstTicket(){

@@ -1,4 +1,3 @@
-@skip_for_demo1
 @agent_mode
 Feature: Chat handling in out of support hours for for Bot mode tenant
 
