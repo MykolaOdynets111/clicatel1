@@ -569,6 +569,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return dataForNewCRMTicket;
     }
 
+    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber){
+        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
+                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        Map<String, String> dataForNewCRMTicket = new HashMap<>();
+        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
+        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
+        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
+        dataForNewCRMTicket.put("agentNote", agentNote);
+        dataForNewCRMTicket.put("link", link);
+        dataForNewCRMTicket.put("ticketNumber", ticketNumber);
+        crmTicketInfoForUpdating.set(dataForNewCRMTicket);
+        return dataForNewCRMTicket;
+    }
+
     @Then("New CRM ticket is shown")
     public void verifyCRMTicketIsShown(){
         SoftAssert soft = new SoftAssert();
@@ -875,5 +889,41 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^CRM ticket is not created$")
     public void crmTicketDidNotCreated() {
         Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
+    }
+
+    @Then("(.*)type Note:'(.*)', Link:'(.*)', Number:'(.*)' for CRM ticket$")
+    public void agentCreateCRMTicket(String agent,String note, String link, String number) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note);
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink(link);
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber(number);
+        prepareDataForCrmTicketChatdesk(note,link, number);
+    }
+
+    @Then("(.*) create CRM ticket$")
+    public void agentCreateCRMTicket(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note from automation test)");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("Note text Link");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
+        prepareDataForCrmTicketChatdesk("Note from automation test)","Note text Link", "12345");
+    }
+
+    @Then("^CRM ticket is created on backend with correct information$")
+    public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
+        SoftAssert soft = new SoftAssert();
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
+        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
+//        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
+//
+//
+//        soft.assertEquals(createdDateFromBackend.toLowerCase(), createdDate.toLowerCase(),
+//                "Ticket created date is changed after ticket editing \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
+                "Ticket Number does not match created on the backend  \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
+                " Ticket note does not match created on the backend \n");
+        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
+                " Ticket link does not match created on the backend \n");
+        soft.assertAll();
+
     }
 }
