@@ -1,13 +1,13 @@
 @agent_feedback
-Feature: Interaction with 'Skip' button on chatdesk
+Feature: Interaction with 'Skip' button on Agent Feedback window
 
   Background:
-    Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
+    Given User select Automation Bot tenant
+    Given I login as agent of Automation Bot
     And Click chat icon
 
   Scenario: Verify if agent is able to 'Close chat' in end-chat pop-up in chat desk, no CRM ticket if nothing typed
-    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
+    Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
@@ -17,10 +17,10 @@ Feature: Interaction with 'Skip' button on chatdesk
     When Agent click 'Skip' button
     Then Agent should not see from user chat in agent desk
     Then User have to receive 'exit' text response for his 'connect to Support' input
-    Then CRM ticket did not created
+    Then CRM ticket is not created
 
   Scenario: Verify if agent is able to 'Close chat' in end-chat pop-up in chat desk, no CRM ticket if nothing typed
-    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
+    Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
@@ -31,7 +31,7 @@ Feature: Interaction with 'Skip' button on chatdesk
     When Agent click 'Skip' button
     Then Agent should not see from user chat in agent desk
     Then User have to receive 'exit' text response for his 'connect to Support' input
-    Then CRM ticket did not created
+    Then CRM ticket is not created
 
 
 
