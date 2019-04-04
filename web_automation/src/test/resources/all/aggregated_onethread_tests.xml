@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Chatdesk tests" parallel="tests" thread-count="3" >
+<suite name="Chatdesk tests" parallel="tests" thread-count="4" >
     <test name="User to Agent conversation (General Bank Demo tenant)">
         <classes>
             <class name="runner.generalbank.RunGenBankAgentTest" />
@@ -15,6 +15,11 @@
     <test name="User to Agent conversation (Automation Bot tenant)">
         <classes>
             <class name="runner.automationbot.RunChatdeskTest" />
+        </classes>
+    </test>
+    <test name="TIE training new intent test">
+        <classes>
+            <class name="runner.RunTIETrainingManagement" />
         </classes>
     </test>
 </suite>

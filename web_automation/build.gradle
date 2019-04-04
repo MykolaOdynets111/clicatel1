@@ -96,6 +96,7 @@ task runTieTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath+tenantName+"/tie.xml"
+        suites baseXmlPath+tenantName+"/tietraining.xml"
     }
 }
 

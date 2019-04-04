@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TIE Training" >
+    <test name="TIE Training test">
+        <classes>
+            <class name="runner.RunTIETrainingManagement" />
+        </classes>
+    </test>
+</suite>

@@ -5,7 +5,6 @@
             <class name="runner.generalbank.RunTIETest" />
             <class name="runner.virginmoney.RunTIETest" />
             <class name="runner.generalbank.RunTIEOneThreadTest" />
-            <class name="runner.RunTIETrainingManagement" />
         </classes>
     </test>
 </suite>
