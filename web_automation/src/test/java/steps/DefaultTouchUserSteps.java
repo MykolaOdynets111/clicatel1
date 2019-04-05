@@ -92,7 +92,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);}
 
     private String getClientWithHistory(){
-        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 1, 100);
+        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 1, 160);
 
         if(resp.statusCode()!=200){
             Assert.assertTrue(false, "Getting finished chats was not successful\n" +
