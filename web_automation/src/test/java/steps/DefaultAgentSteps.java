@@ -85,10 +85,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-//        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
-//        ApiHelper.closeActiveChats();
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }
 
@@ -910,7 +909,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String integrationType = "";
         switch (clientFrom){
             case "fb dm":
-                Map chatInfo = (Map) ApiHelper.getActiveChatByAgent().getBody().jsonPath().getList("content")
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent().getBody().jsonPath().getList("content")
                                         .stream()
                                         .filter(e -> ((Map)
                                                             ((Map) e).get("client")

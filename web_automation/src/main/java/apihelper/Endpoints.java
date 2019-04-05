@@ -46,7 +46,8 @@ public class Endpoints {
 
     public static String ACTIVE_CHATS_BY_AGENT = "https://%s-touch.clickatelllabs.com/chats/active-by-agent?page=0&size=10";
 
-    public static String CLOSE_ACTIVE_CHAT = URLs.getTouchApiBaseURL() +  "chats/close-conversation/";
+    public static String CLOSE_ACTIVE_CHAT = "https://%s-touch.clickatelllabs.com/chats/%s/end";
+
 
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
