@@ -41,6 +41,14 @@ public class CRMTicket extends Widget implements WebActions {
         return infoMap;
     }
 
+
+    public Map<String, String> getTicketInfoExceptDate(){
+        Map<String, String> infoMap = new HashMap<>();
+        infoMap.put("note", crmNote.getAttribute("innerText"));
+        infoMap.put("number", crmNumber.getAttribute("innerText"));
+        return infoMap;
+    }
+
     public String getCreatedDate(){
         return crmCreatedDate.getText();
     }

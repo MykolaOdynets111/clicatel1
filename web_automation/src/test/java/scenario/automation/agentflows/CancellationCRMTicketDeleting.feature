@@ -9,11 +9,11 @@ Feature: Verification cancellation of CRM ticket deleting
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     And Agent click on new conversation
-    Then New CRM ticket is shown
+    Then Container with new CRM ticket is shown
     When Agent click 'Delete' button for CRM ticket
     Then Confirmation deleting popup is shown
     When Agent click 'Cancel' button' in CRM deleting popup
-    Then New CRM ticket is shown
+    Then Container with new CRM ticket is shown
 
 
 
