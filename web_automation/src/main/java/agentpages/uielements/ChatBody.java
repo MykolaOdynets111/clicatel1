@@ -117,7 +117,7 @@ public class ChatBody extends AbstractUIElement {
             }
             if (agentInitials.size() > 1) {
                 messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
-                        .map(e -> e.replace(agentInitials.get(1), ""))
+                        .map(e -> e.replace(agentInitials.get(1), "").trim())
                         .collect(Collectors.toList());
             }
         }
