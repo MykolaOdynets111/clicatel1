@@ -63,14 +63,6 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public boolean isOvernightTicketRemoved(){
-        for(int i = 0; i<10; i++){
-            try{
-                if(isElementExistsInDOMAgentCss(overnightTicketIcon, 1, "main")) waitFor(1000);
-            }catch (NoSuchElementException e){
-                return true;
-            }
-        }
-        return false;
-
+        return isElementNotShownAgentByCSS(overnightTicketIcon, 9);
     }
 }
