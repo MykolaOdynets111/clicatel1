@@ -992,13 +992,27 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @Then("^New model is ready after (.*) minutes wait$")
     public void getModels(int minutes){
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+
+        String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
+                .filter(e ->        convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                        >
+                        convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
+                .findFirst().get();
+
+
         int numberOfModelsBeforeTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
-        Response resp = ApiHelperTie.getTrainings();
+        boolean isTrained = false;
+
         int timeout = (minutes*60)/18/2;
         for(int i = 0; i < timeout; i++){
-            if(!(resp.getBody().jsonPath().get("train").equals("finished"))){
+            if(!isTrained){
                 waitFor(18000);
-                resp = ApiHelperTie.getTrainings();
+                isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                        .stream().map(e -> (Map) e)
+                        .filter(e -> e.get("name").equals(model))
+                        .allMatch(e -> e.get("status").equals("finished"));
             } else{
                 break;
             }
