@@ -19,7 +19,7 @@ Feature: Interaction with 'Skip' button on Agent Feedback window
     Then User have to receive 'exit' text response for his 'connect to Support' input
     Then CRM ticket is not created
 
-  Scenario: Verify if agent is able to 'Close chat' in end-chat pop-up in chat desk, no CRM ticket if nothing typed
+  Scenario: Verify if agent is able to 'Close chat' in end-chat pop-up in chat desk
     Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
