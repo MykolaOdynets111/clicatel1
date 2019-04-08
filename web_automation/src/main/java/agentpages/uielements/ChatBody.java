@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import drivermanager.DriverFactory;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,7 +20,7 @@ public class ChatBody extends AbstractUIElement {
 
     private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li";
 
-    private String toUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
+    private String toUserMessagesCSS = "li.to";
 
     private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
 
@@ -96,7 +97,8 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isToUserMessageShown(String userMessage){
-        return toUserMessages.stream().anyMatch(e -> e.getText().contains(userMessage));
+        return findElemsByCSSAgent(toUserMessagesCSS).
+                                    stream().anyMatch(e -> e.getText().contains(userMessage));
     }
 
     public List<String> getAllMessages(){
