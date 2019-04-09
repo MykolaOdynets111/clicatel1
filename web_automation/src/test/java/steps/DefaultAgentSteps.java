@@ -600,6 +600,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         dataForNewCRMTicket.put("agentNote", agentNote);
         dataForNewCRMTicket.put("link", link);
         dataForNewCRMTicket.put("ticketNumber", ticketNumber);
+        dataForNewCRMTicket.put("date", LocalDateTime.now().toString());
         crmTicketInfoForUpdating.set(dataForNewCRMTicket);
         return dataForNewCRMTicket;
     }
@@ -977,12 +978,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
         SoftAssert soft = new SoftAssert();
         CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-//        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
-//        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
-//
-//
-//        soft.assertEquals(createdDateFromBackend.toLowerCase(), createdDate.toLowerCase(),
-//                "Ticket created date is changed after ticket editing \n");
+        String createdDate = crmTicketInfoForUpdating.get().get("date");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+
+        soft.assertEquals(dateTimeFromBackend.toString().substring(0, 16), createdDate.substring(0, 16),
+                "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");
         soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
