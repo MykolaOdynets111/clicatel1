@@ -8,6 +8,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.CRMTicket;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import drivermanager.URLs;
@@ -247,8 +248,13 @@ public class Hooks implements JSHelper{
                 }catch(NullPointerException e){
                     //no feature status interaction
                 }
-                if(!(DefaultAgentSteps.getCreatedCRMTicket()==null)){
+                if(DefaultAgentSteps.getCreatedCRMTicket()!=null){
                     ApiHelper.deleteCRMTicket(DefaultAgentSteps.getCreatedCRMTicket().getId());
+                }
+                if(DefaultAgentSteps.getCreatedCRMTicketsList()!=null){
+                    for(CRMTicket ticket: DefaultAgentSteps.getCreatedCRMTicketsList()){
+                        ApiHelper.deleteCRMTicket(ticket.getId());
+                    }
                 }
             }
 
@@ -301,7 +307,7 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            agentHomePage.endChat();
+            ApiHelper.closeActiveChats();
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);

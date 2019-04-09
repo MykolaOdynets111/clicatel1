@@ -9,7 +9,7 @@ Feature: Verification CRM ticket editing
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     And Agent click on new conversation
-    Then New CRM ticket is shown
+    Then Container with new CRM ticket is shown
     When Agent click 'Edit' button for CRM ticket
     Then 'Edit ticket' window is opened
     When I fill in the form with new CRM ticket info
@@ -25,7 +25,7 @@ Feature: Verification CRM ticket editing
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     And Agent click on new conversation
-    Then New CRM ticket is shown
+    Then Container with new CRM ticket is shown
     When Agent click 'Edit' button for CRM ticket
     Then 'Edit ticket' window is opened
     When Agent fill in the form with new CRM ticket info

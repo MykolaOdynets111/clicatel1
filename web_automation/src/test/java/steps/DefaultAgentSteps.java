@@ -52,6 +52,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private static ThreadLocal<Map<String, String>> crmTicketInfoForCreatingViaAPI = new ThreadLocal<>();
     private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
+    private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
+
+    public static List<CRMTicket> getCreatedCRMTicketsList(){
+        return createdCrmTicketsList.get();
+    }
 
     public static CRMTicket getCreatedCRMTicket(){
         return createdCrmTicket.get();
@@ -80,10 +85,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-//        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
-//        ApiHelper.closeActiveChats();
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
     }
 
@@ -544,7 +548,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
     @Given("CRM ticket (.*) is created")
-    public void createCRMTicketsViaAPI(String urlStatus){
+    public void createCRMTicketViaAPI(String urlStatus){
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
                                                                 (ConfigManager.getEnv(), getUserNameFromLocalStorage());
         Map<String, String> dataForNewCRMTicket = prepareDataForCrmTicket(sessionDetails, urlStatus);
@@ -556,6 +560,22 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                                 "rest body: " +resp.getBody().asString());
     }
 
+    @Given("(.*) CRM tickets are created")
+    public void createCRMTicketsViaAPI(int ticketsNumber){
+        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
+                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        List<CRMTicket> createdCRMTicket = new ArrayList<>();
+        for(int i = 0; i < ticketsNumber; i++) {
+            Map<String, String> dataForNewCRMTicket = prepareDataForCrmTicket(sessionDetails, "with url");
+
+            Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
+            createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
+        }
+        createdCrmTicketsList.set(createdCRMTicket);
+        Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), ticketsNumber,
+                "Not all tickets where successfully created");
+    }
+
     private Map<String, String> prepareDataForCrmTicket( Map<String, String>  sessionDetails, String urlStatus){
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
         dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
@@ -563,7 +583,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
         dataForNewCRMTicket.put("link", "about:blank");
         dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
-        dataForNewCRMTicket.put("agentNote", "Note from automation test)");
+        dataForNewCRMTicket.put("agentNote", "AQA_note " + faker.book().title());
         crmTicketInfoForCreatingViaAPI.set(dataForNewCRMTicket);
         if(urlStatus.toLowerCase().contains("without url")) dataForNewCRMTicket.remove("link");
         return dataForNewCRMTicket;
@@ -583,7 +603,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return dataForNewCRMTicket;
     }
 
-    @Then("New CRM ticket is shown")
+    @Then("Container with new CRM (?:ticket|tickets) is shown")
     public void verifyCRMTicketIsShown(){
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getContainerHeader(), "Notes",
@@ -591,6 +611,44 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
                 "CRM ticket is not shown");
         soft.assertAll();
+    }
+
+    @Then("^Agent sees (.*) CRM tickets$")
+    public void verifyTicketsNumber(int expectedNumber){
+        Assert.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets(), expectedNumber,
+                "Shown tickets number is not as expected");
+    }
+
+    @Then("^Tickets number is reduced to (.*)$")
+    public void verifyTicketsNumberReduced(int expectedNumber){
+        boolean isReduced = false;
+        for(int i =0; i < 6; i++){
+            if(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets() == expectedNumber) {
+                isReduced = true;
+                break;
+            }
+            else getAgentHomeForMainAgent().waitFor(200);
+        }
+        Assert.assertTrue(isReduced, "Shown tickets number is not as expected");
+    }
+
+
+    @Then("Tickets are correctly sorted")
+    public void verifyTicketsSorting(){
+        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer().getAllTicketsInfoExceptDate();
+        List<CRMTicket> createdTickets = getCreatedCRMTicketsList();
+
+        Collections.reverse(createdTickets);
+        List<Map<String, String>> expectedTickets = new ArrayList<>();
+
+        for (CRMTicket ticket : createdTickets){
+            expectedTickets.add(new HashMap<String, String>(){{
+                put("note", "Note: " + ticket.getAgentNote());
+                put("number", "Ticket Number: " + ticket.getTicketNumber());
+            }});
+        }
+        Assert.assertEquals(actualTickets, expectedTickets,
+                "Tickets order is not as Expected");
     }
 
     @Then("New CRM ticket is not shown")
@@ -615,6 +673,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @When("^(.*) click 'Edit' button for CRM ticket$")
     public void clickEditCRMTicketButton(String agent){
         getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickEditButton();
+    }
+
+    @When("^(.*) deletes first ticket$")
+    public void deleteFirstTicket(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
     }
 
     @When("^(.*) click 'Delete' button for CRM ticket$")
@@ -859,7 +923,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String integrationType = "";
         switch (clientFrom){
             case "fb dm":
-                Map chatInfo = (Map) ApiHelper.getActiveChatByAgent().getBody().jsonPath().getList("content")
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent().getBody().jsonPath().getList("content")
                                         .stream()
                                         .filter(e -> ((Map)
                                                             ((Map) e).get("client")
@@ -891,7 +955,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
     }
 
-    @Then("(.*)type Note:'(.*)', Link:'(.*)', Number:'(.*)' for CRM ticket$")
+    @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note);
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink(link);
@@ -911,7 +975,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
         SoftAssert soft = new SoftAssert();
         CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
+//        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
 //        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
 //
 //

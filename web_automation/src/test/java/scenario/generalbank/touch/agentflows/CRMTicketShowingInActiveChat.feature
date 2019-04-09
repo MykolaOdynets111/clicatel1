@@ -9,7 +9,7 @@ Feature: Verification that CRM ticket is shown in active chat
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     And Agent click on new conversation
-    Then New CRM ticket is shown
+    Then Container with new CRM ticket is shown
     And Correct ticket info is shown
     When I click CRM ticket number URL
     Then Agent is redirected by CRM ticket URL
@@ -22,7 +22,7 @@ Feature: Verification that CRM ticket is shown in active chat
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     And Agent click on new conversation
-    Then New CRM ticket is shown
+    Then Container with new CRM ticket is shown
     When I click CRM ticket number URL
     Then Agent is redirected to empty chatdesk page
 

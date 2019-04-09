@@ -214,10 +214,17 @@ public class ApiHelperTie {
 
 
     public static Response getTrainings(){
-        return RestAssured.given()
+        Response resp =  RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
+        if(resp.statusCode()!=200){
+            Assert.assertTrue(false, "Getting tie training was not successful\n"+
+            "Resp code: " + resp.statusCode() + "\n" +
+            "Resp body: " + resp.getBody().asString() + "\n" +
+            "Resp URL: " + String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
+        }
+        return resp;
     }
 
 
