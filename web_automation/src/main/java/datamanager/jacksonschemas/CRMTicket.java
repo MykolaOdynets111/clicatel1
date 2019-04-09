@@ -140,4 +140,18 @@ public class CRMTicket {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "CRMTicket{" +
+                "id='" + id + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", modifiedDate='" + modifiedDate + '\'' +
+                ", clientProfileId='" + clientProfileId + '\'' +
+                ", conversationId='" + conversationId + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", link='" + link + '\'' +
+                ", ticketNumber='" + ticketNumber + '\'' +
+                ", agentNote='" + agentNote + '\'' +
+                "}\n";
+    }
 }

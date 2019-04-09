@@ -570,6 +570,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
             Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
             createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
+            getAgentHomeForMainAgent().waitFor(400);
         }
         createdCrmTicketsList.set(createdCRMTicket);
         Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), ticketsNumber,
@@ -634,7 +635,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
             }});
         }
         Assert.assertEquals(actualTickets, expectedTickets,
-                "Tickets order is not as Expected");
+                "Tickets order is not as Expected\n" +
+        "Created tickets: " + createdTickets.toString());
     }
 
     @Then("New CRM ticket is not shown")
