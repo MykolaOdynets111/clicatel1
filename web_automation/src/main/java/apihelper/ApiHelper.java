@@ -439,7 +439,7 @@ public class ApiHelper {
         for(OvernightTicket ticket : allTicketsByStatus){
             RestAssured.given()
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                    .post(Endpoints.PROCESS_OVERNIGHT_TICKET + ticket.getId());
+                    .post(String.format(Endpoints.PROCESS_OVERNIGHT_TICKET, ticket.getId()));
         }
     }
 

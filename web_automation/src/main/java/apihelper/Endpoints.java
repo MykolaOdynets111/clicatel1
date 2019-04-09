@@ -34,7 +34,7 @@ public class Endpoints {
 
     public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
 
-    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/";
+    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/%s?state=PROCESSED";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
