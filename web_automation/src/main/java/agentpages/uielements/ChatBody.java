@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import drivermanager.DriverFactory;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,7 +17,7 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
 
-    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li";
+    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[not(@class='empty')]";
 
     private String toUserMessagesCSS = "li.to";
 
@@ -35,7 +34,7 @@ public class ChatBody extends AbstractUIElement {
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
-            AgentDeskFromUserMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskFromUserMessage(e))
+            AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e))
                     .filter(e1 -> e1.getMessageText().equals(messageText))
                     .findFirst().get();
             return theMessage.getWrappedElement();
@@ -80,7 +79,7 @@ public class ChatBody extends AbstractUIElement {
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
         return findElemsByXPATHAgent(fromUserMessagesXPATH).stream()
-                .map(AgentDeskFromUserMessage::new)
+                .map(AgentDeskChatMessage::new)
                 .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }
 
@@ -93,7 +92,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isResponseOnUserMessageShown(String userMessage) {
-        return new AgentDeskToUserMessage(getFromUserWebElement(userMessage)).isTextResponseShown(5);
+        return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).isTextResponseShown(5);
     }
 
     public boolean isToUserMessageShown(String userMessage){
@@ -102,27 +101,10 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
-        List<String> messages = findElemsByXPATHAgent(messagesInChatBodyXPATH)
-                                            .stream()
-                                            .map(e -> e.getAttribute("innerText").replace("\n", " ").trim())
-                                            .filter(e -> !e.equals(""))
-                                            .collect(Collectors.toList());
-
-        if(isElementShownAgent(agentIconWIthInitials)) {
-            List<String> agentInitials = findElemsByCSSAgent(agentIconWIthInitialsCSS)
-                    .stream()
-                    .map(e -> e.getAttribute("innerText")).distinct()
+        return findElemsByXPATHAgent(messagesInChatBodyXPATH)
+                    .stream().map(e -> new AgentDeskChatMessage(e))
+                    .map(e -> e.getMessageInfo())
                     .collect(Collectors.toList());
-            if (agentInitials.size() == 1) {
-                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
-                        .collect(Collectors.toList());
-            }
-            if (agentInitials.size() > 1) {
-                messages = messages.stream().map(e -> e.replace(agentInitials.get(0), "").trim())
-                        .map(e -> e.replace(agentInitials.get(1), "").trim())
-                        .collect(Collectors.toList());
-            }
-        }
-        return messages;
+
     }
 }
