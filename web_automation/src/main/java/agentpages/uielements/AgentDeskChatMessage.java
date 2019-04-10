@@ -11,6 +11,9 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AgentDeskChatMessage extends Widget implements WebActions {
 
+    @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
+    private WebElement toUserTextResponse;
+
     @FindBy(css = "span.text-parsed-by-emoji")
     private WebElement messageText;
 
@@ -53,4 +56,14 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
             return getMessageText() + " " + getMessageTime();
         }
     }
+
+    public boolean isToUserTextResponseShown(int wait) {
+        try {
+            waitForElementToBeVisible(toUserTextResponse, wait);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
 }
