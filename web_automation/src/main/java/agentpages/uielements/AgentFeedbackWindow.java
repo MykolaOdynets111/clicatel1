@@ -72,16 +72,25 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         return isElementShownAgent(closeChatButton,12);
     }
 
-    public void typeCRMNoteTextField(String msg) {
-        inputTextAgent(crmNoteTextField, 5,"main agent", "Note", msg);
+    public AgentFeedbackWindow typeCRMNoteTextField(String msg) {
+        if (!msg.equals(null) || !msg.equals("")) {
+            inputTextAgent(crmNoteTextField, 5, "main agent", "Note", msg);
+        }
+        return this;
     }
 
-    public void typeCRMLink(String msg) {
-        inputTextAgent(crmLink,5 , "main agent", "Note link", msg);
+    public AgentFeedbackWindow typeCRMLink(String msg) {
+        if (!msg.equals(null) || !msg.equals("")) {
+            inputTextAgent(crmLink, 5, "main agent", "Note link", msg);
+        }
+        return this;
     }
 
-    public void typeCRMTicketNumber(String msg) {
-        inputTextAgent(crmTicketNumber, 5, "main agent", "Note number", msg);
+    public AgentFeedbackWindow typeCRMTicketNumber(String msg) {
+        if (!msg.equals(null) || !msg.equals("")) {
+            inputTextAgent(crmTicketNumber, 5, "main agent", "Note number", msg);
+        }
+        return this;
     }
 
     public void setSentimentUnsatisfied() {

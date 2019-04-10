@@ -961,19 +961,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note);
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink(link);
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber(number);
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note)
+                                                        .typeCRMLink(link)
+                                                        .typeCRMTicketNumber(number);
         prepareDataForCrmTicketChatdesk(note,link, number);
     }
 
-    @Then("(.*) create CRM ticket$")
-    public void agentCreateCRMTicket(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note from automation test)");
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("Note text Link");
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
-        prepareDataForCrmTicketChatdesk("Note from automation test)","Note text Link", "12345");
-    }
 
     @Then("^CRM ticket is created on backend with correct information$")
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
