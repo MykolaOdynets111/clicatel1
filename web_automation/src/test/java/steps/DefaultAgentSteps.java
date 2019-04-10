@@ -651,8 +651,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         Assert.assertEquals(actualTickets, expectedTickets,
                 "Tickets order is not as Expected\n" +
-        "Created tickets: " + createdTickets.toString() + "\n" +
-"Expected list" + expectedTickets        );
+        "Created tickets: " + createdTickets.toString() + "\n\n" +
+        "Expected list" + expectedTickets        );
     }
 
     @Then("New CRM ticket is not shown")
