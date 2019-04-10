@@ -34,7 +34,7 @@ public class Endpoints {
 
     public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
 
-    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/";
+    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/%s?state=PROCESSED";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
@@ -46,7 +46,8 @@ public class Endpoints {
 
     public static String ACTIVE_CHATS_BY_AGENT = "https://%s-touch.clickatelllabs.com/chats/active-by-agent?page=0&size=10";
 
-    public static String CLOSE_ACTIVE_CHAT = URLs.getTouchApiBaseURL() +  "chats/close-conversation/";
+    public static String CLOSE_ACTIVE_CHAT = "https://%s-touch.clickatelllabs.com/chats/%s/end";
+
 
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 

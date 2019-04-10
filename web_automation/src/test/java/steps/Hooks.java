@@ -307,7 +307,7 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            agentHomePage.endChat();
+            ApiHelper.closeActiveChats();
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);

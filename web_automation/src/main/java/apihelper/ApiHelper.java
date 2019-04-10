@@ -439,7 +439,7 @@ public class ApiHelper {
         for(OvernightTicket ticket : allTicketsByStatus){
             RestAssured.given()
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                    .post(Endpoints.PROCESS_OVERNIGHT_TICKET + ticket.getId());
+                    .post(String.format(Endpoints.PROCESS_OVERNIGHT_TICKET, ticket.getId()));
         }
     }
 
@@ -518,18 +518,19 @@ public class ApiHelper {
         return RestAssured.get(url);
     }
 
-    public static Response getActiveChatByAgent(){
+    public static Response getActiveChatsByAgent(){
         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
     public static void closeActiveChats(){
-        List<String> conversationIds = getActiveChatByAgent().getBody().jsonPath().getList("content.sessions.conversationId");
+        List<String> conversationIds = getActiveChatsByAgent().getBody().jsonPath().getList("content.id");
         for(String conversationId : conversationIds){
             RestAssured.given()
+                    .header("Accept", "application/json")
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                    .delete(Endpoints.CLOSE_ACTIVE_CHAT + conversationId);
+                    .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
             }
     }
 

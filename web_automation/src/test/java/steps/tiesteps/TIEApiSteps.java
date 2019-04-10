@@ -1001,11 +1001,9 @@ public class TIEApiSteps implements DateTimeHelper{
                         convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
                 .findFirst().get();
 
-
-        int numberOfModelsBeforeTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
         boolean isTrained = false;
 
-        int timeout = (minutes*60)/18/2;
+        int timeout = (minutes*60)/18;
         for(int i = 0; i < timeout; i++){
             if(!isTrained){
                 waitFor(18000);
@@ -1017,9 +1015,7 @@ public class TIEApiSteps implements DateTimeHelper{
                 break;
             }
         }
-        int numberOfModelsAfterTraining = ApiHelperTie.getModels().getBody().jsonPath().getList("").size();
-        Assert.assertTrue(numberOfModelsAfterTraining == numberOfModelsBeforeTraining + 1,
-                "New model is not created");
+        Assert.assertTrue(isTrained, "New model is not created");
     }
 
     @When("^I publish new model$")
