@@ -1,5 +1,5 @@
 @agent_feedback
-Feature: Interaction with CRM tickets
+Feature: Interaction with CRM tickets (agent mode)
 
   Background:
     Given AGENT_FEEDBACK tenant feature is set to true for Automation
