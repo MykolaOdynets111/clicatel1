@@ -569,4 +569,17 @@ public class ApiHelper {
                 .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
 
+
+    public static Response updateTenantConfig(String tenantOrgName, String config, String configValue){
+        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
+                .body("{ \"configAttributes\": " +
+                        "{\""+config+"\": "+configValue+" }" +
+                      "}")
+                .put(Endpoints.INTERNAL_CONFIG_ATTRIBUTES + tenantId);
+
+    }
 }

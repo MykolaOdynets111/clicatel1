@@ -240,6 +240,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
+    @Then("^(.*) has new conversation request within (.*) seconds$")
+    public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(timeout, agent),
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+    }
+
     @Then("(.*) sees 'overnight' icon in this chat")
     public void verifyOvernightIconShown(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage()),
@@ -818,6 +825,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(actualInfo.get("note"), "Note: " + crmTicketInfoForUpdating.get().get("agentNote"),
                 "Shown Ticket note is not correct \n");
         soft.assertAll();
+    }
+
+    @Given("Transfer timeout for (.*) tenant is set to (.*) seconds")
+    public void updateAgentInactivityTimeout(String tenantOrgName, String timeout){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        Response resp = ApiHelper.updateTenantConfig(tenantOrgName, "agentInactivityTimeoutSec", timeout);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Changing agentInactivityTimeoutSec was not successful for '"+Tenants.getTenantUnderTestName()+"' tenant \n" +
+        "Response: " + resp.getBody().asString());
     }
 
     private void formDataForCRMUpdating(){

@@ -116,7 +116,7 @@ public enum Agents {
         return agentsList.stream()
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
-                        && e.getAgentName().contains("second"))
+                        && e.toString().toLowerCase().contains("second"))
                 .findFirst().get();
     }
 
