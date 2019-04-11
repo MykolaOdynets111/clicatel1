@@ -1,5 +1,5 @@
 @inactivity_timeout
-Feature: Transferring chat
+Feature: Transferring chat after timeout
 
   Verification of automatic transfer chat functionality
 
@@ -9,7 +9,7 @@ Feature: Transferring chat
     Given I login as agent of Automation Bot
     And Click chat icon
 
-  Scenario: Verify if agent is able to transfer chat via "Transfer chat" button
+  Scenario: Verify if chat is automatically transferred after agentIncativity timeout
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     Given I login as second agent of Automation Bot
