@@ -92,7 +92,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isResponseOnUserMessageShown(String userMessage) {
-        return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).isTextResponseShown(5);
+        return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).isToUserTextResponseShown(5);
     }
 
     public boolean isToUserMessageShown(String userMessage){

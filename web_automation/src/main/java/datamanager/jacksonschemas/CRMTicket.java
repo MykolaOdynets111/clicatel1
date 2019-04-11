@@ -152,6 +152,6 @@ public class CRMTicket {
                 ", link='" + link + '\'' +
                 ", ticketNumber='" + ticketNumber + '\'' +
                 ", agentNote='" + agentNote + '\'' +
-                "}\n";
+                "}\n\n";
     }
 }
