@@ -2,10 +2,10 @@
 Feature: Interaction with CRM tickets
 
   Background:
+    Given AGENT_FEEDBACK tenant feature is set to true for Automation
     Given User select Automation tenant
     Given I login as agent of Automation
     And Click chat icon
-    Given AGENT_FEEDBACK tenant feature is set to true for Automation
 
   Scenario: Agent is able fill only "Note" and create CRM ticket
     When User enter connect to Support into widget input field
