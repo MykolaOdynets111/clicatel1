@@ -98,9 +98,10 @@ public class ToUserMessageWithActions  extends Widget implements WebActions {
     }
 
     public ToUserMessageWithActions fillInInputFieldWithAPlaceholder(String placeholder, String textToInput){
-        inputs.stream().filter(e -> e.getAttribute("placeholder").equalsIgnoreCase(placeholder))
-                .findFirst().get()
-                .sendKeys(textToInput);
+        inputText(
+                inputs.stream().filter(e -> e.getAttribute("placeholder").equalsIgnoreCase(placeholder))
+                        .findFirst().get()
+                , textToInput);
         return this;
     }
 
