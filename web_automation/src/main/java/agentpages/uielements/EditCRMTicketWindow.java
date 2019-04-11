@@ -46,6 +46,7 @@ public class EditCRMTicketWindow extends AbstractUIElement {
     public void saveChanges() {
         clickElemAgent(edidTicketButton, 5, "main agent", "Edit CRM ticket button" );
         waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
+    waitFor(200); //Just for test
     }
 
     public boolean isOpened(){
