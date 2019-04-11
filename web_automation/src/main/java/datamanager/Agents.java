@@ -59,7 +59,7 @@ public enum Agents {
 
     DEV_BOT_MODE_SECOND_AGENT("updateplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),
     DEMO_BOT_MODE_SECOND_AGENT("updateplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo"),
-    QA_BOT_MODE_SECOND_AGENT("updateplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "qa"),
+    QA_BOT_MODE_SECOND_AGENT("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "qa"),
     TESTING_BOT_MODE_SECOND_AGENT("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "testing"),
 
     // =======  Active agents for Bot mode with default settings ======== //
