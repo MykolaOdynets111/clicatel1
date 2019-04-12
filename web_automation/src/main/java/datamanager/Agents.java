@@ -30,7 +30,7 @@ public enum Agents {
     // =======  Active agents for TouchGo tests ======== //
 
     QA_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
-    QA_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
+    QA_STARTER_TOUCH_GO_SECOND_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "qa"),
     QA_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "qa"),
     QA_STANDARD_ACCOUNT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "qa"),
     TESTING_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
