@@ -1177,6 +1177,7 @@ public class TIEApiSteps implements DateTimeHelper{
         }
         ApiHelperTie.deleteAllIntents();
         mapForCreatedIntent.clear();
+        ApiHelperTie.deleteAllModels();
     }
 
     public static void clearCreatedSlots(){
