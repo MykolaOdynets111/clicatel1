@@ -507,6 +507,11 @@ public class BasePortalSteps {
                 "Admin is not redirected to billing details page");
     }
 
+    @When("^Fill in Billing details$")
+    public void fillInBillingDetails(){
+        getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
+    }
+
     @When("^Select '(.*)' in nav menu$")
     public void clickNavItemOnBillingDetailsPage(String navName){
         getPortalBillingDetailsPage().clickNavItem(navName);

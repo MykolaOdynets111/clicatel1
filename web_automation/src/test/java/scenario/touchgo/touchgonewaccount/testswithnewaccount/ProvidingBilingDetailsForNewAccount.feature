@@ -10,4 +10,4 @@
 #    Then 'Billing Not Setup' pop up is shown
 #    When Admin clicks 'Setup Billing' button
 #    Then Billing Details page is opened
-##    When Fill in Billing details
+#    When Fill in Billing details
