@@ -34,7 +34,7 @@ public enum Agents {
     QA_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "qa"),
     QA_STANDARD_ACCOUNT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "qa"),
     TESTING_STARTER_TOUCH_GO_ADMIN("startertgplan@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
-    TESTING_STARTER_TOUCH_GO_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
+    TESTING_STARTER_TOUCH_GO_SECOND_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
     TESTING_STANDARD_TOUCH_GO_AGENT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "testing"),
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
     TESTING_SIGNUP_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
