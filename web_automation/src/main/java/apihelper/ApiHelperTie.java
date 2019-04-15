@@ -13,6 +13,7 @@ import org.testng.Assert;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.get;
@@ -113,6 +114,20 @@ public class ApiHelperTie {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()));
+    }
+
+    public static Response deleteModel(String model){
+        return RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .delete(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()) + "/" + model);
+    }
+
+    public static void deleteAllModels(){
+        List<Map> models = ApiHelperTie.getModels().getBody().jsonPath().getList("");
+        for(Map model : models){
+            deleteModel((String) model.get("name"));
+        }
     }
 
     public static Response getAllIntents(){

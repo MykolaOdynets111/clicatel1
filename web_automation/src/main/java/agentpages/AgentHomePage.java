@@ -21,10 +21,10 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement suggestionInputFieldContainer;
 
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
-    private String messageInputLocator = "//textarea[contains(@class,'text-input')]";
+    private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
-    @FindBy(xpath = "//textarea[contains(@class,'text-input')]")
+    @FindBy(css = "textarea.text-input--example")
     private WebElement messageInput;
 
     @FindBy(css = "span.icon.svg-icon-send")
@@ -160,9 +160,10 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.getCurrentAgent());
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
         waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
+        messageInput.clear();
         int symbolsNumber = messageInput.getText().length();
         if(symbolsNumber>0) {
-                messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+            findElemByXPATHAgent(messageInputLocator, getCurrentAgent()).sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         }
 
         sendResponseToUser(response);

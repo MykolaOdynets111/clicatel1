@@ -142,6 +142,7 @@ public class DriverFactory {
             }
             if(ConfigManager.getEnv().equalsIgnoreCase("testing")||
                     ConfigManager.getEnv().equalsIgnoreCase("demo")){
+//                REMOTE_URL = "http://172.31.70.236:4445/wd/hub"; // for remote debug ONLY, supports only 2 browsers !!
                 REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
             }
             RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);

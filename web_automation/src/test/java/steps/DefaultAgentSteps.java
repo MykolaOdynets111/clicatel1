@@ -240,6 +240,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
+    @Then("^(.*) has new conversation request within (.*) seconds$")
+    public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(timeout, agent),
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+    }
+
     @Then("(.*) sees 'overnight' icon in this chat")
     public void verifyOvernightIconShown(String agent){
         Assert.assertTrue(getLeftMenu(agent).isOvernightTicketIconShown(getUserNameFromLocalStorage()),
@@ -328,7 +335,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         // ToDo: Update after clarifying timeout in System timeouts
-        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(13),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }
@@ -820,6 +827,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertAll();
     }
 
+    @Given("Transfer timeout for (.*) tenant is set to (.*) seconds")
+    public void updateAgentInactivityTimeout(String tenantOrgName, String timeout){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        Response resp = ApiHelper.updateTenantConfig(tenantOrgName, "agentInactivityTimeoutSec", timeout);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Changing agentInactivityTimeoutSec was not successful for '"+Tenants.getTenantUnderTestName()+"' tenant \n" +
+        "Response: " + resp.getBody().asString());
+    }
+
     private void formDataForCRMUpdating(){
         Map<String, String> info = new HashMap<>();
         info.put("agentNote", "Note for updating ticket");
@@ -961,19 +977,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note);
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink(link);
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber(number);
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note)
+                                                        .typeCRMLink(link)
+                                                        .typeCRMTicketNumber(number);
         prepareDataForCrmTicketChatdesk(note,link, number);
     }
 
-    @Then("(.*) create CRM ticket$")
-    public void agentCreateCRMTicket(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note from automation test)");
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("Note text Link");
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
-        prepareDataForCrmTicketChatdesk("Note from automation test)","Note text Link", "12345");
-    }
 
     @Then("^CRM ticket is created on backend with correct information$")
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
