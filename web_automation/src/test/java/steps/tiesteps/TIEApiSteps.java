@@ -996,7 +996,8 @@ public class TIEApiSteps implements DateTimeHelper{
         waitFor(300);
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
-        String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+
+        String createdModelName = ApiHelperTie.getModels().getBody().jsonPath().getList("")
                 .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
                 .filter(e ->        convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
                         >
@@ -1011,34 +1012,20 @@ public class TIEApiSteps implements DateTimeHelper{
                 waitFor(18000);
                 isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
                         .stream().map(e -> (Map) e)
-                        .filter(e -> e.get("name").equals(model))
+                        .filter(e -> e.get("name").equals(createdModelName))
                         .allMatch(e -> e.get("status").equals("finished"));
             } else{
                 break;
             }
         }
+        mapForCreatedIntent.put("model", createdModelName);
         Assert.assertTrue(isTrained, "New model is not created");
     }
 
     @When("^I publish new model$")
     public void publishNewModel(){
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-        String model = "";
-        ResponseBody body = ApiHelperTie.getModels().getBody();
-        try {
-            model = body.jsonPath().getList("")
-                    .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                    .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
-                            >
-                            convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
-                    .findFirst().get();
-        } catch(NoSuchElementException e){
-            Assert.assertTrue(false, "Expected model is not returned in TIE response.\n" +
-            "TIE resp body: " + body.asString());
-        }
-        mapForCreatedIntent.put("model", model);
-        Assert.assertTrue(ApiHelperTie.publishModel(model).statusCode()==200,
-                "Publishing '"+model+"' model was not successful");
+        Assert.assertTrue(ApiHelperTie.publishModel((String) mapForCreatedIntent.get("model")).statusCode()==200,
+                "Publishing '"+mapForCreatedIntent.get("model")+"' model was not successful");
     }
 
     private LocalDateTime getModelDateTime(String model){

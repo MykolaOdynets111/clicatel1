@@ -110,7 +110,7 @@ public class ChatBody extends AbstractUIElement {
     public List<String> getAllMessages(){
         return findElemsByXPATHAgent(messagesInChatBodyXPATH)
                     .stream().map(e -> new AgentDeskChatMessage(e))
-                    .map(e -> e.getMessageInfo())
+                    .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
     }
