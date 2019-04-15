@@ -21,6 +21,7 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -1021,13 +1022,19 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^I publish new model$")
     public void publishNewModel(){
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-
-        String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
-                .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                .filter(e ->        convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
-                                    >
-                                    convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
-                .findFirst().get();
+        String model = "";
+        ResponseBody body = ApiHelperTie.getModels().getBody();
+        try {
+            model = body.jsonPath().getList("")
+                    .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
+                    .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                            >
+                            convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
+                    .findFirst().get();
+        } catch(NoSuchElementException e){
+            Assert.assertTrue(false, "Expected model is not returned in TIE response.\n" +
+            "TIE resp body: " + body.asString());
+        }
         mapForCreatedIntent.put("model", model);
         Assert.assertTrue(ApiHelperTie.publishModel(model).statusCode()==200,
                 "Publishing '"+model+"' model was not successful");
