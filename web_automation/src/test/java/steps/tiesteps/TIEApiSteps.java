@@ -993,6 +993,7 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @Then("^New model is ready after (.*) minutes wait$")
     public void getModels(int minutes){
+        waitFor(300);
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
         String model = ApiHelperTie.getModels().getBody().jsonPath().getList("")
