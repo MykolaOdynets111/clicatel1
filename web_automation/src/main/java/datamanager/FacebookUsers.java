@@ -5,9 +5,9 @@ import drivermanager.ConfigManager;
 
 public enum FacebookUsers {
 
-//    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", ""),
+    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", ""),
 //    FIRST_USER("Tom", "Jones", "automation258@gmail.com", "2438051536267464", ""),
-    FIRST_USER("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
+    USER_FOR_INTEGRATION("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
 //    ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
     ;
 
