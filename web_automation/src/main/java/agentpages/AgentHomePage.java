@@ -160,7 +160,8 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.getCurrentAgent());
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.getCurrentAgent()), findElemByXPATHAgent(messageInputLocator, this.getCurrentAgent()));
         waitForElementToBeClickableAgent(messageInput, 4, this.getCurrentAgent());
-        int symbolsNumber = messageInput.getText().length();
+        messageInput.clear();
+        int symbolsNumber = messageInput.getAttribute("innerText").length();
         if(symbolsNumber>0) {
                 messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         }
