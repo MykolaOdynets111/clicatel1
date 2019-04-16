@@ -977,10 +977,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField(note)
-                                                        .typeCRMLink(link)
-                                                        .typeCRMTicketNumber(number);
-        prepareDataForCrmTicketChatdesk(note,link, number);
+        getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
+        prepareDataForCrmTicketChatdesk(note, link, number);
     }
 
 
@@ -993,7 +991,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
 
-        soft.assertEquals(dateTimeFromBackend.toString().substring(0, 16), createdDate.substring(0, 16),
+        soft.assertEquals(dateTimeFromBackend.toString().substring(0, 15), createdDate.substring(0, 15),
                 "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");
@@ -1003,5 +1001,48 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 " Ticket link does not match created on the backend \n");
         soft.assertAll();
 
+    }
+
+    @Then("^Agent add (.*) tag$")
+    public void agentAddSelectedTag(int iter) {
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
+    }
+
+    @Then("^Agent delete all tags$")
+    public void agentDeleteAllTags() {
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().deleteTags();
+    }
+
+    @Then("^All tags for tenant is available in the dropdown$")
+    public void allTagsForTenantIsAvailableInTheDropdown() {
+        SoftAssert soft = new SoftAssert();
+        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
+        List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
+        soft.assertTrue(tagsInCRM.equals(tags),
+                " CRM ticket 'Tags' does not match created on the backend \n");
+        soft.assertAll();
+
+   //     driver.findElement(By.xpath("//label[contains(text(),"Organization")).click();
+//        if(driver.findElement(By.xpath("//span[@aria-labelledby='select2-id_event_operator-container']")).isDisplayed())
+//        {
+//            String getData = driver.findElement(By.xpath("//span[@aria-labelledby='select2-id_event_operator-container']")).getAttribute("aria-activedescendant");
+//        }
+    }
+
+    @Then("^Agent can search tag and select tag, selected tag added in tags field$")
+    public void agentCanSearchTagAndSelectTag() {
+        SoftAssert soft = new SoftAssert();
+        List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
+        String randomTag= tags.get((int)(Math.random() * tags.size()));
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
+        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
+        soft.assertTrue(tagsInCRM.contains(randomTag),
+                " CRM ticket 'Tags' does not match in search \n");
+        soft.assertAll();
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
+        List<String> chosenTags = getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags();
+        soft.assertTrue(chosenTags.contains(randomTag),
+                " CRM ticket 'Tag' does not match into the Tags field \n");
+        soft.assertAll();
     }
 }

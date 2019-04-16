@@ -3,8 +3,15 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @FindBy(css = "div.modal-content")
@@ -34,8 +41,17 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".icon-positive")
     private WebElement sentimentHappy;
 
+    @FindBy(xpath = "//div[@class='Select-menu-outer']/*")
+    private WebElement availableTags;
+
+    private String inputTagField =  "div.Select-input > input";
+
     @FindBy(css = ".Select-arrow")
-    private WebElement tagsDropdown;
+    private WebElement openDropdownButton;
+
+    private String openDropdownButtoncss = ".Select-control";
+
+    private String cleareAll = ".Select-clear";
 
     @FindBy(id = "CRMNote")
     private WebElement crmNoteTextField;
@@ -93,6 +109,12 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         return this;
     }
 
+    public void  fillForm(String note, String link, String number) {
+        typeCRMNoteTextField(note);
+        typeCRMLink(link);
+        typeCRMTicketNumber(number);
+    }
+
     public void setSentimentUnsatisfied() {
         clickElemAgent(sentimentUnsatisfied, 5, "main agent", "Sentiment Unsatisfied" );
     }
@@ -105,4 +127,58 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         clickElemAgent(sentimentHappy, 5, "main agent", "Sentiment Happy" );
     }
 
+
+    public void selectTags(int iter) {
+        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
+        openDropdownButton.click();
+        if(availableTags.getText().isEmpty()) {
+            Assert.assertTrue(false, "Have not Tags to be selected");
+        } else {
+            openDropdownButton.click();
+            while (iter > 0) {
+                openDropdownButton.click();
+                availableTags.click();
+                findElemByCSSAgent(openDropdownButtoncss).click();
+                iter--;
+            }
+        }
+    }
+
+    public List<String> getTags() {
+        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
+        if (isElementShown(availableTags, 2)){
+            List<String> result = Arrays.asList(availableTags.getText().split("[\n]"));
+            return result;
+        } else {
+            openDropdownButton.click();
+        }
+        waitForElementToBeClickableAgent(availableTags, 6, "main agent");
+        if(availableTags.getText().isEmpty()) {
+            Assert.assertTrue(false, "Have not Tags to be selected");
+        }
+        List<String> result = Arrays.asList(availableTags.getText().split("[\n]"));
+        openDropdownButton.click();
+        return result;
+    }
+
+    public List<String> getChosenTags() {
+        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
+        List<String> result = Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]"));
+        return result;
+    }
+
+    public void typeTags(String tag) {
+        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
+        findElemByCSSAgent(openDropdownButtoncss).click();
+        findElemByCSSAgent(inputTagField).sendKeys(tag);
+    }
+
+    public void selectTagInSearch() {
+        waitForElementToBeClickableAgent(availableTags, 6, "main agent");
+        availableTags.click();
+    }
+
+    public void deleteTags() {
+             findElemByCSSAgent(cleareAll).click();
+    }
 }
