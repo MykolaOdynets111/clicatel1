@@ -5,6 +5,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.AddPaymentMethodWindow;
+import portalpages.uielements.BillingContactsDetails;
 
 import java.util.List;
 
@@ -31,12 +32,18 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement removePaymentConfirmationButton;
 
+    private BillingContactsDetails billingContactsDetails;
+
     private AddPaymentMethodWindow addPaymentMethodWindow;
 
     private String removePaymentButton =  "//button[@ng-click='removeCard()']";
 
     public AddPaymentMethodWindow getAddPaymentMethodWindow(){
         return addPaymentMethodWindow;
+    }
+
+    public BillingContactsDetails getBillingContactsDetails() {
+        return billingContactsDetails;
     }
 
     public boolean isPageOpened(int wait){

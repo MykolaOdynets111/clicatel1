@@ -335,7 +335,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         // ToDo: Update after clarifying timeout in System timeouts
-        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(10),
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(13),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }

@@ -34,18 +34,10 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
+        waitForElementsToBeVisibleAgent(messagesInChatBody, 5, "main");
         return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
                 .map(e -> e.getMessageInfo())
                 .collect(Collectors.toList());
-//        String agentInitials = "";
-//        if(isElementsExistsInDOM(agentIconWIthInitials, 7)) agentInitials=
-//                findElemsByXPATHAgent(agentIconWIthInitials).get(0).getAttribute("innerText");
-//        String finalAgentInitials = agentInitials;
-//        return messagesInChatBody
-//                .stream()
-//                .map(e -> e.getAttribute("innerText").replace("\n", " ").replace(finalAgentInitials, "").trim())
-//                .filter(e -> !e.equals(""))
-//                .collect(Collectors.toList());
     }
 
     public void closeChatHistoryDetailsPopup(){

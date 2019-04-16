@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import drivermanager.DriverFactory;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -96,14 +97,20 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isToUserMessageShown(String userMessage){
-        return findElemsByCSSAgent(toUserMessagesCSS).
-                                    stream().anyMatch(e -> e.getText().contains(userMessage));
+        try {
+            return findElemsByCSSAgent(toUserMessagesCSS).
+                    stream().anyMatch(e -> e.getText().contains(userMessage));
+        }catch(StaleElementReferenceException ex){
+            waitFor(200);
+            return findElemsByCSSAgent(toUserMessagesCSS).
+                    stream().anyMatch(e -> e.getText().contains(userMessage));
+        }
     }
 
     public List<String> getAllMessages(){
         return findElemsByXPATHAgent(messagesInChatBodyXPATH)
                     .stream().map(e -> new AgentDeskChatMessage(e))
-                    .map(e -> e.getMessageInfo())
+                    .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
     }
