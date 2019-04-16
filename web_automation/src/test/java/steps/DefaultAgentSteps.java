@@ -1021,12 +1021,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertTrue(tagsInCRM.equals(tags),
                 " CRM ticket 'Tags' does not match created on the backend \n");
         soft.assertAll();
-
-   //     driver.findElement(By.xpath("//label[contains(text(),"Organization")).click();
-//        if(driver.findElement(By.xpath("//span[@aria-labelledby='select2-id_event_operator-container']")).isDisplayed())
-//        {
-//            String getData = driver.findElement(By.xpath("//span[@aria-labelledby='select2-id_event_operator-container']")).getAttribute("aria-activedescendant");
-//        }
     }
 
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")

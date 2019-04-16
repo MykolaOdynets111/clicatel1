@@ -7,11 +7,25 @@ Feature: Interaction with CRM tickets
     And Click chat icon
     Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
 
-  Scenario: All tie tags available for the test tenant are in the drop down
+  Scenario: All tie tags available for the test tenant in the drop down
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
+    When Agent click "End chat" button
+    Then End chat popup should be opened
+    Then All tags for tenant is available in the dropdown
+    When Agent click 'Close chat' button
+
+  Scenario: All tie tags available for the test tenant in the drop down after reopen "End chat" window
+    When User enter connect to Support into widget input field
+    Then Agent has new conversation request
+    When Agent click on new conversation request from touch
+    Then Conversation area becomes active with connect to Support user's message
+    When Agent click "End chat" button
+    Then End chat popup should be opened
+    When Agent click 'Cancel' button
+    Then Conversation area contains connect to Support user's message
     When Agent click "End chat" button
     Then End chat popup should be opened
     Then All tags for tenant is available in the dropdown
