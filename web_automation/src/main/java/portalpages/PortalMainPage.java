@@ -1,8 +1,10 @@
 package portalpages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import portalpages.uielements.*;
 
 public class PortalMainPage extends PortalAbstractPage {
@@ -44,7 +46,11 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
-        waitForElementToBeVisibleAgent(upgradeYourPlanWindow.getWrappedElement(), 5);
+        try {
+            waitForElementToBeVisibleAgent(upgradeYourPlanWindow.getWrappedElement(), 5);
+        } catch (TimeoutException | NoSuchElementException e){
+            Assert.assertTrue(false, "Upgrade window is not shown");
+        }
         return upgradeYourPlanWindow;
     }
 
