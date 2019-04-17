@@ -2,10 +2,8 @@ package apihelper;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
@@ -130,7 +128,7 @@ public class ApiHelperPlatform {
         String accessToken = "";
         try {
             accessToken = RequestSpec.getAccessTokenForPortalUserByAccount(accountName);
-        }catch (java.lang.NullPointerException e){
+        }catch (java.lang.NullPointerException|NoSuchElementException e){
             return; // nothing to close - account doesn't exist
         }
         RestAssured.given()
@@ -142,6 +140,13 @@ public class ApiHelperPlatform {
                         "  \"reason\": \"string\"\n" +
                         "}")
                 .post(Endpoints.PLATFORM_CLOSE_ACCOUNT);
+    }
+
+    public static Response getAccountBillingInfo(String tenantOrgName){
+        return RestAssured.given()
+                .header("Accept", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_BILLING_INFO);
     }
 
 }

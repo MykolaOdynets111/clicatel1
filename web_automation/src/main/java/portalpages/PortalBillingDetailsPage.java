@@ -1,5 +1,6 @@
 package portalpages;
 
+import drivermanager.DriverFactory;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -51,7 +52,9 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     }
 
     public void clickNavItem(String navName){
-        navItems.stream().filter(e -> e.getText().equalsIgnoreCase(navName)).findFirst().get().click();
+        moveToElemAndClick(DriverFactory.getAgentDriverInstance(),
+                navItems.stream().filter(e -> e.getText().equalsIgnoreCase(navName)).findFirst().get());
+//        navItems.stream().filter(e -> e.getText().equalsIgnoreCase(navName)).findFirst().get().click();
     }
 
     public boolean isAddPaymentMethodButtonShown(int wait){

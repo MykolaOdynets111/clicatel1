@@ -47,8 +47,10 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         cardOption.click();
         findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();
+        waitForElementToBeClickableAgent(thirdMons, 2, "main");
         thirdMons.click();
         expirationYear.click();
+        waitForElementToBeClickableAgent(thirdYear, 2, "main");
         thirdYear.click();
         findElemByCSSAgent(cardCvv).sendKeys("112");
         findElemByCSSAgent(firstName).sendKeys("AQA");

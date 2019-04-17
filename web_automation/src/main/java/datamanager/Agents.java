@@ -38,7 +38,7 @@ public enum Agents {
     TESTING_STANDARD_TOUCH_GO_AGENT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "testing"),
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
     TESTING_SIGNUP_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
-
+    TESTING_NEW_ONE_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "New One2", "testing"),
 
     // =======  Active agents for Agent mode tests ======== //
 

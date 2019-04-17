@@ -5,7 +5,7 @@ Feature: Admin of tenant with Starter plan should be redirected on the billing d
 
   Scenario: Admin should be redirected to the Billing Details when they are not added
     When I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of Automation account
     When Admin clicks 'Upgrade' button
     Then 'Billing Not Setup' pop up is shown
     When Admin clicks 'Setup Billing' button
