@@ -106,6 +106,8 @@ public class Endpoints {
 
     public static String PLATFORM_CLOSE_ACCOUNT = URLs.getBasePlatformUrl() + "/accounts/close";
 
+    public static String PLATFORM_BILLING_INFO = URLs.getBasePlatformUrl() + "/accounts/billing-info";
+
     public static String PLATFORM_ROLES_PERMITIONS = URLs.getBasePlatformUrl() + "/roles/%s/permissions?details=false";
 
     // ====================  tie ================= //

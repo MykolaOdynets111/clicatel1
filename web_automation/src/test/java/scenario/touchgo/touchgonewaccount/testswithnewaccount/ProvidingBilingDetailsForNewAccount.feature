@@ -5,9 +5,10 @@
 #
 #  Scenario: Filling Billing details for newly created Account
 #    Given I open portal
-#    And Login into portal as an admin of SignedUp AQA account
+#    And Login into portal as an admin of New One2 account
 #    When Admin clicks 'Upgrade' button
 #    Then 'Billing Not Setup' pop up is shown
 #    When Admin clicks 'Setup Billing' button
 #    Then Billing Details page is opened
 #    When Fill in Billing details
+#    Then Billing details is saved on backend
