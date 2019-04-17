@@ -1,11 +1,11 @@
 @agent_feedback
-Feature: Interaction with CRM tickets
+Feature: Interaction with Tags in CRM tickets (agent mode)
 
   Background:
-    Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
+    Given AGENT_FEEDBACK tenant feature is set to true for Automation
+    Given User select Automation tenant
+    Given I login as agent of Automation
     And Click chat icon
-    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
 
   Scenario: All tie tags available for the test tenant in the drop down
     When User enter connect to Support into widget input field
@@ -60,7 +60,7 @@ Feature: Interaction with CRM tickets
     Then User have to receive 'exit' text response for his 'connect to Support' input
     Then CRM ticket is created on backend with correct information
 
-  Scenario: Agent can select, then unselect tag and the tag is not saved in created CRM ticket
+  Scenario: Agent can select, then delete tags and the tags is not saved in created CRM ticket
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
