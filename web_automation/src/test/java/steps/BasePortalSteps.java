@@ -20,7 +20,9 @@ import portalpages.*;
 import portalpages.uielements.LeftMenu;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BasePortalSteps {
 
@@ -40,6 +42,7 @@ public class BasePortalSteps {
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
+    public static Map billingInfo = new HashMap();
     private String activationAccountID;
 
 
@@ -509,7 +512,27 @@ public class BasePortalSteps {
 
     @When("^Fill in Billing details$")
     public void fillInBillingDetails(){
-        getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
+        billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
+    }
+
+    @Then("^Billing details is saved on backend$")
+    public void verifyBillingDetails(){
+        SoftAssert soft = new SoftAssert();
+        Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
+        Map info = resp.jsonPath().getMap("");
+        String billingAddress = resp.jsonPath().get("billingAddress.country.name") + ", " +
+                                resp.jsonPath().get("billingAddress.city") + ", " +
+                                resp.jsonPath().get("billingAddress.address1") + ", " +
+                                resp.jsonPath().get("billingAddress.postalCode");
+        soft.assertEquals(info.get("billingContact").toString(), billingInfo.get("billingContact"),
+                "Billing contact is incorrectly saved");
+        soft.assertEquals(info.get("accountTypeId").toString(), billingInfo.get("accountTypeId"),
+                "accountTypeId is incorrectly saved");
+        soft.assertEquals(info.get("companyName").toString(), billingInfo.get("companyName"),
+                "Company Name is incorrectly saved");
+        soft.assertEquals(billingAddress, billingInfo.get("billingAddress"),
+                "Billing address is incorrectly saved");
+        soft.assertAll();
     }
 
     @When("^Select '(.*)' in nav menu$")
