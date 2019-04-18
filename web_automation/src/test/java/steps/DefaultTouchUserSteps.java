@@ -665,7 +665,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
                 "TButton is shown for tenant with Starter TouchGoPlan.");
     }
 
-    @Then("^There is no (.*) response")
+    @Then("^There is no (.*) response$")
     public void verifyTextResponseIsNotShownForUser(String expectedText){
         Assert.assertFalse(widget.getWidgetConversationArea()
                 .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4));
