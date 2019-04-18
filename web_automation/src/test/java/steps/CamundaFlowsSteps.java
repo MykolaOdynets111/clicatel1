@@ -12,12 +12,13 @@ import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.JSHelper;
+import interfaces.WebActions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
 import java.util.Random;
 
-public class CamundaFlowsSteps implements JSHelper {
+public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     Faker faker = new Faker();
 
@@ -33,8 +34,11 @@ public class CamundaFlowsSteps implements JSHelper {
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String tafMessageId, String tenantOrgName){
         TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
-        tafMessageUpdates.setText(generateNewMessageText(tafMessageId));
+        String updatedMessage = generateNewMessageText(tafMessageId);
+        tafMessageUpdates.setText(updatedMessage);
         ApiHelper.updateTafMessage(tafMessageUpdates);
+        TafMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
+        Assert.assertTrue(tafMessageUpdates.getText().equals(tafMessageBackend.getText()), "Message text is not updated for tenant");
 
     }
 
