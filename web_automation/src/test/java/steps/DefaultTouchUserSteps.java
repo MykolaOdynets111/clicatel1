@@ -159,7 +159,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
     }
 
@@ -208,7 +208,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
     public void verifyResponseOnUniqueMessage(String textResponse, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         verifyTextResponse(FacebookSteps.getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
     }
 
@@ -223,7 +223,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^User have to receive '(.*)' text response with (.*) intent for his '(.*)' input$")
     public void verifyTextResponseWithIntent(String textResponse, String intent, String userInput){
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
 
 //      ToDo: As soon as there is an API to check the tie mode implement the following logic
@@ -300,39 +300,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         softAssert.assertAll();
     }
 
-    private String formExpectedTextResponseForBotWidget(String fromFeatureText){
-        String expectedTextResponse;
-        switch (fromFeatureText) {
-            case "welcome":
-                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_message");
-                break;
-            case "start new conversation":
-                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
-                break;
-            case "welcome back message":
-                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
-                break;
-            case "dynamical branch address":
-                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
-                break;
-            case "exit":
-                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
-                break;
-            case "agents_away":
-                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
-                break;
-            case "out_of_support_hours":
-                expectedTextResponse = ApiHelper.getTenantMessageText("out_of_support_hours");
-                break;
-            default:
-                expectedTextResponse = fromFeatureText;
-                break;
-        }
-        if (fromFeatureText.contains("${firstName}")) {
-            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
-        }
-        return expectedTextResponse;
-    }
 
     /**Method that strictly verifies is there expected response shown as an second response in the widget
      * @param textResponse expected text response
@@ -341,7 +308,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
     public void verifySecondTextResponse(String textResponse, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isSecondTextResponseShownFor(userInput, waitForResponse),
@@ -366,7 +333,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
                     "health@test.com";
         }
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseForBotWidget(textResponse);
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
@@ -378,7 +345,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Text response that contains \"(.*)\" is shown$")
     public void quickVerifyIsResponseShown(String text){
-       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(text, 10),
+       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(formExpectedTextResponseFromBotWidget(text), 10),
                "Response to user is not shown");
     }
 
@@ -696,6 +663,49 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     public void verifyTButtonIsNotShown(){
         Assert.assertFalse(widget.isTouchButtonShown(2),
                 "TButton is shown for tenant with Starter TouchGoPlan.");
+    }
+
+    @Then("^There is no (.*) response$")
+    public void verifyTextResponseIsNotShownForUser(String expectedText){
+        Assert.assertFalse(widget.getWidgetConversationArea()
+                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4));
+    }
+
+    private String formExpectedTextResponseFromBotWidget(String fromFeatureText){
+        String expectedTextResponse;
+        switch (fromFeatureText) {
+            case "welcome":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_message");
+                break;
+            case "start new conversation":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "welcome back message":
+                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
+                break;
+            case "dynamical branch address":
+                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
+                break;
+            case "exit":
+                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                break;
+            case "agents_away":
+                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
+                break;
+            case "out_of_support_hours":
+                expectedTextResponse = ApiHelper.getTenantMessageText("out_of_support_hours");
+                break;
+            case "connect_agent":
+                expectedTextResponse = ApiHelper.getTenantMessageText("connect_agent");
+                break;
+            default:
+                expectedTextResponse = fromFeatureText;
+                break;
+        }
+        if (fromFeatureText.contains("${firstName}")) {
+            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage());
+        }
+        return expectedTextResponse;
     }
 
     // ======================= Private Getters ========================== //

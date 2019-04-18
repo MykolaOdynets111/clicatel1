@@ -33,7 +33,7 @@ public class CamundaFlowsSteps implements JSHelper {
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String tafMessageId, String tenantOrgName){
         TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
-        tafMessageUpdates.setText(generateNewMessageText());
+        tafMessageUpdates.setText(generateNewMessageText(tafMessageId));
         ApiHelper.updateTafMessage(tafMessageUpdates);
 
     }
@@ -86,8 +86,8 @@ public class CamundaFlowsSteps implements JSHelper {
     }
 
 
-    private String generateNewMessageText(){
-        return "randow welcome message:" + faker.lorem().characters(8, 13, true);
+    private String generateNewMessageText(String tafMessageId){
+        return "randow "+tafMessageId+" message:" + faker.lorem().characters(8, 13, true);
     }
 
 
