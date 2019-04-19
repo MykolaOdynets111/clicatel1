@@ -698,9 +698,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
             case "connect_agent":
                 expectedTextResponse = ApiHelper.getTenantMessageText("connect_agent");
                 break;
-            case "end_chat_tbutton":
-                expectedTextResponse = ApiHelper.getTenantMessageText("end_chat_tbutton");
-                break;
             default:
                 expectedTextResponse = fromFeatureText;
                 break;

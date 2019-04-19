@@ -5,4 +5,5 @@ out/
 .*
 .gradle/
 **/.gradle/
+../touch-rest-api-tests/
 debug.log

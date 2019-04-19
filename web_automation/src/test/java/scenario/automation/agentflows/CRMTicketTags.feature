@@ -43,7 +43,6 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then Agent type Note:CheckTags, Link:CheckTags, Number:12345 for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
-    Then User have to receive 'exit' text response for his 'connect to Support' input
     Then CRM ticket is created on backend with correct information
 
   Scenario: Agent can select 2 tags and save the ticket
@@ -57,7 +56,6 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then Agent type Note:"Note from automation test)", Link:"Note text Link", Number:"12345" for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
-    Then User have to receive 'exit' text response for his 'connect to Support' input
     Then CRM ticket is created on backend with correct information
 
   Scenario: Agent can select, then delete tags and the tags is not saved in created CRM ticket
@@ -72,7 +70,6 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then Agent type Note:"Note from automation test)", Link:"Note text Link", Number:"12345" for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
-    Then User have to receive 'exit' text response for his 'connect to Support' input
     Then CRM ticket is created on backend with correct information
 
 

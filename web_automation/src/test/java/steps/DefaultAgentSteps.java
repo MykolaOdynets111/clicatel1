@@ -1005,7 +1005,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Agent add (.*) tag$")
     public void agentAddSelectedTag(int iter) {
+        SoftAssert soft = new SoftAssert();
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
+        soft.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
+                "Not all tags was added \n");
     }
 
     @Then("^Agent delete all tags$")
@@ -1016,11 +1019,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^All tags for tenant is available in the dropdown$")
     public void allTagsForTenantIsAvailableInTheDropdown() {
         SoftAssert soft = new SoftAssert();
-        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
         List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
+        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
         soft.assertTrue(tagsInCRM.equals(tags),
                 " CRM ticket 'Tags' does not match created on the backend \n");
-        soft.assertAll();
     }
 
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")
@@ -1030,11 +1032,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String randomTag= tags.get((int)(Math.random() * tags.size()));
         getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        soft.assertTrue(tagsInCRM.contains(randomTag),
-                " CRM ticket 'Tags' does not match in search \n");
-        soft.assertAll();
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
         List<String> chosenTags = getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags();
+        soft.assertTrue(tagsInCRM.contains(randomTag),
+                " CRM ticket 'Tags' does not match in search \n");
         soft.assertTrue(chosenTags.contains(randomTag),
                 " CRM ticket 'Tag' does not match into the Tags field \n");
         soft.assertAll();
