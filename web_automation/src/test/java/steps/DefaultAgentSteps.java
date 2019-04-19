@@ -869,6 +869,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         newDaysMap.put(16L, "16th");
         newDaysMap.put(17L, "17th");
         newDaysMap.put(18L, "18th");
+        newDaysMap.put(19L, "19th");
         newDaysMap.put(20L, "20th");
         newDaysMap.put(21L, "21st");
         newDaysMap.put(22L, "22nd");
