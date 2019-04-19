@@ -1023,6 +1023,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
         soft.assertTrue(tagsInCRM.equals(tags),
                 " CRM ticket 'Tags' does not match created on the backend \n");
+        soft.assertAll();
     }
 
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")
