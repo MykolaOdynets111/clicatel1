@@ -987,8 +987,10 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @When("^Schedule new training$")
     public void scheduleNewTraining(){
-        Assert.assertTrue( ApiHelperTie.scheduleTraining().statusCode()==200,
-                "Training is not scheduled");
+        Response resp = ApiHelperTie.scheduleTraining();
+        Assert.assertTrue( resp.statusCode()==200,
+                "Training is not scheduled\n" +
+                        "Resp: " + resp.getBody().asString());
     }
 
     @Then("^New model is ready after (.*) minutes wait$")
