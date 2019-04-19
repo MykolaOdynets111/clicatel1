@@ -668,7 +668,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^There is no (.*) response$")
     public void verifyTextResponseIsNotShownForUser(String expectedText){
         Assert.assertFalse(widget.getWidgetConversationArea()
-                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4));
+                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4), "Error: Response is shown in widget");
     }
 
     private String formExpectedTextResponseFromBotWidget(String fromFeatureText){
@@ -697,6 +697,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
                 break;
             case "connect_agent":
                 expectedTextResponse = ApiHelper.getTenantMessageText("connect_agent");
+                break;
+            case "end_chat_tbutton":
+                expectedTextResponse = ApiHelper.getTenantMessageText("end_chat_tbutton");
                 break;
             default:
                 expectedTextResponse = fromFeatureText;

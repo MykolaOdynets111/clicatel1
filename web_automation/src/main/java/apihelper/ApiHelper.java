@@ -547,6 +547,21 @@ public class ApiHelper {
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
+    public static List<String> getTags(String clientID, String type){
+        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
+//        String clientProfileId = getClientProfileId(clientID);
+
+        List<String> result = RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
+        return result;
+
+             //   .getBody().jsonPath().getList("", CRMTicket.class);resp.jsonPath().get("tenants");
+    }
+
+
+
+
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
