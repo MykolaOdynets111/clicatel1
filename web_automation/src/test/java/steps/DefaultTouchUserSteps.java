@@ -668,7 +668,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^There is no (.*) response$")
     public void verifyTextResponseIsNotShownForUser(String expectedText){
         Assert.assertFalse(widget.getWidgetConversationArea()
-                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4), "Error: Response is shown in widget");
+                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 10), "Error: Response is shown in widget");
     }
 
     private String formExpectedTextResponseFromBotWidget(String fromFeatureText){
