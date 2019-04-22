@@ -1006,9 +1006,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Agent add (.*) tag$")
     public void agentAddSelectedTag(int iter) {
-        SoftAssert soft = new SoftAssert();
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
-        soft.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
+        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size()-1, iter, //-1 delet "x"(delet all tags) element
                 "Not all tags was added \n");
     }
 
@@ -1019,12 +1018,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^All tags for tenant is available in the dropdown$")
     public void allTagsForTenantIsAvailableInTheDropdown() {
-        SoftAssert soft = new SoftAssert();
         List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        soft.assertTrue(tagsInCRM.equals(tags),
+        Assert.assertTrue(tagsInCRM.equals(tags),
                 " CRM ticket 'Tags' does not match created on the backend \n");
-        soft.assertAll();
     }
 
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")
