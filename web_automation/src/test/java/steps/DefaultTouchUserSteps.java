@@ -92,8 +92,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);}
 
     private String getClientWithHistory(){
-        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 1, 160);
-
+        int page = 1;
+        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), page, 15);
+        boolean lastPage = resp.jsonPath().getBoolean("last");
         if(resp.statusCode()!=200){
             Assert.assertTrue(false, "Getting finished chats was not successful\n" +
             "statusCode: " + resp.statusCode() + "\n" +
@@ -101,15 +102,27 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         }
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
         LocalDateTime nowMinusTwoDays = LocalDateTime.now(zoneId).minusDays(2).minusHours(2);
-        selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
-                .map(sessionContainer ->  ((ArrayList) sessionContainer))
-                .filter(e -> e.size()==1)
-                .map(session -> ((HashMap) session.get(0)))
-                .filter(session ->  LocalDateTime.parse((String) session.get("endedDate"), formatter).isBefore(nowMinusTwoDays))
-                .findAny()
-                .get();
+
+        while(!lastPage){
+            try {
+                selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
+                        .map(sessionContainer ->  ((ArrayList) sessionContainer))
+                        .filter(e -> e.size()==1)
+                        .map(session -> ((HashMap) session.get(0)))
+                        .filter(session ->  LocalDateTime.parse((String) session.get("endedDate"), formatter).isBefore(nowMinusTwoDays))
+                        .findAny()
+                        .get();
+                break;
+            }catch(NoSuchElementException e){
+                page += 1;
+                resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), page, 15);
+                lastPage = resp.jsonPath().getBoolean("last");
+
+            }
+        }
+
+
 
         return   (String) selectedClient.get("clientId");
     }
