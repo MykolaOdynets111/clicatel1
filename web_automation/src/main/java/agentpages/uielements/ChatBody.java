@@ -66,8 +66,11 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
-        waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
-
+        try {
+            waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
+        } catch(TimeoutException e){
+            Assert.assertTrue(false, "Chat body is not visible");
+        }
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         // ToDo: update timeout after it is provided in System timeouts confluence page
         // ToDo: If for social chatting timeout is bigger - introduce another method for social

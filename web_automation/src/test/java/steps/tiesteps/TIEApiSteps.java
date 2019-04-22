@@ -997,24 +997,29 @@ public class TIEApiSteps implements DateTimeHelper{
     public void getModels(int minutes){
         waitFor(300);
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-
-
-        String createdModelName = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+        String createdModelName = "";
+        ResponseBody respBody = ApiHelperTie.getModels().getBody();
+        try {
+            createdModelName = respBody.jsonPath().getList("")
                 .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                .filter(e ->        convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
                         >
                         convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
                 .findFirst().get();
-
+        } catch(NoSuchElementException e){
+            Assert.assertTrue(false, "Expected created model is not present in get models response\n" +
+            "Resp: " + respBody.asString());
+        }
         boolean isTrained = false;
 
         int timeout = (minutes*60)/18;
         for(int i = 0; i < timeout; i++){
             if(!isTrained){
                 waitFor(18000);
+                String finalCreatedModelName = createdModelName;
                 isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
                         .stream().map(e -> (Map) e)
-                        .filter(e -> e.get("name").equals(createdModelName))
+                        .filter(e -> e.get("name").equals(finalCreatedModelName))
                         .allMatch(e -> e.get("status").equals("finished"));
             } else{
                 break;
