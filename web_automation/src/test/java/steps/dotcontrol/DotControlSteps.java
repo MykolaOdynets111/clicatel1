@@ -105,7 +105,7 @@ public class DotControlSteps {
             }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
-        waitFotResponseToComeToServer();
+        waitFotResponseToComeToServer(10);
         try {
             Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                     "Message is not as expected");
@@ -132,12 +132,13 @@ public class DotControlSteps {
 
     @Then("Verify dot .Control returns (.*) response")
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
-        waitFotResponseToComeToServer();
         try {
             if (expectedResponse.equalsIgnoreCase("agents_available")) {
+                waitFotResponseToComeToServer(35);
                 Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
                         "Message is not as expected");
             } else {
+                waitFotResponseToComeToServer(10);
                 Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
                         "Message is not as expected");
             }
@@ -329,8 +330,8 @@ public class DotControlSteps {
         return dotControlRequestMessage;
     }
 
-    private void waitFotResponseToComeToServer() {
-        for(int i = 0; i<15; i++) {
+    private void waitFotResponseToComeToServer(int wait) {
+        for(int i = 0; i<wait; i++) {
             if (!Server.incomingRequests.isEmpty() &
                     Server.incomingRequests.keySet().contains(clientId.get())) {
                 break;
