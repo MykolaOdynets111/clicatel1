@@ -10,8 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.Arrays;
-import java.util.List;
+//import java.util.Arrays;
+//import java.util.List;
+import java.util.*;
 
 
 @FindBy(css = "div.modal-content")
@@ -163,7 +164,11 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public List<String> getChosenTags() {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
-        List<String> result = Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]"));
+        List<String> result = new ArrayList();
+        result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]+[ ]")));
+        if (result.size()>1) {
+            result.remove(result.size() - 1); //REMOVE 'x' from list
+        }
         return result;
     }
 

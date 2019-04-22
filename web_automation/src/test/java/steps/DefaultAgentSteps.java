@@ -29,6 +29,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
 
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -597,7 +598,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return dataForNewCRMTicket;
     }
 
-    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber){
+    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber, List<String> tags){
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
                 (ConfigManager.getEnv(), getUserNameFromLocalStorage());
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
@@ -605,6 +606,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
         dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
         dataForNewCRMTicket.put("agentNote", agentNote);
+        dataForNewCRMTicket.put("agentTags", String.join(", ", tags));
         dataForNewCRMTicket.put("link", link);
         dataForNewCRMTicket.put("ticketNumber", ticketNumber);
         dataForNewCRMTicket.put("date", LocalDateTime.now().toString());
@@ -979,7 +981,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
         getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
-        prepareDataForCrmTicketChatdesk(note, link, number);
+        List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
+        prepareDataForCrmTicketChatdesk(note, link, number, tags);
     }
 
 
@@ -1000,6 +1003,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 " Ticket note does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
                 " Ticket link does not match created on the backend \n");
+//        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("agentTags"),
+//                " Ticket link does not match created on the backend \n");
         soft.assertAll();
 
     }
@@ -1007,7 +1012,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^Agent add (.*) tag$")
     public void agentAddSelectedTag(int iter) {
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
-        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size()-1, iter, //-1 delet "x"(delet all tags) element
+        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
                 "Not all tags was added \n");
     }
 
