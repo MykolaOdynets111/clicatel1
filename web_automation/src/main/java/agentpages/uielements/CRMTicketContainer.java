@@ -3,9 +3,11 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.user-tickets-container")
@@ -29,7 +31,14 @@ public class CRMTicketContainer extends AbstractUIElement {
         return new CRMTicket(crmTickets.get(0));
     }
 
-    public String getContainerHeader(){ return containerHeader.getText(); }
+    public String getContainerHeader(){
+        try {
+            return containerHeader.getText();
+        } catch(NoSuchElementException e) {
+            Assert.assertTrue(false, "CRM ticket container is not shown");
+        }
+        return "";
+    }
 
     public int getNumberOfTickets(){return crmTickets.size();}
 
