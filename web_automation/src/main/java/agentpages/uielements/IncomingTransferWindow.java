@@ -9,8 +9,17 @@ import org.testng.Assert;
 @FindBy(css = "div.touch-pop-up")
 public class IncomingTransferWindow extends AbstractUIElement {
 
+    @FindBy(css = "div.touch-header h2")
+    private WebElement transferWindowHeader;
+
     @FindBy(xpath = "//button[text()='Accept transfer']")
-    private WebElement acceptTransfetButton;
+    private WebElement acceptTransferButton;
+
+    @FindBy(xpath = "//button[text()='Accept']")
+    private WebElement acceptRejectedButton;
+
+    @FindBy(xpath = "//button[text()='Reject transfer']")
+    private WebElement rejectTransfetButton;
 
     @FindBy(xpath = "(//dt[text()='Transfer from:']/following-sibling::dd)[1]")
     private WebElement fromAgentName;
@@ -24,8 +33,19 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = "div.chat-context")
     private WebElement clientMessage;
 
+    @FindBy(css = "dl.dl-horizontal")
+    private WebElement rejectedBy;
+
     public void acceptTransfer(){
-        acceptTransfetButton.click();
+        acceptTransferButton.click();
+    }
+
+    public void rejectTransfer(){
+        rejectTransfetButton.click();
+    }
+
+    public void acceptRejectTransfer(String agent){
+        clickElemAgent(acceptRejectedButton, 3, agent, "'Accept' rejected transfer button");
     }
 
     public String getTransferNotes(){
@@ -50,4 +70,13 @@ public class IncomingTransferWindow extends AbstractUIElement {
     public String getFromAgentName(){
         return  fromAgentName.getText();
     }
+
+    public String getTransferWindowHeader(String agent){
+        return getTextFromElemAgent(transferWindowHeader, 2, agent, "Transfer chat window header");
+    }
+
+    public String getRejectedBy(String agent){
+        return getTextFromElemAgent(rejectedBy, 2, agent, "Transfer chat window header");
+    }
+
 }

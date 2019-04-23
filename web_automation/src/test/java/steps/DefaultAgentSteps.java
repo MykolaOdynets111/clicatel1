@@ -53,6 +53,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
+    private String secondAgentName;
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
         return createdCrmTicketsList.get();
@@ -185,12 +186,26 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @When("^Agent transfers chat$")
     public void transferChat(){
         getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
-        getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
+        secondAgentName = getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
     }
 
-    @Then("Second agent receives incoming transfer with \"(.*)\" note from the first agent")
-    public void verifyIncomingTransferReceived(String notes){
-        Assert.assertEquals(getAgentHomeForSecondAgent().getIncomingTransferWindow().getTransferNotes(), notes,
+    @Then("(.*) receives incoming transfer with \"(.*)\" header")
+    public void verifyIncomingTransferHeader(String agent, String expectedHeader){
+        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferWindowHeader(agent),
+                expectedHeader,
+                "Header in incoming transfer window is not as expected");
+    }
+
+    @Then("^Correct Rejected by field is shown for (.*)$")
+    public void verifyRejectedByField(String agent){
+        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getRejectedBy(agent),
+                "Rejected by:\n" + secondAgentName,
+                "Header in incoming transfer window is not as expected");
+    }
+
+    @Then("(.*) receives incoming transfer with \"(.*)\" note from the another agent")
+    public void verifyIncomingTransferReceived(String agent, String notes){
+        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferNotes(), notes,
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
@@ -233,12 +248,23 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomeForSecondAgent().getIncomingTransferWindow().acceptTransfer();
     }
 
+    @Then("^Second agent click \"Reject transfer\" button$")
+    public void rejectIncomingTransfer(){
+        getAgentHomeForSecondAgent().getIncomingTransferWindow().rejectTransfer();
+    }
+
+    @Then("^(.*) click \"Accept\" button$")
+    public void acceptRejectedTransfer(String agent){
+        getAgentHomePage(agent).getIncomingTransferWindow().acceptRejectTransfer(agent);
+    }
+
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
+
 
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
