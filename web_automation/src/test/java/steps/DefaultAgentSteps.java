@@ -265,6 +265,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
 
+    @When("^(.*) click 'Pin' button$")
+    public void pinChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickPinButton(agent);
+    }
+
+
+    @When("^(.*) click 'Unpin' button$")
+    public void unpinChat(String agent) {
+        getAgentHomePage(agent).getChatHeader().clickUnpinButton(agent);
+    }
+
 
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
@@ -364,6 +375,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(13),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
+    }
+
+    @Then("^(.*) sees 'flag' icon in this chat$")
+    public void verifyFlagAppearance(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isFlagIconShown(getUserNameFromLocalStorage()),
+                "Overnight icon is not shown for overnight ticket. \n clientId: "+ getUserNameFromLocalStorage());
+
     }
 
     @When("^(.*) click on new conversation request from (.*)$")

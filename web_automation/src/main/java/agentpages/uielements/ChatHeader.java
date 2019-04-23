@@ -11,6 +11,12 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='End chat']")
     private WebElement endChatButton;
 
+    @FindBy(xpath = ".//button[text()='Pin chat']")
+    private WebElement pinChatButton;
+
+    @FindBy(xpath = ".//button[text()='Unpin chat']")
+    private WebElement unpinChatButton;
+
     @FindBy(css = "div.chat-header-title")
     private WebElement chatHeaderTitle;
 
@@ -35,4 +41,11 @@ public class ChatHeader extends AbstractUIElement {
         return chatHeaderTitle.getText();
     }
 
+    public void clickPinButton(String agent){
+        clickElemAgent(pinChatButton, 2, agent, "Pin chat");
+    }
+
+    public void clickUnpinButton(String agent){
+        clickElemAgent(unpinChatButton, 2, agent, "Unpin chat");
+    }
 }

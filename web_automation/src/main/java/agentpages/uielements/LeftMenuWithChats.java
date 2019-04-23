@@ -56,7 +56,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
     }
 
-
+    private WebElement getActiveTargetChat(String userName){
+        return chatsList.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
+    }
 
     public void openNewConversationRequestByAgent(String agent) {
         String userName = getUserNameFromLocalStorage();
@@ -86,6 +88,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketIconShown();
     }
 
+    public boolean isFlagIconShown(String userName){
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconShown();
+    }
 
     public boolean isOvernightTicketIconRemoved(String userName){
         return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
