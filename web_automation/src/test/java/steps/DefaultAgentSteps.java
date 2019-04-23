@@ -641,7 +641,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         return dataForNewCRMTicket;
     }
 
-    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber){
+    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber, List<String> tags){
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
                 (ConfigManager.getEnv(), getUserNameFromLocalStorage());
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
@@ -649,6 +649,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
         dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
         dataForNewCRMTicket.put("agentNote", agentNote);
+        dataForNewCRMTicket.put("agentTags", String.join(", ", tags));
         dataForNewCRMTicket.put("link", link);
         dataForNewCRMTicket.put("ticketNumber", ticketNumber);
         dataForNewCRMTicket.put("date", LocalDateTime.now().toString());
@@ -1023,7 +1024,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
         getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
-        prepareDataForCrmTicketChatdesk(note, link, number);
+        List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
+        prepareDataForCrmTicketChatdesk(note, link, number, tags);
     }
 
 
@@ -1044,6 +1046,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 " Ticket note does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
                 " Ticket link does not match created on the backend \n");
+//        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("agentTags"),
+//                " Ticket link does not match created on the backend \n");
         soft.assertAll();
 
     }
@@ -1051,6 +1055,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^Agent add (.*) tag$")
     public void agentAddSelectedTag(int iter) {
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
+        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
+                "Not all tags was added \n");
     }
 
     @Then("^Agent delete all tags$")
@@ -1060,12 +1066,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^All tags for tenant is available in the dropdown$")
     public void allTagsForTenantIsAvailableInTheDropdown() {
-        SoftAssert soft = new SoftAssert();
-        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
         List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
-        soft.assertTrue(tagsInCRM.equals(tags),
+        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
+        Assert.assertTrue(tagsInCRM.equals(tags),
                 " CRM ticket 'Tags' does not match created on the backend \n");
-        soft.assertAll();
     }
 
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")
@@ -1075,11 +1079,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         String randomTag= tags.get((int)(Math.random() * tags.size()));
         getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        soft.assertTrue(tagsInCRM.contains(randomTag),
-                " CRM ticket 'Tags' does not match in search \n");
-        soft.assertAll();
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
         List<String> chosenTags = getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags();
+        soft.assertTrue(tagsInCRM.contains(randomTag),
+                " CRM ticket 'Tags' does not match in search \n");
         soft.assertTrue(chosenTags.contains(randomTag),
                 " CRM ticket 'Tag' does not match into the Tags field \n");
         soft.assertAll();

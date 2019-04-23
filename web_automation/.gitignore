@@ -5,4 +5,6 @@ out/
 .*
 .gradle/
 **/.gradle/
+../touch-rest-api-tests/
+../Web_touch_automation/
 debug.log
