@@ -29,7 +29,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
 
-import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
