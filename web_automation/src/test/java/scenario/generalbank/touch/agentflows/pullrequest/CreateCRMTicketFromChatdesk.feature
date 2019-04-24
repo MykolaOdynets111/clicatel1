@@ -1,5 +1,5 @@
 @agent_feedback
-Feature: Interaction with CRM tickets
+Feature: Creating CRM tickets
 
   Background:
     Given User select General Bank Demo tenant
