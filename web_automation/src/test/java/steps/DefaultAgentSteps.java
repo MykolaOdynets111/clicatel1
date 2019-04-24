@@ -276,6 +276,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomePage(agent).getChatHeader().clickUnpinButton(agent);
     }
 
+    @Then("^(.*) can not click 'Transfer chat' button$")
+    public void agentCanNotClickTransferChatButton(String agent) {
+        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isTransferButtonEnabled(),
+                "Transfer chat button is enabled ");
+    }
+
 
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
@@ -1086,5 +1092,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertTrue(chosenTags.contains(randomTag),
                 " CRM ticket 'Tag' does not match into the Tags field \n");
         soft.assertAll();
+    }
+
+    @Then("^(.*) receives 'pin' error message$")
+    public void agentReceivesErrorMessage(String agent) {
+        getAgentHomePage(agent).isPinErrorMassageShown(agent);
     }
 }
