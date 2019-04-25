@@ -33,6 +33,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String tafMessageId, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
         TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
         String updatedMessage = generateNewMessageText(tafMessageId);
         tafMessageUpdates.setText(updatedMessage);
