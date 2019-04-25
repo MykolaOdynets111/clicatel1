@@ -28,7 +28,7 @@ Feature: connect_agent auto responder (Agent mode)
     Given Taf connect_agent is set to true for Automation tenant
     Given Taf connect_agent message text is updated for Automation tenant
     Given I open portal
-    And Login into portal as an admin of Automation Bot account
+    And Login into portal as an admin of Automation account
     When I select Touch in left menu and Touch preferences in submenu
     And Click "Auto responders" nav button
     When Agent click expand arrow for Connecting Agent message auto responder

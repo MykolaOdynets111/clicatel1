@@ -52,6 +52,5 @@ public class ChatHeader extends AbstractUIElement {
 
     public void clickUnpinButton(String agent){
         clickElemAgent(unpinChatButton, 2, agent, "Unpin chat");
-        waitForElementToBeClickableAgent(pinChatButton,2, "main agent");
     }
 }
