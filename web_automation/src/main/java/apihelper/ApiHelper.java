@@ -121,6 +121,15 @@ public class ApiHelper {
         return tenantMessages;
     }
 
+    public static List<TafMessage> getDefaultTafMessages() {
+        String url = String.format(Endpoints.TAF_MESSAGES, "null");
+        tenantMessages = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .get(url)
+                .jsonPath().getList("tafResponses", TafMessage.class);
+        return tenantMessages;
+    }
+
     public static void updateTafMessage(TafMessage tafMessage){
         ObjectMapper mapper = new ObjectMapper();
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
@@ -136,6 +145,10 @@ public class ApiHelper {
 
     public static String getTenantMessageText(String id) {
         return getTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
+    }
+
+    public static String getDefaultTenantMessageText(String id) {
+        return getDefaultTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
     }
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {

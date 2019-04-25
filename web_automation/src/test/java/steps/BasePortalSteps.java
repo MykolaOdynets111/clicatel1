@@ -38,6 +38,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserManagementPage> portalUserManagementThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
@@ -335,6 +336,32 @@ public class BasePortalSteps {
                 }
             }
         }
+    }
+
+    @When("^Click \"(.*)\" nav button$")
+    public void clickNavButton(String navButton){
+        getPortalTouchPrefencesPage().clickPageNavButton(navButton);
+    }
+
+    @When("^Agent click expand arrow for (.*) auto responder$")
+    public void clickExpandArrowForAutoResponder(String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPrefencesPage().getAutoRespondersWindow()
+                                                            .clickExpandArrowForMessage(autoresponder);
+    }
+
+    @When("^Click \"Reset to default\" button for (.*) auto responder$")
+    public void clickResetToDefaultButton(String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @Then("^(.*) is reset on backend$")
+    public void verifyTafMessageIsReset(String tafMessageId){
+        String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
+        String defaultMessage = ApiHelper.getDefaultTenantMessageText(tafMessageId);
+        Assert.assertEquals(actualMessage, defaultMessage,
+                tafMessageId + " message is not reset to default");
     }
 
     @When("^(?:I|Admin) select (.*) in left menu$")
@@ -779,6 +806,15 @@ public class BasePortalSteps {
             return portalManagingUsersThreadLocal.get();
         } else{
             return portalManagingUsersThreadLocal.get();
+        }
+    }
+
+    private PortalTouchPrefencesPage getPortalTouchPrefencesPage(){
+        if (portalTouchPrefencesPageThreadLocal.get()==null) {
+            portalTouchPrefencesPageThreadLocal.set(new PortalTouchPrefencesPage());
+            return portalTouchPrefencesPageThreadLocal.get();
+        } else{
+            return portalTouchPrefencesPageThreadLocal.get();
         }
     }
 

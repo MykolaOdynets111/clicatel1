@@ -22,3 +22,17 @@ Feature: connect_agent auto responder (Agent mode)
     And User is able to provide some info about himself in the card after his chat to agent message
     And User click 'Submit' button in the card after user message: chat to agent
     Then Text response that contains "connect_agent" is shown
+
+  @no_chatdesk
+  Scenario: Reset to default connect_agent auto responder (Agent mode)
+    Given Taf connect_agent is set to true for Automation tenant
+    Given Taf connect_agent message text is updated for Automation tenant
+    Given I open portal
+    And Login into portal as an admin of Automation Bot account
+    When I select Touch in left menu and Touch preferences in submenu
+    And Click "Auto responders" nav button
+    When Agent click expand arrow for Connecting Agent message auto responder
+    And Click "Reset to default" button for Connecting Agent message auto responder
+    Then connect_agent is reset on backend
+
+
