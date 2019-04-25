@@ -37,6 +37,11 @@ public class ChatHeader extends AbstractUIElement {
         findElemByXPATHAgent(transferChatButton).click();
     }
 
+    public boolean isTransferButtonEnabled(){
+        waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
+        return findElemByXPATHAgent(transferChatButton).isEnabled();
+    }
+
     public String getChatHeaderText(){
         return chatHeaderTitle.getText();
     }
@@ -47,5 +52,6 @@ public class ChatHeader extends AbstractUIElement {
 
     public void clickUnpinButton(String agent){
         clickElemAgent(unpinChatButton, 2, agent, "Unpin chat");
+        waitForElementToBeClickableAgent(pinChatButton,2, "main agent");
     }
 }

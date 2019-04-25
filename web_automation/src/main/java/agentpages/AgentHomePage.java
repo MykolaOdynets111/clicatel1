@@ -42,6 +42,11 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[text()='Agent Assistant']")
     private WebElement agentAssistantButton;
 
+    private String pinErrorMessageXpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']";
+
+    @FindBy(xpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']")
+    private WebElement pinErrorMessage;
+
     @FindBy(xpath = "//div[text()='Profanity not allowed']")
     private WebElement profanityPopup;
 
@@ -294,6 +299,17 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public boolean isAgentLimitReachedPopupShown(int wait){
         return isElementShownAgent(agentLimitReachedPopup,wait);
+    }
+
+    public void isPinErrorMassageShown(String Agent){
+        try{
+            waitForElementToBeVisibleAgent(pinErrorMessage, 10, Agent);
+        }
+        catch (TimeoutException e){
+            Assert.assertTrue(false,
+                    "There is no Error message for pin chat");
+        }
+        waitForElementsToBeInvisibleByXpathAgent(pinErrorMessageXpath,10, Agent);
     }
 
 }
