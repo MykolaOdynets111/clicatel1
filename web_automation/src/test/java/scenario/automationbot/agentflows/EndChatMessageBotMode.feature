@@ -35,3 +35,14 @@ Feature: End chat flow: bot mode
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then Text response that contains "exit" is shown
+
+  @no_chatdesk
+  Scenario: End chat message resetting for Bot mode tenant
+    Given Taf start_new_conversation message text is updated for Automation Bot tenant
+    Given I open portal
+    And Login into portal as an admin of Automation Bot account
+    When I select Touch in left menu and Touch preferences in submenu
+    And Click "Auto responders" nav button
+    When Agent click expand arrow for End chat message auto responder
+    And Click "Reset to default" button for End chat message auto responder
+    Then start_new_conversation is reset on backend
