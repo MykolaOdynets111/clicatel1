@@ -41,7 +41,7 @@ public class LeftMenu extends AbstractUIElement {
         }
 
         waitForElementToBeVisibleAgent(leftSubMenu, 10);
-        waitForElementsToBeVisibleAgent(submenuItems,2, "main agent");
+        waitForElementsToBeVisibleAgent(submenuItems, 3, "admin");
         executeJSclick(submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get(),
                 DriverFactory.getAgentDriverInstance());
     }

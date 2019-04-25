@@ -23,6 +23,7 @@ public class ChatHeader extends AbstractUIElement {
     private String transferChatButton =  "//button[text()='Transfer chat']";
 
     public void clickEndChatButton(){
+        waitForElementToBeClickableAgent(pinChatButton,2, "main agent");
         if (!isElementShownAgent(endChatButton)){
             Assert.assertTrue(false, "'End chat' button is not shown.");
         } else {endChatButton.click();}
@@ -52,6 +53,5 @@ public class ChatHeader extends AbstractUIElement {
 
     public void clickUnpinButton(String agent){
         clickElemAgent(unpinChatButton, 2, agent, "Unpin chat");
-        waitForElementToBeClickableAgent(pinChatButton,2, "main agent");
     }
 }

@@ -6,7 +6,11 @@ import interfaces.JSHelper;
 import interfaces.WebActions;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
+
+import java.util.List;
 
 public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
@@ -17,6 +21,12 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     private static String notificationAlert = "div.alert-container";
 
     private static String processingAlert = "div.loader-bar-text";
+
+    @FindBy(css = "section.cl-page-tabs ol.list-unstyled.list-inline")
+    private WebElement selectionNavBar;
+
+    @FindBy(css = "li[ng-repeat='tab in clTabs']")
+    private List<WebElement> pageNavButtons;
 
     public String getNotificationAlertText(){
         if( isElementShownAgentByCSS(notificationAlert, 4, "admin")){
@@ -45,5 +55,13 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         waitForElementToBeVisibleByCssAgent(notificationAlert, 14);
         waitForElementToBeInVisibleByCssAgent(notificationAlert, 20);
         } catch(NoSuchElementException|TimeoutException e){}
+    }
+
+    public void clickPageNavButton(String buttonName){
+        waitForElementToBeVisibleAgent(selectionNavBar, 8);
+        WebElement targetButton = pageNavButtons.stream()
+                                        .filter(e -> e.getText().equalsIgnoreCase(buttonName))
+                                        .findFirst().get();
+        clickElemAgent(targetButton,1,"admin", buttonName);
     }
 }
