@@ -31,7 +31,6 @@ Feature: Pinned chat is disabled to close and to transfer
     When Agent click 'Pin' button
     Then Agent sees 'flag' icon in this chat
     Then Agent can not click 'Transfer chat' button
-#    Then Agent receives 'pin' error message ToDO
     Then Agent click 'Unpin' button
     Given I login as second agent of Automation Bot
     And Agent transfers chat

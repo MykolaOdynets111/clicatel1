@@ -33,6 +33,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
     private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
     private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
+    private ThreadLocal<PortalTouchPreferencesPage> portalTouchPreferencesPage = new ThreadLocal<>();
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
@@ -737,6 +738,15 @@ public class BasePortalSteps {
         }
     }
 
+    private PortalTouchPreferencesPage getPortalTouchPreferencesPage(){
+        if (portalTouchPreferencesPage.get()==null) {
+            portalTouchPreferencesPage.set(new PortalTouchPreferencesPage());
+            return portalTouchPreferencesPage.get();
+        } else{
+            return portalTouchPreferencesPage.get();
+        }
+    }
+
     private PortalSignUpPage getPortalSignUpPage(){
         if (portalSignUpPage.get()==null) {
             portalSignUpPage.set(new PortalSignUpPage());
@@ -780,6 +790,12 @@ public class BasePortalSteps {
         } else{
             return portalManagingUsersThreadLocal.get();
         }
+    }
+
+    @When("^Select '(.*)' in navigation menu$")
+    public void clickNavItemOnPortalTouchPreferencesPage(String navName){
+        getPortalTouchPreferencesPage().clickNavItem(navName);
+        getPortalTouchPreferencesPage().getAutoResponse().clickOnOff();
     }
 
 }
