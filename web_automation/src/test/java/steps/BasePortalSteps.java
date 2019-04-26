@@ -725,7 +725,7 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().clickDeleteButton();
     }
 
-    @When("^Admin updates aget's personal details$")
+    @When("^Admin updates agent's personal details$")
     public void updateAgentDetails(){
 
     }

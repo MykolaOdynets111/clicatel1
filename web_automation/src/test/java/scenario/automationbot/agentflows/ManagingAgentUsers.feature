@@ -37,5 +37,5 @@
 #    And Login into portal as an admin of Automation Bot account
 #    When I select Touch in left menu and Manage Agent users in submenu
 #    And Click 'Manage' button for created user
-#    When Admin updates aget's personal details
+#    When Admin updates agent's personal details
 #

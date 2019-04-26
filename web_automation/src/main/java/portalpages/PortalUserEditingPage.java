@@ -34,6 +34,16 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     @FindBy(css = "button[ng-click='delete()']")
     private WebElement deleteButton;
 
+    @FindBy(name = "firstName")
+    private WebElement firstNameInput;
+
+    @FindBy(name = "lastName")
+    private WebElement lastNameInput;
+
+    @FindBy(name = "email")
+    private WebElement emailInput;
+
+
     private EditUserRolesWindow editUserRolesWindow;
 
     private String inputPhotoLocator = "input[ngf-select][ng-model='%s']";
@@ -74,6 +84,12 @@ public class PortalUserEditingPage extends PortalAbstractPage {
 
     public void clickDeleteButton(){
         clickElemAgent(deleteButton, 3, "main", "'Delete button'");
+    }
+
+    public void updateAgentPersonalDetails(){
+        inputTextAgent(firstNameInput, 2, "admin", "First name input", "text");
+        inputTextAgent(lastNameInput, 2, "admin", "Last name input", "text");
+        inputTextAgent(emailInput, 2, "admin", "email input", "text");
     }
 
 }
