@@ -5,7 +5,7 @@ Feature: Managing Agent's Auto responders
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Touch Preferences in submenu
-    And Select 'Auto responders' in navigation menu
+    And Click "Auto responders" nav button
 #    And Click 'Manage' button for Taras Aqa user
 #    And Click 'Upload' button
 #    When Upload new photo

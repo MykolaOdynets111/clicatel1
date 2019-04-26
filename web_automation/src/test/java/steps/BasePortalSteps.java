@@ -818,10 +818,4 @@ public class BasePortalSteps {
         }
     }
 
-    @When("^Select '(.*)' in navigation menu$")
-    public void clickNavItemOnPortalTouchPreferencesPage(String navName){
-        getPortalTouchPreferencesPage().clickNavItem(navName);
-        getPortalTouchPreferencesPage().getAutoResponse().clickOnOff();
-    }
-
 }

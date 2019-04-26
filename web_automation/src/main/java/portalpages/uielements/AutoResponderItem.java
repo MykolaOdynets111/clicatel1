@@ -17,6 +17,9 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
     @FindBy(css = "span.cl-icon--collapse")
     private WebElement collapceIcon;
 
+    @FindBy(css = "textarea.go-textarea")
+    private WebElement textarea ;
+
     @FindBy(css = "button.button.button-secondary")
     private WebElement resetToDefaultButton;
 
