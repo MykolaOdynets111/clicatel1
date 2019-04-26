@@ -180,7 +180,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void verifyAgentLoggedIn(String ordinalAgentNumber){
         agentHomePage = new AgentHomePage(ordinalAgentNumber);
         Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in chat desk.");
+    }
 
+    @Then("^Agent is not redirected to chatdesk$")
+    public void verifyAgentNotLoggedIn(String ordinalAgentNumber){
+        agentHomePage = new AgentHomePage(ordinalAgentNumber);
+        Assert.assertFalse(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is redirected to chat desk.");
     }
 
     @When("^Agent transfers chat$")

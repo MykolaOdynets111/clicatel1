@@ -3,6 +3,7 @@ package steps;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
 import apihelper.Endpoints;
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -26,8 +27,7 @@ import java.util.Map;
 
 public class BasePortalSteps {
 
-    private static String agentEmail;
-    private String agentPass = "p@$$w0rd4te$t";
+    private Faker faker;
     private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
     private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
@@ -37,12 +37,16 @@ public class BasePortalSteps {
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalUserManagementPage> portalUserManagementThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserEditingPage> portalUserManagementThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
+    public static String AGENT_FIRST_NAME;
+    public static String AGENT_LAST_NAME;
+    private static String AGENT_EMAIL;
+    private String AGENT_PASS = "p@$$w0rd4te$t";
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
 
@@ -50,16 +54,18 @@ public class BasePortalSteps {
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        agentEmail = "aqa_"+System.currentTimeMillis()+"@aqa.com";
-        ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, agentEmail);
+        AGENT_FIRST_NAME = faker.name().firstName();
+        AGENT_LAST_NAME =  faker.name().lastName();
+        AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), agentEmail);
-        ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
+        String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
+        ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
     }
 
     @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
@@ -75,13 +81,13 @@ public class BasePortalSteps {
 
     @Then("^New agent is added into touch database$")
     public void verifyThatNewAgentAddedToDatabase(){
-        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), agentEmail),
-                "Agent with '" + agentEmail + "' Email is not created in touch DB after 10 seconds wait.");
+        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), AGENT_EMAIL),
+                "Agent with '" + AGENT_EMAIL + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
     @Given("^Delete user$")
     public static void deleteAgent(){
-        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);
+        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL);
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
     }
 
@@ -191,7 +197,7 @@ public class BasePortalSteps {
     @When("^Login as newly created agent$")
     public void loginAsCreatedAgent(){
         try {
-            portalLoginPage.get().login(agentEmail, agentPass);
+            portalLoginPage.get().login(AGENT_EMAIL, AGENT_PASS);
         }catch (org.openqa.selenium.TimeoutException e){
 
         }
@@ -321,7 +327,7 @@ public class BasePortalSteps {
     }
 
     public static boolean isNewUserWasCreated(){
-        return agentEmail != null;
+        return AGENT_EMAIL != null;
     }
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
@@ -696,6 +702,9 @@ public class BasePortalSteps {
 
     @When("^Click 'Manage' button for (.*) user$")
     public void clickManageButtonForUser(String fullName){
+        if(fullName.equalsIgnoreCase("created")){
+            fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        }
         portalUserManagementThreadLocal.set(
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
@@ -706,15 +715,33 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().clickUploadPhotoButton();
     }
 
+    @When("^Admin clicks 'Edit user roles'$")
+    public void clickEditRoles(){
+        portalUserManagementThreadLocal.get().clickEditUserRolesButton();
+    }
+
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+    }
+
+    @When("^Add new touch (.*) solution$")
+    public void addNewTouchSolution(String touchRole){
+        portalUserManagementThreadLocal.get().getEditUserRolesWindow()
+                                                .selectNewTouchRole(touchRole)
+                                                .clickFinishButton();
+        portalUserManagementThreadLocal.get().waitWhileProcessing();
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")
     public void deleteAgentPhoto(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
+    }
+
+    @When("^Admin logs out from portal$")
+    public void logoutFromPortal(){
+        portalUserManagementThreadLocal.get().getPageHeader().logoutAdmin();
     }
 
     @Then("^New image is saved on portal and backend$")
