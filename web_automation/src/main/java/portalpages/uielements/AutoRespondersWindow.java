@@ -16,11 +16,9 @@ public class AutoRespondersWindow extends BasePortalWindow {
                             .findFirst().get();
     }
 
-
     public void waitToBeLoaded(){
         waitForElementToBeVisibleAgent(this.getWrappedElement(), 6);
     }
-
 
     public void clickExpandArrowForMessage(String autoresponder){
         waitForElementsToBeVisibleAgent(autoresponderItems, 5, "admin");
@@ -30,5 +28,10 @@ public class AutoRespondersWindow extends BasePortalWindow {
     public void clickResetToDefaultForMessage(String autoresponder){
         waitForElementsToBeVisibleAgent(autoresponderItems, 5, "admin");
         getTargetAutoResponderItem(autoresponder).clickResetToDefaultButton();
+    }
+
+    public void clickOnOffForMessage(String autoresponder){
+        waitForElementsToBeVisibleAgent(autoresponderItems, 5, "admin");
+        getTargetAutoResponderItem(autoresponder).clickOnOff();
     }
 }

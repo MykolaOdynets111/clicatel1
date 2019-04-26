@@ -39,6 +39,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserEditingPage> portalUserManagementThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
@@ -349,6 +350,12 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().clickPageNavButton(navButton);
     }
 
+    @When("^Agent click 'Save changes' button$")
+    public void agentClickSaveChangesButton() {
+        getPortalTouchPrefencesPage().clickSaveButton();
+    }
+
+
     @When("^Agent click expand arrow for (.*) auto responder$")
     public void clickExpandArrowForAutoResponder(String autoresponder){
         getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
@@ -356,10 +363,34 @@ public class BasePortalSteps {
                                                             .clickExpandArrowForMessage(autoresponder);
     }
 
+    @When("^Agent click On/Off button for (.*) auto responder$")
+    public void clickOnOffForAutoResponder(String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPrefencesPage().getAutoRespondersWindow()
+                .clickOnOffForMessage(autoresponder);
+    }
+
     @When("^Click \"Reset to default\" button for (.*) auto responder$")
     public void clickResetToDefaultButton(String autoresponder){
         getPortalTouchPrefencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
         getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @When("^Type new message: (.*) to (.*) message field$")
+    public void typeNewMessage(String message, String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
+//        autoresponseMessageThreadLocal.set(message);
+//        autoresponseMessageThreadLocal.get();
+//       // getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @Then("^(.*) on backend corresponds to (.*) on frontend$")
+    public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
+        String messageOnfrontend = getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
+        String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
+        Assert.assertEquals(actualMessage, messageOnfrontend,
+                messageName + " message is not updated on backend");
+
     }
 
     @Then("^(.*) is reset on backend$")

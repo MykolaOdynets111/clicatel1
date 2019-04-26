@@ -21,6 +21,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(css = "li[ng-repeat='tab in clTabs']")
     private List<WebElement> pageNavButtons;
 
+    @FindBy(xpath = "//button[text()='Save changes ']")
+    private WebElement saveChangesButton ;
+
     private static String notificationAlert = "div.alert-container";
 
     private static String processingAlert = "div.loader-bar-text";
@@ -74,5 +77,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         clickElemAgent(targetButton,1,"admin", buttonName);
     }
 
+    public void clickSaveButton(){
+        clickElemAgent(saveChangesButton, 4, "admin", "Save changes");
+    }
 
 }
