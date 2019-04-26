@@ -17,9 +17,8 @@ public class DriverFactory {
     private static final ThreadLocal<WebDriver> agentDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> portalDriver = new ThreadLocal<>();
     private static final ThreadLocal<WebDriver> secondAgentDriver = new ThreadLocal<>();
+    //Remote machine with Windows server installed
     private static String REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
-//    private static final String REMOTE_URL = "http://172.31.44.151:4444/wd/hub";
-//    private static final String REMOTE_URL = "http://35.164.148.100:4441/wd/hub";
 
 
     public static boolean isAgentDriverExists(){
@@ -140,10 +139,10 @@ public class DriverFactory {
             if(REMOTE_URL.equals("http://35.164.148.100:4441/wd/hub")&ConfigManager.isRemote()){
                 Assert.assertTrue(false, "!!! Incorrect remote driver is used. ");
             }
-            if(!ConfigManager.getEnv().equalsIgnoreCase("prod")){
-//                REMOTE_URL = "http://172.31.70.236:4445/wd/hub"; // for remote debug ONLY, supports only 2 browsers !!
-                REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
-            }
+//            if(!ConfigManager.getEnv().equalsIgnoreCase("prod")){
+////                REMOTE_URL = "http://172.31.70.236:4445/wd/hub"; // for remote debug ONLY, supports only 2 browsers !!
+//                REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
+//            }
             RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
             return remoteWebDriver;
         } catch (MalformedURLException e) {

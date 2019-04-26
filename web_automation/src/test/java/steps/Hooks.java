@@ -131,7 +131,7 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow(scenario);
         }
-        if(scenario.getSourceTagNames().contains("@portal")){
+        if(scenario.getSourceTagNames().contains("@newagent")){
             if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
         }
 

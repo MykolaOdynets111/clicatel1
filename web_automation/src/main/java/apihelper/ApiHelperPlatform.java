@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
 
-    public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail){
+    public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
         List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
         String[] idsArray = new String[ids.size()];
@@ -23,8 +23,8 @@ public class ApiHelperPlatform {
                         "  \"invitations\": [\n" +
                         "    {\n" +
                         "      \"targetEmail\": \""+agentEmail+"\",\n" +
-                        "      \"firstName\": \"AQA\",\n" +
-                        "      \"lastName\": \"TEST\",\n" +
+                        "      \"firstName\": \"" +name+ "\",\n" +
+                        "      \"lastName\": \"" +lastName+ "\",\n" +
                         "      \"roleIds\": "+ Arrays.toString(idsArray) +
                         "    }\n" +
                         "  ]\n" +

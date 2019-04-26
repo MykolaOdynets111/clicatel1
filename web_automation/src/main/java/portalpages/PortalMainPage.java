@@ -36,7 +36,6 @@ public class PortalMainPage extends PortalAbstractPage {
     private WebElement launchpadButton;
 
     private LeftMenu leftMenu;
-    private PageHeader pageHeader;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
@@ -54,9 +53,6 @@ public class PortalMainPage extends PortalAbstractPage {
         return upgradeYourPlanWindow;
     }
 
-    public PageHeader getPageHeader() {
-        return pageHeader;
-    }
 
     public LeftMenu getLeftMenu() {
         waitForElementToBeVisibleAgent(leftMenu.getWrappedElement(), 5);

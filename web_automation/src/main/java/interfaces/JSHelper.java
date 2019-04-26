@@ -66,7 +66,7 @@ public interface JSHelper {
             WebElement element = driver.findElement(By.xpath(xpath));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         }catch(NoSuchElementException e){
-            Assert.assertTrue(false, elemName +" is not fot found");
+            Assert.assertTrue(false, elemName +" is not found");
         }
     }
 

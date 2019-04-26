@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class CamundaFlowsSteps implements JSHelper, WebActions {
 
-    Faker faker = new Faker();
+    private Faker faker = new Faker();
 
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String tafMessageId, boolean status, String tenantOrgName){
@@ -39,7 +39,8 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
         tafMessageUpdates.setText(updatedMessage);
         ApiHelper.updateTafMessage(tafMessageUpdates);
         TafMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
-        Assert.assertTrue(tafMessageUpdates.getText().equals(tafMessageBackend.getText()), "Message text is not updated for tenant");
+        Assert.assertEquals(tafMessageBackend.getText(), tafMessageUpdates.getText(),
+                "Message text is not updated for tenant");
 
     }
 

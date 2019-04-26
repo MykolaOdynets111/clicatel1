@@ -180,7 +180,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
 
     public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
-        if (isElementShownAgent(conversationAreaContainer,15, ordinalAgentNumber)) {
+        if (isElementShownAgent(conversationAreaContainer,10, ordinalAgentNumber)) {
             try{
                 try {
                     waitForElementToBeVisibleByXpathAgent(loadingSpinner, 6, ordinalAgentNumber);
