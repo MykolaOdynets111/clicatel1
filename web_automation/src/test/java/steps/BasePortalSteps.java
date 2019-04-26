@@ -720,6 +720,16 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().clickEditUserRolesButton();
     }
 
+    @When("^Admin clicks Delete user button$")
+    public void deleteAgentUser(){
+        portalUserManagementThreadLocal.get().clickDeleteButton();
+    }
+
+    @When("^Admin updates aget's personal details$")
+    public void updateAgentDetails(){
+
+    }
+
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");

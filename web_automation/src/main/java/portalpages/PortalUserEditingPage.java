@@ -31,6 +31,9 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Edit user roles']")
     private WebElement editUserButton;
 
+    @FindBy(css = "button[ng-click='delete()']")
+    private WebElement deleteButton;
+
     private EditUserRolesWindow editUserRolesWindow;
 
     private String inputPhotoLocator = "input[ngf-select][ng-model='%s']";
@@ -69,5 +72,8 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         clickElemAgent(editUserButton, 3, "main", "'Edit user roles'");
     }
 
+    public void clickDeleteButton(){
+        clickElemAgent(deleteButton, 3, "main", "'Delete button'");
+    }
 
 }
