@@ -21,6 +21,7 @@ public class RequestSpec {
     private static ThreadLocal<RequestSpecification> requestSpecification = new ThreadLocal<RequestSpecification>();
     private static Faker faker = new Faker();
     private static volatile ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
+    private static volatile ThreadLocal<String> PORTAL_SECOND_USER_ACCESS_TOKEN = new ThreadLocal<>();
 
 
     public static RequestSpecification getRequestSpecification(){
@@ -81,6 +82,24 @@ public class RequestSpec {
         }else{
             return PORTAL_USER_ACCESS_TOKEN.get();
     }
+    }
+
+    public static String getAccessTokenForPortalUserSecond(String tenantOrgName) {
+        if(PORTAL_SECOND_USER_ACCESS_TOKEN.get()==null) {
+            Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "second agent");
+            Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
+            Response resp = RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .body("{\n" +
+                            "  \"token\": \"" + tokenAndAccount.get("token") + "\",\n" +
+                            "  \"accountId\": \"" + tokenAndAccount.get("accountId") + "\"\n" +
+                            "}")
+                    .post(Endpoints.PLATFORM_SIGN_IN);
+        PORTAL_SECOND_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
+            return PORTAL_SECOND_USER_ACCESS_TOKEN.get();
+        }else{
+            return PORTAL_SECOND_USER_ACCESS_TOKEN.get();
+        }
     }
 
     public static String getAccessTokenForPortalUserByAccount(String accountName) {

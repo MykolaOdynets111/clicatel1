@@ -1,5 +1,6 @@
 package drivermanager;
 
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,8 +43,12 @@ public enum DriverType {
 
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
-//        ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
-      ChromeDriverManager.getInstance().setup();
+        if (System.getenv("COMPUTERNAME").equals("FANB0604")) {
+            ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+            return new ChromeDriver((ChromeOptions) capabilities);
+        }
+ //       ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+        ChromeDriverManager.getInstance().setup();
 
            return new ChromeDriver((ChromeOptions) capabilities);
         }

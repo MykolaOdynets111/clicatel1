@@ -280,7 +280,7 @@ public class Hooks implements JSHelper{
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-            closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            closePopupsIfOpenedEndChatAndlogoutSecondAgent("second agent");
             DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();
         }
@@ -312,6 +312,17 @@ public class Hooks implements JSHelper{
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
             ApiHelper.closeActiveChats();
+//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
+            agentHomePage.getPageHeader().logOut(agent);
+            new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
+        } catch(WebDriverException|AssertionError e){
+        }
+    }
+
+    private void closePopupsIfOpenedEndChatAndlogoutSecondAgent(String agent) {
+        try {
+            AgentHomePage agentHomePage = new AgentHomePage(agent);
+            ApiHelper.closeActiveChatsSecondAgent();
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
