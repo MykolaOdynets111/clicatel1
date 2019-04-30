@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.EditUserRolesWindow;
 
 import java.io.File;
-import java.util.List;
+import java.util.Map;
 
 public class PortalUserEditingPage extends PortalAbstractPage {
 
@@ -23,7 +23,10 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     private WebElement selectPictureButton;
 
     @FindBy(xpath = "//button[text()='Save'][not(@id='integration-save')]")
-    private WebElement saveButton;
+    private WebElement savePhotoButton;
+
+    @FindBy(css = "button[ng-click='save()']")
+    private WebElement saveChangesButton;
 
     @FindBy(css = "form[name='userForm'] div[ng-if='profileIcon']>img")
     private WebElement profileImage;
@@ -48,6 +51,8 @@ public class PortalUserEditingPage extends PortalAbstractPage {
 
     private String inputPhotoLocator = "input[ngf-select][ng-model='%s']";
 
+    private String saveButtonXPATH = "//button[text()='Save'][not(@id='integration-save')]";
+
     public EditUserRolesWindow getEditUserRolesWindow() {
         return editUserRolesWindow;
     }
@@ -65,7 +70,7 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         ));
         element.setFileDetector(new LocalFileDetector());
         element.sendKeys(new File(photoPath).getAbsolutePath());
-        saveButton.click();
+        savePhotoButton.click();
 
         waitWhileProcessing();
     }
@@ -86,10 +91,14 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         clickElemAgent(deleteButton, 3, "main", "'Delete button'");
     }
 
-    public void updateAgentPersonalDetails(){
-        inputTextAgent(firstNameInput, 2, "admin", "First name input", "text");
-        inputTextAgent(lastNameInput, 2, "admin", "Last name input", "text");
-        inputTextAgent(emailInput, 2, "admin", "email input", "text");
+    public void updateAgentPersonalDetails(Map<String, String> updatedAgentInfo){
+        firstNameInput.clear();
+        inputTextAgent(firstNameInput, 2, "admin", "First name input", updatedAgentInfo.get("firstName"));
+        lastNameInput.clear();
+        inputTextAgent(lastNameInput, 2, "admin", "Last name input", updatedAgentInfo.get("lastName"));
+        emailInput.clear();
+        inputTextAgent(emailInput, 2, "admin", "email input", updatedAgentInfo.get("email"));
+        clickElemAgent(saveChangesButton, 5,"admin", "Save changes");
     }
 
 }

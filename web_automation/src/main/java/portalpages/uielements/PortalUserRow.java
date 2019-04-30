@@ -25,6 +25,7 @@ public class PortalUserRow extends Widget implements WebActions {
 
 
     public String getAgentFullName(){
+        waitForElementToBeVisibleAgent(agentFirstName, 6);
         return agentFirstName.getText() + " " + agentLastName.getText();
     }
 
