@@ -20,6 +20,7 @@ Feature: Pinned chat is disabled to close and to transfer
     When Agent click "End chat" button
     Then Agent receives 'pin' error message
     When Agent click 'Unpin' button
+    Then Agent do not see 'flag' icon in this chat
     Then Agent click "End chat" button
     Then End chat popup should be opened
     When Agent click 'Skip' button

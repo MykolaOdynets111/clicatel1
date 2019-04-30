@@ -391,8 +391,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^(.*) sees 'flag' icon in this chat$")
     public void verifyFlagAppearance(String agent){
         Assert.assertTrue(getLeftMenu(agent).isFlagIconShown(getUserNameFromLocalStorage()),
-                "Overnight icon is not shown for overnight ticket. \n clientId: "+ getUserNameFromLocalStorage());
+                "Flag icon is not shown");
+    }
 
+    @Then("^(.*) do not see 'flag' icon in this chat$")
+    public void verifyFlagNotAppearance(String agent){
+        Assert.assertTrue(getLeftMenu(agent).isFlagIconRemoved(getUserNameFromLocalStorage()),
+                "Flag icon is shown");
     }
 
     @When("^(.*) click on new conversation request from (.*)$")

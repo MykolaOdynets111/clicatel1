@@ -69,6 +69,10 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
         return isElementShownAgent(flagIcon, 10, "main");
     }
 
+    public boolean isFlagIconRemoved(){
+        return isElementNotShown(flagIcon, 1);
+    }
+
     public boolean isOvernightTicketRemoved(){
         return isElementNotShownAgentByCSS(overnightTicketIcon, 9);
     }
