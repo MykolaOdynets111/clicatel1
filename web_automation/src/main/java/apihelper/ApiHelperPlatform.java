@@ -10,7 +10,7 @@ public class ApiHelperPlatform {
 
     public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
-        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
+        List<String> ids = getIdsOfRoles(tenantOrgName, "TOUCH_AGENT");
         String[] idsArray = new String[ids.size()];
         for(int i=0; i<ids.size(); i++){
             idsArray[i] = "\""+ids.get(i)+"\"";

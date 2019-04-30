@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class BasePortalSteps {
 
-    private Faker faker;
+    private Faker faker = new Faker();
     private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
     private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
@@ -740,6 +740,14 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().getEditUserRolesWindow()
                                                 .selectNewTouchRole(touchRole)
                                                 .clickFinishButton();
+        portalUserManagementThreadLocal.get().waitWhileProcessing();
+    }
+
+    @When("^Add new platform (.*) solution$")
+    public void addNewPlatformSolution(String role){
+        portalUserManagementThreadLocal.get().getEditUserRolesWindow()
+                .selectNewPlatformRole(role)
+                .clickFinishButton();
         portalUserManagementThreadLocal.get().waitWhileProcessing();
     }
 
