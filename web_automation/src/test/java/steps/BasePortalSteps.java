@@ -36,7 +36,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalManageAgentUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserEditingPage> portalUserManagementThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
@@ -66,6 +66,11 @@ public class BasePortalSteps {
         }
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
+    }
+
+    @Then("^Newly created agent is deleted in DB$")
+    public void verifyAgentDelete(){
+
     }
 
     @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
@@ -201,6 +206,14 @@ public class BasePortalSteps {
         }catch (org.openqa.selenium.TimeoutException e){
 
         }
+    }
+
+    @Then("^Deleted agent is not able to log in portal$")
+    public void verifyDeletedAgentIsNotLoggedIn(){
+        portalLoginPage.get().login(AGENT_EMAIL, AGENT_PASS);
+        Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
+                "Username or password is invalid",
+                "Error about invalid credentials is not shown");
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
@@ -723,6 +736,14 @@ public class BasePortalSteps {
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
         portalUserManagementThreadLocal.get().clickDeleteButton();
+        portalUserManagementThreadLocal.get().waitWhileProcessing();
+    }
+
+    @Then("^User is removed from User management page$")
+    public void verifyAgentDeleted(){
+        String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 2000),
+                fullName + " agent is not removed from User management page after deleting");
     }
 
     @When("^Admin updates agent's personal details$")
@@ -760,6 +781,12 @@ public class BasePortalSteps {
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
         portalUserManagementThreadLocal.get().getPageHeader().logoutAdmin();
+    }
+
+    @Then("^Newly created agent is deleted on backend$")
+    public void verifyUserDeleted(){
+        Assert.assertFalse(ApiHelperPlatform.isActiveUserExists(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL),
+                AGENT_EMAIL + " agent is not deleted on backend");
     }
 
     @Then("^New image is saved on portal and backend$")
@@ -845,9 +872,9 @@ public class BasePortalSteps {
         }
     }
 
-    private PortalManagingUsersPage getPortalManagingUsersPage(){
+    private PortalManageAgentUsersPage getPortalManagingUsersPage(){
         if (portalManagingUsersThreadLocal.get()==null) {
-            portalManagingUsersThreadLocal.set(new PortalManagingUsersPage());
+            portalManagingUsersThreadLocal.set(new PortalManageAgentUsersPage());
             return portalManagingUsersThreadLocal.get();
         } else{
             return portalManagingUsersThreadLocal.get();

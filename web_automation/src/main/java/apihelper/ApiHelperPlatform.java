@@ -85,6 +85,15 @@ public class ApiHelperPlatform {
                 .findFirst().get().get("id");
     }
 
+    public static boolean isActiveUserExists(String tenantOrgName, String userEmail){
+        Response resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_USER);
+        return resp.getBody().jsonPath().getList("users", Map.class)
+                .stream().anyMatch(e -> e.get("email").equals(userEmail));
+    }
+
     public static List<Integer> getListOfActiveSubscriptions(String tenantOrgName){
         Response resp =   RestAssured.given()
                 .header("Content-Type", "application/json")
