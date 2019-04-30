@@ -51,6 +51,10 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
         return this;
     }
 
+    public boolean isMessageShown() {
+        return textarea.isDisplayed();
+    }
+
     public String getMessage() {
         waitForElementToBeVisibleAgent(textarea, 10);
         String messageOnfrontend = textarea.getAttribute("value");

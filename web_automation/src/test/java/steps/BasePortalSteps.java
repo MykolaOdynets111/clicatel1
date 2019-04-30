@@ -367,6 +367,7 @@ public class BasePortalSteps {
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
     }
 
 
@@ -392,6 +393,11 @@ public class BasePortalSteps {
 
     @When("^Type new message: (.*) to (.*) message field$")
     public void typeNewMessage(String message, String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        if (!getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
+            getPortalTouchPrefencesPage().getAutoRespondersWindow()
+                    .clickExpandArrowForMessage(autoresponder);
+        }
         getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
 //        autoresponseMessageThreadLocal.set(message);
 //        autoresponseMessageThreadLocal.get();
