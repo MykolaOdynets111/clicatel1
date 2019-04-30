@@ -47,6 +47,7 @@ public class BasePortalSteps {
     public static String AGENT_LAST_NAME;
     private static String AGENT_EMAIL;
     private String AGENT_PASS = "p@$$w0rd4te$t";
+    private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
 
@@ -199,13 +200,13 @@ public class BasePortalSteps {
         ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
-    @When("^Login as newly created agent$")
-    public void loginAsCreatedAgent(){
-        try {
-            portalLoginPage.get().login(AGENT_EMAIL, AGENT_PASS);
-        }catch (org.openqa.selenium.TimeoutException e){
-
+    @When("^Login as (.*) agent$")
+    public void loginAsCreatedAgent(String agent){
+        String email = AGENT_EMAIL;
+        if(agent.equalsIgnoreCase("updated")){
+            email = updatedAgentInfo.get("email");
         }
+        portalLoginPage.get().login(email, AGENT_PASS);
     }
 
     @Then("^Deleted agent is not able to log in portal$")
@@ -748,7 +749,13 @@ public class BasePortalSteps {
 
     @When("^Admin updates agent's personal details$")
     public void updateAgentDetails(){
+        updatedAgentInfo = new HashMap<>();
+        updatedAgentInfo.put("firstName", faker.name().firstName());
+        updatedAgentInfo.put("lastName", faker.name().lastName());
+        updatedAgentInfo.put("email", "aqa_"+System.currentTimeMillis()+"@aqa.com");
 
+        portalUserManagementThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
+        portalUserManagementThreadLocal.get().waitWhileProcessing();
     }
 
     @When("^Upload (.*)")
@@ -783,11 +790,18 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().getPageHeader().logoutAdmin();
     }
 
-    @Then("^Newly created agent is deleted on backend$")
+    @Then("^Newly created agent is (?:deleted|absent) on backend$")
     public void verifyUserDeleted(){
         Assert.assertFalse(ApiHelperPlatform.isActiveUserExists(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL),
                 AGENT_EMAIL + " agent is not deleted on backend");
     }
+
+    @Then("^Updated agent is present on backend$")
+    public void verifyUserUpdated(){
+        Assert.assertTrue(ApiHelperPlatform.isActiveUserExists(Tenants.getTenantUnderTestOrgName(), updatedAgentInfo.get("email")),
+                updatedAgentInfo.get("email") + " agent is not present on backend");
+    }
+
 
     @Then("^New image is saved on portal and backend$")
     public void verifyImageSaveOnPortal(){
