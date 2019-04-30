@@ -766,6 +766,11 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().clickUploadPhotoButton();
     }
 
+    @When("^Click 'Upload' button for tenant logo$")
+    public void clickUploadButtonForTenantLogo(){
+        getPortalTouchPrefencesPage().getconfigureBrandWindow().clickuploadButton();
+    }
+
     @When("^Admin clicks 'Edit user roles'$")
     public void clickEditRoles(){
         portalUserManagementThreadLocal.get().clickEditUserRolesButton();
@@ -798,6 +803,11 @@ public class BasePortalSteps {
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+    }
+
+    @When("^Upload (.*) for tenant")
+    public void uploadPhotoForTenant(String photoStrategy){
+        getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
     }
 
     @When("^Add new touch (.*) solution$")
