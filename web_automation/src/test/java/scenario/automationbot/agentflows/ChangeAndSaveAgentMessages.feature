@@ -1,4 +1,5 @@
 @no_widget
+@no_chatdesk
 Feature: Managing Agent's Auto responders
 
   Scenario: Changing agent auto responders, save it and check if it saved on backend
