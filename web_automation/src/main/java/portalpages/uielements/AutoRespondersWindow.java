@@ -1,7 +1,10 @@
 package portalpages.uielements;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+
 import java.util.List;
 
 @FindBy(css = "div.automated-messages")
@@ -21,7 +24,11 @@ public class AutoRespondersWindow extends BasePortalWindow {
     }
 
     public void clickExpandArrowForMessage(String autoresponder){
-        waitForElementsToBeVisibleAgent(autoresponderItems, 8, "admin");
+        try {
+            waitForElementsToBeVisibleAgent(autoresponderItems, 8, "admin");
+        } catch (TimeoutException e){
+            Assert.assertTrue(false, "Auto responders are not loaded after 8 seconds wait");
+        }
         getTargetAutoResponderItem(autoresponder).clickCollapseIcon();
     }
 
