@@ -527,6 +527,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @When("^(.*) searches and selects random chat is chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber){
+        getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(ordinalAgentNumber, 3,7);
         getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
     }
 
