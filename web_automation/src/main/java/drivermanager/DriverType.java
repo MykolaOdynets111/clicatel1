@@ -49,7 +49,7 @@ public enum DriverType {
                 ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
-            //        ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+//                    ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
             ChromeDriverManager.getInstance().setup();
 
            return new ChromeDriver((ChromeOptions) capabilities);

@@ -794,7 +794,7 @@ public class BasePortalSteps {
     public void verifyAgentDeleted(String user){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 1200),
-                fullName + " agent is not removed from User management page after deleting");
+                fullName + " agent is not removed from User management page");
     }
 
     @Then("^(.*) added to User management page$")
