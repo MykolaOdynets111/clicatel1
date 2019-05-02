@@ -21,7 +21,7 @@ public class AutoRespondersWindow extends BasePortalWindow {
     }
 
     public void clickExpandArrowForMessage(String autoresponder){
-        waitForElementsToBeVisibleAgent(autoresponderItems, 5, "admin");
+        waitForElementsToBeVisibleAgent(autoresponderItems, 8, "admin");
         getTargetAutoResponderItem(autoresponder).clickCollapseIcon();
     }
 
