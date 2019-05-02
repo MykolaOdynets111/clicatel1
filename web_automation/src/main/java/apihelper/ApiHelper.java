@@ -537,6 +537,12 @@ public class ApiHelper {
                 .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
+    public static Response getActiveChatsBySecondAgent(){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUserSecond(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+    }
+
     public static void closeActiveChats(){
         List<String> conversationIds = getActiveChatsByAgent().getBody().jsonPath().getList("content.id");
         for(String conversationId : conversationIds){
@@ -544,7 +550,17 @@ public class ApiHelper {
                     .header("Accept", "application/json")
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                     .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
-            }
+        }
+    }
+
+    public static void closeActiveChatsSecondAgent(){
+        List<String> conversationIds = getActiveChatsBySecondAgent().getBody().jsonPath().getList("content.id");
+        for(String conversationId : conversationIds){
+            RestAssured.given()
+                    .header("Accept", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUserSecond(Tenants.getTenantUnderTestOrgName()))
+                    .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
+        }
     }
 
     public static String getClientProfileId(String clientID){

@@ -17,8 +17,14 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
     @FindBy(css = "span.cl-icon--collapse")
     private WebElement collapceIcon;
 
+    @FindBy(css = "textarea.go-textarea")
+    private WebElement textarea ;
+
     @FindBy(css = "button.button.button-secondary")
     private WebElement resetToDefaultButton;
+
+    @FindBy(css = "bttn-toggle ng-valid ng-not-empty ng-dirty']")
+    private WebElement buttonOnOff;
 
     protected AutoResponderItem(WebElement element) {
         super(element);
@@ -36,4 +42,28 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
     public void clickResetToDefaultButton(){
         clickElemAgent(resetToDefaultButton, 1, "admin", "Reset to default button");
     }
+
+    public AutoResponderItem typeMessage(String msg) {
+        if (!msg.equals(null) || !msg.equals("")) {
+            textarea.clear();
+            inputTextAgent(textarea, 5, "main agent", "Note number", msg);
+        }
+        return this;
+    }
+
+    public boolean isMessageShown() {
+        return textarea.isDisplayed();
+    }
+
+    public String getMessage() {
+        waitForElementToBeVisibleAgent(textarea, 10);
+        String messageOnfrontend = textarea.getAttribute("value");
+        return messageOnfrontend;
+    }
+
+    public void clickOnOff(){
+        waitForElementToBeVisibleAgent(buttonOnOff, 10);
+        buttonOnOff.click();
+    }
+
 }

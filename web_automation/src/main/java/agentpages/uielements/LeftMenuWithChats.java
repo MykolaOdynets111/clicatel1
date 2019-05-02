@@ -92,6 +92,10 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconShown();
     }
 
+    public boolean isFlagIconRemoved(String userName){
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconRemoved();
+    }
+
     public boolean isOvernightTicketIconRemoved(String userName){
         return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
     }

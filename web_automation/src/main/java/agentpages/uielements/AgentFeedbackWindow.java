@@ -50,7 +50,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".Select-arrow")
     private WebElement openDropdownButton;
 
-    private String openDropdownButtoncss = ".Select-control";
+    private String openDropdownButtoncss = ".Select-multi-value-wrapper";
 
     private String cleareAll = ".Select-clear";
 
@@ -166,9 +166,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
         List<String> result = new ArrayList();
         result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]+[ ]")));
-        if (result.size()>1) {
-            result.remove(result.size() - 1); //REMOVE 'x' from list
-        }
         return result;
     }
 
