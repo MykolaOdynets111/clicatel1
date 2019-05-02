@@ -15,7 +15,7 @@ import java.util.List;
         format={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/touchgonewaccount/testswithnewaccount/",
+        features ="src/test/java/scenario/touchgo/newaccount/testswithnewaccount/",
         glue ="steps")
 public class RunTouchGoWithNewAccountTest {
 
