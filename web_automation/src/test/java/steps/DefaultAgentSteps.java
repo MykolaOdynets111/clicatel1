@@ -1108,4 +1108,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void agentReceivesErrorMessage(String agent) {
         getAgentHomePage(agent).isPinErrorMassageShown(agent);
     }
+
+
+    @Then("^I check (.*) color to '(.*)' for tenant in agent desk$")
+    public void iCheckPrimaryColorToFfDecForTenantInAgentDesk(String color, String hex) {
+
+        if (color.toLowerCase().contains("second")){
+            Assert.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantNameColor(), hex, "Color for tenant name in agent desk window is not correct");
+            Assert.assertEquals(getAgentHomePage("second agent").getPageHeader().gettenantLogoBorderColor(), hex, "Color for tenant logo border in agent desk window is not correct");
+        }else {
+            Assert.assertEquals(getAgentHomePage("second agent").getcustomer360Color(), hex, "Color for tenant 'Costomer' is not correct");
+            Assert.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getexpandFilterButtonColor(), hex, "Color for tenant dropdown button is not correct");
+            Assert.assertEquals(getAgentHomePage("second agent").gettouchButtonColor(), hex, "Color for tenant chat button is not correct");
+
+
+        }
+    }
 }

@@ -7,6 +7,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -175,4 +176,11 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public String getActiveChatLocation(){
         return new ChatInLeftMenu(activeCaht).getLocation();
     }
+
+    public String getexpandFilterButtonColor() {
+        String hexColor = Color.fromString(expandFilterButton.getCssValue("color")).asHex();
+        return hexColor;
+    }
+
+
 }

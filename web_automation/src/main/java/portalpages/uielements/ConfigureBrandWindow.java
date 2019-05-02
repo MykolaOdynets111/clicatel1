@@ -5,19 +5,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.util.List;
 
 
 @FindBy(css = "div.edit-brand-details-page")
 public class ConfigureBrandWindow extends BasePortalWindow {
 
-    @FindBy(name = "ui-select-choices-0")
-    private WebElement primaryColor;
 
-    @FindBy(id = "ui-select-choices-1")
-    private WebElement secondaryColor;
+    @FindBy( xpath = "//span[contains(@class, 'color-picker-preview')]")
+    private List<WebElement> colorButton;
 
     @FindBy(xpath = "//button[text()=' Upload ']")
     private WebElement uploadButton ;
@@ -39,13 +39,35 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         acceptButton.click();
     }
 
-    public void setColor(){
-        waitForElementToBeVisibleAgent(colorInputField, 5, "admin");
-        colorInputField.sendKeys();
+    public void setColor(String color, String hex){
+        if (color.toLowerCase().contains("second")){
+            waitForElementToBeVisibleAgent(colorButton.get(1), 3, "admin");
+            colorButton.get(1).click();
+        }else {
+            waitForElementToBeVisibleAgent(colorButton.get(0), 3, "admin");
+            colorButton.get(0).click();
+        }
+        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        colorInputField.clear();
+        colorInputField.sendKeys(hex);
+        waitFor(2000);
+        acceptButton.click();
+    }
+
+    public String getColor(String color){
+        if (color.toLowerCase().contains("second")){
+            waitForElementToBeVisibleAgent(colorButton.get(1), 3, "admin");
+            String hex = Color.fromString(colorButton.get(1).getCssValue("background-color")).asHex();
+            return hex;
+        }else {
+            waitForElementToBeVisibleAgent(colorButton.get(0), 3, "admin");
+            String hex = Color.fromString(colorButton.get(0).getCssValue("background-color")).asHex();
+            return hex;
+        }
     }
 
     public void uploadPhoto(String photoPath){
-      //  waitForElementToBeVisibleAgent(uploadPhotoWindow, 8, "main");
+        waitForElementToBeVisibleAgent(uploadButton, 8, "main");
         String selectPictureButtonNGModel = uploadButton.getAttribute("ng-model");
         RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)

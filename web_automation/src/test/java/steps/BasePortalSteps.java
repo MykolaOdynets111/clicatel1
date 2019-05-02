@@ -805,9 +805,19 @@ public class BasePortalSteps {
         portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
     }
 
-    @When("^Upload (.*) for tenant")
-    public void uploadPhotoForTenant(String photoStrategy){
-        getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+
+    @When("^Upload: foto for tenant$")
+    public void uploadFotoForTenant() {
+        getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
+    }
+
+    @Then("^Change (.*) color to '(.*)' for tenant$")
+    public void changePrimaryColorForTenant(String color, String hex) {
+        if (!hex.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getColor(color))) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setColor(color, hex);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
     }
 
     @When("^Add new touch (.*) solution$")

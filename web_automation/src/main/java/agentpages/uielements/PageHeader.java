@@ -5,6 +5,7 @@ import drivermanager.DriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -39,6 +40,15 @@ public class PageHeader extends AbstractUIElement {
 
     @FindBy(css = "button#top-menu-dropdown>img")
     private WebElement agentIcon;
+
+    @FindBy(css = "div.logo h1")
+    private WebElement tenantName;
+
+    @FindBy(css = "div.logo img")
+    private WebElement tenantLogoBorder;
+
+    private String tenantLogoBorderXpath = "//div[contains(@class, 'logo')]//img";
+    private String tenantNameXpath = "//div[contains(@class, 'logo')]//h1";
 
     public PageHeader logOut(String agent) {
             waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
@@ -87,5 +97,15 @@ public class PageHeader extends AbstractUIElement {
 
     public boolean isAgentImageShown(){
         return isElementShownAgent(agentIcon, 10, "main agent");
+    }
+
+    public String getTenantNameColor() {
+        String hexColor = Color.fromString(findElemByXPATHAgent(tenantNameXpath,"second agent").getCssValue("color")).asHex();
+        return hexColor;
+    }
+
+    public String gettenantLogoBorderColor() {
+        String hexColor = Color.fromString(findElemByXPATHAgent(tenantLogoBorderXpath,"second agent").getCssValue("border-bottom-color")).asHex();
+        return hexColor;
     }
 }
