@@ -45,11 +45,12 @@ public enum DriverType {
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
             String hostName = getHostName();
-        if (hostName.equals("FANB0604") | hostName.contains("TMytlovych")) {
-            ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
-            return new ChromeDriver((ChromeOptions) capabilities);
-        }
-        ChromeDriverManager.getInstance().setup();
+            if (hostName.equals("FANB0604") | hostName.contains("TMytlovych")) {
+                ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+                return new ChromeDriver((ChromeOptions) capabilities);
+            }
+            //        ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+            ChromeDriverManager.getInstance().setup();
 
            return new ChromeDriver((ChromeOptions) capabilities);
         }
