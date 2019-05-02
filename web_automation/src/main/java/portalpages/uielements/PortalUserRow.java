@@ -4,15 +4,22 @@ import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class PortalUserRow extends Widget implements WebActions {
 
-    @FindBy(css = "td.cl-name-item.limited-table-cell-small span")
+    @FindAll({
+            @FindBy(css = "td.limited-table-cell-small b.agent-initials"),
+            @FindBy(xpath = "//td[contains(@class, 'cl-name-item')][not(contains(@class, 'limited-cell-table'))]//a/b")
+    })
     private WebElement agentFirstName;
 
-    @FindBy(css = "td.cl-name-item.limited-table-cell-medium span")
+    @FindAll({
+            @FindBy(css = "td.limited-table-cell-medium b.agent-initials"),
+            @FindBy(xpath = "//td[contains(@class, 'limited-cell-table')]//a/b")
+    })
     private WebElement agentLastName;
 
     @FindBy(css = "a.button")

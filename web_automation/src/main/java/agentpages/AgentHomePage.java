@@ -21,7 +21,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
-    private String loadingSpinner = "//*[text()='Connecting...']";
+
 
     @FindBy(css = "textarea.text-input--example")
     private WebElement messageInput;
@@ -186,16 +186,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
         if (isElementShownAgent(conversationAreaContainer,10, ordinalAgentNumber)) {
-            try{
-                try {
-                    waitForElementToBeVisibleByXpathAgent(loadingSpinner, 6, ordinalAgentNumber);
-                }catch (TimeoutException e){ }
-                waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, 10, ordinalAgentNumber);
-                return true;
-            }
-            catch (TimeoutException e){
-                return false;
-            }
+            return waitForLoadingInLeftMenuToDisappear(ordinalAgentNumber, 6, 10);
         } else { return false;}
     }
 

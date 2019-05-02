@@ -37,8 +37,9 @@ public class BasePortalSteps {
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalManageAgentUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalUserEditingPage> portalUserManagementThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserEditingPage> portalUserProfileEditingThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
@@ -756,14 +757,14 @@ public class BasePortalSteps {
         if(fullName.equalsIgnoreCase("created")){
             fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         }
-        portalUserManagementThreadLocal.set(
+        portalUserProfileEditingThreadLocal.set(
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
     }
 
     @When("^Click 'Upload' button$")
     public void clickUploadButtonForUser(){
-        portalUserManagementThreadLocal.get().clickUploadPhotoButton();
+        portalUserProfileEditingThreadLocal.get().clickUploadPhotoButton();
     }
 
     @When("^Click 'Upload' button for tenant logo$")
@@ -773,19 +774,34 @@ public class BasePortalSteps {
 
     @When("^Admin clicks 'Edit user roles'$")
     public void clickEditRoles(){
-        portalUserManagementThreadLocal.get().clickEditUserRolesButton();
+        portalUserProfileEditingThreadLocal.get().clickEditUserRolesButton();
     }
 
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
-        portalUserManagementThreadLocal.get().clickDeleteButton();
-        portalUserManagementThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().clickDeleteButton();
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
     }
 
-    @Then("^User is removed from User management page$")
-    public void verifyAgentDeleted(){
+    @Then("^User is removed from Manage agent users page$")
+    public void verifyAgentDeletedManageAgentsPage(){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 2000),
+                fullName + " agent is not removed from Manage agent users page after deleting");
+    }
+
+    @Then("^(.*) is removed from User management page$")
+    public void verifyAgentDeleted(String user){
+        String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 1200),
+                fullName + " agent is not removed from User management page");
+    }
+
+    @Then("^(.*) added to User management page$")
+    public void verifyAgentAdded(String user){
+        String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        if(user.contains("Updated")) fullName = updatedAgentInfo.get("firstName") + " " + updatedAgentInfo.get("lastName");
+        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 2000),
                 fullName + " agent is not removed from User management page after deleting");
     }
 
@@ -796,13 +812,13 @@ public class BasePortalSteps {
         updatedAgentInfo.put("lastName", faker.name().lastName());
         updatedAgentInfo.put("email", "aqa_"+System.currentTimeMillis()+"@aqa.com");
 
-        portalUserManagementThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
-        portalUserManagementThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
     }
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+        portalUserProfileEditingThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
     }
 
 
@@ -822,18 +838,18 @@ public class BasePortalSteps {
 
     @When("^Add new touch (.*) solution$")
     public void addNewTouchSolution(String touchRole){
-        portalUserManagementThreadLocal.get().getEditUserRolesWindow()
+        portalUserProfileEditingThreadLocal.get().getEditUserRolesWindow()
                                                 .selectNewTouchRole(touchRole)
                                                 .clickFinishButton();
-        portalUserManagementThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
     }
 
     @When("^Add new platform (.*) solution$")
     public void addNewPlatformSolution(String role){
-        portalUserManagementThreadLocal.get().getEditUserRolesWindow()
+        portalUserProfileEditingThreadLocal.get().getEditUserRolesWindow()
                 .selectNewPlatformRole(role)
                 .clickFinishButton();
-        portalUserManagementThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")
@@ -844,7 +860,7 @@ public class BasePortalSteps {
 
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
-        portalUserManagementThreadLocal.get().getPageHeader().logoutAdmin();
+        portalUserProfileEditingThreadLocal.get().getPageHeader().logoutAdmin();
     }
 
     @Then("^Newly created agent is (?:deleted|absent) on backend$")
@@ -866,7 +882,7 @@ public class BasePortalSteps {
         String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("imageUrl");
         soft.assertFalse(imageURLFromBackend==null,
                         "Agent photo is not saved on backend");
-        soft.assertFalse(portalUserManagementThreadLocal.get().getImageURL().isEmpty(),
+        soft.assertFalse(portalUserProfileEditingThreadLocal.get().getImageURL().isEmpty(),
                 "Agent photo is not shown in portal");
         soft.assertAll();
     }
@@ -958,6 +974,15 @@ public class BasePortalSteps {
             return portalTouchPrefencesPageThreadLocal.get();
         } else{
             return portalTouchPrefencesPageThreadLocal.get();
+        }
+    }
+
+    private PortalUserManagementPage getPortalUserManagementPage(){
+        if (portalUserManagementPageThreadLocal.get()==null) {
+            portalUserManagementPageThreadLocal.set(new PortalUserManagementPage());
+            return portalUserManagementPageThreadLocal.get();
+        } else{
+            return portalUserManagementPageThreadLocal.get();
         }
     }
 
