@@ -29,6 +29,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "span.icon.svg-icon-send")
     private WebElement submitMessageButton;
 
+    @FindBy(css = "button.btn.btn-primary.pull-right.btn.btn-default")
+    private WebElement submitMessageButtonColor;
+
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
 
@@ -318,4 +321,9 @@ public class AgentHomePage extends AgentAbstractPage {
         return hexColor;
     }
 
+    public String getSubmitMessageButtonColor() {
+
+        String hexColor = Color.fromString(submitMessageButtonColor.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
 }

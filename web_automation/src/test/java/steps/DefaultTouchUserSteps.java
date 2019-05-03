@@ -769,18 +769,20 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ));
     }
 
-    @Then("^I check (.*) color to '(.*)' for tenant in widget$")
-    public void iCheckSecondaryColorToFfDecForTenantInWidget(String color, String hex) {
-        if (color.toLowerCase().contains("second")){
+    @Then("^I check secondary color to '(.*)' for tenant in widget$")
+    public void iCheckSecondaryColorForTenantInWidget(String hex) {
             Assert.assertEquals(getMainPage().getTenantNameColor(), hex, "Color for tenant name in widget window is not correct");
-        }else {
+    }
+
+    @Then("^I check primary color to '(.*)' for tenant in widget$")
+    public void iCheckPrimaryColorForTenantInWidget(String hex) {
             Assert.assertEquals(getMainPage().getchatIconColor(), hex, "Color for tenant open widget button is not correct");
             Assert.assertEquals(getMainPage().getHeaderColor(), hex, "Color for tenant header in widget window is not correct");
             clickChatIcon();
             Assert.assertEquals(widget.getTenantNameWidgetColor(), hex, "Color for tenant name in widget is not correct");
             Assert.assertEquals(widget.getTenantcloseButtonColor(), hex, "Color for tenant close widget button is not correct");
-        }
     }
+
 
 
 

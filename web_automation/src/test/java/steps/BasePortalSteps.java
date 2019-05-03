@@ -52,6 +52,7 @@ public class BasePortalSteps {
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
+    private static String COLOR;
 
 
     @Given("^New (.*) agent is created$")
@@ -827,10 +828,21 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
     }
 
-    @Then("^Change (.*) color to '(.*)' for tenant$")
-    public void changePrimaryColorForTenant(String color, String hex) {
-        if (!hex.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getColor(color))) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setColor(color, hex);
+    @Then("^Change secondary color to '(.*)' for tenant$")
+    public void changeSecondaryColorForTenant(String hex) {
+        COLOR = getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor();
+        if (!hex.contains(COLOR)) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(hex);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @Then("^Change primary color to '(.*)' for tenant$")
+    public void changePrimaryColorForTenant(String hex) {
+        COLOR = getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor();
+        if (!hex.contains(COLOR)) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(hex);
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
@@ -986,4 +998,23 @@ public class BasePortalSteps {
         }
     }
 
+    @Then("^Return secondary color for tenant$")
+    public void returnSecondaryColorForTenant() {
+            DriverFactory.getDriverForAgent("main").navigate().refresh();
+            if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @Then("^Return primary color for tenant$")
+    public void returnPrimaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
 }

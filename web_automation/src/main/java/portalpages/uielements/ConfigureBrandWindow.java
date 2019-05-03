@@ -19,6 +19,13 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     @FindBy( xpath = "//span[contains(@class, 'color-picker-preview')]")
     private List<WebElement> colorButton;
 
+    @FindBy(xpath = "//span[contains(@cl-color-picker, 'primary')]//span[contains(@class, 'color-picker')]")
+    private WebElement primaryColor;
+
+    @FindBy(xpath = "//span[contains(@cl-color-picker, 'second')]//span[contains(@class, 'color-picker')]")
+    private WebElement secondaryColor;
+
+
     @FindBy(xpath = "//button[text()=' Upload ']")
     private WebElement uploadButton ;
 
@@ -39,14 +46,9 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         acceptButton.click();
     }
 
-    public void setColor(String color, String hex){
-        if (color.toLowerCase().contains("second")){
-            waitForElementToBeVisibleAgent(colorButton.get(1), 3, "admin");
-            colorButton.get(1).click();
-        }else {
-            waitForElementToBeVisibleAgent(colorButton.get(0), 3, "admin");
-            colorButton.get(0).click();
-        }
+    public void setPrimaryColor(String hex){
+        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+        primaryColor.click();
         waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
         colorInputField.clear();
         colorInputField.sendKeys(hex);
@@ -54,16 +56,26 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         acceptButton.click();
     }
 
-    public String getColor(String color){
-        if (color.toLowerCase().contains("second")){
-            waitForElementToBeVisibleAgent(colorButton.get(1), 3, "admin");
-            String hex = Color.fromString(colorButton.get(1).getCssValue("background-color")).asHex();
+    public void setSecondaryColor(String hex){
+        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+        secondaryColor.click();
+        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        colorInputField.clear();
+        colorInputField.sendKeys(hex);
+        waitFor(2000);
+        acceptButton.click();
+    }
+
+    public String getPrimaryColor(){
+            waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+            String hex = Color.fromString(primaryColor.getCssValue("background-color")).asHex();
             return hex;
-        }else {
-            waitForElementToBeVisibleAgent(colorButton.get(0), 3, "admin");
-            String hex = Color.fromString(colorButton.get(0).getCssValue("background-color")).asHex();
+    }
+
+    public String getSecondaryColor(){
+            waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+            String hex = Color.fromString(secondaryColor.getCssValue("background-color")).asHex();
             return hex;
-        }
     }
 
     public void uploadPhoto(String photoPath){

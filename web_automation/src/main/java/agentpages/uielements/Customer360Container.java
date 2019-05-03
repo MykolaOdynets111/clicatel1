@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -47,6 +48,11 @@ public class Customer360Container extends AbstractUIElement {
     @FindBy(css = "button.pull-right.disable-spacing-top.btn-default")
     private WebElement saveEditButton;
 
+    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    private WebElement userPicture;
+
+    @FindBy(xpath = "//div[contains(@class,'context-part')]//a")
+    private WebElement mailColor;
 
     public Customer360PersonalInfo getActualPersonalInfo(){
         try {
@@ -81,4 +87,20 @@ public class Customer360Container extends AbstractUIElement {
     public String getUserFullName(){
         return profileNameLabel.getText().replace("\n", " ");
     }
+
+    public String getSaveEditButtonColor() {
+        String hexColor = Color.fromString(saveEditButton.getCssValue("color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserPictureColor() {
+        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String getMailColor() {
+        String hexColor = Color.fromString(mailColor.getCssValue("color")).asHex();
+        return hexColor;
+    }
+
 }

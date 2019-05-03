@@ -574,6 +574,7 @@ public class ApiHelper {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
                 .getBody().jsonPath().getList("", CRMTicket.class);
+      //  getSessionDetails(clientID).getBody().jsonPath().getString("data.sessionId")
     }
 
     public static List<String> getTags(String clientID, String type){

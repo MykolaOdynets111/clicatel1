@@ -49,6 +49,12 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     @FindBy(xpath = "//div[@class='Select-control']//input")
     private WebElement searchChatInput;
 
+    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    private WebElement userPicture;
+
+    @FindBy(xpath = "//span[@class='msg-count']")
+    private WebElement userMsgCount;
+
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
     private String loadingSpinner = "//*[text()='Connecting...']";
@@ -177,8 +183,19 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return new ChatInLeftMenu(activeCaht).getLocation();
     }
 
-    public String getexpandFilterButtonColor() {
+    public String getExpandFilterButtonColor() {
         String hexColor = Color.fromString(expandFilterButton.getCssValue("color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserPictureColor() {
+        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserMsgCountColor() {
+        String hexColor = Color.fromString(userMsgCount.getCssValue("background-color")).asHex();
+        userMsgCount.click();
         return hexColor;
     }
 
