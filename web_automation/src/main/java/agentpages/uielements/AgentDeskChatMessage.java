@@ -46,7 +46,12 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
     }
 
     public String getMessageTime() {
-        return messageTime.getAttribute("innerText").trim();
+        try{
+            return messageTime.getAttribute("innerText").trim();
+        }catch (NoSuchElementException e){
+            waitFor(300);
+            return messageTime.getAttribute("innerText").trim();
+        }
     }
 
     public String getMessageInfo() {
