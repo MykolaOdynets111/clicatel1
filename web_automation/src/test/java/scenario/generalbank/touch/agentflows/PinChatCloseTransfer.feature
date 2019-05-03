@@ -4,9 +4,9 @@ Feature: Pinned chat is disabled to close and to transfer
   Verification of basic pin chat functionality
 
   Background:
-    Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
-    Given User select Automation Bot tenant
-    Given I login as agent of Automation Bot
+    Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
+    Given User select General Bank Demo tenant
+    Given I login as agent of General Bank Demo
     And Click chat icon
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
