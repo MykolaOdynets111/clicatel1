@@ -7,7 +7,7 @@ Feature: Max chat functionality for Agent mode tenant
     Given User select Automation tenant
     And Click chat icon
     When User enter chat to agent into widget input field
-    Then User have to receive 'agents_away' text response for his 'chat to agent' input
+    Then User should see 'agents_away' text response for his 'chat to agent' input
     Given Set session capacity to 10 for Automation tenant
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
