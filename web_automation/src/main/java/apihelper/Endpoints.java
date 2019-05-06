@@ -174,6 +174,9 @@ public class Endpoints {
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "health";
 
+    public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
+
+
     // ====================  PORTAL ================= //
 
     public static String PORTAL_LOGIN_PAGE = URLs.getBasePortalUrl() + "#/login";

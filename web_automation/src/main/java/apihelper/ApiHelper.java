@@ -1,12 +1,16 @@
 package apihelper;
 
+import com.github.javafaker.Faker;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
+import gherkin.lexer.Fa;
+import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
+import io.restassured.config.EncoderConfig;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
@@ -16,13 +20,14 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class ApiHelper {
+public class ApiHelper implements DateTimeHelper{
 
     private static  List<HashMap> tenantsInfo=null;
 //    private static List<HashMap> tenantMessages=null;
@@ -625,6 +630,47 @@ public class ApiHelper {
                         "{\""+config+"\": "+configValue+" }" +
                       "}")
                 .put(Endpoints.INTERNAL_CONFIG_ATTRIBUTES + tenantId);
+    }
 
+    public static Response createFBChat(long linkedFBPageId, long fbUserId, String message){
+        Faker faker = new Faker();
+        String mid = faker.code().isbn13(true) + "-" + faker.lorem().characters(3,6, true);
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = LocalDateTime.now().atZone(zoneId);
+        long timestamp =  zdt.toInstant().toEpochMilli();
+        String requestBody1 = "{\n" +
+                "  \"entry\": [\n" +
+                "    {\n" +
+                "      \"changes\": [],\n" +
+                "      \"id\": \""+linkedFBPageId+"\",\n" +
+                "      \"messaging\": [\n" +
+                "        {\n" +
+                "          \"message\": {\n" +
+                "            \"mid\": \""+mid+"\",\n" +
+                "            \"seq\": 31478,\n" +
+                "            \"text\": \""+message+"\"\n" +
+                "          },\n" +
+                "          \"recipient\": {\n" +
+                "            \"id\": \""+linkedFBPageId+"\"\n" +
+                "          },\n" +
+                "          \"sender\": {\n" +
+                "            \"id\": \""+fbUserId+"\"\n" +
+                "          },\n" +
+                "          \"timestamp\": "+timestamp+"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"time\": "+timestamp+"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"object\": \"page\",\n" +
+                "  \"tenant\": null\n" +
+                "}";
+        String requestBody = "{ \"entry\": [ { \"changes\": [], \"id\": \""+linkedFBPageId+"\", \"messaging\": [ { \"message\": { \"mid\": \""+mid+"\", \"seq\": 31478, \"text\": \""+message+"\" }, \"recipient\": { \"id\": \""+linkedFBPageId+"\" }, \"sender\": { \"id\": \""+fbUserId+"\" }, \"timestamp\": 1557148766703 } ], \"time\": 1557148766703 } ], \"object\": \"page\", \"tenant\": null}";
+        return RestAssured.given().log().all()
+                .header("accept", "*/*")
+                .header("Content-Type", "application/json")
+                .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .body(requestBody1)
+                .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);
     }
 }
