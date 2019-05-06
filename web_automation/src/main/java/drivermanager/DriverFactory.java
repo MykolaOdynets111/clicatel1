@@ -143,6 +143,9 @@ public class DriverFactory {
 //                REMOTE_URL = "http://172.31.70.236:4445/wd/hub"; // for remote debug ONLY, supports only 2 browsers !!
                 REMOTE_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
             }
+            if(ConfigManager.getSuite().equalsIgnoreCase("chatdesk")){
+                REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
+            }
             RemoteWebDriver remoteWebDriver = new RemoteWebDriver(new URL(REMOTE_URL), capabilities);
             return remoteWebDriver;
         } catch (MalformedURLException e) {
