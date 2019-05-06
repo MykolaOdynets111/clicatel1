@@ -1,6 +1,6 @@
 @no_widget
 @agent_photo
-#Feature: Managing tenant's photo
+#Feature: Managing tenant's brand image
 #
 #  Scenario: Adding agent new photo
 ##    Given Agent of Automation Bot tenant has no photo uploaded

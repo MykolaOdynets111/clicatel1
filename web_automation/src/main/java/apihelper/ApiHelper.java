@@ -577,6 +577,13 @@ public class ApiHelper {
       //  getSessionDetails(clientID).getBody().jsonPath().getString("data.sessionId")
     }
 
+    public static List<String> getTagsForCRMTicket(String sessionID){
+        List<String> result = RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.TAGS_FROM_CRM_TICKET, sessionID)).getBody().jsonPath().getList("");
+        return result;
+    }
+
     public static List<String> getTags(String clientID, String type){
         String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
 //        String clientProfileId = getClientProfileId(clientID);

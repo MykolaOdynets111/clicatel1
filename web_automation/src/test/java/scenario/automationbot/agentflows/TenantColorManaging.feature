@@ -13,7 +13,7 @@ Feature: Managing brand color
     Then I check secondary color to '#ff4ded' for tenant in agent desk
     Then Return secondary color for tenant
 
-  Scenario: Check primary second color
+  Scenario: Check changing primary color
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Touch preferences in submenu

@@ -2,7 +2,6 @@ package steps;
 
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
-import agentpages.uielements.PageHeader;
 import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -38,6 +37,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
+import twitter4j.JSONException;
+import twitter4j.JSONObject;
+
 
 public class Hooks implements JSHelper{
 
@@ -97,6 +99,7 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@healthcheck") &&
                 !scenario.getSourceTagNames().contains("@camunda")){
 
+            if(scenario.isFailed()) widgetWebSocketLogs();
             takeScreenshot();
             endTouchFlow(scenario, true);
             ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
@@ -108,7 +111,7 @@ public class Hooks implements JSHelper{
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
-            ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 100);
+            ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
 
         finishAgentFlowIfExists(scenario);
@@ -193,11 +196,13 @@ public class Hooks implements JSHelper{
             takeScreenshotFromSecondDriver();
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
+                chatdeskWebSocketLogs();
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
+                    secondAgentChatdeskWebSocketLogs();
                 }
                 takeScreenshotFromThirdDriverIfExists();
         }
@@ -443,5 +448,42 @@ public class Hooks implements JSHelper{
         return  result.toString();
     }
 
+    @Attachment
+    private String chatdeskWebSocketLogs(){
+        return getWebSocketLogs(DriverFactory.getAgentDriverInstance());
+    }
 
+    @Attachment
+    private String secondAgentChatdeskWebSocketLogs(){
+        return getWebSocketLogs(DriverFactory.getSecondAgentDriverInstance());
+    }
+
+    @Attachment
+    private String widgetWebSocketLogs(){
+        return getWebSocketLogs(DriverFactory.getTouchDriverInstance());
+    }
+
+    private String getWebSocketLogs(WebDriver driver){
+        StringBuilder result = new StringBuilder();
+        LogEntries logEntries = driver.manage().logs().get(LogType.PERFORMANCE);
+        for (LogEntry entry : logEntries) {
+
+            JSONObject messageJSON = null;
+            JSONObject msg = null;
+            try {
+                messageJSON = new JSONObject(entry.getMessage());
+                msg  = messageJSON.getJSONObject("message");
+                String method = msg.getString("method");
+                if(method.contains("Network.webSocket") ){
+                    if(!msg.get("params").toString().contains("ping")) {
+                        result.append(msg.toString()).append(";  \n\n");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return  result.toString();
+    }
 }

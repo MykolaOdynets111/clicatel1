@@ -33,7 +33,6 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
 #    When Agent click 'Close chat' button
 
 #ToDo: Add verification that tags are saved
-# /internal/sessions/{sessionId}/attributes/keys/{keysByComma}
   Scenario: Agent can search and selected tag, selected tag is added into the Tags field, save CRM ticket and tag is saved
     When User enter connect to Support into widget input field
     Then Agent has new conversation request

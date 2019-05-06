@@ -55,6 +55,8 @@ public class Endpoints {
 
     public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "tags";
 
+    public static String TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
