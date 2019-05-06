@@ -310,9 +310,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("Message that it is overnight ticket is shown for (.*)")
     public void verifyMessageThatThisIsOvernightTicket(String agent){
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getAgentHomePage(agent).isOvernightTicketMessageShown(),
+        softAssert.assertTrue(getAgentHomePage(agent).getChatForm().isOvernightTicketMessageShown(),
                 "Message that this is Overnight ticket is not shown");
-        softAssert.assertTrue(getAgentHomePage(agent).isSendEmailForOvernightTicketMessageShown(),
+        softAssert.assertTrue(getAgentHomePage(agent).getChatForm().isSendEmailForOvernightTicketMessageShown(),
                 "'Send email' button is not enabled");
         softAssert.assertAll();
     }
@@ -1113,9 +1113,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^I check primary color to '(.*)' for tenant in agent desk$")
     public void iCheckPrimaryColorForTenantInAgentDesk(String hex) {
-        Assert.assertEquals(getAgentHomePage("second agent").getcustomer360Color(), hex, "Color for tenant 'Costomer' is not correct");
+        Assert.assertEquals(getAgentHomePage("second agent").getCustomer360ButtonColor(), hex, "Color for tenant 'Costomer' is not correct");
         Assert.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getExpandFilterButtonColor(), hex, "Color for tenant dropdown button is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").gettouchButtonColor(), hex, "Color for tenant chat button is not correct");
+        Assert.assertEquals(getAgentHomePage("second agent").getTouchButtonColor(), hex, "Color for tenant chat button is not correct");
     }
 
     @Then("^I check secondary color to '(.*)' for tenant in agent desk$")
@@ -1135,6 +1135,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         Assert.assertEquals(getAgentHomePage("second agent").getChatHeader().getPinChatButtonColor(), hex, "Color for Pin chat button in agent desk window is not correct");
         Assert.assertEquals(getAgentHomePage("second agent").getChatHeader().getTransferButtonColor(), hex, "Color for Transfer chat button in agent desk window is not correct");
         Assert.assertEquals(getAgentHomePage("second agent").getChatHeader().getEndChatButtonColor(), hex, "Color for End chat button in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getSubmitMessageButtonColor(), hex, "Color for Send button in agent desk window is not correct");
+        Assert.assertEquals(getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(), hex, "Color for Send button in agent desk window is not correct");
     }
 }
