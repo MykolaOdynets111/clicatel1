@@ -5,6 +5,7 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touchpages.uielements.TouchActionsMenu;
@@ -18,6 +19,9 @@ public class Widget extends AbstractPage {
     @FindBy(css = "div.ctl-chat-icon.ctl-close")
     private WebElement closeButton;
 
+    @FindBy(css = "input.ctl-chat-widget-btn-close")
+    private WebElement closeButtonColor;
+
     @FindBy(xpath = "//span[@class='connection-status-bar-message']")
     private WebElement conectingMassage;
 
@@ -29,6 +33,9 @@ public class Widget extends AbstractPage {
 
     @FindBy(css = "div.ctl-conversation-area")
     private WebElement conversationArea;
+
+    @FindBy(css = "div.ctl-chat-area-header-container")
+    private WebElement tenantNameWidget;
 
     public Widget() {
         waitUntilOpenedAndConnected();
@@ -119,5 +126,16 @@ public class Widget extends AbstractPage {
 
     public boolean isTouchButtonShown(int wait){
         return isElementShown(touchButton, wait);
+    }
+
+
+    public String getTenantNameWidgetColor() {
+        String hexColor = Color.fromString(tenantNameWidget.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String getTenantcloseButtonColor() {
+        String hexColor = Color.fromString(closeButtonColor.getCssValue("background-color")).asHex();
+        return hexColor;
     }
 }

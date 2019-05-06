@@ -2,10 +2,9 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import agentpages.uielements.*;
-import apihelper.ApiHelper;
-import datamanager.Tenants;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -29,6 +28,9 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "span.icon.svg-icon-send")
     private WebElement submitMessageButton;
+
+    @FindBy(css = "button.btn.btn-primary.pull-right.btn.btn-default")
+    private WebElement submitMessageButtonColor;
 
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
@@ -67,6 +69,12 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "div.history-details")
     private WebElement historyDetails;
+
+    @FindBy(css = "div > div.active")
+    private WebElement customer360;
+
+    @FindBy(css = "div.touch-button")
+    private WebElement touchButton;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
@@ -303,4 +311,19 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementsToBeInvisibleByXpathAgent(pinErrorMessageXpath,10, Agent);
     }
 
+    public String getcustomer360Color() {
+        String hexColor = Color.fromString(customer360.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String gettouchButtonColor() {
+        String hexColor = Color.fromString(touchButton.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String getSubmitMessageButtonColor() {
+
+        String hexColor = Color.fromString(submitMessageButtonColor.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
 }

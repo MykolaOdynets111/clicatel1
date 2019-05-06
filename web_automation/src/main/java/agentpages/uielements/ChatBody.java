@@ -5,6 +5,7 @@ import drivermanager.DriverFactory;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -116,5 +117,10 @@ public class ChatBody extends AbstractUIElement {
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
+    }
+
+    public String getTenantMsgColor() {
+        String hexColor = Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
+        return hexColor;
     }
 }

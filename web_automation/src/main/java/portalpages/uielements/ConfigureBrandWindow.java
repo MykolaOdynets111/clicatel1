@@ -5,19 +5,26 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.util.List;
 
 
 @FindBy(css = "div.edit-brand-details-page")
 public class ConfigureBrandWindow extends BasePortalWindow {
 
-    @FindBy(name = "ui-select-choices-0")
+
+    @FindBy( xpath = "//span[contains(@class, 'color-picker-preview')]")
+    private List<WebElement> colorButton;
+
+    @FindBy(xpath = "//span[contains(@cl-color-picker, 'primary')]//span[contains(@class, 'color-picker')]")
     private WebElement primaryColor;
 
-    @FindBy(id = "ui-select-choices-1")
+    @FindBy(xpath = "//span[contains(@cl-color-picker, 'second')]//span[contains(@class, 'color-picker')]")
     private WebElement secondaryColor;
+
 
     @FindBy(xpath = "//button[text()=' Upload ']")
     private WebElement uploadButton ;
@@ -39,13 +46,40 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         acceptButton.click();
     }
 
-    public void setColor(){
-        waitForElementToBeVisibleAgent(colorInputField, 5, "admin");
-        colorInputField.sendKeys();
+    public void setPrimaryColor(String hex){
+        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+        primaryColor.click();
+        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        colorInputField.clear();
+        colorInputField.sendKeys(hex);
+        waitFor(2000);
+        acceptButton.click();
+    }
+
+    public void setSecondaryColor(String hex){
+        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+        secondaryColor.click();
+        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        colorInputField.clear();
+        colorInputField.sendKeys(hex);
+        waitFor(2000);
+        acceptButton.click();
+    }
+
+    public String getPrimaryColor(){
+            waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+            String hex = Color.fromString(primaryColor.getCssValue("background-color")).asHex();
+            return hex;
+    }
+
+    public String getSecondaryColor(){
+            waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+            String hex = Color.fromString(secondaryColor.getCssValue("background-color")).asHex();
+            return hex;
     }
 
     public void uploadPhoto(String photoPath){
-      //  waitForElementToBeVisibleAgent(uploadPhotoWindow, 8, "main");
+        waitForElementToBeVisibleAgent(uploadButton, 8, "main");
         String selectPictureButtonNGModel = uploadButton.getAttribute("ng-model");
         RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)

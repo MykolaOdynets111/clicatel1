@@ -7,6 +7,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -47,6 +48,12 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     @FindBy(xpath = "//div[@class='Select-control']//input")
     private WebElement searchChatInput;
+
+    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    private WebElement userPicture;
+
+    @FindBy(xpath = "//span[@class='msg-count']")
+    private WebElement userMsgCount;
 
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
@@ -175,4 +182,22 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public String getActiveChatLocation(){
         return new ChatInLeftMenu(activeCaht).getLocation();
     }
+
+    public String getExpandFilterButtonColor() {
+        String hexColor = Color.fromString(expandFilterButton.getCssValue("color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserPictureColor() {
+        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserMsgCountColor() {
+        String hexColor = Color.fromString(userMsgCount.getCssValue("background-color")).asHex();
+        userMsgCount.click();
+        return hexColor;
+    }
+
+
 }
