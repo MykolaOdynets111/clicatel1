@@ -1,5 +1,6 @@
 package steps;
 
+import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
 import apihelper.Endpoints;
@@ -372,6 +373,18 @@ public class BasePortalSteps {
     @Then("^(.*) widget value increased on (.*)$")
     public void verifyWidgetValue(String widgetName, int incrementor){
         int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
+        Assert.assertTrue(waitForCorrectCounterValue(widgetName, expectedValue),
+                "'"+widgetName+"' widget value is not updated");
+    }
+
+    @Then("^(.*) counter shows correct live chats number$")
+    public void verifyChatConsoleActiveChats(String widgetName){
+        int expectedValue = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertTrue(waitForCorrectCounterValue(widgetName, expectedValue),
+                "'"+widgetName+"' widget value is not updated");
+    }
+
+    private boolean waitForCorrectCounterValue(String widgetName, int expectedValue){
         int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
         boolean result = false;
         for (int i=0; i<30; i++){
@@ -384,7 +397,7 @@ public class BasePortalSteps {
             }
 
         }
-        Assert.assertTrue(result,"'"+widgetName+"' widget value is not updated");
+        return result;
     }
 
     @When("^Click \"(.*)\" nav button$")
