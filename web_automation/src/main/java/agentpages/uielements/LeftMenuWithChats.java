@@ -184,13 +184,11 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public String getExpandFilterButtonColor() {
-        String hexColor = Color.fromString(expandFilterButton.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(expandFilterButton.getCssValue("color")).asHex();
     }
 
     public String getUserPictureColor() {
-        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(userPicture.getCssValue("background-color")).asHex();
     }
 
     public String getUserMsgCountColor() {

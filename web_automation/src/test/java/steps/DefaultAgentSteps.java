@@ -525,6 +525,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Agent image is not shown on chatdesk");
     }
 
+    @Then("^Tenant photo is shown on chatdesk$")
+    public void verifyTenantImageIsShownOnChatdesk(){
+        Assert.assertTrue(getAgentHomePage("main").getPageHeader().isTenantImageShown(),
+                "Tenant image is not shown on chatdesk");
+    }
+
     @When("^(.*) searches and selects random chat is chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(ordinalAgentNumber, 3,7);

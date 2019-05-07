@@ -120,7 +120,6 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public String getTenantMsgColor() {
-        String hexColor = Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
     }
 }

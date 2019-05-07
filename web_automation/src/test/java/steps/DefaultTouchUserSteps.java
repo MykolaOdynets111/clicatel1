@@ -6,10 +6,13 @@ import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.FacebookPages;
+import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.DriverFactory;
+import facebook.FBTenantPage;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
@@ -777,12 +780,18 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^I check primary color to '(.*)' for tenant in widget$")
     public void iCheckPrimaryColorForTenantInWidget(String hex) {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getMainPage().getchatIconColor(), hex, "Color for tenant open widget button is not correct");
+        soft.assertEquals(getMainPage().getChatIconColor(), hex, "Color for tenant open widget button is not correct");
         soft.assertEquals(getMainPage().getHeaderColor(), hex, "Color for tenant header in widget window is not correct");
         clickChatIcon();
         soft.assertEquals(widget.getTenantNameWidgetColor(), hex, "Color for tenant name in widget is not correct");
-        soft.assertEquals(widget.getTenantcloseButtonColor(), hex, "Color for tenant close widget button is not correct");
+        soft.assertEquals(widget.getTenantCloseButtonColor(), hex, "Color for tenant close widget button is not correct");
         soft.assertAll();
+    }
+
+    @Then("^Tenant photo is shown on widget$")
+    public void verifyTenantImageIsShownOnChatdesk(){
+        clickChatIcon();
+        Assert.assertTrue(widget.isTenantImageShown(),"Tenant image is not shown on widget");
     }
 
 

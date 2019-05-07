@@ -3,10 +3,12 @@ package datamanager;
 import apihelper.ApiHelper;
 import drivermanager.ConfigManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum FacebookUsers {
 
-//    FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", ""),
-//    FIRST_USER("Tom", "Jones", "automation258@gmail.com", "2438051536267464", ""),
+    TOM_SMITH("Tom", "Smith", "generalbankaqa@gmail.com", "password22", "100024956568638"),
     FIRST_USER("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
 
     USER_FOR_INTEGRATION("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
@@ -34,6 +36,11 @@ public enum FacebookUsers {
         }
         this.userID = userID;
     }
+
+    public static final Map<String, Long> userIds = new HashMap<String, Long>() {{
+        put(TOM_SMITH.userEmail + "_fbmsg", 1912835872122481l);
+    }};
+
 
     private static FacebookUsers LOGGED_IN_USER = null;
 

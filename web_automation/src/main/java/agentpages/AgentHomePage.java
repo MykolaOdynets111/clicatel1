@@ -189,13 +189,11 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String getCustomer360ButtonColor() {
-        String hexColor = Color.fromString(customer360Button.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(customer360Button.getCssValue("background-color")).asHex();
     }
 
     public String getTouchButtonColor() {
-        String hexColor = Color.fromString(touchButton.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(touchButton.getCssValue("background-color")).asHex();
     }
 
 

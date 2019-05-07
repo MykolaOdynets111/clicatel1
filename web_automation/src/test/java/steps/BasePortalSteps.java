@@ -823,8 +823,8 @@ public class BasePortalSteps {
     }
 
 
-    @When("^Upload: foto for tenant$")
-    public void uploadFotoForTenant() {
+    @When("^Upload: photo for tenant$")
+    public void uploadPhotoForTenant() {
         getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
     }
 
@@ -870,6 +870,12 @@ public class BasePortalSteps {
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
 
+    @Given("^Agent of (.*) tenant has no brand image$")
+    public void deleteTenantBrandImage(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelper.deleteTenantBrandImage(Tenants.getTenantUnderTestOrgName());
+    }
+
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
         portalUserProfileEditingThreadLocal.get().getPageHeader().logoutAdmin();
@@ -896,6 +902,19 @@ public class BasePortalSteps {
                         "Agent photo is not saved on backend");
         soft.assertFalse(portalUserProfileEditingThreadLocal.get().getImageURL().isEmpty(),
                 "Agent photo is not shown in portal");
+        soft.assertAll();
+    }
+
+    @Then("^New brand image is saved on backend for (.*) tenant$")
+    public void verifyBrandImageSaveOnPortal(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
+        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(fileType.contains("image"),
+                "Image is not saved on backend");
+        soft.assertTrue(fileType.contains("image"),
+                "Image for chat desk (tenant_logo_trans) is not saved on backend");
         soft.assertAll();
     }
 
