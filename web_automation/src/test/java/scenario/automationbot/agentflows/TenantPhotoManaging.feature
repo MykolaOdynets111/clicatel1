@@ -1,5 +1,5 @@
-@no_widget
-@agent_photo
+#@no_widget
+#@agent_photo
 #Feature: Managing tenant's photo
 #
 #  Scenario: Adding agent new photo
