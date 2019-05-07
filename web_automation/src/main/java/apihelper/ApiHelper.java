@@ -632,6 +632,7 @@ public class ApiHelper implements DateTimeHelper{
                 .put(Endpoints.INTERNAL_CONFIG_ATTRIBUTES + tenantId);
     }
 
+//    Response resp = ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName).getFBPageId(), 1912835872122481l, "to agent the last");
     public static Response createFBChat(long linkedFBPageId, long fbUserId, String message){
         Faker faker = new Faker();
         String mid = faker.code().isbn13(true) + "-" + faker.lorem().characters(3,6, true);

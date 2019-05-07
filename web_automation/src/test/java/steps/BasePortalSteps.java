@@ -15,6 +15,7 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import org.apache.commons.collections.map.HashedMap;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
@@ -40,6 +41,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalUserEditingPage> portalUserProfileEditingThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
@@ -53,6 +55,7 @@ public class BasePortalSteps {
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
     private static String COLOR;
+    private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
 
 
     @Given("^New (.*) agent is created$")
@@ -359,6 +362,29 @@ public class BasePortalSteps {
                 }
             }
         }
+    }
+
+    @When("^Save (.*) pre-test widget value$")
+    public void savePreTestValue(String widgetName){
+        chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
+    }
+
+    @Then("^(.*) widget value increased on (.*)$")
+    public void verifyWidgetValue(String widgetName, int incrementor){
+        int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
+        int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        boolean result = false;
+        for (int i=0; i<30; i++){
+            if(expectedValue!=actualValue){
+                getPortalChatConsolePage().waitFor(1000);
+                actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+            } else {
+                result =true;
+                break;
+            }
+
+        }
+        Assert.assertTrue(result,"'"+widgetName+"' widget value is not updated");
     }
 
     @When("^Click \"(.*)\" nav button$")
@@ -899,6 +925,26 @@ public class BasePortalSteps {
         soft.assertAll();
     }
 
+    @Then("^Return secondary color for tenant$")
+    public void returnSecondaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @Then("^Return primary color for tenant$")
+    public void returnPrimaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
     private LeftMenu getLeftMenu() {
         if (leftMenu.get()==null) {
             leftMenu.set(getPortalMainPage().getLeftMenu());
@@ -998,23 +1044,14 @@ public class BasePortalSteps {
         }
     }
 
-    @Then("^Return secondary color for tenant$")
-    public void returnSecondaryColorForTenant() {
-            DriverFactory.getDriverForAgent("main").navigate().refresh();
-            if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
+    private PortalChatConsolePage getPortalChatConsolePage(){
+        if (portalChatConsolePage.get()==null) {
+            portalChatConsolePage.set(new PortalChatConsolePage());
+            return portalChatConsolePage.get();
+        } else{
+            return portalChatConsolePage.get();
         }
     }
 
-    @Then("^Return primary color for tenant$")
-    public void returnPrimaryColorForTenant() {
-        DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
-        }
-    }
+
 }

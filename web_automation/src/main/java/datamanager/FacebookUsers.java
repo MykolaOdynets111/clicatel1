@@ -8,11 +8,13 @@ import java.util.Map;
 
 public enum FacebookUsers {
 
-    TOM_SMITH("Tom", "Smith", "generalbankaqa@gmail.com", "password22", "100024956568638"),
+    TOM_SMITH("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", "password22"),
     FIRST_USER("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
 
     USER_FOR_INTEGRATION("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
 //    ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
+    ACCOUNT_WITH_DEV_GENBANK_PAGE("Tom", "Black", "tenantagentmode@gmail.com", "", "p@$$w0rd4te$t"),
+
     ;
 
     String userName;

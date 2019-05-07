@@ -286,6 +286,13 @@ public class Hooks implements JSHelper{
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
+                //ToDo: replace with API call if appropriate exists
+                AgentHomePage agentHomePage = new AgentHomePage("second agent");
+                agentHomePage.getPageHeader().clickIconWithInitials();
+                agentHomePage.getPageHeader().selectStatus("available");
+                agentHomePage.getPageHeader().clickIconWithInitials();
+            }
             DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();
         }
