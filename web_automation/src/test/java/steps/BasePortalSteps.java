@@ -16,7 +16,6 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
-import org.apache.commons.collections.map.HashedMap;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
@@ -370,17 +369,26 @@ public class BasePortalSteps {
         chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
     }
 
+    @Then("^(.*) widget shows correct number$")
+    public void checkTotalAgentOnlineValue(String widgetName){
+        int actualActiveAgentsCount = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
+        int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
+        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
+                widgetName + " counter differs from agent online count on backend");
+    }
+
     @Then("^(.*) widget value increased on (.*)$")
     public void verifyWidgetValue(String widgetName, int incrementor){
         int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
-        Assert.assertTrue(waitForCorrectCounterValue(widgetName, expectedValue),
+        Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
                 "'"+widgetName+"' widget value is not updated");
     }
 
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertTrue(waitForCorrectCounterValue(widgetName, activeChatsFromChatdesk),
+        Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated");
     }
 
@@ -392,7 +400,7 @@ public class BasePortalSteps {
                "Number of Average chats per Agent is not as expected");
     }
 
-    private boolean waitForCorrectCounterValue(String widgetName, int expectedValue){
+    private boolean checkLiveCounterValue(String widgetName, int expectedValue){
         int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
         boolean result = false;
         for (int i=0; i<30; i++){
