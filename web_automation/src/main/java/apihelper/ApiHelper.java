@@ -119,10 +119,17 @@ public class ApiHelper implements DateTimeHelper{
 
     public static List<TafMessage> getTafMessages() {
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-        tenantMessages = RestAssured.given()
+        Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .get(url)
-                .jsonPath().getList("tafResponses", TafMessage.class);
+                .get(url);
+        try {
+            tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
+        }catch (JsonPathException e){
+            Assert.assertTrue(false,
+                    "Getting taf response was not successful \n" +
+                            "Resp code: " + resp.statusCode() + "\n" +
+                            "Resp body: " + resp.getBody().asString() + "\n");
+        }
         return tenantMessages;
     }
 
