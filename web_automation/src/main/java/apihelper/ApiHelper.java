@@ -598,31 +598,24 @@ public class ApiHelper implements DateTimeHelper{
 
     public static List<CRMTicket> getCRMTickets(String clientID, String type){
         String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
-//        String clientProfileId = getClientProfileId(clientID);
         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
                 .getBody().jsonPath().getList("", CRMTicket.class);
-      //  getSessionDetails(clientID).getBody().jsonPath().getString("data.sessionId")
     }
 
     public static List<String> getTagsForCRMTicket(String sessionID){
         List<String> result = RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                .get(String.format(Endpoints.TAGS_FROM_CRM_TICKET, sessionID)).getBody().jsonPath().getList("");
+                .get(String.format(Endpoints.INTERNAL_TAGS_FROM_CRM_TICKET, sessionID)).getBody().jsonPath().getList("");
         return result;
     }
 
     public static List<String> getTags(String clientID, String type){
         String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
-//        String clientProfileId = getClientProfileId(clientID);
-
         List<String> result = RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
         return result;
-
-             //   .getBody().jsonPath().getList("", CRMTicket.class);resp.jsonPath().get("tenants");
     }
 
 

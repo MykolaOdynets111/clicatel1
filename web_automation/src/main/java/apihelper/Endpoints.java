@@ -89,7 +89,7 @@ public class Endpoints {
 
     public static String INTERNAL_CONFIG_ATTRIBUTES = URLs.getBaseInternalApiUrl() + "tenants/config-attributes/";
 
-    public static String TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
+    public static String INTERNAL_TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
 
 
     // ==================  PLATFORM ============== //
