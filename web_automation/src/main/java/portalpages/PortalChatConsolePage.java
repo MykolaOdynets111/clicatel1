@@ -22,6 +22,9 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     @FindBy(xpath = "//p[text()='Agents online']/following-sibling::div[@class='average-number--blue ng-binding']")
     private WebElement agentsOnlineCounter;
 
+    @FindBy(xpath = "//p[text()='Live chats active']//following-sibling::p/b")
+    private WebElement averageChatsPerAgent;
+
     public String getWaitingChatsNumber(){
         return getTextFromElemAgent(chatsWaitingCounter, 3, "admin", "Customers waiting for response");
     }
@@ -46,6 +49,8 @@ public class PortalChatConsolePage extends PortalAbstractPage {
         return "invalid widget name";
     }
 
-
+    public String getAverageChatsPerAgent(){
+        return getTextFromElemAgent(averageChatsPerAgent, 3, "admin", "Average chats per Agent");
+    }
 
 }

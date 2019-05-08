@@ -57,7 +57,7 @@ public class BasePortalSteps {
     private String activationAccountID;
     private static String COLOR;
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
-
+    int activeChatsFromChatdesk;
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
@@ -379,9 +379,17 @@ public class BasePortalSteps {
 
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
-        int expectedValue = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertTrue(waitForCorrectCounterValue(widgetName, expectedValue),
+        activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertTrue(waitForCorrectCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated");
+    }
+
+    @Then("^Average chats per Agent is correct$")
+    public void verifyAverageChatsPerAgent(){
+       int actualAverageChats = Integer.valueOf(getPortalChatConsolePage().getAverageChatsPerAgent());
+       int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
+       Assert.assertEquals(actualAverageChats, expectedAverageChats,
+               "Number of Average chats per Agent is not as expected");
     }
 
     private boolean waitForCorrectCounterValue(String widgetName, int expectedValue){
