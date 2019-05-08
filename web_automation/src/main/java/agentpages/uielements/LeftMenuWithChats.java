@@ -197,5 +197,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return hexColor;
     }
 
-
+    public int getNewChatsCount(){
+        return  newConversationRequests.size();
+    }
 }

@@ -22,16 +22,35 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     @FindBy(xpath = "//p[text()='Agents online']/following-sibling::div[@class='average-number--blue ng-binding']")
     private WebElement agentsOnlineCounter;
 
-    public String getWainingChatsNumber(){
-        return chatsWaitingCounter.getText();
+    @FindBy(xpath = "//p[text()='Live chats active']//following-sibling::p/b")
+    private WebElement averageChatsPerAgent;
+
+    public String getWaitingChatsNumber(){
+        return getTextFromElemAgent(chatsWaitingCounter, 3, "admin", "Customers waiting for response");
     }
 
     public String getLiveChatsNumber(){
-        return liveChatsCounter.getText();
+        return getTextFromElemAgent(liveChatsCounter, 3, "admin", "Customer engaging with an Agent");
     }
 
     public String getAgentsOnlineNumber(){
-        return agentsOnlineCounter.getText();
+        return getTextFromElemAgent(agentsOnlineCounter, 3, "admin", "Total Agents online");
+    }
+
+    public String getWidgetValue(String value){
+        switch (value) {
+            case "Customers waiting for response":
+                return getWaitingChatsNumber();
+            case "Customer engaging with an Agent":
+                return getLiveChatsNumber();
+            case "Total Agents online":
+                return getAgentsOnlineNumber();
+        }
+        return "invalid widget name";
+    }
+
+    public String getAverageChatsPerAgent(){
+        return getTextFromElemAgent(averageChatsPerAgent, 3, "admin", "Average chats per Agent");
     }
 
 }

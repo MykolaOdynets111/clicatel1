@@ -11,10 +11,7 @@ import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import datamanager.Customer360PersonalInfo;
-import datamanager.FacebookUsers;
-import datamanager.Tenants;
-import datamanager.TwitterUsers;
+import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import dbmanager.DBConnector;
@@ -1148,5 +1145,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getEndChatButtonColor(), hex, "Color for End chat button in agent desk window is not correct");
         soft.assertEquals(getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(), hex, "Color for Send button in agent desk window is not correct");
         soft.assertAll();
+    }
+
+    @Given("^Create (.*) chat via API$")
+    public void createChatViaAPI(String chatOrigin){
+        switch (chatOrigin){
+            case "fb dm message":
+                ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName()).getFBPageId(),
+                        1912835872122481l, "to agent message");
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 package steps;
 
+import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
 import apihelper.Endpoints;
@@ -41,6 +42,7 @@ public class BasePortalSteps {
     private ThreadLocal<PortalUserEditingPage> portalUserProfileEditingThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
@@ -58,7 +60,8 @@ public class BasePortalSteps {
     private static String COMPANY_CITY;
     private static String COMPANY_INDUSTRY;
     private static String COMPANY_COUNTRY;
-
+    private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
+    int activeChatsFromChatdesk;
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
@@ -364,6 +367,58 @@ public class BasePortalSteps {
                 }
             }
         }
+    }
+
+    @When("^Save (.*) pre-test widget value$")
+    public void savePreTestValue(String widgetName){
+        chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
+    }
+
+    @Then("^(.*) widget shows correct number$")
+    public void checkTotalAgentOnlineValue(String widgetName){
+        int actualActiveAgentsCount = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
+        int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
+        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
+                widgetName + " counter differs from agent online count on backend");
+    }
+
+    @Then("^(.*) widget value increased on (.*)$")
+    public void verifyWidgetValue(String widgetName, int incrementor){
+        int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
+        Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
+                "'"+widgetName+"' widget value is not updated");
+    }
+
+    @Then("^(.*) counter shows correct live chats number$")
+    public void verifyChatConsoleActiveChats(String widgetName){
+        activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
+                "'"+widgetName+"' widget value is not updated");
+    }
+
+    @Then("^Average chats per Agent is correct$")
+    public void verifyAverageChatsPerAgent(){
+       int actualAverageChats = Integer.valueOf(getPortalChatConsolePage().getAverageChatsPerAgent());
+       int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
+       Assert.assertEquals(actualAverageChats, expectedAverageChats,
+               "Number of Average chats per Agent is not as expected");
+    }
+
+    private boolean checkLiveCounterValue(String widgetName, int expectedValue){
+        int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        boolean result = false;
+        for (int i=0; i<30; i++){
+            if(expectedValue!=actualValue){
+                getPortalChatConsolePage().waitFor(1000);
+                actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+            } else {
+                result =true;
+                break;
+            }
+
+        }
+        return result;
     }
 
     @When("^Click \"(.*)\" nav button$")
@@ -923,6 +978,50 @@ public class BasePortalSteps {
         soft.assertAll();
     }
 
+    @Then("^Return secondary color for tenant$")
+    public void returnSecondaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @Then("^Return primary color for tenant$")
+    public void returnPrimaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @And("^Change business details$")
+    public void changeBusinessDetails() {
+        COMPANY_NAME = "New company name "+faker.lorem().word();
+        COMPANY_CITY = "San Francisco "+faker.lorem().word();
+        COMPANY_INDUSTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry();
+        COMPANY_COUNTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry();
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(COMPANY_NAME);
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(COMPANY_CITY);
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @And("^Refresh page and verify business details was changed$")
+    public void refreshPageAndVerifyItWasChanged() {
+        SoftAssert soft = new SoftAssert();
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),COMPANY_NAME, "Company name was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),COMPANY_CITY, "Company city was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),COMPANY_INDUSTRY, "Company industry was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),COMPANY_COUNTRY, "Company country was not changed");
+        soft.assertAll();
+    }
+
     private LeftMenu getLeftMenu() {
         if (leftMenu.get()==null) {
             leftMenu.set(getPortalMainPage().getLeftMenu());
@@ -1022,47 +1121,14 @@ public class BasePortalSteps {
         }
     }
 
-    @Then("^Return secondary color for tenant$")
-    public void returnSecondaryColorForTenant() {
-            DriverFactory.getDriverForAgent("main").navigate().refresh();
-            if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
+    private PortalChatConsolePage getPortalChatConsolePage(){
+        if (portalChatConsolePage.get()==null) {
+            portalChatConsolePage.set(new PortalChatConsolePage());
+            return portalChatConsolePage.get();
+        } else{
+            return portalChatConsolePage.get();
         }
     }
 
-    @Then("^Return primary color for tenant$")
-    public void returnPrimaryColorForTenant() {
-        DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
-        }
-    }
 
-    @And("^Change business details$")
-    public void changeBusinessDetails() {
-        COMPANY_NAME = "New company name "+faker.lorem().word();
-        COMPANY_CITY = "San Francisco "+faker.lorem().word();
-        COMPANY_INDUSTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry();
-        COMPANY_COUNTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry();
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(COMPANY_NAME);
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(COMPANY_CITY);
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitWhileProcessing();
-    }
-
-    @And("^Refresh page and verify business details was changed$")
-    public void refreshPageAndVerifyItWasChanged() {
-        SoftAssert soft = new SoftAssert();
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
-        DriverFactory.getDriverForAgent("main").navigate().refresh();
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),COMPANY_NAME, "Company name was not changed");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),COMPANY_CITY, "Company city was not changed");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),COMPANY_INDUSTRY, "Company industry was not changed");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),COMPANY_COUNTRY, "Company country was not changed");
-        soft.assertAll();
-    }
 }
