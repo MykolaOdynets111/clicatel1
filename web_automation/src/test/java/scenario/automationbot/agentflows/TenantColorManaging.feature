@@ -1,4 +1,4 @@
-@no_widget
+#@no_widget
 Feature: Managing brand color
 
   Scenario: Check changing second color

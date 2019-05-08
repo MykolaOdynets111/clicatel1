@@ -4,6 +4,7 @@ import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -53,6 +54,10 @@ public class BasePortalSteps {
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
     private static String COLOR;
+    private static String COMPANY_NAME;
+    private static String COMPANY_CITY;
+    private static String COMPANY_INDUSTRY;
+    private static String COMPANY_COUNTRY;
 
 
     @Given("^New (.*) agent is created$")
@@ -1035,5 +1040,29 @@ public class BasePortalSteps {
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
+    }
+
+    @And("^Change business details$")
+    public void changeBusinessDetails() {
+        COMPANY_NAME = "New company name "+faker.lorem().word();
+        COMPANY_CITY = "San Francisco "+faker.lorem().word();
+        COMPANY_INDUSTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry();
+        COMPANY_COUNTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry();
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(COMPANY_NAME);
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(COMPANY_CITY);
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @And("^Refresh page and verify business details was changed$")
+    public void refreshPageAndVerifyItWasChanged() {
+        SoftAssert soft = new SoftAssert();
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),COMPANY_NAME, "Company name was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),COMPANY_CITY, "Company city was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),COMPANY_INDUSTRY, "Company industry was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),COMPANY_COUNTRY, "Company country was not changed");
+        soft.assertAll();
     }
 }
