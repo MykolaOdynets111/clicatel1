@@ -1019,6 +1019,9 @@ public class BasePortalSteps {
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),COMPANY_CITY, "Company city was not changed");
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),COMPANY_INDUSTRY, "Company industry was not changed");
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),COMPANY_COUNTRY, "Company country was not changed");
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
         soft.assertAll();
     }
 

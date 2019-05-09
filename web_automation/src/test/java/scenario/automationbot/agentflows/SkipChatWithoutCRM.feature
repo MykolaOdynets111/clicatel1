@@ -2,9 +2,9 @@
 Feature: Interaction with 'Skip' button on Agent Feedback window
 
   Background:
-    Given User select Automation Bot tenant
     Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
     Given I login as agent of Automation Bot
+    Given User select Automation Bot tenant
     And Click chat icon
 
     Scenario: Agent is able to 'Skip' in end-chat pop-up in chat desk, no CRM ticket created
