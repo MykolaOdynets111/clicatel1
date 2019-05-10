@@ -488,6 +488,11 @@ public class BasePortalSteps {
                 tafMessageId + " message is not reset to default");
     }
 
+    @When("Admin click BACK button in left menu")
+    public void clickBackButton(){
+        getLeftMenu().clickBackButton();
+    }
+
     @When("^(?:I|Admin) select (.*) in left menu$")
     public void navigateInLeftMenu(String menuItem){
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();

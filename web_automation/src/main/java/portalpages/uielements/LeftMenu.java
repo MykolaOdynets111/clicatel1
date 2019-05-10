@@ -17,6 +17,9 @@ public class LeftMenu extends AbstractUIElement {
     @FindBy(css = "div.menu-container div.menu-item-wrap.ng-scope.ng-isolate-scope.with-collapse")
     private List<WebElement> activeLeftMenuItems;
 
+    @FindBy(xpath = "//a[@ui-sref='launchpad']//span[text()='BACK']")
+    private WebElement backLaunchpadButton;
+
     @FindBy(xpath = "//div[@uib-collapse='menuItem.menuclIsCollapsed'][not(contains(@style,'0px'))]")
     private  WebElement leftSubMenu;
 
@@ -56,5 +59,9 @@ public class LeftMenu extends AbstractUIElement {
                 waitFor(200);
             }
         }
+    }
+
+    public void clickBackButton(){
+        clickElemAgent(backLaunchpadButton, 3, "admin", " Back button in left menu");
     }
 }
