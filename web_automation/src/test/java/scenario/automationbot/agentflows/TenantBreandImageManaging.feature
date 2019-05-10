@@ -1,9 +1,7 @@
-#@no_widget
-#@agent_photo
 Feature: Managing tenant's brand image
 
   Scenario: Adding tenant new image
-    Given Agent of Automation Bot tenant has no brand image
+    Given Automation Bot tenant has no brand image
     When I open portal
     And Login into portal as an admin of Automation Bot account
     And I select Touch in left menu and Touch preferences in submenu

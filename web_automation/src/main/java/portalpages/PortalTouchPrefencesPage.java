@@ -17,7 +17,7 @@ public class PortalTouchPrefencesPage extends PortalAbstractPage {
         return autoRespondersWindow;
     }
 
-    public ConfigureBrandWindow getconfigureBrandWindow() {
+    public ConfigureBrandWindow getConfigureBrandWindow() {
         return configureBrandWindow;
     }
 

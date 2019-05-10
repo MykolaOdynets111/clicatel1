@@ -830,7 +830,7 @@ public class BasePortalSteps {
 
     @When("^Click 'Upload' button for tenant logo$")
     public void clickUploadButtonForTenantLogo(){
-        getPortalTouchPrefencesPage().getconfigureBrandWindow().clickuploadButton();
+        getPortalTouchPrefencesPage().getConfigureBrandWindow().clickuploadButton();
     }
 
     @When("^Admin clicks 'Edit user roles'$")
@@ -885,14 +885,14 @@ public class BasePortalSteps {
 
     @When("^Upload: photo for tenant$")
     public void uploadPhotoForTenant() {
-        getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
+        getPortalTouchPrefencesPage().getConfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
     }
 
     @Then("^Change secondary color to '(.*)' for tenant$")
     public void changeSecondaryColorForTenant(String hex) {
-        COLOR = getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor();
+        COLOR = getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor();
         if (!hex.contains(COLOR)) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(hex);
+            getPortalTouchPrefencesPage().getConfigureBrandWindow().setSecondaryColor(hex);
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
@@ -900,9 +900,9 @@ public class BasePortalSteps {
 
     @Then("^Change primary color to '(.*)' for tenant$")
     public void changePrimaryColorForTenant(String hex) {
-        COLOR = getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor();
+        COLOR = getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor();
         if (!hex.contains(COLOR)) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(hex);
+            getPortalTouchPrefencesPage().getConfigureBrandWindow().setPrimaryColor(hex);
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
@@ -930,7 +930,7 @@ public class BasePortalSteps {
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
 
-    @Given("^Agent of (.*) tenant has no brand image$")
+    @Given("^(.*) tenant has no brand image$")
     public void deleteTenantBrandImage(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.deleteTenantBrandImage(Tenants.getTenantUnderTestOrgName());
@@ -969,7 +969,6 @@ public class BasePortalSteps {
     public void verifyBrandImageSaveOnPortal(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
-        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(fileType.contains("image"),
                 "Image is not saved on backend");
@@ -981,8 +980,8 @@ public class BasePortalSteps {
     @Then("^Return secondary color for tenant$")
     public void returnSecondaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPrefencesPage().getConfigureBrandWindow().setSecondaryColor(COLOR);
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
@@ -991,8 +990,8 @@ public class BasePortalSteps {
     @Then("^Return primary color for tenant$")
     public void returnPrimaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
-            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPrefencesPage().getConfigureBrandWindow().setPrimaryColor(COLOR);
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
