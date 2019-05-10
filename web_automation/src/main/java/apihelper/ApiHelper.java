@@ -612,17 +612,14 @@ public class ApiHelper implements DateTimeHelper{
     }
 
     public static List<String> getTagsForCRMTicket(String sessionID){
-        List<String> result = RestAssured.given()
+        return RestAssured.given()
                 .get(String.format(Endpoints.INTERNAL_TAGS_FROM_CRM_TICKET, sessionID)).getBody().jsonPath().getList("");
-        return result;
     }
 
-    public static List<String> getTags(String clientID, String type){
-        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
-        List<String> result = RestAssured.given()
+    public static List<String> getAllTags(){
+        return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
-        return result;
     }
 
 

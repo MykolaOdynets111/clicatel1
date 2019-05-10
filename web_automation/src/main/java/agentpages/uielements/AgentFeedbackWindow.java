@@ -82,7 +82,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public void clickCloseButtonInCloseChatPopup (){
         if( isElementShownAgentByXpath(closeChatButtonXPATH, 3, "main")){
-            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
+            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 5, "main agent");
             findElemByXPATHAgent(closeChatButtonXPATH).click();
         }
     }
