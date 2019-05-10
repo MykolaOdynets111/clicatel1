@@ -104,7 +104,11 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){
-        return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
+        try {
+            return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
+        } catch(NoSuchElementException e){
+            return true;
+        }
     }
 
     public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait){
