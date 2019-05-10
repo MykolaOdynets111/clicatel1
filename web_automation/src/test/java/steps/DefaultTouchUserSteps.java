@@ -779,11 +779,19 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
 
     @Then("^I check primary color to '(.*)' for tenant in widget$")
     public void iCheckPrimaryColorForTenantInWidget(String hex) {
-            Assert.assertEquals(getMainPage().getchatIconColor(), hex, "Color for tenant open widget button is not correct");
-            Assert.assertEquals(getMainPage().getHeaderColor(), hex, "Color for tenant header in widget window is not correct");
-            clickChatIcon();
-            Assert.assertEquals(widget.getTenantNameWidgetColor(), hex, "Color for tenant name in widget is not correct");
-            Assert.assertEquals(widget.getTenantcloseButtonColor(), hex, "Color for tenant close widget button is not correct");
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getMainPage().getChatIconColor(), hex, "Color for tenant open widget button is not correct");
+        soft.assertEquals(getMainPage().getHeaderColor(), hex, "Color for tenant header in widget window is not correct");
+        clickChatIcon();
+        soft.assertEquals(widget.getTenantNameWidgetColor(), hex, "Color for tenant name in widget is not correct");
+        soft.assertEquals(widget.getTenantCloseButtonColor(), hex, "Color for tenant close widget button is not correct");
+        soft.assertAll();
+    }
+
+    @Then("^Tenant photo is shown on widget$")
+    public void verifyTenantImageIsShownOnChatdesk(){
+        clickChatIcon();
+        Assert.assertTrue(widget.isTenantImageShown(),"Tenant image is not shown on widget");
     }
 
 

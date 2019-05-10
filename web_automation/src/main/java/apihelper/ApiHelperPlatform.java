@@ -10,7 +10,7 @@ public class ApiHelperPlatform {
 
     public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
-        List<String> ids = getIdsOfRoles(tenantOrgName, "TOUCH_AGENT");
+        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");//!!!CHECK!!! chenged from "TOUCH_AGENT" because returtn ids==0 and test fail
         String[] idsArray = new String[ids.size()];
         for(int i=0; i<ids.size(); i++){
             idsArray[i] = "\""+ids.get(i)+"\"";
@@ -61,7 +61,7 @@ public class ApiHelperPlatform {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
-        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).filter(e -> e.get("description").equals(roleDescription)).
+        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
                         forEach(e -> {ids.add(
                                 (String) e.get("id"));});
          ids.stream().forEach(e -> e.replace(e, "\""+e+"\""));

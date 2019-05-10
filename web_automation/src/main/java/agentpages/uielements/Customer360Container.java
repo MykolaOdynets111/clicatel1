@@ -89,18 +89,15 @@ public class Customer360Container extends AbstractUIElement {
     }
 
     public String getSaveEditButtonColor() {
-        String hexColor = Color.fromString(saveEditButton.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(saveEditButton.getCssValue("color")).asHex();
     }
 
     public String getUserPictureColor() {
-        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(userPicture.getCssValue("background-color")).asHex();
     }
 
     public String getMailColor() {
-        String hexColor = Color.fromString(mailColor.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(mailColor.getCssValue("color")).asHex();
     }
 
 }

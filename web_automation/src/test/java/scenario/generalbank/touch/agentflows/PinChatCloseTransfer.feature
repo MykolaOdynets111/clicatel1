@@ -33,7 +33,7 @@ Feature: Pinned chat is disabled to close and to transfer
     Then Agent sees 'flag' icon in this chat
     Then Agent can not click 'Transfer chat' button
     Then Agent click 'Unpin' button
-    Given I login as second agent of Automation Bot
+    Given I login as second agent of General Bank Demo
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming transfer" header
     Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent

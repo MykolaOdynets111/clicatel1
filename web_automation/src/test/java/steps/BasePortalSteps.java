@@ -5,6 +5,7 @@ import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -55,6 +56,10 @@ public class BasePortalSteps {
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
     private static String COLOR;
+    private static String COMPANY_NAME;
+    private static String COMPANY_CITY;
+    private static String COMPANY_INDUSTRY;
+    private static String COMPANY_COUNTRY;
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     int activeChatsFromChatdesk;
 
@@ -878,8 +883,8 @@ public class BasePortalSteps {
     }
 
 
-    @When("^Upload: foto for tenant$")
-    public void uploadFotoForTenant() {
+    @When("^Upload: photo for tenant$")
+    public void uploadPhotoForTenant() {
         getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
     }
 
@@ -925,6 +930,12 @@ public class BasePortalSteps {
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
 
+    @Given("^Agent of (.*) tenant has no brand image$")
+    public void deleteTenantBrandImage(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        ApiHelper.deleteTenantBrandImage(Tenants.getTenantUnderTestOrgName());
+    }
+
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
         portalUserProfileEditingThreadLocal.get().getPageHeader().logoutAdmin();
@@ -954,6 +965,19 @@ public class BasePortalSteps {
         soft.assertAll();
     }
 
+    @Then("^New brand image is saved on backend for (.*) tenant$")
+    public void verifyBrandImageSaveOnPortal(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
+        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(fileType.contains("image"),
+                "Image is not saved on backend");
+        soft.assertTrue(fileType.contains("image"),
+                "Image for chat desk (tenant_logo_trans) is not saved on backend");
+        soft.assertAll();
+    }
+
     @Then("^Return secondary color for tenant$")
     public void returnSecondaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
@@ -972,6 +996,33 @@ public class BasePortalSteps {
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
+    }
+
+    @And("^Change business details$")
+    public void changeBusinessDetails() {
+        COMPANY_NAME = "New company name "+faker.lorem().word();
+        COMPANY_CITY = "San Francisco "+faker.lorem().word();
+        COMPANY_INDUSTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry();
+        COMPANY_COUNTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry();
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(COMPANY_NAME);
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(COMPANY_CITY);
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @And("^Refresh page and verify business details was changed$")
+    public void refreshPageAndVerifyItWasChanged() {
+        SoftAssert soft = new SoftAssert();
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),COMPANY_NAME, "Company name was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),COMPANY_CITY, "Company city was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),COMPANY_INDUSTRY, "Company industry was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),COMPANY_COUNTRY, "Company country was not changed");
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+        soft.assertAll();
     }
 
     private LeftMenu getLeftMenu() {
