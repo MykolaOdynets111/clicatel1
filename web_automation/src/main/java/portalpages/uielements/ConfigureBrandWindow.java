@@ -7,13 +7,17 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import com.github.javafaker.Faker;
 
 import java.io.File;
 import java.util.List;
 
 
+
 @FindBy(css = "div.edit-brand-details-page")
 public class ConfigureBrandWindow extends BasePortalWindow {
+
+    private Faker faker = new Faker();
 
 
     @FindBy( xpath = "//span[contains(@class, 'color-picker-preview')]")
@@ -66,13 +70,42 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         acceptButton.click();
     }
 
+    public String setRandomPrimaryColor(String color){
+        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+        primaryColor.click();
+        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        colorInputField.clear();
+        String newColor;
+        do  {
+            newColor = Color.fromString(faker.color().name()).asHex();
+        } while (color.contains(newColor));
+        colorInputField.sendKeys(newColor);
+        waitFor(2000);
+        acceptButton.click();
+        return newColor;
+    }
+
+    public String setRandomSecondaryColor(String color){
+        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+        secondaryColor.click();
+        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        colorInputField.clear();
+        String newColor;
+        do  {
+             newColor = Color.fromString(faker.color().name()).asHex();
+        } while (color.contains(newColor));
+        colorInputField.sendKeys(newColor);
+        waitFor(2000);
+        acceptButton.click();
+        return newColor;
+    }
+
     public String getPrimaryColor(){
         waitForElementToBeVisibleAgent(primaryColor, 3, "admin");            return Color.fromString(primaryColor.getCssValue("background-color")).asHex();
     }
 
     public String getSecondaryColor(){
-        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
-        return Color.fromString(secondaryColor.getCssValue("background-color")).asHex();
+        return Color.fromString(waitForElementToBeVisibleAgent(secondaryColor, 3, "admin").getCssValue("background-color")).asHex();
     }
 
     public void uploadPhoto(String photoPath){

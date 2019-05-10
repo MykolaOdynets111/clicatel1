@@ -1115,38 +1115,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
 
-    @Then("^I check primary color to '(.*)' for tenant in agent desk$")
-    public void iCheckPrimaryColorForTenantInAgentDesk(String hex) {
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360ButtonColor(), hex, "Color for tenant 'Costomer' is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getExpandFilterButtonColor(), hex, "Color for tenant dropdown button is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getTouchButtonColor(), hex, "Color for tenant chat button is not correct");
-        soft.assertAll();
-    }
-
-    @Then("^I check secondary color to '(.*)' for tenant in agent desk$")
-    public void iCheckSecondaryColorForTenantInAgentDesk(String hex) {
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantNameColor(), hex, "Color for tenant name in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantLogoBorderColor(), hex, "Color for tenant logo border in agent desk window is not correct");
-        soft.assertAll();
-    }
-
-    @Then("^Check primary color '(.*)' for incoming chat and 360Container$")
-    public void checkPrimaryColorForIncomingChatAndContainer(String hex) {
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserMsgCountColor(), hex, "Color for tenant logo border in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserPictureColor(), hex, "Color for User Picture in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getUserPictureColor(), hex, "Color for User Picture in 360container in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getSaveEditButtonColor(), hex, "Color for Edit button in 360container in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getMailColor(), hex, "Color for Email in 360container in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getPinChatButtonColor(), hex, "Color for Pin chat button in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getTransferButtonColor(), hex, "Color for Transfer chat button in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getEndChatButtonColor(), hex, "Color for End chat button in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(), hex, "Color for Send button in agent desk window is not correct");
-        soft.assertAll();
-    }
-
     @Given("^Create (.*) chat via API$")
     public void createChatViaAPI(String chatOrigin){
         switch (chatOrigin){
