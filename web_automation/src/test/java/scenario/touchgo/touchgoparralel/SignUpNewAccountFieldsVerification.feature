@@ -19,4 +19,4 @@ Feature: Signing up the account: verification fields limitation
   Scenario: Verification password length
     password: size must be between 8 and 128
     When I try to create new account with following data: Test Aqa, fieldtesting, aqa@test.com, 1234567
-    Then Error popup with text Error while sign up  is shown
+    Then Error popup with text password: size must be between 8 and 128  is shown

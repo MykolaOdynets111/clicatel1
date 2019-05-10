@@ -84,6 +84,16 @@ public interface WebWait {
         return elements;
         }
 
+    default List<WebElement> waitForElementsToBeClickableAgent(List<WebElement> elements, int waitTime, String agent){
+        WebDriverWait wait = initAgentWait(waitTime, agent);
+        for(WebElement element: elements) {
+            wait.ignoring(NoSuchElementException.class)
+                    .ignoring(StaleElementReferenceException.class)
+                    .until(ExpectedConditions.elementToBeClickable(element));
+        }
+        return elements;
+    }
+
     default List<WebElement> waitForElementsToBeVisible(List<WebElement> elements, int wait){
             return initWait(wait).ignoring(NoSuchElementException.class)
                     .ignoring(StaleElementReferenceException.class)

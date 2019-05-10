@@ -357,6 +357,7 @@ public class BasePortalSteps {
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
+        getPortalMainPage().waitWhileProcessing(2,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 

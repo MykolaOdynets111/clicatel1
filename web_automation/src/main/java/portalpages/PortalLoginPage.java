@@ -36,6 +36,7 @@ public class PortalLoginPage extends PortalAbstractPage {
             pageHeader.logoutAdmin();
             enterAdminCreds(email, pass);
         }
+        waitWhileProcessing();
         return new PortalMainPage();
     }
 
