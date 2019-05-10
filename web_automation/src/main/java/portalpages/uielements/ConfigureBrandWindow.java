@@ -67,15 +67,12 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     }
 
     public String getPrimaryColor(){
-            waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
-            String hex = Color.fromString(primaryColor.getCssValue("background-color")).asHex();
-            return hex;
+        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");            return Color.fromString(primaryColor.getCssValue("background-color")).asHex();
     }
 
     public String getSecondaryColor(){
-            waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
-            String hex = Color.fromString(secondaryColor.getCssValue("background-color")).asHex();
-            return hex;
+        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+        return Color.fromString(secondaryColor.getCssValue("background-color")).asHex();
     }
 
     public void uploadPhoto(String photoPath){

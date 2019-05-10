@@ -110,7 +110,7 @@ public class PageHeader extends AbstractUIElement {
         return Color.fromString(findElemByXPATHAgent(tenantNameXpath,"second agent").getCssValue("color")).asHex();
     }
 
-    public String gettenantLogoBorderColor() {
+    public String getTenantLogoBorderColor() {
         return Color.fromString(findElemByXPATHAgent(tenantLogoBorderXpath,"second agent").getCssValue("border-bottom-color")).asHex();
     }
 }

@@ -1128,7 +1128,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void iCheckSecondaryColorForTenantInAgentDesk(String hex) {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantNameColor(), hex, "Color for tenant name in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().gettenantLogoBorderColor(), hex, "Color for tenant logo border in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantLogoBorderColor(), hex, "Color for tenant logo border in agent desk window is not correct");
         soft.assertAll();
     }
 
