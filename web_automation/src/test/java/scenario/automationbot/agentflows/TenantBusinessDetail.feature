@@ -1,4 +1,5 @@
 @no_widget
+@no_chatdesk
 Feature: Managing business details
 
   Scenario: Check changing business details
