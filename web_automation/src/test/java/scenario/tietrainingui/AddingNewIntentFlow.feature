@@ -1,5 +1,7 @@
 @tie
 @creating_intent
+@no_widget
+@no_chatdesk
 Feature: Creating new intent
 
   Scenario: Create new intent, train model and apply it

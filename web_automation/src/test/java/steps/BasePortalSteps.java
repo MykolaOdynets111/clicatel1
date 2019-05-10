@@ -372,7 +372,11 @@ public class BasePortalSteps {
 
     @When("^Save (.*) pre-test widget value$")
     public void savePreTestValue(String widgetName){
-        chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
+        try {
+            chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
+        } catch (NumberFormatException e){
+            Assert.assertTrue(false, "Cannot read value from " +widgetName + "chat console widget");
+        }
     }
 
     @Then("^(.*) widget shows correct number$")
