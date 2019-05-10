@@ -694,7 +694,6 @@ public class ApiHelper implements DateTimeHelper{
                 "  \"object\": \"page\",\n" +
                 "  \"tenant\": null\n" +
                 "}";
-        String requestBody = "{ \"entry\": [ { \"changes\": [], \"id\": \""+linkedFBPageId+"\", \"messaging\": [ { \"message\": { \"mid\": \""+mid+"\", \"seq\": 31478, \"text\": \""+message+"\" }, \"recipient\": { \"id\": \""+linkedFBPageId+"\" }, \"sender\": { \"id\": \""+fbUserId+"\" }, \"timestamp\": 1557148766703 } ], \"time\": 1557148766703 } ], \"object\": \"page\", \"tenant\": null}";
         return RestAssured.given().log().all()
                 .header("accept", "*/*")
                 .header("Content-Type", "application/json")
