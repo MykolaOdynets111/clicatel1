@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Chatdesk tests" parallel="tests" thread-count="3" >
+    <test name="Chatdesk General Bank Demo tenant">
+        <classes>
+            <class name="runner.generalbank.RunGenBankAgentTest" />
+            <class name="runner.generalbank.RunPortalTest" />
+        </classes>
+    </test>
+    <test name="Chatdesk Automation (Agent mode) tenant ">
+        <classes>
+            <class name="runner.automation.RunChatdeskTest" />
+        </classes>
+    </test>
+    <test name="Chatdesk Automation Bot (bot mode) tenant">
+        <classes>
+            <class name="runner.automationbot.RunChatdeskTest" />
+        </classes>
+    </test>
+</suite>

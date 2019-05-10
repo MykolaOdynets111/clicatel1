@@ -1,6 +1,10 @@
 @agent_mode
 Feature: Chat handling in out of support hours for for Bot mode tenant
 
+  Background:
+    Given Taf out_of_support_hours is set to true for Automation Bot tenant
+
+
   @agent_support_hours
   Scenario: Verify overnight ticket is created on chatdesk for Bot mode tenant
     Given I login as agent of Automation Bot

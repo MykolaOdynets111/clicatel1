@@ -1,5 +1,7 @@
 package drivermanager;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,8 +44,14 @@ public enum DriverType {
 
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
-//       ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
-      ChromeDriverManager.getInstance().setup();
+            String hostName = getHostName();
+//            ChromeDriverManager.getInstance().version("72.0.3626").setup();
+
+            if (hostName.equals("FANB0604") | hostName.contains("TMytlovych")) {
+                ChromeDriverManager.getInstance().version("73.0.3683.68").setup();
+                return new ChromeDriver((ChromeOptions) capabilities);
+            }
+            ChromeDriverManager.getInstance().setup();
 
            return new ChromeDriver((ChromeOptions) capabilities);
         }
@@ -110,6 +118,20 @@ public enum DriverType {
         int width = (int) (long) ((JavascriptExecutor) driver).executeScript("return screen.width;");
         int height = (int) (long) ((JavascriptExecutor) driver).executeScript("return screen.height;");
         driver.manage().window().setSize(new Dimension(width, height));
+    }
+
+    public String getHostName(){
+        String hostName = "";
+
+//        hostName = System.getenv("COMPUTERNAME");
+//        if(hostName==null) {
+            try {
+                hostName = InetAddress.getLocalHost().getHostName();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+//        }
+    return hostName;
     }
 }
 

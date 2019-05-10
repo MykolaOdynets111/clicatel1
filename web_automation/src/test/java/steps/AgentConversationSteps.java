@@ -85,13 +85,13 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser){
-        getAgentHomePage(agent).clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
     }
 
 
     @When("^Agent replays with (.*) message$")
     public void respondToUserWithCheck(String agentMessage) {
-        if (getAgentHomePage("main agent").isSuggestionFieldShown()) {
+        if (getAgentHomePage("main agent").getChatForm().isSuggestionFieldShown()) {
             deleteSuggestionAndSendOwn(agentMessage);
         } else {
             sendAnswerToUser("main agent", agentMessage);
@@ -100,7 +100,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String responseToUser){
-        getAgentHomePage().clearAndSendResponseToUser(responseToUser);
+        getAgentHomePage().getChatForm().clearAndSendResponseToUser(responseToUser);
     }
 
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
@@ -129,7 +129,7 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^The suggestion for user message \"(.*)\" with the biggest confidence is added to the input field$")
     public void verifyAutomaticAddingSuggestingToInputField(String userMessage){
-        String actualSuggestion = getAgentHomePage().getSuggestionFromInputFiled();
+        String actualSuggestion = getAgentHomePage().getChatForm().getSuggestionFromInputFiled();
         if (actualSuggestion==null){
             Assert.assertTrue(false, "There is no added suggestion in input field");
         }
@@ -146,7 +146,7 @@ public class AgentConversationSteps implements JSHelper{
     public void verifySuggestionIsNotShown(String userInput){
         getAgentHomePage().clickAgentAssistantButton();
         SoftAssert softAssert = new SoftAssert();
-        String actualSuggestion = getAgentHomePage().getSuggestionFromInputFiled();
+        String actualSuggestion = getAgentHomePage().getChatForm().getSuggestionFromInputFiled();
         softAssert.assertTrue(actualSuggestion.isEmpty(),"Input field is not empty\n");
         softAssert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(), "Suggestions list is not empty");
         softAssert.assertAll();
@@ -154,58 +154,58 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent click send button$")
     public void clickSendButton() {
-        getAgentHomePage().clickSendButton();
+        getAgentHomePage().getChatForm().clickSendButton();
     }
 
     @When("^Agent is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
     public void deleteSuggestionAndSendOwn(String agentMessage){
-        getAgentHomePage().deleteSuggestionAndAddAnother(agentMessage);
+        getAgentHomePage().getChatForm().deleteSuggestionAndAddAnother(agentMessage);
 //        getAgentHomePage().clickSendButton();
     }
 
     @When("^Agent add additional info \"(.*)\" to suggested message$")
     public void addMoreInfo(String additional) {
-        getAgentHomePage().addMoreInfo(additional);
+        getAgentHomePage().getChatForm().addMoreInfo(additional);
     }
 
     @Then("^'Clear' buttons are not shown$")
     public void checkClearEditButtonsAreShown(){
-        Assert.assertTrue(getAgentHomePage().isClearButtonShown(),
+        Assert.assertTrue(getAgentHomePage().getChatForm().isClearButtonShown(),
                 "'Clear' button is not shown for suggestion input field.");
     }
 
     @Then("^'Clear' and 'Edit' buttons are shown$")
     public void checkClearEditButtonsAreNotShown(){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getAgentHomePage().isClearButtonShown(),
+        soft.assertTrue(getAgentHomePage().getChatForm().isClearButtonShown(),
                 "'Clear' button is not shown for suggestion input field.");
-        soft.assertTrue(getAgentHomePage().isEditButtonShown(),
+        soft.assertTrue(getAgentHomePage().getChatForm().isEditButtonShown(),
                 "'Edit' button is not shown for suggestion input field.");
         soft.assertAll();
     }
 
     @When("^Agent click Edit suggestions button$")
     public void clickEditButton(){
-        getAgentHomePage().clickEditButton();
+        getAgentHomePage().getChatForm().clickEditButton();
     }
 
     @When("^Agent click Clear suggestions button$")
     public void clickClearButton(){
-        getAgentHomePage().clickClearButton();
+        getAgentHomePage().getChatForm().clickClearButton();
     }
 
     @Then("^Message input field is cleared$")
     public void verifySuggestionClearedByClearButton(){
-        Assert.assertTrue(getAgentHomePage().isMessageInputFieldEmpty(),
+        Assert.assertTrue(getAgentHomePage().getChatForm().isMessageInputFieldEmpty(),
                 "Message input field is not empty");
     }
 
     @Then("Agent is able to add \"(.*)\"")
     public void enterAdditionTextForSuggestion(String textToAdd){
-        if(!getAgentHomePage().isSuggestionContainerDisappears()){
+        if(!getAgentHomePage().getChatForm().isSuggestionContainerDisappears()){
             Assert.assertTrue(false, "Input field is not become cklickable");
         }
-        getAgentHomePage().sendResponseToUser(textToAdd);
+        getAgentHomePage().getChatForm().sendResponseToUser(textToAdd);
     }
 
     @Then("^'Profanity not allowed' pop up is shown$")
@@ -222,7 +222,6 @@ public class AgentConversationSteps implements JSHelper{
 
     @When("^Agent click \"End chat\" button$")
     public void clickEndChatButton(){
-
         getAgentHomePage().getChatHeader().clickEndChatButton();
     }
 

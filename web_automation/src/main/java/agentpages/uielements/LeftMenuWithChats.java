@@ -7,6 +7,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -48,6 +49,12 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     @FindBy(xpath = "//div[@class='Select-control']//input")
     private WebElement searchChatInput;
 
+    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    private WebElement userPicture;
+
+    @FindBy(xpath = "//span[@class='msg-count']")
+    private WebElement userMsgCount;
+
     private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
 
     private String loadingSpinner = "//*[text()='Connecting...']";
@@ -56,7 +63,9 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
     }
 
-
+    private WebElement getActiveTargetChat(String userName){
+        return chatsList.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
+    }
 
     public void openNewConversationRequestByAgent(String agent) {
         String userName = getUserNameFromLocalStorage();
@@ -86,6 +95,13 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketIconShown();
     }
 
+    public boolean isFlagIconShown(String userName){
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconShown();
+    }
+
+    public boolean isFlagIconRemoved(String userName){
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconRemoved();
+    }
 
     public boolean isOvernightTicketIconRemoved(String userName){
         return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
@@ -165,5 +181,25 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     public String getActiveChatLocation(){
         return new ChatInLeftMenu(activeCaht).getLocation();
+    }
+
+    public String getExpandFilterButtonColor() {
+        String hexColor = Color.fromString(expandFilterButton.getCssValue("color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserPictureColor() {
+        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
+        return hexColor;
+    }
+
+    public String getUserMsgCountColor() {
+        String hexColor = Color.fromString(userMsgCount.getCssValue("background-color")).asHex();
+        userMsgCount.click();
+        return hexColor;
+    }
+
+    public int getNewChatsCount(){
+        return  newConversationRequests.size();
     }
 }

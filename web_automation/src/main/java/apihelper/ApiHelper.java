@@ -1,12 +1,16 @@
 package apihelper;
 
+import com.github.javafaker.Faker;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
+import gherkin.lexer.Fa;
+import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
+import io.restassured.config.EncoderConfig;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
@@ -16,13 +20,14 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class ApiHelper {
+public class ApiHelper implements DateTimeHelper{
 
     private static  List<HashMap> tenantsInfo=null;
 //    private static List<HashMap> tenantMessages=null;
@@ -114,6 +119,22 @@ public class ApiHelper {
 
     public static List<TafMessage> getTafMessages() {
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+        Response resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .get(url);
+        try {
+            tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
+        }catch (JsonPathException e){
+            Assert.assertTrue(false,
+                    "Getting taf response was not successful \n" +
+                            "Resp code: " + resp.statusCode() + "\n" +
+                            "Resp body: " + resp.getBody().asString() + "\n");
+        }
+        return tenantMessages;
+    }
+
+    public static List<TafMessage> getDefaultTafMessages() {
+        String url = String.format(Endpoints.TAF_MESSAGES, "null");
         tenantMessages = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .get(url)
@@ -136,6 +157,10 @@ public class ApiHelper {
 
     public static String getTenantMessageText(String id) {
         return getTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
+    }
+
+    public static String getDefaultTenantMessageText(String id) {
+        return getDefaultTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
     }
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
@@ -524,6 +549,12 @@ public class ApiHelper {
                 .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
+    public static Response getActiveChatsBySecondAgent(){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUserSecond(Tenants.getTenantUnderTestOrgName()))
+                .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+    }
+
     public static void closeActiveChats(){
         List<String> conversationIds = getActiveChatsByAgent().getBody().jsonPath().getList("content.id");
         for(String conversationId : conversationIds){
@@ -531,7 +562,17 @@ public class ApiHelper {
                     .header("Accept", "application/json")
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                     .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
-            }
+        }
+    }
+
+    public static void closeActiveChatsSecondAgent(){
+        List<String> conversationIds = getActiveChatsBySecondAgent().getBody().jsonPath().getList("content.id");
+        for(String conversationId : conversationIds){
+            RestAssured.given()
+                    .header("Accept", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUserSecond(Tenants.getTenantUnderTestOrgName()))
+                    .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
+        }
     }
 
     public static String getClientProfileId(String clientID){
@@ -545,7 +586,23 @@ public class ApiHelper {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
                 .getBody().jsonPath().getList("", CRMTicket.class);
+      //  getSessionDetails(clientID).getBody().jsonPath().getString("data.sessionId")
     }
+
+    public static List<String> getTags(String clientID, String type){
+        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
+//        String clientProfileId = getClientProfileId(clientID);
+
+        List<String> result = RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
+        return result;
+
+             //   .getBody().jsonPath().getList("", CRMTicket.class);resp.jsonPath().get("tenants");
+    }
+
+
+
 
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
         return RestAssured.given().log().all()
@@ -580,6 +637,48 @@ public class ApiHelper {
                         "{\""+config+"\": "+configValue+" }" +
                       "}")
                 .put(Endpoints.INTERNAL_CONFIG_ATTRIBUTES + tenantId);
+    }
 
+//    Response resp = ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName).getFBPageId(), 1912835872122481l, "to agent the last");
+    public static Response createFBChat(long linkedFBPageId, long fbUserId, String message){
+        Faker faker = new Faker();
+        String mid = faker.code().isbn13(true) + "-" + faker.lorem().characters(3,6, true);
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = LocalDateTime.now().atZone(zoneId);
+        long timestamp =  zdt.toInstant().toEpochMilli();
+        String requestBody1 = "{\n" +
+                "  \"entry\": [\n" +
+                "    {\n" +
+                "      \"changes\": [],\n" +
+                "      \"id\": \""+linkedFBPageId+"\",\n" +
+                "      \"messaging\": [\n" +
+                "        {\n" +
+                "          \"message\": {\n" +
+                "            \"mid\": \""+mid+"\",\n" +
+                "            \"seq\": 31478,\n" +
+                "            \"text\": \""+message+"\"\n" +
+                "          },\n" +
+                "          \"recipient\": {\n" +
+                "            \"id\": \""+linkedFBPageId+"\"\n" +
+                "          },\n" +
+                "          \"sender\": {\n" +
+                "            \"id\": \""+fbUserId+"\"\n" +
+                "          },\n" +
+                "          \"timestamp\": "+timestamp+"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"time\": "+timestamp+"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"object\": \"page\",\n" +
+                "  \"tenant\": null\n" +
+                "}";
+        String requestBody = "{ \"entry\": [ { \"changes\": [], \"id\": \""+linkedFBPageId+"\", \"messaging\": [ { \"message\": { \"mid\": \""+mid+"\", \"seq\": 31478, \"text\": \""+message+"\" }, \"recipient\": { \"id\": \""+linkedFBPageId+"\" }, \"sender\": { \"id\": \""+fbUserId+"\" }, \"timestamp\": 1557148766703 } ], \"time\": 1557148766703 } ], \"object\": \"page\", \"tenant\": null}";
+        return RestAssured.given().log().all()
+                .header("accept", "*/*")
+                .header("Content-Type", "application/json")
+                .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .body(requestBody1)
+                .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);
     }
 }

@@ -1,5 +1,5 @@
 @agent_feedback
-Feature: Verification that 5 CRM tickets are shown and sorted be created date
+Feature: Verification that 5 CRM tickets are shown and sorted by created date
 
   Scenario: Check CRM tickets number and sorting
     Given User select Automation tenant

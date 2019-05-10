@@ -12,10 +12,10 @@ import java.util.List;
 
 @Test(groups = {"touchgo"})
 @CucumberOptions(
-        format={"com.github.kirlionik.cucumberallure.AllureReporter"
+        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/touchgonewaccount/SignUpNewAccount.feature/",
+        features ="src/test/java/scenario/touchgo/newaccount/SignUpNewAccount.feature/",
         glue ="steps")
 public class RunTouchGoCreatingAccountTest {
 

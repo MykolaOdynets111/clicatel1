@@ -6,10 +6,13 @@ import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.FacebookPages;
+import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.DriverFactory;
+import facebook.FBTenantPage;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
@@ -92,8 +95,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);}
 
     private String getClientWithHistory(){
-        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), 1, 160);
-
+        int page = 1;
+        Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), page, 15);
+        boolean lastPage = resp.jsonPath().getBoolean("last");
         if(resp.statusCode()!=200){
             Assert.assertTrue(false, "Getting finished chats was not successful\n" +
             "statusCode: " + resp.statusCode() + "\n" +
@@ -101,15 +105,27 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         }
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
         LocalDateTime nowMinusTwoDays = LocalDateTime.now(zoneId).minusDays(2).minusHours(2);
-        selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
-                .map(sessionContainer ->  ((ArrayList) sessionContainer))
-                .filter(e -> e.size()==1)
-                .map(session -> ((HashMap) session.get(0)))
-                .filter(session ->  LocalDateTime.parse((String) session.get("endedDate"), formatter).isBefore(nowMinusTwoDays))
-                .findAny()
-                .get();
+
+        while(!lastPage){
+            try {
+                selectedClient = resp.getBody().jsonPath().getList("content.sessions").stream()
+                        .map(sessionContainer ->  ((ArrayList) sessionContainer))
+                        .filter(e -> e.size()==1)
+                        .map(session -> ((HashMap) session.get(0)))
+                        .filter(session ->  LocalDateTime.parse((String) session.get("endedDate"), formatter).isBefore(nowMinusTwoDays))
+                        .findAny()
+                        .get();
+                break;
+            }catch(NoSuchElementException e){
+                page += 1;
+                resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), page, 15);
+                lastPage = resp.jsonPath().getBoolean("last");
+
+            }
+        }
+
+
 
         return   (String) selectedClient.get("clientId");
     }
@@ -668,7 +684,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Then("^There is no (.*) response$")
     public void verifyTextResponseIsNotShownForUser(String expectedText){
         Assert.assertFalse(widget.getWidgetConversationArea()
-                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4));
+                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 10), "Error: Response is shown in widget");
     }
 
     private String formExpectedTextResponseFromBotWidget(String fromFeatureText){
@@ -755,5 +771,22 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
                 "aqa_quoterequest"+System.currentTimeMillis()+"@aqa.com"                          // email
         ));
     }
+
+    @Then("^I check secondary color to '(.*)' for tenant in widget$")
+    public void iCheckSecondaryColorForTenantInWidget(String hex) {
+            Assert.assertEquals(getMainPage().getTenantNameColor(), hex, "Color for tenant name in widget window is not correct");
+    }
+
+    @Then("^I check primary color to '(.*)' for tenant in widget$")
+    public void iCheckPrimaryColorForTenantInWidget(String hex) {
+            Assert.assertEquals(getMainPage().getchatIconColor(), hex, "Color for tenant open widget button is not correct");
+            Assert.assertEquals(getMainPage().getHeaderColor(), hex, "Color for tenant header in widget window is not correct");
+            clickChatIcon();
+            Assert.assertEquals(widget.getTenantNameWidgetColor(), hex, "Color for tenant name in widget is not correct");
+            Assert.assertEquals(widget.getTenantcloseButtonColor(), hex, "Color for tenant close widget button is not correct");
+    }
+
+
+
 
 }

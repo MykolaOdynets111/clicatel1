@@ -5,6 +5,7 @@ import drivermanager.DriverFactory;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -66,8 +67,11 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isUserMessageShown(String usrMessage, String agent) {
-        waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
-
+        try {
+            waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
+        } catch(TimeoutException e){
+            Assert.assertTrue(false, "Chat body is not visible");
+        }
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         // ToDo: update timeout after it is provided in System timeouts confluence page
         // ToDo: If for social chatting timeout is bigger - introduce another method for social
@@ -113,5 +117,10 @@ public class ChatBody extends AbstractUIElement {
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
+    }
+
+    public String getTenantMsgColor() {
+        String hexColor = Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
+        return hexColor;
     }
 }

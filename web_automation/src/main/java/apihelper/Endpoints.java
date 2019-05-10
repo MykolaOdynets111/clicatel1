@@ -53,6 +53,8 @@ public class Endpoints {
 
     public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
 
+    public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "tags";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
@@ -171,6 +173,9 @@ public class Endpoints {
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "health";
+
+    public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
+
 
     // ====================  PORTAL ================= //
 

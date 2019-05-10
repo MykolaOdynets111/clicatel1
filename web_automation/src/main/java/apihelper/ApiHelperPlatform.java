@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
 
-    public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail){
+    public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
-        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
+        List<String> ids = getIdsOfRoles(tenantOrgName, "TOUCH_AGENT");
         String[] idsArray = new String[ids.size()];
         for(int i=0; i<ids.size(); i++){
             idsArray[i] = "\""+ids.get(i)+"\"";
@@ -23,8 +23,8 @@ public class ApiHelperPlatform {
                         "  \"invitations\": [\n" +
                         "    {\n" +
                         "      \"targetEmail\": \""+agentEmail+"\",\n" +
-                        "      \"firstName\": \"AQA\",\n" +
-                        "      \"lastName\": \"TEST\",\n" +
+                        "      \"firstName\": \"" +name+ "\",\n" +
+                        "      \"lastName\": \"" +lastName+ "\",\n" +
                         "      \"roleIds\": "+ Arrays.toString(idsArray) +
                         "    }\n" +
                         "  ]\n" +
@@ -83,6 +83,15 @@ public class ApiHelperPlatform {
         return (String) resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().filter(e -> e.get("email").equals(userEmail))
                 .findFirst().get().get("id");
+    }
+
+    public static boolean isActiveUserExists(String tenantOrgName, String userEmail){
+        Response resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_USER);
+        return resp.getBody().jsonPath().getList("users", Map.class)
+                .stream().anyMatch(e -> e.get("email").equals(userEmail));
     }
 
     public static List<Integer> getListOfActiveSubscriptions(String tenantOrgName){

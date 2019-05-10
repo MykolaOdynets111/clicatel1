@@ -1,8 +1,10 @@
 package steps;
 
+import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
 import apihelper.Endpoints;
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -26,8 +28,7 @@ import java.util.Map;
 
 public class BasePortalSteps {
 
-    private static String agentEmail;
-    private String agentPass = "p@$$w0rd4te$t";
+    private Faker faker = new Faker();
     private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
     private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
@@ -36,29 +37,47 @@ public class BasePortalSteps {
     private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
     private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalManagingUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalUserManagementPage> portalUserManagementThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalManageAgentUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserEditingPage> portalUserProfileEditingThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
+    private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
     public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
+    public static String AGENT_FIRST_NAME;
+    public static String AGENT_LAST_NAME;
+    private static String AGENT_EMAIL;
+    private String AGENT_PASS = "p@$$w0rd4te$t";
+    private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-
+    private static String COLOR;
+    private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
+    int activeChatsFromChatdesk;
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        agentEmail = "aqa_"+System.currentTimeMillis()+"@aqa.com";
-        ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, agentEmail);
+        AGENT_FIRST_NAME = faker.name().firstName();
+        AGENT_LAST_NAME =  faker.name().lastName();
+        AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), agentEmail);
-        ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, agentPass);
+        String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
+        ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
+    }
+
+    @Then("^Newly created agent is deleted in DB$")
+    public void verifyAgentDelete(){
+
     }
 
     @Then("^Agent of (.*) should have all permissions to manage CRM tickets$")
@@ -74,13 +93,13 @@ public class BasePortalSteps {
 
     @Then("^New agent is added into touch database$")
     public void verifyThatNewAgentAddedToDatabase(){
-        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), agentEmail),
-                "Agent with '" + agentEmail + "' Email is not created in touch DB after 10 seconds wait.");
+        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), AGENT_EMAIL),
+                "Agent with '" + AGENT_EMAIL + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
     @Given("^Delete user$")
     public static void deleteAgent(){
-        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agentEmail);
+        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL);
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
     }
 
@@ -187,13 +206,21 @@ public class BasePortalSteps {
         ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
-    @When("^Login as newly created agent$")
-    public void loginAsCreatedAgent(){
-        try {
-            portalLoginPage.get().login(agentEmail, agentPass);
-        }catch (org.openqa.selenium.TimeoutException e){
-
+    @When("^Login as (.*) agent$")
+    public void loginAsCreatedAgent(String agent){
+        String email = AGENT_EMAIL;
+        if(agent.equalsIgnoreCase("updated")){
+            email = updatedAgentInfo.get("email");
         }
+        portalLoginPage.get().login(email, AGENT_PASS);
+    }
+
+    @Then("^Deleted agent is not able to log in portal$")
+    public void verifyDeletedAgentIsNotLoggedIn(){
+        portalLoginPage.get().login(AGENT_EMAIL, AGENT_PASS);
+        Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
+                "Username or password is invalid",
+                "Error about invalid credentials is not shown");
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
@@ -320,7 +347,7 @@ public class BasePortalSteps {
     }
 
     public static boolean isNewUserWasCreated(){
-        return agentEmail != null;
+        return AGENT_EMAIL != null;
     }
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
@@ -335,6 +362,120 @@ public class BasePortalSteps {
                 }
             }
         }
+    }
+
+    @When("^Save (.*) pre-test widget value$")
+    public void savePreTestValue(String widgetName){
+        chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
+    }
+
+    @Then("^(.*) widget shows correct number$")
+    public void checkTotalAgentOnlineValue(String widgetName){
+        int actualActiveAgentsCount = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
+        int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
+        Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
+                widgetName + " counter differs from agent online count on backend");
+    }
+
+    @Then("^(.*) widget value increased on (.*)$")
+    public void verifyWidgetValue(String widgetName, int incrementor){
+        int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
+        Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
+                "'"+widgetName+"' widget value is not updated");
+    }
+
+    @Then("^(.*) counter shows correct live chats number$")
+    public void verifyChatConsoleActiveChats(String widgetName){
+        activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
+                "'"+widgetName+"' widget value is not updated");
+    }
+
+    @Then("^Average chats per Agent is correct$")
+    public void verifyAverageChatsPerAgent(){
+       int actualAverageChats = Integer.valueOf(getPortalChatConsolePage().getAverageChatsPerAgent());
+       int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
+       Assert.assertEquals(actualAverageChats, expectedAverageChats,
+               "Number of Average chats per Agent is not as expected");
+    }
+
+    private boolean checkLiveCounterValue(String widgetName, int expectedValue){
+        int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        boolean result = false;
+        for (int i=0; i<30; i++){
+            if(expectedValue!=actualValue){
+                getPortalChatConsolePage().waitFor(1000);
+                actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+            } else {
+                result =true;
+                break;
+            }
+
+        }
+        return result;
+    }
+
+    @When("^Click \"(.*)\" nav button$")
+    public void clickNavButton(String navButton){
+        getPortalTouchPrefencesPage().clickPageNavButton(navButton);
+    }
+
+    @When("^Agent click 'Save changes' button$")
+    public void agentClickSaveChangesButton() {
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+
+    @When("^Agent click expand arrow for (.*) auto responder$")
+    public void clickExpandArrowForAutoResponder(String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPrefencesPage().getAutoRespondersWindow()
+                                                            .clickExpandArrowForMessage(autoresponder);
+    }
+
+    @When("^Agent click On/Off button for (.*) auto responder$")
+    public void clickOnOffForAutoResponder(String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPrefencesPage().getAutoRespondersWindow()
+                .clickOnOffForMessage(autoresponder);
+    }
+
+    @When("^Click \"Reset to default\" button for (.*) auto responder$")
+    public void clickResetToDefaultButton(String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
+        getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @When("^Type new message: (.*) to (.*) message field$")
+    public void typeNewMessage(String message, String autoresponder){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        if (!getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
+            getPortalTouchPrefencesPage().getAutoRespondersWindow()
+                    .clickExpandArrowForMessage(autoresponder);
+        }
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
+//        autoresponseMessageThreadLocal.set(message);
+//        autoresponseMessageThreadLocal.get();
+//       // getPortalTouchPrefencesPage().waitWhileProcessing();
+    }
+
+    @Then("^(.*) on backend corresponds to (.*) on frontend$")
+    public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
+        String messageOnfrontend = getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
+        String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
+        Assert.assertEquals(actualMessage, messageOnfrontend,
+                messageName + " message is not updated on backend");
+
+    }
+
+    @Then("^(.*) is reset on backend$")
+    public void verifyTafMessageIsReset(String tafMessageId){
+        String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
+        String defaultMessage = ApiHelper.getDefaultTenantMessageText(tafMessageId);
+        Assert.assertEquals(actualMessage, defaultMessage,
+                tafMessageId + " message is not reset to default");
     }
 
     @When("^(?:I|Admin) select (.*) in left menu$")
@@ -669,19 +810,113 @@ public class BasePortalSteps {
 
     @When("^Click 'Manage' button for (.*) user$")
     public void clickManageButtonForUser(String fullName){
-        portalUserManagementThreadLocal.set(
+        if(fullName.equalsIgnoreCase("created")){
+            fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        }
+        portalUserProfileEditingThreadLocal.set(
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
     }
 
     @When("^Click 'Upload' button$")
     public void clickUploadButtonForUser(){
-        portalUserManagementThreadLocal.get().clickUploadPhotoButton();
+        portalUserProfileEditingThreadLocal.get().clickUploadPhotoButton();
+    }
+
+    @When("^Click 'Upload' button for tenant logo$")
+    public void clickUploadButtonForTenantLogo(){
+        getPortalTouchPrefencesPage().getconfigureBrandWindow().clickuploadButton();
+    }
+
+    @When("^Admin clicks 'Edit user roles'$")
+    public void clickEditRoles(){
+        portalUserProfileEditingThreadLocal.get().clickEditUserRolesButton();
+    }
+
+    @When("^Admin clicks Delete user button$")
+    public void deleteAgentUser(){
+        portalUserProfileEditingThreadLocal.get().clickDeleteButton();
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+    }
+
+    @Then("^User is removed from Manage agent users page$")
+    public void verifyAgentDeletedManageAgentsPage(){
+        String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 2000),
+                fullName + " agent is not removed from Manage agent users page after deleting");
+    }
+
+    @Then("^(.*) is removed from User management page$")
+    public void verifyAgentDeleted(String user){
+        String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 1200),
+                fullName + " agent is not removed from User management page");
+    }
+
+    @Then("^(.*) added to User management page$")
+    public void verifyAgentAdded(String user){
+        String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        if(user.contains("Updated")) fullName = updatedAgentInfo.get("firstName") + " " + updatedAgentInfo.get("lastName");
+        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 2000),
+                fullName + " agent is not removed from User management page after deleting");
+    }
+
+    @When("^Admin updates agent's personal details$")
+    public void updateAgentDetails(){
+        updatedAgentInfo = new HashMap<>();
+        updatedAgentInfo.put("firstName", faker.name().firstName());
+        updatedAgentInfo.put("lastName", faker.name().lastName());
+        updatedAgentInfo.put("email", "aqa_"+System.currentTimeMillis()+"@aqa.com");
+
+        portalUserProfileEditingThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
     }
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        portalUserManagementThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+        portalUserProfileEditingThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+    }
+
+
+    @When("^Upload: foto for tenant$")
+    public void uploadFotoForTenant() {
+        getPortalTouchPrefencesPage().getconfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
+    }
+
+    @Then("^Change secondary color to '(.*)' for tenant$")
+    public void changeSecondaryColorForTenant(String hex) {
+        COLOR = getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor();
+        if (!hex.contains(COLOR)) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(hex);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @Then("^Change primary color to '(.*)' for tenant$")
+    public void changePrimaryColorForTenant(String hex) {
+        COLOR = getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor();
+        if (!hex.contains(COLOR)) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(hex);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @When("^Add new touch (.*) solution$")
+    public void addNewTouchSolution(String touchRole){
+        portalUserProfileEditingThreadLocal.get().getEditUserRolesWindow()
+                                                .selectNewTouchRole(touchRole)
+                                                .clickFinishButton();
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+    }
+
+    @When("^Add new platform (.*) solution$")
+    public void addNewPlatformSolution(String role){
+        portalUserProfileEditingThreadLocal.get().getEditUserRolesWindow()
+                .selectNewPlatformRole(role)
+                .clickFinishButton();
+        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")
@@ -690,15 +925,53 @@ public class BasePortalSteps {
         ApiHelper.deleteAgentPhotoForMainAQAAgent(Tenants.getTenantUnderTestOrgName());
     }
 
+    @When("^Admin logs out from portal$")
+    public void logoutFromPortal(){
+        portalUserProfileEditingThreadLocal.get().getPageHeader().logoutAdmin();
+    }
+
+    @Then("^Newly created agent is (?:deleted|absent) on backend$")
+    public void verifyUserDeleted(){
+        Assert.assertFalse(ApiHelperPlatform.isActiveUserExists(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL),
+                AGENT_EMAIL + " agent is not deleted on backend");
+    }
+
+    @Then("^Updated agent is present on backend$")
+    public void verifyUserUpdated(){
+        Assert.assertTrue(ApiHelperPlatform.isActiveUserExists(Tenants.getTenantUnderTestOrgName(), updatedAgentInfo.get("email")),
+                updatedAgentInfo.get("email") + " agent is not present on backend");
+    }
+
+
     @Then("^New image is saved on portal and backend$")
     public void verifyImageSaveOnPortal(){
         SoftAssert soft = new SoftAssert();
         String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("imageUrl");
         soft.assertFalse(imageURLFromBackend==null,
                         "Agent photo is not saved on backend");
-        soft.assertFalse(portalUserManagementThreadLocal.get().getImageURL().isEmpty(),
+        soft.assertFalse(portalUserProfileEditingThreadLocal.get().getImageURL().isEmpty(),
                 "Agent photo is not shown in portal");
         soft.assertAll();
+    }
+
+    @Then("^Return secondary color for tenant$")
+    public void returnSecondaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setSecondaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
+    }
+
+    @Then("^Return primary color for tenant$")
+    public void returnPrimaryColorForTenant() {
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
+        if (!COLOR.contains(getPortalTouchPrefencesPage().getconfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPrefencesPage().getconfigureBrandWindow().setPrimaryColor(COLOR);
+            getPortalTouchPrefencesPage().clickSaveButton();
+            getPortalTouchPrefencesPage().waitWhileProcessing();
+        }
     }
 
     private LeftMenu getLeftMenu() {
@@ -773,13 +1046,41 @@ public class BasePortalSteps {
         }
     }
 
-    private PortalManagingUsersPage getPortalManagingUsersPage(){
+    private PortalManageAgentUsersPage getPortalManagingUsersPage(){
         if (portalManagingUsersThreadLocal.get()==null) {
-            portalManagingUsersThreadLocal.set(new PortalManagingUsersPage());
+            portalManagingUsersThreadLocal.set(new PortalManageAgentUsersPage());
             return portalManagingUsersThreadLocal.get();
         } else{
             return portalManagingUsersThreadLocal.get();
         }
     }
+
+    private PortalTouchPrefencesPage getPortalTouchPrefencesPage(){
+        if (portalTouchPrefencesPageThreadLocal.get()==null) {
+            portalTouchPrefencesPageThreadLocal.set(new PortalTouchPrefencesPage());
+            return portalTouchPrefencesPageThreadLocal.get();
+        } else{
+            return portalTouchPrefencesPageThreadLocal.get();
+        }
+    }
+
+    private PortalUserManagementPage getPortalUserManagementPage(){
+        if (portalUserManagementPageThreadLocal.get()==null) {
+            portalUserManagementPageThreadLocal.set(new PortalUserManagementPage());
+            return portalUserManagementPageThreadLocal.get();
+        } else{
+            return portalUserManagementPageThreadLocal.get();
+        }
+    }
+
+    private PortalChatConsolePage getPortalChatConsolePage(){
+        if (portalChatConsolePage.get()==null) {
+            portalChatConsolePage.set(new PortalChatConsolePage());
+            return portalChatConsolePage.get();
+        } else{
+            return portalChatConsolePage.get();
+        }
+    }
+
 
 }

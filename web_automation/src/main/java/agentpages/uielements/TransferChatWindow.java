@@ -24,7 +24,7 @@ public class TransferChatWindow extends AbstractUIElement {
     private WebElement noteInput;
 
 
-    public void transferChat() {
+    public String transferChat() {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
         openDropdownButton.click();
         try{
@@ -37,9 +37,11 @@ public class TransferChatWindow extends AbstractUIElement {
             if(availableAgent.getText().contains("AQA")) break;
             else waitFor(500);
         }
+        String agentName = availableAgent.getText();
         availableAgent.click();
         noteInput.sendKeys("Please take care of this one");
         submitTransferChatButton.click();
+        return agentName;
     }
 
 }

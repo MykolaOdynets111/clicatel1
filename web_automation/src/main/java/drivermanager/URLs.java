@@ -22,6 +22,8 @@ public class URLs {
 
     private static String FINAL_AGENT_URL = null;
 
+    private static ThreadLocal<String> CHATDESK_URL = new ThreadLocal<>();
+
     private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com/";
 
     // ================== API BASE URLs ========================= //
@@ -70,9 +72,6 @@ public class URLs {
      * @param updateURL - boolean value to indicate if we need to log into different tenant Agent desk
      */
     public static String getAgentURL(String tenantOrgName, boolean updateURL) {
-        System.out.println("!!! tenantOrgName before getting agent URL: " + tenantOrgName);
-        System.out.println("!!! agent URL before getting it: " + FINAL_AGENT_URL);
-
         if (FINAL_AGENT_URL == null || updateURL) {
             String baseUrl;
             String targetEnvConfiguration = ConfigManager.getEnv();

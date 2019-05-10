@@ -34,7 +34,7 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
-        waitForElementsToBeVisibleAgent(messagesInChatBody, 5, "main");
+        waitForElementToBeVisibleAgent(messagesInChatBody.get(1), 5, "main");
         return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
                 .map(e -> e.getMessageInfo())
                 .collect(Collectors.toList());

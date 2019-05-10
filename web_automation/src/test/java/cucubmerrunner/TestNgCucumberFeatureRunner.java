@@ -71,7 +71,16 @@ public class TestNgCucumberFeatureRunner{
 
     @Test(groups = {"cucumber"})
     public void feature() {
-        this.testNGCucumberRunner.runCucumber(cucumberFeature.getCucumberFeature());
+        try {
+            this.testNGCucumberRunner.runCucumber(cucumberFeature.getCucumberFeature());
+        } catch (ArrayIndexOutOfBoundsException e){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.testNGCucumberRunner.runCucumber(cucumberFeature.getCucumberFeature());
+        }
     }
 
     @AfterClass(alwaysRun = true)
