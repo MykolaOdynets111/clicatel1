@@ -57,13 +57,17 @@ public class BasePortalSteps {
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-    private Map<String, String> tenantInfo = new HashMap();
+    private static Map<String, String> tenantInfo = new HashMap();
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     private MainPage mainPage;
     private AgentHomePage agentHomePage;
     private AgentHomePage secondAgentHomePage;
     private Widget widget;
     int activeChatsFromChatdesk;
+
+    public static Map<String, String> getTenantInfoMap(){
+        return  tenantInfo;
+    }
 
     @Given("^New (.*) agent is created$")
     public void createNewAgent(String tenantOrgName){
@@ -926,12 +930,9 @@ public class BasePortalSteps {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getMainPage().getChatIconColor(), tenantInfo.get("newColor"), "Color for tenant open widget button is not correct");
         soft.assertEquals(getMainPage().getHeaderColor(), tenantInfo.get("newColor"), "Color for tenant header in widget window is not correct");
-        clickChatIcon();
-        widget.getWidgetFooter().enterMessage("message").sendMessage();
-        soft.assertEquals(widget.getTenantNameWidgetColor(), tenantInfo.get("newColor"), "Color for tenant name in widget is not correct");
-        soft.assertEquals(widget.getTenantCloseButtonColor(), tenantInfo.get("newColor"), "Color for tenant close widget button is not correct");
         soft.assertAll();
     }
+
 
     @Then("^I check primary color for tenant in agent desk$")
     public void iCheckPrimaryColorForTenantInAgentDesk() {

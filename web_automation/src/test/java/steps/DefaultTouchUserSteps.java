@@ -139,6 +139,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         return this;
     }
 
+    @Then("^I check primary color for tenant in opened widget$")
+    public void iCheckPrimaryColorForTenantInOpenedWidget() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(widget.getTenantNameWidgetColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant name in widget is not correct");
+        soft.assertEquals(widget.getTenantCloseButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant close widget button is not correct");
+        soft.assertAll();
+    }
+
     @Then("^Chat icon is not visible$")
     public void isChatIconIsNotVisible(){
         Assert.assertFalse(getMainPage().isChatIconShown(), "Chat icon is visible.");

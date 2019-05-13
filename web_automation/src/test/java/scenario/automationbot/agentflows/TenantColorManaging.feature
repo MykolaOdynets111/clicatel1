@@ -10,7 +10,6 @@ Feature: Managing brand color
     Then I check secondary color for tenant in widget
     When I login with the same credentials in another browser as an agent of Automation Bot
     Then I check secondary color for tenant in agent desk
-    Then Return secondary color for tenant
 
   Scenario: Check changing primary color
     Given I open portal
@@ -18,12 +17,15 @@ Feature: Managing brand color
     When I select Touch in left menu and Touch preferences in submenu
     And Click "Configure your brand" nav button
     And Change primary color for tenant
-    And User select Automation Bot tenant
     And I login with the same credentials in another browser as an agent of Automation Bot
+    And User select Automation Bot tenant
     Then I check primary color for tenant in widget
+    And Click chat icon
+    When User enter chat to agent into widget input field
+    Then Second agent has new conversation request
+    Then I check primary color for tenant in opened widget
     Then I check primary color for tenant in agent desk
     Then Check primary color for incoming chat and 360Container
-    Then Return primary color for tenant
 
 
 
