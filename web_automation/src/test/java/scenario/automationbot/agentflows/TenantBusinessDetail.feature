@@ -2,6 +2,7 @@
 @no_chatdesk
 Feature: Managing business details
 
+  @Issue("https://jira.clickatell.com/browse/TADMIN-1626")
   Scenario: Check changing business details
     Given I open portal
     And Login into portal as an admin of Automation Bot account

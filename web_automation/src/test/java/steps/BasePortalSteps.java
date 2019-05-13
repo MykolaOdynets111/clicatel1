@@ -21,6 +21,8 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
 import portalpages.uielements.LeftMenu;
+import touchpages.pages.MainPage;
+import touchpages.pages.Widget;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,12 +57,12 @@ public class BasePortalSteps {
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-    private static String COLOR;
-    private static String COMPANY_NAME;
-    private static String COMPANY_CITY;
-    private static String COMPANY_INDUSTRY;
-    private static String COMPANY_COUNTRY;
+    private Map<String, String> tenantInfo = new HashMap();
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
+    private MainPage mainPage;
+    private AgentHomePage agentHomePage;
+    private AgentHomePage secondAgentHomePage;
+    private Widget widget;
     int activeChatsFromChatdesk;
 
     @Given("^New (.*) agent is created$")
@@ -898,24 +900,78 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().getConfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
     }
 
-    @Then("^Change secondary color to '(.*)' for tenant$")
-    public void changeSecondaryColorForTenant(String hex) {
-        COLOR = getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor();
-        if (!hex.contains(COLOR)) {
-            getPortalTouchPrefencesPage().getConfigureBrandWindow().setSecondaryColor(hex);
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
-        }
+    @Then("^Change secondary color for tenant$")
+    public void changeSecondaryColorForTenant() {
+        tenantInfo.put("color", getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor());
+        tenantInfo.put("newColor", getPortalTouchPrefencesPage().getConfigureBrandWindow().setRandomSecondaryColor(tenantInfo.get("color")));
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
     }
 
-    @Then("^Change primary color to '(.*)' for tenant$")
-    public void changePrimaryColorForTenant(String hex) {
-        COLOR = getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor();
-        if (!hex.contains(COLOR)) {
-            getPortalTouchPrefencesPage().getConfigureBrandWindow().setPrimaryColor(hex);
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
-        }
+    @Then("^I check secondary color for tenant in widget$")
+    public void iCheckSecondaryColorForTenantInWidget() {
+        Assert.assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
+    }
+
+    public Widget clickChatIcon() {
+        widget = getMainPage().openWidget();
+//        widgetConversationArea = widget.getWidgetConversationArea();
+//        widgetConversationArea.waitForSalutation();
+        return widget;
+    }
+
+
+    @Then("^I check primary color for tenant in widget$")
+    public void iCheckPrimaryColorForTenantInWidget() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getMainPage().getChatIconColor(), tenantInfo.get("newColor"), "Color for tenant open widget button is not correct");
+        soft.assertEquals(getMainPage().getHeaderColor(), tenantInfo.get("newColor"), "Color for tenant header in widget window is not correct");
+        clickChatIcon();
+        widget.getWidgetFooter().enterMessage("message").sendMessage();
+        soft.assertEquals(widget.getTenantNameWidgetColor(), tenantInfo.get("newColor"), "Color for tenant name in widget is not correct");
+        soft.assertEquals(widget.getTenantCloseButtonColor(), tenantInfo.get("newColor"), "Color for tenant close widget button is not correct");
+        soft.assertAll();
+    }
+
+    @Then("^I check primary color for tenant in agent desk$")
+    public void iCheckPrimaryColorForTenantInAgentDesk() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomePage("second agent").getCustomer360ButtonColor(), tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getExpandFilterButtonColor(), tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getTouchButtonColor(), tenantInfo.get("newColor"), "Color for tenant chat button is not correct");
+        soft.assertAll();
+    }
+
+
+    @Then("^I check secondary color for tenant in agent desk$")
+    public void iCheckSecondaryColorForTenantInAgentDesk() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantLogoBorderColor(), tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
+        soft.assertAll();
+    }
+
+    @Then("^Check primary color for incoming chat and 360Container$")
+    public void checkPrimaryColorForIncomingChatAndContainer() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserMsgCountColor(), tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserPictureColor(), tenantInfo.get("newColor"), "Color for User Picture in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getUserPictureColor(), tenantInfo.get("newColor"), "Color for User Picture in 360container in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getSaveEditButtonColor(), tenantInfo.get("newColor"), "Color for Edit button in 360container in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getMailColor(), tenantInfo.get("newColor"), "Color for Email in 360container in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getPinChatButtonColor(), tenantInfo.get("newColor"), "Color for Pin chat button in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getTransferButtonColor(), tenantInfo.get("newColor"), "Color for Transfer chat button in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getEndChatButtonColor(), tenantInfo.get("newColor"), "Color for End chat button in agent desk window is not correct");
+        soft.assertEquals(getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(), tenantInfo.get("newColor"), "Color for Send button in agent desk window is not correct");
+        soft.assertAll();
+    }
+
+    @Then("^Change primary color for tenant$")
+    public void changePrimaryColorForTenant() {
+        tenantInfo.put("color", getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor());
+        tenantInfo.put("newColor", getPortalTouchPrefencesPage().getConfigureBrandWindow().setRandomPrimaryColor(tenantInfo.get("color")));
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitWhileProcessing();
     }
 
     @When("^Add new touch (.*) solution$")
@@ -944,6 +1000,14 @@ public class BasePortalSteps {
     public void deleteTenantBrandImage(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.deleteTenantBrandImage(Tenants.getTenantUnderTestOrgName());
+        String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
+        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
+        SoftAssert soft = new SoftAssert();
+        soft.assertFalse(fileType.contains("image"),
+                "Image was not deleted on backend");
+        soft.assertFalse(fileTypeTrans.contains("image"),
+                "Image for chat desk (tenant_logo_trans) was not deleted on backend");
+        soft.assertAll();
     }
 
     @When("^Admin logs out from portal$")
@@ -979,10 +1043,11 @@ public class BasePortalSteps {
     public void verifyBrandImageSaveOnPortal(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String fileType = ApiHelper.getTenantBrandImage(Tenants.getTenantUnderTestOrgName()).contentType();
+        String fileTypeTrans = ApiHelper.getTenantBrandImageTrans(Tenants.getTenantUnderTestOrgName()).contentType();
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(fileType.contains("image"),
                 "Image is not saved on backend");
-        soft.assertTrue(fileType.contains("image"),
+        soft.assertTrue(fileTypeTrans.contains("image"),
                 "Image for chat desk (tenant_logo_trans) is not saved on backend");
         soft.assertAll();
     }
@@ -990,8 +1055,8 @@ public class BasePortalSteps {
     @Then("^Return secondary color for tenant$")
     public void returnSecondaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!COLOR.contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor())) {
-            getPortalTouchPrefencesPage().getConfigureBrandWindow().setSecondaryColor(COLOR);
+        if (!tenantInfo.get("color").contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPrefencesPage().getConfigureBrandWindow().setSecondaryColor(tenantInfo.get("color"));
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
@@ -1000,8 +1065,8 @@ public class BasePortalSteps {
     @Then("^Return primary color for tenant$")
     public void returnPrimaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!COLOR.contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor())) {
-            getPortalTouchPrefencesPage().getConfigureBrandWindow().setPrimaryColor(COLOR);
+        if (!tenantInfo.get("color").contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPrefencesPage().getConfigureBrandWindow().setPrimaryColor(tenantInfo.get("color"));
             getPortalTouchPrefencesPage().clickSaveButton();
             getPortalTouchPrefencesPage().waitWhileProcessing();
         }
@@ -1009,12 +1074,12 @@ public class BasePortalSteps {
 
     @And("^Change business details$")
     public void changeBusinessDetails() {
-        COMPANY_NAME = "New company name "+faker.lorem().word();
-        COMPANY_CITY = "San Francisco "+faker.lorem().word();
-        COMPANY_INDUSTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry();
-        COMPANY_COUNTRY = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry();
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(COMPANY_NAME);
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(COMPANY_CITY);
+        tenantInfo.put("companyName", "New company name "+faker.lorem().word());
+        tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
+        tenantInfo.put("companyIndustry", getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry());
+        tenantInfo.put("companyCountry", getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry());
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(tenantInfo.get("companyName"));
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(tenantInfo.get("companyCity"));
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();
     }
@@ -1024,10 +1089,10 @@ public class BasePortalSteps {
         SoftAssert soft = new SoftAssert();
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),COMPANY_NAME, "Company name was not changed");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),COMPANY_CITY, "Company city was not changed");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),COMPANY_INDUSTRY, "Company industry was not changed");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),COMPANY_COUNTRY, "Company country was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
+        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();
@@ -1139,6 +1204,41 @@ public class BasePortalSteps {
             return portalChatConsolePage.get();
         } else{
             return portalChatConsolePage.get();
+        }
+    }
+
+    private MainPage getMainPage() {
+        if (mainPage==null) {
+            mainPage = new MainPage();
+            return mainPage;
+        } else{
+            return mainPage;
+        }
+    }
+
+    private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
+        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
+            return getAgentHomeForSecondAgent();
+        } else {
+            return getAgentHomeForMainAgent();
+        }
+    }
+
+    private AgentHomePage getAgentHomeForSecondAgent(){
+        if (secondAgentHomePage==null) {
+            secondAgentHomePage = new AgentHomePage("second agent");
+            return secondAgentHomePage;
+        } else{
+            return secondAgentHomePage;
+        }
+    }
+
+    private AgentHomePage getAgentHomeForMainAgent(){
+        if (agentHomePage==null) {
+            agentHomePage = new AgentHomePage("main agent");
+            return agentHomePage;
+        } else{
+            return agentHomePage;
         }
     }
 

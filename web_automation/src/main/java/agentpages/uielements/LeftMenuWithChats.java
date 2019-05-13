@@ -196,6 +196,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public String getUserMsgCountColor() {
+        waitForElementToBeVisible(userMsgCount,10);
         String hexColor = Color.fromString(userMsgCount.getCssValue("background-color")).asHex();
         userMsgCount.click();
         return hexColor;
