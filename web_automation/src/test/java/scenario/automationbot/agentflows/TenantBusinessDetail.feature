@@ -9,7 +9,7 @@ Feature: Managing business details
     When I select Touch in left menu and Touch preferences in submenu
     And Click "About your business" nav button
     And Change business details
-    Then Refresh page and verify business details was changed
+    Then Refresh page and verify business details was changed for Automation Bot
 
 
 

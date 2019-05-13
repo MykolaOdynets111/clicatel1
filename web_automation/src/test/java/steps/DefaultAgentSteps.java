@@ -50,6 +50,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
+    private ThreadLocal<AgentLoginPage> agentLoginPage = new ThreadLocal<>();
     private String secondAgentName;
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
@@ -100,6 +101,25 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
         AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
+    }
+
+    @When("I open browser to log in in chat desk as an agent of (.*)")
+    public void openBrowserToLogin(String tenantOrgName){
+         agentLoginPage.set(AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName));
+    }
+
+    @When("I check primary color for tenant in login page")
+    public void checkPrimaryColorLoginPage(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(agentLoginPage.get().getLoginButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant 'Login button' is not correct");
+        soft.assertEquals(agentLoginPage.get().getStringForgotColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant 'Forgot password?' string is not correct");
+        soft.assertAll();
+    }
+
+    @When("I login in another browser as an agent of (.*)")
+    public void loginWithTheSameAnotherBrowser(String tenantOrgName){
+        agentLoginPage.get().loginAsAgentOf(tenantOrgName, "main agent");
         Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
     }
 
