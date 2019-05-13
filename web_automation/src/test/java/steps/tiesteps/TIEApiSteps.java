@@ -1012,10 +1012,10 @@ public class TIEApiSteps implements DateTimeHelper{
         }
         boolean isTrained = false;
 
-        int timeout = (minutes*60)/18;
+        int timeout = (minutes*60)/15;
         for(int i = 0; i < timeout; i++){
             if(!isTrained){
-                waitFor(18000);
+                waitFor(15000);
                 String finalCreatedModelName = createdModelName;
                 isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
                         .stream().map(e -> (Map) e)

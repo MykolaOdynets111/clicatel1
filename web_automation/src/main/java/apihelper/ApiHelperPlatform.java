@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
 
-    public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
+    public static Response sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
         List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");//!!!CHECK!!! chenged from "TOUCH_AGENT" because returtn ids==0 and test fail
         String[] idsArray = new String[ids.size()];
@@ -16,7 +16,7 @@ public class ApiHelperPlatform {
             idsArray[i] = "\""+ids.get(i)+"\"";
         }
 
-       Response resp =  RestAssured.given()
+       return   RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +

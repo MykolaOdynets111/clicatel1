@@ -48,7 +48,7 @@ public class BasePortalSteps {
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "account_signup@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
-    public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest";
+    public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
@@ -75,8 +75,13 @@ public class BasePortalSteps {
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
         AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
-        ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
+        Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
+        if(resp.statusCode()!=200){
+            Assert.assertTrue(false, "Sending new invitation was not successful \n"+
+            "Resp status code: " + resp.statusCode() + "\n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
