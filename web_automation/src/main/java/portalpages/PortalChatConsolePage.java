@@ -26,15 +26,15 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     private WebElement averageChatsPerAgent;
 
     public String getWaitingChatsNumber(){
-        return getTextFromElemAgent(chatsWaitingCounter, 3, "admin", "Customers waiting for response");
+        return getTextFromElemAgent(chatsWaitingCounter, 6, "admin", "Customers waiting for response");
     }
 
     public String getLiveChatsNumber(){
-        return getTextFromElemAgent(liveChatsCounter, 3, "admin", "Customer engaging with an Agent");
+        return getTextFromElemAgent(liveChatsCounter, 6, "admin", "Customer engaging with an Agent");
     }
 
     public String getAgentsOnlineNumber(){
-        return getTextFromElemAgent(agentsOnlineCounter, 3, "admin", "Total Agents online");
+        return getTextFromElemAgent(agentsOnlineCounter, 6, "admin", "Total Agents online");
     }
 
     public String getWidgetValue(String value){

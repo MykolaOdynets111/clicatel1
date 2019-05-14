@@ -7,6 +7,7 @@ Feature: Managing Agent's Auto responders
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Touch Preferences in submenu
     And Click "Auto responders" nav button
+    When Wait for auto responders page to load
     And Type new message: New message to  Welcome message message field
     And Type new message: New Connecting Agent message to  Connecting Agent message field
     And Type new message: New Agent Busy message message to  Agent Busy message message field
