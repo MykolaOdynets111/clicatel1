@@ -276,6 +276,25 @@ public class DBConnector {
         return sessionDetails;
     }
 
+    public static String getCountryName(String env, String code) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "SELECT name FROM "+ tableName +".country where code='"+code+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        String name = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            name = results.getString("name");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
 
 //    public static void main(String args[]){
 //        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
