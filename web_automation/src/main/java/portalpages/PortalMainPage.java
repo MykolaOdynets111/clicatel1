@@ -55,7 +55,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
     public LeftMenu getLeftMenu() {
-        waitForElementToBeVisibleAgent(leftMenu.getWrappedElement(), 5);
+        waitForElementToBeClickableAgent(leftMenu.getWrappedElement(), 5,"main");
         return leftMenu;
     }
 
