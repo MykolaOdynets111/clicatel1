@@ -69,6 +69,16 @@ public class ApiHelper implements DateTimeHelper{
         return tenantInf;
     }
 
+    public static Response getTenantInfo(String tenantOrgName) {
+        Response resp =  RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.TENANT_INFO);
+        Assert.assertEquals(resp.statusCode(),200, "Failed to get tenant info\n"+
+                "URL: " + Endpoints.TENANT_INFO + "\n" +
+                "resp status code:" + resp.statusCode() + "\n"+
+                "resp body: " + resp.getBody().asString());
+        return resp;
+    }
 
     public static void createUserProfile(String tenantName, String clientID) {
         Response resp;

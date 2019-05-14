@@ -24,10 +24,7 @@ import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BasePortalSteps {
 
@@ -1096,15 +1093,21 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().waitWhileProcessing();
     }
 
-    @And("^Refresh page and verify business details was changed$")
-    public void refreshPageAndVerifyItWasChanged() {
+    @And("^Refresh page and verify business details was changed for (.*)$")
+    public void refreshPageAndVerifyItWasChanged(String tenantOrgName) {
         SoftAssert soft = new SoftAssert();
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
+        Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
+        String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
+        soft.assertEquals(resp.jsonPath().get("tenantOrgName"),tenantInfo.get("companyName"), "Company name was not changed on backend");
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
+        soft.assertEquals(resp.jsonPath().getList("tenantAddresses.city").get(0).toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
+        soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
+        soft.assertEquals(country,tenantInfo.get("companyCountry"), "Company country was not changed on backend");
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();

@@ -7,6 +7,7 @@ import drivermanager.URLs;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 public class AgentLoginPage extends AgentAbstractPage {
@@ -24,6 +25,9 @@ public class AgentLoginPage extends AgentAbstractPage {
 
     @FindBy(css = "button[type='submit']")
     private WebElement loginButton;
+
+    @FindBy(css = "div.text-center > a")
+    private WebElement stringForgotPassword;
 
     public AgentLoginPage(String ordinalAgentNumber) {
         super(ordinalAgentNumber);
@@ -55,4 +59,13 @@ public class AgentLoginPage extends AgentAbstractPage {
    public void waitForLoginPageToOpen(String agent) {
         waitForElementToBeVisibleAgent(loginForm, 6, agent);
    }
+
+    public String getLoginButtonColor() {
+        waitForElementToBeVisibleAgent(loginButton, 6, "second agent");
+        return Color.fromString(loginButton.getCssValue("color")).asHex();
+    }
+
+    public String getStringForgotColor() {
+        return Color.fromString(stringForgotPassword.getCssValue("color")).asHex();
+    }
 }

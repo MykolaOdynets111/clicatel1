@@ -77,7 +77,7 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         colorInputField.clear();
         String newColor;
         do  {
-            newColor = Color.fromString(faker.color().name()).asHex();
+            newColor = faker.color().hex().toLowerCase();
         } while (color.contains(newColor));
         colorInputField.sendKeys(newColor);
         waitFor(2000);
@@ -92,7 +92,7 @@ public class ConfigureBrandWindow extends BasePortalWindow {
         colorInputField.clear();
         String newColor;
         do  {
-             newColor = Color.fromString(faker.color().name()).asHex();
+             newColor = faker.color().hex().toLowerCase();
         } while (color.contains(newColor));
         colorInputField.sendKeys(newColor);
         waitFor(2000);
