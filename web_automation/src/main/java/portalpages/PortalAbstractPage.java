@@ -54,6 +54,13 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         } catch(NoSuchElementException e){}
     }
 
+    public void waitForNotificationAlertToBeProcessed(int toAppear, int toDisappear){
+        try {
+            waitForElementToBeVisibleByCssAgent(notificationAlert, toAppear);
+            waitForElementsToBeInvisibleByCssAgent(notificationAlert, toDisappear);
+        } catch(NoSuchElementException|TimeoutException e){}
+    }
+
     public static String getNotificationAlertLocator(){
         return notificationAlert;
     }

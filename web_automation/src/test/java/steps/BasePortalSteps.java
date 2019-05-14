@@ -442,6 +442,12 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().clickPageNavButton(navButton);
     }
 
+    @When("^Wait for auto responders page to load$")
+    public void waitForAutoRespondersToLoad(){
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
+    }
+
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPrefencesPage().clickSaveButton();
@@ -451,7 +457,6 @@ public class BasePortalSteps {
 
     @When("^Agent click expand arrow for (.*) auto responder$")
     public void clickExpandArrowForAutoResponder(String autoresponder){
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
         getPortalTouchPrefencesPage().getAutoRespondersWindow()
                                                             .clickExpandArrowForMessage(autoresponder);
     }
@@ -901,6 +906,7 @@ public class BasePortalSteps {
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         portalUserProfileEditingThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(3,6);
     }
 
 
