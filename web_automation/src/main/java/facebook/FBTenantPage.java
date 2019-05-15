@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class FBTenantPage extends AbstractPage {
 
-    @FindBy(xpath = "//span[text()='Send Message']")
+    @FindBy(xpath = "//button[text()='Send Message']")
     private WebElement sendMessageButton;
 
     @FindBy(xpath = "//a[text()='View Post.']")
