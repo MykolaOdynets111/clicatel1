@@ -4,7 +4,7 @@
 Feature: Communication between user and agent in FB messenger
 
   Background:
-    Given I login as agent of Automation Bot
+    Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 
   Scenario: Communication between user and agent
