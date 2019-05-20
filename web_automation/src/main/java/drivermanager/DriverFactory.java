@@ -21,6 +21,7 @@ public class DriverFactory {
     private static String WINDOWS_SERVER_REMOTE_EXTERNAL_URL = "http://35.164.148.100:4441/wd/hub";
     private static String WINDOWS_SERVER_REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
     private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
+    private static String LINUX_SELENIUM_DOCKERS_URL_FB = "http://selenium.clickatelllabs.com:5900";
     private static String LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR = "http://172.31.70.236:4445/wd/hub";
 
 
@@ -142,10 +143,13 @@ public class DriverFactory {
             RemoteWebDriver remoteWebDriver;
             if(ConfigManager.getSuite().equalsIgnoreCase("touchgo")){
                 remoteWebDriver = new RemoteWebDriver(new URL(WINDOWS_SERVER_REMOTE_URL), capabilities);
-            } else {
+            } else if (ConfigManager.getSuite().equalsIgnoreCase("facebook")){
+                remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL_FB), capabilities);
+            }else {
                 remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL), capabilities);
-
             }
+
+
             return remoteWebDriver;
         } catch (MalformedURLException e) {
             e.printStackTrace();
