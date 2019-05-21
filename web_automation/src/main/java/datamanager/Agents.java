@@ -8,6 +8,7 @@ import java.util.List;
 public enum Agents {
 
     DEV_AGENT("taras.mytlovych@perfectial.com", "passw0rd", "capitec bank", "dev"),
+    TESTING_AGENT_FB("andriy768+fbtestandriy@gmail.com", "12345678", "FB", "testing"),
 
     // =======  Active agents of General Bank Demo ======== //
 
