@@ -57,6 +57,31 @@ public class DotControlSteps {
         apiToken.set(token);
     }
 
+    @Given("Create .Control (.*) adapters integration for (.*) tenant")
+    public void
+    createIntegration(String adapters, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+
+        Response resp = APIHelperDotControl.createIntegrationForAdapters(adapters, tenantOrgName,
+                generateInfoForCreatingIntegration(Server.getServerURL()).get());
+
+        if(!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "Integration creating was not successful\n" +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
+        System.out.println("!! Api token from creating integration: " + token);
+        if(token==null){
+            Assert.assertTrue(false, "apiToken is absent in create integration response " +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        apiToken.remove();
+        apiToken.set(token);
+    }
+
     @When("Send (.*) message for .Control")
     public void sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
