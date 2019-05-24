@@ -17,7 +17,10 @@ Feature: Creating new tenant
     When Click "Get started with Touch" button
     Then "Get started with Touch Go" window is opened
     When I try to create new tenant
-#    ToDo: Implement the following steps
+    Given User select SignedUp AQA tenant
+    And Click chat icon
+    When User enter chat to support into widget input field
+    #    ToDo: Implement the following steps
 #    Then Tenant is created in portal
 #    When I open page with widgets
 #    Then I can see created tenant

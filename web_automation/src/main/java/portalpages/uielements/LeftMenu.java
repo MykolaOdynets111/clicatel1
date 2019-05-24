@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 public class LeftMenu extends AbstractUIElement {
 
     //Launchpad item not included
-    @FindBy(css = "div.menu-container div.menu-item-wrap.ng-scope.ng-isolate-scope.with-collapse")
+    @FindBy(xpath = "//div[@class='menu-item-wrap ng-scope ng-isolate-scope with-collapse']")
     private List<WebElement> activeLeftMenuItems;
 
     @FindBy(xpath = "//a[@ui-sref='launchpad']//span[text()='BACK']")
@@ -25,6 +25,8 @@ public class LeftMenu extends AbstractUIElement {
 
     @FindBy(xpath = "//div[@uib-collapse='menuItem.menuclIsCollapsed'][not(contains(@style,'0px'))]/ul/li//a[@ui-sref-active='active']/span")
     private List<WebElement> submenuItems;
+
+    private String activeLeftMenuItemsCSS = "div.menu-container div.menu-item-wrap.ng-scope.ng-isolate-scope.with-collapse";
 
     public void clickLeftMenuItem(String itemName){
         activeLeftMenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(itemName)).findFirst().get().click();

@@ -14,6 +14,7 @@ public enum Agents {
 
     QA_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "qa"),
     DEV_AGENT_GEN_BANK("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "dev"),
+//    TESTING_AGENT("andriy768+fbtestandriy@gmail.com", "12345678", "general bank demo", "testing"),
     TESTING_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", "testing"),
     DEMO_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", "demo"),
     INTEGRATION_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", "integration"),
@@ -38,7 +39,7 @@ public enum Agents {
     TESTING_STARTER_TOUCH_GO_SECOND_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
     TESTING_STANDARD_TOUCH_GO_AGENT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "testing"),
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
-    TESTING_SIGNUP_ACCOUNT("signup_account@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
+    TESTING_SIGNUP_ACCOUNT("signup_account9@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
     TESTING_NEW_ONE_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "New One2", "testing"),
 
     // =======  Active agents for Agent mode tests ======== //

@@ -108,7 +108,7 @@ public class Tenants {
                 TENANT_UNDER_TEST.get().put("Automation Bot", "agentmode");
                 break;
             case "SignedUp AQA":
-                Tenants.setTenantUnderTestName("automationtest");
+                Tenants.setTenantUnderTestName( "automationtest2m9");
                 Tenants.setTenantUnderTestOrgName("SignedUp AQA");
                 TENANT_UNDER_TEST.get().put("SignedUp AQA", "automationtest");
                 break;
