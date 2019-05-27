@@ -449,6 +449,7 @@ public class BasePortalSteps {
     public void agentClickSaveChangesButton() {
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();
+        getPortalTouchPrefencesPage().waitForNotificationAlertToBeProcessed(5,5);
     }
 
 

@@ -13,8 +13,10 @@ import java.util.NoSuchElementException;
 @FindBy(css = "div.menu-container")
 public class LeftMenu extends AbstractUIElement {
 
-    //Launchpad item not included
-    @FindBy(css = "div.menu-container div.menu-item-wrap.ng-scope.ng-isolate-scope.with-collapse")
+    @FindBy(xpath = "//div[@ng-repeat='menuItem in menu']//a[@ui-sref='launchpad']")
+    private List<WebElement> launchpadMenuItems;
+
+    @FindBy(xpath = "//div[@ng-repeat='menuItem in menu']/div")
     private List<WebElement> activeLeftMenuItems;
 
     @FindBy(xpath = "//a[@ui-sref='launchpad']//span[text()='BACK']")
@@ -32,7 +34,7 @@ public class LeftMenu extends AbstractUIElement {
 
 
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
-        waitForElementsToBeVisibleAgent(activeLeftMenuItems, 5, "admin");
+        waitForElementsToBeVisibleAgent(launchpadMenuItems, 5, "admin");
         WebElement elem = activeLeftMenuItems
                 .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get();
         clickElemAgent(elem, 3, "admin", menuItem + " left menu item");
