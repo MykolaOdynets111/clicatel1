@@ -265,15 +265,27 @@ public class DBConnector {
             statement.executeQuery(query);
             results = statement.getResultSet();
             results.next();
-            sessionDetails.put("sessionId", results.getString("session_id"));
-            sessionDetails.put("clientProfileId", results.getString("client_profile_id"));
-            sessionDetails.put("conversationId", results.getString("conversation_id"));
+            sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
+            sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
+            sessionDetails.put("conversationId",  getColumnValue(results,"conversation_id"));
             statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return sessionDetails;
+    }
+
+    private static String getColumnValue(ResultSet results, String column){
+        String columnValue="";
+        try {
+            columnValue = results.getString(column);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            Assert.assertTrue(false, "Unable to get '" +column+ "' column value");
+        }
+        return columnValue;
     }
 
     public static String getCountryName(String env, String code) {

@@ -421,7 +421,7 @@ public class BasePortalSteps {
     private boolean checkLiveCounterValue(String widgetName, int expectedValue){
         int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
         boolean result = false;
-        for (int i=0; i<30; i++){
+        for (int i=0; i<45; i++){
             if(expectedValue!=actualValue){
                 getPortalChatConsolePage().waitFor(1000);
                 actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
