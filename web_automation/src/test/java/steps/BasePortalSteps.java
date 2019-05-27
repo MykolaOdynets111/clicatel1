@@ -898,6 +898,7 @@ public class BasePortalSteps {
 
         portalUserProfileEditingThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
         portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(5,5);
     }
 
     @When("^Upload (.*)")
@@ -997,6 +998,7 @@ public class BasePortalSteps {
                 .selectNewPlatformRole(role)
                 .clickFinishButton();
         portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(5, 9);
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")

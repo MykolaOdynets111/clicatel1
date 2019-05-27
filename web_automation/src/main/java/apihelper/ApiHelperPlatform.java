@@ -10,7 +10,8 @@ public class ApiHelperPlatform {
 
     public static Response sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
-        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");//!!!CHECK!!! chenged from "TOUCH_AGENT" because returtn ids==0 and test fail
+        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
+        if(ids.size()==0) ids = getIdsOfRoles(tenantOrgName, "TOUCH_AGENT");
         String[] idsArray = new String[ids.size()];
         for(int i=0; i<ids.size(); i++){
             idsArray[i] = "\""+ids.get(i)+"\"";
