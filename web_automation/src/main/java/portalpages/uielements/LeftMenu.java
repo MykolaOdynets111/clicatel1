@@ -13,6 +13,8 @@ import java.util.NoSuchElementException;
 @FindBy(css = "div.menu-container")
 public class LeftMenu extends AbstractUIElement {
 
+    private String currentAgent;
+
     @FindBy(xpath = "//div[@ng-repeat='menuItem in menu']//a[@ui-sref='launchpad']")
     private List<WebElement> launchpadMenuItems;
 
@@ -28,10 +30,13 @@ public class LeftMenu extends AbstractUIElement {
     @FindBy(xpath = "//div[@uib-collapse='menuItem.menuclIsCollapsed'][not(contains(@style,'0px'))]/ul/li//a[@ui-sref-active='active']/span")
     private List<WebElement> submenuItems;
 
+    public void setCurrentAgent(String agent){
+        this.currentAgent = agent;
+    }
+
     public void clickLeftMenuItem(String itemName){
         activeLeftMenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(itemName)).findFirst().get().click();
     }
-
 
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
         waitForElementsToBeVisibleAgent(launchpadMenuItems, 5, "admin");
@@ -47,8 +52,7 @@ public class LeftMenu extends AbstractUIElement {
                     DriverFactory.getAgentDriverInstance());
         }
 
-        executeJSclick(submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get(),
-                DriverFactory.getAgentDriverInstance());
+        executeClickInElemListWithWait(submenuItems, subMenuItem, this.currentAgent);
     }
 
     public void navigateINLeftMenu(String menuItem){
