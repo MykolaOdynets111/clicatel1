@@ -134,7 +134,7 @@ public class DotControlSteps {
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
         try {
             if (expectedResponse.equalsIgnoreCase("agents_available")) {
-                waitFotResponseToComeToServer(45);
+                waitFotResponseToComeToServer(40);
                 Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
                         "Message is not as expected");
             } else {
