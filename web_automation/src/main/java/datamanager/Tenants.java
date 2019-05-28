@@ -1,6 +1,7 @@
 package datamanager;
 
 import apihelper.ApiHelper;
+import com.github.javafaker.Faker;
 import cucumber.runtime.CucumberException;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class Tenants {
 
     private static Response respWithAgentInfo = null;
@@ -22,11 +24,23 @@ public class Tenants {
     private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
     private static ThreadLocal<Map<String,String>> TENANT_UNDER_TEST =  new ThreadLocal<>();
 
+    private static String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
+
+    public static String getAccountNameForNewAccountSignUp() {
+        return ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
+    }
+
+    public static void setAccountNameForNewAccountSignUp() {
+        Faker faker = new Faker();
+        ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = faker.name().firstName() + faker.number().randomNumber();
+    }
+
+
     private static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME.set(orgName);
     }
 
-    private static void setTenantUnderTestName(String tenantName){
+    public static void setTenantUnderTestName(String tenantName){
         TENANT_UNDER_TEST_NAME.set(tenantName);
     }
 
@@ -108,11 +122,12 @@ public class Tenants {
                 TENANT_UNDER_TEST.get().put("Automation Bot", "agentmode");
                 break;
             case "SignedUp AQA":
-                Tenants.setTenantUnderTestName( "automationtest2m9");
                 Tenants.setTenantUnderTestOrgName("SignedUp AQA");
+                Tenants.setTenantUnderTestName(Tenants.getAccountNameForNewAccountSignUp());
                 TENANT_UNDER_TEST.get().put("SignedUp AQA", "automationtest");
                 break;
             case "Automation Common":
+                Tenants.setTenantUnderTestName("automationbot");
                 Tenants.setTenantUnderTestName("aqacomon");
                 Tenants.setTenantUnderTestOrgName("Automation Common");
                 TENANT_UNDER_TEST.get().put("Automation Common", "aqacomon");
