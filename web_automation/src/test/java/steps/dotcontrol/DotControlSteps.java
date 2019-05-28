@@ -159,7 +159,7 @@ public class DotControlSteps {
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
         try {
             if (expectedResponse.equalsIgnoreCase("agents_available")) {
-                waitFotResponseToComeToServer(35);
+                waitFotResponseToComeToServer(40);
                 Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
                         "Message is not as expected");
             } else {
@@ -369,7 +369,7 @@ public class DotControlSteps {
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
             Assert.assertTrue(false,
-                    ".Control is not responding after 15 seconds wait. to client with id '"+clientId.get()+"'");
+                    ".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
         }
     }
 

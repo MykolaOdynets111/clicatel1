@@ -96,8 +96,9 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         inputTextAgent(firstNameInput, 2, "admin", "First name input", updatedAgentInfo.get("firstName"));
         lastNameInput.clear();
         inputTextAgent(lastNameInput, 2, "admin", "Last name input", updatedAgentInfo.get("lastName"));
-        emailInput.clear();
-        inputTextAgent(emailInput, 2, "admin", "email input", updatedAgentInfo.get("email"));
+//        waitForElementToBeClickableAgent(emailInput, 5, "admin");
+//        emailInput.clear();
+//        inputTextAgent(emailInput, 2, "admin", "email input", updatedAgentInfo.get("email"));
         clickElemAgent(saveChangesButton, 5,"admin", "Save changes");
     }
 

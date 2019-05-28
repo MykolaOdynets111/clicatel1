@@ -13,8 +13,12 @@ import java.util.NoSuchElementException;
 @FindBy(css = "div.menu-container")
 public class LeftMenu extends AbstractUIElement {
 
-    //Launchpad item not included
-    @FindBy(xpath = "//div[@class='menu-item-wrap ng-scope ng-isolate-scope with-collapse']")
+    private String currentAgent;
+
+    @FindBy(xpath = "//div[@ng-repeat='menuItem in menu']//a[@ui-sref='launchpad']")
+    private List<WebElement> launchpadMenuItems;
+
+    @FindBy(xpath = "//div[@ng-repeat='menuItem in menu']/div")
     private List<WebElement> activeLeftMenuItems;
 
     @FindBy(xpath = "//a[@ui-sref='launchpad']//span[text()='BACK']")
@@ -26,15 +30,16 @@ public class LeftMenu extends AbstractUIElement {
     @FindBy(xpath = "//div[@uib-collapse='menuItem.menuclIsCollapsed'][not(contains(@style,'0px'))]/ul/li//a[@ui-sref-active='active']/span")
     private List<WebElement> submenuItems;
 
-    private String activeLeftMenuItemsCSS = "div.menu-container div.menu-item-wrap.ng-scope.ng-isolate-scope.with-collapse";
+    public void setCurrentAgent(String agent){
+        this.currentAgent = agent;
+    }
 
     public void clickLeftMenuItem(String itemName){
         activeLeftMenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(itemName)).findFirst().get().click();
     }
 
-
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
-        waitForElementsToBeVisibleAgent(activeLeftMenuItems, 5, "admin");
+        waitForElementsToBeVisibleAgent(launchpadMenuItems, 5, "admin");
         WebElement elem = activeLeftMenuItems
                 .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get();
         clickElemAgent(elem, 3, "admin", menuItem + " left menu item");
@@ -46,9 +51,8 @@ public class LeftMenu extends AbstractUIElement {
                             .stream().filter(e1 -> e1.getText().equalsIgnoreCase(menuItem)).findFirst().get(),
                     DriverFactory.getAgentDriverInstance());
         }
-        waitForElementsToBeClickableAgent(submenuItems, 3, "admin");
-        executeJSclick(submenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(subMenuItem)).findFirst().get(),
-                DriverFactory.getAgentDriverInstance());
+
+        executeClickInElemListWithWait(submenuItems, subMenuItem, this.currentAgent);
     }
 
     public void navigateINLeftMenu(String menuItem){

@@ -1,5 +1,6 @@
 @agent_to_user_conversation
 @twitter
+@skip
 Feature: Redirection to the agent after negative tweet
 
   Background:

@@ -1017,10 +1017,14 @@ public class TIEApiSteps implements DateTimeHelper{
             if(!isTrained){
                 waitFor(15000);
                 String finalCreatedModelName = createdModelName;
-                isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
-                        .stream().map(e -> (Map) e)
-                        .filter(e -> e.get("name").equals(finalCreatedModelName))
-                        .allMatch(e -> e.get("status").equals("finished"));
+                try {
+                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                            .stream().map(e -> (Map) e)
+                            .filter(e -> e.get("name").equals(finalCreatedModelName))
+                            .allMatch(e -> e.get("status").equals("finished"));
+                }catch (JsonPathException e){
+                    Assert.assertTrue(false, "Unable to get trained models");
+                }
             } else{
                 break;
             }

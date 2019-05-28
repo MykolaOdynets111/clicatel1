@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -64,7 +65,7 @@ public class Customer360Container extends AbstractUIElement {
         String channelUsername = "Unknown";
         if(!twitterLabel.getText().equals("Unknown")) channelUsername = twitterLabel.getText();
         if(!fbLabel.getText().equals("Unknown")) channelUsername = fbLabel.getText();
-       // if(channelUsername.equals("Unknown")&!getUserNameFromLocalStorage().equals("")) channelUsername = getUserNameFromLocalStorage(); egor
+        if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage()!=null) channelUsername = getUserNameFromLocalStorage();
         return new Customer360PersonalInfo(profileNameLabel.getText().replace("\n", " "), locationLabel.getText(), customerSinceLabel.getText(),
                 mailLabel.getText(), channelUsername, phoneLabel.getText().replaceAll(" ", ""));
     }
@@ -74,8 +75,10 @@ public class Customer360Container extends AbstractUIElement {
     }
 
     public void fillFormWithNewDetails(Customer360PersonalInfo valuesToSet){
-        profileNameInput.clear();
-        profileNameInput.sendKeys(valuesToSet.getFullName());
+        if(!ConfigManager.getSuite().contains("twitter")) { // for now, because there is an issue TPORT-3989
+            profileNameInput.clear();
+            profileNameInput.sendKeys(valuesToSet.getFullName());
+        }
         locationInput.clear();
         locationInput.sendKeys(valuesToSet.getLocation());
         mailInput.clear();

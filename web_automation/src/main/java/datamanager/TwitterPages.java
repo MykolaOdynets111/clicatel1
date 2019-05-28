@@ -5,7 +5,9 @@ import java.util.List;
 
 public enum TwitterPages {
 
-    GEN_BANK_QA("General Bank Demo", "testing", "https://twitter.com/Olegtest7");
+    GEN_BANK_TESTING("General Bank Demo", "testing", "https://twitter.com/Olegtest7"),
+    GEN_BANK_QA("General Bank Demo", "qa", "https://twitter.com/TestBotPerf")
+    ;
 
     String tenantName;
     String env;

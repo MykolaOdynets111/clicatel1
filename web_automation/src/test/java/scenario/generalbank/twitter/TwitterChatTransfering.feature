@@ -13,7 +13,8 @@ Feature: Twitter chat transferring
     When Agent click on new conversation request from twitter
     Given I login as second agent of General Bank Demo
     And Agent transfers chat
-    Then Second agent receives incoming transfer with "Please take care of this one" note from the first agent
+    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
     And Second agent can see transferring agent name, twitter user name and following user's message: 'connect to agent'
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request from twitter user

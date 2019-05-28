@@ -421,7 +421,7 @@ public class BasePortalSteps {
     private boolean checkLiveCounterValue(String widgetName, int expectedValue){
         int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
         boolean result = false;
-        for (int i=0; i<30; i++){
+        for (int i=0; i<45; i++){
             if(expectedValue!=actualValue){
                 getPortalChatConsolePage().waitFor(1000);
                 actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
@@ -449,6 +449,7 @@ public class BasePortalSteps {
     public void agentClickSaveChangesButton() {
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();
+        getPortalTouchPrefencesPage().waitForNotificationAlertToBeProcessed(5,5);
     }
 
 
@@ -898,6 +899,7 @@ public class BasePortalSteps {
 
         portalUserProfileEditingThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
         portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(5,5);
     }
 
     @When("^Upload (.*)")
@@ -997,6 +999,7 @@ public class BasePortalSteps {
                 .selectNewPlatformRole(role)
                 .clickFinishButton();
         portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(5, 9);
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")

@@ -1,3 +1,4 @@
+@skip
 @twitter
 Feature: Communication with bot via tweet
 
