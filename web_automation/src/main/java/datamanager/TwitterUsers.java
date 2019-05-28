@@ -1,6 +1,5 @@
 package datamanager;
 
-import apihelper.ApiHelper;
 
 public enum TwitterUsers {
 

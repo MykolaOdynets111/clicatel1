@@ -28,7 +28,6 @@ import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
-import twitter.TweetsSection;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
@@ -48,10 +47,14 @@ public class Hooks implements JSHelper{
 
         clearAllSessionData();
 
+        if(scenario.getSourceTagNames().contains("@skip")){
+            throw new cucumber.api.PendingException();
+        }
+
         if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
-            }
+        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
@@ -363,21 +366,20 @@ public class Hooks implements JSHelper{
 
     private void endTwitterFlow(Scenario scenario) {
         TwitterTenantPage twitterTenantPage = new TwitterTenantPage();
-        try {
-            if(scenario.isFailed()){
-                TweetsSection tweetsSection =  new TweetsSection();
-                if(tweetsSection.getOpenedTweet().isDisplayed()){
-//                    tweetsSection.sendReplyForTweet("", "end");
-                    tweetsSection.getOpenedTweet().clickSendReplyButton();
-                }
-            }
-        } catch (WebDriverException e) {}
-        TwitterAPI.deleteToTestUserTweets();
-        TwitterAPI.deleteTweetsFromTestUser();
+//        Commented out because for now tweets are not working stable
+//        try {
+//            if(scenario.isFailed()){
+//                TweetsSection tweetsSection =  new TweetsSection();
+//                if(tweetsSection.getOpenedTweet().isDisplayed()){
+//                    tweetsSection.getOpenedTweet().clickSendReplyButton();
+//                }
+//            }
+//        } catch (WebDriverException e) {}
+//        TwitterAPI.deleteToTestUserTweets();
+//        TwitterAPI.deleteTweetsFromTestUser();
         try {
             if(twitterTenantPage.isDMWindowOpened()) {
                 DMWindow dmWindow = twitterTenantPage.getDmWindow();
-//                dmWindow.sendUserMessage("end");
                 dmWindow.deleteConversation();
             }
         } catch (WebDriverException e) {}

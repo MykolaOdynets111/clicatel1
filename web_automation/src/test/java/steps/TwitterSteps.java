@@ -53,6 +53,8 @@ public class TwitterSteps {
     public void sendTwitterDM(String userMessage){
         if (userMessage.contains("agent")||userMessage.contains("support")){
             userMessage = createToAgentTweetText();
+        }else {
+            userMessage = FacebookSteps.createUniqueUserMessage(userMessage);
         }
         getDmWindow().sendUserMessage(userMessage);
     }
@@ -144,6 +146,8 @@ public class TwitterSteps {
         SoftAssert soft = new SoftAssert();
         if (userMessage.contains("agent")||userMessage.contains("support")){
             userMessage = getCurrentConnectToAgentTweetText();
+        }else {
+            userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
                 "There is no response on "+userMessage+" user message");

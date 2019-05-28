@@ -522,7 +522,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^New info is shown in left menu with chats$")
     public void checkUpdatingUserInfoInLeftMenu(){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName(),
+        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName().trim(),
                 "Full user name is not updated in left menu with chats after updating Customer 360 info \n");
         soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), customer360InfoForUpdating.getLocation(),
                 "Location is not updated in left menu with chats after updating Customer 360 info \n");
@@ -531,7 +531,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Customer name is updated in active chat header$")
     public void verifyCustomerNameUpdated(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName()),
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName().trim()),
                 "Updated customer name is not shown in chat header");
 
     }
