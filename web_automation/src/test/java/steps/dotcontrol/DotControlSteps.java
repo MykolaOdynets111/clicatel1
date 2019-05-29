@@ -58,8 +58,7 @@ public class DotControlSteps {
     }
 
     @Given("Create .Control (.*) adapters integration for (.*) tenant")
-    public void
-    createIntegration(String adapters, String tenantOrgName){
+    public void createIntegration(String adapters, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
