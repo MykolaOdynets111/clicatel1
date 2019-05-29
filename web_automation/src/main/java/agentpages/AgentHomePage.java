@@ -152,7 +152,11 @@ public class AgentHomePage extends AgentAbstractPage {
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
-            waitForElementsToBeInvisibleByXpathAgent(chatContainer, 3, getCurrentAgent());
+            try {
+                waitForElementsToBeInvisibleByXpathAgent(chatContainer, 5, getCurrentAgent());
+            }catch (TimeoutException e){
+                Assert.fail("Chat container does not disappear after 5 second wait");
+            }
         }
     }
 

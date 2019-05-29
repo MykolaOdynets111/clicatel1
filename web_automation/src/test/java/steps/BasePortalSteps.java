@@ -400,7 +400,8 @@ public class BasePortalSteps {
     public void verifyWidgetValue(String widgetName, int incrementor){
         int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
         Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
-                "'"+widgetName+"' widget value is not updated");
+                "'"+widgetName+"' widget value is not updated\n" +
+                "Expected value: " + expectedValue);
     }
 
     @Then("^(.*) counter shows correct live chats number$")

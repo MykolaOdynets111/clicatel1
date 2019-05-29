@@ -46,11 +46,11 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
     }
 
     public String getMessageTime() {
-        waitForElementToBeVisibleAgent(messageTime, 5);
         try{
+            waitForElementToBeVisibleAgent(messageTime, 5);
             return messageTime.getAttribute("innerText").trim();
-        }catch (NoSuchElementException e){
-            waitFor(300);
+        }catch (NoSuchElementException|TimeoutException e){
+            waitFor(500);
             return messageTime.getAttribute("innerText").trim();
         }
     }
