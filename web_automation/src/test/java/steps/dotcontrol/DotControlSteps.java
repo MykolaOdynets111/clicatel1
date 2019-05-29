@@ -263,7 +263,7 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
-    @Then("^MessageId is correctly saved$")
+    @Then("^MessageId is not null$")
     public void checkMessageIdSavingInINITCall(){
             String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
@@ -273,17 +273,12 @@ public class DotControlSteps {
                         .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
                         .findFirst().get().getMessageId();
             }catch(java.util.NoSuchElementException e){
-                Assert.assertTrue(false, "Not found message by clientId\n"
-                + String.join(", ", chatHistoryItemList.toString()));
+                Assert.fail("Not found message by clientId\n"
+                        + String.join(", ", chatHistoryItemList.toString()));
             }
 
-            if (!initCallMessageId.get().isEmpty()) {
-                Assert.assertEquals(actualMessageId, initCallMessageId.get(),
-                        "Message id is not as expected\n");
-            } else {
-                Assert.assertTrue(!actualMessageId.equalsIgnoreCase("null"),
-                        "Message id is not auto generated");
-            }
+            Assert.assertFalse(actualMessageId.equalsIgnoreCase("null"),
+                "Message id is not auto generated");
     }
 
 
