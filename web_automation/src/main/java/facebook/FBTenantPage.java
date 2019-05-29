@@ -9,6 +9,7 @@ import facebook.uielements.VisitorPost;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalTime;
@@ -18,7 +19,12 @@ import java.util.stream.Collectors;
 
 public class FBTenantPage extends AbstractPage {
 
-    @FindBy(xpath = "//span[text()='Send Message']")
+
+
+    @FindAll({
+            @FindBy(xpath = "//button[text()='Send Message']"),
+            @FindBy(xpath = "//button/*[contains(text(), 'Send Message')]")
+    })
     private WebElement sendMessageButton;
 
     @FindBy(xpath = "//a[text()='View Post.']")

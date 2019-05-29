@@ -72,6 +72,15 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
 
+    @Given("^User open new (.*) tenant$")
+    public void openNewTenantPage(String tenantOrgName) {
+   //     Tenants.setTenantUnderTestNames(tenantOrgName);
+   //     Tenants.checkWidgetConnectionStatus();
+        DriverFactory.openUrl(tenantOrgName);
+        String clientID = getUserNameFromLocalStorage();
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+    }
+
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
     public void openTenantPageWithoutCreatingUserProfile(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);

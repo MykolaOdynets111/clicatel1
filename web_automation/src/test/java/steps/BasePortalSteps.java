@@ -43,9 +43,9 @@ public class BasePortalSteps {
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
-    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
+    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";//"signup_account@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
-    public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2";
+  //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
@@ -61,6 +61,8 @@ public class BasePortalSteps {
     private AgentHomePage secondAgentHomePage;
     private Widget widget;
     int activeChatsFromChatdesk;
+
+
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -118,7 +120,9 @@ public class BasePortalSteps {
 
     @When("^I provide all info about new account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(){
-        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+        Tenants.setAccountNameForNewAccountSignUp();
+        Tenants.setTenantUnderTestName(Tenants.getAccountNameForNewAccountSignUp());
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, Tenants.getAccountNameForNewAccountSignUp(),
                                         EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
@@ -148,7 +152,7 @@ public class BasePortalSteps {
     @When("(.*) test accounts is closed")
     public void closeAllTestAccount(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
+        ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
                 BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
                 BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
@@ -173,12 +177,12 @@ public class BasePortalSteps {
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
         activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+                Tenants.getAccountNameForNewAccountSignUp());
         for(int i=0; i<4; i++){
             if (activationAccountID==null){
                 getPortalSignUpPage().waitFor(1000);
                 activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                        ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+                        Tenants.getAccountNameForNewAccountSignUp());
             }
         }
         Assert.assertFalse(activationAccountID ==null,
@@ -367,7 +371,7 @@ public class BasePortalSteps {
     public void navigateInLeftMenu(String menuItem, String submenu){
         getPortalMainPage().waitWhileProcessing(2,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
+        getPortalMainPage().getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
             for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {

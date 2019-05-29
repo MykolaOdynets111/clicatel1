@@ -14,7 +14,7 @@ Feature: Facebook chat transferring
     Then Conversation area becomes active with chat to agent message from facebook user
     Given I login as second agent of General Bank Demo
     And Agent transfers chat
-    Then Second agent receives incoming transfer with "Please take care of this one" note from the first agent
+    Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
     And Second agent can see transferring agent name, facebook user name and following user's message: 'connect to agent'
     When Second agent click "Accept transfer" button
     Then Agent should not see from user chat in agent desk
