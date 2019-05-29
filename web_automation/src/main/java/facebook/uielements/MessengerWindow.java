@@ -40,7 +40,7 @@ public class MessengerWindow extends AbstractUIElement {
     }
 
     public void deleteConversation(){
-        enterMessage("end");
+//        enterMessage("end");
         moveToElement(DriverFactory.getTouchDriverInstance(), headerGearButtonContainer);
         gearButton.click();
         if(!isElementShown(popupMenu,2)) gearButton.click();

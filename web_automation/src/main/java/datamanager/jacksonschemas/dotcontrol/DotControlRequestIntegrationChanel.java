@@ -18,8 +18,6 @@ import java.util.Map;
 })
 public class DotControlRequestIntegrationChanel {
 
-    Faker faker = new Faker();
-
     @JsonProperty("name")
     private String name;
     @JsonProperty("enabled")

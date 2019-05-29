@@ -24,6 +24,8 @@ public class Tenants {
     private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
     private static ThreadLocal<Map<String,String>> TENANT_UNDER_TEST =  new ThreadLocal<>();
 
+
+//    ToDo: Remove after enhanced DB backup
     private static String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
 
     public static String getAccountNameForNewAccountSignUp() {
@@ -124,10 +126,9 @@ public class Tenants {
             case "SignedUp AQA":
                 Tenants.setTenantUnderTestOrgName("SignedUp AQA");
                 Tenants.setTenantUnderTestName(Tenants.getAccountNameForNewAccountSignUp());
-                TENANT_UNDER_TEST.get().put("SignedUp AQA", "automationtest");
+                TENANT_UNDER_TEST.get().put("SignedUp AQA", Tenants.getAccountNameForNewAccountSignUp());
                 break;
             case "Automation Common":
-                Tenants.setTenantUnderTestName("automationbot");
                 Tenants.setTenantUnderTestName("aqacomon");
                 Tenants.setTenantUnderTestOrgName("Automation Common");
                 TENANT_UNDER_TEST.get().put("Automation Common", "aqacomon");

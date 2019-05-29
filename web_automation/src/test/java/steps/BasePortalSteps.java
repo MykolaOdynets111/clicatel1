@@ -371,7 +371,7 @@ public class BasePortalSteps {
     public void navigateInLeftMenu(String menuItem, String submenu){
         getPortalMainPage().waitWhileProcessing(2,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        getPortalMainPage().getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
+        getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
             for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {

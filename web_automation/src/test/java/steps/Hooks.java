@@ -276,16 +276,16 @@ public class Hooks implements JSHelper{
             }
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
-
-            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
-                ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
-                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-            }
-            if (scenario.getSourceTagNames().contains("@creating_new_tenant ")){
-                String url = String.format(Endpoints.TIE_DELETE_TENANT, Tenants.getAccountNameForNewAccountSignUp());
-                given().delete(url);
-            }
+// Will be handled via DB backup
+//            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
+//                ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
+//                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+//                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+//            }
+//            if (scenario.getSourceTagNames().contains("@creating_new_tenant ")){
+//                String url = String.format(Endpoints.TIE_DELETE_TENANT, Tenants.getAccountNameForNewAccountSignUp());
+//                given().delete(url);
+//            }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");

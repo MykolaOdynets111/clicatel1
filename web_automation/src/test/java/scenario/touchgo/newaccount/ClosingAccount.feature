@@ -2,7 +2,6 @@
 @no_widget
 @no_chatdesk
 @testing_env_only
-@closing_account
 Feature: Closing account
 
   Scenario: Admin of the account should be able to close the account

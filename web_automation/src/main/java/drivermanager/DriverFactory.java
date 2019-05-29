@@ -143,13 +143,9 @@ public class DriverFactory {
             RemoteWebDriver remoteWebDriver;
             if(ConfigManager.getSuite().equalsIgnoreCase("touchgo")){
                 remoteWebDriver = new RemoteWebDriver(new URL(WINDOWS_SERVER_REMOTE_URL), capabilities);
-//            } else if (ConfigManager.getSuite().equalsIgnoreCase("facebook")){
-//                remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL_FB), capabilities);
             }else {
                 remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL), capabilities);
             }
-
-
             return remoteWebDriver;
         } catch (MalformedURLException e) {
             e.printStackTrace();
