@@ -163,12 +163,12 @@ public class TwitterSteps {
         int day = LocalDateTime.now().getDayOfMonth();
         if (day % 2 == 0) {
             if (invocationCount<1) tweetMessage = "chat to agent" +  faker.name().firstName().substring(0,1);
-            else tweetMessage= "connect to agent " + invocationCount +  faker.lorem().character();
+            else tweetMessage= "connect to agent" +  faker.lorem().character();
             invocationCount ++;
         }
         else {
             if (invocationCount<1) tweetMessage = "chat to support" +  faker.name().firstName().substring(0,1);
-            else tweetMessage= invocationCount +" connect to support " + invocationCount +  faker.name().firstName().substring(0,1);
+            else tweetMessage= "connect to support" + invocationCount +  faker.name().firstName().substring(0,1);
             invocationCount ++;
         }
         return tweetMessage;
