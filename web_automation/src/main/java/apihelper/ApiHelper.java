@@ -181,14 +181,14 @@ public class ApiHelper implements DateTimeHelper{
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
 
-    public static void setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
+    public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
         Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body(body)
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
-        resp.getBody().asString();
+        return resp;
     }
 
     public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {

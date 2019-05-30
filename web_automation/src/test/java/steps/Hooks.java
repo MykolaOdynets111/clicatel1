@@ -14,6 +14,7 @@ import drivermanager.URLs;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
+import io.restassured.response.Response;
 import javaserver.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -109,7 +110,10 @@ public class Hooks implements JSHelper{
         }
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
-            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            Response resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            if(resp.statusCode()!=200) {
+                supportHoursUpdates(resp);
+            }
             ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         }
 
@@ -470,6 +474,13 @@ public class Hooks implements JSHelper{
     @Attachment
     private String widgetWebSocketLogs(){
         return getWebSocketLogs(DriverFactory.getTouchDriverInstance());
+    }
+
+    @Attachment
+    private String supportHoursUpdates(Response resp){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(resp.statusCode()).append("\n").append(resp.getBody().asString()).append("\n");
+        return  buffer.toString();
     }
 
     private String getWebSocketLogs(WebDriver driver){

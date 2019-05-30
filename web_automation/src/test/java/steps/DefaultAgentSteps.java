@@ -467,19 +467,23 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Given("^Set agent support hours (.*)$")
     public void setSupportHoursWithShift(String shiftStrategy){
+        Response resp = null;
         switch (shiftStrategy){
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
-                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
+                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
                         "00:00", "23:59");
                 break;
             case "for all week":
-                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
                 getAgentHomePage("main").waitFor(1500);
                 break;
         }
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Changing support hours was not successful\n" +
+                "resp body: " + resp.getBody().asString() + "\n");
     }
 
 
