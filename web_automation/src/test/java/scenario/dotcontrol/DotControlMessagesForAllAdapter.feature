@@ -13,9 +13,9 @@ Feature: Creating .Control integration and sending messages for different adapte
     When Agent click on new conversation request from dotcontrol
     Then Conversation area becomes active with <message> user's message
     When Agent responds with hello from agent to User
-#    Then Verify dot .Control returns hello from agent response
-#    When Send hi, need your help with my card message for .Control
-#    Then Conversation area contains hi, need your help with my card user's message
+    Then Verify dot .Control returns hello from agent response
+    When Send hi, need your help with my card message for .Control
+    Then Conversation area contains hi, need your help with my card user's message
 
     Examples:
       |adapter                                             |message   |
