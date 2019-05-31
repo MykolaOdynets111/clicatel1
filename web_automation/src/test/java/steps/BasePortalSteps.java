@@ -235,7 +235,7 @@ public class BasePortalSteps {
 
     @Then("^Deleted agent is not able to log in portal$")
     public void verifyDeletedAgentIsNotLoggedIn(){
-        portalLoginPage.get().login(AGENT_EMAIL, AGENT_PASS);
+        portalLoginPage.get().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -872,20 +872,20 @@ public class BasePortalSteps {
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
         portalUserProfileEditingThreadLocal.get().clickDeleteButton();
-        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(6,5);
     }
 
     @Then("^User is removed from Manage agent users page$")
     public void verifyAgentDeletedManageAgentsPage(){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
-        Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 2000),
+        Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 800),
                 fullName + " agent is not removed from Manage agent users page after deleting");
     }
 
     @Then("^(.*) is removed from User management page$")
     public void verifyAgentDeleted(String user){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
-        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 1200),
+        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 800),
                 fullName + " agent is not removed from User management page");
     }
 
