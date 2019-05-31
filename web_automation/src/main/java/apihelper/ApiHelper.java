@@ -453,9 +453,9 @@ public class ApiHelper implements DateTimeHelper{
                 .getBody().jsonPath().getList("records", ChatHistoryItem.class);
     }
 
-    public static void updateSessionCapacity(String tenantOrgName, int availableChats){
+    public static Response updateSessionCapacity(String tenantOrgName, int availableChats){
         RequestSpec.clearAccessTokenForPortalUser();
-        RestAssured.given()
+        return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);

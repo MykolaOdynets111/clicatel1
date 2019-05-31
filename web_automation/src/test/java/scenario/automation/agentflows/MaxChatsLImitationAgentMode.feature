@@ -1,6 +1,7 @@
 @agent_session_capacity
 Feature: Max chat functionality for Agent mode tenant
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4150")
   Scenario: Verify chat limitation feature for Agent mode tenant
     Given Set session capacity to 0 for Automation tenant
     Given I login as agent of Automation

@@ -412,7 +412,7 @@ public class BasePortalSteps {
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
-                "'"+widgetName+"' widget value is not updated");
+                "'"+widgetName+"' widget value is not updated according to active chats on chatdesk");
     }
 
     @Then("^Average chats per Agent is correct$")
