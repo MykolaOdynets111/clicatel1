@@ -103,6 +103,10 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconRemoved();
     }
 
+    public boolean isProfileIconNotShown(String userName){
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).isProfileIconNotShown();
+    }
+
     public boolean isOvernightTicketIconRemoved(String userName){
         try {
             return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
@@ -185,6 +189,18 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     public String getActiveChatLocation(){
         return new ChatInLeftMenu(activeCaht).getLocation();
+    }
+
+    public String getActiveChatLastMessage(){
+        return new ChatInLeftMenu(activeCaht).getLastMessageText();
+    }
+
+    public boolean isValidIconForActiveChat(String adapter){
+        return new ChatInLeftMenu(activeCaht).isValidIcon(adapter);
+    }
+
+    public boolean isValidIconSentimentForActiveChat(String sentiment){
+        return new ChatInLeftMenu(activeCaht).isValidIconSentiment(sentiment);
     }
 
     public String getExpandFilterButtonColor() {

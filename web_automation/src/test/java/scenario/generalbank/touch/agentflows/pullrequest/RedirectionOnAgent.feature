@@ -56,6 +56,7 @@ Feature: User on his demand should be redirected on the agent
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with Hate your banking user's message
     Then Correct sentiment on Hate your banking user's message is stored in DB
+    Then Valid icon for negativ sentiment are shown in left menu with chat
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'Hate your banking' input
     When User enter how to check my balance? into widget input field
