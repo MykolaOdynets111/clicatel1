@@ -12,6 +12,7 @@ import cucumber.api.java.en.When;
 import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -1128,6 +1129,17 @@ public class BasePortalSteps {
             Assert.assertTrue(getPortalChatConsolePage().isNoAgentsOnlineShown(),
                     "'No agents online' are not shown while there is no logged in agents");
         }
+    }
+
+    @Then("Logged in agents shown in Agents chat console tab")
+    public void verifySecondAgentAppearsInAgentsTab(){
+        SoftAssert soft = new SoftAssert();
+        List<AvailableAgent> agents = ApiHelper.getAvailableAgents();
+        for(AvailableAgent agent : agents){
+            soft.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 15),
+                    agent.getAgentFullName() + " agent is not shown in online agents table on chat console");
+        }
+        soft.assertAll();
     }
 
     private LeftMenu getLeftMenu() {

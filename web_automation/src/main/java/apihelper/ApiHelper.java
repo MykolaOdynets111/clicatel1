@@ -710,5 +710,13 @@ public class ApiHelper implements DateTimeHelper{
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
                 .body(requestBody1)
                 .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);
+        }
+
+
+    public static List<AvailableAgent> getAvailableAgents(){
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(Endpoints.TENANT_AVAILABLE_AGENTS)
+                .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
 }

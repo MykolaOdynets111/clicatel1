@@ -106,7 +106,7 @@ public class Hooks implements JSHelper{
             if(scenario.isFailed()) widgetWebSocketLogs();
             takeScreenshot();
             endTouchFlow(scenario, true);
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
+//            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage()); for now not possible to delete just a one profile
         }
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
