@@ -1,16 +1,21 @@
 package agentpages.uielements;
 
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import drivermanager.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper, JSHelper {
 
@@ -27,7 +32,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     private WebElement channelIcon;
     @FindAll({
         @FindBy(xpath = "//div[@class='icons']/span/span[1]"),
-        @FindBy(xpath = "//div[@class='icons']/span[1]")
+        @FindBy(xpath = "//div[@class='context-info']/div[@class='icons']/span[1]")
     })
     private WebElement adapterIcon;
 
@@ -67,6 +72,17 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
             return messageText.getAttribute("innerText").trim();
     }
 
+    public void isValidImg(String adapter) throws Exception {
+        File image =new File("screenshots/"+adapter+".png");
+        BufferedImage expectedImage = ImageIO.read(image);
+        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),adapterIcon,true ).withName("Actual").equals(expectedImage);
+        Assert.assertTrue(result,"Image in last message in left menu for adapter as not expected. \n");
+    }
+
+    public void createValidImg(String adapter) throws Exception {
+        Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),adapterIcon,true ).withName(adapter).save();
+    }
+
     public boolean isValidIcon(String adapter) {
         String iconClass = adapterIcon.getAttribute("class");
         switch (adapter){
@@ -91,12 +107,12 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     public boolean isValidIconSentiment(String sentiment) {
         String iconClass = usercSentiment.getAttribute("class");
         switch (sentiment){
-            case "negativ":
+            case "negative":
                 return iconClass.equals("icon icon-negative");
             case "neutral":
                 return iconClass.equals("icon icon-neutral");
-            case "positiv":
-                return iconClass.equals("icon icon-positiv");
+            case "positive":
+                return iconClass.equals("icon icon-positive");
             default:
                 Assert.assertTrue(false,"Can not verify icon for "+sentiment+" sentiment");
                 return false;

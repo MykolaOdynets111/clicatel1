@@ -15,9 +15,6 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(css = "form[name=billingDetailsForm]")
     private WebElement billingDetailsForm;
 
-    @FindBy(css = "div[cl-tabs='tabs'] ol.list-unstyled.list-inline>li")
-    private List<WebElement> navItems;
-
     @FindBy(css = "a[ng-click='addPaymentMethod()']")
     private WebElement addPaymentMethodButton;
 
@@ -49,12 +46,6 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
 
     public boolean isPageOpened(int wait){
         return isElementShownAgent(billingDetailsForm, wait);
-    }
-
-    public void clickNavItem(String navName){
-        moveToElemAndClick(DriverFactory.getAgentDriverInstance(),
-                navItems.stream().filter(e -> e.getText().equalsIgnoreCase(navName)).findFirst().get());
-//        navItems.stream().filter(e -> e.getText().equalsIgnoreCase(navName)).findFirst().get().click();
     }
 
     public boolean isAddPaymentMethodButtonShown(int wait){

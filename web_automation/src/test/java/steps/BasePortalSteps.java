@@ -12,6 +12,7 @@ import cucumber.api.java.en.When;
 import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -234,7 +235,7 @@ public class BasePortalSteps {
 
     @Then("^Deleted agent is not able to log in portal$")
     public void verifyDeletedAgentIsNotLoggedIn(){
-        portalLoginPage.get().login(AGENT_EMAIL, AGENT_PASS);
+        portalLoginPage.get().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -400,9 +401,10 @@ public class BasePortalSteps {
                 widgetName + " counter differs from agent online count on backend");
     }
 
-    @Then("^(.*) widget value increased on (.*)$")
-    public void verifyWidgetValue(String widgetName, int incrementor){
-        int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
+    @Then("^(.*) widget value (?:increased on|set to) (.*)$")
+    public void verifyWidgetValue(String widgetName, int incrementer){
+        int expectedValue = 0;
+        if(incrementer!=0) expectedValue = chatConsolePretestValue.get(widgetName) + incrementer;
         Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
                 "'"+widgetName+"' widget value is not updated\n" +
                 "Expected value: " + expectedValue);
@@ -412,7 +414,7 @@ public class BasePortalSteps {
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
-                "'"+widgetName+"' widget value is not updated");
+                "'"+widgetName+"' widget value is not updated according to active chats on chatdesk");
     }
 
     @Then("^Average chats per Agent is correct$")
@@ -712,7 +714,7 @@ public class BasePortalSteps {
 
     @When("^Select '(.*)' in nav menu$")
     public void clickNavItemOnBillingDetailsPage(String navName){
-        getPortalBillingDetailsPage().clickNavItem(navName);
+        getPortalMainPage().clickPageNavButton(navName);
     }
 
 
@@ -870,20 +872,20 @@ public class BasePortalSteps {
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
         portalUserProfileEditingThreadLocal.get().clickDeleteButton();
-        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(6,5);
     }
 
     @Then("^User is removed from Manage agent users page$")
     public void verifyAgentDeletedManageAgentsPage(){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
-        Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 2000),
+        Assert.assertFalse(getPortalManagingUsersPage().isUserShown(fullName, 800),
                 fullName + " agent is not removed from Manage agent users page after deleting");
     }
 
     @Then("^(.*) is removed from User management page$")
     public void verifyAgentDeleted(String user){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
-        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 1200),
+        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 800),
                 fullName + " agent is not removed from User management page");
     }
 
@@ -1119,6 +1121,25 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();
+        soft.assertAll();
+    }
+
+    @Then("'No agents online' on Agents tab shown if there is no online agent")
+    public void verifyNoAgentsOnline(){
+        if(ApiHelper.getNumberOfLoggedInAgents()==0) {
+            Assert.assertTrue(getPortalChatConsolePage().isNoAgentsOnlineShown(),
+                    "'No agents online' are not shown while there is no logged in agents");
+        }
+    }
+
+    @Then("Logged in agents shown in Agents chat console tab")
+    public void verifySecondAgentAppearsInAgentsTab(){
+        SoftAssert soft = new SoftAssert();
+        List<AvailableAgent> agents = ApiHelper.getAvailableAgents();
+        for(AvailableAgent agent : agents){
+            soft.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 35),
+                    agent.getAgentFullName() + " agent is not shown in online agents table on chat console");
+        }
         soft.assertAll();
     }
 

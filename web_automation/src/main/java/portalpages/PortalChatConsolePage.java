@@ -1,15 +1,9 @@
 package portalpages;
 
-import drivermanager.DriverFactory;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.LocalFileDetector;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.support.FindBy;
-import portalpages.uielements.EditUserRolesWindow;
 
-import java.io.File;
-import java.util.Map;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import portalpages.uielements.AgentsTableChatConsole;
 
 public class PortalChatConsolePage extends PortalAbstractPage {
 
@@ -24,6 +18,15 @@ public class PortalChatConsolePage extends PortalAbstractPage {
 
     @FindBy(xpath = "//p[text()='Live chats active']//following-sibling::p/b")
     private WebElement averageChatsPerAgent;
+
+    @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
+    private WebElement noAgentsNotification;
+
+    private AgentsTableChatConsole agentsTableChatConsole;
+
+    public AgentsTableChatConsole getAgentsTableChatConsole(){
+        return agentsTableChatConsole;
+    }
 
     public String getWaitingChatsNumber(){
         return getTextFromElemAgent(chatsWaitingCounter, 6, "admin", "Customers waiting for response");
@@ -53,4 +56,7 @@ public class PortalChatConsolePage extends PortalAbstractPage {
         return getTextFromElemAgent(averageChatsPerAgent, 3, "admin", "Average chats per Agent");
     }
 
+    public boolean isNoAgentsOnlineShown(){
+        return isElementShownAgent(noAgentsNotification, 8);
+    }
 }

@@ -343,7 +343,11 @@ public class DotControlSteps {
 
     @When("^Set session capacity to (.*) for (.*) tenant$")
     public void updateSessionCapacity(int chats, String tenantOrgName){
-        ApiHelper.updateSessionCapacity(tenantOrgName, chats);
+        Response resp = ApiHelper.updateSessionCapacity(tenantOrgName, chats);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Updating session capacity was not successful\n" +
+                "resp body: " + resp.getBody().asString());
+
     }
 
 

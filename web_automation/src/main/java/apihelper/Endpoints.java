@@ -48,7 +48,6 @@ public class Endpoints {
 
     public static String CLOSE_ACTIVE_CHAT = "https://%s-touch.clickatelllabs.com/chats/%s/end";
 
-
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
     public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
@@ -58,6 +57,8 @@ public class Endpoints {
     public static String TENANT_BRAND_LOGO = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo";
 
     public static String TENANT_BRAND_LOGO_TRANS = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo_trans";
+
+    public static String TENANT_AVAILABLE_AGENTS = URLs.getTouchApiBaseURL() + "agent-availability/logged-in";
 
     // ================== INTERNAL ============== //
 

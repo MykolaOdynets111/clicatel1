@@ -11,10 +11,8 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.scrollable-roster")
@@ -197,6 +195,14 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     public boolean isValidIconForActiveChat(String adapter){
         return new ChatInLeftMenu(activeCaht).isValidIcon(adapter);
+    }
+
+    public void isValidImgForActiveChat(String adapter) throws Exception {
+       new ChatInLeftMenu(activeCaht).isValidImg(adapter);
+    }
+
+    public void createValidImgForActiveChat(String adapter) throws Exception {
+        new ChatInLeftMenu(activeCaht).createValidImg(adapter);
     }
 
     public boolean isValidIconSentimentForActiveChat(String sentiment){
