@@ -3,8 +3,6 @@
 @dot_control
 Feature: Creating .Control integration and sending messages for different adapters
 
-#  Background:
-
   Scenario Outline: Sending message to .Control (to agent) using <adapter> adapter
     Given Create .Control '<adapter>' adapters integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
@@ -19,8 +17,8 @@ Feature: Creating .Control integration and sending messages for different adapte
 
     Examples:
       |adapter                                             |message   |
-      |fbmsg                                               |Hello from fbmsg|
-      |whatsapp                                            |Hello from whatsapp|
-      |fbpost                                              |Hello from fbpost|
-      |twdm                                                |Hello from twdm|
-      |twmention                                           |Hello from twmention|
+      |fbmsg                                               |chat to agent from fbmsg|
+      |whatsapp                                            |chat to support from whatsapp|
+      |fbpost                                              |chat to support from fbpost|
+      |twdm                                                |chat to support from twdm|
+      |twmention                                           |chat to agent from twmention|
