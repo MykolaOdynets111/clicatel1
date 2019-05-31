@@ -12,7 +12,6 @@ public enum FacebookPages {
     DEMO_GEN_BANK("General-Bank-Demo-178022086085592/", 178022086085592l, "General Bank Demo", "demo"),
     DEV_GEN_BANK("General-Bank-Dev-662912180789339/", 662912180789339l, "General Bank Demo", "dev"),
     TESTING_GEN_BANK("General-Bank-Testing-662287630896233/", 662287630896233l, "General Bank Demo", "testing"),//egor
-    TESTING_FB("Testing_env_1-480580659352322/", 662287630896233l, "FB", "testing"),
     ;
 
     String pageLink;

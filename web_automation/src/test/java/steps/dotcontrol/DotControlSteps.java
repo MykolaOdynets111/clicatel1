@@ -20,7 +20,9 @@ import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DotControlSteps {
 
@@ -30,11 +32,11 @@ public class DotControlSteps {
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
     private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
+    private static Map<String, String> adapterApiTokens= new HashMap();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
-    public void
-    createIntegration(String tenantOrgName){
+    public void    createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
@@ -57,8 +59,8 @@ public class DotControlSteps {
         apiToken.set(token);
     }
 
-    @Given("Create .Control (.*) adapters integration for (.*) tenant")
-    public void createIntegration(String adapters, String tenantOrgName){
+    @Given("Create .Control '(.*)' adapters integration for (.*) tenant")
+    public void createIntegrationAdapters(String adapters, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
@@ -70,15 +72,17 @@ public class DotControlSteps {
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
-        String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
-        System.out.println("!! Api token from creating integration: " + token);
-        if(token==null){
+        String[] arrayAdapters = adapters.split(",");
+        for (int i=0; i<arrayAdapters.length; i++){
+            String adapter = resp.getBody().jsonPath().get("channels["+i+"].adapter");
+            String token = resp.getBody().jsonPath().get("channels["+i+"].config.apiToken");
+            adapterApiTokens.put(adapter,token);
+        }
+        if(adapterApiTokens.isEmpty()){
             Assert.assertTrue(false, "apiToken is absent in create integration response " +
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
-        apiToken.remove();
-        apiToken.set(token);
     }
 
     @When("Send (.*) message for .Control")
@@ -93,6 +97,15 @@ public class DotControlSteps {
         if (message.contains("empty")) dotControlRequestMessage.get().setMessage("");
         if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
 
+        responseOnSentRequest.set(
+                APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
+        );
+        clientId.set(dotControlRequestMessage.get().getClientId());
+    }
+
+    @When("Send '(.*)' messages for .Control '(.*)' adapter")
+    public void sendMessageToDotControlAdapter(String message,String adapter ){
+        createRequestMessage(adapterApiTokens.get(adapter), message);
         responseOnSentRequest.set(
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
