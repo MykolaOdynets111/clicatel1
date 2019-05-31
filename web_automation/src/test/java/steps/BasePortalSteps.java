@@ -401,9 +401,10 @@ public class BasePortalSteps {
                 widgetName + " counter differs from agent online count on backend");
     }
 
-    @Then("^(.*) widget value increased on (.*)$")
-    public void verifyWidgetValue(String widgetName, int incrementor){
-        int expectedValue = chatConsolePretestValue.get(widgetName) + incrementor;
+    @Then("^(.*) widget value (?:increased on|set to) (.*)$")
+    public void verifyWidgetValue(String widgetName, int incrementer){
+        int expectedValue = 0;
+        if(incrementer!=0) expectedValue = chatConsolePretestValue.get(widgetName) + incrementer;
         Assert.assertTrue(checkLiveCounterValue(widgetName, expectedValue),
                 "'"+widgetName+"' widget value is not updated\n" +
                 "Expected value: " + expectedValue);
