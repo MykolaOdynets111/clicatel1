@@ -25,6 +25,10 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     @FindBy(xpath = "//p[text()='Live chats active']//following-sibling::p/b")
     private WebElement averageChatsPerAgent;
 
+    @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
+    private WebElement noAgentsNotification;
+
+
     public String getWaitingChatsNumber(){
         return getTextFromElemAgent(chatsWaitingCounter, 6, "admin", "Customers waiting for response");
     }
@@ -53,4 +57,7 @@ public class PortalChatConsolePage extends PortalAbstractPage {
         return getTextFromElemAgent(averageChatsPerAgent, 3, "admin", "Average chats per Agent");
     }
 
+    public boolean isNoAgentsOnlineShown(){
+        return isElementShownAgent(noAgentsNotification, 8);
+    }
 }

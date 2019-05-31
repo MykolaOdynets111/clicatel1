@@ -712,7 +712,7 @@ public class BasePortalSteps {
 
     @When("^Select '(.*)' in nav menu$")
     public void clickNavItemOnBillingDetailsPage(String navName){
-        getPortalBillingDetailsPage().clickNavItem(navName);
+        getPortalMainPage().clickPageNavButton(navName);
     }
 
 
@@ -1120,6 +1120,14 @@ public class BasePortalSteps {
         getPortalTouchPrefencesPage().clickSaveButton();
         getPortalTouchPrefencesPage().waitWhileProcessing();
         soft.assertAll();
+    }
+
+    @Then("'No agents online' on Agents tab shown if there is no online agent")
+    public void verifyNoAgentsOnline(){
+        if(ApiHelper.getNumberOfLoggedInAgents()==0) {
+            Assert.assertTrue(getPortalChatConsolePage().isNoAgentsOnlineShown(),
+                    "'No agents online' are not shown while there is no logged in agents");
+        }
     }
 
     private LeftMenu getLeftMenu() {
