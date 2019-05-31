@@ -1137,7 +1137,7 @@ public class BasePortalSteps {
         SoftAssert soft = new SoftAssert();
         List<AvailableAgent> agents = ApiHelper.getAvailableAgents();
         for(AvailableAgent agent : agents){
-            soft.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 15),
+            soft.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 35),
                     agent.getAgentFullName() + " agent is not shown in online agents table on chat console");
         }
         soft.assertAll();
