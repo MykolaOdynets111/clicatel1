@@ -284,7 +284,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
-                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity")
+                );
     }
 
     @When("^(.*) click 'Pin' button$")

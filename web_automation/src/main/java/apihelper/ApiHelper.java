@@ -39,10 +39,11 @@ public class ApiHelper implements DateTimeHelper{
         return RestAssured.get(url).jsonPath().get(config);
     }
 
-    public static void getTenantConfig(String tenantOrgName){
-        RestAssured.given()
+    public static Response getTenantConfig(String tenantOrgName){
+        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.TENANT_CONFIG);
+                .get(String.format(Endpoints.TENANT_CONFIG, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
