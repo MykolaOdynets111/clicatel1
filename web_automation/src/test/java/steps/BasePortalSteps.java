@@ -306,7 +306,7 @@ public class BasePortalSteps {
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }
-        portalLoginPage.get().login(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        portalLoginPage.get().enterAdminCreds(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
