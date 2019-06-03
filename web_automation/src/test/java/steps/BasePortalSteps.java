@@ -16,6 +16,7 @@ import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
+import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -27,7 +28,7 @@ import touchpages.pages.Widget;
 
 import java.util.*;
 
-public class BasePortalSteps {
+public class BasePortalSteps implements JSHelper {
 
     private Faker faker = new Faker();
     private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
@@ -1141,6 +1142,12 @@ public class BasePortalSteps {
                     agent.getAgentFullName() + " agent is not shown in online agents table on chat console");
         }
         soft.assertAll();
+    }
+
+    @Then("^Chat console contains info about active chats including intent on user message (.*)$")
+    public void verifyActiveChatInfoOnChatConsole(String userMessage){
+        String userId = getUserNameFromLocalStorage();
+
     }
 
     private LeftMenu getLeftMenu() {

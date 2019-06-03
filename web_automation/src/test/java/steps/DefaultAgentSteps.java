@@ -285,7 +285,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
-                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity")
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("tenantAddresses.businessHours") + "\n" +
+                        "Support hours: " + ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).toString() + "\n"
                 );
     }
 
