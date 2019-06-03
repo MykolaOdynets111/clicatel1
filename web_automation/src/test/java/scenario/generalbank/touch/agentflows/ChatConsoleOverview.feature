@@ -1,5 +1,6 @@
 Feature: Chat console: Overview tab
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4155")
   Scenario: Live chats counter
     Given User select General Bank Demo tenant
     And Click chat icon
