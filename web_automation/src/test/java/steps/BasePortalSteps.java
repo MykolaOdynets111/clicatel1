@@ -693,10 +693,11 @@ public class BasePortalSteps implements JSHelper {
         billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
     }
 
-    @Then("^Billing details is saved on backend$")
-    public void verifyBillingDetails(){
+    @Then("^Billing details is saved on backend (.*)$")
+    public void verifyBillingDetails(String testOrgName ){
         SoftAssert soft = new SoftAssert();
-        Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
+        Response resp = ApiHelperPlatform.getAccountBillingInfo(testOrgName);
+   //     Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
         Map info = resp.jsonPath().getMap("");
         String billingAddress = resp.jsonPath().get("billingAddress.country.name") + ", " +
                                 resp.jsonPath().get("billingAddress.city") + ", " +

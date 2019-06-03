@@ -205,8 +205,8 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         new ChatInLeftMenu(activeCaht).createValidImg(adapter);
     }
 
-    public boolean isValidIconSentimentForActiveChat(String sentiment){
-        return new ChatInLeftMenu(activeCaht).isValidIconSentiment(sentiment);
+    public void isValidIconSentimentForActiveChat(String message) throws Exception {
+         new ChatInLeftMenu(activeCaht).isValidIconSentiment(message);
     }
 
     public String getExpandFilterButtonColor() {

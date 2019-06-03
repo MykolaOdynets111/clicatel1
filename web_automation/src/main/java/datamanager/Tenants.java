@@ -9,8 +9,7 @@ import io.restassured.response.Response;
 import org.apache.commons.io.FileUtils;
 import org.testng.SkipException;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +28,27 @@ public class Tenants {
     private static String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
 
     public static String getAccountNameForNewAccountSignUp() {
+        try {
+            FileReader fileReader = new FileReader("src/test/resources/touchgo/accountName.txt");
+            BufferedReader rFile =  new BufferedReader(fileReader);
+            ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = rFile.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
     }
 
     public static void setAccountNameForNewAccountSignUp() {
         Faker faker = new Faker();
         ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = faker.name().firstName() + faker.number().randomNumber();
+        File file =new File("src/test/resources/touchgo/accountName.txt");
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
