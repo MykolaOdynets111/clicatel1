@@ -68,7 +68,7 @@ public class RequestSpec {
     public static String getAccessTokenForPortalUser(String tenantOrgName) {
         if(PORTAL_USER_ACCESS_TOKEN.get()==null) {
             Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "main agent");
-            Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
+            Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentEmail(), user.getAgentPass());
             Response resp = RestAssured.given()
                     .header("Content-Type", "application/json")
                     .body("{\n" +
@@ -87,7 +87,7 @@ public class RequestSpec {
     public static String getAccessTokenForPortalUserSecond(String tenantOrgName) {
         if(PORTAL_SECOND_USER_ACCESS_TOKEN.get()==null) {
             Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), "second agent");
-            Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentName(), user.getAgentPass());
+            Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentEmail(), user.getAgentPass());
             Response resp = RestAssured.given()
                     .header("Content-Type", "application/json")
                     .body("{\n" +

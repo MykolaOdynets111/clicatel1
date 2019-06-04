@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class AgentRowChatConsole extends Widget implements WebActions {
@@ -52,4 +53,20 @@ public class AgentRowChatConsole extends Widget implements WebActions {
         clickElemAgent(expandButton, 3, "admin", "Expand agent row button");
     }
 
+
+    public List<String> getChannels(){
+        return channels.stream().map(e -> e.getText()).collect(Collectors.toList());
+    }
+
+    public List<String> getIntents(){
+        return intents.stream().map(e -> e.getText()).collect(Collectors.toList());
+    }
+
+    public List<String> getSentiments(){
+        return sentiments.stream().map(e -> e.getAttribute("class")).collect(Collectors.toList());
+    }
+
+    public List<String> getChattingTo(){
+        return chattingTo.stream().map(e -> e.getText()).collect(Collectors.toList());
+    }
 }

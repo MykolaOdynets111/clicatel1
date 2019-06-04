@@ -25,4 +25,31 @@ public class AgentsTableChatConsole extends BasePortalWindow {
                 .findFirst().get();
     }
 
+    public boolean isAgentMarkedWithGreenDot(String agentName, int wait){
+        return getTargetAgentRow(agentName).isActiveChatIconShown(wait);
+    }
+
+    public boolean isAgentMarkedWithYellowDot(String agentName, int wait){
+        return getTargetAgentRow(agentName).isNoActiveChatsIconShown(wait);
+    }
+
+    public void clickExpandRow(String agentName){
+        getTargetAgentRow(agentName).clickExpandButton();
+    }
+
+    public List<String> getShownChatsForAgent(String agentName){
+        return getTargetAgentRow(agentName).getChattingTo();
+    }
+
+    public List<String> getShownChannelsForAgent(String agentName){
+        return getTargetAgentRow(agentName).getChannels();
+    }
+
+    public List<String> getShownIntentsForAgent(String agentName){
+        return getTargetAgentRow(agentName).getIntents();
+    }
+
+    public List<String> getShownSentimentForAgent(String agentName){
+        return getTargetAgentRow(agentName).getSentiments();
+    }
 }

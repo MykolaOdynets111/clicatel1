@@ -3,6 +3,7 @@ package steps;
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperPlatform;
+import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.And;
@@ -13,6 +14,7 @@ import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
+import datamanager.jacksonschemas.Intent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -63,7 +65,7 @@ public class BasePortalSteps implements JSHelper {
     private AgentHomePage secondAgentHomePage;
     private Widget widget;
     int activeChatsFromChatdesk;
-
+    private String secondAgentNameForChatConsoleTests = "";
 
 
     public static Map<String, String> getTenantInfoMap(){
@@ -246,7 +248,7 @@ public class BasePortalSteps implements JSHelper {
     public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
         Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
         portalMainPage.set(
-                portalLoginPage.get().login(portalAdmin.getAgentName(), portalAdmin.getAgentPass())
+                portalLoginPage.get().login(portalAdmin.getAgentEmail(), portalAdmin.getAgentPass())
         );
         Tenants.setTenantUnderTestNames(tenantOrgName);
     }
@@ -415,7 +417,7 @@ public class BasePortalSteps implements JSHelper {
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
-                "'"+widgetName+"' widget value is not updated according to active chats on chatdesk");
+                "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
     }
 
     @Then("^Average chats per Agent is correct$")
@@ -1134,6 +1136,22 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
+    @Then("^(.*) is marked with a green dot in chat console$")
+    public void verifyAgentMarkedWithAGreenDot(String agent){
+        secondAgentNameForChatConsoleTests =  ApiHelper.getAvailableAgents().stream()
+                .filter(e -> e.getEmail().equalsIgnoreCase(
+                        Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
+                .findFirst().get().getAgentFullName();
+        Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
+                .isAgentMarkedWithGreenDot(secondAgentNameForChatConsoleTests, 10),
+                secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
+    }
+
+    @When("^Admin clicks expand dot for (.*)$")
+    public void expandAgentsRowInChatConsole(String agent){
+        getPortalChatConsolePage().getAgentsTableChatConsole().clickExpandRow(secondAgentNameForChatConsoleTests);
+    }
+
     @Then("Logged in agents shown in Agents chat console tab")
     public void verifySecondAgentAppearsInAgentsTab(){
         SoftAssert soft = new SoftAssert();
@@ -1145,10 +1163,28 @@ public class BasePortalSteps implements JSHelper {
         soft.assertAll();
     }
 
-    @Then("^Chat console contains info about active chats including intent on user message (.*)$")
-    public void verifyActiveChatInfoOnChatConsole(String userMessage){
-        String userId = getUserNameFromLocalStorage();
 
+    @Then("^All chats info are shown for (.*) including intent on user message (.*)$")
+    public void verifyActiveChatInfoOnChatConsole(String agent, String userMessage){
+        String userId = getUserNameFromLocalStorage();
+        String sentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
+        Intent intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0);
+
+        List<String> clientIdsWithActiveChatsForTargetAgent = getPortalChatConsolePage().getAgentsTableChatConsole().getShownChatsForAgent(agent);
+        if(!clientIdsWithActiveChatsForTargetAgent.contains(userId)){
+            Assert.fail("Chat from '" + userId + "' user is not shown in chat console for " +
+                    secondAgentNameForChatConsoleTests + " agent");
+        }
+        SoftAssert soft = new SoftAssert();
+        int ordinalChatNumber = clientIdsWithActiveChatsForTargetAgent.indexOf(userId);
+
+        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownChannelsForAgent(agent).get(ordinalChatNumber),
+                "Touch Web chat");
+        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownSentimentForAgent(agent).get(ordinalChatNumber),
+                sentiment);
+        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownIntentsForAgent(agent).get(ordinalChatNumber),
+                intent);
+        soft.assertAll();
     }
 
     private LeftMenu getLeftMenu() {

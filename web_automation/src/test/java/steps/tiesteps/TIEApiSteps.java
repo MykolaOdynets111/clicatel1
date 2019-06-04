@@ -988,9 +988,8 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^Schedule new training$")
     public void scheduleNewTraining(){
         Response resp = ApiHelperTie.scheduleTraining();
-        Assert.assertTrue( resp.statusCode()==200,
-                "Training is not scheduled\n" +
-                        "Resp: " + resp.getBody().asString());
+        Assert.assertEquals(resp.statusCode(), 200, "Training is not scheduled\n" +
+                "Resp: " + resp.getBody().asString());
     }
 
     @Then("^New model is ready after (.*) minutes wait$")
@@ -1007,7 +1006,7 @@ public class TIEApiSteps implements DateTimeHelper{
                         convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
                 .findFirst().get();
         } catch(NoSuchElementException e){
-            Assert.assertTrue(false, "Expected created model is not present in get models response\n" +
+            Assert.assertTrue(false, "Expected created model '"+createdModelName+"' is not present in get models response\n" +
             "Resp: " + respBody.asString());
         }
         boolean isTrained = false;
