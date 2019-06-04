@@ -1,4 +1,4 @@
-Feature: Chat console: Agent tab
+Feature: Chat console: Agents tab
 
   Scenario: Info about agent on Agent tab
     Given I open portal
@@ -11,5 +11,7 @@ Feature: Chat console: Agent tab
 #    Given User select General Bank Demo tenant
 #    And Click chat icon
 #    When User enter chat to support into widget input field
-#    Then Agent has new conversation request
-#    And Chat console contains info about active chats including intent on user message chat to support
+#    Then Second Agent has new conversation request
+#    And Second agent is marked with a green dot in chat console
+#    When Admin clicks expand dot for Second agent
+#    Then All chats info are shown for second agent including intent on user message chat to support
