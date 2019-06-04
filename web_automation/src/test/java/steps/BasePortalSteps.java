@@ -417,7 +417,7 @@ public class BasePortalSteps implements JSHelper {
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
-                "'"+widgetName+"' widget value is not updated according to active chats on chatdesk");
+                "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
     }
 
     @Then("^Average chats per Agent is correct$")

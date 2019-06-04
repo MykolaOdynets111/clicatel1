@@ -7,6 +7,7 @@ Feature: Bot answers regarding interest and account
     Given User select General Bank Demo tenant
     And Click chat icon
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4160")
   Scenario Outline: Verify if user receives answer on "<user input>" message
     When User enter <user input> into widget input field
     Then User have to receive '<expected response>' text response for his '<user input>' input
