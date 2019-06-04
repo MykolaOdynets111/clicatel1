@@ -302,6 +302,22 @@ public class AgentConversationSteps implements JSHelper{
                 "Sentiment on '" + userMessage + "' user message is saved incorrectly\n");
     }
 
+    @Then("(.*) can see default (.*) placeholder for note if there is no input made$")
+    public void defaultWordsShouldBeIfThereIsNoInputMade(String agent,String words) {
+        Assert.assertEquals(getAgentHomePage(agent).getAgentFeedbackWindow().getPlaceholder(), words,
+                "Placeholder for note is incorrect\n");
+    }
+
+    @Then("^(.*) can see valid sentiments \\(Neutral sentiment by default, There are 3 icons for sentiments\\)$")
+    public void validSentimentsAreShown(String agent)  throws Exception {
+        getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments();
+    }
+
+    @Then("^(.*) is able to select sentiment, when sentiment is selected, 2 other should be blurred$")
+    public void agentIsAbleToSelectSentimentWhenSentimentIsSelectedOtherShouldBeBlurred(String agent) throws Exception {
+        getAgentHomePage(agent).getAgentFeedbackWindow().canSelectSentiments();
+    }
+
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
             agentHomePage =  new AgentHomePage("");

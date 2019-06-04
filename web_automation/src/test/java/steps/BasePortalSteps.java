@@ -47,7 +47,7 @@ public class BasePortalSteps implements JSHelper {
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
-    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";//"signup_account@aqa.test";
+    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
   //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";

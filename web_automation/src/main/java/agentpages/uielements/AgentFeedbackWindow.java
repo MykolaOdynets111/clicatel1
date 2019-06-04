@@ -1,17 +1,15 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import apihelper.ApiHelper;
-import datamanager.Tenants;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-//import java.util.Arrays;
-//import java.util.List;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.*;
 
 
@@ -41,6 +39,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(css = ".icon-positive")
     private WebElement sentimentHappy;
+
+    @FindBy(css = ".icons.conclude-chat-sentiment")
+    private WebElement sentimentsAll;
 
     @FindBy(xpath = "//div[@class='Select-menu-outer']/*")
     private WebElement availableTags;
@@ -186,5 +187,38 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public void deleteTags() {
              findElemByCSSAgent(cleareAll).click();
+    }
+
+    public String getPlaceholder() {
+       return crmNoteTextField.getAttribute("placeholder");
+    }
+
+    public void createValidImg() throws Exception {
+        Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("sentimentsConcludeWindow").save("src/test/resources/sentimenticons/");
+    }
+
+
+    public void isValidSentiments() throws Exception {
+        File image =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        BufferedImage expectedImage = ImageIO.read(image);
+        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImage);
+        Assert.assertTrue(result,"Sentiments in agent feedback window as not expected. \n");
+    }
+
+    public void canSelectSentiments() throws Exception {
+        File imageNeutral =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        BufferedImage expectedImageNeutral = ImageIO.read(imageNeutral);
+        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImageNeutral);
+        Assert.assertTrue(result,"Neutral Sentiments in agent feedback window as not expected. \n");
+        setSentimentHappy();
+        File imageHappy =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
+        BufferedImage expectedImageHappy = ImageIO.read(imageHappy);
+        boolean resultHappy = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImageHappy);
+        Assert.assertTrue(resultHappy,"Happy Sentiments in agent feedback window as not expected. \n");
+        setSentimentUnsatisfied();
+        File imageUnsatisfied =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
+        BufferedImage expectedImageUnsatisfied = ImageIO.read(imageUnsatisfied);
+        boolean resultUnsatisfied = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImageUnsatisfied);
+        Assert.assertTrue(resultUnsatisfied,"Unsatisfied Sentiments in agent feedback window as not expected. \n");
     }
 }
