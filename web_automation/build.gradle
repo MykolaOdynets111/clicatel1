@@ -24,7 +24,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 repositories {
     mavenCentral()
 }
-
+F
 dependencies {
     compile group: 'io.appium', name: 'java-client', version: '6.1.0'
     compile group: 'javax.mail', name: 'mail', version: '1.4.5'
@@ -51,6 +51,7 @@ allure{
     testNG = false
     allureResultsDir = "$buildDir${File.separator}allure-results"
     allureReportDir = "$buildDir${File.separator}allure-report"
+    allure
 }
 
 def baseXmlPath = "/src/test/resources/"
