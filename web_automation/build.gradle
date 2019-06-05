@@ -51,7 +51,6 @@ allure{
     testNG = false
     allureResultsDir = "$buildDir${File.separator}allure-results"
     allureReportDir = "$buildDir${File.separator}allure-report"
-    allure
 }
 
 def baseXmlPath = "/src/test/resources/"
