@@ -12,6 +12,7 @@ import facebook.uielements.MessengerWindow;
 import facebook.FBYourPostPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import ru.yandex.qatools.allure.annotations.TestCaseId;
 
 import javax.annotation.concurrent.GuardedBy;
 import java.util.Random;
@@ -36,6 +37,7 @@ public class FacebookSteps {
     }
 
     @When("^User opens Messenger and send message regarding (.*)")
+    @TestCaseId("TMS-1")
     public void openMessengerAndSendMessage(String message){
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
