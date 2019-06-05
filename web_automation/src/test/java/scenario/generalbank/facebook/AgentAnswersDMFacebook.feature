@@ -7,6 +7,8 @@ Feature: Communication between user and agent in FB messenger
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 
+
+  @TestCaseId("TPORT-3869")
   Scenario: Communication between user and agent
     When User opens Messenger and send message regarding chat to agent
     Then Agent has new conversation request from facebook user
