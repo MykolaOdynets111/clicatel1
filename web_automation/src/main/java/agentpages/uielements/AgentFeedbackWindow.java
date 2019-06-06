@@ -198,27 +198,36 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
 
-    public void isValidSentiments() throws Exception {
-        File image =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
-        BufferedImage expectedImage = ImageIO.read(image);
-        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImage);
-        Assert.assertTrue(result,"Sentiments in agent feedback window as not expected. \n");
+    public boolean isValidSentiments() {
+        boolean result=false;
+        try {
+            File image = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+            BufferedImage expectedImage = ImageIO.read(image);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImage);
+        }
+        catch (Exception e){
+        }
+        return result;
     }
 
-    public void canSelectSentiments() throws Exception {
-        File imageNeutral =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
-        BufferedImage expectedImageNeutral = ImageIO.read(imageNeutral);
-        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImageNeutral);
-        Assert.assertTrue(result,"Neutral Sentiments in agent feedback window as not expected. \n");
-        setSentimentHappy();
-        File imageHappy =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
-        BufferedImage expectedImageHappy = ImageIO.read(imageHappy);
-        boolean resultHappy = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImageHappy);
-        Assert.assertTrue(resultHappy,"Happy Sentiments in agent feedback window as not expected. \n");
-        setSentimentUnsatisfied();
-        File imageUnsatisfied =new File("src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
-        BufferedImage expectedImageUnsatisfied = ImageIO.read(imageUnsatisfied);
-        boolean resultUnsatisfied = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),sentimentsAll,true ).withName("Actual").equals(expectedImageUnsatisfied);
-        Assert.assertTrue(resultUnsatisfied,"Unsatisfied Sentiments in agent feedback window as not expected. \n");
+    public boolean canSelectSentiments() {
+        boolean result = false;
+        boolean resultHappy = false;
+        boolean resultUnsatisfied = false;
+        try {
+            File imageNeutral = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+            BufferedImage expectedImageNeutral = ImageIO.read(imageNeutral);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImageNeutral);
+            setSentimentHappy();
+            File imageHappy = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
+            BufferedImage expectedImageHappy = ImageIO.read(imageHappy);
+            resultHappy = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImageHappy);
+            setSentimentUnsatisfied();
+            File imageUnsatisfied = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
+            BufferedImage expectedImageUnsatisfied = ImageIO.read(imageUnsatisfied);
+            resultUnsatisfied = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImageUnsatisfied);
+        } catch (Exception e) {
+        }
+        return result&&resultHappy&&resultUnsatisfied;
     }
 }

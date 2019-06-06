@@ -556,8 +556,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
     @Then("^Valid image for (.*) integration are shown in left menu with chat$")
-    public void verifyImgForLastMessageInLeftMenu(String adapter) throws Exception {
-        getLeftMenu("main").isValidImgForActiveChat(adapter);
+    public void verifyImgForLastMessageInLeftMenu(String adapter) {
+        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
        // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
     }
 
@@ -568,8 +568,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
-    public void verifyIconSentimentForLastMessageInLeftMenu(String message) throws Exception{
-      getLeftMenu("main").isValidIconSentimentForActiveChat(message);
+    public void verifyIconSentimentForLastMessageInLeftMenu(String message) {
+        Assert.assertTrue(getLeftMenu("main").isValidIconSentimentForActiveChat(message),"Image in last message in left menu for sentiment as not expected. \n");
     }
 
     @Then("^Customer name is updated in active chat header$")

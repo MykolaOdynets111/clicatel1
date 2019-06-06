@@ -33,8 +33,9 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     private WebElement channelIcon;
 
     @FindAll({
-        @FindBy(xpath = "//div[@class='icons']/span/span[contains(@class,'icon svg')]"),
-        @FindBy(xpath = "//div[@class='context-info']/div[@class='icons']/span[contains(@class,'icon svg')]")
+        @FindBy(xpath = "//div[contains(@class,'context-info')]//span[contains(@class,'icon svg-icon-webchat')]/*"),
+        @FindBy(xpath = "//span[contains(@class,'http-icon')]//span/*"),
+        @FindBy(xpath = "//span[contains(@class,'http-icon')]/span[contains(@class,'icon icon')]")
     })
     private WebElement adapterIcon;
 
@@ -74,11 +75,17 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
             return messageText.getAttribute("innerText").trim();
     }
 
-    public void isValidImg(String adapter) throws Exception {
-        File image =new File("src/test/resources/adaptericons/"+adapter+".png");
-        BufferedImage expectedImage = ImageIO.read(image);
-        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),adapterIcon,true ).withName("Actual").equals(expectedImage);
-        Assert.assertTrue(result,"Image in last message in left menu for "+adapter+ " adapter as not expected. \n");
+    public boolean isValidImg(String adapter) {
+        boolean result=false;
+        try {
+            File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+            BufferedImage expectedImage = ImageIO.read(image);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), adapterIcon, true).withName("Actual").equals(expectedImage);
+        }
+        catch(Exception e) {
+         //   Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),adapterIcon,true ).withName(adapter).save("src/test/resources/adaptericons/");
+        }
+        return result;
     }
 
     public void createValidImg(String adapter) throws Exception {
@@ -106,12 +113,19 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
         }
     }
 
-    public void isValidIconSentiment(String message) throws Exception{
+    public boolean isValidIconSentiment(String message){
+        boolean result=false;
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-        File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
-        BufferedImage expectedImage = ImageIO.read(image);
-        boolean result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),userSentiment,true ).withName("Actual").equals(expectedImage,0.1);
-        Assert.assertTrue(result,"Image in last message in left menu for sentiment as not expected. \n");
+        try {
+            File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
+            BufferedImage expectedImage = ImageIO.read(image);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),userSentiment,true ).withName("Actual").equals(expectedImage,0.1);
+        }
+        catch(Exception e) {
+          //  Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),userSentiment,true ).withName(sentiment).save("src/test/resources/sentimenticons/");
+        }
+        return result;
+
     }
 
     public String getChatsChannel(){

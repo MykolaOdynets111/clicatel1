@@ -309,14 +309,13 @@ public class AgentConversationSteps implements JSHelper{
     }
 
     @Then("^(.*) can see valid sentiments \\(Neutral sentiment by default, There are 3 icons for sentiments\\)$")
-    public void validSentimentsAreShown(String agent)  throws Exception {
-        getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments();
+    public void validSentimentsAreShown(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(),"Sentiments in agent feedback window as not expected. \n");
     }
 
     @Then("^(.*) is able to select sentiment, when sentiment is selected, 2 other should be blurred$")
-    public void agentIsAbleToSelectSentimentWhenSentimentIsSelectedOtherShouldBeBlurred(String agent) throws Exception {
-        getAgentHomePage(agent).getAgentFeedbackWindow().canSelectSentiments();
-    }
+    public void agentIsAbleToSelectSentimentWhenSentimentIsSelectedOtherShouldBeBlurred(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().canSelectSentiments(),"Select sentiments behavior in agent feedback window as not expected. \n");   }
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {
