@@ -1,9 +1,9 @@
-@portal
-@no_widget
-@no_chatdesk
-Feature: Providing Billing details for newly created Account
-
-  Scenario: Filling Billing details for newly created Account
+#@portal
+#@no_widget
+#@no_chatdesk
+#Feature: Providing Billing details for newly created Account
+#
+#  Scenario: Filling Billing details for newly created Account
 #    Given I open portal
 #    And Login into portal as an admin of SignedUp AQA account
 #    When Admin clicks 'Upgrade' button
@@ -11,4 +11,4 @@ Feature: Providing Billing details for newly created Account
 #    When Admin clicks 'Setup Billing' button
 #    Then Billing Details page is opened
 #    When Fill in Billing details
-    Then Billing details is saved on backend SignedUp AQA
+#    Then Billing details is saved on backend SignedUp AQA
