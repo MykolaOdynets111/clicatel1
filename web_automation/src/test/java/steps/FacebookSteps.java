@@ -37,7 +37,6 @@ public class FacebookSteps {
     }
 
     @When("^User opens Messenger and send message regarding (.*)")
-    @TestCaseId("TMS-1")
     public void openMessengerAndSendMessage(String message){
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
