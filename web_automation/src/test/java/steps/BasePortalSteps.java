@@ -455,6 +455,23 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
     }
 
+    @When("^Change chats per agent:\"(.*)\"$")
+    public void changeChatPerAgent(String chats){
+        getPortalTouchPrefencesPage().getChatDeskWindow().setChatsAvailable(chats);
+    }
+
+    @When("^Error message is shown$")
+    public void errorIsShownInWindow(){
+        Assert.assertTrue(getPortalTouchPrefencesPage().getChatDeskWindow().isErrorMessageShown(),
+                "Error message is not shown");
+    }
+
+    @When("^Click off/on  Chat Conclusion$")
+    public void clickOffOnChatConclusion(){
+        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffChatConclusion();
+    }
+
+
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPrefencesPage().clickSaveButton();

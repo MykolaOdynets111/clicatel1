@@ -130,7 +130,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Agent in the first browser is not disconnected");
     }
 
-    @Given("^(.*) tenant feature is set to (.*) for (.*)$")
+    @Given("^(.*) tenant feature is set to  for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
         RequestSpec.clearAccessTokenForPortalUser();
         boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
@@ -139,6 +139,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         if(featureStatus!=Boolean.parseBoolean(status.toLowerCase())) {
             ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
         }
+    }
+
+    @Given("^On backand (.*) tenant feature is set to (.*) for (.*)$")
+    public void isSetFeatureStatus(String feature, boolean status, String tenantOrgName){
+        Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
+                "Agent feature is not expected");
     }
 
     @Then("^Icon should contain (.*) agent's initials$")
@@ -549,21 +555,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Last message in left menu with chat as not expected. \n");
     }
 
-    @Then("^Valid class for (.*) integration are shown in DOM for active chat$")
-    public void verifyIconForLastMessageInLeftMenu(String adapter){
-        Assert.assertTrue(getLeftMenu("main").isValidIconForActiveChat(adapter),
-                "Icon in last message in left menu for adapter as not expected. \n");
-    }
 
     @Then("^Valid image for (.*) integration are shown in left menu with chat$")
     public void verifyImgForLastMessageInLeftMenu(String adapter) {
         Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
        // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
-    }
-
-    @Then("^Create image for (.*).$")
-    public void createImgFor(String adapter) throws Exception {
-         getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
     }
 
 

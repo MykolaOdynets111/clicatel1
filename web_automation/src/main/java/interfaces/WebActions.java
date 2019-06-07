@@ -1,10 +1,14 @@
 package interfaces;
 
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 
 
@@ -278,5 +282,23 @@ public interface WebActions extends WebWait {
     default void clickHoldRelease(WebDriver driver, WebElement elem){
         Actions actions = new Actions(driver);
         actions.clickAndHold(elem).release().perform();
+    }
+
+    default boolean isWebElementEqualsImage(WebElement element, File image){
+        boolean result=false;
+        try {
+            BufferedImage expectedImage = ImageIO.read(image);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
+        }
+        catch(Exception e) {
+            //   Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(adapter).save("src/test/resources/adapter\icons/");
+        }
+        return result;
+    }
+
+    default void createElementImage(WebElement element,String name, String path){
+
+            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
+
     }
 }

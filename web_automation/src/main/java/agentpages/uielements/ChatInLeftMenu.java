@@ -32,6 +32,14 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     @FindBy(css = "div.context-info div.icons>span")
     private WebElement channelIcon;
 
+    public WebElement getChannelIcon() {
+        return channelIcon;
+    }
+
+    public WebElement getAdapterIcon() {
+        return adapterIcon;
+    }
+
     @FindAll({
         @FindBy(xpath = "//div[contains(@class,'context-info')]//span[contains(@class,'icon svg-icon-webchat')]/*"),
         @FindBy(xpath = "//span[contains(@class,'http-icon')]//span/*"),
@@ -76,56 +84,20 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public boolean isValidImg(String adapter) {
-        boolean result=false;
-        try {
-            File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
-            BufferedImage expectedImage = ImageIO.read(image);
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), adapterIcon, true).withName("Actual").equals(expectedImage);
-        }
-        catch(Exception e) {
-         //   Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),adapterIcon,true ).withName(adapter).save("src/test/resources/adaptericons/");
-        }
-        return result;
+        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+        return isWebElementEqualsImage(adapterIcon,image);
     }
 
-    public void createValidImg(String adapter) throws Exception {
-        Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),adapterIcon,true ).withName(adapter).save("src/test/resources/sentimenticons/");
-    }
-
-    public boolean isValidIcon(String adapter) {
-        String iconClass = adapterIcon.getAttribute("class");
-        switch (adapter){
-            case "fbmsg":
-                return iconClass.equals("icon svg-icon-fbmsg");
-            case "whatsapp":
-                return iconClass.equals("icon svg-icon-whatsapp");
-            case "fbpost":
-                return iconClass.equals("icon icon-fbpost");
-            case "twdm":
-                return iconClass.equals("icon svg-icon-twdm");
-            case "twmention":
-                return iconClass.equals("icon icon-twmention");
-            case "webchat":
-                return iconClass.equals("icon svg-icon-webchat");
-            default:
-                Assert.assertTrue(false,"Can not verify icon for "+adapter+" adapter");
-                return false;
-        }
-    }
 
     public boolean isValidIconSentiment(String message){
-        boolean result=false;
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-        try {
-            File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
-            BufferedImage expectedImage = ImageIO.read(image);
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),userSentiment,true ).withName("Actual").equals(expectedImage,0.1);
-        }
-        catch(Exception e) {
-          //  Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),userSentiment,true ).withName(sentiment).save("src/test/resources/sentimenticons/");
-        }
-        return result;
 
+   //     createElementImage(userSentiment,sentiment,"src/test/resources/sentimenticons/");
+        File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
+        isWebElementEqualsImage(userSentiment,image);
+
+
+        return true;
     }
 
     public String getChatsChannel(){
