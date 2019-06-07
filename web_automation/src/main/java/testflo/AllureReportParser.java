@@ -15,12 +15,7 @@ import java.util.stream.Collectors;
 public class AllureReportParser {
 
     //Should correspond with one stored in build.gradle file
-    private static final String ALLURE_REPORT_DATA_FOLDER = System.getProperty("user.dir") + "/build/allure-report/data/";
-
-//    public static void main(String[] args) {
-//        List<AllureScenarioWithDescription> scenarious = parseAllureResultsToGetTestCases();
-//        int a = 2;
-//    }
+   private static final String ALLURE_REPORT_DATA_FOLDER = System.getProperty("user.dir") + "/build/allure-report/data/";
 
 
    private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper){

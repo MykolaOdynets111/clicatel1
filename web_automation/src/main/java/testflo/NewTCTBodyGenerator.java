@@ -13,7 +13,6 @@ import java.util.Map;
 public class NewTCTBodyGenerator {
 
     // parent - key of TestPlan
-    // customfield_10902 - key of TestTemplate
 
      public static String newIssueBody = "{\n" +
              "  \"fields\": {\n" +
