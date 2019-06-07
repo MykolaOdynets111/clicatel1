@@ -40,7 +40,7 @@ public class URLs {
 
     private static String BASE_PLATFORM_URL = "https://%s-platform.clickatelllabs.com";
 
-    private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
+    private static String BASE_TAF_URL = "https://%s-taf.clickatelllabs.com/";
 
     public static String getWidgetURL(String tenantOrgName){
         String tenantID = "";
