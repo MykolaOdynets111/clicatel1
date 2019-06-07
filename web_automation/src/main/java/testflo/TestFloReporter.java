@@ -19,6 +19,7 @@ public class TestFloReporter {
 
         if(ConfigManager.reportToTouchFlo()) {
 
+            //ToDo: Add storing base test plan key on Jenkins side as an Artifact
             String baseTestPlan = readBaseTestPlanKey();
             if (baseTestPlan == null) baseTestPlan = "";
 
