@@ -236,11 +236,20 @@ task runChatdeskTests(type:Test) {
 
 // ========= !! MAIN TASKS !! ============== //
 
-task runTests(type: Test) {
+task reportToTesFLO(type:JavaExec) {
 
-//    if (System.getProperty("tenant") != null) {
-//        tenantName = System.properties.getProperty("tenant")
-//    }
+    reportToTesFLO.dependsOn(allureReport)
+
+    main = "testflo/TestFloReporter"
+    systemProperties = System.getProperties()
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
+task runTests(type: Test) {
+    systemProperties = System.getProperties()
+
+
     if (System.getProperty("suite") != null) {
         suite = System.properties.getProperty("suite")
     }
@@ -300,8 +309,8 @@ task runTests(type: Test) {
     if(suite == "chatdesk"){
         runTests.dependsOn(runChatdeskTests)
     }
-
-    runTests.finalizedBy(allureReport)
+    
+    runTests.finalizedBy(reportToTesFLO)
     defaultTasks 'clean', 'runTests'
 }
 
