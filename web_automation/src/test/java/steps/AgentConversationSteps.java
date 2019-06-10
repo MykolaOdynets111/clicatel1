@@ -12,14 +12,16 @@ import datamanager.Intents;
 import datamanager.jacksonschemas.Intent;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
+import interfaces.WebActions;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AgentConversationSteps implements JSHelper{
+public class AgentConversationSteps implements JSHelper, WebActions {
 
     private AgentHomePage mainAgentHomePage;
     private AgentHomePage secondAgentHomePage;
@@ -310,12 +312,29 @@ public class AgentConversationSteps implements JSHelper{
 
     @Then("^(.*) can see valid sentiments \\(Neutral sentiment by default, There are 3 icons for sentiments\\)$")
     public void validSentimentsAreShown(String agent) {
-        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(),"Sentiments in agent feedback window as not expected. \n");
+        File image = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(image),"Sentiments in agent feedback window as not expected. (Neutral sentiment by default, There are 3 icons for sentiments) \n");
     }
 
-    @Then("^(.*) is able to select sentiment, when sentiment is selected, 2 other should be blurred$")
+    @Then("^(.*) is able to select sentiments, when sentiment is selected, 2 other should be blurred$")
     public void agentIsAbleToSelectSentimentWhenSentimentIsSelectedOtherShouldBeBlurred(String agent) {
-        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().canSelectSentiments(),"Select sentiments behavior in agent feedback window as not expected. \n");   }
+        boolean result = false;
+        boolean resultHappy = false;
+        boolean resultUnsatisfied = false;
+        File imageNeutral = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        result = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageNeutral);
+        getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();
+        File imageHappy = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
+        resultHappy = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageHappy);
+        getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentUnsatisfied();
+        File imageUnsatisfied = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
+        resultUnsatisfied = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageUnsatisfied);
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(result,"Neutral. Sentiments in agent feedback window as not expected. \n");
+        soft.assertTrue(resultHappy,"Happy. Sentiments in agent feedback window as not expected. \n");
+        soft.assertTrue(resultUnsatisfied,"Unsatisfied. Sentiments in agent feedback window as not expected. \n");
+        soft.assertAll();
+    }
 
     private AgentHomePage getAgentHomePage() {
         if (agentHomePage==null) {

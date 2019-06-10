@@ -197,37 +197,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("sentimentsConcludeWindow").save("src/test/resources/sentimenticons/");
     }
 
-
-    public boolean isValidSentiments() {
-        boolean result=false;
-        try {
-            File image = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
-            BufferedImage expectedImage = ImageIO.read(image);
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImage);
-        }
-        catch (Exception e){
-        }
-        return result;
+    public boolean isValidSentiments(File image) {
+        return isWebElementEqualsImage(sentimentsAll, image);
     }
 
-    public boolean canSelectSentiments() {
-        boolean result = false;
-        boolean resultHappy = false;
-        boolean resultUnsatisfied = false;
-        try {
-            File imageNeutral = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
-            BufferedImage expectedImageNeutral = ImageIO.read(imageNeutral);
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImageNeutral);
-            setSentimentHappy();
-            File imageHappy = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
-            BufferedImage expectedImageHappy = ImageIO.read(imageHappy);
-            resultHappy = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImageHappy);
-            setSentimentUnsatisfied();
-            File imageUnsatisfied = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
-            BufferedImage expectedImageUnsatisfied = ImageIO.read(imageUnsatisfied);
-            resultUnsatisfied = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("Actual").equals(expectedImageUnsatisfied);
-        } catch (Exception e) {
-        }
-        return result&&resultHappy&&resultUnsatisfied;
-    }
 }

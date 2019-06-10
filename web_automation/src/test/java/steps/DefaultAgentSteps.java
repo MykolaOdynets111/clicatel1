@@ -130,7 +130,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Agent in the first browser is not disconnected");
     }
 
-    @Given("^(.*) tenant feature is set to  for (.*)$")
+    @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
         RequestSpec.clearAccessTokenForPortalUser();
         boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);

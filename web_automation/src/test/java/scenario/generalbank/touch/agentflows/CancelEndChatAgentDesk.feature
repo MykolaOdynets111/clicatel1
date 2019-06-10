@@ -16,7 +16,7 @@ Feature: Canceling chat ending
     Then End chat popup should be opened
     Then Agent can see default Supply a note... placeholder for note if there is no input made
     Then Agent can see valid sentiments (Neutral sentiment by default, There are 3 icons for sentiments)
-    Then Agent is able to select sentiment, when sentiment is selected, 2 other should be blurred
+    Then Agent is able to select sentiments, when sentiment is selected, 2 other should be blurred
     When Agent click 'Cancel' button
     Then Conversation area contains connect to Support user's message
     Then CRM ticket is not created

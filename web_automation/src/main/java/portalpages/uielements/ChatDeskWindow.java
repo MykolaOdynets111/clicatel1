@@ -46,10 +46,8 @@ public class ChatDeskWindow extends BasePortalWindow {
     }
 
     public void clickOnOffChatConclusion(){
-       // waitFor(3000);
         waitForElementToBeVisibleAgent(toggleChatConclusion, 5, "admin");
         toggleChatConclusion.click();
-      //  waitFor(3000);
     }
 
     public void clickOnOffAutoScheduler(){
