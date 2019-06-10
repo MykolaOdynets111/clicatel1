@@ -24,7 +24,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(xpath = "//button[text()='Save changes ']")
     private WebElement saveChangesButton ;
 
-    private static String notificationAlert = "div.alert-container";
+    private static String notificationAlert = "div.alert-window div[ng-bind-html='alert']";
 
     private static String processingAlert = "div.loader-bar-text";
 
@@ -41,7 +41,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     }
 
     public String getNotificationAlertText(){
-        if( isElementShownAgentByCSS(notificationAlert, 4, "admin")){
+        if(isElementShownAgentByCSS(notificationAlert, 4, "admin")){
             return findElemByCSSAgent(notificationAlert).getText();
         } else{
             return "no notification alert";
@@ -54,6 +54,13 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         } catch(NoSuchElementException e){}
     }
 
+    public void waitForNotificationAlertToBeProcessed(int toAppear, int toDisappear){
+        try {
+            waitForElementToBeVisibleByCssAgent(notificationAlert, toAppear);
+            waitForElementsToBeInvisibleByCssAgent(notificationAlert, toDisappear);
+        } catch(NoSuchElementException|TimeoutException e){}
+    }
+
     public static String getNotificationAlertLocator(){
         return notificationAlert;
     }
@@ -64,8 +71,15 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitWhileProcessing(){
         try {
-        waitForElementToBeVisibleByCssAgent(notificationAlert, 14);
-        waitForElementToBeInVisibleByCssAgent(notificationAlert, 20);
+        waitForElementToBeVisibleByCssAgent(processingAlert, 14);
+        waitForElementToBeInVisibleByCssAgent(processingAlert, 20);
+        } catch(NoSuchElementException|TimeoutException e){}
+    }
+
+    public void waitWhileProcessing(int toAppears, int toDisappear){
+        try {
+            waitForElementToBeVisibleByCssAgent(processingAlert, toAppears);
+            waitForElementToBeInVisibleByCssAgent(processingAlert, toDisappear);
         } catch(NoSuchElementException|TimeoutException e){}
     }
 

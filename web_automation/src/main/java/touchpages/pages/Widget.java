@@ -37,6 +37,9 @@ public class Widget extends AbstractPage {
     @FindBy(css = "div.ctl-chat-area-header-container")
     private WebElement tenantNameWidget;
 
+    @FindBy(css = "div.ctl-chat-header-agent-image")
+    private WebElement tenantLogoImage;
+
     public Widget() {
         waitUntilOpenedAndConnected();
     }
@@ -130,12 +133,15 @@ public class Widget extends AbstractPage {
 
 
     public String getTenantNameWidgetColor() {
-        String hexColor = Color.fromString(tenantNameWidget.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(tenantNameWidget.getCssValue("background-color")).asHex();
     }
 
-    public String getTenantcloseButtonColor() {
-        String hexColor = Color.fromString(closeButtonColor.getCssValue("background-color")).asHex();
-        return hexColor;
+    public String getTenantCloseButtonColor() {
+        return Color.fromString(closeButtonColor.getCssValue("background-color")).asHex();
     }
+
+    public boolean isTenantImageShown(){
+        return tenantLogoImage.getCssValue("background-image").contains("logo");
+    }
+
 }

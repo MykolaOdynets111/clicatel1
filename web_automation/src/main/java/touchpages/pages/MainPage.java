@@ -46,18 +46,15 @@ public class MainPage extends AbstractPage {
     }
 
     public String getTenantNameColor() {
-        String hexColor = Color.fromString(tenantName.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(tenantName.getCssValue("color")).asHex();
     }
 
-    public String getchatIconColor() {
-        String hexColor = Color.fromString(chatIcon.getCssValue("background-color")).asHex();
-        return hexColor;
+    public String getChatIconColor() {
+        return Color.fromString(chatIcon.getCssValue("background-color")).asHex();
     }
 
     public String getHeaderColor() {
-        String hexColor = Color.fromString(header.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(header.getCssValue("background-color")).asHex();
     }
 
 }

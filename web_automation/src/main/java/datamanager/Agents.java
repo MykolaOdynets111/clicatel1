@@ -37,7 +37,7 @@ public enum Agents {
     TESTING_STARTER_TOUCH_GO_SECOND_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
     TESTING_STANDARD_TOUCH_GO_AGENT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "testing"),
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
-    TESTING_SIGNUP_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
+    TESTING_SIGNUP_ACCOUNT("signup_account@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
     TESTING_NEW_ONE_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "New One2", "testing"),
 
     // =======  Active agents for Agent mode tests ======== //
@@ -72,13 +72,13 @@ public enum Agents {
 
     ;
 
-    String userName;
+    String email;
     String userPass;
     String tenant;
     String env;
 
-    Agents(String userName, String userPass, String tenant, String env) {
-        this.userName = userName;
+    Agents(String email, String userPass, String tenant, String env) {
+        this.email = email;
         this.userPass = userPass;
         this.tenant = tenant;
         this.env = env;
@@ -88,8 +88,8 @@ public enum Agents {
         return this.userPass;
     }
 
-    public String getAgentName() {
-        return this.userName;
+    public String getAgentEmail() {
+        return this.email;
     }
 
     public String getAgentEnv() {
@@ -106,7 +106,7 @@ public enum Agents {
         return agentsList.stream()
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
-                        && !e.getAgentName().contains("second"))
+                        && !e.getAgentEmail().contains("second"))
                 .findFirst().get();
     }
 

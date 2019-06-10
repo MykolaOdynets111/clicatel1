@@ -72,6 +72,15 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
 
+    @Given("^User open new (.*) tenant$")
+    public void openNewTenantPage(String tenantOrgName) {
+   //     Tenants.setTenantUnderTestNames(tenantOrgName);
+   //     Tenants.checkWidgetConnectionStatus();
+        DriverFactory.openUrl(tenantOrgName);
+        String clientID = getUserNameFromLocalStorage();
+        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+    }
+
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
     public void openTenantPageWithoutCreatingUserProfile(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
@@ -137,6 +146,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         widgetConversationArea = widget.getWidgetConversationArea();
         widgetConversationArea.waitForSalutation();
         return this;
+    }
+
+    @Then("^I check primary color for tenant in opened widget$")
+    public void iCheckPrimaryColorForTenantInOpenedWidget() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(widget.getTenantNameWidgetColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant name in widget is not correct");
+        soft.assertEquals(widget.getTenantCloseButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant close widget button is not correct");
+        soft.assertAll();
     }
 
     @Then("^Chat icon is not visible$")
@@ -772,18 +789,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         ));
     }
 
-    @Then("^I check secondary color to '(.*)' for tenant in widget$")
-    public void iCheckSecondaryColorForTenantInWidget(String hex) {
-            Assert.assertEquals(getMainPage().getTenantNameColor(), hex, "Color for tenant name in widget window is not correct");
-    }
 
-    @Then("^I check primary color to '(.*)' for tenant in widget$")
-    public void iCheckPrimaryColorForTenantInWidget(String hex) {
-            Assert.assertEquals(getMainPage().getchatIconColor(), hex, "Color for tenant open widget button is not correct");
-            Assert.assertEquals(getMainPage().getHeaderColor(), hex, "Color for tenant header in widget window is not correct");
-            clickChatIcon();
-            Assert.assertEquals(widget.getTenantNameWidgetColor(), hex, "Color for tenant name in widget is not correct");
-            Assert.assertEquals(widget.getTenantcloseButtonColor(), hex, "Color for tenant close widget button is not correct");
+
+    @Then("^Tenant photo is shown on widget$")
+    public void verifyTenantImageIsShownOnChatdesk(){
+        clickChatIcon();
+        Assert.assertTrue(widget.isTenantImageShown(),"Tenant image is not shown on widget");
     }
 
 

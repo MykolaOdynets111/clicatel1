@@ -1,7 +1,7 @@
 package apihelper;
 
-import com.github.javafaker.Faker;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
+import datamanager.jacksonschemas.dotcontrol.DotControlRequestIntegrationChanel;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 public class APIHelperDotControl {
-
-    static Faker faker = new Faker();
 
     public static void waitForServerToBeReady(){
         try {
@@ -68,6 +66,30 @@ public class APIHelperDotControl {
 
         return resp;
     }
+
+    public static Response createIntegrationForAdapters(String adapters, String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
+        RequestSpec.clearAccessTokenForPortalUser();
+        String url =  newIntegrationInfo.getCallBackURL();
+        String bodyAdapters = getBodyAdaptersChannels(adapters,url);
+        return RestAssured.given().log().all()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .body("{\n" +
+                        "  \"channels\":" + bodyAdapters +
+                        "}")
+                .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+    }
+
+    public static String getBodyAdaptersChannels(String adapters, String url){
+        String[] arrayAdapters = adapters.split(",");
+        String result = "[";
+        for (int i=0; i<arrayAdapters.length; i++){
+            result = result + (new DotControlRequestIntegrationChanel(url,arrayAdapters[i])).toString() +",";
+        }
+        return result.substring(0 ,result.length()-1) + "]";
+    }
+
+
 
     public static Response sendMessage(DotControlRequestMessage requestMessage){
         ZoneId zoneId = TimeZone.getDefault().toZoneId();

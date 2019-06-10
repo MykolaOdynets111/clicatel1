@@ -30,7 +30,7 @@ Feature: Managing agent user
     When Admin logs out from portal
     Then Deleted agent is not able to log in portal
 
-  Scenario: Editing agent name and email
+  Scenario: Editing agent name
     Given New Automation Bot agent is created
     Then New agent is added into touch database
     Given I open portal
@@ -41,8 +41,9 @@ Feature: Managing agent user
     When I select Settings in left menu and User management in submenu
     Then Created user is removed from User management page
     Then Updated user added to User management page
-    Then Newly created agent is deleted on backend
-    And  Updated agent is present on backend
+#  For now it is impossible to edit agent's email
+#    Then Newly created agent is deleted on backend
+#    And  Updated agent is present on backend
 
 
 

@@ -152,7 +152,11 @@ public class AgentHomePage extends AgentAbstractPage {
         if(getChatHeader().isEndChatShown(getCurrentAgent())){
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
-            waitForElementsToBeInvisibleByXpathAgent(chatContainer, 3, getCurrentAgent());
+            try {
+                waitForElementsToBeInvisibleByXpathAgent(chatContainer, 5, getCurrentAgent());
+            }catch (TimeoutException e){
+                Assert.fail("Chat container does not disappear after 5 second wait");
+            }
         }
     }
 
@@ -189,13 +193,11 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String getCustomer360ButtonColor() {
-        String hexColor = Color.fromString(customer360Button.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(customer360Button.getCssValue("background-color")).asHex();
     }
 
     public String getTouchButtonColor() {
-        String hexColor = Color.fromString(touchButton.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(touchButton.getCssValue("background-color")).asHex();
     }
 
 

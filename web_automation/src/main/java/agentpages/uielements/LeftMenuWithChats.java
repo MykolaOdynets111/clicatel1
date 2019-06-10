@@ -104,7 +104,11 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){
-        return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
+        try {
+            return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
+        } catch(NoSuchElementException e){
+            return true;
+        }
     }
 
     public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait){
@@ -184,16 +188,15 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public String getExpandFilterButtonColor() {
-        String hexColor = Color.fromString(expandFilterButton.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(expandFilterButton.getCssValue("color")).asHex();
     }
 
     public String getUserPictureColor() {
-        String hexColor = Color.fromString(userPicture.getCssValue("background-color")).asHex();
-        return hexColor;
+        return Color.fromString(userPicture.getCssValue("background-color")).asHex();
     }
 
     public String getUserMsgCountColor() {
+        waitForElementToBeVisible(userMsgCount,10);
         String hexColor = Color.fromString(userMsgCount.getCssValue("background-color")).asHex();
         userMsgCount.click();
         return hexColor;

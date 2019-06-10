@@ -1,6 +1,7 @@
 @agent_to_user_conversation
 @facebook
 @fb_post
+@skip
 Feature:  Agent answers on post
 
   Background:

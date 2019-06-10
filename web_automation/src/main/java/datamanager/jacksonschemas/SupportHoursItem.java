@@ -73,4 +73,13 @@ public class SupportHoursItem {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "startWorkTime='" + startWorkTime + '\'' +
+                ", endWorkTime='" + endWorkTime + '\'' +
+                ", dayOfWeek='" + dayOfWeek + '\'' +
+                "}\n";
+    }
 }

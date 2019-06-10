@@ -52,6 +52,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String openDropdownButtoncss = ".Select-multi-value-wrapper";
 
+    private String openDropdownButtonXpathClear = "//div[contains(@class,'Select-placeholder')]";
+
     private String cleareAll = ".Select-clear";
 
     @FindBy(id = "CRMNote")
@@ -80,7 +82,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public void clickCloseButtonInCloseChatPopup (){
         if( isElementShownAgentByXpath(closeChatButtonXPATH, 3, "main")){
-            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 10, "main agent");
+            waitForElementToBeVisibleByXpathAgent(closeChatButtonXPATH, 5, "main agent");
             findElemByXPATHAgent(closeChatButtonXPATH).click();
         }
     }
@@ -165,7 +167,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public List<String> getChosenTags() {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
         List<String> result = new ArrayList();
-        result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]+[ ]")));
+        if (!isElementShownAgentByXpath(openDropdownButtonXpathClear,2,"main")){
+            result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]+[ ]")));
+        }
         return result;
     }
 

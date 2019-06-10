@@ -24,12 +24,15 @@ public class AutoRespondersWindow extends BasePortalWindow {
     }
 
     public void clickExpandArrowForMessage(String autoresponder){
+        getTargetAutoResponderItem(autoresponder).clickCollapseIcon();
+    }
+
+    public void waitForAutoRespondersToLoad(){
         try {
             waitForElementsToBeVisibleAgent(autoresponderItems, 16, "admin");
         } catch (TimeoutException e){
             Assert.assertTrue(false, "Auto responders are not loaded after 16 seconds wait");
         }
-        getTargetAutoResponderItem(autoresponder).clickCollapseIcon();
     }
 
     public void clickResetToDefaultForMessage(String autoresponder){

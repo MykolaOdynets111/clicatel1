@@ -36,10 +36,11 @@ public class PortalLoginPage extends PortalAbstractPage {
             pageHeader.logoutAdmin();
             enterAdminCreds(email, pass);
         }
+        waitWhileProcessing();
         return new PortalMainPage();
     }
 
-    private void enterAdminCreds(String email, String pass){
+    public void enterAdminCreds(String email, String pass){
         waitForElementToBeVisibleAgent(emailInput, 6);
         emailInput.sendKeys(email);
         passInput.sendKeys(pass);

@@ -7,7 +7,6 @@ import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
-import gherkin.lexer.Fa;
 import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -40,10 +39,11 @@ public class ApiHelper implements DateTimeHelper{
         return RestAssured.get(url).jsonPath().get(config);
     }
 
-    public static void getTenantConfig(String tenantOrgName){
-        RestAssured.given()
+    public static Response getTenantConfig(String tenantOrgName){
+        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.TENANT_CONFIG);
+                .get(String.format(Endpoints.TENANT_CONFIG, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
@@ -70,6 +70,16 @@ public class ApiHelper implements DateTimeHelper{
         return tenantInf;
     }
 
+    public static Response getTenantInfo(String tenantOrgName) {
+        Response resp =  RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.TENANT_INFO);
+        Assert.assertEquals(resp.statusCode(),200, "Failed to get tenant info\n"+
+                "URL: " + Endpoints.TENANT_INFO + "\n" +
+                "resp status code:" + resp.statusCode() + "\n"+
+                "resp body: " + resp.getBody().asString());
+        return resp;
+    }
 
     public static void createUserProfile(String tenantName, String clientID) {
         Response resp;
@@ -172,14 +182,14 @@ public class ApiHelper implements DateTimeHelper{
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
 
-    public static void setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
+    public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
         Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body(body)
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
-        resp.getBody().asString();
+        return resp;
     }
 
     public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
@@ -444,9 +454,9 @@ public class ApiHelper implements DateTimeHelper{
                 .getBody().jsonPath().getList("records", ChatHistoryItem.class);
     }
 
-    public static void updateSessionCapacity(String tenantOrgName, int availableChats){
+    public static Response updateSessionCapacity(String tenantOrgName, int availableChats){
         RequestSpec.clearAccessTokenForPortalUser();
-        RestAssured.given()
+        return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);
@@ -533,6 +543,31 @@ public class ApiHelper implements DateTimeHelper{
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
     }
 
+    public static void deleteTenantBrandImage(String tenantOrgName){
+        String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
+
+        RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .delete(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
+    }
+
+    public static Response getTenantBrandImage(String tenantOrgName){
+        String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
+    }
+
+    public static Response getTenantBrandImageTrans(String tenantOrgName){
+        String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
+    }
+
     public static Response getSessionDetails(String clientID){
         return RestAssured.get(String.format(Endpoints.INTERNAL_SESSION_DETAILS, Tenants.getTenantUnderTestName(), clientID));
     }
@@ -581,24 +616,21 @@ public class ApiHelper implements DateTimeHelper{
 
     public static List<CRMTicket> getCRMTickets(String clientID, String type){
         String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
-//        String clientProfileId = getClientProfileId(clientID);
         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
                 .getBody().jsonPath().getList("", CRMTicket.class);
-      //  getSessionDetails(clientID).getBody().jsonPath().getString("data.sessionId")
     }
 
-    public static List<String> getTags(String clientID, String type){
-        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
-//        String clientProfileId = getClientProfileId(clientID);
+    public static List<String> getTagsForCRMTicket(String sessionID){
+        return RestAssured.given()
+                .get(String.format(Endpoints.INTERNAL_TAGS_FROM_CRM_TICKET, sessionID)).getBody().jsonPath().getList("");
+    }
 
-        List<String> result = RestAssured.given()
+    public static List<String> getAllTags(){
+        return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
                 .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
-        return result;
-
-             //   .getBody().jsonPath().getList("", CRMTicket.class);resp.jsonPath().get("tenants");
     }
 
 
@@ -673,12 +705,19 @@ public class ApiHelper implements DateTimeHelper{
                 "  \"object\": \"page\",\n" +
                 "  \"tenant\": null\n" +
                 "}";
-        String requestBody = "{ \"entry\": [ { \"changes\": [], \"id\": \""+linkedFBPageId+"\", \"messaging\": [ { \"message\": { \"mid\": \""+mid+"\", \"seq\": 31478, \"text\": \""+message+"\" }, \"recipient\": { \"id\": \""+linkedFBPageId+"\" }, \"sender\": { \"id\": \""+fbUserId+"\" }, \"timestamp\": 1557148766703 } ], \"time\": 1557148766703 } ], \"object\": \"page\", \"tenant\": null}";
         return RestAssured.given().log().all()
                 .header("accept", "*/*")
                 .header("Content-Type", "application/json")
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
                 .body(requestBody1)
                 .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);
+        }
+
+
+    public static List<AvailableAgent> getAvailableAgents(){
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(Endpoints.TENANT_AVAILABLE_AGENTS)
+                .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
 }

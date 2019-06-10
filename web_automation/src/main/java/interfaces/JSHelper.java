@@ -4,6 +4,8 @@ import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.testng.Assert;
 
+import java.util.List;
+
 public interface JSHelper {
 
     default void executeJSclick(WebElement elem) {
@@ -95,6 +97,25 @@ public interface JSHelper {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
+
+    default void executeClickInElemListWithWait(List<WebElement> list, String item, String agent){
+        for(int i = 0; i<10; i++){
+            if(list.stream().anyMatch(e1 -> e1.getText().equalsIgnoreCase(item))){
+                executeJSclick(list.stream().filter(e -> e.getText().equalsIgnoreCase(item)).findFirst().get(),
+                        DriverFactory.getDriverForAgent(agent));
+                break;
+            }else {
+                sleepFor(300);
+            }
+        }
+    }
+
+    default void sleepFor(int i){
+        try {
+            Thread.sleep(i);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    };
 }

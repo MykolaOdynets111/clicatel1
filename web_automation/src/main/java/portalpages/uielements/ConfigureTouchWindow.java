@@ -21,7 +21,10 @@ public class ConfigureTouchWindow extends AbstractUIElement {
     private WebElement selectCountryField;
 
     @FindBy(css = "ul.ui-select-choices div.ui-select-choices-row")
-    private List<WebElement> industriesAndCountriesChoicesList;
+    private List<WebElement> industriesChoicesList;
+
+    @FindBy(css = "li#ui-select-choices-1 span.ui-select-choices-row-inner")
+    private List<WebElement> countryChoicesList;
 
     @FindBy(css = "button.button.button-primary.ng-scope")
     private WebElement nextButton;
@@ -32,14 +35,14 @@ public class ConfigureTouchWindow extends AbstractUIElement {
     public void createNewTenant(String tenantOrgName, String transcriptsEmail){
         waitForElementToBeVisibleAgent(businessNameInput, 3).sendKeys(tenantOrgName);
         selectIndustryField.click();
-        int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, industriesAndCountriesChoicesList.size() - 1);
-        industriesAndCountriesChoicesList.get(randomIndustryNumber).click();
-        selectCountryField.click();
-        int randomCountryNumber = ThreadLocalRandom.current().nextInt(0, industriesAndCountriesChoicesList.size() - 1);
-        industriesAndCountriesChoicesList.get(randomCountryNumber).click();
+        int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, industriesChoicesList.size() - 1);
+        industriesChoicesList.get(randomIndustryNumber).click();
+        clickElemAgent(selectCountryField, 5, "admin", "Select country dropdown");
+        int randomCountryNumber = ThreadLocalRandom.current().nextInt(0, countryChoicesList.size() - 1);
+        countryChoicesList.get(randomCountryNumber).click();
         nextButton.click();
         nextButton.click();
         transcriptsEmailInput.sendKeys(transcriptsEmail);
-        nextButton.click();
+        clickElemAgent(nextButton, 5, "admin", "Finish button");
     }
 }

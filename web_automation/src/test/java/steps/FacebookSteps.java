@@ -39,7 +39,7 @@ public class FacebookSteps {
     public void openMessengerAndSendMessage(String message){
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
-//        messengerWindow.waitForWelcomeMessage(10);
+        messengerWindow.waitForWelcomeMessage(10);
         messengerWindow.enterMessage(createUniqueUserMessage(message));
     }
 

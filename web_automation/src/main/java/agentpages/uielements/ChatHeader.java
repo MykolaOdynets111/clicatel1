@@ -59,17 +59,14 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public String getEndChatButtonColor() {
-        String hexColor = Color.fromString(endChatButton.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(endChatButton.getCssValue("color")).asHex();
     }
 
     public String getTransferButtonColor() {
-        String hexColor = Color.fromString(transferButton.getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(transferButton.getCssValue("color")).asHex();
     }
 
     public String getPinChatButtonColor() {
-        String hexColor = Color.fromString(pinChatButton.getCssValue("color")).asHex();
-        return hexColor;
+        return  Color.fromString(pinChatButton.getCssValue("color")).asHex();
     }
 }

@@ -14,6 +14,7 @@ import drivermanager.URLs;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
+import io.restassured.response.Response;
 import javaserver.Server;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -28,7 +29,6 @@ import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
-import twitter.TweetsSection;
 import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
@@ -48,10 +48,14 @@ public class Hooks implements JSHelper{
 
         clearAllSessionData();
 
+        if(scenario.getSourceTagNames().contains("@skip")){
+            throw new cucumber.api.PendingException();
+        }
+
         if(scenario.getSourceTagNames().contains("@skip_for_demo1")&ConfigManager.getEnv().equalsIgnoreCase("demo1")){
                     throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
                             " connection to DB is used and demo1 DB located in different network than other DBs");
-            }
+        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
@@ -60,7 +64,7 @@ public class Hooks implements JSHelper{
         }
 
         if (scenario.getSourceTagNames().contains("@facebook")) {
-                ApiHelper.closeAllOvernightTickets("General Bank Demo");
+          //      ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 FBLoginPage.openFacebookLoginPage().loginUser();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
@@ -102,11 +106,14 @@ public class Hooks implements JSHelper{
             if(scenario.isFailed()) widgetWebSocketLogs();
             takeScreenshot();
             endTouchFlow(scenario, true);
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage());
+//            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage()); for now not possible to delete just a one profile
         }
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
-            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            Response resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            if(resp.statusCode()!=200) {
+                supportHoursUpdates(resp);
+            }
             ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         }
 
@@ -273,16 +280,16 @@ public class Hooks implements JSHelper{
             }
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
-
-            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
-                ApiHelperPlatform.closeAccount(BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP,
-                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-            }
-            if (scenario.getSourceTagNames().contains("@creating_new_tenant ")){
-                String url = String.format(Endpoints.TIE_DELETE_TENANT, BasePortalSteps.ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
-                given().delete(url);
-            }
+// Will be handled via DB backup
+//            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
+//                ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
+//                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
+//                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+//            }
+//            if (scenario.getSourceTagNames().contains("@creating_new_tenant ")){
+//                String url = String.format(Endpoints.TIE_DELETE_TENANT, Tenants.getAccountNameForNewAccountSignUp());
+//                given().delete(url);
+//            }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
@@ -363,21 +370,20 @@ public class Hooks implements JSHelper{
 
     private void endTwitterFlow(Scenario scenario) {
         TwitterTenantPage twitterTenantPage = new TwitterTenantPage();
-        try {
-            if(scenario.isFailed()){
-                TweetsSection tweetsSection =  new TweetsSection();
-                if(tweetsSection.getOpenedTweet().isDisplayed()){
-//                    tweetsSection.sendReplyForTweet("", "end");
-                    tweetsSection.getOpenedTweet().clickSendReplyButton();
-                }
-            }
-        } catch (WebDriverException e) {}
-        TwitterAPI.deleteToTestUserTweets();
-        TwitterAPI.deleteTweetsFromTestUser();
+//        Commented out because for now tweets are not working stable
+//        try {
+//            if(scenario.isFailed()){
+//                TweetsSection tweetsSection =  new TweetsSection();
+//                if(tweetsSection.getOpenedTweet().isDisplayed()){
+//                    tweetsSection.getOpenedTweet().clickSendReplyButton();
+//                }
+//            }
+//        } catch (WebDriverException e) {}
+//        TwitterAPI.deleteToTestUserTweets();
+//        TwitterAPI.deleteTweetsFromTestUser();
         try {
             if(twitterTenantPage.isDMWindowOpened()) {
                 DMWindow dmWindow = twitterTenantPage.getDmWindow();
-//                dmWindow.sendUserMessage("end");
                 dmWindow.deleteConversation();
             }
         } catch (WebDriverException e) {}
@@ -468,6 +474,13 @@ public class Hooks implements JSHelper{
     @Attachment
     private String widgetWebSocketLogs(){
         return getWebSocketLogs(DriverFactory.getTouchDriverInstance());
+    }
+
+    @Attachment
+    private String supportHoursUpdates(Response resp){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(resp.statusCode()).append("\n").append(resp.getBody().asString()).append("\n");
+        return  buffer.toString();
     }
 
     private String getWebSocketLogs(WebDriver driver){

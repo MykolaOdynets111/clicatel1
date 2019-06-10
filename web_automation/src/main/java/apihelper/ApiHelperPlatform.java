@@ -8,15 +8,16 @@ import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
 
-    public static void sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
+    public static Response sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
-        List<String> ids = getIdsOfRoles(tenantOrgName, "TOUCH_AGENT");
+        List<String> ids = getIdsOfRoles(tenantOrgName, "Touch agent role");
+        if(ids.size()==0) ids = getIdsOfRoles(tenantOrgName, "TOUCH_AGENT");
         String[] idsArray = new String[ids.size()];
         for(int i=0; i<ids.size(); i++){
             idsArray[i] = "\""+ids.get(i)+"\"";
         }
 
-       Response resp =  RestAssured.given()
+       return   RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
@@ -61,7 +62,7 @@ public class ApiHelperPlatform {
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .get(Endpoints.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
-        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).filter(e -> e.get("description").equals(roleDescription)).
+        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
                         forEach(e -> {ids.add(
                                 (String) e.get("id"));});
          ids.stream().forEach(e -> e.replace(e, "\""+e+"\""));

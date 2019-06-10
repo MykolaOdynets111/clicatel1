@@ -1,5 +1,6 @@
 @agent_to_user_conversation
 @facebook
+@skip
 Feature: Communication between user and agent in two channel
 
   Background:

@@ -180,10 +180,31 @@ public class DBConnector {
         return id;
     }
 
-    public static void updateClientLastVisitDate(String env, String clientProfileId, Long timestampDate){
+    public static String getLinkedClientProfileID(String env, String clientID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
-        String query = "UPDATE `"+tableName+"`.`client_attribute` SET `value`='"+timestampDate+"' WHERE `client_profile_id`='"+clientProfileId+"' and`key`='lastVisit';";
+        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' ";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = results.getString("linked_profile_id");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public static void updateClientLastVisitDate(String env, String linkedClientProfileId, Long timestampDate){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "UPDATE `"+tableName+"`.`client_attribute` SET `value`='"+timestampDate+"' WHERE `client_profile_id`='"+linkedClientProfileId+"' and`key`='lastVisit';";
 
         Statement statement = null;
         ResultSet results = null;
@@ -199,10 +220,10 @@ public class DBConnector {
         }
     }
 
-    public static Long getLastVisitForUserProfile(String env, String clientProfileId){
+    public static Long getLastVisitForUserProfile(String env, String linkedClientProfileId){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
-        String query = "SELECT value FROM "+ tableName +".client_attribute where client_profile_id='"+clientProfileId+"' and `key` = 'lastVisit';";
+        String query = "SELECT value FROM "+ tableName +".client_attribute where client_profile_id='"+linkedClientProfileId+"' and `key` = 'lastVisit';";
         Statement statement = null;
         ResultSet results = null;
         long timestamp =0;
@@ -221,9 +242,9 @@ public class DBConnector {
     }
 
 
-    public static boolean isLastVisitSavedInDB(String env, String clientProfileId, int secondsTimeout) {
+    public static boolean isLastVisitSavedInDB(String env, String linkedClientProfileId, int secondsTimeout) {
         String tableName = DBProperties.getPropertiesFor(env, "touch").getDBName();
-        String query = "SELECT value FROM " + tableName + ".client_attribute where client_profile_id='" + clientProfileId + "' and `key` = 'lastVisit';";
+        String query = "SELECT value FROM " + tableName + ".client_attribute where client_profile_id='" + linkedClientProfileId + "' and `key` = 'lastVisit';";
         Statement statement = null;
         ResultSet results = null;
         boolean isLastVisitSaved = false;
@@ -265,9 +286,9 @@ public class DBConnector {
             statement.executeQuery(query);
             results = statement.getResultSet();
             results.next();
-            sessionDetails.put("sessionId", results.getString("session_id"));
-            sessionDetails.put("clientProfileId", results.getString("client_profile_id"));
-            sessionDetails.put("conversationId", results.getString("conversation_id"));
+            sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
+            sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
+            sessionDetails.put("conversationId",  getColumnValue(results,"conversation_id"));
             statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
@@ -276,6 +297,37 @@ public class DBConnector {
         return sessionDetails;
     }
 
+    private static String getColumnValue(ResultSet results, String column){
+        String columnValue="";
+        try {
+            columnValue = results.getString(column);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            Assert.assertTrue(false, "Unable to get '" +column+ "' column value");
+        }
+        return columnValue;
+    }
+
+    public static String getCountryName(String env, String code) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "SELECT name FROM "+ tableName +".country where code='"+code+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        String name = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            name = results.getString("name");
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
 
 //    public static void main(String args[]){
 //        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");

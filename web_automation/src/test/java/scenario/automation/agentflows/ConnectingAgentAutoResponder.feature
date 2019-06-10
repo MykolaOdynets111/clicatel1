@@ -31,7 +31,8 @@ Feature: connect_agent auto responder (Agent mode)
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Touch preferences in submenu
     And Click "Auto responders" nav button
-    When Agent click expand arrow for Connecting Agent message auto responder
+    When Wait for auto responders page to load
+    And Agent click expand arrow for Connecting Agent message auto responder
     And Click "Reset to default" button for Connecting Agent message auto responder
     Then connect_agent is reset on backend
 

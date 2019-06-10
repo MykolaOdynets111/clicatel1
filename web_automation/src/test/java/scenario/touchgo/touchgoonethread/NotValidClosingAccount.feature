@@ -6,7 +6,7 @@ Feature: Closing account should require verification
 
   Scenario: Admin of the account should be able to cancel closing the account
     Given I open portal
-    And Login into portal as an admin of SignedUp AQA account
+    And Login into portal as an admin of Updating AQA account
     When I click Launchpad button
     When I select Settings in left menu and Account details in submenu
     And Click 'Close account' button
@@ -16,7 +16,7 @@ Feature: Closing account should require verification
 
   Scenario: Admin of the account should be able to cancel closing the account on the Account confirmation step
     Given I open portal
-    And Login into portal as an admin of SignedUp AQA account
+    And Login into portal as an admin of Updating AQA account
     When I click Launchpad button
     When I select Settings in left menu and Account details in submenu
     And Click 'Close account' button
@@ -29,7 +29,7 @@ Feature: Closing account should require verification
 
   Scenario: Admin of the account should not be able to close the account with incorrect confirmation
     Given I open portal
-    And Login into portal as an admin of SignedUp AQA account
+    And Login into portal as an admin of Updating AQA account
     When I click Launchpad button
     When I select Settings in left menu and Account details in submenu
     And Click 'Close account' button
@@ -44,7 +44,7 @@ Feature: Closing account should require verification
 
   Scenario Outline: Admin of the account should not be able to close the account with incorrect confirmation: <email>, <pass>
     Given I open portal
-    And Login into portal as an admin of SignedUp AQA account
+    And Login into portal as an admin of Updating AQA account
     When I click Launchpad button
     When I select Settings in left menu and Account details in submenu
     And Click 'Close account' button

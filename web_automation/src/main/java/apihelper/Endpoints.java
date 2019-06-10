@@ -48,12 +48,17 @@ public class Endpoints {
 
     public static String CLOSE_ACTIVE_CHAT = "https://%s-touch.clickatelllabs.com/chats/%s/end";
 
-
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
     public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
 
     public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "tags";
+
+    public static String TENANT_BRAND_LOGO = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo";
+
+    public static String TENANT_BRAND_LOGO_TRANS = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo_trans";
+
+    public static String TENANT_AVAILABLE_AGENTS = URLs.getTouchApiBaseURL() + "agent-availability/logged-in";
 
     // ================== INTERNAL ============== //
 
@@ -84,6 +89,8 @@ public class Endpoints {
     public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
 
     public static String INTERNAL_CONFIG_ATTRIBUTES = URLs.getBaseInternalApiUrl() + "tenants/config-attributes/";
+
+    public static String INTERNAL_TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
 
 
     // ==================  PLATFORM ============== //
@@ -172,7 +179,7 @@ public class Endpoints {
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "/internal/health";
 
     public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 

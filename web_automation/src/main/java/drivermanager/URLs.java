@@ -119,7 +119,7 @@ public class URLs {
 //        String pageName = resp.jsonPath().get("pageName");
 //        String pageID = resp.jsonPath().get("pageId");
 //        return String.format(FACEBOOK_URL, pageName.replace(" ", "-")+"-"+pageID);
-        return BASE_FB_URL+ FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName);
+        return BASE_FB_URL+ FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName).getFBPageLink();
     }
 
     public static String getTwitterURL(String tenantOrgName) {

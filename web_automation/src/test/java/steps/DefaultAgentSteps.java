@@ -50,6 +50,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
     private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
+    private ThreadLocal<AgentLoginPage> agentLoginPage = new ThreadLocal<>();
     private String secondAgentName;
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
@@ -100,6 +101,25 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
         AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
+    }
+
+    @When("I open browser to log in in chat desk as an agent of (.*)")
+    public void openBrowserToLogin(String tenantOrgName){
+         agentLoginPage.set(AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName));
+    }
+
+    @When("I check primary color for tenant in login page")
+    public void checkPrimaryColorLoginPage(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(agentLoginPage.get().getLoginButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant 'Login button' is not correct");
+        soft.assertEquals(agentLoginPage.get().getStringForgotColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant 'Forgot password?' string is not correct");
+        soft.assertAll();
+    }
+
+    @When("I login in another browser as an agent of (.*)")
+    public void loginWithTheSameAnotherBrowser(String tenantOrgName){
+        agentLoginPage.get().loginAsAgentOf(tenantOrgName, "main agent");
         Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
     }
 
@@ -264,7 +284,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
-                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + "\n" +
+                        "Support hours: " + ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).toString() + "\n"
+                );
     }
 
     @When("^(.*) click 'Pin' button$")
@@ -380,7 +403,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         // ToDo: Update after clarifying timeout in System timeouts
-        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(13),
+        Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")"
         );
     }
@@ -447,19 +470,23 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Given("^Set agent support hours (.*)$")
     public void setSupportHoursWithShift(String shiftStrategy){
+        Response resp = null;
         switch (shiftStrategy){
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
-                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
+                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
                         "00:00", "23:59");
                 break;
             case "for all week":
-                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
+                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
                 getAgentHomePage("main").waitFor(1500);
                 break;
         }
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Changing support hours was not successful\n" +
+                "resp body: " + resp.getBody().asString() + "\n");
     }
 
 
@@ -502,7 +529,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^New info is shown in left menu with chats$")
     public void checkUpdatingUserInfoInLeftMenu(){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName(),
+        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName().trim(),
                 "Full user name is not updated in left menu with chats after updating Customer 360 info \n");
         soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), customer360InfoForUpdating.getLocation(),
                 "Location is not updated in left menu with chats after updating Customer 360 info \n");
@@ -511,7 +538,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^Customer name is updated in active chat header$")
     public void verifyCustomerNameUpdated(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName()),
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName().trim()),
                 "Updated customer name is not shown in chat header");
 
     }
@@ -520,6 +547,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void verifyPhotoLoadedOnChatdesk(){
         Assert.assertTrue(getAgentHomePage("main").getPageHeader().isAgentImageShown(),
                 "Agent image is not shown on chatdesk");
+    }
+
+    @Then("^Tenant photo is shown on chatdesk$")
+    public void verifyTenantImageIsShownOnChatdesk(){
+        Assert.assertTrue(getAgentHomePage("main").getPageHeader().isTenantImageShown(),
+                "Tenant image is not shown on chatdesk");
     }
 
     @When("^(.*) searches and selects random chat is chat history list$")
@@ -1051,17 +1084,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+        String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
 
         soft.assertEquals(dateTimeFromBackend.toString().substring(0, 15), createdDate.substring(0, 15),
                 "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");
         soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
-                " Ticket note does not match created on the backend \n");
+                "Ticket note does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
-                " Ticket link does not match created on the backend \n");
-//        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("agentTags"),
-//                " Ticket link does not match created on the backend \n");
+                "Ticket link does not match created on the backend \n");
+        soft.assertTrue(crmTicketTags.equals(crmTicketInfoForUpdating.get().get("agentTags")),
+                "CRM ticket 'Tags' does not match created on the backend \n");
         soft.assertAll();
 
     }
@@ -1080,7 +1114,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^All tags for tenant is available in the dropdown$")
     public void allTagsForTenantIsAvailableInTheDropdown() {
-        List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
+        List<String> tags= ApiHelper.getAllTags();
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
         Assert.assertTrue(tagsInCRM.equals(tags),
                 " CRM ticket 'Tags' does not match created on the backend \n");
@@ -1089,7 +1123,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")
     public void agentCanSearchTagAndSelectTag() {
         SoftAssert soft = new SoftAssert();
-        List<String> tags= ApiHelper.getTags(getUserNameFromLocalStorage(), "TOUCH");
+        List<String> tags= ApiHelper.getAllTags();
         String randomTag= tags.get((int)(Math.random() * tags.size()));
         getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
@@ -1107,33 +1141,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomePage(agent).isPinErrorMassageShown(agent);
     }
 
-
-    @Then("^I check primary color to '(.*)' for tenant in agent desk$")
-    public void iCheckPrimaryColorForTenantInAgentDesk(String hex) {
-        Assert.assertEquals(getAgentHomePage("second agent").getCustomer360ButtonColor(), hex, "Color for tenant 'Costomer' is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getExpandFilterButtonColor(), hex, "Color for tenant dropdown button is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getTouchButtonColor(), hex, "Color for tenant chat button is not correct");
-    }
-
-    @Then("^I check secondary color to '(.*)' for tenant in agent desk$")
-    public void iCheckSecondaryColorForTenantInAgentDesk(String hex) {
-
-        Assert.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantNameColor(), hex, "Color for tenant name in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getPageHeader().gettenantLogoBorderColor(), hex, "Color for tenant logo border in agent desk window is not correct");
-    }
-
-    @Then("^Check primary color '(.*)' for incoming chat and 360Container$")
-    public void checkPrimaryColorForIncomingChatAndContainer(String hex) {
-        Assert.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserMsgCountColor(), hex, "Color for tenant logo border in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserPictureColor(), hex, "Color for User Picture in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getUserPictureColor(), hex, "Color for User Picture in 360container in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getSaveEditButtonColor(), hex, "Color for Edit button in 360container in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getMailColor(), hex, "Color for Email in 360container in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getChatHeader().getPinChatButtonColor(), hex, "Color for Pin chat button in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getChatHeader().getTransferButtonColor(), hex, "Color for Transfer chat button in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getChatHeader().getEndChatButtonColor(), hex, "Color for End chat button in agent desk window is not correct");
-        Assert.assertEquals(getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(), hex, "Color for Send button in agent desk window is not correct");
-    }
 
     @Given("^Create (.*) chat via API$")
     public void createChatViaAPI(String chatOrigin){

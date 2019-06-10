@@ -47,6 +47,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.logo img")
     private WebElement tenantLogoBorder;
 
+    @FindBy(xpath = "//div[@class='header']//img[@src]")
+    private WebElement tenantLogoImage;
+
     private String tenantLogoBorderXpath = "//div[contains(@class, 'logo')]//img";
     private String tenantNameXpath = "//div[contains(@class, 'logo')]//h1";
 
@@ -99,13 +102,15 @@ public class PageHeader extends AbstractUIElement {
         return isElementShownAgent(agentIcon, 10, "main agent");
     }
 
-    public String getTenantNameColor() {
-        String hexColor = Color.fromString(findElemByXPATHAgent(tenantNameXpath,"second agent").getCssValue("color")).asHex();
-        return hexColor;
+    public boolean isTenantImageShown(){
+        return isElementShownAgent(tenantLogoImage, 10, "main agent");
     }
 
-    public String gettenantLogoBorderColor() {
-        String hexColor = Color.fromString(findElemByXPATHAgent(tenantLogoBorderXpath,"second agent").getCssValue("border-bottom-color")).asHex();
-        return hexColor;
+    public String getTenantNameColor() {
+        return Color.fromString(findElemByXPATHAgent(tenantNameXpath,"second agent").getCssValue("color")).asHex();
+    }
+
+    public String getTenantLogoBorderColor() {
+        return Color.fromString(findElemByXPATHAgent(tenantLogoBorderXpath,"second agent").getCssValue("border-bottom-color")).asHex();
     }
 }

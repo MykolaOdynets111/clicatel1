@@ -27,7 +27,8 @@ Feature: Busy message auto responder Bot mode
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Touch preferences in submenu
     And Click "Auto responders" nav button
-    When Agent click expand arrow for Agent Busy message auto responder
+    When Wait for auto responders page to load
+    And Agent click expand arrow for Agent Busy message auto responder
     And Click "Reset to default" button for Agent Busy message auto responder
     Then agents_away is reset on backend
     Given User select Automation Bot tenant

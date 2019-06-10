@@ -13,23 +13,22 @@ Feature: Chat console: Waiting customers
     Given Set session capacity to 0 for Automation Bot tenant
     Given I login as second agent of Automation Bot
     And User enter connect to agent into widget input field
-    Then User have to receive 'agents_away' text response for his 'connect to agent' input
     Then Customers waiting for response widget value increased on 1
 
 
   @no_chatdesk
   Scenario: Waiting customers counter in case no agents online
     And User enter connect to agent into widget input field
-    Then Text response that contains "agents_away" is shown
     Then Customers waiting for response widget value increased on 1
 
 
   @second_agent_availability
   Scenario: Waiting customers counter in case agent not available
     Given I login as second agent of Automation Bot
+    Then Customers waiting for response widget value set to 0
+    Given Save Customers waiting for response pre-test widget value
     And Second agent changes status to: Unavailable
     And User enter connect to agent into widget input field
-    Then User have to receive 'agents_away' text response for his 'connect to agent' input
     Then Customers waiting for response widget value increased on 1
 
 

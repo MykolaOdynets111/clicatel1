@@ -101,14 +101,19 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isToUserMessageShown(String userMessage){
-        try {
-            return findElemsByCSSAgent(toUserMessagesCSS).
+        boolean result = false;
+        for(int i = 0; i<3; i++){
+            try {
+                result =  findElemsByCSSAgent(toUserMessagesCSS).
                     stream().anyMatch(e -> e.getText().contains(userMessage));
-        }catch(StaleElementReferenceException ex){
-            waitFor(200);
-            return findElemsByCSSAgent(toUserMessagesCSS).
+            }catch(StaleElementReferenceException ex){
+                waitFor(200);
+                result =  findElemsByCSSAgent(toUserMessagesCSS).
                     stream().anyMatch(e -> e.getText().contains(userMessage));
+            }
+            if (result) break;
         }
+        return result;
     }
 
     public List<String> getAllMessages(){
@@ -120,7 +125,6 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public String getTenantMsgColor() {
-        String hexColor = Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
-        return hexColor;
+        return Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
     }
 }

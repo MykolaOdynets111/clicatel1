@@ -988,9 +988,8 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^Schedule new training$")
     public void scheduleNewTraining(){
         Response resp = ApiHelperTie.scheduleTraining();
-        Assert.assertTrue( resp.statusCode()==200,
-                "Training is not scheduled\n" +
-                        "Resp: " + resp.getBody().asString());
+        Assert.assertEquals(resp.statusCode(), 200, "Training is not scheduled\n" +
+                "Resp: " + resp.getBody().asString());
     }
 
     @Then("^New model is ready after (.*) minutes wait$")
@@ -1007,20 +1006,24 @@ public class TIEApiSteps implements DateTimeHelper{
                         convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
                 .findFirst().get();
         } catch(NoSuchElementException e){
-            Assert.assertTrue(false, "Expected created model is not present in get models response\n" +
+            Assert.assertTrue(false, "Expected created model '"+createdModelName+"' is not present in get models response\n" +
             "Resp: " + respBody.asString());
         }
         boolean isTrained = false;
 
-        int timeout = (minutes*60)/18;
+        int timeout = (minutes*60)/15;
         for(int i = 0; i < timeout; i++){
             if(!isTrained){
-                waitFor(18000);
+                waitFor(15000);
                 String finalCreatedModelName = createdModelName;
-                isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
-                        .stream().map(e -> (Map) e)
-                        .filter(e -> e.get("name").equals(finalCreatedModelName))
-                        .allMatch(e -> e.get("status").equals("finished"));
+                try {
+                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                            .stream().map(e -> (Map) e)
+                            .filter(e -> e.get("name").equals(finalCreatedModelName))
+                            .allMatch(e -> e.get("status").equals("finished"));
+                }catch (JsonPathException e){
+                    Assert.assertTrue(false, "Unable to get trained models");
+                }
             } else{
                 break;
             }

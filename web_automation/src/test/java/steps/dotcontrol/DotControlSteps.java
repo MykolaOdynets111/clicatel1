@@ -20,7 +20,9 @@ import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DotControlSteps {
 
@@ -30,11 +32,11 @@ public class DotControlSteps {
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
     private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
+    private static Map<String, String> adapterApiTokens= new HashMap();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
-    public void
-    createIntegration(String tenantOrgName){
+    public void    createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
@@ -57,6 +59,32 @@ public class DotControlSteps {
         apiToken.set(token);
     }
 
+    @Given("Create .Control '(.*)' adapters integration for (.*) tenant")
+    public void createIntegrationAdapters(String adapters, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+
+        Response resp = APIHelperDotControl.createIntegrationForAdapters(adapters, tenantOrgName,
+                generateInfoForCreatingIntegration(Server.getServerURL()).get());
+
+        if(!(resp.statusCode()==200)) {
+            Assert.assertTrue(false, "Integration creating was not successful\n" +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        String[] arrayAdapters = adapters.split(",");
+        for (int i=0; i<arrayAdapters.length; i++){
+            String adapter = resp.getBody().jsonPath().get("channels["+i+"].adapter");
+            String token = resp.getBody().jsonPath().get("channels["+i+"].config.apiToken");
+            adapterApiTokens.put(adapter,token);
+        }
+        if(adapterApiTokens.isEmpty()){
+            Assert.assertTrue(false, "apiToken is absent in create integration response " +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+    }
+
     @When("Send (.*) message for .Control")
     public void sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
@@ -69,6 +97,15 @@ public class DotControlSteps {
         if (message.contains("empty")) dotControlRequestMessage.get().setMessage("");
         if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
 
+        responseOnSentRequest.set(
+                APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
+        );
+        clientId.set(dotControlRequestMessage.get().getClientId());
+    }
+
+    @When("Send '(.*)' messages for .Control '(.*)' adapter")
+    public void sendMessageToDotControlAdapter(String message,String adapter ){
+        createRequestMessage(adapterApiTokens.get(adapter), message);
         responseOnSentRequest.set(
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
@@ -134,7 +171,7 @@ public class DotControlSteps {
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
         try {
             if (expectedResponse.equalsIgnoreCase("agents_available")) {
-                waitFotResponseToComeToServer(35);
+                waitFotResponseToComeToServer(40);
                 Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
                         "Message is not as expected");
             } else {
@@ -263,7 +300,7 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
-    @Then("^MessageId is correctly saved$")
+    @Then("^MessageId is not null$")
     public void checkMessageIdSavingInINITCall(){
             String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
             List<ChatHistoryItem> chatHistoryItemList = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionId);
@@ -273,17 +310,12 @@ public class DotControlSteps {
                         .filter(e -> e.getClientId().equalsIgnoreCase(clientId.get()))
                         .findFirst().get().getMessageId();
             }catch(java.util.NoSuchElementException e){
-                Assert.assertTrue(false, "Not found message by clientId\n"
-                + String.join(", ", chatHistoryItemList.toString()));
+                Assert.fail("Not found message by clientId\n"
+                        + String.join(", ", chatHistoryItemList.toString()));
             }
 
-            if (!initCallMessageId.get().isEmpty()) {
-                Assert.assertEquals(actualMessageId, initCallMessageId.get(),
-                        "Message id is not as expected\n");
-            } else {
-                Assert.assertTrue(!actualMessageId.equalsIgnoreCase("null"),
-                        "Message id is not auto generated");
-            }
+            Assert.assertFalse(actualMessageId.equalsIgnoreCase("null"),
+                "Message id is not auto generated");
     }
 
 
@@ -311,7 +343,11 @@ public class DotControlSteps {
 
     @When("^Set session capacity to (.*) for (.*) tenant$")
     public void updateSessionCapacity(int chats, String tenantOrgName){
-        ApiHelper.updateSessionCapacity(tenantOrgName, chats);
+        Response resp = ApiHelper.updateSessionCapacity(tenantOrgName, chats);
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Updating session capacity was not successful\n" +
+                "resp body: " + resp.getBody().asString());
+
     }
 
 
@@ -344,7 +380,7 @@ public class DotControlSteps {
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
             Assert.assertTrue(false,
-                    ".Control is not responding after 15 seconds wait. to client with id '"+clientId.get()+"'");
+                    ".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
         }
     }
 
