@@ -33,7 +33,7 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     @FindBy(xpath = "//button[text()=' Upload ']")
     private WebElement uploadButton ;
 
-    @FindBy(xpath = "//button[text()='Accept']")
+    @FindBy(css = "ul.color-picker-scroll button.button-primary")
     private WebElement acceptButton ;
 
     @FindBy(name = "hexValue")
@@ -95,7 +95,7 @@ public class ConfigureBrandWindow extends BasePortalWindow {
              newColor = faker.color().hex().toLowerCase();
         } while (color.contains(newColor));
         colorInputField.sendKeys(newColor);
-        waitFor(2000);
+        waitForElementToBeClickableAgent(acceptButton, 6, "admin");
         acceptButton.click();
         return newColor;
     }
