@@ -1,9 +1,11 @@
 package portalpages.uielements;
 
 import interfaces.WebActions;
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,11 +14,14 @@ import java.util.stream.Collectors;
 public class AgentRowChatConsole extends Widget implements WebActions {
     private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(css = "tr.animate-repeat.ng-scope td[cl-mobile-title='Agent']")
+    @FindBy(css = "div.cl-chat-data-agent-status--holder span.ng-binding")
     private WebElement agentName;
 
     @FindBy(css = "div>*.cl-chat-data-agent-status.cl-chat-data-agent-status--active")
     private WebElement activeStatus;
+
+    @FindBy(css = "div.animation-box-wrapper>div.cl-chat-data-item.ng-binding")
+    private WebElement activeChatsNumber;
 
     @FindBy(css = "svg#Layer_1")
     private WebElement expandButton;
@@ -35,15 +40,20 @@ public class AgentRowChatConsole extends Widget implements WebActions {
 
     public AgentRowChatConsole(WebElement element) {
         super(element);
+        PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
 
     public String getAgentName(){
         return agentName.getText();
-   }
+    }
 
-   public boolean isActiveChatIconShown(int wait){
+   public boolean isActiveChatsIconShown(int wait){
         return isElementShownAgent(activeStatus, wait);
    }
+
+    public int getActiveChatsNumber(){
+        return Integer.valueOf(activeChatsNumber.getText());
+    }
 
     public boolean isNoActiveChatsIconShown(int wait){
         return isElementShownAgent(activeStatus, wait);
