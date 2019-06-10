@@ -24,6 +24,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
+import portalpages.uielements.AgentRowChatConsole;
 import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
@@ -1160,13 +1161,25 @@ public class BasePortalSteps implements JSHelper {
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get().getAgentFullName();
         Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
-                .isAgentMarkedWithGreenDot(secondAgentNameForChatConsoleTests, 10),
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isActiveChatsIconShown(10),
                 secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
+    }
+
+    @Then("^Correct number of active chats shown for (.*)$")
+    public void verifyChatConsoleAgentsContainsChats(String agent){
+        int activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole()
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).getActiveChatsNumber(),
+                activeChatsFromChatdesk,
+                secondAgentNameForChatConsoleTests + " icon has incorrect number of active chats");
+
     }
 
     @When("^Admin clicks expand dot for (.*)$")
     public void expandAgentsRowInChatConsole(String agent){
-        getPortalChatConsolePage().getAgentsTableChatConsole().clickExpandRow(secondAgentNameForChatConsoleTests);
+        getPortalChatConsolePage().getAgentsTableChatConsole()
+                .getTargetAgentRow(secondAgentNameForChatConsoleTests)
+                .clickExpandButton();
     }
 
     @Then("Logged in agents shown in Agents chat console tab")
@@ -1185,9 +1198,12 @@ public class BasePortalSteps implements JSHelper {
     public void verifyActiveChatInfoOnChatConsole(String agent, String userMessage){
         String userId = getUserNameFromLocalStorage();
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-        Intent intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0);
+        String intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0).getIntent();
 
-        List<String> clientIdsWithActiveChatsForTargetAgent = getPortalChatConsolePage().getAgentsTableChatConsole().getShownChatsForAgent(agent);
+        AgentRowChatConsole agentUnderTest = getPortalChatConsolePage().getAgentsTableChatConsole()
+                .getTargetAgentRow(secondAgentNameForChatConsoleTests);
+
+        List<String> clientIdsWithActiveChatsForTargetAgent = agentUnderTest.getChattingTo();
         if(!clientIdsWithActiveChatsForTargetAgent.contains(userId)){
             Assert.fail("Chat from '" + userId + "' user is not shown in chat console for " +
                     secondAgentNameForChatConsoleTests + " agent");
@@ -1195,12 +1211,12 @@ public class BasePortalSteps implements JSHelper {
         SoftAssert soft = new SoftAssert();
         int ordinalChatNumber = clientIdsWithActiveChatsForTargetAgent.indexOf(userId);
 
-        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownChannelsForAgent(agent).get(ordinalChatNumber),
+        soft.assertEquals(agentUnderTest.getChannels().get(ordinalChatNumber),
                 "Touch Web chat");
-        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownSentimentForAgent(agent).get(ordinalChatNumber),
-                sentiment);
-        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownIntentsForAgent(agent).get(ordinalChatNumber),
-                intent);
+        soft.assertEquals(agentUnderTest.getSentiments().get(ordinalChatNumber),
+                sentiment.toLowerCase(), "Sentiment is not correct for "+ userId +" chat ");
+        soft.assertEquals(agentUnderTest.getIntents().get(ordinalChatNumber),
+                intent, "Intent for "+ userId +" user chat is not correct");
         soft.assertAll();
     }
 

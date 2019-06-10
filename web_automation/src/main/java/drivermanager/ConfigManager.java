@@ -13,7 +13,15 @@ public class ConfigManager {
     private static final String TENANT_ID = "tenantid";
     private static final String FACEBOOK_PASS = "fbuserpass";
     private static final String SUITE = "suite";
+    private static final String REPORT_TESTFLO = "reportToTestFLO";
 
+    public static boolean reportToTouchFlo() {
+        String reportToTestFlo = System.getProperty(REPORT_TESTFLO);
+        if(reportToTestFlo==null) {
+            reportToTestFlo = "false";
+        }
+        return Boolean.parseBoolean(reportToTestFlo);
+    }
 
     public static void setTenantId(String tenantId) {
         System.setProperty(TENANT_ID, tenantId);
@@ -26,7 +34,6 @@ public class ConfigManager {
     public static void setEnv(String env) {
         System.setProperty(ENV, env);
     }
-
 
     public static boolean isRemote() {
         String remoteValue = System.getProperty(REMOTE_FLAG_VARIABLE);
