@@ -141,8 +141,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
     }
 
-    @Given("^On backand (.*) tenant feature is set to (.*) for (.*)$")
-    public void isSetFeatureStatus(String feature, boolean status, String tenantOrgName){
+    @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
+    public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
         Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
                 "Agent feature is not expected");
     }

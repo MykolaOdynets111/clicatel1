@@ -461,6 +461,23 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getChatDeskWindow().setChatsAvailable(chats);
     }
 
+    @When("^Click \"(.*)\" button (.*) times chats per agent became:\"(.*)\"$")
+    public void changeChatPerAgentPlusMinus(String sign, int add, String result){
+        if (sign.equals("+")){
+            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsPlus(add);
+            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+                    "Number of available chat was changed not correctly");
+        } else if (sign.equals("-")) {
+            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsMinus(add);
+            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+                    "Number of available chat was changed not correctly");
+        } else {
+            Assert.assertTrue(false,
+                    "Unexpected sign. Expected \"\\+\" or \"\\-\"");
+        }
+
+    }
+
     @When("^Error message is shown$")
     public void errorIsShownInWindow(){
         Assert.assertTrue(getPortalTouchPrefencesPage().getChatDeskWindow().isErrorMessageShown(),

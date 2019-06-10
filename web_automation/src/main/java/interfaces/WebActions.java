@@ -284,6 +284,14 @@ public interface WebActions extends WebWait {
         actions.clickAndHold(elem).release().perform();
     }
 
+    /**
+     * Verify if scren of element equals image (deviation 5%).
+     *
+     * @param  element   WebElement for screen shot
+     * @param  image   File for comparing with scren shot
+     * @return         Boolean: true or false
+     * @throws Exception
+     */
     default boolean isWebElementEqualsImage(WebElement element, File image){
         boolean result=false;
         try {

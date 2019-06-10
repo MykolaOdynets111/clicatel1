@@ -31,18 +31,29 @@ public class ChatDeskWindow extends BasePortalWindow {
         chatsAvailable.sendKeys(chats);
     }
 
+    public String getChatsAvailable(){
+        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
+        return chatsAvailable.getAttribute("value");
+    }
+
     public boolean isErrorMessageShown(){
        return isElementShownAgent(chatsErrorMessage,5,"admin");
     }
 
-    public void clickChatsPlus(String autoresponder){
+    public void clickChatsPlus(int times){
         waitForElementToBeVisibleAgent(chatsPlus, 5, "admin");
+        for (int i = 0; i<times;i++){
         chatsPlus.click();
+        }
+        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
     }
 
-    public void clickChatsMinus(){
+    public void clickChatsMinus(int times){
         waitForElementToBeVisibleAgent(chatsMinus, 5, "admin");
-        chatsMinus.click();
+        for (int i = 0; i<times;i++){
+            chatsMinus.click();
+        }
+        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
     }
 
     public void clickOnOffChatConclusion(){
