@@ -1,7 +1,6 @@
 @no_widget
 Feature: Agent should be able to see chat history in left menu
 
-  @Issue("https://jira.clickatell.com/browse/TPLAT-4114")
   Scenario: Verify agent can filter chat history and view closed chats
     Given I login as agent of General Bank Demo
     When Agent select "Chat history" filter option

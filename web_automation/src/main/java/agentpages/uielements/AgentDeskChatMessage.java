@@ -6,6 +6,7 @@ import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -17,7 +18,10 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
     @FindBy(css = "span.text-parsed-by-emoji")
     private WebElement messageText;
 
-    @FindBy(xpath = ".//div/following-sibling::span[not(@class='icons msg-status')]")
+    @FindAll({
+            @FindBy(xpath = ".//div/following-sibling::span[not(@class='icons msg-status')]"),
+            @FindBy(xpath = ".//div[@data-name='card-container']//span[contains(@style, 'align-self')]")
+    })
     private WebElement messageTime;
 
     @FindBy(css = "div.channel-separator-title")
