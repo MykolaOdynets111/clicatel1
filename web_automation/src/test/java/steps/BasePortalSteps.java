@@ -1147,6 +1147,18 @@ public class BasePortalSteps implements JSHelper {
                 secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
     }
 
+    @Then("^(.*) is marked with a yellow dot in chat console$")
+    public void verifyAgentMarkedWithAYellowDot(String agent){
+        secondAgentNameForChatConsoleTests =  ApiHelper.getAvailableAgents().stream()
+                .filter(e -> e.getEmail().equalsIgnoreCase(
+                        Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
+                .findFirst().get().getAgentFullName();
+        Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isNoActiveChatsIconShown(40),
+                secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
+
+    }
+
     @Then("^Correct number of active chats shown for (.*)$")
     public void verifyChatConsoleAgentsContainsChats(String agent){
         int activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();

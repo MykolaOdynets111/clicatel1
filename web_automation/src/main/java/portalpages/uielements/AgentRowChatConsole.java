@@ -18,7 +18,10 @@ public class AgentRowChatConsole extends Widget implements WebActions {
     private WebElement agentName;
 
     @FindBy(css = "div>*.cl-chat-data-agent-status.cl-chat-data-agent-status--active")
-    private WebElement activeStatus;
+    private WebElement activeChatsIcon;
+
+    @FindBy(css = "div>*.cl-chat-data-agent-status.cl-chat-data-agent-status--idle")
+    private WebElement noActiveChatsIcon;
 
     @FindBy(css = "div.animation-box-wrapper>div.cl-chat-data-item.ng-binding")
     private WebElement activeChatsNumber;
@@ -48,7 +51,7 @@ public class AgentRowChatConsole extends Widget implements WebActions {
     }
 
    public boolean isActiveChatsIconShown(int wait){
-        return isElementShownAgent(activeStatus, wait);
+        return isElementShownAgent(activeChatsIcon, wait);
    }
 
     public int getActiveChatsNumber(){
@@ -56,7 +59,7 @@ public class AgentRowChatConsole extends Widget implements WebActions {
     }
 
     public boolean isNoActiveChatsIconShown(int wait){
-        return isElementShownAgent(activeStatus, wait);
+        return isElementShownAgent(noActiveChatsIcon, wait);
     }
 
     public void clickExpandButton(){

@@ -205,4 +205,15 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public int getNewChatsCount(){
         return  newConversationRequests.size();
     }
+
+    public void waitForAllChatsToDisappear(int secondsWait){
+        int size = chatsList.size();
+        for(int i =0; i<secondsWait; i++){
+            if(size==0) break;
+            else{
+                waitFor(i*1000);
+                size = chatsList.size();
+            }
+        }
+    }
 }

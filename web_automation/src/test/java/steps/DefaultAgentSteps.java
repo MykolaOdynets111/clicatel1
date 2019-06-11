@@ -98,6 +98,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
 
+    @Given("^(.*) has no active chats$")
+    public void closeActiveChats(String agent){
+        if (agent.contains("second")){
+            ApiHelper.closeActiveChatsSecondAgent();
+        }else{
+            ApiHelper.closeActiveChats();
+        }
+        getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
+    }
+
+
+
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
         AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
