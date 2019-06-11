@@ -1,17 +1,15 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import apihelper.ApiHelper;
-import datamanager.Tenants;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-//import java.util.Arrays;
-//import java.util.List;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.*;
 
 
@@ -41,6 +39,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(css = ".icon-positive")
     private WebElement sentimentHappy;
+
+    @FindBy(css = ".icons.conclude-chat-sentiment")
+    private WebElement sentimentsAll;
 
     @FindBy(xpath = "//div[@class='Select-menu-outer']/*")
     private WebElement availableTags;
@@ -187,4 +188,17 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void deleteTags() {
              findElemByCSSAgent(cleareAll).click();
     }
+
+    public String getPlaceholder() {
+       return crmNoteTextField.getAttribute("placeholder");
+    }
+
+    public void createValidImg() throws Exception {
+        Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("sentimentsConcludeWindow").save("src/test/resources/sentimenticons/");
+    }
+
+    public boolean isValidSentiments(File image) {
+        return isWebElementEqualsImage(sentimentsAll, image);
+    }
+
 }

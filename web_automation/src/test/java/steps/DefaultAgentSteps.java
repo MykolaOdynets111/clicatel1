@@ -8,6 +8,7 @@ import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -150,6 +151,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         if(featureStatus!=Boolean.parseBoolean(status.toLowerCase())) {
             ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
         }
+    }
+
+    @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
+    public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
+        Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
+                "Agent feature is not expected");
     }
 
     @Then("^Icon should contain (.*) agent's initials$")
@@ -552,6 +559,31 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), customer360InfoForUpdating.getLocation(),
                 "Location is not updated in left menu with chats after updating Customer 360 info \n");
         soft.assertAll();
+    }
+
+    @And("^Empty image is not shown in left menu with chats$")
+    public void verifyEmptyImgNotShown(String customerFrom){
+        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(getUserNameFromLocalStorage()),
+                "Image is not updated in left menu with chats. \n");
+    }
+
+    @Then("^Message (.*) shown like last message in left menu with chat$")
+    public void verifyLastMessageInLeftMenu(String customerMsg){
+        Assert.assertEquals(getLeftMenu("main").getActiveChatLastMessage(), customerMsg,
+                "Last message in left menu with chat as not expected. \n");
+    }
+
+
+    @Then("^Valid image for (.*) integration are shown in left menu with chat$")
+    public void verifyImgForLastMessageInLeftMenu(String adapter) {
+        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
+       // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
+    }
+
+
+    @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
+    public void verifyIconSentimentForLastMessageInLeftMenu(String message) {
+        Assert.assertTrue(getLeftMenu("main").isValidIconSentimentForActiveChat(message),"Image in last message in left menu for sentiment as not expected. \n");
     }
 
     @Then("^Customer name is updated in active chat header$")

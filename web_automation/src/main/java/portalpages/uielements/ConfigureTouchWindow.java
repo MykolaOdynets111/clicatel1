@@ -37,6 +37,7 @@ public class ConfigureTouchWindow extends AbstractUIElement {
         selectIndustryField.click();
         int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, industriesChoicesList.size() - 1);
         industriesChoicesList.get(randomIndustryNumber).click();
+        waitForElementToBeVisibleAgent(selectCountryField, 3);
         clickElemAgent(selectCountryField, 5, "admin", "Select country dropdown");
         int randomCountryNumber = ThreadLocalRandom.current().nextInt(0, countryChoicesList.size() - 1);
         countryChoicesList.get(randomCountryNumber).click();

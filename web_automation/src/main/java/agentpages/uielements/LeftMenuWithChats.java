@@ -11,10 +11,8 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.scrollable-roster")
@@ -103,6 +101,10 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconRemoved();
     }
 
+    public boolean isProfileIconNotShown(String userName){
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).isProfileIconNotShown();
+    }
+
     public boolean isOvernightTicketIconRemoved(String userName){
         try {
             return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
@@ -185,6 +187,19 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
 
     public String getActiveChatLocation(){
         return new ChatInLeftMenu(activeCaht).getLocation();
+    }
+
+    public String getActiveChatLastMessage(){
+        return new ChatInLeftMenu(activeCaht).getLastMessageText();
+    }
+
+
+    public boolean isValidImgForActiveChat(String adapter) {
+      return new ChatInLeftMenu(activeCaht).isValidImg(adapter);
+    }
+
+    public boolean isValidIconSentimentForActiveChat(String message) {
+         return new ChatInLeftMenu(activeCaht).isValidIconSentiment(message);
     }
 
     public String getExpandFilterButtonColor() {

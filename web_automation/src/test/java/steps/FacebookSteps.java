@@ -12,6 +12,7 @@ import facebook.uielements.MessengerWindow;
 import facebook.FBYourPostPage;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import ru.yandex.qatools.allure.annotations.TestCaseId;
 
 import javax.annotation.concurrent.GuardedBy;
 import java.util.Random;

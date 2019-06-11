@@ -16,5 +16,6 @@ Feature: Customer 360 from fb
     Then fb dm customer info is updated on backend
     And Correct fb dm client details are shown
     And New info is shown in left menu with chats
+    And Empty image is not shown in left menu with chats
     And Customer name is updated in active chat header
 

@@ -16,6 +16,8 @@ Feature: Customer 360 from widget
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation
+    Then Message chat to support shown like last message in left menu with chat
+    Then Valid image for webchat integration are shown in left menu with chat
     And Click 'Edit' button in Customer 360 view
     When Fill in the form with new touch customer 360 info
     And Click 'Save' button in Customer 360 view

@@ -48,7 +48,7 @@ public class BasePortalSteps implements JSHelper {
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
-    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";//"signup_account@aqa.test";
+    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
   //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
@@ -456,6 +456,40 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
     }
 
+    @When("^Change chats per agent:\"(.*)\"$")
+    public void changeChatPerAgent(String chats){
+        getPortalTouchPrefencesPage().getChatDeskWindow().setChatsAvailable(chats);
+    }
+
+    @When("^Click \"(.*)\" button (.*) times chats per agent became:\"(.*)\"$")
+    public void changeChatPerAgentPlusMinus(String sign, int add, String result){
+        if (sign.equals("+")){
+            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsPlus(add);
+            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+                    "Number of available chat was changed not correctly");
+        } else if (sign.equals("-")) {
+            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsMinus(add);
+            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+                    "Number of available chat was changed not correctly");
+        } else {
+            Assert.assertTrue(false,
+                    "Unexpected sign. Expected \"\\+\" or \"\\-\"");
+        }
+
+    }
+
+    @When("^Error message is shown$")
+    public void errorIsShownInWindow(){
+        Assert.assertTrue(getPortalTouchPrefencesPage().getChatDeskWindow().isErrorMessageShown(),
+                "Error message is not shown");
+    }
+
+    @When("^Click off/on  Chat Conclusion$")
+    public void clickOffOnChatConclusion(){
+        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffChatConclusion();
+    }
+
+
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPrefencesPage().clickSaveButton();
@@ -696,10 +730,11 @@ public class BasePortalSteps implements JSHelper {
         billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
     }
 
-    @Then("^Billing details is saved on backend$")
-    public void verifyBillingDetails(){
+    @Then("^Billing details is saved on backend (.*)$")
+    public void verifyBillingDetails(String testOrgName ){
         SoftAssert soft = new SoftAssert();
-        Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
+        Response resp = ApiHelperPlatform.getAccountBillingInfo(testOrgName);
+   //     Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
         Map info = resp.jsonPath().getMap("");
         String billingAddress = resp.jsonPath().get("billingAddress.country.name") + ", " +
                                 resp.jsonPath().get("billingAddress.city") + ", " +

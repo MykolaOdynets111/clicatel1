@@ -39,6 +39,7 @@ dependencies {
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
     compile 'mysql:mysql-connector-java:5.1.+'
+    compile 'com.assertthat:selenium-shutterbug:0.9.1'
 }
 
 configurations {
@@ -49,7 +50,7 @@ allure{
     aspectjweaver = true
     testNG = false
     allureResultsDir = "$buildDir${File.separator}allure-results"
-    allureReportDir = "$buildDir${File.separator}allure-report"
+    allureReportDir = "$buildDir${File.separator}allure-report"    
 }
 
 def baseXmlPath = "/src/test/resources/"
