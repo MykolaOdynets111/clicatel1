@@ -1143,7 +1143,7 @@ public class BasePortalSteps implements JSHelper {
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get().getAgentFullName();
         Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
-                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isActiveChatsIconShown(10),
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isActiveChatsIconShown(40),
                 secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
     }
 

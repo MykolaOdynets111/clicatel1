@@ -1153,7 +1153,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         switch (chatOrigin){
             case "fb dm message":
                 ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName()).getFBPageId(),
-                        1912835872122481l, "to agent message");
+                        FacebookUsers.TOM_SMITH.getFBUserIDMsg(), "to agent message");
+                FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
 
         }
     }
