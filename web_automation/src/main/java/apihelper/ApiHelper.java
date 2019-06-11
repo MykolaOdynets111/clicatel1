@@ -21,10 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 public class ApiHelper implements DateTimeHelper{
 
@@ -470,8 +467,12 @@ public class ApiHelper implements DateTimeHelper{
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName) {
-        List<OvernightTicket> allTicketsByStatus = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
-        for(OvernightTicket ticket : allTicketsByStatus){
+        List<OvernightTicket> allAssignedTickets = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
+        List<OvernightTicket> allUnassignedTickets = getOvernightTicketsByStatus(tenantOrgName, "UNASSIGNED");
+        List<OvernightTicket> fullList = new ArrayList<>();
+        fullList.addAll(allAssignedTickets);
+        fullList.addAll(allUnassignedTickets);
+        for(OvernightTicket ticket : fullList){
             RestAssured.given()
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                     .post(String.format(Endpoints.PROCESS_OVERNIGHT_TICKET, ticket.getId()));
