@@ -5,6 +5,9 @@ import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -292,14 +295,48 @@ public interface WebActions extends WebWait {
      * @return         Boolean: true or false
      * @throws Exception
      */
+    default boolean isWebElementEqualsImage(WebElement element, File image, String name){
+        boolean result=false;
+        try {
+            BufferedImage expectedImage = ImageIO.read(image);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
+            if (!result|result) {
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).equalsWithDiff(expectedImage, "src/test/resources/adaptericonsdif/"+name+"dif");
+            }
+        }
+        catch(Exception e) {
+            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
+//            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
+//            jse.executeScript("window.scrollBy(0,250)", "");
+//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
+        }
+        return result;
+    }
+
+    default boolean isWebElementEqualsImageAshot(WebElement element, File image, String name){
+        boolean result=false;
+        try {
+            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"),element) ;//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
+            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
+            BufferedImage expectedImage = ImageIO.read(image);
+        }
+        catch(Exception e) {
+            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
+//            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
+//            jse.executeScript("window.scrollBy(0,250)", "");
+//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
+        }
+        return result;
+    }
+
     default boolean isWebElementEqualsImage(WebElement element, File image){
         boolean result=false;
         try {
             BufferedImage expectedImage = ImageIO.read(image);
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
-        }
+          }
         catch(Exception e) {
-            //   Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(adapter).save("src/test/resources/adapter\icons/");
+            // Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
         }
         return result;
     }

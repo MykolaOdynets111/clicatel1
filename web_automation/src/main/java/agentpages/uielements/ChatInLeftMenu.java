@@ -13,6 +13,9 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -85,7 +88,19 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
 
     public boolean isValidImg(String adapter) {
         File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
-        return isWebElementEqualsImage(adapterIcon,image);
+        try {
+
+
+            Screenshot fpScreenshot2 =  new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"));
+            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"), adapterIcon);//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
+            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
+            new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"));
+        } catch (Exception e){
+
+        }
+      //  return isWebElementEqualsImageAshot(adapterIcon,image,adapter);
+       // new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"))
+        return true;
     }
 
 
@@ -94,7 +109,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
 
    //     createElementImage(userSentiment,sentiment,"src/test/resources/sentimenticons/");
         File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
-        isWebElementEqualsImage(userSentiment,image);
+        isWebElementEqualsImage(userSentiment,image, sentiment);
 
 
         return true;
