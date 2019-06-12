@@ -8,6 +8,7 @@ import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -89,12 +90,14 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     public boolean isValidImgAshot(String adapter) {
         File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
         try {
-
-
-            Screenshot fpScreenshot2 =  new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"));
+           // WebElement wel=findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main");
+            WebElement wel=DriverFactory.getDriverForAgent("main").findElement(By.xpath("//span[contains(@class,'http-icon')]//span/*"));
+            Screenshot fpScreenshot2 =  new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"),wel);
+            ImageIO.write(fpScreenshot2.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
             Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"), adapterIcon);//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
             ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
-            new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"));
+            ImageIO.write(fpScreenshot2.getImage(), "PNG", new File("src/test/resources/adaptericonsA/22.png"));
+           // new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"));
         } catch (Exception e){
 
         }
@@ -104,7 +107,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public boolean isValidImg(String adapter) {
-        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+        File image = new File("src/test/resources/icons/" + adapter + ".png");
           return isWebElementEqualsImage(adapterIcon,image,adapter);
 
     }

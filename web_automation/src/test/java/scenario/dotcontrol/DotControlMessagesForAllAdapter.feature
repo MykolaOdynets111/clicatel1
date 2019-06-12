@@ -11,9 +11,9 @@ Feature: Creating .Control integration and sending messages for different adapte
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
     Then Conversation area becomes active with <message> user's message
-    Then Valid image for <adapter> integration are shown in left menu with chat
+#    Then Valid image for <adapter> integration are shown in left menu with chat
     Then Valid image for <adapter> integration are shown
-    Then Valid sentiment icon are shown for <message> message in left menu with chat
+#    Then Valid sentiment icon are shown for <message> message in left menu with chat
 
 
     Examples:
