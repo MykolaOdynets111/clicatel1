@@ -1,10 +1,7 @@
 
 package testflo.jacksonschemas.allurescenario;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 import testflo.jacksonschemas.AllureScenarioInterface;
@@ -307,10 +304,17 @@ public class AllureScenario  implements AllureScenarioInterface {
     }
 
     @Override
-    public Map<String, String> getStepsWithStatuses() {
-        Map<String, String> map = new HashMap<>();
-        getTestStage().getSteps().forEach(e -> map.put(e.getName(), e.getStatus()));
-        return map;
+    public List<Map<String, String>> getStepsWithStatuses() {
+        List<Map<String, String>> steps = new ArrayList<>();
+
+        getTestStage().getSteps().forEach(e ->
+                            {
+                                Map<String, String> map = new HashMap<>();
+                                map.put("name", e.getName());
+                                map.put("status", e.getStatus());
+                                steps.add(map);
+                            });
+        return steps;
     }
 
     @Override

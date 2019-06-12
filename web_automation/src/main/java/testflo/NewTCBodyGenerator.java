@@ -4,6 +4,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import testflo.jacksonschemas.AllureScenarioInterface;
 import testflo.jacksonschemas.NewTCStep;
+import testflo.jacksonschemas.NewTCTStep;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,19 +52,32 @@ public class NewTCBodyGenerator {
      public static String formBodyForNewTestCase(String testPlanKey, String testTemplateId, AllureScenarioInterface scenario){
          ObjectMapper mapper = new ObjectMapper();
 
-         Map<String, String> scenarioSteps = scenario.getStepsWithStatuses();
-         List<String> testCaseSteps = new ArrayList<>();
-         for(String stepName : scenarioSteps.keySet()){
+//         Map<String, String> scenarioSteps = scenario.getStepsWithStatuses();
+//         List<String> testCaseSteps = new ArrayList<>();
+//         for(String stepName : scenarioSteps.keySet()){
+//
+//             NewTCStep testCaseStep = new NewTCStep().setCells(
+//                     Arrays.asList(stepName, "", ""));
+//             try {
+//                 testCaseSteps.add(mapper.writeValueAsString(testCaseStep));
+//             } catch (JsonProcessingException e) {
+//                 e.printStackTrace();
+//             }
+//         }
 
-             NewTCStep testCaseStep = new NewTCStep().setCells(
-                     Arrays.asList(stepName, "", ""));
+
+         List<Map<String, String>> scenarioSteps = scenario.getStepsWithStatuses();
+         List<String> testCaseSteps = new ArrayList<>();
+         for(int i = 0; i<scenarioSteps.size(); i++){
+             Map<String, String> map = scenarioSteps.get(i);
+             NewTCTStep testCaseStep = new NewTCTStep().setCells(
+                     Arrays.asList(map.get("name"), "", ""));
              try {
-                 testCaseSteps.add(mapper.writeValueAsString(testCaseStep));
+                 testCaseSteps.add(i, mapper.writeValueAsString(testCaseStep));
              } catch (JsonProcessingException e) {
                  e.printStackTrace();
              }
          }
-
 
          String body = String.format(newIssueBody, testPlanKey, scenario.getName(),
                  scenario.getDescription().replace("null", "").trim(),
