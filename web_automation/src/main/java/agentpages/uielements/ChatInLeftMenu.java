@@ -86,7 +86,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
             return messageText.getAttribute("innerText").trim();
     }
 
-    public boolean isValidImg(String adapter) {
+    public boolean isValidImgAshot(String adapter) {
         File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
         try {
 
@@ -101,6 +101,12 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
       //  return isWebElementEqualsImageAshot(adapterIcon,image,adapter);
        // new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"))
         return true;
+    }
+
+    public boolean isValidImg(String adapter) {
+        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+          return isWebElementEqualsImage(adapterIcon,image,adapter);
+
     }
 
 
