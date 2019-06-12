@@ -12,7 +12,9 @@ import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.Integration;
 import datamanager.jacksonschemas.SupportHoursItem;
+import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
@@ -30,7 +32,9 @@ public class DotControlSteps {
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
-    private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
+//    private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
+
+    private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
     private static Map<String, String> adapterApiTokens= new HashMap();
     Faker faker = new Faker();
@@ -85,7 +89,7 @@ public class DotControlSteps {
         }
     }
 
-    @When("Send (.*) message for .Control")
+    @When("^Send (.*) message for .Control$")
     public void sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
         else{
@@ -101,6 +105,15 @@ public class DotControlSteps {
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
         clientId.set(dotControlRequestMessage.get().getClientId());
+    }
+
+    @When("^Send (.*) message for .Control from existed client$")
+    public void sendMessageToDotControlFromExistedClient(String message){
+        createRequestMessage(apiToken.get(), message);
+        dotControlRequestMessage.get().setClientId(initCallBody.get().getClientId());
+        Response resp = APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get());
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Sending .Control message from " + initCallBody.get().getClientId() + " was not successful");
     }
 
     @When("Send '(.*)' messages for .Control '(.*)' adapter")
@@ -234,10 +247,10 @@ public class DotControlSteps {
 
     @When("^Send init call with (.*) messageId correct response is returned$")
     public void sendInitCall(String messageIdStrategy){
-        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
-        generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                            formInitRequestBody(apiToken.get(), "generated", messageIdStrategy));
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n"+
                 resp.getBody().asString() + "\n");
@@ -252,12 +265,25 @@ public class DotControlSteps {
         soft.assertAll();
     }
 
+    @When("^Send parameterized init call with context correct response is returned$")
+    public void sendInitCalWithAdditionalParameters(){
+        SoftAssert soft = new SoftAssert();
+
+        DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
+        initRequest.setInitContext(new InitContext());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n" +
+                        resp.getBody().asString() + "\n\n");
+
+    }
+
     @When("^Send init call with (.*) messageId and no active agents correct response is returned$")
     public void sendInitCallWithoutAgent(String messageIdStrategy){
-        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
-        generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                formInitRequestBody(apiToken.get(), "generated", messageIdStrategy));
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
                         resp.getBody().asString() + "\n\n");
@@ -274,10 +300,10 @@ public class DotControlSteps {
 
     @When("^Send init call with provided messageId and not registered apiToken then correct response is returned$")
     public void sendInitCallWithNotRegisteredApiToken(){
-        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
-        generateInitCallMessageId("provided");
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), "eQscd8r4_notRegistered", clientId.get(), initCallMessageId.get());
+
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                formInitRequestBody("eQscd8r4_notRegistered", "generated", "provided"));
         soft.assertEquals(resp.getStatusCode(), 401,
                 "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
                         resp.getBody().asString() + "\n\n");
@@ -288,10 +314,9 @@ public class DotControlSteps {
 
     @When("^Send init call with provided messageId and empty clientId then correct response is returned$")
     public void sendInitCallWithEmptyClientId(){
-        clientId.set("");
-        generateInitCallMessageId("provided");
         SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                formInitRequestBody(apiToken.get(), "empty", "provided"));
         soft.assertEquals(resp.getStatusCode(), 400,
                 "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
                         resp.getBody().asString() + "\n\n");
@@ -321,11 +346,10 @@ public class DotControlSteps {
 
     @When("^Send init call with (.*) messageId correct response without of support hours is returned$")
     public void sendInitCallOutOfSupport(String messageIdStrategy){
-        clientId.set("aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
-        generateInitCallMessageId(messageIdStrategy);
         SoftAssert soft = new SoftAssert();
         List<SupportHoursItem> expectedBusinessHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), apiToken.get(), clientId.get(), initCallMessageId.get());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                formInitRequestBody(apiToken.get(), "generated", messageIdStrategy));
         soft.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n"+
                         resp.getBody().asString() + "\n");
@@ -350,6 +374,10 @@ public class DotControlSteps {
 
     }
 
+    public static String getClient(){
+        if(initCallBody.get()!=null) return initCallBody.get().getInitContext().getFullName();
+        else return dotControlRequestMessage.get().getClientId();
+    }
 
 
     public static DotControlRequestMessage getFromClientRequestMessage(){
@@ -384,15 +412,6 @@ public class DotControlSteps {
         }
     }
 
-    public void generateInitCallMessageId(String messageIdStrategy){
-        switch(messageIdStrategy){
-            case "provided":
-                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
-                break;
-            default:
-                initCallMessageId.set("");
-        }
-    }
 
     public static void cleanUPMessagesInfo(){
         Server.incomingRequests.clear();
@@ -401,5 +420,50 @@ public class DotControlSteps {
         dotControlRequestMessage.remove();
         apiToken.remove();
         clientId.remove();
+    }
+
+    public DotControlInitRequest formInitRequestBody(String apiToken, String clientIdStrategy, String messageIdStrategy){
+
+        DotControlInitRequest body = new DotControlInitRequest(apiToken,
+                                                            generateInitCallClientId(clientIdStrategy),
+                                                            generateInitCallMessageId(messageIdStrategy));
+        initCallBody.set(body);
+        return initCallBody.get();
+    }
+
+    public static InitContext getInitContext(){
+        return initCallBody.get().getInitContext();
+    }
+
+    public String generateInitCallMessageId(String messageIdStrategy){
+        String messageId = "";
+        switch(messageIdStrategy){
+            case "provided":
+//                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+                messageId = "testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3);
+                break;
+            case "empty":
+//                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
+                messageId = "";
+                break;
+        }
+        return messageId;
+    }
+
+    public String generateInitCallClientId(String clientIdStrategy){
+        String clientIdString = "";
+        switch(clientIdStrategy){
+            case "generated":
+                clientIdString = "aqa_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3);
+                break;
+            case "empty":
+                clientIdString = "";
+                break;
+            default:
+                clientIdString = clientIdStrategy;
+                break;
+        }
+        clientId.set(clientIdString);
+        return clientIdString;
     }
 }

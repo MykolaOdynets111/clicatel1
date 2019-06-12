@@ -8,7 +8,7 @@ Feature: Redirection to the agent after negative tweet
     Given Open twitter page of General Bank Demo
     Given Open new tweet window
 
-  Scenario: Redirecting to the agent negative tweet
+  Scenario: Twitter: Redirecting to the agent negative tweet
     When User sends tweet regarding "Hate your banking"
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter

@@ -3,7 +3,7 @@
 @fb_dm
 Feature: Customer 360 from fb
 
-  Scenario: User's info presence on chatdesk (fb user)
+  Scenario: Facebook: Customer 360 from fb
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
     When User opens Messenger and send message regarding chat to agent
@@ -16,6 +16,6 @@ Feature: Customer 360 from fb
     Then fb dm customer info is updated on backend
     And Correct fb dm client details are shown
     And New info is shown in left menu with chats
-    And Empty image is not shown in left menu with chats
+    And Empty image is not shown for chat with facebook user
     And Customer name is updated in active chat header
 

@@ -9,7 +9,7 @@ public interface AllureScenarioInterface {
 
     public String getTestId();
 
-    public Map<String, String> getStepsWithStatuses();
+    public List<Map<String, String>> getStepsWithStatuses();
 
     public String getName();
 

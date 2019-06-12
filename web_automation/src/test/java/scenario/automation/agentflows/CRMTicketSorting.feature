@@ -1,6 +1,7 @@
 @agent_feedback
 Feature: Verification that 5 CRM tickets are shown and sorted by created date
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-3510")
   Scenario: Check CRM tickets number and sorting
     Given User select Automation tenant
     And Click chat icon

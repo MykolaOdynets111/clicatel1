@@ -7,6 +7,7 @@ import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -57,6 +58,23 @@ public class TestFloReporter {
         }
 
     }
+
+//    public static void main(String[] args) {
+//
+////            Сreating TCT
+//            System.setProperty("remote", "true");
+//            List<String> createdTCT = new ArrayList<>();
+//
+//            // 1. Get executed case from allure
+//            List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
+//
+//            // 2. Loop through existed Test Cases in tests plan and update the status
+//
+//            for (AllureScenarioInterface scenario : executedTests) {
+//                Map<String, String> aa = JiraApiHelper.createNewTestCaseTemplate(scenario);
+//                createdTCT.add(aa.get("key"));
+//            }
+//    }
 
 
     private static void updateTestPlanSummary(String testPlanKey){
