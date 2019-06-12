@@ -1,7 +1,6 @@
 package agentpages.uielements;
 
 import apihelper.ApiHelperTie;
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import drivermanager.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
@@ -13,13 +12,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper, JSHelper {
@@ -107,17 +104,16 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
     }
 
     public boolean isValidImg(String adapter) {
-        File image = new File("src/test/resources/icons/" + adapter + ".png");
-          return isWebElementEqualsImage(adapterIcon,image,adapter);
+        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+          return isWebElementEqualsImage(adapterIcon,image);
 
     }
 
 
     public boolean isValidIconSentiment(String message){
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-   //     createElementImage(userSentiment,sentiment,"src/test/resources/sentimenticons/");
         File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
-        isWebElementEqualsImage(userSentiment,image, sentiment);
+        isWebElementEqualsImage(userSentiment,image);
         return true;
     }
 

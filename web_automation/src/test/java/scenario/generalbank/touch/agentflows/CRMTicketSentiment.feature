@@ -1,4 +1,5 @@
 @agent_feedback
+@egor
 Feature: CRM ticket sentiment
 
   Background:
