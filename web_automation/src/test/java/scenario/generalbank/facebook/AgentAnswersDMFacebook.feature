@@ -7,7 +7,7 @@ Feature: Communication between user and agent in FB messenger
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 
-  Scenario: Communication between user and agent
+  Scenario: Facebook: Communication between user and agent in FB messenger
     When User opens Messenger and send message regarding chat to agent
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook

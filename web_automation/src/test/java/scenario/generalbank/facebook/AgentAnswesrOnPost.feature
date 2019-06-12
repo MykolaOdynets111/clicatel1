@@ -8,7 +8,7 @@ Feature:  Agent answers on post
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 
-  Scenario: Agent should answer with comment on users's post
+  Scenario: Facebook: Agent should answer with comment on users's post
     When User makes post message regarding connect to agent
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook

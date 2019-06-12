@@ -60,19 +60,19 @@ public class TestFloReporter {
 //    }
 
     public static void main(String[] args) {
-        //
-        System.setProperty("remote", "true");
-        List<String> createdTCT = new ArrayList<>();
-
-        // 1. Get executed case from allure
-        List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
-
-        // 2. Loop through existed Test Cases in tests plan and update the status
-
-        for(AllureScenarioInterface scenario : executedTests){
-            Map<String, String> aa = JiraApiHelper.createNewTestCaseTemplate(scenario);
-            createdTCT.add(aa.get("key"));
-        }
+        // Сreating TCT
+//        System.setProperty("remote", "true");
+//        List<String> createdTCT = new ArrayList<>();
+//
+//        // 1. Get executed case from allure
+//        List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
+//
+//        // 2. Loop through existed Test Cases in tests plan and update the status
+//
+//        for(AllureScenarioInterface scenario : executedTests){
+//            Map<String, String> aa = JiraApiHelper.createNewTestCaseTemplate(scenario);
+//            createdTCT.add(aa.get("key"));
+//        }
 
     }
 

@@ -561,9 +561,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertAll();
     }
 
-    @And("^Empty image is not shown in left menu with chats$")
+    @And("^Empty image is not shown for chat with (.*) user$")
     public void verifyEmptyImgNotShown(String customerFrom){
-        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(getUserNameFromLocalStorage()),
+        String user = "";
+        if(customerFrom.equalsIgnoreCase("facebook")) user = FacebookUsers.getLoggedInUserName();
+        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(user),
                 "Image is not updated in left menu with chats. \n");
     }
 
