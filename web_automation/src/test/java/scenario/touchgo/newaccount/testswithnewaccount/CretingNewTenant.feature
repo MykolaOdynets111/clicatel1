@@ -2,7 +2,7 @@
 @no_chatdesk
 @creating_new_tenant
 @testing_env_only
-  @egor
+@egor
 Feature: Creating new tenant
 #
 ##  Must run after new account is created, Please see the following test:
