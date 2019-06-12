@@ -591,6 +591,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
        // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
     }
 
+    @Then("^Valid image for (.*) integration are shown$")
+    public void verifyImgForLastMessageInLeftMenuAshot(String adapter) {
+  //      Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
+         getLeftMenu("main").isValidImg(adapter); //do not delete
+    }
+
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
     public void verifyIconSentimentForLastMessageInLeftMenu(String message) {

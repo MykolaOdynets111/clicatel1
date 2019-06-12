@@ -105,19 +105,16 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
 
     public boolean isValidImg(String adapter) {
         File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
-          return isWebElementEqualsImage(adapterIcon,image,adapter);
+          return isWebElementEqualsImageAshot(adapterIcon,image,adapter);
 
     }
 
 
     public boolean isValidIconSentiment(String message){
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-
    //     createElementImage(userSentiment,sentiment,"src/test/resources/sentimenticons/");
         File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
         isWebElementEqualsImage(userSentiment,image, sentiment);
-
-
         return true;
     }
 

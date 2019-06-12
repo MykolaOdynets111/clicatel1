@@ -292,23 +292,26 @@ public interface WebActions extends WebWait {
      *
      * @param  element   WebElement for screen shot
      * @param  image   File for comparing with scren shot
+     *  @param  name   name of image if file does not exist
      * @return         Boolean: true or false
      * @throws Exception
      */
     default boolean isWebElementEqualsImage(WebElement element, File image, String name){
         boolean result=false;
         try {
+            try {
+                BufferedImage expectedImage = ImageIO.read(image);
+            } catch (Exception e) {
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/icons/");
+            }
             BufferedImage expectedImage = ImageIO.read(image);
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
             if (!result|result) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).equalsWithDiff(expectedImage, "src/test/resources/adaptericonsdif/"+name+"dif");
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/iconsdif/"+name+"dif");
             }
         }
         catch(Exception e) {
-            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
-//            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
-//            jse.executeScript("window.scrollBy(0,250)", "");
-//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
+            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
         }
         return result;
     }
