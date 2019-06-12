@@ -1,7 +1,7 @@
-@portal
-@no_chatdesk
-@creating_new_tenant
-@testing_env_only
+#@portal
+#@no_chatdesk
+#@creating_new_tenant
+#@testing_env_only
 @egor
 Feature: Creating new tenant
 #
