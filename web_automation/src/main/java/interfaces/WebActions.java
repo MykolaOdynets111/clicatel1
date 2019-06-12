@@ -305,8 +305,8 @@ public interface WebActions extends WebWait {
             }
             BufferedImage expectedImage = ImageIO.read(image);
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
-            if (!result|result) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName());
+            if (!result) {
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
             }
         }
         catch(Exception e) {
@@ -315,21 +315,21 @@ public interface WebActions extends WebWait {
         return result;
     }
 
-    default boolean isWebElementEqualsImageAshot(WebElement element, File image, String name){
-        boolean result=false;
-        try {
-            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"),element) ;//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
-            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
-            BufferedImage expectedImage = ImageIO.read(image);
-        }
-        catch(Exception e) {
-            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
-//            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
-//            jse.executeScript("window.scrollBy(0,250)", "");
-//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
-        }
-        return result;
-    }
+//    default boolean isWebElementEqualsImageAshot(WebElement element, File image, String name){
+//        boolean result=false;
+//        try {
+//            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"),element) ;//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
+//            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
+//            BufferedImage expectedImage = ImageIO.read(image);
+//        }
+//        catch(Exception e) {
+//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
+////            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
+////            jse.executeScript("window.scrollBy(0,250)", "");
+////            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
+//        }
+//        return result;
+//    }
 
     default void createElementImage(WebElement element,String name, String path){
 
