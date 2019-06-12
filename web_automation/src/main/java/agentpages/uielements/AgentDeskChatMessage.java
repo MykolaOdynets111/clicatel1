@@ -24,7 +24,7 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
     })
     private WebElement messageTime;
 
-    @FindBy(css = "div.channel-separator-title")
+    @FindBy(xpath = ".//div[@class='channel-separator-title']")
     private WebElement channelSeparator;
 
     public AgentDeskChatMessage(WebElement element) {
