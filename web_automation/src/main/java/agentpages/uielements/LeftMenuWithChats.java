@@ -199,7 +199,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     }
 
     public boolean isValidImg(String adapter) {
-        return new ChatInLeftMenu(activeCaht).isValidImg(adapter);
+        return new ChatInLeftMenu(activeCaht).isValidImgAshot(adapter);
     }
 
     public boolean isValidIconSentimentForActiveChat(String message) {

@@ -105,7 +105,7 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
 
     public boolean isValidImg(String adapter) {
         File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
-          return isWebElementEqualsImageAshot(adapterIcon,image,adapter);
+          return isWebElementEqualsImage(adapterIcon,image,adapter);
 
     }
 
