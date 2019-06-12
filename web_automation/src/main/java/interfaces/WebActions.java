@@ -299,7 +299,7 @@ public interface WebActions extends WebWait {
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
         }
         catch(Exception e) {
-            //   Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(adapter).save("src/test/resources/adapter\icons/");
+//               Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName("test").save("src/test/resources/adapter/icons/");
         }
         return result;
     }
