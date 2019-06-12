@@ -499,11 +499,7 @@ public class ApiHelper implements DateTimeHelper{
     }
 
     public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
-        String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
-        JsonPath respJSON = RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.CUSTOMER_VIEW + sessionId)
-                .getBody().jsonPath();
+        JsonPath respJSON = getCustomerView(tenantOrgName, clineId);
 
         String fullName = "";
         if(respJSON.getString("personalDetails.firstName") == null &&
@@ -515,12 +511,7 @@ public class ApiHelper implements DateTimeHelper{
         }
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
 
-        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        String customerSince = LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(zoneId).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+        String customerSince = getCustomerSince(respJSON);
 
         String channelUsername = "";
         try {
@@ -535,6 +526,25 @@ public class ApiHelper implements DateTimeHelper{
         return new Customer360PersonalInfo(fullName, location,
                 "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
+    }
+
+
+    public static JsonPath getCustomerView(String tenantOrgName, String clineId){
+        String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.CUSTOMER_VIEW + sessionId)
+                .getBody().jsonPath();
+
+    }
+
+    public static String getCustomerSince(JsonPath respJSON){
+        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        return LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
     }
 
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){

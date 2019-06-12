@@ -29,8 +29,8 @@ public class InitContext {
     Faker faker = new Faker();
 
     public InitContext(){
-        this.firstName = "FN_" + faker.lorem().word();
-        this.lastName = "LN_" + faker.lorem().word();
+        this.firstName = faker.name().firstName();
+        this.lastName = "DotC_" + faker.name().lastName();
         this.email = faker.lorem().word() + "@mail.com";
         this.phone = faker.phoneNumber().cellPhone();
     }
@@ -83,5 +83,9 @@ public class InitContext {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    public String getFullName(){
+        return this.firstName + " " + this.lastName;
     }
 }

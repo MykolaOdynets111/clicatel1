@@ -15,66 +15,66 @@ import java.util.stream.Collectors;
 
 public class TestFloReporter {
 
-//    public static void main(String[] args) {
-////        ConfigManager.setIsRemote("true");
-//
-//        if(ConfigManager.reportToTouchFlo()) {
-//
-//            //ToDo: Add storing base test plan key on Jenkins side as an Artifact
-//            String baseTestPlan = readBaseTestPlanKey();
-//            if (baseTestPlan == null) baseTestPlan = "";
-//
-//            // 1. Create test plan
-//            String newTPlanKey = JiraApiHelper.copyTestPlan(baseTestPlan);
-//            updateTestPlanSummary(newTPlanKey);
-//
-//            // 2. Get existed cases from Test Plan
-//            List<ExistedTestCase> existedTestCases = JiraApiHelper.getExistedInTestPlanTestCases(newTPlanKey);
-//            List<String> existedTestCasesNames = existedTestCases.stream()
-//                    .map(testCase -> testCase.getFields().getSummary()).collect(Collectors.toList());
-//
-//            // 3. Get executed case from allure
-//            List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
-//
-//            // 4. Filter the cases that should be created in Test Plan
-//            List<AllureScenarioInterface> executedTestsToBeCreatedInTestPlan = executedTests
-//                    .stream()
-//                    .filter(executedTest -> !(existedTestCasesNames.contains(executedTest.getName())))
-//                    .collect(Collectors.toList());
-//
-//            // 5. Update target Test Plan key for the next run
-//            if (executedTestsToBeCreatedInTestPlan.size() > 0) writeNewBaseTestPlanKey(newTPlanKey);
-//
-//
-//            // 6. Loop through existed Test Cases in tests plan and update the status
-//            existedTestCases.forEach(tc -> updateExistedTestCase(tc, executedTests));
-//
-//            // 7. Create missing test cases and set their status
-//            executedTestsToBeCreatedInTestPlan.forEach(e -> addMissingScenarios(e, newTPlanKey));
-//
-//        } else{
-//            System.out.println("!!! reporting to TestFLO is turned off. \n" +
-//                    "Please check -DreportToTestFLO parameter !!!!");
-//        }
-//
-//    }
-
     public static void main(String[] args) {
-        // Сreating TCT
-//        System.setProperty("remote", "true");
-//        List<String> createdTCT = new ArrayList<>();
-//
-//        // 1. Get executed case from allure
-//        List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
-//
-//        // 2. Loop through existed Test Cases in tests plan and update the status
-//
-//        for(AllureScenarioInterface scenario : executedTests){
-//            Map<String, String> aa = JiraApiHelper.createNewTestCaseTemplate(scenario);
-//            createdTCT.add(aa.get("key"));
-//        }
+//        ConfigManager.setIsRemote("true");
+
+        if(ConfigManager.reportToTouchFlo()) {
+
+            //ToDo: Add storing base test plan key on Jenkins side as an Artifact
+            String baseTestPlan = readBaseTestPlanKey();
+            if (baseTestPlan == null) baseTestPlan = "";
+
+            // 1. Create test plan
+            String newTPlanKey = JiraApiHelper.copyTestPlan(baseTestPlan);
+            updateTestPlanSummary(newTPlanKey);
+
+            // 2. Get existed cases from Test Plan
+            List<ExistedTestCase> existedTestCases = JiraApiHelper.getExistedInTestPlanTestCases(newTPlanKey);
+            List<String> existedTestCasesNames = existedTestCases.stream()
+                    .map(testCase -> testCase.getFields().getSummary()).collect(Collectors.toList());
+
+            // 3. Get executed case from allure
+            List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
+
+            // 4. Filter the cases that should be created in Test Plan
+            List<AllureScenarioInterface> executedTestsToBeCreatedInTestPlan = executedTests
+                    .stream()
+                    .filter(executedTest -> !(existedTestCasesNames.contains(executedTest.getName())))
+                    .collect(Collectors.toList());
+
+            // 5. Update target Test Plan key for the next run
+            if (executedTestsToBeCreatedInTestPlan.size() > 0) writeNewBaseTestPlanKey(newTPlanKey);
+
+
+            // 6. Loop through existed Test Cases in tests plan and update the status
+            existedTestCases.forEach(tc -> updateExistedTestCase(tc, executedTests));
+
+            // 7. Create missing test cases and set their status
+            executedTestsToBeCreatedInTestPlan.forEach(e -> addMissingScenarios(e, newTPlanKey));
+
+        } else{
+            System.out.println("!!! reporting to TestFLO is turned off. \n" +
+                    "Please check -DreportToTestFLO parameter !!!!");
+        }
 
     }
+
+//    public static void main(String[] args) {
+//
+////            Сreating TCT
+//            System.setProperty("remote", "true");
+//            List<String> createdTCT = new ArrayList<>();
+//
+//            // 1. Get executed case from allure
+//            List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases();
+//
+//            // 2. Loop through existed Test Cases in tests plan and update the status
+//
+//            for (AllureScenarioInterface scenario : executedTests) {
+//                Map<String, String> aa = JiraApiHelper.createNewTestCaseTemplate(scenario);
+//                createdTCT.add(aa.get("key"));
+//            }
+//    }
 
 
     private static void updateTestPlanSummary(String testPlanKey){

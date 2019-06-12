@@ -53,8 +53,6 @@ public class DotControlRequestMessage {
         this.context = new DotControlRequestMessageContext();
     }
 
-
-
     @JsonProperty("apiToken")
     public String getApiToken() {
         return apiToken;
