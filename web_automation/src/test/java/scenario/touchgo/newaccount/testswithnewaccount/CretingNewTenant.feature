@@ -1,8 +1,7 @@
-#@portal
-#@no_chatdesk
-#@creating_new_tenant
-#@testing_env_only
-@egor
+@portal
+@no_chatdesk
+@creating_new_tenant
+@testing_env_only
 Feature: Creating new tenant
 #
 ##  Must run after new account is created, Please see the following test:
@@ -18,7 +17,7 @@ Feature: Creating new tenant
     When Click "Get started with Touch" button
     Then "Get started with Touch Go" window is opened
     When I try to create new tenant
-#    Given User open new SignedUp AQA tenant
-#    And Click chat icon
-#    When User enter chat to support into widget input field
+    Given User open new SignedUp AQA tenant
+    And Click chat icon
+    When User enter chat to support into widget input field
 

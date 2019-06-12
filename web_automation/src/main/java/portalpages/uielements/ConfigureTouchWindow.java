@@ -51,6 +51,6 @@ public class ConfigureTouchWindow extends AbstractUIElement {
         nextButton.click();
         nextButton.click();
         transcriptsEmailInput.sendKeys(transcriptsEmail);
-   //     clickElemAgent(nextButton, 5, "admin", "Finish button");
+        clickElemAgent(nextButton, 5, "admin", "Finish button");
     }
 }
