@@ -301,7 +301,7 @@ public interface WebActions extends WebWait {
             try {
                 BufferedImage expectedImage = ImageIO.read(image);
             } catch (Exception e) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName()).save(image.getParent());
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName().substring(0,image.getName().length()-4)).save(image.getParent());
             }
             BufferedImage expectedImage = ImageIO.read(image);
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
