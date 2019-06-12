@@ -8,7 +8,7 @@ Feature: Communication with agent via tweet
     Given Open twitter page of General Bank Demo
     Given Open new tweet window
 
-  Scenario: Receiving answer on tweet from the agent
+  Scenario: Twitter: Receiving answer on tweet from the agent
     When User sends tweet regarding "connect to agent"
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter

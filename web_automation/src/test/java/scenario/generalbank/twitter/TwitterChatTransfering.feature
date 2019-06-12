@@ -7,7 +7,7 @@ Feature: Twitter chat transferring
     Given Open twitter page of General Bank Demo
     Given Open direct message channel
 
-  Scenario: Verify if agent is able to transfer twitter chat via "Transfer chat" button
+  Scenario: Twitter: Verify if agent is able to transfer twitter chat via "Transfer chat" button
     When User sends twitter direct message regarding chat to support
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
