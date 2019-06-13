@@ -1,17 +1,24 @@
 package interfaces;
 
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.Browser;
 import drivermanager.DriverFactory;
+import net.coobird.thumbnailator.Thumbnails;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import sun.awt.image.ToolkitImage;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
 import java.awt.image.BufferedImage;
+import java.awt.Image;
+import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 
@@ -297,14 +304,22 @@ public interface WebActions extends WebWait {
      */
     default boolean isWebElementEqualsImage(WebElement element, File image){
         boolean result=false;
-
+        Browser browser = new Browser(DriverFactory.getDriverForAgent("main"),true);
+        Double dpr= browser.getDevicePixelRatio();
         try {
             try {
                 BufferedImage expectedImage = ImageIO.read(image);
             } catch (Exception e) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName().substring(0,image.getName().length()-4)).save(image.getParent());
+//                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName().substring(0,image.getName().length()-4)).save(image.getParent());
+                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
+//                Image newimg = img.getScaledInstance((int)(img.getWidth()/dpr),(int)(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+                BufferedImage buffimg = Thumbnails.of(img).scale(1/dpr,1/dpr).asBufferedImage();
+                File newFile = new File(image.getPath());
+                newFile.getParentFile().mkdirs();
+                new FileWriter(newFile);
+                ImageIO.write(buffimg,"PNG",newFile);
             }
-            BufferedImage expectedImage = ImageIO.read(image);
+            BufferedImage expectedImage = Thumbnails.of(ImageIO.read(image)).scale(dpr,dpr).asBufferedImage();
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
             if (!result) {
                 Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
