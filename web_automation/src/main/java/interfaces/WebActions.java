@@ -297,6 +297,7 @@ public interface WebActions extends WebWait {
      */
     default boolean isWebElementEqualsImage(WebElement element, File image){
         boolean result=false;
+
         try {
             try {
                 BufferedImage expectedImage = ImageIO.read(image);
