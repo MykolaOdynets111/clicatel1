@@ -18,8 +18,8 @@ Feature: Creating .Control integration and sending messages for different adapte
 
     Examples:
       |adapter                                             |message|
-      |fbmsg                                               |Hate your banking. Hello from fbmsg|
+#      |fbmsg                                               |Hate your banking. Hello from fbmsg|
       |whatsapp                                            |Chat to agent from whatsapp        |
-      |fbpost                                              |Chat to agent from fbpost          |
-      |twdm                                                |Chat to agent from twdm            |
-      |twmention                                           |Chat to agent from twmention |
+#      |fbpost                                              |Chat to agent from fbpost          |
+#      |twdm                                                |Chat to agent from twdm            |
+#      |twmention                                           |Chat to agent from twmention |
