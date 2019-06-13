@@ -307,21 +307,19 @@ public interface WebActions extends WebWait {
         Browser browser = new Browser(DriverFactory.getDriverForAgent("main"),true);
         Double dpr= browser.getDevicePixelRatio();
         try {
-            try {
-                BufferedImage expectedImage = ImageIO.read(image);
-            } catch (Exception e) {
-////                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName().substring(0,image.getName().length()-4)).save(image.getParent());
-//                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
-////                Image newimg = img.getScaledInstance((int)(img.getWidth()/dpr),(int)(img.getHeight()/dpr),Image.SCALE_DEFAULT);
-//                BufferedImage buffimg = Thumbnails.of(img).scale(1/dpr,1/dpr).asBufferedImage();
-//                File newFile = new File(image.getPath());
-//                newFile.getParentFile().mkdirs();
-//                new FileWriter(newFile);
-//                ImageIO.write(buffimg,"PNG",newFile);
-//                System.out.println("!!!!!! File was created !!!!!!!!! \n");
+           if (!image.canRead()) {
+//                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName().substring(0,image.getName().length()-4)).save(image.getParent());
+                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
+//                Image newimg = img.getScaledInstance((int)(img.getWidth()/dpr),(int)(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+                BufferedImage buffimg = Thumbnails.of(img).scale(1/dpr,1/dpr).asBufferedImage();
+                File newFile = new File(image.getPath());
+                newFile.getParentFile().mkdirs();
+                new FileWriter(newFile);
+                ImageIO.write(buffimg,"PNG",newFile);
+                System.out.println("!!!!!! File was created !!!!!!!!! \n");
             }
-         //   BufferedImage expectedImage = Thumbnails.of(ImageIO.read(image)).scale(dpr,dpr).asBufferedImage();
-            BufferedImage expectedImage = ImageIO.read(image);
+            BufferedImage expectedImage = Thumbnails.of(ImageIO.read(image)).scale(dpr,dpr).asBufferedImage();
+         //   BufferedImage expectedImage = ImageIO.read(image);
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
             if (!result) {
                 Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
