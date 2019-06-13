@@ -318,6 +318,7 @@ public interface WebActions extends WebWait {
                 newFile.getParentFile().mkdirs();
                 new FileWriter(newFile);
                 ImageIO.write(buffimg,"PNG",newFile);
+                System.out.println("!!!!!! File was created !!!!!!!!! \n");
             }
             BufferedImage expectedImage = Thumbnails.of(ImageIO.read(image)).scale(dpr,dpr).asBufferedImage();
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
