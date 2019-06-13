@@ -416,7 +416,9 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
-        activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        activeChatsFromChatdesk = ApiHelper.getActiveChatsBySecondAgent()
+                .getBody().jsonPath().getList("content.id").size();
+                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
     }
