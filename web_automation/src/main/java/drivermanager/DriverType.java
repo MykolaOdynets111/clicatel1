@@ -30,7 +30,7 @@ public enum DriverType {
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type=browser");
-        //    options.addArguments("start-maximized");
+            options.addArguments("start-maximized");
             options.addArguments("--window-size=1024,768");
             options.addArguments("disable-web-security");
             options.addArguments("disable-gpu");
