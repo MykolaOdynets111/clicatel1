@@ -14,8 +14,8 @@ import sun.awt.image.ToolkitImage;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.Image;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -310,15 +310,19 @@ public interface WebActions extends WebWait {
            if (!image.canRead()) {
 //                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(image.getName().substring(0,image.getName().length()-4)).save(image.getParent());
                 BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
-//                Image newimg = img.getScaledInstance((int)(img.getWidth()/dpr),(int)(img.getHeight()/dpr),Image.SCALE_DEFAULT);
-                BufferedImage buffimg = Thumbnails.of(img).scale(1/dpr,1/dpr).asBufferedImage();
+                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+              //  BufferedImage buffimg = Thumbnails.of(img).scale(1/dpr,1/dpr).asBufferedImage();
                 File newFile = new File(image.getPath());
                 newFile.getParentFile().mkdirs();
                 new FileWriter(newFile);
-                ImageIO.write(buffimg,"PNG",newFile);
+//                ImageIO.write(buffimg,"PNG",newFile);
+               BufferedImage buffered = imageToBufferedImage(newimg);
+               ImageIO.write(buffered,"PNG",newFile);
                 System.out.println("!!!!!! File was created !!!!!!!!! \n");
             }
-            BufferedImage expectedImage = Thumbnails.of(ImageIO.read(image)).scale(dpr,dpr).asBufferedImage();
+          //  BufferedImage expectedImage = Thumbnails.of(ImageIO.read(image)).scale(dpr,dpr).asBufferedImage();
+            BufferedImage expImage = ImageIO.read(image);
+            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
          //   BufferedImage expectedImage = ImageIO.read(image);
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
             if (!result) {
@@ -330,6 +334,16 @@ public interface WebActions extends WebWait {
         }
         return result;
     }
+
+    public static BufferedImage imageToBufferedImage(Image im) {
+        BufferedImage bi = new BufferedImage
+                (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
+        Graphics bg = bi.getGraphics();
+        bg.drawImage(im, 0, 0, null);
+        bg.dispose();
+        return bi;
+    }
+
 
 //    default boolean isWebElementEqualsImageAshot(WebElement element, File image, String name){
 //        boolean result=false;
