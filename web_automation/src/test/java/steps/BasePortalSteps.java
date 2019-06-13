@@ -1225,6 +1225,8 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^All chats info are shown for (.*) including intent on user message (.*)$")
     public void verifyActiveChatInfoOnChatConsole(String agent, String userMessage){
+        SoftAssert soft = new SoftAssert();
+
         String userId = getUserNameFromLocalStorage();
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0).getIntent();
@@ -1232,12 +1234,12 @@ public class BasePortalSteps implements JSHelper {
         AgentRowChatConsole agentUnderTest = getPortalChatConsolePage().getAgentsTableChatConsole()
                 .getTargetAgentRow(secondAgentNameForChatConsoleTests);
 
-        List<String> clientIdsWithActiveChatsForTargetAgent = agentUnderTest.getChattingTo();
-        if(!clientIdsWithActiveChatsForTargetAgent.contains(userId)){
+        if(!agentUnderTest.isChatShownFromUserShown(userId, 40)){
             Assert.fail("Chat from '" + userId + "' user is not shown in chat console for " +
                     secondAgentNameForChatConsoleTests + " agent");
         }
-        SoftAssert soft = new SoftAssert();
+        List<String> clientIdsWithActiveChatsForTargetAgent = agentUnderTest.getChattingTo();
+
         int ordinalChatNumber = clientIdsWithActiveChatsForTargetAgent.indexOf(userId);
 
         soft.assertEquals(agentUnderTest.getChannels().get(ordinalChatNumber),

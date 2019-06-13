@@ -396,7 +396,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,20, agent),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
-            }
+    }
 
     private boolean waitForDotControlRequestOnChatDesk(){
         for(int i = 0; i<5; i++) {
@@ -527,7 +527,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         InitContext initContext = DotControlSteps.getInitContext();
         expectedResult.setFullName(initContext.getFullName())
                         .setEmail(initContext.getEmail())
-                        .setPhone(initContext.getPhone());
+                        .setPhone(initContext.getPhone())
+        .setChannelUsername("");
 
         Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedResult,
                 "User Customer360 info is not as in init context \n");
