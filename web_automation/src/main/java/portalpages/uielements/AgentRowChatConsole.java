@@ -82,4 +82,16 @@ public class AgentRowChatConsole extends Widget implements WebActions {
     public List<String> getChattingTo(){
         return chattingTo.stream().map(e -> e.getText()).collect(Collectors.toList());
     }
+
+    public boolean isChatShownFromUserShown(String clientId, int secondWait){
+        boolean result = chattingTo.stream().map(e -> e.getText()).anyMatch(e -> e.equals(clientId));
+        for (int i = 0; i<secondWait; i++){
+            if(result) break;
+            else{
+                waitFor(1000);
+                result = chattingTo.stream().map(e -> e.getText()).anyMatch(e -> e.equals(clientId));
+            }
+        }
+        return result;
+    }
 }

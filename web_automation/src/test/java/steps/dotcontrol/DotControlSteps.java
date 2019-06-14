@@ -14,6 +14,7 @@ import datamanager.jacksonschemas.Integration;
 import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
@@ -88,7 +89,7 @@ public class DotControlSteps {
         }
     }
 
-    @When("Send (.*) message for .Control")
+    @When("^Send (.*) message for .Control$")
     public void sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
         else{
@@ -104,6 +105,15 @@ public class DotControlSteps {
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
         clientId.set(dotControlRequestMessage.get().getClientId());
+    }
+
+    @When("^Send (.*) message for .Control from existed client$")
+    public void sendMessageToDotControlFromExistedClient(String message){
+        createRequestMessage(apiToken.get(), message);
+        dotControlRequestMessage.get().setClientId(initCallBody.get().getClientId());
+        Response resp = APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get());
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Sending .Control message from " + initCallBody.get().getClientId() + " was not successful");
     }
 
     @When("Send '(.*)' messages for .Control '(.*)' adapter")
@@ -257,6 +267,14 @@ public class DotControlSteps {
 
     @When("^Send parameterized init call with context correct response is returned$")
     public void sendInitCalWithAdditionalParameters(){
+        SoftAssert soft = new SoftAssert();
+
+        DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
+        initRequest.setInitContext(new InitContext());
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n" +
+                        resp.getBody().asString() + "\n\n");
 
     }
 
@@ -356,6 +374,15 @@ public class DotControlSteps {
 
     }
 
+    public static String getClient(){
+        if(initCallBody.get()!=null) {
+            if (initCallBody.get().getInitContext()!=null){
+                return initCallBody.get().getInitContext().getFullName();
+            }
+            return dotControlRequestMessage.get().getClientId();
+        }
+        else return dotControlRequestMessage.get().getClientId();
+    }
 
 
     public static DotControlRequestMessage getFromClientRequestMessage(){
@@ -407,6 +434,10 @@ public class DotControlSteps {
                                                             generateInitCallMessageId(messageIdStrategy));
         initCallBody.set(body);
         return initCallBody.get();
+    }
+
+    public static InitContext getInitContext(){
+        return initCallBody.get().getInitContext();
     }
 
     public String generateInitCallMessageId(String messageIdStrategy){

@@ -15,11 +15,13 @@ import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
@@ -391,16 +393,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 String userName=null;
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-                if(social.equalsIgnoreCase("dotcontrol")) {
-                    userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-                    Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,15, "main"),
-                            "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
-                                    DotControlSteps.getFromClientRequestMessage().getClientId()+")");
-                    return;
-                }
+                if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,20, agent),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
-            }
+    }
 
     private boolean waitForDotControlRequestOnChatDesk(){
         for(int i = 0; i<5; i++) {
@@ -459,7 +455,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 userName = FacebookUsers.getLoggedInUserName();
                 break;
             case "dotcontrol":
-               userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+               userName = DotControlSteps.getClient();
 
         }
         getLeftMenu(agent).openNewFromSocialConversationRequest(userName);
@@ -523,6 +519,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "User info is not as expected \n");
     }
 
+    @Then("Correct dotcontrol client details from Init context are shown")
+    public void verifyInitContextClientDetails(){
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+
+        Customer360PersonalInfo expectedResult = getCustomer360Info("dotcontrol");
+        InitContext initContext = DotControlSteps.getInitContext();
+        expectedResult.setFullName(initContext.getFullName())
+                        .setEmail(initContext.getEmail())
+                        .setPhone(initContext.getPhone())
+        .setChannelUsername("");
+
+        Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedResult,
+                "User Customer360 info is not as in init context \n");
+    }
 
 
     @When("Click (?:'Edit'|'Save') button in Customer 360 view")
@@ -561,9 +571,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertAll();
     }
 
-    @And("^Empty image is not shown in left menu with chats$")
+    @And("^Empty image is not shown for chat with (.*) user$")
     public void verifyEmptyImgNotShown(String customerFrom){
-        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(getUserNameFromLocalStorage()),
+        String user = "";
+        if(customerFrom.equalsIgnoreCase("facebook")) user = FacebookUsers.getLoggedInUserName();
+        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(user),
                 "Image is not updated in left menu with chats. \n");
     }
 

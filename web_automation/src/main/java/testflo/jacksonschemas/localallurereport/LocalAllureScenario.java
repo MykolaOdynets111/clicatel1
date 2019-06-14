@@ -4,6 +4,7 @@ package testflo.jacksonschemas.localallurereport;
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 import testflo.jacksonschemas.AllureScenarioInterface;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,10 +171,17 @@ public class LocalAllureScenario implements AllureScenarioInterface {
     }
 
     @Override
-    public Map<String, String> getStepsWithStatuses() {
-        Map<String, String> map = new HashMap<>();
-        getSteps().forEach(e -> map.put(e.getName(), e.getStatus()));
-        return map;
+    public List<Map<String, String>> getStepsWithStatuses() {
+        List<Map<String, String>> steps = new ArrayList<>();
+
+        getSteps().forEach(e ->
+        {
+            Map<String, String> map = new HashMap<>();
+            map.put("name", e.getName());
+            map.put("status", e.getStatus());
+            steps.add(map);
+        });
+        return steps;
     }
 
     @JsonProperty("testId")

@@ -11,7 +11,6 @@ Feature: Chat console: Overview tab
     And Create fb dm message chat via API
     When User enter connect to agent into widget input field
     Then Second agent has new conversation request
-    And Second agent has new conversation request from facebook user
     Then Customer engaging with an Agent counter shows correct live chats number
     And Average chats per Agent is correct
 

@@ -23,7 +23,9 @@ public class NewTCTBodyGenerator {
              "    \"description\": \"%s\",\n" +
              "    \"issuetype\": {\n" +
              "      \"name\": \"Test Case Template\"\n" +
-             "    },\n" +
+             "    },\"components\": [{\n" +
+             "  \"name\": \"Automated Test Cases\"\n" +
+             "}],\n" +
              "    \"customfield_10906\": {\n" +
              "            \"stepsRows\": %s" +
              "    }\n" +
@@ -33,21 +35,25 @@ public class NewTCTBodyGenerator {
      public static String formBodyForNewTestCaseTemplate(AllureScenarioInterface scenario){
          ObjectMapper mapper = new ObjectMapper();
 
-         Map<String, String> scenarioSteps = scenario.getStepsWithStatuses();
+         List<Map<String, String>> scenarioSteps = scenario.getStepsWithStatuses();
          List<String> testCaseSteps = new ArrayList<>();
-         for(String stepName : scenarioSteps.keySet()){
-
+         for(int i = 0; i<scenarioSteps.size(); i++){
+             Map<String, String> map = scenarioSteps.get(i);
              NewTCTStep testCaseStep = new NewTCTStep().setCells(
-                     Arrays.asList(stepName, "", ""));
+                     Arrays.asList(map.get("name"), "", ""));
              try {
-                 testCaseSteps.add(mapper.writeValueAsString(testCaseStep));
+                 testCaseSteps.add(i, mapper.writeValueAsString(testCaseStep));
              } catch (JsonProcessingException e) {
                  e.printStackTrace();
              }
          }
 
-         String body = String.format(newIssueBody, scenario.getName(),
-                 scenario.getDescription().replace("null", "").trim(),
+         String body = String.format(newIssueBody, scenario.getName().replace("\"", "\\\"" ),
+                 scenario.getDescription()
+                         .replace("null", "")
+                         .replace("\"", "\\\"" )
+                         .replace("\n", "\\n")
+                         .trim(),
                  testCaseSteps.toString());
          return body;
      }

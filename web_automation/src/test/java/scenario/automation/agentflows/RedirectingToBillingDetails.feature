@@ -1,6 +1,7 @@
 @portal
 @no_widget
 @no_chatdesk
+@touch_go
 Feature: Admin of tenant with Starter plan should be redirected on the billing details page while buying new plan
 
   Scenario: Admin should be redirected to the Billing Details when they are not added

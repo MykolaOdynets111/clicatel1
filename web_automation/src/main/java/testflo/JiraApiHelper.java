@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,8 +59,17 @@ public class JiraApiHelper {
                 .header("Content-Type", "application/json")
                 .body(body)
                 .post(JiraEndpoints.JIRA_ISSUE);
-        resp.statusCode();
-        return resp.jsonPath().getMap("");
+        int statusCode = resp.statusCode();
+        if(statusCode == 400 |
+                statusCode == 500){
+            Map<String, String> map = new HashMap<>();
+            map.put("key", "TPORT-0000");
+            map.put("tcName", scenario.getName());
+            map.put("body", body);
+            return  map;
+        } else {
+            return resp.jsonPath().getMap("");
+        }
     }
 
     public static void changeTestCaseStatus(String tcKey, String transitionId){
