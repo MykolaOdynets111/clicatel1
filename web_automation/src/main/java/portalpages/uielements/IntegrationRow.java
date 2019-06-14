@@ -24,6 +24,10 @@ public class IntegrationRow extends Widget implements WebActions {
         return baseWebElem.findElement(By.xpath(integrationName)).getText();
    }
 
+   public boolean isToggleEnabled(){
+       return baseWebElem.findElement(By.cssSelector(toggle)).getAttribute("class").contains("toggle-active");
+   }
+
    public void clickToggle(){
        baseWebElem.findElement(By.cssSelector(toggle)).click();
    }

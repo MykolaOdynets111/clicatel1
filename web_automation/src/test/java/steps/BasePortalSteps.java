@@ -611,9 +611,9 @@ public class BasePortalSteps implements JSHelper {
                 "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
-    @When("^Disable the (.*)$")
-    public void disableTheIntegration(String integration){
-        getPortalIntegrationsPage().clickToggleFor(integration);
+    @When("^(.*) the (.*)$")
+    public void disableTheIntegration(String switchTo, String integration){
+        getPortalIntegrationsPage().switchToggleStateTo(integration, switchTo);
         getPortalIntegrationsPage().waitWhileProcessing();
     }
 

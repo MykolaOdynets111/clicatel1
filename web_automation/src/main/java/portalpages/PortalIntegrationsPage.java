@@ -42,6 +42,14 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
         }
     }
 
+    // changing toggle state if it's required
+    public void switchToggleStateTo(String integrationName, String toggleAction){
+        if (toggleAction.equalsIgnoreCase("enable") && getTargetIntegrationRow(integrationName).isToggleEnabled())
+            System.out.println("No toggle state change required for '" + integrationName + "' integration");
+        else if (toggleAction.equalsIgnoreCase("disable") && getTargetIntegrationRow(integrationName).isToggleEnabled())
+            clickToggleFor(integrationName);
+    }
+
     public String getIntegrationRowStatus(String integrationName){
         return getTargetIntegrationRow(integrationName).getStatus();
     }
