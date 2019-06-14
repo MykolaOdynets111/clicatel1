@@ -38,6 +38,8 @@ public enum MC2Account {
     TESTING_COMMON_BOT("starter", "commontenant@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "testing", "", ""),
     QA_COMMON_BOT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "qa", "", ""),
 
+    QA_TRAINING_ADMIN("standard", "standard@mailinator.com", "passw0rd", "standard-plan", "Standard", "qa", "", "")
+
     ;
 
     String touchGoPlan;
