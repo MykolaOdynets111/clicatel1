@@ -319,7 +319,7 @@ public interface WebActions extends WebWait {
             }
             BufferedImage expImage = ImageIO.read(image);
             BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.08);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
             if (!result) {
               //  Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
             }
