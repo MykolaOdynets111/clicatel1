@@ -19,13 +19,13 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     @FindBy(css = "div#expirationMonth")
     private WebElement expirationMonth;
 
-    @FindBy(xpath = "(//li[@id='ui-select-choices-5']/div)[5]")
+    @FindBy(xpath = "(//ul[@class = 'ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-scope']//div[contains(@class, 'ui-select-choices-row ng-scope')])[3]")
     private WebElement thirdMons;
 
     @FindBy(css = "div[cl-options='expirationYears']")
     private WebElement expirationYear;
 
-    @FindBy(xpath =  "(//li[@id='ui-select-choices-6']/div)[5]")
+    @FindBy(xpath =  "(//ul[@class = 'ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-scope']//div[contains(@class, 'ui-select-choices-row ng-scope')])[3]")
     private WebElement thirdYear;
 
     @FindBy(css = "input[type='checkbox']+span")
