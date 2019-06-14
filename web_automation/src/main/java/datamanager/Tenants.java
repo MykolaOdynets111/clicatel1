@@ -152,6 +152,11 @@ public class Tenants {
                 Tenants.setTenantUnderTestOrgName("New One");
                 TENANT_UNDER_TEST.get().put("Automation Common", "automationtest1");
                 break;
+            case "Standard Billing":
+                Tenants.setTenantUnderTestName("standardbilling");
+                Tenants.setTenantUnderTestOrgName("Standard Billing");
+                TENANT_UNDER_TEST.get().put("Standard Billing", "standardbilling");
+                break;
         }
     }
 
