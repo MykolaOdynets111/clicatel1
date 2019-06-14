@@ -71,7 +71,9 @@ public enum Agents {
     TESTING_COMMON_ADMIN("commontenant@gmail.com", "p@$$w0rd4te$t", "Automation Common", "testing"),
 
     // ======= Dummy tenants for training
-    QA_TRAINING_ADMIN("standard@mailinator.com", "passw0rd", "Standard", "qa"),
+    DEV_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "qa"),
+    DEMO_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "qa"),
+    QA_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "qa"),
 
     ;
 
