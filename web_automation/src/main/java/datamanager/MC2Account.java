@@ -38,8 +38,8 @@ public enum MC2Account {
     TESTING_COMMON_BOT("starter", "commontenant@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "testing", "", ""),
     QA_COMMON_BOT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "aqacomon", "Automation Common", "qa", "", ""),
 
-    DEV_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "qa", "", ""),
-    DEMO_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "qa", "", ""),
+    DEV_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "dev", "", ""),
+    DEMO_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "demo", "", ""),
     QA_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "qa", "", ""),
 
     ;
