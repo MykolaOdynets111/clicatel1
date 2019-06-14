@@ -798,7 +798,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("Tickets are correctly sorted")
     public void verifyTicketsSorting(){
-        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer().getAllTicketsInfoExceptDate();
+        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer()
+                                                                            .getAllTicketsInfoExceptDate();
         List<CRMTicket> createdTickets = getCreatedCRMTicketsList();
 
         Collections.reverse(createdTickets);
