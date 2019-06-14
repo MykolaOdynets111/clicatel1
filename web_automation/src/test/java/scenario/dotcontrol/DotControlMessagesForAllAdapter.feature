@@ -1,7 +1,6 @@
 @start_server
 @no_widget
 @dot_control
-@egor
 Feature: Creating .Control integration and sending messages for different adapters
 
   Scenario Outline: Sending message to .Control (to agent) using <adapter> adapter
