@@ -21,7 +21,6 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;

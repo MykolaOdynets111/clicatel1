@@ -14,7 +14,6 @@ import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
-import datamanager.jacksonschemas.Intent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -1147,7 +1146,6 @@ public class BasePortalSteps implements JSHelper {
     @And("^Refresh page and verify business details was changed for (.*)$")
     public void refreshPageAndVerifyItWasChanged(String tenantOrgName) {
         SoftAssert soft = new SoftAssert();
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
         Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
         String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
