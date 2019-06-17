@@ -736,7 +736,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
             Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
             createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
-            getAgentHomeForMainAgent().waitFor(400);
+            getAgentHomeForMainAgent().waitFor(1100);
         }
         createdCrmTicketsList.set(createdCRMTicket);
         Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), ticketsNumber,
@@ -804,7 +804,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("Tickets are correctly sorted")
     public void verifyTicketsSorting(){
-        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer().getAllTicketsInfoExceptDate();
+        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer()
+                                                                            .getAllTicketsInfoExceptDate();
         List<CRMTicket> createdTickets = getCreatedCRMTicketsList();
 
         Collections.reverse(createdTickets);

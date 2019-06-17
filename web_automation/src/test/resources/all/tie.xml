@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Suite of suites for TIE tests" >
-    <test name="TIE parallel tests (all tenants)" parallel="instances" thread-count="6">
+    <test name="TIE parallel tests (all tenants)" parallel="instances" thread-count="20">
         <classes>
             <class name="runner.generalbank.RunTIETest" />
             <class name="runner.virginmoney.RunTIETest" />

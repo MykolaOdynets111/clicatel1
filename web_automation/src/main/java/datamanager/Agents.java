@@ -70,6 +70,11 @@ public enum Agents {
     QA_COMMON_ADMIN("account_signup@aqa.test", "p@$$w0rd4te$t", "Automation Common", "qa"),
     TESTING_COMMON_ADMIN("commontenant@gmail.com", "p@$$w0rd4te$t", "Automation Common", "testing"),
 
+    // ======= Dummy tenants for training
+    DEV_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "dev"),
+    DEMO_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "demo"),
+    QA_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "qa"),
+
     ;
 
     String email;

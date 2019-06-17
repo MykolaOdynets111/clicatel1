@@ -15,7 +15,7 @@ Feature: CRM ticket sentiment
     When Agent click "End chat" button
     Then End chat popup should be opened
     Then Agent can see default Supply a note... placeholder for note if there is no input made
-    Then Agent can see valid sentiments (Neutral sentiment by default, There are 3 icons for sentiments)
-    Then Agent is able to select sentiments, when sentiment is selected, 2 other should be blurred
+#    Then Agent can see valid sentiments (Neutral sentiment by default, There are 3 icons for sentiments)
+#    Then Agent is able to select sentiments, when sentiment is selected, 2 other should be blurred
 
 

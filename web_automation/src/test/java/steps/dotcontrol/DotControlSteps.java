@@ -375,7 +375,12 @@ public class DotControlSteps {
     }
 
     public static String getClient(){
-        if(initCallBody.get()!=null) return initCallBody.get().getInitContext().getFullName();
+        if(initCallBody.get()!=null) {
+            if (initCallBody.get().getInitContext()!=null){
+                return initCallBody.get().getInitContext().getFullName();
+            }
+            return dotControlRequestMessage.get().getClientId();
+        }
         else return dotControlRequestMessage.get().getClientId();
     }
 
