@@ -1,3 +1,4 @@
+@without_tct
 Feature: Default SMS integration items visibility check
 
   Background:
@@ -12,7 +13,6 @@ Feature: Default SMS integration items visibility check
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
-    Then Conversation area becomes active with connect to agent user's message
 
   Scenario: Send SMS button change state depending on phone number availability
     When Agent see no phone number added into customer's profile

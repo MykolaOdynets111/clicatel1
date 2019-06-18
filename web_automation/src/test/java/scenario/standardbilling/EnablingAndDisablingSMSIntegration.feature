@@ -1,5 +1,6 @@
 @portal
 @no_chatdesk
+@without_tct
 Feature: Admin should be able to enable and disable SMS integration
 
   Scenario: Switch OFF and ON SMS integration
