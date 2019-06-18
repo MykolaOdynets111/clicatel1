@@ -328,10 +328,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomePage(agent).getChatHeader().clickUnpinButton(agent);
     }
 
-    @Then("^(.*) can not click 'Transfer chat' button$")
-    public void agentCanNotClickTransferChatButton(String agent) {
-        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isTransferButtonEnabled(),
+    @Then("^(.*) can not click '(.*)' button$")
+    public void agentCanNotClickTransferChatButton(String agent, String transferButton) {
+        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isButtonEnabled(transferButton),
                 "Transfer chat button is enabled ");
+    }
+
+    @Then("^(.*) button is (?:enabled|disabled) for the (.*)$")
+    public void isButtonEnabled(String button, String state, String agent){
+        if (state.equalsIgnoreCase("disabled"))
+            Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isButtonEnabled(button));
+        else if (state.equalsIgnoreCase("enabled"))
+            Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isButtonEnabled(button));
     }
 
 
