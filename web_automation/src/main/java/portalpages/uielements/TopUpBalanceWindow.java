@@ -20,4 +20,8 @@ public class TopUpBalanceWindow extends BasePortalWindow {
     public String getMinLimit(){
         return  inputBalanceField.getAttribute("placeholder").split("Minimum allowed")[1];
     }
+
+    public void enterNewAmount(int amount){
+        inputBalanceField.sendKeys(String.valueOf(amount));
+    }
 }

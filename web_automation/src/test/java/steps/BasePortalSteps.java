@@ -66,7 +66,7 @@ public class BasePortalSteps implements JSHelper {
     private Widget widget;
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
-    private Map<String, Integer> topUpBalance;
+    private Map<String, Integer> topUpBalance = new HashMap<>();
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -768,9 +768,11 @@ public class BasePortalSteps implements JSHelper {
                 "'Top up balance' window is not opened");
     }
 
-    @When("^I enter allowed amount$")
+    @When("^Agent enter allowed top up amount$")
     public void enterNewBalanceAmount(){
-//        topUpBalance.
+        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
+        String value = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit();
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(Integer.valueOf(value) + 1);
     }
 
     @Then("^'Add a payment method now\\?' button is shown$")

@@ -14,7 +14,6 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import org.junit.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
@@ -733,10 +732,4 @@ public class ApiHelper implements DateTimeHelper{
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
 
-    public static MC2AccountBalance getAccountBallance(){
-        return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                .get(Endpoints.PLATFORM_ACCOUNT_BALANCE)
-                .getBody().as(MC2AccountBalance.class);
-    }
 }

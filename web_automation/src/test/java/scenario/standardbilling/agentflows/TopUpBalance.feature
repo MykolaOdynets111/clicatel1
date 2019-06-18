@@ -12,7 +12,7 @@
 #    And Select 'Top up balance' in nav menu
 #    When Admin clicks Top up balance on Billing details
 #    Then 'Top up balance' window is opened
-#    When I enter allowed amount
+#    When Agent enter allowed top up amount
 #
 #    Then 'Add a payment method now?' button is shown
 #    When Admin clicks 'Add a payment method now?' button
