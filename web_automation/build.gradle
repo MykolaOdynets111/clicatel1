@@ -40,8 +40,6 @@ dependencies {
     compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
     compile 'mysql:mysql-connector-java:5.1.+'
     compile 'com.assertthat:selenium-shutterbug:0.9.1'
-    compile group: 'ru.yandex.qatools.ashot', name: 'ashot', version: '1.5.4'
-    compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
 }
 
 configurations {
