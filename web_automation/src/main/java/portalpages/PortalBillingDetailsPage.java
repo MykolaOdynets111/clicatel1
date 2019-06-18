@@ -29,7 +29,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement removePaymentConfirmationButton;
 
-    @FindBy(xpath = "//section//button[@ng-click='topUpBalance()']")
+    @FindBy(xpath = "//header//button[@ng-click='topUpBalance()']")
     private WebElement topUpBalanceButton;
 
     private BillingContactsDetails billingContactsDetails;
