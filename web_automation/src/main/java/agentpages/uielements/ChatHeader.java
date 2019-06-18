@@ -36,10 +36,12 @@ public class ChatHeader extends AbstractUIElement {
     private String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
 
 
-    public void clickEndChatButton(){
-        if (!isElementShownAgent(endChatButton)){
+    public void clickEndChatButton() {
+        if (!isElementShownAgent(endChatButton)) {
             Assert.assertTrue(false, "'End chat' button is not shown.");
-        } else {endChatButton.click();}
+        } else {
+            clickElemAgent(endChatButton, 6, "agent", "End chat button");
+        }
     }
 
     public boolean isEndChatShown(String agent){

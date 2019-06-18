@@ -1,8 +1,6 @@
 package agentpages.uielements;
 
 import apihelper.ApiHelperTie;
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
-import drivermanager.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
@@ -12,10 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper, JSHelper {
@@ -83,20 +78,36 @@ public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper,
             return messageText.getAttribute("innerText").trim();
     }
 
+//    public boolean isValidImgAshot(String adapter) {
+//        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+//        try {
+//           // WebElement wel=findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main");
+//            WebElement wel=DriverFactory.getDriverForAgent("main").findElement(By.xpath("//span[contains(@class,'http-icon')]//span/*"));
+//            Screenshot fpScreenshot2 =  new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"),wel);
+//            ImageIO.write(fpScreenshot2.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
+//            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"), adapterIcon);//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
+//            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
+//            ImageIO.write(fpScreenshot2.getImage(), "PNG", new File("src/test/resources/adaptericonsA/22.png"));
+//           // new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"));
+//        } catch (Exception e){
+//
+//        }
+//      //  return isWebElementEqualsImageAshot(adapterIcon,image,adapter);
+//       // new AShot().takeScreenshot(DriverFactory.getDriverForAgent("main"), findElemByXPATHAgent("//span[contains(@class,'http-icon')]//span/*","main"))
+//        return true;
+//    }
+
     public boolean isValidImg(String adapter) {
         File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
-        return isWebElementEqualsImage(adapterIcon,image);
+          return isWebElementEqualsImage(adapterIcon,image);
+
     }
 
 
     public boolean isValidIconSentiment(String message){
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-
-   //     createElementImage(userSentiment,sentiment,"src/test/resources/sentimenticons/");
         File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
         isWebElementEqualsImage(userSentiment,image);
-
-
         return true;
     }
 

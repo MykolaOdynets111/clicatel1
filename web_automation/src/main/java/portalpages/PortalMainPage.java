@@ -63,7 +63,11 @@ public class PortalMainPage extends PortalAbstractPage {
     public void upgradePlan(int agentSeats){
         addAgentSeatsIntoCart(agentSeats);
         openAgentsPurchasingConfirmationWindow();
-        cartPage.getConfirmPaymentDetailsWindow()
+        checkoutAndBuy(cartPage);
+    }
+
+    public void checkoutAndBuy(CartPage localCartPage){
+        localCartPage.getConfirmPaymentDetailsWindow()
                 .clickSelectPaymentField()
                 .selectPaymentMethod("VISA")
                 .clickNexButton()

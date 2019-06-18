@@ -14,7 +14,6 @@ import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
-import datamanager.jacksonschemas.Intent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -67,7 +66,7 @@ public class BasePortalSteps implements JSHelper {
     private Widget widget;
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
-
+    private Map<String, Double> topUpBalance = new HashMap<>();
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -758,6 +757,55 @@ public class BasePortalSteps implements JSHelper {
         getPortalMainPage().clickPageNavButton(navName);
     }
 
+    @When("^Admin clicks Top up balance on Billing details$")
+    public void clickTopUpOnBilling(){
+        getPortalBillingDetailsPage().clickTopUPBalance();
+    }
+
+    @Then("^'Top up balance' window is opened$")
+    public void verifyTopUpBalanceWindowOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().getTopUpBalanceWindow().isShown(),
+                "'Top up balance' window is not opened");
+    }
+
+    @When("^Agent enter allowed top up amount$")
+    public void enterNewBalanceAmount(){
+        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
+        String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
+        int addingSum = Integer.valueOf(minValue) + 1;
+        double afterTest = topUpBalance.get("preTest") + addingSum;
+        topUpBalance.put("afterTest", afterTest);
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
+    }
+
+    @When("^Click 'Add to cart' button$")
+    public void clickAddToCartButton(){
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().clickAddToCardButton();
+        getPortalBillingDetailsPage().waitWhileProcessing();
+    }
+
+    @When("^Make the balance top up payment$")
+    public void buyTopUpBalance(){
+        getPortalMainPage().getCartPage().clickCheckoutButton();
+        getPortalMainPage().checkoutAndBuy(getPortalMainPage().getCartPage());
+    }
+
+    @Then("^Top up balance updated up to (.*) minutes$")
+    public void verifyTopUpUpdated(int mints){
+        String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+        boolean result = false;
+        for(int i = 0; i<(mints*60)/25; i++){
+            if(valueFromPortal.equalsIgnoreCase(String.format("%1.2f", topUpBalance.get("afterTest")))){
+                result = true;
+                break;
+            } else{
+                getPortalMainPage().waitFor(25000);
+                valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+            }
+        }
+        Assert.assertTrue(result, "Balance was not updated after top up");
+    }
+
 
     @Then("^'Add a payment method now\\?' button is shown$")
     public void verifyAddPaymentButtonShown(){
@@ -1147,7 +1195,6 @@ public class BasePortalSteps implements JSHelper {
     @And("^Refresh page and verify business details was changed for (.*)$")
     public void refreshPageAndVerifyItWasChanged(String tenantOrgName) {
         SoftAssert soft = new SoftAssert();
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
         Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
         String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());

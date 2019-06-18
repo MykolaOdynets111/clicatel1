@@ -87,9 +87,9 @@ public class Widget extends AbstractPage {
 
     private void waitConnectingMessageToDisappear() {
         try{
-            waitForElementToBeInvisibleWithNoSuchElementException(conectingMassage, 15);
+            waitForElementToBeInvisibleWithNoSuchElementException(conectingMassage, 17);
         } catch (TimeoutException e){
-            Assert.assertTrue(false, "Widget is not connected after 15 seconds wait. Client ID: "+getUserNameFromLocalStorage()+"");
+            Assert.assertTrue(false, "Widget is not connected after 17 seconds wait. Client ID: "+getUserNameFromLocalStorage()+"");
         }
     }
 

@@ -1,5 +1,7 @@
 package apihelper;
 
+import datamanager.Tenants;
+import datamanager.jacksonschemas.MC2AccountBalance;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
@@ -159,4 +161,10 @@ public class ApiHelperPlatform {
                 .get(Endpoints.PLATFORM_BILLING_INFO);
     }
 
+    public static MC2AccountBalance getAccountBallance(){
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(Endpoints.PLATFORM_ACCOUNT_BALANCE)
+                .getBody().as(MC2AccountBalance.class);
+    }
 }
