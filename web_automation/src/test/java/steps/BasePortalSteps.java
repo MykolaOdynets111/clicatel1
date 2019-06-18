@@ -796,7 +796,7 @@ public class BasePortalSteps implements JSHelper {
 
 
     @When("^Selects all checkboxes for adding new payment$")
-    public void checkAllCheckBoxesForAddindNewPayment(){
+    public void checkAllCheckBoxesForAddingNewPayment(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().checkAllCheckboxesForAddingNewPayment();
     }
 
@@ -1192,7 +1192,7 @@ public class BasePortalSteps implements JSHelper {
                 .findFirst().get().getAgentFullName();
         Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
                         .getTargetAgentRow(secondAgentNameForChatConsoleTests).isNoActiveChatsIconShown(40),
-                secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
+                secondAgentNameForChatConsoleTests + " agent is not marked with yellow");
 
     }
 
