@@ -3,6 +3,7 @@ package steps;
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.ChatInActiveChatHistory;
+import agentpages.uielements.Customer360Container;
 import agentpages.uielements.LeftMenuWithChats;
 import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
@@ -334,7 +335,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Transfer chat button is enabled ");
     }
 
-    @Then("^(.*) button is (?:enabled|disabled) for the (.*)$")
+    @Then("^(.*) button is (.*) for the (.*)$")
     public void isButtonEnabled(String button, String state, String agent){
         if (state.equalsIgnoreCase("disabled"))
             Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isButtonEnabled(button));
@@ -561,6 +562,31 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
 
+    }
+
+    @When("^(.*) see (.*) phone number added into customer's profile$")
+    public void updatePhoneNumberCustomer360(String agent, String isPhoneNumberRequired){
+        Assert.assertTrue(isRequiredPhoneNumberDisplayed(agent, isPhoneNumberRequired));
+    }
+
+    @Then("^(.*) button (.*) displayed$")
+    public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
+        Customer360Container customer360PersonalInfo = getAgentHomePage("main").getCustomer360Container();
+        if (isOrNotDisplayed.equalsIgnoreCase("is"))
+            Assert.assertTrue(customer360PersonalInfo.isSMSButtonsDisplayed(buttonName));
+        else
+            Assert.assertFalse(customer360PersonalInfo.isSMSButtonsDisplayed(buttonName));
+    }
+
+    @When("^Change phone number for (.*) user and save changes$")
+    public void changePhoneNumberCustomer360(String customerFrom){
+        Faker faker = new Faker();
+        String phoneNumber = faker.phoneNumber().cellPhone();
+        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
+        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+        getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
+        Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
     }
 
     @Then("^(.*) customer info is updated on backend$")
@@ -1132,6 +1158,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
+    }
+
+    public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired){
+        String phone = getAgentHomePage(agent).getCustomer360Container().getPhoneNumber();
+        if (isPhoneNumberRequired.equalsIgnoreCase("no"))
+            return phone.equalsIgnoreCase("unknown");
+        else
+            return !phone.equalsIgnoreCase("unknown");
     }
 
     @Then("^CRM ticket is not created$")

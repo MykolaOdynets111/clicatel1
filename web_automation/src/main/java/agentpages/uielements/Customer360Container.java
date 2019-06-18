@@ -45,6 +45,12 @@ public class Customer360Container extends AbstractUIElement {
     private WebElement phoneLabel;
     @FindBy(name = "phone")
     private WebElement phoneInput;
+    @FindBy(xpath = "//div[@class='info-row']/button[text()='Send OTP']")
+    private WebElement sendOTPButton;
+    @FindBy(xpath = "//div[@class='info-row']/button[text()='Verify']")
+    private WebElement verifyPhoneButton;
+    @FindBy(xpath = "//div[@class='info-row']/button[text()='Re-send OTP']")
+    private WebElement resendOTPButton;
 
     @FindBy(css = "button.pull-right.disable-spacing-top.btn-default")
     private WebElement saveEditButton;
@@ -103,4 +109,24 @@ public class Customer360Container extends AbstractUIElement {
         return Color.fromString(mailColor.getCssValue("color")).asHex();
     }
 
+    public String getPhoneNumber() {
+        return phoneLabel.getText();
+    }
+
+    public boolean isSMSButtonsDisplayed(String button){
+        switch (button.toLowerCase()) {
+            case "send otp":
+                return sendOTPButton.isDisplayed();
+            case "verify":
+                return verifyPhoneButton.isDisplayed();
+            case "re-send otp":
+                return resendOTPButton.isDisplayed();
+            default:
+                return false;
+        }
+    }
+
+    public void clickSendOTPButton(){
+        sendOTPButton.click();
+    }
 }
