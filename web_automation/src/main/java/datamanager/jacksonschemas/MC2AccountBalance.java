@@ -15,23 +15,23 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 public class MC2AccountBalance {
 
     @JsonProperty("balance")
-    private Integer balance;
+    private Double balance;
     @JsonProperty("currency")
     private String currency;
     @JsonProperty("billingBalance")
-    private Integer billingBalance;
+    private Double billingBalance;
     @JsonProperty("billingCurrency")
     private String billingCurrency;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("balance")
-    public Integer getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
     @JsonProperty("balance")
-    public void setBalance(Integer balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
@@ -46,12 +46,12 @@ public class MC2AccountBalance {
     }
 
     @JsonProperty("billingBalance")
-    public Integer getBillingBalance() {
+    public Double getBillingBalance() {
         return billingBalance;
     }
 
     @JsonProperty("billingBalance")
-    public void setBillingBalance(Integer billingBalance) {
+    public void setBillingBalance(Double billingBalance) {
         this.billingBalance = billingBalance;
     }
 

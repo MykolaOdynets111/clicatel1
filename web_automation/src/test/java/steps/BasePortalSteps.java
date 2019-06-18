@@ -66,7 +66,7 @@ public class BasePortalSteps implements JSHelper {
     private Widget widget;
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
-    private Map<String, Integer> topUpBalance = new HashMap<>();
+    private Map<String, Double> topUpBalance = new HashMap<>();
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -771,9 +771,41 @@ public class BasePortalSteps implements JSHelper {
     @When("^Agent enter allowed top up amount$")
     public void enterNewBalanceAmount(){
         topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
-        String value = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit();
-        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(Integer.valueOf(value) + 1);
+        String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
+        int addingSum = Integer.valueOf(minValue) + 1;
+        double afterTest = topUpBalance.get("preTest") + addingSum;
+        topUpBalance.put("afterTest", afterTest);
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
     }
+
+    @When("^Click 'Add to cart' button$")
+    public void clickAddToCartButton(){
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().clickAddToCardButton();
+        getPortalBillingDetailsPage().waitWhileProcessing();
+    }
+
+    @When("^Make the balance top up payment$")
+    public void buyTopUpBalance(){
+        getPortalMainPage().getCartPage().clickCheckoutButton();
+        getPortalMainPage().checkoutAndBuy(getPortalMainPage().getCartPage());
+    }
+
+    @Then("^Top up balance updated up to (.*) minutes$")
+    public void verifyTopUpUpdated(int mints){
+        String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+        boolean result = false;
+        for(int i = 0; i<(mints*60)/25; i++){
+            if(valueFromPortal.equalsIgnoreCase(String.format("%1.2f", topUpBalance.get("afterTest")))){
+                result = true;
+                break;
+            } else{
+                getPortalMainPage().waitFor(25000);
+                valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+            }
+        }
+        Assert.assertTrue(result, "Balance was not updated after top up");
+    }
+
 
     @Then("^'Add a payment method now\\?' button is shown$")
     public void verifyAddPaymentButtonShown(){

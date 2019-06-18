@@ -30,6 +30,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(xpath = "//a[text() = 'Logout']")
     private WebElement logoutButton;
 
+    @FindBy(css = "div.balance-total.ng-binding")
+    private WebElement topUpBalanceSum;
+
     public void clickUpgradeButton(){
         waitForElementToBeClickableAgent(upgradeButton, 5, "main");
         try {
@@ -60,5 +63,9 @@ public class PageHeader extends AbstractUIElement {
         adminIcon.click();
         waitForElementToBeVisibleAgent(adminDropdown, 5);
         logoutButton.click();
+    }
+
+    public String getTopUpBalanceSumm(){
+        return topUpBalanceSum.getText().split(" ")[0];
     }
 }
