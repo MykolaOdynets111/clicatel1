@@ -796,7 +796,7 @@ public class BasePortalSteps implements JSHelper {
 
 
     @When("^Selects all checkboxes for adding new payment$")
-    public void checkAllCheckBoxesForAddindNewPayment(){
+    public void checkAllCheckBoxesForAddingNewPayment(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().checkAllCheckboxesForAddingNewPayment();
     }
 
