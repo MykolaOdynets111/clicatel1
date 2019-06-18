@@ -527,7 +527,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         InitContext initContext = DotControlSteps.getInitContext();
         expectedResult.setFullName(initContext.getFullName())
                         .setEmail(initContext.getEmail())
-                        .setPhone(initContext.getPhone())
+                        .setPhone(initContext.getPhone().replace(" ", ""))
         .setChannelUsername("");
 
         Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedResult,
