@@ -25,8 +25,8 @@ Feature: Chat console: Agents tab
     And Select 'Agents' in nav menu
     Then 'No agents online' on Agents tab shown if there is no online agent
     Given I login as second agent of General Bank Demo
-    Given Second agent has no active chats
     Then Logged in agents shown in Agents chat console tab
+    Given Second agent has no active chats
     And Second agent is marked with a yellow dot in chat console
 
 

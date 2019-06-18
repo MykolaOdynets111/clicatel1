@@ -103,7 +103,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
-        if (agent.contains("second")){
+        if (agent.toLowerCase().contains("second")){
             ApiHelper.closeActiveChatsSecondAgent();
         }else{
             ApiHelper.closeActiveChats();
