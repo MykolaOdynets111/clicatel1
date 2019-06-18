@@ -1,14 +1,25 @@
 package interfaces;
 
+import apihelper.ApiHelper;
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.Browser;
 import drivermanager.DriverFactory;
+import net.coobird.thumbnailator.Thumbnails;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import sun.awt.image.ToolkitImage;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 
@@ -294,15 +305,57 @@ public interface WebActions extends WebWait {
      */
     default boolean isWebElementEqualsImage(WebElement element, File image){
         boolean result=false;
+        Browser browser = new Browser(DriverFactory.getDriverForAgent("main"),true);
+        Double dpr= browser.getDevicePixelRatio();
         try {
-            BufferedImage expectedImage = ImageIO.read(image);
+           if (!image.canRead()) {
+                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
+                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+                File newFile = new File(image.getPath());
+                newFile.getParentFile().mkdirs();
+                new FileWriter(newFile);
+                BufferedImage buffered = imageToBufferedImage(newimg);
+                ImageIO.write(buffered,"PNG",newFile);
+                System.out.println("!!!!!! File was created !!!!!!!!! \n");
+            }
+            BufferedImage expImage = ImageIO.read(image);
+            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
             result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
+            if (!result) {
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
+            }
         }
         catch(Exception e) {
-//               Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName("test").save("src/test/resources/adapter/icons/");
+            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
         }
         return result;
     }
+
+    public static BufferedImage imageToBufferedImage(Image im) {
+        BufferedImage bi = new BufferedImage
+                (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
+        Graphics bg = bi.getGraphics();
+        bg.drawImage(im, 0, 0, null);
+        bg.dispose();
+        return bi;
+    }
+
+
+//    default boolean isWebElementEqualsImageAshot(WebElement element, File image, String name){
+//        boolean result=false;
+//        try {
+//            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"),element) ;//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
+//            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
+//            BufferedImage expectedImage = ImageIO.read(image);
+//        }
+//        catch(Exception e) {
+//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
+////            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
+////            jse.executeScript("window.scrollBy(0,250)", "");
+////            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
+//        }
+//        return result;
+//    }
 
     default void createElementImage(WebElement element,String name, String path){
 

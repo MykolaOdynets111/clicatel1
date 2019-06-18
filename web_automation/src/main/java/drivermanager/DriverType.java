@@ -31,6 +31,7 @@ public enum DriverType {
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
+            options.addArguments("--window-size=1024,768");
             options.addArguments("disable-web-security");
             options.addArguments("disable-gpu");
             options.addArguments("disable-webgl");
@@ -50,7 +51,7 @@ public enum DriverType {
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
             if (hostName.equals("FANB0604")) {
-                ChromeDriverManager.getInstance().version("72").setup();
+                ChromeDriverManager.getInstance().version("74").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
             ChromeDriverManager.getInstance().setup();
