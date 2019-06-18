@@ -732,4 +732,11 @@ public class ApiHelper implements DateTimeHelper{
                 .get(Endpoints.TENANT_AVAILABLE_AGENTS)
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
+
+    public static MC2AccountBalance getAccountBallance(){
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .get(Endpoints.PLATFORM_ACCOUNT_BALANCE)
+                .getBody().as(MC2AccountBalance.class);
+    }
 }

@@ -66,7 +66,7 @@ public class BasePortalSteps implements JSHelper {
     private Widget widget;
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
-
+    private Map<String, Integer> topUpBalance;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -757,6 +757,21 @@ public class BasePortalSteps implements JSHelper {
         getPortalMainPage().clickPageNavButton(navName);
     }
 
+    @When("^Admin clicks Top up balance on Billing details$")
+    public void clickTopUpOnBilling(){
+        getPortalBillingDetailsPage().clickTopUPBalance();
+    }
+
+    @Then("^'Top up balance' window is opened$")
+    public void verifyTopUpBalanceWindowOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().getTopUpBalanceWindow().isShown(),
+                "'Top up balance' window is not opened");
+    }
+
+    @When("^I enter allowed amount$")
+    public void enterNewBalanceAmount(){
+//        topUpBalance.
+    }
 
     @Then("^'Add a payment method now\\?' button is shown$")
     public void verifyAddPaymentButtonShown(){
