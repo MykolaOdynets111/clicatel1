@@ -324,35 +324,15 @@ public interface WebActions extends WebWait {
         return result;
     }
 
-    public static BufferedImage imageToBufferedImage(Image im) {
-        BufferedImage bi = new BufferedImage
-                (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
+     static  BufferedImage imageToBufferedImage(Image im) {
+        BufferedImage bi = new BufferedImage (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
         Graphics bg = bi.getGraphics();
         bg.drawImage(im, 0, 0, null);
         bg.dispose();
         return bi;
     }
 
-
-//    default boolean isWebElementEqualsImageAshot(WebElement element, File image, String name){
-//        boolean result=false;
-//        try {
-//            Screenshot fpScreenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"),element) ;//.shootingStrategy(ShootingStrategies.viewportPasting(100)).takeScreenshot(DriverFactory.getDriverForAgent("main"));
-//            ImageIO.write(fpScreenshot.getImage(), "PNG", new File("src/test/resources/adaptericonsA/2.png"));
-//            BufferedImage expectedImage = ImageIO.read(image);
-//        }
-//        catch(Exception e) {
-//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save("src/test/resources/adaptericons/");
-////            JavascriptExecutor jse = (JavascriptExecutor)DriverFactory.getDriverForAgent("main");
-////            jse.executeScript("window.scrollBy(0,250)", "");
-////            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/adapter/")
-//        }
-//        return result;
-//    }
-
     default void createElementImage(WebElement element,String name, String path){
-
             Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
-
     }
 }

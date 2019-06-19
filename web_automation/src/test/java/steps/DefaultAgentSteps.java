@@ -584,19 +584,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Last message in left menu with chat as not expected. \n");
     }
 
-
     @Then("^Valid image for (.*) integration are shown in left menu with chat$")
     public void verifyImgForLastMessageInLeftMenu(String adapter) {
         Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
        // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
     }
-
-//    @Then("^Valid image for (.*) integration are shown$")
-//    public void verifyImgForLastMessageInLeftMenuAshot(String adapter) {
-//  //      Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
-//         getLeftMenu("main").isValidImg(adapter); //do not delete
-//    }
-
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
     public void verifyIconSentimentForLastMessageInLeftMenu(String message) {
@@ -607,7 +599,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     public void verifyCustomerNameUpdated(){
         Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName().trim()),
                 "Updated customer name is not shown in chat header");
-
     }
 
     @Then("^Agent photo is updated on chatdesk$")
