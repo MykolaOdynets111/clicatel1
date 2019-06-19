@@ -71,7 +71,6 @@ public interface JSHelper {
                         e.getMessage());
                 return "";}
         }else{
-            Assert.fail("DriverFactory.isTouchDriverExists() returns false \n");
             return "";
         }
     }

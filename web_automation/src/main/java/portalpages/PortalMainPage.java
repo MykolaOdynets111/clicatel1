@@ -67,6 +67,7 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public void checkoutAndBuy(CartPage localCartPage){
+//        if(localCartPage.)
         localCartPage.getConfirmPaymentDetailsWindow()
                 .clickSelectPaymentField()
                 .selectPaymentMethod("VISA")
