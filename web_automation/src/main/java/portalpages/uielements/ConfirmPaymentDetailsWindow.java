@@ -36,6 +36,8 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     private String termsAndConditions = "//a[text()='Terms and Conditions']";
 
+    private String billingContact = "form[name='form.cartPaymentDetails']";
+
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
         waitForElementToBeVisibleByXpathAgent(String.format(paymentMethodXpath, payment), 8);
         findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
@@ -134,4 +136,9 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     public boolean isPaymnentSummaryTabOPened(){
         return isElementShownAgentByXpath(termsAndConditions, 1, "admin");
     }
+
+    public boolean isBillingContactShown(){
+        return isElementShownAgentByCSS(billingContact, 3, "admin");
+    }
+
 }

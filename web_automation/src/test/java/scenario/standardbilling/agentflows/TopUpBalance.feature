@@ -2,6 +2,7 @@
 @no_widget
 @no_chatdesk
 @touch_go
+@without_tct
 Feature: Top up balance
 
   Scenario: Admin should be able to top up balance

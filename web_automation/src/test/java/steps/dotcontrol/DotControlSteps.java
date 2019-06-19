@@ -425,6 +425,7 @@ public class DotControlSteps {
         dotControlRequestMessage.remove();
         apiToken.remove();
         clientId.remove();
+        initCallBody.remove();
     }
 
     public DotControlInitRequest formInitRequestBody(String apiToken, String clientIdStrategy, String messageIdStrategy){

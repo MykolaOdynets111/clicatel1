@@ -11,6 +11,6 @@ Feature: Managing Agent's photo
     And Click 'Upload' button
     When Upload new photo
     Then New image is saved on portal and backend
-    When I select Touch in left menu and Launch Chat Desk in submenu
+    When I launch chatdesk from portal
     Then Agent photo is updated on chatdesk
 

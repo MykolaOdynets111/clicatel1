@@ -51,8 +51,25 @@ public interface JSHelper {
         if(DriverFactory.isTouchDriverExists()){
             try {
                 JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
-                return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
-            } catch(WebDriverException e){return "";}
+                String clientId = (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+                jsExec.executeScript("console.log(window.localStorage.getItem('ctlUsername'))");
+                if(clientId == null || clientId.equals("")){
+                    try {
+                        Thread.sleep(1100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    clientId = (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+
+                    if(clientId == null || clientId.equals("")){
+                        Assert.fail("Client id was not saved in local storage after 1.1 seconds wait \n");
+                    }
+                }
+                return clientId;
+            } catch(WebDriverException e){
+                Assert.fail("Getting client_id from local storage was not successful \n" +
+                        e.getMessage());
+                return "";}
         }else{
             return "";
         }

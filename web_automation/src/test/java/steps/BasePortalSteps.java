@@ -386,6 +386,24 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
+    @When("^I launch chatdesk from portal$")
+    public void launchChatdeskFromPortal(){
+        getPortalMainPage().waitWhileProcessing(2,5);
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        navigateInLeftMenu("Touch", "Launch Chat Desk");
+
+        while(getPortalMainPage().isPortalPageOpened()){
+            navigateInLeftMenu("Touch", "Launch Chat Desk");
+        }
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
     @When("^Save (.*) pre-test widget value$")
     public void savePreTestValue(String widgetName){
         try {
