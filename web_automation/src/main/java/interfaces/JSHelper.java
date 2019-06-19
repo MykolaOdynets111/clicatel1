@@ -52,6 +52,7 @@ public interface JSHelper {
             try {
                 JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
                 String clientId = (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+                jsExec.executeScript("console.log(window.localStorage.getItem('ctlUsername'))");
                 if(clientId == null || clientId.equals("")){
                     try {
                         Thread.sleep(1100);
