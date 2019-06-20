@@ -91,23 +91,22 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     }
 
     public String uncheckTodayDay(){
-        arrowSupportHours.click();
+        clickElemAgent(arrowSupportHours,2,"main","Arrow to open support hours");
         SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
         String nameOfDay = simpleDateformat.format(new Date());
         WebElement dayToUncheck = findElemByXPATHAgent(String.format(choiseSupportDay,nameOfDay),"main");
         clickElemAgent(dayToUncheck,2,"main","Today day");
-        addSupportHoursButton.click();
+        clickElemAgent(addSupportHoursButton,2,"main","Add button");
         return nameOfDay;
     }
 
     public boolean isUncheckTodayDay(String nameOfDay){
-        waitForElementToBeClickableAgent(arrowSupportHours,5,"main");
-        arrowSupportHours.click();
+        clickElemAgent(arrowSupportHours,3,"main","Arrow to open support hours");
         return isElementsExistsInDOM(String.format(choiseSupportDay,nameOfDay)+isSelected,5);
     }
 
     public void openSpecificSupportHours(){
-        specificSupportHours.click();
+        clickElemAgent(specificSupportHours,2,"main","Specific Support Hours");
     }
 
 }
