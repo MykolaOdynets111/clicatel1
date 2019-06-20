@@ -68,9 +68,28 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Tenants.checkWidgetConnectionStatus();
         DriverFactory.openUrl(tenantOrgName);
-        String clientID = getUserNameFromLocalStorage();
+        String clientID = getClientIdFromLocalStorage();
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
+
+    private String getClientIdFromLocalStorage(){
+        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
+        String clientId = getUserNameFromLocalStorage();
+        if(clientId == null || clientId.equals("")){
+            try {
+                Thread.sleep(1100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            clientId = (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+
+            if(clientId == null || clientId.equals("")){
+                Assert.fail("Client id was not saved in local storage after 1.1 seconds wait \n");
+            }
+        }
+        return clientId;
+    }
+
 
     @Given("^User open new (.*) tenant$")
     public void openNewTenantPage(String tenantOrgName) {
