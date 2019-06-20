@@ -3,6 +3,7 @@
 Feature: Managing business details
 
  @Issue("https://jira.clickatell.com/browse/TADMIN-1626")
+ @TestCaseId("https://jira.clickatell.com/browse/TPORT-4563")
   Scenario: Touch preferences :: Check changing business details
     Given I open portal
     And Login into portal as an admin of Automation Bot account
@@ -12,6 +13,7 @@ Feature: Managing business details
     Then Refresh page and verify business details was changed for Automation Bot
 
   @agent_support_hours
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5317")
   Scenario: Touch preferences :: Verify if agent can change support hours
     Given I open portal
     And Login into portal as an admin of Automation Bot account
