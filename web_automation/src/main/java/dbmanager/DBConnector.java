@@ -297,6 +297,71 @@ public class DBConnector {
         return sessionDetails;
     }
 
+    public static Map<String, String> getSessionDetailsByClientID(String env, String clientID) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        Map<String, String> sessionDetails = new HashMap<>();
+        String query = "SELECT * FROM "+tableName+".session where client_id = '"+clientID+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            sessionDetails.put("clientJID", getColumnValue(results, "client_jid"));
+            sessionDetails.put("state", getColumnValue(results, "state"));
+            sessionDetails.put("endedDate", getColumnValue(results, "ended_date"));
+            sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
+            sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
+            sessionDetails.put("conversationId",  getColumnValue(results,"conversation_id"));
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sessionDetails;
+    }
+
+    public static Map<String, String> getChatAgentHistoryDetailsBySessionID(String env, String sessionID) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        Map<String, String> details = new HashMap<>();
+        String query = "SELECT * FROM "+tableName+".chat_agent_history where session_id = '"+sessionID+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            details.put("endedDate", getColumnValue(results, "ended_date"));
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return details;
+    }
+
+    public static Map<String, String> getConversationByID(String env, String conversationID) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        Map<String, String> conversationDetails = new HashMap<>();
+        String query = "SELECT * FROM "+tableName+".conversation where conversation_id = '"+conversationID+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            conversationDetails.put("active", getColumnValue(results, "active"));
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return conversationDetails;
+    }
+
     private static String getColumnValue(ResultSet results, String column){
         String columnValue="";
         try {
