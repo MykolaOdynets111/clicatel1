@@ -16,7 +16,8 @@ public class CartPage extends PortalAbstractPage {
     }
 
     public void clickCheckoutButton(){
-        waitForElementsToBeVisibleByCssAgent(checkOutButtonCSS, 5);
+        waitForElementToBeVisibleByCssAgent(checkOutButtonCSS, 5);
+        waitForElementToBeClickableAgent(findElemByCSSAgent(checkOutButtonCSS), 5, "main");
         findElemByCSSAgent(checkOutButtonCSS).click();
     }
 

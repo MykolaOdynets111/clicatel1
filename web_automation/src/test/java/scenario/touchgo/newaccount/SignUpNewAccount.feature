@@ -13,6 +13,8 @@ Feature: Signing up the account
     Then Page with a message "Your account has successfully been created!" is shown
     And Login into portal as an admin of SignedUp AQA account
     Then Portal Page is opened
+    Then Landing pop up is shown
+    When Close landing popup
     Then "Update policy" pop up is shown
     When Accept "Update policy" popup
     Then Main portal page with welcome message is shown

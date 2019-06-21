@@ -35,6 +35,15 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "button.launchpad-btn")
     private WebElement launchpadButton;
 
+    @FindBy(xpath = "//span[text()='Thank you for singing up. Welcome!']")
+    private WebElement landingPage;
+
+    @FindBy(css = "span.svg-close.cl-clickable.push-right")
+    private WebElement closeLandingPage;
+
+    @FindBy(css = "div.button-container button.button.button-primary.ng-binding")
+    private WebElement closeLandingPageConfirmation;
+
     private LeftMenu leftMenu;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
@@ -67,6 +76,9 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public void checkoutAndBuy(CartPage localCartPage){
+        if(localCartPage.getConfirmPaymentDetailsWindow().isBillingContactShown()){
+            localCartPage.getConfirmPaymentDetailsWindow().clickNexButton();
+        }
         localCartPage.getConfirmPaymentDetailsWindow()
                 .clickSelectPaymentField()
                 .selectPaymentMethod("VISA")
@@ -139,6 +151,18 @@ public class PortalMainPage extends PortalAbstractPage {
         return isElementShownAgent(updatePolicyPopUp, 10);
     }
 
+    public boolean isLandingPopUpOpened(){
+        return isElementShownAgent(landingPage, 10);
+    }
+
+
+    public void closeLandingPage(){
+        clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
+        clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+
+    }
+
+
     public boolean isPortalPageOpened(){
         return isElementShownAgent(getPageHeader().getWrappedElement());
     }
@@ -148,6 +172,7 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public String getGreetingMessage(){
+        waitForElementToBeVisibleAgent(greetingMessage, 3);
         return getTextFrom(greetingMessage);
     }
 

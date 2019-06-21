@@ -10,6 +10,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Intents;
 import datamanager.jacksonschemas.Intent;
+import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
 import interfaces.WebActions;
@@ -19,6 +20,7 @@ import org.testng.asserts.SoftAssert;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AgentConversationSteps implements JSHelper, WebActions {
@@ -48,7 +50,7 @@ public class AgentConversationSteps implements JSHelper, WebActions {
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage, "main agent"),
-                "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
+                "'" +userMessage+ "' User message is not shown in conversation area");
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
@@ -261,6 +263,29 @@ public class AgentConversationSteps implements JSHelper, WebActions {
     @When("(.*) closes chat")
     public void closeChat(String agent){
         getAgentHomePage(agent).endChat();
+    }
+
+    @Then("^All session attributes are closed in DB$")
+    public void verifySessionClosed(){
+        SoftAssert soft = new SoftAssert();
+        Map<String, String> sessionDetails = DBConnector
+                                    .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        Map<String, String> chatAgentDetails = DBConnector
+                                    .getChatAgentHistoryDetailsBySessionID(ConfigManager.getEnv(), sessionDetails.get("sessionId"));
+        Map<String, String> conversationDetails = DBConnector
+                                    .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
+
+        soft.assertEquals(sessionDetails.get("state"), "TERMINATED",
+                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. ");
+        soft.assertTrue(sessionDetails.get("endedDate")!=null,
+        "Ended date is not set for session " +sessionDetails.get("sessionId")+ " after ending chat");
+        soft.assertTrue(chatAgentDetails.get("endedDate")!=null,
+                "Ended date is not set for chat agent history record after ending chat." +
+                        "\nSession " +sessionDetails.get("sessionId")+ "");
+        soft.assertEquals(conversationDetails.get("active"), "0",
+                "Conversation is still active after ending chat." +
+                        "\nSession " +sessionDetails.get("sessionId")+ "");
+        soft.assertAll();
     }
 
     @When("(.*) click 'Cancel' button$")

@@ -193,10 +193,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
        return crmNoteTextField.getAttribute("placeholder");
     }
 
-    public void createValidImg() throws Exception {
-        Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), sentimentsAll, true).withName("sentimentsConcludeWindow").save("src/test/resources/sentimenticons/");
-    }
-
     public boolean isValidSentiments(File image) {
         return isWebElementEqualsImage(sentimentsAll, image);
     }

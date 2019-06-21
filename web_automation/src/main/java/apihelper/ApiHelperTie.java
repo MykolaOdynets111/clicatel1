@@ -157,11 +157,12 @@ public class ApiHelperTie {
         List<String> faqIntents = ApiHelperTie.getAllIntentsWithIDs().getBody().jsonPath().getList("data").stream()
                 .map(e -> (List) e)
                 .filter(e -> ((String) e.get(2)).equals("faq"))
-                .map(e -> (String) e.get(5))
+                .map(e -> (String) e.get(6))
                 .collect(Collectors.toList());
         for(String id : faqIntents) {
             ApiHelperTie.deleteIntent(id);
-        }    }
+        }
+    }
 
 
     public static Response getTrainData(){

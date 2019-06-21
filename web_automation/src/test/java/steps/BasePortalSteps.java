@@ -67,6 +67,7 @@ public class BasePortalSteps implements JSHelper {
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
     private Map<String, Double> topUpBalance = new HashMap<>();
+    private String nameOfUnchekedDay = "";
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -224,7 +225,7 @@ public class BasePortalSteps implements JSHelper {
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
-        ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
+        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
     @When("^Login as (.*) agent$")
@@ -337,12 +338,24 @@ public class BasePortalSteps implements JSHelper {
     @When("^Accept \"Update policy\" popup$")
     public void acceptUpdatedPolicyPopup(){
         getPortalMainPage().closeUpdatePolicyPopup();
+        getPortalMainPage().waitWhileProcessing(2, 3);
+    }
+
+    @Then("^Landing pop up is shown$")
+    public void verifyLandingPopupShown(){
+        Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
+                "User is not logged in Portal");
+    }
+
+    @When("Close landing popup$")
+    public void acceptLandingPopup(){
+        getPortalMainPage().closeLandingPage();
     }
 
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
         Assert.assertEquals(getPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
-                ". Thanks for signing up.", "Welcome message is not shown.");
+                ". Add a solution to your account.", "Welcome message is not shown.");
     }
 
     @Then("^\"Get started with Touch\" button is shown$")
@@ -377,6 +390,24 @@ public class BasePortalSteps implements JSHelper {
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
+    @When("^I launch chatdesk from portal$")
+    public void launchChatdeskFromPortal(){
+        getPortalMainPage().waitWhileProcessing(2,5);
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        navigateInLeftMenu("Touch", "Launch Chat Desk");
+
+        while(getPortalMainPage().isPortalPageOpened()){
+            navigateInLeftMenu("Touch", "Launch Chat Desk");
+        }
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
             for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
                 if (!winHandle.equals(currentWindow)) {
