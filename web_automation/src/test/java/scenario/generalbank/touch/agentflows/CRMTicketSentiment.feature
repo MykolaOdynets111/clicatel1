@@ -6,7 +6,8 @@ Feature: CRM ticket sentiment
     Given User select General Bank Demo tenant
     Given I login as agent of General Bank Demo
     And Click chat icon
-
+    
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-4387")
   Scenario: Agent is able to see and select sentiment for CRM ticket
     Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
     When User enter connect to Support into widget input field
