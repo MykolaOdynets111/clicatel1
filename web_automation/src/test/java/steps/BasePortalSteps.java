@@ -67,6 +67,7 @@ public class BasePortalSteps implements JSHelper {
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
     private Map<String, Double> topUpBalance = new HashMap<>();
+    private String nameOfUnchekedDay = "";
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -1316,6 +1317,28 @@ public class BasePortalSteps implements JSHelper {
         soft.assertEquals(agentUnderTest.getIntents().get(ordinalChatNumber),
                 intent, "Intent for "+ userId +" user chat is not correct");
         soft.assertAll();
+    }
+
+    @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
+    public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
+    }
+
+    @And("^Uncheck today day and apply changes$")
+    public void uncheckTodayDayAndApplyChanges() {
+        nameOfUnchekedDay = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().uncheckTodayDay();
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitForNotificationAlertToBeProcessed(2,5);
+    }
+
+    @And("^'support hours' are updated in (.*) configs$")
+    public void supportHoursAreUpdatedInTenantConfigs(String tenantOrgName) {
+        Assert.assertFalse(ApiHelper.getAgentSupportDaysAndHours(tenantOrgName).toString().contains(nameOfUnchekedDay.toUpperCase()),"Error. 'support hours' contain today day.");
+    }
+
+    @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
+    public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
+        Assert.assertTrue(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
     }
 
     private LeftMenu getLeftMenu() {

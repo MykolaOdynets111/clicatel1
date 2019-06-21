@@ -1,12 +1,14 @@
 @healthcheck
 Feature: Tenant Widget health check
 
+
   Scenario: Widget is connecting and bot is responding
     Given User opens page with desired tenant widget
     And Click chat icon
     Then Widget is connected
     When User enter hi into widget input field
     Then User have to receive 'Hello' text response for his 'hi' input
+
 
   Scenario: Before redirecting to the agent user is asked about his info
     Given User opens page with desired tenant widget
