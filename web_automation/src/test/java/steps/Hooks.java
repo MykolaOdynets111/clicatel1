@@ -245,7 +245,7 @@ public class Hooks implements JSHelper{
 
             if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
                 List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(Tenants.getTenantUnderTestOrgName(), "CREDIT_CARD");
-                ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), e));
+                if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), e));
             }
 
             if (scenario.getSourceTagNames().contains("@suggestions")){

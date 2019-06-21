@@ -225,7 +225,7 @@ public class BasePortalSteps implements JSHelper {
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
-        ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
+        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
     @When("^Login as (.*) agent$")
