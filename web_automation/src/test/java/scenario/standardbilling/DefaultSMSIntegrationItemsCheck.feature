@@ -16,9 +16,22 @@ Feature: Default SMS integration items visibility check
 
   Scenario: Send SMS button change state depending on phone number availability
     When Agent see no phone number added into customer's profile
-    Then Send SMS button is disabled for the Agent
-    And Send OTP button is displayed
+    Then Send SMS button is disabled on Chat header
+    And Send OTP button is displayed in Customer 360
     When Click 'Edit' button in Customer 360 view
-    And Change phone number for touch user and save changes
-    Then Send SMS button is enabled for the Agent
-    And Send OTP button is displayed
+    And Change phone number for touch user
+    And Click 'Save' button in Customer 360 view
+    When Wait for 3 seconds for Phone Number to be updated
+    Then Send SMS button is enabled on Chat header
+    And Send OTP button is displayed in Customer 360
+
+  Scenario: SMS integration related buttons are disappearing after disabling SMS integration
+    Then Send SMS button is disabled on Chat header
+    And Send OTP button is displayed in Customer 360
+    When Agent switches to opened Portal page
+    And Disable the SMS integration
+    And Agent switches to opened ChatDesk page
+    And Agent refresh current page
+    And Agent click on last opened conversation request from touch
+    Then Send SMS button hidden from the Chat header
+    And Send OTP button not displayed in Customer 360

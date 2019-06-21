@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
 import drivermanager.ConfigManager;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -110,10 +111,11 @@ public class Customer360Container extends AbstractUIElement {
     }
 
     public String getPhoneNumber() {
-        return phoneLabel.getText();
+        waitForElementToBeVisibleByCssAgent("span.icon.svg-icon-mobile+span", 2, "main agent");
+        return findElemByCSSAgent("span.icon.svg-icon-mobile+span").getText(); // phoneLabel.getText();
     }
 
-    public boolean isSMSButtonsDisplayed(String button){
+    public boolean isCustomer360SMSButtonsDisplayed(String button){
         switch (button.toLowerCase()) {
             case "send otp":
                 return sendOTPButton.isDisplayed();
@@ -122,8 +124,15 @@ public class Customer360Container extends AbstractUIElement {
             case "re-send otp":
                 return resendOTPButton.isDisplayed();
             default:
-                return false;
+                throw new NoSuchElementException("Button '" + button + " wasn't found");
         }
+    }
+
+    public boolean isPhoneNumberFieldUpdated(String requiredEndState){
+        if (requiredEndState.equalsIgnoreCase("deleted"))
+            return getPhoneNumber().equalsIgnoreCase("Unknown");
+        else
+            return !getPhoneNumber().equalsIgnoreCase("Unknown");
     }
 
     public void clickSendOTPButton(){

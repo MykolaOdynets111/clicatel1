@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -54,7 +55,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isButtonEnabled(String buttonTitle){
-        switch (buttonTitle){
+        switch (buttonTitle) {
             case "Transfer chat":
                 waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
                 return findElemByXPATHAgent(transferChatButton).isEnabled();
@@ -66,7 +67,7 @@ public class ChatHeader extends AbstractUIElement {
                 return findElemByXPATHAgent(sendWhatsAppXpath).isEnabled();
 
             default:
-                return false;
+                throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
         }
     }
 
