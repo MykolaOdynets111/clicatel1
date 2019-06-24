@@ -8,6 +8,7 @@ import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
+import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.path.json.JsonPath;
@@ -23,7 +24,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class ApiHelper implements DateTimeHelper{
+public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     private static  List<HashMap> tenantsInfo=null;
 //    private static List<HashMap> tenantMessages=null;
@@ -99,6 +100,30 @@ public class ApiHelper implements DateTimeHelper{
                 "Creating of user profile was not successful\n" +
         "resp status code: " + resp.statusCode() + "\n" +
         "resp body: " + resp.getBody().asString());
+    }
+
+    public static void createUserProfileWithPhone(String clientID, String phoneNumber){
+        Response resp;
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+
+        resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body("{ " +
+                        "\"tenantId\": \"" + tenantId + "\"," +
+                        "\"type\": \"TOUCH\"," +
+                        "\"clientId\": \"" + clientID + "\"," +
+                        "\"attributes\": {" +
+                        "\"firstName\": \"" + clientID + "\"," +
+                        "\"email\": \"aqa_test@gmail.com\"," +
+                        "\"phone\": \"" + phoneNumber + "\"" +
+                        "}" +
+                        "}")
+                .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+        Assert.assertTrue(resp.statusCode()==200,
+                "Creating of user profile was not successful\n" +
+                        "resp status code: " + resp.statusCode() + "\n" +
+                        "resp body: " + resp.getBody().asString());
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
@@ -399,7 +424,7 @@ public class ApiHelper implements DateTimeHelper{
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
                         "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
-                        "  \"enable\": true\n" +
+                        "  \"enable\": "+ integrationStatus + "\n" +
                         "}")
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }
