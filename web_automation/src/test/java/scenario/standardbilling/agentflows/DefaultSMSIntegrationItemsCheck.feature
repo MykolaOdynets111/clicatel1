@@ -30,7 +30,8 @@ Feature: Default SMS integration items visibility check
     And Send OTP button is displayed in Customer 360
     When Agent switches to opened Portal page
     And Disable the SMS integration
-    And Agent switches to opened ChatDesk page
+    Then Status of SMS integration is changed to "Not Active"
+    When Agent switches to opened ChatDesk page
     And Agent refresh current page
     And Agent click on last opened conversation request from touch
     Then Send SMS button hidden from the Chat header
