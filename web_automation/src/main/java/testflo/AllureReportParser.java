@@ -49,7 +49,7 @@ public class AllureReportParser {
        File folder;
        if(ConfigManager.isRemote()){
            System.out.println("\n System.getProperty(\"user.dir\")" + System.getProperty("user.dir") + "\n");
-            folder = new File(System.getProperty("user.dir")+"/build/allure-report/data/test-cases");
+            folder = new File(System.getProperty("user.dir")+"/build/allure-report/data");
 //       if(new File( System.getProperty("user.dir") + "/build/allure-report_2/data/test-cases").exists()){
 //           folder = new File(System.getProperty("user.dir") + "/build/allure-report_2/data/test-cases");
            for(int i = 0; i <5; i ++){
@@ -57,7 +57,7 @@ public class AllureReportParser {
                    try {
                        System.out.println("\n !!! folder check  !! " + i +"\n");
                        Thread.sleep(1000);
-                       folder = new File(System.getProperty("user.dir")+"/build/allure-report/data/test-cases");
+                       folder = new File(System.getProperty("user.dir")+"/build/allure-report/data");
                    }catch(InterruptedException e){}
                } else {
                    System.out.println("\n !!! folder exists !! \n");
@@ -65,6 +65,9 @@ public class AllureReportParser {
                }
            }
            System.out.println("is folder exists: " + folder.exists() + "\n" + folder.getPath());
+           System.out.println("\n is folder data list: " +Arrays.asList(folder.listFiles()).stream()
+                   .map(e -> e.getName()).collect(Collectors.toList()).toString() + "\n");
+
            allureTestCases= Arrays.asList(folder.listFiles());
        }else{
            folder = new File(ALLURE_REPORT_DATA_FOLDER);
