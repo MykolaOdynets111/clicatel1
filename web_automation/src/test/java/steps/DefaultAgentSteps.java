@@ -3,6 +3,7 @@ package steps;
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.ChatInActiveChatHistory;
+import agentpages.uielements.Customer360Container;
 import agentpages.uielements.LeftMenuWithChats;
 import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
@@ -21,8 +22,12 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import interfaces.VerificationHelper;
+import interfaces.WebWait;
 import io.restassured.response.Response;
+import org.junit.rules.Timeout;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -37,7 +42,7 @@ import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Collections;
 
-public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
+public class DefaultAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
     private AgentHomePage agentHomePage;
     private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
@@ -327,10 +332,28 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomePage(agent).getChatHeader().clickUnpinButton(agent);
     }
 
-    @Then("^(.*) can not click 'Transfer chat' button$")
-    public void agentCanNotClickTransferChatButton(String agent) {
-        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isTransferButtonEnabled(),
+    @Then("^(.*) can not click '(.*)' button$")
+    public void agentCanNotClickTransferChatButton(String agent, String transferButton) {
+        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isButtonEnabled(transferButton),
                 "Transfer chat button is enabled ");
+    }
+
+    @Then("^(.*) button is (.+) on Chat header$")
+    public void isButtonEnabled(String button, String state){
+        if (state.equalsIgnoreCase("disabled"))
+            Assert.assertFalse(getAgentHomePage("main").getChatHeader().isButtonEnabled(button));
+        else if (state.equalsIgnoreCase("enabled"))
+            Assert.assertTrue(getAgentHomePage("main").getChatHeader().isButtonEnabled(button));
+    }
+
+    @Then("^(.*) button hidden from the Chat header$")
+    public void checkIfButtonHidden(String button){
+        try {
+            getAgentHomePage("main").getChatHeader().isButtonEnabled(button);
+        }
+        catch (NoSuchElementException | TimeoutException e){
+            Assert.assertFalse(false, "'" + button + "' button is displayed");
+        }
     }
 
 
@@ -440,7 +463,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Flag icon is shown");
     }
 
-    @When("^(.*) click on new conversation request from (.*)$")
+    @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         String userName=null;
         switch (socialChannel.toLowerCase()){
@@ -539,6 +562,23 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
     }
 
+    @Then("^Wait for (.d*) seconds for Phone Number to be (.*)$")
+    public void checkPhoneNumberFieldUpdate(int waitFor, String requiredState) throws InterruptedException{
+        Customer360Container customer360Container = new Customer360Container();
+
+        int waitTimeInMillis = waitFor * 1000;
+        long endTime = System.currentTimeMillis() + waitTimeInMillis;
+
+        if (requiredState.equalsIgnoreCase("deleted")) {
+            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
+                Thread.sleep(200);
+        }
+        else {
+            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
+                Thread.sleep(200);
+        }
+    }
+
     @When("Fill in the form with new (.*) customer 360 info")
     public void updateCustomer360Info(String customerFrom){
         Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
@@ -552,6 +592,53 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
 
+    }
+
+    @When("^(.*) see (.*) phone number added into customer's profile$")
+    public void updatePhoneNumberCustomer360(String agent, String isPhoneNumberRequired){
+        Assert.assertTrue(isRequiredPhoneNumberDisplayed(agent, isPhoneNumberRequired));
+    }
+
+    @Then("^(.*) button (.*) displayed in Customer 360$")
+    public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
+        Customer360Container customer360PersonalInfo = getAgentHomePage("main").getCustomer360Container();
+        if (isOrNotDisplayed.equalsIgnoreCase("not"))
+            try {
+                customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName);
+            }
+            catch (NoSuchElementException e){
+                Assert.assertFalse(false, "'" + buttonName + "' button is not displayed");
+            }
+        else
+            Assert.assertTrue(customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName));
+    }
+
+    @When("^Change phone number for (.*) user$")
+    public void changePhoneNumberCustomer360(String customerFrom){
+        String phoneNumber = generateUSCellPhoneNumber();
+        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
+
+        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+        Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
+    }
+
+    @When("^Agent switches to opened (?:Portal|ChatDesk) page$")
+    public void switchBetweenPortalAndChatDesk(){
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+
+        if (DriverFactory.getDriverForAgent("main").getWindowHandles().size() > 1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
+    @When("^Agent refresh current page$")
+    public void refreshCurrentPage(){
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
     }
 
     @Then("^(.*) customer info is updated on backend$")
@@ -1120,6 +1207,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
+    }
+
+    public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired){
+        String phone = getAgentHomePage(agent).getCustomer360Container().getPhoneNumber();
+        if (isPhoneNumberRequired.equalsIgnoreCase("no"))
+            return phone.equalsIgnoreCase("unknown");
+        else
+            return !phone.equalsIgnoreCase("unknown");
     }
 
     @Then("^CRM ticket is not created$")

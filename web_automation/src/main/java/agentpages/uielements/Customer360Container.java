@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
 import drivermanager.ConfigManager;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -45,6 +46,12 @@ public class Customer360Container extends AbstractUIElement {
     private WebElement phoneLabel;
     @FindBy(name = "phone")
     private WebElement phoneInput;
+    @FindBy(xpath = "//div[@class='info-row']/button[text()='Send OTP']")
+    private WebElement sendOTPButton;
+    @FindBy(xpath = "//div[@class='info-row']/button[text()='Verify']")
+    private WebElement verifyPhoneButton;
+    @FindBy(xpath = "//div[@class='info-row']/button[text()='Re-send OTP']")
+    private WebElement resendOTPButton;
 
     @FindBy(css = "button.pull-right.disable-spacing-top.btn-default")
     private WebElement saveEditButton;
@@ -103,4 +110,32 @@ public class Customer360Container extends AbstractUIElement {
         return Color.fromString(mailColor.getCssValue("color")).asHex();
     }
 
+    public String getPhoneNumber() {
+        waitForElementToBeVisibleByCssAgent("span.icon.svg-icon-mobile+span", 2, "main agent");
+        return findElemByCSSAgent("span.icon.svg-icon-mobile+span").getText(); // phoneLabel.getText();
+    }
+
+    public boolean isCustomer360SMSButtonsDisplayed(String button){
+        switch (button.toLowerCase()) {
+            case "send otp":
+                return sendOTPButton.isDisplayed();
+            case "verify":
+                return verifyPhoneButton.isDisplayed();
+            case "re-send otp":
+                return resendOTPButton.isDisplayed();
+            default:
+                throw new NoSuchElementException("Button '" + button + " wasn't found");
+        }
+    }
+
+    public boolean isPhoneNumberFieldUpdated(String requiredEndState){
+        if (requiredEndState.equalsIgnoreCase("deleted"))
+            return getPhoneNumber().equalsIgnoreCase("Unknown");
+        else
+            return !getPhoneNumber().equalsIgnoreCase("Unknown");
+    }
+
+    public void clickSendOTPButton(){
+        sendOTPButton.click();
+    }
 }
