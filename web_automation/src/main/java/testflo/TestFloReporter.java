@@ -7,7 +7,6 @@ import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -20,13 +19,16 @@ public class TestFloReporter {
 
         if(ConfigManager.reportToTouchFlo()) {
 
-            //ToDo: Add storing base test plan key on Jenkins side as an Artifact
-            String baseTestPlan = readBaseTestPlanKey();
-            if (baseTestPlan == null) baseTestPlan = "";
+            // Get target TPLAN key
+            String targetTestPlan = ConfigManager.getTplanKey().toUpperCase();
+            if (targetTestPlan.isEmpty()) throw new AssertionError("Test Plan key was not provided");
 
-            // 1. Create test plan
-            String newTPlanKey = JiraApiHelper.copyTestPlan(baseTestPlan);
-            updateTestPlanSummary(newTPlanKey);
+            // 1. Create test plan copy if needed
+            String newTPlanKey = "";
+            if(ConfigManager.createNewTPlan()) {
+                newTPlanKey = JiraApiHelper.copyTestPlan(targetTestPlan);
+                updateTestPlanSummary(newTPlanKey);
+            } else newTPlanKey = targetTestPlan;
 
             // 2. Get existed cases from Test Plan
             List<ExistedTestCase> existedTestCases = JiraApiHelper.getExistedInTestPlanTestCases(newTPlanKey);
@@ -43,14 +45,14 @@ public class TestFloReporter {
                     .collect(Collectors.toList());
 
             // 5. Update target Test Plan key for the next run
-            if (executedTestsToBeCreatedInTestPlan.size() > 0) writeNewBaseTestPlanKey(newTPlanKey);
-
+            // if (executedTestsToBeCreatedInTestPlan.size() > 0) writeNewBaseTestPlanKey(newTPlanKey);
 
             // 6. Loop through existed Test Cases in tests plan and update the status
             existedTestCases.forEach(tc -> updateExistedTestCase(tc, executedTests));
 
             // 7. Create missing test cases and set their status
-            executedTestsToBeCreatedInTestPlan.forEach(e -> addMissingScenarios(e, newTPlanKey));
+            String testPlan = newTPlanKey;
+            executedTestsToBeCreatedInTestPlan.forEach(e -> addMissingScenarios(e, testPlan));
 
         } else{
             System.out.println("!!! reporting to TestFLO is turned off. \n" +
