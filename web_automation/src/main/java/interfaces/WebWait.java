@@ -20,7 +20,7 @@ public interface WebWait {
         return new WebDriverWait(DriverFactory.getAgentDriverInstance(), waitTime);
     }
 
-    default WebDriverWait initAgentWait(int waitTime, String ordinalAgentNumber){
+    default WebDriverWait  initAgentWait(int waitTime, String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return new WebDriverWait(DriverFactory.getSecondAgentDriverInstance(), waitTime);
         else return new WebDriverWait(DriverFactory.getAgentDriverInstance(), waitTime);
     }
