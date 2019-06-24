@@ -241,6 +241,7 @@ task reportToTesFLO(type:JavaExec) {
 
     reportToTesFLO.dependsOn(allureReport)
 
+    sleep(5000)
     main = "testflo/TestFloReporter"
     systemProperties = System.getProperties()
     classpath = sourceSets.main.runtimeClasspath
