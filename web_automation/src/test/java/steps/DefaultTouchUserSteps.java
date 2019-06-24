@@ -15,6 +15,7 @@ import drivermanager.DriverFactory;
 import facebook.FBTenantPage;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import interfaces.VerificationHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
@@ -33,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
+public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, VerificationHelper {
 
     private MainPage mainPage;
     private Widget widget;
@@ -70,6 +71,16 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         DriverFactory.openUrl(tenantOrgName);
         String clientID = getClientIdFromLocalStorage();
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+    }
+
+    @Given("^User with phone number (?:select|opens) (.*) (?:tenant|tenant page)$")
+    public void openTenantPageAsUserWithPhone(String tenantOrgName) {
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        Tenants.checkWidgetConnectionStatus();
+        DriverFactory.openUrl(tenantOrgName);
+        String clientID = getClientIdFromLocalStorage();
+        String phoneNumber = generateUSCellPhoneNumber();
+        ApiHelper.createUserProfileWithPhone(clientID, phoneNumber);
     }
 
     private String getClientIdFromLocalStorage(){
