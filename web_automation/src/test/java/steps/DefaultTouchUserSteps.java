@@ -66,10 +66,10 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page)$")
     public void openTenantPage(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        Tenants.checkWidgetConnectionStatus();
-        DriverFactory.openUrl(tenantOrgName);
-        String clientID = getClientIdFromLocalStorage();
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+//        Tenants.checkWidgetConnectionStatus();
+//        DriverFactory.openUrl(tenantOrgName);
+//        String clientID = getClientIdFromLocalStorage();
+//        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
 
     private String getClientIdFromLocalStorage(){
