@@ -8,7 +8,7 @@ Feature: Agent should see active chat after page was refreshed
     Given User opens General Bank Demo tenant page
     And Click chat icon
 
-  Scenario: Verify user is chat remains in chatdesk after refresh
+  Scenario: Verify user chat remains in chatdesk after refresh
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     When Agent refreshes the page
