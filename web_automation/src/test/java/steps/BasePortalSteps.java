@@ -208,8 +208,39 @@ public class BasePortalSteps implements JSHelper {
     }
 
     @Given("Widget is enabled for (.*) tenant")
-    public void enableWidget(String tenantOrgNAme){
-        ApiHelper.setIntegrationStatus(tenantOrgNAme, "webchat", true);
+    public void enableWidget(String tenantOrgName){
+        ApiHelper.setIntegrationStatus(tenantOrgName, "webchat", true);
+    }
+
+    @Given("Change (.*) integration status to (.*) for (.*) tenant")
+    public void changeIntegrationState(String integrationName, String status, String tenantOrgName){
+        if (status.equalsIgnoreCase("enabled"))
+            ApiHelper.setIntegrationStatus(tenantOrgName, getIntegrationType(integrationName),true);
+        else if (status.equalsIgnoreCase("disabled"))
+            ApiHelper.setIntegrationStatus(tenantOrgName, getIntegrationType(integrationName),false);
+    }
+
+    private String getIntegrationType(String integrationName){
+        switch (integrationName.toLowerCase()){
+            case "touch":
+            case "web widget":
+                return "webchat";
+            case "facebook messenger":
+                return "fbmsg";
+            case "facebook posts":
+                return "fbpost";
+            case "twitter dm":
+                return "twdm";
+            case "twitter mention":
+                return "twmention";
+            case "sms":
+                return "sms";
+            case "whatsapp":
+                return "whatsapp";
+
+            default:
+                throw new NoSuchElementException("Invalid integration name");
+        }
     }
 
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
