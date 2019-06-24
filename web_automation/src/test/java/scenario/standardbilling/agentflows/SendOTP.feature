@@ -7,7 +7,7 @@ Feature: OTP functionality
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Agent see his phone number added into customer's profile
-    When Change sms integration status to disabled for Standard Billing tenant
+    When sms integration status is set to disabled for Standard Billing tenant
     And Agent refresh current page
     And Agent click on last opened conversation request from touch
     Then Send OTP button not displayed in Customer 360

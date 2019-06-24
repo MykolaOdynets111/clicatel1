@@ -212,7 +212,7 @@ public class BasePortalSteps implements JSHelper {
         ApiHelper.setIntegrationStatus(tenantOrgName, "webchat", true);
     }
 
-    @Given("Change (.*) integration status to (.*) for (.*) tenant")
+    @Given("(.*) integration status is set to (.*) for (.*) tenant")
     public void changeIntegrationState(String integrationName, String status, String tenantOrgName){
         if (status.equalsIgnoreCase("enabled"))
             ApiHelper.setIntegrationStatus(tenantOrgName, getIntegrationType(integrationName),true);

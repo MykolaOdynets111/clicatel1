@@ -25,7 +25,7 @@ Feature: Default SMS integration items visibility check
     And Send OTP button not displayed in Customer 360
 
   Scenario: Send SMS button change state depending on phone number availability
-    Given Change sms integration status to enabled for Standard Billing tenant
+    Given sms integration status is set to enabled for Standard Billing tenant
     Given I login as agent of Standard Billing
     Given User select Standard Billing tenant
     And Click chat icon
