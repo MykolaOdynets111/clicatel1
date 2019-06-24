@@ -18,6 +18,7 @@ public class ConfigManager {
     private static final String CREATE_NEW_TPLAN = "createTPlan";
     private static final String JIRA_USER = "jirauser";
     private static final String JIRA_PASS = "jirapass";
+    private static final String REMOTE_ALLURE_REPORT = "isRemoteAllureReport";
 
     public static boolean reportToTouchFlo() {
         String reportToTestFlo = System.getProperty(REPORT_TESTFLO);
@@ -45,6 +46,14 @@ public class ConfigManager {
         String usrName = System.getProperty(JIRA_USER);
         if(usrName==null) return "";
         return usrName;
+    }
+
+    public static boolean isRemoteAllureReport(){
+        String createNewTPlan = System.getProperty(REMOTE_ALLURE_REPORT);
+        if(createNewTPlan==null) {
+            createNewTPlan = "false";
+        }
+        return Boolean.parseBoolean(createNewTPlan);
     }
 
     public static String getJiraPass(){

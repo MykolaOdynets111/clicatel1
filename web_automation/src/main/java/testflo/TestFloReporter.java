@@ -93,6 +93,7 @@ public class TestFloReporter {
         AllureScenarioInterface executedTest;
         try{
             executedTest = executedTests.stream()
+                    .filter(e -> e!=null)
                     .filter(e -> e.getName().equals(testCase.getFields().getSummary()))
                     .findFirst().get();
         }catch(NoSuchElementException e){
