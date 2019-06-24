@@ -14,7 +14,7 @@ public class IntegrationCard extends Widget implements WebActions, JSHelper {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
-    private String integrationCardButton = ".//button[contains(text(),'Configure') or contains(text(),'Manage')]";
+    private String integrationCardButton = ".//button[contains(text(),'Configure') or contains(text(),'Manage') or contains(text(),'Pay now')]";
 
     private String integrationName =  "p.title";
 
