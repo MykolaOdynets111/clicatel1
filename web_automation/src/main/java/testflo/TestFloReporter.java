@@ -45,7 +45,8 @@ public class TestFloReporter {
                     .collect(Collectors.toList());
 
             // 5. Update target Test Plan key for the next run
-            // if (executedTestsToBeCreatedInTestPlan.size() > 0) writeNewBaseTestPlanKey(newTPlanKey);
+//            if (executedTestsToBeCreatedInTestPlan.size() > 0) writeNewBaseTestPlanKey(newTPlanKey);
+
 
             // 6. Loop through existed Test Cases in tests plan and update the status
             existedTestCases.forEach(tc -> updateExistedTestCase(tc, executedTests));

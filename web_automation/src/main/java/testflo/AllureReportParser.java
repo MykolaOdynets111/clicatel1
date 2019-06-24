@@ -19,11 +19,11 @@ public class AllureReportParser {
 
 
    private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper){
-       if(ConfigManager.isRemote()){
-           return parseRemoteAllure(file, objectMapper);
-       } else{
+//       if(ConfigManager.isRemote()){
+//           return parseRemoteAllure(file, objectMapper);
+//       } else{
            return parseLocalAllure(file, objectMapper);
-       }
+//       }
    }
 
    private static AllureScenarioInterface parseLocalAllure(File file, ObjectMapper objectMapper){
