@@ -1,4 +1,3 @@
-@smoke
 Feature: Transferring chat
 
   Verification of basic transfer chat functionality
