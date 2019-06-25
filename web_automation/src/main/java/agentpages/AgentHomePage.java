@@ -48,6 +48,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.context-menu>div.active")
     private WebElement selectedTab;
 
+    @FindBy(css = "div.tip-note")
+    private WebElement tipNote;
+
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
@@ -205,5 +208,9 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public String getSelectedTabHeader(){
         return selectedTab.getText();
+    }
+
+    public String getTipIfNoChatSelected(){
+        return getTextFromElemAgent(tipNote, 5, getCurrentAgent(), "Tips if no chat selected");
     }
 }

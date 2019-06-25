@@ -321,6 +321,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 );
     }
 
+    @Then("^(.*) sees \"(.*)\" tip in conversation area$")
+    public void verifyTipIfNoSelectedChat(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
+                "Tip note if no chat selected is not as expected");
+    }
+
     @When("^(.*) click 'Pin' button$")
     public void pinChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickPinButton(agent);

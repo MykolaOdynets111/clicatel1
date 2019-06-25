@@ -5,8 +5,8 @@ Feature: User on his demand should be redirected on the agent
 
   Background:
     Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
     And Click chat icon
+    Given I login as agent of General Bank Demo
 
 #  Welcome card is not showing anymore
 #  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
@@ -35,6 +35,7 @@ Feature: User on his demand should be redirected on the agent
 #    Then User have to receive 'hello' text response for his 'Chat to us' input
 
   Scenario: User redirection to the Agent after negative message and storing it's sentiment
+    Then Agent sees "No chat selected" tip in conversation area
     When User enter Hate your banking into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
