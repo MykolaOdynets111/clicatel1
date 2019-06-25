@@ -20,6 +20,9 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text() = 'Setup Billing']")
     private WebElement setUpBillingButton;
 
+    @FindBy(xpath = "//button[contains(@class, 'close-discard-modal')]")
+    private WebElement closeSetUpBillingPopUp;
+
     @FindBy(xpath = "//h3[text()='We’ve updated our privacy policy']")
     private WebElement updatePolicyPopUp;
 
@@ -145,6 +148,10 @@ public class PortalMainPage extends PortalAbstractPage {
     public PortalBillingDetailsPage clickSetupBillingButton(){
         setUpBillingButton.click();
         return new PortalBillingDetailsPage();
+    }
+
+    public void closeSetupBillingPopUpModal(){
+        closeSetUpBillingPopUp.click();
     }
 
     public boolean isUpdatePolicyPopUpOpened(){

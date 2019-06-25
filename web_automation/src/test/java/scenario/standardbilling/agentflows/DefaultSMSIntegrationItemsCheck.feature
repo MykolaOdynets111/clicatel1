@@ -1,4 +1,3 @@
-@without_tct
 Feature: Default SMS integration items visibility check
 
   Scenario: SMS integration related buttons are disappearing after disabling SMS integration
