@@ -35,7 +35,6 @@ Feature: User on his demand should be redirected on the agent
 #    Then User have to receive 'hello' text response for his 'Chat to us' input
 
   Scenario: User redirection to the Agent after negative message and storing it's sentiment
-    Then Agent sees "No chat selected" tip in conversation area
     When User enter Hate your banking into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
@@ -47,6 +46,5 @@ Feature: User on his demand should be redirected on the agent
     Then Correct sentiment on how to check my balance? user's message is stored in DB
     When Agent closes chat
     Then Correct sentiment on how to check my balance? user's message is stored in DB
-
 
 
