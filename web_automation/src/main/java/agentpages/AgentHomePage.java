@@ -45,6 +45,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.touch-button")
     private WebElement touchButton;
 
+    @FindBy(css = "div.context-menu>div.active")
+    private WebElement selectedTab;
+
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
@@ -200,5 +203,7 @@ public class AgentHomePage extends AgentAbstractPage {
         return Color.fromString(touchButton.getCssValue("background-color")).asHex();
     }
 
-
+    public String getSelectedTabHeader(){
+        return selectedTab.getText();
+    }
 }

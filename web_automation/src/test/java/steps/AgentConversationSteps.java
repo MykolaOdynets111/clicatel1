@@ -114,7 +114,7 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         getAgentHomePage().clickAgentAssistantButton();
         getAgentHomePage().waitForElementToBeVisible(getAgentHomePage().getSuggestedGroup());
         if (getSuggestedGroup().isSuggestionListEmpty()){
-            Assert.assertTrue(false, "Suggestion list is empty");
+            Assert.fail("Suggestion list is empty");
         }
         String expectedResponse = "no response";
         List<Intent> listOfIntentsFromTIE = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage);

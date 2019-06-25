@@ -532,10 +532,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "resp body: " + resp.getBody().asString() + "\n");
     }
 
+    @Then("^Tab with user info has \"(.*)\" header$")
+    public void verifyTabHeader(String headerName){
+        Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
+                "Incorrect header of Customer 360 container");
+    }
+
 
     @Then("Correct (.*) client details are shown")
     public void verifyClientDetails(String clientFrom){
-        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main")
+                .getCustomer360Container().getActualPersonalInfo();
 
         Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
                 "User info is not as expected \n");
