@@ -50,7 +50,7 @@ public enum DriverType {
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
             if (hostName.equals("FANB0604")) {
-                ChromeDriverManager.getInstance().version("74").setup();
+                ChromeDriverManager.getInstance().version("72").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
             ChromeDriverManager.getInstance().setup();
