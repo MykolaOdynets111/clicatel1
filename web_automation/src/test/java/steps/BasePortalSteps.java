@@ -13,6 +13,7 @@ import cucumber.api.java.en.When;
 import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
+import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -68,6 +69,7 @@ public class BasePortalSteps implements JSHelper {
     private String secondAgentNameForChatConsoleTests = "";
     private Map<String, Double> topUpBalance = new HashMap<>();
     private String nameOfUnchekedDay = "";
+    private String accountCurrency;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -838,6 +840,32 @@ public class BasePortalSteps implements JSHelper {
         double afterTest = topUpBalance.get("preTest") + addingSum;
         topUpBalance.put("afterTest", afterTest);
         getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
+    }
+
+    @When("Agent enter (.*) top up amount")
+    public void enterMaxValueForTopUp(String value){
+        accountCurrency = ApiHelperPlatform.getAccountBallance().getCurrency().toUpperCase();
+        int invalidSum;
+        if(value.contains("max")){
+            invalidSum = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency) +1 ;
+        } else{
+            invalidSum = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency) - 1;
+        }
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(invalidSum);
+    }
+
+    @Then("\"(.*)\" message is displayed")
+    public void verifyMaximumPopup(String baseMessage){
+        String expectedMessage;
+        if(baseMessage.contains("max_value")){
+            int maxValue = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency);
+            expectedMessage = baseMessage.replace("max_value", maxValue + " " + accountCurrency);
+        } else{
+            int minValue = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency);
+            expectedMessage = baseMessage.replace("min_value", minValue + " " + accountCurrency);
+        }
+        Assert.assertEquals(getPortalBillingDetailsPage().getTopUpBalanceWindow().getErrorWhileAddingPopup(),
+                expectedMessage, "Error massage about invalid top up sum is not as expected \n" );
     }
 
     @When("^Click 'Add to cart' button$")
