@@ -726,8 +726,8 @@ public class BasePortalSteps implements JSHelper {
 
     }
 
-    @When("^Click '(.*)' button for (.*) integration$")
-    public void clickButtonForIntegrationCard(String button, String integration){
+    @When("^Click '(?:Configure|Manage|Pay now)' button for (.*) integration$")
+    public void clickButtonForIntegrationCard(String integration){
         getPortalIntegrationsPage().clickActionButtonForIntegration(integration);
     }
 
@@ -773,15 +773,24 @@ public class BasePortalSteps implements JSHelper {
                 "Shown Touch go plan is not as expected.");
     }
 
-    @Then("^'Billing Not Setup' pop up is shown$")
-    public void verifyBillingNotSetUpPopupShown(){
-        Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
+    @Then("^'Billing Not Setup' pop up (.*) shown$")
+    public void verifyBillingNotSetUpPopupShown(String isShown){
+        if (isShown.contains("not"))
+            Assert.assertFalse(getPortalMainPage().isBillingNotSetUpPopupShown(2),
+                    "'Billing Not Setup' pop up still shown");
+        else
+            Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
                 "'Billing Not Setup' pop up is not shown");
     }
 
     @When("^Admin clicks 'Setup Billing' button$")
     public void clickSetupBillingButton(){
         portalBillingDetailsPage.set(getPortalMainPage().clickSetupBillingButton());
+    }
+
+    @When("Close 'Billing not setup' modal window")
+    public void closeSetupBillingModal(){
+        portalMainPage.get().closeSetupBillingPopUpModal();
     }
 
     @Then("^Billing Details page is opened$")
