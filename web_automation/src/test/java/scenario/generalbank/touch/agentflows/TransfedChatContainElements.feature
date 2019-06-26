@@ -1,5 +1,5 @@
 @egor
-Feature: Transferring chat
+Feature: Transferring chat, user info
 
   Verification of basic transfer chat functionality
 
@@ -9,7 +9,7 @@ Feature: Transferring chat
     And Click chat icon
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1742")
-  Scenario: Verify if agent is able to transfer chat via "Transfer chat" button
+  Scenario: Transfer chat: Notification should have user's profile picture, priority, channel and sentiment
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     Given I login as second agent of General Bank Demo
