@@ -70,6 +70,7 @@ public class BasePortalSteps implements JSHelper {
     private Map<String, Double> topUpBalance = new HashMap<>();
     private String nameOfUnchekedDay = "";
     private String accountCurrency;
+    private String autoSchedulerPreActionStatus;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -1402,6 +1403,20 @@ public class BasePortalSteps implements JSHelper {
     @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
     public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
+    }
+
+    @When("^click off/on 'Automatic Scheduler'$")
+    public void clickOnOffAutoScheduler(){
+        autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
+        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
+        getPortalTouchPrefencesPage().waitWhileProcessing(1,1);
+    }
+
+    @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
+    public void verifyAutoSchedulingStatusOnBackend(String tenant){
+        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
+                autoSchedulerPreActionStatus,
+                "Auto scheduling status on backend is not as expected \n");
     }
 
     @And("^Uncheck today day and apply changes$")
