@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.io.File;
+
 @FindBy(css = "div.touch-pop-up")
 public class IncomingTransferWindow extends AbstractUIElement {
 
@@ -72,5 +74,20 @@ public class IncomingTransferWindow extends AbstractUIElement {
     public String getRejectedBy(String agent){
         return getTextFromElemAgent(rejectedBy, 2, agent, "Transfer chat window header");
     }
+
+//    public boolean isValidImg(String adapter) {
+//        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+//        return isWebElementEqualsImage(adapterIcon,image);
+//    }
+//
+//    public boolean isValidImg(String adapter) {
+//        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+//        return isWebElementEqualsImage(adapterIcon,image);
+//    }
+//
+//    public boolean isValidImg(String adapter) {
+//        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+//        return isWebElementEqualsImage(adapterIcon,image);
+//    }
 
 }
