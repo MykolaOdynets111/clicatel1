@@ -90,10 +90,10 @@ public class ChatForm extends AbstractUIElement {
             findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.chord(Keys.CONTROL,"A", Keys.DELETE));
         }
         int symbolsNumber2 = messageInput.getText().length();
-        while (symbolsNumber2>0) {
-            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.BACK_SPACE);
-            symbolsNumber2 = messageInput.getText().length();
-        }
+//        while (symbolsNumber2>0) {
+//            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.BACK_SPACE);
+//            symbolsNumber2 = messageInput.getText().length();
+//        }
         sendResponseToUser(response);
     }
 
