@@ -27,14 +27,11 @@ import java.util.*;
 public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     private static  List<HashMap> tenantsInfo=null;
-//    private static List<HashMap> tenantMessages=null;
     private static List<TafMessage> tenantMessages=null;
-
-
 
     public static String getInternalTenantConfig(String tenantName, String config){
         String url = String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
-        return RestAssured.get(url).jsonPath().get(config);
+        return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
     public static Response getTenantConfig(String tenantOrgName){

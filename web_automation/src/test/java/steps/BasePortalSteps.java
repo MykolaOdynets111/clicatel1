@@ -13,6 +13,7 @@ import cucumber.api.java.en.When;
 import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
+import datamanager.TopUpBalanceLimits;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -68,6 +69,8 @@ public class BasePortalSteps implements JSHelper {
     private String secondAgentNameForChatConsoleTests = "";
     private Map<String, Double> topUpBalance = new HashMap<>();
     private String nameOfUnchekedDay = "";
+    private String accountCurrency;
+    private String autoSchedulerPreActionStatus;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -839,7 +842,7 @@ public class BasePortalSteps implements JSHelper {
                 "'Top up balance' window is not opened");
     }
 
-    @When("^Agent enter allowed top up amount$")
+    @When("^Agent enter allowed top up sum$")
     public void enterNewBalanceAmount(){
         topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
         String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
@@ -847,6 +850,32 @@ public class BasePortalSteps implements JSHelper {
         double afterTest = topUpBalance.get("preTest") + addingSum;
         topUpBalance.put("afterTest", afterTest);
         getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
+    }
+
+    @When("^Agent enter (.*) top up amount$")
+    public void enterMaxValueForTopUp(String value){
+        accountCurrency = ApiHelperPlatform.getAccountBallance().getCurrency().toUpperCase();
+        int invalidSum;
+        if(value.contains("max")){
+            invalidSum = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency) +1 ;
+        } else{
+            invalidSum = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency) - 1;
+        }
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(invalidSum);
+    }
+
+    @Then("\"(.*)\" message is displayed")
+    public void verifyMaximumPopup(String baseMessage){
+        String expectedMessage;
+        if(baseMessage.contains("max_value")){
+            int maxValue = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency);
+            expectedMessage = baseMessage.replace("max_value", maxValue + " " + accountCurrency);
+        } else{
+            int minValue = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency);
+            expectedMessage = baseMessage.replace("min_value", minValue + " " + accountCurrency);
+        }
+        Assert.assertEquals(getPortalBillingDetailsPage().getTopUpBalanceWindow().getErrorWhileAddingPopup(),
+                expectedMessage, "Error massage about invalid top up sum is not as expected \n" );
     }
 
     @When("^Click 'Add to cart' button$")
@@ -1374,6 +1403,20 @@ public class BasePortalSteps implements JSHelper {
     @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
     public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
+    }
+
+    @When("^click off/on 'Automatic Scheduler'$")
+    public void clickOnOffAutoScheduler(){
+        autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
+        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
+        getPortalTouchPrefencesPage().waitWhileProcessing(1,1);
+    }
+
+    @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
+    public void verifyAutoSchedulingStatusOnBackend(String tenant){
+        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
+                autoSchedulerPreActionStatus,
+                "Auto scheduling status on backend is not as expected \n");
     }
 
     @And("^Uncheck today day and apply changes$")

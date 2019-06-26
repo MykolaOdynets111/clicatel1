@@ -11,6 +11,7 @@ public enum FacebookPages {
     INTEGRATION_GEN_BANK("General-Bank-Integration-307344189832958", 307344189832958l, "General Bank Demo", "integration"),
     DEMO_GEN_BANK("General-Bank-Demo-178022086085592/", 178022086085592l, "General Bank Demo", "demo"),
     DEV_GEN_BANK("General-Bank-Dev-662912180789339/", 662912180789339l, "General Bank Demo", "dev"),
+    // pass for General-Bank-Testing "oneclicktouch@gmail.com"  /  "itsallaboutlove"
     TESTING_GEN_BANK("General-Bank-Testing-662287630896233/", 662287630896233l, "General Bank Demo", "testing"),//egor
     ;
 

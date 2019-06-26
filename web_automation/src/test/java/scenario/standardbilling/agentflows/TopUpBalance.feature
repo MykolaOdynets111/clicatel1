@@ -12,7 +12,7 @@ Feature: Top up balance
     And Select 'Top up balance' in nav menu
     When Admin clicks Top up balance on Billing details
     Then 'Top up balance' window is opened
-    When Agent enter allowed top up amount
+    When Agent enter allowed top up sum
     And Click 'Add to cart' button
     And Make the balance top up payment
     Then I see "Payment Successful" message

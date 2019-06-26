@@ -999,7 +999,7 @@ public class TIEApiSteps implements DateTimeHelper{
         String createdModelName = "";
         ResponseBody respBody = ApiHelperTie.getModels().getBody();
         try {
-            createdModelName = respBody.jsonPath().getList("")
+            createdModelName = respBody.jsonPath().getList("intent")
                 .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
                 .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
                         >

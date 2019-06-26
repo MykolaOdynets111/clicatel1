@@ -164,8 +164,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             }
         }
 
-
-
+//    return "testing_2155727w7";
         return   (String) selectedClient.get("clientId");
     }
 
