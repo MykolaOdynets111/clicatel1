@@ -289,7 +289,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
-    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, priority, channel and sentiment$")
+    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")
     public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(),
