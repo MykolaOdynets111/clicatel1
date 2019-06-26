@@ -842,7 +842,7 @@ public class BasePortalSteps implements JSHelper {
                 "'Top up balance' window is not opened");
     }
 
-    @When("^Agent enter allowed top up amount$")
+    @When("^Agent enter allowed top up sum$")
     public void enterNewBalanceAmount(){
         topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
         String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
@@ -852,7 +852,7 @@ public class BasePortalSteps implements JSHelper {
         getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
     }
 
-    @When("Agent enter (.*) top up amount")
+    @When("^Agent enter (.*) top up amount$")
     public void enterMaxValueForTopUp(String value){
         accountCurrency = ApiHelperPlatform.getAccountBallance().getCurrency().toUpperCase();
         int invalidSum;
