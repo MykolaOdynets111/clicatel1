@@ -1,9 +1,9 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,9 +35,17 @@ public class HistoryDetailsWindow extends AbstractUIElement {
 
     public List<String> getAllMessages(){
         waitForElementToBeVisibleAgent(messagesInChatBody.get(1), 5, "main");
-        return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
-                .map(e -> e.getMessageInfo())
-                .collect(Collectors.toList());
+        try {
+            return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
+                    .map(e -> e.getMessageInfo())
+                    .collect(Collectors.toList());
+        }catch (NoSuchElementException e1){
+            waitFor(2000);
+            return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
+                    .map(e -> e.getMessageInfo())
+                    .collect(Collectors.toList());
+        }
+
     }
 
     public void closeChatHistoryDetailsPopup(){
