@@ -19,7 +19,7 @@ public interface VerificationHelper {
                 "954", "956", "970", "971", "972", "973", "978", "979", "980", "985", "989"};
         Random random = new Random();
         int areaCode = random.nextInt(areaCodes.length);
-        int mainNumber = 1000000 + random.nextInt(9000000);
+        int mainNumber = 2000000 + random.nextInt(8000000);
         finalCellPhoneNumber = countryCode + areaCodes[areaCode] + mainNumber;
         return finalCellPhoneNumber;
     }
