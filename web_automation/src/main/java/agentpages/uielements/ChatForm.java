@@ -86,9 +86,13 @@ public class ChatForm extends AbstractUIElement {
         messageInput.clear();
         int symbolsNumber = messageInput.getText().length();
         if(symbolsNumber>0) {
-            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.chord(Keys.CONTROL,"A", Keys.DELETE));
         }
-
+        int symbolsNumber2 = messageInput.getText().length();
+        while (symbolsNumber2>0) {
+            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.BACK_SPACE);
+            symbolsNumber2 = messageInput.getText().length();
+        }
         sendResponseToUser(response);
     }
 
