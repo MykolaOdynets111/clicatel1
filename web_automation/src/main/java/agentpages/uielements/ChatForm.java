@@ -80,6 +80,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void clearAndSendResponseToUser(String response){
+        if(clearButton.isDisplayed()) clearButton.click();
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.currentAgent);
         moveToElemAndClick(DriverFactory.getDriverForAgent(this.currentAgent), findElemByXPATHAgent(messageInputLocator, this.currentAgent));
         waitForElementToBeClickableAgent(messageInput, 4, this.currentAgent);
