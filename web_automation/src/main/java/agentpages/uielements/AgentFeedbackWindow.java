@@ -1,14 +1,10 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
-import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 
@@ -193,7 +189,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public boolean isValidSentiments(File image) {
-        return isWebElementEqualsImage(sentimentsAll, image);
+        return isWebElementEqualsImage(sentimentsAll, image, "main");
     }
 
 }

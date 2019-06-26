@@ -289,6 +289,22 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
+    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, priority, channel and sentiment$")
+    public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(),
+                "User picture sa not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel(),
+                "Channel picture sa not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment(),
+                "Sentiment picture sa not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
+                "Transfered chat window not on the right side of the screen");
+        softAssert.assertAll();
+
+
+    }
+
     @Then("^(.*) click \"Accept transfer\" button$")
     public void acceptIncomingTransfer(String agent){
         getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
