@@ -55,9 +55,8 @@ public class TransferChatWindow extends AbstractUIElement {
         clickElemAgent(openDropdownButton,5,"main", "Open drop down button");
     }
 
-    public String openDropDownMessage() {
-        waitForElementToBeClickableAgent(availableAgent, 6, "main agent");
-        return availableAgent.getText();
+    public String getTextDropDownMessage() {
+        return getTextFromElemAgent(availableAgent,6,"main agent","Drop down menu");
     }
 
     public void clickTransferChatButton() {

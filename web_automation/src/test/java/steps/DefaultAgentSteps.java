@@ -1349,7 +1349,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^Agent sees '(.*)'$")
     public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
-        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().openDropDownMessage(), message, "message in drop down menu not as expected");
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
     }
 
     @When("^Click on 'Transfer' button in pop-up$")

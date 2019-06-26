@@ -1,4 +1,4 @@
-Feature: Transferring chat
+Feature: Transfer chat with no Agents available
 
   Verification of basic transfer chat functionality
 
@@ -7,6 +7,7 @@ Feature: Transferring chat
     Given I login as agent of General Bank Demo
     And Click chat icon
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-1676")
   Scenario: Transfer chat :: If there is no Agents available, after user opened dropdown menu, - "No results found"
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
