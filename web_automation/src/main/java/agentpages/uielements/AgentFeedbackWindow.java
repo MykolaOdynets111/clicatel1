@@ -133,14 +133,13 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
 
     public void selectTags(int iter) {
-        waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
-        openDropdownButton.click();
+        clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         if(availableTags.getText().isEmpty()) {
             Assert.assertTrue(false, "Have not Tags to be selected");
         } else {
-            openDropdownButton.click();
+            clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
             while (iter > 0) {
-                openDropdownButton.click();
+                clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
                 availableTags.click();
                 findElemByCSSAgent(openDropdownButtoncss).click();
                 iter--;
@@ -154,14 +153,14 @@ public class AgentFeedbackWindow extends AbstractUIElement {
             List<String> result = Arrays.asList(availableTags.getText().split("[\n]"));
             return result;
         } else {
-            openDropdownButton.click();
+            clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         }
         waitForElementToBeClickableAgent(availableTags, 6, "main agent");
         if(availableTags.getText().isEmpty()) {
             Assert.assertTrue(false, "Have not Tags to be selected");
         }
         List<String> result = Arrays.asList(availableTags.getText().split("[\n]"));
-        openDropdownButton.click();
+        clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         return result;
     }
 

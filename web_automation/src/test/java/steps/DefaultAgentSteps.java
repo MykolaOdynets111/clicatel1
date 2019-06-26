@@ -229,10 +229,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         Assert.assertFalse(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is redirected to chat desk.");
     }
 
-    @When("^Agent transfers chat$")
-    public void transferChat(){
-        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
-        secondAgentName = getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
+    @When("^(.*) transfers chat$")
+    public void transferChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
     }
 
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
@@ -289,9 +289,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
-    @Then("^Second agent click \"Accept transfer\" button$")
-    public void acceptIncomingTransfer(){
-        getAgentHomeForSecondAgent().getIncomingTransferWindow().acceptTransfer();
+    @Then("^(.*) click \"Accept transfer\" button$")
+    public void acceptIncomingTransfer(String agent){
+        getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
     }
 
     @Then("^Second agent click \"Reject transfer\" button$")
@@ -1330,5 +1330,38 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
 
         }
+    }
+
+    @When("^(.*) click on 'Transfer' chat$")
+    public void agentClickOnTransferChat(String agent) {
+        getAgentHomeForMainAgent().getChatHeader().clickTransferButton(agent);
+    }
+
+    @Then("^Transfer chat pop up appears$")
+    public void transferChatPopUpAppears() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
+    }
+
+    @When("^Select 'Transfer to' drop down$")
+    public void selectTransferToDropDown() {
+        getAgentHomeForMainAgent().getTransferChatWindow().openDropDownAgent();
+    }
+
+    @Then("^Agent sees '(.*)'$")
+    public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
+    }
+
+    @When("^Click on 'Transfer' button in pop-up$")
+    public void clickOnTransferButtonInPopUp() {
+        getAgentHomeForMainAgent().getTransferChatWindow().clickTransferChatButton();
+    }
+
+    @Then("^'Transfer to' and 'Note' fields highlighted red color$")
+    public void transferToAndNoteFieldsHighlightedRedColor() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)","Drop down: not expected border color");
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)","Note: not expected border color");
+        soft.assertAll();
     }
 }
