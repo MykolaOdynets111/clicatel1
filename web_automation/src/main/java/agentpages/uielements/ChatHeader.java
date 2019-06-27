@@ -7,6 +7,8 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.io.File;
+
 @FindBy(css = "div.chat-header")
 public class ChatHeader extends AbstractUIElement {
 
@@ -31,6 +33,11 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindBy(css = "div.chat-header-title")
     private WebElement chatHeaderTitle;
+
+    @FindBy(xpath = "//div[contains(@class,'chat-header')]//div[@class='icons']/span/*")
+    private WebElement channelImg;
+
+
 
     private String transferChatButton =  "//button[text()='Transfer chat']";
     private String sendSMSXpath = ".//button[text()='Send SMS']";
@@ -93,5 +100,10 @@ public class ChatHeader extends AbstractUIElement {
 
     public String getPinChatButtonColor() {
         return  Color.fromString(pinChatButton.getCssValue("color")).asHex();
+    }
+
+    public boolean isValidChannelImg() {
+        File image = new File("src/test/resources/adaptericons/headerChannel.png");
+        return isWebElementEqualsImage(channelImg,image, "main");
     }
 }

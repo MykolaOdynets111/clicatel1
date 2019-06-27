@@ -1353,6 +1353,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomeForMainAgent().getChatHeader().clickTransferButton(agent);
     }
 
+
+    @And("^Header in chat box displayed the icon for channel from which the user is chatting$")
+    public void headerInChatBoxDisplayedTheIconForChannelFromWhichTheUserIsChatting() {
+        getAgentHomeForMainAgent().getChatHeader();
+    }
+
     @Then("^Transfer chat pop up appears$")
     public void transferChatPopUpAppears() {
         Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");

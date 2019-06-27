@@ -9,7 +9,7 @@ Feature: Transferring chat, user info
     And Click chat icon
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1742")
-  Scenario: Transfer chat: Notification should have user's profile picture, priority, channel and sentiment
+  Scenario: Transfer chat: Notification should have user's profile picture, channel and sentiment
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     Given I login as second agent of General Bank Demo
