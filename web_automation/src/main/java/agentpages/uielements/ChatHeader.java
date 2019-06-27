@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @FindBy(css = "div.chat-header")
 public class ChatHeader extends AbstractUIElement {
@@ -36,6 +38,9 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindBy(xpath = "//div[contains(@class,'chat-header')]//div[@class='icons']/span/*")
     private WebElement channelImg;
+
+    @FindBy(xpath = "//div/span[@class='time']")
+    private WebElement timeStamp;
 
 
 
@@ -106,4 +111,39 @@ public class ChatHeader extends AbstractUIElement {
         File image = new File("src/test/resources/adaptericons/headerChannel.png");
         return isWebElementEqualsImage(channelImg,image, "main");
     }
+        //Verify if tame stanp in 24 hours format
+    public boolean isValidTimeStamp() {
+        String strTime = timeStamp.getAttribute("textContent").toLowerCase();
+        if (strTime.contains("am")|strTime.contains("a.m")|strTime.contains("pm")|strTime.contains("p.m")) {
+            return false;
+        }
+        int ft = strTime.indexOf(',');
+        int ls = strTime.length();
+        String strTime24 = strTime.substring(ft+1,ls-1).trim();
+        return  validate24Time(strTime24);
+    }
+
+    public boolean validate24Time(String time){
+         Pattern pattern;
+         Matcher matcher;
+         String TIME24HOURS_PATTERN =
+                "([0-1][0-9]|2[0-3]):[0-5][0-9]";
+        pattern = Pattern.compile(TIME24HOURS_PATTERN);
+        matcher = pattern.matcher(time);
+        return matcher.matches();
+    }
+
+    public boolean isValidHeader() {
+        String strHeader = chatHeaderTitle.getText().toLowerCase();
+        if (!strHeader.contains("chatting to")) {
+            return false;
+        }
+        if (!strHeader.contains(getUserNameFromLocalStorage())) {
+            return false;
+        }
+        return  true;
+    }
+
+
+
 }

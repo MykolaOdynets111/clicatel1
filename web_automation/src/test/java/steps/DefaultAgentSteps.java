@@ -9,6 +9,7 @@ import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -1371,7 +1372,21 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @And("^Header in chat box displayed the icon for channel from which the user is chatting$")
     public void headerInChatBoxDisplayedTheIconForChannelFromWhichTheUserIsChatting() {
-        getAgentHomeForMainAgent().getChatHeader();
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg(),
+                "Icon for channel in chat header as not expected");
+    }
+
+    @And("^Time stamp displayed in 24 hours format$")
+    public void timeStampDisplayedInHoursFormat() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidTimeStamp(),
+                "Time stamp in chat header as not expected");
+    }
+
+    @And("^Header in chat box displayed \"chatting to \"customer name\"\"$")
+    public void headerInChatBoxDisplayedCustomerName() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidHeader(),
+                "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
+
     }
 
     @Then("^Transfer chat pop up appears$")
