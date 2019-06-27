@@ -12,8 +12,6 @@ Feature: Transfer chat with no Agents available
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When First Agent click on new conversation
-#    And Header in chat box displayed the icon for channel from which the user is chatting
-
     When Agent click on 'Transfer' chat
     Then Transfer chat pop up appears
     When Select 'Transfer to' drop down
