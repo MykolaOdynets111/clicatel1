@@ -1,13 +1,11 @@
-@egor
 Feature: Header contain valid information
 
   Background:
-    Given AGENT_FEEDBACK tenant feature is set to true for Automation
     Given User select Automation tenant
     Given I login as agent of Automation
     And Click chat icon
 
-  Scenario: All tie tags available for the test tenant in the drop down
+  Scenario: The header should have the icon for channel, user name, time stamp
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
