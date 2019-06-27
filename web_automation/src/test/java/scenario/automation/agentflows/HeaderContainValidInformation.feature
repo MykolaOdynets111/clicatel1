@@ -1,7 +1,6 @@
 @egor
 Feature: Header contain valid information
 
-  
   Background:
     Given AGENT_FEEDBACK tenant feature is set to true for Automation
     Given User select Automation tenant

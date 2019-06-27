@@ -1,4 +1,3 @@
-@egor
 Feature: Transferring chat, user info
 
   Verification of basic transfer chat functionality
