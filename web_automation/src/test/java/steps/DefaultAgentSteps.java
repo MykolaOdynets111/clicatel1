@@ -16,6 +16,7 @@ import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -58,6 +59,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
     private ThreadLocal<AgentLoginPage> agentLoginPage = new ThreadLocal<>();
     private String secondAgentName;
+    private List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
         return createdCrmTicketsList.get();
@@ -233,6 +235,19 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     public void transferChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
+    }
+
+    @When("^(.*) transfer a few chats$")
+    public void transferFewDotControlChats(String agent){
+        for(DotControlRequestMessage chat : createdChatsViaDotControl) {
+            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
+            transferChat(agent);
+            int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
+            while(availableAgents!=2){
+                getAgentHomePage(agent).waitFor(1000);
+                availableAgents = ApiHelper.getNumberOfLoggedInAgents();
+            }
+        }
     }
 
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
@@ -1384,6 +1399,27 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)","Drop down: not expected border color");
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)","Note: not expected border color");
+        soft.assertAll();
+    }
+
+    @Given("^(.*) receives a few conversation requests$")
+    public void create2DotControlChats(String agent){
+        leftMenuWithChats = getLeftMenu(agent);
+        SoftAssert soft = new SoftAssert();
+        DotControlSteps dotControlSteps = new DotControlSteps();
+        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
+        DotControlSteps.cleanUPDotControlRequestMessage();
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to agent"));
+
+        soft.assertTrue(leftMenuWithChats
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(0).getClientId(),20, agent),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
+        soft.assertTrue(leftMenuWithChats
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(1).getClientId(),20, agent),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Test(groups = "tie_general_bank")
 @CucumberOptions(
-        format={"com.github.kirlionik.cucumberallure.AllureReporter"
+        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
         features ="src/test/java/scenario/generalbank/tie",

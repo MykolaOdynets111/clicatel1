@@ -53,6 +53,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.context-wrapper>div.tip-note")
     private WebElement tipNoteInRightArea;
 
+//    @FindBy(css = "div.notifications-container>div.touch-notification")
+//    private WebElement notificationsList
+
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
