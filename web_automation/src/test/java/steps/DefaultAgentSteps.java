@@ -9,7 +9,6 @@ import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -1399,6 +1398,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomeForMainAgent().getTransferChatWindow().openDropDownAgent();
     }
 
+    @When("^(.*) select an agent in 'Transfer to' drop down$")
+    public void selectAgentTransferToDropDown(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
+    }
+
     @Then("^Agent sees '(.*)'$")
     public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
         Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
@@ -1409,10 +1413,21 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomeForMainAgent().getTransferChatWindow().clickTransferChatButton();
     }
 
-    @Then("^'Transfer to' and 'Note' fields highlighted red color$")
-    public void transferToAndNoteFieldsHighlightedRedColor() {
+    @When("^Complete 'Note' field$")
+    public void sentNotesTransferChatPopup() {
+        getAgentHomeForMainAgent().getTransferChatWindow().sentNote();
+    }
+
+    @Then("^'Transfer to' fields highlighted red color$")
+    public void transferToFieldsHighlightedRedColor() {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)","Drop down: not expected border color");
+        soft.assertAll();
+    }
+
+    @Then("^'Note' fields highlighted red color$")
+    public void noteFieldsHighlightedRedColor() {
+        SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)","Note: not expected border color");
         soft.assertAll();
     }

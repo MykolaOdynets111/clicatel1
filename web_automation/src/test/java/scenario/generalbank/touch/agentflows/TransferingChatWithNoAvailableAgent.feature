@@ -17,6 +17,7 @@ Feature: Transfer chat with no Agents available
     When Select 'Transfer to' drop down
     Then Agent sees 'No results found'
     When Click on 'Transfer' button in pop-up
-    Then 'Transfer to' and 'Note' fields highlighted red color
+    Then 'Transfer to' fields highlighted red color
+    And 'Note' fields highlighted red color
 
 
