@@ -13,6 +13,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     private String chatContainer = "//ul[@class='chat-container']";
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
+    private String modalWindow = "div.modal-content";
 
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
@@ -241,5 +242,9 @@ public class AgentHomePage extends AgentAbstractPage {
         }catch(TimeoutException o){
 
         }
+    }
+
+    public void waitForModalWindowToDisappear(){
+        waitForElementToBeInVisibleByCssAgent(modalWindow, 6);
     }
 }

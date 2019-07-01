@@ -1,4 +1,3 @@
-@start_server
 @dot_control
 @multiple_transfer
 @no_widget
