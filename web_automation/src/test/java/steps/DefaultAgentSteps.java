@@ -650,10 +650,37 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             Assert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName));
     }
 
-    @When("^Change phone number for (.*) user$")
-    public void changePhoneNumberCustomer360(String customerFrom){
-        String phoneNumber = generateUSCellPhoneNumber();
+    @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in Customer 360$")
+    public void checkCustomer360PhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
+        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
+        SoftAssert softAssert = new SoftAssert();
+        if (isOrNotDisplayed.contains("not")) {
+            try {
+                customer360Container.isCustomer360SMSButtonsDisplayed("Verify");
+            } catch (NoSuchElementException e) {
+                softAssert.assertFalse(false, "'Verify' button is not displayed");
+            }
+            try {
+                customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP");
+            } catch (NoSuchElementException e) {
+                softAssert.assertFalse(false, "'Re-send OTP' button is not displayed");
+            }
+            softAssert.assertAll();
+        }
+        else {
+            softAssert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"));
+            softAssert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"));
+            softAssert.assertAll();
+        }
+    }
+
+    @When("^(.*) phone number for (.*) user$")
+    public void changePhoneNumberCustomer360(String changeOrDelete, String customerFrom){
+        String phoneNumber = ""; //in case we need to delete phone number
         Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        if (changeOrDelete.equalsIgnoreCase("change"))
+            phoneNumber = generateUSCellPhoneNumber();
+
         customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
 
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
@@ -705,11 +732,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     }
 
     @Then("'Verified' label become (.*)")
-    public void checkVerifiedLabel(String isVisible){
+    public void checkVerifiedLabel(String isVisible) {
         if (isVisible.equalsIgnoreCase("visible"))
             Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label is not displayed");
-        else
-            Assert.assertFalse(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label remains displayed");
+        else {
+            try {
+                getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed();
+            } catch (NoSuchElementException e) {
+                Assert.assertFalse(false, "Verified label remains displayed");
+            }
+        }
+
     }
 
     @Then("SMS client-profile added into DB")
@@ -720,16 +753,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "MC2_SMS client profile wasn't created");
     }
 
-    @And("Chat separator with OTP code displayed")
+    @Then("Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed")
     public void chatSeparatorCheck(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
-//        getAgentHomeForMainAgent().getChatBody().getLastOTPCode();
-    }
-
-    @Then("Message 'I have just sent...' with user phone number displayed in textarea")
-    public void isMessageFieldContainPhone(){
         String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber();
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatForm().isMessageInputFieldContainText(phone), "Phone number is not displayed in message field");
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
+        softAssert.assertTrue(getAgentHomeForMainAgent().getChatForm().isMessageInputFieldContainText(phone), "Phone number is not displayed in message field");
+        softAssert.assertAll();
     }
 
     @Then("New OTP code is different from the previous one")

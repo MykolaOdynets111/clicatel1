@@ -131,8 +131,10 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isOTPDividerDisplayed(){
-        if (otpDividersBlocks.size() > 0)
+        if (otpDividersBlocks.size() > 0) {
+            waitForElementToBeVisibleAgent(otpDividersBlocks.get(otpDividersBlocks.size() - 1), 4, "main");
             return otpDividersBlocks.get(otpDividersBlocks.size() - 1).isDisplayed();
+        }
         else
             return false;
     }
