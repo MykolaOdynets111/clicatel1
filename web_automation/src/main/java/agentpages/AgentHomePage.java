@@ -7,6 +7,8 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.List;
+
 public class AgentHomePage extends AgentAbstractPage {
 
     private String chatContainer = "//ul[@class='chat-container']";
@@ -53,8 +55,8 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.context-wrapper>div.tip-note")
     private WebElement tipNoteInRightArea;
 
-//    @FindBy(css = "div.notifications-container>div.touch-notification")
-//    private WebElement notificationsList
+    @FindBy(xpath = "//div[@class='touch-notification']//child::h2[text()='Transfer waiting']")
+    private List<WebElement> notificationsList;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
@@ -224,4 +226,19 @@ public class AgentHomePage extends AgentAbstractPage {
         return getTextFromElemAgent(tipNoteInRightArea, 5, getCurrentAgent(), "Tips in context area if no chat selected");
     }
 
+    public List<WebElement> getCollapsedTransfers(){
+        waitForElementsToBeVisibleAgent(notificationsList, 6, this.getCurrentAgent());
+        return notificationsList;
+    }
+
+    public void acceptAllTransfers(){
+        try {
+            for (WebElement elem : getCollapsedTransfers()) {
+                elem.click();
+                getIncomingTransferWindow().acceptTransfer();
+            }
+        }catch(TimeoutException o){
+
+        }
+    }
 }

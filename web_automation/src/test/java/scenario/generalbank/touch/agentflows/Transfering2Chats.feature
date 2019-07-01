@@ -1,5 +1,7 @@
 #@start_server
 #@dot_control
+#@multiple_transfer
+#@no_widget
 #Feature: Transferring 2 chats
 #
 #  Verification of more than 1 chat transferring
@@ -12,6 +14,5 @@
 #    When First Agent transfer a few chats
 #    Then Second Agent receives incoming transfer notification with "Transfer waiting" header and collapsed view
 #    When Second Agent click on "Transfer waiting" header
-#    Then incoming notification will expand
-#    And Second agent can see transferring agent name, user name and following user's message: 'connect to agent'
-
+#    Then Second agent receives incoming transfer with "Incoming transfer" header
+#    And Second agent can see transferring agent name, user name from first chat and following user's message: 'chat to support'

@@ -250,6 +250,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
+    @When("^(.*) receives incoming transfer notification with \"Transfer waiting\" header and collapsed view$")
+    public void verifyTransferredChatsCollapsed(String agent){
+        Assert.assertEquals(getAgentHomePage(agent).getCollapsedTransfers().size(), 2,
+                "Not all expected collapsed transferred chats shown");
+    }
+
+    @When("^(.*) click on \"Transfer waiting\" header$")
+    public void expandFirstOfCollapsedTransfer(String agent){
+        getAgentHomePage(agent).getCollapsedTransfers().get(0).click();
+    }
+
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
     public void verifyIncomingTransferHeader(String agent, String expectedHeader){
         Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferWindowHeader(agent),
@@ -270,8 +281,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
-    @Then("(.*) can see transferring agent name, (?:user name|twitter user name|facebook user name) and following user's message: '(.*)'")
-    public void verifyIncomingTransferDetails(String agent, String userMessage) {
+    @Then("(.*) can see transferring agent name, (.*) and following user's message: '(.*)'")
+    public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
         try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = "";
@@ -286,6 +297,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
                     !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
                 expectedUserName = getUserNameFromLocalStorage();
+            }
+            if(user.contains("first chat")){
+                expectedUserName = createdChatsViaDotControl.get(0).getClientId();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
             String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
