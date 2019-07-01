@@ -299,6 +299,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         }
     }
 
+    @Then("^User should see emoji response for his '(.*)' input$")
+    public void verifyEmoticonAnswer(String userInput){
+        String emoji = AgentConversationSteps.getSelectedEmoji();
+        verifyTextResponseRegardlessPosition(emoji, userInput);
+    }
+
     private void verifyTextResponseAfterInteractionWithChoiceCard(String userInput, String expectedTextResponse, String intent, int waitForResponse){
         widgetConversationArea = widget.getWidgetConversationArea();
         int intentsCount=ApiHelperTie.getListOfIntentsOnUserMessage(userInput).size();

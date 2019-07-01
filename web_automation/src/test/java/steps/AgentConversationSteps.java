@@ -30,6 +30,11 @@ public class AgentConversationSteps implements JSHelper, WebActions {
     private AgentHomePage agentHomePage ;
     private ChatBody chatBody;
     private SuggestedGroup suggestedGroup;
+    private static String selectedEmoji;
+
+    public static String getSelectedEmoji() {
+        return selectedEmoji;
+    }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
@@ -40,6 +45,12 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         }
         Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage, "main agent"),
                 "'" +userMessage+ "' User message is not shown in conversation area");
+    }
+
+    @When("^Agent click on emoji icon$")
+    public void selectRamdomFrequetlyUsedEmogy(){
+        getAgentHomePage().getChatForm().clickEmoticonButton();
+        selectedEmoji = getAgentHomePage().getChatForm().selectRandomFrequentlyUsedEmoji();
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from twitter user$")
@@ -83,6 +94,16 @@ public class AgentConversationSteps implements JSHelper, WebActions {
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
+    @Then("^Sent emoji is displayed on chatdesk$")
+    public void verifyEmojiDisplayedOnChatdesk() {
+        String userMessage = "Submitted data:\n" +
+                ""+getUserNameFromLocalStorage()+"\n" +
+                "health@test.com";
+        Assert.assertTrue(getAgentHomePage("main agent").getChatBody()
+                        .getAgentEmojiResponseOnUserMessage(userMessage).contains(selectedEmoji),
+                "Expected to user emoji '"+selectedEmoji+"' is not shown in chatdesk");
+    }
+
     @Then("^There is no from agent response added by default for (.*) message from fb user$")
     public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String userMessage) {
         Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
@@ -107,6 +128,11 @@ public class AgentConversationSteps implements JSHelper, WebActions {
     @When("^Agent clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String responseToUser){
         getAgentHomePage().getChatForm().clearAndSendResponseToUser(responseToUser);
+    }
+
+    @When("^Agent response with emoticon to User$")
+    public void clickSendMessageButton(){
+        getAgentHomePage().getChatForm().clickSendButton();
     }
 
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")

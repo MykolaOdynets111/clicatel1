@@ -82,7 +82,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatForm getChatForm() {
-        chatForm.setCurrectAgent(this.getCurrentAgent());
+        chatForm.setCurrentAgent(this.getCurrentAgent());
         return chatForm;
     }
 
@@ -141,6 +141,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatBody getChatBody() {
+        chatBody.setCurrentAgent(this.getCurrentAgent());
         return chatBody;
     }
 
