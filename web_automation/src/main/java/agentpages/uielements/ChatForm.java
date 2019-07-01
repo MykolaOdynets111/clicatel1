@@ -69,6 +69,18 @@ public class ChatForm extends AbstractUIElement {
         clearAndSendResponseToUser(message);
     }
 
+    public String getTextFromMessageInputField(){
+        waitForElementToBeVisibleByXpathAgent(messageInputLocator, 1, this.currentAgent);
+        moveToElemAndClick(DriverFactory.getDriverForAgent(this.currentAgent), findElemByXPATHAgent(messageInputLocator, this.currentAgent));
+        waitForElementToBeClickableAgent(messageInput, 4, this.currentAgent);
+        return messageInput.getText();
+    }
+
+    public boolean isMessageInputFieldContainText(String textToSearch){
+        String enteredText = getTextFromMessageInputField().replaceAll("\\s", "");
+        return enteredText.contains(textToSearch);
+    }
+
     public void addMoreInfo(String additionalMessage){
         try {
             waitForElementToBeVisible(suggestionInputFieldContainer,6);

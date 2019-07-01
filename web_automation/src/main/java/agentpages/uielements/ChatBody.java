@@ -7,6 +7,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 
 import java.util.*;
@@ -33,6 +34,11 @@ public class ChatBody extends AbstractUIElement {
 
     @FindBy(css = "li.to div.empty-icon")
     private WebElement agentIconWIthInitials;
+
+    @FindBys(
+            @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
+    )
+    private List<WebElement> otpDividersBlocks;
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -122,6 +128,34 @@ public class ChatBody extends AbstractUIElement {
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
+    }
+
+    public boolean isOTPDividerDisplayed(){
+        if (otpDividersBlocks.size() > 0)
+            return otpDividersBlocks.get(otpDividersBlocks.size() - 1).isDisplayed();
+        else
+            return false;
+    }
+
+    public String getLastOTPCode(){
+        try{
+            String blockText = otpDividersBlocks.get(otpDividersBlocks.size()-1).getText();
+            return blockText.substring(4, 8);
+        }
+        catch (TimeoutException e){
+            Assert.assertTrue(false, "There is no OTP block displayed");
+            return null;
+        }
+    }
+
+    public boolean isNewOTPCodeDifferent(){
+        if (otpDividersBlocks.size() > 1){
+            String lastCode = otpDividersBlocks.get(otpDividersBlocks.size()-1).getText();
+            String previousCode = otpDividersBlocks.get(otpDividersBlocks.size()-2).getText();
+            return lastCode.equals(previousCode);
+        }
+        else
+            return false;
     }
 
     public String getTenantMsgColor() {

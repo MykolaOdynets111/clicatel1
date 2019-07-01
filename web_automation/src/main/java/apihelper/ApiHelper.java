@@ -8,6 +8,7 @@ import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
+import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -24,7 +25,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class ApiHelper implements DateTimeHelper, VerificationHelper{
+public class ApiHelper implements DateTimeHelper, JSHelper, VerificationHelper{
 
     private static  List<HashMap> tenantsInfo=null;
 //    private static List<HashMap> tenantMessages=null;

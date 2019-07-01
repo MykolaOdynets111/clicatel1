@@ -2,10 +2,7 @@ package steps;
 
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
-import agentpages.uielements.ChatInActiveChatHistory;
-import agentpages.uielements.Customer360Container;
-import agentpages.uielements.LeftMenuWithChats;
-import agentpages.uielements.ProfileWindow;
+import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
@@ -601,16 +598,16 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) button (.*) displayed in Customer 360$")
     public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
-        Customer360Container customer360PersonalInfo = getAgentHomePage("main").getCustomer360Container();
+        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
             try {
-                customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName);
+                customer360Container.isCustomer360SMSButtonsDisplayed(buttonName);
             }
             catch (NoSuchElementException e){
                 Assert.assertFalse(false, "'" + buttonName + "' button is not displayed");
             }
         else
-            Assert.assertTrue(customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName));
+            Assert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName));
     }
 
     @When("^Change phone number for (.*) user$")
@@ -621,6 +618,83 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
         Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
+    }
+
+    @When("Agent click on '(.*)' button in Customer 360")
+    public void clickSendOTPButton(String buttonName){
+        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
+        customer360Container.clickPhoneNumberVerificationButton(buttonName);
+    }
+
+    @Then("^'Verify phone' window is (.*)$")
+    public void verifyPhoneNumberWindowOpened(String isWindowOpen) {
+        if (isWindowOpen.equalsIgnoreCase("opened"))
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),"'Verify phone' window is not opened.");
+        else
+            Assert.assertFalse(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),"'Verify phone' window wasn't closed.");
+    }
+
+    @Then("User's profile phone number (.*) in 'Verify phone' input field")
+    public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
+        Customer360Container customer360Container = new Customer360Container();
+        String phoneNumberInCustomer360 = customer360Container.getPhoneNumber().replaceAll("\\s+", "");
+        String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
+        if (isRequiredToDisplay.contains("not")){
+            Assert.assertTrue(phoneNumberInVerifyPopUp.equals(""), "Some phone number displayed in the field");
+        }
+        else{
+            Assert.assertTrue(phoneNumberInVerifyPopUp.equals(phoneNumberInCustomer360),
+                    "Phone number in Verify phone window is different from displayed in Customer 360");
+        }
+    }
+
+    @When("Agent click on (.*) button on 'Verify phone' window")
+    public void closeVerifyPhonePopUp(String buttonName){
+        if (buttonName.equalsIgnoreCase("Send OTP"))
+            getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().sendOTPMessage();
+        else if (buttonName.equalsIgnoreCase("Cancel"))
+            getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().closeSendOTPPopUp();
+        else
+            throw new NoSuchElementException("No button with specified name");
+    }
+
+    @When("Agent send OTP message with API")
+    public void sendOTPWithAPI(){
+        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        DBConnector.verifyOTPSent(ConfigManager.getEnv(), linkedClientProfileId);
+    }
+
+    @Then("'Verified' label become (.*)")
+    public void checkVerifiedLabel(String isVisible){
+        if (isVisible.equalsIgnoreCase("visible"))
+            Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label is not displayed");
+        else
+            Assert.assertFalse(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label remains displayed");
+    }
+
+    @Then("SMS client-profile added into DB")
+    public void checkSMSProfileCreating(){
+        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\+", "");
+        Assert.assertTrue(DBConnector.isSMSClientProfileCreated(ConfigManager.getEnv(), phone, linkedClientProfileId, "MC2_SMS"),
+                "MC2_SMS client profile wasn't created");
+    }
+
+    @And("Chat separator with OTP code displayed")
+    public void chatSeparatorCheck(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
+//        getAgentHomeForMainAgent().getChatBody().getLastOTPCode();
+    }
+
+    @Then("Message 'I have just sent...' with user phone number displayed in textarea")
+    public void isMessageFieldContainPhone(){
+        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber();
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatForm().isMessageInputFieldContainText(phone), "Phone number is not displayed in message field");
+    }
+
+    @Then("New OTP code is different from the previous one")
+    public void checkOTPCodes(){
+        Assert.assertFalse(getAgentHomeForMainAgent().getChatBody().isNewOTPCodeDifferent(), "Codes are equal");
     }
 
     @When("^Agent switches to opened (?:Portal|ChatDesk) page$")

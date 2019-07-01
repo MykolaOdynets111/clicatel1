@@ -63,6 +63,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
+    private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -125,6 +126,10 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public LeftMenuWithChats getLeftMenuWithChats() {
         return leftMenuWithChats;
+    }
+
+    public VerifyPhoneNumberWindow getVerifyPhoneNumberWindow() {
+        return verifyPhoneNumberWindow;
     }
 
     public ChatBody getChatBody() {
