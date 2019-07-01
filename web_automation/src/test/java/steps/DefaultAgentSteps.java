@@ -1400,9 +1400,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
         dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
-        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("connect to agent'"));
         DotControlSteps.cleanUPDotControlRequestMessage();
-        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to agent"));
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
 
         soft.assertTrue(leftMenuWithChats
                         .isNewConversationRequestFromSocialIsShown(
