@@ -1017,7 +1017,7 @@ public class TIEApiSteps implements DateTimeHelper{
                 waitFor(15000);
                 String finalCreatedModelName = createdModelName;
                 try {
-                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("intent")
                             .stream().map(e -> (Map) e)
                             .filter(e -> e.get("name").equals(finalCreatedModelName))
                             .allMatch(e -> e.get("status").equals("finished"));
@@ -1081,9 +1081,8 @@ public class TIEApiSteps implements DateTimeHelper{
         try {
             createdSlotIds.add(resp.getBody().jsonPath().get("id"));
         } catch (JsonPathException e) {
-            Assert.assertTrue(resp.statusCode() == 200,
-                    "Creating new slot was not successful \n" +
-                            "Create slot body: " + createSlotBody.toString());
+            Assert.assertEquals(resp.statusCode(), 200, "Creating new slot was not successful \n" +
+                    "Create slot body: " + createSlotBody.toString());
         }
 
     }

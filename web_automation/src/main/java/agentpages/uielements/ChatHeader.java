@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -15,8 +16,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @FindBy(css = "div.chat-header")
 public class ChatHeader extends AbstractUIElement {
@@ -77,18 +76,24 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isButtonEnabled(String buttonTitle){
-        switch (buttonTitle) {
-            case "Transfer chat":
-                waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
-                return findElemByXPATHAgent(transferChatButton).isEnabled();
-            case "Send SMS":
-                waitForElementToBeVisibleByXpathAgent(sendSMSXpath, 5, "main agent");
-                return findElemByXPATHAgent(sendSMSXpath).isEnabled();
-            case "Send WhatsApp":
-                waitForElementToBeVisibleByXpathAgent(sendWhatsAppXpath, 5, "main agent");
-                return findElemByXPATHAgent(sendWhatsAppXpath).isEnabled();
-            default:
-                throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
+        try {
+            switch (buttonTitle) {
+                case "Transfer chat":
+                    waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
+                    return findElemByXPATHAgent(transferChatButton).isEnabled();
+                case "Send SMS":
+                    waitForElementToBeVisibleByXpathAgent(sendSMSXpath, 5, "main agent");
+                    return findElemByXPATHAgent(sendSMSXpath).isEnabled();
+                case "Send WhatsApp":
+                    waitForElementToBeVisibleByXpathAgent(sendWhatsAppXpath, 5, "main agent");
+                    return findElemByXPATHAgent(sendWhatsAppXpath).isEnabled();
+
+                default:
+                    throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
+            }
+        }catch (TimeoutException e){
+            Assert.fail(buttonTitle + " is not visible.");
+            return false;
         }
     }
 

@@ -1,4 +1,5 @@
-package runner;
+package runner.automationcomon;
+
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -10,14 +11,14 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "tie_training_management")
+@Test(groups = "All Automation Common tenant tests")
 @CucumberOptions(
-        format={"com.github.kirlionik.cucumberallure.AllureReporter"
+        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/tietrainingui",
+        features ="src/test/java/scenario/automationcommon",
         glue ="steps")
-public class RunTIETrainingManagement {
+public class RunAllTests {
 
         @Factory
         public Object[] features() {
@@ -28,4 +29,5 @@ public class RunTIETrainingManagement {
                 }
                 return objects.toArray();
         }
+
 }

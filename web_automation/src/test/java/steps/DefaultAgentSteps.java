@@ -242,12 +242,24 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         for(DotControlRequestMessage chat : createdChatsViaDotControl) {
             getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
             transferChat(agent);
+            getAgentHomePage(agent).waitForModalWindowToDisappear();
             int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             while(availableAgents!=2){
                 getAgentHomePage(agent).waitFor(1000);
                 availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             }
         }
+    }
+
+    @When("^(.*) receives incoming transfer notification with \"Transfer waiting\" header and collapsed view$")
+    public void verifyTransferredChatsCollapsed(String agent){
+        Assert.assertEquals(getAgentHomePage(agent).getCollapsedTransfers().size(), 2,
+                "Not all expected collapsed transferred chats shown");
+    }
+
+    @When("^(.*) click on \"Transfer waiting\" header$")
+    public void expandFirstOfCollapsedTransfer(String agent){
+        getAgentHomePage(agent).getCollapsedTransfers().get(0).click();
     }
 
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
@@ -270,8 +282,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
-    @Then("(.*) can see transferring agent name, (?:user name|twitter user name|facebook user name) and following user's message: '(.*)'")
-    public void verifyIncomingTransferDetails(String agent, String userMessage) {
+    @Then("(.*) can see transferring agent name, (.*) and following user's message: '(.*)'")
+    public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
         try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = "";
@@ -286,6 +298,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
                     !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
                 expectedUserName = getUserNameFromLocalStorage();
+            }
+            if(user.contains("first chat")){
+                expectedUserName = createdChatsViaDotControl.get(0).getClientId();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
             String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
@@ -1439,9 +1454,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
         dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
-        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("connect to agent'"));
         DotControlSteps.cleanUPDotControlRequestMessage();
-        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to agent"));
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
 
         soft.assertTrue(leftMenuWithChats
                         .isNewConversationRequestFromSocialIsShown(

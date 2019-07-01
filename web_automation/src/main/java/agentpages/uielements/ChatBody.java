@@ -25,6 +25,12 @@ public class ChatBody extends AbstractUIElement {
 
     private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
 
+    private String currentAgent;
+
+    public void setCurrentAgent(String agent){
+        this.currentAgent = agent;
+    }
+
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
 
@@ -98,6 +104,11 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isResponseOnUserMessageShown(String userMessage) {
         return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).isToUserTextResponseShown(5);
+    }
+
+    public String getAgentEmojiResponseOnUserMessage(String userMessage) {
+        return new AgentDeskChatMessage(getFromUserWebElement(userMessage))
+                .getAgentResponseEmoji(this.currentAgent);
     }
 
     public boolean isToUserMessageShown(String userMessage){
