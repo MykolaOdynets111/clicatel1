@@ -9,7 +9,7 @@
     <test name="TIE one thread tests" parallel="instances" thread-count="2">
         <classes>
             <class name="runner.generalbank.RunTIEOneThreadTest" />
-            <class name="runner.RunTIETrainingManagement" />
+            <class name="runner.automationcomon.RunTIETrainingManagement" />
         </classes>
     </test>
 </suite>

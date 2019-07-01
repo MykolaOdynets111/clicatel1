@@ -88,6 +88,17 @@ public class ApiHelperPlatform {
                 .findFirst().get().get("id");
     }
 
+    public static String getAccountUserFullName(String tenantOrgName, String userEmail){
+        Response resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.PLATFORM_USER);
+        Map user = resp.getBody().jsonPath().getList("users", Map.class)
+                .stream().filter(e -> e.get("email").equals(userEmail))
+                .findFirst().get();
+        return user.get("firstName") + " " +  user.get("lastName");
+    }
+
     public static boolean isActiveUserExists(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
