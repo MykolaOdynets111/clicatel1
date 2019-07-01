@@ -1383,7 +1383,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @And("^Header in chat box displayed \"chatting to \"customer name\"\"$")
     public void headerInChatBoxDisplayedCustomerName() {
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidHeader(),
+        Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTextHeader(),
+                "chatting to " + getUserNameFromLocalStorage(),
                 "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
 
     }

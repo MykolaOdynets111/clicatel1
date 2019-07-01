@@ -26,3 +26,4 @@ Feature: Transferring chat, user info
     Then Second agent receives incoming transfer with "Incoming transfer" header
     Then Second Agent receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment
 
+

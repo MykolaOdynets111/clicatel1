@@ -5,6 +5,7 @@ Feature: Header contain valid information
     Given I login as agent of Automation
     And Click chat icon
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-1637")
   Scenario: The header should have the icon for channel, user name, time stamp
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
