@@ -49,9 +49,9 @@ public class ChatHeader extends AbstractUIElement {
         return isElementShownAgent(endChatButton,1, agent);
     }
 
-    public void clickTransferButton(){
-        waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
-        findElemByXPATHAgent(transferChatButton).click();
+    public void clickTransferButton(String agent){
+        waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, agent);
+        findElemByXPATHAgent(transferChatButton,agent).click();
     }
 
     public boolean isButtonEnabled(String buttonTitle){

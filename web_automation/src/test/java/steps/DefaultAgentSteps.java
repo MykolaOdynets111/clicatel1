@@ -13,6 +13,7 @@ import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -22,7 +23,6 @@ import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
 import io.restassured.response.Response;
-import org.junit.rules.Timeout;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -56,6 +56,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
     private ThreadLocal<AgentLoginPage> agentLoginPage = new ThreadLocal<>();
     private String secondAgentName;
+    private List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
         return createdCrmTicketsList.get();
@@ -227,10 +228,23 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         Assert.assertFalse(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is redirected to chat desk.");
     }
 
-    @When("^Agent transfers chat$")
-    public void transferChat(){
-        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
-        secondAgentName = getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
+    @When("^(.*) transfers chat$")
+    public void transferChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
+    }
+
+    @When("^(.*) transfer a few chats$")
+    public void transferFewDotControlChats(String agent){
+        for(DotControlRequestMessage chat : createdChatsViaDotControl) {
+            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
+            transferChat(agent);
+            int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
+            while(availableAgents!=2){
+                getAgentHomePage(agent).waitFor(1000);
+                availableAgents = ApiHelper.getNumberOfLoggedInAgents();
+            }
+        }
     }
 
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
@@ -287,9 +301,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
-    @Then("^Second agent click \"Accept transfer\" button$")
-    public void acceptIncomingTransfer(){
-        getAgentHomeForSecondAgent().getIncomingTransferWindow().acceptTransfer();
+    @Then("^(.*) click \"Accept transfer\" button$")
+    public void acceptIncomingTransfer(String agent){
+        getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
     }
 
     @Then("^Second agent click \"Reject transfer\" button$")
@@ -316,6 +330,25 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                         "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + "\n" +
                         "Support hours: " + ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).toString() + "\n"
                 );
+    }
+
+    @Then("^(.*) sees \"(.*)\" tip in conversation area$")
+    public void verifyTipIfNoSelectedChat(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
+                "Tip note if no chat selected is not as expected");
+    }
+
+    @Then("^(.*) sees \"(.*)\" tip in context area$")
+    public void verifyTipIfNoSelectedChatInContextArea(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelectedFromContextArea(), note,
+                "Tip note in context area if no chat selected is not as expected");
+    }
+
+    @Then("^(.*) sees \"(.*)\" placeholder in input field$")
+    public void verifyInputFieldPlaceholder(String agent, String placeholder){
+        Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
+                "Placeholder in input field in opened chat is not as expected");
+
     }
 
     @When("^(.*) click 'Pin' button$")
@@ -529,10 +562,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "resp body: " + resp.getBody().asString() + "\n");
     }
 
+    @Then("^Tab with user info has \"(.*)\" header$")
+    public void verifyTabHeader(String headerName){
+        Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
+                "Incorrect header of Customer 360 container");
+    }
+
 
     @Then("Correct (.*) client details are shown")
     public void verifyClientDetails(String clientFrom){
-        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main")
+                .getCustomer360Container().getActualPersonalInfo();
 
         Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
                 "User info is not as expected \n");
@@ -1379,5 +1419,59 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
 
         }
+    }
+
+    @When("^(.*) click on 'Transfer' chat$")
+    public void agentClickOnTransferChat(String agent) {
+        getAgentHomeForMainAgent().getChatHeader().clickTransferButton(agent);
+    }
+
+    @Then("^Transfer chat pop up appears$")
+    public void transferChatPopUpAppears() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
+    }
+
+    @When("^Select 'Transfer to' drop down$")
+    public void selectTransferToDropDown() {
+        getAgentHomeForMainAgent().getTransferChatWindow().openDropDownAgent();
+    }
+
+    @Then("^Agent sees '(.*)'$")
+    public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
+    }
+
+    @When("^Click on 'Transfer' button in pop-up$")
+    public void clickOnTransferButtonInPopUp() {
+        getAgentHomeForMainAgent().getTransferChatWindow().clickTransferChatButton();
+    }
+
+    @Then("^'Transfer to' and 'Note' fields highlighted red color$")
+    public void transferToAndNoteFieldsHighlightedRedColor() {
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)","Drop down: not expected border color");
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)","Note: not expected border color");
+        soft.assertAll();
+    }
+
+    @Given("^(.*) receives a few conversation requests$")
+    public void create2DotControlChats(String agent){
+        leftMenuWithChats = getLeftMenu(agent);
+        SoftAssert soft = new SoftAssert();
+        DotControlSteps dotControlSteps = new DotControlSteps();
+        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
+        DotControlSteps.cleanUPDotControlRequestMessage();
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to agent"));
+
+        soft.assertTrue(leftMenuWithChats
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(0).getClientId(),20, agent),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
+        soft.assertTrue(leftMenuWithChats
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(1).getClientId(),20, agent),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
+        soft.assertAll();
     }
 }

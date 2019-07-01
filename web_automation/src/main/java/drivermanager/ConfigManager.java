@@ -14,6 +14,11 @@ public class ConfigManager {
     private static final String FACEBOOK_PASS = "fbuserpass";
     private static final String SUITE = "suite";
     private static final String REPORT_TESTFLO = "reportToTestFLO";
+    private static final String TPLAN_KEY = "tplanKey";
+    private static final String CREATE_NEW_TPLAN = "createTPlan";
+    private static final String JIRA_USER = "jirauser";
+    private static final String JIRA_PASS = "jirapass";
+    private static final String REMOTE_ALLURE_REPORT = "isRemoteAllureReport";
 
     public static boolean reportToTouchFlo() {
         String reportToTestFlo = System.getProperty(REPORT_TESTFLO);
@@ -21,6 +26,40 @@ public class ConfigManager {
             reportToTestFlo = "false";
         }
         return Boolean.parseBoolean(reportToTestFlo);
+    }
+
+    public static boolean createNewTPlan() {
+        String createNewTPlan = System.getProperty(CREATE_NEW_TPLAN);
+        if(createNewTPlan==null) {
+            createNewTPlan = "false";
+        }
+        return Boolean.parseBoolean(createNewTPlan);
+    }
+
+    public static String getTplanKey(){
+        String tenantID = System.getProperty(TPLAN_KEY);
+        if(tenantID==null) return "";
+        return tenantID;
+    }
+
+    public static String getJiraUser(){
+        String usrName = System.getProperty(JIRA_USER);
+        if(usrName==null) return "";
+        return usrName;
+    }
+
+    public static boolean isRemoteAllureReport(){
+        String createNewTPlan = System.getProperty(REMOTE_ALLURE_REPORT);
+        if(createNewTPlan==null) {
+            createNewTPlan = "false";
+        }
+        return Boolean.parseBoolean(createNewTPlan);
+    }
+
+    public static String getJiraPass(){
+        String usrPass = System.getProperty(JIRA_PASS);
+        if(usrPass==null) return "";
+        return usrPass;
     }
 
     public static void setTenantId(String tenantId) {

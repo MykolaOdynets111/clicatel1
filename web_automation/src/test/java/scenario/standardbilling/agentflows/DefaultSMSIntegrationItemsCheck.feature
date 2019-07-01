@@ -6,7 +6,7 @@ Feature: Default SMS integration items visibility check
     Given I select Touch in left menu and Configure Touch in submenu
     And Enable the SMS integration
     Then Status of SMS integration is changed to "Active"
-    And I select Touch in left menu and Launch Chat Desk in submenu
+    When I launch chatdesk from portal
     Given User select Standard Billing tenant
     And Click chat icon
     When User enter connect to agent into widget input field

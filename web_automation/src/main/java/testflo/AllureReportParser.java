@@ -1,6 +1,7 @@
 package testflo;
 
 import drivermanager.ConfigManager;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import testflo.jacksonschemas.AllureScenarioInterface;
 import testflo.jacksonschemas.allurescenario.AllureScenario;
@@ -19,7 +20,7 @@ public class AllureReportParser {
 
 
    private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper){
-       if(ConfigManager.isRemote()){
+       if(ConfigManager.isRemoteAllureReport()){
            return parseRemoteAllure(file, objectMapper);
        } else{
            return parseLocalAllure(file, objectMapper);
@@ -29,17 +30,19 @@ public class AllureReportParser {
    private static AllureScenarioInterface parseLocalAllure(File file, ObjectMapper objectMapper){
        try {
            return objectMapper.readValue(file, LocalAllureScenario.class);
-       } catch (IOException e) {
+       } catch (IOException|NullPointerException e) {
            e.printStackTrace();
+           System.out.println("\n !! Was not able to parse Allure test case \n");
        }
        return new AllureScenario();
    }
 
     private static AllureScenarioInterface parseRemoteAllure(File file, ObjectMapper objectMapper){
-        try {
+       try {
             return objectMapper.readValue(file, AllureScenario.class);
-        } catch (IOException e) {
+        } catch (IOException|NullPointerException e) {
             e.printStackTrace();
+            System.out.println("\n !! Was not able to parse Allure test case \n");
         }
         return new AllureScenario();
     }
@@ -47,10 +50,22 @@ public class AllureReportParser {
    public static List<AllureScenarioInterface> parseAllureResultsToGetTestCases(){
        List<File> allureTestCases;
        File folder;
-       if(ConfigManager.isRemote()){
-            folder = new File(ALLURE_REPORT_DATA_FOLDER + "/test-cases");
+       if(ConfigManager.isRemoteAllureReport()){
+            folder = new File(System.getProperty("user.dir")+"/build/allure-report/data");
 //       if(new File( System.getProperty("user.dir") + "/build/allure-report_2/data/test-cases").exists()){
 //           folder = new File(System.getProperty("user.dir") + "/build/allure-report_2/data/test-cases");
+           for(int i = 0; i <5; i ++){
+               if(!folder.exists()){
+                   try {
+                       System.out.println("\n !!! folder check  !! " + i +"\n");
+                       Thread.sleep(1000);
+                       folder = new File(System.getProperty("user.dir")+"/build/allure-report/data");
+                   }catch(InterruptedException e){}
+               } else {
+                   System.out.println("\n !!! folder exists !! \n");
+                   break;
+               }
+           }
            allureTestCases= Arrays.asList(folder.listFiles());
        }else{
            folder = new File(ALLURE_REPORT_DATA_FOLDER);

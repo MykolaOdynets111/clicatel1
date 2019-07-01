@@ -8,6 +8,7 @@ Feature: Customer 360 from widget
     Then Agent has new conversation request
     When Agent click on new conversation
     Then Correct touch client details are shown
+    And Tab with user info has "Customer 360" header
 
   Scenario: Editing Customer 360 info (touch user)
     Given I login as agent of General Bank Demo
