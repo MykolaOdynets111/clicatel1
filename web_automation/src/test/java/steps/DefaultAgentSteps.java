@@ -1468,4 +1468,17 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }
+
+    @When("^(.*) click 'Cancel transfer' button$")
+    public void cancelTransferChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickCancelTransferButton(agent);
+    }
+
+    @Then("^(.*) has not see incoming transfer pop-up$")
+    public void secondAgentHasNotSeeIncomingTransferPopUp(String agent) {
+           Assert.assertTrue(
+            getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(agent),
+                   "Transfer chat header is shown for "+ agent + " agent");
+
+    }
 }

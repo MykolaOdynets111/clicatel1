@@ -227,6 +227,19 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementNotShownAgent(WebElement element, int wait, String agent){
+        try {
+            waitForElementToBeInvisibleWithNoSuchElementExceptionAgent(element, wait, agent);
+            return true;
+        } catch (TimeoutException e) {
+            try {
+                return !element.isDisplayed();
+            } catch(NoSuchElementException e1) {
+                return true;
+            }
+        }
+    }
+
 
     default String getTextFrom(WebElement elem) {
         try{

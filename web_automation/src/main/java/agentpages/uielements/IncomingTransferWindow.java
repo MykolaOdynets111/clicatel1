@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -76,6 +77,10 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public String getTransferWindowHeader(String agent){
         return getTextFromElemAgent(transferWindowHeader, 2, agent, "Transfer chat window header");
+    }
+
+    public boolean isTransferWindowHeaderNotShown(String agent){
+        return isElementNotShownAgent(transferWindowHeader,2,agent);
     }
 
     public String getRejectedBy(String agent){
