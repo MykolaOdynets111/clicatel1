@@ -12,10 +12,10 @@ import java.util.List;
 
 @Test(groups = "tie_training_management")
 @CucumberOptions(
-        format={"com.github.kirlionik.cucumberallure.AllureReporter"
+        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/tietrainingui",
+        features ="src/test/java/scenario/automationcommon/AddingNewIntentFlow.feature",
         glue ="steps")
 public class RunTIETrainingManagement {
 
