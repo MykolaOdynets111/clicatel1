@@ -14,7 +14,7 @@ Feature: Signing up the account
     And Login into portal as an admin of SignedUp AQA account
     Then Portal Page is opened
     Then Landing pop up is shown
-    When Close landing popup
-    Then "Update policy" pop up is shown
+    And "Update policy" pop up is shown
     When Accept "Update policy" popup
+    And Close landing popup
     Then Main portal page with welcome message is shown
