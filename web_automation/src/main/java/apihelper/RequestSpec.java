@@ -104,7 +104,7 @@ public class RequestSpec {
 
     public static String getAccessTokenForPortalUserByAccount(String accountName) {
         if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
-            MC2Account admin = MC2Account.getAccountDetails(ConfigManager.getEnv(), accountName);
+            MC2Account admin = MC2Account.getAccountDetailsByAccountName(ConfigManager.getEnv(), accountName);
 
             Map<String, String> tokenAndAccount = Accounts.getToken(accountName, admin.getEmail(), admin.getPass());
             Response resp = RestAssured.given()

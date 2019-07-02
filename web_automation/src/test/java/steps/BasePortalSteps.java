@@ -49,9 +49,6 @@ public class BasePortalSteps implements JSHelper {
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
-    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
-    public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
-  //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
     public static final String FIRST_AND_LAST_NAME = "Touch Go";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
@@ -129,17 +126,16 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(String accountOrgName){
-
-//        MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("signup_account@aqa.test").setAccountName()setEnv(ConfigManager.getEnv())
-//        "Touch Go"
-//        "signup_account@aqa.test"
-//        "p@$$w0rd4te$t"
-//        MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail();
-        String accountName = Tenants.setAccountNameForNewAccountSignUp();
+        Faker faker = new Faker();
+        String accountName = faker.name().firstName() + faker.number().randomNumber();
+        MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("signtqwaaa@aqa.test").setTenantOrgName(accountOrgName)
+                                        .setAccountName(accountName).setEnv(ConfigManager.getEnv());
+        Agents.TOUCH_GO_ADMIN.setEmail( MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail())
+                .setTenant(accountOrgName).setEnv(ConfigManager.getEnv());
         Tenants.setTenantUnderTestName(accountName);
         Tenants.setTenantUnderTestOrgName(accountOrgName);
-        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, accountName,
-                                        EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME,  MC2Account.TOUCH_GO_NEW_ACCOUNT.getAccountName(),
+                MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail(), MC2Account.TOUCH_GO_NEW_ACCOUNT.getPass());
     }
 
     @When("^I try to create new account with following data: (.*), (.*), (.*), (.*)$")
@@ -168,9 +164,8 @@ public class BasePortalSteps implements JSHelper {
     @When("(.*) test accounts is closed")
     public void closeAllTestAccount(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
-                BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-                BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        ApiHelperPlatform.closeAccount(mc2Account.getAccountName(), mc2Account.getEmail(), mc2Account.getPass());
     }
 
     @When("Portal Sign Up page is opened")
@@ -193,22 +188,22 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
         activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                Tenants.getAccountNameForNewAccountSignUp());
+                MC2Account.TOUCH_GO_NEW_ACCOUNT.getAccountName());
         for(int i=0; i<4; i++){
             if (activationAccountID==null){
                 getPortalSignUpPage().waitFor(1000);
                 activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                        Tenants.getAccountNameForNewAccountSignUp());
+                        MC2Account.TOUCH_GO_NEW_ACCOUNT.getAccountName());
             }
         }
-        Assert.assertFalse(activationAccountID ==null,
-        "Record with new activation ID is not created in mc2 DB after submitting sign up form");
+        Assert.assertNotNull(activationAccountID,
+                "Record with new activation ID is not created in mc2 DB after submitting sign up form");
     }
 
 
     @Then("^Login page is opened with a message that activation email has been sent$")
     public void verifyMassageThatConfirmationEmailSent(){
-        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+EMAIL_FOR_NEW_ACCOUNT_SIGN_UP+"" +
+        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail()+"" +
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
@@ -273,9 +268,7 @@ public class BasePortalSteps implements JSHelper {
     @When("^Login as (.*) agent$")
     public void loginAsCreatedAgent(String agent){
         String email = AGENT_EMAIL;
-        if(agent.equalsIgnoreCase("updated")){
-            email = updatedAgentInfo.get("email");
-        }
+        if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
         portalLoginPage.get().login(email, AGENT_PASS);
     }
 
@@ -334,10 +327,10 @@ public class BasePortalSteps implements JSHelper {
                 "Account confirmation popup is not shown");
     }
 
-    @When("^Admin confirms account to close$")
-    public void confirmAccountToCLosing(){
-        getPortalAccountDetailsPage().confirmAccount(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-                PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    @When("^Admin confirms (.*) account to close$")
+    public void confirmAccountToCLosing(String tenantOrgName){
+        MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        getPortalAccountDetailsPage().confirmAccount(mc2Account.getEmail(), mc2Account.getPass());
     }
 
     @When("Admin provides '(.*)' email and '(.*)' pass for account confirmation")
@@ -345,14 +338,15 @@ public class BasePortalSteps implements JSHelper {
         getPortalAccountDetailsPage().confirmAccount(email, account);
     }
 
-    @Then("^Admin is not able to login into portal with deleted account$")
-    public void verifyAdminCannotLoginToPortal(){
+    @Then("^Admin is not able to login into portal with deleted (.*) account$")
+    public void verifyAdminCannotLoginToPortal(String tenantOrgName){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         if (!portalLoginPage.get().isLoginPageOpened(1)){
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }
-        portalLoginPage.get().enterAdminCreds(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        portalLoginPage.get().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -455,9 +449,9 @@ public class BasePortalSteps implements JSHelper {
                 "\"Get started with Touch Go\" window is not opened");
     }
 
-    @When("^I try to create new tenant$")
-    public void createNewTenant(){
-        getPortalMainPage().getConfigureTouchWindow().createNewTenant("SignedUp AQA", EMAIL_FOR_NEW_ACCOUNT_SIGN_UP);
+    @When("^I try to create new (.*) tenant$")
+    public void createNewTenant(String tenantOrgName){
+        getPortalMainPage().getConfigureTouchWindow().createNewTenant(tenantOrgName, MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail());
     }
 
     public static boolean isNewUserWasCreated(){

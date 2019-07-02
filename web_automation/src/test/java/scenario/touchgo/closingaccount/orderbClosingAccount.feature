@@ -2,6 +2,7 @@
 @no_widget
 @no_chatdesk
 @testing_env_only
+@testy22
 Feature: Closing account
 
   Scenario: Admin of the account should be able to close the account
@@ -14,6 +15,6 @@ Feature: Closing account
     Then 'Close account?' popup is shown
     When Admin clicks 'Close account' button in confirmation popup
     Then 'Account confirmation' popup is shown
-    When Admin confirms account to close
+    When Admin confirms SignedUp AQA account to close
     And Click 'Close account' button
-    Then Admin is not able to login into portal with deleted account
+    Then Admin is not able to login into portal with deleted SignedUp AQA account
