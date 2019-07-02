@@ -15,7 +15,7 @@ import java.util.List;
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/newaccount/creating",
+        features ="src/test/java/scenario/touchgo/newtenant/creating",
         glue ="steps")
 public class RunTouchGoCreateTenant {
 
