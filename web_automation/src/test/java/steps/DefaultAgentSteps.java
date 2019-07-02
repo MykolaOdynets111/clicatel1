@@ -316,6 +316,22 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
+    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")
+    public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(),
+                "User picture sa not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel(),
+                "Channel picture sa not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment(),
+                "Sentiment picture sa not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
+                "Transfered chat window not on the right side of the screen");
+        softAssert.assertAll();
+
+
+    }
+
     @Then("^(.*) click \"Accept transfer\" button$")
     public void acceptIncomingTransfer(String agent){
         getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
@@ -1467,6 +1483,27 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomeForMainAgent().getChatHeader().clickTransferButton(agent);
     }
 
+
+    @And("^Header in chat box displayed the icon for channel from which the user is chatting$")
+    public void headerInChatBoxDisplayedTheIconForChannelFromWhichTheUserIsChatting() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg(),
+                "Icon for channel in chat header as not expected");
+    }
+
+    @And("^Time stamp displayed in 24 hours format$")
+    public void timeStampDisplayedInHoursFormat() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidTimeStamp(),
+                "Time stamp in chat header as not expected");
+    }
+
+    @And("^Header in chat box displayed \"chatting to \"customer name\"\"$")
+    public void headerInChatBoxDisplayedCustomerName() {
+        Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTextHeader(),
+                "chatting to " + getUserNameFromLocalStorage(),
+                "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
+
+    }
+
     @Then("^Transfer chat pop up appears$")
     public void transferChatPopUpAppears() {
         Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
@@ -1475,6 +1512,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @When("^Select 'Transfer to' drop down$")
     public void selectTransferToDropDown() {
         getAgentHomeForMainAgent().getTransferChatWindow().openDropDownAgent();
+    }
+
+    @When("^(.*) select an agent in 'Transfer to' drop down$")
+    public void selectAgentTransferToDropDown(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
     }
 
     @Then("^Agent sees '(.*)'$")
@@ -1487,10 +1529,21 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomeForMainAgent().getTransferChatWindow().clickTransferChatButton();
     }
 
-    @Then("^'Transfer to' and 'Note' fields highlighted red color$")
-    public void transferToAndNoteFieldsHighlightedRedColor() {
+    @When("^Complete 'Note' field$")
+    public void sentNotesTransferChatPopup() {
+        getAgentHomeForMainAgent().getTransferChatWindow().sentNote();
+    }
+
+    @Then("^'Transfer to' fields highlighted red color$")
+    public void transferToFieldsHighlightedRedColor() {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)","Drop down: not expected border color");
+        soft.assertAll();
+    }
+
+    @Then("^'Note' fields highlighted red color$")
+    public void noteFieldsHighlightedRedColor() {
+        SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)","Note: not expected border color");
         soft.assertAll();
     }
@@ -1514,5 +1567,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                                 createdChatsViaDotControl.get(1).getClientId(),20, agent),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
+    }
+
+    @When("^(.*) click 'Cancel transfer' button$")
+    public void cancelTransferChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickCancelTransferButton(agent);
+    }
+
+    @Then("^(.*) has not see incoming transfer pop-up$")
+    public void secondAgentHasNotSeeIncomingTransferPopUp(String agent) {
+           Assert.assertTrue(
+            getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(agent),
+                   "Transfer chat header is shown for "+ agent + " agent");
+
     }
 }

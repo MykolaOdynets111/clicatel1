@@ -364,6 +364,7 @@ public class DBConnector {
             results.next();
             sessionDetails.put("clientJID", getColumnValue(results, "client_jid"));
             sessionDetails.put("state", getColumnValue(results, "state"));
+            sessionDetails.put("startedDate", getColumnValue(results, "started_date"));
             sessionDetails.put("endedDate", getColumnValue(results, "ended_date"));
             sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
             sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));

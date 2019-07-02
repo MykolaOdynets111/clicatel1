@@ -7,7 +7,7 @@ Feature: Chat transfer back
     Given I login as agent of General Bank Demo
     And Click chat icon
 
-  @Issue("https://jira.clickatell.com/browse/TPORT-3591")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3591")
   Scenario: Chat transfer: Agent should be able transfer back transferred chat
     When User enter connect to agent into widget input field
     Then Agent has new conversation request

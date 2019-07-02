@@ -1,10 +1,11 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
+
+import java.io.File;
 
 @FindBy(css = "div.touch-pop-up")
 public class IncomingTransferWindow extends AbstractUIElement {
@@ -35,6 +36,15 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     @FindBy(css = "dl.dl-horizontal")
     private WebElement rejectedBy;
+
+    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    private WebElement transferPicture;
+
+    @FindBy(xpath = "//div[@class='icons']/span/*")
+    private WebElement transferChannel;
+
+    @FindBy(xpath = "//div/div[@class='icons']/span[contains(@class,'icon icon-')]")
+    private WebElement transferSentiment;
 
     public void acceptTransfer(){
         acceptTransferButton.click();
@@ -69,8 +79,33 @@ public class IncomingTransferWindow extends AbstractUIElement {
         return getTextFromElemAgent(transferWindowHeader, 2, agent, "Transfer chat window header");
     }
 
+    public boolean isTransferWindowHeaderNotShown(String agent){
+        return isElementNotShownAgent(transferWindowHeader,2,agent);
+    }
+
     public String getRejectedBy(String agent){
         return getTextFromElemAgent(rejectedBy, 2, agent, "Transfer chat window header");
+    }
+
+    public boolean isValidImgTransferPicture() {
+        File image = new File("src/test/resources/transferchatimg/transferPicture.png");
+        return isWebElementEqualsImage(transferPicture,image, "second agent");
+    }
+
+    public boolean isValidImTransferChannel() {
+        File image = new File("src/test/resources/transferchatimg/transferChannel.png");
+        return isWebElementEqualsImage(transferChannel,image, "second agent");
+    }
+
+    public boolean isValidImgTransferSentiment() {
+        File image = new File("src/test/resources/transferchatimg/transferSentiment.png");
+        return isWebElementEqualsImage(transferSentiment,image, "second agent");
+    }
+
+    public boolean isRigthSideTransferChatWindow() {
+        int xcordElement = transferWindowHeader.getLocation().getX();
+        int xcordWindow = findElemByXPATHAgent("//body","second agent").getSize().getWidth()/2;
+        return    xcordElement > xcordWindow;
     }
 
 }

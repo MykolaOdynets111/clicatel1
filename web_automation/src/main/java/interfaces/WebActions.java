@@ -227,6 +227,19 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementNotShownAgent(WebElement element, int wait, String agent){
+        try {
+            waitForElementToBeInvisibleWithNoSuchElementExceptionAgent(element, wait, agent);
+            return true;
+        } catch (TimeoutException e) {
+            try {
+                return !element.isDisplayed();
+            } catch(NoSuchElementException e1) {
+                return true;
+            }
+        }
+    }
+
 
     default String getTextFrom(WebElement elem) {
         try{
@@ -303,16 +316,17 @@ public interface WebActions extends WebWait {
      *
      * @param  element   WebElement for screen shot
      * @param  image   File for comparing with scren shot
+     * @param agent
      * @return         Boolean: true or false
      * @throws Exception
      */
-    default boolean isWebElementEqualsImage(WebElement element, File image){
+    default boolean isWebElementEqualsImage(WebElement element, File image, String agent){
         boolean result=false;
-        Browser browser = new Browser(DriverFactory.getDriverForAgent("main"),true);
+        Browser browser = new Browser(DriverFactory.getDriverForAgent(agent),true);
         Double dpr= browser.getDevicePixelRatio();
         try {
            if (!image.canRead()) {
-                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
+                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent),element,true ).getImage();
                 Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
                 File newFile = new File(image.getPath());
                 newFile.getParentFile().mkdirs();
@@ -323,9 +337,9 @@ public interface WebActions extends WebWait {
             }
             BufferedImage expImage = ImageIO.read(image);
             BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element, true).withName("Actual").equals(expectedImage, 0.05);
             if (!result) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
             }
         }
         catch(Exception e) {
