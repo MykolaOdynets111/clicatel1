@@ -10,6 +10,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.CucumberException;
 import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
@@ -22,6 +23,7 @@ import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
 import portalpages.uielements.AgentRowChatConsole;
@@ -29,6 +31,8 @@ import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class BasePortalSteps implements JSHelper {
@@ -359,8 +363,24 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-        Assert.assertTrue(getPortalMainPage().isPortalPageOpened(),
-                "User is not logged in Portal");
+        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
+        if(!isPortalPageOpened){
+            File file = new File("src/test/resources/touchgo/testscontroller/signupFailure.txt");
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
+    }
+
+    @Then("^New account is successfully created$")
+    public void verifyAccountCreated(){
+        File file = new File("src/test/resources/touchgo/testscontroller/signupFailure.txt");
+        if(file.exists()){
+            throw new CucumberException(new SkipException("Sign up new account was not successfull"));
+        }
     }
 
     @Then("^\"Update policy\" pop up is shown$")

@@ -10,14 +10,14 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = {"touchgo"})
+@Test(groups = {"touchgo_deprecated"})
 @CucumberOptions(
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/fbintegration/DelinkingFBAccount.feature/",
+        features ="src/test/java/scenario/touchgo/signup/",
         glue ="steps")
-public class RunTouchGoDeleteFBIntegrationTest {
+public class RunTouchGoSignUp {
 
 
     @Factory

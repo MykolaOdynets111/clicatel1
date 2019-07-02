@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Touch Go one suite for the new account">
+    <test name="Touch Go tests with newly created account">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoCreateTenant" />
+        </classes>
+    </test>
+</suite>

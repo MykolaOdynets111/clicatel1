@@ -29,7 +29,7 @@ public class Tenants {
 
     public static String getAccountNameForNewAccountSignUp() {
         try {
-            FileReader fileReader = new FileReader("src/test/resources/touchgo/accountName.txt");
+            FileReader fileReader = new FileReader("src/test/resources/touchgo_deprecated/accountName.txt");
             BufferedReader rFile =  new BufferedReader(fileReader);
             ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = rFile.readLine();
         } catch (IOException e) {
@@ -41,7 +41,7 @@ public class Tenants {
     public static void setAccountNameForNewAccountSignUp() {
         Faker faker = new Faker();
         ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = faker.name().firstName() + faker.number().randomNumber();
-        File file =new File("src/test/resources/touchgo/accountName.txt");
+        File file =new File("src/test/resources/touchgo_deprecated/accountName.txt");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);

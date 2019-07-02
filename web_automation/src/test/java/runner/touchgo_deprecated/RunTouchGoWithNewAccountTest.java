@@ -1,4 +1,4 @@
-package runner.touchgo;
+package runner.touchgo_deprecated;
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
@@ -10,14 +10,14 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = {"touchgo"})
+@Test(groups = {"touchgo_deprecated"})
 @CucumberOptions(
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/touchgoparralel",
+        features ="src/test/java/scenario/touchgo_deprecated/newaccount/testswithnewaccount/",
         glue ="steps")
-public class RunTouchGoMultiThreadTest {
+public class RunTouchGoWithNewAccountTest {
 
 
     @Factory

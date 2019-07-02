@@ -3,7 +3,7 @@
 <suite name="Touch Go FB integration creation">
     <test name="FB integration creation">
         <classes>
-            <class name="runner.touchgo.RunTouchGoCreatingFBIntegrationTest" />
+            <class name="runner.touchgo_deprecated.RunTouchGoCreatingFBIntegrationTest" />
         </classes>
     </test>
 </suite>

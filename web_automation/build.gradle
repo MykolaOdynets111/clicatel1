@@ -173,30 +173,38 @@ task runWidgetOnlyTests(type:Test){
 task runTestsAgainstNewlyCreatedAccount(type:Test){
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "touchgo/touchgofornewaccount.xml"
+        suites baseXmlPath + "touchgo_deprecated/touchgofornewaccount.xml"
     }
 }
 
-task runTouchGoTests(type:Test) {
-    doFirst {
-        useTestNG() {
-            useDefaultListeners = true
-            ignoreFailures = true
-            suites baseXmlPath+ "touchgo/createfbintegration.xml"
-            suites baseXmlPath + "touchgo/onethreadtouchgotests.xml"
-            suites baseXmlPath+ "touchgo/paralleltouchgotests.xml"
-        }
-    }
-    doLast {
-        if (!file("build/reports/tests/runTouchGoTests/testng-failed.xml").exists()) {
-            runTestsAgainstNewlyCreatedAccount.execute()
-        } else {
-            String failedTestXMLContent = file("build/reports/tests/runTouchGoTests/testng-failed.xml").text
-            if (!failedTestXMLContent.contains("Touch Go create new account test(failed)")) {
-                runTestsAgainstNewlyCreatedAccount.execute()
-            }
+//task runTouchGoTests(type:Test) {
+//    doFirst {
+//        useTestNG() {
+//            useDefaultListeners = true
+//            ignoreFailures = true
+//            suites baseXmlPath+ "touchgo_deprecated/createfbintegration.xml"
+//            suites baseXmlPath + "touchgo_deprecated/onethreadtouchgotests.xml"
+//            suites baseXmlPath+ "touchgo_deprecated/paralleltouchgotests.xml"
+//        }
+//    }
+//    doLast {
+//        if (!file("build/reports/tests/runTouchGoTests/testng-failed.xml").exists()) {
+//            runTestsAgainstNewlyCreatedAccount.execute()
+//        } else {
+//            String failedTestXMLContent = file("build/reports/tests/runTouchGoTests/testng-failed.xml").text
+//            if (!failedTestXMLContent.contains("Touch Go create new account test(failed)")) {
+//                runTestsAgainstNewlyCreatedAccount.execute()
+//            }
+//
+//        }
+//    }
+//}
 
-        }
+task runTouchGoTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "touchgo/touchgosignup.xml"
+        suites baseXmlPath + "touchgo/touchgocreatetenant.xml"
     }
 }
 
@@ -292,7 +300,7 @@ task runTests(type: Test) {
         runTests.dependsOn(runTiePullRequestTests)
     }
 
-    if(suite=="touchgo"){
+    if(suite=="touchgo_deprecated"){
         runTests.dependsOn(runTouchGoTests)
     }
 
