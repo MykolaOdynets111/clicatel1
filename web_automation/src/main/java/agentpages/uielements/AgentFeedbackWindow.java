@@ -194,7 +194,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public boolean isValidSentiments(File image) {
-        return isWebElementEqualsImage(sentimentsAll, image);
+        return isWebElementEqualsImage(sentimentsAll, image, "main");
     }
 
 }

@@ -28,8 +28,22 @@ public class TransferChatWindow extends AbstractUIElement {
 
 
     public String transferChat(String agent) {
-        waitForElementToBeClickableAgent(openDropdownButton, 6, agent);
-        openDropdownButton.click();
+        openDropDownAgent();
+        String agentName = selectDropDownAgent(agent);
+        sentNote();
+        clickTransferChatButton();
+        return agentName;
+    }
+
+    public boolean isTransferChatShown() {
+        return  isElementShown(submitTransferChatButton, 5);
+    }
+
+    public void openDropDownAgent() {
+        clickElemAgent(openDropdownButton,5,"main", "Open drop down button");
+    }
+
+    public String selectDropDownAgent(String agent) {
         try{
             isElementShownAgent(findElement(By.cssSelector(openedMenu)), 5, agent);
         } catch(NoSuchElementException e){
@@ -42,17 +56,7 @@ public class TransferChatWindow extends AbstractUIElement {
         }
         String agentName = availableAgent.getText();
         availableAgent.click();
-        noteInput.sendKeys("Please take care of this one");
-        submitTransferChatButton.click();
         return agentName;
-    }
-
-    public boolean isTransferChatShown() {
-        return  isElementShown(submitTransferChatButton, 5);
-    }
-
-    public void openDropDownAgent() {
-        clickElemAgent(openDropdownButton,5,"main", "Open drop down button");
     }
 
     public String getTextDropDownMessage() {
@@ -61,6 +65,10 @@ public class TransferChatWindow extends AbstractUIElement {
 
     public void clickTransferChatButton() {
         clickElemAgent(submitTransferChatButton,5,"main", "Transfer button");
+    }
+
+    public void sentNote() {
+        noteInput.sendKeys("Please take care of this one");
     }
 
     public String getNoteInputColor() {

@@ -1,12 +1,21 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.TimeZone;
 
 @FindBy(css = "div.chat-header")
 public class ChatHeader extends AbstractUIElement {
@@ -32,6 +41,17 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindBy(css = "div.chat-header-title")
     private WebElement chatHeaderTitle;
+
+    @FindBy(xpath = "//div[contains(@class,'chat-header')]//div[@class='icons']/span/*")
+    private WebElement channelImg;
+
+    @FindBy(xpath = "//div/span[@class='time']")
+    private WebElement timeStamp;
+
+    @FindBy(xpath = ".//button[text()='Cancel transfer']")
+    private WebElement cancelTransferButton;
+
+
 
     private String transferChatButton =  "//button[text()='Transfer chat']";
     private String sendSMSXpath = ".//button[text()='Send SMS']";
@@ -88,6 +108,10 @@ public class ChatHeader extends AbstractUIElement {
         clickElemAgent(unpinChatButton, 2, agent, "Unpin chat");
     }
 
+    public void clickCancelTransferButton(String agent){
+        clickElemAgent(cancelTransferButton, 2, agent, "Cancel transfer");
+    }
+
     public String getEndChatButtonColor() {
         return Color.fromString(endChatButton.getCssValue("color")).asHex();
     }
@@ -99,4 +123,23 @@ public class ChatHeader extends AbstractUIElement {
     public String getPinChatButtonColor() {
         return  Color.fromString(pinChatButton.getCssValue("color")).asHex();
     }
+
+    public boolean isValidChannelImg() {
+        File image = new File("src/test/resources/adaptericons/headerChannel.png");
+        return isWebElementEqualsImage(channelImg,image, "main");
+    }
+        //Verify if tame stanp in 24 hours format
+    public boolean isValidTimeStamp() {
+        Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv(),getUserNameFromLocalStorage());
+        String startedDate = sessionDetails.get("startedDate");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        LocalDateTime formatDateTime = LocalDateTime.parse(startedDate, formatter).atZone(ZoneId.of("UTC")).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("'Started:' dd MMM, HH:mm|");
+        return timeStamp.getAttribute("textContent").equals(formatDateTime.format(formatter2));
+    }
+
+    public String getTextHeader() {
+        return  chatHeaderTitle.getText().toLowerCase();
+    }
+
 }
