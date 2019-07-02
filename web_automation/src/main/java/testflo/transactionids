@@ -1,0 +1,79 @@
+ "transitions": [
+ {
+              "expand": "transitions",
+              "transitions": [
+                  {
+                      "id": "11",
+                      "name": "Test",
+                      "to": {
+                          "self": "https://jira.clickatell.com/rest/api/2/status/10434",
+                          "description": "This issue is being actively worked on at the moment by the assignee.",
+                          "iconUrl": "https://jira.clickatell.com/images/icons/statuses/inprogress.png",
+                          "name": "In Progress",
+                          "id": "10434",
+                          "statusCategory": {
+                              "self": "https://jira.clickatell.com/rest/api/2/statuscategory/4",
+                              "id": 4,
+                              "key": "indeterminate",
+                              "colorName": "yellow",
+                              "name": "In Progress"
+                          }
+                      }
+                  }
+              ]
+          },
+        {
+            "id": "21",
+            "name": "Pass",
+            "to": {
+                "self": "https://jira.clickatell.com/rest/api/2/status/10602",
+                "description": "",
+                "iconUrl": "https://jira.clickatell.com/images/icons/statuses/generic.png",
+                "name": "Pass",
+                "id": "10602",
+                "statusCategory": {
+                    "self": "https://jira.clickatell.com/rest/api/2/statuscategory/3",
+                    "id": 3,
+                    "key": "done",
+                    "colorName": "green",
+                    "name": "Done"
+                }
+            }
+        },
+        {
+            "id": "31",
+            "name": "Fail",
+            "to": {
+                "self": "https://jira.clickatell.com/rest/api/2/status/10601",
+                "description": "",
+                "iconUrl": "https://jira.clickatell.com/images/icons/statuses/generic.png",
+                "name": "Fail",
+                "id": "10601",
+                "statusCategory": {
+                    "self": "https://jira.clickatell.com/rest/api/2/statuscategory/3",
+                    "id": 3,
+                    "key": "done",
+                    "colorName": "green",
+                    "name": "Done"
+                }
+            }
+        },
+         {
+                    "id": "61",
+                    "name": "Retest",
+                    "to": {
+                        "self": "https://jira.clickatell.com/rest/api/2/status/10603",
+                        "description": "",
+                        "iconUrl": "https://jira.clickatell.com/images/icons/statuses/generic.png",
+                        "name": "Retest",
+                        "id": "10603",
+                        "statusCategory": {
+                            "self": "https://jira.clickatell.com/rest/api/2/statuscategory/4",
+                            "id": 4,
+                            "key": "indeterminate",
+                            "colorName": "yellow",
+                            "name": "In Progress"
+                        }
+                    }
+         }
+]

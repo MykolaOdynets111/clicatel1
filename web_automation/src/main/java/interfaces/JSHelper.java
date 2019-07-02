@@ -51,8 +51,13 @@ public interface JSHelper {
         if(DriverFactory.isTouchDriverExists()){
             try {
                 JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
-                return (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
-            } catch(WebDriverException e){return "";}
+                String clientId = (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+                jsExec.executeScript("console.log(window.localStorage.getItem('ctlUsername'))");
+                return clientId;
+            } catch(WebDriverException e){
+                Assert.fail("Getting client_id from local storage was not successful \n" +
+                        e.getMessage());
+                return "";}
         }else{
             return "";
         }

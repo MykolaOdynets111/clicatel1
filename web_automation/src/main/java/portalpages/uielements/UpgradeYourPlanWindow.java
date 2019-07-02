@@ -9,13 +9,10 @@ import org.testng.Assert;
 
 
 @FindBy(css = "div.cl-wizzard.create-integration-container")
-public class UpgradeYourPlanWindow  extends AbstractUIElement {
+public class UpgradeYourPlanWindow  extends BasePortalWindow {
 
     @FindBy(css = "button.bttn-add-agents-seats")
     private WebElement addAgentSeatsButton;
-
-    @FindBy(xpath =  ".//button[@ng-click='wizardSubmit()'][not(@id='integration-save')]")
-    private WebElement addToCardButton;
 
     @FindBy(xpath = "//span[contains(@value, 'MONTH')]//span[contains(@class, 'cl-input-label')]")
     private WebElement monthlyRadioButton;
@@ -33,10 +30,6 @@ public class UpgradeYourPlanWindow  extends AbstractUIElement {
         return this;
     }
 
-    public void clickAddToCardButton(){
-        executeJSclick(addToCardButton, DriverFactory.getAgentDriverInstance());
-//        addToCardButton.click();
-    }
 
     public UpgradeYourPlanWindow selectMonthly(){
         monthlyRadioButton.click();

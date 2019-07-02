@@ -3,24 +3,30 @@ package steps;
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.ChatInActiveChatHistory;
+import agentpages.uielements.Customer360Container;
 import agentpages.uielements.LeftMenuWithChats;
 import agentpages.uielements.ProfileWindow;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import interfaces.VerificationHelper;
+import interfaces.WebWait;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -35,7 +41,7 @@ import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Collections;
 
-public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
+public class DefaultAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
     private AgentHomePage agentHomePage;
     private AgentHomePage secondAgentHomePage;
     private ProfileWindow profileWindow;
@@ -98,6 +104,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
     }
 
 
+    @Given("^(.*) has no active chats$")
+    public void closeActiveChats(String agent){
+        if (agent.toLowerCase().contains("second")){
+            ApiHelper.closeActiveChatsSecondAgent();
+        }else{
+            ApiHelper.closeActiveChats();
+        }
+        getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
+    }
+
+
+
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
         AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
@@ -138,6 +156,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         if(featureStatus!=Boolean.parseBoolean(status.toLowerCase())) {
             ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
         }
+    }
+
+    @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
+    public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
+        Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
+                "Agent feature is not expected");
     }
 
     @Then("^Icon should contain (.*) agent's initials$")
@@ -282,12 +306,37 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("^(.*) has new conversation request$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(20, agent),
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(20, agent);
+        int sessionCapacity;
+        if(!isConversationShown){
+            sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
+            if (sessionCapacity==0) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
+        }
+        Assert.assertTrue(isConversationShown,
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
                         "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + "\n" +
                         "Support hours: " + ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).toString() + "\n"
                 );
+    }
+
+    @Then("^(.*) sees \"(.*)\" tip in conversation area$")
+    public void verifyTipIfNoSelectedChat(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
+                "Tip note if no chat selected is not as expected");
+    }
+
+    @Then("^(.*) sees \"(.*)\" tip in context area$")
+    public void verifyTipIfNoSelectedChatInContextArea(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelectedFromContextArea(), note,
+                "Tip note in context area if no chat selected is not as expected");
+    }
+
+    @Then("^(.*) sees \"(.*)\" placeholder in input field$")
+    public void verifyInputFieldPlaceholder(String agent, String placeholder){
+        Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
+                "Placeholder in input field in opened chat is not as expected");
+
     }
 
     @When("^(.*) click 'Pin' button$")
@@ -301,10 +350,28 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         getAgentHomePage(agent).getChatHeader().clickUnpinButton(agent);
     }
 
-    @Then("^(.*) can not click 'Transfer chat' button$")
-    public void agentCanNotClickTransferChatButton(String agent) {
-        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isTransferButtonEnabled(),
+    @Then("^(.*) can not click '(.*)' button$")
+    public void agentCanNotClickTransferChatButton(String agent, String transferButton) {
+        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isButtonEnabled(transferButton),
                 "Transfer chat button is enabled ");
+    }
+
+    @Then("^(.*) button is (.+) on Chat header$")
+    public void isButtonEnabled(String button, String state){
+        if (state.equalsIgnoreCase("disabled"))
+            Assert.assertFalse(getAgentHomePage("main").getChatHeader().isButtonEnabled(button));
+        else if (state.equalsIgnoreCase("enabled"))
+            Assert.assertTrue(getAgentHomePage("main").getChatHeader().isButtonEnabled(button));
+    }
+
+    @Then("^(.*) button hidden from the Chat header$")
+    public void checkIfButtonHidden(String button){
+        try {
+            getAgentHomePage("main").getChatHeader().isButtonEnabled(button);
+        }
+        catch (NoSuchElementException | TimeoutException e){
+            Assert.assertFalse(false, "'" + button + "' button is displayed");
+        }
     }
 
 
@@ -366,16 +433,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 String userName=null;
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-                if(social.equalsIgnoreCase("dotcontrol")) {
-                    userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-                    Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,15, "main"),
-                            "There is no new conversation request on Agent Desk from .Control\n (Client ID: "+
-                                    DotControlSteps.getFromClientRequestMessage().getClientId()+")");
-                    return;
-                }
+                if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
                 Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,20, agent),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
-            }
+    }
 
     private boolean waitForDotControlRequestOnChatDesk(){
         for(int i = 0; i<5; i++) {
@@ -420,7 +481,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "Flag icon is shown");
     }
 
-    @When("^(.*) click on new conversation request from (.*)$")
+    @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         String userName=null;
         switch (socialChannel.toLowerCase()){
@@ -434,7 +495,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 userName = FacebookUsers.getLoggedInUserName();
                 break;
             case "dotcontrol":
-               userName = DotControlSteps.getFromClientRequestMessage().getClientId();
+               userName = DotControlSteps.getClient();
 
         }
         getLeftMenu(agent).openNewFromSocialConversationRequest(userName);
@@ -489,20 +550,58 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 "resp body: " + resp.getBody().asString() + "\n");
     }
 
+    @Then("^Tab with user info has \"(.*)\" header$")
+    public void verifyTabHeader(String headerName){
+        Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
+                "Incorrect header of Customer 360 container");
+    }
+
 
     @Then("Correct (.*) client details are shown")
     public void verifyClientDetails(String clientFrom){
-        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main")
+                .getCustomer360Container().getActualPersonalInfo();
 
         Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
                 "User info is not as expected \n");
     }
 
+    @Then("Correct dotcontrol client details from Init context are shown")
+    public void verifyInitContextClientDetails(){
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+
+        Customer360PersonalInfo expectedResult = getCustomer360Info("dotcontrol");
+        InitContext initContext = DotControlSteps.getInitContext();
+        expectedResult.setFullName(initContext.getFullName())
+                        .setEmail(initContext.getEmail())
+                        .setPhone(initContext.getPhone().replace(" ", ""))
+        .setChannelUsername("");
+
+        Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedResult,
+                "User Customer360 info is not as in init context \n");
+    }
 
 
     @When("Click (?:'Edit'|'Save') button in Customer 360 view")
     public void clickEditCustomerView(){
         getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
+    }
+
+    @Then("^Wait for (.d*) seconds for Phone Number to be (.*)$")
+    public void checkPhoneNumberFieldUpdate(int waitFor, String requiredState) throws InterruptedException{
+        Customer360Container customer360Container = new Customer360Container();
+
+        int waitTimeInMillis = waitFor * 1000;
+        long endTime = System.currentTimeMillis() + waitTimeInMillis;
+
+        if (requiredState.equalsIgnoreCase("deleted")) {
+            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
+                Thread.sleep(200);
+        }
+        else {
+            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
+                Thread.sleep(200);
+        }
     }
 
     @When("Fill in the form with new (.*) customer 360 info")
@@ -518,6 +617,53 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         }
         getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
 
+    }
+
+    @When("^(.*) see (.*) phone number added into customer's profile$")
+    public void updatePhoneNumberCustomer360(String agent, String isPhoneNumberRequired){
+        Assert.assertTrue(isRequiredPhoneNumberDisplayed(agent, isPhoneNumberRequired));
+    }
+
+    @Then("^(.*) button (.*) displayed in Customer 360$")
+    public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
+        Customer360Container customer360PersonalInfo = getAgentHomePage("main").getCustomer360Container();
+        if (isOrNotDisplayed.equalsIgnoreCase("not"))
+            try {
+                customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName);
+            }
+            catch (NoSuchElementException e){
+                Assert.assertFalse(false, "'" + buttonName + "' button is not displayed");
+            }
+        else
+            Assert.assertTrue(customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName));
+    }
+
+    @When("^Change phone number for (.*) user$")
+    public void changePhoneNumberCustomer360(String customerFrom){
+        String phoneNumber = generateUSCellPhoneNumber();
+        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
+
+        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+        Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
+    }
+
+    @When("^Agent switches to opened (?:Portal|ChatDesk) page$")
+    public void switchBetweenPortalAndChatDesk(){
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+
+        if (DriverFactory.getDriverForAgent("main").getWindowHandles().size() > 1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
+    @When("^Agent refresh current page$")
+    public void refreshCurrentPage(){
+        DriverFactory.getDriverForAgent("main").navigate().refresh();
     }
 
     @Then("^(.*) customer info is updated on backend$")
@@ -536,11 +682,35 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         soft.assertAll();
     }
 
+    @And("^Empty image is not shown for chat with (.*) user$")
+    public void verifyEmptyImgNotShown(String customerFrom){
+        String user = "";
+        if(customerFrom.equalsIgnoreCase("facebook")) user = FacebookUsers.getLoggedInUserName();
+        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(user),
+                "Image is not updated in left menu with chats. \n");
+    }
+
+    @Then("^Message (.*) shown like last message in left menu with chat$")
+    public void verifyLastMessageInLeftMenu(String customerMsg){
+        Assert.assertEquals(getLeftMenu("main").getActiveChatLastMessage(), customerMsg,
+                "Last message in left menu with chat as not expected. \n");
+    }
+
+    @Then("^Valid image for (.*) integration are shown in left menu with chat$")
+    public void verifyImgForLastMessageInLeftMenu(String adapter) {
+        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
+       // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
+    }
+
+    @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
+    public void verifyIconSentimentForLastMessageInLeftMenu(String message) {
+        Assert.assertTrue(getLeftMenu("main").isValidIconSentimentForActiveChat(message),"Image in last message in left menu for sentiment as not expected. \n");
+    }
+
     @Then("^Customer name is updated in active chat header$")
     public void verifyCustomerNameUpdated(){
         Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName().trim()),
                 "Updated customer name is not shown in chat header");
-
     }
 
     @Then("^Agent photo is updated on chatdesk$")
@@ -668,7 +838,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
             Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
             createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
-            getAgentHomeForMainAgent().waitFor(400);
+            getAgentHomeForMainAgent().waitFor(1100);
         }
         createdCrmTicketsList.set(createdCRMTicket);
         Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), ticketsNumber,
@@ -736,7 +906,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
 
     @Then("Tickets are correctly sorted")
     public void verifyTicketsSorting(){
-        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer().getAllTicketsInfoExceptDate();
+        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer()
+                                                                            .getAllTicketsInfoExceptDate();
         List<CRMTicket> createdTickets = getCreatedCRMTicketsList();
 
         Collections.reverse(createdTickets);
@@ -1063,6 +1234,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
                 clientId, integrationType);
     }
 
+    public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired){
+        String phone = getAgentHomePage(agent).getCustomer360Container().getPhoneNumber();
+        if (isPhoneNumberRequired.equalsIgnoreCase("no"))
+            return phone.equalsIgnoreCase("unknown");
+        else
+            return !phone.equalsIgnoreCase("unknown");
+    }
+
     @Then("^CRM ticket is not created$")
     public void crmTicketDidNotCreated() {
         Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
@@ -1147,7 +1326,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper {
         switch (chatOrigin){
             case "fb dm message":
                 ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName()).getFBPageId(),
-                        1912835872122481l, "to agent message");
+                        FacebookUsers.TOM_SMITH.getFBUserIDMsg(), "to agent message");
+                FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
 
         }
     }

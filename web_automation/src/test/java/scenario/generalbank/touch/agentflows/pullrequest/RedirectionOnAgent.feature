@@ -5,8 +5,8 @@ Feature: User on his demand should be redirected on the agent
 
   Background:
     Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
     And Click chat icon
+    Given I login as agent of General Bank Demo
 
 #  Welcome card is not showing anymore
 #  Scenario: Verify if user is able to communicate with agent by selecting "Chat to us" in Welcome card
@@ -46,6 +46,5 @@ Feature: User on his demand should be redirected on the agent
     Then Correct sentiment on how to check my balance? user's message is stored in DB
     When Agent closes chat
     Then Correct sentiment on how to check my balance? user's message is stored in DB
-
 
 

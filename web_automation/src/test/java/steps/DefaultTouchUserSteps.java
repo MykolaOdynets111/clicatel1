@@ -15,6 +15,7 @@ import drivermanager.DriverFactory;
 import facebook.FBTenantPage;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import interfaces.VerificationHelper;
 import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
@@ -33,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
+public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, VerificationHelper {
 
     private MainPage mainPage;
     private Widget widget;
@@ -68,9 +69,38 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Tenants.checkWidgetConnectionStatus();
         DriverFactory.openUrl(tenantOrgName);
-        String clientID = getUserNameFromLocalStorage();
+        String clientID = getClientIdFromLocalStorage();
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
+
+    @Given("^User with phone number (?:select|opens) (.*) (?:tenant|tenant page)$")
+    public void openTenantPageAsUserWithPhone(String tenantOrgName) {
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        Tenants.checkWidgetConnectionStatus();
+        DriverFactory.openUrl(tenantOrgName);
+        String clientID = getClientIdFromLocalStorage();
+        String phoneNumber = generateUSCellPhoneNumber();
+        ApiHelper.createUserProfileWithPhone(clientID, phoneNumber);
+    }
+
+    private String getClientIdFromLocalStorage(){
+        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
+        String clientId = getUserNameFromLocalStorage();
+        if(clientId == null || clientId.equals("")){
+            try {
+                Thread.sleep(1100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            clientId = (String) jsExec.executeScript("return window.localStorage.getItem('ctlUsername');");
+
+            if(clientId == null || clientId.equals("")){
+                Assert.fail("Client id was not saved in local storage after 1.1 seconds wait \n");
+            }
+        }
+        return clientId;
+    }
+
 
     @Given("^User open new (.*) tenant$")
     public void openNewTenantPage(String tenantOrgName) {

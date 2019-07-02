@@ -14,7 +14,6 @@ import datamanager.Agents;
 import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
-import datamanager.jacksonschemas.Intent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
@@ -24,6 +23,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
+import portalpages.uielements.AgentRowChatConsole;
 import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
@@ -47,7 +47,7 @@ public class BasePortalSteps implements JSHelper {
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
-    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";//"signup_account@aqa.test";
+    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
   //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
     public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
@@ -66,7 +66,8 @@ public class BasePortalSteps implements JSHelper {
     private Widget widget;
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
-
+    private Map<String, Double> topUpBalance = new HashMap<>();
+    private String nameOfUnchekedDay = "";
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -207,8 +208,39 @@ public class BasePortalSteps implements JSHelper {
     }
 
     @Given("Widget is enabled for (.*) tenant")
-    public void enableWidget(String tenantOrgNAme){
-        ApiHelper.setIntegrationStatus(tenantOrgNAme, "webchat", true);
+    public void enableWidget(String tenantOrgName){
+        ApiHelper.setIntegrationStatus(tenantOrgName, "webchat", true);
+    }
+
+    @Given("(.*) integration status is set to (.*) for (.*) tenant")
+    public void changeIntegrationState(String integrationName, String status, String tenantOrgName){
+        if (status.equalsIgnoreCase("enabled"))
+            ApiHelper.setIntegrationStatus(tenantOrgName, getIntegrationType(integrationName),true);
+        else if (status.equalsIgnoreCase("disabled"))
+            ApiHelper.setIntegrationStatus(tenantOrgName, getIntegrationType(integrationName),false);
+    }
+
+    private String getIntegrationType(String integrationName){
+        switch (integrationName.toLowerCase()){
+            case "touch":
+            case "web widget":
+                return "webchat";
+            case "facebook messenger":
+                return "fbmsg";
+            case "facebook posts":
+                return "fbpost";
+            case "twitter dm":
+                return "twdm";
+            case "twitter mention":
+                return "twmention";
+            case "sms":
+                return "sms";
+            case "whatsapp":
+                return "whatsapp";
+
+            default:
+                throw new NoSuchElementException("Invalid integration name");
+        }
     }
 
     @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
@@ -224,7 +256,7 @@ public class BasePortalSteps implements JSHelper {
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
-        ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
+        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
     @When("^Login as (.*) agent$")
@@ -337,12 +369,24 @@ public class BasePortalSteps implements JSHelper {
     @When("^Accept \"Update policy\" popup$")
     public void acceptUpdatedPolicyPopup(){
         getPortalMainPage().closeUpdatePolicyPopup();
+        getPortalMainPage().waitWhileProcessing(2, 3);
+    }
+
+    @Then("^Landing pop up is shown$")
+    public void verifyLandingPopupShown(){
+        Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
+                "User is not logged in Portal");
+    }
+
+    @When("Close landing popup$")
+    public void acceptLandingPopup(){
+        getPortalMainPage().closeLandingPage();
     }
 
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
         Assert.assertEquals(getPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
-                ". Thanks for signing up.", "Welcome message is not shown.");
+                ". Add a solution to your account.", "Welcome message is not shown.");
     }
 
     @Then("^\"Get started with Touch\" button is shown$")
@@ -386,6 +430,24 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
+    @When("^I launch chatdesk from portal$")
+    public void launchChatdeskFromPortal(){
+        getPortalMainPage().waitWhileProcessing(2,5);
+        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        navigateInLeftMenu("Touch", "Launch Chat Desk");
+
+        while(getPortalMainPage().isPortalPageOpened()){
+            navigateInLeftMenu("Touch", "Launch Chat Desk");
+        }
+        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
+            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
+                if (!winHandle.equals(currentWindow)) {
+                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
+                }
+            }
+        }
+    }
+
     @When("^Save (.*) pre-test widget value$")
     public void savePreTestValue(String widgetName){
         try {
@@ -415,7 +477,9 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
-        activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        activeChatsFromChatdesk = ApiHelper.getActiveChatsBySecondAgent()
+                .getBody().jsonPath().getList("content.id").size();
+                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
     }
@@ -454,6 +518,40 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
         getPortalTouchPrefencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
     }
+
+    @When("^Change chats per agent:\"(.*)\"$")
+    public void changeChatPerAgent(String chats){
+        getPortalTouchPrefencesPage().getChatDeskWindow().setChatsAvailable(chats);
+    }
+
+    @When("^Click \"(.*)\" button (.*) times chats per agent became:\"(.*)\"$")
+    public void changeChatPerAgentPlusMinus(String sign, int add, String result){
+        if (sign.equals("+")){
+            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsPlus(add);
+            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+                    "Number of available chat was changed not correctly");
+        } else if (sign.equals("-")) {
+            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsMinus(add);
+            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+                    "Number of available chat was changed not correctly");
+        } else {
+            Assert.assertTrue(false,
+                    "Unexpected sign. Expected \"\\+\" or \"\\-\"");
+        }
+
+    }
+
+    @When("^Error message is shown$")
+    public void errorIsShownInWindow(){
+        Assert.assertTrue(getPortalTouchPrefencesPage().getChatDeskWindow().isErrorMessageShown(),
+                "Error message is not shown");
+    }
+
+    @When("^Click off/on  Chat Conclusion$")
+    public void clickOffOnChatConclusion(){
+        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffChatConclusion();
+    }
+
 
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
@@ -576,9 +674,9 @@ public class BasePortalSteps implements JSHelper {
                 "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
-    @When("^Disable the (.*)$")
-    public void disableTheIntegration(String integration){
-        getPortalIntegrationsPage().clickToggleFor(integration);
+    @When("^(.*) the (.*) integration$")
+    public void changeIntegrationStateTo(String switchTo, String integration){
+        getPortalIntegrationsPage().switchToggleStateTo(integration, switchTo);
         getPortalIntegrationsPage().waitWhileProcessing();
     }
 
@@ -695,10 +793,11 @@ public class BasePortalSteps implements JSHelper {
         billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
     }
 
-    @Then("^Billing details is saved on backend$")
-    public void verifyBillingDetails(){
+    @Then("^Billing details is saved on backend (.*)$")
+    public void verifyBillingDetails(String testOrgName ){
         SoftAssert soft = new SoftAssert();
-        Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
+        Response resp = ApiHelperPlatform.getAccountBillingInfo(testOrgName);
+   //     Response resp = ApiHelperPlatform.getAccountBillingInfo(Tenants.getTenantUnderTestOrgName());
         Map info = resp.jsonPath().getMap("");
         String billingAddress = resp.jsonPath().get("billingAddress.country.name") + ", " +
                                 resp.jsonPath().get("billingAddress.city") + ", " +
@@ -718,6 +817,55 @@ public class BasePortalSteps implements JSHelper {
     @When("^Select '(.*)' in nav menu$")
     public void clickNavItemOnBillingDetailsPage(String navName){
         getPortalMainPage().clickPageNavButton(navName);
+    }
+
+    @When("^Admin clicks Top up balance on Billing details$")
+    public void clickTopUpOnBilling(){
+        getPortalBillingDetailsPage().clickTopUPBalance();
+    }
+
+    @Then("^'Top up balance' window is opened$")
+    public void verifyTopUpBalanceWindowOpened(){
+        Assert.assertTrue(getPortalBillingDetailsPage().getTopUpBalanceWindow().isShown(),
+                "'Top up balance' window is not opened");
+    }
+
+    @When("^Agent enter allowed top up amount$")
+    public void enterNewBalanceAmount(){
+        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
+        String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
+        int addingSum = Integer.valueOf(minValue) + 1;
+        double afterTest = topUpBalance.get("preTest") + addingSum;
+        topUpBalance.put("afterTest", afterTest);
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
+    }
+
+    @When("^Click 'Add to cart' button$")
+    public void clickAddToCartButton(){
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().clickAddToCardButton();
+        getPortalBillingDetailsPage().waitWhileProcessing();
+    }
+
+    @When("^Make the balance top up payment$")
+    public void buyTopUpBalance(){
+        getPortalMainPage().getCartPage().clickCheckoutButton();
+        getPortalMainPage().checkoutAndBuy(getPortalMainPage().getCartPage());
+    }
+
+    @Then("^Top up balance updated up to (.*) minutes$")
+    public void verifyTopUpUpdated(int mints){
+        String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+        boolean result = false;
+        for(int i = 0; i<(mints*60)/25; i++){
+            if(valueFromPortal.equalsIgnoreCase(String.format("%1.2f", topUpBalance.get("afterTest")))){
+                result = true;
+                break;
+            } else{
+                getPortalMainPage().waitFor(25000);
+                valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+            }
+        }
+        Assert.assertTrue(result, "Balance was not updated after top up");
     }
 
 
@@ -758,7 +906,7 @@ public class BasePortalSteps implements JSHelper {
 
 
     @When("^Selects all checkboxes for adding new payment$")
-    public void checkAllCheckBoxesForAddindNewPayment(){
+    public void checkAllCheckBoxesForAddingNewPayment(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().checkAllCheckboxesForAddingNewPayment();
     }
 
@@ -1109,7 +1257,6 @@ public class BasePortalSteps implements JSHelper {
     @And("^Refresh page and verify business details was changed for (.*)$")
     public void refreshPageAndVerifyItWasChanged(String tenantOrgName) {
         SoftAssert soft = new SoftAssert();
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry();
         Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
         String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
@@ -1142,13 +1289,37 @@ public class BasePortalSteps implements JSHelper {
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get().getAgentFullName();
         Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
-                .isAgentMarkedWithGreenDot(secondAgentNameForChatConsoleTests, 10),
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isActiveChatsIconShown(40),
                 secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
+    }
+
+    @Then("^(.*) is marked with a yellow dot in chat console$")
+    public void verifyAgentMarkedWithAYellowDot(String agent){
+        secondAgentNameForChatConsoleTests =  ApiHelper.getAvailableAgents().stream()
+                .filter(e -> e.getEmail().equalsIgnoreCase(
+                        Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
+                .findFirst().get().getAgentFullName();
+        Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isNoActiveChatsIconShown(40),
+                secondAgentNameForChatConsoleTests + " agent is not marked with yellow");
+
+    }
+
+    @Then("^Correct number of active chats shown for (.*)$")
+    public void verifyChatConsoleAgentsContainsChats(String agent){
+        int activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+        Assert.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole()
+                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).getActiveChatsNumber(),
+                activeChatsFromChatdesk,
+                secondAgentNameForChatConsoleTests + " icon has incorrect number of active chats");
+
     }
 
     @When("^Admin clicks expand dot for (.*)$")
     public void expandAgentsRowInChatConsole(String agent){
-        getPortalChatConsolePage().getAgentsTableChatConsole().clickExpandRow(secondAgentNameForChatConsoleTests);
+        getPortalChatConsolePage().getAgentsTableChatConsole()
+                .getTargetAgentRow(secondAgentNameForChatConsoleTests)
+                .clickExpandButton();
     }
 
     @Then("Logged in agents shown in Agents chat console tab")
@@ -1165,26 +1336,54 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^All chats info are shown for (.*) including intent on user message (.*)$")
     public void verifyActiveChatInfoOnChatConsole(String agent, String userMessage){
+        SoftAssert soft = new SoftAssert();
+
         String userId = getUserNameFromLocalStorage();
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-        Intent intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0);
+        String intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0).getIntent();
 
-        List<String> clientIdsWithActiveChatsForTargetAgent = getPortalChatConsolePage().getAgentsTableChatConsole().getShownChatsForAgent(agent);
-        if(!clientIdsWithActiveChatsForTargetAgent.contains(userId)){
+        AgentRowChatConsole agentUnderTest = getPortalChatConsolePage().getAgentsTableChatConsole()
+                .getTargetAgentRow(secondAgentNameForChatConsoleTests);
+
+        if(!agentUnderTest.isChatShownFromUserShown(userId, 40)){
             Assert.fail("Chat from '" + userId + "' user is not shown in chat console for " +
                     secondAgentNameForChatConsoleTests + " agent");
         }
-        SoftAssert soft = new SoftAssert();
+        List<String> clientIdsWithActiveChatsForTargetAgent = agentUnderTest.getChattingTo();
+
         int ordinalChatNumber = clientIdsWithActiveChatsForTargetAgent.indexOf(userId);
 
-        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownChannelsForAgent(agent).get(ordinalChatNumber),
+        soft.assertEquals(agentUnderTest.getChannels().get(ordinalChatNumber),
                 "Touch Web chat");
-        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownSentimentForAgent(agent).get(ordinalChatNumber),
-                sentiment);
-        soft.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole().getShownIntentsForAgent(agent).get(ordinalChatNumber),
-                intent);
+        soft.assertEquals(agentUnderTest.getSentiments().get(ordinalChatNumber),
+                sentiment.toLowerCase(), "Sentiment is not correct for "+ userId +" chat ");
+        soft.assertEquals(agentUnderTest.getIntents().get(ordinalChatNumber),
+                intent, "Intent for "+ userId +" user chat is not correct");
         soft.assertAll();
     }
+
+    @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
+    public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
+        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
+    }
+
+    @And("^Uncheck today day and apply changes$")
+    public void uncheckTodayDayAndApplyChanges() {
+        nameOfUnchekedDay = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().uncheckTodayDay();
+        getPortalTouchPrefencesPage().clickSaveButton();
+        getPortalTouchPrefencesPage().waitForNotificationAlertToBeProcessed(2,5);
+    }
+
+    @And("^'support hours' are updated in (.*) configs$")
+    public void supportHoursAreUpdatedInTenantConfigs(String tenantOrgName) {
+        Assert.assertFalse(ApiHelper.getAgentSupportDaysAndHours(tenantOrgName).toString().contains(nameOfUnchekedDay.toUpperCase()),"Error. 'support hours' contain today day.");
+    }
+
+    @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
+    public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
+        Assert.assertTrue(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
+    }
+
 
     private LeftMenu getLeftMenu() {
         if (leftMenu.get()==null) {

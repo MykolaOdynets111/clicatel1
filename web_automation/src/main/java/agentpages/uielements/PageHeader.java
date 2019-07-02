@@ -1,9 +1,6 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import drivermanager.DriverFactory;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;

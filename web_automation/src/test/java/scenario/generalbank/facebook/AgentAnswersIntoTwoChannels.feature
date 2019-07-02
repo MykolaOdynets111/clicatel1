@@ -9,7 +9,7 @@ Feature: Communication between user and agent in two channel
 
   @fb_post
   @fb_dm
-  Scenario: Communication between user and agent (start in dm, proceed with post)
+  Scenario: Facebook: Communication between user and agent (start in dm, proceed with post)
     When User opens Messenger and send message regarding connect to agent
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook
@@ -26,7 +26,7 @@ Feature: Communication between user and agent in two channel
     And User initial message regarding can you help me? with following agent response 'yes, sure' in comments are shown
 
   @fb_dm
-  Scenario: Communication between user and agent (start in post, proceed with dm)
+  Scenario: Facebook: Communication between user and agent (start in post, proceed with dm)
     When User makes post message regarding connect to agent
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook

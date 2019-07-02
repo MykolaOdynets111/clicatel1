@@ -119,6 +119,8 @@ public class Endpoints {
 
     public static String PLATFORM_ROLES_PERMITIONS = URLs.getBasePlatformUrl() + "/roles/%s/permissions?details=false";
 
+    public static String PLATFORM_ACCOUNT_BALANCE = URLs.getBasePlatformUrl() + "/accounts/balance";
+
     // ====================  tie ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";
@@ -179,7 +181,7 @@ public class Endpoints {
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "/internal/health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/health";
 
     public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 

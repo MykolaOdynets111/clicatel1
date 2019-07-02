@@ -1,14 +1,13 @@
 package portalpages;
 
-import drivermanager.DriverFactory;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.AddPaymentMethodWindow;
 import portalpages.uielements.BillingContactsDetails;
+import portalpages.uielements.TopUpBalanceWindow;
 
-import java.util.List;
 
 public class PortalBillingDetailsPage extends PortalAbstractPage {
 
@@ -30,9 +29,14 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement removePaymentConfirmationButton;
 
+    @FindBy(xpath = "//header//button[@ng-click='topUpBalance()']")
+    private WebElement topUpBalanceButton;
+
     private BillingContactsDetails billingContactsDetails;
 
     private AddPaymentMethodWindow addPaymentMethodWindow;
+
+    private TopUpBalanceWindow topUpBalanceWindow;
 
     private String removePaymentButton =  "//button[@ng-click='removeCard()']";
 
@@ -43,6 +47,8 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     public BillingContactsDetails getBillingContactsDetails() {
         return billingContactsDetails;
     }
+
+    public TopUpBalanceWindow getTopUpBalanceWindow(){ return topUpBalanceWindow;}
 
     public boolean isPageOpened(int wait){
         return isElementShownAgent(billingDetailsForm, wait);
@@ -87,4 +93,9 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
         if(isElementShownAgent(removePaymentConfirmationButton, 3))removePaymentConfirmationButton.click();
 
     }
+
+    public void clickTopUPBalance(){
+        clickElemAgent(topUpBalanceButton, 5, "admin", "'Top up balance' button" );
+    }
+
 }

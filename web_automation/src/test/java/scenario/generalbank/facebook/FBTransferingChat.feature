@@ -7,7 +7,7 @@ Feature: Facebook chat transferring
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 
-  Scenario: Verify if agent is able to transfer facebook chat via "Transfer chat" button
+  Scenario: Facebook: Facebook chat transferring
     When User opens Messenger and send message regarding chat to agent
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook

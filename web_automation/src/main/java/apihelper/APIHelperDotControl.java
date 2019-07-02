@@ -1,11 +1,16 @@
 package apihelper;
 
+import datamanager.Tenants;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
+import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestIntegrationChanel;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import javaserver.Server;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.LocalDateTime;
@@ -135,8 +140,10 @@ public class APIHelperDotControl {
                 .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }
 
-    public static Response sendInitCallWithWait(String tenantOrgName, String apiToken, String clientId, String messageId){
-        Response resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+    public static Response sendInitCallWithWait(String tenantOrgName, DotControlInitRequest initRequest){
+//        Response resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+        Response resp = sendInitCall(tenantOrgName, initRequest);
+
         for (int i =0; i<15; i++){
             if (resp.statusCode() != 401) break;
             else{
@@ -145,36 +152,27 @@ public class APIHelperDotControl {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                resp = sendInitCall(tenantOrgName, apiToken, clientId, messageId);
+                resp = sendInitCall(tenantOrgName, initRequest);
             }
 
         }
         return resp;
     }
 
-    private static Response sendInitCall(String tenantOrgName, String apiToken, String clientId, String messageId){
 
-        return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .header("Content-Type", "application/json")
-                .body("{\n" +
-                        "  \"apiToken\": \""+apiToken+"\",\n" +
-                        "  \"clientId\": \""+clientId+"\",\n" +
-                        "  \"context\": {},\n" +
-                        "  \"conversationId\": \"string\",\n" +
-                        "  \"history\": [\n" +
-                        "    {\n" +
-                        "      \"message\": \"string\",\n" +
-                        "      \"messageId\": \""+ messageId + "\",\n" +
-                        "      \"messageType\": \"PLAIN\",\n" +
-                        "      \"source\": \"AGENT\",\n" +
-                        "      \"timestamp\": 0\n" +
-                        "    }\n" +
-                        "  ],\n" +
-                        "  \"referenceId\": \"string\",\n" +
-                        "  \"tenantMode\": \"BOT\"\n" +
-                        "}")
-                .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
+    private static Response sendInitCall(String tenantOrgName, DotControlInitRequest initRequest){
+        ObjectMapper mapper = new ObjectMapper();
+        Response resp = null;
+        try {
+            resp = RestAssured.given().log().all()
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .header("Content-Type", "application/json")
+                    .body(mapper.writeValueAsString(initRequest))
+                    .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return resp;
     }
 
 }

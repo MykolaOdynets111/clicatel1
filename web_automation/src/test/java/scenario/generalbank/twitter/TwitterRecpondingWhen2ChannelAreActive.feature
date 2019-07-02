@@ -7,7 +7,7 @@ Feature: Receiving answer when two channels are active
     Given I login as agent of General Bank Demo
     Given Open twitter page of General Bank Demo
 
-  Scenario: User receive agent response in DM after he sends last message into dm
+  Scenario: Twitter: User receive agent response in DM after he sends last message into dm
     Given Open new tweet window
     When User sends tweet regarding "chat to agent"
     Then Agent has new conversation request from twitter user
@@ -19,7 +19,7 @@ Feature: Receiving answer when two channels are active
     When Agent responds with How can I help you? to User
     Then User have to receive correct response "How can I help you?" on his message "hello"
 
-  Scenario: User receive agent response via tweet after he sends last message via tweet
+  Scenario: Twitter: User receive agent response via tweet after he sends last message via tweet
     Given Open direct message channel
     When User sends twitter direct message: chat to support
     Then Agent has new conversation request from twitter user

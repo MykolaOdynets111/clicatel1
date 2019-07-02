@@ -10,16 +10,20 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Intents;
 import datamanager.jacksonschemas.Intent;
+import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
+import interfaces.WebActions;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AgentConversationSteps implements JSHelper{
+public class AgentConversationSteps implements JSHelper, WebActions {
 
     private AgentHomePage mainAgentHomePage;
     private AgentHomePage secondAgentHomePage;
@@ -46,7 +50,7 @@ public class AgentConversationSteps implements JSHelper{
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         Assert.assertTrue(getChatBody().isUserMessageShown(userMessage, "main agent"),
-                "'" +userMessage+ "' User message is not shown in conversation area (Client ID: "+getUserNameFromLocalStorage()+")");
+                "'" +userMessage+ "' User message is not shown in conversation area");
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
@@ -110,7 +114,7 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage().clickAgentAssistantButton();
         getAgentHomePage().waitForElementToBeVisible(getAgentHomePage().getSuggestedGroup());
         if (getSuggestedGroup().isSuggestionListEmpty()){
-            Assert.assertTrue(false, "Suggestion list is empty");
+            Assert.fail("Suggestion list is empty");
         }
         String expectedResponse = "no response";
         List<Intent> listOfIntentsFromTIE = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage);
@@ -261,6 +265,29 @@ public class AgentConversationSteps implements JSHelper{
         getAgentHomePage(agent).endChat();
     }
 
+    @Then("^All session attributes are closed in DB$")
+    public void verifySessionClosed(){
+        SoftAssert soft = new SoftAssert();
+        Map<String, String> sessionDetails = DBConnector
+                                    .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        Map<String, String> chatAgentDetails = DBConnector
+                                    .getChatAgentHistoryDetailsBySessionID(ConfigManager.getEnv(), sessionDetails.get("sessionId"));
+        Map<String, String> conversationDetails = DBConnector
+                                    .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
+
+        soft.assertEquals(sessionDetails.get("state"), "TERMINATED",
+                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. ");
+        soft.assertTrue(sessionDetails.get("endedDate")!=null,
+        "Ended date is not set for session " +sessionDetails.get("sessionId")+ " after ending chat");
+        soft.assertTrue(chatAgentDetails.get("endedDate")!=null,
+                "Ended date is not set for chat agent history record after ending chat." +
+                        "\nSession " +sessionDetails.get("sessionId")+ "");
+        soft.assertEquals(conversationDetails.get("active"), "0",
+                "Conversation is still active after ending chat." +
+                        "\nSession " +sessionDetails.get("sessionId")+ "");
+        soft.assertAll();
+    }
+
     @When("(.*) click 'Cancel' button$")
     public void agentClickCancelButton(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCancel();
@@ -300,6 +327,38 @@ public class AgentConversationSteps implements JSHelper{
         }
         Assert.assertEquals(sentimentFromAPI, expectedSentiment,
                 "Sentiment on '" + userMessage + "' user message is saved incorrectly\n");
+    }
+
+    @Then("(.*) can see default (.*) placeholder for note if there is no input made$")
+    public void defaultWordsShouldBeIfThereIsNoInputMade(String agent,String words) {
+        Assert.assertEquals(getAgentHomePage(agent).getAgentFeedbackWindow().getPlaceholder(), words,
+                "Placeholder for note is incorrect\n");
+    }
+
+    @Then("^(.*) can see valid sentiments \\(Neutral sentiment by default, There are 3 icons for sentiments\\)$")
+    public void validSentimentsAreShown(String agent) {
+        File image = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(image),"Sentiments in agent feedback window as not expected. (Neutral sentiment by default, There are 3 icons for sentiments) \n");
+    }
+
+    @Then("^(.*) is able to select sentiments, when sentiment is selected, 2 other should be blurred$")
+    public void agentIsAbleToSelectSentimentWhenSentimentIsSelectedOtherShouldBeBlurred(String agent) {
+        boolean result = false;
+        boolean resultHappy = false;
+        boolean resultUnsatisfied = false;
+        File imageNeutral = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        result = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageNeutral);
+        getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();
+        File imageHappy = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
+        resultHappy = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageHappy);
+        getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentUnsatisfied();
+        File imageUnsatisfied = new File("src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
+        resultUnsatisfied = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageUnsatisfied);
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(result,"Neutral. Sentiments in agent feedback window as not expected. \n");
+        soft.assertTrue(resultHappy,"Happy. Sentiments in agent feedback window as not expected. \n");
+        soft.assertTrue(resultUnsatisfied,"Unsatisfied. Sentiments in agent feedback window as not expected. \n");
+        soft.assertAll();
     }
 
     private AgentHomePage getAgentHomePage() {

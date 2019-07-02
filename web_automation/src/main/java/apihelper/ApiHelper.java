@@ -8,6 +8,7 @@ import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
+import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.path.json.JsonPath;
@@ -21,12 +22,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
-public class ApiHelper implements DateTimeHelper{
+public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     private static  List<HashMap> tenantsInfo=null;
 //    private static List<HashMap> tenantMessages=null;
@@ -102,6 +100,30 @@ public class ApiHelper implements DateTimeHelper{
                 "Creating of user profile was not successful\n" +
         "resp status code: " + resp.statusCode() + "\n" +
         "resp body: " + resp.getBody().asString());
+    }
+
+    public static void createUserProfileWithPhone(String clientID, String phoneNumber){
+        Response resp;
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+
+        resp = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body("{ " +
+                        "\"tenantId\": \"" + tenantId + "\"," +
+                        "\"type\": \"TOUCH\"," +
+                        "\"clientId\": \"" + clientID + "\"," +
+                        "\"attributes\": {" +
+                        "\"firstName\": \"" + clientID + "\"," +
+                        "\"email\": \"aqa_test@gmail.com\"," +
+                        "\"phone\": \"" + phoneNumber + "\"" +
+                        "}" +
+                        "}")
+                .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
+        Assert.assertTrue(resp.statusCode()==200,
+                "Creating of user profile was not successful\n" +
+                        "resp status code: " + resp.statusCode() + "\n" +
+                        "resp body: " + resp.getBody().asString());
     }
 
     public static void deleteUserProfile(String tenantName, String clientID) {
@@ -402,7 +424,7 @@ public class ApiHelper implements DateTimeHelper{
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .body("{\n" +
                         "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
-                        "  \"enable\": true\n" +
+                        "  \"enable\": "+ integrationStatus + "\n" +
                         "}")
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }
@@ -470,8 +492,12 @@ public class ApiHelper implements DateTimeHelper{
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName) {
-        List<OvernightTicket> allTicketsByStatus = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
-        for(OvernightTicket ticket : allTicketsByStatus){
+        List<OvernightTicket> allAssignedTickets = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
+        List<OvernightTicket> allUnassignedTickets = getOvernightTicketsByStatus(tenantOrgName, "UNASSIGNED");
+        List<OvernightTicket> fullList = new ArrayList<>();
+        fullList.addAll(allAssignedTickets);
+        fullList.addAll(allUnassignedTickets);
+        for(OvernightTicket ticket : fullList){
             RestAssured.given()
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                     .post(String.format(Endpoints.PROCESS_OVERNIGHT_TICKET, ticket.getId()));
@@ -498,11 +524,7 @@ public class ApiHelper implements DateTimeHelper{
     }
 
     public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
-        String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
-        JsonPath respJSON = RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.CUSTOMER_VIEW + sessionId)
-                .getBody().jsonPath();
+        JsonPath respJSON = getCustomerView(tenantOrgName, clineId);
 
         String fullName = "";
         if(respJSON.getString("personalDetails.firstName") == null &&
@@ -514,12 +536,7 @@ public class ApiHelper implements DateTimeHelper{
         }
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
 
-        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        String customerSince = LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(zoneId).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+        String customerSince = getCustomerSince(respJSON);
 
         String channelUsername = "";
         try {
@@ -534,6 +551,25 @@ public class ApiHelper implements DateTimeHelper{
         return new Customer360PersonalInfo(fullName, location,
                 "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
+    }
+
+
+    public static JsonPath getCustomerView(String tenantOrgName, String clineId){
+        String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .get(Endpoints.CUSTOMER_VIEW + sessionId)
+                .getBody().jsonPath();
+
+    }
+
+    public static String getCustomerSince(JsonPath respJSON){
+        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
+        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        return LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(zoneId).toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
     }
 
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){
@@ -720,4 +756,5 @@ public class ApiHelper implements DateTimeHelper{
                 .get(Endpoints.TENANT_AVAILABLE_AGENTS)
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
+
 }

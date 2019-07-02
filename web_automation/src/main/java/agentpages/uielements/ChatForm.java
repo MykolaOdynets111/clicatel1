@@ -144,4 +144,8 @@ public class ChatForm extends AbstractUIElement {
 
     public boolean isOvernightTicketMessageShown(){ return isElementShownAgent(overnightTicketLable, 3, this.currentAgent); }
 
+    public String getPlaceholderFromInputLocator(){
+        waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.currentAgent);
+        return findElemByXPATHAgent(messageInputLocator, this.currentAgent).getAttribute("placeholder");
+    }
 }

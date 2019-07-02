@@ -2,15 +2,15 @@
 @no_widget
 @no_chatdesk
 @adding_payment_method
+@touch_go
 Feature: Admin should be able to manage payment methods
 
   Background:
-    Given Tenant Standard AQA has no Payment Methods
-
+    Given Tenant Automation Bot has no Payment Methods
 
   Scenario: Admin should be able to add payment method from Billing Details page add see it while purchasing
     When I open portal
-    And Login into portal as an admin of Standard AQA account
+    And Login into portal as an admin of Automation Bot account
     When I select Settings in left menu and Billing & payments in submenu
     And Select 'Payment methods' in nav menu
     Then 'Add a payment method now?' button is shown
@@ -25,7 +25,7 @@ Feature: Admin should be able to manage payment methods
 
   Scenario: Admin should be able to add payment method from purchasing and to delete it
     When I open portal
-    And Login into portal as an admin of Standard AQA account
+    And Login into portal as an admin of Automation Bot account
     When Admin adds to cart 2 agents
     And Admin opens Confirm Details window
     And Click Next button on Details tab
@@ -44,7 +44,7 @@ Feature: Admin should be able to manage payment methods
 
   Scenario: Admin should not be able to add payment method without accepting all terms
     When I open portal
-    And Login into portal as an admin of Standard AQA account
+    And Login into portal as an admin of Automation Bot account
     When I select Settings in left menu and Billing & payments in submenu
     And Select 'Payment methods' in nav menu
     When Admin clicks 'Add a payment method now?' button

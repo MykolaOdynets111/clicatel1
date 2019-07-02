@@ -2,7 +2,6 @@ package agentpages;
 
 import abstractclasses.AgentAbstractPage;
 import agentpages.uielements.*;
-import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -44,6 +43,15 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "div.touch-button")
     private WebElement touchButton;
+
+    @FindBy(css = "div.context-menu>div.active")
+    private WebElement selectedTab;
+
+    @FindBy(css = "div.tip-note")
+    private WebElement tipNoteInConversationArea;
+
+    @FindBy(css = "div.context-wrapper>div.tip-note")
+    private WebElement tipNoteInRightArea;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
@@ -200,5 +208,17 @@ public class AgentHomePage extends AgentAbstractPage {
         return Color.fromString(touchButton.getCssValue("background-color")).asHex();
     }
 
+    public String getSelectedTabHeader(){
+        return selectedTab.getText();
+    }
+
+    public String getTipIfNoChatSelected(){
+        return getTextFromElemAgent(tipNoteInConversationArea, 5, getCurrentAgent(), "Tips in conversation area if no chat selected");
+    }
+
+
+    public String getTipIfNoChatSelectedFromContextArea(){
+        return getTextFromElemAgent(tipNoteInRightArea, 5, getCurrentAgent(), "Tips in context area if no chat selected");
+    }
 
 }

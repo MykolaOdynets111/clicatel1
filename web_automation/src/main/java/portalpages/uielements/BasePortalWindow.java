@@ -2,6 +2,7 @@ package portalpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 //import com.paulhammant.ngwebdriver.NgWebDriver;
+import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -31,12 +32,11 @@ public class BasePortalWindow extends AbstractUIElement{
     @FindBy(name = "form.cartPaymentDetails")
     protected WebElement cartPaymentDetailsForm;
 
-//    private ThreadLocal<NgWebDriver> ngWebDriverThreadLocal = new ThreadLocal<>();
-//
-//    public NgWebDriver getNgDriver(WebDriver driver) {
-//        if(ngWebDriverThreadLocal.get()==null){
-//            ngWebDriverThreadLocal.set(new NgWebDriver((JavascriptExecutor) driver));
-//        }
-//        return ngWebDriverThreadLocal.get();
-//    }
+    @FindBy(xpath =  ".//button[@ng-click='wizardSubmit()'][not(@id='integration-save')]")
+    private WebElement addToCardButton;
+
+
+    public void clickAddToCardButton(){
+        executeJSclick(addToCardButton, DriverFactory.getAgentDriverInstance());
+    }
 }

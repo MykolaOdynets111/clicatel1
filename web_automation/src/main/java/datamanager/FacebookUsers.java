@@ -8,8 +8,7 @@ import java.util.Map;
 
 public enum FacebookUsers {
 
-    TOM_SMITH("Tom", "Smith", "generalbankaqa@gmail.com", "100024956568638", "password22"),
-//    FIRST_USER("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),//acc not available
+    TOM_SMITH("Tom", "Smith", "generalbankaqa@gmail.com", "1912835872122481", "password22"),
     FIRST_USER("Yahor", "Click", "yahor.click@gmail.com", "", "Passw0rd@"),
 
     USER_FOR_INTEGRATION("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
@@ -22,9 +21,9 @@ public enum FacebookUsers {
     String userSurname;
     String userEmail;
     String userPass;
-    String userID;
+    String userIDMsg;
 
-    FacebookUsers(String userName, String userSurname, String userEmail, String userID, String userPass) {
+    FacebookUsers(String userName, String userSurname, String userEmail, String userIDMsg, String userPass) {
         this.userName = userName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;
@@ -37,7 +36,7 @@ public enum FacebookUsers {
         }else {
             this.userPass = userPass;
         }
-        this.userID = userID;
+        this.userIDMsg = userIDMsg;
     }
 
     public static final Map<String, Long> userIds = new HashMap<String, Long>() {{
@@ -71,8 +70,8 @@ public enum FacebookUsers {
         return this.userEmail;
     }
 
-    public String getFBUserID() {
-        return this.userID;
+    public Long getFBUserIDMsg() {
+        return Long.valueOf(this.userIDMsg);
     }
 
     public static String getLoggedInUserName(){

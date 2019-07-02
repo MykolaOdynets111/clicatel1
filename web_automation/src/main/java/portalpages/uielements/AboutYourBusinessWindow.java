@@ -3,7 +3,8 @@ package portalpages.uielements;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -28,6 +29,22 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
 
     @FindBy(xpath = "//span[contains(@ng-model-key, 'country')]")
     private WebElement selectCompanyCountry ;
+
+    @FindBy(xpath = "//span[contains(text(), 'Specific Agent Support hours')]")
+    private WebElement specificSupportHours ;
+
+    @FindBy(xpath = "//div[contains(@ng-repeat, 'businessHours')]//span[contains(@aria-label, 'Select box activate')]")
+    private WebElement arrowSupportHours ;
+
+    @FindBy(xpath = "//span[contains(@class, 'ui-select-choices-row-inner')]")
+    private WebElement choicesSupportHours ;
+
+    @FindBy(xpath = "//button[contains(text(), 'Add')]")
+    private WebElement addSupportHoursButton ;
+
+    private String choiseSupportDay = "//span[@class='checkbox-label ng-binding'][text()='%s']/..";
+
+    private String isSelected = "/span[contains(@class, 'uncheck')]";
 
     private String companyNameXpath ="//input[contains(@name,'companyName')]";
 
@@ -72,4 +89,24 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
         companyCountry.get(randomIndustryNumber).click();
         return selectCompanyCountry.getText();
     }
+
+    public String uncheckTodayDay(){
+        clickElemAgent(arrowSupportHours,2,"main","Arrow to open support hours");
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
+        String nameOfDay = simpleDateformat.format(new Date());
+        WebElement dayToUncheck = findElemByXPATHAgent(String.format(choiseSupportDay,nameOfDay),"main");
+        clickElemAgent(dayToUncheck,2,"main","Today day");
+        clickElemAgent(addSupportHoursButton,2,"main","Add button");
+        return nameOfDay;
+    }
+
+    public boolean isUncheckTodayDay(String nameOfDay){
+        clickElemAgent(arrowSupportHours,3,"main","Arrow to open support hours");
+        return isElementsExistsInDOM(String.format(choiseSupportDay,nameOfDay)+isSelected,5);
+    }
+
+    public void openSpecificSupportHours(){
+        clickElemAgent(specificSupportHours,2,"main","Specific Support Hours");
+    }
+
 }

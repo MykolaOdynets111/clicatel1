@@ -1,10 +1,18 @@
 package interfaces;
 
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.Browser;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 
@@ -278,5 +286,53 @@ public interface WebActions extends WebWait {
     default void clickHoldRelease(WebDriver driver, WebElement elem){
         Actions actions = new Actions(driver);
         actions.clickAndHold(elem).release().perform();
+    }
+
+    /**
+     * Verify if scren of element equals image (deviation 5%).
+     *
+     * @param  element   WebElement for screen shot
+     * @param  image   File for comparing with scren shot
+     * @return         Boolean: true or false
+     * @throws Exception
+     */
+    default boolean isWebElementEqualsImage(WebElement element, File image){
+        boolean result=false;
+        Browser browser = new Browser(DriverFactory.getDriverForAgent("main"),true);
+        Double dpr= browser.getDevicePixelRatio();
+        try {
+           if (!image.canRead()) {
+                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
+                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+                File newFile = new File(image.getPath());
+                newFile.getParentFile().mkdirs();
+                new FileWriter(newFile);
+                BufferedImage buffered = imageToBufferedImage(newimg);
+                ImageIO.write(buffered,"PNG",newFile);
+                System.out.println("!!!!!! File was created !!!!!!!!! \n");
+            }
+            BufferedImage expImage = ImageIO.read(image);
+            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
+            if (!result) {
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
+            }
+        }
+        catch(Exception e) {
+            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
+        }
+        return result;
+    }
+
+     static  BufferedImage imageToBufferedImage(Image im) {
+        BufferedImage bi = new BufferedImage (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
+        Graphics bg = bi.getGraphics();
+        bg.drawImage(im, 0, 0, null);
+        bg.dispose();
+        return bi;
+    }
+
+    default void createElementImage(WebElement element,String name, String path){
+            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
     }
 }

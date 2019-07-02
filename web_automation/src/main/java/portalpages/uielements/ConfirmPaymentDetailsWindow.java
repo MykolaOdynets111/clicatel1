@@ -5,6 +5,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 @FindBy(css = "div.cl-wizzard.create-integration-container")
 public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
@@ -35,6 +36,8 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     private String termsAndConditions = "//a[text()='Terms and Conditions']";
 
+    private String billingContact = "form[name='form.cartPaymentDetails']";
+
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
         waitForElementToBeVisibleByXpathAgent(String.format(paymentMethodXpath, payment), 8);
         findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
@@ -47,7 +50,12 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
         if(!isElementShownAgentByCSS(choisesGroup, 5, "admin")){
             selectPaymentBox.click();
         }
-        waitForElementToBeVisibleByCssAgent(choisesGroup, 9);
+        try {
+            waitForElementToBeVisibleByCssAgent(choisesGroup, 9);
+        } catch(TimeoutException e){
+            Assert.fail("Incorrect screen was shown after clicking select payment box \n " +
+                    "Please check the screenshot");
+        }
         return this;
     }
 
@@ -128,4 +136,9 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     public boolean isPaymnentSummaryTabOPened(){
         return isElementShownAgentByXpath(termsAndConditions, 1, "admin");
     }
+
+    public boolean isBillingContactShown(){
+        return isElementShownAgentByCSS(billingContact, 3, "admin");
+    }
+
 }
