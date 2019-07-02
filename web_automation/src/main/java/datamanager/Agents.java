@@ -76,6 +76,9 @@ public enum Agents {
     QA_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "qa"),
     TESTING_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "testing"),
 
+    // ======= User of newly created tenant for touch go tests =========== //
+    TOUCH_GO_ADMIN("", "p@$$w0rd4te$t", "", ""),
+    TOUCH_GO_AGENT("", "p@$$w0rd4te$t", "", ""),
     ;
 
     String email;
@@ -129,5 +132,21 @@ public enum Agents {
     public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
         else return getMainAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
+    }
+
+    public Agents setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+
+    public Agents setTenant(String tenant) {
+        this.tenant = tenant;
+        return this;
+    }
+
+    public Agents setEnv(String env) {
+        this.env = env;
+        return this;
     }
 }

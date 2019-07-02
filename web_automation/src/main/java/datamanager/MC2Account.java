@@ -43,6 +43,7 @@ public enum MC2Account {
     QA_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "qa", "", ""),
     TESTING_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "testing", "", "ff8080816b545c7c016b561eb8530040"),
 
+    TOUCH_GO_NEW_ACCOUNT("", "", "p@$$w0rd4te$t","", "", "", "","")
     ;
 
     String touchGoPlan;
@@ -122,5 +123,40 @@ public enum MC2Account {
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAccountName().equalsIgnoreCase(accounName))
                 .findFirst().get();
+    }
+
+    public MC2Account setTouchGoPlan(String touchGoPlan) {
+        this.touchGoPlan = touchGoPlan;
+        return this;
+    }
+
+    public MC2Account setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public MC2Account setAccountName(String accountName) {
+        this.accountName = accountName;
+        return this;
+    }
+
+    public MC2Account setTenantOrgName(String tenantOrgName) {
+        this.tenantOrgName = tenantOrgName;
+        return this;
+    }
+
+    public MC2Account setEnv(String env) {
+        this.env = env;
+        return this;
+    }
+
+    public MC2Account setTenantID(String tenantID) {
+        this.tenantID = tenantID;
+        return this;
+    }
+
+    public MC2Account setAccountID(String accountID) {
+        this.accountID = accountID;
+        return this;
     }
 }

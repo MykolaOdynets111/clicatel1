@@ -11,10 +11,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.CucumberException;
-import datamanager.Agents;
-import datamanager.FacebookUsers;
-import datamanager.Tenants;
-import datamanager.TopUpBalanceLimits;
+import datamanager.*;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -132,6 +129,12 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(String accountOrgName){
+
+//        MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("signup_account@aqa.test").setAccountName()setEnv(ConfigManager.getEnv())
+//        "Touch Go"
+//        "signup_account@aqa.test"
+//        "p@$$w0rd4te$t"
+//        MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail();
         String accountName = Tenants.setAccountNameForNewAccountSignUp();
         Tenants.setTenantUnderTestName(accountName);
         Tenants.setTenantUnderTestOrgName(accountOrgName);
