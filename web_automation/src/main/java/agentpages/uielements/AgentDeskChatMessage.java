@@ -10,10 +10,18 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 public class AgentDeskChatMessage extends Widget implements WebActions {
 
     @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
     private WebElement toUserTextResponse;
+
+    @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
+    private List<WebElement> toUserTextResponses;
+
+    @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='emoji-mart-emoji']")
+    private WebElement sentEmoji;
 
     @FindBy(css = "span.text-parsed-by-emoji")
     private WebElement messageText;
@@ -76,4 +84,17 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
         }
     }
 
+    public boolean isToUserTextResponseShownAmongOthers(String expectedMessage) {
+        boolean result = false;
+        for(int i = 0; i < 15; i++){
+            result = toUserTextResponses.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+            if (result) return true;
+            waitFor(500);
+        }
+        return result;
+    }
+
+    public String getAgentResponseEmoji(String agent) {
+        return getAttributeFromElemAgent(sentEmoji, "aria-label", 3, agent, "Sent by Agent Emoji");
+    }
 }

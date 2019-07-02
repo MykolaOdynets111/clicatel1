@@ -51,6 +51,16 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default String getAttributeFromElemAgent(WebElement element, String attribute, int time, String agent, String elemName){
+        try {
+            waitForElementToBeVisibleAgent(element, time, agent);
+            return element.getAttribute(attribute);
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.assertTrue(false, "Cannot get text from  '"+elemName+"' because element is not visible.");
+            return "no text elem";
+        }
+    }
+
     default void clickOnElementFromListByText(List<WebElement> elements, String text){
         waitForElementsToBeClickable(elements).stream().filter(e -> e.getText().toUpperCase().equals(text.toUpperCase())).findFirst().get().click();
     }

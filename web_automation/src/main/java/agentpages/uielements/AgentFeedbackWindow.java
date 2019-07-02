@@ -1,16 +1,13 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
-import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @FindBy(css = "div.modal-content")
@@ -43,8 +40,11 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".icons.conclude-chat-sentiment")
     private WebElement sentimentsAll;
 
-    @FindBy(xpath = "//div[@class='Select-menu-outer']/*")
-    private WebElement availableTags;
+    @FindBy(xpath = "//div[@class='Select-menu-outer']/div[@role='listbox']")
+    private WebElement availableTagsContainer;
+
+    @FindBy(xpath = "//div[@class='Select-menu-outer']//div[@role='option']")
+    private List<WebElement> availableTags;
 
     private String inputTagField =  "div.Select-input > input";
 
@@ -134,13 +134,13 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public void selectTags(int iter) {
         clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
-        if(availableTags.getText().isEmpty()) {
+        if(availableTagsContainer.getText().isEmpty()) {
             Assert.assertTrue(false, "Have not Tags to be selected");
         } else {
             clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
             while (iter > 0) {
                 clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
-                availableTags.click();
+                availableTagsContainer.click();
                 findElemByCSSAgent(openDropdownButtoncss).click();
                 iter--;
             }
@@ -149,17 +149,18 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public List<String> getTags() {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
-        if (isElementShown(availableTags, 2)){
-            List<String> result = Arrays.asList(availableTags.getText().split("[\n]"));
+        if (isElementShown(availableTagsContainer, 2)){
+            List<String> result = Arrays.asList(availableTagsContainer.getText().split("[\n]"));
             return result;
         } else {
             clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         }
-        waitForElementToBeClickableAgent(availableTags, 6, "main agent");
-        if(availableTags.getText().isEmpty()) {
+        waitForElementToBeClickableAgent(availableTagsContainer, 6, "main agent");
+        if(availableTagsContainer.getText().isEmpty()) {
             Assert.assertTrue(false, "Have not Tags to be selected");
         }
-        List<String> result = Arrays.asList(availableTags.getText().split("[\n]"));
+//        String html = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector("div.Select-menu-outer")).getAttribute("innerHTML");
+        List<String> result = availableTags.stream().map(e -> e.getAttribute("innerText").trim()).collect(Collectors.toList());
         clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         return result;
     }
@@ -180,8 +181,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void selectTagInSearch() {
-        waitForElementToBeClickableAgent(availableTags, 6, "main agent");
-        availableTags.click();
+        waitForElementToBeClickableAgent(availableTagsContainer, 6, "main agent");
+        availableTagsContainer.click();
     }
 
     public void deleteTags() {

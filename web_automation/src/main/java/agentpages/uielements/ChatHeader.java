@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -55,19 +56,23 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isButtonEnabled(String buttonTitle){
-        switch (buttonTitle) {
-            case "Transfer chat":
-                waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
-                return findElemByXPATHAgent(transferChatButton).isEnabled();
-            case "Send SMS":
-                waitForElementToBeVisibleByXpathAgent(sendSMSXpath, 5, "main agent");
-                return findElemByXPATHAgent(sendSMSXpath).isEnabled();
-            case "Send WhatsApp":
-                waitForElementToBeVisibleByXpathAgent(sendWhatsAppXpath, 5, "main agent");
-                return findElemByXPATHAgent(sendWhatsAppXpath).isEnabled();
+        try {
+            switch (buttonTitle) {
+                case "Transfer chat":
+                    waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
+                    return findElemByXPATHAgent(transferChatButton).isEnabled();
+                case "Send SMS":
+                    waitForElementToBeVisibleByXpathAgent(sendSMSXpath, 5, "main agent");
+                    return findElemByXPATHAgent(sendSMSXpath).isEnabled();
+                case "Send WhatsApp":
+                    waitForElementToBeVisibleByXpathAgent(sendWhatsAppXpath, 5, "main agent");
+                    return findElemByXPATHAgent(sendWhatsAppXpath).isEnabled();
 
-            default:
-                throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
+                default:
+                    throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
+            }
+        }catch (TimeoutException e){
+            return false;
         }
     }
 

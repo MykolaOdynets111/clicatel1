@@ -46,6 +46,8 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     @FindBy(name = "email")
     private WebElement emailInput;
 
+    @FindBy(css = "button[ng-click='changeUserStatus(false)']")
+    private WebElement deactivateButton;
 
     private EditUserRolesWindow editUserRolesWindow;
 
@@ -96,10 +98,11 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         inputTextAgent(firstNameInput, 2, "admin", "First name input", updatedAgentInfo.get("firstName"));
         lastNameInput.clear();
         inputTextAgent(lastNameInput, 2, "admin", "Last name input", updatedAgentInfo.get("lastName"));
-//        waitForElementToBeClickableAgent(emailInput, 5, "admin");
-//        emailInput.clear();
-//        inputTextAgent(emailInput, 2, "admin", "email input", updatedAgentInfo.get("email"));
         clickElemAgent(saveChangesButton, 5,"admin", "Save changes");
+    }
+
+    public void clickDactivateButton(){
+        clickElemAgent(deactivateButton, 3, "main", "'Deactivate User' button");
     }
 
 }

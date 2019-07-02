@@ -1038,6 +1038,11 @@ public class BasePortalSteps implements JSHelper {
         if(fullName.equalsIgnoreCase("created")){
             fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         }
+        if(fullName.equalsIgnoreCase("admin")){
+            String email = Agents.getMainAgentFromCurrentEnvByTenantOrgName(
+                    Tenants.getTenantUnderTestOrgName()).getAgentEmail();
+            fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
+        }
         portalUserProfileEditingThreadLocal.set(
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
@@ -1062,6 +1067,11 @@ public class BasePortalSteps implements JSHelper {
     public void deleteAgentUser(){
         portalUserProfileEditingThreadLocal.get().clickDeleteButton();
         portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(6,5);
+    }
+
+    @When("^On the right corner of the page click \"Deactivate User\" button$")
+    public void clickDeactivateUser(){
+        portalUserProfileEditingThreadLocal.get().clickDactivateButton();
     }
 
     @Then("^User is removed from Manage agent users page$")

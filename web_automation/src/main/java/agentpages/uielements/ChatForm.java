@@ -7,6 +7,9 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.List;
+import java.util.Random;
+
 @FindBy(css = "div.chat-form")
 public class ChatForm extends AbstractUIElement {
 
@@ -39,7 +42,16 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "div.overnight-chat-controls p")
     public WebElement overnightTicketLable;
 
-    public void setCurrectAgent(String agent){
+    @FindBy(css = "svg#emoticon")
+    public WebElement emoticonButton;
+
+    @FindBy(css = "section.emoji-mart")
+    public WebElement emojiMart;
+
+    @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
+    public List<WebElement> frequetlyUsedEmojis;
+
+    public void setCurrentAgent(String agent){
         this.currentAgent = agent;
     }
 
@@ -163,5 +175,18 @@ public class ChatForm extends AbstractUIElement {
     public String getPlaceholderFromInputLocator(){
         waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.currentAgent);
         return findElemByXPATHAgent(messageInputLocator, this.currentAgent).getAttribute("placeholder");
+    }
+
+    public void clickEmoticonButton(){
+        clickElemAgent(emoticonButton, 2, this.currentAgent,"Emoticon button in chatdesk");
+        waitForElementToBeVisibleAgent(emojiMart, 2, this.currentAgent);
+    }
+
+    public String selectRandomFrequentlyUsedEmoji(){
+        Random generator = new Random();
+        WebElement emoji = frequetlyUsedEmojis.get(generator.nextInt(frequetlyUsedEmojis.size()-1));
+        String emojiText = emoji.getAttribute("aria-label").split(",")[0].trim();
+        clickElemAgent(emoji, 2, this.currentAgent, emojiText + " emoji");
+        return emojiText;
     }
 }
