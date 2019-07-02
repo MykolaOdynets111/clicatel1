@@ -38,7 +38,7 @@ public class Tenants {
         return ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
     }
 
-    public static void setAccountNameForNewAccountSignUp() {
+    public static String setAccountNameForNewAccountSignUp() {
         Faker faker = new Faker();
         ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = faker.name().firstName() + faker.number().randomNumber();
         File file =new File("src/test/resources/touchgo_deprecated/accountName.txt");
@@ -49,10 +49,11 @@ public class Tenants {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
     }
 
 
-    private static void setTenantUnderTestOrgName(String orgName){
+    public static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME.set(orgName);
     }
 

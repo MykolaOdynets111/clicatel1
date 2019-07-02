@@ -55,7 +55,7 @@ public class BasePortalSteps implements JSHelper {
     public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
     public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
   //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
-    public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
+    public static final String FIRST_AND_LAST_NAME = "Touch Go";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
     private static String AGENT_EMAIL;
@@ -130,11 +130,12 @@ public class BasePortalSteps implements JSHelper {
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
     }
 
-    @When("^I provide all info about new account and click 'Sign Up' button$")
-    public void fillInFormWithInfoAboutNewAccount(){
-        Tenants.setAccountNameForNewAccountSignUp();
-        Tenants.setTenantUnderTestName(Tenants.getAccountNameForNewAccountSignUp());
-        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, Tenants.getAccountNameForNewAccountSignUp(),
+    @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
+    public void fillInFormWithInfoAboutNewAccount(String accountOrgName){
+        String accountName = Tenants.setAccountNameForNewAccountSignUp();
+        Tenants.setTenantUnderTestName(accountName);
+        Tenants.setTenantUnderTestOrgName(accountOrgName);
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, accountName,
                                         EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
     }
 
