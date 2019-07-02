@@ -41,9 +41,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.to div.empty-icon")
     private WebElement agentIconWIthInitials;
 
-    @FindBys(
-            @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
-    )
+    @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
     private List<WebElement> otpDividersBlocks;
 
     private WebElement getFromUserWebElement(String messageText) {
