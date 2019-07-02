@@ -143,14 +143,17 @@ public class Customer360Container extends AbstractUIElement {
     public void clickPhoneNumberVerificationButton(String buttonName){
         switch (buttonName.toLowerCase()) {
             case "send otp":
+                waitForElementToBeClickableAgent(sendOTPButton, 1, "main");
                 sendOTPButton.click();
                 break;
             case "verify":
+                waitForElementToBeClickableAgent(verifyPhoneButton, 1, "main");
                 verifyPhoneButton.click();
                 break;
             case "re-send otp":
             case "re send otp":
             case "resend otp":
+                waitForElementToBeClickableAgent(resendOTPButton, 1, "main");
                 resendOTPButton.click();
                 break;
             default:

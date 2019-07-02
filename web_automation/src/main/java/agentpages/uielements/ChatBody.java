@@ -165,7 +165,11 @@ public class ChatBody extends AbstractUIElement {
         if (otpDividersBlocks.size() > 1){
             String lastCode = otpDividersBlocks.get(otpDividersBlocks.size()-1).getText();
             String previousCode = otpDividersBlocks.get(otpDividersBlocks.size()-2).getText();
-            return lastCode.equals(previousCode);
+            return !lastCode.equals(previousCode);
+        }
+        else if (otpDividersBlocks.size() == 1){
+            Assert.fail("Only one OTP code displayed");
+            return false;
         }
         else
             return false;

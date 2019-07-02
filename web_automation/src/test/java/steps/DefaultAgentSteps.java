@@ -687,7 +687,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @When("^(.*) phone number for (.*) user$")
     public void changePhoneNumberCustomer360(String changeOrDelete, String customerFrom){
-        String phoneNumber = ""; //in case we need to delete phone number
+        String phoneNumber = " "; //in case we need to delete phone number
         Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
         if (changeOrDelete.equalsIgnoreCase("change"))
             phoneNumber = generateUSCellPhoneNumber();
@@ -714,8 +714,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("User's profile phone number (.*) in 'Verify phone' input field")
     public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
-        Customer360Container customer360Container = new Customer360Container();
-        String phoneNumberInCustomer360 = customer360Container.getPhoneNumber().replaceAll("\\s+", "");
+
+        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\s+", "");
         String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
         if (isRequiredToDisplay.contains("not")){
             Assert.assertTrue(phoneNumberInVerifyPopUp.equals(""), "Some phone number displayed in the field");
@@ -775,7 +775,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("New OTP code is different from the previous one")
     public void checkOTPCodes(){
-        Assert.assertFalse(getAgentHomeForMainAgent().getChatBody().isNewOTPCodeDifferent(), "Codes are equal");
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatBody().isNewOTPCodeDifferent(), "Codes are equal");
     }
 
     @When("^Agent switches to opened (?:Portal|ChatDesk) page$")
