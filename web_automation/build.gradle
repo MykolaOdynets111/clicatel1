@@ -1,7 +1,5 @@
 group 'web_automation'
 version '1.0-SNAPSHOT'
-import java.io.*
-import groovy.json.*
 
 
 buildscript {
@@ -200,7 +198,7 @@ task runTestsAgainstNewlyCreatedAccount(type:Test){
 //    }
 //}
 
-task runTouchGoTests(type:Test) {
+task runTouchGoTests(type:Test){
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + "touchgo/touchgosignup.xml"
@@ -300,7 +298,7 @@ task runTests(type: Test) {
         runTests.dependsOn(runTiePullRequestTests)
     }
 
-    if(suite=="touchgo_deprecated"){
+    if(suite=="touchgo"){
         runTests.dependsOn(runTouchGoTests)
     }
 

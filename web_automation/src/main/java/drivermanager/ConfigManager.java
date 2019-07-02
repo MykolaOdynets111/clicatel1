@@ -21,45 +21,30 @@ public class ConfigManager {
     private static final String REMOTE_ALLURE_REPORT = "isRemoteAllureReport";
 
     public static boolean reportToTouchFlo() {
-        String reportToTestFlo = System.getProperty(REPORT_TESTFLO);
-        if(reportToTestFlo==null) {
-            reportToTestFlo = "false";
-        }
+        String reportToTestFlo = System.getProperty(REPORT_TESTFLO, "false");
         return Boolean.parseBoolean(reportToTestFlo);
     }
 
     public static boolean createNewTPlan() {
-        String createNewTPlan = System.getProperty(CREATE_NEW_TPLAN);
-        if(createNewTPlan==null) {
-            createNewTPlan = "false";
-        }
+        String createNewTPlan = System.getProperty(CREATE_NEW_TPLAN, "false");
         return Boolean.parseBoolean(createNewTPlan);
     }
 
     public static String getTplanKey(){
-        String tenantID = System.getProperty(TPLAN_KEY);
-        if(tenantID==null) return "";
-        return tenantID;
+        return System.getProperty(TPLAN_KEY, "");
     }
 
     public static String getJiraUser(){
-        String usrName = System.getProperty(JIRA_USER);
-        if(usrName==null) return "";
-        return usrName;
+        return System.getProperty(JIRA_USER, "");
     }
 
     public static boolean isRemoteAllureReport(){
-        String createNewTPlan = System.getProperty(REMOTE_ALLURE_REPORT);
-        if(createNewTPlan==null) {
-            createNewTPlan = "false";
-        }
+        String createNewTPlan = System.getProperty(REMOTE_ALLURE_REPORT, "false");
         return Boolean.parseBoolean(createNewTPlan);
     }
 
     public static String getJiraPass(){
-        String usrPass = System.getProperty(JIRA_PASS);
-        if(usrPass==null) return "";
-        return usrPass;
+        return System.getProperty(JIRA_PASS, "");
     }
 
     public static void setTenantId(String tenantId) {
@@ -91,9 +76,8 @@ public class ConfigManager {
     }
 
     public static String getEnv() {
-        String env = System.getProperty(ENV);
+        String env = System.getProperty(ENV, "testing");
         String deployTo = System.getProperty(DEPLOY_TO);
-        if(env==null) env = "testing";
         if(deployTo==null) return env;
         else{
             if (deployTo.equalsIgnoreCase("standby_group")) {
@@ -127,8 +111,6 @@ public class ConfigManager {
     }
 
     public static String getSuite(){
-        String suite = System.getProperty(SUITE);
-        if(suite==null) return "all tests";
-        return suite;
+        return System.getProperty(SUITE, "all");
     }
 }

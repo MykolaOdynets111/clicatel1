@@ -363,23 +363,16 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
-        if(!isPortalPageOpened){
-            File file = new File("src/test/resources/touchgo/testscontroller/signupFailure.txt");
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
+        boolean isPortalPageOpened = false;
+        System.setProperty("signupSuccessfull", String.valueOf(isPortalPageOpened));
         Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
     }
 
     @Then("^New account is successfully created$")
     public void verifyAccountCreated(){
-        File file = new File("src/test/resources/touchgo/testscontroller/signupFailure.txt");
-        if(file.exists()){
-            throw new CucumberException(new SkipException("Sign up new account was not successfull"));
+        if(System.getProperty("signupSuccessfull", "false").equalsIgnoreCase("false")){
+            throw new SkipException("Sign up new account was not successfull");
         }
     }
 
