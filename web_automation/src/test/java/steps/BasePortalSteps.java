@@ -363,16 +363,45 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-//        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
-        boolean isPortalPageOpened = false;
-        System.setProperty("signupSuccessfull", String.valueOf(isPortalPageOpened));
+        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
+        System.setProperty("signupSuccessful", String.valueOf(isPortalPageOpened));
         Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
     }
 
-    @Then("^New account is successfully created$")
+    @Given("^New account is successfully created$")
     public void verifyAccountCreated(){
-        if(System.getProperty("signupSuccessfull", "false").equalsIgnoreCase("false")){
-            throw new SkipException("Sign up new account was not successfull");
+        if(System.getProperty("signupSuccessful", "false").equalsIgnoreCase("false")){
+            throw new SkipException("Sign up new account was not successful");
+        }
+    }
+
+    @Then("^New (.*) tenant is created$")
+    public void verifyNewTenantCreated(String tenant){
+        List<HashMap> allTenants = ApiHelper.getAllTenantsInfo();
+        boolean isTenantCreated = allTenants.stream().anyMatch(e -> e.get("tenantOrgName").equals(tenant));
+        System.setProperty("tenantCreationSuccessful", String.valueOf(isTenantCreated));
+        Assert.assertTrue(isTenantCreated,
+                "New tenant is absent in API response tenants?state=ACTIVE");
+    }
+
+    @Given("^New tenant is successfully created$")
+    public void verifyTenantCreated(){
+        if(System.getProperty("tenantCreationSuccessful", "false").equalsIgnoreCase("false")){
+            throw new SkipException("Creating new tenant was not successful");
+        }
+    }
+
+    @Given("^Second agent of new tenant is successfully created$")
+    public void verifySecondAgentCreated(){
+        if(System.getProperty("agentCreationSuccessful", "false").equalsIgnoreCase("false")){
+            throw new SkipException("Creating second agent for a new tenant was not successful");
+        }
+    }
+
+    @Given("^New tenant is successfully upgraded$")
+    public void verifyTenantUpgraded(){
+        if(System.getProperty("tenantUpgradeSuccessful", "false").equalsIgnoreCase("false")){
+            throw new SkipException("Upgrading a new tenant was not successful");
         }
     }
 
@@ -772,7 +801,9 @@ public class BasePortalSteps implements JSHelper {
                 break;
             }
         }
-        Assert.assertTrue(actualType.equalsIgnoreCase(expectedTouchGoPlan),
+        boolean isUpgraded = actualType.equalsIgnoreCase(expectedTouchGoPlan);
+        System.setProperty("tenantUpgradeSuccessful", String.valueOf(isUpgraded));
+        Assert.assertTrue(isUpgraded,
                 "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
                         "Expected: " + expectedTouchGoPlan + "\n" +
                         "Found:" + actualType

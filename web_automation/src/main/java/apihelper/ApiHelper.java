@@ -43,7 +43,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
         Map<String, String> tenantsMap = new HashMap<>();
-        List<HashMap> tenants = getAllTenantInfo();
+        List<HashMap> tenants = getAllTenantsInfo();
         tenants.forEach(e-> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
                 (String) e.get(theValue)));
         return tenantsMap;
@@ -132,7 +132,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         }
     }
 
-    private static synchronized List<HashMap> getAllTenantInfo() {
+    public static synchronized List<HashMap> getAllTenantsInfo() {
         Response resp = RestAssured.given(RequestSpec.getRequestSpecification()).get(Endpoints.GET_ALL_TENANTS_ENDPOINT);
             try {
                 if (tenantsInfo == null) {

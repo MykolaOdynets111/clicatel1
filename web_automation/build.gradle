@@ -175,28 +175,6 @@ task runTestsAgainstNewlyCreatedAccount(type:Test){
     }
 }
 
-//task runTouchGoTests(type:Test) {
-//    doFirst {
-//        useTestNG() {
-//            useDefaultListeners = true
-//            ignoreFailures = true
-//            suites baseXmlPath+ "touchgo_deprecated/createfbintegration.xml"
-//            suites baseXmlPath + "touchgo_deprecated/onethreadtouchgotests.xml"
-//            suites baseXmlPath+ "touchgo_deprecated/paralleltouchgotests.xml"
-//        }
-//    }
-//    doLast {
-//        if (!file("build/reports/tests/runTouchGoTests/testng-failed.xml").exists()) {
-//            runTestsAgainstNewlyCreatedAccount.execute()
-//        } else {
-//            String failedTestXMLContent = file("build/reports/tests/runTouchGoTests/testng-failed.xml").text
-//            if (!failedTestXMLContent.contains("Touch Go create new account test(failed)")) {
-//                runTestsAgainstNewlyCreatedAccount.execute()
-//            }
-//
-//        }
-//    }
-//}
 
 task runTouchGoTests(type:Test){
     useTestNG() {

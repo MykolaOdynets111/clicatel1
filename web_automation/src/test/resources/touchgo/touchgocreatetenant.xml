@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Creating new tenant">
-    <test name="Creating new tenant test">
-        <classes>
-            <class name="runner.touchgo.RunTouchGoCreateTenant" />
-        </classes>
-    </test>
-</suite>
