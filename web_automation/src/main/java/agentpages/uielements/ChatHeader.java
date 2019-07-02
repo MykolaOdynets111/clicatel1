@@ -72,7 +72,6 @@ public class ChatHeader extends AbstractUIElement {
                     throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
             }
         }catch (TimeoutException e){
-            Assert.fail(buttonTitle + " is not visible.");
             return false;
         }
     }

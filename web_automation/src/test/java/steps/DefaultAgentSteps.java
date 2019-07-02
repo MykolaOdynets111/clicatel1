@@ -396,12 +396,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) button hidden from the Chat header$")
     public void checkIfButtonHidden(String button){
-        try {
-            getAgentHomePage("main").getChatHeader().isButtonEnabled(button);
-        }
-        catch (NoSuchElementException | TimeoutException e){
-            Assert.assertFalse(false, "'" + button + "' button is displayed");
-        }
+            Assert.assertFalse( getAgentHomePage("main").getChatHeader().isButtonEnabled(button),
+                    "'" + button + "' button is displayed");
     }
 
 
