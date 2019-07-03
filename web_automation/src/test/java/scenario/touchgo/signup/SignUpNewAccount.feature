@@ -1,7 +1,6 @@
 @portal
 @no_widget
 @no_chatdesk
-@testy22
 Feature: Signing up the account
 
   Scenario: I should be able to sign up and activate new account

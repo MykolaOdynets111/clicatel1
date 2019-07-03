@@ -5,6 +5,7 @@ import org.testng.Assert;
 
 public class ConfigManager {
 
+    // Base configs
     private static final String REMOTE_FLAG_VARIABLE = "remote";
     private static final String BROWSER_TYPE = "browsertype";
     private static final String ENV = "env";
@@ -13,6 +14,8 @@ public class ConfigManager {
     private static final String TENANT_ID = "tenantid";
     private static final String FACEBOOK_PASS = "fbuserpass";
     private static final String SUITE = "suite";
+
+    // TestFLO reporter configs
     private static final String REPORT_TESTFLO = "reportToTestFLO";
     private static final String TPLAN_KEY = "tplanKey";
     private static final String CREATE_NEW_TPLAN = "createTPlan";
@@ -20,9 +23,61 @@ public class ConfigManager {
     private static final String JIRA_PASS = "jirapass";
     private static final String REMOTE_ALLURE_REPORT = "isRemoteAllureReport";
 
+    //TouchGo configs
+    private static final String DEBUG_TOUCHGO = "gebugTouchGo";
+    private static final String NEW_ACCOUNT_CREATED = "signupSuccessful";
+    private static final String NEW_TENANT_CREATED = "tenantCreationSuccessful";
+    private static final String SECOND_AGENT_CREATED = "agentCreationSuccessful";
+    private static final String TENANT_UPGRADED ="tenantUpgradeSuccessful";
+
+    public static boolean isNewAccountCreated(){
+        String result = System.getProperty(NEW_ACCOUNT_CREATED, "false");
+        return Boolean.parseBoolean(result);
+    }
+
+    public static void setIsNewAccountCreated(String status){
+        System.setProperty(NEW_ACCOUNT_CREATED, status);
+    }
+
+    public static boolean isNewTenantCreated(){
+        String result = System.getProperty(NEW_TENANT_CREATED, "false");
+        return Boolean.parseBoolean(result);
+    }
+
+    public static void setIsNewTenantCreated(String status){
+        System.setProperty(NEW_TENANT_CREATED, status);
+    }
+
+    public static boolean isSecondAgentCreated(){
+        String result = System.getProperty(SECOND_AGENT_CREATED, "false");
+        return Boolean.parseBoolean(result);
+    }
+
+    public static void setIsSecondCreated(String status){
+        System.setProperty(SECOND_AGENT_CREATED, status);
+    }
+
+    public static boolean isTenantUpgraded(){
+        String result = System.getProperty(TENANT_UPGRADED, "false");
+        return Boolean.parseBoolean(result);
+    }
+
+    public static void setIsTenantUpgraded(String status){
+        System.setProperty(TENANT_UPGRADED, status);
+    }
+
     public static boolean reportToTouchFlo() {
         String reportToTestFlo = System.getProperty(REPORT_TESTFLO, "false");
         return Boolean.parseBoolean(reportToTestFlo);
+    }
+
+    public static boolean debugTouchGo() {
+        String reportToTestFlo = System.getProperty(DEBUG_TOUCHGO, "false");
+        return Boolean.parseBoolean(reportToTestFlo);
+    }
+
+    public static void setDebugTouchGo(String debug) {
+        System.setProperty(DEBUG_TOUCHGO, debug);
     }
 
     public static boolean createNewTPlan() {

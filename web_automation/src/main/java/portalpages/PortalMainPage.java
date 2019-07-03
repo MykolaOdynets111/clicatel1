@@ -2,6 +2,7 @@ package portalpages;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -164,8 +165,15 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
     public void closeLandingPage(){
-        clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
-        clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+        try {
+            clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
+            clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+        }catch (WebDriverException e){
+            waitFor(1000);
+            clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
+            clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+
+        }
 
     }
 

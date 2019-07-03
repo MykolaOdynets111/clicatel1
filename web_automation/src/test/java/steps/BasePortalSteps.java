@@ -126,17 +126,23 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(String accountOrgName){
-        Faker faker = new Faker();
-        String accountName = faker.name().firstName() + faker.number().randomNumber();
-        MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("signtqwaaa@aqa.test").setTenantOrgName(accountOrgName)
-                                        .setAccountName(accountName).setEnv(ConfigManager.getEnv());
-        System.out.println("\nnew account " + MC2Account.TOUCH_GO_NEW_ACCOUNT.toString() + "\n");
-        Agents.TOUCH_GO_ADMIN.setEmail( MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail())
-                .setTenant(accountOrgName).setEnv(ConfigManager.getEnv());
-        Tenants.setTenantUnderTestName(accountName);
+        MC2Account targetAcc;
+        if (ConfigManager.debugTouchGo()){
+            targetAcc =  MC2Account.TESTING_LOCAL_ACCOUNT;
+        } else {
+            Faker faker = new Faker();
+            String accountName = faker.name().firstName() + faker.number().randomNumber();
+            MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("signupasa@aqa.test").setTenantOrgName(accountOrgName+"a")
+                    .setAccountName(accountName).setEnv(ConfigManager.getEnv());
+            targetAcc = MC2Account.TOUCH_GO_NEW_ACCOUNT;
+            Agents.TOUCH_GO_ADMIN.setEmail( MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail())
+                    .setTenant(accountOrgName).setEnv(ConfigManager.getEnv());
+        }
+
+        Tenants.setTenantUnderTestName(targetAcc.getAccountName());
         Tenants.setTenantUnderTestOrgName(accountOrgName);
-        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME,  MC2Account.TOUCH_GO_NEW_ACCOUNT.getAccountName(),
-                MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail(), MC2Account.TOUCH_GO_NEW_ACCOUNT.getPass());
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME,  targetAcc.getAccountName(),
+                targetAcc.getEmail(), targetAcc.getPass());
     }
 
     @When("^I try to create new account with following data: (.*), (.*), (.*), (.*)$")
@@ -189,12 +195,12 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
         activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                MC2Account.TOUCH_GO_NEW_ACCOUNT.getAccountName());
+                MC2Account.getTouchGoAccount().getAccountName());
         for(int i=0; i<4; i++){
             if (activationAccountID==null){
                 getPortalSignUpPage().waitFor(1000);
                 activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                        MC2Account.TOUCH_GO_NEW_ACCOUNT.getAccountName());
+                        MC2Account.getTouchGoAccount().getAccountName());
             }
         }
         Assert.assertNotNull(activationAccountID,
@@ -204,7 +210,8 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Login page is opened with a message that activation email has been sent$")
     public void verifyMassageThatConfirmationEmailSent(){
-        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail()+"" +
+        String targetAccEmail = MC2Account.getTouchGoAccount().getEmail();
+        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+targetAccEmail+"" +
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
@@ -363,17 +370,13 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
         boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
-        System.setProperty("signupSuccessful", String.valueOf(isPortalPageOpened));
+        ConfigManager.setIsNewAccountCreated(String.valueOf(isPortalPageOpened));
         Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
     }
 
     @Given("^New account is successfully created$")
     public void verifyAccountCreated(){
-        System.setProperty("signupSuccessful", "true");
-        Agents.TOUCH_GO_ADMIN.setEmail("signtqwaaa@aqa.test")
-                .setTenant("SignedUp AQA").setEnv(ConfigManager.getEnv());
-
-        if(System.getProperty("signupSuccessful", "false").equalsIgnoreCase("false")){
+        if(!ConfigManager.isNewAccountCreated()){
             throw new SkipException("Sign up new account was not successful");
         }
     }
@@ -382,21 +385,21 @@ public class BasePortalSteps implements JSHelper {
     public void verifyNewTenantCreated(String tenant){
         List<HashMap> allTenants = ApiHelper.getAllTenantsInfo();
         boolean isTenantCreated = allTenants.stream().anyMatch(e -> e.get("tenantOrgName").equals(tenant));
-        System.setProperty("tenantCreationSuccessful", String.valueOf(isTenantCreated));
+        ConfigManager.setIsNewTenantCreated(String.valueOf(isTenantCreated));
         Assert.assertTrue(isTenantCreated,
                 "New tenant is absent in API response tenants?state=ACTIVE");
     }
 
     @Given("^New tenant is successfully created$")
     public void verifyTenantCreated(){
-        if(System.getProperty("tenantCreationSuccessful", "false").equalsIgnoreCase("false")){
+        if(!ConfigManager.isNewTenantCreated()){
             throw new SkipException("Creating new tenant was not successful");
         }
     }
 
     @Given("^Second agent of new tenant is successfully created$")
     public void verifySecondAgentCreated(){
-        if(System.getProperty("agentCreationSuccessful", "false").equalsIgnoreCase("false")){
+        if(!ConfigManager.isSecondAgentCreated()){
             throw new SkipException("Creating second agent for a new tenant was not successful");
         }
     }
@@ -423,7 +426,7 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Landing pop up is shown$")
     public void verifyLandingPopupShown(){
         Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
-                "User is not logged in Portal");
+                "Landing popup is not shown");
     }
 
     @When("Close landing popup$")
@@ -456,7 +459,8 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^I try to create new (.*) tenant$")
     public void createNewTenant(String tenantOrgName){
-        getPortalMainPage().getConfigureTouchWindow().createNewTenant(tenantOrgName, MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail());
+        getPortalMainPage().getConfigureTouchWindow()
+                .createNewTenant(tenantOrgName, MC2Account.getTouchGoAccount().getEmail());
     }
 
     public static boolean isNewUserWasCreated(){
