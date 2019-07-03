@@ -88,11 +88,6 @@ public class ChatForm extends AbstractUIElement {
         return messageInput.getText();
     }
 
-    public boolean isMessageInputFieldContainText(String textToSearch){
-        String enteredText = getTextFromMessageInputField().replaceAll("\\s", "");
-        return enteredText.contains(textToSearch);
-    }
-
     public void addMoreInfo(String additionalMessage){
         try {
             waitForElementToBeVisible(suggestionInputFieldContainer,6);

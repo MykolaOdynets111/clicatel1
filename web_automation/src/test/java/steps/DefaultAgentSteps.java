@@ -347,7 +347,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomePage(agent).getIncomingTransferWindow().acceptRejectTransfer(agent);
     }
 
-    @Then("^(.*) has new conversation request$")
+    @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(20, agent);
         int sessionCapacity;
@@ -667,14 +667,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
         Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
-            try {
-                customer360Container.isCustomer360SMSButtonsDisplayed(buttonName);
-            }
-            catch (NoSuchElementException e){
-                Assert.assertFalse(false, "'" + buttonName + "' button is not displayed");
-            }
+            Assert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
         else
-            Assert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName));
+            Assert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
     }
 
     @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in Customer 360$")
@@ -682,16 +677,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
         SoftAssert softAssert = new SoftAssert();
         if (isOrNotDisplayed.contains("not")) {
-            try {
-                customer360Container.isCustomer360SMSButtonsDisplayed("Verify");
-            } catch (NoSuchElementException e) {
-                softAssert.assertFalse(false, "'Verify' button is not displayed");
-            }
-            try {
-                customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP");
-            } catch (NoSuchElementException e) {
-                softAssert.assertFalse(false, "'Re-send OTP' button is not displayed");
-            }
+            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"), "'Verify' button is not displayed");
+            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"), "'Re-send OTP' button is not displayed");
             softAssert.assertAll();
         }
         else {
@@ -710,12 +697,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
         customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
 
-        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+        getAgentHomePage("main").getCustomer360Container().setPhoneNumber(phoneNumber);
         Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
     }
 
     @When("Agent click on '(.*)' button in Customer 360")
-    public void clickSendOTPButton(String buttonName){
+    public void clickPhoneActionsButtonsCustomer360(String buttonName){
         Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
         customer360Container.clickPhoneNumberVerificationButton(buttonName);
     }
@@ -725,7 +712,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         if (isWindowOpen.equalsIgnoreCase("opened"))
             Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),"'Verify phone' window is not opened.");
         else
-            Assert.assertFalse(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),"'Verify phone' window wasn't closed.");
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isClosed(),"'Verify phone' window wasn't closed.");
     }
 
     @Then("User's profile phone number (.*) in 'Verify phone' input field")
@@ -744,32 +731,21 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @When("Agent click on (.*) button on 'Verify phone' window")
     public void closeVerifyPhonePopUp(String buttonName){
-        if (buttonName.equalsIgnoreCase("Send OTP"))
-            getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().sendOTPMessage();
-        else if (buttonName.equalsIgnoreCase("Cancel"))
-            getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().closeSendOTPPopUp();
-        else
-            throw new NoSuchElementException("No button with specified name");
+        getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().sendOrCancelClick(buttonName);
     }
 
     @When("Agent send OTP message with API")
     public void sendOTPWithAPI(){
         String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
-        DBConnector.verifyOTPSent(ConfigManager.getEnv(), linkedClientProfileId);
+        DBConnector.addPhoneAndOTPStatusIntoDB(ConfigManager.getEnv(), linkedClientProfileId);
     }
 
     @Then("'Verified' label become (.*)")
     public void checkVerifiedLabel(String isVisible) {
         if (isVisible.equalsIgnoreCase("visible"))
             Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label is not displayed");
-        else {
-            try {
-                getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed();
-            } catch (NoSuchElementException e) {
-                Assert.assertFalse(false, "Verified label remains displayed");
-            }
-        }
-
+        else
+            Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelHidden(), "Verified label remains displayed");
     }
 
     @Then("SMS client-profile added into DB")
@@ -785,7 +761,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
-        softAssert.assertTrue(getAgentHomeForMainAgent().getChatForm().isMessageInputFieldContainText(phone), "Phone number is not displayed in message field");
+        softAssert.assertTrue(getAgentHomeForMainAgent().getChatForm().getTextFromMessageInputField().replaceAll("\\s", "").contains(phone),
+                "Phone number is not displayed in message field");
         softAssert.assertAll();
     }
 

@@ -15,20 +15,13 @@ Feature: OTP, Verify and Re-send OTP functionality
   Scenario: Re-send OTP
     Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
     When Agent click on 'Re-send OTP' button in Customer 360
-    When Agent click on Send OTP button on 'Verify phone' window
+    And Agent click on Send OTP button on 'Verify phone' window
     Then 'Verify phone' window is closed
     And Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed
     And 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
 #    And New OTP code is different from the previous one   //in case of using API to 'send' first OTP message - no chat separator with OTP code will be displayed
 
-  Scenario: Verify phone number
-    Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
-    When Agent click on 'Verify' button in Customer 360
-    Then 'Verified' label become visible
-    And SMS client-profile added into DB
-    And 'Verify' and 'Re-send OTP' buttons are not displayed in Customer 360
-
-  Scenario: Editing verified phone number
+  Scenario: Verifying and Editing verified phone number
     Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
     When Agent click on 'Verify' button in Customer 360
     Then 'Verified' label become visible

@@ -97,6 +97,11 @@ public class Customer360Container extends AbstractUIElement {
         phoneInput.sendKeys(valuesToSet.getPhone());
     }
 
+    public void setPhoneNumber(String phoneNumber){
+        phoneInput.clear();
+        phoneInput.sendKeys(phoneNumber);
+    }
+
     public String getUserFullName(){
         return profileNameLabel.getText().replace("\n", " ");
     }
@@ -121,15 +126,15 @@ public class Customer360Container extends AbstractUIElement {
     public boolean isCustomer360SMSButtonsDisplayed(String button){
         switch (button.toLowerCase()) {
             case "send otp":
-                return sendOTPButton.isDisplayed();
+                return isElementShown(sendOTPButton);
             case "verify":
-                return verifyPhoneButton.isDisplayed();
+                return isElementShown(verifyPhoneButton);
             case "re-send otp":
             case "re send otp":
             case "resend otp":
-                return resendOTPButton.isDisplayed();
+                return isElementShown(resendOTPButton);
             default:
-                throw new NoSuchElementException("Button '" + button + " wasn't found");
+                return false;
         }
     }
 
@@ -143,25 +148,24 @@ public class Customer360Container extends AbstractUIElement {
     public void clickPhoneNumberVerificationButton(String buttonName){
         switch (buttonName.toLowerCase()) {
             case "send otp":
-                waitForElementToBeClickableAgent(sendOTPButton, 1, "main");
-                sendOTPButton.click();
+                clickElemAgent(sendOTPButton, 1, "main", "Send OTP");
                 break;
             case "verify":
-                waitForElementToBeClickableAgent(verifyPhoneButton, 1, "main");
-                verifyPhoneButton.click();
+                clickElemAgent(verifyPhoneButton, 1, "main", "Verify");
                 break;
             case "re-send otp":
             case "re send otp":
             case "resend otp":
-                waitForElementToBeClickableAgent(resendOTPButton, 1, "main");
-                resendOTPButton.click();
+                clickElemAgent(resendOTPButton, 1, "main", "Re-send OTP");
                 break;
-            default:
-                throw new NoSuchElementException("Button '" + buttonName + " wasn't found");
         }
     }
 
     public boolean isVerifiedLabelDisplayed(){
-        return verifiedLabel.isDisplayed();
+        return isElementShown(verifiedLabel);
+    }
+
+    public boolean isVerifiedLabelHidden(){
+        return isElementNotShown(verifiedLabel, 1);
     }
 }

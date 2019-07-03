@@ -201,7 +201,7 @@ public class DBConnector {
         return id;
     }
 
-    public static void verifyOTPSent(String env, String linkedClientProfileID){
+    public static void addPhoneAndOTPStatusIntoDB(String env, String linkedClientProfileID){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
         String query = "INSERT INTO `" + tableName + "`.`client_attribute` (`client_profile_id`, `key`, `value`) " +
@@ -230,7 +230,7 @@ public class DBConnector {
         ResultSet results = null;
         boolean isRecordExists = false;
         try {
-            for(int i = 0; i<20; i++) {
+            for(int i = 0; i<5; i++) {
                 statement = getConnection(env, "touch").createStatement();
                 statement.executeQuery(query);
                 results = statement.getResultSet();

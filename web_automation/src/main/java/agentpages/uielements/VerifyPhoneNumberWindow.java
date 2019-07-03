@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -29,16 +30,27 @@ public class VerifyPhoneNumberWindow extends AbstractUIElement {
     }
 
     public void sendOTPMessage(){
-        sendOTPButton.click();
-        waitFor(300);
+        clickElemAgent(sendOTPButton, 1, "main", "Send OTP");
     }
 
     public void closeSendOTPPopUp(){
-        cancelButton.click();
-        waitFor(300);
+        clickElemAgent(cancelButton, 1, "main", "Cancel");
+    }
+
+    public void sendOrCancelClick(String buttonName){
+        if (buttonName.equalsIgnoreCase("send otp"))
+            sendOTPMessage();
+        else if (buttonName.equalsIgnoreCase("cancel"))
+            closeSendOTPPopUp();
+        else
+            throw new NoSuchElementException("No such button with specified name");
     }
 
     public boolean isOpened(){
-        return isElementShownAgent(this.getWrappedElement());
+        return isElementShownAgent(this.getWrappedElement(), 1);
+    }
+
+    public boolean isClosed(){
+        return isElementNotShown(this.getWrappedElement(), 1);
     }
 }

@@ -44,6 +44,9 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
     private List<WebElement> otpDividersBlocks;
 
+    @FindBy(xpath = "(//li[contains(@class, 'otp')]/div)[last()]")
+    private WebElement lastOTPDividerBlock;
+
     private WebElement getFromUserWebElement(String messageText) {
         try {
             AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e))
@@ -141,36 +144,20 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isOTPDividerDisplayed(){
         if (otpDividersBlocks.size() > 0) {
-            waitForElementToBeVisibleAgent(otpDividersBlocks.get(otpDividersBlocks.size() - 1), 4, "main");
-            return otpDividersBlocks.get(otpDividersBlocks.size() - 1).isDisplayed();
+            return isElementShown(otpDividersBlocks.get(otpDividersBlocks.size() - 1));
         }
         else
             return false;
     }
 
     public String getLastOTPCode(){
-        try{
-            String blockText = otpDividersBlocks.get(otpDividersBlocks.size()-1).getText();
-            return blockText.substring(4, 8);
-        }
-        catch (TimeoutException e){
-            Assert.assertTrue(false, "There is no OTP block displayed");
-            return null;
-        }
+        return getTextFrom(lastOTPDividerBlock).substring(4, 8);
     }
 
     public boolean isNewOTPCodeDifferent(){
-        if (otpDividersBlocks.size() > 1){
-            String lastCode = otpDividersBlocks.get(otpDividersBlocks.size()-1).getText();
-            String previousCode = otpDividersBlocks.get(otpDividersBlocks.size()-2).getText();
-            return !lastCode.equals(previousCode);
-        }
-        else if (otpDividersBlocks.size() == 1){
-            Assert.fail("Only one OTP code displayed");
-            return false;
-        }
-        else
-            return false;
+        String lastCode = getTextFrom(otpDividersBlocks.get(otpDividersBlocks.size()-1));
+        String previousCode = getTextFrom(otpDividersBlocks.get(otpDividersBlocks.size()-2));
+        return !lastCode.equals(previousCode);
     }
 
     public String getTenantMsgColor() {
