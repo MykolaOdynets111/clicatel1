@@ -1,7 +1,7 @@
 @portal
 @no_chatdesk
 @creating_new_tenant
-@test21
+@test22
 Feature: Creating new tenant
 
   Scenario: Admin of newly created account should be able to create new tenant
@@ -11,6 +11,6 @@ Feature: Creating new tenant
     Then "Get started with Touch" button is shown
     When Click "Get started with Touch" button
     Then "Get started with Touch Go" window is opened
-    When I try to create new tenant
+    When I try to create new SignedUp AQA tenant
     Then New SignedUp AQA tenant is created
 

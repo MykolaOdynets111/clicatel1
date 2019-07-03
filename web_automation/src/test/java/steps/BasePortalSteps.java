@@ -130,6 +130,7 @@ public class BasePortalSteps implements JSHelper {
         String accountName = faker.name().firstName() + faker.number().randomNumber();
         MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("signtqwaaa@aqa.test").setTenantOrgName(accountOrgName)
                                         .setAccountName(accountName).setEnv(ConfigManager.getEnv());
+        System.out.println("\nnew account " + MC2Account.TOUCH_GO_NEW_ACCOUNT.toString() + "\n");
         Agents.TOUCH_GO_ADMIN.setEmail( MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail())
                 .setTenant(accountOrgName).setEnv(ConfigManager.getEnv());
         Tenants.setTenantUnderTestName(accountName);

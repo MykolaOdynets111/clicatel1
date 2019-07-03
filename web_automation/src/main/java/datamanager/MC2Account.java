@@ -159,4 +159,16 @@ public enum MC2Account {
         this.accountID = accountID;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "MC2Account{" +
+                "touchGoPlan='" + touchGoPlan + '\'' +
+                ", email='" + email + '\'' +
+                ", pass='" + pass + '\'' +
+                ", accountName='" + accountName + '\'' +
+                ", tenantOrgName='" + tenantOrgName + '\'' +
+                ", env='" + env + '\'' +
+                '}';
+    }
 }
