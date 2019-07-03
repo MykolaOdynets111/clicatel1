@@ -1,4 +1,4 @@
-@without_tct
+@TestCaseId("https://jira.clickatell.com/browse/TPORT-5968")
 Feature: General Send OTP flow
   Scenario: Send OTP for new user
     Given sms integration status is set to enabled for Standard Billing tenant
