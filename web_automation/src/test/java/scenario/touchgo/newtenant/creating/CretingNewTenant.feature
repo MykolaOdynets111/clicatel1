@@ -1,7 +1,7 @@
 @portal
 @no_chatdesk
 @creating_new_tenant
-@test22
+@testy22
 Feature: Creating new tenant
 
   Scenario: Admin of newly created account should be able to create new tenant

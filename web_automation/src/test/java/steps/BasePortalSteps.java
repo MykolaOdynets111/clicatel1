@@ -369,6 +369,10 @@ public class BasePortalSteps implements JSHelper {
 
     @Given("^New account is successfully created$")
     public void verifyAccountCreated(){
+        System.setProperty("signupSuccessful", "true");
+        Agents.TOUCH_GO_ADMIN.setEmail("signtqwaaa@aqa.test")
+                .setTenant("SignedUp AQA").setEnv(ConfigManager.getEnv());
+
         if(System.getProperty("signupSuccessful", "false").equalsIgnoreCase("false")){
             throw new SkipException("Sign up new account was not successful");
         }
