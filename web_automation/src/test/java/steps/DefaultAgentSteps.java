@@ -703,8 +703,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @When("Agent click on '(.*)' button in Customer 360")
     public void clickPhoneActionsButtonsCustomer360(String buttonName){
-        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
-        customer360Container.clickPhoneNumberVerificationButton(buttonName);
+        getAgentHomeForMainAgent().getCustomer360Container().clickPhoneNumberVerificationButton(buttonName);
     }
 
     @Then("^'Verify phone' window is (.*)$")
