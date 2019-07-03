@@ -145,6 +145,8 @@ public class DriverFactory {
                 remoteWebDriver = new RemoteWebDriver(new URL(WINDOWS_SERVER_REMOTE_URL), capabilities);
             }else {
                 remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL), capabilities);
+//              debug remote run
+//                remoteWebDriver = new RemoteWebDriver(new URL(WINDOWS_SERVER_REMOTE_EXTERNAL_URL), capabilities);
             }
             return remoteWebDriver;
         } catch (MalformedURLException e) {

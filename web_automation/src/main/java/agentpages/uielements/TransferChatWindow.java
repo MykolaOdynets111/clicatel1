@@ -44,17 +44,14 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public String selectDropDownAgent(String agent) {
-        try{
-            isElementShownAgent(findElement(By.cssSelector(openedMenu)), 5, agent);
-        } catch(NoSuchElementException e){
-            openDropdownButton.click();
-        }
+        if(!isElementShownAgentByCSS(openedMenu, 2, agent)) openDropdownButton.click();
+        if(!isElementShownAgent(availableAgent, 2, agent)) openDropdownButton.click();
         waitForElementToBeVisibleAgent(availableAgent,5);
         for(int i=0; i<15; i++){
-            if(availableAgent.getText().contains("AQA")) break;
+            if(availableAgent.getAttribute("innerText").contains("AQA")) break;
             else waitFor(500);
         }
-        String agentName = availableAgent.getText();
+        String agentName = availableAgent.getAttribute("innerText");
         availableAgent.click();
         return agentName;
     }
