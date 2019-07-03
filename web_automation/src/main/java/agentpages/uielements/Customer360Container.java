@@ -52,6 +52,8 @@ public class Customer360Container extends AbstractUIElement {
     private WebElement verifyPhoneButton;
     @FindBy(xpath = "//div[@class='info-row']/button[text()='Re-send OTP']")
     private WebElement resendOTPButton;
+    @FindBy(css = ".status-text")
+    private WebElement verifiedLabel;
 
     @FindBy(css = "button.pull-right.disable-spacing-top.btn-default")
     private WebElement saveEditButton;
@@ -95,6 +97,11 @@ public class Customer360Container extends AbstractUIElement {
         phoneInput.sendKeys(valuesToSet.getPhone());
     }
 
+    public void setPhoneNumber(String phoneNumber){
+        phoneInput.clear();
+        phoneInput.sendKeys(phoneNumber);
+    }
+
     public String getUserFullName(){
         return profileNameLabel.getText().replace("\n", " ");
     }
@@ -119,13 +126,15 @@ public class Customer360Container extends AbstractUIElement {
     public boolean isCustomer360SMSButtonsDisplayed(String button){
         switch (button.toLowerCase()) {
             case "send otp":
-                return sendOTPButton.isDisplayed();
+                return isElementShown(sendOTPButton);
             case "verify":
-                return verifyPhoneButton.isDisplayed();
+                return isElementShown(verifyPhoneButton);
             case "re-send otp":
-                return resendOTPButton.isDisplayed();
+            case "re send otp":
+            case "resend otp":
+                return isElementShown(resendOTPButton);
             default:
-                throw new NoSuchElementException("Button '" + button + " wasn't found");
+                return false;
         }
     }
 
@@ -136,7 +145,27 @@ public class Customer360Container extends AbstractUIElement {
             return !getPhoneNumber().equalsIgnoreCase("Unknown");
     }
 
-    public void clickSendOTPButton(){
-        sendOTPButton.click();
+    public void clickPhoneNumberVerificationButton(String buttonName){
+        switch (buttonName.toLowerCase()) {
+            case "send otp":
+                clickElemAgent(sendOTPButton, 1, "main", "Send OTP");
+                break;
+            case "verify":
+                clickElemAgent(verifyPhoneButton, 1, "main", "Verify");
+                break;
+            case "re-send otp":
+            case "re send otp":
+            case "resend otp":
+                clickElemAgent(resendOTPButton, 1, "main", "Re-send OTP");
+                break;
+        }
+    }
+
+    public boolean isVerifiedLabelDisplayed(){
+        return isElementShown(verifiedLabel);
+    }
+
+    public boolean isVerifiedLabelHidden(){
+        return isElementNotShown(verifiedLabel, 1);
     }
 }
