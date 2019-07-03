@@ -10,6 +10,7 @@ import org.testng.Assert;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class Accounts {
 
@@ -31,7 +32,14 @@ public class Accounts {
         try {
             tokenAndAccount.put("token", resp.jsonPath().get("token"));
             List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
-            HashMap<String, String> targetAccount = accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
+            HashMap<String, String> targetAccount = new HashMap<>();
+            try {
+                targetAccount = accounts.stream().filter(e -> e.get("name").equals(accountName)).findFirst().get();
+            }catch (NoSuchElementException e){
+                Assert.fail("Incomming tenant org name " +tenantOrgName + "\n"
+                +"Returned account name from getCorrectAccountName(tenantOrgName) " + accountName + "\n"
+                +"Returned response " + resp.getBody().asString());
+            }
             tokenAndAccount.put("accountId", targetAccount.get("id"));
         }catch(JsonPathException e){
             Assert.assertTrue(false, "Unexpected response received while getting portal access token\n"+

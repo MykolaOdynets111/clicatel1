@@ -28,7 +28,7 @@ public class ConfigManager {
     private static final String NEW_ACCOUNT_CREATED = "signupSuccessful";
     private static final String NEW_TENANT_CREATED = "tenantCreationSuccessful";
     private static final String SECOND_AGENT_CREATED = "agentCreationSuccessful";
-    private static final String TENANT_UPGRADED ="tenantUpgradeSuccessful";
+    private static final String TENANT_UPGRADED = "tenantUpgradeSuccessful";
 
     public static boolean isNewAccountCreated(){
         String result = System.getProperty(NEW_ACCOUNT_CREATED, "false");

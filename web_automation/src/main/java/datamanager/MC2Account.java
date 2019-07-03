@@ -15,7 +15,7 @@ public enum MC2Account {
     TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing", "ff808081668ab31c01668b98407f05e5", "ff8080816642a88501668b925a0e00cc"),
     TESTING_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingplan", "Updating AQA", "testing", "", ""),
 
-    TESTING_LOCAL_ACCOUNT("starter", "loTral_sigJupaio@aqa.test", "p@$$w0rd4te$t", "lcaluno", "SignedUp AQA", "testing", "", ""),
+    TESTING_LOCAL_ACCOUNT("starter", "loTral_sigJupaio@aqa.test", "p@$$w0rd4te$t", "lcaluno", "Local AQA", "testing", "", ""),
 
     TESTING_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "testing", "", ""),
     QA_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "qa", "", ""),

@@ -181,7 +181,7 @@ task runTouchGoTests(type:Test){
         ignoreFailures = true
         suites baseXmlPath + "touchgo/touchgosignup.xml"
         suites baseXmlPath + "touchgo/touchgonewtenant.xml"
-//        suites baseXmlPath + "touchgo/tocuhgocloseaccount.xml"
+        suites baseXmlPath + "touchgo/tocuhgocloseaccount.xml"
     }
 }
 

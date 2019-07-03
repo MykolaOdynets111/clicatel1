@@ -69,7 +69,8 @@ public class BillingContactsDetails extends BasePortalWindow {
         String city =  faker.address().city();
         String address1 = faker.address().streetAddress();
         String zipCode = faker.address().zipCode();
-        billingInfo.put("billingContact", "{firstName="+firstName+", lastName="+lastName+", emailAddress="+email+", cellPhone="+phone.replace("+", "")+"}");
+        billingInfo.put("billingContact", "{firstName="+firstName+", lastName="+lastName+", emailAddress="+email+", " +
+                "cellPhone="+phone.replace("+", "").replace("-","").replace(".", "")+"}");
         billingInfo.put("accountTypeId", "3");
         billingInfo.put("companyName", faker.company().name());
         billingInfo.put("billingAddress", "Albania, " + city + ", " + address1 +", " + zipCode);
