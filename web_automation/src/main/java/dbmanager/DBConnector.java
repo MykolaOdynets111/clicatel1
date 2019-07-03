@@ -424,7 +424,7 @@ public class DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (NullPointerException e){
-            Assert.assertTrue(false, "Unable to get '" +column+ "' column value");
+            Assert.fail("Unable to get '" + column + "' column value");
         }
         return columnValue;
     }

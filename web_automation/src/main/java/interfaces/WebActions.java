@@ -164,7 +164,7 @@ public interface WebActions extends WebWait {
     default boolean isElementShownAgent(WebElement element, int wait, String agent){
         try {
             return waitForElementToBeVisibleAgent(element, wait, agent).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (WebDriverException e) {
             return false;
         }
     }
@@ -173,7 +173,7 @@ public interface WebActions extends WebWait {
         try {
             waitForElementToBeVisibleByXpathAgent(xpath, wait, agent);
             return true;
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (WebDriverException e) {
             return false;
         }
     }
