@@ -1,4 +1,3 @@
-@without_tct
 Feature: OTP, Verify and Re-send OTP functionality
 
   Background:
@@ -12,6 +11,7 @@ Feature: OTP, Verify and Re-send OTP functionality
     When Agent click on new conversation request from touch
     Then Agent see his phone number added into customer's profile
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5972")
   Scenario: Re-send OTP
     Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
     When Agent click on 'Re-send OTP' button in Customer 360
@@ -21,6 +21,7 @@ Feature: OTP, Verify and Re-send OTP functionality
     And 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
 #    And New OTP code is different from the previous one   //in case of using API to 'send' first OTP message - no chat separator with OTP code will be displayed
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5971")
   Scenario: Verifying and Editing verified phone number
     Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
     When Agent click on 'Verify' button in Customer 360
@@ -34,6 +35,7 @@ Feature: OTP, Verify and Re-send OTP functionality
     Then 'Verified' label become invisible
     And Send OTP button is displayed in Customer 360
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-5970")
   Scenario: No data in 'Verify phone' pop-up window
     When Click 'Edit' button in Customer 360 view
     And Delete phone number for touch user
