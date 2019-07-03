@@ -1,7 +1,5 @@
 Feature: Transferring chat, user info
 
-  Verification of basic transfer chat functionality
-
   Background:
     Given User select General Bank Demo tenant
     Given I login as agent of General Bank Demo

@@ -1432,16 +1432,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^'Transfer to' fields highlighted red color$")
     public void transferToFieldsHighlightedRedColor() {
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)","Drop down: not expected border color");
-        soft.assertAll();
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)",
+                "Drop down: not expected border color");
     }
 
     @Then("^'Note' fields highlighted red color$")
     public void noteFieldsHighlightedRedColor() {
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)","Note: not expected border color");
-        soft.assertAll();
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)",
+                "Note: not expected border color");
     }
 
     @Given("^(.*) receives a few conversation requests$")
