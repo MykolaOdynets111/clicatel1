@@ -51,21 +51,7 @@ public class AllureReportParser {
        List<File> allureTestCases;
        File folder;
        if(ConfigManager.isRemoteAllureReport()){
-            folder = new File(System.getProperty("user.dir")+"/build/allure-report/data");
-//       if(new File( System.getProperty("user.dir") + "/build/allure-report_2/data/test-cases").exists()){
-//           folder = new File(System.getProperty("user.dir") + "/build/allure-report_2/data/test-cases");
-           for(int i = 0; i <5; i ++){
-               if(!folder.exists()){
-                   try {
-                       System.out.println("\n !!! folder check  !! " + i +"\n");
-                       Thread.sleep(1000);
-                       folder = new File(System.getProperty("user.dir")+"/build/allure-report/data");
-                   }catch(InterruptedException e){}
-               } else {
-                   System.out.println("\n !!! folder exists !! \n");
-                   break;
-               }
-           }
+           folder = new File(System.getProperty("user.dir") + "/build/allure-report/data/test-cases");
            allureTestCases= Arrays.asList(folder.listFiles());
        }else{
            folder = new File(ALLURE_REPORT_DATA_FOLDER);
