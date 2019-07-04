@@ -85,8 +85,8 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     public ConfirmPaymentDetailsWindow clickPayNowButton(){
 //        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
-        waitForElementToBeClickableAgent(payNowButton, 15, "admin");
-        clickHoldRelease(DriverFactory.getAgentDriverInstance(), payNowButton);
+        waitForElementToBeClickableAgent(primaryBindingButton, 15, "admin");
+        clickHoldRelease(DriverFactory.getAgentDriverInstance(), primaryBindingButton);
         return this;
     }
 

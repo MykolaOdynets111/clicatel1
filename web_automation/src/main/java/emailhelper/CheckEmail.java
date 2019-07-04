@@ -15,7 +15,7 @@ public class CheckEmail {
 
     private static String host = "imap.gmail.com";
 
-    public static String getConfirmationURL(String strSubject, String... mail) throws Exception {
+    public static String getConfirmationURL(String expectedSender, String... mail) throws Exception {
         GMailAuthenticator gMailAuthenticator = initGMailAuthenticator(mail);
         Properties properties = configureProperties();
         Store store = initStore(properties);
@@ -26,16 +26,16 @@ public class CheckEmail {
 
         for (int i=0; i<21; i++){
             List<Message> emails = Arrays.asList(folder.getMessages());
-            List<Message> twitterEmails = new ArrayList<>();
+            List<Message> targetEmails = new ArrayList<>();
             for (Message msg: emails) {
                 String sender = ((IMAPMessage) msg).getSender().toString();
-                if (sender.equals("Twitter <password@twitter.com>")) {
-                    twitterEmails.add(msg);
+                if (sender.equals(expectedSender)) {
+                    targetEmails.add(msg);
                 }
             }
-            if(!twitterEmails.isEmpty()&&twitterEmails.stream().anyMatch(CheckEmail::ifNotOpenedTwitterMessageExists)){
-                Message targetMessage = twitterEmails.stream()
-                        .filter(CheckEmail::ifNotOpenedTwitterMessageExists).findFirst().get();
+            if(!targetEmails.isEmpty()&&targetEmails.stream().anyMatch(CheckEmail::ifNotOpenedMessageExists)){
+                Message targetMessage = targetEmails.stream()
+                        .filter(CheckEmail::ifNotOpenedMessageExists).findFirst().get();
                 verificationCode = parser(targetMessage);
                 targetMessage.setFlag(Flags.Flag.SEEN, true);
                 targetMessage.setFlag(Flags.Flag.DELETED, true);
@@ -49,7 +49,7 @@ public class CheckEmail {
         return "";
     }
 
-    public static boolean ifNotOpenedTwitterMessageExists(Message e) {
+    public static boolean ifNotOpenedMessageExists(Message e) {
         try {
             if(e.isSet(Flags.Flag.SEEN))
                 return false;
@@ -98,17 +98,17 @@ public class CheckEmail {
         return properties;
     }
 
-    private static String parser(javax.mail.Message newTwitterMail) {
+    private static String parser(javax.mail.Message newTargetMail) {
         String emailContent = null;
         try {
-            emailContent = (String) ((Multipart) newTwitterMail.getContent()).getBodyPart(0).getContent();
+            emailContent = (String) ((Multipart) newTargetMail.getContent()).getBodyPart(0).getContent();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
         List<String> lines = Arrays.asList(emailContent.split("\r\n"));
-        return lines.get(11);
+        return lines.stream().filter(e -> e.contains("Click on this link to create a password")).findFirst().get();
     }
 
     private static GMailAuthenticator initGMailAuthenticator(String[] mail){

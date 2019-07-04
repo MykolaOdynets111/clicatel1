@@ -16,6 +16,7 @@ import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
+import emailhelper.CheckEmail;
 import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
@@ -28,9 +29,11 @@ import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class BasePortalSteps implements JSHelper {
 
@@ -94,6 +97,27 @@ public class BasePortalSteps implements JSHelper {
         }
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
+    }
+
+    @When("^Create new Agent$")
+    public void createNewAgent(){
+        AGENT_FIRST_NAME = faker.name().firstName();
+        AGENT_LAST_NAME =  faker.name().lastName();
+        AGENT_EMAIL = Agents.TOUCH_GO_AGENT.getAgentEmail();
+        Agents.TOUCH_GO_AGENT.setEnv(ConfigManager.getEnv());
+        Agents.TOUCH_GO_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+
+        getPortalManagingUsersPage().getAddNewAgentWindow()
+                .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
+        getPortalManagingUsersPage().waitWhileProcessing(2,3);
+        getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
+        try {
+            CheckEmail.getConfirmationURL("mc2", Agents.TOUCH_GO_AGENT.getAgentEmail(),
+                    Agents.TOUCH_GO_AGENT.getAgentPass());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Then("^Newly created agent is deleted in DB$")
@@ -394,6 +418,13 @@ public class BasePortalSteps implements JSHelper {
 
     @Given("^New tenant is successfully created$")
     public void verifyTenantCreated(){
+        try {
+            CheckEmail.getConfirmationURL("Clickatell <mc2-devs@clickatell.com>",
+                    Agents.TOUCH_GO_AGENT.getAgentEmail(),
+                    Agents.TOUCH_GO_AGENT.getAgentPass());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(!ConfigManager.isNewTenantCreated()){
             throw new SkipException("Creating new tenant was not successful");
         }

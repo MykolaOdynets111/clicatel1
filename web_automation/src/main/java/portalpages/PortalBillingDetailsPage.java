@@ -14,7 +14,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(css = "form[name=billingDetailsForm]")
     private WebElement billingDetailsForm;
 
-    @FindBy(css = "a[ng-click='addPaymentMethod()']")
+    @FindBy(css = "a[ng-click='primaryBindingButton()']")
     private WebElement addPaymentMethodButton;
 
     @FindBy(css = "div.payment-method")
