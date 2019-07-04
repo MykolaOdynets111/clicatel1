@@ -88,6 +88,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public boolean isValidImgTransferPicture() {
+        waitFor(1000);//it should be. transfer window apeared but not all(animation);
         File image = new File("src/test/resources/transferchatimg/transferPicture.png");
         return isWebElementEqualsImage(transferPicture,image, "second agent");
     }
