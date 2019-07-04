@@ -21,6 +21,12 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(css = "li[ng-repeat='tab in clTabs']")
     private List<WebElement> pageNavButtons;
 
+    @FindBy(css = "div.cl-header--controls.cl-header--item button")
+    private List<WebElement> pageActionButtons;
+
+    @FindBy(css = "div.cl-header--controls")
+    private WebElement headerControlsContainer;
+
     @FindBy(xpath = "//button[text()='Save changes ']")
     private WebElement saveChangesButton ;
 
@@ -88,6 +94,14 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         WebElement targetButton = pageNavButtons.stream()
                                         .filter(e -> e.getText().equalsIgnoreCase(buttonName))
                                         .findFirst().get();
+        clickElemAgent(targetButton,1,"admin", buttonName);
+    }
+
+    public void clickPageActionButton(String buttonName){
+        waitForElementToBeVisibleAgent(headerControlsContainer, 8);
+        WebElement targetButton = pageActionButtons.stream()
+                .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
+                .findFirst().get();
         clickElemAgent(targetButton,1,"admin", buttonName);
     }
 

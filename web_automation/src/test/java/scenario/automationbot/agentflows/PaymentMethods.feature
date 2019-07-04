@@ -12,7 +12,7 @@ Feature: Admin should be able to manage payment methods
     When I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Settings in left menu and Billing & payments in submenu
-    And Select 'Payment methods' in nav menu
+    And Select "Payment methods" nav button
     Then 'Add a payment method now?' button is shown
     When Admin clicks 'Add a payment method now?' button
     Then 'Add Payment Method' window is opened
@@ -38,7 +38,7 @@ Feature: Admin should be able to manage payment methods
     When Admin closes Confirm details window
     When Admin click BACK button in left menu
     And Admin select Settings in left menu and Billing & payments in submenu
-    And Select 'Payment methods' in nav menu
+    And Select "Payment methods" nav button
     When Admin clicks Manage -> Remove payment
     Then 'Add a payment method now?' button is shown
 
@@ -46,7 +46,7 @@ Feature: Admin should be able to manage payment methods
     When I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Settings in left menu and Billing & payments in submenu
-    And Select 'Payment methods' in nav menu
+    And Select "Payment methods" nav button
     When Admin clicks 'Add a payment method now?' button
     Then 'Add Payment Method' window is opened
     When Admin provides all card info

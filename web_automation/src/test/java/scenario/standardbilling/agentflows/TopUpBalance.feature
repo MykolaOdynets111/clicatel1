@@ -9,7 +9,7 @@ Feature: Top up balance
     When I open portal
     And Login into portal as an admin of Standard Billing account
     When I select Settings in left menu and Billing & payments in submenu
-    And Select 'Top up balance' in nav menu
+    And Select "Top up balance" in nav menu
     When Admin clicks Top up balance on Billing details
     Then 'Top up balance' window is opened
     When Agent enter allowed top up sum

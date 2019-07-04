@@ -5,6 +5,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class PortalAccountDetailsPage extends PortalAbstractPage {
 
+    // page_action_to_remove
    @FindBy(xpath = "//button[text()='Close account']")
    private WebElement closeAccountButton;
 

@@ -31,6 +31,7 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     @FindBy(css = "form[name='userForm'] div[ng-if='profileIcon']>img")
     private WebElement profileImage;
 
+    //
     @FindBy(xpath = "//button[text()='Edit user roles']")
     private WebElement editUserButton;
 

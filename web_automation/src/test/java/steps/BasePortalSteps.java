@@ -303,6 +303,7 @@ public class BasePortalSteps implements JSHelper {
         getPortalMainPage().clickLaunchpadButton();
     }
 
+    // page_action_to_remove
     @When("^Click 'Close account' button$")
     public void clickCloseAccount(){
         getPortalAccountDetailsPage().clickCloseAccountButton();
@@ -561,10 +562,16 @@ public class BasePortalSteps implements JSHelper {
         return result;
     }
 
-    @When("^Click \"(.*)\" nav button$")
+    @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
     public void clickNavButton(String navButton){
-        getPortalTouchPrefencesPage().clickPageNavButton(navButton);
+        getPortalMainPage().clickPageNavButton(navButton);
     }
+
+    @When("^I click \"(.*)\" page action button$")
+    public void clickActionButton(String actionButton){
+        getPortalMainPage().clickPageActionButton(actionButton);
+    }
+
 
     @When("^Wait for auto responders page to load$")
     public void waitForAutoRespondersToLoad(){
@@ -641,9 +648,6 @@ public class BasePortalSteps implements JSHelper {
                     .clickExpandArrowForMessage(autoresponder);
         }
         getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
-//        autoresponseMessageThreadLocal.set(message);
-//        autoresponseMessageThreadLocal.get();
-//       // getPortalTouchPrefencesPage().waitWhileProcessing();
     }
 
     @Then("^(.*) on backend corresponds to (.*) on frontend$")
@@ -879,11 +883,6 @@ public class BasePortalSteps implements JSHelper {
         soft.assertAll();
     }
 
-    @When("^Select '(.*)' in nav menu$")
-    public void clickNavItemOnBillingDetailsPage(String navName){
-        getPortalMainPage().clickPageNavButton(navName);
-    }
-
     @When("^Admin clicks Top up balance on Billing details$")
     public void clickTopUpOnBilling(){
         getPortalBillingDetailsPage().clickTopUPBalance();
@@ -1111,11 +1110,13 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getConfigureBrandWindow().clickuploadButton();
     }
 
+    // page_action_to_remove
     @When("^Admin clicks 'Edit user roles'$")
     public void clickEditRoles(){
         portalUserProfileEditingThreadLocal.get().clickEditUserRolesButton();
     }
 
+    // page_action_to_remove
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
         portalUserProfileEditingThreadLocal.get().clickDeleteButton();
@@ -1184,13 +1185,6 @@ public class BasePortalSteps implements JSHelper {
     @Then("^I check secondary color for tenant in widget$")
     public void iCheckSecondaryColorForTenantInWidget() {
         Assert.assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
-    }
-
-    public Widget clickChatIcon() {
-        widget = getMainPage().openWidget();
-//        widgetConversationArea = widget.getWidgetConversationArea();
-//        widgetConversationArea.waitForSalutation();
-        return widget;
     }
 
 
