@@ -120,14 +120,6 @@ public class ApiHelperPlatform {
                 .collect(Collectors.toList());
     }
 
-    public static void deactivateSubscription(String tenantOrgName, int subscriptionID){
-        String url = String.format(Endpoints.PLATFORM_SUBSCRIPTIONS_DEACTIVATION, subscriptionID);
-        RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .post(url);
-    }
-
     public static List<String> getListOfActivePaymentMethods(String tenantOrgName, String paymentType){
         Response resp =   RestAssured.given()
                 .header("Content-Type", "application/json")
