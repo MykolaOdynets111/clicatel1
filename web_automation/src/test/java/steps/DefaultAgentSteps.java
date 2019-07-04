@@ -1381,13 +1381,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
         SoftAssert soft = new SoftAssert();
         CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-        String createdDate = crmTicketInfoForUpdating.get().get("date");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
-        String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
 
-        soft.assertEquals(dateTimeFromBackend.toString().substring(0, 15), createdDate.substring(0, 15),
+        ZoneId zoneId = TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        LocalDateTime createdDate = LocalDateTime.parse(crmTicketInfoForUpdating.get().get("date"), formatter1);
+        long expectedMili = convertLocalDateTimeToMillis(createdDate, zoneId);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter)
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+        long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
+
+        String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
+        soft.assertTrue((actualMili-expectedMili)<=2000,
                 "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");
