@@ -1,5 +1,7 @@
 package steps;
 
+import agentpages.AgentHomePage;
+import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
@@ -735,8 +737,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^There is no (.*) response$")
     public void verifyTextResponseIsNotShownForUser(String expectedText){
-        Assert.assertFalse(widget.getWidgetConversationArea()
-                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 10), "Error: Response is shown in widget");
+        if (expectedText.equalsIgnoreCase("otp code")) {
+            AgentHomePage agentHomePage = new AgentHomePage("main");
+            Assert.assertFalse(widget.getWidgetConversationArea()
+                    .isTextShown(formExpectedTextResponseFromBotWidget(agentHomePage.getChatBody().getLastOTPCode()), 10), "Error: OTP code displayed in the widget");
+        }
+        else
+            Assert.assertFalse(widget.getWidgetConversationArea()
+                    .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 10), "Error: Response is shown in widget");
     }
 
     private String formExpectedTextResponseFromBotWidget(String fromFeatureText){

@@ -28,22 +28,10 @@ public class TransferChatWindow extends AbstractUIElement {
 
 
     public String transferChat(String agent) {
-        waitForElementToBeClickableAgent(openDropdownButton, 6, agent);
-        openDropdownButton.click();
-        try{
-            isElementShownAgent(findElement(By.cssSelector(openedMenu)), 5, agent);
-        } catch(NoSuchElementException e){
-            openDropdownButton.click();
-        }
-        waitForElementToBeVisibleAgent(availableAgent,5);
-        for(int i=0; i<15; i++){
-            if(availableAgent.getText().contains("AQA")) break;
-            else waitFor(500);
-        }
-        String agentName = availableAgent.getText();
-        availableAgent.click();
-        noteInput.sendKeys("Please take care of this one");
-        submitTransferChatButton.click();
+        openDropDownAgent();
+        String agentName = selectDropDownAgent(agent);
+        sentNote();
+        clickTransferChatButton();
         return agentName;
     }
 
@@ -55,12 +43,29 @@ public class TransferChatWindow extends AbstractUIElement {
         clickElemAgent(openDropdownButton,5,"main", "Open drop down button");
     }
 
+    public String selectDropDownAgent(String agent) {
+//        if(!isElementShownAgentByCSS(openedMenu, 5, agent)) openDropdownButton.click();
+        if(!isElementShownAgent(availableAgent, 2, agent)) openDropdownButton.click();
+        waitForElementToBeVisibleAgent(availableAgent,5, agent);
+        for(int i=0; i<15; i++){
+            if(availableAgent.getAttribute("innerText").contains("AQA")) break;
+            else waitFor(500);
+        }
+        String agentName = availableAgent.getAttribute("innerText");
+        availableAgent.click();
+        return agentName;
+    }
+
     public String getTextDropDownMessage() {
         return getTextFromElemAgent(availableAgent,6,"main agent","Drop down menu");
     }
 
     public void clickTransferChatButton() {
         clickElemAgent(submitTransferChatButton,5,"main", "Transfer button");
+    }
+
+    public void sentNote() {
+        noteInput.sendKeys("Please take care of this one");
     }
 
     public String getNoteInputColor() {

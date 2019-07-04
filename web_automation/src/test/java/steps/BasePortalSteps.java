@@ -282,16 +282,6 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
-    @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
-    public void downgradeTouchGoPlan(String tenantOrgName){
-            Tenants.setTenantUnderTestNames(tenantOrgName);
-            DriverFactory.closeAgentBrowser();
-            ApiHelper.decreaseTouchGoPLan(tenantOrgName);
-            List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(tenantOrgName);
-            subscriptionIDs.forEach(e ->
-                    ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
-    }
-
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");

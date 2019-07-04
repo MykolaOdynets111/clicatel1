@@ -19,8 +19,9 @@ Feature: Default SMS integration items visibility check
     Then Status of SMS integration is changed to "Not Active"
     When Agent switches to opened ChatDesk page
     And Agent refresh current page
+    Then Agent has old conversation shown
     And Agent click on last opened conversation request from touch
-    Then Send SMS button hidden from the Chat header
+    And Send SMS button hidden from the Chat header
     And Send OTP button not displayed in Customer 360
 
   Scenario: Send SMS button change state depending on phone number availability

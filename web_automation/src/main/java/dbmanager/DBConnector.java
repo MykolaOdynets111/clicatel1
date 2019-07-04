@@ -201,6 +201,60 @@ public class DBConnector {
         return id;
     }
 
+    public static void addPhoneAndOTPStatusIntoDB(String env, String linkedClientProfileID){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "INSERT INTO `" + tableName + "`.`client_attribute` (`client_profile_id`, `key`, `value`) " +
+                "VALUES ('" + linkedClientProfileID + "', 'otpSent', 'true') ON DUPLICATE KEY UPDATE `value` = 'true';";
+
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeUpdate(query);
+            results = statement.getResultSet();
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isSMSClientProfileCreated(String env, String phoneNumber, String linkedProfileID, String type) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+phoneNumber+"' " +
+                "and linked_profile_id='"+linkedProfileID+"' and type = '"+type+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        boolean isRecordExists = false;
+        try {
+            for(int i = 0; i<5; i++) {
+                statement = getConnection(env, "touch").createStatement();
+                statement.executeQuery(query);
+                results = statement.getResultSet();
+                isRecordExists = results.next();
+                if (isRecordExists) {
+                    statement.close();
+                    DBConnector.closeConnection();
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                statement.close();
+                DBConnector.closeConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isRecordExists;
+    }
+
     public static void updateClientLastVisitDate(String env, String linkedClientProfileId, Long timestampDate){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
@@ -310,6 +364,7 @@ public class DBConnector {
             results.next();
             sessionDetails.put("clientJID", getColumnValue(results, "client_jid"));
             sessionDetails.put("state", getColumnValue(results, "state"));
+            sessionDetails.put("startedDate", getColumnValue(results, "started_date"));
             sessionDetails.put("endedDate", getColumnValue(results, "ended_date"));
             sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
             sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
@@ -369,7 +424,7 @@ public class DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (NullPointerException e){
-            Assert.assertTrue(false, "Unable to get '" +column+ "' column value");
+            Assert.fail("Unable to get '" + column + "' column value");
         }
         return columnValue;
     }

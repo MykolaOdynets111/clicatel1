@@ -7,6 +7,7 @@ import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -66,6 +67,7 @@ public class TestFloReporter {
 //
 ////            Сreating TCT
 //            System.setProperty("remote", "true");
+//            System.setProperty("isRemoteAllureReport", "true");
 //            List<String> createdTCT = new ArrayList<>();
 //
 //            // 1. Get executed case from allure
