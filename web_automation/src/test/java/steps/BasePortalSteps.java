@@ -132,7 +132,8 @@ public class BasePortalSteps implements JSHelper {
         } else {
             Faker faker = new Faker();
             String accountName = (faker.name().firstName() + faker.number().randomNumber()).toLowerCase();
-            MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail("saigdnuaqpaa@aqa.test").setTenantOrgName(accountOrgName)
+            String email = "aqa_" + faker.internet().emailAddress();
+            MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail(email).setTenantOrgName(accountOrgName)
                     .setAccountName(accountName).setEnv(ConfigManager.getEnv());
             targetAcc = MC2Account.TOUCH_GO_NEW_ACCOUNT;
             Agents.TOUCH_GO_ADMIN.setEmail( MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail())
@@ -853,7 +854,8 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Fill in Billing details$")
     public void fillInBillingDetails(){
-        billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
+        billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails()
+                .fillInBillingDetailsForm();
     }
 
     @Then("^Billing details is saved on backend (.*)$")
