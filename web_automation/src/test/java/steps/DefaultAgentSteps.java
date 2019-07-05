@@ -1384,7 +1384,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        LocalDateTime createdDate = LocalDateTime.parse(crmTicketInfoForUpdating.get().get("date"), formatter1);
+        String date = crmTicketInfoForUpdating.get().get("date");
+        if(date.length()<=19){
+            formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        }
+        LocalDateTime createdDate = LocalDateTime.parse(date, formatter1);
         long expectedMili = convertLocalDateTimeToMillis(createdDate, zoneId);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");

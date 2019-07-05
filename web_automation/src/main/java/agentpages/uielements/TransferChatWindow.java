@@ -26,11 +26,14 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = "textarea")
     private WebElement noteInput;
 
+    @FindBy(css = "div.Select-placeholder")
+    private WebElement selectAgentPlaceholder;
 
     public String transferChat(String agent) {
         openDropDownAgent();
         String agentName = selectDropDownAgent(agent);
         sentNote();
+        if(isElementShownAgent(selectAgentPlaceholder, 1, agent)) agentName = selectDropDownAgent(agent);
         clickTransferChatButton();
         return agentName;
     }

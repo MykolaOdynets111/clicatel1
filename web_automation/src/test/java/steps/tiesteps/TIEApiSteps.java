@@ -1005,7 +1005,7 @@ public class TIEApiSteps implements DateTimeHelper{
                         >
                         convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
                 .findFirst().get();
-        } catch(NoSuchElementException e){
+        } catch(NoSuchElementException|NullPointerException e){
             Assert.assertTrue(false, "Expected created model '"+createdModelName+"' is not present in get models response\n" +
             "Resp: " + respBody.asString());
         }
