@@ -237,14 +237,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @When("^(.*) transfer a few chats$")
     public void transferFewDotControlChats(String agent){
         for(DotControlRequestMessage chat : createdChatsViaDotControl) {
-            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
-            transferChat(agent);
-            getAgentHomePage(agent).waitForModalWindowToDisappear();
             int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             while(availableAgents!=2){
                 getAgentHomePage(agent).waitFor(1000);
                 availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             }
+            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
+            transferChat(agent);
+            getAgentHomePage(agent).waitForModalWindowToDisappear();
+
         }
     }
 
