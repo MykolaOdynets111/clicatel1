@@ -40,6 +40,7 @@ public class TransferChatWindow extends AbstractUIElement {
             clickElemAgent(cancelTransferButton, 1, agent, "Cancel transfer button");
             new ChatHeader().clickTransferButton(agent);
             agentName = selectDropDownAgent(agent);
+            sentNote();
         }
         clickTransferChatButton();
         return agentName;
