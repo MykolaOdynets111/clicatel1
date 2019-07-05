@@ -15,7 +15,9 @@ import java.util.List;
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/touchgo/closingaccount/",
+        features = {
+                Path.CLOSE_ACCOUNT + "NotValidClosingAccount.feature",
+                Path.CLOSE_ACCOUNT + "ClosingAccount.feature"},
         glue ="steps")
 public class RunTouchGoCloseAccount {
 
