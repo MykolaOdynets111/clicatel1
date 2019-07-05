@@ -36,9 +36,15 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     private PageHeader pageHeader;
 
+    private String currentAgent = "main_agent";
 
     public PortalAbstractPage() {
         HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
+    }
+
+    public PortalAbstractPage(String agent) {
+        this.currentAgent = agent;
+        HtmlElementLoader.populatePageObject(this, DriverFactory.getDriverForAgent(agent));
     }
 
 
@@ -109,4 +115,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         clickElemAgent(saveChangesButton, 4, "admin", "Save changes");
     }
 
+    public String getCurrentAgent(){
+        return currentAgent;
+    }
 }

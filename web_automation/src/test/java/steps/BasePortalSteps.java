@@ -10,7 +10,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.runtime.CucumberException;
 import datamanager.*;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
@@ -30,9 +29,6 @@ import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -57,7 +53,7 @@ public class BasePortalSteps implements JSHelper {
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
     private static String AGENT_EMAIL;
-    private String AGENT_PASS = "p@$$w0rd4te$t";
+    private String AGENT_PASS = Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
@@ -73,6 +69,7 @@ public class BasePortalSteps implements JSHelper {
     private String nameOfUnchekedDay = "";
     private String accountCurrency;
     private String autoSchedulerPreActionStatus;
+    private String confirmationURL;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -104,21 +101,53 @@ public class BasePortalSteps implements JSHelper {
     public void createNewAgent(){
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL = Agents.TOUCH_GO_AGENT.getAgentEmail();
-        Agents.TOUCH_GO_AGENT.setEnv(ConfigManager.getEnv());
-        Agents.TOUCH_GO_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+        AGENT_EMAIL = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
+        Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
         getPortalManagingUsersPage().waitWhileProcessing(2,3);
         getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
-//        try {
-//            CheckEmail.getConfirmationURL("mc2", Agents.TOUCH_GO_AGENT.getAgentEmail(),
-//                    Agents.TOUCH_GO_AGENT.getAgentPass());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    }
 
+    @Then("^Confirmation Email arrives$")
+    public void verifyConfirmationEmail(){
+        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(),Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+        String confirmationEmail = CheckEmail
+                .getConfirmationURL("Clickatell <mc2-devs@clickatell.com>", 380);
+        boolean result = confirmationEmail.equalsIgnoreCase("") ||
+                confirmationEmail.equalsIgnoreCase("none");
+        if(!result){
+            confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+        }
+
+        Assert.assertFalse(result,
+                "Confirmation email about creating new agent is not delivered after 380 seconds wait");
+    }
+
+    @When("^Second agent opens confirmation URL$")
+    public void openConfirmationURL(){
+        portalLoginPage.remove();
+        DriverFactory.getSecondAgentDriverInstance().get(confirmationURL);
+    }
+
+    @Then("^Login screen with new (.*) name opened$")
+    public void verifyLoginScreenWithGreeting(String agent){
+        String agentFullName = AGENT_FIRST_NAME +" "+ AGENT_LAST_NAME;
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalLoginPage(agent).getWelcomeMessage(6).contains(agentFullName),
+                        "Welcome message does not contaion "+ agentFullName +"user name");
+        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+                "There are no 2 input fields for creating agent's password");
+        soft.assertAll();
+
+    }
+
+    @When("(.*) provides new password and click Login")
+    public void createPassword(String agent){
+        getPortalLoginPage(agent).createNewPass(AGENT_PASS)
+                                    .clickLogin();
     }
 
     @Then("^Newly created agent is deleted in DB$")
@@ -182,7 +211,7 @@ public class BasePortalSteps implements JSHelper {
                 "'Required' error not shown");
     }
 
-    @Then("^Error popup with text (.*) is shown$")
+    @Then("^(?:Error|Notification) popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
         Assert.assertEquals(getPortalSignUpPage().getNotificationAlertText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
@@ -291,6 +320,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Login as (.*) agent$")
     public void loginAsCreatedAgent(String agent){
+        ConfigManager.setIsSecondCreated("true");
         String email = AGENT_EMAIL;
         if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
         portalLoginPage.get().login(email, AGENT_PASS);
@@ -393,9 +423,6 @@ public class BasePortalSteps implements JSHelper {
 
     @Given("^New account is successfully created$")
     public void verifyAccountCreated(){
-        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_AGENT.getAgentEmail(),
-                Agents.TOUCH_GO_AGENT.getAgentPass());
-        CheckEmail.getConfirmationURL("Clickatell <mc2-devs@clickatell.com>");
         if(!ConfigManager.isNewAccountCreated()){
             throw new SkipException("Sign up new account was not successful");
         }
@@ -1573,6 +1600,16 @@ public class BasePortalSteps implements JSHelper {
     private PortalLoginPage getPortalLoginPage(){
         if (portalLoginPage.get()==null) {
             portalLoginPage.set(new PortalLoginPage());
+            return portalLoginPage.get();
+        } else{
+            return portalLoginPage.get();
+        }
+    }
+
+
+    private PortalLoginPage getPortalLoginPage(String agent){
+        if (portalLoginPage.get()==null) {
+            portalLoginPage.set(new PortalLoginPage(agent));
             return portalLoginPage.get();
         } else{
             return portalLoginPage.get();

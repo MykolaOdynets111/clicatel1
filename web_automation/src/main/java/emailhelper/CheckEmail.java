@@ -12,20 +12,21 @@ import java.util.stream.Collectors;
 public class CheckEmail {
 
 
-    public static String getConfirmationURL(String expectedSender){
+    public static String getConfirmationURL(String expectedSender, int wait){
         try {
-            return getConfirmation(expectedSender);
+            return getConfirmation(expectedSender, wait);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "none";
     }
 
-    private static String getConfirmation(String expectedSender) throws Exception {
+    private static String getConfirmation(String expectedSender, int wait) throws Exception {
         String verificationCode = null;
-        List<Message> targetSenderNewMails = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
 
-        if(newLetterFromSenderArrives(expectedSender)) {
+        if(newLetterFromSenderArrives(expectedSender, wait)) {
+            List<Message> targetSenderNewMails =
+                    getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
             Message targetMessage = targetSenderNewMails.stream()
                     .filter(e -> !(GmailParser.parseEmail(e, expectedSender)).equals("none"))
                     .findFirst().get();
@@ -41,10 +42,10 @@ public class CheckEmail {
         return "";
     }
 
-    public static boolean newLetterFromSenderArrives(String expectedSender){
+    public static boolean newLetterFromSenderArrives(String expectedSender, int wait){
         boolean result = false;
         List<Message> targetSenderNewMails = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
-        for (int i=0; i<21; i++){
+        for (int i=0; i<wait; i++){
             if(targetSenderNewMails.isEmpty()){
                 try {
                     Thread.sleep(1000);
