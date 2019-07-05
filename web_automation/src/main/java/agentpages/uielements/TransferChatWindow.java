@@ -9,6 +9,9 @@ import org.openqa.selenium.support.FindBy;
 @FindBy(css = "div.modal-content")
 public class TransferChatWindow extends AbstractUIElement {
 
+    @FindBy(css = "button.btn.pull-left.btn-default")
+    private WebElement cancelTransferButton;
+
     @FindBy(xpath = "//button[text()='Transfer']")
     private WebElement submitTransferChatButton;
 
@@ -33,7 +36,11 @@ public class TransferChatWindow extends AbstractUIElement {
         openDropDownAgent();
         String agentName = selectDropDownAgent(agent);
         sentNote();
-        if(isElementShownAgent(selectAgentPlaceholder, 1, agent)) agentName = selectDropDownAgent(agent);
+        if(isElementShownAgent(selectAgentPlaceholder, 1, agent)){
+            clickElemAgent(cancelTransferButton, 1, agent, "Cancel transfer button");
+            new ChatHeader().clickTransferButton(agent);
+            agentName = selectDropDownAgent(agent);
+        }
         clickTransferChatButton();
         return agentName;
     }
