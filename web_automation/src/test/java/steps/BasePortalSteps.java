@@ -408,13 +408,6 @@ public class BasePortalSteps implements JSHelper {
 
     @Given("^New tenant is successfully created$")
     public void verifyTenantCreated(){
-        try {
-            CheckEmail.getConfirmationURL("Clickatell <mc2-devs@clickatell.com>",
-                    Agents.TOUCH_GO_AGENT.getAgentEmail(),
-                    Agents.TOUCH_GO_AGENT.getAgentPass());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if(!ConfigManager.isNewTenantCreated()){
             throw new SkipException("Creating new tenant was not successful");
         }

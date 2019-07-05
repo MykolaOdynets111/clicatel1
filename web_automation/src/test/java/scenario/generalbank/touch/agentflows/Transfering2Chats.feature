@@ -1,6 +1,7 @@
 @dot_control
 @multiple_transfer
 @no_widget
+@test_tr
 Feature: Transferring 2 chats
 
   Verification of more than 1 chat transferring
