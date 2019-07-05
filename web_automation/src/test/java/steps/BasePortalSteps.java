@@ -17,6 +17,7 @@ import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import emailhelper.CheckEmail;
+import emailhelper.GmailConnector;
 import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
@@ -111,12 +112,12 @@ public class BasePortalSteps implements JSHelper {
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
         getPortalManagingUsersPage().waitWhileProcessing(2,3);
         getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
-        try {
-            CheckEmail.getConfirmationURL("mc2", Agents.TOUCH_GO_AGENT.getAgentEmail(),
-                    Agents.TOUCH_GO_AGENT.getAgentPass());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            CheckEmail.getConfirmationURL("mc2", Agents.TOUCH_GO_AGENT.getAgentEmail(),
+//                    Agents.TOUCH_GO_AGENT.getAgentPass());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -392,6 +393,9 @@ public class BasePortalSteps implements JSHelper {
 
     @Given("^New account is successfully created$")
     public void verifyAccountCreated(){
+        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_AGENT.getAgentEmail(),
+                Agents.TOUCH_GO_AGENT.getAgentPass());
+        CheckEmail.getConfirmationURL("Clickatell <mc2-devs@clickatell.com>");
         if(!ConfigManager.isNewAccountCreated()){
             throw new SkipException("Sign up new account was not successful");
         }
