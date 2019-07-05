@@ -39,7 +39,7 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "button.launchpad-btn")
     private WebElement launchpadButton;
 
-    @FindBy(xpath = "//span[text()='Thank you for singing up. Welcome!']")
+    @FindBy(css = "div[ng-controller='WizardCtrl']")
     private WebElement landingPage;
 
     @FindBy(css = "span.svg-close.cl-clickable.push-right")

@@ -448,6 +448,7 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Landing pop up is shown$")
     public void verifyLandingPopupShown(){
+        getPortalMainPage().waitWhileProcessing(3,2);
         Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
                 "Landing popup is not shown");
     }
@@ -881,6 +882,8 @@ public class BasePortalSteps implements JSHelper {
     public void fillInBillingDetails(){
         billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails()
                 .fillInBillingDetailsForm();
+        getPortalBillingDetailsPage().waitWhileProcessing(2,2);
+        getPortalBillingDetailsPage().waitForNotificationAlertToBeProcessed(2,2);
     }
 
     @Then("^Billing details is saved on backend (.*)$")
@@ -893,15 +896,25 @@ public class BasePortalSteps implements JSHelper {
                                 resp.jsonPath().get("billingAddress.city") + ", " +
                                 resp.jsonPath().get("billingAddress.address1") + ", " +
                                 resp.jsonPath().get("billingAddress.postalCode");
-        soft.assertEquals(info.get("billingContact").toString(), billingInfo.get("billingContact"),
-                "Billing contact is incorrectly saved");
-        soft.assertEquals(info.get("accountTypeId").toString(), billingInfo.get("accountTypeId"),
-                "accountTypeId is incorrectly saved");
-        soft.assertEquals(info.get("companyName").toString(), billingInfo.get("companyName"),
-                "Company Name is incorrectly saved");
-        soft.assertEquals(billingAddress, billingInfo.get("billingAddress"),
-                "Billing address is incorrectly saved");
-        soft.assertAll();
+        try {
+            soft.assertEquals(info.get("billingContact").toString(), billingInfo.get("billingContact"),
+                    "Billing contact is incorrectly saved");
+            soft.assertEquals(info.get("accountTypeId").toString(), billingInfo.get("accountTypeId"),
+                    "accountTypeId is incorrectly saved");
+            soft.assertEquals(info.get("companyName").toString(), billingInfo.get("companyName"),
+                    "Company Name is incorrectly saved");
+            soft.assertEquals(billingAddress, billingInfo.get("billingAddress"),
+                    "Billing address is incorrectly saved");
+            soft.assertAll();
+        }catch(NullPointerException e){
+            String message = "NULL_POINTER!! \n";
+            if(info!=null) {
+                if (info.get("billingContact") != null) message = message + info.get("billingContact");
+                else message = message + resp.getBody().asString();
+            }
+            if(billingInfo!=null) message = message + "\n\n" + billingInfo.toString();
+            Assert.fail(message);
+        }
     }
 
     @When("^Admin clicks Top up balance on Billing details$")
