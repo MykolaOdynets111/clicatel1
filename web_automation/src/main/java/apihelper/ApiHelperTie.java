@@ -124,7 +124,7 @@ public class ApiHelperTie {
     }
 
     public static void deleteAllModels(){
-        List<Map> models = ApiHelperTie.getModels().getBody().jsonPath().getList("");
+        List<Map> models = ApiHelperTie.getModels().getBody().jsonPath().getList("intent");
         for(Map model : models){
             deleteModel((String) model.get("name"));
         }
