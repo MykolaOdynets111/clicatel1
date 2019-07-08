@@ -2,6 +2,7 @@
 @no_widget
 @no_chatdesk
 @without_tct
+@delete_agent_on_failure
 Feature: Creating new agent
 
 
@@ -16,6 +17,6 @@ Feature: Creating new agent
     When Second agent opens confirmation URL
     Then Login screen with new Second Agent name opened
     When Second Agent provides new password and click Login
-    Then Notification popup with text Your account has been created is shown
-    When Login as newly created agent
-    Then Agent is logged in chat desk
+    Then Notification popup with text Your account has been created is shown for Second agent
+    When Login as second agent
+    Then Second Agent is logged in chat desk

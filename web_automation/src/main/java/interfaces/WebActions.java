@@ -189,7 +189,7 @@ public interface WebActions extends WebWait {
 
     default boolean isElementShownAgentByCSS(String css, int wait, String agent){
         try {
-            waitForElementToBeVisibleByCssAgent(css, wait);
+            waitForElementToBeVisibleByCssAgent(css, wait, agent);
             return true;
         } catch (WebDriverException e) {
             return false;
@@ -275,8 +275,12 @@ public interface WebActions extends WebWait {
         return DriverFactory.getDriverForAgent(agent).findElement(By.xpath(xpath));
     }
 
-        default WebElement findElemByCSSAgent(String css){
+    default WebElement findElemByCSSAgent(String css){
         return DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(css));
+    }
+
+    default WebElement findElemByCSSAgent(String css, String agent){
+        return DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(css));
     }
 
     default List<WebElement> findElemsByXPATH(String xpath){

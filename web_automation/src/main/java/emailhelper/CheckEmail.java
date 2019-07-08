@@ -100,16 +100,4 @@ public class CheckEmail {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

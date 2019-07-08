@@ -30,13 +30,13 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(xpath = "//button[text()='Save changes ']")
     private WebElement saveChangesButton ;
 
-    private static String notificationAlert = "div.alert-window div[ng-bind-html='alert']";
+    private static String notificationAlert = "div[ng-bind-html='alert']";
 
     private static String processingAlert = "div.loader-bar-text";
 
     private PageHeader pageHeader;
 
-    private String currentAgent = "main_agent";
+    protected String currentAgent = "main_agent";
 
     public PortalAbstractPage() {
         HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
@@ -53,8 +53,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     }
 
     public String getNotificationAlertText(){
-        if(isElementShownAgentByCSS(notificationAlert, 4, "admin")){
-            return findElemByCSSAgent(notificationAlert).getText();
+        if(isElementShownAgentByCSS(notificationAlert, 2, this.currentAgent)){
+            return findElemByCSSAgent(notificationAlert, this.currentAgent).getText();
         } else{
             return "no notification alert";
         }
@@ -68,8 +68,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitForNotificationAlertToBeProcessed(int toAppear, int toDisappear){
         try {
-            waitForElementToBeVisibleByCssAgent(notificationAlert, toAppear);
-            waitForElementsToBeInvisibleByCssAgent(notificationAlert, toDisappear);
+            waitForElementToBeVisibleByCssAgent(notificationAlert, toAppear, this.currentAgent);
+            waitForElementToBeInVisibleByCssAgent(notificationAlert, toDisappear, this.currentAgent);
         } catch(NoSuchElementException|TimeoutException e){}
     }
 

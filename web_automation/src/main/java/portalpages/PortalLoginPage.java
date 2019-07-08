@@ -5,6 +5,7 @@ import drivermanager.DriverFactory;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.PageHeader;
 
@@ -18,7 +19,10 @@ public class PortalLoginPage extends PortalAbstractPage {
     @FindBy(css = "input[type='password']")
     private WebElement passInput;
 
-    @FindBy(xpath = "//button[text()='Log In']")
+    @FindAll({
+        @FindBy(xpath = "//button[text()='Log In']"),
+        @FindBy(xpath = "//button[text()='Login']")
+    })
     private WebElement loginButton;
 
     @FindBy(css = "div[ng-show='newAccountEmail']")
@@ -63,7 +67,7 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public void clickLogin(){
-        clickElemAgent(loginButton, 1, getCurrentAgent(), "Login Button" );
+        clickElemAgent(loginButton, 1, this.currentAgent, "Login Button" );
     }
 
     public boolean isMessageAboutConfirmationMailSentShown(){

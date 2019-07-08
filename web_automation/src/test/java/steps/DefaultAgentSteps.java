@@ -219,7 +219,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @Then("^(.*) is logged in chat desk$")
     public void verifyAgentLoggedIn(String ordinalAgentNumber){
         agentHomePage = new AgentHomePage(ordinalAgentNumber);
-        Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in chat desk.");
+        boolean result = agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber);
+        if(result) ConfigManager.setIsSecondCreated("true");
+        Assert.assertTrue(result, "Agent is not logged in chat desk.");
     }
 
     @Then("^(.*) is not redirected to chatdesk$")
