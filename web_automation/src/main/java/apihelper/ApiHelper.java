@@ -482,10 +482,18 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     }
 
     public static List<OvernightTicket> getOvernightTicketsByStatus(String tenantOrgName, String ticketStatus){
-        return RestAssured.given().log().all()
+        List<OvernightTicket> tickets = new ArrayList<>();
+        Response resp =  RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase())
-                .getBody().jsonPath().getList("", OvernightTicket.class);
+                .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase());
+        try {
+            tickets = resp.getBody().jsonPath().getList("", OvernightTicket.class);
+        }catch (ClassCastException|JsonPathException e){
+            Assert.fail("Getting overnight tickets by URL "+
+                    Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase()+ " was not successful \n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
+        return tickets;
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName) {
