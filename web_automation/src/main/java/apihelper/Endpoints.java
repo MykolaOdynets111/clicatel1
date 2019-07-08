@@ -192,6 +192,9 @@ public class Endpoints {
 
     public static String PORTAL_ACCOUNT_ACTIVATION = URLs.getBasePortalUrl() + "#/activation/%s ";
 
+    public static String PORTAL_NEW_AGENT_ACTIVATION = URLs.getBasePortalUrl() + "/#/invitation/";
+
+
     // ====================  TAF ================= //
 
     public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "resources/taf-messages?tenant=%s";

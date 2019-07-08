@@ -76,6 +76,12 @@ public class ApiHelperPlatform {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
                 .delete(Endpoints.PLATFORM_USER +"/"+ userID);
+        if(resp.statusCode()==404){
+            RestAssured.given()
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .delete(Endpoints.PLATFORM_SEND_INVITATION +"/"+ userID);
+        }
     }
 
     public static String getUserID(String tenantOrgName, String userEmail){

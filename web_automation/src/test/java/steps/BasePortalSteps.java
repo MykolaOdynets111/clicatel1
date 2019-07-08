@@ -10,13 +10,13 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.runtime.CucumberException;
 import datamanager.*;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import emailhelper.CheckEmail;
+import emailhelper.GmailConnector;
 import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
@@ -29,9 +29,6 @@ import portalpages.uielements.LeftMenu;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -39,6 +36,7 @@ public class BasePortalSteps implements JSHelper {
 
     private Faker faker = new Faker();
     private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
+    private ThreadLocal<PortalLoginPage> secondAgentPortalLoginPage = new ThreadLocal<>();
     private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
     private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
@@ -56,7 +54,7 @@ public class BasePortalSteps implements JSHelper {
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
     private static String AGENT_EMAIL;
-    private String AGENT_PASS = "p@$$w0rd4te$t";
+    private String AGENT_PASS = Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
@@ -72,6 +70,7 @@ public class BasePortalSteps implements JSHelper {
     private String nameOfUnchekedDay = "";
     private String accountCurrency;
     private String autoSchedulerPreActionStatus;
+    private String confirmationURL;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -103,21 +102,62 @@ public class BasePortalSteps implements JSHelper {
     public void createNewAgent(){
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL = Agents.TOUCH_GO_AGENT.getAgentEmail();
-        Agents.TOUCH_GO_AGENT.setEnv(ConfigManager.getEnv());
-        Agents.TOUCH_GO_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+        AGENT_EMAIL = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
+        Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
         getPortalManagingUsersPage().waitWhileProcessing(2,3);
         getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
-        try {
-            CheckEmail.getConfirmationURL("mc2", Agents.TOUCH_GO_AGENT.getAgentEmail(),
-                    Agents.TOUCH_GO_AGENT.getAgentPass());
-        } catch (Exception e) {
-            e.printStackTrace();
+    }
+
+    @Then("^Confirmation Email arrives$")
+    public void verifyConfirmationEmail(){
+        boolean result = false;
+        if(ConfigManager.getEnv().equals("testing"))
+            result = DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+        else {
+            GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+            String confirmationEmail = CheckEmail
+                    .getConfirmationURL("Clickatell <mc2-devs@clickatell.com>", 200);
+            result = !confirmationEmail.equalsIgnoreCase("") ||
+                    !confirmationEmail.equalsIgnoreCase("none");
+            if(result){
+                confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+            }
         }
 
+        Assert.assertTrue(result,
+                "Confirmation email about creating new agent is not delivered after 380 seconds wait");
+    }
+
+    @When("^Second agent opens confirmation URL$")
+    public void openConfirmationURL() {
+        if (ConfigManager.getEnv().equals("testing")){
+            String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(
+                    ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            confirmationURL = Endpoints.PORTAL_NEW_AGENT_ACTIVATION + invitationID;
+        }
+        DriverFactory.getSecondAgentDriverInstance().get(confirmationURL);
+    }
+
+    @Then("^Login screen with new (.*) name opened$")
+    public void verifyLoginScreenWithGreeting(String agent){
+        String agentFullName = AGENT_FIRST_NAME +" "+ AGENT_LAST_NAME;
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalLoginPage(agent).getWelcomeMessage(6).contains(agentFullName),
+                        "Welcome message does not contaion "+ agentFullName +"user name");
+        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+                "There are no 2 input fields for creating agent's password");
+        soft.assertAll();
+
+    }
+
+    @When("(.*) provides new password and click Login")
+    public void createPassword(String agent){
+        getPortalLoginPage(agent).createNewPass(AGENT_PASS)
+                                    .clickLogin();
     }
 
     @Then("^Newly created agent is deleted in DB$")
@@ -181,10 +221,18 @@ public class BasePortalSteps implements JSHelper {
                 "'Required' error not shown");
     }
 
-    @Then("^Error popup with text (.*) is shown$")
+    @Then("^(?:Error|Notification) popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
         Assert.assertEquals(getPortalSignUpPage().getNotificationAlertText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
+    }
+
+    @Then("^(?:Error|Notification) popup with text (.*) is shown for (.*)$")
+    public void verifyVerificationMessage(String expectedMessage, String agent){
+        String notificationText = getPortalLoginPage(agent).getNotificationAlertText().trim();
+        getPortalLoginPage(agent).waitForNotificationAlertToBeProcessed(2,4);
+        Assert.assertEquals(notificationText, expectedMessage.trim(),
+                "Expected notification is not shown");
     }
 
     @When("^I open portal$")
@@ -288,11 +336,11 @@ public class BasePortalSteps implements JSHelper {
         if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
-    @When("^Login as (.*) agent$")
+    @When("^Login as (.*)$")
     public void loginAsCreatedAgent(String agent){
-        String email = AGENT_EMAIL;
+        String email = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
         if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
-        portalLoginPage.get().login(email, AGENT_PASS);
+        getPortalLoginPage(agent).login(email, Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
     }
 
     @Then("^Deleted agent is not able to log in portal$")
@@ -1574,6 +1622,27 @@ public class BasePortalSteps implements JSHelper {
             return portalLoginPage.get();
         }
     }
+
+    private PortalLoginPage getSecondPortalLoginPage(){
+        if (secondAgentPortalLoginPage.get()==null) {
+            secondAgentPortalLoginPage.set(new PortalLoginPage("second agent"));
+            return secondAgentPortalLoginPage.get();
+        } else{
+            return secondAgentPortalLoginPage.get();
+        }
+    }
+
+    private PortalLoginPage getPortalLoginPage(String agent){
+
+        if (agent.equalsIgnoreCase("second agent")){
+            return getSecondPortalLoginPage();
+        } else {
+            return getPortalLoginPage();
+        }
+
+    }
+
+
 
     private PortalAccountDetailsPage getPortalAccountDetailsPage(){
         if (portalAccountDetailsPageThreadLocal.get()==null) {

@@ -6,6 +6,7 @@ import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
 import drivermanager.ConfigManager;
@@ -27,6 +28,7 @@ import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.dotcontrol.DotControlSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
+import sun.management.Agent;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import twitter.TwitterLoginPage;
@@ -269,18 +271,16 @@ public class Hooks implements JSHelper{
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
+
+            if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
+                String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(),
+                        Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+                ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+            }
+
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
-// Will be handled via DB backup
-//            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
-//                ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
-//                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-//                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-//            }
-//            if (scenario.getSourceTagNames().contains("@creating_new_tenant ")){
-//                String url = String.format(Endpoints.TIE_DELETE_TENANT, Tenants.getAccountNameForNewAccountSignUp());
-//                given().delete(url);
-//            }
+
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
             closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
@@ -293,7 +293,11 @@ public class Hooks implements JSHelper{
             }
             DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();
+
+
         }
+
+
     }
 
     private void endTouchFlow(Scenario scenario, boolean typeEndInWidget) {
@@ -306,9 +310,6 @@ public class Hooks implements JSHelper{
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
                 }
-//                if (scenario.isFailed()&&DriverFactory.isAgentDriverExists()) {
-//                    closeWidgetSession();
-//                }
         }catch (WebDriverException e) { }
         }
     }
@@ -329,7 +330,7 @@ public class Hooks implements JSHelper{
 //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
-        } catch(WebDriverException|AssertionError e){
+        } catch(WebDriverException|AssertionError|NoSuchElementException e){
         }
     }
 

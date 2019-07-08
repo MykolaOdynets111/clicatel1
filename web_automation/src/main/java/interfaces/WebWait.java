@@ -161,6 +161,13 @@ public interface WebWait {
                 .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
     }
 
+    default void waitForElementToBeInVisibleByCssAgent(String css, int time, String agent){
+        initAgentWait(time, agent).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
+    }
+
+
     default void waitForElementToBeVisibleByXpathAgent(String xpath, int time, String agent){
         initAgentWait(time, agent).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)

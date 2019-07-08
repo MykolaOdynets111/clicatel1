@@ -36,7 +36,7 @@ public class DBConnector {
 
     public static String getInvitationIdForCreatedUserFromMC2DB(String env, String userEmail) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
-        String query = "SELECT * FROM "+tableName+".invitation where email=\""+userEmail+"\";";
+        String query = "SELECT * FROM "+tableName+".invitation where email=\""+userEmail+"\" AND deleted = 0;";
         Statement statement = null;
         ResultSet results = null;
         String id = null;
