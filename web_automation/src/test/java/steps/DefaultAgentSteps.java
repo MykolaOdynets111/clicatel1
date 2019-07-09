@@ -13,6 +13,7 @@ import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
@@ -358,12 +359,16 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
             if (sessionCapacity==0) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
+        List<SupportHoursItem> supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+        if(supportHours.size()<7){
+            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        }
         Assert.assertTrue(isConversationShown,
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
                         "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + "\n" +
-                        "Support hours: " + ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).toString() + "\n"
-                );
+                        "Support hours: " + supportHours + "\n"
+        );
     }
 
     @Then("^(.*) sees \"(.*)\" tip in conversation area$")
