@@ -183,11 +183,18 @@ public class BasePortalSteps implements JSHelper {
                 "Agent with '" + AGENT_EMAIL + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
-    @Given("^(?:Delete user|Second agent does not exist)$")
+    @Given("^Delete user$")
     public static void deleteAgent(){
         String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
     }
+
+    @Given("^Second agent of (.*) account does not exist$")
+    public void deleteSecondAgent(String account){
+        Tenants.setTenantUnderTestNames(account);
+        deleteAgent();
+    }
+
 
     @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
     public void fillInFormWithInfoAboutNewAccount(String accountOrgName){

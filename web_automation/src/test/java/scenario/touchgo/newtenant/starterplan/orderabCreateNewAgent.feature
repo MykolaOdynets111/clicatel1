@@ -8,7 +8,7 @@ Feature: Creating new agent
 
   Scenario: Creating new agent
     Given New tenant is successfully created
-    And Second agent does not exist
+    And Second agent of SignedUp AQA account does not exist
     Given I open portal
     And Login into portal as an admin of SignedUp AQA account
     When I select Touch in left menu and Manage Agent users in submenu
