@@ -192,7 +192,11 @@ public class BasePortalSteps implements JSHelper {
     @Given("^Second agent of (.*) account does not exist$")
     public void deleteSecondAgent(String account){
         Tenants.setTenantUnderTestNames(account);
+        try{
         deleteAgent();
+        }catch (NoSuchElementException e){
+            //agent doesn't exists
+        }
     }
 
 
