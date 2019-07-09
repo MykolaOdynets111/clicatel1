@@ -3,8 +3,8 @@ Feature: Tenant with Starter plan should be able to have only 1 logged in agent
   Background:
     Given New tenant is successfully created
     Given Second agent of new tenant is successfully created
-    Given I login as agent of Starter AQA
-    Given User select Starter AQA tenant
+    Given I login as agent of SignedUp AQA
+    Given User select SignedUp AQA tenant
     And Click chat icon
 
   Scenario: Agent seats limitation for Starter plan
