@@ -82,6 +82,7 @@ public class BasePortalSteps implements JSHelper {
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
         AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         if(resp.statusCode()!=200){
@@ -178,13 +179,13 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^New agent is added into touch database$")
     public void verifyThatNewAgentAddedToDatabase(){
-        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), AGENT_EMAIL),
+        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail()),
                 "Agent with '" + AGENT_EMAIL + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
     @Given("^(?:Delete user|Second agent does not exist)$")
     public static void deleteAgent(){
-        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL);
+        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
     }
 
