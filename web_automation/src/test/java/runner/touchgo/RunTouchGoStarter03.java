@@ -16,10 +16,9 @@ import java.util.List;
         },
         monochrome = true,
         features = {
-                Path.CLOSE_ACCOUNT + "orderaNotValidClosingAccount.feature",
-                Path.CLOSE_ACCOUNT + "orderbClosingAccount.feature"},
+        },
         glue ="steps")
-public class RunTouchGoCloseAccount {
+public class RunTouchGoStarter03 {
 
 
     @Factory

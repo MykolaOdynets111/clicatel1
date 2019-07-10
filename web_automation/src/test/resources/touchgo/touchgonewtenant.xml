@@ -6,9 +6,14 @@
             <class name="runner.touchgo.RunTouchGoCreateTenant" />
         </classes>
     </test>
-    <test name="Tests for Starter TouchGo plan">
+    <test name="Tests for Starter TouchGo plan (first bunch)">
         <classes>
-            <class name="runner.touchgo.RunTouchGoStarter" />
+            <class name="runner.touchgo.RunTouchGoStarter01" />
+        </classes>
+    </test>
+    <test name="Tests for Starter TouchGo plan (second bunch)">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoStarter02" />
         </classes>
     </test>
 <!--    <test name="Tests for Standard TouchGo plan">-->
