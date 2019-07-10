@@ -1034,7 +1034,8 @@ public class BasePortalSteps implements JSHelper {
         String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
         boolean result = false;
         for(int i = 0; i<(mints*60)/25; i++){
-            if(valueFromPortal.equalsIgnoreCase(String.format("%1.2f", topUpBalance.get("afterTest")))){
+            if(valueFromPortal.replace(",", "")
+                    .equals(String.format("%1.2f", topUpBalance.get("afterTest")))){
                 result = true;
                 break;
             } else{
