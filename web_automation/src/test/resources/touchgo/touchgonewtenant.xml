@@ -16,6 +16,11 @@
             <class name="runner.touchgo.RunTouchGoStarter02" />
         </classes>
     </test>
+    <test name="Tests for Starter TouchGo plan (third bunch)">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoStarter03" />
+        </classes>
+    </test>
 <!--    <test name="Tests for Standard TouchGo plan">-->
 <!--        <classes>-->
 <!--            <class name="runner.touchgo.RunTouchGoStandard" />-->
