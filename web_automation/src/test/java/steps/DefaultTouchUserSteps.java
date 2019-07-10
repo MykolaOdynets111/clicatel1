@@ -1,20 +1,16 @@
 package steps;
 
 import agentpages.AgentHomePage;
-import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import datamanager.FacebookPages;
-import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.DriverFactory;
-import facebook.FBTenantPage;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;

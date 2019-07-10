@@ -11,7 +11,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
         "state",
         "createdDate",
         "modifiedDate",
-        "sessionId",
+//        "sessionId",
         "conversationId"
 })
 public class OvernightTicket {
@@ -26,8 +26,8 @@ public class OvernightTicket {
     private Long createdDate;
     @JsonProperty("modifiedDate")
     private Long modifiedDate;
-    @JsonProperty("sessionId")
-    private String sessionId;
+//    @JsonProperty("sessionId")
+//    private String sessionId;
     @JsonProperty("conversationId")
     private String conversationId;
     @JsonIgnore
@@ -83,15 +83,15 @@ public class OvernightTicket {
         this.modifiedDate = modifiedDate;
     }
 
-    @JsonProperty("sessionId")
-    public String getSessionId() {
-        return sessionId;
-    }
+//    @JsonProperty("sessionId")
+//    public String getSessionId() {
+//        return sessionId;
+//    }
 
-    @JsonProperty("sessionId")
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
+//    @JsonProperty("sessionId")
+//    public void setSessionId(String sessionId) {
+//        this.sessionId = sessionId;
+//    }
 
     @JsonProperty("conversationId")
     public String getConversationId() {

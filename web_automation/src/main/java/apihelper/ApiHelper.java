@@ -509,6 +509,44 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         }
     }
 
+    public static void processUnassignedTickets(String tenantOrgName){
+        List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
+        for(OvernightTicket ticket : allUnassignedTickets){
+            RestAssured.given()
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .post(String.format(Endpoints.PROCESS_OVERNIGHT_TICKET, ticket.getId()));
+        }
+    }
+
+    public static List<OvernightTicket> getUnassignedOvernightTickets(String tenantOrgName){
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        List<OvernightTicket> tickets = new ArrayList<>();
+        Response resp =  RestAssured.given().log().all()
+                .get(String.format(Endpoints.INTERNAL_GET_TICKETS,tenantID, 0));
+        try{
+
+            List<OvernightTicket> baseTickets = resp.jsonPath().getList("content", OvernightTicket.class);
+            tickets.addAll(baseTickets);
+            int pageSize = resp.jsonPath().getInt("pageable.pageSize");
+            int unassignedTickets = resp.jsonPath().getInt("totalElements");
+            int pagesNumber = unassignedTickets / pageSize;
+            if(pagesNumber > 1){
+                for (int i=1; i<pageSize; i++){
+                    resp =  RestAssured.given().log().all()
+                        .get(String.format(Endpoints.INTERNAL_GET_TICKETS, tenantID, i));
+                    List<OvernightTicket> allUnassignedTickets = resp.jsonPath().getList("content", OvernightTicket.class);
+                    tickets.addAll(allUnassignedTickets);
+                }
+            }
+        } catch (ClassCastException|JsonPathException e){
+            Assert.fail("Getting Unassighned overnight tickets by internal URL "+
+                   " was not successful \n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
+        return tickets;
+    }
+
+
     public static Map getActiveSessionByClientId(String clientId){
         String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         String url = String.format(Endpoints.INTERNAL_CHAT_BY_CLIENT, tenantID, clientId);

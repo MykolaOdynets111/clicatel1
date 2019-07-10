@@ -92,6 +92,8 @@ public class Endpoints {
 
     public static String INTERNAL_TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
 
+    public static String INTERNAL_GET_TICKETS = URLs.getBaseInternalApiUrl() + "chats/ticket?tenantId=%s&page=%s&size=10&state=UNASSIGNED&direction=ASC";
+
 
     // ==================  PLATFORM ============== //
 
