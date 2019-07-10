@@ -1,7 +1,6 @@
 package datamanager;
 
 import apihelper.ApiHelper;
-import com.github.javafaker.Faker;
 import cucumber.runtime.CucumberException;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
