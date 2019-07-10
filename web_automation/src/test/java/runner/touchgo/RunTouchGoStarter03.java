@@ -16,6 +16,7 @@ import java.util.List;
         },
         monochrome = true,
         features = {
+                Path.NEW_TENANT_STARTER +  "03TouchGoPlanUpgradingWithoutAcceptigTerms.feature",
         },
         glue ="steps")
 public class RunTouchGoStarter03 {

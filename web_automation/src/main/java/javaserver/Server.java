@@ -36,7 +36,7 @@ public class Server {
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://ae8c6459.ngrok.io";
+            return "http://45cfff2e.ngrok.io";
         }
     }
 

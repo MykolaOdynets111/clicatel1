@@ -1043,7 +1043,9 @@ public class BasePortalSteps implements JSHelper {
                 valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
             }
         }
-        Assert.assertTrue(result, "Balance was not updated after top up");
+        Assert.assertTrue(result, "Balance was not updated after top up\n" +
+                "Expected: " + String.format("%1.2f", topUpBalance.get("afterTest")) +"\n" +
+                "Actual: " + valueFromPortal);
     }
 
 
