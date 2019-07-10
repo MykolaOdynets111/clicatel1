@@ -27,9 +27,7 @@ public class AgentConversationSteps implements JSHelper, WebActions {
 
     private AgentHomePage mainAgentHomePage;
     private AgentHomePage secondAgentHomePage;
-    private AgentHomePage agentHomePage ;
-    private ChatBody chatBody;
-    private SuggestedGroup suggestedGroup;
+//    private AgentHomePage agentHomePage ;
     private static String selectedEmoji;
 
     public static String getSelectedEmoji() {
@@ -49,8 +47,8 @@ public class AgentConversationSteps implements JSHelper, WebActions {
 
     @When("^Agent click on emoji icon$")
     public void selectRamdomFrequetlyUsedEmogy(){
-        getAgentHomePage().getChatForm().clickEmoticonButton();
-        selectedEmoji = getAgentHomePage().getChatForm().selectRandomFrequentlyUsedEmoji();
+        getAgentHomePage("main").getChatForm().clickEmoticonButton();
+        selectedEmoji = getAgentHomePage("main").getChatForm().selectRandomFrequentlyUsedEmoji();
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from twitter user$")
@@ -60,7 +58,7 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         }else {
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
-        Assert.assertTrue(getChatBody().isUserMessageShown(userMessage, "main agent"),
+        Assert.assertTrue(getChatBody("main").isUserMessageShown(userMessage, "main agent"),
                 "'" +userMessage+ "' User message is not shown in conversation area");
     }
 
@@ -84,13 +82,13 @@ public class AgentConversationSteps implements JSHelper, WebActions {
 
     @Then("^There is no more than one from user message$")
     public void checkThereIsNoMoreThanOneUserMessage() {
-        Assert.assertFalse(getChatBody().isMoreThanOneUserMassageShown(),
+        Assert.assertFalse(getChatBody("main").isMoreThanOneUserMassageShown(),
                 "More than one user message is shown (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
-    @Then("^There is no from agent response added by default for (.*) user message$")
-    public void verifyIfNoAgentResponseAddedByDefault(String userMessage) {
-        Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(userMessage),
+    @Then("^There is no from (.*) response added by default for (.*) user message$")
+    public void verifyIfNoAgentResponseAddedByDefault(String agent, String userMessage) {
+        Assert.assertFalse(getChatBody(agent).isResponseOnUserMessageShown(userMessage),
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -104,9 +102,9 @@ public class AgentConversationSteps implements JSHelper, WebActions {
                 "Expected to user emoji '"+selectedEmoji+"' is not shown in chatdesk");
     }
 
-    @Then("^There is no from agent response added by default for (.*) message from fb user$")
-    public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String userMessage) {
-        Assert.assertFalse(getChatBody().isResponseOnUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
+    @Then("^There is no from (.*) response added by default for (.*) message from fb user$")
+    public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String agent, String userMessage) {
+        Assert.assertFalse(getChatBody(agent).isResponseOnUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
                 "There is agent answer added without agent's intention (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -116,30 +114,30 @@ public class AgentConversationSteps implements JSHelper, WebActions {
     }
 
 
-    @When("^Agent replays with (.*) message$")
-    public void respondToUserWithCheck(String agentMessage) {
-        if (getAgentHomePage("main agent").getChatForm().isSuggestionFieldShown()) {
-            deleteSuggestionAndSendOwn(agentMessage);
+    @When("^(.*) replays with (.*) message$")
+    public void respondToUserWithCheck(String agent, String agentMessage) {
+        if (getAgentHomePage(agent).getChatForm().isSuggestionFieldShown()) {
+            deleteSuggestionAndSendOwn(agent, agentMessage);
         } else {
             sendAnswerToUser("main agent", agentMessage);
         }
     }
 
-    @When("^Agent clear input and send a new message (.*)$")
-    public void clearAndSendAnswerToUser(String responseToUser){
-        getAgentHomePage().getChatForm().clearAndSendResponseToUser(responseToUser);
+    @When("^(.*) clear input and send a new message (.*)$")
+    public void clearAndSendAnswerToUser(String agent, String responseToUser){
+        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
     }
 
-    @When("^Agent response with emoticon to User$")
-    public void clickSendMessageButton(){
-        getAgentHomePage().getChatForm().clickSendButton();
+    @When("^(.*) response with emoticon to User$")
+    public void clickSendMessageButton(String agent){
+        getAgentHomePage(agent).getChatForm().clickSendButton();
     }
 
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
-        getAgentHomePage().clickAgentAssistantButton();
-        getAgentHomePage().waitForElementToBeVisible(getAgentHomePage().getSuggestedGroup());
-        if (getSuggestedGroup().isSuggestionListEmpty()){
+        getAgentHomePage("main").clickAgentAssistantButton();
+        getAgentHomePage("main").waitForElementToBeVisible(getAgentHomePage("main").getSuggestedGroup());
+        if (getSuggestedGroup("main").isSuggestionListEmpty()){
             Assert.fail("Suggestion list is empty");
         }
         String expectedResponse = "no response";
@@ -154,14 +152,14 @@ public class AgentConversationSteps implements JSHelper, WebActions {
             expectedResponse = expectedResponse.replace("  ", " ");
             answersFromTie.add(i, expectedResponse);
         }
-        List<Suggestion> actualSuggestions = getSuggestedGroup().getSuggestionsList();
+        List<Suggestion> actualSuggestions = getSuggestedGroup("main").getSuggestionsList();
         List<String> suggestionTextsActual = actualSuggestions.stream().map(e -> e.getSuggestionMessage()).collect(Collectors.toList());
         Assert.assertEquals(suggestionTextsActual, answersFromTie, "Shown Suggestions is not as expected");
     }
 
     @Then("^The suggestion for user message \"(.*)\" with the biggest confidence is added to the input field$")
     public void verifyAutomaticAddingSuggestingToInputField(String userMessage){
-        String actualSuggestion = getAgentHomePage().getChatForm().getSuggestionFromInputFiled();
+        String actualSuggestion = getAgentHomePage("main").getChatForm().getSuggestionFromInputFiled();
         if (actualSuggestion==null){
             Assert.assertTrue(false, "There is no added suggestion in input field");
         }
@@ -176,96 +174,95 @@ public class AgentConversationSteps implements JSHelper, WebActions {
 
     @Then("There is no suggestions on '(.*)' user input")
     public void verifySuggestionIsNotShown(String userInput){
-        getAgentHomePage().clickAgentAssistantButton();
+        getAgentHomePage("main").clickAgentAssistantButton();
         SoftAssert softAssert = new SoftAssert();
-        String actualSuggestion = getAgentHomePage().getChatForm().getSuggestionFromInputFiled();
+        String actualSuggestion = getAgentHomePage("main").getChatForm().getSuggestionFromInputFiled();
         softAssert.assertTrue(actualSuggestion.isEmpty(),"Input field is not empty\n");
-        softAssert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(), "Suggestions list is not empty");
+        softAssert.assertTrue(getSuggestedGroup("main").isSuggestionListEmpty(), "Suggestions list is not empty");
         softAssert.assertAll();
     }
 
-    @When("^Agent click send button$")
-    public void clickSendButton() {
-        getAgentHomePage().getChatForm().clickSendButton();
+    @When("^(.*) click send button$")
+    public void clickSendButton(String agent) {
+        getAgentHomePage(agent).getChatForm().clickSendButton();
     }
 
-    @When("^Agent is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
-    public void deleteSuggestionAndSendOwn(String agentMessage){
-        getAgentHomePage().getChatForm().deleteSuggestionAndAddAnother(agentMessage);
-//        getAgentHomePage().clickSendButton();
+    @When("^(.*) is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
+    public void deleteSuggestionAndSendOwn(String agent, String agentMessage){
+        getAgentHomePage(agent).getChatForm().deleteSuggestionAndAddAnother(agentMessage);
     }
 
-    @When("^Agent add additional info \"(.*)\" to suggested message$")
-    public void addMoreInfo(String additional) {
-        getAgentHomePage().getChatForm().addMoreInfo(additional);
+    @When("^(.*) add additional info \"(.*)\" to suggested message$")
+    public void addMoreInfo(String agent, String additional) {
+        getAgentHomePage(agent).getChatForm().addMoreInfo(additional);
     }
 
     @Then("^'Clear' buttons are not shown$")
     public void checkClearEditButtonsAreShown(){
-        Assert.assertTrue(getAgentHomePage().getChatForm().isClearButtonShown(),
+        Assert.assertTrue(getAgentHomePage("main").getChatForm().isClearButtonShown(),
                 "'Clear' button is not shown for suggestion input field.");
     }
 
     @Then("^'Clear' and 'Edit' buttons are shown$")
     public void checkClearEditButtonsAreNotShown(){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getAgentHomePage().getChatForm().isClearButtonShown(),
+        soft.assertTrue(getAgentHomePage("main").getChatForm().isClearButtonShown(),
                 "'Clear' button is not shown for suggestion input field.");
-        soft.assertTrue(getAgentHomePage().getChatForm().isEditButtonShown(),
+        soft.assertTrue(getAgentHomePage("main").getChatForm().isEditButtonShown(),
                 "'Edit' button is not shown for suggestion input field.");
         soft.assertAll();
     }
 
-    @When("^Agent click Edit suggestions button$")
-    public void clickEditButton(){
-        getAgentHomePage().getChatForm().clickEditButton();
+    @When("^(.*) click Edit suggestions button$")
+    public void clickEditButton(String agent){
+        getAgentHomePage(agent).getChatForm().clickEditButton();
     }
 
-    @When("^Agent click Clear suggestions button$")
-    public void clickClearButton(){
-        getAgentHomePage().getChatForm().clickClearButton();
+    @When("^(.*) click Clear suggestions button$")
+    public void clickClearButton(String agent){
+        getAgentHomePage(agent).getChatForm().clickClearButton();
     }
 
     @Then("^Message input field is cleared$")
     public void verifySuggestionClearedByClearButton(){
-        Assert.assertTrue(getAgentHomePage().getChatForm().isMessageInputFieldEmpty(),
+        Assert.assertTrue(getAgentHomePage("main").getChatForm().isMessageInputFieldEmpty(),
                 "Message input field is not empty");
     }
 
     @Then("Agent is able to add \"(.*)\"")
     public void enterAdditionTextForSuggestion(String textToAdd){
-        if(!getAgentHomePage().getChatForm().isSuggestionContainerDisappears()){
+        if(!getAgentHomePage("main").getChatForm().isSuggestionContainerDisappears()){
             Assert.assertTrue(false, "Input field is not become cklickable");
         }
-        getAgentHomePage().getChatForm().sendResponseToUser(textToAdd);
+        getAgentHomePage("main").getChatForm().sendResponseToUser(textToAdd);
     }
 
     @Then("^'Profanity not allowed' pop up is shown$")
     public void verifyProfanityNotAllowedPopupShown(){
-        Assert.assertTrue(getAgentHomePage().isProfanityPopupShown(),
+        Assert.assertTrue(getAgentHomePage("main").isProfanityPopupShown(),
                 "'Profanity not allowed' popup not shown.");
     }
 
-    @When("^Agent closes 'Profanity not allowed' popup$")
-    public void closeProfanityPopup(){
-        getAgentHomePage().clickAcceptProfanityPopupButton();
+    @When("^(.*) closes 'Profanity not allowed' popup$")
+    public void closeProfanityPopup(String agent){
+        getAgentHomePage(agent).clickAcceptProfanityPopupButton();
     }
 
 
-    @When("^Agent click \"End chat\" button$")
-    public void clickEndChatButton(){
-        getAgentHomePage().getChatHeader().clickEndChatButton();
+    @When("^(.*) click \"End chat\" button$")
+    public void clickEndChatButton(String agent){
+        getAgentHomePage(agent).getChatHeader().clickEndChatButton();
     }
 
     @Then("^(?:End chat|Agent Feedback) popup should be opened$")
     public void verifyAgentFeedbackPopupOpened(){
-        Assert.assertTrue(getAgentHomePage().getAgentFeedbackWindow().isEndChatPopupShown(),
+        Assert.assertTrue(getAgentHomePage("main").getAgentFeedbackWindow().isEndChatPopupShown(),
                 "End chat popup is not opened");
     }
 
-    @When("^Agent click 'Close chat' button$")
-    public void clickCloseChatButton(){
-        getAgentHomePage().getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+    @When("^(.*) click 'Close chat' button$")
+    public void clickCloseChatButton(String agent){
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
 //    @When("(.*) click 'Close chat' button$")
@@ -321,21 +318,21 @@ public class AgentConversationSteps implements JSHelper, WebActions {
 
     @Then("^Suggestions are not shown$")
     public void verifySuggestionNotShown(){
-        getAgentHomePage().clickAgentAssistantButton();
-        Assert.assertTrue(getSuggestedGroup().isSuggestionListEmpty(),
+        getAgentHomePage("main").clickAgentAssistantButton();
+        Assert.assertTrue(getSuggestedGroup("main").isSuggestionListEmpty(),
                 "Suggestions list is not empty.");
     }
 
     @Then("And message that feature is not available is shown")
     public void verifySuggestionFeatureNotAvailable(){
         String expectedMessage = "Agent assist is not available on your current touch package";
-        Assert.assertEquals(getSuggestedGroup().getSuggestionsNotAvailableMessage(), expectedMessage,
+        Assert.assertEquals(getSuggestedGroup("main").getSuggestionsNotAvailableMessage(), expectedMessage,
                 "Error message that Agent Assist feature is not available is not as expected");
     }
 
     @Then("^(?:End chat|Agent Feedback) popup is not shown$")
     public void verifyAgentFeedbackPopupNotOpened(){
-        Assert.assertFalse(getAgentHomePage().getAgentFeedbackWindow().isEndChatPopupShown(),
+        Assert.assertFalse(getAgentHomePage("main").getAgentFeedbackWindow().isEndChatPopupShown(),
                 "Agent Feedback popup is opened");
     }
 
@@ -345,7 +342,7 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         String sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
         for(int i = 0; i<8; i++){
             if(!expectedSentiment.equalsIgnoreCase(sentimentFromAPI)){
-                getAgentHomePage().waitFor(1000);
+                getAgentHomePage("main").waitFor(1000);
                 sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
             }else {
                 break;
@@ -387,14 +384,6 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         soft.assertAll();
     }
 
-    private AgentHomePage getAgentHomePage() {
-        if (agentHomePage==null) {
-            agentHomePage =  new AgentHomePage("");
-            return agentHomePage;
-        } else{
-            return agentHomePage;
-        }
-    }
 
     private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -422,27 +411,15 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         }
     }
 
-    private ChatBody getChatBody(){
-        if (chatBody==null) {
-            chatBody =  getAgentHomePage().getChatBody();
-            return chatBody;
-        } else{
-            return chatBody;
-        }
-    }
 
     private ChatBody getChatBody(String agent){
-        return getAgentHomePage(agent).getChatBody();
+            return getAgentHomePage(agent).getChatBody();
     }
 
-    private SuggestedGroup getSuggestedGroup() {
-        if (suggestedGroup==null) {
-            suggestedGroup =  getAgentHomePage().getSuggestedGroup();
-            return suggestedGroup;
-        } else{
-            return suggestedGroup;
-        }
+    private SuggestedGroup getSuggestedGroup(String agent) {
+            return getAgentHomePage(agent).getSuggestedGroup();
     }
+
 
 
 }
