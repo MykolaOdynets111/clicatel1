@@ -55,7 +55,7 @@ public class APIHelperDotControl {
         RequestSpec.clearAccessTokenForPortalUser();
         Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channels\": [\n" +
                         "    {\n" +
@@ -78,7 +78,7 @@ public class APIHelperDotControl {
         String bodyAdapters = getBodyAdaptersChannels(adapters,url);
         return RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channels\":" + bodyAdapters +
                         "}")
@@ -136,7 +136,7 @@ public class APIHelperDotControl {
 
     public static Response deleteHTTPIntegrations(String tenantOrgName){
         return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }
 
@@ -165,7 +165,7 @@ public class APIHelperDotControl {
         Response resp = null;
         try {
             resp = RestAssured.given().log().all()
-                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                     .header("Content-Type", "application/json")
                     .body(mapper.writeValueAsString(initRequest))
                     .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);

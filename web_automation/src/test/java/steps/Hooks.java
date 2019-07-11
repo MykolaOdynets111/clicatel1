@@ -28,7 +28,6 @@ import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.dotcontrol.DotControlSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
-import sun.management.Agent;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import twitter.TwitterLoginPage;
@@ -74,7 +73,6 @@ public class Hooks implements JSHelper{
         }
 
         if (scenario.getSourceTagNames().contains("@twitter")) {
-                ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
@@ -116,7 +114,6 @@ public class Hooks implements JSHelper{
             if(resp.statusCode()!=200) {
                 supportHoursUpdates(resp);
             }
-            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
@@ -322,12 +319,8 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            if (agent.toLowerCase().contains("second")){
-                ApiHelper.closeActiveChatsSecondAgent();
-            } else {
-                ApiHelper.closeActiveChats();
-            }
-//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
+            ApiHelper.closeActiveChats(agent);
+            //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch(WebDriverException|AssertionError|NoSuchElementException e){

@@ -57,7 +57,7 @@ public class Tenants {
 
     public static Response getPrimaryAgentInfoForTenant(String tenantOrgName){
         if (respWithAgentInfo==null){
-            respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName);
+            respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName, "main");
         }
             return respWithAgentInfo;
     }

@@ -25,7 +25,6 @@ import interfaces.VerificationHelper;
 import interfaces.WebWait;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -90,7 +89,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
@@ -106,11 +105,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
-        if (agent.toLowerCase().contains("second")){
-            ApiHelper.closeActiveChatsSecondAgent();
-        }else{
-            ApiHelper.closeActiveChats();
-        }
+        ApiHelper.closeActiveChats(agent);
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
 
@@ -1343,7 +1338,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         String integrationType = "";
         switch (clientFrom){
             case "fb dm":
-                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent().getBody().jsonPath().getList("content")
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
                                         .stream()
                                         .filter(e -> ((Map)
                                                             ((Map) e).get("client")

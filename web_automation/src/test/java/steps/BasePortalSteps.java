@@ -606,7 +606,7 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
-        activeChatsFromChatdesk = ApiHelper.getActiveChatsBySecondAgent()
+        activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
                 .getBody().jsonPath().getList("content.id").size();
                 new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
@@ -1386,7 +1386,8 @@ public class BasePortalSteps implements JSHelper {
     @Then("^New image is saved on portal and backend$")
     public void verifyImageSaveOnPortal(){
         SoftAssert soft = new SoftAssert();
-        String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("imageUrl");
+        String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "main")
+                .jsonPath().get("imageUrl");
         soft.assertFalse(imageURLFromBackend==null,
                         "Agent photo is not saved on backend");
         soft.assertFalse(portalUserProfileEditingThreadLocal.get().getImageURL().isEmpty(),

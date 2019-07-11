@@ -32,9 +32,11 @@ public class Endpoints {
 
     public static String SESSION_CAPACITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
 
-    public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
+//    public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
 
-    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/%s?state=PROCESSED";
+    public static String AGENT_ASSIGNED_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets";
+
+//    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/%s?state=PROCESSED";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
@@ -94,6 +96,7 @@ public class Endpoints {
 
     public static String INTERNAL_GET_TICKETS = URLs.getBaseInternalApiUrl() + "chats/ticket?tenantId=%s&page=%s&size=10&state=UNASSIGNED&direction=ASC";
 
+    public static String INTERNAL_PROCESS_TICKET = URLs.getBaseInternalApiUrl() + "chats/ticket/process";
 
     // ==================  PLATFORM ============== //
 

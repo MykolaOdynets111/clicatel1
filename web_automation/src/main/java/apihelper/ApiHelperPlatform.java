@@ -21,7 +21,7 @@ public class ApiHelperPlatform {
 
        return   RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"invitations\": [\n" +
                         "    {\n" +
@@ -41,7 +41,7 @@ public class ApiHelperPlatform {
         for(String id : ids){
             Response resp = RestAssured.given()
                     .header("Content-Type", "application/json")
-                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                     .get(String.format(Endpoints.PLATFORM_ROLES_PERMITIONS, id));
             permissions.addAll(resp.jsonPath().getList(" permissions"));
         }
@@ -51,7 +51,7 @@ public class ApiHelperPlatform {
     public static void acceptInvitation(String tenantOrgName, String invitationID, String pass){
         RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"password\": \""+pass+"\"\n" +
                         "}")
@@ -61,10 +61,11 @@ public class ApiHelperPlatform {
     public static List<String> getIdsOfRoles(String tenantOrgName, String roleDescription){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
-        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
+        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e))
+                        .filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
                         forEach(e -> {ids.add(
                                 (String) e.get("id"));});
          ids.stream().forEach(e -> e.replace(e, "\""+e+"\""));
@@ -74,12 +75,12 @@ public class ApiHelperPlatform {
     public static void deleteUser(String tenantOrgName, String userID){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(Endpoints.PLATFORM_USER +"/"+ userID);
         if(resp.statusCode()==404){
             RestAssured.given()
                     .header("Content-Type", "application/json")
-                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                     .delete(Endpoints.PLATFORM_SEND_INVITATION +"/"+ userID);
         }
     }
@@ -87,7 +88,7 @@ public class ApiHelperPlatform {
     public static String getUserID(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_USER);
         return (String) resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().filter(e -> e.get("email").equals(userEmail))
@@ -97,7 +98,7 @@ public class ApiHelperPlatform {
     public static String getAccountUserFullName(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_USER);
         Map user = resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().filter(e -> e.get("email").equals(userEmail))
@@ -108,7 +109,7 @@ public class ApiHelperPlatform {
     public static boolean isActiveUserExists(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_USER);
         return resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().anyMatch(e -> e.get("email").equals(userEmail));
@@ -117,7 +118,7 @@ public class ApiHelperPlatform {
     public static List<Integer> getListOfActiveSubscriptions(String tenantOrgName){
         Response resp =   RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_SUBSCRIPTIONS_LIST);
 
         return resp.getBody().jsonPath().getList("data", Map.class)
@@ -129,7 +130,7 @@ public class ApiHelperPlatform {
     public static List<String> getListOfActivePaymentMethods(String tenantOrgName, String paymentType){
         Response resp =   RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_PAYMENT_METHODS);
 
         return resp.getBody().jsonPath().getList("paymentMethods", Map.class)
@@ -141,7 +142,7 @@ public class ApiHelperPlatform {
     public static void deletePaymentMethod(String tenantOrgName, String paymentID){
         RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(Endpoints.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
     }
 
@@ -166,13 +167,13 @@ public class ApiHelperPlatform {
     public static Response getAccountBillingInfo(String tenantOrgName){
         return RestAssured.given()
                 .header("Accept", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_BILLING_INFO);
     }
 
     public static MC2AccountBalance getAccountBallance(){
         return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.PLATFORM_ACCOUNT_BALANCE)
                 .getBody().as(MC2AccountBalance.class);
     }

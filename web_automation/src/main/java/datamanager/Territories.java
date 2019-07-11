@@ -14,7 +14,7 @@ public class Territories {
     public static Territory getTargetTerr(String tenantOrgName, String terrName) {
         Response resp =        RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"AVAILABLE\"\n" +
                         "\n" +
