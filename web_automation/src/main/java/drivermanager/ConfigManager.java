@@ -29,6 +29,16 @@ public class ConfigManager {
     private static final String NEW_TENANT_CREATED = "tenantCreationSuccessful";
     private static final String SECOND_AGENT_CREATED = "agentCreationSuccessful";
     private static final String TENANT_UPGRADED = "tenantUpgradeSuccessful";
+    private static final String PAYMENT_ADDED = "paymentAdded";
+
+    public static boolean isPaymentAdded(){
+        String result = System.getProperty(PAYMENT_ADDED, "false");
+        return Boolean.parseBoolean(result);
+    }
+
+    public static void setIsPaymentAdded(String status){
+        System.setProperty(PAYMENT_ADDED, status);
+    }
 
     public static boolean isNewAccountCreated(){
         String result = System.getProperty(NEW_ACCOUNT_CREATED, "false");

@@ -1,7 +1,6 @@
 #Feature: Agent Assist and Feedback limitation for tenant with Standard plan
 #
 #  Background:
-#    Given New tenant is successfully created
 #    Given New tenant is successfully upgraded
 #    Given I login as agent of Standard AQA
 #    Given User select Standard AQA tenant

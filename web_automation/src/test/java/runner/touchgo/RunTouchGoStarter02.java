@@ -18,6 +18,7 @@ import java.util.List;
         features = {
                 Path.NEW_TENANT_STARTER + "02SuggestionsAndFeedbackLimitationForStarter.feature",
                 Path.NEW_TENANT_STARTER + "02TryingToLogin2AgentInStarterPlan.feature",
+                Path.NEW_TENANT_STARTER + "02AddingPaymentMethod.feature"
                 },
         glue ="steps")
 public class RunTouchGoStarter02 {

@@ -473,6 +473,13 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
+    @Given("^Payment method is added$")
+    public void verifyPaymentAdded(){
+        if(!ConfigManager.isPaymentAdded()){
+            throw new SkipException("Adding new payment was not successful");
+        }
+    }
+
     @Given("^Second agent of (.*) is successfully created$")
     public void verifySecondAgentCreated(String tenant){
         if(!ConfigManager.isSecondAgentCreated()){
@@ -1110,8 +1117,9 @@ public class BasePortalSteps implements JSHelper {
     @Then("^New card is shown in Payment methods tab$")
     public void verifyNewPaymentAdded(){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getPortalBillingDetailsPage().isNewPaymentAdded(),
-                "New payment is not shown in 'Billing & payments' page");
+        boolean isPaymentAdded = getPortalBillingDetailsPage().isNewPaymentAdded();
+        ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
+        soft.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
         soft.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
                 "Cardholder name of added card is not as expected");
         soft.assertAll();

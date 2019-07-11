@@ -8,7 +8,7 @@
 ##  ToDo: Add logic for creating DB dump and after test destroying it
 #
 #  Background:
-#    Given New tenant is successfully created
+#    Given Given Payment method is added
 #
 #  Scenario: Upgrading Touch Go plan
 #    When I open portal

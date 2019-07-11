@@ -4,7 +4,7 @@
 Feature: User should not be able to upgrade Touch Go PLan if he does not accept terms and conditions
 
   Scenario: Upgrading Touch Go plan without accepting Terms and conditions
-    Given New tenant is successfully created
+    Given Payment method is added
     When I open portal
     And Login into portal as an admin of SignedUp AQA account
     When I try to upgrade and buy 3 agent seats without accept Clickatell's Terms and Conditions
