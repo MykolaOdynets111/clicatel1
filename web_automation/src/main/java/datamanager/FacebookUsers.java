@@ -9,7 +9,7 @@ import java.util.Map;
 public enum FacebookUsers {
 
     TOM_SMITH("Tom", "Smith", "generalbankaqa@gmail.com", "1912835872122481", "password22"),
-    FIRST_USER("Yahor", "Click", "yahor.click@gmail.com", "", "Passw0rd@"),
+    FIRST_USER("Yahor", "Click", "yahor.click@gmail.com", "", "6740582W@"),
 
     USER_FOR_INTEGRATION("Aqa", "TestPages", "generabanksecondagent@gmail.com", "", "p@$$w0rd4te$t"),
 //    ACCOUNT_WITH_QA_GENBANK_PAGE("Generalbank", "Demo", "generalbankdemo@gmail.com","T0uch!d3m0", "")
