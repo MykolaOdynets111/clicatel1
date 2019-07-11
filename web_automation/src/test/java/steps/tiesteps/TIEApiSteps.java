@@ -455,7 +455,7 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(65000);
+            Thread.sleep(70000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -1013,7 +1013,8 @@ public class TIEApiSteps implements DateTimeHelper{
             }
         }
         mapForCreatedIntent.put("model", createdModelName);
-        Assert.assertTrue(isTrained, "New model is not created");
+        Assert.assertTrue(isTrained, "New model is not created\n" +
+                ApiHelperTie.getModels().getBody().asString());
     }
 
     public String getExpectedModelName(){
