@@ -496,13 +496,15 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
-        String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
-        List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
-        List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
-        List<OvernightTicket> fullList = new ArrayList<>();
-        fullList.addAll(allAssignedTickets);
-        fullList.addAll(allUnassignedTickets);
-        if(fullList.size()>0) processTickets(fullList, agentId);
+        try {
+            String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
+            List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
+            List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
+            List<OvernightTicket> fullList = new ArrayList<>();
+            fullList.addAll(allAssignedTickets);
+            fullList.addAll(allUnassignedTickets);
+            if (fullList.size() > 0) processTickets(fullList, agentId);
+        }catch(NullPointerException e){}
     }
 
     public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
