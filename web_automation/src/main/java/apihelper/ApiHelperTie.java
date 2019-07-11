@@ -23,7 +23,8 @@ public class ApiHelperTie {
     public static List<Intent> getListOfIntentsOnUserMessage(String userMessage) {
         Response resp = RestAssured
                 .given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName()))
+                .header("Authorization",
+                        RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
                 .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().getList("intents_result.intents", Intent.class).stream()
                 .sorted(Comparator.comparing(Intent::getConfidence).reversed()).collect(Collectors.toList());
@@ -39,7 +40,8 @@ public class ApiHelperTie {
     public static String getExpectedMessageOnIntent(String intent) {
         return RestAssured
                 .given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName()))
+                .header("Authorization",
+                        RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
                 .get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestName(), intent)).jsonPath().get("text");
 
     }
