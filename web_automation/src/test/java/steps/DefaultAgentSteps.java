@@ -1407,7 +1407,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
 
         String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
-        soft.assertTrue((actualMili-expectedMili)<=2000,
+        soft.assertTrue((actualMili-expectedMili)<=3000,
                 "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");

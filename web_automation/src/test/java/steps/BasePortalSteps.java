@@ -1044,7 +1044,7 @@ public class BasePortalSteps implements JSHelper {
             }
         }
         Assert.assertTrue(result, "Balance was not updated after top up\n" +
-                "Expected: " + String.format("%1.2f", topUpBalance.get("afterTest")) +"\n" +
+                "Balance from backend : " + ApiHelperPlatform.getAccountBallance().getBalance() +"\n" +
                 "Actual: " + valueFromPortal);
     }
 
