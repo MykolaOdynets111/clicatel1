@@ -27,7 +27,7 @@ Feature: Closing account should require verification
     Then Account details page is opened
 
 
-  Scenario: Admin of the account should not be able to close the account with incorrect confirmation
+  Scenario: Admin of the account should not be able to close the account with invalid email
     When I click Launchpad button
     When I select Settings in left menu and Account details in submenu
     And Click 'Close account' button
@@ -41,8 +41,6 @@ Feature: Closing account should require verification
 
 
   Scenario Outline: Admin of the account should not be able to close the account with incorrect confirmation: <email>, <pass>
-    Given I open portal
-    And Login into portal as an admin of Updating AQA account
     When I click Launchpad button
     When I select Settings in left menu and Account details in submenu
     And Click 'Close account' button
