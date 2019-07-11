@@ -7,6 +7,7 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import datamanager.Agents;
+import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
 import drivermanager.ConfigManager;
@@ -233,10 +234,7 @@ public class Hooks implements JSHelper{
             }
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
-            if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
-                List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(Tenants.getTenantUnderTestOrgName(), "CREDIT_CARD");
-                if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), e));
-            }
+            if(scenario.getSourceTagNames().contains("@sign_up")) newAccountInfo();
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
@@ -491,4 +489,11 @@ public class Hooks implements JSHelper{
         }
         return  result.toString();
     }
+
+
+    @Attachment
+    private String newAccountInfo(){
+        return MC2Account.TOUCH_GO_NEW_ACCOUNT.toString();
+    }
+
 }
