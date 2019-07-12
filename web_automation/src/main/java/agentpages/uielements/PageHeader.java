@@ -6,6 +6,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(css = "div.header")
 public class PageHeader extends AbstractUIElement {
@@ -46,6 +47,12 @@ public class PageHeader extends AbstractUIElement {
 
     @FindBy(xpath = "//div[@class='header']//img[@src]")
     private WebElement tenantLogoImage;
+
+    @FindBy(xpath = "//button[@id='agents-list-dropdown']")
+    private WebElement headPhones;
+
+    @FindBy(xpath = "//ul[@id='agents-list-menu']/li/div")
+    private List<WebElement> headPhonesList;
 
     private String tenantLogoBorderXpath = "//div[contains(@class, 'logo')]//img";
     private String tenantNameXpath = "//div[contains(@class, 'logo')]//h1";
@@ -109,5 +116,13 @@ public class PageHeader extends AbstractUIElement {
 
     public String getTenantLogoBorderColor() {
         return Color.fromString(findElemByXPATHAgent(tenantLogoBorderXpath,"second agent").getCssValue("border-bottom-color")).asHex();
+    }
+
+    public void clickHeadPhonesButton(String agent){
+        clickElemAgent(headPhones,3,agent, "Head Phones button");
+    }
+
+    public List<String> getAvailableAgents(){
+        return headPhonesList.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
     }
 }

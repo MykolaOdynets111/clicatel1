@@ -49,6 +49,7 @@ public class BasePortalSteps implements JSHelper {
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
+    private ThreadLocal<ChatConsoleInboxPage> chatConsoleInboxPage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
     public static final String FIRST_AND_LAST_NAME = "Touch Go";
     public static String AGENT_FIRST_NAME;
@@ -1592,6 +1593,13 @@ public class BasePortalSteps implements JSHelper {
         Assert.assertTrue(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
     }
 
+    @Then("^Filter \"(.*)\" is selected by default$")
+    public void filterIsSelectedByDefault(String filterName) {
+        getChatConsoleInboxPage().getChatConsoleInboxRow("name");
+        Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
+                "Filter name by default does not match expected");
+    }
+
 
     private LeftMenu getLeftMenu() {
         if (leftMenu.get()==null) {
@@ -1719,6 +1727,15 @@ public class BasePortalSteps implements JSHelper {
             return portalChatConsolePage.get();
         } else{
             return portalChatConsolePage.get();
+        }
+    }
+
+    private ChatConsoleInboxPage getChatConsoleInboxPage(){
+        if (chatConsoleInboxPage.get()==null) {
+            chatConsoleInboxPage.set(new ChatConsoleInboxPage());
+            return chatConsoleInboxPage.get();
+        } else{
+            return chatConsoleInboxPage.get();
         }
     }
 

@@ -1,3 +1,4 @@
+@egor
 Feature: Transferring chat, user info
 
   Background:

@@ -325,13 +325,14 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(),
-                "User picture sa not expected");
+                "User picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel(),
-                "Channel picture sa not expected");
+                "Channel picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment(),
-                "Sentiment picture sa not expected");
+                "Sentiment picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
                 "Transfered chat window not on the right side of the screen");
+
         softAssert.assertAll();
 
 
@@ -462,9 +463,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "Expected to user message '"+userMessage+"' is not shown in chatdesk");
     }
 
-    @Then("^Agent select \"(.*)\" filter option$")
-    public void selectFilterOption(String option){
-        getLeftMenu("main agent").selectFilterOption(option);
+    @Then("^(.*) select \"(.*)\" filter option$")
+    public void selectFilterOption(String agent,String option){
+        getLeftMenu(agent).selectFilterOption(option);
     }
 
     @Then("^Agent see \"(.*)\" filter options$")
@@ -1574,5 +1575,29 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(agent),
                    "Transfer chat header is shown for "+ agent + " agent");
 
+    }
+
+    @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
+    public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {
+        getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton(agent);
+        List<String> availableAgents = getAgentHomePage(agent).getPageHeader().getAvailableAgents();
+        Assert.assertEquals(
+                availableAgents.size(), availableAgent,
+                "Quantity of available agents not as expected");
+        if (availableAgent==1){
+            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            String agentName =  getAgentHomePage(agent).getPageHeader().getAgentName();
+            Assert.assertFalse(
+                    availableAgents.contains(agentName),
+                    "Unavailable agent in list of available agents");
+        }
+
+
+    }
+
+    @And("^(.*) transfers overnight ticket$")
+    public void agentTransfersOvernightTicket(String agent) {
+        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
     }
 }

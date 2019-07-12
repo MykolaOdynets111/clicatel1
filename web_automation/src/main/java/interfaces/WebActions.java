@@ -347,6 +347,7 @@ public interface WebActions extends WebWait {
             }
         }
         catch(Exception e) {
+            e.printStackTrace();
             //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
         }
         return result;
