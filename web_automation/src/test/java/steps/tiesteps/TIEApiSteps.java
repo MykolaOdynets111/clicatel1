@@ -1013,7 +1013,7 @@ public class TIEApiSteps implements DateTimeHelper{
             }
         }
         mapForCreatedIntent.put("model", createdModelName);
-        Assert.assertTrue(isTrained, "New model is not created\n" +
+        Assert.assertTrue(isTrained, "New model is not trained\n" +
                 ApiHelperTie.getModels().getBody().asString());
     }
 
