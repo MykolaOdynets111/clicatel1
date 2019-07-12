@@ -27,6 +27,9 @@ public enum DriverType {
             logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
 
             ChromeOptions options = new ChromeOptions();
+            options.setCapability("profile.default_content_setting_values.cookies", 1);
+            options.setCapability("profile.block_third_party_cookies", false);
+
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
             options.addArguments("test-type=browser");
