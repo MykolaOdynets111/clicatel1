@@ -643,13 +643,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         int waitTimeInMillis = waitFor * 1000;
         long endTime = System.currentTimeMillis() + waitTimeInMillis;
 
-        if (requiredState.equalsIgnoreCase("deleted")) {
-            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
-                Thread.sleep(200);
-        }
-        else {
-            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
-                Thread.sleep(200);
+        while (!customer360Container.isPhoneNumberFieldUpdated(requiredState)
+                    && System.currentTimeMillis() < endTime) {
+            Thread.sleep(200);
         }
     }
 
