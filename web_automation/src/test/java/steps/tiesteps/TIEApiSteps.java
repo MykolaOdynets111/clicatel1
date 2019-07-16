@@ -417,14 +417,12 @@ public class TIEApiSteps implements DateTimeHelper{
     public void verifyNorRelatedModelUsing(String userInput, String modelType, String tenant, String intent){
         String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_TYPE_URL, tenant, userInput) + modelType;
         Response resp = get(url);
-        SoftAssert soft = new SoftAssert();
-        soft.assertTrue(resp.getBody().jsonPath().getList("intents_result.intents").size()>1,
-                "Only 1 intent is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
-                        "\n"+resp.getBody().asString()+"\n");
-        soft.assertFalse(resp.getBody().jsonPath().getList("intents_result.intents.intent").contains(intent),
-                "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
-                        "\n"+resp.getBody().asString()+"\n");
-        soft.assertAll();
+        List intents = resp.getBody().jsonPath().getList("intents_result.intents");
+        if(!intents.isEmpty()){
+            Assert.assertFalse(intents.contains(intent),
+                    "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                            "\n"+resp.getBody().asString()+"\n");
+        }
     }
 
 
