@@ -167,7 +167,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public List<String> getChosenTags() {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
-        List<String> result = new ArrayList();
+        List<String> result = new ArrayList<>();
         if (!isElementShownAgentByXpath(openDropdownButtonXpathClear,2,"main")){
             result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]+[ ]")));
         }

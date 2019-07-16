@@ -35,7 +35,8 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
         return chatConsoleInboxRow.stream().map(ChatConsoleInboxRow::new).collect(Collectors.toList())
-                .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase().contains(userName.toLowerCase()))
+                .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
+                        .contains(userName.toLowerCase()))
                 .findFirst().get();
     }
 

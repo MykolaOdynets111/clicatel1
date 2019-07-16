@@ -36,7 +36,7 @@ public class DotControlSteps {
 
     private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
-    private static Map<String, String> adapterApiTokens= new HashMap();
+    private static Map<String, String> adapterApiTokens= new HashMap<>();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")

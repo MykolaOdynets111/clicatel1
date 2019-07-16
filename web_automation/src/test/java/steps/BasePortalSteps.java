@@ -59,7 +59,7 @@ public class BasePortalSteps implements JSHelper {
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-    private static Map<String, String> tenantInfo = new HashMap();
+    private static Map<String, String> tenantInfo = new HashMap<>();
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     private MainPage mainPage;
     private AgentHomePage agentHomePage;
