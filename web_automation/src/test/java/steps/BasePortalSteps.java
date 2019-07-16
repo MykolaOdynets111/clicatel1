@@ -77,15 +77,17 @@ public class BasePortalSteps implements JSHelper {
         return  tenantInfo;
     }
 
-    @Given("^New (.*) agent is created$")
-    public void createNewAgent(String tenantOrgName){
+    @Given("^(.*) New (.*) agent is created$")
+    public void createNewAgent(String agentEmail, String tenantOrgName){
+        if (agentEmail.equalsIgnoreCase("brand")) {
+           AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+           Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
+        }
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-//        AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
         AGENT_EMAIL =  Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
 
-        Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         if(resp.statusCode()!=200){
@@ -547,7 +549,7 @@ public class BasePortalSteps implements JSHelper {
     @Given("^Second agent of (.*) is successfully created$")
     public void verifySecondAgentCreated(String tenant){
         if(!ConfigManager.isSecondAgentCreated()){
-            createNewAgent(tenant);
+            createNewAgent("predefined mail", tenant);
             ConfigManager.setIsSecondCreated("true");
         }
     }
