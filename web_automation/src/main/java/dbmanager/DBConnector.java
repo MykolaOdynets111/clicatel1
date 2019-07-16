@@ -449,6 +449,36 @@ public class DBConnector {
         return name;
     }
 
+
+    public static String getResetPassId(String env, String email){
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
+        String userMetadataIdQuery = "SELECT id FROM "+ tableName +".user_metadata where email='" + email + "';";
+
+        Statement statement = null;
+        ResultSet results = null;
+        String resetId = "none";
+        try {
+            statement = getConnection(env, "mc2").createStatement();
+            results = statement.executeQuery(userMetadataIdQuery);
+            results.next();
+            String userMetadatId = results.getString("id");
+
+            String userResetPassQuery = "SELECT id FROM "+ tableName +".password_reset where user_metadata_id='"
+                    + userMetadatId + "' and deleted=0;";
+            results =  statement.executeQuery(userResetPassQuery);
+            results.next();
+            resetId = results.getString("id");
+
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resetId;
+    }
+
+
+
 //    public static void main(String args[]){
 //        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");
 //        long lastVisit = DBConnector.getLastVisitForUserProfile("testing", clientProfileID);

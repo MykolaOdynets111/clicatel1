@@ -17,6 +17,7 @@ import java.util.List;
         monochrome = true,
         features = {
                 Path.NEW_TENANT_STARTER +  "03TouchGoPlanUpgradingWithoutAcceptigTerms.feature",
+                Path.NEW_TENANT_STARTER +  "03ResettingPassword.feature",
         },
         glue ="steps")
 public class RunTouchGoStarter03 {

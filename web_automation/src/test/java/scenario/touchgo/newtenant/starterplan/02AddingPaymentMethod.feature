@@ -6,6 +6,7 @@
 Feature: Admin should be able to add payment methods
 
   Background:
+    Given New tenant is successfully created
     Given Tenant SignedUp AQA has no Payment Methods
 
   Scenario: Admin should be able to add payment method from Billing Details page add see it while purchasing

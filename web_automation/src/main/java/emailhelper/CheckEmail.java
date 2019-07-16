@@ -14,7 +14,8 @@ public class CheckEmail {
 
     public static String getConfirmationURL(String expectedSender, int wait){
         try {
-            return getConfirmation(expectedSender, wait);
+            if(expectedSender.equals("Clickatell <mc2-devs@clickatell.com>")) return getConfirmation(expectedSender, wait);
+            if(expectedSender.equals("Clickatell <no-reply@clickatell.com>")) return getResetConfirmation(expectedSender, wait);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -28,11 +29,32 @@ public class CheckEmail {
             List<Message> targetSenderNewMails =
                     getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
             Message targetMessage = targetSenderNewMails.stream()
-                    .filter(e -> !(GmailParser.parseEmail(e, expectedSender)).equals("none"))
+                    .filter(e -> !(GmailParser.getAgentConfirmationLink(e, expectedSender)).equals("none"))
                     .findFirst().get();
-            verificationCode = GmailParser.parseEmail(targetMessage, expectedSender);
+            verificationCode = GmailParser.getAgentConfirmationLink(targetMessage, expectedSender);
             targetMessage.setFlag(Flags.Flag.SEEN, true);
             targetMessage.setFlag(Flags.Flag.DELETED, true);
+            GmailConnector.getFolder().close(true);
+            GmailConnector.getStore().close();
+            return verificationCode;
+        }
+        GmailConnector.getFolder().close(false);
+        GmailConnector.getStore().close();
+        return "";
+    }
+
+    private static String getResetConfirmation(String expectedSender, int wait) throws Exception {
+        String verificationCode = null;
+
+        if(newLetterFromSenderArrives(expectedSender, wait)) {
+            List<Message> targetSenderNewMails =
+                    getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
+            Message targetMessage = targetSenderNewMails.stream()
+                    .filter(e -> !(GmailParser.getResetPasswordLink(e, expectedSender)).equals("none"))
+                    .findFirst().get();
+            verificationCode = GmailParser.getResetPasswordLink(targetMessage, expectedSender);
+            targetMessage.setFlag(Flags.Flag.SEEN, true);
+//            targetMessage.setFlag(Flags.Flag.DELETED, true);
             GmailConnector.getFolder().close(true);
             GmailConnector.getStore().close();
             return verificationCode;

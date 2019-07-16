@@ -73,15 +73,17 @@ public class ApiHelperPlatform {
     }
 
     public static void deleteUser(String tenantOrgName, String userID){
-        Response resp = RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .delete(Endpoints.PLATFORM_USER +"/"+ userID);
-        if(resp.statusCode()==404){
-            RestAssured.given()
+        if(!userID.equals("none")) {
+            Response resp = RestAssured.given()
                     .header("Content-Type", "application/json")
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                    .delete(Endpoints.PLATFORM_SEND_INVITATION +"/"+ userID);
+                    .delete(Endpoints.PLATFORM_USER + "/" + userID);
+            if (resp.statusCode() == 404) {
+                RestAssured.given()
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                        .delete(Endpoints.PLATFORM_SEND_INVITATION + "/" + userID);
+            }
         }
     }
 
@@ -90,9 +92,10 @@ public class ApiHelperPlatform {
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.PLATFORM_USER);
-        return (String) resp.getBody().jsonPath().getList("users", Map.class)
-                .stream().filter(e -> e.get("email").equals(userEmail))
-                .findFirst().get().get("id");
+        Map user =  resp.getBody().jsonPath().getList("users", Map.class)
+                                    .stream().filter(e -> e.get("email").equals(userEmail))
+                                    .findFirst().orElse(null);
+        return user!=null ? (String) user.get("id") : "none";
     }
 
     public static String getAccountUserFullName(String tenantOrgName, String userEmail){

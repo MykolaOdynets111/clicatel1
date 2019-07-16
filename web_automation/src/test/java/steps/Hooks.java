@@ -217,6 +217,14 @@ public class Hooks implements JSHelper{
 
 
     private void finishAgentFlowIfExists(Scenario scenario) {
+
+        if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
+            String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(),
+                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+            ConfigManager.setIsSecondCreated("false");
+        }
+
         if (DriverFactory.isAgentDriverExists()) {
             if (scenario.getSourceTagNames().contains("@agent_info")) {
                 new AgentHomePage("main").getProfileWindow().closeIfOpened();
@@ -267,18 +275,13 @@ public class Hooks implements JSHelper{
 
             }
 
-            if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
-                String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(),
-                        Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
-                ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
-            }
 
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
 
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-            closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                 AgentHomePage agentHomePage = new AgentHomePage("second agent");
@@ -288,11 +291,7 @@ public class Hooks implements JSHelper{
             }
             DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();
-
-
         }
-
-
     }
 
     private void endTouchFlow(Scenario scenario, boolean typeEndInWidget) {

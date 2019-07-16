@@ -82,7 +82,9 @@ public class BasePortalSteps implements JSHelper {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+//        AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        AGENT_EMAIL =  Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+
         Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
@@ -114,33 +116,67 @@ public class BasePortalSteps implements JSHelper {
         getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
     }
 
-    @Then("^Confirmation Email arrives$")
-    public void verifyConfirmationEmail(){
+    private boolean checkThatEmailFromSenderArrives(String sender, int wait){
         boolean result = false;
         if(ConfigManager.getEnv().equals("testing"))
             result = DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
         else {
             GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
             String confirmationEmail = CheckEmail
-                    .getConfirmationURL("Clickatell <mc2-devs@clickatell.com>", 200);
+                    .getConfirmationURL(sender, wait);
             result = !confirmationEmail.equalsIgnoreCase("") ||
                     !confirmationEmail.equalsIgnoreCase("none");
             if(result){
                 confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
             }
         }
-
-        Assert.assertTrue(result,
-                "Confirmation email about creating new agent is not delivered after 380 seconds wait");
+        return result;
     }
 
-    @When("^Second agent opens confirmation URL$")
-    public void openConfirmationURL() {
+    @Then("^Confirmation Email arrives$")
+    public void verifyConfirmationEmail(){
+        boolean result = false;
         if (ConfigManager.getEnv().equals("testing")){
             String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(
                     ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
             confirmationURL = Endpoints.PORTAL_NEW_AGENT_ACTIVATION + invitationID;
+            if(!(invitationID==null)) result = true;
+        }else {
+            result = checkThatEmailFromSenderArrives("Clickatell <mc2-devs@clickatell.com>", 200);
         }
+        Assert.assertTrue(result,
+                "Confirmation email about creating new agent is not delivered after 200 seconds wait");
+    }
+
+    @Then("^Confirmation reset password Email arrives$")
+    public void verifyResetPassEmailArrives(){
+        boolean result = false;
+        if (ConfigManager.getEnv().equals("testing")){
+            String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
+                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            if(resetPassID.equals("none")) {
+                getPortalMainPage().waitFor(1500);
+                resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
+                        Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            }else{
+                result = true;
+            }
+            confirmationURL = Endpoints.PORTAL_RESET_PASS_URL + resetPassID;
+        }else{
+            result = checkThatEmailFromSenderArrives("Clickatell <no-reply@clickatell.com>", 200);
+        }
+        Assert.assertTrue(result,
+                "Confirmation email about resetting agent password is not delivered after 200 seconds wait");
+
+    }
+
+    @Then("^Agent opens confirmation URL$")
+    public void clickPasswordRestLink(){
+        DriverFactory.getDriverForAgent("admin").get(confirmationURL);
+    }
+
+    @When("^Second agent opens confirmation URL$")
+    public void openConfirmationURL() {
         DriverFactory.getSecondAgentDriverInstance().get(confirmationURL);
     }
 
@@ -156,8 +192,22 @@ public class BasePortalSteps implements JSHelper {
 
     }
 
+
+    @Then("^(.*) redirected to the \"(.*)\" page$")
+    public void verifySetNewPasswordScreenShown(String agent, String pageName){
+        SoftAssert soft = new SoftAssert();
+        String pageLabel = getPortalLoginPage(agent).getNewPasswordLable();
+        soft.assertEquals(pageLabel, pageName,
+                "Set new password label is not as expected");
+        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+                "There are no 2 input fields for creating agent's password");
+        soft.assertAll();
+    }
+
     @When("(.*) provides new password and click Login")
     public void createPassword(String agent){
+        Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
+        AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
         getPortalLoginPage(agent).createNewPass(AGENT_PASS)
                                     .clickLogin();
     }
@@ -243,6 +293,9 @@ public class BasePortalSteps implements JSHelper {
     @Then("^(?:Error|Notification) popup with text (.*) is shown for (.*)$")
     public void verifyVerificationMessage(String expectedMessage, String agent){
         String notificationText = getPortalLoginPage(agent).getNotificationAlertText().trim();
+        if(expectedMessage.contains("<email>")) {
+            expectedMessage = expectedMessage.replace("<email>", Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+        }
         getPortalLoginPage(agent).waitForNotificationAlertToBeProcessed(2,4);
         Assert.assertEquals(notificationText, expectedMessage.trim(),
                 "Expected notification is not shown");
@@ -362,6 +415,16 @@ public class BasePortalSteps implements JSHelper {
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
+    }
+
+    @Then("^(.*) logs in successfully$")
+    public void agentLoggsIn(String agent){
+        SoftAssert soft = new SoftAssert();
+        soft.assertNotEquals(getPortalLoginPage(agent).getNotificationAlertText(), "Username or password is invalid",
+                "Agent login into portal was not successful");
+        soft.assertFalse(getPortalLoginPage(agent).isLoginPageOpened(1),
+                "Agent login into portal was not successful");
+        soft.assertAll();
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
@@ -485,6 +548,7 @@ public class BasePortalSteps implements JSHelper {
     public void verifySecondAgentCreated(String tenant){
         if(!ConfigManager.isSecondAgentCreated()){
             createNewAgent(tenant);
+            ConfigManager.setIsSecondCreated("true");
         }
     }
 
@@ -554,7 +618,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
-        getPortalMainPage().waitWhileProcessing(2,5);
+        getPortalMainPage().waitWhileProcessing(1,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
@@ -1187,6 +1251,7 @@ public class BasePortalSteps implements JSHelper {
     @When("^Click 'Manage' button for (.*) user$")
     public void clickManageButtonForUser(String fullName){
         if(fullName.equalsIgnoreCase("created")){
+//            fullName = "Maurita Toy";
             fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         }
         if(fullName.equalsIgnoreCase("admin")){
