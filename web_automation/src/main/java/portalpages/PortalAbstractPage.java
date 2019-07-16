@@ -62,7 +62,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitForNotificationAlertToDisappear(){
         try {
-            waitForElementsToBeInvisibleByCssAgent(notificationAlert, 25);
+            waitForElementToBeInVisibleByCssAgent(notificationAlert, 25, this.currentAgent);
         } catch(NoSuchElementException e){}
     }
 
@@ -83,8 +83,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitWhileProcessing(){
         try {
-        waitForElementToBeVisibleByCssAgent(processingAlert, 14);
-        waitForElementToBeInVisibleByCssAgent(processingAlert, 20);
+        waitForElementToBeVisibleByCssAgent(processingAlert, 14, this.getCurrentAgent());
+        waitForElementToBeInVisibleByCssAgent(processingAlert, 20, this.getCurrentAgent());
         } catch(NoSuchElementException|TimeoutException e){}
     }
 

@@ -53,6 +53,14 @@ public class PortalMainPage extends PortalAbstractPage {
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
 
+
+    public PortalMainPage(String agent) {
+        super(agent);
+    }
+    public PortalMainPage() {
+        super();
+    }
+
     public ConfigureTouchWindow getConfigureTouchWindow() {
         return configureTouchWindow;
     }

@@ -199,6 +199,7 @@ public class Endpoints {
 
     public static String PORTAL_NEW_AGENT_ACTIVATION = URLs.getBasePortalUrl() + "/#/invitation/";
 
+    public static String PORTAL_RESET_PASS_URL = URLs.getBasePortalUrl() + "/#/forgotPassword/";
 
     // ====================  TAF ================= //
 

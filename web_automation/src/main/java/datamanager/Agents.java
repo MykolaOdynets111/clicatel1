@@ -149,4 +149,9 @@ public enum Agents {
         this.env = env;
         return this;
     }
+
+    public Agents setPass(String pass) {
+        this.userPass = pass;
+        return this;
+    }
 }
