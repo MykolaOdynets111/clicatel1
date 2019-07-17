@@ -37,7 +37,7 @@ public enum Agents {
     TESTING_STARTER_TOUCH_GO_SECOND_AGENT("touchgosecondagent@gmail.com", "p@$$w0rd4te$t", "Starter AQA", "testing"),
     TESTING_STANDARD_TOUCH_GO_AGENT("standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "Standard AQA", "testing"),
     TESTING_UPDATE_ACCOUNT_ADMIN("updateplan@gmail.com", "p@$$w0rd4te$t", "Updating AQA", "testing"),
-    TESTING_SIGNUP_ACCOUNT("signup_account@aqa.test", "p@$$w0rd4te$t", "SignedUp AQA", "testing"),
+    TESTING_LOCAL_SIGNUP_ACCOUNT(MC2Account.TESTING_LOCAL_ACCOUNT.getEmail(), "p@$$w0rd4te$t", "Local AQA", "testing"),
     TESTING_NEW_ONE_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "New One2", "testing"),
 
     // =======  Active agents for Agent mode tests ======== //
@@ -70,12 +70,15 @@ public enum Agents {
     QA_COMMON_ADMIN("account_signup@aqa.test", "p@$$w0rd4te$t", "Automation Common", "qa"),
     TESTING_COMMON_ADMIN("commontenant@gmail.com", "p@$$w0rd4te$t", "Automation Common", "testing"),
 
-    // ======= Dummy tenants for training
+    // ======= Test tenants with Standard plan
     DEV_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "dev"),
     DEMO_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "demo"),
     QA_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "qa"),
     TESTING_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", "testing"),
 
+    // ======= User of newly created tenant for touch go tests =========== //
+    TOUCH_GO_ADMIN("", "p@$$w0rd4te$t", "", ""),
+    TOUCH_GO_SECOND_AGENT("touchgoagent@gmail.com", "p@$$w0rd4te$t", "", ""),
     ;
 
     String email;
@@ -129,5 +132,26 @@ public enum Agents {
     public static  Agents getAgentFromCurrentEnvByTenantOrgName(String tenantOrgName, String ordinalAgentNumber){
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")) return getSecondAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
         else return getMainAgentFromCurrentEnvByTenantOrgName(tenantOrgName);
+    }
+
+    public Agents setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+
+    public Agents setTenant(String tenant) {
+        this.tenant = tenant;
+        return this;
+    }
+
+    public Agents setEnv(String env) {
+        this.env = env;
+        return this;
+    }
+
+    public Agents setPass(String pass) {
+        this.userPass = pass;
+        return this;
     }
 }

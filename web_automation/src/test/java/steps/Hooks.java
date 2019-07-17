@@ -6,6 +6,8 @@ import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import datamanager.Agents;
+import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
 import drivermanager.ConfigManager;
@@ -72,7 +74,6 @@ public class Hooks implements JSHelper{
         }
 
         if (scenario.getSourceTagNames().contains("@twitter")) {
-                ApiHelper.closeAllOvernightTickets("General Bank Demo");
                 TwitterLoginPage.openTwitterLoginPage().loginUser().clickNotificationsButton();
                 if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
                     DriverFactory.getAgentDriverInstance();
@@ -114,7 +115,6 @@ public class Hooks implements JSHelper{
             if(resp.statusCode()!=200) {
                 supportHoursUpdates(resp);
             }
-            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
@@ -217,6 +217,14 @@ public class Hooks implements JSHelper{
 
 
     private void finishAgentFlowIfExists(Scenario scenario) {
+
+        if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
+            String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(),
+                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+            ConfigManager.setIsSecondCreated("false");
+        }
+
         if (DriverFactory.isAgentDriverExists()) {
             if (scenario.getSourceTagNames().contains("@agent_info")) {
                 new AgentHomePage("main").getProfileWindow().closeIfOpened();
@@ -224,7 +232,6 @@ public class Hooks implements JSHelper{
             if (scenario.getSourceTagNames().contains("@inactivity_timeout")) {
                 ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "agentInactivityTimeoutSec", "30");
             }
-
 
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
@@ -235,18 +242,7 @@ public class Hooks implements JSHelper{
             }
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
-            if(scenario.getSourceTagNames().contains("@updating_touchgo")) {
-                DriverFactory.closeAgentBrowser();
-                ApiHelper.decreaseTouchGoPLan(Tenants.getTenantUnderTestOrgName());
-                List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(Tenants.getTenantUnderTestOrgName());
-                subscriptionIDs.forEach(e ->
-                        ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
-            }
-
-            if(scenario.getSourceTagNames().contains("@adding_payment_method")) {
-                List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(Tenants.getTenantUnderTestOrgName(), "CREDIT_CARD");
-                if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(Tenants.getTenantUnderTestOrgName(), e));
-            }
+            if(scenario.getSourceTagNames().contains("@sign_up")) newAccountInfo();
 
             if (scenario.getSourceTagNames().contains("@suggestions")){
                 boolean pretestFeatureStatus = DefaultAgentSteps.getPreTestFeatureStatus("AGENT_ASSISTANT");
@@ -278,21 +274,14 @@ public class Hooks implements JSHelper{
                 ApiHelper.setIntegrationStatus(Tenants.getTenantUnderTestOrgName(), "webchat", true);
 
             }
+
+
             DriverFactory.getAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeAgentBrowser();
-// Will be handled via DB backup
-//            if(scenario.isFailed()&&scenario.getSourceTagNames().contains("@closing_account")){
-//                ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
-//                                                    BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-//                                                    BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
-//            }
-//            if (scenario.getSourceTagNames().contains("@creating_new_tenant ")){
-//                String url = String.format(Endpoints.TIE_DELETE_TENANT, Tenants.getAccountNameForNewAccountSignUp());
-//                given().delete(url);
-//            }
+
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-            closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                 AgentHomePage agentHomePage = new AgentHomePage("second agent");
@@ -315,9 +304,6 @@ public class Hooks implements JSHelper{
                 if (scenario.isFailed()) {
                     touchConsoleOutput();
                 }
-//                if (scenario.isFailed()&&DriverFactory.isAgentDriverExists()) {
-//                    closeWidgetSession();
-//                }
         }catch (WebDriverException e) { }
         }
     }
@@ -330,15 +316,11 @@ public class Hooks implements JSHelper{
     private void closePopupsIfOpenedEndChatAndlogoutAgent(String agent) {
         try {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
-            if (agent.toLowerCase().contains("second")){
-                ApiHelper.closeActiveChatsSecondAgent();
-            } else {
-                ApiHelper.closeActiveChats();
-            }
-//            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
+            ApiHelper.closeActiveChats(agent);
+            //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
             agentHomePage.getPageHeader().logOut(agent);
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
-        } catch(WebDriverException|AssertionError e){
+        } catch(WebDriverException|AssertionError|NoSuchElementException e){
         }
     }
 
@@ -506,4 +488,11 @@ public class Hooks implements JSHelper{
         }
         return  result.toString();
     }
+
+
+    @Attachment
+    private String newAccountInfo(){
+        return MC2Account.TOUCH_GO_NEW_ACCOUNT.toString();
+    }
+
 }

@@ -1,0 +1,28 @@
+@egor
+Feature: Transferring chat, user info
+
+  Background:
+    Given User select General Bank Demo tenant
+    Given I login as agent of General Bank Demo
+    And Click chat icon
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-1742")
+  Scenario: Transfer chat: All required fields in pop-up should be filled. Notification should have user's profile picture, channel and sentiment
+    When User enter connect to agent into widget input field
+    Then Agent has new conversation request
+    Given I login as second agent of General Bank Demo
+    When First Agent click on new conversation
+    When Agent click on 'Transfer' chat
+    Then Transfer chat pop up appears
+    When Click on 'Transfer' button in pop-up
+    Then 'Transfer to' fields highlighted red color
+    And  'Note' fields highlighted red color
+    When Agent select an agent in 'Transfer to' drop down
+    And  Click on 'Transfer' button in pop-up
+    Then 'Note' fields highlighted red color
+    When Complete 'Note' field
+    And  Click on 'Transfer' button in pop-up
+    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second Agent receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment
+
+

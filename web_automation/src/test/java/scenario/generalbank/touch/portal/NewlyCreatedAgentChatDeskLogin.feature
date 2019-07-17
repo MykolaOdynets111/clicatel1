@@ -7,7 +7,7 @@ Feature: Newly created agent should be able to login into to chat desk
 
   @skip_for_demo1
   Scenario: Newly created agent should be able to login into to chat desk
-    Given New General Bank Demo agent is created
+    Given Brand New General Bank Demo agent is created
     Then New agent is added into touch database
     When I open portal
     And Login as newly created agent

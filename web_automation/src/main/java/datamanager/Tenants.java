@@ -1,7 +1,6 @@
 package datamanager;
 
 import apihelper.ApiHelper;
-import com.github.javafaker.Faker;
 import cucumber.runtime.CucumberException;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
@@ -23,36 +22,7 @@ public class Tenants {
     private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
     private static ThreadLocal<Map<String,String>> TENANT_UNDER_TEST =  new ThreadLocal<>();
 
-
-//    ToDo: Remove after enhanced DB backup
-    private static String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
-
-    public static String getAccountNameForNewAccountSignUp() {
-        try {
-            FileReader fileReader = new FileReader("src/test/resources/touchgo/accountName.txt");
-            BufferedReader rFile =  new BufferedReader(fileReader);
-            ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = rFile.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP;
-    }
-
-    public static void setAccountNameForNewAccountSignUp() {
-        Faker faker = new Faker();
-        ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = faker.name().firstName() + faker.number().randomNumber();
-        File file =new File("src/test/resources/touchgo/accountName.txt");
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private static void setTenantUnderTestOrgName(String orgName){
+    public static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME.set(orgName);
     }
 
@@ -87,7 +57,7 @@ public class Tenants {
 
     public static Response getPrimaryAgentInfoForTenant(String tenantOrgName){
         if (respWithAgentInfo==null){
-            respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName);
+            respWithAgentInfo = ApiHelper.getAgentInfo(tenantOrgName, "main");
         }
             return respWithAgentInfo;
     }
@@ -137,26 +107,20 @@ public class Tenants {
                 Tenants.setTenantUnderTestOrgName("Automation Bot");
                 TENANT_UNDER_TEST.get().put("Automation Bot", "agentmode");
                 break;
-            case "SignedUp AQA":
-                Tenants.setTenantUnderTestOrgName("SignedUp AQA");
-                Tenants.setTenantUnderTestName(Tenants.getAccountNameForNewAccountSignUp());
-                TENANT_UNDER_TEST.get().put("SignedUp AQA", Tenants.getAccountNameForNewAccountSignUp());
-                break;
             case "Automation Common":
                 Tenants.setTenantUnderTestName("aqacomon");
                 Tenants.setTenantUnderTestOrgName("Automation Common");
                 TENANT_UNDER_TEST.get().put("Automation Common", "aqacomon");
-                break;
-            case "New One":
-                Tenants.setTenantUnderTestName("automationtest1");
-                Tenants.setTenantUnderTestOrgName("New One");
-                TENANT_UNDER_TEST.get().put("Automation Common", "automationtest1");
                 break;
             case "Standard Billing":
                 Tenants.setTenantUnderTestName("standardbilling");
                 Tenants.setTenantUnderTestOrgName("Standard Billing");
                 TENANT_UNDER_TEST.get().put("Standard Billing", "standardbilling");
                 break;
+            default:
+                Tenants.setTenantUnderTestOrgName(tenantOrgName);
+                Tenants.setTenantUnderTestName(
+                        MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName).getAccountName());
         }
     }
 

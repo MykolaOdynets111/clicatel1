@@ -15,8 +15,7 @@ public enum MC2Account {
     TESTING_STANDARD_ACCOUNT("standard", "standarttouchgoplan@gmail.com", "p@$$w0rd4te$t", "standardplan", "Standard AQA", "testing", "ff808081668ab31c01668b98407f05e5", "ff8080816642a88501668b925a0e00cc"),
     TESTING_UPDATE_ACCOUNT("starter", "updateplan@gmail.com", "p@$$w0rd4te$t", "updatingplan", "Updating AQA", "testing", "", ""),
 
-    TESTING_SIGNUP_ACCOUNT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "automationtest", "SignedUp AQA", "testing", "", ""),
-//    TESTING_NEW_ONE_ACCOUNT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "automationtest1", "New One", "testing", "", ""),
+    TESTING_LOCAL_ACCOUNT("starter", "loTral_sigJupaio@aqa.test", "p@$$w0rd4te$t", "lcaluno", "Local AQA", "testing", "", ""),
 
     TESTING_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "testing", "", ""),
     QA_AGENT_MODE_ACCOUNT("starter", "tenantagentmode@gmail.com", "p@$$w0rd4te$t", "agentmode", "Automation", "qa", "", ""),
@@ -43,6 +42,7 @@ public enum MC2Account {
     QA_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "qa", "", ""),
     TESTING_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", "testing", "", "ff8080816b545c7c016b561eb8530040"),
 
+    TOUCH_GO_NEW_ACCOUNT("", "", "p@$$w0rd4te$t","", "", "", "","")
     ;
 
     String touchGoPlan;
@@ -110,17 +110,70 @@ public enum MC2Account {
         MC2Account[] accountsArray = MC2Account.values();
         List<MC2Account> agentsList = Arrays.asList(accountsArray);
         return agentsList.stream()
-                .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
+                .filter(e -> e.getEnv().equalsIgnoreCase(env)
                         && e.getTenantOrgName().equalsIgnoreCase(tenantOrgName))
                 .findFirst().get();
     }
 
-    public static MC2Account getAccountDetails(String env, String accounName){
+    public static MC2Account getAccountDetailsByAccountName(String env, String accounName){
         MC2Account[] accountsArray = MC2Account.values();
         List<MC2Account> agentsList = Arrays.asList(accountsArray);
         return agentsList.stream()
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAccountName().equalsIgnoreCase(accounName))
                 .findFirst().get();
+    }
+
+    public MC2Account setTouchGoPlan(String touchGoPlan) {
+        this.touchGoPlan = touchGoPlan;
+        return this;
+    }
+
+    public MC2Account setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public MC2Account setAccountName(String accountName) {
+        this.accountName = accountName;
+        return this;
+    }
+
+    public MC2Account setTenantOrgName(String tenantOrgName) {
+        this.tenantOrgName = tenantOrgName;
+        return this;
+    }
+
+    public MC2Account setEnv(String env) {
+        this.env = env;
+        return this;
+    }
+
+    public MC2Account setTenantID(String tenantID) {
+        this.tenantID = tenantID;
+        return this;
+    }
+
+    public MC2Account setAccountID(String accountID) {
+        this.accountID = accountID;
+        return this;
+    }
+
+    public static MC2Account getTouchGoAccount(){
+        if(ConfigManager.debugTouchGo()) return MC2Account.TESTING_LOCAL_ACCOUNT;
+        else return MC2Account.TOUCH_GO_NEW_ACCOUNT;
+    }
+
+
+    @Override
+    public String toString() {
+        return "MC2Account{" +
+                "touchGoPlan='" + touchGoPlan + '\'' +
+                ", email='" + email + '\'' +
+                ", pass='" + pass + '\'' +
+                ", accountName='" + accountName + '\'' +
+                ", tenantOrgName='" + tenantOrgName + '\'' +
+                ", env='" + env + '\'' +
+                '}';
     }
 }

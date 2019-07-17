@@ -10,17 +10,18 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import datamanager.Agents;
-import datamanager.FacebookUsers;
-import datamanager.Tenants;
+import datamanager.*;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
+import emailhelper.CheckEmail;
+import emailhelper.GmailConnector;
 import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
 import portalpages.uielements.AgentRowChatConsole;
@@ -29,11 +30,13 @@ import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
 import java.util.*;
+import java.util.List;
 
 public class BasePortalSteps implements JSHelper {
 
     private Faker faker = new Faker();
     private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
+    private ThreadLocal<PortalLoginPage> secondAgentPortalLoginPage = new ThreadLocal<>();
     private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
     private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
     private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
@@ -46,19 +49,17 @@ public class BasePortalSteps implements JSHelper {
     private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
     private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
+    private ThreadLocal<ChatConsoleInboxPage> chatConsoleInboxPage = new ThreadLocal<>();
     private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
-    public static final String EMAIL_FOR_NEW_ACCOUNT_SIGN_UP = "signup_account@aqa.test";
-    public static final String PASS_FOR_NEW_ACCOUNT_SIGN_UP = "p@$$w0rd4te$t";
-  //  public static final String ACCOUNT_NAME_FOR_NEW_ACCOUNT_SIGN_UP = "automationtest2m15";
-    public static final String FIRST_AND_LAST_NAME = "Taras Aqa";
+    public static final String FIRST_AND_LAST_NAME = "Touch Go";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
     private static String AGENT_EMAIL;
-    private String AGENT_PASS = "p@$$w0rd4te$t";
+    private String AGENT_PASS = Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
     private String activationAccountID;
-    private static Map<String, String> tenantInfo = new HashMap();
+    private static Map<String, String> tenantInfo = new HashMap<>();
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     private MainPage mainPage;
     private AgentHomePage agentHomePage;
@@ -68,17 +69,25 @@ public class BasePortalSteps implements JSHelper {
     private String secondAgentNameForChatConsoleTests = "";
     private Map<String, Double> topUpBalance = new HashMap<>();
     private String nameOfUnchekedDay = "";
+    private String accountCurrency;
+    private String autoSchedulerPreActionStatus;
+    private String confirmationURL;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
     }
 
-    @Given("^New (.*) agent is created$")
-    public void createNewAgent(String tenantOrgName){
+    @Given("^(.*) New (.*) agent is created$")
+    public void createNewAgent(String agentEmail, String tenantOrgName){
+        if (agentEmail.equalsIgnoreCase("brand")) {
+           AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+           Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
+        }
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        AGENT_EMAIL =  Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         if(resp.statusCode()!=200){
@@ -93,6 +102,116 @@ public class BasePortalSteps implements JSHelper {
         }
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
+    }
+
+    @When("^Create new Agent$")
+    public void createNewAgent(){
+        AGENT_FIRST_NAME = faker.name().firstName();
+        AGENT_LAST_NAME =  faker.name().lastName();
+        AGENT_EMAIL = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
+        Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+
+        getPortalManagingUsersPage().getAddNewAgentWindow()
+                .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
+        getPortalManagingUsersPage().waitWhileProcessing(2,3);
+        getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
+    }
+
+    private boolean checkThatEmailFromSenderArrives(String sender, int wait){
+        boolean result = false;
+        if(ConfigManager.getEnv().equals("testing"))
+            result = DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+        else {
+            GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+            String confirmationEmail = CheckEmail
+                    .getConfirmationURL(sender, wait);
+            result = !confirmationEmail.equalsIgnoreCase("") ||
+                    !confirmationEmail.equalsIgnoreCase("none");
+            if(result){
+                confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+            }
+        }
+        return result;
+    }
+
+    @Then("^Confirmation Email arrives$")
+    public void verifyConfirmationEmail(){
+        boolean result = false;
+        if (ConfigManager.getEnv().equals("testing")){
+            String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(
+                    ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            confirmationURL = Endpoints.PORTAL_NEW_AGENT_ACTIVATION + invitationID;
+            if(!(invitationID==null)) result = true;
+        }else {
+            result = checkThatEmailFromSenderArrives("Clickatell <mc2-devs@clickatell.com>", 200);
+        }
+        Assert.assertTrue(result,
+                "Confirmation email about creating new agent is not delivered after 200 seconds wait");
+    }
+
+    @Then("^Confirmation reset password Email arrives$")
+    public void verifyResetPassEmailArrives(){
+        boolean result = false;
+        if (ConfigManager.getEnv().equals("testing")){
+            String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
+                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            if(resetPassID.equals("none")) {
+                getPortalMainPage().waitFor(1500);
+                resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
+                        Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            }else{
+                result = true;
+            }
+            confirmationURL = Endpoints.PORTAL_RESET_PASS_URL + resetPassID;
+        }else{
+            result = checkThatEmailFromSenderArrives("Clickatell <no-reply@clickatell.com>", 200);
+        }
+        Assert.assertTrue(result,
+                "Confirmation email about resetting agent password is not delivered after 200 seconds wait");
+
+    }
+
+    @Then("^Agent opens confirmation URL$")
+    public void clickPasswordRestLink(){
+        DriverFactory.getDriverForAgent("admin").get(confirmationURL);
+    }
+
+    @When("^Second agent opens confirmation URL$")
+    public void openConfirmationURL() {
+        DriverFactory.getSecondAgentDriverInstance().get(confirmationURL);
+    }
+
+    @Then("^Login screen with new (.*) name opened$")
+    public void verifyLoginScreenWithGreeting(String agent){
+        String agentFullName = AGENT_FIRST_NAME +" "+ AGENT_LAST_NAME;
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getPortalLoginPage(agent).getWelcomeMessage(6).contains(agentFullName),
+                        "Welcome message does not contaion "+ agentFullName +"user name");
+        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+                "There are no 2 input fields for creating agent's password");
+        soft.assertAll();
+
+    }
+
+
+    @Then("^(.*) redirected to the \"(.*)\" page$")
+    public void verifySetNewPasswordScreenShown(String agent, String pageName){
+        SoftAssert soft = new SoftAssert();
+        String pageLabel = getPortalLoginPage(agent).getNewPasswordLable();
+        soft.assertEquals(pageLabel, pageName,
+                "Set new password label is not as expected");
+        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+                "There are no 2 input fields for creating agent's password");
+        soft.assertAll();
+    }
+
+    @When("(.*) provides new password and click Login")
+    public void createPassword(String agent){
+        Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
+        AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
+        getPortalLoginPage(agent).createNewPass(AGENT_PASS)
+                                    .clickLogin();
     }
 
     @Then("^Newly created agent is deleted in DB$")
@@ -113,22 +232,47 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^New agent is added into touch database$")
     public void verifyThatNewAgentAddedToDatabase(){
-        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), AGENT_EMAIL),
+        Assert.assertTrue(DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail()),
                 "Agent with '" + AGENT_EMAIL + "' Email is not created in touch DB after 10 seconds wait.");
     }
 
     @Given("^Delete user$")
     public static void deleteAgent(){
-        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), AGENT_EMAIL);
+        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
         ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
     }
 
-    @When("^I provide all info about new account and click 'Sign Up' button$")
-    public void fillInFormWithInfoAboutNewAccount(){
-        Tenants.setAccountNameForNewAccountSignUp();
-        Tenants.setTenantUnderTestName(Tenants.getAccountNameForNewAccountSignUp());
-        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME, Tenants.getAccountNameForNewAccountSignUp(),
-                                        EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    @Given("^Second agent of (.*) account does not exist$")
+    public void deleteSecondAgent(String account){
+        Tenants.setTenantUnderTestNames(account);
+        try{
+        deleteAgent();
+        }catch (NoSuchElementException e){
+            //agent doesn't exists
+        }
+    }
+
+
+    @When("^I provide all info about new (.*) account and click 'Sign Up' button$")
+    public void fillInFormWithInfoAboutNewAccount(String accountOrgName){
+        MC2Account targetAcc;
+        if (ConfigManager.debugTouchGo()){
+            targetAcc =  MC2Account.TESTING_LOCAL_ACCOUNT;
+        } else {
+            Faker faker = new Faker();
+            String accountName = (faker.name().firstName() + faker.number().randomNumber()).toLowerCase();
+            String email = "aqa_" + faker.internet().emailAddress();
+            MC2Account.TOUCH_GO_NEW_ACCOUNT.setEmail(email).setTenantOrgName(accountOrgName)
+                    .setAccountName(accountName).setEnv(ConfigManager.getEnv());
+            targetAcc = MC2Account.TOUCH_GO_NEW_ACCOUNT;
+            Agents.TOUCH_GO_ADMIN.setEmail( MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail())
+                    .setTenant(accountOrgName).setEnv(ConfigManager.getEnv());
+        }
+
+        Tenants.setTenantUnderTestName(targetAcc.getAccountName());
+        Tenants.setTenantUnderTestOrgName(accountOrgName);
+        getPortalSignUpPage().signUp(FIRST_AND_LAST_NAME,  targetAcc.getAccountName(),
+                targetAcc.getEmail(), targetAcc.getPass());
     }
 
     @When("^I try to create new account with following data: (.*), (.*), (.*), (.*)$")
@@ -142,10 +286,21 @@ public class BasePortalSteps implements JSHelper {
                 "'Required' error not shown");
     }
 
-    @Then("^Error popup with text (.*) is shown$")
+    @Then("^(?:Error|Notification) popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
         Assert.assertEquals(getPortalSignUpPage().getNotificationAlertText().trim(), expectedMessage.trim(),
                 "Field verification is not working.");
+    }
+
+    @Then("^(?:Error|Notification) popup with text (.*) is shown for (.*)$")
+    public void verifyVerificationMessage(String expectedMessage, String agent){
+        String notificationText = getPortalLoginPage(agent).getNotificationAlertText().trim();
+        if(expectedMessage.contains("<email>")) {
+            expectedMessage = expectedMessage.replace("<email>", Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+        }
+        getPortalLoginPage(agent).waitForNotificationAlertToBeProcessed(2,4);
+        Assert.assertEquals(notificationText, expectedMessage.trim(),
+                "Expected notification is not shown");
     }
 
     @When("^I open portal$")
@@ -157,9 +312,8 @@ public class BasePortalSteps implements JSHelper {
     @When("(.*) test accounts is closed")
     public void closeAllTestAccount(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelperPlatform.closeAccount(Tenants.getAccountNameForNewAccountSignUp(),
-                BasePortalSteps.EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-                BasePortalSteps.PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        ApiHelperPlatform.closeAccount(mc2Account.getAccountName(), mc2Account.getEmail(), mc2Account.getPass());
     }
 
     @When("Portal Sign Up page is opened")
@@ -182,22 +336,23 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
         activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                Tenants.getAccountNameForNewAccountSignUp());
+                MC2Account.getTouchGoAccount().getAccountName());
         for(int i=0; i<4; i++){
             if (activationAccountID==null){
                 getPortalSignUpPage().waitFor(1000);
                 activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                        Tenants.getAccountNameForNewAccountSignUp());
+                        MC2Account.getTouchGoAccount().getAccountName());
             }
         }
-        Assert.assertFalse(activationAccountID ==null,
-        "Record with new activation ID is not created in mc2 DB after submitting sign up form");
+        Assert.assertNotNull(activationAccountID,
+                "Record with new activation ID is not created in mc2 DB after submitting sign up form");
     }
 
 
     @Then("^Login page is opened with a message that activation email has been sent$")
     public void verifyMassageThatConfirmationEmailSent(){
-        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+EMAIL_FOR_NEW_ACCOUNT_SIGN_UP+"" +
+        String targetAccEmail = MC2Account.getTouchGoAccount().getEmail();
+        String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+targetAccEmail+"" +
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
@@ -243,29 +398,17 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
-    @Given("^(.*) tenant has Starter Touch Go PLan and no active subscription$")
-    public void downgradeTouchGoPlan(String tenantOrgName){
-            Tenants.setTenantUnderTestNames(tenantOrgName);
-            DriverFactory.closeAgentBrowser();
-            ApiHelper.decreaseTouchGoPLan(tenantOrgName);
-            List<Integer> subscriptionIDs = ApiHelperPlatform.getListOfActiveSubscriptions(tenantOrgName);
-            subscriptionIDs.forEach(e ->
-                    ApiHelperPlatform.deactivateSubscription(Tenants.getTenantUnderTestOrgName(), e));
-    }
-
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
         if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
     }
 
-    @When("^Login as (.*) agent$")
+    @When("^Login as (.*)$")
     public void loginAsCreatedAgent(String agent){
-        String email = AGENT_EMAIL;
-        if(agent.equalsIgnoreCase("updated")){
-            email = updatedAgentInfo.get("email");
-        }
-        portalLoginPage.get().login(email, AGENT_PASS);
+        String email = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
+        getPortalLoginPage(agent).login(email, Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
     }
 
     @Then("^Deleted agent is not able to log in portal$")
@@ -274,6 +417,16 @@ public class BasePortalSteps implements JSHelper {
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
+    }
+
+    @Then("^(.*) logs in successfully$")
+    public void agentLoggsIn(String agent){
+        SoftAssert soft = new SoftAssert();
+        soft.assertNotEquals(getPortalLoginPage(agent).getNotificationAlertText(), "Username or password is invalid",
+                "Agent login into portal was not successful");
+        soft.assertFalse(getPortalLoginPage(agent).isLoginPageOpened(1),
+                "Agent login into portal was not successful");
+        soft.assertAll();
     }
 
     @When("^Login into portal as an (.*) of (.*) account$")
@@ -290,6 +443,7 @@ public class BasePortalSteps implements JSHelper {
         getPortalMainPage().clickLaunchpadButton();
     }
 
+    // page_action_to_remove
     @When("^Click 'Close account' button$")
     public void clickCloseAccount(){
         getPortalAccountDetailsPage().clickCloseAccountButton();
@@ -323,10 +477,10 @@ public class BasePortalSteps implements JSHelper {
                 "Account confirmation popup is not shown");
     }
 
-    @When("^Admin confirms account to close$")
-    public void confirmAccountToCLosing(){
-        getPortalAccountDetailsPage().confirmAccount(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP,
-                PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+    @When("^Admin confirms (.*) account to close$")
+    public void confirmAccountToCLosing(String tenantOrgName){
+        MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        getPortalAccountDetailsPage().confirmAccount(mc2Account.getEmail(), mc2Account.getPass());
     }
 
     @When("Admin provides '(.*)' email and '(.*)' pass for account confirmation")
@@ -334,14 +488,15 @@ public class BasePortalSteps implements JSHelper {
         getPortalAccountDetailsPage().confirmAccount(email, account);
     }
 
-    @Then("^Admin is not able to login into portal with deleted account$")
-    public void verifyAdminCannotLoginToPortal(){
+    @Then("^Admin is not able to login into portal with deleted (.*) account$")
+    public void verifyAdminCannotLoginToPortal(String tenantOrgName){
         portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         if (!portalLoginPage.get().isLoginPageOpened(1)){
             portalLoginPage.get().waitFor(200);
             portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
         }
-        portalLoginPage.get().enterAdminCreds(EMAIL_FOR_NEW_ACCOUNT_SIGN_UP, PASS_FOR_NEW_ACCOUNT_SIGN_UP);
+        MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
+        portalLoginPage.get().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
         Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -356,8 +511,54 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-        Assert.assertTrue(getPortalMainPage().isPortalPageOpened(),
-                "User is not logged in Portal");
+        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
+        ConfigManager.setIsNewAccountCreated(String.valueOf(isPortalPageOpened));
+        Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
+    }
+
+    @Given("^New account is successfully created$")
+    public void verifyAccountCreated(){
+        if(!ConfigManager.isNewAccountCreated()){
+            throw new SkipException("Sign up new account was not successful");
+        }
+    }
+
+    @Then("^New (.*) tenant is created$")
+    public void verifyNewTenantCreated(String tenant){
+        List<HashMap> allTenants = ApiHelper.getAllTenantsInfo();
+        boolean isTenantCreated = allTenants.stream().anyMatch(e -> e.get("tenantOrgName").equals(tenant));
+        ConfigManager.setIsNewTenantCreated(String.valueOf(isTenantCreated));
+        Assert.assertTrue(isTenantCreated,
+                "New tenant is absent in API response tenants?state=ACTIVE");
+    }
+
+    @Given("^New tenant is successfully created$")
+    public void verifyTenantCreated(){
+        if(!ConfigManager.isNewTenantCreated()){
+            throw new SkipException("Creating new tenant was not successful");
+        }
+    }
+
+    @Given("^Payment method is added$")
+    public void verifyPaymentAdded(){
+        if(!ConfigManager.isPaymentAdded()){
+            throw new SkipException("Adding new payment was not successful");
+        }
+    }
+
+    @Given("^Second agent of (.*) is successfully created$")
+    public void verifySecondAgentCreated(String tenant){
+        if(!ConfigManager.isSecondAgentCreated()){
+            createNewAgent("predefined mail", tenant);
+            ConfigManager.setIsSecondCreated("true");
+        }
+    }
+
+    @Given("^New tenant is successfully upgraded$")
+    public void verifyTenantUpgraded(){
+        if(System.getProperty("tenantUpgradeSuccessful", "false").equalsIgnoreCase("false")){
+            throw new SkipException("Upgrading a new tenant was not successful");
+        }
     }
 
     @Then("^\"Update policy\" pop up is shown$")
@@ -374,8 +575,9 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Landing pop up is shown$")
     public void verifyLandingPopupShown(){
+        getPortalMainPage().waitWhileProcessing(3,2);
         Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
-                "User is not logged in Portal");
+                "Landing popup is not shown");
     }
 
     @When("Close landing popup$")
@@ -406,9 +608,10 @@ public class BasePortalSteps implements JSHelper {
                 "\"Get started with Touch Go\" window is not opened");
     }
 
-    @When("^I try to create new tenant$")
-    public void createNewTenant(){
-        getPortalMainPage().getConfigureTouchWindow().createNewTenant("SignedUp AQA", EMAIL_FOR_NEW_ACCOUNT_SIGN_UP);
+    @When("^I try to create new (.*) tenant$")
+    public void createNewTenant(String tenantOrgName){
+        getPortalMainPage().getConfigureTouchWindow()
+                .createNewTenant(tenantOrgName, MC2Account.getTouchGoAccount().getEmail());
     }
 
     public static boolean isNewUserWasCreated(){
@@ -417,7 +620,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
-        getPortalMainPage().waitWhileProcessing(2,5);
+        getPortalMainPage().waitWhileProcessing(1,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
@@ -477,7 +680,7 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^(.*) counter shows correct live chats number$")
     public void verifyChatConsoleActiveChats(String widgetName){
-        activeChatsFromChatdesk = ApiHelper.getActiveChatsBySecondAgent()
+        activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
                 .getBody().jsonPath().getList("content.id").size();
                 new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
@@ -508,10 +711,16 @@ public class BasePortalSteps implements JSHelper {
         return result;
     }
 
-    @When("^Click \"(.*)\" nav button$")
+    @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
     public void clickNavButton(String navButton){
-        getPortalTouchPrefencesPage().clickPageNavButton(navButton);
+        getPortalMainPage().clickPageNavButton(navButton);
     }
+
+    @When("^I click \"(.*)\" page action button$")
+    public void clickActionButton(String actionButton){
+        getPortalMainPage().clickPageActionButton(actionButton);
+    }
+
 
     @When("^Wait for auto responders page to load$")
     public void waitForAutoRespondersToLoad(){
@@ -588,9 +797,6 @@ public class BasePortalSteps implements JSHelper {
                     .clickExpandArrowForMessage(autoresponder);
         }
         getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
-//        autoresponseMessageThreadLocal.set(message);
-//        autoresponseMessageThreadLocal.get();
-//       // getPortalTouchPrefencesPage().waitWhileProcessing();
     }
 
     @Then("^(.*) on backend corresponds to (.*) on frontend$")
@@ -724,8 +930,8 @@ public class BasePortalSteps implements JSHelper {
 
     }
 
-    @When("^Click '(.*)' button for (.*) integration$")
-    public void clickButtonForIntegrationCard(String button, String integration){
+    @When("^Click '(?:Configure|Manage|Pay now)' button for (.*) integration$")
+    public void clickButtonForIntegrationCard(String integration){
         getPortalIntegrationsPage().clickActionButtonForIntegration(integration);
     }
 
@@ -756,7 +962,9 @@ public class BasePortalSteps implements JSHelper {
                 break;
             }
         }
-        Assert.assertTrue(actualType.equalsIgnoreCase(expectedTouchGoPlan),
+        boolean isUpgraded = actualType.equalsIgnoreCase(expectedTouchGoPlan);
+        System.setProperty("tenantUpgradeSuccessful", String.valueOf(isUpgraded));
+        Assert.assertTrue(isUpgraded,
                 "TouchGo plan is not updated in tenant configs for '"+tenantOrgName+"' tenant \n"+
                         "Expected: " + expectedTouchGoPlan + "\n" +
                         "Found:" + actualType
@@ -771,15 +979,24 @@ public class BasePortalSteps implements JSHelper {
                 "Shown Touch go plan is not as expected.");
     }
 
-    @Then("^'Billing Not Setup' pop up is shown$")
-    public void verifyBillingNotSetUpPopupShown(){
-        Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
+    @Then("^'Billing Not Setup' pop up (.*) shown$")
+    public void verifyBillingNotSetUpPopupShown(String isShown){
+        if (isShown.contains("not"))
+            Assert.assertFalse(getPortalMainPage().isBillingNotSetUpPopupShown(2),
+                    "'Billing Not Setup' pop up still shown");
+        else
+            Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
                 "'Billing Not Setup' pop up is not shown");
     }
 
     @When("^Admin clicks 'Setup Billing' button$")
     public void clickSetupBillingButton(){
         portalBillingDetailsPage.set(getPortalMainPage().clickSetupBillingButton());
+    }
+
+    @When("Close 'Billing not setup' modal window")
+    public void closeSetupBillingModal(){
+        portalMainPage.get().closeSetupBillingPopUpModal();
     }
 
     @Then("^Billing Details page is opened$")
@@ -790,7 +1007,10 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Fill in Billing details$")
     public void fillInBillingDetails(){
-        billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails().fillInBillingDetailsForm();
+        billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails()
+                .fillInBillingDetailsForm();
+        getPortalBillingDetailsPage().waitWhileProcessing(2,2);
+        getPortalBillingDetailsPage().waitForNotificationAlertToBeProcessed(2,2);
     }
 
     @Then("^Billing details is saved on backend (.*)$")
@@ -803,20 +1023,25 @@ public class BasePortalSteps implements JSHelper {
                                 resp.jsonPath().get("billingAddress.city") + ", " +
                                 resp.jsonPath().get("billingAddress.address1") + ", " +
                                 resp.jsonPath().get("billingAddress.postalCode");
-        soft.assertEquals(info.get("billingContact").toString(), billingInfo.get("billingContact"),
-                "Billing contact is incorrectly saved");
-        soft.assertEquals(info.get("accountTypeId").toString(), billingInfo.get("accountTypeId"),
-                "accountTypeId is incorrectly saved");
-        soft.assertEquals(info.get("companyName").toString(), billingInfo.get("companyName"),
-                "Company Name is incorrectly saved");
-        soft.assertEquals(billingAddress, billingInfo.get("billingAddress"),
-                "Billing address is incorrectly saved");
-        soft.assertAll();
-    }
-
-    @When("^Select '(.*)' in nav menu$")
-    public void clickNavItemOnBillingDetailsPage(String navName){
-        getPortalMainPage().clickPageNavButton(navName);
+        try {
+            soft.assertEquals(info.get("billingContact").toString(), billingInfo.get("billingContact"),
+                    "Billing contact is incorrectly saved");
+            soft.assertEquals(info.get("accountTypeId").toString(), billingInfo.get("accountTypeId"),
+                    "accountTypeId is incorrectly saved");
+            soft.assertEquals(info.get("companyName").toString(), billingInfo.get("companyName"),
+                    "Company Name is incorrectly saved");
+            soft.assertEquals(billingAddress, billingInfo.get("billingAddress"),
+                    "Billing address is incorrectly saved");
+            soft.assertAll();
+        }catch(NullPointerException e){
+            String message = "NULL_POINTER!! \n";
+            if(info!=null) {
+                if (info.get("billingContact") != null) message = message + info.get("billingContact");
+                else message = message + resp.getBody().asString();
+            }
+            if(billingInfo!=null) message = message + "\n\n" + billingInfo.toString();
+            Assert.fail(message);
+        }
     }
 
     @When("^Admin clicks Top up balance on Billing details$")
@@ -830,7 +1055,7 @@ public class BasePortalSteps implements JSHelper {
                 "'Top up balance' window is not opened");
     }
 
-    @When("^Agent enter allowed top up amount$")
+    @When("^Agent enter allowed top up sum$")
     public void enterNewBalanceAmount(){
         topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
         String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
@@ -838,6 +1063,32 @@ public class BasePortalSteps implements JSHelper {
         double afterTest = topUpBalance.get("preTest") + addingSum;
         topUpBalance.put("afterTest", afterTest);
         getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(addingSum);
+    }
+
+    @When("^Agent enter (.*) top up amount$")
+    public void enterMaxValueForTopUp(String value){
+        accountCurrency = ApiHelperPlatform.getAccountBallance().getCurrency().toUpperCase();
+        int invalidSum;
+        if(value.contains("max")){
+            invalidSum = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency) +1 ;
+        } else{
+            invalidSum = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency) - 1;
+        }
+        getPortalBillingDetailsPage().getTopUpBalanceWindow().enterNewAmount(invalidSum);
+    }
+
+    @Then("\"(.*)\" message is displayed")
+    public void verifyMaximumPopup(String baseMessage){
+        String expectedMessage;
+        if(baseMessage.contains("max_value")){
+            int maxValue = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency);
+            expectedMessage = baseMessage.replace("max_value", maxValue + " " + accountCurrency);
+        } else{
+            int minValue = TopUpBalanceLimits.getMinValueByCurrency(accountCurrency);
+            expectedMessage = baseMessage.replace("min_value", minValue + " " + accountCurrency);
+        }
+        Assert.assertEquals(getPortalBillingDetailsPage().getTopUpBalanceWindow().getErrorWhileAddingPopup(),
+                expectedMessage, "Error massage about invalid top up sum is not as expected \n" );
     }
 
     @When("^Click 'Add to cart' button$")
@@ -857,7 +1108,8 @@ public class BasePortalSteps implements JSHelper {
         String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
         boolean result = false;
         for(int i = 0; i<(mints*60)/25; i++){
-            if(valueFromPortal.equalsIgnoreCase(String.format("%1.2f", topUpBalance.get("afterTest")))){
+            if(valueFromPortal.replace(",", "")
+                    .equals(String.format("%1.2f", topUpBalance.get("afterTest")))){
                 result = true;
                 break;
             } else{
@@ -865,7 +1117,9 @@ public class BasePortalSteps implements JSHelper {
                 valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
             }
         }
-        Assert.assertTrue(result, "Balance was not updated after top up");
+        Assert.assertTrue(result, "Balance was not updated after top up\n" +
+                "Balance from backend : " + ApiHelperPlatform.getAccountBallance().getBalance() +"\n" +
+                "Actual: " + valueFromPortal);
     }
 
 
@@ -930,8 +1184,9 @@ public class BasePortalSteps implements JSHelper {
     @Then("^New card is shown in Payment methods tab$")
     public void verifyNewPaymentAdded(){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getPortalBillingDetailsPage().isNewPaymentAdded(),
-                "New payment is not shown in 'Billing & payments' page");
+        boolean isPaymentAdded = getPortalBillingDetailsPage().isNewPaymentAdded();
+        ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
+        soft.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
         soft.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
                 "Cardholder name of added card is not as expected");
         soft.assertAll();
@@ -998,7 +1253,13 @@ public class BasePortalSteps implements JSHelper {
     @When("^Click 'Manage' button for (.*) user$")
     public void clickManageButtonForUser(String fullName){
         if(fullName.equalsIgnoreCase("created")){
+//            fullName = "Maurita Toy";
             fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        }
+        if(fullName.equalsIgnoreCase("admin")){
+            String email = Agents.getMainAgentFromCurrentEnvByTenantOrgName(
+                    Tenants.getTenantUnderTestOrgName()).getAgentEmail();
+            fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
         }
         portalUserProfileEditingThreadLocal.set(
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
@@ -1015,15 +1276,22 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getConfigureBrandWindow().clickuploadButton();
     }
 
+    // page_action_to_remove
     @When("^Admin clicks 'Edit user roles'$")
     public void clickEditRoles(){
         portalUserProfileEditingThreadLocal.get().clickEditUserRolesButton();
     }
 
+    // page_action_to_remove
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
         portalUserProfileEditingThreadLocal.get().clickDeleteButton();
         portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(6,5);
+    }
+
+    @When("^On the right corner of the page click \"Deactivate User\" button$")
+    public void clickDeactivateUser(){
+        portalUserProfileEditingThreadLocal.get().clickDactivateButton();
     }
 
     @Then("^User is removed from Manage agent users page$")
@@ -1083,13 +1351,6 @@ public class BasePortalSteps implements JSHelper {
     @Then("^I check secondary color for tenant in widget$")
     public void iCheckSecondaryColorForTenantInWidget() {
         Assert.assertEquals(getMainPage().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in widget window is not correct");
-    }
-
-    public Widget clickChatIcon() {
-        widget = getMainPage().openWidget();
-//        widgetConversationArea = widget.getWidgetConversationArea();
-//        widgetConversationArea.waitForSalutation();
-        return widget;
     }
 
 
@@ -1201,7 +1462,8 @@ public class BasePortalSteps implements JSHelper {
     @Then("^New image is saved on portal and backend$")
     public void verifyImageSaveOnPortal(){
         SoftAssert soft = new SoftAssert();
-        String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("imageUrl");
+        String imageURLFromBackend = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "main")
+                .jsonPath().get("imageUrl");
         soft.assertFalse(imageURLFromBackend==null,
                         "Agent photo is not saved on backend");
         soft.assertFalse(portalUserProfileEditingThreadLocal.get().getImageURL().isEmpty(),
@@ -1367,6 +1629,20 @@ public class BasePortalSteps implements JSHelper {
         getPortalTouchPrefencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
     }
 
+    @When("^click off/on 'Automatic Scheduler'$")
+    public void clickOnOffAutoScheduler(){
+        autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
+        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
+        getPortalTouchPrefencesPage().waitWhileProcessing(1,1);
+    }
+
+    @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
+    public void verifyAutoSchedulingStatusOnBackend(String tenant){
+        Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
+                autoSchedulerPreActionStatus,
+                "Auto scheduling status on backend is not as expected \n");
+    }
+
     @And("^Uncheck today day and apply changes$")
     public void uncheckTodayDayAndApplyChanges() {
         nameOfUnchekedDay = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().uncheckTodayDay();
@@ -1382,6 +1658,13 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
     public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
         Assert.assertTrue(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
+    }
+
+    @Then("^Filter \"(.*)\" is selected by default$")
+    public void filterIsSelectedByDefault(String filterName) {
+        getChatConsoleInboxPage().getChatConsoleInboxRow("name");
+        Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
+                "Filter name by default does not match expected");
     }
 
 
@@ -1439,6 +1722,27 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
+    private PortalLoginPage getSecondPortalLoginPage(){
+        if (secondAgentPortalLoginPage.get()==null) {
+            secondAgentPortalLoginPage.set(new PortalLoginPage("second agent"));
+            return secondAgentPortalLoginPage.get();
+        } else{
+            return secondAgentPortalLoginPage.get();
+        }
+    }
+
+    private PortalLoginPage getPortalLoginPage(String agent){
+
+        if (agent.equalsIgnoreCase("second agent")){
+            return getSecondPortalLoginPage();
+        } else {
+            return getPortalLoginPage();
+        }
+
+    }
+
+
+
     private PortalAccountDetailsPage getPortalAccountDetailsPage(){
         if (portalAccountDetailsPageThreadLocal.get()==null) {
             portalAccountDetailsPageThreadLocal.set(new PortalAccountDetailsPage());
@@ -1490,6 +1794,15 @@ public class BasePortalSteps implements JSHelper {
             return portalChatConsolePage.get();
         } else{
             return portalChatConsolePage.get();
+        }
+    }
+
+    private ChatConsoleInboxPage getChatConsoleInboxPage(){
+        if (chatConsoleInboxPage.get()==null) {
+            chatConsoleInboxPage.set(new ChatConsoleInboxPage());
+            return chatConsoleInboxPage.get();
+        } else{
+            return chatConsoleInboxPage.get();
         }
     }
 

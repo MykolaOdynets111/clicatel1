@@ -22,7 +22,7 @@ public class DriverFactory {
     private static String WINDOWS_SERVER_REMOTE_URL = "http://172.31.29.139:4441/wd/hub";
     private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
     private static String LINUX_SELENIUM_DOCKERS_URL_FB = "http://selenium.clickatelllabs.com:5900/wd/hub";
-    private static String LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR = "http://172.31.70.236:4445/wd/hub";
+    private static String LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR = "http://selenium.clickatelllabs.com:4445/wd/hub";
 
 
     public static boolean isAgentDriverExists(){
@@ -145,6 +145,8 @@ public class DriverFactory {
                 remoteWebDriver = new RemoteWebDriver(new URL(WINDOWS_SERVER_REMOTE_URL), capabilities);
             }else {
                 remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL), capabilities);
+//              debug remote run
+//                remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR), capabilities);
             }
             return remoteWebDriver;
         } catch (MalformedURLException e) {

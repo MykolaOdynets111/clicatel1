@@ -1,7 +1,5 @@
 group 'web_automation'
 version '1.0-SNAPSHOT'
-import java.io.*
-import groovy.json.*
 
 
 buildscript {
@@ -173,30 +171,17 @@ task runWidgetOnlyTests(type:Test){
 task runTestsAgainstNewlyCreatedAccount(type:Test){
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "touchgo/touchgofornewaccount.xml"
+        suites baseXmlPath + "touchgo_deprecated/touchgofornewaccount.xml"
     }
 }
 
-task runTouchGoTests(type:Test) {
-    doFirst {
-        useTestNG() {
-            useDefaultListeners = true
-            ignoreFailures = true
-            suites baseXmlPath+ "touchgo/createfbintegration.xml"
-            suites baseXmlPath + "touchgo/onethreadtouchgotests.xml"
-            suites baseXmlPath+ "touchgo/paralleltouchgotests.xml"
-        }
-    }
-    doLast {
-        if (!file("build/reports/tests/runTouchGoTests/testng-failed.xml").exists()) {
-            runTestsAgainstNewlyCreatedAccount.execute()
-        } else {
-            String failedTestXMLContent = file("build/reports/tests/runTouchGoTests/testng-failed.xml").text
-            if (!failedTestXMLContent.contains("Touch Go create new account test(failed)")) {
-                runTestsAgainstNewlyCreatedAccount.execute()
-            }
 
-        }
+task runTouchGoTests(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "touchgo/touchgosignup.xml"
+        suites baseXmlPath + "touchgo/touchgonewtenant.xml"
+        suites baseXmlPath + "touchgo/tocuhgocloseaccount.xml"
     }
 }
 

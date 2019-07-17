@@ -32,9 +32,11 @@ public class Endpoints {
 
     public static String SESSION_CAPACITY = URLs.getTouchApiBaseURL() + "tenants/sessions-capacity/";
 
-    public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
+//    public static String AGENT_OVERNIGHT_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets?state=";
 
-    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/%s?state=PROCESSED";
+    public static String AGENT_ASSIGNED_TICKETS = URLs.getTouchApiBaseURL() + "agent/tickets";
+
+//    public static String PROCESS_OVERNIGHT_TICKET = URLs.getTouchApiBaseURL() + "tickets/process-by-id/%s?state=PROCESSED";
 
     public static String CUSTOMER_VIEW = URLs.getTouchApiBaseURL() + "customer-view/";
 
@@ -92,6 +94,9 @@ public class Endpoints {
 
     public static String INTERNAL_TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
 
+    public static String INTERNAL_GET_TICKETS = URLs.getBaseInternalApiUrl() + "chats/ticket?tenantId=%s&page=%s&size=10&state=UNASSIGNED&direction=ASC";
+
+    public static String INTERNAL_PROCESS_TICKET = URLs.getBaseInternalApiUrl() + "chats/ticket/process";
 
     // ==================  PLATFORM ============== //
 
@@ -108,8 +113,6 @@ public class Endpoints {
     public static String PLATFORM_USER = URLs.getBasePlatformUrl() + "/users";
 
     public static String PLATFORM_SUBSCRIPTIONS_LIST = URLs.getBasePlatformUrl() + "/subscriptions?pageNumber=1&pageSize=50&ascending=false";
-
-    public static String PLATFORM_SUBSCRIPTIONS_DEACTIVATION = URLs.getBasePlatformUrl() + "/subscriptions/%s/deactivated";
 
     public static String PLATFORM_PAYMENT_METHODS = URLs.getBasePlatformUrl() + "/payment-methods";
 
@@ -193,6 +196,10 @@ public class Endpoints {
     public static String PORTAL_SIGN_UP_PAGE = URLs.getBasePortalUrl() + "#/signup";
 
     public static String PORTAL_ACCOUNT_ACTIVATION = URLs.getBasePortalUrl() + "#/activation/%s ";
+
+    public static String PORTAL_NEW_AGENT_ACTIVATION = URLs.getBasePortalUrl() + "/#/invitation/";
+
+    public static String PORTAL_RESET_PASS_URL = URLs.getBasePortalUrl() + "/#/forgotPassword/";
 
     // ====================  TAF ================= //
 

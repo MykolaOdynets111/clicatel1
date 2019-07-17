@@ -14,7 +14,6 @@ Feature: User messages handling in "Agent" tenant mode
     Then Conversation area becomes active with account balance user's message
     Then Valid sentiment icon are shown for account balance message in left menu with chat
     Then Message account balance shown like last message in left menu with chat
-#    Then Valid image for webchat integration are shown in left menu with chat
     And There is no more than one from user message
     And There is no from agent response added by default for account balance user message
     When Agent responds with hello to User

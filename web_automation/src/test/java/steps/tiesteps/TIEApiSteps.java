@@ -417,14 +417,12 @@ public class TIEApiSteps implements DateTimeHelper{
     public void verifyNorRelatedModelUsing(String userInput, String modelType, String tenant, String intent){
         String url = String.format(Endpoints.TIE_INTENT_WITH_TIE_TYPE_URL, tenant, userInput) + modelType;
         Response resp = get(url);
-        SoftAssert soft = new SoftAssert();
-        soft.assertTrue(resp.getBody().jsonPath().getList("intents_result.intents").size()>1,
-                "Only 1 intent is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
-                        "\n"+resp.getBody().asString()+"\n");
-        soft.assertFalse(resp.getBody().jsonPath().getList("intents_result.intents.intent").contains(intent),
-                "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
-                        "\n"+resp.getBody().asString()+"\n");
-        soft.assertAll();
+        List intents = resp.getBody().jsonPath().getList("intents_result.intents");
+        if(!intents.isEmpty()){
+            Assert.assertFalse(intents.contains(intent),
+                    "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                            "\n"+resp.getBody().asString()+"\n");
+        }
     }
 
 
@@ -455,7 +453,7 @@ public class TIEApiSteps implements DateTimeHelper{
     @When("^Wait for a minute$")
     public void waitForAMinute(){
         try {
-            Thread.sleep(65000);
+            Thread.sleep(70000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -994,32 +992,16 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @Then("^New model is ready after (.*) minutes wait$")
     public void getModels(int minutes){
-        waitFor(300);
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-        String createdModelName = "";
-        ResponseBody respBody = ApiHelperTie.getModels().getBody();
-        try {
-            createdModelName = respBody.jsonPath().getList("")
-                .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
-                        >
-                        convertLocalDateTimeToMillis(now.minusMinutes(3), ZoneId.of("UTC")))
-                .findFirst().get();
-        } catch(NoSuchElementException e){
-            Assert.assertTrue(false, "Expected created model '"+createdModelName+"' is not present in get models response\n" +
-            "Resp: " + respBody.asString());
-        }
         boolean isTrained = false;
-
+        String createdModelName = getExpectedModelName();
         int timeout = (minutes*60)/15;
         for(int i = 0; i < timeout; i++){
             if(!isTrained){
                 waitFor(15000);
-                String finalCreatedModelName = createdModelName;
                 try {
-                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("")
+                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("intent")
                             .stream().map(e -> (Map) e)
-                            .filter(e -> e.get("name").equals(finalCreatedModelName))
+                            .filter(e -> e.get("name").equals(createdModelName))
                             .allMatch(e -> e.get("status").equals("finished"));
                 }catch (JsonPathException e){
                     Assert.assertTrue(false, "Unable to get trained models");
@@ -1029,7 +1011,32 @@ public class TIEApiSteps implements DateTimeHelper{
             }
         }
         mapForCreatedIntent.put("model", createdModelName);
-        Assert.assertTrue(isTrained, "New model is not created");
+        Assert.assertTrue(isTrained, "New model is not trained\n" +
+                ApiHelperTie.getModels().getBody().asString());
+    }
+
+    public String getExpectedModelName(){
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        String createdModelName = "";
+        ResponseBody respBody = ApiHelperTie.getModels().getBody();
+        for(int i = 0; i < 30; i++){
+            if(!createdModelName.equals("")) break;
+            else {
+                int incrementor = i;
+                respBody = ApiHelperTie.getModels().getBody();
+                createdModelName = respBody.jsonPath().getList("intent")
+                            .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
+                            .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                                    >
+                                    convertLocalDateTimeToMillis(now.minusMinutes(3+incrementor), ZoneId.of("UTC")))
+                            .findFirst().orElse("");
+            }
+        }
+        if(createdModelName.equals("")){
+            Assert.assertTrue(false, "Expected created model '" + createdModelName + "' is not present in get models response\n" +
+                    "Resp: " + respBody.asString());
+        }
+        return createdModelName;
     }
 
     @When("^I publish new model$")
@@ -1081,9 +1088,8 @@ public class TIEApiSteps implements DateTimeHelper{
         try {
             createdSlotIds.add(resp.getBody().jsonPath().get("id"));
         } catch (JsonPathException e) {
-            Assert.assertTrue(resp.statusCode() == 200,
-                    "Creating new slot was not successful \n" +
-                            "Create slot body: " + createSlotBody.toString());
+            Assert.assertEquals(resp.statusCode(), 200, "Creating new slot was not successful \n" +
+                    "Create slot body: " + createSlotBody.toString());
         }
 
     }

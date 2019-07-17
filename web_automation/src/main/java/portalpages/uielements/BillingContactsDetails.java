@@ -2,6 +2,7 @@ package portalpages.uielements;
 
 import com.github.javafaker.Faker;
 import drivermanager.DriverFactory;
+import interfaces.VerificationHelper;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @FindBy(css = "form[name=billingDetailsForm]")
-public class BillingContactsDetails extends BasePortalWindow {
+public class BillingContactsDetails extends BasePortalWindow implements VerificationHelper {
 
     Faker faker = new Faker();
 
@@ -64,12 +65,13 @@ public class BillingContactsDetails extends BasePortalWindow {
         Map billingInfo = new HashMap();
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
-        String phone =  faker.phoneNumber().cellPhone();
+        String phone =  "380931576235";
         String email = "test@test.com";
         String city =  faker.address().city();
         String address1 = faker.address().streetAddress();
         String zipCode = faker.address().zipCode();
-        billingInfo.put("billingContact", "{firstName="+firstName+", lastName="+lastName+", emailAddress="+email+", cellPhone="+phone.replace("+", "")+"}");
+        billingInfo.put("billingContact", "{firstName="+firstName+", lastName="+lastName+", emailAddress="+email+", " +
+                "cellPhone="+phone.replace("+", "").replace("-","").replace(".", "")+"}");
         billingInfo.put("accountTypeId", "3");
         billingInfo.put("companyName", faker.company().name());
         billingInfo.put("billingAddress", "Albania, " + city + ", " + address1 +", " + zipCode);

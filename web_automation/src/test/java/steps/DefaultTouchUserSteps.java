@@ -1,18 +1,16 @@
 package steps;
 
+import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import datamanager.FacebookPages;
-import datamanager.FacebookUsers;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.DriverFactory;
-import facebook.FBTenantPage;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
@@ -164,8 +162,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             }
         }
 
-
-
+//    return "testing_2155727w7";
         return   (String) selectedClient.get("clientId");
     }
 
@@ -298,6 +295,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         } else{
             verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
         }
+    }
+
+    @Then("^User should see emoji response for his '(.*)' input$")
+    public void verifyEmoticonAnswer(String userInput){
+        String emoji = AgentConversationSteps.getSelectedEmoji();
+        verifyTextResponseRegardlessPosition(emoji, userInput);
     }
 
     private void verifyTextResponseAfterInteractionWithChoiceCard(String userInput, String expectedTextResponse, String intent, int waitForResponse){
@@ -730,8 +733,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^There is no (.*) response$")
     public void verifyTextResponseIsNotShownForUser(String expectedText){
-        Assert.assertFalse(widget.getWidgetConversationArea()
-                .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 10), "Error: Response is shown in widget");
+        if (expectedText.equalsIgnoreCase("otp code")) {
+            AgentHomePage agentHomePage = new AgentHomePage("main");
+            Assert.assertFalse(widget.getWidgetConversationArea()
+                    .isTextShown(formExpectedTextResponseFromBotWidget(agentHomePage.getChatBody().getLastOTPCode()), 10), "Error: OTP code displayed in the widget");
+        }
+        else
+            Assert.assertFalse(widget.getWidgetConversationArea()
+                    .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 10), "Error: Response is shown in widget");
     }
 
     private String formExpectedTextResponseFromBotWidget(String fromFeatureText){

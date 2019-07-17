@@ -51,6 +51,16 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default String getAttributeFromElemAgent(WebElement element, String attribute, int time, String agent, String elemName){
+        try {
+            waitForElementToBeVisibleAgent(element, time, agent);
+            return element.getAttribute(attribute);
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.assertTrue(false, "Cannot get text from  '"+elemName+"' because element is not visible.");
+            return "no text elem";
+        }
+    }
+
     default void clickOnElementFromListByText(List<WebElement> elements, String text){
         waitForElementsToBeClickable(elements).stream().filter(e -> e.getText().toUpperCase().equals(text.toUpperCase())).findFirst().get().click();
     }
@@ -154,7 +164,7 @@ public interface WebActions extends WebWait {
     default boolean isElementShownAgent(WebElement element, int wait, String agent){
         try {
             return waitForElementToBeVisibleAgent(element, wait, agent).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (WebDriverException e) {
             return false;
         }
     }
@@ -163,7 +173,7 @@ public interface WebActions extends WebWait {
         try {
             waitForElementToBeVisibleByXpathAgent(xpath, wait, agent);
             return true;
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (WebDriverException e) {
             return false;
         }
     }
@@ -179,9 +189,9 @@ public interface WebActions extends WebWait {
 
     default boolean isElementShownAgentByCSS(String css, int wait, String agent){
         try {
-            waitForElementToBeVisibleByCssAgent(css, wait);
+            waitForElementToBeVisibleByCssAgent(css, wait, agent);
             return true;
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (WebDriverException e) {
             return false;
         }
     }
@@ -214,6 +224,19 @@ public interface WebActions extends WebWait {
             return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
+        }
+    }
+
+    default boolean isElementNotShownAgent(WebElement element, int wait, String agent){
+        try {
+            waitForElementToBeInvisibleWithNoSuchElementExceptionAgent(element, wait, agent);
+            return true;
+        } catch (TimeoutException e) {
+            try {
+                return !element.isDisplayed();
+            } catch(NoSuchElementException e1) {
+                return true;
+            }
         }
     }
 
@@ -252,8 +275,12 @@ public interface WebActions extends WebWait {
         return DriverFactory.getDriverForAgent(agent).findElement(By.xpath(xpath));
     }
 
-        default WebElement findElemByCSSAgent(String css){
+    default WebElement findElemByCSSAgent(String css){
         return DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(css));
+    }
+
+    default WebElement findElemByCSSAgent(String css, String agent){
+        return DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(css));
     }
 
     default List<WebElement> findElemsByXPATH(String xpath){
@@ -293,16 +320,17 @@ public interface WebActions extends WebWait {
      *
      * @param  element   WebElement for screen shot
      * @param  image   File for comparing with scren shot
+     * @param agent
      * @return         Boolean: true or false
      * @throws Exception
      */
-    default boolean isWebElementEqualsImage(WebElement element, File image){
+    default boolean isWebElementEqualsImage(WebElement element, File image, String agent){
         boolean result=false;
-        Browser browser = new Browser(DriverFactory.getDriverForAgent("main"),true);
+        Browser browser = new Browser(DriverFactory.getDriverForAgent(agent),true);
         Double dpr= browser.getDevicePixelRatio();
         try {
            if (!image.canRead()) {
-                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).getImage();
+                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent),element,true ).getImage();
                 Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
                 File newFile = new File(image.getPath());
                 newFile.getParentFile().mkdirs();
@@ -313,12 +341,13 @@ public interface WebActions extends WebWait {
             }
             BufferedImage expImage = ImageIO.read(image);
             BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element, true).withName("Actual").equals(expectedImage, 0.05);
+            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element, true).withName("Actual").equals(expectedImage, 0.07);
             if (!result) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
+                Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
             }
         }
         catch(Exception e) {
+            e.printStackTrace();
             //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
         }
         return result;

@@ -7,6 +7,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 
 import java.util.*;
@@ -25,6 +26,12 @@ public class ChatBody extends AbstractUIElement {
 
     private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
 
+    private String currentAgent;
+
+    public void setCurrentAgent(String agent){
+        this.currentAgent = agent;
+    }
+
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
 
@@ -33,6 +40,12 @@ public class ChatBody extends AbstractUIElement {
 
     @FindBy(css = "li.to div.empty-icon")
     private WebElement agentIconWIthInitials;
+
+    @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
+    private List<WebElement> otpDividersBlocks;
+
+    @FindBy(xpath = "(//li[contains(@class, 'otp')]/div)[last()]")
+    private WebElement lastOTPDividerBlock;
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -100,6 +113,11 @@ public class ChatBody extends AbstractUIElement {
         return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).isToUserTextResponseShown(5);
     }
 
+    public String getAgentEmojiResponseOnUserMessage(String userMessage) {
+        return new AgentDeskChatMessage(getFromUserWebElement(userMessage))
+                .getAgentResponseEmoji(this.currentAgent);
+    }
+
     public boolean isToUserMessageShown(String userMessage){
         boolean result = false;
         for(int i = 0; i<3; i++){
@@ -122,6 +140,24 @@ public class ChatBody extends AbstractUIElement {
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
+    }
+
+    public boolean isOTPDividerDisplayed(){
+        if (otpDividersBlocks.size() > 0) {
+            return isElementShown(otpDividersBlocks.get(otpDividersBlocks.size() - 1));
+        }
+        else
+            return false;
+    }
+
+    public String getLastOTPCode(){
+        return getTextFrom(lastOTPDividerBlock).substring(4, 8);
+    }
+
+    public boolean isNewOTPCodeDifferent(){
+        String lastCode = getTextFrom(otpDividersBlocks.get(otpDividersBlocks.size()-1));
+        String previousCode = getTextFrom(otpDividersBlocks.get(otpDividersBlocks.size()-2));
+        return !lastCode.equals(previousCode);
     }
 
     public String getTenantMsgColor() {

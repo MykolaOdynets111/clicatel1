@@ -2,6 +2,7 @@ package portalpages;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -20,6 +21,9 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text() = 'Setup Billing']")
     private WebElement setUpBillingButton;
 
+    @FindBy(xpath = "//button[contains(@class, 'close-discard-modal')]")
+    private WebElement closeSetUpBillingPopUp;
+
     @FindBy(xpath = "//h3[text()='We’ve updated our privacy policy']")
     private WebElement updatePolicyPopUp;
 
@@ -35,7 +39,7 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "button.launchpad-btn")
     private WebElement launchpadButton;
 
-    @FindBy(xpath = "//span[text()='Thank you for singing up. Welcome!']")
+    @FindBy(css = "div[ng-controller='WizardCtrl']")
     private WebElement landingPage;
 
     @FindBy(css = "span.svg-close.cl-clickable.push-right")
@@ -48,6 +52,14 @@ public class PortalMainPage extends PortalAbstractPage {
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
+
+
+    public PortalMainPage(String agent) {
+        super(agent);
+    }
+    public PortalMainPage() {
+        super();
+    }
 
     public ConfigureTouchWindow getConfigureTouchWindow() {
         return configureTouchWindow;
@@ -147,6 +159,10 @@ public class PortalMainPage extends PortalAbstractPage {
         return new PortalBillingDetailsPage();
     }
 
+    public void closeSetupBillingPopUpModal(){
+        closeSetUpBillingPopUp.click();
+    }
+
     public boolean isUpdatePolicyPopUpOpened(){
         return isElementShownAgent(updatePolicyPopUp, 10);
     }
@@ -157,8 +173,15 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
     public void closeLandingPage(){
-        clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
-        clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+        try {
+            clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
+            clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+        }catch (WebDriverException e){
+            waitFor(1000);
+            clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
+            clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+
+        }
 
     }
 

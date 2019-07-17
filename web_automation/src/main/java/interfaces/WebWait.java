@@ -113,6 +113,12 @@ public interface WebWait {
                 .until(ExpectedConditions.invisibilityOf(element));
     }
 
+    default void waitForElementToBeInvisibleAgent(WebElement element, int time, String agent){
+        initAgentWait(time, agent).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOf(element));
+    }
+
     default void waitForElementToBeVisibleByXpathAgent(String xpath, int time){
         initAgentWait(time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
@@ -154,6 +160,13 @@ public interface WebWait {
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
     }
+
+    default void waitForElementToBeInVisibleByCssAgent(String css, int time, String agent){
+        initAgentWait(time, agent).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
+    }
+
 
     default void waitForElementToBeVisibleByXpathAgent(String xpath, int time, String agent){
         initAgentWait(time, agent).ignoring(NoSuchElementException.class)
@@ -236,6 +249,10 @@ public interface WebWait {
 
     default void waitForElementToBeInvisibleWithNoSuchElementException(WebElement element, int time){
         initWait(time).until(ExpectedConditions.invisibilityOf(element)).toString();
+    }
+
+    default void waitForElementToBeInvisibleWithNoSuchElementExceptionAgent(WebElement element, int time, String agent){
+        initAgentWait(time, agent).until(ExpectedConditions.invisibilityOf(element)).toString();
     }
 
 }

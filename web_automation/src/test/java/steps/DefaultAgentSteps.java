@@ -2,10 +2,7 @@ package steps;
 
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
-import agentpages.uielements.ChatInActiveChatHistory;
-import agentpages.uielements.Customer360Container;
-import agentpages.uielements.LeftMenuWithChats;
-import agentpages.uielements.ProfileWindow;
+import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
 import com.github.javafaker.Faker;
@@ -16,6 +13,8 @@ import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
+import datamanager.jacksonschemas.SupportHoursItem;
+import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -26,7 +25,6 @@ import interfaces.VerificationHelper;
 import interfaces.WebWait;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -58,6 +56,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
     private ThreadLocal<AgentLoginPage> agentLoginPage = new ThreadLocal<>();
     private String secondAgentName;
+    private List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
 
     public static List<CRMTicket> getCreatedCRMTicketsList(){
         return createdCrmTicketsList.get();
@@ -90,7 +89,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName());
+        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
         if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
         AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
@@ -106,11 +105,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
-        if (agent.toLowerCase().contains("second")){
-            ApiHelper.closeActiveChatsSecondAgent();
-        }else{
-            ApiHelper.closeActiveChats();
-        }
+        ApiHelper.closeActiveChats(agent);
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
 
@@ -220,8 +215,12 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @Then("^(.*) is logged in chat desk$")
     public void verifyAgentLoggedIn(String ordinalAgentNumber){
         agentHomePage = new AgentHomePage(ordinalAgentNumber);
-        Assert.assertTrue(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in chat desk.");
+        boolean result = agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber);
+        if(result) ConfigManager.setIsSecondCreated("true");
+        Assert.assertTrue(result, "Agent is not logged in chat desk.");
     }
+
+
 
     @Then("^(.*) is not redirected to chatdesk$")
     public void verifyAgentNotLoggedIn(String ordinalAgentNumber){
@@ -229,10 +228,42 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         Assert.assertFalse(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is redirected to chat desk.");
     }
 
-    @When("^Agent transfers chat$")
-    public void transferChat(){
-        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
-        secondAgentName = getAgentHomeForMainAgent().getTransferChatWindow().transferChat();
+    @When("^(.*) transfers chat$")
+    public void transferChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
+    }
+
+    @When("^(.*) transfer a few chats$")
+    public void transferFewDotControlChats(String agent){
+        for(DotControlRequestMessage chat : createdChatsViaDotControl) {
+            int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
+            for(int i = 0; i<11; i ++){
+                if(availableAgents<2) {
+                    getAgentHomePage(agent).waitFor(1000);
+                    availableAgents = ApiHelper.getNumberOfLoggedInAgents();
+                } else{
+                    break;
+                }
+            }
+            if(availableAgents<2) Assert.fail(
+                    "Second agent is not available after waiting 11 seconds after chat transfer");
+            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
+            transferChat(agent);
+            getAgentHomePage(agent).waitForModalWindowToDisappear();
+
+        }
+    }
+
+    @When("^(.*) receives incoming transfer notification with \"Transfer waiting\" header and collapsed view$")
+    public void verifyTransferredChatsCollapsed(String agent){
+        Assert.assertEquals(getAgentHomePage(agent).getCollapsedTransfers().size(), 2,
+                "Not all expected collapsed transferred chats shown");
+    }
+
+    @When("^(.*) click on \"Transfer waiting\" header$")
+    public void expandFirstOfCollapsedTransfer(String agent){
+        getAgentHomePage(agent).getCollapsedTransfers().get(0).click();
     }
 
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
@@ -255,8 +286,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "Notes in incoming transfer window is not as added by the first agent");
     }
 
-    @Then("(.*) can see transferring agent name, (?:user name|twitter user name|facebook user name) and following user's message: '(.*)'")
-    public void verifyIncomingTransferDetails(String agent, String userMessage) {
+    @Then("(.*) can see transferring agent name, (.*) and following user's message: '(.*)'")
+    public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
         try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = "";
@@ -271,6 +302,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
                     !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
                 expectedUserName = getUserNameFromLocalStorage();
+            }
+            if(user.contains("first chat")){
+                expectedUserName = createdChatsViaDotControl.get(0).getClientId();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
             String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
@@ -289,9 +323,26 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         }
     }
 
-    @Then("^Second agent click \"Accept transfer\" button$")
-    public void acceptIncomingTransfer(){
-        getAgentHomeForSecondAgent().getIncomingTransferWindow().acceptTransfer();
+    @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")
+    public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(),
+                "User picture as not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel(),
+                "Channel picture as not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment(),
+                "Sentiment picture as not expected");
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
+                "Transfered chat window not on the right side of the screen");
+
+        softAssert.assertAll();
+
+
+    }
+
+    @Then("^(.*) click \"Accept transfer\" button$")
+    public void acceptIncomingTransfer(String agent){
+        getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
     }
 
     @Then("^Second agent click \"Reject transfer\" button$")
@@ -304,7 +355,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomePage(agent).getIncomingTransferWindow().acceptRejectTransfer(agent);
     }
 
-    @Then("^(.*) has new conversation request$")
+    @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(20, agent);
         int sessionCapacity;
@@ -312,12 +363,16 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
             if (sessionCapacity==0) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
+        List<SupportHoursItem> supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+        if(supportHours.size()<7){
+            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+        }
         Assert.assertTrue(isConversationShown,
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
                         "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + "\n" +
-                        "Support hours: " + ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName()).toString() + "\n"
-                );
+                        "Support hours: " + supportHours + "\n"
+        );
     }
 
     @Then("^(.*) sees \"(.*)\" tip in conversation area$")
@@ -366,12 +421,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) button hidden from the Chat header$")
     public void checkIfButtonHidden(String button){
-        try {
-            getAgentHomePage("main").getChatHeader().isButtonEnabled(button);
-        }
-        catch (NoSuchElementException | TimeoutException e){
-            Assert.assertFalse(false, "'" + button + "' button is displayed");
-        }
+            Assert.assertFalse( getAgentHomePage("main").getChatHeader().isButtonEnabled(button),
+                    "'" + button + "' button is displayed");
     }
 
 
@@ -414,9 +465,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "Expected to user message '"+userMessage+"' is not shown in chatdesk");
     }
 
-    @Then("^Agent select \"(.*)\" filter option$")
-    public void selectFilterOption(String option){
-        getLeftMenu("main agent").selectFilterOption(option);
+    @Then("^(.*) select \"(.*)\" filter option$")
+    public void selectFilterOption(String agent,String option){
+        getLeftMenu(agent).selectFilterOption(option);
     }
 
     @Then("^Agent see \"(.*)\" filter options$")
@@ -594,13 +645,9 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         int waitTimeInMillis = waitFor * 1000;
         long endTime = System.currentTimeMillis() + waitTimeInMillis;
 
-        if (requiredState.equalsIgnoreCase("deleted")) {
-            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
-                Thread.sleep(200);
-        }
-        else {
-            while (!customer360Container.isPhoneNumberFieldUpdated(requiredState) && System.currentTimeMillis() < endTime)
-                Thread.sleep(200);
+        while (!customer360Container.isPhoneNumberFieldUpdated(requiredState)
+                    && System.currentTimeMillis() < endTime) {
+            Thread.sleep(200);
         }
     }
 
@@ -626,26 +673,109 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) button (.*) displayed in Customer 360$")
     public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
-        Customer360Container customer360PersonalInfo = getAgentHomePage("main").getCustomer360Container();
+        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
-            try {
-                customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName);
-            }
-            catch (NoSuchElementException e){
-                Assert.assertFalse(false, "'" + buttonName + "' button is not displayed");
-            }
+            Assert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
         else
-            Assert.assertTrue(customer360PersonalInfo.isCustomer360SMSButtonsDisplayed(buttonName));
+            Assert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
     }
 
-    @When("^Change phone number for (.*) user$")
-    public void changePhoneNumberCustomer360(String customerFrom){
-        String phoneNumber = generateUSCellPhoneNumber();
+    @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in Customer 360$")
+    public void checkCustomer360PhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
+        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
+        SoftAssert softAssert = new SoftAssert();
+        if (isOrNotDisplayed.contains("not")) {
+            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"), "'Verify' button is not displayed");
+            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"), "'Re-send OTP' button is not displayed");
+            softAssert.assertAll();
+        }
+        else {
+            softAssert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"));
+            softAssert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"));
+            softAssert.assertAll();
+        }
+    }
+
+    @When("^(.*) phone number for (.*) user$")
+    public void changePhoneNumberCustomer360(String changeOrDelete, String customerFrom){
+        String phoneNumber = " "; //in case we need to delete phone number
         Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        if (changeOrDelete.equalsIgnoreCase("change"))
+            phoneNumber = generateUSCellPhoneNumber();
+
         customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
 
-        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+        getAgentHomePage("main").getCustomer360Container().setPhoneNumber(phoneNumber);
         Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
+    }
+
+    @When("Agent click on '(.*)' button in Customer 360")
+    public void clickPhoneActionsButtonsCustomer360(String buttonName){
+        getAgentHomeForMainAgent().getCustomer360Container().clickPhoneNumberVerificationButton(buttonName);
+    }
+
+    @Then("^'Verify phone' window is (.*)$")
+    public void verifyPhoneNumberWindowOpened(String isWindowOpen) {
+        if (isWindowOpen.equalsIgnoreCase("opened"))
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),"'Verify phone' window is not opened.");
+        else
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isClosed(),"'Verify phone' window wasn't closed.");
+    }
+
+    @Then("User's profile phone number (.*) in 'Verify phone' input field")
+    public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
+
+        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\s+", "");
+        String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
+        if (isRequiredToDisplay.contains("not")){
+            Assert.assertTrue(phoneNumberInVerifyPopUp.equals(""), "Some phone number displayed in the field");
+        }
+        else{
+            Assert.assertTrue(phoneNumberInVerifyPopUp.equals(phoneNumberInCustomer360),
+                    "Phone number in Verify phone window is different from displayed in Customer 360");
+        }
+    }
+
+    @When("Agent click on (.*) button on 'Verify phone' window")
+    public void closeVerifyPhonePopUp(String buttonName){
+        getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().sendOrCancelClick(buttonName);
+    }
+
+    @When("Agent send OTP message with API")
+    public void sendOTPWithAPI(){
+        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        DBConnector.addPhoneAndOTPStatusIntoDB(ConfigManager.getEnv(), linkedClientProfileId);
+    }
+
+    @Then("'Verified' label become (.*)")
+    public void checkVerifiedLabel(String isVisible) {
+        if (isVisible.equalsIgnoreCase("visible"))
+            Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label is not displayed");
+        else
+            Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelHidden(), "Verified label remains displayed");
+    }
+
+    @Then("SMS client-profile added into DB")
+    public void checkSMSProfileCreating(){
+        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage());
+        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\+", "");
+        Assert.assertTrue(DBConnector.isSMSClientProfileCreated(ConfigManager.getEnv(), phone, linkedClientProfileId, "MC2_SMS"),
+                "MC2_SMS client profile wasn't created");
+    }
+
+    @Then("Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed")
+    public void chatSeparatorCheck(){
+        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
+        softAssert.assertTrue(getAgentHomeForMainAgent().getChatForm().getTextFromMessageInputField().replaceAll("\\s", "").contains(phone),
+                "Phone number is not displayed in message field");
+        softAssert.assertAll();
+    }
+
+    @Then("New OTP code is different from the previous one")
+    public void checkOTPCodes(){
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatBody().isNewOTPCodeDifferent(), "Codes are equal");
     }
 
     @When("^Agent switches to opened (?:Portal|ChatDesk) page$")
@@ -1207,7 +1337,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         String integrationType = "";
         switch (clientFrom){
             case "fb dm":
-                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent().getBody().jsonPath().getList("content")
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
                                         .stream()
                                         .filter(e -> ((Map)
                                                             ((Map) e).get("client")
@@ -1259,13 +1389,24 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
         SoftAssert soft = new SoftAssert();
         CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-        String createdDate = crmTicketInfoForUpdating.get().get("date");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
-        String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
 
-        soft.assertEquals(dateTimeFromBackend.toString().substring(0, 15), createdDate.substring(0, 15),
+        ZoneId zoneId = TimeZone.getDefault().toZoneId();
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        String date = crmTicketInfoForUpdating.get().get("date");
+        if(date.length()<=19){
+            formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        }
+        LocalDateTime createdDate = LocalDateTime.parse(date, formatter1);
+        long expectedMili = convertLocalDateTimeToMillis(createdDate, zoneId);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter)
+                .atZone(ZoneId.of("UTC"))
+                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+        long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
+
+        String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
+        soft.assertTrue((actualMili-expectedMili)<=3000,
                 "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");
@@ -1330,5 +1471,131 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
 
         }
+    }
+
+    @When("^(.*) click on 'Transfer' chat$")
+    public void agentClickOnTransferChat(String agent) {
+        getAgentHomeForMainAgent().getChatHeader().clickTransferButton(agent);
+    }
+
+
+    @And("^Header in chat box displayed the icon for channel from which the user is chatting$")
+    public void headerInChatBoxDisplayedTheIconForChannelFromWhichTheUserIsChatting() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg(),
+                "Icon for channel in chat header as not expected");
+    }
+
+    @And("^Time stamp displayed in 24 hours format$")
+    public void timeStampDisplayedInHoursFormat() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidTimeStamp(),
+                "Time stamp in chat header as not expected");
+    }
+
+    @And("^Header in chat box displayed \"chatting to \"customer name\"\"$")
+    public void headerInChatBoxDisplayedCustomerName() {
+        Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTextHeader(),
+                "chatting to " + getUserNameFromLocalStorage(),
+                "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
+
+    }
+
+    @Then("^Transfer chat pop up appears$")
+    public void transferChatPopUpAppears() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
+    }
+
+    @When("^Select 'Transfer to' drop down$")
+    public void selectTransferToDropDown() {
+        getAgentHomeForMainAgent().getTransferChatWindow().openDropDownAgent();
+    }
+
+    @When("^(.*) select an agent in 'Transfer to' drop down$")
+    public void selectAgentTransferToDropDown(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
+    }
+
+    @Then("^Agent sees '(.*)'$")
+    public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
+    }
+
+    @When("^Click on 'Transfer' button in pop-up$")
+    public void clickOnTransferButtonInPopUp() {
+        getAgentHomeForMainAgent().getTransferChatWindow().clickTransferChatButton();
+    }
+
+    @When("^Complete 'Note' field$")
+    public void sentNotesTransferChatPopup() {
+        getAgentHomeForMainAgent().getTransferChatWindow().sentNote();
+    }
+
+    @Then("^'Transfer to' fields highlighted red color$")
+    public void transferToFieldsHighlightedRedColor() {
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)",
+                "Drop down: not expected border color");
+    }
+
+    @Then("^'Note' fields highlighted red color$")
+    public void noteFieldsHighlightedRedColor() {
+        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)",
+                "Note: not expected border color");
+    }
+
+    @Given("^(.*) receives a few conversation requests$")
+    public void create2DotControlChats(String agent){
+        leftMenuWithChats = getLeftMenu(agent);
+        SoftAssert soft = new SoftAssert();
+        DotControlSteps dotControlSteps = new DotControlSteps();
+        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("connect to agent'"));
+        DotControlSteps.cleanUPDotControlRequestMessage();
+        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
+
+        soft.assertTrue(leftMenuWithChats
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(0).getClientId(),20, agent),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
+        soft.assertTrue(leftMenuWithChats
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(1).getClientId(),20, agent),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
+        soft.assertAll();
+    }
+
+    @When("^(.*) click 'Cancel transfer' button$")
+    public void cancelTransferChat(String agent){
+        getAgentHomePage(agent).getChatHeader().clickCancelTransferButton(agent);
+    }
+
+    @Then("^(.*) has not see incoming transfer pop-up$")
+    public void secondAgentHasNotSeeIncomingTransferPopUp(String agent) {
+           Assert.assertTrue(
+            getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(agent),
+                   "Transfer chat header is shown for "+ agent + " agent");
+
+    }
+
+    @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
+    public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {
+        getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton(agent);
+        List<String> availableAgents = getAgentHomePage(agent).getPageHeader().getAvailableAgents();
+        Assert.assertEquals(
+                availableAgents.size(), availableAgent,
+                "Quantity of available agents not as expected");
+        if (availableAgent==1){
+            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            String agentName =  getAgentHomePage(agent).getPageHeader().getAgentName();
+            Assert.assertFalse(
+                    availableAgents.contains(agentName),
+                    "Unavailable agent in list of available agents");
+        }
+
+
+    }
+
+    @And("^(.*) transfers overnight ticket$")
+    public void agentTransfersOvernightTicket(String agent) {
+        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
     }
 }

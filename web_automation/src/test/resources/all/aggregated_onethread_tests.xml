@@ -17,9 +17,9 @@
             <class name="runner.automationbot.RunChatdeskTest" />
         </classes>
     </test>
-    <test name="TIE training new intent test">
+    <test name="TIE training new intent test and config tests">
         <classes>
-            <class name="runner.RunTIETrainingManagement" />
+            <class name="runner.automationcomon.RunAllTests" />
         </classes>
     </test>
     <test name="Chatdesk and portal tests (Standard Billing tenant) ">

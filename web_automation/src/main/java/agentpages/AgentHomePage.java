@@ -7,10 +7,13 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.List;
+
 public class AgentHomePage extends AgentAbstractPage {
 
     private String chatContainer = "//ul[@class='chat-container']";
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
+    private String modalWindow = "div.modal-content";
 
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
@@ -53,6 +56,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.context-wrapper>div.tip-note")
     private WebElement tipNoteInRightArea;
 
+    @FindBy(xpath = "//div[@class='touch-notification']//child::h2[text()='Transfer waiting']")
+    private List<WebElement> notificationsList;
+
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
@@ -71,13 +77,14 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatHistoryContainer chatHistoryContainer;
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
+    private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
     }
 
     public ChatForm getChatForm() {
-        chatForm.setCurrectAgent(this.getCurrentAgent());
+        chatForm.setCurrentAgent(this.getCurrentAgent());
         return chatForm;
     }
 
@@ -135,7 +142,12 @@ public class AgentHomePage extends AgentAbstractPage {
         return leftMenuWithChats;
     }
 
+    public VerifyPhoneNumberWindow getVerifyPhoneNumberWindow() {
+        return verifyPhoneNumberWindow;
+    }
+
     public ChatBody getChatBody() {
+        chatBody.setCurrentAgent(this.getCurrentAgent());
         return chatBody;
     }
 
@@ -221,4 +233,23 @@ public class AgentHomePage extends AgentAbstractPage {
         return getTextFromElemAgent(tipNoteInRightArea, 5, getCurrentAgent(), "Tips in context area if no chat selected");
     }
 
+    public List<WebElement> getCollapsedTransfers(){
+        waitForElementsToBeVisibleAgent(notificationsList, 6, this.getCurrentAgent());
+        return notificationsList;
+    }
+
+    public void acceptAllTransfers(){
+        try {
+            for (WebElement elem : getCollapsedTransfers()) {
+                elem.click();
+                getIncomingTransferWindow().acceptTransfer();
+            }
+        }catch(TimeoutException o){
+
+        }
+    }
+
+    public void waitForModalWindowToDisappear(){
+        waitForElementToBeInVisibleByCssAgent(modalWindow, 6);
+    }
 }

@@ -36,11 +36,11 @@ public class DotControlSteps {
 
     private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
-    private static Map<String, String> adapterApiTokens= new HashMap();
+    private static Map<String, String> adapterApiTokens= new HashMap<>();
     Faker faker = new Faker();
 
     @Given("Create .Control integration for (.*) tenant")
-    public void    createIntegration(String tenantOrgName){
+    public void createIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
 
@@ -90,7 +90,7 @@ public class DotControlSteps {
     }
 
     @When("^Send (.*) message for .Control$")
-    public void sendMessageToDotControl(String message){
+    public DotControlRequestMessage sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
         else{
                 dotControlRequestMessage.get().setMessage(message);
@@ -105,6 +105,7 @@ public class DotControlSteps {
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
         clientId.set(dotControlRequestMessage.get().getClientId());
+        return dotControlRequestMessage.get();
     }
 
     @When("^Send (.*) message for .Control from existed client$")
@@ -426,6 +427,10 @@ public class DotControlSteps {
         apiToken.remove();
         clientId.remove();
         initCallBody.remove();
+    }
+
+    public static void cleanUPDotControlRequestMessage(){
+        dotControlRequestMessage.remove();
     }
 
     public DotControlInitRequest formInitRequestBody(String apiToken, String clientIdStrategy, String messageIdStrategy){

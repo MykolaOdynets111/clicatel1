@@ -13,6 +13,9 @@ public class TopUpBalanceWindow extends BasePortalWindow {
     @FindBy(xpath = ".//input[@type='number']")
     private WebElement inputBalanceField;
 
+    @FindBy(xpath = "//div[contains(@class, 'error')][not(contains(@class, 'ng-hide'))]")
+    private WebElement errorInInputTopUpForm;
+
     public boolean isShown(){
         return this.getWrappedElement().isDisplayed();
     }
@@ -23,5 +26,10 @@ public class TopUpBalanceWindow extends BasePortalWindow {
 
     public void enterNewAmount(int amount){
         inputBalanceField.sendKeys(String.valueOf(amount));
+    }
+
+    public String getErrorWhileAddingPopup(){
+        return getTextFromElemAgent(errorInInputTopUpForm, 3, "main",
+                "Error about not valid top up sum");
     }
 }

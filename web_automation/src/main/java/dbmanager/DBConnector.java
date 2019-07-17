@@ -36,7 +36,7 @@ public class DBConnector {
 
     public static String getInvitationIdForCreatedUserFromMC2DB(String env, String userEmail) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
-        String query = "SELECT * FROM "+tableName+".invitation where email=\""+userEmail+"\";";
+        String query = "SELECT * FROM "+tableName+".invitation where email=\""+userEmail+"\" AND deleted = 0;";
         Statement statement = null;
         ResultSet results = null;
         String id = null;
@@ -201,6 +201,60 @@ public class DBConnector {
         return id;
     }
 
+    public static void addPhoneAndOTPStatusIntoDB(String env, String linkedClientProfileID){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "INSERT INTO `" + tableName + "`.`client_attribute` (`client_profile_id`, `key`, `value`) " +
+                "VALUES ('" + linkedClientProfileID + "', 'otpSent', 'true') ON DUPLICATE KEY UPDATE `value` = 'true';";
+
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeUpdate(query);
+            results = statement.getResultSet();
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isSMSClientProfileCreated(String env, String phoneNumber, String linkedProfileID, String type) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+
+        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+phoneNumber+"' " +
+                "and linked_profile_id='"+linkedProfileID+"' and type = '"+type+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        boolean isRecordExists = false;
+        try {
+            for(int i = 0; i<5; i++) {
+                statement = getConnection(env, "touch").createStatement();
+                statement.executeQuery(query);
+                results = statement.getResultSet();
+                isRecordExists = results.next();
+                if (isRecordExists) {
+                    statement.close();
+                    DBConnector.closeConnection();
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                statement.close();
+                DBConnector.closeConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isRecordExists;
+    }
+
     public static void updateClientLastVisitDate(String env, String linkedClientProfileId, Long timestampDate){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
@@ -310,6 +364,7 @@ public class DBConnector {
             results.next();
             sessionDetails.put("clientJID", getColumnValue(results, "client_jid"));
             sessionDetails.put("state", getColumnValue(results, "state"));
+            sessionDetails.put("startedDate", getColumnValue(results, "started_date"));
             sessionDetails.put("endedDate", getColumnValue(results, "ended_date"));
             sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
             sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
@@ -369,7 +424,7 @@ public class DBConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (NullPointerException e){
-            Assert.assertTrue(false, "Unable to get '" +column+ "' column value");
+            Assert.fail("Unable to get '" + column + "' column value");
         }
         return columnValue;
     }
@@ -393,6 +448,36 @@ public class DBConnector {
         }
         return name;
     }
+
+
+    public static String getResetPassId(String env, String email){
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
+        String userMetadataIdQuery = "SELECT id FROM "+ tableName +".user_metadata where email='" + email + "';";
+
+        Statement statement = null;
+        ResultSet results = null;
+        String resetId = "none";
+        try {
+            statement = getConnection(env, "mc2").createStatement();
+            results = statement.executeQuery(userMetadataIdQuery);
+            results.next();
+            String userMetadatId = results.getString("id");
+
+            String userResetPassQuery = "SELECT id FROM "+ tableName +".password_reset where user_metadata_id='"
+                    + userMetadatId + "' and deleted=0;";
+            results =  statement.executeQuery(userResetPassQuery);
+            results.next();
+            resetId = results.getString("id");
+
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resetId;
+    }
+
+
 
 //    public static void main(String args[]){
 //        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");

@@ -8,6 +8,7 @@ Feature: Transferring chat
     Given I login as agent of General Bank Demo
     And Click chat icon
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3591")
   Scenario: Verify if agent is able to transfer chat via "Transfer chat" button
     When User enter connect to agent into widget input field
     Then Agent has new conversation request

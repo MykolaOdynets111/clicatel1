@@ -27,26 +27,23 @@ import java.util.*;
 public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     private static  List<HashMap> tenantsInfo=null;
-//    private static List<HashMap> tenantMessages=null;
     private static List<TafMessage> tenantMessages=null;
-
-
 
     public static String getInternalTenantConfig(String tenantName, String config){
         String url = String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
-        return RestAssured.get(url).jsonPath().get(config);
+        return RestAssured.get(url).jsonPath().get(config).toString();
     }
 
     public static Response getTenantConfig(String tenantOrgName){
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_CONFIG, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
         Map<String, String> tenantsMap = new HashMap<>();
-        List<HashMap> tenants = getAllTenantInfo();
+        List<HashMap> tenants = getAllTenantsInfo();
         tenants.forEach(e-> tenantsMap.put(((String) e.get("tenantOrgName")).toLowerCase(),
                 (String) e.get(theValue)));
         return tenantsMap;
@@ -70,7 +67,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static Response getTenantInfo(String tenantOrgName) {
         Response resp =  RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.TENANT_INFO);
         Assert.assertEquals(resp.statusCode(),200, "Failed to get tenant info\n"+
                 "URL: " + Endpoints.TENANT_INFO + "\n" +
@@ -135,7 +132,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         }
     }
 
-    private static synchronized List<HashMap> getAllTenantInfo() {
+    public static synchronized List<HashMap> getAllTenantsInfo() {
         Response resp = RestAssured.given(RequestSpec.getRequestSpecification()).get(Endpoints.GET_ALL_TENANTS_ENDPOINT);
             try {
                 if (tenantsInfo == null) {
@@ -199,7 +196,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String body = createPutBodyForHours(day, startTime, endTime);
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body(body)
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
@@ -208,7 +205,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String body = createPutBodyForHours(day, startTime, endTime);
         Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body(body)
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         return resp;
@@ -217,7 +214,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
         Response resp = RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         try {
             return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
@@ -225,7 +222,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
             Assert.assertTrue(false, "Incorrect body on updating support hours \n"
             +"Status code: " +resp.statusCode() + "\n"
                     +"tenantOrgName: "+ tenantOrgName
-                    + "Authorization :"  + RequestSpec.getAccessTokenForPortalUser(tenantOrgName) + "\n"
+                    + "Authorization :"  + RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main") + "\n"
           + resp.getBody().asString()  );
 //            System.out.println(resp.getBody().asString());
             return null;
@@ -285,7 +282,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static void setAvailableForAllTerritories(String tenantOrgName){
         RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"AVAILABLE\"\n" +
                         "\n" +
@@ -303,7 +300,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String countryID = targetCountry.getCountryId();
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
                         "  \"territory\": [\n" +
@@ -327,7 +324,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String territoryID = targetTerr.getTerritoryId();
         RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
                         "  \"territory\": [\n" +
@@ -366,7 +363,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE){
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.FEATURE);
         boolean featureStatus = false;
         try{
@@ -384,8 +381,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
     }
 
-    public static Response getAgentInfo(String tenantOrgName) {
-        String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName);
+    public static Response getAgentInfo(String tenantOrgName, String agent) {
+        String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName, agent);
         return RestAssured.given()
                 .header("Content-Type", "application/json")
                 .header("Authorization", token)
@@ -411,7 +408,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static String getChannelID(String tenantOrgName, String integrationChanel){
         List<IntegrationChannel> existedChannels = RestAssured.given()
-                                                            .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                                                            .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                                                             .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
                                                             .getBody().jsonPath().getList("", IntegrationChannel.class);
     return  existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
@@ -421,7 +418,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
         RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
                         "  \"enable\": "+ integrationStatus + "\n" +
@@ -431,14 +428,14 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static ResponseBody getInfoAboutFBIntegration(String tenantOrgName){
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
 
     public static void delinkFBIntegration(String tenantOrgName){
         RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
@@ -461,7 +458,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static Integration getIntegration(String tenantOrgName, String integrationType){
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.INTEGRATIONS)
                 .getBody().jsonPath().getList("", Integration.class)
                 .stream()
@@ -471,7 +468,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static List<ChatHistoryItem> getChatHistory(String tenantOrgName, String sessionId){
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.CHAT_HISTORY, sessionId))
                 .getBody().jsonPath().getList("records", ChatHistoryItem.class);
     }
@@ -480,29 +477,80 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         RequestSpec.clearAccessTokenForPortalUser();
         return RestAssured.given()
                 .header("Content-Type", "application/json")
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);
     }
 
-    public static List<OvernightTicket> getOvernightTicketsByStatus(String tenantOrgName, String ticketStatus){
-        return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                .get(Endpoints.AGENT_OVERNIGHT_TICKETS + ticketStatus.toUpperCase())
-                .getBody().jsonPath().getList("", OvernightTicket.class);
-    }
-
-    public static void closeAllOvernightTickets(String tenantOrgName) {
-        List<OvernightTicket> allAssignedTickets = getOvernightTicketsByStatus(tenantOrgName, "ASSIGNED");
-        List<OvernightTicket> allUnassignedTickets = getOvernightTicketsByStatus(tenantOrgName, "UNASSIGNED");
-        List<OvernightTicket> fullList = new ArrayList<>();
-        fullList.addAll(allAssignedTickets);
-        fullList.addAll(allUnassignedTickets);
-        for(OvernightTicket ticket : fullList){
+    public static void processTickets(List<OvernightTicket> tickets, String agentId){
+        for(OvernightTicket ticket : tickets){
+            String body = "{\n" +
+                    "  \"chatId\": \"" + ticket.getId() + "\",\n" +
+                    "  \"state\": \"PROCESSED\",\n" +
+                    "  \"agentId\": \"" + agentId + "\"\n" +
+                    "}";
             RestAssured.given()
-                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
-                    .post(String.format(Endpoints.PROCESS_OVERNIGHT_TICKET, ticket.getId()));
+                    .header("Content-Type", "application/json")
+                    .body(body)
+                    .post(Endpoints.INTERNAL_PROCESS_TICKET);
         }
     }
+
+    public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
+        try {
+            String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
+            List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
+            List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
+            List<OvernightTicket> fullList = new ArrayList<>();
+            fullList.addAll(allAssignedTickets);
+            fullList.addAll(allUnassignedTickets);
+            if (fullList.size() > 0) processTickets(fullList, agentId);
+        }catch(NullPointerException e){}
+    }
+
+    public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
+        List<OvernightTicket> tickets = new ArrayList<>();
+        Response resp =  RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, ordinalAgentNumber))
+                .get(Endpoints.AGENT_ASSIGNED_TICKETS);
+        try {
+            tickets = resp.getBody().jsonPath().getList("", OvernightTicket.class);
+        }catch (ClassCastException|JsonPathException e){
+            Assert.fail("Getting overnight tickets by URL "+
+                    Endpoints.AGENT_ASSIGNED_TICKETS + " was not successful \n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
+        return tickets;
+    }
+
+
+    public static List<OvernightTicket> getUnassignedOvernightTickets(String tenantOrgName){
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        List<OvernightTicket> tickets = new ArrayList<>();
+        Response resp =  RestAssured.given().log().all()
+                .get(String.format(Endpoints.INTERNAL_GET_TICKETS,tenantID, 0));
+        try{
+
+            List<OvernightTicket> baseTickets = resp.jsonPath().getList("content", OvernightTicket.class);
+            tickets.addAll(baseTickets);
+            int pageSize = resp.jsonPath().getInt("pageable.pageSize");
+            int unassignedTickets = resp.jsonPath().getInt("totalElements");
+            int pagesNumber = unassignedTickets / pageSize;
+            if(pagesNumber > 1){
+                for (int i=1; i<pageSize; i++){
+                    resp =  RestAssured.given().log().all()
+                        .get(String.format(Endpoints.INTERNAL_GET_TICKETS, tenantID, i));
+                    List<OvernightTicket> allUnassignedTickets = resp.jsonPath().getList("content", OvernightTicket.class);
+                    tickets.addAll(allUnassignedTickets);
+                }
+            }
+        } catch (ClassCastException|JsonPathException e){
+            Assert.fail("Getting Unassighned overnight tickets by internal URL "+
+                   " was not successful \n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
+        return tickets;
+    }
+
 
     public static Map getActiveSessionByClientId(String clientId){
         String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
@@ -557,7 +605,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static JsonPath getCustomerView(String tenantOrgName, String clineId){
         String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
                 .getBody().jsonPath();
 
@@ -573,34 +621,34 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     }
 
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){
-        String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
+        String agentId = getAgentInfo(tenantOrgName, "main").getBody().jsonPath().get("id");
         RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
     }
 
     public static void deleteTenantBrandImage(String tenantOrgName){
         String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
 
         RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
     public static Response getTenantBrandImage(String tenantOrgName){
         String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
     }
 
     public static Response getTenantBrandImageTrans(String tenantOrgName){
         String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
@@ -609,39 +657,25 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     }
 
     public static Response getFinishedChatsByLoggedInAgentAgent(String tenantOrgName, int page, int size){
-        String agentId = getAgentInfo(tenantOrgName).getBody().jsonPath().get("id");
+        String agentId = getAgentInfo(tenantOrgName, "main").getBody().jsonPath().get("id");
         String url = String.format(Endpoints.INTERNAL_GET_CHATS_FINISHED_BY_AGENT, agentId, page, size);
         return RestAssured.get(url);
     }
 
-    public static Response getActiveChatsByAgent(){
+    public static Response getActiveChatsByAgent(String agent){
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization",
+                        RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
                 .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
-    public static Response getActiveChatsBySecondAgent(){
-        return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUserSecond(Tenants.getTenantUnderTestOrgName()))
-                .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
-    }
-
-    public static void closeActiveChats(){
-        List<String> conversationIds = getActiveChatsByAgent().getBody().jsonPath().getList("content.id");
+    public static void closeActiveChats(String agent){
+        List<String> conversationIds = getActiveChatsByAgent(agent).getBody().jsonPath().getList("content.id");
         for(String conversationId : conversationIds){
             RestAssured.given()
                     .header("Accept", "application/json")
-                    .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
-                    .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
-        }
-    }
-
-    public static void closeActiveChatsSecondAgent(){
-        List<String> conversationIds = getActiveChatsBySecondAgent().getBody().jsonPath().getList("content.id");
-        for(String conversationId : conversationIds){
-            RestAssured.given()
-                    .header("Accept", "application/json")
-                    .header("Authorization", RequestSpec.getAccessTokenForPortalUserSecond(Tenants.getTenantUnderTestOrgName()))
+                    .header("Authorization",
+                            RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
                     .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
         }
     }
@@ -653,7 +687,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static List<CRMTicket> getCRMTickets(String clientID, String type){
         String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
@@ -665,7 +699,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static List<String> getAllTags(){
         return RestAssured.given()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
     }
 
@@ -674,7 +708,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
         return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .header("Content-Type", "application/json")
                 .header("accept", "application/json")
                 .body("{" +
@@ -689,7 +723,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static void deleteCRMTicket(String crmTicketId){
         RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .header("accept", "application/json")
                 .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
@@ -698,7 +732,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static Response updateTenantConfig(String tenantOrgName, String config, String configValue){
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .header("accept", "application/json")
                 .header("Content-Type", "application/json")
                 .body("{ \"configAttributes\": " +
@@ -752,7 +786,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static List<AvailableAgent> getAvailableAgents(){
         return RestAssured.given().log().all()
-                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName()))
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.TENANT_AVAILABLE_AGENTS)
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
