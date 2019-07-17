@@ -4,7 +4,7 @@
 @no_chatdesk
 Feature: Managing agent user
 
-  Scenario: Editing agent roles
+  Scenario: Editing agent roles02
     Given New Automation Bot agent is created
     Then New agent is added into touch database
     Given I open portal
@@ -17,7 +17,7 @@ Feature: Managing agent user
     And Login as newly created agent
     Then Agent is not redirected to chatdesk
 
-  Scenario: Deleting agent
+  Scenario: Deleting agent04
     Given New Automation Bot agent is created
     Then New agent is added into touch database
     Given I open portal
@@ -30,7 +30,7 @@ Feature: Managing agent user
     When Admin logs out from portal
     Then Deleted agent is not able to log in portal
 
-  Scenario: Editing agent name
+  Scenario: Editing agent name03
     Given New Automation Bot agent is created
     Then New agent is added into touch database
     Given I open portal

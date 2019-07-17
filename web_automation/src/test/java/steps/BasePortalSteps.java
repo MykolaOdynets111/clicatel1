@@ -129,7 +129,11 @@ public class BasePortalSteps implements JSHelper {
             result = !confirmationEmail.equalsIgnoreCase("") ||
                     !confirmationEmail.equalsIgnoreCase("none");
             if(result){
-                confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+                try {
+                    confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+                }catch (ArrayIndexOutOfBoundsException e){
+                    Assert.fail("Unexpected confirmationEmail \n" + confirmationEmail);
+                }
             }
         }
         return result;
