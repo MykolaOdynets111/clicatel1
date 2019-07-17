@@ -1265,6 +1265,20 @@ public class BasePortalSteps implements JSHelper {
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
     }
+    @When("^Click on (.*) user from the table$")
+    public void clickUser(String fullName){
+        if(fullName.equalsIgnoreCase("created")){
+//            fullName = "Eduardo Brown";
+            fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        }
+        if(fullName.equalsIgnoreCase("admin")){
+            String email = Agents.getMainAgentFromCurrentEnvByTenantOrgName(
+                    Tenants.getTenantUnderTestOrgName()).getAgentEmail();
+            fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
+        }
+        getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
+        portalUserProfileEditingThreadLocal.set(new PortalUserEditingPage());
+    }
 
     @When("^Click 'Upload' button$")
     public void clickUploadButtonForUser(){

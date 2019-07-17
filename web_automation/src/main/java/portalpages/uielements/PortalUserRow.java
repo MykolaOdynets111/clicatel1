@@ -40,4 +40,8 @@ public class PortalUserRow extends Widget implements WebActions {
         manageButton.click();
     }
 
+    public void clickOnUserName(){
+        agentFirstName.click();
+    }
+
 }

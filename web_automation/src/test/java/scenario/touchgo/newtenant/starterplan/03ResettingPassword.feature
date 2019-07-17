@@ -6,14 +6,14 @@ Feature: Resetting agent password
 
   Background:
     Given New tenant is successfully created
-    Given Second agent of Updating AQA is successfully created
+    Given Second agent of SignedUp AQA is successfully created
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4734")
   Scenario: Manage agent :: Reset password
     Given I open portal
-    And Login into portal as an admin of Updating AQA account
-    When I select Touch in left menu and Manage Agent users in submenu
-    And Click 'Manage' button for created user
+    And Login into portal as an admin of SignedUp AQA account
+    When I select Settings in left menu and User management in submenu
+    And Click on created user from the table
     When I click "Reset password" page action button
     Then Notification popup with text Reset password email has been sent to <email> is shown for admin
     And Confirmation reset password Email arrives
