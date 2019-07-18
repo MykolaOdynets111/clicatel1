@@ -1680,7 +1680,6 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Filter \"(.*)\" is selected by default$")
     public void filterIsSelectedByDefault(String filterName) {
-        getChatConsoleInboxPage().getChatConsoleInboxRow("name");
         Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
                 "Filter name by default does not match expected");
     }
