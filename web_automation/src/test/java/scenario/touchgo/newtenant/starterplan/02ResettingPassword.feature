@@ -7,6 +7,7 @@ Feature: Resetting agent password
   Background:
     Given New tenant is successfully created
     Given Second agent of SignedUp AQA is successfully created
+    Given There is no new emails in target email box
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4734")
   Scenario: Manage agent :: Reset password

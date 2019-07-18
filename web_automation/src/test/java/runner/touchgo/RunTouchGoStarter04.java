@@ -16,11 +16,10 @@ import java.util.List;
         },
         monochrome = true,
         features = {
-                Path.NEW_TENANT_STARTER + "03TouchGoPlanUpgradingWithoutAcceptigTerms.feature",
-                Path.NEW_TENANT_STARTER + "03EditingAgentDetails.feature"
+                Path.NEW_TENANT_STARTER + "04DeletingAgentUsers.feature"
         },
         glue ="steps")
-public class RunTouchGoStarter03 {
+public class RunTouchGoStarter04 {
 
 
     @Factory

@@ -3,11 +3,13 @@
 @no_chatdesk
 @without_tct
 @delete_agent_on_failure
+@new_agent
 Feature: Creating new agent
 
 
   Scenario: Creating new agent
     Given New tenant is successfully created
+    Given There is no new emails in target email box
     And Second agent of SignedUp AQA account does not exist
     Given I open portal
     And Login into portal as an admin of SignedUp AQA account

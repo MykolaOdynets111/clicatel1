@@ -124,6 +124,11 @@ public class Hooks implements JSHelper{
             ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
 
+        if(scenario.getSourceTagNames().contains("@new_agent")){
+            newAgent();
+        }
+
+
         finishAgentFlowIfExists(scenario);
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {
@@ -497,6 +502,14 @@ public class Hooks implements JSHelper{
     @Attachment
     private String newAccountInfo(){
         return MC2Account.TOUCH_GO_NEW_ACCOUNT.toString();
+    }
+
+
+    @Attachment
+    private String newAgent(){
+        return BasePortalSteps.AGENT_FIRST_NAME + "\n"
+                + BasePortalSteps.AGENT_LAST_NAME + "\n"
+                + BasePortalSteps.AGENT_EMAIL;
     }
 
 }
