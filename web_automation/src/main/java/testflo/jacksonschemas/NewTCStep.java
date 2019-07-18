@@ -29,7 +29,7 @@ public class NewTCStep {
 
     public NewTCStep(){
         this.defects = Arrays.asList(new Object[0]);
-        this.attachments = Arrays.asList(new Object[0]);;
+        this.attachments = Arrays.asList(new Object[0]);
         this.isGroup = false;
         this.group = false;
     }

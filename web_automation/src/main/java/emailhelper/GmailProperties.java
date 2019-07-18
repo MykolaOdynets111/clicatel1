@@ -1,7 +1,5 @@
 package emailhelper;
 import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 
 public class GmailProperties {

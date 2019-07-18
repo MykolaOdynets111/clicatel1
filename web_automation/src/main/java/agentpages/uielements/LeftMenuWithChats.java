@@ -155,8 +155,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
     public List<String> getFilterOption(){
         expandFilterButton.click();
         waitForElementToBeVisibleAgent(filterDropdownMenu, 10);
-        List<String> displayedFilterOptions = filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
-        return  displayedFilterOptions;
+        return filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
     }
 
     public void selectRandomChat(String agent){

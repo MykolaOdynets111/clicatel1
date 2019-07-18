@@ -57,8 +57,7 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
 
     public String getMessage() {
         waitForElementToBeVisibleAgent(textarea, 10);
-        String messageOnfrontend = textarea.getAttribute("value");
-        return messageOnfrontend;
+        return textarea.getAttribute("value");
     }
 
     public void clickOnOff(){

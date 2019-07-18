@@ -2,7 +2,6 @@ package testflo.jacksonschemas;
 
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

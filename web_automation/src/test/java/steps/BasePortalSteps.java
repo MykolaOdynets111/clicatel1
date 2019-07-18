@@ -30,7 +30,6 @@ import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
 import java.util.*;
-import java.util.List;
 
 public class BasePortalSteps implements JSHelper {
 
@@ -768,7 +767,7 @@ public class BasePortalSteps implements JSHelper {
                 "Error message is not shown");
     }
 
-    @When("^Click off/on  Chat Conclusion$")
+    @When("^Click off/on Chat Conclusion$")
     public void clickOffOnChatConclusion(){
         getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffChatConclusion();
     }
@@ -1700,7 +1699,6 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Filter \"(.*)\" is selected by default$")
     public void filterIsSelectedByDefault(String filterName) {
-        getChatConsoleInboxPage().getChatConsoleInboxRow("name");
         Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
                 "Filter name by default does not match expected");
     }

@@ -1,7 +1,6 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import drivermanager.ConfigManager;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

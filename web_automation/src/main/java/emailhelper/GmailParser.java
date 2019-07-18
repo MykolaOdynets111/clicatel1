@@ -27,9 +27,7 @@ public class GmailParser {
         String emailContent = null;
         try {
             emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
+        } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
         List<String> lines = Arrays.asList(emailContent.split("\r\n"));

@@ -1,21 +1,20 @@
 package testflo.jacksonschemas;
 
-import testflo.jacksonschemas.localallurereport.Step;
 
 import java.util.List;
 import java.util.Map;
 
 public interface AllureScenarioInterface {
 
-    public String getTestId();
+    String getTestId();
 
-    public List<Map<String, String>> getStepsWithStatuses();
+    List<Map<String, String>> getStepsWithStatuses();
 
-    public String getName();
+    String getName();
 
-    public String getDescription();
+    String getDescription();
 
-    public String getFailureMessage();
+    String getFailureMessage();
 
-    public String getStatus();
+    String getStatus();
 }

@@ -122,5 +122,5 @@ public interface JSHelper {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    };
+    }
 }

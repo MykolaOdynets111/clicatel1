@@ -25,10 +25,9 @@ public class Accounts {
                         "  \"password\": \""+userPass+"\"\n" +
                         "}")
                 .post(Endpoints.PLATFORM_ACCOUNTS);
-        if (resp.getBody().asString().contains("Not Authorized")){
-            Assert.assertTrue(false, "User "+userName +" / "+userPass+" is not authorized in portal."
-                   );
-        }
+
+            Assert.assertFalse(resp.getBody().asString().contains("Not Authorized"),
+                    "User "+userName +" / "+userPass+" is not authorized in portal.");
         try {
             tokenAndAccount.put("token", resp.jsonPath().get("token"));
             List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
@@ -42,9 +41,9 @@ public class Accounts {
             }
             tokenAndAccount.put("accountId", targetAccount.get("id"));
         }catch(JsonPathException e){
-            Assert.assertTrue(false, "Unexpected response received while getting portal access token\n"+
-            "resp status: " + resp.statusCode() + "\n" +
-            "resp body: " + resp.getBody().asString());
+            Assert.fail("Unexpected response received while getting portal access token\n" +
+                    "resp status: " + resp.statusCode() + "\n" +
+                    "resp body: " + resp.getBody().asString());
         }
 
         return tokenAndAccount;

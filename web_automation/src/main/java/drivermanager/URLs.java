@@ -3,7 +3,6 @@ package drivermanager;
 import apihelper.ApiHelper;
 import apihelper.Endpoints;
 import datamanager.FacebookPages;
-import datamanager.Tenants;
 import datamanager.TwitterPages;
 import io.restassured.path.json.exception.JsonPathException;
 import org.testng.Assert;
