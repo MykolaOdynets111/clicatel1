@@ -1,4 +1,4 @@
-package steps;
+package steps.agentsteps;
 
 import agentpages.AgentHomePage;
 import agentpages.uielements.ChatBody;
@@ -16,6 +16,8 @@ import interfaces.JSHelper;
 import interfaces.WebActions;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.FacebookSteps;
+import steps.TwitterSteps;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,11 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AgentConversationSteps implements JSHelper, WebActions {
+public class AgentConversationSteps extends AbstractAgentSteps {
 
-    private AgentHomePage mainAgentHomePage;
-    private AgentHomePage secondAgentHomePage;
-    //    private AgentHomePage agentHomePage ;
     private static String selectedEmoji;
 
     public static String getSelectedEmoji() {
@@ -384,42 +383,5 @@ public class AgentConversationSteps implements JSHelper, WebActions {
         soft.assertTrue(resultUnsatisfied, "Unsatisfied. Sentiments in agent feedback window as not expected. \n");
         soft.assertAll();
     }
-
-
-    private AgentHomePage getAgentHomePage(String ordinalAgentNumber) {
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")) {
-            return getAgentHomeForSecondAgent();
-        } else {
-            return getAgentHomeForMainAgent();
-        }
-    }
-
-    private AgentHomePage getAgentHomeForSecondAgent() {
-        if (secondAgentHomePage == null) {
-            secondAgentHomePage = new AgentHomePage("second agent");
-            return secondAgentHomePage;
-        } else {
-            return secondAgentHomePage;
-        }
-    }
-
-    private AgentHomePage getAgentHomeForMainAgent() {
-        if (mainAgentHomePage == null) {
-            mainAgentHomePage = new AgentHomePage("main agent");
-            return mainAgentHomePage;
-        } else {
-            return mainAgentHomePage;
-        }
-    }
-
-
-    private ChatBody getChatBody(String agent) {
-        return getAgentHomePage(agent).getChatBody();
-    }
-
-    private SuggestedGroup getSuggestedGroup(String agent) {
-        return getAgentHomePage(agent).getSuggestedGroup();
-    }
-
 
 }

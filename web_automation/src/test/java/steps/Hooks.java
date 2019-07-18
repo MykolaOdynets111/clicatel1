@@ -26,6 +26,9 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import steps.agentsteps.AbstractAgentSteps;
+import steps.agentsteps.AgentCRMTicketsSteps;
+import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
@@ -260,11 +263,11 @@ public class Hooks implements JSHelper{
                 }catch(NullPointerException e){
                     //no feature status interaction
                 }
-                if(DefaultAgentSteps.getCreatedCRMTicket()!=null){
-                    ApiHelper.deleteCRMTicket(DefaultAgentSteps.getCreatedCRMTicket().getId());
+                if(AgentCRMTicketsSteps.getCreatedCRMTicket()!=null){
+                    ApiHelper.deleteCRMTicket(AgentCRMTicketsSteps.getCreatedCRMTicket().getId());
                 }
-                if(DefaultAgentSteps.getCreatedCRMTicketsList()!=null){
-                    for(CRMTicket ticket: DefaultAgentSteps.getCreatedCRMTicketsList()){
+                if(AgentCRMTicketsSteps.getCreatedCRMTicketsList()!=null){
+                    for(CRMTicket ticket: AgentCRMTicketsSteps.getCreatedCRMTicketsList()){
                         ApiHelper.deleteCRMTicket(ticket.getId());
                     }
                 }
@@ -390,6 +393,7 @@ public class Hooks implements JSHelper{
         Tenants.clearTenantUnderTest();
         RequestSpec.clearAccessTokenForPortalUser();
         URLs.clearFinalAgentURL();
+        AbstractAgentSteps.сleanAllPages();
     }
 
     @Attachment(value = "request")

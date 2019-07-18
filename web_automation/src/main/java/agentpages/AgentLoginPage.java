@@ -38,7 +38,7 @@ public class AgentLoginPage extends AgentAbstractPage {
        return new AgentLoginPage(ordinalAgentNumber);
    }
 
-   public AgentHomePage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
+   public AgentLoginPage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
        try{
            logIn(agent, ordinalAgentNumber);
@@ -46,7 +46,7 @@ public class AgentLoginPage extends AgentAbstractPage {
            new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut(ordinalAgentNumber);
            logIn(agent, ordinalAgentNumber);
        }
-       return new AgentHomePage(ordinalAgentNumber);
+       return this;
    }
 
    private void logIn(Agents agent, String ordinalAgentNumber){
