@@ -13,9 +13,9 @@ Feature: Managing Chat desk Window
     Then Error message is shown
     When Change chats per agent:""
     Then Error message is shown
-    When Click off/on  Chat Conclusion
+    When Click off/on Chat Conclusion
     Then  On backand AGENT_FEEDBACK tenant feature status is set to false for Automation Bot
-    When Click off/on  Chat Conclusion
+    When Click off/on Chat Conclusion
     Then  On backand AGENT_FEEDBACK tenant feature status is set to true for Automation Bot
 
 

@@ -37,5 +37,5 @@ Feature: Creating .Control integration and sending messages
   Scenario: Sending message to .Control with empty clientID
     Given Create .Control integration for General Bank Demo tenant
     When Send empty clientID in message for .Control
-    Then Error about client  is returned
+    Then Error about client is returned
 
