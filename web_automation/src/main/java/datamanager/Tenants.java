@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class Tenants {
 
-    private static ThreadLocal<Response> respWithAgentInfo = null;
+    private static ThreadLocal<Response> respWithAgentInfo = new ThreadLocal<>();
     private static ThreadLocal<String> TENANT_UNDER_TEST_NAME = new ThreadLocal<>();
     private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
     private static ThreadLocal<Map<String,String>> TENANT_UNDER_TEST =  new ThreadLocal<>();
@@ -59,7 +59,7 @@ public class Tenants {
         if (respWithAgentInfo.get()==null){
             respWithAgentInfo.set(ApiHelper.getAgentInfo(tenantOrgName, "main"));
         }
-            return respWithAgentInfo.get();
+        return respWithAgentInfo.get();
     }
 
     public static ZoneId getTenantZoneId(String tenantOrgName){
