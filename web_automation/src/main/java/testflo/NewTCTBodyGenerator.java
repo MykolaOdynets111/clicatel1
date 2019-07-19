@@ -48,14 +48,13 @@ public class NewTCTBodyGenerator {
              }
          }
 
-         String body = String.format(newIssueBody, scenario.getName().replace("\"", "\\\"" ),
+         return String.format(newIssueBody, scenario.getName().replace("\"", "\\\"" ),
                  scenario.getDescription()
                          .replace("null", "")
                          .replace("\"", "\\\"" )
                          .replace("\n", "\\n")
                          .trim(),
                  testCaseSteps.toString());
-         return body;
      }
 
 

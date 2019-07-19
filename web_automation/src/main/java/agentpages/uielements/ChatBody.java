@@ -7,7 +7,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 
 import java.util.*;
@@ -102,11 +101,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isMoreThanOneUserMassageShown() {
-        if (fromUserMessages.size()>1){
-            return true;
-        } else{
-            return false;
-        }
+        return fromUserMessages.size() > 1;
     }
 
     public boolean isResponseOnUserMessageShown(String userMessage) {

@@ -9,4 +9,4 @@ Feature: Agent should be able to see chat history in opened active chat
     When Agent click on new conversation request from touch
     Then Agent sees correct chat with basic info in chat history container
     When Agent click 'View chat' button
-    Then Correct messages is shown in history details window
+    Then Agent sees correct messages in history details window

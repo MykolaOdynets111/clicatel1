@@ -1,17 +1,14 @@
-package steps;
+package steps.agentsteps;
 
-import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import apihelper.RequestSpec;
-import com.github.javafaker.Faker;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.*;
-import datamanager.jacksonschemas.CRMTicket;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
@@ -19,52 +16,34 @@ import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
-import interfaces.DateTimeHelper;
-import interfaces.JSHelper;
-import interfaces.VerificationHelper;
-import interfaces.WebWait;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.BasePortalSteps;
+import steps.DefaultTouchUserSteps;
+import steps.FacebookSteps;
+import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Collections;
 
-public class DefaultAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
-    private AgentHomePage agentHomePage;
-    private AgentHomePage secondAgentHomePage;
-    private ProfileWindow profileWindow;
-    private LeftMenuWithChats leftMenuWithChats;
+public class DefaultAgentSteps extends AbstractAgentSteps {
+
     private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
     private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static Customer360PersonalInfo customer360InfoForUpdating;
-    private Faker faker = new Faker();
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-    private static ThreadLocal<Map<String, String>> crmTicketInfoForCreatingViaAPI = new ThreadLocal<>();
-    private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
-    private static ThreadLocal<CRMTicket> createdCrmTicket = new ThreadLocal<>();
-    private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
-    private ThreadLocal<AgentLoginPage> agentLoginPage = new ThreadLocal<>();
     private String secondAgentName;
     private List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
 
-    public static List<CRMTicket> getCreatedCRMTicketsList(){
-        return createdCrmTicketsList.get();
-    }
-
-    public static CRMTicket getCreatedCRMTicket(){
-        return createdCrmTicket.get();
-    }
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -90,16 +69,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
-        if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
-        AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
-        Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is not logged in.");
+//        if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
+        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName)
+                .loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
+        setAgentLoginPage(ordinalAgentNumber, loginPage);
+        Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
+                "Agent is not logged in.");
     }
 
     @Given("^Try to login as (.*) of (.*)")
     public void tryToLoginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-//        if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
-        AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName).loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
+        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName)
+                .loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
+        setAgentLoginPage(ordinalAgentNumber, loginPage);
     }
 
 
@@ -113,27 +96,34 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
-        AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName).loginAsAgentOf(tenantOrgName, "main agent");
-        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
+        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName)
+                .loginAsAgentOf(tenantOrgName, "main agent");
+        setAgentLoginPage("second agent", loginPage);
+
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"),
+                "Agent is not logged in.");
     }
 
     @When("I open browser to log in in chat desk as an agent of (.*)")
     public void openBrowserToLogin(String tenantOrgName){
-         agentLoginPage.set(AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName));
+        setCurrentLoginPage(AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName));
     }
 
     @When("I check primary color for tenant in login page")
     public void checkPrimaryColorLoginPage(){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(agentLoginPage.get().getLoginButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant 'Login button' is not correct");
-        soft.assertEquals(agentLoginPage.get().getStringForgotColor(), BasePortalSteps.getTenantInfoMap().get("newColor"), "Color for tenant 'Forgot password?' string is not correct");
+        soft.assertEquals(getCurrentLoginPage().getLoginButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"),
+                "Color for tenant 'Login button' is not correct");
+        soft.assertEquals(getCurrentLoginPage().getStringForgotColor(), BasePortalSteps.getTenantInfoMap().get("newColor"),
+                "Color for tenant 'Forgot password?' string is not correct");
         soft.assertAll();
     }
 
     @When("I login in another browser as an agent of (.*)")
     public void loginWithTheSameAnotherBrowser(String tenantOrgName){
-        agentLoginPage.get().loginAsAgentOf(tenantOrgName, "main agent");
-        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"), "Agent is not logged in.");
+        getCurrentLoginPage().loginAsAgentOf(tenantOrgName, "main agent");
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"),
+                "Agent is not logged in.");
     }
 
     @Then("^In the first browser Connection Error should be shown$")
@@ -159,63 +149,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
                 "Agent feature is not expected");
     }
 
-    @Then("^Icon should contain (.*) agent's initials$")
-    public void verifyUserInitials(String tenantOrgName){
-        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
-        String expectedInitials = Character.toString(agentInfoResp.getBody().jsonPath().get("firstName").toString().charAt(0)) +
-                Character.toString(agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0));
-
-        Assert.assertEquals(agentHomePage.getPageHeader().getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
-    }
-
-    @When("^I click icon with initials$")
-    public void clickIconWithInitials(){
-        agentHomePage.getPageHeader().clickIconWithInitials();
-    }
-
-    @Then("^I see (.*) agent's info$")
-    public void verifyAgentInfoInInfoPopup(String tenantOrgName){
-        SoftAssert soft = new SoftAssert();
-        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
-        String agentName = agentInfoResp.getBody().jsonPath().get("firstName") + " "
-                + agentInfoResp.getBody().jsonPath().get("lastName");
-        soft.assertEquals(agentHomePage.getPageHeader().getAgentName(), agentName,
-                "Agent name is not as expected");
-        soft.assertEquals(agentHomePage.getPageHeader().getAgentEmail(), agentInfoResp.getBody().jsonPath().get("email"),
-                "Agent name is not as expected");
-        soft.assertAll();
-    }
-
-    @When("^I click \"Profile Settings\" button$")
-    public void clickProfileSettingsButton(){
-        agentHomePage.getPageHeader().clickProfileSettingsButton();
-    }
-
-
-    @Then("^(.*) Agent's info derails is shown in profile window$")
-    public void verifyAgentInfoInProfileWindow(String tenantOrgName){
-        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
-        SoftAssert soft = new SoftAssert();
-        List<String> expected=new ArrayList<>();
-        agentInfoResp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).forEach(e -> {expected.add(
-                e.get("name").toString().toUpperCase() + " ("+
-                        e.get("solution").toString().toUpperCase() +        ")"
-        );});
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("firstName")),
-                "Agent first name is not shown in profile window");
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("lastName")),
-                "Agent last name is not shown in profile window");
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("email")),
-                "Agent email is not shown in profile window");
-        soft.assertEquals(getProfileWindow("agent").getListOfRoles(), expected,
-                "Agent roles listed in Profile window are not as expected");
-        soft.assertAll();
-    }
 
     @Then("^(.*) is logged in chat desk$")
     public void verifyAgentLoggedIn(String ordinalAgentNumber){
-        agentHomePage = new AgentHomePage(ordinalAgentNumber);
-        boolean result = agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber);
+        boolean result = getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber);
         if(result) ConfigManager.setIsSecondCreated("true");
         Assert.assertTrue(result, "Agent is not logged in chat desk.");
     }
@@ -224,8 +161,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) is not redirected to chatdesk$")
     public void verifyAgentNotLoggedIn(String ordinalAgentNumber){
-        agentHomePage = new AgentHomePage(ordinalAgentNumber);
-        Assert.assertFalse(agentHomePage.isAgentSuccessfullyLoggedIn(ordinalAgentNumber), "Agent is redirected to chat desk.");
+        Assert.assertFalse(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
+                "Agent is redirected to chat desk.");
     }
 
     @When("^(.*) transfers chat$")
@@ -480,19 +417,18 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
-                leftMenuWithChats = getLeftMenu(agent);
                 String userName=null;
                 if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
-                Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,20, agent),
+                Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,20, agent),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
     }
 
-    private boolean waitForDotControlRequestOnChatDesk(){
+    private boolean waitForDotControlRequestOnChatDesk(String agent){
         for(int i = 0; i<5; i++) {
             String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(leftMenuWithChats.isNewConversationRequestFromSocialIsShown(userName,4, "main")) return true;
+            if(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,4, "main")) return true;
             else {
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
             }
@@ -502,12 +438,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social, String channel){
-        agentHomePage = getAgentHomePage(agent);
-        leftMenuWithChats = agentHomePage.getLeftMenuWithChats();
         String userName=null;
         if (social.equalsIgnoreCase("twitter")) userName = TwitterUsers.getLoggedInUserName();
         if(social.equalsIgnoreCase("facebook")) userName = FacebookUsers.getLoggedInUserName();
-        Assert.assertTrue(leftMenuWithChats.isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage()+")");
     }
 
@@ -587,8 +521,8 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             case "with day shift":
                 LocalDateTime currentTimeWithADayShift = LocalDateTime.now().minusDays(1);
 
-                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), currentTimeWithADayShift.getDayOfWeek().toString(),
-                        "00:00", "23:59");
+                resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(),
+                        currentTimeWithADayShift.getDayOfWeek().toString(),"00:00", "23:59");
                 break;
             case "for all week":
                 resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
@@ -619,7 +553,7 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("Correct dotcontrol client details from Init context are shown")
     public void verifyInitContextClientDetails(){
-        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main").getCustomer360Container().getActualPersonalInfo();
+        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getCustomer360Container("main").getActualPersonalInfo();
 
         Customer360PersonalInfo expectedResult = getCustomer360Info("dotcontrol");
         InitContext initContext = DotControlSteps.getInitContext();
@@ -685,8 +619,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
         SoftAssert softAssert = new SoftAssert();
         if (isOrNotDisplayed.contains("not")) {
-            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"), "'Verify' button is not displayed");
-            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"), "'Re-send OTP' button is not displayed");
+            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"),
+                    "'Verify' button is not displayed");
+            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"),
+                    "'Re-send OTP' button is not displayed");
             softAssert.assertAll();
         }
         else {
@@ -717,16 +653,20 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     @Then("^'Verify phone' window is (.*)$")
     public void verifyPhoneNumberWindowOpened(String isWindowOpen) {
         if (isWindowOpen.equalsIgnoreCase("opened"))
-            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),"'Verify phone' window is not opened.");
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),
+                    "'Verify phone' window is not opened.");
         else
-            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isClosed(),"'Verify phone' window wasn't closed.");
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isClosed(),
+                    "'Verify phone' window wasn't closed.");
     }
 
     @Then("User's profile phone number (.*) in 'Verify phone' input field")
     public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
 
-        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\s+", "");
-        String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
+        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getCustomer360Container()
+                .getPhoneNumber().replaceAll("\\s+", "");
+        String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow()
+                .getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
         if (isRequiredToDisplay.contains("not")){
             Assert.assertTrue(phoneNumberInVerifyPopUp.equals(""), "Some phone number displayed in the field");
         }
@@ -828,13 +768,15 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Then("^Valid image for (.*) integration are shown in left menu with chat$")
     public void verifyImgForLastMessageInLeftMenu(String adapter) {
-        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter), "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
+        Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter),
+                "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
        // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
     }
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")
     public void verifyIconSentimentForLastMessageInLeftMenu(String message) {
-        Assert.assertTrue(getLeftMenu("main").isValidIconSentimentForActiveChat(message),"Image in last message in left menu for sentiment as not expected. \n");
+        Assert.assertTrue(getLeftMenu("main").isValidIconSentimentForActiveChat(message),
+                "Image in last message in left menu for sentiment as not expected. \n");
     }
 
     @Then("^Customer name is updated in active chat header$")
@@ -861,13 +803,13 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
     }
 
-    @When("^Correct chat history is shown$")
-    public void getChatHistoryFromBackend(){
-        String clientID = agentHomePage.getCustomer360Container().getUserFullName();
+    @When("^(.*) sees correct chat history$")
+    public void getChatHistoryFromBackend(String agent){
+        String clientID = getCustomer360Container(agent).getUserFullName();
         Response sessionDetails  = ApiHelper.getSessionDetails(clientID);
         List<String> sessionIds = sessionDetails.getBody().jsonPath().getList("data.sessionId");
         List<ChatHistoryItem> chatItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
-        List<String> messagesFromChatBody = agentHomePage.getChatBody().getAllMessages();
+        List<String> messagesFromChatBody = getChatBody(agent).getAllMessages();
         List<String> expectedMessagesList = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatItems);
 
         Assert.assertEquals(messagesFromChatBody, expectedMessagesList,
@@ -929,88 +871,19 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems().clickViewButton();
     }
 
-    @Then("^Correct messages is shown in history details window$")
-    public void verifyHistoryInOpenedWindow(){
+    @Then("^(.*) sees correct messages in history details window$")
+    public void verifyHistoryInOpenedWindow(String agent){
         SoftAssert soft = new SoftAssert();
         String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
-        List<String> messagesFromChatHistoryDetails = agentHomePage.getHistoryDetailsWindow().getAllMessages();
+        List<String> messagesFromChatHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getAllMessages();
         List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
 
-        soft.assertEquals(agentHomePage.getHistoryDetailsWindow().getUserName(), selectedChatForHistoryTest.get("clientId"),
+        soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getUserName(), selectedChatForHistoryTest.get("clientId"),
                 "User name is not as expected in opened Chat History Details window");
-        soft.assertEquals(agentHomePage.getHistoryDetailsWindow().getChatStartDate(), expectedChatHistoryTime,
+        soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getChatStartDate(), expectedChatHistoryTime,
                 "Started date is not as expected in opened Chat History Details window");
         soft.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
                 "Chat history is not as expected in chat history details (in active chat)");
-        soft.assertAll();
-    }
-
-    @Given("CRM ticket (.*) is created")
-    public void createCRMTicketViaAPI(String urlStatus){
-        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
-                                                                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
-        Map<String, String> dataForNewCRMTicket = prepareDataForCrmTicket(sessionDetails, urlStatus);
-
-        Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
-        createdCrmTicket.set(resp.getBody().as(CRMTicket.class));
-        Assert.assertTrue(resp.statusCode()==200, "Creating CRM ticket via API was not successful\n" +
-                                resp.statusCode() + "\n" +
-                                "rest body: " +resp.getBody().asString());
-    }
-
-    @Given("(.*) CRM tickets are created")
-    public void createCRMTicketsViaAPI(int ticketsNumber){
-        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
-                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
-        List<CRMTicket> createdCRMTicket = new ArrayList<>();
-        for(int i = 0; i < ticketsNumber; i++) {
-            Map<String, String> dataForNewCRMTicket = prepareDataForCrmTicket(sessionDetails, "with url");
-
-            Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(), dataForNewCRMTicket);
-            createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
-            getAgentHomeForMainAgent().waitFor(1100);
-        }
-        createdCrmTicketsList.set(createdCRMTicket);
-        Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), ticketsNumber,
-                "Not all tickets where successfully created");
-    }
-
-    private Map<String, String> prepareDataForCrmTicket( Map<String, String>  sessionDetails, String urlStatus){
-        Map<String, String> dataForNewCRMTicket = new HashMap<>();
-        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
-        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
-        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
-        dataForNewCRMTicket.put("link", "about:blank");
-        dataForNewCRMTicket.put("ticketNumber", faker.number().digits(5));
-        dataForNewCRMTicket.put("agentNote", "AQA_note " + faker.book().title());
-        crmTicketInfoForCreatingViaAPI.set(dataForNewCRMTicket);
-        if(urlStatus.toLowerCase().contains("without url")) dataForNewCRMTicket.remove("link");
-        return dataForNewCRMTicket;
-    }
-
-    private Map<String, String> prepareDataForCrmTicketChatdesk( String agentNote, String link, String ticketNumber, List<String> tags){
-        Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
-                (ConfigManager.getEnv(), getUserNameFromLocalStorage());
-        Map<String, String> dataForNewCRMTicket = new HashMap<>();
-        dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
-        dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
-        dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
-        dataForNewCRMTicket.put("agentNote", agentNote);
-        dataForNewCRMTicket.put("agentTags", String.join(", ", tags));
-        dataForNewCRMTicket.put("link", link);
-        dataForNewCRMTicket.put("ticketNumber", ticketNumber);
-        dataForNewCRMTicket.put("date", LocalDateTime.now().toString());
-        crmTicketInfoForUpdating.set(dataForNewCRMTicket);
-        return dataForNewCRMTicket;
-    }
-
-    @Then("Container with new CRM (?:ticket|tickets) is shown")
-    public void verifyCRMTicketIsShown(){
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getContainerHeader(), "Notes",
-                "CRM tickets section header is not 'Notes'");
-        soft.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
-                "CRM ticket is not shown");
         soft.assertAll();
     }
 
@@ -1034,190 +907,10 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
     }
 
 
-    @Then("Tickets are correctly sorted")
-    public void verifyTicketsSorting(){
-        List<Map<String, String>> actualTickets = getAgentHomeForMainAgent().getCrmTicketContainer()
-                                                                            .getAllTicketsInfoExceptDate();
-        List<CRMTicket> createdTickets = getCreatedCRMTicketsList();
-
-        Collections.reverse(createdTickets);
-        List<Map<String, String>> expectedTickets = new ArrayList<>();
-
-        for (CRMTicket ticket : createdTickets){
-            expectedTickets.add(new HashMap<String, String>(){{
-                put("note", "Note: " + ticket.getAgentNote());
-                put("number", "Ticket Number: " + ticket.getTicketNumber());
-            }});
-        }
-        Assert.assertEquals(actualTickets, expectedTickets,
-                "Tickets order is not as Expected\n" +
-        "Created tickets: " + createdTickets.toString() + "\n\n" +
-        "Expected list" + expectedTickets        );
-    }
-
-    @Then("New CRM ticket is not shown")
-    public void verifyCRMTicketIsNotShown(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerRemoved(),
-                "CRM ticket is still shown");
-    }
-
-    @When("^I click CRM ticket number URL$")
-    public void clickTicketNumber(){
-        getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().clickTicketNumber();
-
-        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-
-            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
-                if (!winHandle.equals(currentWindow)) {
-                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
-                }
-            }
-    }
-
-    @When("^(.*) click 'Edit' button for CRM ticket$")
-    public void clickEditCRMTicketButton(String agent){
-        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickEditButton();
-    }
-
     @When("^(.*) deletes first ticket$")
     public void deleteFirstTicket(String agent){
         getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
         getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
-    }
-
-    @When("^(.*) click 'Delete' button for CRM ticket$")
-    public void clickDeleteCRMTicketButton(String agent){
-        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
-    }
-
-
-    @Then("^Confirmation deleting popup is shown$")
-    public void verifyDeletingCRMTicketPopupShown(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getDeleteCRMConfirmationPopup().isOpened(),
-                "CRM ticket deleting confirmation popup is not shown");
-    }
-
-    @When("^(.*) click 'Cancel' button' in CRM deleting popup$")
-    public void cancelCRMDeleting(String agent){
-        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickCancel();
-    }
-
-    @When("^(.*) click 'Delete' button' in CRM deleting popup$")
-    public void deleteCRMTicket(String agent){
-        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
-    }
-
-
-    @Then("^'Edit ticket' window is opened$")
-    public void verifyEditWindowOpened(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getEditCRMTicketWindow().isOpened(),
-                "'Edit ticket' window is not opened after clicking 'Edit' button for CRM ticket");
-    }
-
-    @When("^(.*) fill in the form with new CRM ticket info$")
-    public void fillCRMEditingFormWithNewData(String agent){
-        formDataForCRMUpdating();
-        getAgentHomePage(agent).getEditCRMTicketWindow().provideCRMNewTicketInfo(crmTicketInfoForUpdating.get());
-    }
-
-    @When("^Cancel CRM editing$")
-    public void cancelCRMEditing(){
-        getAgentHomeForMainAgent().getEditCRMTicketWindow().clickCancel();
-    }
-
-    @When("^Save CRM ticket changings$")
-    public void saveCRMEditing(){
-        getAgentHomeForMainAgent().getEditCRMTicketWindow().saveChanges();
-    }
-
-    @Then("CRM ticket is not updated on back end")
-    public void verifyCRMTicketNotUpdated() {
-        SoftAssert soft = new SoftAssert();
-        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-
-        soft.assertEquals(actualTicketInfoFromBackend.getCreatedDate().split(":")[0],
-                                createdCrmTicket.get().getCreatedDate().split(":")[0],
-                        "Ticket created date is changed after canceling ticket editing \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), createdCrmTicket.get().getTicketNumber(),
-                "Ticket Number is changed after canceling ticket editing \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(), createdCrmTicket.get().getAgentNote(),
-                " Ticket note is changed after canceling ticket editing \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getLink(), createdCrmTicket.get().getLink(),
-                " Ticket link is changed after canceling ticket editing \n");
-        soft.assertAll();
-    }
-
-    @Then("CRM ticket is updated on back end")
-    public void verifyCRMTicketUpdated() {
-        SoftAssert soft = new SoftAssert();
-        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-        String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
-        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
-
-
-        soft.assertEquals(createdDateFromBackend.toLowerCase(), createdDate.toLowerCase(),
-                "Ticket created date is changed after ticket editing \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
-                "Ticket Number is not changed after canceling ticket editing \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
-                " Ticket note is changed after canceling ticket editing \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
-                " Ticket link is changed after canceling ticket editing \n");
-        soft.assertAll();
-    }
-
-    @Then("^(.*) is redirected by CRM ticket URL$")
-    public void verifyUserRedirectedBlankPage(String agent){
-        String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
-        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
-                if (!winHandle.equals(currentWindow)) {
-                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
-                }
-        }
-        Assert.assertEquals(pageUrl, "about:blank",
-                "Agent is not redirected by CRM tickets' url");
-    }
-
-    @Then("^(.*) is redirected to empty chatdesk page$")
-    public void verifyUserRedirectedEmptyChatdeskPage(String agent){
-        String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
-        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
-            if (!winHandle.equals(currentWindow)) {
-                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
-            }
-        }
-        Assert.assertTrue(pageUrl.contains("null")&pageUrl.contains("chatdesk"),
-                "Agent is not redirected by CRM tickets' url");
-    }
-
-    @Then("Correct ticket info is shown")
-    public void verifyTicketInfoInActiveChat(){
-        SoftAssert soft = new SoftAssert();
-        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
-        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
-        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
-                "Shown Ticket created date is not correct \n");
-        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
-                "Shown Ticket Number is not correct \n");
-        soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
-                "Shown Ticket note is not correct \n");
-        soft.assertAll();
-    }
-
-    @Then("Ticket info is updated on chatdesk")
-    public void verifyTicketInfoUpdatedInActiveChat(){
-        SoftAssert soft = new SoftAssert();
-        Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
-        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
-        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
-                "Shown Ticket created date is not correct \n");
-        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + crmTicketInfoForUpdating.get().get("ticketNumber"),
-                "Shown Ticket Number is not correct \n");
-        soft.assertEquals(actualInfo.get("note"), "Note: " + crmTicketInfoForUpdating.get().get("agentNote"),
-                "Shown Ticket note is not correct \n");
-        soft.assertAll();
     }
 
     @Given("Transfer timeout for (.*) tenant is set to (.*) seconds")
@@ -1229,60 +922,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         "Response: " + resp.getBody().asString());
     }
 
-    private void formDataForCRMUpdating(){
-        Map<String, String> info = new HashMap<>();
-        info.put("agentNote", "Note for updating ticket");
-        info.put("link", "http://updateurl.com");
-        info.put("ticketNumber", "11111");
-        crmTicketInfoForUpdating.set(info);
-    }
-
-    private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(createdCrmTicket.get().getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
-
-        DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
-        Map<Long, String> newDaysMap = new HashMap<>();
-        newDaysMap.put(1L, "1st");
-        newDaysMap.put(2L, "2nd");
-        newDaysMap.put(3L, "3rd");
-        newDaysMap.put(4L, "4th");
-        newDaysMap.put(5L, "5th");
-        newDaysMap.put(6L, "6th");
-        newDaysMap.put(7L, "7th");
-        newDaysMap.put(8L, "8th");
-        newDaysMap.put(9L, "9th");
-        newDaysMap.put(10L, "10th");
-        newDaysMap.put(11L, "11th");
-        newDaysMap.put(12L, "12th");
-        newDaysMap.put(13L, "13th");
-        newDaysMap.put(14L, "14th");
-        newDaysMap.put(15L, "15th");
-        newDaysMap.put(16L, "16th");
-        newDaysMap.put(17L, "17th");
-        newDaysMap.put(18L, "18th");
-        newDaysMap.put(19L, "19th");
-        newDaysMap.put(20L, "20th");
-        newDaysMap.put(21L, "21st");
-        newDaysMap.put(22L, "22nd");
-        newDaysMap.put(23L, "23rd");
-        newDaysMap.put(24L, "24th");
-        newDaysMap.put(25L, "25th");
-        newDaysMap.put(26L, "26th");
-        newDaysMap.put(27L, "27th");
-        newDaysMap.put(28L, "28th");
-        newDaysMap.put(29L, "29th");
-        newDaysMap.put(30L, "30th");
-        newDaysMap.put(31L, "31st");
-
-        builder.appendText(ChronoField.DAY_OF_MONTH, newDaysMap );
-        builder.append(DateTimeFormatter.ofPattern(" yyyy, h:mm a"));
-        DateTimeFormatter formatter1 = builder.toFormatter();
-
-
-        return (dateTimeFromBackend.getMonth() + " " + dateTimeFromBackend.format(formatter1)).toLowerCase();    }
-
     private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
@@ -1290,46 +929,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         return chatTimeFromBackendUTC.atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(zoneId).toLocalDateTime()
                 .format(DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
-    }
-
-    private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
-            return getAgentHomeForSecondAgent();
-        } else {
-            return getAgentHomeForMainAgent();
-        }
-    }
-
-    private AgentHomePage getAgentHomeForSecondAgent(){
-        if (secondAgentHomePage==null) {
-            secondAgentHomePage = new AgentHomePage("second agent");
-            return secondAgentHomePage;
-        } else{
-            return secondAgentHomePage;
-        }
-    }
-
-    private AgentHomePage getAgentHomeForMainAgent(){
-        if (agentHomePage==null) {
-            agentHomePage = new AgentHomePage("main agent");
-            return agentHomePage;
-        } else{
-            return agentHomePage;
-        }
-    }
-
-    private ProfileWindow getProfileWindow(String ordinalAgentNumber){
-        if (profileWindow==null) {
-            profileWindow = getAgentHomePage(ordinalAgentNumber).getProfileWindow();
-            return profileWindow;
-        } else{
-            return profileWindow;
-        }
-    }
-
-
-    private LeftMenuWithChats getLeftMenu(String agent) {
-        return getAgentHomePage(agent).getLeftMenuWithChats();
     }
 
     private Customer360PersonalInfo getCustomer360Info(String clientFrom){
@@ -1370,54 +969,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
             return phone.equalsIgnoreCase("unknown");
         else
             return !phone.equalsIgnoreCase("unknown");
-    }
-
-    @Then("^CRM ticket is not created$")
-    public void crmTicketDidNotCreated() {
-        Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").size(), 0, "CRM ticket was created on back end");
-    }
-
-    @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
-    public void agentCreateCRMTicket(String agent,String note, String link, String number) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
-        List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
-        prepareDataForCrmTicketChatdesk(note, link, number, tags);
-    }
-
-
-    @Then("^CRM ticket is created on backend with correct information$")
-    public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
-        SoftAssert soft = new SoftAssert();
-        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(), "TOUCH").get(0);
-
-        ZoneId zoneId = TimeZone.getDefault().toZoneId();
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        String date = crmTicketInfoForUpdating.get().get("date");
-        if(date.length()<=19){
-            formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        }
-        LocalDateTime createdDate = LocalDateTime.parse(date, formatter1);
-        long expectedMili = convertLocalDateTimeToMillis(createdDate, zoneId);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter)
-                .atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
-        long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
-
-        String crmTicketTags = String.join(", ",ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId()));
-        soft.assertTrue((actualMili-expectedMili)<=3000,
-                "Ticket created date does not match created on the backend \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
-                "Ticket Number does not match created on the backend  \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getAgentNote(),  crmTicketInfoForUpdating.get().get("agentNote"),
-                "Ticket note does not match created on the backend \n");
-        soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
-                "Ticket link does not match created on the backend \n");
-        soft.assertTrue(crmTicketTags.equals(crmTicketInfoForUpdating.get().get("agentTags")),
-                "CRM ticket 'Tags' does not match created on the backend \n");
-        soft.assertAll();
-
     }
 
     @Then("^Agent add (.*) tag$")
@@ -1543,7 +1094,6 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
 
     @Given("^(.*) receives a few conversation requests$")
     public void create2DotControlChats(String agent){
-        leftMenuWithChats = getLeftMenu(agent);
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
         dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
@@ -1551,11 +1101,11 @@ public class DefaultAgentSteps implements JSHelper, DateTimeHelper, Verification
         DotControlSteps.cleanUPDotControlRequestMessage();
         createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
 
-        soft.assertTrue(leftMenuWithChats
+        soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
                                 createdChatsViaDotControl.get(0).getClientId(),20, agent),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
-        soft.assertTrue(leftMenuWithChats
+        soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
                                 createdChatsViaDotControl.get(1).getClientId(),20, agent),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");

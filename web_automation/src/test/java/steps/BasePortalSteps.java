@@ -30,7 +30,6 @@ import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
 import java.util.*;
-import java.util.List;
 
 public class BasePortalSteps implements JSHelper {
 
@@ -54,7 +53,7 @@ public class BasePortalSteps implements JSHelper {
     public static final String FIRST_AND_LAST_NAME = "Touch Go";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
-    private static String AGENT_EMAIL;
+    public static String AGENT_EMAIL;
     private String AGENT_PASS = Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
     private Map<String, String> updatedAgentInfo;
     public static Map billingInfo = new HashMap();
@@ -129,10 +128,20 @@ public class BasePortalSteps implements JSHelper {
             result = !confirmationEmail.equalsIgnoreCase("") ||
                     !confirmationEmail.equalsIgnoreCase("none");
             if(result){
-                confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+                try {
+                    confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
+                }catch (ArrayIndexOutOfBoundsException e){
+                    Assert.fail("Unexpected confirmationEmail \n" + confirmationEmail);
+                }
             }
         }
         return result;
+    }
+
+    @Given("^There is no new emails in target email box$")
+    public void cleanUpEmailBox(){
+        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+        CheckEmail.clearEmailInbox();
     }
 
     @Then("^Confirmation Email arrives$")
@@ -422,8 +431,10 @@ public class BasePortalSteps implements JSHelper {
     @Then("^(.*) logs in successfully$")
     public void agentLoggsIn(String agent){
         SoftAssert soft = new SoftAssert();
-        soft.assertNotEquals(getPortalLoginPage(agent).getNotificationAlertText(), "Username or password is invalid",
-                "Agent login into portal was not successful");
+        soft.assertNotEquals(getPortalLoginPage(agent).getNotificationAlertText(),
+                "Username or password is invalid",
+                "Agent login into portal was not successful\n"
+                         + "Agent pass: " + Agents.TOUCH_GO_SECOND_AGENT.getAgentPass() + "\n");
         soft.assertFalse(getPortalLoginPage(agent).isLoginPageOpened(1),
                 "Agent login into portal was not successful");
         soft.assertAll();
@@ -756,7 +767,7 @@ public class BasePortalSteps implements JSHelper {
                 "Error message is not shown");
     }
 
-    @When("^Click off/on  Chat Conclusion$")
+    @When("^Click off/on Chat Conclusion$")
     public void clickOffOnChatConclusion(){
         getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffChatConclusion();
     }
@@ -1265,6 +1276,24 @@ public class BasePortalSteps implements JSHelper {
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
     }
+    @When("^Click on (.*) user from the table$")
+    public void clickUser(String fullName){
+        if(fullName.equalsIgnoreCase("created")){
+//            fullName = "Touch AQA";
+            fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
+        }
+        if(fullName.equalsIgnoreCase("admin")){
+            String email = Agents.getMainAgentFromCurrentEnvByTenantOrgName(
+                    Tenants.getTenantUnderTestOrgName()).getAgentEmail();
+            fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
+        }
+        try {
+            getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
+        }catch (NoSuchElementException e){
+            Assert.fail(fullName + " user was not found");
+        }
+        portalUserProfileEditingThreadLocal.set(new PortalUserEditingPage());
+    }
 
     @When("^Click 'Upload' button$")
     public void clickUploadButtonForUser(){
@@ -1311,9 +1340,17 @@ public class BasePortalSteps implements JSHelper {
     @Then("^(.*) added to User management page$")
     public void verifyAgentAdded(String user){
         String fullName = AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
-        if(user.contains("Updated")) fullName = updatedAgentInfo.get("firstName") + " " + updatedAgentInfo.get("lastName");
-        Assert.assertFalse(getPortalUserManagementPage().isUserShown(fullName, 2000),
-                fullName + " agent is not removed from User management page after deleting");
+        if(user.contains("Updated")) {
+            fullName = updatedAgentInfo.get("firstName") + " " + updatedAgentInfo.get("lastName");
+            boolean isUserUpdated = getPortalUserManagementPage().isUserShown(fullName, 2000);
+            if(isUserUpdated){
+                AGENT_FIRST_NAME = updatedAgentInfo.get("firstName");
+                AGENT_LAST_NAME = updatedAgentInfo.get("lastName");
+            }
+        }
+
+        Assert.assertTrue(getPortalUserManagementPage().isUserShown(fullName, 2000),
+                fullName + " agent is not shown on User management page after deleting");
     }
 
     @When("^Admin updates agent's personal details$")
@@ -1662,7 +1699,6 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Filter \"(.*)\" is selected by default$")
     public void filterIsSelectedByDefault(String filterName) {
-        getChatConsoleInboxPage().getChatConsoleInboxRow("name");
         Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
                 "Filter name by default does not match expected");
     }

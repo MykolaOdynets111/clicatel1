@@ -1,10 +1,7 @@
 package portalpages.uielements;
 
-import drivermanager.DriverFactory;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portalpages.PortalUserEditingPage;
 
 import java.util.List;
 

@@ -5,7 +5,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.Assert;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -141,13 +140,10 @@ public class DriverFactory {
     private static WebDriver createRemoteDriver(MutableCapabilities capabilities){
         try {
             RemoteWebDriver remoteWebDriver;
-            if(ConfigManager.getSuite().equalsIgnoreCase("touchgo")){
-                remoteWebDriver = new RemoteWebDriver(new URL(WINDOWS_SERVER_REMOTE_URL), capabilities);
-            }else {
-                remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL), capabilities);
+            remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL), capabilities);
 //              debug remote run
-//                remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR), capabilities);
-            }
+//           remoteWebDriver = new RemoteWebDriver(new URL(LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR), capabilities);
+
             return remoteWebDriver;
         } catch (MalformedURLException e) {
             e.printStackTrace();

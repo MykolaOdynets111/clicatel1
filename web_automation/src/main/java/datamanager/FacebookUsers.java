@@ -1,6 +1,5 @@
 package datamanager;
 
-import apihelper.ApiHelper;
 import drivermanager.ConfigManager;
 
 import java.util.HashMap;

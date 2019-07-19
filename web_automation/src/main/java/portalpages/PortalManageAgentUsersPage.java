@@ -18,7 +18,7 @@ public class PortalManageAgentUsersPage extends PortalAbstractPage {
         return addNewAgentWindow;
     }
 
-    private PortalUserRow getTargetUserRow(String fullName){
+    public PortalUserRow getTargetUserRow(String fullName){
         waitForElementsToBeVisibleAgent(userRows, 3, "admin");
         return new PortalUserRow (
                 userRows.stream().filter(e -> new PortalUserRow(e).getAgentFullName().equals(fullName))

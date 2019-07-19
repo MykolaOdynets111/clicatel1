@@ -26,6 +26,9 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import steps.agentsteps.AbstractAgentSteps;
+import steps.agentsteps.AgentCRMTicketsSteps;
+import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
@@ -104,10 +107,11 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@healthcheck") &&
                 !scenario.getSourceTagNames().contains("@camunda")){
 
-            if(scenario.isFailed()) widgetWebSocketLogs();
-            takeScreenshot();
-            endTouchFlow(scenario, true);
-//            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage()); for now not possible to delete just a one profile
+            if(DriverFactory.isTouchDriverExists()) {
+                if (scenario.isFailed()) widgetWebSocketLogs();
+                takeScreenshot();
+                endTouchFlow(scenario, true);
+            }
         }
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
@@ -120,6 +124,11 @@ public class Hooks implements JSHelper{
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
             ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
+
+        if(scenario.getSourceTagNames().contains("@new_agent")){
+            newAgent();
+        }
+
 
         finishAgentFlowIfExists(scenario);
 
@@ -260,11 +269,11 @@ public class Hooks implements JSHelper{
                 }catch(NullPointerException e){
                     //no feature status interaction
                 }
-                if(DefaultAgentSteps.getCreatedCRMTicket()!=null){
-                    ApiHelper.deleteCRMTicket(DefaultAgentSteps.getCreatedCRMTicket().getId());
+                if(AgentCRMTicketsSteps.getCreatedCRMTicket()!=null){
+                    ApiHelper.deleteCRMTicket(AgentCRMTicketsSteps.getCreatedCRMTicket().getId());
                 }
-                if(DefaultAgentSteps.getCreatedCRMTicketsList()!=null){
-                    for(CRMTicket ticket: DefaultAgentSteps.getCreatedCRMTicketsList()){
+                if(AgentCRMTicketsSteps.getCreatedCRMTicketsList()!=null){
+                    for(CRMTicket ticket: AgentCRMTicketsSteps.getCreatedCRMTicketsList()){
                         ApiHelper.deleteCRMTicket(ticket.getId());
                     }
                 }
@@ -390,6 +399,7 @@ public class Hooks implements JSHelper{
         Tenants.clearTenantUnderTest();
         RequestSpec.clearAccessTokenForPortalUser();
         URLs.clearFinalAgentURL();
+        AbstractAgentSteps.сleanAllPages();
     }
 
     @Attachment(value = "request")
@@ -493,6 +503,14 @@ public class Hooks implements JSHelper{
     @Attachment
     private String newAccountInfo(){
         return MC2Account.TOUCH_GO_NEW_ACCOUNT.toString();
+    }
+
+
+    @Attachment
+    private String newAgent(){
+        return BasePortalSteps.AGENT_FIRST_NAME + "\n"
+                + BasePortalSteps.AGENT_LAST_NAME + "\n"
+                + BasePortalSteps.AGENT_EMAIL;
     }
 
 }

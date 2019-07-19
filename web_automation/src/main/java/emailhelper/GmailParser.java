@@ -1,5 +1,7 @@
 package emailhelper;
 
+import org.testng.Assert;
+
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import java.io.IOException;
@@ -25,9 +27,7 @@ public class GmailParser {
         String emailContent = null;
         try {
             emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
+        } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
         List<String> lines = Arrays.asList(emailContent.split("\r\n"));
@@ -45,7 +45,11 @@ public class GmailParser {
             e.printStackTrace();
         }
         List<String> lines = Arrays.asList(emailContent.split("\r\n"));
-        return lines.stream().filter(e -> e.startsWith("http")).findFirst().orElse("none");
+        String url = lines.stream().filter(e -> e.startsWith("http")).findFirst().orElse("none");
+        if(url.equalsIgnoreCase("none")){
+            Assert.fail("message\n" + lines.toString());
+        }
+        return url;
     }
 
 

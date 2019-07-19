@@ -3,9 +3,6 @@ package portalpages.uielements;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 
 @FindBy(xpath = "//div[@ng-controller='TopUpBalanceCtrl']")
 public class TopUpBalanceWindow extends BasePortalWindow {

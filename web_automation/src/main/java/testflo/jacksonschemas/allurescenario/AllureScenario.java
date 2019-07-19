@@ -75,7 +75,7 @@ public class AllureScenario  implements AllureScenarioInterface {
     @JsonProperty("parameterValues")
     private List<Object> parameterValues = null;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("uid")
     public String getUid() {

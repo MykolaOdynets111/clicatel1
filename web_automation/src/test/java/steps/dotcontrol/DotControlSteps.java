@@ -168,7 +168,7 @@ public class DotControlSteps {
         }
     }
 
-    @Then("^Error about client  is returned$")
+    @Then("^Error about client is returned$")
     public void verifyErrorOnInvalidClientID(){
         SoftAssert soft = new SoftAssert();
         Response resp = responseOnSentRequest.get();

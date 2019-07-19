@@ -71,8 +71,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
     }
 
-    public void clickCloseСhat() {
-        clickElemAgent(closeChatButton, 5, "main agent", "Close сhat button" );
+    public void clickCloseChat() {
+        clickElemAgent(closeChatButton, 5, "main agent", "Close chat button" );
         waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
     }
 
@@ -150,8 +150,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public List<String> getTags() {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
         if (isElementShown(availableTagsContainer, 2)){
-            List<String> result = Arrays.asList(availableTagsContainer.getText().split("[\n]"));
-            return result;
+            return Arrays.asList(availableTagsContainer.getText().split("[\n]"));
         } else {
             clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         }

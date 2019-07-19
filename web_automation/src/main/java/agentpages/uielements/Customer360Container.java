@@ -3,7 +3,6 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
 import drivermanager.ConfigManager;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;

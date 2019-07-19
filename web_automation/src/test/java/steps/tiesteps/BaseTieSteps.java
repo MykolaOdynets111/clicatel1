@@ -6,8 +6,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
-import datamanager.jacksonschemas.tie.CreateSlotBody;
-import datamanager.jacksonschemas.tie.SlotInTieResponse;
 import drivermanager.URLs;
 import io.restassured.RestAssured;
 import io.restassured.path.json.exception.JsonPathException;

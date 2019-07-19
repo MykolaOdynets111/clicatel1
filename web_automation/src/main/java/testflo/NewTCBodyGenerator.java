@@ -3,7 +3,6 @@ package testflo;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import testflo.jacksonschemas.AllureScenarioInterface;
-import testflo.jacksonschemas.NewTCStep;
 import testflo.jacksonschemas.NewTCTStep;
 
 import java.util.ArrayList;
@@ -79,10 +78,9 @@ public class NewTCBodyGenerator {
              }
          }
 
-         String body = String.format(newIssueBody, testPlanKey, scenario.getName(),
+         return String.format(newIssueBody, testPlanKey, scenario.getName(),
                  scenario.getDescription().replace("null", "").trim(),
                  testTemplateId, testCaseSteps.toString());
-         return body;
      }
 
 

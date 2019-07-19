@@ -22,7 +22,7 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     private List<WebElement> companyIndastry ;
 
     @FindBy(xpath = "//span[contains(@ng-model-key, 'country')]//li//span[contains(@class,'ui-select-choices-row')]")
-     private List<WebElement> companyCountry ;
+    private List<WebElement> companyCountry ;
 
     @FindBy(xpath = "//div[contains(@ng-model-key, 'category')]")
     private WebElement selectCompanyIndustry ;
@@ -102,7 +102,8 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
 
     public boolean isUncheckTodayDay(String nameOfDay){
         clickElemAgent(arrowSupportHours,3,"main","Arrow to open support hours");
-        return isElementsExistsInDOM(String.format(choiseSupportDay,nameOfDay)+isSelected,5);
+        String isSelected = "/span[contains(@class, 'uncheck')]";
+        return isElementsExistsInDOM(String.format(choiseSupportDay,nameOfDay)+ isSelected,5);
     }
 
     public void openSpecificSupportHours(){

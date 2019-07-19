@@ -1,12 +1,7 @@
 package twitter.uielements;
 
 import interfaces.WebActions;
-import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
 
 public class DMToUserMessage implements WebActions {
 

@@ -64,7 +64,7 @@ public class MessengerWindow extends AbstractUIElement {
         String welcomeMessage = ApiHelper.getTenantMessageText("welcome_message");
         try{
             waitForElementToBeVisibleByXpath("//span[text()=\""+welcomeMessage+"\"]", wait);
-        } catch (WebDriverException e){
+        } catch (WebDriverException ignored){
 
         }
     }

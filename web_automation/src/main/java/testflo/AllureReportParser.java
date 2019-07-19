@@ -1,7 +1,6 @@
 package testflo;
 
 import drivermanager.ConfigManager;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import testflo.jacksonschemas.AllureScenarioInterface;
 import testflo.jacksonschemas.allurescenario.AllureScenario;

@@ -1,6 +1,5 @@
 package apihelper;
 
-import datamanager.Tenants;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestIntegrationChanel;
@@ -53,7 +52,7 @@ public class APIHelperDotControl {
 
     public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
         RequestSpec.clearAccessTokenForPortalUser();
-        Response resp = RestAssured.given().log().all()
+        return RestAssured.given().log().all()
                 .header("Content-Type", "application/json")
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
@@ -68,8 +67,6 @@ public class APIHelperDotControl {
                         "  ]\n" +
                         "}")
                 .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
-
-        return resp;
     }
 
     public static Response createIntegrationForAdapters(String adapters, String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){

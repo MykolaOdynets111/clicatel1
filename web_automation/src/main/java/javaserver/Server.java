@@ -67,7 +67,7 @@ public class Server {
                                 clientProcessingPool.shutdownNow();
                                 try {
                                     clientProcessingPool.awaitTermination(8, TimeUnit.SECONDS);
-                                } catch (Exception e) {}
+                                } catch (Exception ignored) {}
                                 break;
                             }
                         }

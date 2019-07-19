@@ -1,14 +1,11 @@
 package portalpages.uielements;
 
 import com.github.javafaker.Faker;
-import drivermanager.DriverFactory;
 import interfaces.VerificationHelper;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @FindBy(css = "form[name=billingDetailsForm]")
