@@ -41,7 +41,7 @@ public enum Agents {
     TESTING_NEW_ONE_ACCOUNT("account_signup@aqa.test", "p@$$w0rd4te$t", "New One2", "testing"),
 
     // =======  Active agents for Agent mode tests ======== //
-
+    // linked phone number to GMail box: +38050 508 36 62
     TESTING_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "testing"),
     QA_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "qa"),
     DEV_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "dev"),
@@ -49,7 +49,7 @@ public enum Agents {
     DEMO1_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo1"),
 
     // =======  Active agents for Bot mode for Camunda flows tests ======== //
-
+    // ==== phone number for Gmail inbox +380 50 5083662
     TESTING_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "testing"),
     QA_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "qa"),
     DEV_BOT_MODE_ADMIN("automation258@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "dev"),

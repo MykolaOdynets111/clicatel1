@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
+import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -790,4 +791,10 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
 
+    public static ClientProfile getClientAttributes(String clientProfileID){
+        return RestAssured.given().log().all()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .get(String.format(Endpoints.INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT, clientProfileID))
+                .getBody().as(ClientProfile.class);
+    }
 }

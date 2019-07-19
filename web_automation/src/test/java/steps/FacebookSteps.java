@@ -24,9 +24,9 @@ public class FacebookSteps {
     @GuardedBy("this") private static String fbMessage;
 
     @Given("^Open (.*) page$")
-    public void openTenantPage(String tenant){
-       FBHomePage.openTenantPage(URLs.getFBPageURL(tenant));
-       Tenants.setTenantUnderTestNames(tenant);
+    public void openTenantPage(String tenantOrgName){
+       FBHomePage.openTenantPage(URLs.getFBPageURL(tenantOrgName));
+       Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 
     @When("^User sends message regarding (.*)")

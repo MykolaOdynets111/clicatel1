@@ -2,12 +2,16 @@ package facebook;
 
 import abstractclasses.AbstractPage;
 import datamanager.FacebookUsers;
+import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class FBLoginPage extends AbstractPage {
 
@@ -39,9 +43,10 @@ public class FBLoginPage extends AbstractPage {
 
     public void loginUser() {
         waitForElementToBeVisible(emailInputField, 6);
-        emailInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserEmail());
-        passInputField.sendKeys(FacebookUsers.FIRST_USER.getFBUserPass());
-        FacebookUsers.setLoggedInUser(FacebookUsers.FIRST_USER);
+        FacebookUsers fbUser = FacebookUsers.getFBTestUserFromCurrentEnv();
+        emailInputField.sendKeys(fbUser.getFBUserEmail());
+        passInputField.sendKeys(fbUser.getFBUserPass());
+        FacebookUsers.setLoggedInUser(fbUser);
         if (isElementShown(loginForm, 2)) loginForm.submit();
         else logInButton.click();
         waitForElementToBeVisible(facebookHeader, 10);

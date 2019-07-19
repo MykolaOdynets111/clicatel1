@@ -377,6 +377,28 @@ public class DBConnector {
         return sessionDetails;
     }
 
+    public static int getNumberOfSessionsInConversation(String env, String chatID){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        Map<String, String> details = new HashMap<>();
+        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"';";
+        Statement statement = null;
+        ResultSet results = null;
+        int sessionsCount = 0;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            sessionsCount = results.getInt("count(session_id)");
+            statement.close();
+            DBConnector.closeConnection();
+            return sessionsCount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sessionsCount;
+    }
+
     public static Map<String, String> getChatAgentHistoryDetailsBySessionID(String env, String sessionID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> details = new HashMap<>();
@@ -395,6 +417,28 @@ public class DBConnector {
             e.printStackTrace();
         }
         return details;
+    }
+
+    public static String getLastSessioinID(String env, String tenantName, String clientID){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        Map<String, String> details = new HashMap<>();
+        String query = "SELECT * FROM "+tableName+".session where tenant_name = '"+tenantName+"' and client_id = '"+clientID+"' order by started_date desc;";
+        Statement statement = null;
+        ResultSet results = null;
+        String lastSessionID = null;
+        try {
+            statement = getConnection(env, "touch").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            lastSessionID = results.getString("session_id");
+            DBConnector.closeConnection();
+            return lastSessionID;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lastSessionID;
     }
 
     public static Map<String, String> getConversationByID(String env, String conversationID) {

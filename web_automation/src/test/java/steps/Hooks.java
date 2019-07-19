@@ -28,7 +28,6 @@ import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
-import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
@@ -182,6 +181,13 @@ public class Hooks implements JSHelper{
 
         if(scenario.getSourceTagNames().contains("@slot_management")){
             TIEApiSteps.clearCreatedSlots();
+        }
+
+        if(scenario.getSourceTagNames().contains("@chat_transcript")){
+            String tenantOrgName = Tenants.getTenantUnderTestOrgName();
+            String contactEmail = ApiHelper.getTenantInfoMap(tenantOrgName).get("contactEmail");
+            ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + contactEmail + "\"");
+            ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\"UNATTENDED_ONLY\"");
         }
 
         closeMainBrowserIfOpened();

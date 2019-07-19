@@ -1,10 +1,11 @@
 package emailhelper;
 
+import javax.mail.Message;
 import org.testng.Assert;
-
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +23,15 @@ public class GmailParser {
         }
     }
 
+    public static String parseSubject(Message newEmail){
+        String emailTitle = null;
+        try{
+            emailTitle = newEmail.getSubject();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return emailTitle;
+    }
 
     public static String getAgentConfirmationLink(javax.mail.Message newEMail, String expectedSender) {
         String emailContent = null;
@@ -34,6 +44,26 @@ public class GmailParser {
         return lines.stream().filter(e -> e.contains(getCodePattern(expectedSender.toLowerCase()))).findFirst().orElse("none");
     }
 
+    public static List<String> parseChatTranscriptEmail(Message newEMail) {
+        String emailContent = null;
+        List<String> chat = new ArrayList<>();
+        String [] list = null;
+        try {
+            emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+        }
+
+        list = emailContent.split("\r\n");
+
+        for (String line : list){
+            if (line.startsWith("BOT:") || line.startsWith("AGENT:") || line.startsWith("USER:")) {
+                line = line.substring(line.indexOf(" ") + 1);
+                chat.add(line);
+            }
+        }
+        return chat;
+    }
 
     public static String getResetPasswordLink(javax.mail.Message newEMail, String expectedSender) {
         String emailContent = null;

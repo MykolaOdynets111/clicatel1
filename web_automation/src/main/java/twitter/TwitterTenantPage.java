@@ -8,6 +8,7 @@ import twitter.uielements.SendNewTweetWindow;
 public class TwitterTenantPage extends TwitterHomePage {
 
     @FindBy(css = "button.DMButton")
+//    @FindBy(xpath = "//span[contains(text(),'Messages')]")
     private WebElement messageButton;
 
     @FindBy(css = "div.DMDock-conversations")

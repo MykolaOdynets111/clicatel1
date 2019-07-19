@@ -2,7 +2,6 @@ package emailhelper;
 
 import com.sun.mail.imap.IMAPMessage;
 import org.testng.Assert;
-
 import javax.mail.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +11,11 @@ import java.util.stream.Collectors;
 
 public class CheckEmail {
 
+    private Message lastTargetMessage;
+
+    public Message getLastTargetMessage(){
+        return lastTargetMessage;
+    }
 
     public static String getConfirmationURL(String expectedSender, int wait){
         try {
@@ -70,11 +74,53 @@ public class CheckEmail {
         return "";
     }
 
+    public static Message getLastMessageBySender(String expectedSender, int wait){
+        Message lastTargetMessage = null;
+        try {
+            if (newLetterFromSenderArrives(expectedSender, wait)) {
+                List<Message> targetSenderNewMails = getAllMessagesFromSender(GmailConnector.getFolder(), expectedSender);
+                lastTargetMessage = targetSenderNewMails.get(targetSenderNewMails.size()-1);
+                GmailConnector.getFolder().close(true);
+                GmailConnector.getStore().close();
+                return lastTargetMessage;
+            }
+            GmailConnector.getFolder().close(false);
+            GmailConnector.getStore().close();
+            return lastTargetMessage;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lastTargetMessage;
+    }
+
+    public static String getEmailSubject(Message message){
+        return GmailParser.parseSubject(message);
+    }
+
+    public static List<String> getChatTranscriptEmailContent(Message message){
+        List<String> emailContent = null;
+        try {
+            if (!GmailConnector.getFolder().isOpen()) {
+                GmailConnector.getFolder().open(Folder.READ_WRITE);
+            }
+            emailContent = GmailParser.parseChatTranscriptEmail(message);
+            message.setFlag(Flags.Flag.SEEN, true);
+            message.setFlag(Flags.Flag.DELETED, true);
+            GmailConnector.getFolder().close(true);
+            GmailConnector.getStore().close();
+            return emailContent;
+        } catch (MessagingException e){
+            e.printStackTrace();
+        }
+
+        return emailContent;
+    }
+
     public static boolean newLetterFromSenderArrives(String expectedSender, int wait){
-        boolean result = false;
+        int unreadMessagesCount = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender).size();
         List<Message> targetSenderNewMails = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
         for (int i=0; i<wait; i++){
-            if(targetSenderNewMails.isEmpty()){
+            if(targetSenderNewMails.isEmpty() || unreadMessagesCount == getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender).size()){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -82,28 +128,11 @@ public class CheckEmail {
                 }
                 targetSenderNewMails = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
             }
-            else{
+            else
                 return true;
-            }
         }
         return false;
     }
-
-
-    public static void clearEmailInbox(){
-        try {
-            if (!GmailConnector.getFolder().isOpen())
-                GmailConnector.getFolder().open(Folder.READ_WRITE);
-            for (Message message : GmailConnector.getFolder().getMessages()){
-                message.setFlag(Flags.Flag.DELETED, true);
-            }
-            GmailConnector.getFolder().close(true);
-            GmailConnector.getStore().close();
-        } catch (MessagingException e){
-            e.printStackTrace();
-        }
-    }
-
 
     public static void deleteAllNewMassages(){
         List<Message> msgs = getAllNewMessages(GmailConnector.getFolder());
@@ -165,6 +194,20 @@ public class CheckEmail {
         } catch (MessagingException e1) {
             e1.printStackTrace();
             return false;
+        }
+    }
+
+    public static void clearEmailInbox(){
+        try {
+            if (!GmailConnector.getFolder().isOpen())
+                GmailConnector.getFolder().open(Folder.READ_WRITE);
+            for (Message message : GmailConnector.getFolder().getMessages()){
+                message.setFlag(Flags.Flag.DELETED, true);
+            }
+            GmailConnector.getFolder().close(true);
+            GmailConnector.getStore().close();
+        } catch (MessagingException e){
+            e.printStackTrace();
         }
     }
 

@@ -1876,6 +1876,4 @@ public class BasePortalSteps implements JSHelper {
             return agentHomePage;
         }
     }
-
-
 }

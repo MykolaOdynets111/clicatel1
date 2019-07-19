@@ -3,6 +3,7 @@ package datamanager;
 
 public enum TwitterUsers {
 
+//    FIRST_USER("Click", "qa2", "click_qa2", "Qwerty123=", "@click_qa2", "", "1120976215819608064", "");
     FIRST_USER("Tom", "Smith", "generalbankaqa@gmail.com", "p@$$w0rd4te$t", "@tomaqa0", "p@$$w0rd4te$t", "979311039996157952", "");
 
     String userName;
