@@ -1041,8 +1041,7 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @When("^I publish new model$")
     public void publishNewModel(){
-        Assert.assertTrue(ApiHelperTie.publishModel((String) mapForCreatedIntent.get("model")).statusCode()==200,
-                "Publishing '"+mapForCreatedIntent.get("model")+"' model was not successful");
+        Assert.assertEquals(ApiHelperTie.publishModel((String) mapForCreatedIntent.get("model")).statusCode(), 200, "Publishing '" + mapForCreatedIntent.get("model") + "' model was not successful");
     }
 
     private LocalDateTime getModelDateTime(String model){
@@ -1054,6 +1053,7 @@ public class TIEApiSteps implements DateTimeHelper{
 
     @Then("^Tie returns new intent$")
     public void verifyNewIntent(){
+        waitForAMinute();
         System.out.println("Verifying new intent");
         String sample = (String) ((List) mapForCreatedIntent.get("samples")).get(0);
         String expectedIntent = (String) mapForCreatedIntent.get("intent");
