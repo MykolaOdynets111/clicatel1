@@ -11,7 +11,7 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |hi, how do i check my balance in the app?                      |balance check                                           |
       |i lost my card                                                 |what happens if my card is lost or stolen or has expired|
       |trading hours                                                  |trading hours                                           |
-      |Should I have proof of residential address?                    |what if i don t have proof of residential address       |
+      |Should I have proof of residential address?                    |what happens if don t have proof my residential address |
       |How much interest will I earn on my savings?                   |how much interest will i earn on my savings             |
       |Do you offer business accounts?                                |business account                                        |
       |branch location                                                |where can i find a branch                               |
@@ -22,7 +22,7 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |How much interest will I earn on my savings                    |how much interest will i earn on my savings             |
       |I want to open an account.                                     |open account                                            |
       |OK, Thanks                                                     |thank you                                               |
-      |Are you open on Saturday?                                      |trading hours                                           |
+      |Are you open on weekends?                                      |trading hours                                           |
       |Why is my card blocked?                                        |why was my pin blocked after i entered it incorrectly a few times|
       |Where can I find a branch?                                     |where can i find a branch                                        |
       |hi                                                             |hello                                                            |

@@ -107,10 +107,11 @@ public class Hooks implements JSHelper{
                 !scenario.getSourceTagNames().contains("@healthcheck") &&
                 !scenario.getSourceTagNames().contains("@camunda")){
 
-            if(scenario.isFailed()) widgetWebSocketLogs();
-            takeScreenshot();
-            endTouchFlow(scenario, true);
-//            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage()); for now not possible to delete just a one profile
+            if(DriverFactory.isTouchDriverExists()) {
+                if (scenario.isFailed()) widgetWebSocketLogs();
+                takeScreenshot();
+                endTouchFlow(scenario, true);
+            }
         }
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
