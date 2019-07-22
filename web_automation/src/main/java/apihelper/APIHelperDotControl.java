@@ -5,10 +5,9 @@ import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestIntegrationChanel;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import javaserver.Server;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -53,7 +52,7 @@ public class APIHelperDotControl {
     public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
         RequestSpec.clearAccessTokenForPortalUser();
         return RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channels\": [\n" +
@@ -74,7 +73,7 @@ public class APIHelperDotControl {
         String url =  newIntegrationInfo.getCallBackURL();
         String bodyAdapters = getBodyAdaptersChannels(adapters,url);
         return RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channels\":" + bodyAdapters +
@@ -99,7 +98,7 @@ public class APIHelperDotControl {
         ZonedDateTime zdt = ldt.atZone(zoneId);
         long timestamp = zdt.toInstant().toEpochMilli();
         return RestAssured.given().log().all()
-                    .header("Content-Type", "application/json")
+                    .contentType(ContentType.JSON)
                     .body("{\n" +
                             "  \"apiToken\": \""+ requestMessage.getApiToken() +"\",\n" +
                             "  \"clientId\": \"" +requestMessage.getClientId()+ "\",\n" +
@@ -158,18 +157,11 @@ public class APIHelperDotControl {
 
 
     private static Response sendInitCall(String tenantOrgName, DotControlInitRequest initRequest){
-        ObjectMapper mapper = new ObjectMapper();
-        Response resp = null;
-        try {
-            resp = RestAssured.given().log().all()
+        return RestAssured.given().log().all()
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                    .header("Content-Type", "application/json")
-                    .body(mapper.writeValueAsString(initRequest))
+                    .contentType(ContentType.JSON)
+                    .body(initRequest)
                     .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return resp;
     }
 
 }

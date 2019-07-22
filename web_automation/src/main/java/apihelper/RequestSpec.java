@@ -12,9 +12,8 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import mc2api.PortalAuth;
 import org.testng.Assert;
-
-import java.util.Map;
 
 public class RequestSpec {
 
@@ -68,16 +67,11 @@ public class RequestSpec {
     public static String getAccessTokenForPortalUser(String tenantOrgName, String agent) {
         if(PORTAL_USER_ACCESS_TOKEN.get()==null) {
             Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), agent);
-            Map<String, String> tokenAndAccount = Accounts.getAccountsAndToken(tenantOrgName, user.getAgentEmail(), user.getAgentPass());
-            Response resp = RestAssured.given()
-                    .header("Content-Type", "application/json")
-                    .body("{\n" +
-                            "  \"token\": \"" + tokenAndAccount.get("token") + "\",\n" +
-                            "  \"accountId\": \"" + tokenAndAccount.get("accountId") + "\"\n" +
-                            "}")
-                    .post(Endpoints.PLATFORM_SIGN_IN);
+            String accountName = Accounts.getCorrectAccountName(tenantOrgName);
 
-            PORTAL_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
+            String token = PortalAuth.getMC2AuthToken(accountName, user.getAgentEmail(), user.getAgentPass());
+
+            PORTAL_USER_ACCESS_TOKEN.set(token);
             return PORTAL_USER_ACCESS_TOKEN.get();
         }else{
             return PORTAL_USER_ACCESS_TOKEN.get();
@@ -89,16 +83,9 @@ public class RequestSpec {
         if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
             MC2Account admin = MC2Account.getAccountDetailsByAccountName(ConfigManager.getEnv(), accountName);
 
-            Map<String, String> tokenAndAccount = Accounts.getToken(accountName, admin.getEmail(), admin.getPass());
-            Response resp = RestAssured.given()
-                    .header("Content-Type", "application/json")
-                    .body("{\n" +
-                            "  \"token\": \"" + tokenAndAccount.get("token") + "\",\n" +
-                            "  \"accountId\": \"" + tokenAndAccount.get("accountId") + "\"\n" +
-                            "}")
-                    .post(Endpoints.PLATFORM_SIGN_IN);
+            String token = PortalAuth.getMC2AuthToken(accountName, admin.getEmail(), admin.getPass());
 
-            PORTAL_USER_ACCESS_TOKEN.set(resp.jsonPath().get("token"));
+            PORTAL_USER_ACCESS_TOKEN.set(token);
             return PORTAL_USER_ACCESS_TOKEN.get();
         } else {
             return PORTAL_USER_ACCESS_TOKEN.get();
@@ -108,7 +95,7 @@ public class RequestSpec {
     public static void clearAccessTokenForPortalUser(){
         requestSpecification.remove();
         PORTAL_USER_ACCESS_TOKEN.remove();
-        }
+    }
 
 
 }

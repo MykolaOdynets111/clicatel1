@@ -1,14 +1,37 @@
-package apihelper;
+package mc2api;
 
+import apihelper.RequestSpec;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.MC2AccountBalance;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ApiHelperPlatform {
+
+    public static Response getPlatformAccountAndToken(String userName, String userPass){
+        return  RestAssured.given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .body("{\n" +
+                        "  \"email\": \"" + userName + "\",\n" +
+                        "  \"password\": \"" + userPass + "\"\n" +
+                        "}")
+                .post(EndpointsPlatform.PLATFORM_ACCOUNTS);
+    }
+
+    public static Response signInToPortal(String token, String accountId){
+        return RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body("{\n" +
+                        "  \"token\": \"" + token + "\",\n" +
+                        "  \"accountId\": \"" + accountId + "\"\n" +
+                        "}")
+                .post(EndpointsPlatform.PLATFORM_SIGN_IN);
+    }
 
     public static Response sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){
 
@@ -20,7 +43,7 @@ public class ApiHelperPlatform {
         }
 
        return   RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"invitations\": [\n" +
@@ -32,7 +55,7 @@ public class ApiHelperPlatform {
                         "    }\n" +
                         "  ]\n" +
                         "}")
-                .post(Endpoints.PLATFORM_SEND_INVITATION);
+                .post(EndpointsPlatform.PLATFORM_SEND_INVITATION);
     }
 
     public static List<String> getAllRolePermission(String tenantOrgName, String role){
@@ -40,9 +63,9 @@ public class ApiHelperPlatform {
         List<String> permissions = new ArrayList<>();
         for(String id : ids){
             Response resp = RestAssured.given()
-                    .header("Content-Type", "application/json")
+                    .contentType(ContentType.JSON)
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                    .get(String.format(Endpoints.PLATFORM_ROLES_PERMITIONS, id));
+                    .get(String.format(EndpointsPlatform.PLATFORM_ROLES_PERMITIONS, id));
             permissions.addAll(resp.jsonPath().getList(" permissions"));
         }
         return permissions;
@@ -50,48 +73,48 @@ public class ApiHelperPlatform {
 
     public static void acceptInvitation(String tenantOrgName, String invitationID, String pass){
         RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"password\": \""+pass+"\"\n" +
                         "}")
-                .post(String.format(Endpoints.PLATFORM_ACCEPT_INVITATION, invitationID));
+                .post(String.format(EndpointsPlatform.PLATFORM_ACCEPT_INVITATION, invitationID));
     }
 
     public static List<String> getIdsOfRoles(String tenantOrgName, String roleDescription){
         Response resp = RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_USER_ROLES);
+                .get(EndpointsPlatform.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
         resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e))
                         .filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
                         forEach(e -> {ids.add(
                                 (String) e.get("id"));});
-         ids.stream().forEach(e -> e.replace(e, "\""+e+"\""));
+         ids.forEach(e -> e = e.replace(e, "\""+e+"\""));
          return ids;
     }
 
     public static void deleteUser(String tenantOrgName, String userID){
         if(!userID.equals("none")) {
             Response resp = RestAssured.given()
-                    .header("Content-Type", "application/json")
+                    .contentType(ContentType.JSON)
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                    .delete(Endpoints.PLATFORM_USER + "/" + userID);
+                    .delete(EndpointsPlatform.PLATFORM_USER + "/" + userID);
             if (resp.statusCode() == 404) {
                 RestAssured.given()
-                        .header("Content-Type", "application/json")
+                        .contentType(ContentType.JSON)
                         .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                        .delete(Endpoints.PLATFORM_SEND_INVITATION + "/" + userID);
+                        .delete(EndpointsPlatform.PLATFORM_SEND_INVITATION + "/" + userID);
             }
         }
     }
 
     public static String getUserID(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_USER);
+                .get(EndpointsPlatform.PLATFORM_USER);
         Map user =  resp.getBody().jsonPath().getList("users", Map.class)
                                     .stream().filter(e -> e.get("email").equals(userEmail))
                                     .findFirst().orElse(null);
@@ -100,9 +123,9 @@ public class ApiHelperPlatform {
 
     public static String getAccountUserFullName(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_USER);
+                .get(EndpointsPlatform.PLATFORM_USER);
         Map user = resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().filter(e -> e.get("email").equals(userEmail))
                 .findFirst().get();
@@ -111,18 +134,18 @@ public class ApiHelperPlatform {
 
     public static boolean isActiveUserExists(String tenantOrgName, String userEmail){
         Response resp = RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_USER);
+                .get(EndpointsPlatform.PLATFORM_USER);
         return resp.getBody().jsonPath().getList("users", Map.class)
                 .stream().anyMatch(e -> e.get("email").equals(userEmail));
     }
 
     public static List<Integer> getListOfActiveSubscriptions(String tenantOrgName){
         Response resp =   RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_SUBSCRIPTIONS_LIST);
+                .get(EndpointsPlatform.PLATFORM_SUBSCRIPTIONS_LIST);
 
         return resp.getBody().jsonPath().getList("data", Map.class)
                 .stream().filter(e -> e.get("status").equals("SERVICE_ACTIVE")|e.get("status").equals("WILL_AUTORENEW"))
@@ -132,9 +155,9 @@ public class ApiHelperPlatform {
 
     public static List<String> getListOfActivePaymentMethods(String tenantOrgName, String paymentType){
         Response resp =   RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_PAYMENT_METHODS);
+                .get(EndpointsPlatform.PLATFORM_PAYMENT_METHODS);
 
         return resp.getBody().jsonPath().getList("paymentMethods", Map.class)
                 .stream().filter(e -> e.get("paymentType").equals(paymentType))
@@ -144,9 +167,9 @@ public class ApiHelperPlatform {
 
     public static void deletePaymentMethod(String tenantOrgName, String paymentID){
         RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .delete(Endpoints.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
+                .delete(EndpointsPlatform.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
     }
 
     public static void closeAccount(String accountName, String email, String pass){
@@ -157,27 +180,27 @@ public class ApiHelperPlatform {
             return; // nothing to close - account doesn't exist
         }
         RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization",accessToken)
                 .body("{\n" +
                         "  \"email\": \""+email+"\",\n" +
                         "  \"password\": \""+pass+"\",\n" +
                         "  \"reason\": \"string\"\n" +
                         "}")
-                .post(Endpoints.PLATFORM_CLOSE_ACCOUNT);
+                .post(EndpointsPlatform.PLATFORM_CLOSE_ACCOUNT);
     }
 
     public static Response getAccountBillingInfo(String tenantOrgName){
         return RestAssured.given()
-                .header("Accept", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(Endpoints.PLATFORM_BILLING_INFO);
+                .get(EndpointsPlatform.PLATFORM_BILLING_INFO);
     }
 
-    public static MC2AccountBalance getAccountBallance(){
+    public static MC2AccountBalance getAccountBalance(){
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(Endpoints.PLATFORM_ACCOUNT_BALANCE)
+                .get(EndpointsPlatform.PLATFORM_ACCOUNT_BALANCE)
                 .getBody().as(MC2AccountBalance.class);
     }
 }

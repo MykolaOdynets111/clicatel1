@@ -1,7 +1,7 @@
 package portalpages;
 
-import apihelper.Endpoints;
 import drivermanager.DriverFactory;
+import mc2api.EndpointsPlatform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -44,7 +44,7 @@ public class PortalSignUpPage extends PortalAbstractPage {
     }
 
     public static PortalSignUpPage openPortalSignUpPage() {
-        DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_SIGN_UP_PAGE);
+        DriverFactory.getAgentDriverInstance().get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
         return new PortalSignUpPage();
     }
 

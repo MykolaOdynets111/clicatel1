@@ -2,7 +2,7 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
-import apihelper.ApiHelperPlatform;
+import mc2api.ApiHelperPlatform;
 import apihelper.ApiHelperTie;
 import apihelper.Endpoints;
 import com.github.javafaker.Faker;
@@ -19,6 +19,7 @@ import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import mc2api.EndpointsPlatform;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
@@ -131,7 +132,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         if (ConfigManager.getEnv().equals("testing")){
             String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(
                     ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
-            confirmationURL = Endpoints.PORTAL_NEW_AGENT_ACTIVATION + invitationID;
+            confirmationURL = EndpointsPlatform.PORTAL_NEW_AGENT_ACTIVATION + invitationID;
             if(!(invitationID==null)) result = true;
         }else {
             result = checkThatEmailFromSenderArrives("Clickatell <mc2-devs@clickatell.com>", 200);
@@ -153,7 +154,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             }else{
                 result = true;
             }
-            confirmationURL = Endpoints.PORTAL_RESET_PASS_URL + resetPassID;
+            confirmationURL = EndpointsPlatform.PORTAL_RESET_PASS_URL + resetPassID;
         }else{
             result = checkThatEmailFromSenderArrives("Clickatell <no-reply@clickatell.com>", 200);
         }
@@ -313,7 +314,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("I use activation ID and opens activation page")
     public void openActivationAccountPage(){
-        String activationURL = String.format(Endpoints.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
+        String activationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationAccountID);
         DriverFactory.getAgentDriverInstance().get(activationURL);
     }
 
@@ -1048,7 +1049,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Agent enter allowed top up sum$")
     public void enterNewBalanceAmount(){
-        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBallance().getBalance());
+        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBalance().getBalance());
         String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
         int addingSum = Integer.valueOf(minValue) + 1;
         double afterTest = topUpBalance.get("preTest") + addingSum;
@@ -1058,7 +1059,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Agent enter (.*) top up amount$")
     public void enterMaxValueForTopUp(String value){
-        accountCurrency = ApiHelperPlatform.getAccountBallance().getCurrency().toUpperCase();
+        accountCurrency = ApiHelperPlatform.getAccountBalance().getCurrency().toUpperCase();
         int invalidSum;
         if(value.contains("max")){
             invalidSum = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency) +1 ;
@@ -1111,7 +1112,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             }
         }
         Assert.assertTrue(result, "Balance was not updated after top up\n" +
-                "Balance from backend : " + ApiHelperPlatform.getAccountBallance().getBalance() +"\n" +
+                "Balance from backend : " + ApiHelperPlatform.getAccountBalance().getBalance() +"\n" +
                 "Expected: " + actualInfo + "\n" +
                 "Actual: " + valueFromPortal);
     }

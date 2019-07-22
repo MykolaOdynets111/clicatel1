@@ -30,8 +30,6 @@ public class TafMessage {
     private String description;
     @JsonProperty("tenantName")
     private String tenantName;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("id")
     public String getId() {
@@ -101,16 +99,6 @@ public class TafMessage {
     @JsonProperty("tenantName")
     public void setTenantName(String tenantName) {
         this.tenantName = tenantName;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }

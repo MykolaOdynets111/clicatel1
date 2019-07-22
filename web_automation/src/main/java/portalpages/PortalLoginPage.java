@@ -1,7 +1,7 @@
 package portalpages;
 
-import apihelper.Endpoints;
 import drivermanager.DriverFactory;
+import mc2api.EndpointsPlatform;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -53,7 +53,7 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public static PortalLoginPage openPortalLoginPage() {
-        DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_LOGIN_PAGE);
+        DriverFactory.getAgentDriverInstance().get(EndpointsPlatform.PORTAL_LOGIN_PAGE);
         return new PortalLoginPage(DriverFactory.getAgentDriverInstance());
     }
 

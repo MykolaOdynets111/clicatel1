@@ -15,11 +15,7 @@ public class URLs {
 
     private static final String BASE_PROD_URL = "https://touch-web.clickatell.com/?tenantId=%s";
 
-    private static String BASE_PORTAL_URL = "https://%s-portal.clickatelllabs.com/";
-
     private static String BASE_AGENT_URL = "https://%s-agentdesk.clickatelllabs.com/#/login?tenantId=";
-
-    private static String FINAL_AGENT_URL = null;
 
     private static ThreadLocal<String> CHATDESK_URL = new ThreadLocal<>();
 
@@ -36,8 +32,6 @@ public class URLs {
     private static String BASE_TOUCH_API_URL = "https://%s-touch.clickatelllabs.com/v6/";
 
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
-
-    private static String BASE_PLATFORM_URL = "https://%s-platform.clickatelllabs.com";
 
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
@@ -71,17 +65,17 @@ public class URLs {
      * @param updateURL - boolean value to indicate if we need to log into different tenant Agent desk
      */
     public static String getAgentURL(String tenantOrgName, boolean updateURL) {
-        if (FINAL_AGENT_URL == null || updateURL) {
+        if (CHATDESK_URL.get() == null || updateURL) {
             String baseUrl;
             String targetEnvConfiguration = ConfigManager.getEnv();
             String env;
             if(targetEnvConfiguration.split("-").length==2) env=targetEnvConfiguration.split("-")[1];
             else env = targetEnvConfiguration;
             baseUrl =String.format(URLs.BASE_AGENT_URL, targetEnvConfiguration);
-            FINAL_AGENT_URL = baseUrl + ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+            CHATDESK_URL.set(baseUrl + ApiHelper.getTenantInfoMap(tenantOrgName).get("id"));
         }
-        System.out.println("!!! URL to be returned getting it: " + FINAL_AGENT_URL);
-        return FINAL_AGENT_URL;
+        System.out.println("!!! URL to be returned getting it: " + CHATDESK_URL.get());
+        return CHATDESK_URL.get();
     }
 
     public static String getTouchApiBaseURL(){
@@ -93,8 +87,7 @@ public class URLs {
     }
 
     public static String getBasePlatformUrl(){
-        return String.format(BASE_PLATFORM_URL, ConfigManager.getEnv());
-
+        return MC2URLs.getBasePlatformUrl();
     }
 
     public static String getBaseTieURL(){
@@ -126,7 +119,7 @@ public class URLs {
     }
 
     public static String getBasePortalUrl(){
-        return String.format(BASE_PORTAL_URL, ConfigManager.getEnv());
+        return MC2URLs.getBasePortalUrl();
     }
 
     public static String getBaseSocialUrl(){
@@ -138,7 +131,7 @@ public class URLs {
     }
 
     public static  void clearFinalAgentURL(){
-        FINAL_AGENT_URL=null;
+        CHATDESK_URL.remove();
     }
 
 }

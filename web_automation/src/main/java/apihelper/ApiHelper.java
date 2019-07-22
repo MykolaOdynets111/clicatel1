@@ -12,12 +12,11 @@ import interfaces.DateTimeHelper;
 import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -58,7 +57,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         try{
              tenantInf = resp.getBody().jsonPath().getMap("");
         } catch (JsonPathException e){
-            Assert.assertTrue(false, "Failed to get tenant info\n"+
+            Assert.fail( "Failed to get tenant info\n"+
             "URL: " + Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName() + "\n" +
             "resp status code:" + resp.statusCode() + "\n"+
             "resp body: " + resp.getBody().asString());
@@ -82,8 +81,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
         resp = RestAssured.given()
-                    .header("Content-Type", "application/json")
-                    .header("Accept", "application/json")
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
                     .body("{ " +
                             "\"tenantId\": \"" + tenantId + "\"," +
                             "\"type\": \"TOUCH\"," +
@@ -94,10 +93,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                             "}" +
                             "}")
                     .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
-        Assert.assertTrue(resp.statusCode()==200,
+        Assert.assertEquals(resp.statusCode(), 200,
                 "Creating of user profile was not successful\n" +
-        "resp status code: " + resp.statusCode() + "\n" +
-        "resp body: " + resp.getBody().asString());
+                "resp body: " + resp.getBody().asString());
     }
 
     public static void createUserProfileWithPhone(String clientID, String phoneNumber){
@@ -105,8 +103,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
         resp = RestAssured.given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
                 .body("{ " +
                         "\"tenantId\": \"" + tenantId + "\"," +
                         "\"type\": \"TOUCH\"," +
@@ -118,9 +116,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                         "}" +
                         "}")
                 .post(Endpoints.INTERNAL_CREATE_USER_PROFILE_ENDPOINT);
-        Assert.assertTrue(resp.statusCode()==200,
+        Assert.assertEquals(resp.statusCode(), 200,
                 "Creating of user profile was not successful\n" +
-                        "resp status code: " + resp.statusCode() + "\n" +
                         "resp body: " + resp.getBody().asString());
     }
 
@@ -128,7 +125,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         if(!clientID.isEmpty()) {
             String url = String.format(Endpoints.INTERNAL_DELETE_USER_PROFILE_ENDPOINT, tenantName, clientID);
             RestAssured.given()
-                    .header("Accept", "application/json")
+                    .accept(ContentType.JSON)
                     .delete(url);
         }
     }
@@ -140,7 +137,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                     tenantsInfo = resp.jsonPath().get("tenants");
                 }
             } catch (JsonPathException e) {
-                Assert.assertTrue(false, "Unexpected JSON response: \n" +
+                Assert.fail("Unexpected JSON response: \n" +
                         "Status code " + resp.statusCode() + "\n" +
                         "Body " + resp.getBody().asString() +"\n");
             }
@@ -150,13 +147,12 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static List<TafMessage> getTafMessages() {
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
         Response resp = RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .get(url);
         try {
             tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
         }catch (JsonPathException e){
-            Assert.assertTrue(false,
-                    "Getting taf response was not successful \n" +
+            Assert.fail("Getting taf response was not successful \n" +
                             "Resp code: " + resp.statusCode() + "\n" +
                             "Resp body: " + resp.getBody().asString() + "\n");
         }
@@ -166,23 +162,18 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static List<TafMessage> getDefaultTafMessages() {
         String url = String.format(Endpoints.TAF_MESSAGES, "null");
         tenantMessages = RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .get(url)
                 .jsonPath().getList("tafResponses", TafMessage.class);
         return tenantMessages;
     }
 
     public static void updateTafMessage(TafMessage tafMessage){
-        ObjectMapper mapper = new ObjectMapper();
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-        try {
-            RestAssured.given().log().all()
-                    .header("Content-Type", "application/json")
-                    .body("[" + mapper.writeValueAsString(tafMessage) + "]")
+        RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .body(Arrays.asList(tafMessage))
                     .put(url);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
     }
 
     public static String getTenantMessageText(String id) {
@@ -196,7 +187,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
         RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body(body)
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
@@ -205,7 +196,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
         return RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body(body)
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
@@ -213,18 +204,17 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
         Response resp = RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         try {
             return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
         } catch(java.lang.ClassCastException e){
-            Assert.assertTrue(false, "Incorrect body on updating support hours \n"
+            Assert.fail("Incorrect body on updating support hours \n"
             +"Status code: " +resp.statusCode() + "\n"
                     +"tenantOrgName: "+ tenantOrgName
                     + "Authorization :"  + RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main") + "\n"
           + resp.getBody().asString()  );
-//            System.out.println(resp.getBody().asString());
             return null;
         }
     }
@@ -281,7 +271,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static void setAvailableForAllTerritories(String tenantOrgName){
         RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"AVAILABLE\"\n" +
@@ -299,7 +289,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                 .findFirst().get();
         String countryID = targetCountry.getCountryId();
         RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
@@ -323,7 +313,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         Territory targetTerr =  Territories.getTargetTerr(tenantOrgName, terrName);
         String territoryID = targetTerr.getTerritoryId();
         RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
@@ -340,7 +330,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static List<TenantAddress> getTenantAddressInfo(String tenantName) {
         return RestAssured.given()
-                .header("Accept", "application/json")
+                .accept(ContentType.JSON)
                 .get(String.format(Endpoints.INTERNAL_TENANT_ADDRESS, tenantName))
                 .jsonPath().getList("addresses", TenantAddress.class);
     }
@@ -348,7 +338,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static UserSession getLastUserSession(String userID, String tenant){
         return RestAssured.given()
-                .header("Accept", "application/json")
+                .accept(ContentType.JSON)
                 .get(String.format(Endpoints.INTERNAL_LAST_CLIENT_SESSION, tenant, userID))
                 .getBody().as(UserSession.class);
 
@@ -369,7 +359,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         try{
             featureStatus = resp.getBody().jsonPath().getBoolean(FEATURE);
         } catch(NullPointerException e){
-            Assert.assertTrue(false, "Failed to get feature status from GET " +Endpoints.FEATURE+ " response\n"+
+            Assert.fail("Failed to get feature status from GET " +Endpoints.FEATURE+ " response\n"+
             "statusCode" + resp.statusCode() + "\n" +
             "respBody" + resp.getBody().asString());
         }
@@ -384,21 +374,21 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static Response getAgentInfo(String tenantOrgName, String agent) {
         String token = RequestSpec.getAccessTokenForPortalUser(tenantOrgName, agent);
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", token)
                 .get(Endpoints.AGENT_INFO_ME);
     }
 
     public static void logoutTheAgent(String tenantOrgName) {
         String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
-        RestAssured.given().header("Accept", "application/json")
+        RestAssured.given().accept(ContentType.JSON)
                .get(String.format(Endpoints.INTERNAL_LOGOUT_AGENT, tenantID));
     }
 
     public static void decreaseTouchGoPLan(String tenantOrgName){
         MC2Account targetAccount = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
         RestAssured.given().log().all()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .body("{\n" +
                         "  \"accountId\": \""+targetAccount.getAccountID()+"\",\n" +
                         "  \"messageType\": \"TOUCH_STARTED\"" +
@@ -417,7 +407,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
         RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
@@ -442,7 +432,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
 
     public static void setStatusForWelcomeMesage(String tenantName, String messageStatus){
         RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .body("[\n" +
                         "  {\n" +
                         "    \"id\": \"welcome_message\",\n" +
@@ -476,7 +466,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static Response updateSessionCapacity(String tenantOrgName, int availableChats){
         RequestSpec.clearAccessTokenForPortalUser();
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);
     }
@@ -489,7 +479,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                     "  \"agentId\": \"" + agentId + "\"\n" +
                     "}";
             RestAssured.given()
-                    .header("Content-Type", "application/json")
+                    .contentType(ContentType.JSON)
                     .body(body)
                     .post(Endpoints.INTERNAL_PROCESS_TICKET);
         }
@@ -564,7 +554,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                     .filter(map -> map.get("state").equals("ACTIVE"))
                     .findFirst().get());
         }catch(JsonPathException e){
-            Assert.assertTrue(false, "Failed to get session Id\n"+
+            Assert.fail("Failed to get session Id\n"+
                     "resp status: " + resp.statusCode() + "\n" +
             "resp body:" + resp.getBody().asString() + "\n");
         }
@@ -673,7 +663,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         List<String> conversationIds = getActiveChatsByAgent(agent).getBody().jsonPath().getList("content.id");
         for(String conversationId : conversationIds){
             RestAssured.given()
-                    .header("Accept", "application/json")
+                    .accept(ContentType.JSON)
                     .header("Authorization",
                             RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
                     .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
@@ -709,8 +699,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .header("Content-Type", "application/json")
-                .header("accept", "application/json")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
                 .body("{" +
                         "  \"conversationId\": \""+ ticketInfo.get("conversationId") +"\",\n" +
                         "  \"sessionId\": \""+ ticketInfo.get("sessionId") +"\",\n" +
@@ -724,7 +714,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
     public static void deleteCRMTicket(String crmTicketId){
         RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .header("accept", "application/json")
+                .accept(ContentType.JSON)
                 .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
 
@@ -733,8 +723,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given().log().all()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .header("accept", "application/json")
-                .header("Content-Type", "application/json")
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
                 .body("{ \"configAttributes\": " +
                         "{\""+config+"\": "+configValue+" }" +
                       "}")
@@ -776,8 +766,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                 "  \"tenant\": null\n" +
                 "}";
         return RestAssured.given().log().all()
-                .header("accept", "*/*")
-                .header("Content-Type", "application/json")
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
                 .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
                 .body(requestBody1)
                 .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);

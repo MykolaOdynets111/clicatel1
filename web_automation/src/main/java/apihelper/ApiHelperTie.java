@@ -6,9 +6,8 @@ import datamanager.jacksonschemas.tie.CreateSlotBody;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import drivermanager.URLs;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 
 import java.util.Comparator;
@@ -31,15 +30,13 @@ public class ApiHelperTie {
     }
 
     public static Response getRespWithIntentsOnUserMessageWithAutorization(String userMessage) {
-         return RestAssured
-                .given()
+         return RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
                 .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
          }
 
     public static String getExpectedMessageOnIntent(String intent) {
-        return RestAssured
-                .given()
+        return RestAssured.given()
                 .header("Authorization",
                         RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
                 .get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestName(), intent)).jsonPath().get("text");
@@ -47,7 +44,8 @@ public class ApiHelperTie {
     }
 
     public static String getExpectedMessageOnIntent(String tenantOrgName, String intent) {
-        return RestAssured.get(URLs.getTIEURLForAnswers(Tenants.getTenantNameByTenantOrgName(tenantOrgName), intent))
+        return RestAssured
+                .get(URLs.getTIEURLForAnswers(Tenants.getTenantNameByTenantOrgName(tenantOrgName), intent))
                 .jsonPath().get("text");
     }
 
@@ -82,7 +80,7 @@ public class ApiHelperTie {
 
     public static Response createNewIntent(String tenantOrgName, String newIntent, String category, String answer, String type){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{" +
                             "\"intent\":\""+newIntent+"\"," +
@@ -97,7 +95,7 @@ public class ApiHelperTie {
 
     public static Response addNewSample(String tenantOrgName, String intent, String sample){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{" +
                             "\"intent\":\"" +intent+ "\"," +
@@ -112,21 +110,21 @@ public class ApiHelperTie {
 
     public static Response scheduleTraining(){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .post(String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
     }
 
     public static Response getModels(){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()));
     }
 
     public static Response deleteModel(String model){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .delete(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()) + "/" + model);
     }
@@ -140,14 +138,14 @@ public class ApiHelperTie {
 
     public static Response getAllIntents(){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.TIE_ALL_INTENTS, Tenants.getTenantUnderTestName()));
     }
 
     public static Response getAllIntentsWithIDs(){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.TIE_NEW_INTENT_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
@@ -155,7 +153,7 @@ public class ApiHelperTie {
 
     public static Response deleteIntent(String intentId){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .body("{\"ids\":[\"" +intentId+ "\"]}")
                 .delete(String.format(Endpoints.TIE_NEW_INTENT_MANAGEMENT, Tenants.getTenantUnderTestName()));
@@ -175,14 +173,14 @@ public class ApiHelperTie {
 
     public static Response getTrainData(){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.TIE_SAMPLES, Tenants.getTenantUnderTestName()));
     }
 
     public static Response deleteSample(String sampleId){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .body("{\"ids\":[\"" +sampleId+ "\"]}")
                 .delete(String.format(Endpoints.TIE_SAMPLES, Tenants.getTenantUnderTestName()));
@@ -190,33 +188,20 @@ public class ApiHelperTie {
     }
 
     public static Response createNewSlot(CreateSlotBody createSlotBody){
-        ObjectMapper mapper = new ObjectMapper();
-        Response resp = null;
-        try {
-            resp =  RestAssured.given()
-                    .header("Content-Type", "application/json")
+        return RestAssured.given()
+                    .contentType(ContentType.JSON)
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                    .body(mapper.writeValueAsString(createSlotBody))
+                    .body(createSlotBody)
                     .post(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return resp;
+
     }
 
     public static Response updateSlot(CreateSlotBody createSlotBody, String slotId){
-        ObjectMapper mapper = new ObjectMapper();
-        Response resp = null;
-        try {
-            resp =  RestAssured.given()
-                    .header("Content-Type", "application/json")
+        return RestAssured.given()
+                    .contentType(ContentType.JSON)
                     .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                    .body(mapper.writeValueAsString(createSlotBody))
+                    .body(createSlotBody)
                     .put(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()) + "/" + slotId);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return resp;
     }
 
 
@@ -230,7 +215,7 @@ public class ApiHelperTie {
 
     public static Response getAllSlots(){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.TIE_SLOTS_MANAGEMENT, Tenants.getTenantUnderTestName()));
     }
@@ -239,11 +224,11 @@ public class ApiHelperTie {
 
     public static Response getTrainings(){
         Response resp =  RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
         if(resp.statusCode()!=200){
-            Assert.assertTrue(false, "Getting tie training was not successful\n"+
+            Assert.fail("Getting tie training was not successful\n"+
             "Resp code: " + resp.statusCode() + "\n" +
             "Resp body: " + resp.getBody().asString() + "\n" +
             "Resp URL: " + String.format(Endpoints.TIE_TRAINING, Tenants.getTenantUnderTestName()));
@@ -254,7 +239,7 @@ public class ApiHelperTie {
 
     public static Response publishModel(String model){
         return RestAssured.given()
-                .header("Content-Type", "application/json")
+                .contentType(ContentType.JSON)
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .body("{\"model\":\"" + model + "\"}")
                 .post(String.format(Endpoints.TIE_MODELS, Tenants.getTenantUnderTestName()));
