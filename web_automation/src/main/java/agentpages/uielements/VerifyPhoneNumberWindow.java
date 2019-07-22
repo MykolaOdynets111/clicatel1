@@ -1,12 +1,12 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(xpath = "//div[text()='Verify phone number']/parent::div")
-public class VerifyPhoneNumberWindow extends AbstractUIElement {
+public class VerifyPhoneNumberWindow extends AbstractUIElementDeprecated {
 
     String overlappedPage = "//section[@id='app'][@aria-hidden='true']";
 

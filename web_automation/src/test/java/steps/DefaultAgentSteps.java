@@ -19,12 +19,12 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
-import facebook.FBLoginPage;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.portalsteps.BasePortalSteps;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 
@@ -180,7 +180,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             for(int i = 0; i<11; i ++){
                 if(availableAgents<2) {
-                    getAgentHomePage(agent).waitFor(1000);
+                    getAgentHomePage(agent).waitForDeprecated(1000);
                     availableAgents = ApiHelper.getNumberOfLoggedInAgents();
                 } else{
                     break;
@@ -530,7 +530,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "for all week":
                 resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
-                getAgentHomePage("main").waitFor(1500);
+                getAgentHomePage("main").waitForDeprecated(1500);
                 break;
         }
         Assert.assertEquals(resp.statusCode(), 200,
@@ -1017,7 +1017,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 isReduced = true;
                 break;
             }
-            else getAgentHomeForMainAgent().waitFor(200);
+            else getAgentHomeForMainAgent().waitForDeprecated(200);
         }
         Assert.assertTrue(isReduced, "Shown tickets number is not as expected");
     }

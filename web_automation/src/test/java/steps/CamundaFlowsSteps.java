@@ -12,13 +12,13 @@ import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import interfaces.JSHelper;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
 import java.util.Random;
 
-public class CamundaFlowsSteps implements JSHelper, WebActions {
+public class CamundaFlowsSteps implements JSHelper, WebActionsDeprecated {
 
     private Faker faker = new Faker();
 

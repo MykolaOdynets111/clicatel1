@@ -4,8 +4,10 @@ import drivermanager.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.PageHeader;
@@ -36,25 +38,43 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     private PageHeader pageHeader;
 
-    protected String currentAgent = "main_agent";
+    private WebDriver currentDriver;
+
+    // == Constructors == //
 
     public PortalAbstractPage() {
-        HtmlElementLoader.populatePageObject(this, DriverFactory.getAgentDriverInstance());
+        // here will be a default Driver for mc2 tests
+//        HtmlElementLoader.populatePageObject(this, MC2DriverFactory.getAgentDriverInstance());
     }
-
     public PortalAbstractPage(String agent) {
-        this.currentAgent = agent;
-        HtmlElementLoader.populatePageObject(this, DriverFactory.getDriverForAgent(agent));
+        this.currentDriver = DriverFactory.getDriverForAgent(agent);
+        HtmlElementLoader.populatePageObject(this, this.currentDriver);
+    }
+    public PortalAbstractPage(WebDriver driver) {
+        this.currentDriver = driver;
+        HtmlElementLoader.populatePageObject(this, this.currentDriver);
     }
 
+    public static String getProcessingAlertLocator(){
+        return processingAlert;
+    }
+
+    public static String getNotificationAlertLocator(){
+        return notificationAlert;
+    }
+
+    public WebDriver getCurrentDriver(){
+        return this.currentDriver;
+    }
 
     public PageHeader getPageHeader() {
+        pageHeader.setCurrentDriver(currentDriver);
         return pageHeader;
     }
 
     public String getNotificationAlertText(){
-        if(isElementShownAgentByCSS(notificationAlert, 2, this.currentAgent)){
-            return findElemByCSSAgent(notificationAlert, this.currentAgent).getText();
+        if(isElementShownByCSS(this.getCurrentDriver(), notificationAlert, 2)) {
+            return findElemByCSS(this.getCurrentDriver(), notificationAlert).getText();
         } else{
             return "no notification alert";
         }
@@ -62,60 +82,42 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitForNotificationAlertToDisappear(){
         try {
-            waitForElementToBeInVisibleByCssAgent(notificationAlert, 25, this.currentAgent);
+            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), notificationAlert, 25);
         } catch(NoSuchElementException e){}
     }
 
     public void waitForNotificationAlertToBeProcessed(int toAppear, int toDisappear){
         try {
-            waitForElementToBeVisibleByCssAgent(notificationAlert, toAppear, this.currentAgent);
-            waitForElementToBeInVisibleByCssAgent(notificationAlert, toDisappear, this.currentAgent);
-        } catch(NoSuchElementException|TimeoutException e){}
-    }
-
-    public static String getNotificationAlertLocator(){
-        return notificationAlert;
-    }
-
-    public static String getProcessingAlertLocator(){
-        return processingAlert;
-    }
-
-    public void waitWhileProcessing(){
-        try {
-        waitForElementToBeVisibleByCssAgent(processingAlert, 14, this.getCurrentAgent());
-        waitForElementToBeInVisibleByCssAgent(processingAlert, 20, this.getCurrentAgent());
+            waitForElementToBeVisibleByCss(this.getCurrentDriver(), notificationAlert, toAppear);
+            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), notificationAlert, toDisappear);
         } catch(NoSuchElementException|TimeoutException e){}
     }
 
     public void waitWhileProcessing(int toAppears, int toDisappear){
         try {
-            waitForElementToBeVisibleByCssAgent(processingAlert, toAppears);
-            waitForElementToBeInVisibleByCssAgent(processingAlert, toDisappear);
+            waitForElementToBeVisibleByCss(this.getCurrentDriver(), processingAlert, toAppears);
+            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), processingAlert, toDisappear);
         } catch(NoSuchElementException|TimeoutException e){}
     }
 
     public void clickPageNavButton(String buttonName){
-        waitForElementToBeVisibleAgent(selectionNavBar, 8);
+        waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
         WebElement targetButton = pageNavButtons.stream()
                                         .filter(e -> e.getText().equalsIgnoreCase(buttonName))
                                         .findFirst().get();
-        clickElemAgent(targetButton,1,"admin", buttonName);
+        clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
     }
 
     public void clickPageActionButton(String buttonName){
-        waitForElementToBeVisibleAgent(headerControlsContainer, 8);
+        waitForElementToBeVisible(this.getCurrentDriver(), headerControlsContainer, 8);
         WebElement targetButton = pageActionButtons.stream()
                 .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
                 .findFirst().get();
-        clickElemAgent(targetButton,1,"admin", buttonName);
+        clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
     }
 
     public void clickSaveButton(){
-        clickElemAgent(saveChangesButton, 4, "admin", "Save changes");
+        clickElem(this.getCurrentDriver(), saveChangesButton,1, "Save changes");
     }
 
-    public String getCurrentAgent(){
-        return currentAgent;
-    }
 }

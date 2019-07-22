@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.chat-body")
-public class ChatBody extends AbstractUIElement {
+public class ChatBody extends AbstractUIElementDeprecated {
 
     private String scrollElement = "div.chat-body";
 
@@ -53,7 +53,7 @@ public class ChatBody extends AbstractUIElement {
                     .findFirst().get();
             return theMessage.getWrappedElement();
         } catch (NoSuchElementException e){
-            Assert.assertTrue(false, "There is no such user message: "+messageText+"");
+            Assert.fail("There is no such user message: "+messageText+"");
             return null;
         }
     }
@@ -82,7 +82,7 @@ public class ChatBody extends AbstractUIElement {
         try {
             waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
         } catch(TimeoutException e){
-            Assert.assertTrue(false, "Chat body is not visible");
+            Assert.fail("Chat body is not visible");
         }
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         // ToDo: update timeout after it is provided in System timeouts confluence page
@@ -120,7 +120,7 @@ public class ChatBody extends AbstractUIElement {
                 result =  findElemsByCSSAgent(toUserMessagesCSS).
                     stream().anyMatch(e -> e.getText().contains(userMessage));
             }catch(StaleElementReferenceException ex){
-                waitFor(200);
+                waitForDeprecated(200);
                 result =  findElemsByCSSAgent(toUserMessagesCSS).
                     stream().anyMatch(e -> e.getText().contains(userMessage));
             }

@@ -1,13 +1,13 @@
 package twitter.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import twitter.TweetsSection;
 
 @FindBy(css = "div.PermalinkOverlay-modal")
-public class OpenedTweet extends AbstractUIElement {
+public class OpenedTweet extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.PermalinkOverlay-modal div.RichEditor-scrollContainer")
     private WebElement replyInputArea;

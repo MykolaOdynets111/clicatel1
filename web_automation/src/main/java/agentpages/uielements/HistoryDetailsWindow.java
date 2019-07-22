@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.history-details")
-public class HistoryDetailsWindow extends AbstractUIElement {
+public class HistoryDetailsWindow extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.title h2")
     public WebElement chatTitle;
@@ -40,7 +40,7 @@ public class HistoryDetailsWindow extends AbstractUIElement {
                     .map(e -> e.getMessageInfo())
                     .collect(Collectors.toList());
         }catch (NoSuchElementException e1){
-            waitFor(2000);
+            waitForDeprecated(2000);
             return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
                     .map(e -> e.getMessageInfo())
                     .collect(Collectors.toList());

@@ -1,16 +1,14 @@
 package portalpages.uielements;
 
+import abstractclasses.AbstractWidget;
 import drivermanager.DriverFactory;
 import interfaces.JSHelper;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.Widget;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 
-public class IntegrationCard extends Widget implements WebActions, JSHelper {
+public class IntegrationCard extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
@@ -24,6 +22,10 @@ public class IntegrationCard extends Widget implements WebActions, JSHelper {
         super(element);
     }
 
+    public IntegrationCard setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
+    }
 
     public String getIntegrationName(){
         return baseWebElem.findElement(By.cssSelector(integrationName)).getText();
@@ -31,7 +33,7 @@ public class IntegrationCard extends Widget implements WebActions, JSHelper {
 
 
    public String getStatus(){
-       waitForElementToBeVisibleAgent(baseWebElem, 2);
+       waitForElementToBeVisible(this.getCurrentDriver(), baseWebElem, 2);
        try {
             return baseWebElem.findElement(By.cssSelector(statusButton)).getText();
         }catch (StaleElementReferenceException e){
@@ -43,11 +45,11 @@ public class IntegrationCard extends Widget implements WebActions, JSHelper {
    public void clickActionButton(){
         try {
             executeJSclick(baseWebElem.findElement(By.xpath(integrationCardButton)),
-                    DriverFactory.getAgentDriverInstance());
+                    this.getCurrentDriver());
         }catch (NoSuchElementException e){
             waitFor(700);
             executeJSclick(baseWebElem.findElement(By.xpath(integrationCardButton)),
-                    DriverFactory.getAgentDriverInstance());
+                    this.getCurrentDriver());
         }
    }
 }

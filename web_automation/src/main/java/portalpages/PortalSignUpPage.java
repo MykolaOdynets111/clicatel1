@@ -2,6 +2,7 @@ package portalpages;
 
 import apihelper.Endpoints;
 import drivermanager.DriverFactory;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -30,7 +31,17 @@ public class PortalSignUpPage extends PortalAbstractPage {
     @FindBy(css = "form[name='signupForm'] input.ng-invalid")
     private List<WebElement> requiredInputErrors;
 
+    // == Constructors == //
 
+    public PortalSignUpPage() {
+        super();
+    }
+    public PortalSignUpPage(String agent) {
+        super(agent);
+    }
+    public PortalSignUpPage(WebDriver driver) {
+        super(driver);
+    }
 
     public static PortalSignUpPage openPortalSignUpPage() {
         DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_SIGN_UP_PAGE);
@@ -38,7 +49,7 @@ public class PortalSignUpPage extends PortalAbstractPage {
     }
 
     public void signUp(String firstName, String accountName, String email, String pass){
-        waitForElementToBeVisibleAgent(fullName, 5);
+        waitForElementToBeVisible(this.getCurrentDriver(), fullName, 5);
         fullName.clear();
         fullName.sendKeys(firstName);
         accountNameInput.clear();
@@ -51,11 +62,11 @@ public class PortalSignUpPage extends PortalAbstractPage {
     }
 
     public boolean isSuccessSignUpMessageShown(){
-        return isElementShownAgent(successSignUpMessage, 20);
+        return isElementShown(this.getCurrentDriver(), successSignUpMessage, 20);
     }
 
     public boolean areRequiredErrorsShown(){
-        return  areElementsShownAgent(requiredInputErrors, 2, "admin");
+        return  areElementsShown(this.getCurrentDriver(), requiredInputErrors, 2);
     }
 
 

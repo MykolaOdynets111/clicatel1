@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.user-tickets-container")
-public class CRMTicketContainer extends AbstractUIElement {
+public class CRMTicketContainer extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.ticket-item-block")
     private List<WebElement> crmTickets;
@@ -35,7 +35,7 @@ public class CRMTicketContainer extends AbstractUIElement {
         try {
             return containerHeader.getText();
         } catch(NoSuchElementException e) {
-            Assert.assertTrue(false, "CRM ticket container is not shown");
+            Assert.fail("CRM ticket container is not shown");
         }
         return "";
     }

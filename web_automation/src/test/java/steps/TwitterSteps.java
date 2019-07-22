@@ -123,14 +123,14 @@ public class TwitterSteps {
                     }
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
-                    else openedTweet.waitFor(2000);
+                    else openedTweet.waitForDeprecated(2000);
                 } catch(StaleElementReferenceException e){
                     if(targetTweet.contains("agent")||targetTweet.contains("support")){
                         targetTweet = getCurrentConnectToAgentTweetText();
                     }
                     result = checkAgentsResponse(expectedResponse, targetTweet);
                     if(result) break;
-                    else openedTweet.waitFor(2000);
+                    else openedTweet.waitForDeprecated(2000);
                 }
             }
         Assert.assertTrue(result, "Agent response for user is not shown as comment for tweet");

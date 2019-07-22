@@ -1,8 +1,10 @@
 package portalpages.uielements;
 
-import interfaces.WebActions;
+import abstractclasses.AbstractWidget;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -11,7 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class AgentRowChatConsole extends Widget implements WebActions {
+public class AgentRowChatConsole extends AbstractWidget {
+
     private WebElement baseWebElem = this.getWrappedElement();
 
     @FindBy(css = "div.cl-chat-data-agent-status--holder span.ng-binding")
@@ -46,12 +49,17 @@ public class AgentRowChatConsole extends Widget implements WebActions {
         PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
 
+    public AgentRowChatConsole setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
+    }
+
     public String getAgentName(){
         return agentName.getText();
     }
 
    public boolean isActiveChatsIconShown(int wait){
-        return isElementShownAgent(activeChatsIcon, wait);
+        return isElementShown(this.getCurrentDriver(), activeChatsIcon, wait);
    }
 
     public int getActiveChatsNumber(){
@@ -59,13 +67,12 @@ public class AgentRowChatConsole extends Widget implements WebActions {
     }
 
     public boolean isNoActiveChatsIconShown(int wait){
-        return isElementShownAgent(noActiveChatsIcon, wait);
+        return isElementShown(this.getCurrentDriver(), noActiveChatsIcon, wait);
     }
 
     public void clickExpandButton(){
-        clickElemAgent(expandButton, 3, "admin", "Expand agent row button");
+        clickElem(this.getCurrentDriver(), expandButton, 3,"Expand agent row button");
     }
-
 
     public List<String> getChannels(){
         return channels.stream().map(e -> e.getText()).collect(Collectors.toList());

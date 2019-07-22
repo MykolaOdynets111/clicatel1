@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import org.openqa.selenium.NoSuchElementException;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 @FindBy(css = "div.chat-header")
-public class ChatHeader extends AbstractUIElement {
+public class ChatHeader extends AbstractUIElementDeprecated {
 
     @FindBy(xpath = ".//button[text()='End chat']")
     private WebElement endChatButton;
@@ -60,7 +60,7 @@ public class ChatHeader extends AbstractUIElement {
 
     public void clickEndChatButton() {
         if (!isElementShownAgent(endChatButton)) {
-            Assert.assertTrue(false, "'End chat' button is not shown.");
+            Assert.fail("'End chat' button is not shown.");
         } else {
             clickElemAgent(endChatButton, 6, "agent", "End chat button");
         }

@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import apihelper.ApiHelper;
 import interfaces.JSHelper;
 import org.openqa.selenium.Keys;
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.scrollable-roster")
-public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
+public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JSHelper{
 
     private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
 
@@ -70,7 +70,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         try {
             new ChatInLeftMenu(getTargetChat(userName)).openConversation();
         } catch(WebDriverException|NoSuchElementException e){
-            Assert.assertTrue(false, "Chat for '"+userName+"' disappears from chat desk when tries to open it.\n" +
+            Assert.fail("Chat for '"+userName+"' disappears from chat desk when tries to open it.\n" +
                     "UserID: "+ getUserNameFromLocalStorage());
         }
     }
@@ -225,7 +225,7 @@ public class LeftMenuWithChats extends AbstractUIElement implements JSHelper{
         for(int i =0; i<secondsWait; i++){
             if(size==0) break;
             else{
-                waitFor(i*1000);
+                waitForDeprecated(i*1000);
                 size = chatsList.size();
             }
         }

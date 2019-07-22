@@ -1,5 +1,6 @@
 package portalpages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.AddNewAgentWindow;
@@ -14,21 +15,35 @@ public class PortalManageAgentUsersPage extends PortalAbstractPage {
 
     private AddNewAgentWindow addNewAgentWindow;
 
+    // == Constructors == //
+
+    public PortalManageAgentUsersPage() {
+        super();
+    }
+    public PortalManageAgentUsersPage(String agent) {
+        super(agent);
+    }
+    public PortalManageAgentUsersPage(WebDriver driver) {
+        super(driver);
+    }
+
     public AddNewAgentWindow getAddNewAgentWindow(){
+        addNewAgentWindow.setCurrentDriver(this.getCurrentDriver());
         return addNewAgentWindow;
     }
 
     public PortalUserRow getTargetUserRow(String fullName){
-        waitForElementsToBeVisibleAgent(userRows, 3, "admin");
+        waitForElementsToBeVisible(this.getCurrentDriver(), userRows, 3 );
         return new PortalUserRow (
-                userRows.stream().filter(e -> new PortalUserRow(e).getAgentFullName().equals(fullName))
+                userRows.stream().filter(e -> new PortalUserRow(e).setCurrentDriver(this.getCurrentDriver())
+                        .getAgentFullName().equals(fullName))
                 .findFirst().get()
         );
     }
 
     public PortalUserEditingPage clickManageButtonForUser(String fullName){
         getTargetUserRow(fullName).clickManageButton();
-        return new PortalUserEditingPage();
+        return new PortalUserEditingPage(this.getCurrentDriver());
     }
 
     public boolean isUserShown(String username, int wait){

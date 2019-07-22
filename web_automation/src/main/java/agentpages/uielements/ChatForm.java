@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 @FindBy(css = "div.chat-form")
-public class ChatForm extends AbstractUIElement {
+public class ChatForm extends AbstractUIElementDeprecated {
 
     private String currentAgent;
 
@@ -122,7 +122,7 @@ public class ChatForm extends AbstractUIElement {
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
-            Assert.assertTrue(false, "There is a problem with agent desk page." +
+            Assert.fail("There is a problem with agent desk page." +
                     " Check if there is no blinking connection error.");
             return this;
         }
@@ -138,7 +138,7 @@ public class ChatForm extends AbstractUIElement {
         for(int i=0; i<3; i++){
             result = messageInput.getText().equals("");
             if (result) return true;
-            waitFor(1000);
+            waitForDeprecated(1000);
         }
         return result;
     }

@@ -3,19 +3,23 @@ package abstractclasses;
 import drivermanager.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 
-public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JSHelper {
+public abstract class AgentAbstractPage implements WebActionsDeprecated, ActionsHelper, JSHelper {
 
     private String agent="main agent";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
+    protected WebDriver currentDriver;
+
     public AgentAbstractPage(String agent) {
         this.agent = agent;
-        HtmlElementLoader.populatePageObject(this, DriverFactory.getDriverForAgent(agent));
+        currentDriver = DriverFactory.getDriverForAgent(agent);
+        HtmlElementLoader.populatePageObject(this, currentDriver);
     }
 
     public boolean waitForLoadingInLeftMenuToDisappear(String ordinalAgentNumber, int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
@@ -33,5 +37,9 @@ public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JS
 
     public String getCurrentAgent(){
         return agent;
+    }
+
+    public WebDriver getCurrentDriver(){
+        return this.currentDriver;
     }
 }

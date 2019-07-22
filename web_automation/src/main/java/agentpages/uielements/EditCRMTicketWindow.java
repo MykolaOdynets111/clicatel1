@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 @FindBy(xpath = "//div[text()='Edit ticket']/parent::div")
-public class EditCRMTicketWindow extends AbstractUIElement {
+public class EditCRMTicketWindow extends AbstractUIElementDeprecated {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
@@ -46,7 +46,7 @@ public class EditCRMTicketWindow extends AbstractUIElement {
     public void saveChanges() {
         clickElemAgent(edidTicketButton, 5, "main agent", "Edit CRM ticket button" );
         waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
-    waitFor(200); //Just for test
+    waitForDeprecated(200); //Just for test
     }
 
     public boolean isOpened(){

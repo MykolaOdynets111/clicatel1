@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.header")
-public class PageHeader extends AbstractUIElement {
+public class PageHeader extends AbstractUIElementDeprecated {
 
     @FindBy(css = "button#top-menu-dropdown")
     private WebElement iconWithAgentInitials;

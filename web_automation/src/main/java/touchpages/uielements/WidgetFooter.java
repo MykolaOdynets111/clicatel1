@@ -1,11 +1,11 @@
 package touchpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = "div.ctl-text-input-container ")
-public class WidgetFooter extends AbstractUIElement {
+public class WidgetFooter extends AbstractUIElementDeprecated {
 
     @FindBy(css = "textarea.ctl-text-input")
     private WebElement textInput;

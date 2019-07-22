@@ -100,12 +100,12 @@ public class FBYourPostPage extends AbstractPage {
         int loopsCounter=0;
         while(isStaleReferenceErrorThrown&loopsCounter<10){
             try {
-                waitFor(1000);
+                waitForDeprecated(1000);
                 isVerificationPassed =  makeSecondLevelResponseVerification(userMessage, expectedResponse);
                 isStaleReferenceErrorThrown=false;
             } catch(StaleElementReferenceException ex){
                 loopsCounter++;
-                waitFor(200);
+                waitForDeprecated(200);
             }
         }
         return isVerificationPassed;

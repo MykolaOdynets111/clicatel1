@@ -1,13 +1,16 @@
 package portalpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.CartPage;
 
 
 @FindBy(css = "div.header.ng-scope")
-public class PageHeader extends AbstractUIElement {
+public class PageHeader extends AbstractUIElementDeprecated {
+
+    private WebDriver currentDriver;
 
     @FindBy(css = "div[cl-tenant-feature='UPGRADE_PACKAGE||ADD_AGENT_SEATS'] button.upgrade-touch-plan-bttn")
     private WebElement upgradeButton;
@@ -33,6 +36,10 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.balance-total.ng-binding")
     private WebElement topUpBalanceSum;
 
+    public void setCurrentDriver(WebDriver driver){
+        this.currentDriver = driver;
+    }
+
     public void clickUpgradeButton(){
         waitForElementToBeClickableAgent(upgradeButton, 5, "main");
         try {
@@ -47,7 +54,7 @@ public class PageHeader extends AbstractUIElement {
         cartIcon.click();
         waitForElementToBeVisibleAgent(checkoutCartButton, 10);
         checkoutCartButton.click();
-        return new CartPage();
+        return new CartPage(this.currentDriver);
     }
 
     public String getTouchGoPlanName(){

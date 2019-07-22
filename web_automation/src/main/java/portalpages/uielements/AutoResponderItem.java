@@ -1,15 +1,17 @@
 package portalpages.uielements;
 
+import abstractclasses.AbstractWidget;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AutoResponderItem extends Widget implements WebActions, ActionsHelper, JSHelper {
+public class AutoResponderItem extends AbstractWidget {
 
     @FindBy(css = "span.automated-message-title")
     private WebElement messageTitle;
@@ -28,7 +30,11 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
 
     protected AutoResponderItem(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
+    }
+
+    public AutoResponderItem setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
     }
 
     public String getTitle(){
@@ -36,17 +42,17 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
     }
 
     public void clickCollapseIcon(){
-        clickElemAgent(collapceIcon, 1, "admin", "Collapse icon");
+        clickElem(this.getCurrentDriver(), collapceIcon, 1,"Collapse icon");
     }
 
     public void clickResetToDefaultButton(){
-        clickElemAgent(resetToDefaultButton, 1, "admin", "Reset to default button");
+        clickElem(this.getCurrentDriver(), resetToDefaultButton, 1,"Reset to default button");
     }
 
     public AutoResponderItem typeMessage(String msg) {
-        if (!msg.equals(null) || !msg.equals("")) {
+        if (msg != null || !msg.equals("")) {
             textarea.clear();
-            inputTextAgent(textarea, 5, "main agent", "Note number", msg);
+            inputText(this.getCurrentDriver(), textarea, 5, "Note number", msg);
         }
         return this;
     }
@@ -56,13 +62,11 @@ public class AutoResponderItem extends Widget implements WebActions, ActionsHelp
     }
 
     public String getMessage() {
-        waitForElementToBeVisibleAgent(textarea, 10);
-        return textarea.getAttribute("value");
+        return getAttributeFromElemAgent(this.getCurrentDriver(), textarea, 10, "Test", "value");
     }
 
     public void clickOnOff(){
-        waitForElementToBeVisibleAgent(buttonOnOff, 10);
-        buttonOnOff.click();
+        clickElem(this.getCurrentDriver(), buttonOnOff, 10, "On Off button");
     }
 
 }

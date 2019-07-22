@@ -1,6 +1,6 @@
 package facebook.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import apihelper.ApiHelper;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.TimeoutException;
@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(xpath = "//div[@class='fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent']")
-public class MessengerWindow extends AbstractUIElement {
+public class MessengerWindow extends AbstractUIElementDeprecated {
 
     private String inputFieldXPATHLocator = "//div[@role='combobox']";
     private String toUserMessage = "//span[text()='%s']//following::span[contains(text(), \"%s\")]";

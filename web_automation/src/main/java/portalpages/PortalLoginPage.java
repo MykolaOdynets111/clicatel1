@@ -4,6 +4,7 @@ import apihelper.Endpoints;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -39,16 +40,21 @@ public class PortalLoginPage extends PortalAbstractPage {
 
     PageHeader pageHeader;
 
+    // == Constructors == //
+
+    public PortalLoginPage() {
+        super();
+    }
     public PortalLoginPage(String agent) {
         super(agent);
     }
-    public PortalLoginPage() {
-        super();
+    public PortalLoginPage(WebDriver driver) {
+        super(driver);
     }
 
     public static PortalLoginPage openPortalLoginPage() {
         DriverFactory.getAgentDriverInstance().get(Endpoints.PORTAL_LOGIN_PAGE);
-        return new PortalLoginPage();
+        return new PortalLoginPage(DriverFactory.getAgentDriverInstance());
     }
 
     public PortalMainPage login(String email, String pass){
@@ -59,22 +65,22 @@ public class PortalLoginPage extends PortalAbstractPage {
             enterAdminCreds(email, pass);
         }
         waitWhileProcessing(2, 14);
-        return new PortalMainPage(this.getCurrentAgent());
+        return new PortalMainPage(this.getCurrentDriver());
     }
 
     public void enterAdminCreds(String email, String pass){
-        waitForElementToBeVisibleAgent(emailInput, 6, this.getCurrentAgent());
+        waitForElementToBeVisible(this.getCurrentDriver(), emailInput, 6);
         emailInput.sendKeys(email);
         passInput.sendKeys(pass);
         clickLogin();
     }
 
     public void clickLogin(){
-        clickElemAgent(loginButton, 1, this.currentAgent, "Login Button" );
+        clickElem(this.getCurrentDriver(), loginButton, 1, "Login Button" );
     }
 
     public boolean isMessageAboutConfirmationMailSentShown(){
-        return isElementShownAgent(confirmationEmailMessage, 15);
+        return isElementShown(this.getCurrentDriver(), confirmationEmailMessage, 15);
     }
 
     public String getMessageAboutSendingConfirmationEmail(){
@@ -86,7 +92,7 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public  boolean isLoginPageOpened(int wait){
-        return isElementShownAgent(emailInput,wait, this.getCurrentAgent());
+        return isElementShown(this.getCurrentDriver(), emailInput, wait);
     }
 
     public boolean areCreatePasswordInputsShown(int wait){
@@ -99,7 +105,7 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
 
     public String getWelcomeMessage(int wait){
-        return getTextFromElemAgent(invitationWelcomeMsg, wait, getCurrentAgent(),
+        return getTextFromElem(this.getCurrentDriver(), invitationWelcomeMsg, wait,
                 "Welcome Text in Login screen");
     }
 
@@ -110,7 +116,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         return this;
     }
 
-    public String getNewPasswordLable(){
-        return getTextFromElemAgent(setNewPasswordLabel, 4, this.getCurrentAgent(), "Set new password");
+    public String getNewPasswordLabel(){
+        return getTextFromElem(this.getCurrentDriver(), setNewPasswordLabel, 4, "Set new password");
     }
 }

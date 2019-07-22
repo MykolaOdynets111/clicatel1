@@ -1,5 +1,6 @@
 package portalpages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -18,18 +19,33 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
 
     private CreateIntegrationWindow createIntegrationWindow;
 
+    // == Constructors == //
+
+    public PortalIntegrationsPage() {
+        super();
+    }
+    public PortalIntegrationsPage(String agent) {
+        super(agent);
+    }
+    public PortalIntegrationsPage(WebDriver driver) {
+        super(driver);
+    }
+
     public CreateIntegrationWindow getCreateIntegrationWindow() {
+        createIntegrationWindow.setCurrentDriver(this.getCurrentDriver());
         return createIntegrationWindow;
     }
 
     private IntegrationRow getTargetIntegrationRow(String integrationName){
-        return integrationRows.stream().map(IntegrationRow::new).collect(Collectors.toList())
+        return integrationRows.stream().map(e -> new IntegrationRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .collect(Collectors.toList())
                 .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName.toLowerCase()))
                 .findFirst().get();
     }
 
     private IntegrationCard getTargetIntegrationCard(String integrationName){
-        return integrationCards.stream().map(IntegrationCard::new).collect(Collectors.toList())
+        return integrationCards.stream().map(e -> new IntegrationCard(e).setCurrentDriver(this.getCurrentDriver()))
+                .collect(Collectors.toList())
                 .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName.toLowerCase()))
                 .findFirst().get();
     }
@@ -38,7 +54,7 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
         try {
             getTargetIntegrationRow(integrationName).clickToggle();
         } catch(java.util.NoSuchElementException e){
-            Assert.assertTrue(false, "Toggle for managing '"+integrationName+"' integration is not shown on the page");
+            Assert.fail("Toggle for managing '"+integrationName+"' integration is not shown on the page");
         }
     }
 

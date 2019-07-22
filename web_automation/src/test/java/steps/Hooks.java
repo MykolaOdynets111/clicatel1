@@ -29,6 +29,8 @@ import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
 import steps.dotcontrol.DotControlSteps;
+import steps.portalsteps.AbstractPortalSteps;
+import steps.portalsteps.BasePortalSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
 import touchpages.pages.MainPage;
@@ -406,6 +408,7 @@ public class Hooks implements JSHelper{
         RequestSpec.clearAccessTokenForPortalUser();
         URLs.clearFinalAgentURL();
         AbstractAgentSteps.сleanAllPages();
+        AbstractPortalSteps.сleanAllPortalPages();
     }
 
     @Attachment(value = "request")

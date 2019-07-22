@@ -1,12 +1,14 @@
 package portalpages.uielements;
 
-import interfaces.WebActions;
+import abstractclasses.AbstractWidget;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
-public class IntegrationRow extends Widget implements WebActions {
+public class IntegrationRow extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
@@ -18,6 +20,11 @@ public class IntegrationRow extends Widget implements WebActions {
 
     public IntegrationRow(WebElement element) {
         super(element);
+    }
+
+    public IntegrationRow setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
     }
 
    public String getIntegrationName(){

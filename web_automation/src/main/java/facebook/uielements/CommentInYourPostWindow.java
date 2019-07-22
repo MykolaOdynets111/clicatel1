@@ -1,6 +1,6 @@
 package facebook.uielements;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.NoSuchElementException;
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class CommentInYourPostWindow extends Widget implements WebActions {
+public class CommentInYourPostWindow extends Widget implements WebActionsDeprecated {
 
     @FindBy(css = "span.UFICommentBody")
     private WebElement commentText;

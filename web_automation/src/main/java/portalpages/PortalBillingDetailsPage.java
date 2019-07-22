@@ -2,6 +2,7 @@ package portalpages;
 
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.AddPaymentMethodWindow;
@@ -40,26 +41,43 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
 
     private String removePaymentButton =  "//button[@ng-click='removeCard()']";
 
+    // == Constructors == //
+
+    public PortalBillingDetailsPage() {
+        super();
+    }
+    public PortalBillingDetailsPage(String agent) {
+        super(agent);
+    }
+    public PortalBillingDetailsPage(WebDriver driver) {
+        super(driver);
+    }
+
     public AddPaymentMethodWindow getAddPaymentMethodWindow(){
+        addPaymentMethodWindow.setCurrentDriver(this.getCurrentDriver());
         return addPaymentMethodWindow;
     }
 
     public BillingContactsDetails getBillingContactsDetails() {
+        billingContactsDetails.setCurrentDriver(this.getCurrentDriver());
         return billingContactsDetails;
     }
 
-    public TopUpBalanceWindow getTopUpBalanceWindow(){ return topUpBalanceWindow;}
+    public TopUpBalanceWindow getTopUpBalanceWindow(){
+        topUpBalanceWindow.setCurrentDriver(this.getCurrentDriver());
+        return topUpBalanceWindow;
+    }
 
     public boolean isPageOpened(int wait){
-        return isElementShownAgent(billingDetailsForm, wait);
+        return isElementShown(this.getCurrentDriver(), billingDetailsForm, wait);
     }
 
     public boolean isAddPaymentMethodButtonShown(int wait){
-        return isElementShownAgent(addPaymentMethodButton, wait);
+        return isElementShown(this.getCurrentDriver(), addPaymentMethodButton, wait);
     }
 
     public boolean isAddPaymentMethodWindowShown(int wait){
-        return isElementShownAgent(getAddPaymentMethodWindow().getWrappedElement(), wait);
+        return isElementShown(this.getCurrentDriver(), getAddPaymentMethodWindow().getWrappedElement(), wait);
     }
 
     public void clickAddPaymentButton(){
@@ -67,35 +85,31 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     }
 
     public boolean isNewPaymentAdded() {
-        waitWhileProcessing();
+        waitWhileProcessing(14, 20);
         waitForNotificationAlertToDisappear();
-        return isElementShownAgent(addedPayment, 20);
+        return isElementShown(this.getCurrentDriver(), addedPayment, 20);
     }
 
     public String getPaymentMethodDetails(){ return paymentMethodDetails.getText();}
 
     public void deletePaymentMethod(){
         managePaymentMethodButton.click();
-        waitForElementsToBeVisibleByXpathAgent(removePaymentButton, 12);
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), removePaymentButton, 12);
         try{
-            findElemByXPATHAgent(removePaymentButton).sendKeys(Keys.ENTER);
+            findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
         } catch(InvalidElementStateException e){
             waitFor(200);
-            findElemByXPATHAgent(removePaymentButton).sendKeys(Keys.ENTER);
+            findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
 
         }
-
-        //        executeJSclick(findElemByXPATHAgent(removePaymentButton), DriverFactory.getAgentDriverInstance());
-//        if(isElementShownAgent(removePaymentButton, 2)) executeJSclick(removePaymentButton, DriverFactory.getAgentDriverInstance());
-//        moveToElemAndClick(DriverFactory.getAgentDriverInstance(), removePaymentButton);
-//        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
-//        executor.executeScript("arguments[0].click();", removePaymentButton);
-        if(isElementShownAgent(removePaymentConfirmationButton, 3))removePaymentConfirmationButton.click();
+        if(isElementShown(this.getCurrentDriver(), removePaymentConfirmationButton, 3))
+            removePaymentConfirmationButton.click();
 
     }
 
     public void clickTopUPBalance(){
-        clickElemAgent(topUpBalanceButton, 5, "admin", "'Top up balance' button" );
+        clickElem(this.getCurrentDriver(), topUpBalanceButton, 5,  "'Top up balance' button" );
     }
+
 
 }

@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.NoSuchElementException;
@@ -12,7 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class AgentDeskChatMessage extends Widget implements WebActions {
+public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated {
 
     @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
     private WebElement toUserTextResponse;
@@ -62,7 +62,7 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
             waitForElementToBeVisibleAgent(messageTime, 5);
             return messageTime.getAttribute("innerText").trim();
         }catch (NoSuchElementException|TimeoutException e){
-            waitFor(500);
+            waitForDeprecated(500);
             return messageTime.getAttribute("innerText").trim();
         }
     }
@@ -89,7 +89,7 @@ public class AgentDeskChatMessage extends Widget implements WebActions {
         for(int i = 0; i < 15; i++){
             result = toUserTextResponses.stream().anyMatch(e -> e.getText().equals(expectedMessage));
             if (result) return true;
-            waitFor(500);
+            waitForDeprecated(500);
         }
         return result;
     }

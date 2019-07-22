@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -8,7 +8,7 @@ import org.testng.Assert;
 import java.util.List;
 
 @FindBy(css = "div.chat-history")
-public class ChatHistoryContainer extends AbstractUIElement {
+public class ChatHistoryContainer extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.history-item")
     private List<WebElement> chatHistoryList;
@@ -17,7 +17,7 @@ public class ChatHistoryContainer extends AbstractUIElement {
         try{
             return new ChatInActiveChatHistory(chatHistoryList.get(0));
         } catch (IndexOutOfBoundsException e){
-            Assert.assertTrue(false, "Chat history container in active chat is empty");
+            Assert.fail("Chat history container in active chat is empty");
             return null;
         }
     }

@@ -336,7 +336,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         String sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
         for (int i = 0; i < 8; i++) {
             if (!expectedSentiment.equalsIgnoreCase(sentimentFromAPI)) {
-                getAgentHomePage("main").waitFor(1000);
+                getAgentHomePage("main").waitForDeprecated(1000);
                 sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage()).getBody().jsonPath().get("data[0].attributes.sentiment");
             } else {
                 break;

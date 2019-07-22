@@ -1,13 +1,13 @@
 package twitter.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import twitter.TwitterHomePage;
 
 @FindBy(css = "div.container")
-public class TwitterHeader extends AbstractUIElement {
+public class TwitterHeader extends AbstractUIElementDeprecated {
 
     @FindBy(css = "a[data-component-context='home_nav']")
     private WebElement homeHeaderButton;

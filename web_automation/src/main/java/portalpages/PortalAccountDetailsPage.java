@@ -1,11 +1,11 @@
 package portalpages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class PortalAccountDetailsPage extends PortalAbstractPage {
 
-    // page_action_to_remove
    @FindBy(xpath = "//button[text()='Close account']")
    private WebElement closeAccountButton;
 
@@ -27,12 +27,24 @@ public class PortalAccountDetailsPage extends PortalAbstractPage {
    @FindBy(name = "password")
    private WebElement confirmationPassInput;
 
+    // == Constructors == //
+
+    public PortalAccountDetailsPage() {
+        super();
+    }
+    public PortalAccountDetailsPage(String agent) {
+        super(agent);
+    }
+    public PortalAccountDetailsPage(WebDriver driver) {
+        super(driver);
+    }
+
    public void clickCloseAccountButton(){
-       closeAccountButton.click();
+       clickElem(this.getCurrentDriver(), closeAccountButton, 1, "Close account");
    }
 
    public boolean isClosingConfirmationPopupShown(){
-       return isElementShownAgent(closeAccountButton, 6);
+       return isElementShown(this.getCurrentDriver(), closeAccountButton, 6);
    }
 
    public void confirmClosingAccount(){
@@ -40,7 +52,7 @@ public class PortalAccountDetailsPage extends PortalAbstractPage {
    }
 
    public boolean isAccountConfirmationPopupShown(){
-       return isElementShownAgent(accountConfirmationPopupHeader, 6);
+       return isElementShown(this.getCurrentDriver(), accountConfirmationPopupHeader, 6);
    }
 
    public void confirmAccount(String email, String pass){
@@ -53,6 +65,6 @@ public class PortalAccountDetailsPage extends PortalAbstractPage {
     }
 
     public boolean isAccountDetailsPageOpened(){
-       return isElementShownAgent(closeAccountButton, 5);
+       return isElementShown(this.getCurrentDriver(), closeAccountButton, 5);
     }
 }

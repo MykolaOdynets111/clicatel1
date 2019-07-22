@@ -14,13 +14,13 @@ public class AutoRespondersWindow extends BasePortalWindow {
     private List<WebElement> autoresponderItems;
 
     public AutoResponderItem getTargetAutoResponderItem(String autoresponder){
-        return autoresponderItems.stream().map(e -> new AutoResponderItem(e))
+        return autoresponderItems.stream().map(e -> new AutoResponderItem(e).setCurrentDriver(getCurrentDriver()))
                             .filter(e -> e.getTitle().contains(autoresponder))
                             .findFirst().get();
     }
 
     public void waitToBeLoaded(){
-        waitForElementToBeVisibleAgent(this.getWrappedElement(), 6);
+        waitForElementToBeVisible(this.getCurrentDriver(), this.getWrappedElement(), 6);
     }
 
     public void clickExpandArrowForMessage(String autoresponder){
@@ -29,19 +29,19 @@ public class AutoRespondersWindow extends BasePortalWindow {
 
     public void waitForAutoRespondersToLoad(){
         try {
-            waitForElementsToBeVisibleAgent(autoresponderItems, 16, "admin");
+            waitForElementsToBeVisible(this.getCurrentDriver(), autoresponderItems, 16);
         } catch (TimeoutException e){
-            Assert.assertTrue(false, "Auto responders are not loaded after 16 seconds wait");
+            Assert.fail("Auto responders are not loaded after 16 seconds wait");
         }
     }
 
     public void clickResetToDefaultForMessage(String autoresponder){
-        waitForElementsToBeVisibleAgent(autoresponderItems, 5, "admin");
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoresponderItems, 5);
         getTargetAutoResponderItem(autoresponder).clickResetToDefaultButton();
     }
 
     public void clickOnOffForMessage(String autoresponder){
-        waitForElementsToBeVisibleAgent(autoresponderItems, 5, "admin");
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoresponderItems, 5);
         getTargetAutoResponderItem(autoresponder).clickOnOff();
     }
 }

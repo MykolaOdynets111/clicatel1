@@ -1,11 +1,11 @@
 package facebook.uielements;
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import drivermanager.DriverFactory;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 @FindBy(xpath = "//div[@id='PageComposerPagelet_']")
-public class PostFeed extends AbstractUIElement {
+public class PostFeed extends AbstractUIElementDeprecated {
 
     @FindBy(xpath = "//form[@rel='async']//textarea[@name='xhpc_message_text']")
     private WebElement postArea;
@@ -33,7 +33,7 @@ public class PostFeed extends AbstractUIElement {
             postInputField.clear();
             postInputField.sendKeys(userPostText);
         }
-        waitFor(1000); //A wait for fb, because it blocs when going to fast
+        waitForDeprecated(1000); //A wait for fb, because it blocs when going to fast
         postInputField.sendKeys(Keys.CONTROL, Keys.ENTER);
     }
 
@@ -43,6 +43,7 @@ public class PostFeed extends AbstractUIElement {
             postInputField.sendKeys(Keys.ENTER);
         }
     }
+
 
 
     private void closeFBDMWindowIfOpened(){

@@ -1,9 +1,6 @@
 package portalpages;
 
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import portalpages.uielements.*;
@@ -53,7 +50,11 @@ public class PortalMainPage extends PortalAbstractPage {
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
 
+    // == Constructors == //
 
+    public PortalMainPage(WebDriver driver) {
+        super(driver);
+    }
     public PortalMainPage(String agent) {
         super(agent);
     }
@@ -62,22 +63,24 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public ConfigureTouchWindow getConfigureTouchWindow() {
+        configureTouchWindow.setCurrentDriver(this.getCurrentDriver());
         return configureTouchWindow;
     }
 
     public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
         try {
-            waitForElementToBeVisibleAgent(upgradeYourPlanWindow.getWrappedElement(), 5);
+            waitForElementToBeVisible(this.getCurrentDriver(), upgradeYourPlanWindow.getWrappedElement(), 5);
         } catch (TimeoutException | NoSuchElementException e){
-            Assert.assertTrue(false, "Upgrade window is not shown");
+            Assert.fail("Upgrade window is not shown");
         }
+        upgradeYourPlanWindow.setCurrentDriver(this.getCurrentDriver());
         return upgradeYourPlanWindow;
     }
 
 
     public LeftMenu getLeftMenu() {
-        waitForElementToBeVisibleAgent(leftMenu.getWrappedElement(), 5);
-        leftMenu.setCurrentAgent("admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
+        leftMenu.setCurrentDriver(this.getCurrentDriver());
         return leftMenu;
     }
 
@@ -100,7 +103,7 @@ public class PortalMainPage extends PortalAbstractPage {
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickPayNowButton();
-        waitWhileProcessing();
+        waitWhileProcessing(14, 20);
     }
 
     public void upgradePlanWithoutTerms(int agentSeats){
@@ -116,7 +119,7 @@ public class PortalMainPage extends PortalAbstractPage {
                 .clickNexButton()
                 .acceptTerms()
                 .clickNexButton();
-        waitWhileProcessing();
+        waitWhileProcessing(14, 20);
         confirmPaymentDetailsWindow.waitFotPaymentSummaryScreenToLoad()
                                     .clickPayNowButton();
     }
@@ -127,10 +130,10 @@ public class PortalMainPage extends PortalAbstractPage {
                 .selectAgentSeats(agentSeats)
                 .selectMonthly()
                 .clickAddToCardButton();
-        waitWhileProcessing();
+        waitWhileProcessing(14, 20);
         try {
-            waitForElementToBeVisibleByXpathAgent(addedToCartAlertXPATH, 10, "admin");
-            waitForElementToBeInVisibleByXpathAgent(addedToCartAlertXPATH, 20);
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), addedToCartAlertXPATH, 10);
+            waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),addedToCartAlertXPATH, 20);
         } catch (TimeoutException e){
 //            Assert.assertTrue(false, "Item is not added to the cart");
         }
@@ -143,7 +146,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
     public CartPage getCartPage() {
         if (cartPage==null) {
-            cartPage =  new CartPage();
+            cartPage =  new CartPage(this.getCurrentDriver());
             return cartPage;
         } else{
             return cartPage;
@@ -151,12 +154,12 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public boolean isBillingNotSetUpPopupShown(int wait){
-        return isElementShownAgent(billingNotSetUpPopupHeader, wait);
+        return isElementShown(this.getCurrentDriver(), billingNotSetUpPopupHeader, wait);
     }
 
     public PortalBillingDetailsPage clickSetupBillingButton(){
         setUpBillingButton.click();
-        return new PortalBillingDetailsPage();
+        return new PortalBillingDetailsPage(this.getCurrentDriver());
     }
 
     public void closeSetupBillingPopUpModal(){
@@ -164,22 +167,22 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public boolean isUpdatePolicyPopUpOpened(){
-        return isElementShownAgent(updatePolicyPopUp, 10);
+        return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 10);
     }
 
     public boolean isLandingPopUpOpened(){
-        return isElementShownAgent(landingPage, 10);
+        return isElementShown(this.getCurrentDriver(), landingPage, 10);
     }
 
 
     public void closeLandingPage(){
         try {
-            clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
-            clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
         }catch (WebDriverException e){
             waitFor(1000);
-            clickElemAgent(closeLandingPage, 5, "main", "Close landing popup");
-            clickElemAgent(closeLandingPageConfirmation, 5, "main", "Close landing popup confirmation");
+            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
 
         }
 
@@ -187,7 +190,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
     public boolean isPortalPageOpened(){
-        return isElementShownAgent(getPageHeader().getWrappedElement());
+        return isElementShown(this.getCurrentDriver(), getPageHeader().getWrappedElement(), 2);
     }
 
     public void closeUpdatePolicyPopup(){
@@ -195,18 +198,17 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public String getGreetingMessage(){
-        waitForElementToBeVisibleAgent(greetingMessage, 3);
-        return getTextFrom(greetingMessage);
+        return getTextFromElem(this.getCurrentDriver(), greetingMessage, 3, "Welcome message");
     }
 
-    public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShownAgent(getStartedWithTouchButton, 2);}
+    public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShown(this.getCurrentDriver(), getStartedWithTouchButton, 2);}
 
     public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
 
     public boolean isConfigureTouchWindowOpened(){
-        return isElementShownAgent(getConfigureTouchWindow().getWrappedElement());
+        return isElementShown(this.getCurrentDriver(), getConfigureTouchWindow().getWrappedElement(), 2);
     }
 
     public void clickLaunchpadButton(){
-        if(isElementShownAgent(launchpadButton,2)) launchpadButton.click();}
+        if(isElementShown(this.getCurrentDriver(), launchpadButton,2)) launchpadButton.click();}
 }

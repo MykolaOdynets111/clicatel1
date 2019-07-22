@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import datamanager.Customer360PersonalInfo;
 import drivermanager.ConfigManager;
 import org.openqa.selenium.TimeoutException;
@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 @FindBy(css = "div.user-info-container>div")
-public class Customer360Container extends AbstractUIElement {
+public class Customer360Container extends AbstractUIElementDeprecated {
 
 
     @FindBy(css = "h2.context-profile-name")
@@ -67,7 +67,7 @@ public class Customer360Container extends AbstractUIElement {
         try {
             waitForElementToBeVisibleAgent(profileNameLabel, 3, "main");
         } catch (TimeoutException e){
-            Assert.assertTrue(false, "Customer 360 details is not visible.");
+            Assert.fail("Customer 360 details is not visible.");
         }
 
         String channelUsername = "Unknown";

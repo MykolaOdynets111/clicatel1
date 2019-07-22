@@ -26,7 +26,7 @@ public class TopUpBalanceWindow extends BasePortalWindow {
     }
 
     public String getErrorWhileAddingPopup(){
-        return getTextFromElemAgent(errorInInputTopUpForm, 3, "main",
+        return getTextFromElem(this.getCurrentDriver(), errorInInputTopUpForm, 3,
                 "Error about not valid top up sum");
     }
 }

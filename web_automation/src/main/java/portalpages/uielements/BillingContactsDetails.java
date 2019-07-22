@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @FindBy(css = "form[name=billingDetailsForm]")
-public class BillingContactsDetails extends BasePortalWindow implements VerificationHelper {
+public class BillingContactsDetails extends BasePortalWindow {
 
     Faker faker = new Faker();
 
@@ -73,22 +73,22 @@ public class BillingContactsDetails extends BasePortalWindow implements Verifica
         billingInfo.put("companyName", faker.company().name());
         billingInfo.put("billingAddress", "Albania, " + city + ", " + address1 +", " + zipCode);
 
-        inputTextAgent(firstNameInput, 1, "main", "'First name' Billing details field", firstName);
-        inputTextAgent(lastNameInput, 1, "main", "'Last name' Billing details field", lastName);
-        inputTextAgent(companyNameInput, 1, "main", "'Company name' Billing details field", (String) billingInfo.get("companyName"));
-        inputTextAgent(phoneInput, 1, "main", "'Phone' Billing details field", phone);
-        inputTextAgent(emailAddressInput, 1, "main", "'Email' Billing details field", email);
-        inputTextAgent(address1Input, 1, "main", "'Address' Billing details field",address1);
-        clickElemAgent(selectCountry,1, "main", "'Select country' dropdown");
-        clickElemAgent(country,1, "main", "'Albania' country");
-        inputTextAgent(cityInput, 1, "main", "'City' Billing details field", city);
-        inputTextAgent(postalInput, 1, "main", "'Postal Code' Billing details field", zipCode);
-        clickElemAgent(selectAccount,1, "main", "'Select account' dropdown");
-        clickElemAgent(personalAccount,1, "main", "'Personal account' option");
-        clickElemAgent(selectCurrency,1, "main", "'Select currency' option");
+        inputText(getCurrentDriver(), firstNameInput, 1,  "'First name' Billing details field", firstName);
+        inputText(getCurrentDriver(), lastNameInput, 1,  "'Last name' Billing details field", lastName);
+        inputText(getCurrentDriver(), companyNameInput, 1, "'Company name' Billing details field", (String) billingInfo.get("companyName"));
+        inputText(getCurrentDriver(), phoneInput, 1, "'Phone' Billing details field", phone);
+        inputText(getCurrentDriver(), emailAddressInput, 1, "'Email' Billing details field", email);
+        inputText(getCurrentDriver(), address1Input, 1, "'Address' Billing details field",address1);
+        clickElem(getCurrentDriver(), selectCountry,1, "'Select country' dropdown");
+        clickElem(getCurrentDriver(), country,1, "'Albania' country");
+        inputText(getCurrentDriver(), cityInput, 1,"'City' Billing details field", city);
+        inputText(getCurrentDriver(), postalInput, 1, "'Postal Code' Billing details field", zipCode);
+        clickElem(getCurrentDriver(), selectAccount,1, "'Select account' dropdown");
+        clickElem(getCurrentDriver(), personalAccount,1, "'Personal account' option");
+        clickElem(getCurrentDriver(), selectCurrency,1,"'Select currency' option");
         billingInfo.put("currency", firstAvailableCurrency.getText());
-        clickElemAgent(firstAvailableCurrency,1, "main", "First 'Select currency' option");
-        clickElemAgent(saveChangesButton,1, "main", "'Save changes' button");
+        clickElem(getCurrentDriver(), firstAvailableCurrency,1,"First 'Select currency' option");
+        clickElem(getCurrentDriver(), saveChangesButton,1, "'Save changes' button");
        return billingInfo;
     }
 

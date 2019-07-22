@@ -43,18 +43,18 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     public AddPaymentMethodWindow addTestCardAsANewPayment(){
         selectPaymentBox.click();
-        waitForElementsToBeVisibleAgent(selectOptionsInDropdown, 5, "admin");
+        waitForElementsToBeVisible(this.getCurrentDriver(), selectOptionsInDropdown, 5);
         cardOption.click();
-        findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
+        findElemByCSS(this.getCurrentDriver(), cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();
-        waitForElementToBeClickableAgent(thirdMons, 2, "main");
+        waitForElementToBeClickable(this.getCurrentDriver(), thirdMons, 2);
         thirdMons.click();
         expirationYear.click();
-        waitForElementToBeClickableAgent(thirdYear, 2, "main");
+        waitForElementToBeClickable(this.getCurrentDriver(), thirdYear, 2);
         thirdYear.click();
-        findElemByCSSAgent(cardCvv).sendKeys("112");
-        findElemByCSSAgent(firstName).sendKeys("AQA");
-        findElemByCSSAgent(lastName).sendKeys("Test");
+        findElemByCSS(this.getCurrentDriver(), cardCvv).sendKeys("112");
+        findElemByCSS(this.getCurrentDriver(), firstName).sendKeys("AQA");
+        findElemByCSS(this.getCurrentDriver(), lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
         waitFor(2000);
@@ -64,22 +64,22 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void checkAllCheckboxesForAddingNewPayment(){
-        checkboxes.stream().forEach(e -> e.click());
+        checkboxes.forEach(WebElement::click);
 
     }
 
     public AddPaymentMethodWindow fillInNewCardInfo(){
         selectPaymentBox.click();
-        waitForElementToBeVisibleAgent(selectOptionsInDropdown.get(0), 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), selectOptionsInDropdown.get(0), 5);
         cardOption.click();
-        findElemByCSSAgent(cardNumber).sendKeys("4111111111111111");
+        findElemByCSS(this.getCurrentDriver(), cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();
         thirdMons.click();
         expirationYear.click();
         thirdYear.click();
-        findElemByCSSAgent(cardCvv).sendKeys("112");
-        findElemByCSSAgent(firstName).sendKeys("AQA");
-        findElemByCSSAgent(lastName).sendKeys("Test");
+        findElemByCSS(this.getCurrentDriver(), cardCvv).sendKeys("112");
+        findElemByCSS(this.getCurrentDriver(), firstName).sendKeys("AQA");
+        findElemByCSS(this.getCurrentDriver(), lastName).sendKeys("Test");
         return this;
     }
 
@@ -88,13 +88,11 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void clickNextButton(){
-//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
         executeAngularClick(DriverFactory.getAgentDriverInstance(), nextButton);
     }
 
     public void clickAddPaymentButton(){
-//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
-        waitForElementToBeClickableAgent(primaryBindingButton, 15, "admin");
+        waitForElementToBeClickable(this.getCurrentDriver(), primaryBindingButton, 15);
         waitFor(2000);
         executeAngularClick(DriverFactory.getAgentDriverInstance(), primaryBindingButton);
     }
@@ -107,8 +105,8 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     public void waitForAddingNewPaymentConfirmationPopup(){
         try {
-            waitForElementToBeVisibleByXpathAgent(paymentAddedAlert, 15);
-            waitForElementToBeInVisibleByXpathAgent(paymentAddedAlert, 5);
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), paymentAddedAlert, 15);
+            waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), paymentAddedAlert, 5);
         }catch(TimeoutException e){
             // nothing to do 'cause it were stabilizing waits before continuing
         }

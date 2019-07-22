@@ -3,7 +3,7 @@ package agentpages.uielements;
 import apihelper.ApiHelperTie;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
 
-public class ChatInLeftMenu extends Widget implements WebActions, ActionsHelper, JSHelper {
+public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, ActionsHelper, JSHelper {
 
     @FindBy(css = "div.profile-img")
     private WebElement userIcon;

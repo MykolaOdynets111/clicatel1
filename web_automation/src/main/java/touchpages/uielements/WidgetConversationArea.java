@@ -1,10 +1,10 @@
 package touchpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.ctl-conversation-area")
-public class WidgetConversationArea extends AbstractUIElement implements WebActions{
+public class WidgetConversationArea extends AbstractUIElementDeprecated implements WebActionsDeprecated {
 
     @FindBy(css = "li.ctl-chat-message-container.message-to")
     private WebElement salutationElement;
@@ -41,8 +41,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
             FromUserMessage theMessage = listWithUserMessages.get(listWithUserMessages.size()-1);
             return theMessage.getWrappedElement();
         }catch (java.util.NoSuchElementException|ArrayIndexOutOfBoundsException e1){
-            Assert.assertTrue(false,
-                    "Expected user message \""+messageText+"\" is not shown in widget conversation area");
+            Assert.fail("Expected user message \""+messageText+"\" is not shown in widget conversation area");
             return null;
         }
     }
@@ -97,8 +96,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
         for (String button : buttons) {
             result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
             if(!result){
-                Assert.assertTrue(false,
-                        "Button '"+button+"' is not shown in the card on '"+userMessageText+"' user message");
+                Assert.fail("Button '"+button+"' is not shown in the card on '"+userMessageText+"' user message");
             }
         }
         return result;
@@ -141,7 +139,7 @@ public class WidgetConversationArea extends AbstractUIElement implements WebActi
                 findElemByXPATH(String.format(targetTextInConversationArea, text));
                 return true;
             } catch (NoSuchElementException e){
-                waitFor(500);
+                waitForDeprecated(500);
             }
         }
         return false;

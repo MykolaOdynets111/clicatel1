@@ -39,19 +39,22 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     private String billingContact = "form[name='form.cartPaymentDetails']";
 
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
-        waitForElementToBeVisibleByXpathAgent(String.format(paymentMethodXpath, payment), 8);
-        findElemByXPATHAgent(String.format(paymentMethodXpath, payment)).click();
+        String paymentMethod = String.format(paymentMethodXpath, payment);
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), paymentMethod, 8);
+        clickHoldRelease(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), paymentMethod),
+                3, "Add Credit / Debit Card");
+//        findElemByXPATH(this.getCurrentDriver(), paymentMethod).click();
         return this;
     }
 
     public ConfirmPaymentDetailsWindow clickSelectPaymentField(){
-        waitForElementToBeVisibleAgent(selectPaymentBox, 5);
+        waitForElementToBeVisible(this.getCurrentDriver(), selectPaymentBox, 5);
         selectPaymentBox.click();
-        if(!isElementShownAgentByCSS(choisesGroup, 5, "admin")){
+        if(!isElementShownByCSS(this.getCurrentDriver(), choisesGroup, 5)){
             selectPaymentBox.click();
         }
         try {
-            waitForElementToBeVisibleByCssAgent(choisesGroup, 9);
+            waitForElementToBeVisibleByCss(this.getCurrentDriver(), choisesGroup, 9);
         } catch(TimeoutException e){
             Assert.fail("Incorrect screen was shown after clicking select payment box \n " +
                     "Please check the screenshot");
@@ -60,40 +63,37 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     }
 
     public boolean isSelectPaymentShown(){
-        return isElementShownAgent(paymentethodWindowHeader, 5);
+        return isElementShown(this.getCurrentDriver(), paymentethodWindowHeader, 5);
     }
     
     public ConfirmPaymentDetailsWindow clickNexButton(){
         waitFor(500);
-        waitForElementToBeClickableAgent(nextButton, 15, "admin");
-        clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+        waitForElementToBeClickable(this.getCurrentDriver(), nextButton, 15);
+        clickHoldRelease(this.getCurrentDriver(), nextButton, 2, "Next button");
         return this;
     }
 
     public ConfirmPaymentDetailsWindow clickNexButtonOnDetailsTab(){
         waitFor(500);
-        waitForElementToBeClickableAgent(nextButton, 15, "admin");
-        clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
+        clickHoldRelease(this.getCurrentDriver(), nextButton, 15, "Next Button");
         try {
-            waitForElementToBeInvisibleAgent(cartPaymentDetailsForm, 3);
+            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), billingContact, 3);
         }catch (TimeoutException e){
-            clickHoldRelease(DriverFactory.getAgentDriverInstance(), nextButton);
-
+            clickHoldRelease(this.getCurrentDriver(), nextButton, 2, "Next Button");
         }
         return this;
     }
 
     public ConfirmPaymentDetailsWindow clickPayNowButton(){
-//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
-        waitForElementToBeClickableAgent(primaryBindingButton, 15, "admin");
-        clickHoldRelease(DriverFactory.getAgentDriverInstance(), primaryBindingButton);
+        waitForElementToBeClickable(this.getCurrentDriver(), primaryBindingButton, 15);
+        clickHoldRelease(this.getCurrentDriver(), primaryBindingButton, 1, "Primary button");
         return this;
     }
 
     public ConfirmPaymentDetailsWindow acceptTerms(){
         try {
-            waitForElementsToBeVisibleByCssAgent(acceptTermsCheckboxCSS, 7);
-            findElemsByCSSAgent(acceptTermsCheckboxCSS).forEach(WebElement::click);
+            waitForElementsToBeVisibleByCss(this.getCurrentDriver(), acceptTermsCheckboxCSS, 7);
+            findElemsByCSS(this.getCurrentDriver(), acceptTermsCheckboxCSS).forEach(WebElement::click);
         } catch(TimeoutException e){
 
         }
@@ -102,14 +102,14 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     }
 
     public ConfirmPaymentDetailsWindow waitFotPaymentSummaryScreenToLoad(){
-        waitForElementsToBeVisibleByCssAgent(paymentSummaryScreenSCC, 10);
+        waitForElementsToBeVisibleByCss(this.getCurrentDriver(), paymentSummaryScreenSCC, 10);
         return this;
     }
 
     public String getSuccessMessageMessage(){
         try{
-            waitForElementsToBeVisibleByCssAgent(paymentSuccessfulMessageCSS, 10);
-            return findElemByCSSAgent(paymentSuccessfulMessageCSS).getText();
+            waitForElementsToBeVisibleByCss(this.getCurrentDriver(), paymentSuccessfulMessageCSS, 10);
+            return findElemByCSS(this.getCurrentDriver(), paymentSuccessfulMessageCSS).getText();
         } catch (TimeoutException |NoSuchElementException e){
             return "no success message is shown";
         }
@@ -117,28 +117,29 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     public String getTestVisaCardToPayDetails(){
         clickSelectPaymentField();
-        return findElemByXPATHAgent(String.format(paymentMethodXpath, "VISA")).getText();
+        return findElemByXPATH(this.getCurrentDriver(), String.format(paymentMethodXpath, "VISA")).getText();
     }
 
-    public boolean isPaymentOptionshown(String option){
-        return isElementShownAgentByXpath(String.format(paymentMethodXpath, option), 4, "admin");
+    public boolean isPaymentOptionShown(String option){
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(paymentMethodXpath, option), 4);
     }
 
     public boolean isPaymentReviewTabOpened(){
-        return isElementShownAgentByCSS(totalOrderSum, 12, "admin");
+        return isElementShownByCSS(this.getCurrentDriver(), totalOrderSum, 12);
     }
 
     public void closeWindow(){
-        executeJSclick(findElemByCSSAgent(closeWindowButton), DriverFactory.getAgentDriverInstance());
-        if(isElementShownAgentByXpath(confirmationButton, 2, "admin")) findElemByXPATHAgent(confirmationButton).click();
+        executeJSclick(findElemByCSS(this.getCurrentDriver(), closeWindowButton), DriverFactory.getAgentDriverInstance());
+        if(isElementShownByXpath(this.getCurrentDriver(), confirmationButton, 2))
+            findElemByXPATH(this.getCurrentDriver(), confirmationButton).click();
     }
 
-    public boolean isPaymnentSummaryTabOPened(){
-        return isElementShownAgentByXpath(termsAndConditions, 1, "admin");
+    public boolean isPaymentSummaryTabOpened(){
+        return isElementShownByXpath(this.getCurrentDriver(), termsAndConditions, 1);
     }
 
     public boolean isBillingContactShown(){
-        return isElementShownAgentByCSS(billingContact, 3, "admin");
+        return isElementShownByCSS(this.getCurrentDriver(), billingContact, 3);
     }
 
 }

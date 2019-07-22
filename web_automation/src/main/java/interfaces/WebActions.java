@@ -7,7 +7,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,340 +27,240 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default void click(WebElement element){
-        waitForElementToBeClickable(element).click();
-    }
+    // ==================================== Elements Actions ======================================= //
 
-    default void clickElemAgent(WebElement element, int time, String agent, String buttonName){
+
+    default void clickElem(WebDriver driver, WebElement element, int wait, String elemName){
         try {
-            waitForElementToBeClickableAgent(element, time, agent)
-            .click();
+            waitForElementToBeClickable(driver, element, wait).click();
         } catch (TimeoutException|NoSuchElementException e){
-            Assert.assertTrue(false, "Cannot click '"+buttonName+"' because button is not clickable.");
+            Assert.fail("Cannot click '" + elemName + "' because button is not clickable.");
         }
     }
 
-    default String getTextFromElemAgent(WebElement element, int time, String agent, String elemName){
+    default void clickHoldRelease(WebDriver driver, WebElement element, int wait, String elemName){
         try {
-            waitForElementToBeVisibleAgent(element, time, agent);
+            waitForElementToBeClickable(driver, element, wait);
+            Actions actions = new Actions(driver);
+            actions.clickAndHold(element).release().perform();
+        }catch (TimeoutException|NoSuchElementException e){
+            Assert.fail("Cannot click '" + elemName + "' because button is not clickable.");
+        }
+    }
+
+    default void pressEnterForWebElem(WebDriver driver, WebElement element, int wait, String elemName){
+        try {
+            waitForElementToBeClickable(driver, element, wait).sendKeys(Keys.ENTER);
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.fail("Cannot press enter for '" + elemName + "' because button is not clickable.");
+        }
+    }
+
+    default String getTextFromElem(WebDriver driver, WebElement element, int wait, String elemName){
+        try {
+            waitForElementToBeVisible(driver, element, wait);
             return element.getText();
         } catch (TimeoutException|NoSuchElementException e){
-            Assert.assertTrue(false, "Cannot get text from  '"+elemName+"' because element is not visible.");
+            Assert.fail("Cannot get text from  '" + elemName + "' because element is not visible.");
             return "no text elem";
         }
     }
 
-    default String getAttributeFromElemAgent(WebElement element, String attribute, int time, String agent, String elemName){
+    default String getAttributeFromElemAgent(WebDriver driver, WebElement element, int wait,
+                                             String elemName, String attribute){
         try {
-            waitForElementToBeVisibleAgent(element, time, agent);
+            waitForElementToBeVisible(driver, element, wait);
             return element.getAttribute(attribute);
         } catch (TimeoutException|NoSuchElementException e){
-            Assert.assertTrue(false, "Cannot get text from  '"+elemName+"' because element is not visible.");
+            Assert.fail("Cannot get '" + attribute + "' attribute from  '"+elemName+"' because element is not visible.");
             return "no text elem";
         }
     }
 
-    default void clickOnElementFromListByText(List<WebElement> elements, String text){
-        waitForElementsToBeClickable(elements).stream().filter(e -> e.getText().toUpperCase().equals(text.toUpperCase())).findFirst().get().click();
+    default void clickOnElementFromListByText(WebDriver driver, List<WebElement> elements, int wait, String text){
+        waitForElementsToBeClickable(driver, elements, wait)
+                .stream().filter(e -> e.getText().toUpperCase().equals(text.toUpperCase()))
+                .findFirst().get().click();
     }
 
-    default void inputText(WebElement element, String text){
+    default void inputText(WebDriver driver, WebElement element, int wait, String fieldName, String text){
         try {
-            waitForElementToBeClickable(element).clear();
+            waitForElementToBeClickable(driver, element, wait).clear();
             element.sendKeys(text);
         } catch (TimeoutException e){
-            Assert.assertTrue(false, "Cannot insert text '"+text+"' because input is not clickable.");
+            Assert.fail("Cannot insert text in '" + fieldName + "' because input is not clickable.");
         }
 
     }
 
-    default void inputTextAgent(WebElement element, int time, String agent, String fieldName,String text ){
-        try {
-            waitForElementToBeClickableAgent(element, time, agent)
-            .sendKeys(text);
-        } catch (TimeoutException|NoSuchElementException e){
-            Assert.assertTrue(false, "Cannot insert text in '"+fieldName+"' because input is not clickable.");
-        }
 
-    }
+    // ============================== Elements State Verification ================================== //
 
-    default boolean areElementsShown(List<WebElement> elements){
+    default boolean areElementsShown(WebDriver driver, List<WebElement> elements, int wait){
         try {
-            return waitForElementsToBeVisible(elements, 5).size()>0;
+            return waitForElementsToBeVisible(driver, elements, wait).size()>0;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
 
-    default boolean areElementsShownAgent(List<WebElement> elements, int time, String agent){
+    default boolean isElementShown(WebDriver driver, WebElement element, int wait){
         try {
-            return waitForElementsToBeVisibleAgent(elements, time, agent).size()>0;
+            return waitForElementToBeVisible(driver, element, wait).isDisplayed();
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
 
-    default boolean isElementShown(WebElement element){
+    default boolean isElementShownByXpath(WebDriver driver, String xpath, int wait){
         try {
-            return waitForElementToBeVisible(element, 5).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementShown(WebElement element, int wait){
-        try {
-            return waitForElementToBeVisible(element, wait).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementsExistsInDOM(String xpath, int time){
-        try {
-            waitForElementsToBePresentByXpathAgent(xpath, time);
+            waitForElementToBeVisibleByXpath(driver, xpath, wait);
             return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
 
-
-    default boolean isElementExistsInDOMAgentCss(String css, int time, String agent){
+    default boolean isElementShownByCSS(WebDriver driver, String css, int wait){
         try {
-            waitForElementToBePresentByCssAgent(css, time, agent);
-            return true;
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementShownByXpath(String xpath, int wait){
-        try {
-            waitForElementToBeVisibleByXpath(xpath, wait);
-            return true;
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementShownAgent(WebElement element){
-        try {
-            return waitForElementToBeVisibleAgent(element, 5).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementShownAgent(WebElement element, int wait){
-        try {
-            return waitForElementToBeVisibleAgent(element, wait).isDisplayed();
-        } catch (TimeoutException|NoSuchElementException|NoSuchWindowException|NullPointerException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementShownAgent(WebElement element, int wait, String agent){
-        try {
-            return waitForElementToBeVisibleAgent(element, wait, agent).isDisplayed();
-        } catch (WebDriverException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementShownAgentByXpath(String xpath, int wait, String agent){
-        try {
-            waitForElementToBeVisibleByXpathAgent(xpath, wait, agent);
+            waitForElementToBeVisibleByCss(driver, css, wait);
             return true;
         } catch (WebDriverException e) {
             return false;
         }
     }
 
-    default boolean isElementNotShownAgentByCSS(String css, int wait){
+    default boolean isElementsExistsInDOMXpath(WebDriver driver, String xpath, int time){
         try {
-            waitForElementToBeInVisibleByCssAgent(css, wait);
+            waitForElementsToBePresentByXpath(driver, xpath, time);
             return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
 
-    default boolean isElementShownAgentByCSS(String css, int wait, String agent){
+    default boolean isElementExistsInDOMCss(WebDriver driver, String css, int wait){
         try {
-            waitForElementToBeVisibleByCssAgent(css, wait, agent);
-            return true;
-        } catch (WebDriverException e) {
-            return false;
-        }
-    }
-
-
-    default boolean isElementEnabledAgent(WebElement element, int wait, String agent){
-        try {
-            return waitForElementToBeClickableAgent(element, wait, agent).isEnabled();
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
-    default boolean isElementNotShown(WebElement element, int wait){
-        try {
-            waitForElementToBeInvisibleWithNoSuchElementException(element, wait);
-            return true;
-        } catch (TimeoutException e) {
-            try {
-                return element.isDisplayed();
-            } catch(NoSuchElementException e1) {
-                return true;
-            }
-        }
-    }
-
-    default boolean isElementNotShownAgent(WebElement element, int wait){
-        try {
-            waitForElementToBeInvisibleAgent(element, wait);
+            waitForElementToBePresentByCss(driver, css, wait);
             return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
     }
 
-    default boolean isElementNotShownAgent(WebElement element, int wait, String agent){
+    default boolean isElementExistsInDOMXpath(WebDriver driver, String xpath, int wait){
         try {
-            waitForElementToBeInvisibleWithNoSuchElementExceptionAgent(element, wait, agent);
+            waitForElementToBePresentByXpath(driver, xpath, wait);
             return true;
-        } catch (TimeoutException e) {
-            try {
-                return !element.isDisplayed();
-            } catch(NoSuchElementException e1) {
-                return true;
-            }
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
         }
     }
 
-
-    default String getTextFrom(WebElement elem) {
-        try{
-            String text = elem.getText();
-            if(text.isEmpty()) {
-                waitFor(200);
-                text = elem.getText();
-            }
-            return text;
-        } catch (NoSuchElementException e) {
-            return "no element to get text from";
-        }
-    }
-
-    default WebElement findElemByXPATH(String xpath){
-        return DriverFactory.getTouchDriverInstance().findElement(By.xpath(xpath));
-    }
-
-
-    default WebElement findElemByCSS(String css){
-        return DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(css));
-    }
-
-    default List<WebElement> findElemntsByCSS(String css) {
-        return DriverFactory.getTouchDriverInstance().findElements(By.cssSelector(css));
-    }
-
-    default WebElement findElemByXPATHAgent(String xpath){
-        return DriverFactory.getAgentDriverInstance().findElement(By.xpath(xpath));
-    }
-
-    default WebElement findElemByXPATHAgent(String xpath, String agent){
-        return DriverFactory.getDriverForAgent(agent).findElement(By.xpath(xpath));
-    }
-
-    default WebElement findElemByCSSAgent(String css){
-        return DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(css));
-    }
-
-    default WebElement findElemByCSSAgent(String css, String agent){
-        return DriverFactory.getDriverForAgent(agent).findElement(By.cssSelector(css));
-    }
-
-    default List<WebElement> findElemsByXPATH(String xpath){
-        return DriverFactory.getTouchDriverInstance().findElements(By.xpath(xpath));
-    }
-
-    default List<WebElement> findElemsByCSSAgent(String css){
-        return DriverFactory.getAgentDriverInstance().findElements(By.cssSelector(css));
-    }
-
-    default List<WebElement> findElemsByCSS(String css){
-        return DriverFactory.getTouchDriverInstance().findElements(By.cssSelector(css));
-    }
-
-    default List<WebElement> findElemsByXPATHAgent(String xpath){
-        return DriverFactory.getAgentDriverInstance().findElements(By.xpath(xpath));
-    }
-
-    default void pressEnterForWebElem(WebElement elem){
-        elem.sendKeys(Keys.ENTER);
-    }
-
-    default void scrollUpWidget(int scrollPosition){
-        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
-        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
-        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
-                DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(widgetScroller)));
-    }
-
-    default void clickHoldRelease(WebDriver driver, WebElement elem){
-        Actions actions = new Actions(driver);
-        actions.clickAndHold(elem).release().perform();
-    }
-
-    /**
-     * Verify if scren of element equals image (deviation 5%).
-     *
-     * @param  element   WebElement for screen shot
-     * @param  image   File for comparing with scren shot
-     * @param agent
-     * @return         Boolean: true or false
-     * @throws Exception
-     */
-    default boolean isWebElementEqualsImage(WebElement element, File image, String agent){
-        boolean result=false;
-        Browser browser = new Browser(DriverFactory.getDriverForAgent(agent),true);
-        Double dpr= browser.getDevicePixelRatio();
+    default boolean isElementNotShownAgentByCSS(WebDriver driver, String css, int wait){
         try {
-           if (!image.canRead()) {
-                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent),element,true ).getImage();
-                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
-                File newFile = new File(image.getPath());
-                newFile.getParentFile().mkdirs();
-                new FileWriter(newFile);
-                BufferedImage buffered = imageToBufferedImage(newimg);
-                ImageIO.write(buffered,"PNG",newFile);
-                System.out.println("!!!!!! File was created !!!!!!!!! \n");
-            }
-            BufferedImage expImage = ImageIO.read(image);
-            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
-            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element, true).withName("Actual").equals(expectedImage, 0.07);
-            if (!result) {
-                Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
-            }
+            waitForElementToBeInVisibleByCss(driver, css, wait);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
         }
-        catch(Exception e) {
-            e.printStackTrace();
-            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
-        }
-        return result;
     }
 
-     static  BufferedImage imageToBufferedImage(Image im) {
-        BufferedImage bi = new BufferedImage (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
-        Graphics bg = bi.getGraphics();
-        bg.drawImage(im, 0, 0, null);
-        bg.dispose();
-        return bi;
+    default boolean isElementNotShownAgent(WebDriver driver, WebElement element, int wait){
+        try {
+            waitForElementToBeInvisible(driver, element, wait);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
     }
 
-    default void createElementImage(WebElement element,String name, String path){
-            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
+    default boolean isElementEnabledAgent(WebDriver driver, WebElement element, int wait){
+        try {
+            return waitForElementToBeClickable(driver, element, wait).isEnabled();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
+
+
+    // =============================== Elements Locating  by raw locators =========================== //
+
+    default List<WebElement> findElemsByXPATH(WebDriver driver, String xpath){
+        return driver.findElements(By.xpath(xpath));
+    }
+
+    default WebElement findElemByXPATH(WebDriver driver, String xpath){
+        return driver.findElement(By.xpath(xpath));
+    }
+
+    default List<WebElement> findElemntsByCSS(WebDriver driver, String css) {
+        return driver.findElements(By.cssSelector(css));
+    }
+
+    default WebElement findElemByCSS(WebDriver driver, String css){
+        return driver.findElement(By.cssSelector(css));
+    }
+
+    default List<WebElement> findElemsByCSS(WebDriver driver, String css){
+        return driver.findElements(By.cssSelector(css));
+    }
+
+
+//    default void scrollUpWidget(int scrollPosition){
+//        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
+//        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
+//        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
+//                DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(widgetScroller)));
+//    }
+
+//    /**
+//     * Verify if scren of element equals image (deviation 5%).
+//     *
+//     * @param  element   WebElement for screen shot
+//     * @param  image   File for comparing with scren shot
+//     * @param agent
+//     * @return         Boolean: true or false
+//     * @throws Exception
+//     */
+//    default boolean isWebElementEqualsImage(WebElement element, File image, String agent){
+//        boolean result=false;
+//        Browser browser = new Browser(DriverFactory.getDriverForAgent(agent),true);
+//        Double dpr= browser.getDevicePixelRatio();
+//        try {
+//           if (!image.canRead()) {
+//                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent),element,true ).getImage();
+//                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+//                File newFile = new File(image.getPath());
+//                newFile.getParentFile().mkdirs();
+//                new FileWriter(newFile);
+//                BufferedImage buffered = imageToBufferedImage(newimg);
+//                ImageIO.write(buffered,"PNG",newFile);
+//                System.out.println("!!!!!! File was created !!!!!!!!! \n");
+//            }
+//            BufferedImage expImage = ImageIO.read(image);
+//            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
+//            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element, true).withName("Actual").equals(expectedImage, 0.07);
+//            if (!result) {
+//                Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
+//            }
+//        }
+//        catch(Exception e) {
+//            e.printStackTrace();
+//            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
+//        }
+//        return result;
+//    }
+//
+//     static  BufferedImage imageToBufferedImage(Image im) {
+//        BufferedImage bi = new BufferedImage (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
+//        Graphics bg = bi.getGraphics();
+//        bg.drawImage(im, 0, 0, null);
+//        bg.dispose();
+//        return bi;
+//    }
+//
+//    default void createElementImage(WebElement element, String name, String path){
+//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
+//    }
 }

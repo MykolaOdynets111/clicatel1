@@ -1,11 +1,11 @@
 package touchpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = "div.ctl-chat-area-header-container")
-public class WidgetHeader extends AbstractUIElement {
+public class WidgetHeader extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.ctl-chat-agent-name")
     private WebElement tenantName;

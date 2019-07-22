@@ -11,7 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @FindBy(css = "div.integration-content.cl-content-area.mod-portal.mod-small-cards.ng-valid.ng-valid-required.ng-valid-maxlength.ng-dirty.ng-valid-parse")
 public class AboutYourBusinessWindow extends BasePortalWindow {
 
-
     @FindBy(name = "companyName")
     private WebElement companyName;
 
@@ -67,13 +66,13 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     }
 
     public void setCompanyName(String name){
-        findElemByXPATHAgent(companyNameXpath).clear();
-        findElemByXPATHAgent(companyNameXpath).sendKeys(name);
+        findElemByXPATH(this.getCurrentDriver(), companyNameXpath).clear();
+        findElemByXPATH(this.getCurrentDriver(), companyNameXpath).sendKeys(name);
     }
 
     public void setCompanyCity(String name){
-        findElemByXPATHAgent(companyCityXpath).clear();
-        findElemByXPATHAgent(companyCityXpath).sendKeys(name);
+        findElemByXPATH(this.getCurrentDriver(), companyCityXpath).clear();
+        findElemByXPATH(this.getCurrentDriver(), companyCityXpath).sendKeys(name);
     }
 
     public String selectRandomIndastry(){
@@ -91,23 +90,23 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     }
 
     public String uncheckTodayDay(){
-        clickElemAgent(arrowSupportHours,2,"main","Arrow to open support hours");
+        clickElem(this.getCurrentDriver(), arrowSupportHours,2,"Arrow to open support hours");
         SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
         String nameOfDay = simpleDateformat.format(new Date());
-        WebElement dayToUncheck = findElemByXPATHAgent(String.format(choiseSupportDay,nameOfDay),"main");
-        clickElemAgent(dayToUncheck,2,"main","Today day");
-        clickElemAgent(addSupportHoursButton,2,"main","Add button");
+        WebElement dayToUncheck = findElemByXPATH(this.getCurrentDriver(), String.format(choiseSupportDay,nameOfDay));
+        clickElem(this.getCurrentDriver(), dayToUncheck,2,"Today day");
+        clickElem(this.getCurrentDriver(), addSupportHoursButton,2,"Add button");
         return nameOfDay;
     }
 
     public boolean isUncheckTodayDay(String nameOfDay){
-        clickElemAgent(arrowSupportHours,3,"main","Arrow to open support hours");
+        clickElem(this.getCurrentDriver(), arrowSupportHours,3,"Arrow to open support hours");
         String isSelected = "/span[contains(@class, 'uncheck')]";
-        return isElementsExistsInDOM(String.format(choiseSupportDay,nameOfDay)+ isSelected,5);
+        return isElementExistsInDOMXpath(this.getCurrentDriver(),String.format(choiseSupportDay,nameOfDay)+ isSelected,5);
     }
 
     public void openSpecificSupportHours(){
-        clickElemAgent(specificSupportHours,2,"main","Specific Support Hours");
+        clickElem(this.getCurrentDriver(), specificSupportHours,2,"Specific Support Hours");
     }
 
 }

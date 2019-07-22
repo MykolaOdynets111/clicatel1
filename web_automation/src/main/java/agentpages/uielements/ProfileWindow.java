@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(xpath = "//div[@class='profile-modal-header modal-header']/parent::div")
-public class ProfileWindow extends AbstractUIElement {
+public class ProfileWindow extends AbstractUIElementDeprecated {
 
     @FindBy(css = "ul.groups-list li.groups-item")
     private List<WebElement> listOfElementsWithRoles;
@@ -25,7 +25,7 @@ public class ProfileWindow extends AbstractUIElement {
 
     public List<String> getListOfRoles(){
         if(listOfElementsWithRoles.size()==0){
-            Assert.assertTrue(false, "There are no roles listed in profile window.");
+            Assert.fail("There are no roles listed in profile window.");
         }
         return listOfElementsWithRoles.stream().map(e -> e.getText().toUpperCase()).collect(Collectors.toList());
     }

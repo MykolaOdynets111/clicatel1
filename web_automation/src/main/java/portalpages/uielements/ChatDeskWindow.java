@@ -26,41 +26,41 @@ public class ChatDeskWindow extends BasePortalWindow {
     private WebElement toggleAutoScheduler;
 
     public void setChatsAvailable(String chats){
-        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
         chatsAvailable.clear();
         chatsAvailable.sendKeys(chats);
     }
 
     public String getChatsAvailable(){
-        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
         return chatsAvailable.getAttribute("value");
     }
 
     public boolean isErrorMessageShown(){
-       return isElementShownAgent(chatsErrorMessage,5,"admin");
+       return isElementShown(this.getCurrentDriver(), chatsErrorMessage,5);
     }
 
     public void clickChatsPlus(int times){
-        waitForElementToBeVisibleAgent(chatsPlus, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), chatsPlus, 5);
         for (int i = 0; i<times;i++){
         chatsPlus.click();
         }
-        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
     }
 
     public void clickChatsMinus(int times){
-        waitForElementToBeVisibleAgent(chatsMinus, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), chatsMinus, 5);
         for (int i = 0; i<times;i++){
             chatsMinus.click();
         }
-        waitForElementToBeVisibleAgent(chatsAvailable, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
     }
 
     public void clickOnOffChatConclusion(){
-        clickElemAgent(toggleChatConclusion, 5, "admin", "Chat conclusion toggle");
+        clickElem(this.getCurrentDriver(), toggleChatConclusion, 5, "Chat conclusion toggle");
     }
 
     public void clickOnOffAutoScheduler(){
-        clickElemAgent(toggleAutoScheduler, 5, "admin", "Auto scheduler toggle");
+        clickElem(this.getCurrentDriver(), toggleAutoScheduler, 5,"Auto scheduler toggle");
     }
 }

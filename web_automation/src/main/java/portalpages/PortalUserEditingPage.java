@@ -2,6 +2,7 @@ package portalpages;
 
 import drivermanager.DriverFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebElement;
@@ -31,7 +32,6 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     @FindBy(css = "form[name='userForm'] div[ng-if='profileIcon']>img")
     private WebElement profileImage;
 
-    //
     @FindBy(xpath = "//button[text()='Edit user roles']")
     private WebElement editUserButton;
 
@@ -56,17 +56,29 @@ public class PortalUserEditingPage extends PortalAbstractPage {
 
     private String saveButtonXPATH = "//button[text()='Save'][not(@id='integration-save')]";
 
+    // == Constructors == //
+
+    public PortalUserEditingPage() {
+        super();
+    }
+    public PortalUserEditingPage(String agent) {
+        super(agent);
+    }
+    public PortalUserEditingPage(WebDriver driver) {
+        super(driver);
+    }
+
     public EditUserRolesWindow getEditUserRolesWindow() {
+        editUserRolesWindow.setCurrentDriver(this.getCurrentDriver());
         return editUserRolesWindow;
     }
 
     public void clickUploadPhotoButton(){
-        waitForElementToBeVisibleAgent(uploadPhoto, 8, "main");
-        uploadPhoto.click();
+        clickElem(this.getCurrentDriver(), uploadPhoto, 8, "Upload photo");
     }
 
     public void uploadPhoto(String photoPath){
-        waitForElementToBeVisibleAgent(uploadPhotoWindow, 8, "main");
+        waitForElementToBeVisible(this.getCurrentDriver(), uploadPhotoWindow, 8);
         String selectPictureButtonNGModel = selectPictureButton.getAttribute("ng-model");
         RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)
@@ -75,11 +87,11 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         element.sendKeys(new File(photoPath).getAbsolutePath());
         savePhotoButton.click();
 
-        waitWhileProcessing();
+        waitWhileProcessing(14, 20);
     }
 
     public String getImageURL(){
-        if(isElementShownAgent(profileImage, 3, "main")){
+        if(isElementShown(this.getCurrentDriver(), profileImage, 3)){
             return profileImage.getAttribute("src");
         } else{
             return"";
@@ -87,23 +99,21 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     }
 
     public void clickEditUserRolesButton(){
-        clickElemAgent(editUserButton, 3, "main", "'Edit user roles'");
+        clickElem(this.getCurrentDriver(), editUserButton, 3, "'Edit user roles'");
     }
 
     public void clickDeleteButton(){
-        clickElemAgent(deleteButton, 3, "main", "'Delete button'");
+        clickElem(this.getCurrentDriver(), deleteButton, 3,"'Delete button'");
     }
 
     public void updateAgentPersonalDetails(Map<String, String> updatedAgentInfo){
-        firstNameInput.clear();
-        inputTextAgent(firstNameInput, 2, "admin", "First name input", updatedAgentInfo.get("firstName"));
-        lastNameInput.clear();
-        inputTextAgent(lastNameInput, 2, "admin", "Last name input", updatedAgentInfo.get("lastName"));
-        clickElemAgent(saveChangesButton, 5,"admin", "Save changes");
+        inputText(this.getCurrentDriver(), firstNameInput, 2, "First name input", updatedAgentInfo.get("firstName"));
+        inputText(this.getCurrentDriver(), lastNameInput, 2, "Last name input", updatedAgentInfo.get("lastName"));
+        clickElem(this.getCurrentDriver(), saveChangesButton, 5,"Save changes");
     }
 
-    public void clickDactivateButton(){
-        clickElemAgent(deactivateButton, 3, "main", "'Deactivate User' button");
+    public void clickDeactivateButton(){
+        clickElem(this.getCurrentDriver(), deactivateButton, 3,"'Deactivate User' button");
     }
 
 }

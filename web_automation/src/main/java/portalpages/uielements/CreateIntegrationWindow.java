@@ -17,32 +17,34 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     private WebElement selectFBPage;
 
     public void setUpFBIntegration(String fbPage){
-        String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
+        String currentWindowHandle = this.getCurrentDriver().getWindowHandle();
         clickLoginToFacebookButton(currentWindowHandle);
-        if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()<2) executeJSclick(loginToFBButton, DriverFactory.getAgentDriverInstance());
-        if(!DriverFactory.getDriverForAgent("admin").getCurrentUrl().contains("facebook")){
-            DriverFactory.getDriverForAgent("admin").close();
-            DriverFactory.getDriverForAgent("admin").switchTo().window(currentWindowHandle);
+        if(this.getCurrentDriver().getWindowHandles().size()<2)
+            executeJSclick(loginToFBButton, this.getCurrentDriver());
+        if(!this.getCurrentDriver().getCurrentUrl().contains("facebook")){
+            this.getCurrentDriver().close();
+            this.getCurrentDriver().switchTo().window(currentWindowHandle);
         }
         clickLoginToFacebookButton(currentWindowHandle);
-        new FBLoginPage(DriverFactory.getAgentDriverInstance()).loginUserForFBIntegration();
-        waitForElementToBeVisibleAgent(selectFBPage, 5);
+        new FBLoginPage(this.getCurrentDriver()).loginUserForFBIntegration();
+        waitForElementToBeVisible(this.getCurrentDriver(), selectFBPage, 5);
         selectFBPage.click();
-        waitForElementsToBeVisibleAgent(selectOptionsInDropdown, 6, "agent");
+        waitForElementsToBeVisible(this.getCurrentDriver(), selectOptionsInDropdown, 6);
         selectOptionsInDropdown.stream()
                 .filter(e -> e.getText().equalsIgnoreCase(fbPage))
                 .findFirst().get().click();
         nextButton.click();
-        waitForElementToBeVisibleByCssAgent(PortalAbstractPage.getNotificationAlertLocator(), 6);
-        waitForElementToBeInvisibleAgent(findElemByCSSAgent(PortalAbstractPage.getNotificationAlertLocator()), 6);
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator(), 6);
+        waitForElementToBeInvisible(this.getCurrentDriver(),
+                findElemByCSS(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator()), 6);
     }
 
     private void clickLoginToFacebookButton(String currentWindowHandle){
-
-        JavascriptExecutor executor = (JavascriptExecutor) DriverFactory.getAgentDriverInstance();
+        JavascriptExecutor executor = (JavascriptExecutor) this.getCurrentDriver();
 //        executor.executeScript( "document.querySelector('button.facebook-login-bttn').dispatchEvent(new Event('click'));");
-        executor.executeScript( "arguments[0].dispatchEvent(new Event('click'));", findElemByCSSAgent("div[ng-form='setupTwitterForm'] button"));
-        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
+        executor.executeScript( "arguments[0].dispatchEvent(new Event('click'));",
+                findElemByCSS(this.getCurrentDriver(), "div[ng-form='setupTwitterForm'] button"));
+        for(String handle : this.getCurrentDriver().getWindowHandles()){
             if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
         }
     }

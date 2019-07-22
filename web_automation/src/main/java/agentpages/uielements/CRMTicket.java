@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
@@ -10,7 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CRMTicket extends Widget implements WebActions {
+public class CRMTicket extends Widget implements WebActionsDeprecated {
 
     protected CRMTicket(WebElement element) {
         super(element);

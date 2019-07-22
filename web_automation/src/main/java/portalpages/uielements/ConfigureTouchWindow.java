@@ -1,6 +1,5 @@
 package portalpages.uielements;
 
-import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -9,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 @FindBy(css = "div[ng-controller='SetupTenantCtrl']")
-public class ConfigureTouchWindow extends AbstractUIElement {
+public class ConfigureTouchWindow extends BasePortalWindow {
 
     @FindBy(name = "businessName")
     private WebElement businessNameInput;
@@ -39,21 +38,21 @@ public class ConfigureTouchWindow extends AbstractUIElement {
     private WebElement transcriptsEmailInput;
 
     public void createNewTenant(String tenantOrgName, String transcriptsEmail){
-        waitForElementToBeVisibleAgent(businessNameInput, 3).sendKeys(tenantOrgName);
+        waitForElementToBeVisible(this.getCurrentDriver(), businessNameInput, 3).sendKeys(tenantOrgName);
         selectIndustryField.click();
-        waitForElementToBeVisibleAgent(industriesChoices, 3,"main");
+        waitForElementToBeVisible(this.getCurrentDriver(), industriesChoices, 3);
         List<WebElement> sublist = industriesChoicesList.subList(0, 3);
         int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, sublist.size() - 1);
         sublist.get(randomIndustryNumber).click();
 //        waitForElementToBeVisibleAgent(selectCountryField, 5,"main");
         waitFor(1000);
-        clickElemAgent(selectCountryField, 4, "admin", "Select country dropdown");
-        waitForElementToBeVisibleAgent(countryChoices, 8,"main");
+        clickElem(this.getCurrentDriver(), selectCountryField, 4, "Select country dropdown");
+        waitForElementToBeVisible(this.getCurrentDriver(), countryChoices, 8);
         int randomCountryNumber = ThreadLocalRandom.current().nextInt(0, countryChoicesList.size() - 1);
         countryChoicesList.get(randomCountryNumber).click();
         nextButton.click();
         nextButton.click();
         transcriptsEmailInput.sendKeys(transcriptsEmail);
-        clickElemAgent(nextButton, 5, "admin", "Finish button");
+        clickElem(this.getCurrentDriver(), nextButton, 5,"Finish button");
     }
 }

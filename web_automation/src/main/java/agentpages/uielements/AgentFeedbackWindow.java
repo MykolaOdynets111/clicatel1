@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 
 @FindBy(css = "div.modal-content")
-public class AgentFeedbackWindow extends AbstractUIElement {
+public class AgentFeedbackWindow extends AbstractUIElementDeprecated {
 
     private String windowCss = "div.modal-content";
 
@@ -93,21 +93,21 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public AgentFeedbackWindow typeCRMNoteTextField(String msg) {
-        if (!msg.equals(null) || !msg.equals("")) {
+        if (msg != null & !msg.equals("")) {
             inputTextAgent(crmNoteTextField, 5, "main agent", "Note", msg);
         }
         return this;
     }
 
     public AgentFeedbackWindow typeCRMLink(String msg) {
-        if (!msg.equals(null) || !msg.equals("")) {
+        if (msg != null & !msg.equals("")) {
             inputTextAgent(crmLink, 5, "main agent", "Note link", msg);
         }
         return this;
     }
 
     public AgentFeedbackWindow typeCRMTicketNumber(String msg) {
-        if (!msg.equals(null) || !msg.equals("")) {
+        if (msg != null & !msg.equals("")) {
             inputTextAgent(crmTicketNumber, 5, "main agent", "Note number", msg);
         }
         return this;
@@ -156,7 +156,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         }
         waitForElementToBeClickableAgent(availableTagsContainer, 6, "main agent");
         if(availableTagsContainer.getText().isEmpty()) {
-            Assert.assertTrue(false, "Have not Tags to be selected");
+            Assert.fail("Have not Tags to be selected");
         }
 //        String html = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector("div.Select-menu-outer")).getAttribute("innerHTML");
         List<String> result = availableTags.stream().map(e -> e.getAttribute("innerText").trim()).collect(Collectors.toList());

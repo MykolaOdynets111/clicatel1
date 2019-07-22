@@ -1,7 +1,7 @@
 package touchpages.uielements.messages;
 
 import drivermanager.ConfigManager;
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.*;
@@ -11,7 +11,7 @@ import org.testng.Assert;
 
 import java.util.List;
 
-public class ToUserMessageWithActions  extends Widget implements WebActions {
+public class ToUserMessageWithActions  extends Widget implements WebActionsDeprecated {
 
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']")
     private WebElement toUserCard;

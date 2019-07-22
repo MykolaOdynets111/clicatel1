@@ -1,5 +1,6 @@
 package portalpages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -11,13 +12,25 @@ public class PortalFBIntegrationPage extends PortalAbstractPage {
     @FindBy(css = "div.discard-modal.ng-scope")
     private WebElement delinkAccountConfirmationPopup;
 
+    // == Constructors == //
+
+    public PortalFBIntegrationPage() {
+        super();
+    }
+    public PortalFBIntegrationPage(String agent) {
+        super(agent);
+    }
+    public PortalFBIntegrationPage(WebDriver driver) {
+        super(driver);
+    }
+
     public void delinkFBAccount(){
-        waitForElementToBeClickableAgent(delinkAccountButton, 5, "admin");
+        waitForElementToBeClickable(this.getCurrentDriver(), delinkAccountButton, 5);
         delinkAccountButton.click();
-        waitForElementToBeVisibleAgent(delinkAccountConfirmationPopup, 5);
+        waitForElementToBeVisible(this.getCurrentDriver(), delinkAccountConfirmationPopup, 5);
         delinkAccountButton.click();
-        waitForElementsToBeVisibleByCssAgent(PortalAbstractPage.getProcessingAlertLocator(), 5);
-        waitForElementsToBeInvisibleByCssAgent(PortalAbstractPage.getProcessingAlertLocator(), 5);
+        waitForElementsToBeVisibleByCss(this.getCurrentDriver(), PortalAbstractPage.getProcessingAlertLocator(), 5);
+        waitForElementsToBeInvisibleByCss(this.getCurrentDriver(),PortalAbstractPage.getProcessingAlertLocator(), 5);
     }
 
 }

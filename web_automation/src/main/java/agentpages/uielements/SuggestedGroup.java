@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.agent-assist")
-public class SuggestedGroup extends AbstractUIElement {
+public class SuggestedGroup extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.suggestion")
     private List<WebElement> listOfSuggestion;
@@ -19,7 +19,7 @@ public class SuggestedGroup extends AbstractUIElement {
     public boolean isSuggestionListEmpty() {
         for (int i=0; i<2; i++){
             if (listOfSuggestion.size()==0){
-                waitFor(200);
+                waitForDeprecated(200);
             }else{
                 return false;
             }

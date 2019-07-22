@@ -1,6 +1,7 @@
 package portalpages;
 
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.uielements.AgentsTableChatConsole;
@@ -24,20 +25,33 @@ public class PortalChatConsolePage extends PortalAbstractPage {
 
     private AgentsTableChatConsole agentsTableChatConsole;
 
+    // == Constructors == //
+
+    public PortalChatConsolePage() {
+        super();
+    }
+    public PortalChatConsolePage(String agent) {
+        super(agent);
+    }
+    public PortalChatConsolePage(WebDriver driver) {
+        super(driver);
+    }
+
     public AgentsTableChatConsole getAgentsTableChatConsole(){
+        agentsTableChatConsole.setCurrentDriver(this.getCurrentDriver());
         return agentsTableChatConsole;
     }
 
     public String getWaitingChatsNumber(){
-        return getTextFromElemAgent(chatsWaitingCounter, 6, "admin", "Customers waiting for response");
+        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 6,"Customers waiting for response");
     }
 
     public String getLiveChatsNumber(){
-        return getTextFromElemAgent(liveChatsCounter, 6, "admin", "Customer engaging with an Agent");
+        return getTextFromElem(this.getCurrentDriver(), liveChatsCounter, 6,"Customer engaging with an Agent");
     }
 
     public String getAgentsOnlineNumber(){
-        return getTextFromElemAgent(agentsOnlineCounter, 6, "admin", "Total Agents online");
+        return getTextFromElem(this.getCurrentDriver(), agentsOnlineCounter, 6,"Total Agents online");
     }
 
     public String getWidgetValue(String value){
@@ -53,10 +67,10 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     }
 
     public String getAverageChatsPerAgent(){
-        return getTextFromElemAgent(averageChatsPerAgent, 3, "admin", "Average chats per Agent");
+        return getTextFromElem(this.getCurrentDriver(), averageChatsPerAgent, 3,"Average chats per Agent");
     }
 
     public boolean isNoAgentsOnlineShown(){
-        return isElementShownAgent(noAgentsNotification, 8);
+        return isElementShown(this.getCurrentDriver(), noAgentsNotification, 8);
     }
 }

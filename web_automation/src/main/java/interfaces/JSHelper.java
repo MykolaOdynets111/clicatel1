@@ -73,7 +73,7 @@ public interface JSHelper {
             WebElement element = driver.findElement(By.xpath(xpath));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         }catch(NoSuchElementException e){
-            Assert.assertTrue(false, elemName +" is not found");
+            Assert.fail(elemName +" is not found");
         }
     }
 
@@ -104,11 +104,11 @@ public interface JSHelper {
         }
     }
 
-    default void executeClickInElemListWithWait(List<WebElement> list, String item, String agent){
+    default void executeClickInElemListWithWait(WebDriver driver, List<WebElement> list, String item){
         for(int i = 0; i<10; i++){
             if(list.stream().anyMatch(e1 -> e1.getText().equalsIgnoreCase(item))){
                 executeJSclick(list.stream().filter(e -> e.getText().equalsIgnoreCase(item)).findFirst().get(),
-                        DriverFactory.getDriverForAgent(agent));
+                       driver);
                 break;
             }else {
                 sleepFor(300);

@@ -1,11 +1,11 @@
 package twitter.uielements;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class DMUserMessage extends Widget implements WebActions {
+public class DMUserMessage extends Widget implements WebActionsDeprecated {
 
     public DMUserMessage(WebElement element) {
         super(element);

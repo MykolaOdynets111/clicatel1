@@ -18,23 +18,23 @@ public class EditUserRolesWindow extends BasePortalWindow {
     private WebElement finishButton;
 
     public EditUserRolesWindow selectNewTouchRole(String roleName){
-        waitForElementToBeVisibleAgent(this.getWrappedElement(), 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), this.getWrappedElement(), 5);
         WebElement solution = touchSolutions.stream().filter(e -> e.getText().contains(roleName))
                 .findFirst().get();
-        clickElemAgent(solution, 2, "main", roleName);
+        clickElem(this.getCurrentDriver(), solution, 2,roleName);
         return this;
     }
 
     public EditUserRolesWindow selectNewPlatformRole(String roleName){
-        waitForElementToBeVisibleAgent(this.getWrappedElement(), 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), this.getWrappedElement(), 5);
         WebElement solution = platformSolutions.stream().filter(e -> e.getText().contains(roleName))
                 .findFirst().get();
-        clickElemAgent(solution, 2, "main", roleName);
+        clickElem(this.getCurrentDriver(), solution, 2,roleName);
         return this;
     }
 
     public void clickFinishButton(){
-        clickElemAgent(finishButton, 3, "admin", "Finish");
+        clickElem(this.getCurrentDriver(), finishButton, 3,"Finish");
     }
 
 

@@ -1,5 +1,6 @@
 package portalpages;
 
+import org.openqa.selenium.WebDriver;
 import portalpages.uielements.ConfirmPaymentDetailsWindow;
 
 public class CartPage extends PortalAbstractPage {
@@ -10,15 +11,29 @@ public class CartPage extends PortalAbstractPage {
 
    private ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow;
 
+    // == Constructors == //
+
+    public CartPage() {
+        super();
+    }
+    public CartPage(String agent) {
+        super(agent);
+    }
+    public CartPage(WebDriver driver) {
+        super(driver);
+    }
+
     public ConfirmPaymentDetailsWindow getConfirmPaymentDetailsWindow() {
-            waitForElementsToBeVisibleByCssAgent(confirmDetailsPopUp, 5);
-            return confirmPaymentDetailsWindow;
+        waitForElementsToBeVisibleByCss(this.getCurrentDriver(), confirmDetailsPopUp, 5);
+        confirmPaymentDetailsWindow.setCurrentDriver(this.getCurrentDriver());
+        return confirmPaymentDetailsWindow;
     }
 
     public void clickCheckoutButton(){
-        waitForElementToBeVisibleByCssAgent(checkOutButtonCSS, 5);
-        waitForElementToBeClickableAgent(findElemByCSSAgent(checkOutButtonCSS), 5, "main");
-        findElemByCSSAgent(checkOutButtonCSS).click();
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), checkOutButtonCSS, 5);
+        waitForElementToBeClickable(
+                this.getCurrentDriver(), findElemByCSS(this.getCurrentDriver(), checkOutButtonCSS), 1)
+                .click();
     }
 
 

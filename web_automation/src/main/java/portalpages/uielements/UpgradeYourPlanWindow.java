@@ -17,9 +17,9 @@ public class UpgradeYourPlanWindow  extends BasePortalWindow {
 
     public UpgradeYourPlanWindow selectAgentSeats(int seats){
         try {
-            waitForElementToBeClickableAgent(addAgentSeatsButton, 25, "main");
+            waitForElementToBeClickable(this.getCurrentDriver(), addAgentSeatsButton, 25);
         } catch(TimeoutException e){
-            Assert.assertTrue(false, "'Add agent seats' button is not clickable.\n " +
+            Assert.fail("'Add agent seats' button is not clickable.\n " +
                     "Please check the screenshot");
         }
         for(int i =1; i<seats; i++ ){

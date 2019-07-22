@@ -1,9 +1,9 @@
 package twitter.uielements;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.TimeoutException;
 
-public class DMToUserMessage implements WebActions {
+public class DMToUserMessage implements WebActionsDeprecated {
 
     private String userMessage;
 

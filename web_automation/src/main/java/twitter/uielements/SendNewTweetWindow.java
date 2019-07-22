@@ -1,11 +1,11 @@
 package twitter.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(xpath = "//div[@class='modal-content'][@role='document']")
-public class SendNewTweetWindow extends AbstractUIElement {
+public class SendNewTweetWindow extends AbstractUIElementDeprecated {
 
     @FindBy(xpath = ".//div[@name='tweet']")
     private WebElement tweetInputArea;

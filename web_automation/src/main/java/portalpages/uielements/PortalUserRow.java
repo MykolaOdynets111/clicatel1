@@ -1,14 +1,12 @@
 package portalpages.uielements;
 
-import interfaces.WebActions;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.Widget;
+import abstractclasses.AbstractWidget;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class PortalUserRow extends Widget implements WebActions {
+public class PortalUserRow extends AbstractWidget {
 
     @FindAll({
             @FindBy(css = "td.limited-table-cell-small b.agent-initials"),
@@ -27,12 +25,15 @@ public class PortalUserRow extends Widget implements WebActions {
 
     public PortalUserRow(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
 
+    public PortalUserRow setCurrentDriver(WebDriver driver){
+        this.currentDriver = driver;
+        return this;
+    }
 
     public String getAgentFullName(){
-        waitForElementToBeVisibleAgent(agentFirstName, 6);
+        waitForElementToBeVisible(this.getCurrentDriver(), agentFirstName, 6);
         return agentFirstName.getText() + " " + agentLastName.getText();
     }
 

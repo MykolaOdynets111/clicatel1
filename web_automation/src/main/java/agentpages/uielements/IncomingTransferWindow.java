@@ -1,13 +1,13 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 
 @FindBy(css = "div.touch-pop-up")
-public class IncomingTransferWindow extends AbstractUIElement {
+public class IncomingTransferWindow extends AbstractUIElementDeprecated {
 
     @FindBy(css = "div.touch-header h2")
     private WebElement transferWindowHeader;
@@ -87,7 +87,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public boolean isValidImgTransferPicture() {
-        waitFor(1500);//it should be. transfer window apeared but not all(animation);
+        waitForDeprecated(1500);//it should be. transfer window apeared but not all(animation);
         File image = new File("src/test/resources/transferchatimg/transferPicture.png");
         return isWebElementEqualsImage(transferPicture,image, "second agent");
     }

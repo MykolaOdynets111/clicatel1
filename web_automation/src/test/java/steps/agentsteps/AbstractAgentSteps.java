@@ -7,11 +7,9 @@ import com.github.javafaker.Faker;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
-import interfaces.WebWait;
+import interfaces.WebWaitDeprecated;
 
-import java.util.Map;
-
-public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
+public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWaitDeprecated {
 
     private static ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
 
@@ -127,6 +125,11 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
 
     public static PageHeader getPageHeader(String agent){
         return getAgentHomePage(agent).getPageHeader();
+    }
+
+
+    public static ChatHeader getChatHeader(String agent){
+        return getAgentHomePage(agent).getChatHeader();
     }
 
     public static void сleanAllPages(){

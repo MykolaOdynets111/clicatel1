@@ -1,16 +1,18 @@
 package portalpages.uielements;
 
 
-import interfaces.WebActions;
+import abstractclasses.AbstractWidget;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 
-public class ChatConsoleInboxRow extends Widget implements WebActions {
+public class ChatConsoleInboxRow extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
@@ -35,20 +37,25 @@ public class ChatConsoleInboxRow extends Widget implements WebActions {
         super(element);
     }
 
+    public ChatConsoleInboxRow setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
+    }
+
     public void clickThreeDots(){
-       clickElemAgent(threeDots,3,"admin", "Three dots button");
+       clickElem(this.getCurrentDriver(), threeDots,3, "Three dots button");
     }
 
     public void clickAssignManually(){
-        clickElemAgent(assing,3,"admin", "Assign manually button");
+        clickElem(this.getCurrentDriver(), assing,3, "Assign manually button");
     }
 
     public void clickAgent(){
-        clickElemAgent(listOfAgents.get(0),3,"admin", "Agent in the list");
+        clickElem(this.getCurrentDriver(), listOfAgents.get(0),3, "Agent in the list");
     }
 
     public void clickAssignButton(){
-        clickElemAgent(assignButton,3,"admin", "Assign button");
+        clickElem(this.getCurrentDriver(), assignButton,3, "Assign button");
     }
 
     public String getChatConsoleInboxRowName(){

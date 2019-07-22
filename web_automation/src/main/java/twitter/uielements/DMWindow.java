@@ -1,13 +1,13 @@
 package twitter.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 @FindBy(css = "div.DMDock-conversations")
-public class DMWindow extends AbstractUIElement {
+public class DMWindow extends AbstractUIElementDeprecated {
 
     private String cssLocatorDMInputfield = "div#tweet-box-dm-conversation";
     private String deleteConversationConfirmButton = "button#confirm_dialog_submit_button";

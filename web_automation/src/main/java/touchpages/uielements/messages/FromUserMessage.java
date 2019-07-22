@@ -1,13 +1,13 @@
 package touchpages.uielements.messages;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class FromUserMessage extends Widget implements WebActions {
+public class FromUserMessage extends Widget implements WebActionsDeprecated {
 
     @FindBy(css = "span.text-break-mod")
     private WebElement messageText;

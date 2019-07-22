@@ -1,15 +1,15 @@
 package portalpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 //import com.paulhammant.ngwebdriver.NgWebDriver;
-import drivermanager.DriverFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 
-public class BasePortalWindow extends AbstractUIElement{
+public class BasePortalWindow extends AbstractUIElement {
 
     @FindBy(xpath = "//button[@class='button button-primary ng-scope']")
     protected WebElement nextButton;
@@ -31,10 +31,10 @@ public class BasePortalWindow extends AbstractUIElement{
 
 
     public void clickAddToCardButton(){
-        executeJSclick(addToCardButton, DriverFactory.getAgentDriverInstance());
+        executeJSclick(addToCardButton, getCurrentDriver());
     }
 
     public void clickPrimaryBindingButton(String agent, String buttonName){
-        clickElemAgent(primaryBindingButton, 5, agent, buttonName);
+        clickElem(getCurrentDriver(), primaryBindingButton, 5, buttonName);
     }
 }

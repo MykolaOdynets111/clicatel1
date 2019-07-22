@@ -1,4 +1,4 @@
-package steps;
+package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
@@ -17,7 +17,6 @@ import drivermanager.ConfigManager;
 import drivermanager.DriverFactory;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
-import interfaces.JSHelper;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -25,31 +24,15 @@ import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
 import portalpages.uielements.AgentRowChatConsole;
-import portalpages.uielements.LeftMenu;
+import steps.agentsteps.AbstractAgentSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
 import java.util.*;
 
-public class BasePortalSteps implements JSHelper {
+public class BasePortalSteps extends AbstractPortalSteps {
 
-    private Faker faker = new Faker();
-    private ThreadLocal<PortalLoginPage> portalLoginPage = new ThreadLocal<>();
-    private ThreadLocal<PortalLoginPage> secondAgentPortalLoginPage = new ThreadLocal<>();
-    private ThreadLocal<LeftMenu> leftMenu = new ThreadLocal<>();
-    private ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
-    private ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
-    private ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
-    private ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
-    private ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPageThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPageThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalManageAgentUsersPage> portalManagingUsersThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalUserEditingPage> portalUserProfileEditingThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalTouchPrefencesPage> portalTouchPrefencesPageThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalUserManagementPage> portalUserManagementPageThreadLocal = new ThreadLocal<>();
-    private ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
-    private ThreadLocal<ChatConsoleInboxPage> chatConsoleInboxPage = new ThreadLocal<>();
-    private ThreadLocal<String> autoresponseMessageThreadLocal = new ThreadLocal<>();
+
     public static final String FIRST_AND_LAST_NAME = "Touch Go";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
@@ -61,8 +44,6 @@ public class BasePortalSteps implements JSHelper {
     private static Map<String, String> tenantInfo = new HashMap<>();
     private Map<String, Integer> chatConsolePretestValue = new HashMap<>();
     private MainPage mainPage;
-    private AgentHomePage agentHomePage;
-    private AgentHomePage secondAgentHomePage;
     private Widget widget;
     int activeChatsFromChatdesk;
     private String secondAgentNameForChatConsoleTests = "";
@@ -90,7 +71,7 @@ public class BasePortalSteps implements JSHelper {
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         if(resp.statusCode()!=200){
-            Assert.assertTrue(false, "Sending new invitation was not successful \n"+
+            Assert.fail("Sending new invitation was not successful \n"+
             "Resp status code: " + resp.statusCode() + "\n" +
                     "Resp body: " + resp.getBody().asString());
         }
@@ -207,7 +188,7 @@ public class BasePortalSteps implements JSHelper {
     @Then("^(.*) redirected to the \"(.*)\" page$")
     public void verifySetNewPasswordScreenShown(String agent, String pageName){
         SoftAssert soft = new SoftAssert();
-        String pageLabel = getPortalLoginPage(agent).getNewPasswordLable();
+        String pageLabel = getPortalLoginPage(agent).getNewPasswordLabel();
         soft.assertEquals(pageLabel, pageName,
                 "Set new password label is not as expected");
         soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
@@ -233,7 +214,7 @@ public class BasePortalSteps implements JSHelper {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         List<String> expectedPermissions = Arrays.asList("delete-user-profile", "create-user-profile", "update-user-profile", "read-user-profile");
         List<String> permissions = ApiHelperPlatform.getAllRolePermission(tenantOrgName, "Touch agent role");
-        Assert.assertTrue(expectedPermissions.stream().allMatch(e -> permissions.contains(e)),
+        Assert.assertTrue(permissions.containsAll(expectedPermissions),
                 "Not all CRM permissions are present for Agent role\n" +
                         "Expected permitions: " + expectedPermissions.toString() + "\n" +
                         "Full permitions list: " + permissions.toString());
@@ -314,7 +295,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^I open portal$")
     public void openPortal(){
-        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage());
     }
 
 
@@ -327,7 +308,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("Portal Sign Up page is opened")
     public void openPortalSignUpPage(){
-        portalSignUpPage.set(PortalSignUpPage.openPortalSignUpPage());
+        setPortalSignUpPage(PortalSignUpPage.openPortalSignUpPage());
     }
 
     @When("I use activation ID and opens activation page")
@@ -364,9 +345,9 @@ public class BasePortalSteps implements JSHelper {
         String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+targetAccEmail+"" +
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
+        softAssert.assertTrue(getCurrentPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
                 "Message that confirmation email was sent is not shown");
-        softAssert.assertEquals(getPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
+        softAssert.assertEquals(getCurrentPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
                 "Message about sent confirmation email is not as expected");
         softAssert.assertAll();
     }
@@ -422,8 +403,8 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Deleted agent is not able to log in portal$")
     public void verifyDeletedAgentIsNotLoggedIn(){
-        portalLoginPage.get().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
-        Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
+        getCurrentPortalLoginPage().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
+        Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
     }
@@ -443,8 +424,8 @@ public class BasePortalSteps implements JSHelper {
     @When("^Login into portal as an (.*) of (.*) account$")
     public void loginToPortal(String ordinalAgentNumber, String tenantOrgName){
         Agents portalAdmin = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
-        portalMainPage.set(
-                portalLoginPage.get().login(portalAdmin.getAgentEmail(), portalAdmin.getAgentPass())
+        setPortalMainPage(
+                getCurrentPortalLoginPage().login(portalAdmin.getAgentEmail(), portalAdmin.getAgentPass())
         );
         Tenants.setTenantUnderTestNames(tenantOrgName);
     }
@@ -501,21 +482,21 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Admin is not able to login into portal with deleted (.*) account$")
     public void verifyAdminCannotLoginToPortal(String tenantOrgName){
-        portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
-        if (!portalLoginPage.get().isLoginPageOpened(1)){
-            portalLoginPage.get().waitFor(200);
-            portalLoginPage.set(PortalLoginPage.openPortalLoginPage());
+        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage());
+        if (!getCurrentPortalLoginPage().isLoginPageOpened(1)){
+            getCurrentPortalLoginPage().waitFor(200);
+            setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage());
         }
         MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
-        portalLoginPage.get().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
-        Assert.assertEquals(portalLoginPage.get().getNotificationAlertText(),
+        getCurrentPortalLoginPage().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
+        Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
     }
 
     @Then("^Error about invalid credentials is shown$")
     public void verifyInvalidCredsError(){
-        Assert.assertEquals(portalAccountDetailsPageThreadLocal.get().getNotificationAlertText(),
+        Assert.assertEquals(getPortalAccountDetailsPage().getNotificationAlertText(),
                 "Invalid username or password.",
                 "Error about invalid credentials is not shown");
     }
@@ -667,7 +648,7 @@ public class BasePortalSteps implements JSHelper {
         try {
             chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
         } catch (NumberFormatException e){
-            Assert.assertTrue(false, "Cannot read value from " +widgetName + "chat console widget");
+            Assert.fail("Cannot read value from " +widgetName + "chat console widget");
         }
     }
 
@@ -735,84 +716,83 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Wait for auto responders page to load$")
     public void waitForAutoRespondersToLoad(){
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitForAutoRespondersToLoad();
     }
 
     @When("^Change chats per agent:\"(.*)\"$")
     public void changeChatPerAgent(String chats){
-        getPortalTouchPrefencesPage().getChatDeskWindow().setChatsAvailable(chats);
+        getPortalTouchPreferencesPage().getChatDeskWindow().setChatsAvailable(chats);
     }
 
     @When("^Click \"(.*)\" button (.*) times chats per agent became:\"(.*)\"$")
     public void changeChatPerAgentPlusMinus(String sign, int add, String result){
         if (sign.equals("+")){
-            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsPlus(add);
-            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+            getPortalTouchPreferencesPage().getChatDeskWindow().clickChatsPlus(add);
+            Assert.assertEquals(getPortalTouchPreferencesPage().getChatDeskWindow().getChatsAvailable(),result,
                     "Number of available chat was changed not correctly");
         } else if (sign.equals("-")) {
-            getPortalTouchPrefencesPage().getChatDeskWindow().clickChatsMinus(add);
-            Assert.assertEquals(getPortalTouchPrefencesPage().getChatDeskWindow().getChatsAvailable(),result,
+            getPortalTouchPreferencesPage().getChatDeskWindow().clickChatsMinus(add);
+            Assert.assertEquals(getPortalTouchPreferencesPage().getChatDeskWindow().getChatsAvailable(),result,
                     "Number of available chat was changed not correctly");
         } else {
-            Assert.assertTrue(false,
-                    "Unexpected sign. Expected \"\\+\" or \"\\-\"");
+            Assert.fail("Unexpected sign. Expected \"\\+\" or \"\\-\"");
         }
 
     }
 
     @When("^Error message is shown$")
     public void errorIsShownInWindow(){
-        Assert.assertTrue(getPortalTouchPrefencesPage().getChatDeskWindow().isErrorMessageShown(),
+        Assert.assertTrue(getPortalTouchPreferencesPage().getChatDeskWindow().isErrorMessageShown(),
                 "Error message is not shown");
     }
 
     @When("^Click off/on Chat Conclusion$")
     public void clickOffOnChatConclusion(){
-        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffChatConclusion();
+        getPortalTouchPreferencesPage().getChatDeskWindow().clickOnOffChatConclusion();
     }
 
 
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitWhileProcessing();
-        getPortalTouchPrefencesPage().waitForNotificationAlertToBeProcessed(5,5);
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(5,5);
     }
 
 
     @When("^Agent click expand arrow for (.*) auto responder$")
     public void clickExpandArrowForAutoResponder(String autoresponder){
-        getPortalTouchPrefencesPage().getAutoRespondersWindow()
+        getPortalTouchPreferencesPage().getAutoRespondersWindow()
                                                             .clickExpandArrowForMessage(autoresponder);
     }
 
     @When("^Agent click On/Off button for (.*) auto responder$")
     public void clickOnOffForAutoResponder(String autoresponder){
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        getPortalTouchPrefencesPage().getAutoRespondersWindow()
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        getPortalTouchPreferencesPage().getAutoRespondersWindow()
                 .clickOnOffForMessage(autoresponder);
     }
 
     @When("^Click \"Reset to default\" button for (.*) auto responder$")
     public void clickResetToDefaultButton(String autoresponder){
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
-        getPortalTouchPrefencesPage().waitWhileProcessing();
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().clickResetToDefaultForMessage(autoresponder);
+        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
     @When("^Type new message: (.*) to (.*) message field$")
     public void typeNewMessage(String message, String autoresponder){
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().waitToBeLoaded();
-        if (!getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
-            getPortalTouchPrefencesPage().getAutoRespondersWindow()
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
+        if (!getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
+            getPortalTouchPreferencesPage().getAutoRespondersWindow()
                     .clickExpandArrowForMessage(autoresponder);
         }
-        getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
     }
 
     @Then("^(.*) on backend corresponds to (.*) on frontend$")
     public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
-        String messageOnfrontend = getPortalTouchPrefencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
+        String messageOnfrontend = getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
         String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
         Assert.assertEquals(actualMessage, messageOnfrontend,
                 messageName + " message is not updated on backend");
@@ -858,7 +838,7 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Payment is not proceeded and Payment Summary tab is still opened$")
     public void verifyPaymentSummaryTabOpened(){
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymnentSummaryTabOPened(),
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentSummaryTabOpened(),
                 "'Payment Summary' tab is not still opened when admin tries to proceed without accepting Terms and Conditions");
     }
 
@@ -881,20 +861,18 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Not see \"(.*)\" button$")
     public void verifyNotShowingUpgradeButtonText(String textNotToBeShown){
-        Assert.assertFalse(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals(textNotToBeShown),
-                "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertNotEquals(getPortalMainPage().getPageHeader().getTextOfUpgradeButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @Then("^See \"(.*)\" button$")
     public void verifyNShowingUpgradeButtonText(String textToBeShown){
-        Assert.assertTrue(getPortalMainPage().getPageHeader().getTextOfUpgradeButton().equals(textToBeShown),
-                "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTextOfUpgradeButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @When("^(.*) the (.*) integration$")
     public void changeIntegrationStateTo(String switchTo, String integration){
         getPortalIntegrationsPage().switchToggleStateTo(integration, switchTo);
-        getPortalIntegrationsPage().waitWhileProcessing();
+        getPortalIntegrationsPage().waitWhileProcessing(14, 20);
     }
 
     @Then("^Status of (.*) integration is changed to \"(.*)\"$")
@@ -924,7 +902,7 @@ public class BasePortalSteps implements JSHelper {
         try {
             userName = fbIntegrationInfo.getBody().jsonPath().getString("firstName");
         } catch (JsonPathException e){
-            Assert.assertTrue(false, "FB integration not created");
+            Assert.fail("FB integration not created");
         }
         Assert.assertEquals(userName, FacebookUsers.USER_FOR_INTEGRATION.getFBUserName(),
                 "Incorrect user name in fb integration");
@@ -936,7 +914,7 @@ public class BasePortalSteps implements JSHelper {
         try {
             fbIntegrationInfo.getBody().jsonPath().getString("errorMessage");
         } catch (JsonPathException e){
-            Assert.assertTrue(false, "FB integration is not deleted");
+            Assert.fail("FB integration is not deleted");
         }
 
     }
@@ -958,7 +936,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Delink facebook account$")
     public void delinkFBAccount(){
-        getFBPortalFBIntegrationPage().delinkFBAccount();
+        getPortalFBIntegrationPage().delinkFBAccount();
     }
 
     @Then("^Touch Go plan is updated to \"(.*)\" in (.*) tenant configs$")
@@ -1002,12 +980,14 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Admin clicks 'Setup Billing' button$")
     public void clickSetupBillingButton(){
-        portalBillingDetailsPage.set(getPortalMainPage().clickSetupBillingButton());
+        setPortalBillingDetailsPage(
+                getPortalMainPage().clickSetupBillingButton()
+        );
     }
 
     @When("Close 'Billing not setup' modal window")
     public void closeSetupBillingModal(){
-        portalMainPage.get().closeSetupBillingPopUpModal();
+        getPortalMainPage().closeSetupBillingPopUpModal();
     }
 
     @Then("^Billing Details page is opened$")
@@ -1105,7 +1085,7 @@ public class BasePortalSteps implements JSHelper {
     @When("^Click 'Add to cart' button$")
     public void clickAddToCartButton(){
         getPortalBillingDetailsPage().getTopUpBalanceWindow().clickAddToCardButton();
-        getPortalBillingDetailsPage().waitWhileProcessing();
+        getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
     }
 
     @When("^Make the balance top up payment$")
@@ -1117,10 +1097,12 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Top up balance updated up to (.*) minutes$")
     public void verifyTopUpUpdated(int mints){
         String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
+        String actualInfo="";
         boolean result = false;
         for(int i = 0; i<(mints*60)/25; i++){
-            if(valueFromPortal.replace(",", "")
-                    .equals(String.format("%1.2f", topUpBalance.get("afterTest")))){
+            valueFromPortal = valueFromPortal.replace(",", "");
+            actualInfo = String.format("%1.2f", topUpBalance.get("afterTest"));
+            if(valueFromPortal.equals(actualInfo)){
                 result = true;
                 break;
             } else{
@@ -1130,6 +1112,7 @@ public class BasePortalSteps implements JSHelper {
         }
         Assert.assertTrue(result, "Balance was not updated after top up\n" +
                 "Balance from backend : " + ApiHelperPlatform.getAccountBallance().getBalance() +"\n" +
+                "Expected: " + actualInfo + "\n" +
                 "Actual: " + valueFromPortal);
     }
 
@@ -1154,7 +1137,7 @@ public class BasePortalSteps implements JSHelper {
     @When("^Admin tries to add new card$")
     public void addNewCard(){
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
-        getPortalBillingDetailsPage().waitWhileProcessing();
+        getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
@@ -1226,7 +1209,8 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("Added payment method is able to be selected")
     public void verifyCardIsAvailableToSelecting(){
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getTestVisaCardToPayDetails().contains("1111"),
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow()
+                        .getTestVisaCardToPayDetails().contains("1111"),
                 "Added payment method is not available for purchasing");
     }
 
@@ -1238,12 +1222,12 @@ public class BasePortalSteps implements JSHelper {
     @When("^\"(.*)\" shown in payment methods dropdown$")
     public void verifyPresencePaymentOptionForBuyingAgentSeats(String option){
         getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionshown(option),
+        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionShown(option),
                 "'"+option+"' is not shown in payment options");
     }
 
     @When("^Admin selects \"(.*)\" in payment methods dropdown$")
-    public void selectPaymentOptioWhileBuyingAgents(String option){
+    public void selectPaymentOptionWhileBuyingAgents(String option){
         getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
     }
 
@@ -1272,7 +1256,7 @@ public class BasePortalSteps implements JSHelper {
                     Tenants.getTenantUnderTestOrgName()).getAgentEmail();
             fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
         }
-        portalUserProfileEditingThreadLocal.set(
+        setPortalUserProfileEditingPage(
                 getPortalManagingUsersPage().clickManageButtonForUser(fullName)
         );
     }
@@ -1287,40 +1271,41 @@ public class BasePortalSteps implements JSHelper {
                     Tenants.getTenantUnderTestOrgName()).getAgentEmail();
             fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
         }
+//        getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
         try {
             getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
         }catch (NoSuchElementException e){
             Assert.fail(fullName + " user was not found");
         }
-        portalUserProfileEditingThreadLocal.set(new PortalUserEditingPage());
+        setPortalUserProfileEditingPage(new PortalUserEditingPage("admin"));
     }
 
     @When("^Click 'Upload' button$")
     public void clickUploadButtonForUser(){
-        portalUserProfileEditingThreadLocal.get().clickUploadPhotoButton();
+        getPortalUserProfileEditingPage().clickUploadPhotoButton();
     }
 
     @When("^Click 'Upload' button for tenant logo$")
     public void clickUploadButtonForTenantLogo(){
-        getPortalTouchPrefencesPage().getConfigureBrandWindow().clickuploadButton();
+        getPortalTouchPreferencesPage().getConfigureBrandWindow().clickUploadButton();
     }
 
     // page_action_to_remove
     @When("^Admin clicks 'Edit user roles'$")
     public void clickEditRoles(){
-        portalUserProfileEditingThreadLocal.get().clickEditUserRolesButton();
+        getPortalUserProfileEditingPage().clickEditUserRolesButton();
     }
 
     // page_action_to_remove
     @When("^Admin clicks Delete user button$")
     public void deleteAgentUser(){
-        portalUserProfileEditingThreadLocal.get().clickDeleteButton();
-        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(6,5);
+        getPortalUserProfileEditingPage().clickDeleteButton();
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(6,5);
     }
 
     @When("^On the right corner of the page click \"Deactivate User\" button$")
     public void clickDeactivateUser(){
-        portalUserProfileEditingThreadLocal.get().clickDactivateButton();
+        getPortalUserProfileEditingPage().clickDeactivateButton();
     }
 
     @Then("^User is removed from Manage agent users page$")
@@ -1360,29 +1345,29 @@ public class BasePortalSteps implements JSHelper {
         updatedAgentInfo.put("lastName", faker.name().lastName());
         updatedAgentInfo.put("email", "aqa_"+System.currentTimeMillis()+"@aqa.com");
 
-        portalUserProfileEditingThreadLocal.get().updateAgentPersonalDetails(updatedAgentInfo);
-        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
-        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(5,5);
+        getPortalUserProfileEditingPage().updateAgentPersonalDetails(updatedAgentInfo);
+        getPortalUserProfileEditingPage().waitWhileProcessing(14, 20);
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(5,5);
     }
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        portalUserProfileEditingThreadLocal.get().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
-        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(3,6);
+        getPortalUserProfileEditingPage().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
 
     @When("^Upload: photo for tenant$")
     public void uploadPhotoForTenant() {
-        getPortalTouchPrefencesPage().getConfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
+        getPortalTouchPreferencesPage().getConfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
     }
 
     @Then("^Change secondary color for tenant$")
     public void changeSecondaryColorForTenant() {
-        tenantInfo.put("color", getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor());
-        tenantInfo.put("newColor", getPortalTouchPrefencesPage().getConfigureBrandWindow().setRandomSecondaryColor(tenantInfo.get("color")));
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitWhileProcessing();
+        tenantInfo.put("color", getPortalTouchPreferencesPage().getConfigureBrandWindow().getSecondaryColor());
+        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomSecondaryColor(tenantInfo.get("color")));
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
     @Then("^I check secondary color for tenant in widget$")
@@ -1403,9 +1388,12 @@ public class BasePortalSteps implements JSHelper {
     @Then("^I check primary color for tenant in agent desk$")
     public void iCheckPrimaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360ButtonColor(), tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getExpandFilterButtonColor(), tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getTouchButtonColor(), tenantInfo.get("newColor"), "Color for tenant chat button is not correct");
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getCustomer360ButtonColor(),
+                tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getExpandFilterButtonColor(),
+                tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getTouchButtonColor(),
+                tenantInfo.get("newColor"), "Color for tenant chat button is not correct");
         soft.assertAll();
     }
 
@@ -1413,49 +1401,60 @@ public class BasePortalSteps implements JSHelper {
     @Then("^I check secondary color for tenant in agent desk$")
     public void iCheckSecondaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantNameColor(), tenantInfo.get("newColor"), "Color for tenant name in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getPageHeader().getTenantLogoBorderColor(), tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getPageHeader("second agent").getTenantNameColor(),
+                tenantInfo.get("newColor"), "Color for tenant name in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getPageHeader("second agent").getTenantLogoBorderColor(),
+                tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
         soft.assertAll();
     }
 
     @Then("^Check primary color for incoming chat and 360Container$")
     public void checkPrimaryColorForIncomingChatAndContainer() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserMsgCountColor(), tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getLeftMenuWithChats().getUserPictureColor(), tenantInfo.get("newColor"), "Color for User Picture in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getUserPictureColor(), tenantInfo.get("newColor"), "Color for User Picture in 360container in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getSaveEditButtonColor(), tenantInfo.get("newColor"), "Color for Edit button in 360container in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getCustomer360Container().getMailColor(), tenantInfo.get("newColor"), "Color for Email in 360container in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getPinChatButtonColor(), tenantInfo.get("newColor"), "Color for Pin chat button in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getTransferButtonColor(), tenantInfo.get("newColor"), "Color for Transfer chat button in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatHeader().getEndChatButtonColor(), tenantInfo.get("newColor"), "Color for End chat button in agent desk window is not correct");
-        soft.assertEquals(getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(), tenantInfo.get("newColor"), "Color for Send button in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getUserMsgCountColor(),
+                            tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getUserPictureColor(),
+                            tenantInfo.get("newColor"), "Color for User Picture in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getUserPictureColor(),
+                            tenantInfo.get("newColor"), "Color for User Picture in 360container in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getSaveEditButtonColor(),
+                            tenantInfo.get("newColor"), "Color for Edit button in 360container in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getMailColor(),
+                            tenantInfo.get("newColor"), "Color for Email in 360container in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getPinChatButtonColor(),
+                            tenantInfo.get("newColor"), "Color for Pin chat button in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getTransferButtonColor(),
+                            tenantInfo.get("newColor"), "Color for Transfer chat button in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getEndChatButtonColor(),
+                            tenantInfo.get("newColor"), "Color for End chat button in agent desk window is not correct");
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(),
+                            tenantInfo.get("newColor"), "Color for Send button in agent desk window is not correct");
         soft.assertAll();
     }
 
     @Then("^Change primary color for tenant$")
     public void changePrimaryColorForTenant() {
-        tenantInfo.put("color", getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor());
-        tenantInfo.put("newColor", getPortalTouchPrefencesPage().getConfigureBrandWindow().setRandomPrimaryColor(tenantInfo.get("color")));
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitWhileProcessing();
+        tenantInfo.put("color", getPortalTouchPreferencesPage().getConfigureBrandWindow().getPrimaryColor());
+        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomPrimaryColor(tenantInfo.get("color")));
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
     @When("^Add new touch (.*) solution$")
     public void addNewTouchSolution(String touchRole){
-        portalUserProfileEditingThreadLocal.get().getEditUserRolesWindow()
+        getPortalUserProfileEditingPage().getEditUserRolesWindow()
                                                 .selectNewTouchRole(touchRole)
                                                 .clickFinishButton();
-        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
+        getPortalUserProfileEditingPage().waitWhileProcessing(14, 20);
     }
 
     @When("^Add new platform (.*) solution$")
     public void addNewPlatformSolution(String role){
-        portalUserProfileEditingThreadLocal.get().getEditUserRolesWindow()
+        getPortalUserProfileEditingPage().getEditUserRolesWindow()
                 .selectNewPlatformRole(role)
                 .clickFinishButton();
-        portalUserProfileEditingThreadLocal.get().waitWhileProcessing();
-        portalUserProfileEditingThreadLocal.get().waitForNotificationAlertToBeProcessed(5, 9);
+        getPortalUserProfileEditingPage().waitWhileProcessing(14, 20);
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(5, 9);
     }
 
     @Given("^Agent of (.*) tenant has no photo uploaded$")
@@ -1480,7 +1479,7 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Admin logs out from portal$")
     public void logoutFromPortal(){
-        portalUserProfileEditingThreadLocal.get().getPageHeader().logoutAdmin();
+        getPortalUserProfileEditingPage().getPageHeader().logoutAdmin();
     }
 
     @Then("^Newly created agent is (?:deleted|absent) on backend$")
@@ -1503,7 +1502,7 @@ public class BasePortalSteps implements JSHelper {
                 .jsonPath().get("imageUrl");
         soft.assertFalse(imageURLFromBackend==null,
                         "Agent photo is not saved on backend");
-        soft.assertFalse(portalUserProfileEditingThreadLocal.get().getImageURL().isEmpty(),
+        soft.assertFalse(getPortalUserProfileEditingPage().getImageURL().isEmpty(),
                 "Agent photo is not shown in portal");
         soft.assertAll();
     }
@@ -1524,20 +1523,20 @@ public class BasePortalSteps implements JSHelper {
     @Then("^Return secondary color for tenant$")
     public void returnSecondaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!tenantInfo.get("color").contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getSecondaryColor())) {
-            getPortalTouchPrefencesPage().getConfigureBrandWindow().setSecondaryColor(tenantInfo.get("color"));
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
+        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getConfigureBrandWindow().getSecondaryColor())) {
+            getPortalTouchPreferencesPage().getConfigureBrandWindow().setSecondaryColor(tenantInfo.get("color"));
+            getPortalTouchPreferencesPage().clickSaveButton();
+            getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         }
     }
 
     @Then("^Return primary color for tenant$")
     public void returnPrimaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!tenantInfo.get("color").contains(getPortalTouchPrefencesPage().getConfigureBrandWindow().getPrimaryColor())) {
-            getPortalTouchPrefencesPage().getConfigureBrandWindow().setPrimaryColor(tenantInfo.get("color"));
-            getPortalTouchPrefencesPage().clickSaveButton();
-            getPortalTouchPrefencesPage().waitWhileProcessing();
+        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getConfigureBrandWindow().getPrimaryColor())) {
+            getPortalTouchPreferencesPage().getConfigureBrandWindow().setPrimaryColor(tenantInfo.get("color"));
+            getPortalTouchPreferencesPage().clickSaveButton();
+            getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         }
     }
 
@@ -1545,12 +1544,12 @@ public class BasePortalSteps implements JSHelper {
     public void changeBusinessDetails() {
         tenantInfo.put("companyName", "New company name "+faker.lorem().word());
         tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
-        tenantInfo.put("companyIndustry", getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomIndastry());
-        tenantInfo.put("companyCountry", getPortalTouchPrefencesPage().getAboutYourBusinessWindow().selectRandomCountry());
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName(tenantInfo.get("companyName"));
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyCity(tenantInfo.get("companyCity"));
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitWhileProcessing();
+        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getAboutYourBusinessWindow().selectRandomIndastry());
+        tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getAboutYourBusinessWindow().selectRandomCountry());
+        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyName(tenantInfo.get("companyName"));
+        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyCity(tenantInfo.get("companyCity"));
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
     @And("^Refresh page and verify business details was changed for (.*)$")
@@ -1559,17 +1558,17 @@ public class BasePortalSteps implements JSHelper {
         Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
         String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
         soft.assertEquals(resp.jsonPath().get("tenantOrgName"),tenantInfo.get("companyName"), "Company name was not changed on backend");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
         soft.assertEquals(resp.jsonPath().getList("tenantAddresses.city").get(0).toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
         soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
-        soft.assertEquals(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
         soft.assertEquals(country,tenantInfo.get("companyCountry"), "Company country was not changed on backend");
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitWhileProcessing();
+        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
     }
 
@@ -1663,14 +1662,14 @@ public class BasePortalSteps implements JSHelper {
 
     @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
     public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
-        getPortalTouchPrefencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
+        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
     }
 
     @When("^click off/on 'Automatic Scheduler'$")
     public void clickOnOffAutoScheduler(){
         autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
-        getPortalTouchPrefencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
-        getPortalTouchPrefencesPage().waitWhileProcessing(1,1);
+        getPortalTouchPreferencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
+        getPortalTouchPreferencesPage().waitWhileProcessing(1,1);
     }
 
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
@@ -1682,9 +1681,9 @@ public class BasePortalSteps implements JSHelper {
 
     @And("^Uncheck today day and apply changes$")
     public void uncheckTodayDayAndApplyChanges() {
-        nameOfUnchekedDay = getPortalTouchPrefencesPage().getAboutYourBusinessWindow().uncheckTodayDay();
-        getPortalTouchPrefencesPage().clickSaveButton();
-        getPortalTouchPrefencesPage().waitForNotificationAlertToBeProcessed(2,5);
+        nameOfUnchekedDay = getPortalTouchPreferencesPage().getAboutYourBusinessWindow().uncheckTodayDay();
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(2,5);
     }
 
     @And("^'support hours' are updated in (.*) configs$")
@@ -1694,152 +1693,13 @@ public class BasePortalSteps implements JSHelper {
 
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
     public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
-        Assert.assertTrue(getPortalTouchPrefencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
+        Assert.assertTrue(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
     }
 
     @Then("^Filter \"(.*)\" is selected by default$")
     public void filterIsSelectedByDefault(String filterName) {
         Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
                 "Filter name by default does not match expected");
-    }
-
-
-    private LeftMenu getLeftMenu() {
-        if (leftMenu.get()==null) {
-            leftMenu.set(getPortalMainPage().getLeftMenu());
-            return leftMenu.get();
-        } else{
-            return leftMenu.get();
-        }
-    }
-
-    private PortalMainPage getPortalMainPage() {
-        if (portalMainPage.get()==null) {
-            portalMainPage.set(new PortalMainPage());
-            return portalMainPage.get();
-        } else{
-            return portalMainPage.get();
-        }
-    }
-
-    private PortalIntegrationsPage getPortalIntegrationsPage(){
-        if (portalIntegrationsPage.get()==null) {
-            portalIntegrationsPage.set(new PortalIntegrationsPage());
-            return portalIntegrationsPage.get();
-        } else{
-            return portalIntegrationsPage.get();
-        }
-    }
-
-    private PortalBillingDetailsPage getPortalBillingDetailsPage(){
-        if (portalBillingDetailsPage.get()==null) {
-            portalBillingDetailsPage.set(new PortalBillingDetailsPage());
-            return portalBillingDetailsPage.get();
-        } else{
-            return portalBillingDetailsPage.get();
-        }
-    }
-
-    private PortalSignUpPage getPortalSignUpPage(){
-        if (portalSignUpPage.get()==null) {
-            portalSignUpPage.set(new PortalSignUpPage());
-            return portalSignUpPage.get();
-        } else{
-            return portalSignUpPage.get();
-        }
-    }
-
-    private PortalLoginPage getPortalLoginPage(){
-        if (portalLoginPage.get()==null) {
-            portalLoginPage.set(new PortalLoginPage());
-            return portalLoginPage.get();
-        } else{
-            return portalLoginPage.get();
-        }
-    }
-
-    private PortalLoginPage getSecondPortalLoginPage(){
-        if (secondAgentPortalLoginPage.get()==null) {
-            secondAgentPortalLoginPage.set(new PortalLoginPage("second agent"));
-            return secondAgentPortalLoginPage.get();
-        } else{
-            return secondAgentPortalLoginPage.get();
-        }
-    }
-
-    private PortalLoginPage getPortalLoginPage(String agent){
-
-        if (agent.equalsIgnoreCase("second agent")){
-            return getSecondPortalLoginPage();
-        } else {
-            return getPortalLoginPage();
-        }
-
-    }
-
-
-
-    private PortalAccountDetailsPage getPortalAccountDetailsPage(){
-        if (portalAccountDetailsPageThreadLocal.get()==null) {
-            portalAccountDetailsPageThreadLocal.set(new PortalAccountDetailsPage());
-            return portalAccountDetailsPageThreadLocal.get();
-        } else{
-            return portalAccountDetailsPageThreadLocal.get();
-        }
-    }
-
-    private PortalFBIntegrationPage getFBPortalFBIntegrationPage(){
-        if (portalFBIntegrationPageThreadLocal.get()==null) {
-            portalFBIntegrationPageThreadLocal.set(new PortalFBIntegrationPage());
-            return portalFBIntegrationPageThreadLocal.get();
-        } else{
-            return portalFBIntegrationPageThreadLocal.get();
-        }
-    }
-
-    private PortalManageAgentUsersPage getPortalManagingUsersPage(){
-        if (portalManagingUsersThreadLocal.get()==null) {
-            portalManagingUsersThreadLocal.set(new PortalManageAgentUsersPage());
-            return portalManagingUsersThreadLocal.get();
-        } else{
-            return portalManagingUsersThreadLocal.get();
-        }
-    }
-
-    private PortalTouchPrefencesPage getPortalTouchPrefencesPage(){
-        if (portalTouchPrefencesPageThreadLocal.get()==null) {
-            portalTouchPrefencesPageThreadLocal.set(new PortalTouchPrefencesPage());
-            return portalTouchPrefencesPageThreadLocal.get();
-        } else{
-            return portalTouchPrefencesPageThreadLocal.get();
-        }
-    }
-
-    private PortalUserManagementPage getPortalUserManagementPage(){
-        if (portalUserManagementPageThreadLocal.get()==null) {
-            portalUserManagementPageThreadLocal.set(new PortalUserManagementPage());
-            return portalUserManagementPageThreadLocal.get();
-        } else{
-            return portalUserManagementPageThreadLocal.get();
-        }
-    }
-
-    private PortalChatConsolePage getPortalChatConsolePage(){
-        if (portalChatConsolePage.get()==null) {
-            portalChatConsolePage.set(new PortalChatConsolePage());
-            return portalChatConsolePage.get();
-        } else{
-            return portalChatConsolePage.get();
-        }
-    }
-
-    private ChatConsoleInboxPage getChatConsoleInboxPage(){
-        if (chatConsoleInboxPage.get()==null) {
-            chatConsoleInboxPage.set(new ChatConsoleInboxPage());
-            return chatConsoleInboxPage.get();
-        } else{
-            return chatConsoleInboxPage.get();
-        }
     }
 
     private MainPage getMainPage() {
@@ -1851,29 +1711,4 @@ public class BasePortalSteps implements JSHelper {
         }
     }
 
-    private AgentHomePage getAgentHomePage(String ordinalAgentNumber){
-        if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
-            return getAgentHomeForSecondAgent();
-        } else {
-            return getAgentHomeForMainAgent();
-        }
-    }
-
-    private AgentHomePage getAgentHomeForSecondAgent(){
-        if (secondAgentHomePage==null) {
-            secondAgentHomePage = new AgentHomePage("second agent");
-            return secondAgentHomePage;
-        } else{
-            return secondAgentHomePage;
-        }
-    }
-
-    private AgentHomePage getAgentHomeForMainAgent(){
-        if (agentHomePage==null) {
-            agentHomePage = new AgentHomePage("main agent");
-            return agentHomePage;
-        } else{
-            return agentHomePage;
-        }
-    }
 }

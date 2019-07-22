@@ -1,12 +1,12 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
 @FindBy(xpath = "//div[text()='Delete Note']/parent::div")
-public class DeleteCRMConfirmationPopup extends AbstractUIElement {
+public class DeleteCRMConfirmationPopup extends AbstractUIElementDeprecated {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 

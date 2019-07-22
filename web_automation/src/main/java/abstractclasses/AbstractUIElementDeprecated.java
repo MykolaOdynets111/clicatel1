@@ -3,11 +3,12 @@ package abstractclasses;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
-
-public class AbstractUIElement extends HtmlElement implements WebActions, JSHelper, ActionsHelper {
+@Deprecated
+public class AbstractUIElementDeprecated extends HtmlElement implements WebActionsDeprecated, WebActions, JSHelper, ActionsHelper {
 
     protected WebDriver currentDriver;
 

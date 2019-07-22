@@ -1,13 +1,13 @@
 package touchpages.uielements;
 
-import interfaces.WebActions;
+import interfaces.WebActionsDeprecated;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class TenantRow extends Widget implements WebActions {
+public class TenantRow extends Widget implements WebActionsDeprecated {
 
     @FindBy(css = "input[name='tenantId']")
     private WebElement radioButton;

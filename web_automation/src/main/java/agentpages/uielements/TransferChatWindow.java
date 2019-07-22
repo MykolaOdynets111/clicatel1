@@ -1,11 +1,11 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElement;
+import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = "div.modal-content")
-public class TransferChatWindow extends AbstractUIElement {
+public class TransferChatWindow extends AbstractUIElementDeprecated {
 
     @FindBy(css = "button.btn.pull-left.btn-default")
     private WebElement cancelTransferButton;
@@ -58,7 +58,7 @@ public class TransferChatWindow extends AbstractUIElement {
         waitForElementToBeVisibleAgent(availableAgent,5, agent);
         for(int i=0; i<15; i++){
             if(availableAgent.getAttribute("innerText").contains("AQA")) break;
-            else waitFor(500);
+            else waitForDeprecated(500);
         }
         String agentName = availableAgent.getAttribute("innerText");
         availableAgent.click();

@@ -41,19 +41,19 @@ public class ConfigureBrandWindow extends BasePortalWindow {
 
     private String inputPhotoLocator = "input[ngf-select][ng-model='%s']";
 
-    public void clickuploadButton(){
-        clickElemAgent(uploadButton, 1, "admin", "Upload button");
+    public void clickUploadButton(){
+        clickElem(this.getCurrentDriver(), uploadButton, 1,"Upload button");
     }
 
     public void clickacceptButton(){
-        waitForElementToBeVisibleAgent(acceptButton, 5, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), acceptButton, 5);
         acceptButton.click();
     }
 
     public void setPrimaryColor(String hex){
-        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), primaryColor, 3);
         primaryColor.click();
-        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), colorInputField, 3);
         colorInputField.clear();
         colorInputField.sendKeys(hex);
         waitFor(2000);
@@ -61,9 +61,9 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     }
 
     public void setSecondaryColor(String hex){
-        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), secondaryColor, 3);
         secondaryColor.click();
-        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), colorInputField, 3);
         colorInputField.clear();
         colorInputField.sendKeys(hex);
         waitFor(2000);
@@ -71,9 +71,9 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     }
 
     public String setRandomPrimaryColor(String color){
-        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), primaryColor, 3);
         primaryColor.click();
-        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), colorInputField, 3);
         colorInputField.clear();
         String newColor;
         do  {
@@ -86,36 +86,37 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     }
 
     public String setRandomSecondaryColor(String color){
-        waitForElementToBeVisibleAgent(secondaryColor, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), secondaryColor, 3);
         secondaryColor.click();
-        waitForElementToBeVisibleAgent(colorInputField, 3, "admin");
+        waitForElementToBeVisible(this.getCurrentDriver(), colorInputField, 3);
         colorInputField.clear();
         String newColor;
         do  {
              newColor = faker.color().hex().toLowerCase();
         } while (color.contains(newColor));
         colorInputField.sendKeys(newColor);
-        waitForElementToBeClickableAgent(acceptButton, 6, "admin");
+        waitForElementToBeClickable(this.getCurrentDriver(), acceptButton, 6);
         acceptButton.click();
         return newColor;
     }
 
     public String getPrimaryColor(){
-        waitForElementToBeVisibleAgent(primaryColor, 3, "admin");            return Color.fromString(primaryColor.getCssValue("background-color")).asHex();
+        waitForElementToBeVisible(this.getCurrentDriver(), primaryColor, 3);
+        return Color.fromString(primaryColor.getCssValue("background-color")).asHex();
     }
 
     public String getSecondaryColor(){
-        return Color.fromString(waitForElementToBeVisibleAgent(secondaryColor, 3, "admin").getCssValue("background-color")).asHex();
+        return Color.fromString(waitForElementToBeVisible(this.getCurrentDriver(), secondaryColor, 3)
+                .getCssValue("background-color")).asHex();
     }
 
     public void uploadPhoto(String photoPath){
-        waitForElementToBeVisibleAgent(uploadButton, 8, "main");
+        waitForElementToBeVisible(this.getCurrentDriver(), uploadButton, 8);
         String selectPictureButtonNGModel = uploadButton.getAttribute("ng-model");
         RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)
         ));
         element.setFileDetector(new LocalFileDetector());
         element.sendKeys(new File(photoPath).getAbsolutePath());
-       // waitWhileProcessing();
     }
 }

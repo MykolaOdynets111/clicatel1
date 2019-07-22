@@ -18,6 +18,7 @@ import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.portalsteps.BasePortalSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import touchpages.uielements.TouchActionsMenu;
