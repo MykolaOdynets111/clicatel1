@@ -6,6 +6,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
+import twitter.TwitterLoginPage;
 
 @FindBy(css = "div.cl-wizzard.create-integration-container")
 public class CreateIntegrationWindow extends BasePortalWindow {
@@ -13,8 +14,20 @@ public class CreateIntegrationWindow extends BasePortalWindow {
     @FindBy(css = "button.facebook-login-bttn")
     private WebElement loginToFBButton;
 
+    @FindBy(xpath = "//button[@class='button button-primary ng-scope']")
+    private WebElement loginToTwitterButton;
+
     @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectFBPage;
+
+    @FindBy(xpath = "//button[@class='button button-primary ng-binding']")
+    private WebElement payNowButton;
+
+    @FindBy(xpath = "//button[@class='small-centered button button-primary']")
+    private WebElement checkOutButton;
+
+    @FindBy(xpath = "//span/button[@ng-bind='finishBttn']")
+    private WebElement finishButton;
 
     public void setUpFBIntegration(String fbPage){
         String currentWindowHandle = this.getCurrentDriver().getWindowHandle();
@@ -34,6 +47,19 @@ public class CreateIntegrationWindow extends BasePortalWindow {
                 .filter(e -> e.getText().equalsIgnoreCase(fbPage))
                 .findFirst().get().click();
         nextButton.click();
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator(), 6);
+        waitForElementToBeInvisible(this.getCurrentDriver(),
+                findElemByCSS(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator()), 6);
+    }
+
+    public void setUpTwitterIntegration(){
+        String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
+        clickElem(this.currentDriver,loginToTwitterButton,3,"Login to twitter");
+        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
+            if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+        }
+        new TwitterLoginPage(DriverFactory.getAgentDriverInstance()).loginUserForTwitterIntegration();
+        clickElem(this.currentDriver,finishButton,3,"Finish button");
         waitForElementToBeVisibleByCss(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator(), 6);
         waitForElementToBeInvisible(this.getCurrentDriver(),
                 findElemByCSS(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator()), 6);

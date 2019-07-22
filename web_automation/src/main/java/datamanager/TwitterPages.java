@@ -7,7 +7,7 @@ public enum TwitterPages {
 
     GEN_BANK_TESTING("General Bank Demo", "testing", "https://twitter.com/Olegtest7"),
     GEN_BANK_QA("General Bank Demo", "qa", "https://twitter.com/TestBotPerf"),
-    GEN_BANK_DEMO("General Bank Demo", "demo", "https://twitter.com/generalbankdemo")
+    GEN_BANK_DEMO("General Bank Demo", "demo", "https://twitter.com/generalbankdemo"),
 
     ;
 

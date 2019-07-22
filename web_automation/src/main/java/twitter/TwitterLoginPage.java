@@ -3,9 +3,11 @@ package twitter;
 import abstractclasses.AbstractPage;
 import datamanager.TwitterUsers;
 import drivermanager.DriverFactory;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 public class TwitterLoginPage extends AbstractPage {
 
@@ -18,10 +20,17 @@ public class TwitterLoginPage extends AbstractPage {
     @FindBy(xpath = "//form[@data-element='form']//input[@type='text']")
     private WebElement emailInputField;
 
+    @FindBy(xpath = "//div[@class='row user']/input")
+    private WebElement emailInputFieldIntegration;
+
     private String emailInputOnSeparatePageXPATH = "//form//fieldset//input[@type='text']";
 
     @FindBy(xpath = "//form[@data-element='form']//input[@type='password']")
     private WebElement passInputField;
+
+
+    @FindBy(xpath = "//div[@class='row password']/input")
+    private WebElement passInputFieldIntegration;
 
     private String passInputFieldOnSeparatePageXPATH = "//form//fieldset//input[@type='password']";
 
@@ -37,17 +46,23 @@ public class TwitterLoginPage extends AbstractPage {
 
     @FindAll({
             @FindBy(css = "a.StaticLoggedOutHomePage-buttonLogin"),
-            @FindBy(css = "a[href='/login']")
+            @FindBy(css = "a[href='/login']"),
+            @FindBy(xpath = "//input[@id='allow']")
     })
     private WebElement logInButton;
 
     @FindBy(css = "li.people.notifications")
     private WebElement notificationsButton;
 
+
+    public TwitterLoginPage(WebDriver driver){
+        super(driver);
+    }
+
     public static TwitterLoginPage openTwitterLoginPage() {
         //https://twitter.com/login?lang=en
         DriverFactory.getTouchDriverInstance().get("https://twitter.com/");
-        return new TwitterLoginPage();
+        return new TwitterLoginPage(DriverFactory.getTouchDriverInstance());
     }
 
     public TwitterLoginPage loginUser() {
@@ -65,6 +80,27 @@ public class TwitterLoginPage extends AbstractPage {
         TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
         waitForElementToBeVisible(profileDashboard, 10);
         return this;
+    }
+
+    public void loginUserForTwitterIntegration(){
+        String twitterWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
+        waitForElementToBeVisibleAgent(emailInputFieldIntegration, 6);
+        emailInputFieldIntegration.sendKeys(TwitterUsers.TOUCHGO_USER.getTwitterUserEmail());
+        passInputFieldIntegration.sendKeys(TwitterUsers.TOUCHGO_USER.getTwitterUserPass());
+        logInButton.click();
+        for(int i = 0; i<10; i++){
+            if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()==1){
+                break;
+            }else{
+                waitForDeprecated(200);
+            }
+        }
+        if(DriverFactory.getDriverForAgent("admin").getWindowHandles().size()>1){
+            Assert.fail("Twitter login page was not closed ");
+        }
+        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
+            if(!handle.equals(twitterWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+        }
     }
 
     public void clickNotificationsButton(){

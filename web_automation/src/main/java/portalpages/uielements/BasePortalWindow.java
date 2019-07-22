@@ -27,7 +27,7 @@ public class BasePortalWindow extends AbstractUIElement {
     protected WebElement cartPaymentDetailsForm;
 
     @FindBy(xpath =  ".//button[@ng-click='wizardSubmit()'][not(@id='integration-save')]")
-    private WebElement addToCardButton;
+    protected WebElement addToCardButton;
 
 
     public void clickAddToCardButton(){

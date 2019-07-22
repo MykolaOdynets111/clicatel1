@@ -909,6 +909,20 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 "Incorrect user name in fb integration");
     }
 
+    @Then("^Twitter integration is saved on the backend$")
+    public void verifyTwitterIntegrationSaved(){
+        String twitterFirstName = ApiHelper.getInfoAboutTwitterIntegration(Tenants.getTenantUnderTestOrgName(),"fullName");
+        Assert.assertEquals(twitterFirstName, TwitterUsers.TOUCHGO_USER.getTwitterUserName(),
+                "Incorrect user name in Twitter integration");
+    }
+
+
+    @And("^Delete Twitter integration on the backend$")
+    public void deleteTwitterIntegrationOnTheBackend() {
+        Response deleteTwitterIntegration = (Response) ApiHelper.delinkTwitterIntegration(Tenants.getTenantUnderTestOrgName());
+        Assert.assertEquals(deleteTwitterIntegration.statusCode(),200, "Twitter integration is not deleted");
+    }
+
     @Then("^Facebook integration is deleted$")
     public void verifyFBIntegrationDeleted(){
         Response fbIntegrationInfo = (Response) ApiHelper.getInfoAboutFBIntegration(Tenants.getTenantUnderTestOrgName());
@@ -930,9 +944,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalIntegrationsPage().getCreateIntegrationWindow().setUpFBIntegration(fbPage);
     }
 
-    @When("^Add twitter integration with (.*) fb page$")
-    public void makeTwitterIntegration(String page){
-
+    @When("^Add twitter integration with twitter page$")
+    public void makeTwitterIntegration(){
+        getPortalIntegrationsPage().getCreateIntegrationWindow().setUpTwitterIntegration();
     }
 
     @When("^Delink facebook account$")

@@ -423,6 +423,27 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper{
                 .getBody();
     }
 
+    public static ResponseBody getInfoAboutTwitterIntegration(String tenantOrgName){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .get(Endpoints.TWITTER_INTEGRATION)
+                .getBody();
+    }
+
+    public static String getInfoAboutTwitterIntegration(String tenantOrgName,String parametr){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .get(Endpoints.TWITTER_INTEGRATION)
+                .getBody().jsonPath().getString(parametr);
+    }
+
+    public static ResponseBody delinkTwitterIntegration(String tenantOrgName){
+        return RestAssured.given()
+                .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .delete(Endpoints.TWITTER_INTEGRATION)
+                .getBody();
+    }
+
     public static void delinkFBIntegration(String tenantOrgName){
         RestAssured.given()
                 .header("Authorization", RequestSpec.getAccessTokenForPortalUser(tenantOrgName, "main"))
