@@ -2,302 +2,50 @@ group 'web_automation'
 version '1.0-SNAPSHOT'
 
 
-buildscript {
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
     repositories {
-        jcenter()
         mavenCentral()
     }
-    dependencies {
-        classpath "ru.d10xa:gradle-allure-plugin:0.5.5"
-    }
-}
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'ru.d10xa.allure'
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile group: 'io.appium', name: 'java-client', version: '6.1.0'
-    compile group: 'javax.mail', name: 'mail', version: '1.4.5'
-    compile group: 'org.testcontainers', name: 'selenium', version: '1.10.5'
-    compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '2.2.5'
-    compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.18'
-    compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
-    compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
-    compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
-    compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
-    compile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
-    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
-    compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
-    compile 'mysql:mysql-connector-java:5.1.+'
-    compile 'com.assertthat:selenium-shutterbug:0.9.1'
-}
-
-configurations {
-    compile
-}
-
-allure{
-    aspectjweaver = true
-    testNG = false
-    allureResultsDir = "$buildDir${File.separator}allure-results"
-    allureReportDir = "$buildDir${File.separator}allure-report"    
-}
-
-def baseXmlPath = "/src/test/resources/"
-def tenantName = "all"
-def suite="all"
-def env = 'testing'
-
-// ========= !! SERVICE TASKS !! ============== //
-
-tasks.withType(Test) {
-    systemProperties = System.getProperties()
-    if (System.getProperty("tenant") != null) {
-        tenantName = System.properties.getProperty("tenant")
-    }
-}
-
-// ========= !! TASKS FOR SUITES !! ============== //
-
-task runFacebookTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + tenantName + "/facebook.xml"
-    }
-}
-
-task runTwitterTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + tenantName + "/twitter.xml"
-    }
-}
-
-task runBaseTests(type:Test) {
-    useTestNG() {
-        println("base TEST ENV " + System.getProperty("env"))
-        useDefaultListeners = true
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/mastercheck.xml"
-    }
-    reports.html.enabled = false
-}
-
-task runTieTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/tie.xml"
-    }
-}
-
-task runTieTestsOnly(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/tie.xml"
-        suites baseXmlPath+tenantName+"/tietraining.xml"
-    }
-}
-
-task runVisibilityTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/visibilitytests.xml"
-    }
-}
-
-task runTouchTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/uitests.xml"
-        suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
-        suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
-    }
-}
-
-task runTouchPullRequestTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
-        suites baseXmlPath+tenantName+"/onethreadtests_pullrequest.xml"
-    }
-}
-
-task runAllTests(type:Test){
-    doFirst {
-        runTieTests.execute()
-        runBaseTests.execute()
-    }
-    doLast {
-        runTouchTests.execute()
-    }
-}
-
-task runPullRequestTests(type:Test){
-    doFirst {
-        runTiePullRequestTests.execute()
-        runBaseTests.execute()
-    }
-    doLast {
-        runTouchPullRequestTests.execute()
-        runVisibilityTests.execute()
-    }
-}
-
-task runTiePullRequestTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/tiepullrequest.xml"
-    }
-}
-
-
-task runWidgetOnlyTests(type:Test){
-    doFirst {
-        useTestNG() {
-            ignoreFailures = true
-            suites baseXmlPath+tenantName+"/uitests.xml"
+    buildscript {
+        repositories {
+            jcenter()
+            mavenCentral()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
         }
     }
-}
 
-task runTestsAgainstNewlyCreatedAccount(type:Test){
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + "touchgo_deprecated/touchgofornewaccount.xml"
-    }
-}
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    
 
-
-task runTouchGoTests(type:Test){
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + "touchgo/touchgosignup.xml"
-        suites baseXmlPath + "touchgo/touchgonewtenant.xml"
-        suites baseXmlPath + "touchgo/tocuhgocloseaccount.xml"
-    }
-}
-
-task runHealthCheckTests(type:Test) {
-    useTestNG() {
-        useDefaultListeners = true
-        ignoreFailures = true
-        suites baseXmlPath+"/healthcheck.xml"
-    }
-    reports.html.enabled = false
-}
-
-task runDotControlTests(type:Test) {
-    useTestNG() {
-        useDefaultListeners = true
-        ignoreFailures = true
-        suites baseXmlPath+"/dotcontrol/dotcontrol.xml"
-    }
-    reports.html.enabled = false
-}
-
-task runCamundaFlowsTests(type:Test) {
-    useTestNG() {
-        useDefaultListeners = true
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/camundaflows.xml"
-    }
-    reports.html.enabled = false
-}
-
-
-task runChatdeskTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath+tenantName+"/chatdesk.xml"
-    }
-}
-
-// ========= !! MAIN TASKS !! ============== //
-
-task reportToTesFLO(type:JavaExec) {
-
-    reportToTesFLO.dependsOn(allureReport)
-
-    sleep(5000)
-    main = "testflo/TestFloReporter"
-    systemProperties = System.getProperties()
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-
-task runTests(type: Test) {
-    systemProperties = System.getProperties()
-
-
-    if (System.getProperty("suite") != null) {
-        suite = System.properties.getProperty("suite")
-    }
-
-    if(suite == "facebook") {
-        runTests.dependsOn(runFacebookTests)
-    }
-
-    if(suite == "twitter") {
-        runTests.dependsOn(runTwitterTests)
-    }
-
-    if(suite == "basecheck") {
-        runTests.dependsOn(runBaseTests)
-    }
-
-    if(suite == "tie") {
-        runTests.dependsOn(runTieTestsOnly)
-    }
-
-    if(suite=="visibility"){
-        runTests.dependsOn(runVisibilityTests)
-    }
-
-    if(suite=="all") {
-        runTests.dependsOn(runAllTests)
-    }
-
-    if(suite=="pullrequest") {
-        runTests.dependsOn(runPullRequestTests)
-    }
-
-    if(suite=="widgetonly") {
-        runTests.dependsOn(runWidgetOnlyTests)
-    }
-
-    if(suite=="tiepullrequest"){
-        runTests.dependsOn(runTiePullRequestTests)
-    }
-
-    if(suite=="touchgo"){
-        runTests.dependsOn(runTouchGoTests)
-    }
-
-    if(suite == "healthcheck") {
-        runTests.dependsOn(runHealthCheckTests)
-    }
-
-    if(suite == "dotcontrol"){
-        runTests.dependsOn(runDotControlTests)
-    }
-
-    if(suite == "camundaflows"){
-        runTests.dependsOn(runCamundaFlowsTests)
-    }
-
-    if(suite == "chatdesk"){
-        runTests.dependsOn(runChatdeskTests)
+    dependencies {
+        compile group: 'org.testcontainers', name: 'selenium', version: '1.10.5'
+        compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
+        compile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
+        compile group: 'io.appium', name: 'java-client', version: '6.1.0'
+        compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '2.2.5'
+        compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.18'
+        compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
+        compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
+        compile 'com.assertthat:selenium-shutterbug:0.9.1'
     }
     
-    runTests.finalizedBy(reportToTesFLO)
-    defaultTasks 'clean', 'runTests'
+
+    task reportToTesFLO(type:JavaExec) {
+        sleep(5000)
+        main = "testflo/TestFloReporter"
+        systemProperties = System.getProperties()
+        classpath = sourceSets.main.runtimeClasspath
+    }
 }
+
+defaultTasks 'clean', ':touch:runTests'
+
 

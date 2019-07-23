@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite 1" >
+    <test name="Examplesuite">
+        <classes>
+            <class name="endtoend.FirstTest" />
+        </classes>
+    </test>
+</suite>

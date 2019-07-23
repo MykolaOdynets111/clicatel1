@@ -1,0 +1,44 @@
+group 'mc2'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    dependencies {
+        classpath "io.qameta.allure:allure-gradle:2.8.0"
+    }
+}
+
+apply plugin: "io.qameta.allure"
+
+allure {
+    version = '2.10.0'
+    autoconfigure = true
+//    aspectjweaver = true
+//    allureResultsDir = "${rootProject.buildDir}${File.separator}allure-results"
+//    allureReportDir = "${rootProject.buildDir}${File.separator}allure-report"
+}
+
+def baseXmlPath = "/src/test/resources/"
+
+dependencies {
+    compile project(':shared')
+    compile group: 'io.qameta.allure', name: 'allure-testng', version: '2.10.0'
+    compile group: 'org.testng', name: 'testng', version: '6.14.3'
+}
+
+task generateAllureReport(type: Exec) {
+    commandLine "allure generate build/allure-results -v 2.10.0 -o build/reports/allure"
+}
+
+//task runB(type:Test) {
+//    runA.finalizedBy allureReport
+//}
+
+task runA(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/example.xml"
+    }
+}
+
+
+
