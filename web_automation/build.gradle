@@ -46,6 +46,6 @@ subprojects {
     }
 }
 
-defaultTasks 'clean', ':touch:runTests'
+//defaultTasks 'clean', ':touch:runTests'
 
 
