@@ -64,6 +64,7 @@ public class FBTenantPage extends AbstractSocialPage {
 
     public MessengerWindow openMessenger(){
         clickElem(this.getCurrentDriver(), sendMessageButton, 5, "Send message button");
+        messengerWindow.setCurrentDriver(this.getCurrentDriver());
         return messengerWindow;
     }
 

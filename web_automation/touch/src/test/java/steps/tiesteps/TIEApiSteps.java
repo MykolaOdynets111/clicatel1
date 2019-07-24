@@ -1002,7 +1002,7 @@ public class TIEApiSteps implements DateTimeHelper {
                     isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("intent")
                             .stream().map(e -> (Map) e)
                             .filter(e -> e.get("name").equals(createdModelName))
-                            .allMatch(e -> e.get("status").equals("finished"));
+                            .anyMatch(e -> e.get("status").equals("finished"));
                 }catch (JsonPathException e){
                     Assert.fail("Unable to get trained models");
                 }
