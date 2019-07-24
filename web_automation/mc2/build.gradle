@@ -1,36 +1,26 @@
+plugins {
+    id("io.qameta.allure") version "2.8.1"
+}
+
 group 'mc2'
 version '1.0-SNAPSHOT'
 
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "io.qameta.allure:allure-gradle:2.8.0"
-    }
-}
-
-apply plugin: "io.qameta.allure"
+def allureVersion = "2.12.1"
 
 allure {
-    version = '2.10.0'
-    autoconfigure = true
+    configuration = 'compile'
+    aspectjweaver = true
+    version = allureVersion
     useTestNG {
-        version = '2.10.0'
+        version = allureVersion
     }
-//    aspectjweaver = true
-//    allureResultsDir = "${rootProject.buildDir}${File.separator}allure-results"
-//    allureReportDir = "${rootProject.buildDir}${File.separator}allure-report"
+    reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
 }
 
 def baseXmlPath = "/src/test/resources/"
 
 dependencies {
     compile project(':shared')
-//    compile group: 'io.qameta.allure', name: 'allure-testng', version: '2.10.0'
-    compile group: 'org.testng', name: 'testng', version: '6.14.3'
 }
 
 
@@ -41,7 +31,12 @@ task runA(type:Test) {
     }
 }
 
-//runA.finalizedBy allureReport
+
+//task runB(type:Test) {
+//    println "Inside task b"
+//    runB.finalizedBy(allureReport)
+//}
+
 
 
 
