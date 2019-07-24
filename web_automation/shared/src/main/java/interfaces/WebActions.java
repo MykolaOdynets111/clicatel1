@@ -152,18 +152,18 @@ public interface WebActions extends WebWait {
     default boolean isElementNotShownByCSS(WebDriver driver, String css, int wait){
         try {
             waitForElementToBeInVisibleByCss(driver, css, wait);
-            return true;
-        } catch (TimeoutException|NoSuchElementException e) {
             return false;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return true;
         }
     }
 
     default boolean isElementNotShown(WebDriver driver, WebElement element, int wait){
         try {
             waitForElementToBeInvisible(driver, element, wait);
-            return true;
-        } catch (TimeoutException|NoSuchElementException e) {
             return false;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return true;
         }
     }
 
