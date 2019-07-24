@@ -9,6 +9,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import javaserver.Server;
 import mc2api.PortalAuthToken;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -158,11 +160,20 @@ public class APIHelperDotControl {
 
 
     private static Response sendInitCall(String tenantOrgName, DotControlInitRequest initRequest){
-        return RestAssured.given().log().all()
+        ObjectMapper mapper = new ObjectMapper();
+        Response resp = null;
+        try {
+            resp = RestAssured.given().log().all()
                     .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                    .contentType(ContentType.JSON)
+                    .body(mapper.writeValueAsString(initRequest))
                     .contentType(ContentType.JSON)
                     .body(initRequest)
                     .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return resp;
     }
 
 }
