@@ -14,6 +14,7 @@ import java.util.Map;
         "enabled",
         "createdDate"
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IntegrationChannel {
 
     @JsonProperty("id")

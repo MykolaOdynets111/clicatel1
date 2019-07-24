@@ -14,6 +14,7 @@ import java.util.Map;
     "lastVisit",
     "otpSent"
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientProfileAttributes {
 
     @JsonProperty("phone")

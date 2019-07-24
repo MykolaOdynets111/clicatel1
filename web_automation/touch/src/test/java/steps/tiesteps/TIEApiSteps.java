@@ -1085,13 +1085,9 @@ public class TIEApiSteps implements DateTimeHelper {
     public void createNewSlot(String type, String intent, String tenantOrgName){
         formNewSlotValues(intent, type, null);
         Response resp = ApiHelperTie.createNewSlot(createSlotBody);
-        try {
-            createdSlotIds.add(resp.getBody().jsonPath().get("id"));
-        } catch (JsonPathException e) {
-            Assert.assertEquals(resp.statusCode(), 200, "Creating new slot was not successful \n" +
-                    "Create slot body: " + createSlotBody.toString());
-        }
-
+        Assert.assertEquals(resp.statusCode(), 200, "Creating new slot was not successful \n" +
+                "Create slot body: " + createSlotBody.toString());
+        createdSlotIds.add(resp.getBody().jsonPath().get("id"));
     }
 
     private void formNewSlotValues(String intent, String type, String expectedValue){
