@@ -43,9 +43,8 @@ public class PortalSignUpPage extends PortalAbstractPage {
         super(driver);
     }
 
-    public static PortalSignUpPage openPortalSignUpPage() {
+    public static void openPortalSignUpPage() {
         DriverFactory.getAgentDriverInstance().get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
-        return new PortalSignUpPage();
     }
 
     public void signUp(String firstName, String accountName, String email, String pass){

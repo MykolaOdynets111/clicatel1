@@ -167,8 +167,6 @@ public class APIHelperDotControl {
                     .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                     .contentType(ContentType.JSON)
                     .body(mapper.writeValueAsString(initRequest))
-                    .contentType(ContentType.JSON)
-                    .body(initRequest)
                     .post(Endpoints.DOT_CONTROL_INIT_MESSAGE);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
