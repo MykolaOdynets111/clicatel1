@@ -41,7 +41,7 @@ task runA(type:Test) {
     }
 }
 
-runA.finalizedBy allureReport
+//runA.finalizedBy allureReport
 
 
 
