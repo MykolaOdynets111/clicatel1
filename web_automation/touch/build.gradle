@@ -19,7 +19,7 @@ allure{
 }
 
 dependencies {
-        compile project(':mc2') {
+        compile (project(':mc2')) {
             exclude group: 'org.testng', module: 'testng'
         }
         compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
