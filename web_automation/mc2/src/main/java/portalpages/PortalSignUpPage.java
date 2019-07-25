@@ -1,5 +1,6 @@
 package portalpages;
 
+import io.qameta.allure.Step;
 import mc2api.EndpointsPlatform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -46,17 +47,28 @@ public class PortalSignUpPage extends PortalAbstractPage {
         driver.get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
     }
 
+    @Step(value = "Sign up new account")
     public void signUp(String firstName, String accountName, String email, String pass){
         waitForElementToBeVisible(this.getCurrentDriver(), fullName, 5);
-        fullName.clear();
-        fullName.sendKeys(firstName);
-        accountNameInput.clear();
-        accountNameInput.sendKeys(accountName);
+        setFirstName(firstName);
+        setAccountName(accountName);
         emailInput.clear();
         emailInput.sendKeys(email);
         password.clear();
         password.sendKeys(pass);
         signUpButton.click();
+    }
+
+    @Step(value = "Set first name")
+    public void setFirstName(String firstName){
+        fullName.clear();
+        fullName.sendKeys(firstName);
+    }
+
+    @Step(value = "Set account name")
+    public void setAccountName(String accountName){
+        accountNameInput.clear();
+        accountNameInput.sendKeys(accountName);
     }
 
     public boolean isSuccessSignUpMessageShown(){
