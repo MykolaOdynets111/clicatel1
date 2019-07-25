@@ -580,6 +580,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^Wait for (.d*) seconds for Phone Number to be (.*)$")
     public void checkPhoneNumberFieldUpdate(int waitFor, String requiredState) throws InterruptedException{
         Customer360Container customer360Container = new Customer360Container();
+        customer360Container.setCurrentDriver(DriverFactory.getDriverForAgent("agent"));
 
         int waitTimeInMillis = waitFor * 1000;
         long endTime = System.currentTimeMillis() + waitTimeInMillis;
