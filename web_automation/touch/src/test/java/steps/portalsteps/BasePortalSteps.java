@@ -348,6 +348,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String expectedMessageAboutSentEmail = "A confirmation email has been sent to "+targetAccEmail+"" +
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
+        setCurrentPortalLoginPage(new PortalLoginPage(DriverFactory.getDriverForAgent("admin")));
         softAssert.assertTrue(getCurrentPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
                 "Message that confirmation email was sent is not shown");
         softAssert.assertEquals(getCurrentPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,

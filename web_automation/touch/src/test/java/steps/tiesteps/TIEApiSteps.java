@@ -1090,12 +1090,12 @@ public class TIEApiSteps implements DateTimeHelper {
     private void formNewSlotValues(String intent, String type, String expectedValue){
         switch (type){
             case "MONEY":
-                createSlotBody = new CreateSlotBody().setIntent(intent).setName("Money slot").setEntityType("MONEY")
+                createSlotBody = new CreateSlotBody().setIntent(intent).setName("Money slot").setEntity_type("MONEY")
                         .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
                         .setTenant(Tenants.getTenantUnderTestName());
                 break;
             case "DATE":
-                createSlotBody = new CreateSlotBody().setIntent(intent).setName("DATE slot").setEntityType("DATE")
+                createSlotBody = new CreateSlotBody().setIntent(intent).setName("DATE slot").setEntity_type("DATE")
                         .setPrompt("Hey, automation test is working.").setConfirm("Let's go!")
                         .setTenant(Tenants.getTenantUnderTestName());
                 break;

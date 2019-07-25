@@ -21,7 +21,7 @@ public class CreateSlotBody {
     @JsonProperty("name")
     private String name;
     @JsonProperty("entity_type")
-    private String entityType;
+    private String entity_type;
     @JsonProperty("prompt")
     private String prompt;
     @JsonProperty("confirm")
@@ -54,13 +54,13 @@ public class CreateSlotBody {
     }
 
     @JsonProperty("entity_type")
-    public String getEntityType() {
-        return entityType;
+    public String getEntity_type() {
+        return entity_type;
     }
 
     @JsonProperty("entity_type")
-    public CreateSlotBody setEntityType(String entityType) {
-        this.entityType = entityType;
+    public CreateSlotBody setEntity_type(String entity_type) {
+        this.entity_type = entity_type;
         return this;
     }
 
@@ -112,7 +112,7 @@ public class CreateSlotBody {
         return "CreateSlotBody{" +
                 "intent='" + intent + '\'' +
                 ", name='" + name + '\'' +
-                ", entityType='" + entityType + '\'' +
+                ", entity_type='" + entity_type + '\'' +
                 ", prompt='" + prompt + '\'' +
                 ", confirm='" + confirm + '\'' +
                 ", tenant='" + tenant + '\'' +
