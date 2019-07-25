@@ -753,6 +753,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Click off/on Chat Conclusion$")
     public void clickOffOnChatConclusion(){
         getPortalTouchPreferencesPage().getChatDeskWindow().clickOnOffChatConclusion();
+        getPortalTouchPreferencesPage().waitWhileProcessing(2,6);
     }
 
 
