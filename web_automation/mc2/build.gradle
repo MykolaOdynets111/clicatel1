@@ -14,7 +14,7 @@ allure {
     useTestNG {
         version = allureVersion
     }
-    //    allureResultsDir = "${rootProject.buildDir}${File.separator}allure-results"
+    resultsDir = file("${rootProject.buildDir}${File.separator}allure-results")
     reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
 }
 
