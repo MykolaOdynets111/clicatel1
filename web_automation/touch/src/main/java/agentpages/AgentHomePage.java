@@ -118,6 +118,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public Customer360Container getCustomer360Container() {
+        customer360Container.setCurrentDriver(this.getCurrentDriver());
         return customer360Container;
     }
 

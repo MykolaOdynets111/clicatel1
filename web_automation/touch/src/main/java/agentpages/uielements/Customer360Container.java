@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 @FindBy(css = "div.user-info-container>div")
-public class Customer360Container extends AbstractUIElementDeprecated {
+public class Customer360Container extends AbstractUIElement {
 
 
     @FindBy(css = "h2.context-profile-name")
@@ -44,14 +44,19 @@ public class Customer360Container extends AbstractUIElementDeprecated {
 
     @FindBy(css = "span.icon.svg-icon-mobile+span")
     private WebElement phoneLabel;
+
     @FindBy(name = "phone")
     private WebElement phoneInput;
+
     @FindBy(xpath = "//div[@class='info-row']/button[text()='Send OTP']")
     private WebElement sendOTPButton;
+
     @FindBy(xpath = "//div[@class='info-row']/button[text()='Verify']")
     private WebElement verifyPhoneButton;
+
     @FindBy(xpath = "//div[@class='info-row']/button[text()='Re-send OTP']")
     private WebElement resendOTPButton;
+
     @FindBy(css = ".status-text")
     private WebElement verifiedLabel;
 
@@ -64,9 +69,11 @@ public class Customer360Container extends AbstractUIElementDeprecated {
     @FindBy(xpath = "//div[contains(@class,'context-part')]//a")
     private WebElement mailColor;
 
+    private String phoneCSS = "span.icon.svg-icon-mobile+span";
+
     public Customer360PersonalInfo getActualPersonalInfo(){
         try {
-            waitForElementToBeVisibleAgent(profileNameLabel, 3, "main");
+            waitForElementToBeVisible(this.getCurrentDriver(), profileNameLabel, 3);
         } catch (TimeoutException e){
             Assert.fail("Customer 360 details is not visible.");
         }
@@ -74,7 +81,7 @@ public class Customer360Container extends AbstractUIElementDeprecated {
         String channelUsername = "Unknown";
         if(!twitterLabel.getText().equals("Unknown")) channelUsername = twitterLabel.getText();
         if(!fbLabel.getText().equals("Unknown")) channelUsername = fbLabel.getText();
-        if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())!=null) channelUsername = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+        if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage(this.getCurrentDriver())!=null) channelUsername = getUserNameFromLocalStorage(this.getCurrentDriver());
         return new Customer360PersonalInfo(profileNameLabel.getText().replace("\n", " "),
                 locationLabel.getText(), customerSinceLabel.getText(),
                 mailLabel.getText(), channelUsername, phoneLabel.getText().replaceAll(" ", ""));
@@ -119,20 +126,20 @@ public class Customer360Container extends AbstractUIElementDeprecated {
     }
 
     public String getPhoneNumber() {
-        waitForElementToBeVisibleByCssAgent("span.icon.svg-icon-mobile+span", 2, "main agent");
-        return findElemByCSSAgent("span.icon.svg-icon-mobile+span").getText(); // phoneLabel.getText();
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(),phoneCSS, 2);
+        return findElemByCSS(this.getCurrentDriver(),phoneCSS).getText(); // phoneLabel.getText();
     }
 
     public boolean isCustomer360SMSButtonsDisplayed(String button){
         switch (button.toLowerCase()) {
             case "send otp":
-                return isElementShown(sendOTPButton);
+                return isElementShown(this.getCurrentDriver(), sendOTPButton, 4);
             case "verify":
-                return isElementShown(verifyPhoneButton);
+                return isElementShown(this.getCurrentDriver(), verifyPhoneButton, 4);
             case "re-send otp":
             case "re send otp":
             case "resend otp":
-                return isElementShown(resendOTPButton);
+                return isElementShown(this.getCurrentDriver(), resendOTPButton, 4);
             default:
                 return false;
         }
@@ -148,24 +155,24 @@ public class Customer360Container extends AbstractUIElementDeprecated {
     public void clickPhoneNumberVerificationButton(String buttonName){
         switch (buttonName.toLowerCase()) {
             case "send otp":
-                clickElemAgent(sendOTPButton, 1, "main", "Send OTP");
+                clickElem(this.getCurrentDriver(), sendOTPButton, 1,"Send OTP");
                 break;
             case "verify":
-                clickElemAgent(verifyPhoneButton, 1, "main", "Verify");
+                clickElem(this.getCurrentDriver(), verifyPhoneButton, 1,"Verify");
                 break;
             case "re-send otp":
             case "re send otp":
             case "resend otp":
-                clickElemAgent(resendOTPButton, 1, "main", "Re-send OTP");
+                clickElem(this.getCurrentDriver(), resendOTPButton, 1,"Re-send OTP");
                 break;
         }
     }
 
     public boolean isVerifiedLabelDisplayed(){
-        return isElementShown(verifiedLabel);
+        return isElementShown(this.getCurrentDriver(), verifiedLabel, 3);
     }
 
     public boolean isVerifiedLabelHidden(){
-        return isElementNotShown(verifiedLabel, 1);
+        return isElementNotShown(this.getCurrentDriver(), verifiedLabel, 1);
     }
 }
