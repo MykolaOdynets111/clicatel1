@@ -14,7 +14,7 @@ import java.util.Map;
     "lastVisit",
     "otpSent"
 })
-@JsonIgnoreProperties(ignoreUnknown = true)
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientProfileAttributes {
 
     @JsonProperty("phone")

@@ -5,17 +5,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "id",
-        "integrationType",
-        "channelType",
-        "channelAdapter",
-        "enabled",
-        "createdDate",
-        "config"
-})
-@JsonIgnoreProperties(ignoreUnknown = true)
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public class IntegrationChannel {
 
     @JsonProperty("id")
@@ -30,20 +20,8 @@ public class IntegrationChannel {
     private Boolean enabled;
     @JsonProperty("createdDate")
     private Long createdDate;
-    @JsonProperty("config")
-    private String config;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("config")
-    public String getConfig() {
-        return config;
-    }
-
-    @JsonProperty("config")
-    public void setConfig(String config) {
-        this.config = config;
-    }
 
     @JsonProperty("id")
     public String getId() {

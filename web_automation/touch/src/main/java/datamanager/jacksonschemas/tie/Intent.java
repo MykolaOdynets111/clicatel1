@@ -13,7 +13,7 @@ import java.util.Map;
         "intent",
         "type"
 })
-@JsonIgnoreProperties(ignoreUnknown = true)
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public class Intent {
 
     @JsonProperty("category")
