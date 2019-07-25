@@ -12,7 +12,8 @@ import java.util.Map;
         "channelType",
         "channelAdapter",
         "enabled",
-        "createdDate"
+        "createdDate",
+        "config"
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class IntegrationChannel {
@@ -29,8 +30,20 @@ public class IntegrationChannel {
     private Boolean enabled;
     @JsonProperty("createdDate")
     private Long createdDate;
+    @JsonProperty("config")
+    private String config;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("config")
+    public String getConfig() {
+        return config;
+    }
+
+    @JsonProperty("config")
+    public void setConfig(String config) {
+        this.config = config;
+    }
 
     @JsonProperty("id")
     public String getId() {

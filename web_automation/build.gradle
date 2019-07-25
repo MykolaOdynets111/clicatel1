@@ -26,7 +26,7 @@ subprojects {
     
 
     dependencies {
-        compile group: 'org.testcontainers', name: 'selenium', version: '1.10.5'
+        compile group: 'org.testcontainers', name: 'selenium', version: '1.11.3'
         compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
         compile group: 'io.rest-assured', name: 'rest-assured', version: '4.0.0'
         compile group: 'io.appium', name: 'java-client', version: '6.1.0'

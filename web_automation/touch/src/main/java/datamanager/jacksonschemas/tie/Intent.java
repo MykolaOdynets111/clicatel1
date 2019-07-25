@@ -13,6 +13,7 @@ import java.util.Map;
         "intent",
         "type"
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Intent {
 
     @JsonProperty("category")
