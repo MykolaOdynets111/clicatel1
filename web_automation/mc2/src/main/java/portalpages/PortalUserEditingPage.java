@@ -1,6 +1,5 @@
 package portalpages;
 
-import driverfactory.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -80,7 +79,7 @@ public class PortalUserEditingPage extends PortalAbstractPage {
     public void uploadPhoto(String photoPath){
         waitForElementToBeVisible(this.getCurrentDriver(), uploadPhotoWindow, 8);
         String selectPictureButtonNGModel = selectPictureButton.getAttribute("ng-model");
-        RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
+        RemoteWebElement element = this.getCurrentDriver().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)
         ));
         element.setFileDetector(new LocalFileDetector());

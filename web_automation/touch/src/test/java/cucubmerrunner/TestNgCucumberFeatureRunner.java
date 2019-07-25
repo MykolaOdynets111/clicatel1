@@ -4,7 +4,7 @@
 //import cucumber.api.testng.CucumberFeatureWrapperImpl;
 //import cucumber.api.testng.TestNGCucumberRunner;
 //import cucumber.runtime.model.CucumberFeature;
-//import drivermanager.DriverFactory;
+//import drivermanager.MC2DriverFactory;
 //import org.testng.annotations.AfterClass;
 //import org.testng.annotations.BeforeClass;
 //import org.testng.annotations.Test;
@@ -22,7 +22,7 @@
 //
 ////    @BeforeClass(alwaysRun = true)
 ////    public void startContainer(){
-////        DriverFactory.openUrl();
+////        MC2DriverFactory.openUrl();
 ////        System.out.println("!!!!!!!!!!!!!!!Cucumber feature :" + cucumberFeature.toString());
 ////    }
 //
@@ -33,8 +33,8 @@
 //
 //    @AfterClass(alwaysRun = true)
 //    public void tearDownClass(){
-////        DriverFactory.closeTouchBrowser();
-////        DriverFactory.closeAgentBrowser();
+////        MC2DriverFactory.closeTouchBrowser();
+////        MC2DriverFactory.closeAgentBrowser();
 ////        this.testNGCucumberRunner.finish();
 //    }
 //

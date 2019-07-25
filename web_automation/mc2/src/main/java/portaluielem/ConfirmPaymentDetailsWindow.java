@@ -1,6 +1,5 @@
 package portaluielem;
 
-import driverfactory.DriverFactory;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -129,7 +128,7 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     }
 
     public void closeWindow(){
-        executeJSclick(findElemByCSS(this.getCurrentDriver(), closeWindowButton), DriverFactory.getAgentDriverInstance());
+        executeJSclick(findElemByCSS(this.getCurrentDriver(), closeWindowButton), this.getCurrentDriver());
         if(isElementShownByXpath(this.getCurrentDriver(), confirmationButton, 2))
             findElemByXPATH(this.getCurrentDriver(), confirmationButton).click();
     }

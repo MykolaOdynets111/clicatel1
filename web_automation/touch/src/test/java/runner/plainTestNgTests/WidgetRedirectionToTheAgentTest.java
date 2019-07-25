@@ -37,7 +37,7 @@ public class WidgetRedirectionToTheAgentTest {
 
     @AfterTest
     public void tearDown(){
-        File src= ((TakesScreenshot)DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.FILE);
+        File src= ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(src, new File(PlainTestNGConfigs.getTestOutPutDir() +
                     PlainTestNGConfigs.getTestSuiteName() +"/redirection_to_agent.png"));

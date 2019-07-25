@@ -1,6 +1,5 @@
 package portalpages;
 
-import driverfactory.DriverFactory;
 import mc2api.EndpointsPlatform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -43,8 +42,8 @@ public class PortalSignUpPage extends PortalAbstractPage {
         super(driver);
     }
 
-    public static void openPortalSignUpPage() {
-        DriverFactory.getAgentDriverInstance().get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
+    public static void openPortalSignUpPage(WebDriver driver) {
+        driver.get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
     }
 
     public void signUp(String firstName, String accountName, String email, String pass){

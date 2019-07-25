@@ -3,6 +3,7 @@ package agentpages;
 import abstractclasses.AgentAbstractPage;
 import datamanager.Agents;
 import driverfactory.DriverFactory;
+import driverfactory.MC2DriverFactory;
 import driverfactory.URLs;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;

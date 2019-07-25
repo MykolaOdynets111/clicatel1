@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
+import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import mc2api.ApiHelperPlatform;
 import apihelper.ApiHelperTie;
@@ -13,7 +14,6 @@ import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
-import driverfactory.DriverFactory;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import io.restassured.path.json.exception.JsonPathException;
@@ -297,7 +297,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I open portal$")
     public void openPortal(){
-        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage());
+        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent("admin")));
     }
 
 
@@ -310,8 +310,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("Portal Sign Up page is opened")
     public void openPortalSignUpPage(){
-        PortalSignUpPage.openPortalSignUpPage();
-        setPortalSignUpPage(new PortalSignUpPage("admin"));
+        PortalSignUpPage.openPortalSignUpPage(DriverFactory.getDriverForAgent("admin"));
+        setPortalSignUpPage(new PortalSignUpPage(DriverFactory.getDriverForAgent("admin")));
     }
 
     @When("I use activation ID and opens activation page")
@@ -483,12 +483,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalAccountDetailsPage().confirmAccount(email, account);
     }
 
-    @Then("^Admin is not able to login into portal with deleted (.*) account$")
-    public void verifyAdminCannotLoginToPortal(String tenantOrgName){
-        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage());
+    @Then("^(.*) is not able to login into portal with deleted (.*) account$")
+    public void verifyAdminCannotLoginToPortal(String agent,String tenantOrgName){
+        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent(agent)));
         if (!getCurrentPortalLoginPage().isLoginPageOpened(1)){
             getCurrentPortalLoginPage().waitFor(200);
-            setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage());
+            setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent(agent)));
         }
         MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
         getCurrentPortalLoginPage().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
@@ -1295,7 +1295,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }catch (NoSuchElementException e){
             Assert.fail(fullName + " user was not found");
         }
-        setPortalUserProfileEditingPage(new PortalUserEditingPage("admin"));
+        setPortalUserProfileEditingPage(new PortalUserEditingPage(DriverFactory.getDriverForAgent("admin")));
     }
 
     @When("^Click 'Upload' button$")

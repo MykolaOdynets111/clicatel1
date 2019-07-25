@@ -1,7 +1,6 @@
 package portaluielem;
 
 import com.github.javafaker.Faker;
-import driverfactory.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -112,7 +111,7 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     public void uploadPhoto(String photoPath){
         waitForElementToBeVisible(this.getCurrentDriver(), uploadButton, 8);
         String selectPictureButtonNGModel = uploadButton.getAttribute("ng-model");
-        RemoteWebElement element = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector(
+        RemoteWebElement element = this.getCurrentDriver().findElement(By.cssSelector(
                 String.format(inputPhotoLocator, selectPictureButtonNGModel)
         ));
         element.setFileDetector(new LocalFileDetector());

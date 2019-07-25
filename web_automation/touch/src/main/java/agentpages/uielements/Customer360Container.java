@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
-import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;

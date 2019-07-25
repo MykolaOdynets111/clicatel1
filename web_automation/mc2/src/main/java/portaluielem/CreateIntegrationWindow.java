@@ -1,6 +1,5 @@
 package portaluielem;
 
-import driverfactory.DriverFactory;
 import facebook.FBLoginPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -58,17 +57,17 @@ public class CreateIntegrationWindow extends BasePortalWindow {
         executor.executeScript( "arguments[0].dispatchEvent(new Event('click'));",
                 findElemByCSS(this.getCurrentDriver(), "div[ng-form='setupTwitterForm'] button"));
         for(String handle : this.getCurrentDriver().getWindowHandles()){
-            if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+            if(!handle.equals(currentWindowHandle)) this.getCurrentDriver().switchTo().window(handle);
         }
     }
 
     public void setUpTwitterIntegration(){
-        String currentWindowHandle = DriverFactory.getDriverForAgent("admin").getWindowHandle();
+        String currentWindowHandle = this.getCurrentDriver().getWindowHandle();
         clickElem(this.currentDriver,loginToTwitterButton,3,"Login to twitter");
-        for(String handle : DriverFactory.getDriverForAgent("admin").getWindowHandles()){
-            if(!handle.equals(currentWindowHandle)) DriverFactory.getDriverForAgent("admin").switchTo().window(handle);
+        for(String handle : this.getCurrentDriver().getWindowHandles()){
+            if(!handle.equals(currentWindowHandle)) this.getCurrentDriver().switchTo().window(handle);
         }
-        new TwitterLoginPage(DriverFactory.getAgentDriverInstance()).loginUserForTwitterIntegration();
+        new TwitterLoginPage(this.getCurrentDriver()).loginUserForTwitterIntegration();
         clickElem(this.currentDriver,finishButton,3,"Finish button");
         waitForElementToBeVisibleByCss(this.getCurrentDriver(), PortalAbstractPage.getNotificationAlertLocator(), 6);
         waitForElementToBeInvisible(this.getCurrentDriver(),

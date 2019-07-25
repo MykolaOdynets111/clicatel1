@@ -1,6 +1,5 @@
 package portaluielem;
 
-import driverfactory.DriverFactory;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -56,10 +55,10 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         findElemByCSS(this.getCurrentDriver(), firstName).sendKeys("AQA");
         findElemByCSS(this.getCurrentDriver(), lastName).sendKeys("Test");
         checkAllCheckboxesForAddingNewPayment();
-        waitForAngularToBeReady(DriverFactory.getAgentDriverInstance());
+        waitForAngularToBeReady(this.getCurrentDriver());
         waitFor(2000);
-//        getNgDriver(DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
-        executeAngularClick(DriverFactory.getAgentDriverInstance(), primaryBindingButton);
+//        getNgDriver(MC2DriverFactory.getAgentDriverInstance()).waitForAngularRequestsToFinish();
+        executeAngularClick(this.getCurrentDriver(), primaryBindingButton);
         return this;
     }
 
@@ -88,18 +87,18 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     }
 
     public void clickNextButton(){
-        executeAngularClick(DriverFactory.getAgentDriverInstance(), nextButton);
+        executeAngularClick(this.getCurrentDriver(), nextButton);
     }
 
     public void clickAddPaymentButton(){
         waitForElementToBeClickable(this.getCurrentDriver(), primaryBindingButton, 15);
         waitFor(2000);
-        executeAngularClick(DriverFactory.getAgentDriverInstance(), primaryBindingButton);
+        executeAngularClick(this.getCurrentDriver(), primaryBindingButton);
     }
 
 
     public boolean isAddPaymentButtonEnabled(){
-        executeJSHover(primaryBindingButton, DriverFactory.getAgentDriverInstance());
+        executeJSHover(primaryBindingButton, this.getCurrentDriver());
         return primaryBindingButton.isEnabled();
     }
 

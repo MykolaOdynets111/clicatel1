@@ -1,7 +1,6 @@
 package portaluielem;
 
 import abstractclasses.AbstractUIElement;
-import driverfactory.DriverFactory;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -43,7 +42,7 @@ public class LeftMenu extends AbstractUIElement {
         }catch (TimeoutException e){
             executeJSclick(activeLeftMenuItems
                             .stream().filter(e1 -> e1.getText().equalsIgnoreCase(menuItem)).findFirst().get(),
-                    DriverFactory.getAgentDriverInstance());
+                    this.getCurrentDriver());
         }
 
         executeClickInElemListWithWait(this.getCurrentDriver(), submenuItems, subMenuItem);

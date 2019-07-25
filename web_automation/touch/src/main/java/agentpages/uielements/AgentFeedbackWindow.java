@@ -160,7 +160,7 @@ public class AgentFeedbackWindow extends AbstractUIElementDeprecated {
         if(availableTagsContainer.getText().isEmpty()) {
             Assert.fail("Have not Tags to be selected");
         }
-//        String html = DriverFactory.getAgentDriverInstance().findElement(By.cssSelector("div.Select-menu-outer")).getAttribute("innerHTML");
+//        String html = MC2DriverFactory.getAgentDriverInstance().findElement(By.cssSelector("div.Select-menu-outer")).getAttribute("innerHTML");
         List<String> result = availableTags.stream().map(e -> e.getAttribute("innerText").trim()).collect(Collectors.toList());
         clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
         return result;

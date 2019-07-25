@@ -1,7 +1,9 @@
 package steps.portalsteps;
 
 import com.github.javafaker.Faker;
+import driverfactory.DriverFactory;
 import interfaces.JSHelper;
+import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
 
@@ -50,25 +52,26 @@ public class AbstractPortalSteps implements JSHelper {
     }
 
     public static PortalLoginPage getPortalLoginPage(String agent) {
+        WebDriver driver = DriverFactory.getDriverForAgent(agent);
         if (agent.equalsIgnoreCase("second agent")) {
-            return getSecondPortalLoginPage();
+            return getSecondPortalLoginPage(driver);
         } else {
-            return getMainPortalLoginPage();
+            return getMainPortalLoginPage(driver);
         }
     }
 
-    public static PortalLoginPage getMainPortalLoginPage(){
+    public static PortalLoginPage getMainPortalLoginPage(WebDriver driver){
         if (portalLoginPage.get()==null) {
-            portalLoginPage.set(new PortalLoginPage("main"));
+            portalLoginPage.set(new PortalLoginPage(driver));
             return portalLoginPage.get();
         } else{
             return portalLoginPage.get();
         }
     }
 
-    public static PortalLoginPage getSecondPortalLoginPage(){
+    public static PortalLoginPage getSecondPortalLoginPage(WebDriver driver){
         if (secondAgentPortalLoginPage.get()==null) {
-            secondAgentPortalLoginPage.set(new PortalLoginPage("second agent"));
+            secondAgentPortalLoginPage.set(new PortalLoginPage(driver));
             return secondAgentPortalLoginPage.get();
         } else{
             return secondAgentPortalLoginPage.get();
@@ -78,7 +81,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalMainPage getPortalMainPage() {
         if (portalMainPage.get()==null) {
-            portalMainPage.set(new PortalMainPage("admin"));
+            portalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("admin")));
             return portalMainPage.get();
         } else{
             return portalMainPage.get();
@@ -92,7 +95,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalIntegrationsPage getPortalIntegrationsPage() {
         if (portalIntegrationsPage.get()==null) {
-            portalIntegrationsPage.set(new PortalIntegrationsPage("admin"));
+            portalIntegrationsPage.set(new PortalIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
             return portalIntegrationsPage.get();
         } else{
             return portalIntegrationsPage.get();
@@ -106,7 +109,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalBillingDetailsPage getPortalBillingDetailsPage() {
         if (portalBillingDetailsPage.get()==null) {
-            portalBillingDetailsPage.set(new PortalBillingDetailsPage("admin"));
+            portalBillingDetailsPage.set(new PortalBillingDetailsPage(DriverFactory.getDriverForAgent("admin")));
             return portalBillingDetailsPage.get();
         } else{
             return portalBillingDetailsPage.get();
@@ -120,7 +123,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalSignUpPage getPortalSignUpPage() {
         if (portalSignUpPage.get()==null) {
-            portalSignUpPage.set(new PortalSignUpPage("admin"));
+            portalSignUpPage.set(new PortalSignUpPage(DriverFactory.getDriverForAgent("admin")));
             return portalSignUpPage.get();
         } else{
             return portalSignUpPage.get();
@@ -134,7 +137,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public PortalAccountDetailsPage getPortalAccountDetailsPage() {
         if (portalAccountDetailsPage.get()==null) {
-            portalAccountDetailsPage.set(new PortalAccountDetailsPage("admin"));
+            portalAccountDetailsPage.set(new PortalAccountDetailsPage(DriverFactory.getDriverForAgent("admin")));
             return portalAccountDetailsPage.get();
         } else{
             return portalAccountDetailsPage.get();
@@ -148,7 +151,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalFBIntegrationPage getPortalFBIntegrationPage() {
         if (portalFBIntegrationPage.get()==null) {
-            portalFBIntegrationPage.set(new PortalFBIntegrationPage("admin"));
+            portalFBIntegrationPage.set(new PortalFBIntegrationPage(DriverFactory.getDriverForAgent("admin")));
             return portalFBIntegrationPage.get();
         } else{
             return portalFBIntegrationPage.get();
@@ -162,7 +165,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalManageAgentUsersPage getPortalManagingUsersPage() {
         if (portalManagingUsersPage.get()==null) {
-            portalManagingUsersPage.set(new PortalManageAgentUsersPage("admin"));
+            portalManagingUsersPage.set(new PortalManageAgentUsersPage(DriverFactory.getDriverForAgent("admin")));
             return portalManagingUsersPage.get();
         } else{
             return portalManagingUsersPage.get();
@@ -176,7 +179,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalUserEditingPage getPortalUserProfileEditingPage() {
         if (portalUserProfileEditingPage.get()==null) {
-            portalUserProfileEditingPage.set(new PortalUserEditingPage("admin"));
+            portalUserProfileEditingPage.set(new PortalUserEditingPage(DriverFactory.getDriverForAgent("admin")));
             return portalUserProfileEditingPage.get();
         } else{
             return portalUserProfileEditingPage.get();
@@ -190,7 +193,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalTouchPreferencesPage getPortalTouchPreferencesPage() {
         if (portalTouchPreferencesPage.get()==null) {
-            portalTouchPreferencesPage.set(new PortalTouchPreferencesPage("admin"));
+            portalTouchPreferencesPage.set(new PortalTouchPreferencesPage(DriverFactory.getDriverForAgent("admin")));
             return portalTouchPreferencesPage.get();
         } else{
             return portalTouchPreferencesPage.get();
@@ -204,7 +207,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalUserManagementPage getPortalUserManagementPage() {
         if (portalUserManagementPage.get()==null) {
-            portalUserManagementPage.set(new PortalUserManagementPage("admin"));
+            portalUserManagementPage.set(new PortalUserManagementPage(DriverFactory.getDriverForAgent("admin")));
             return portalUserManagementPage.get();
         } else{
             return portalUserManagementPage.get();
@@ -218,7 +221,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static PortalChatConsolePage getPortalChatConsolePage() {
         if (portalChatConsolePage.get()==null) {
-            portalChatConsolePage.set(new PortalChatConsolePage("admin"));
+            portalChatConsolePage.set(new PortalChatConsolePage(DriverFactory.getDriverForAgent("admin")));
             return portalChatConsolePage.get();
         } else{
             return portalChatConsolePage.get();
@@ -232,7 +235,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     public static ChatConsoleInboxPage getChatConsoleInboxPage() {
         if (chatConsoleInboxPage.get()==null) {
-            chatConsoleInboxPage.set(new ChatConsoleInboxPage("admin"));
+            chatConsoleInboxPage.set(new ChatConsoleInboxPage(DriverFactory.getDriverForAgent("admin")));
             return chatConsoleInboxPage.get();
         } else{
             return chatConsoleInboxPage.get();

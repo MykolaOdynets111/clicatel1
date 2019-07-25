@@ -1,6 +1,5 @@
 package portalpages;
 
-import driverfactory.DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
@@ -9,6 +8,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import portaluielem.PageHeader;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
@@ -46,7 +46,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 //        HtmlElementLoader.populatePageObject(this, MC2DriverFactory.getAgentDriverInstance());
     }
     public PortalAbstractPage(String agent) {
-        this.currentDriver = DriverFactory.getDriverForAgent(agent);
+        Assert.fail(" Use only constructor with driver");
+//        this.currentDriver = DriverFactory.getDriverForAgent(agent);
         HtmlElementLoader.populatePageObject(this, this.currentDriver);
     }
     public PortalAbstractPage(WebDriver driver) {
