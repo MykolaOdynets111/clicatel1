@@ -1,5 +1,6 @@
 package portalpages;
 
+import driverfactory.MC2DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
@@ -42,13 +43,12 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     // == Constructors == //
 
     public PortalAbstractPage() {
-        // here will be a default Driver for mc2 tests
-//        HtmlElementLoader.populatePageObject(this, MC2DriverFactory.getAgentDriverInstance());
+        HtmlElementLoader.populatePageObject(this, MC2DriverFactory.getPortalDriver());
     }
+
+
     public PortalAbstractPage(String agent) {
         Assert.fail(" Use only constructor with driver");
-//        this.currentDriver = DriverFactory.getDriverForAgent(agent);
-        HtmlElementLoader.populatePageObject(this, this.currentDriver);
     }
     public PortalAbstractPage(WebDriver driver) {
         this.currentDriver = driver;

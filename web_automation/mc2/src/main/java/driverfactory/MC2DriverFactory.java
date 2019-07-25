@@ -21,7 +21,7 @@ public class MC2DriverFactory {
     private static String LINUX_SELENIUM_DOCKERS_URL_WITH_MONITOR = "http://selenium.clickatelllabs.com:4445/wd/hub";
 
 
-    public static WebDriver getPortalDriverInstance(){
+    public static WebDriver getPortalDriver(){
         if (portalDriver.get() != null)
             return portalDriver.get();
         return startNewPortalDriverInstance();
