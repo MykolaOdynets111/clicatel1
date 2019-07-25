@@ -310,7 +310,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("Portal Sign Up page is opened")
     public void openPortalSignUpPage(){
-        setPortalSignUpPage(PortalSignUpPage.openPortalSignUpPage());
+        PortalSignUpPage.openPortalSignUpPage();
+        setPortalSignUpPage(new PortalSignUpPage("admin"));
     }
 
     @When("I use activation ID and opens activation page")
