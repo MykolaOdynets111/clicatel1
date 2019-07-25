@@ -1674,7 +1674,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(agentUnderTest.getSentiments().get(ordinalChatNumber),
                 sentiment.toLowerCase(), "Sentiment is not correct for "+ userId +" chat ");
         soft.assertEquals(agentUnderTest.getIntents().get(ordinalChatNumber),
-                intent, "Intent for "+ userId +" user chat is not correct");
+                intent, "CreatedIntent for "+ userId +" user chat is not correct");
         soft.assertAll();
     }
 

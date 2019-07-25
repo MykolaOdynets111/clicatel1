@@ -14,7 +14,7 @@ import java.util.Map;
         "type"
 })
 @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
-public class Intent {
+public class CreatedIntent {
 
     @JsonProperty("category")
     private Object category;

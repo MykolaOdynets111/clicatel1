@@ -65,7 +65,7 @@ public class BaseTieSteps {
                 SoftAssert soft = new SoftAssert();
                 soft.assertEquals(intentsList.size(), numberOfIntents,
                         "Number of intents for '" + userMessage + "' user message is not as expected");
-                soft.assertEquals(intent, expectedIntent, "Intent in tie response is not as expected");
+                soft.assertEquals(intent, expectedIntent, "CreatedIntent in tie response is not as expected");
                 soft.assertAll();
             } catch (IndexOutOfBoundsException e) {
                 Assert.assertTrue(false, "There are no intents at all in tie response for '" + userMessage + "' user message");
@@ -106,7 +106,7 @@ public class BaseTieSteps {
                 String intent = intentsList.get(0).get("intent");
 
                 SoftAssert soft = new SoftAssert();
-                soft.assertEquals(intent, expectedIntent, "Intent in tie response is not as expected");
+                soft.assertEquals(intent, expectedIntent, "CreatedIntent in tie response is not as expected");
                 soft.assertAll();
             } catch (IndexOutOfBoundsException e) {
                 Assert.assertTrue(false, "There are no intents at all in tie response for '" + userMessage + "' user message");
@@ -145,7 +145,7 @@ public class BaseTieSteps {
                 SoftAssert soft = new SoftAssert();
                 soft.assertEquals(intents.size(), numberOfIntents,
                         "Number of intents for '" + userMessage + "' user message is not as expected");
-                soft.assertEquals(intents, expectedIntents, "Intent in tie response is not as expected");
+                soft.assertEquals(intents, expectedIntents, "CreatedIntent in tie response is not as expected");
                 soft.assertAll();
             } catch (IndexOutOfBoundsException e) {
                 Assert.assertTrue(false, "There are no intents at all in tie response for '" + userMessage + "' user message");

@@ -312,7 +312,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         // And we are verifying that expected intent is among the choice options
         if(intentsCount>1){
             if (!widgetConversationArea.isCardContainsButton(userInput, intent)){
-                Assert.assertTrue(false, "Intent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
+                Assert.assertTrue(false, "CreatedIntent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
 
             }
             widgetConversationArea.clickOptionInTheCard(userInput, intent);

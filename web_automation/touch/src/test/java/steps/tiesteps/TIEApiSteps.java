@@ -8,10 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
-import datamanager.jacksonschemas.tie.CreateSlotBody;
-import datamanager.jacksonschemas.tie.SlotInTieResponse;
-import datamanager.jacksonschemas.tie.TieNERItem;
-import datamanager.jacksonschemas.tie.Entity;
+import datamanager.jacksonschemas.tie.*;
 
 import static io.restassured.RestAssured.*;
 
@@ -144,7 +141,7 @@ public class TIEApiSteps implements DateTimeHelper {
     }
 
 
-    // ======================= Intent Answers ======================== //
+    // ======================= CreatedIntent Answers ======================== //
 
     @When("^I send (.*) for (.*) tenant then response code is 200 and list of answers is shown$")
     public void checkListOfAnswers(List<String> intents, String tenant){
@@ -420,7 +417,7 @@ public class TIEApiSteps implements DateTimeHelper {
         List intents = resp.getBody().jsonPath().getList("intents_result.intents");
         if(!intents.isEmpty()){
             Assert.assertFalse(intents.contains(intent),
-                    "Intent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
+                    "CreatedIntent from another model is returned in the response for not related model '"+modelType+"' on user message '"+userInput+"' for '"+tenant+"' tenant" +
                             "\n"+resp.getBody().asString()+"\n");
         }
     }
@@ -745,9 +742,9 @@ public class TIEApiSteps implements DateTimeHelper {
                 .post(String.format(Endpoints.TIE_POST_SEMANTIC,newTenant, "semantic"));
 
         soft.assertEquals(resp1.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
-                "Intent in the response is not as expected after using application/json Content Type\n"+resp1.getBody().asString());
+                "CreatedIntent in the response is not as expected after using application/json Content Type\n"+resp1.getBody().asString());
         soft.assertEquals(resp2.getBody().jsonPath().get("intents_result.intents.intent[0]"), "semantic",
-                "Intent in the response is not as expected after using text/plain Content Type\n"+resp2.getBody().asString());
+                "CreatedIntent in the response is not as expected after using text/plain Content Type\n"+resp2.getBody().asString());
         soft.assertAll();
     }
 
@@ -944,8 +941,8 @@ public class TIEApiSteps implements DateTimeHelper {
     @When("^New intent is created$")
     public void verifyNewIntentAdding(){
         waitFor(500);
-        List<datamanager.jacksonschemas.tie.Intent> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("",
-                datamanager.jacksonschemas.tie.Intent.class);
+        List<CreatedIntent> allIntents = ApiHelperTie.getAllIntents().getBody().jsonPath().getList("",
+                CreatedIntent.class);
         Assert.assertTrue(allIntents.stream().anyMatch(e -> e.getIntent()
                         .equals(mapForCreatedIntent.get("intent").toString())),
                 "Created '"+ mapForCreatedIntent.get("intent")+"'intent is not returned");
