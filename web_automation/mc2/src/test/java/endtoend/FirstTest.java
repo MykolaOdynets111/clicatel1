@@ -7,7 +7,7 @@ import org.testng.annotations.*;
 import portalpages.PortalSignUpPage;
 import steps.StepOne;
 
-@Test
+@Test(testName = "First Test")
 public class FirstTest extends BaseTest {
 
     private PortalSignUpPage signUpPage;
@@ -20,7 +20,7 @@ public class FirstTest extends BaseTest {
 
 
     @Description("The very first test")
-    @Test
+    @Test(testName = "Test with only names") //test name ignored on method level
     public void onlyNames(){
         signUpPage.setFirstName("Tom Jones");
         signUpPage.setAccountName("allure");
@@ -28,7 +28,7 @@ public class FirstTest extends BaseTest {
     }
 
     @Description("The very second test")
-    @Test
+    @Test(testName = "Test with full sign up data") //test name ignored on method level
     public void allInfo(){
         signUpPage.signUp("Tom Jones", "alluew2", "aqa@a.a", "123456");
         Assert.assertEquals(1, 1, "equals");
