@@ -6,7 +6,8 @@ import org.testng.annotations.Test;
 import steps.StepOne;
 
 @Test
-public class FirstTest {
+public class FirstTest extends BaseTest {
+
 
     @Description("The very first test")
     @Test

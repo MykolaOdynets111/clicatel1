@@ -24,8 +24,17 @@ dependencies {
     compile project(':shared')
 }
 
+// =========== !! SERVICE TASKS !! ============== //
 
-task runA(type:Test) {
+task copyConfig(type: Copy) {
+    from "src/test/resources/allureconfigs/"
+    into "${rootProject.buildDir}${File.separator}allure-results"
+//    include "*.properties"
+}
+
+// ========= !! TASKS FOR SUITES !! ============== //
+
+task runAcceptance(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + "/example.xml"
@@ -33,10 +42,14 @@ task runA(type:Test) {
 }
 
 
-//task runB(type:Test) {
-//    println "Inside task b"
-//    runB.finalizedBy(allureReport)
-//}
+// =============== !! MAIN TASK !! ============== //
+
+task runTests(type:Test) {
+    runTests.dependsOn(runAcceptance)
+
+//    copyConfig.execute()
+    runTests.finalizedBy(copyConfig)
+}
 
 
 
