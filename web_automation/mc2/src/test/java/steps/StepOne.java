@@ -4,8 +4,8 @@ import io.qameta.allure.Step;
 
 public class StepOne {
 
-    @Step
+    @Step("Create int")
     public int createInt(){
-        return 2;
+        return 1;
     }
 }

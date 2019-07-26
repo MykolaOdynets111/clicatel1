@@ -22,9 +22,14 @@ def baseXmlPath = "/src/test/resources/"
 
 dependencies {
     compile project(':shared')
+    compile group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
 }
 
 // =========== !! SERVICE TASKS !! ============== //
+
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+}
 
 task copyConfig(type: Copy) {
     from "src/test/resources/allureconfigs/"
@@ -41,13 +46,19 @@ task runAcceptance(type:Test) {
     }
 }
 
+task runApi(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/apiexample.xml"
+    }
+}
+
 
 // =============== !! MAIN TASK !! ============== //
 
 task runTests(type:Test) {
     runTests.dependsOn(runAcceptance)
 
-//    copyConfig.execute()
     runTests.finalizedBy(copyConfig)
 }
 

@@ -1,6 +1,9 @@
+plugins {
+    id "base"
+}
+
 group 'web_automation'
 version '1.0-SNAPSHOT'
-
 
 subprojects {
 
@@ -47,5 +50,20 @@ subprojects {
 }
 
 defaultTasks 'clean', ':touch:runTests'
+
+task runMC2Tests {
+    dependsOn 'clean'
+    dependsOn ':mc2:runTests'
+    runMC2Tests.finalizedBy(':mc2:allureReport')
+
+//    task(':mc2:runTests').mustRunAfter('clean')
+//    'dependsOn: “:subproject1:installWithConfig”'
+//    subprojects.t
+////    dependsOn 'clean'
+////    runMC2Tests.finalizedBy(':mc2:runTests')
+//    task(":mc2:runTests").dependsOn('clean')
+//    .depe
+//    tasks.findByName('runTests').mustRunAfter('clean')
+}
 
 
