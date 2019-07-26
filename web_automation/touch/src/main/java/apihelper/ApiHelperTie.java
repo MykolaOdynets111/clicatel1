@@ -37,11 +37,14 @@ public class ApiHelperTie {
          }
 
     public static String getExpectedMessageOnIntent(String intent) {
-        return RestAssured.given()
+        Response resp  = RestAssured.given()
                 .header("Authorization",
                         PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
-                .get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestName(), intent)).jsonPath().get("text");
-
+                .get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestName(), intent));
+        String answer = resp.jsonPath().get("text");
+        if(answer == null) Assert.fail("Empty answer on '" + intent + "' intent\n"
+                                                                + resp.getBody().asString());
+        return answer;
     }
 
     public static String getExpectedMessageOnIntent(String tenantOrgName, String intent) {
