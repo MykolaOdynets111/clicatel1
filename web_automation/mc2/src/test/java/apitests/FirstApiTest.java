@@ -2,6 +2,7 @@ package apitests;
 
 import datamanager.MC2Account;
 import drivermanager.ConfigManager;
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import mc2api.EndpointsPlatform;
@@ -16,6 +17,7 @@ public class FirstApiTest {
         ConfigManager.setEnv("testing");
     }
 
+    @Step("allure test")
     @Test
     public void test(){
         RestAssured
