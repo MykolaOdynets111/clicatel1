@@ -413,8 +413,7 @@ public class DotControlSteps {
             }
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
-            Assert.assertTrue(false,
-                    ".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
+            Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
         }
     }
 
