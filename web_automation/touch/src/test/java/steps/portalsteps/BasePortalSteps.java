@@ -1130,7 +1130,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
             }
         }
         Assert.assertTrue(result, "Balance was not updated after top up\n" +
-                "Balance from backend : " + ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance() +"\n" +
+                "Balance from backend before test: " + topUpBalance.get("preTest") + "\n" +
+                "Value to be set: " + topUpBalance.get("afterTest") + "\n" +
+                "Balance from backend after test: " + ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance() +"\n" +
                 "Expected: " + actualInfo + "\n" +
                 "Actual: " + valueFromPortal);
     }
