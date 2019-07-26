@@ -49,14 +49,13 @@ public class DotControlSteps implements WebWait {
                 generateInfoForCreatingIntegration(Server.getServerURL()).get());
 
         if(!(resp.statusCode()==200)) {
-            Assert.assertTrue(false, "Integration creating was not successful\n" +
-                    "Status code " + resp.statusCode()+
+            Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
         String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
         System.out.println("!! Api token from creating integration: " + token);
         if(token==null){
-            Assert.assertTrue(false, "apiToken is absent in create integration response " +
+            Assert.fail("apiToken is absent in create integration response " +
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
@@ -73,7 +72,7 @@ public class DotControlSteps implements WebWait {
                 generateInfoForCreatingIntegration(Server.getServerURL()).get());
 
         if(!(resp.statusCode()==200)) {
-            Assert.assertTrue(false, "Integration creating was not successful\n" +
+            Assert.fail("Integration creating was not successful\n" +
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
@@ -84,7 +83,7 @@ public class DotControlSteps implements WebWait {
             adapterApiTokens.put(adapter,token);
         }
         if(adapterApiTokens.isEmpty()){
-            Assert.assertTrue(false, "apiToken is absent in create integration response " +
+            Assert.fail("apiToken is absent in create integration response " +
                     "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
@@ -149,7 +148,7 @@ public class DotControlSteps implements WebWait {
     @Then("Verify dot .Control returns response with correct text for initial (.*) user message")
     public void verifyDotControlResponse(String initialMessage){
         if(!(responseOnSentRequest.get().statusCode()==200)) {
-                Assert.assertTrue(false, "Sending message was not successful\n" +
+                Assert.fail("Sending message was not successful\n" +
                         "Sent data in the request: " + dotControlRequestMessage.get().toString() + "\n\n" +
                         "Status code " + responseOnSentRequest.get().statusCode()+
                         "\nResponse Body: " + responseOnSentRequest.get().getBody().asString() + "\n\n" +
@@ -162,7 +161,7 @@ public class DotControlSteps implements WebWait {
             Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
                     "Message is not as expected");
         }catch(NullPointerException e){
-            Assert.assertTrue(false, "Nullpointer exception was faced\n " +
+            Assert.fail("Nullpointer exception was faced\n " +
                     "The request: " + dotControlRequestMessage.get().toString() + "\n" +
                     "clientId from request:" + dotControlRequestMessage.get().getClientId() + "\n" +
             "Received clientId from .Control response" + Server.incomingRequests.keySet());
@@ -195,7 +194,7 @@ public class DotControlSteps implements WebWait {
                         "Message is not as expected");
             }
         }catch(NullPointerException e){
-            Assert.assertTrue(false, "NullPointerException was faced\n" +
+            Assert.fail("NullPointerException was faced\n" +
             "Keyset from server: " + Server.incomingRequests.keySet() + "\n" +
             "clientId from created integration" + clientId.get() + "\n" +
             "" + Server.incomingRequests.toString()
@@ -269,12 +268,10 @@ public class DotControlSteps implements WebWait {
 
     @When("^Send parameterized init call with context correct response is returned$")
     public void sendInitCalWithAdditionalParameters(){
-        SoftAssert soft = new SoftAssert();
-
         DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
         initRequest.setInitContext(new InitContext());
         Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
-        soft.assertEquals(resp.getStatusCode(), 200,
+        Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
                         resp.getBody().asString() + "\n\n");
 
@@ -409,7 +406,6 @@ public class DotControlSteps implements WebWait {
             }
 
             waitFor(wait);
-
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
             Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
@@ -444,22 +440,20 @@ public class DotControlSteps implements WebWait {
         return initCallBody.get().getInitContext();
     }
 
-    public String generateInitCallMessageId(String messageIdStrategy){
+    private String generateInitCallMessageId(String messageIdStrategy){
         String messageId = "";
         switch(messageIdStrategy){
             case "provided":
-//                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
                 messageId = "testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3);
                 break;
             case "empty":
-//                initCallMessageId.set("testing_" + faker.lorem().word() + "_" + faker.lorem().word() + faker.number().digits(3));
                 messageId = "";
                 break;
         }
         return messageId;
     }
 
-    public String generateInitCallClientId(String clientIdStrategy){
+    private String generateInitCallClientId(String clientIdStrategy){
         String clientIdString = "";
         switch(clientIdStrategy){
             case "generated":
