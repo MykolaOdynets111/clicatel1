@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import portalpages.PortalSignUpPage;
-import steps.StepOne;
 
 @Test(testName = "First Test")
 public class FirstTest extends BaseTest {
@@ -24,7 +23,7 @@ public class FirstTest extends BaseTest {
     public void onlyNames(){
         signUpPage.setFirstName("Tom Jones");
         signUpPage.setAccountName("allure");
-        Assert.assertEquals(1, new StepOne().createInt(), "equals");
+        Assert.assertEquals(1, 2, "equals");
     }
 
     @Description("The very second test")
