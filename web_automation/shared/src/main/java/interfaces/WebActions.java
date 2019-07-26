@@ -12,13 +12,6 @@ public interface WebActions extends WebWait {
 
     String widgetScroller = "div.scroller";
 
-    default void waitFor(int milisecs){
-        try {
-            Thread.sleep(milisecs);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     // ==================================== Elements Actions ======================================= //
 

@@ -17,6 +17,7 @@ import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
+import interfaces.WebWait;
 import io.restassured.response.Response;
 import javaserver.Server;
 import org.testng.Assert;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DotControlSteps {
+public class DotControlSteps implements WebWait {
 
     private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
     private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
@@ -406,11 +407,9 @@ public class DotControlSteps {
                     Server.incomingRequests.keySet().contains(clientId.get())) {
                 break;
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            waitFor(wait);
+
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
             Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");

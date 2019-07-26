@@ -8,6 +8,14 @@ import java.util.List;
 
 public interface WebWait {
 
+    default void waitFor(int milisecs){
+        try {
+            Thread.sleep(milisecs);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     default WebDriverWait initWait(WebDriver driver, int waitTime){
         return new WebDriverWait(driver, waitTime);
     }
