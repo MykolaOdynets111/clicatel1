@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="Acceptance suite" >
-    <test name="New account registration">
+<suite name="MC2 Api Tests" >
+    <test name="MC2 Account">
         <classes>
             <class name="apitests.FirstApiTest" />
         </classes>

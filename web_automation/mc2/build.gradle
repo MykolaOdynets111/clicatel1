@@ -6,6 +6,9 @@ group 'mc2'
 version '1.0-SNAPSHOT'
 
 def allureVersion = "2.12.1"
+def suite = "all"
+def baseXmlPath = "/src/test/resources/"
+
 
 allure {
     configuration = 'compile'
@@ -17,8 +20,6 @@ allure {
     resultsDir = file("${rootProject.buildDir}${File.separator}allure-results")
     reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
 }
-
-def baseXmlPath = "/src/test/resources/"
 
 dependencies {
     compile project(':shared')
@@ -39,14 +40,14 @@ task copyConfig(type: Copy) {
 
 // ========= !! TASKS FOR SUITES !! ============== //
 
-task runAcceptance(type:Test) {
+task runAcceptanceTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + "/example.xml"
     }
 }
 
-task runApi(type:Test) {
+task runApiTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
         suites baseXmlPath + "/apiexample.xml"
@@ -57,7 +58,16 @@ task runApi(type:Test) {
 // =============== !! MAIN TASK !! ============== //
 
 task runTests(type:Test) {
-    runTests.dependsOn(runAcceptance)
+
+    suite = System.properties.getProperty("suite", "all")
+
+    if(suite == "all") {
+        runTests.dependsOn(runAcceptanceTests)
+    }
+
+    if(suite == "api") {
+        runTests.dependsOn(runApiTests)
+    }
 
     runTests.finalizedBy(copyConfig)
 }
