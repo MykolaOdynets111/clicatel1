@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.*;
 
 
 @Test(testName = "POST /auth/accounts")
-public class FirstApiTest {
+public class FirstApiTest extends BaseApiTest{
 
 
     @Step("Verify POST /auth/accounts 200 and token not null ")
