@@ -1,0 +1,67 @@
+plugins {
+    id("io.qameta.allure") version "2.8.1"
+}
+
+group 'mc2'
+version '1.0-SNAPSHOT'
+
+def allureVersion = "2.12.1"
+
+allure {
+    configuration = 'compile'
+    aspectjweaver = true
+    version = allureVersion
+    useTestNG {
+        version = allureVersion
+    }
+    resultsDir = file("${rootProject.buildDir}${File.separator}allure-results")
+    reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
+}
+
+def baseXmlPath = "/src/test/resources/"
+
+dependencies {
+    compile project(':shared')
+    compile group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
+}
+
+// =========== !! SERVICE TASKS !! ============== //
+
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+}
+
+task copyConfig(type: Copy) {
+    from "src/test/resources/allureconfigs/"
+    into "${rootProject.buildDir}${File.separator}allure-results"
+//    include "*.properties"
+}
+
+// ========= !! TASKS FOR SUITES !! ============== //
+
+task runAcceptance(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/example.xml"
+    }
+}
+
+task runApi(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/apiexample.xml"
+    }
+}
+
+
+// =============== !! MAIN TASK !! ============== //
+
+task runTests(type:Test) {
+    runTests.dependsOn(runAcceptance)
+
+    runTests.finalizedBy(copyConfig)
+}
+
+
+
+

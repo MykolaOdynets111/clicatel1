@@ -1,0 +1,269 @@
+group 'touch'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    dependencies {
+        classpath "ru.d10xa:gradle-allure-plugin:0.5.5"
+    }
+}
+
+
+apply plugin: 'ru.d10xa.allure'
+
+
+allure{
+    aspectjweaver = true
+    testNG = false
+    allureResultsDir = "${rootProject.buildDir}${File.separator}allure-results"
+    allureReportDir = "${rootProject.buildDir}${File.separator}allure-report"
+}
+
+dependencies {
+        compile (project(':mc2')) {
+            exclude group: 'org.testng', module: 'testng'
+        }
+        compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
+        compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
+        compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
+        compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
+}
+
+
+def baseXmlPath = "/src/test/resources/"
+def tenantName
+def suite="all"
+def env = 'testing'
+
+
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+    tenantName = System.getProperty("tenant", "all")
+}
+
+// ========= !! TASKS FOR SUITES !! ============== //
+
+task runFacebookTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/facebook.xml"
+    }
+}
+
+task runTwitterTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/twitter.xml"
+    }
+}
+
+task runBaseTests(type:Test) {
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath + tenantName +"/mastercheck.xml"
+    }
+    reports.html.enabled = false
+}
+
+task runTieTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/tie.xml"
+    }
+}
+
+task runTieTestsOnly(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/tie.xml"
+        suites baseXmlPath+tenantName+"/tietraining.xml"
+    }
+}
+
+task runVisibilityTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/visibilitytests.xml"
+    }
+}
+
+task runTouchTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/uitests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
+        suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
+    }
+}
+
+task runTouchPullRequestTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/widget_pullrequest.xml"
+        suites baseXmlPath+tenantName+"/onethreadtests_pullrequest.xml"
+    }
+}
+
+task runAllTests(type:Test){
+    doFirst {
+        runTieTests.execute()
+        runBaseTests.execute()
+    }
+    doLast {
+        runTouchTests.execute()
+    }
+}
+
+task runPullRequestTests(type:Test){
+    doFirst {
+        runTiePullRequestTests.execute()
+        runBaseTests.execute()
+    }
+    doLast {
+        runTouchPullRequestTests.execute()
+        runVisibilityTests.execute()
+    }
+}
+
+task runTiePullRequestTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/tiepullrequest.xml"
+    }
+}
+
+
+task runWidgetOnlyTests(type:Test){
+    doFirst {
+        useTestNG() {
+            ignoreFailures = true
+            suites baseXmlPath+tenantName+"/uitests.xml"
+        }
+    }
+}
+
+task runTestsAgainstNewlyCreatedAccount(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "touchgo_deprecated/touchgofornewaccount.xml"
+    }
+}
+
+
+task runTouchGoTests(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "touchgo/touchgosignup.xml"
+        suites baseXmlPath + "touchgo/touchgonewtenant.xml"
+        suites baseXmlPath + "touchgo/tocuhgocloseaccount.xml"
+    }
+}
+
+task runHealthCheckTests(type:Test) {
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+"/healthcheck.xml"
+    }
+    reports.html.enabled = false
+}
+
+task runDotControlTests(type:Test) {
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+"/dotcontrol/dotcontrol.xml"
+    }
+    reports.html.enabled = false
+}
+
+task runCamundaFlowsTests(type:Test) {
+    useTestNG() {
+        useDefaultListeners = true
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/camundaflows.xml"
+    }
+    reports.html.enabled = false
+}
+
+
+task runChatdeskTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/chatdesk.xml"
+    }
+}
+
+
+// ========= !! MAIN TASKS !! ============== //
+
+task runTests(type: Test) {
+
+    if (System.getProperty("suite") != null) {
+        suite = System.properties.getProperty("suite")
+    }
+
+
+    if(suite == "facebook") {
+        runTests.dependsOn(runFacebookTests)
+    }
+
+    if(suite == "twitter") {
+        runTests.dependsOn(runTwitterTests)
+    }
+
+    if(suite == "basecheck") {
+        runTests.dependsOn(runBaseTests)
+    }
+
+    if(suite == "tie") {
+        runTests.dependsOn(runTieTestsOnly)
+    }
+
+    if(suite=="visibility"){
+        runTests.dependsOn(runVisibilityTests)
+    }
+
+    if(suite=="all") {
+        runTests.dependsOn(runAllTests)
+    }
+
+    if(suite=="pullrequest") {
+        runTests.dependsOn(runPullRequestTests)
+    }
+
+    if(suite=="widgetonly") {
+        runTests.dependsOn(runWidgetOnlyTests)
+    }
+
+    if(suite=="tiepullrequest"){
+        runTests.dependsOn(runTiePullRequestTests)
+    }
+
+    if(suite=="touchgo"){
+        runTests.dependsOn(runTouchGoTests)
+    }
+
+    if(suite == "healthcheck") {
+        runTests.dependsOn(runHealthCheckTests)
+    }
+
+    if(suite == "dotcontrol"){
+        runTests.dependsOn(runDotControlTests)
+    }
+
+    if(suite == "camundaflows"){
+        runTests.dependsOn(runCamundaFlowsTests)
+    }
+
+    if(suite == "chatdesk"){
+        runTests.dependsOn(runChatdeskTests)
+    }
+
+    reportToTesFLO.dependsOn(allureReport)
+    
+    runTests.finalizedBy(reportToTesFLO)
+    
+    defaultTasks 'clean', 'runTests'
+}
+

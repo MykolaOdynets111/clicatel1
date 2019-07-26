@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Creating new tenant">
+    <test name="Creating new tenant test">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoCreateTenant" />
+        </classes>
+    </test>
+    <test name="Tests for Starter TouchGo plan (first bunch)">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoStarter01" />
+        </classes>
+    </test>
+    <test name="Tests for Starter TouchGo plan (second bunch)">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoStarter02" />
+        </classes>
+    </test>
+    <test name="Tests for Starter TouchGo plan (third bunch)">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoStarter03" />
+        </classes>
+    </test>
+    <test name="Tests for Starter TouchGo plan (fourth bunch)">
+        <classes>
+            <class name="runner.touchgo.RunTouchGoStarter04" />
+        </classes>
+    </test>
+<!--    <test name="Tests for Standard TouchGo plan">-->
+<!--        <classes>-->
+<!--            <class name="runner.touchgo.RunTouchGoStandard" />-->
+<!--        </classes>-->
+<!--    </test>-->
+</suite>
