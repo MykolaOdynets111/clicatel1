@@ -13,9 +13,7 @@ import static org.hamcrest.Matchers.*;
 @Test(testName = "POST /auth/accounts")
 public class FirstApiTest extends BaseApiTest{
 
-
     @Step("Verify POST /auth/accounts 200 and token not null ")
-    @Test
     public void authAccounts(){
         RestAssured
                 .given()
@@ -28,8 +26,10 @@ public class FirstApiTest extends BaseApiTest{
                 .when()
                     .post(EndpointsPlatform.PLATFORM_ACCOUNTS)
                 .then()
-                    .statusCode(300)
+                    .statusCode(200)
                     .assertThat()
-                    .body("token", notNullValue());
+                    .body("token", notNullValue())
+                    .body("token", nullValue());
+
     }
 }
