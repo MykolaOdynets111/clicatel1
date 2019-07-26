@@ -79,14 +79,14 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
     }
 
     public boolean isValidImg(String adapter) {
-        File image = new File("src/test/resources/adaptericons/" + adapter + ".png");
+        File image = new File("touch/src/test/resources/adaptericons/" + adapter + ".png");
           return isWebElementEqualsImage(adapterIcon,image, "main");
     }
 
 
     public boolean isValidIconSentiment(String message){
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-        File image =new File("src/test/resources/sentimenticons/"+sentiment+".png");
+        File image =new File("touch/src/test/resources/sentimenticons/"+sentiment+".png");
         return isWebElementEqualsImage(userSentiment,image, "main");
     }
 

@@ -1371,14 +1371,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        getPortalUserProfileEditingPage().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/agent_photo.png");
+        getPortalUserProfileEditingPage().uploadPhoto("touch/src/test/resources/agentphoto/agent_photo.png");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
 
     @When("^Upload: photo for tenant$")
     public void uploadPhotoForTenant() {
-        getPortalTouchPreferencesPage().getConfigureBrandWindow().uploadPhoto(System.getProperty("user.dir") + "/src/test/resources/agentphoto/tenant.png");
+        getPortalTouchPreferencesPage().getConfigureBrandWindow().uploadPhoto("touch/src/test/resources/agentphoto/tenant.png");
     }
 
     @Then("^Change secondary color for tenant$")

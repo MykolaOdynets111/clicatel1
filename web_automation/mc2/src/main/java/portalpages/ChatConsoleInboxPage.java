@@ -34,6 +34,8 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     }
 
     public String getFilterByDefault(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        waitForElementsToBeVisibleByXpath(this.getCurrentDriver(),filterByDefaultXpath,2);
         return getTextFromElem(this.getCurrentDriver(),
                                     findElemByXPATH(this.getCurrentDriver(), filterByDefaultXpath), 5,
                             "Default filter");
