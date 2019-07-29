@@ -9,9 +9,9 @@
 ## Tests Location
 Cucumber tests are stored in `mc2/src/main/tests/`
 
-* ### Report
+### Report
 All test results will be collected in Allure report.
 You can find Allure report by path
 ```
-build/allure-report/index.html
+web_automation/build/allure-report/index.html
 ```

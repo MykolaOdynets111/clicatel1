@@ -60,7 +60,7 @@ In order to run some features by tag please add the following to run command:
 All test results will be collected in Allure report.
 You can find Allure report by path
 ```
-build/allure-report/index.html
+web_automation/build/allure-report/index.html
 ```
 
 * ### Default parameters' values:
