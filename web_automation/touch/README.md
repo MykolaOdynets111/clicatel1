@@ -16,7 +16,7 @@ check out the default parameter values).
 
 ## Tests run configurations
 
-* ###Specific tenant
+* ### Specific tenant
 In order to start tests against some specific tenant use -Dtenant parameter ```./gradlew -Dtenant=virginmoney```
 NOTE: tenants which have "-" in the tenantname should be passed with underscore "_" instead
 
