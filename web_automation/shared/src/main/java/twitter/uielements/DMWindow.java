@@ -6,13 +6,16 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css = "div.DMDock-conversations")
+@FindBy(xpath = "//div[@aria-labelledby='modal-header']")
 public class DMWindow extends AbstractUIElement {
 
     private String cssLocatorDMInputfield = "div#tweet-box-dm-conversation";
+    private String xpathLocatorDMInputfield = "//div[@aria-label='Tweet text']";
     private String deleteConversationConfirmButton = "button#confirm_dialog_submit_button";
+    private String sendButtonXpath = "//span[text()='Tweet']";
 
-    @FindBy(xpath = "//span[text()='Send']")
+
+    @FindBy(xpath = "//span[text()='Tweet']")
     private WebElement sendButton;
 
     @FindBy(css = "span.Icon--info")
@@ -29,8 +32,8 @@ public class DMWindow extends AbstractUIElement {
 
 
     public void sendUserMessage(String message){
-        findElemByCSS(this.getCurrentDriver(), cssLocatorDMInputfield).sendKeys(message);
-        sendButton.click();
+        findElemByXPATH(this.getCurrentDriver(), xpathLocatorDMInputfield).sendKeys(message);
+        findElemByXPATH(this.getCurrentDriver(), sendButtonXpath).click();
     }
 
     public void deleteConversation(){

@@ -8,11 +8,11 @@ import twitter.uielements.SendNewTweetWindow;
 
 public class TwitterTenantPage extends TwitterHomePage {
 
-    @FindBy(css = "button.DMButton")
-//    @FindBy(xpath = "//span[contains(text(),'Messages')]")
+   // @FindBy(xpath = "//div[@aria-labelledby='modal-header']")
+    @FindBy(xpath = "//span[contains(text(),'Tweet')]")
     private WebElement messageButton;
 
-    @FindBy(css = "div.DMDock-conversations")
+    @FindBy(xpath = "//div[@aria-labelledby='modal-header']")
     private WebElement directConversationArea;
 
     private String newTweetButtonCss = "button.NewTweetButton";
@@ -37,7 +37,7 @@ public class TwitterTenantPage extends TwitterHomePage {
     }
 
     public void openDMWindow() {
-        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), tweetSEndPopupCss, 8);
+      //  waitForElementToBeInVisibleByCss(this.getCurrentDriver(), tweetSEndPopupCss, 8);
         waitForElementToBeClickable(this.getCurrentDriver(), messageButton, 5);
         executeJSclick(this.getCurrentDriver(), messageButton);
         waitForElementToBeVisible(this.getCurrentDriver(), directConversationArea, 5);

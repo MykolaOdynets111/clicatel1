@@ -13,6 +13,9 @@ public class TwitterLoginPage extends AbstractSocialPage {
     @FindBy(css = "div.DashboardProfileCard")
     private WebElement profileDashboard;
 
+    @FindBy(xpath = "//a[@aria-label='Profile']")
+    private WebElement profileButton;
+
     @FindBy(xpath = "//form[@data-element='form']")
     private WebElement loginForm;
 
@@ -78,7 +81,7 @@ public class TwitterLoginPage extends AbstractSocialPage {
             loginButton.click();
         }
         TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
-        waitForElementToBeVisible(this.getCurrentDriver(), profileDashboard, 10);
+        waitForElementToBeVisible(this.getCurrentDriver(), profileButton, 10);
         return this;
     }
 
@@ -104,6 +107,6 @@ public class TwitterLoginPage extends AbstractSocialPage {
     }
 
     public void clickNotificationsButton(){
-        notificationsButton.click();
+       notificationsButton.click();
     }
 }
