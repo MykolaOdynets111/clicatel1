@@ -24,6 +24,8 @@ allure {
 dependencies {
     compile project(':shared')
     compile group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
+    compile group: 'io.github.sskorol', name: 'test-data-supplier', version: '1.8.5'
+
 }
 
 // =========== !! SERVICE TASKS !! ============== //
