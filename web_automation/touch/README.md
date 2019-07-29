@@ -21,7 +21,7 @@ In order to start tests against some specific tenant use -Dtenant parameter
 ```
 ./gradlew -Dtenant=virginmoney
 ```
-NOTE: tenants which have "-" in the tenantname should be passed with underscore "_" instead
+NOTE: tenants which have "-" in the tenantname should be passed with underscore "_" instead.
 By default will run tests for all tenants
 
 * ### Specific env
@@ -37,7 +37,7 @@ For example, the following command will run only tie tests :
 ```
 ./gradlew -Dsuite=tie
 ```
-All available suites names also may be found in `touch/build.gradle` file in runTests task.
+All available suites names also may be found in `touch/build.gradle\runTests task`.
 
 * ### Remote run
 For running test in CI on Docker Selenium cluster in selenium grid add `-Dremote=true` to the run command.
@@ -64,11 +64,11 @@ build/allure-report/index.html
 ```
 
 * ### Default parameters' values:
--Dsuite=all
--Dtenant=all
--Denv=testing
--Dremote=false
--Ddeploy_to=active
+- Dsuite=all
+- Dtenant=all
+- Denv=testing
+- Dremote=false
+- Ddeploy_to=active
 
 * ### TC details issue and template ID
 It is also possible to attach issue to the allure report. You just need to user “@Issue” annotation.
