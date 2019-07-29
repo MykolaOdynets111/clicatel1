@@ -1,0 +1,17 @@
+## mc2 sub-project stack
+* JAVA 8
+* TestNG
+* Rest-assured
+* Allure rest assured
+* Allure
+* Gradle
+
+## Tests Location
+Cucumber tests are stored in `mc2/src/main/tests/`
+
+* ### Report
+All test results will be collected in Allure report.
+You can find Allure report by path
+```
+build/allure-report/index.html
+```
