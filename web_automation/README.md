@@ -1,12 +1,12 @@
 ## Overview
-This a multi-module project for mc2 and touch automation.
+This is a multi-module project for mc2 and touch automation.
 
 ## Sub-projects
 * ### shared
 Module for some helpers and useful features. Is sharred between touch and mc2 sub-project
 
 * ### mc2
-Imports shared module features. Are used for mc2 functionality.
+Imports shared module features. Are used for mc2 testing.
 
 * ### touch
 Imports shared and mc2 modules. Are used for touch, .Control and tie testing.
