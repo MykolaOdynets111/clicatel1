@@ -1,4 +1,4 @@
-## Project stack
+## Sub-project stack
 * JAVA 8
 * TestNG
 * Cucumber
