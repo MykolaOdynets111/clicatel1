@@ -7,7 +7,7 @@
 * Gradle
 
 ## Tests Location
-Cucumber tests are stored in `mc2/src/main/tests/`
+Tests are stored in `mc2/src/main/tests/`
 
 ### Report
 All test results will be collected in Allure report.
