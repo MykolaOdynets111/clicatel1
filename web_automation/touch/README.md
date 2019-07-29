@@ -1,4 +1,13 @@
-Tests are stored in src/main/tests/java/scenario/<tenantName>/*/*.feature
+## Project stack
+* JAVA 8
+* TestNG
+* Cucumber
+* Rest-assured
+* Allure
+* Gradle
+
+## Tests Location
+Cucumber tests are stored in `touch/src/main/tests/java/scenario/<tenantName>/*/*.feature`
 
 For starting tests navigate in the terminal to the project's folder (web_automation)
 and use "./gradlew" and all tests will be started (in order to know what tests will be started
