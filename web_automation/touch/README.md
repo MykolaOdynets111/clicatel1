@@ -58,17 +58,23 @@ You can find Allure report by path ```build/allure-report/index.html```
 * ### TC details issue and template ID
 It is also possible to attach issue to the allure report. You just need to user “@Issue” annotation.
  * Issue:
-```@Issue("https://jira.clickatell.com/browse/TPORT-1916")
-Scenario: Scenario name```
+```
+@Issue("https://jira.clickatell.com/browse/TPORT-1916")
+Scenario: Scenario name
+```
  * TC id
- ```@TestCaseId("https://jira.clickatell.com/browse/TPORT-1916")
- Scenario: Scenario name```
- * Severity leve:
+ ```
+ @TestCaseId("https://jira.clickatell.com/browse/TPORT-1916")
+ Scenario: Scenario name
+ ```
+ * Severity level:
  Change displayed severity by using @SeverityLevel.CRITICAL annotation. Possible values are:
 @SeverityLevel.BLOCKER, @SeverityLevel.CRITICAL, @SeverityLevel.NORMAL, @SeverityLevel.MINOR, @SeverityLevel.TRIVIAL
 
 ## LOCAL .Control tests
 In order to run .Control tests LOCALLY, you need to start ngrock on the port, specified in
-```tpuch/src/main/java/javaserver/Server.java/SERVER_PORT variable
+```
+touch/src/main/java/javaserver/Server.java/SERVER_PORT variable
+ ```
 After that, paste your ngrock url into the same class in getServerURL() method
 
