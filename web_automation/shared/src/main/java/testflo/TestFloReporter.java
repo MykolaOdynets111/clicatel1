@@ -112,20 +112,34 @@ public class TestFloReporter {
     }
 
     private static void setTCStatus(String tcKey, String tcStatus, String failureMessage){
-        if(!tcStatus.equalsIgnoreCase("canceled")) {
+        if(tcStatus.equalsIgnoreCase("canceled")){
+            return;
+        }
+        moveTicketToInProgress(tcKey);
+        setStatusForTestCase(tcKey, tcStatus, failureMessage);
+    }
+
+    private static void moveTicketToInProgress(String tcKey){
+        if(ConfigManager.rerunTestPlan()) {
+            JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves ticket "Re-test" status
+            JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "In Progress" status
+        } else{
             JiraApiHelper.changeTestCaseStatus(tcKey, "11"); // moves ticket "In Progress" status
+        }
 
-            if (tcStatus.equalsIgnoreCase("passed")) {
-                JiraApiHelper.changeTestCaseStatus(tcKey, "21");
-            }
+    }
 
-            if (tcStatus.equalsIgnoreCase("broken") |
-                    tcStatus.equalsIgnoreCase("failed")) {
-                JiraApiHelper.changeTestCaseStatus(tcKey, "31");
-                JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
-            }
+    private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage){
+        if (tcStatus.equalsIgnoreCase("passed")) {
+            JiraApiHelper.changeTestCaseStatus(tcKey, "21");
+        }
+        if (tcStatus.equalsIgnoreCase("broken") |
+                tcStatus.equalsIgnoreCase("failed")) {
+            JiraApiHelper.changeTestCaseStatus(tcKey, "31");
+            JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
         }
     }
+
 
     private static String readBaseTestPlanKey(){
             try {

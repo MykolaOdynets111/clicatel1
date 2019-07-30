@@ -23,6 +23,8 @@ public class ConfigManager {
     private static final String JIRA_USER = "jirauser";
     private static final String JIRA_PASS = "jirapass";
     private static final String REMOTE_ALLURE_REPORT = "isRemoteAllureReport";
+    private static final String RERUN_TEST_PLAN = "isRerun";
+
 
     //TouchGo configs
     private static final String DEBUG_TOUCHGO = "gebugTouchGo";
@@ -79,6 +81,11 @@ public class ConfigManager {
 
     public static boolean reportToTouchFlo() {
         String reportToTestFlo = System.getProperty(REPORT_TESTFLO, "false");
+        return Boolean.parseBoolean(reportToTestFlo);
+    }
+
+    public static boolean rerunTestPlan(){
+        String reportToTestFlo = System.getProperty(RERUN_TEST_PLAN, "false");
         return Boolean.parseBoolean(reportToTestFlo);
     }
 
