@@ -85,8 +85,8 @@ public class ConfigManager {
     }
 
     public static boolean rerunTestPlan(){
-        String reportToTestFlo = System.getProperty(RERUN_TEST_PLAN, "false");
-        return Boolean.parseBoolean(reportToTestFlo);
+        String rerun = System.getProperty(RERUN_TEST_PLAN, "false");
+        return Boolean.parseBoolean(rerun);
     }
 
     public static boolean debugTouchGo() {

@@ -15,7 +15,13 @@ import java.util.stream.Collectors;
 public class TestFloReporter {
 
     public static void main(String[] args) {
-//        driver.ConfigManager.setIsRemote("true");
+//        For debug
+//    System.setProperty("isRemoteAllureReport", "true");
+//    System.setProperty("reportToTestFLO", "true");
+//    System.setProperty("isRerun", "true");
+//    System.setProperty("tplanKey", "TPORT-10166");
+//    System.setProperty("jirauser", "");
+//    System.setProperty("jirapass", "");
 
         if(ConfigManager.reportToTouchFlo()) {
 
@@ -36,7 +42,8 @@ public class TestFloReporter {
                     .map(testCase -> testCase.getFields().getSummary()).collect(Collectors.toList());
 
             // 3. Get executed case from allure
-            List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases(false);
+            List<AllureScenarioInterface> executedTests = AllureReportParser
+                    .parseAllureResultsToGetTestCases(ConfigManager.isRemoteAllureReport());
 
             // 4. Filter the cases that should be created in Test Plan
             List<AllureScenarioInterface> executedTestsToBeCreatedInTestPlan = executedTests
