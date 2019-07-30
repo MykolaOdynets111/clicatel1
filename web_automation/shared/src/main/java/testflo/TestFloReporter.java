@@ -127,7 +127,6 @@ public class TestFloReporter {
     }
 
     private static void moveTicketToInProgress(String tcKey){
-        System.out.println("!!!\n\n rerun option !!!" + ConfigManager.rerunTestPlan() + "\n");
         if(ConfigManager.rerunTestPlan()) {
             JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves ticket "Re-test" status
             JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "In Progress" status
