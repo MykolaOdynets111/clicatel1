@@ -251,7 +251,7 @@ public class AbstractPortalSteps implements JSHelper {
     }
 
 
-    public static void сleanAllPortalPages(){
+    public static void cleanAllPortalPages(){
         currentPortalLoginPage.remove();
         portalLoginPage.remove();
         secondAgentPortalLoginPage.remove();

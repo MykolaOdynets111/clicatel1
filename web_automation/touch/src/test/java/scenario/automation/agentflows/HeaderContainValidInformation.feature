@@ -1,3 +1,4 @@
+@img
 Feature: Header contain valid information
 
   Background:

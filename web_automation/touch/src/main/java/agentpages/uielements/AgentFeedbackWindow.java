@@ -50,10 +50,12 @@ public class AgentFeedbackWindow extends AbstractUIElementDeprecated {
 
     private String inputTagField =  "div.Select-input > input";
 
-    @FindBy(css = ".Select-arrow")
+    @FindBy(xpath = "//span[@class='Select-arrow-zone']")
     private WebElement openDropdownButton;
 
-    private String openDropdownButtoncss = ".Select-multi-value-wrapper";
+    private String openDropdownButtoncss = ".Select-control";
+
+    private String openDropdownButtoncssTags = ".Select-multi-value-wrapper";
 
     private String openDropdownButtonXpathClear = "//div[contains(@class,'Select-placeholder')]";
 
@@ -139,9 +141,9 @@ public class AgentFeedbackWindow extends AbstractUIElementDeprecated {
         if(availableTagsContainer.getText().isEmpty()) {
             Assert.assertTrue(false, "Have not Tags to be selected");
         } else {
-            clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
+            clickElemAgent(openDropdownButton, 3, "main agent", "Open dropdown button" );
             while (iter > 0) {
-                clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
+                clickElemAgent(openDropdownButton, 3, "main agent", "Open dropdown button" );
                 availableTagsContainer.click();
                 findElemByCSSAgent(openDropdownButtoncss).click();
                 iter--;
@@ -170,7 +172,7 @@ public class AgentFeedbackWindow extends AbstractUIElementDeprecated {
         waitForElementToBeClickableAgent(openDropdownButton, 6, "main agent");
         List<String> result = new ArrayList<>();
         if (!isElementShownAgentByXpath(openDropdownButtonXpathClear,2,"main")){
-            result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncss).getText().split("[\n]+[ ]")));
+            result.addAll(Arrays.asList(findElemByCSSAgent(openDropdownButtoncssTags).getText().split("[\n]+[ ]")));
         }
         return result;
     }

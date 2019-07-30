@@ -132,7 +132,7 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         return getAgentHomePage(agent).getChatHeader();
     }
 
-    public static void сleanAllPages(){
+    public static void cleanAllPages(){
         currentAgentLoginPage.remove();
         secondAgentLoginPage.remove();
         mainAgentLoginPage.remove();
