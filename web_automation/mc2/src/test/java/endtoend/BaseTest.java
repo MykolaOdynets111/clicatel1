@@ -1,7 +1,10 @@
 package endtoend;
 
+import driverfactory.MC2DriverFactory;
 import drivermanager.ConfigManager;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
@@ -11,6 +14,11 @@ import java.util.Properties;
 
 @Test
 public class BaseTest {
+
+    @AfterTest(alwaysRun = true)
+    public void closeBrowser(){
+        MC2DriverFactory.closePortalBrowser();
+    }
 
     @AfterSuite(alwaysRun = true)
     public void setUpEnvsProp(){

@@ -39,6 +39,16 @@ public class PortalAuthToken {
         }
     }
 
+
+    public static String getAccessTokenForPortalUser(String accountName, String email, String pass) {
+        if (PORTAL_USER_ACCESS_TOKEN.get()==null) {
+            String token = PortalAuth.getMC2AuthToken(accountName, email, pass);
+            PORTAL_USER_ACCESS_TOKEN.set(token);
+            return PORTAL_USER_ACCESS_TOKEN.get();
+        } else {
+            return PORTAL_USER_ACCESS_TOKEN.get();
+        }
+    }
     public static void clearAccessTokenForPortalUser(){
         PORTAL_USER_ACCESS_TOKEN.remove();
     }
