@@ -10,14 +10,17 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = {"facebook"})
+@Test(groups = {"facebook bot"})
 @CucumberOptions(
-        format={"com.github.kirlionik.cucumberallure.AllureReporter"
+        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/generalbank/facebook",
+        features = {
+                Path.GENBANK_TESTS + "BotAnswerOnPost.feature",
+                Path.GENBANK_TESTS + "BotAnswersDMFacebook.feature",
+        },
         glue ="steps")
-public class RunFacebookGenBankTest {
+public class RunFacebookBotGenBankTest {
 
     @Factory
     public Object[] features() {

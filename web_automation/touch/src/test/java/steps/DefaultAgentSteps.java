@@ -426,7 +426,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
-                Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,20, agent),
+                Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40, agent),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
     }
 
