@@ -16,26 +16,26 @@ public class GDPRWindow extends BasePortalWindow {
     private WebElement GDPRComplianceLink;
 
     @Step(value = "Click GDPR Privacy Policy link")
-    public void clickGDPRPolicyLink(){
+    public GDPRWindow clickGDPRPolicyLink(){
         clickElem(this.getCurrentDriver(), GDPRpolicyLink, 5, "'GDPR Privacy Policy' link");
+        return this;
     }
 
     @Step(value = "Click GDPR Compliance")
-    public void clickGDPRComplianceLink(){
+    public GDPRWindow clickGDPRComplianceLink(){
         clickElem(this.getCurrentDriver(), GDPRComplianceLink, 5, "'GDPR Compliance' link");
+        return this;
     }
 
     @Step(value = "Verify GDPR Privacy Policy link redirected to the correct page")
-    public boolean verifyGDPRPolicyLinkWorks(){
-        String currentWindow = this.getCurrentDriver().getWindowHandle();
-        if(this.getCurrentDriver().getWindowHandles().size()>1) {
-            for (String winHandle : this.getCurrentDriver().getWindowHandles()) {
-                if (!winHandle.equals(currentWindow)) {
-                    this.getCurrentDriver().switchTo().window(winHandle);
-                }
-            }
-        }
-        return false;
+    public boolean verifyCorrectnessGDPRLink(String expectedLink){
+        String portalWindow = this.getCurrentDriver().getWindowHandle();
+        switchDriver(this.getCurrentDriver(), portalWindow);
+
+        boolean result = this.currentDriver.getCurrentUrl().equals(expectedLink);
+        closeTab(this.getCurrentDriver(), portalWindow);
+
+        return result;
     }
 
 }

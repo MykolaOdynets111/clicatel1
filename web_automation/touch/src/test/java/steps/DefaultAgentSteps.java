@@ -776,7 +776,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyImgForLastMessageInLeftMenu(String adapter) {
         Assert.assertTrue(getLeftMenu("main").isValidImgForActiveChat(adapter),
                 "Image in last message in left menu for " + adapter + " adapter as not expected. \n");
-       // getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
+//        getLeftMenu("main").createValidImgForActiveChat(adapter); //do not delete
     }
 
     @Then("^Valid sentiment icon are shown for (.*) message in left menu with chat$")

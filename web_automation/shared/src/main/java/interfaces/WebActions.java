@@ -193,6 +193,24 @@ public interface WebActions extends WebWait {
     }
 
 
+    // ======================================== Driver Actions ====================================== //
+
+    default void switchDriver(WebDriver driver, String currentFocus){
+        if(driver.getWindowHandles().size()<2) {
+            return;
+        }
+        for (String winHandle : driver.getWindowHandles()) {
+                if (!winHandle.equals(currentFocus)) {
+                    driver.switchTo().window(winHandle);
+                }
+        }
+    }
+
+    default void closeTab(WebDriver driver, String windowToSwitch){
+        driver.close();
+        driver.switchTo().window(windowToSwitch);
+    }
+
 //    default void scrollUpWidget(int scrollPosition){
 //        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
 //        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();

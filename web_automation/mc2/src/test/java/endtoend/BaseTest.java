@@ -2,6 +2,7 @@ package endtoend;
 
 import driverfactory.MC2DriverFactory;
 import drivermanager.ConfigManager;
+import org.testng.ITest;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
@@ -16,12 +17,12 @@ import java.util.Properties;
 public class BaseTest {
 
     @AfterTest(alwaysRun = true)
-    public void closeBrowser(){
+    protected void closeBrowser(){
         MC2DriverFactory.closePortalBrowser();
     }
 
     @AfterSuite(alwaysRun = true)
-    public void setUpEnvsProp(){
+    protected void setUpEnvsProp(){
         try {
             FileInputStream in = new FileInputStream("src/test/resources/allureconfigs/environment.properties");
             Properties props = new Properties();
@@ -38,4 +39,6 @@ public class BaseTest {
             e.printStackTrace();
         }
     }
+
+
 }

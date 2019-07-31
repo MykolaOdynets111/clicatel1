@@ -2,7 +2,6 @@ package endtoend.acceptance;
 
 import com.github.javafaker.Faker;
 import dbmanager.DBConnector;
-import driverfactory.MC2DriverFactory;
 import drivermanager.ConfigManager;
 import endtoend.BaseTest;
 import io.qameta.allure.*;
@@ -27,14 +26,17 @@ public class SignUpTest extends BaseTest {
     private PortalLoginPage loginPage;
     private PortalMainPage mainPage;
     private SoftAssert soft;
+    Faker faker;
 
     @BeforeTest
     public void prepareSignUpInfo(){
         System.setProperty("env", "qa");
-        Faker faker = new Faker();
-        signUpInfo.put("name", faker.name().fullName());
+        faker = new Faker();
+        signUpInfo.put("firstName", faker.name().firstName());
+        signUpInfo.put("lastName", faker.name().lastName());
+        signUpInfo.put("name", signUpInfo.get("firstName") + " " + signUpInfo.get("lastName"));
         signUpInfo.put("accountName", "aqa_" + faker.lorem().word() + faker.number().digits(3));
-        signUpInfo.put("email", "automationmc2@gmail.com");
+        signUpInfo.put("email", "automationmc2+" + System.currentTimeMillis() +"@gmail.com");
         signUpInfo.put("pass", "p@$$w0rd4te$t");
     }
 
@@ -85,18 +87,44 @@ public class SignUpTest extends BaseTest {
         soft.assertAll();
     }
 
+    @Description("New account GDPR links testing")
+    @Test(dependsOnMethods = {"newAccountActivation"})
+    public void newAccountGDPRLinks(){
+        String expectedPolicyLink = "https://www.clickatell.com/legal/general-terms-notices/privacy-notice/";
+        String expectedComplianceLink = "https://www.clickatell.com/legal/general-terms-notices/clickatell-maintaining-gdpr-compliance/";
+
+        soft.assertTrue(mainPage.getGdprWindow().clickGDPRPolicyLink()
+                                                .verifyCorrectnessGDPRLink(expectedPolicyLink),
+                "GDPR policy link is incorrect. \n Expected: " + expectedPolicyLink );
+        soft.assertTrue(mainPage.getGdprWindow().clickGDPRComplianceLink()
+                        .verifyCorrectnessGDPRLink(expectedComplianceLink),
+                "GDPR compliance is incorrect. \n Expected: " + expectedComplianceLink);
+        soft.assertAll();
+    }
+
+    @Description("Welcoming new user")
+    @Test(dependsOnMethods = {"newAccountGDPRLinks"}, alwaysRun = true)
+    public void welcomeNewUser(){
+        mainPage.closeUpdatePolicyPopup();
+        mainPage.closeLandingPage();
+
+        soft.assertEquals(mainPage.getGreetingMessage(),
+                "Welcome, "+ signUpInfo.get("firstName") + ". Add a solution to your account.",
+                "Greeting is not as expected");
+        soft.assertTrue(mainPage.isGetStartedWithTouchButtonIsShown(),
+                "'Get started' button is not shown");
+        soft.assertAll();
+    }
+
     @AfterTest(alwaysRun = true)
     public void deactivateTestAccount(){
-//        String activationId = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-//                MC2Account.getTouchGoAccount().getAccountName());
-        String activationId = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                signUpInfo.get("accountName"));
-        if(activationId != null){
-            String activationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationId);
-        } else {
+        try {
             ApiHelperPlatform.closeAccount(signUpInfo.get("accountName"),
                     signUpInfo.get("email"), signUpInfo.get("pass"));
+        }catch (AssertionError e){
+            // Nothing to do. Account was not activated.
         }
+
     }
 
 }

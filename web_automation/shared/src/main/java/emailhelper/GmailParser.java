@@ -69,15 +69,18 @@ public class GmailParser {
         String emailContent = null;
         try {
             emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
+        } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
         List<String> lines = Arrays.asList(emailContent.split("\r\n"));
         String url = lines.stream().filter(e -> e.startsWith("http")).findFirst().orElse("none");
         if(url.equalsIgnoreCase("none")){
-            Assert.fail("message\n" + lines.toString());
+            url = lines.stream().filter(e -> e.startsWith("Click here to verify your email address. [ http")).findFirst().orElse("none");
+            try {
+                url = url.split("\\[")[1].replace("\\[", "").replace("]", "");
+            }catch (ArrayIndexOutOfBoundsException e) {
+                Assert.fail("message\n" + lines.toString());
+            }
         }
         return url;
     }

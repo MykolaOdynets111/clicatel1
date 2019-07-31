@@ -4,10 +4,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import portaluielem.ConfigureTouchWindow;
-import portaluielem.ConfirmPaymentDetailsWindow;
-import portaluielem.LeftMenu;
-import portaluielem.UpgradeYourPlanWindow;
+import portaluielem.*;
 
 public class PortalMainPage extends PortalAbstractPage {
 
@@ -53,6 +50,7 @@ public class PortalMainPage extends PortalAbstractPage {
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
+    private GDPRWindow gdprWindow;
 
     // == Constructors == //
 
@@ -64,6 +62,11 @@ public class PortalMainPage extends PortalAbstractPage {
     }
     public PortalMainPage() {
         super();
+    }
+
+    public GDPRWindow getGdprWindow(){
+        gdprWindow.setCurrentDriver(this.getCurrentDriver());
+        return gdprWindow;
     }
 
     public ConfigureTouchWindow getConfigureTouchWindow() {
@@ -181,6 +184,7 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
 
+    @Step(value = "Close Landing (Get Started) modal window ")
     public void closeLandingPage(){
         try {
             clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
@@ -199,14 +203,18 @@ public class PortalMainPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), getPageHeader().getWrappedElement(), 2);
     }
 
+    @Step(value = "Close GDPR and Privacy modal window ")
     public void closeUpdatePolicyPopup(){
         gotItButton.click();
+        waitWhileProcessing(2, 3);
     }
 
+    @Step(value = "Get user greeting from Portal Main page")
     public String getGreetingMessage(){
         return getTextFromElem(this.getCurrentDriver(), greetingMessage, 3, "Welcome message");
     }
 
+    @Step(value = "Verify if 'Get started' button shown")
     public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShown(this.getCurrentDriver(), getStartedWithTouchButton, 2);}
 
     public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
