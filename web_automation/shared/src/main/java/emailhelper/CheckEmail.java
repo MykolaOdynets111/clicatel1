@@ -49,7 +49,7 @@ public class CheckEmail {
         }
         GmailConnector.getFolder().close(false);
         GmailConnector.getStore().close();
-        return "";
+        return "none";
     }
 
     private static String getResetConfirmation(String expectedSender, int wait) throws Exception {
@@ -120,7 +120,7 @@ public class CheckEmail {
         int unreadMessagesCount = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender).size();
         List<Message> targetSenderNewMails = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
         for (int i=0; i<wait; i++){
-            if(targetSenderNewMails.isEmpty() || unreadMessagesCount == getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender).size()){
+            if(targetSenderNewMails.isEmpty()){
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

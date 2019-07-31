@@ -1,5 +1,6 @@
 package portalpages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -169,10 +170,12 @@ public class PortalMainPage extends PortalAbstractPage {
         closeSetUpBillingPopUp.click();
     }
 
+    @Step(value = "Verify GDPR and Privacy modal window is displayed")
     public boolean isUpdatePolicyPopUpOpened(){
         return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 10);
     }
 
+    @Step(value = "Verify Landing (Get Started) modal window is displayed")
     public boolean isLandingPopUpOpened(){
         return isElementShown(this.getCurrentDriver(), landingPage, 10);
     }

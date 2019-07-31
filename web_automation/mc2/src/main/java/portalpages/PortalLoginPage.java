@@ -1,5 +1,11 @@
 package portalpages;
 
+import dbmanager.DBConnector;
+import driverfactory.MC2DriverFactory;
+import drivermanager.ConfigManager;
+import emailhelper.CheckEmail;
+import emailhelper.GmailConnector;
+import io.qameta.allure.Step;
 import mc2api.EndpointsPlatform;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
@@ -37,6 +43,11 @@ public class PortalLoginPage extends PortalAbstractPage {
     @FindBy(css = "div.set-new-password")
     private WebElement setNewPasswordLabel;
 
+    @FindBy(xpath = "//*[text()='Your account has successfully been created!']")
+    private WebElement accountCreatedMessage;
+
+    private String confirmationURL = "none";
+
     PageHeader pageHeader;
 
     // == Constructors == //
@@ -56,12 +67,15 @@ public class PortalLoginPage extends PortalAbstractPage {
         return new PortalLoginPage(driver);
     }
 
+    @Step(value = "Log in to portal")
     public PortalMainPage login(String email, String pass){
         try{
             enterAdminCreds(email, pass);
+            clickLogin();
         }catch(TimeoutException e){
             getPageHeader().logoutAdmin();
             enterAdminCreds(email, pass);
+            clickLogin();
         }
         waitWhileProcessing(2, 14);
         return new PortalMainPage(this.getCurrentDriver());
@@ -71,7 +85,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         waitForElementToBeVisible(this.getCurrentDriver(), emailInput, 6);
         emailInput.sendKeys(email);
         passInput.sendKeys(pass);
-        clickLogin();
+//        clickLogin();
     }
 
     public void clickLogin(){
@@ -82,6 +96,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), confirmationEmailMessage, 15);
     }
 
+    @Step(value = "Get message about confirmation email sent")
     public String getMessageAboutSendingConfirmationEmail(){
         try {
             return confirmationEmailMessage.getText();
@@ -90,6 +105,7 @@ public class PortalLoginPage extends PortalAbstractPage {
         }
     }
 
+    @Step(value = "Verify Portal Login page opened")
     public  boolean isLoginPageOpened(int wait){
         return isElementShown(this.getCurrentDriver(), emailInput, wait);
     }
@@ -117,5 +133,32 @@ public class PortalLoginPage extends PortalAbstractPage {
 
     public String getNewPasswordLabel(){
         return getTextFromElem(this.getCurrentDriver(), setNewPasswordLabel, 4, "Set new password");
+    }
+
+    @Step(value = "Verify confirmation sign up email arrives")
+    public String checkConfirmationEmail(String account, String email, String emailPass, int wait){
+
+        if (ConfigManager.getEnv().equals("testing")){
+            String activationID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+                    account);
+            if(activationID==null) return "none";
+            confirmationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationID);;
+        }else {
+            GmailConnector.loginAndGetInboxFolder(email, emailPass);
+            confirmationURL = CheckEmail
+                    .getConfirmationURL("Clickatell <no-reply@clickatell.com>", wait);
+        }
+        return confirmationURL;
+    }
+
+    @Step(value = "Open account set up confirmation email")
+    public void openConfirmationURL(){
+        MC2DriverFactory.getPortalDriver().get(confirmationURL);
+
+    }
+
+    @Step(value = "Verify 'Your account has successfully been created!' message shown")
+    public boolean isAccountCreatedMessageShown(){
+        return isElementShown(this.getCurrentDriver(), accountCreatedMessage, 3);
     }
 }

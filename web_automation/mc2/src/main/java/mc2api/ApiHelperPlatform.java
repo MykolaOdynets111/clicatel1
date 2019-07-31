@@ -173,7 +173,7 @@ public class ApiHelperPlatform {
     public static void closeAccount(String accountName, String email, String pass){
         String accessToken = "";
         try {
-            accessToken = PortalAuthToken.getAccessTokenForPortalUserByAccount(accountName);
+            accessToken = PortalAuthToken.getAccessTokenForPortalUser(accountName, email, pass);
         }catch (NullPointerException|NoSuchElementException e){
             return; // nothing to close - account doesn't exist
         }

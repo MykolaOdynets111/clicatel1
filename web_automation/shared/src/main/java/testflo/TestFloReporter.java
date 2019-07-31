@@ -15,7 +15,13 @@ import java.util.stream.Collectors;
 public class TestFloReporter {
 
     public static void main(String[] args) {
-//        driver.ConfigManager.setIsRemote("true");
+//        For debug
+//    System.setProperty("isRemoteAllureReport", "true");
+//    System.setProperty("reportToTestFLO", "true");
+//    System.setProperty("isRerun", "true");
+//    System.setProperty("tplanKey", "TPORT-10166");
+//    System.setProperty("jirauser", "");
+//    System.setProperty("jirapass", "");
 
         if(ConfigManager.reportToTouchFlo()) {
 
@@ -36,7 +42,8 @@ public class TestFloReporter {
                     .map(testCase -> testCase.getFields().getSummary()).collect(Collectors.toList());
 
             // 3. Get executed case from allure
-            List<AllureScenarioInterface> executedTests = AllureReportParser.parseAllureResultsToGetTestCases(false);
+            List<AllureScenarioInterface> executedTests = AllureReportParser
+                    .parseAllureResultsToGetTestCases(ConfigManager.isRemoteAllureReport());
 
             // 4. Filter the cases that should be created in Test Plan
             List<AllureScenarioInterface> executedTestsToBeCreatedInTestPlan = executedTests
@@ -112,20 +119,34 @@ public class TestFloReporter {
     }
 
     private static void setTCStatus(String tcKey, String tcStatus, String failureMessage){
-        if(!tcStatus.equalsIgnoreCase("canceled")) {
+        if(tcStatus.equalsIgnoreCase("canceled")){
+            return;
+        }
+        moveTicketToInProgress(tcKey);
+        setStatusForTestCase(tcKey, tcStatus, failureMessage);
+    }
+
+    private static void moveTicketToInProgress(String tcKey){
+        if(ConfigManager.rerunTestPlan()) {
+            JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves ticket "Re-test" status
+            JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "In Progress" status
+        } else{
             JiraApiHelper.changeTestCaseStatus(tcKey, "11"); // moves ticket "In Progress" status
+        }
 
-            if (tcStatus.equalsIgnoreCase("passed")) {
-                JiraApiHelper.changeTestCaseStatus(tcKey, "21");
-            }
+    }
 
-            if (tcStatus.equalsIgnoreCase("broken") |
-                    tcStatus.equalsIgnoreCase("failed")) {
-                JiraApiHelper.changeTestCaseStatus(tcKey, "31");
-                JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
-            }
+    private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage){
+        if (tcStatus.equalsIgnoreCase("passed")) {
+            JiraApiHelper.changeTestCaseStatus(tcKey, "21");
+        }
+        if (tcStatus.equalsIgnoreCase("broken") |
+                tcStatus.equalsIgnoreCase("failed")) {
+            JiraApiHelper.changeTestCaseStatus(tcKey, "31");
+            JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
         }
     }
+
 
     private static String readBaseTestPlanKey(){
             try {

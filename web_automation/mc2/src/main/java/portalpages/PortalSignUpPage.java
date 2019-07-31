@@ -1,5 +1,6 @@
 package portalpages;
 
+import driverfactory.MC2DriverFactory;
 import io.qameta.allure.Step;
 import mc2api.EndpointsPlatform;
 import org.openqa.selenium.WebDriver;
@@ -31,6 +32,7 @@ public class PortalSignUpPage extends PortalAbstractPage {
     @FindBy(css = "form[name='signupForm'] input.ng-invalid")
     private List<WebElement> requiredInputErrors;
 
+
     // == Constructors == //
 
     public PortalSignUpPage() {
@@ -47,29 +49,40 @@ public class PortalSignUpPage extends PortalAbstractPage {
         driver.get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
     }
 
+    @Step("Navigate to sign up page")
+    public static PortalSignUpPage openPortalSignUpPage() {
+        MC2DriverFactory.getPortalDriver().get(EndpointsPlatform.PORTAL_SIGN_UP_PAGE);
+        return new PortalSignUpPage();
+    }
+
     @Step(value = "Sign up new account")
     public void signUp(String firstName, String accountName, String email, String pass){
+        provideSignUpDetails(firstName, accountName, email, pass);
+        clickSignUpButton();
+    }
+
+    @Step(value = "Fill in valid required information")
+    public PortalSignUpPage provideSignUpDetails(String firstName, String accountName, String email, String pass){
         waitForElementToBeVisible(this.getCurrentDriver(), fullName, 5);
-        setFirstName(firstName);
-        setAccountName(accountName);
+        fullName.clear();
+        fullName.sendKeys(firstName);
+        accountNameInput.clear();
+        accountNameInput.sendKeys(accountName);
         emailInput.clear();
         emailInput.sendKeys(email);
         password.clear();
         password.sendKeys(pass);
+
+        return this;
+    }
+
+    @Step(value = "Click Sign Up button")
+    public PortalLoginPage clickSignUpButton(){
         signUpButton.click();
+        return new PortalLoginPage(this.getCurrentDriver());
     }
 
-    @Step(value = "Set first name")
-    public void setFirstName(String firstName){
-        fullName.clear();
-        fullName.sendKeys(firstName);
-    }
 
-    @Step(value = "Set account name")
-    public void setAccountName(String accountName){
-        accountNameInput.clear();
-        accountNameInput.sendKeys(accountName);
-    }
 
     public boolean isSuccessSignUpMessageShown(){
         return isElementShown(this.getCurrentDriver(), successSignUpMessage, 20);

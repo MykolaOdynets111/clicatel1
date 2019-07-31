@@ -44,6 +44,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public PortalAbstractPage() {
         HtmlElementLoader.populatePageObject(this, MC2DriverFactory.getPortalDriver());
+        this.currentDriver = MC2DriverFactory.getPortalDriver();
     }
 
 
