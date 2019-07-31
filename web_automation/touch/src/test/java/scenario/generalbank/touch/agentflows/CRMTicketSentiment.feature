@@ -1,4 +1,5 @@
 @agent_feedback
+@img
 Feature: CRM ticket sentiment
 
   Background:

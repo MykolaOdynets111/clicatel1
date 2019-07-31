@@ -108,7 +108,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
         List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId());
-        Collections.reverse(tags);
+        //Collections.reverse(tags);
         String crmTicketTags = String.join(", ", tags);
         soft.assertTrue((actualMili-expectedMili)<=3000,
                 "Ticket created date does not match created on the backend \n");

@@ -44,6 +44,12 @@ public interface WebWait {
                 .until(ExpectedConditions.elementToBeClickable(By.cssSelector(css)));
     }
 
+    default void waitForElementToBeClickableByXpath(WebDriver driver, String xpath, int time){
+        initWait(driver, time).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+    }
+
     // ================================== Elements to be Visible  ======================================== //
 
 

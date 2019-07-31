@@ -409,8 +409,8 @@ public class Hooks implements JSHelper {
         Tenants.clearTenantUnderTest();
         PortalAuthToken.clearAccessTokenForPortalUser();
         URLs.clearFinalAgentURL();
-        AbstractAgentSteps.сleanAllPages();
-        AbstractPortalSteps.сleanAllPortalPages();
+        AbstractAgentSteps.cleanAllPages();
+        AbstractPortalSteps.cleanAllPortalPages();
     }
 
     @Attachment(value = "request")

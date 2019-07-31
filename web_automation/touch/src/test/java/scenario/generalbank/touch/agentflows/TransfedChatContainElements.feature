@@ -1,3 +1,4 @@
+@img
 Feature: Transferring chat, user info
 
   Background:
