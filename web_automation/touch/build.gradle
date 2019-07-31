@@ -19,14 +19,17 @@ allure{
 }
 
 dependencies {
-        implementation (project(':mc2')) {
+        compile (project(':mc2')) {
             exclude group: 'org.testng', module: 'testng'
             exclude group: 'io.github.sskorol', module: 'test-data-supplier'
+            exclude group: 'io.qameta.allure'
         }
         compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
         compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
         compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
         compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'
+
 }
 
 
