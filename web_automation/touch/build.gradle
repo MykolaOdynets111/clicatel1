@@ -19,7 +19,7 @@ allure{
 }
 
 dependencies {
-        compile (project(':mc2')) {
+        implementation (project(':mc2')) {
             exclude group: 'org.testng', module: 'testng'
             exclude group: 'io.github.sskorol', module: 'test-data-supplier'
         }
