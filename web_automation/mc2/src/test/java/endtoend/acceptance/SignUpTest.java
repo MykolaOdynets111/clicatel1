@@ -26,7 +26,6 @@ public class SignUpTest extends BaseTest {
 
     @BeforeTest
     private void prepareSignUpInfo(){
-        System.setProperty("env", "qa");
         faker = new Faker();
         signUpInfo.put("firstName", faker.name().firstName());
         signUpInfo.put("lastName", faker.name().lastName());
