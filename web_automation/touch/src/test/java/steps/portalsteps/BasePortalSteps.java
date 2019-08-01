@@ -1117,10 +1117,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyTopUpUpdated(int mints){
         String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
         String actualInfo="";
+        double valueFromBackend = ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance();
         boolean result = false;
         for(int i = 0; i<(mints*60)/25; i++){
             valueFromPortal = valueFromPortal.replace(",", "");
-            actualInfo = String.format("%1.2f", topUpBalance.get("afterTest"));
+            actualInfo = String.format("%1.2f", valueFromBackend);
             if(valueFromPortal.equals(actualInfo)){
                 result = true;
                 break;
@@ -1132,7 +1133,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertTrue(result, "Balance was not updated after top up\n" +
                 "Balance from backend before test: " + topUpBalance.get("preTest") + "\n" +
                 "Value to be set: " + topUpBalance.get("afterTest") + "\n" +
-                "Balance from backend after test: " + ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance() +"\n" +
+                "Balance from backend after test: " + valueFromBackend +"\n" +
                 "Expected: " + actualInfo + "\n" +
                 "Actual: " + valueFromPortal);
     }
