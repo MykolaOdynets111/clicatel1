@@ -2,8 +2,8 @@
 <suite name="Acceptance suite" >
     <test name="New account registration">
         <classes>
-<!--            <class name="endtoend.acceptance.SignUpTest" />-->
-            <class name="endtoend.acceptance.SignUpTest1" />
+<!--            <class name="endtoend.acceptance.SignUpTestBaseBase" />-->
+            <class name="endtoend.acceptance.SignUpTest" />
         </classes>
     </test>
 </suite>

@@ -26,7 +26,6 @@ public class TestAllureListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-//        setTestNameInXml(result);
         screenshot(MC2DriverFactory.getPortalDriver());
         MC2DriverFactory.closePortalBrowser();
     }
@@ -34,19 +33,19 @@ public class TestAllureListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         screenshot(MC2DriverFactory.getPortalDriver());
-//        MC2DriverFactory.closePortalBrowser();
+        MC2DriverFactory.closePortalBrowser();
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
         screenshot(MC2DriverFactory.getPortalDriver());
-//        MC2DriverFactory.closePortalBrowser();
+        MC2DriverFactory.closePortalBrowser();
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
         screenshot(MC2DriverFactory.getPortalDriver());
-//        MC2DriverFactory.closePortalBrowser();
+        MC2DriverFactory.closePortalBrowser();
     }
 
     @Override

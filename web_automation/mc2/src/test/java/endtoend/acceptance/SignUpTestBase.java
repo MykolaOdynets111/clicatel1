@@ -1,11 +1,13 @@
 package endtoend.acceptance;
 
 import com.github.javafaker.Faker;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
 import endtoend.BaseTest;
-import io.qameta.allure.Step;
-import io.qameta.allure.TmsLink;
+import io.qameta.allure.*;
 import listeners.TestAllureListener;
 import mc2api.ApiHelperPlatform;
+import mc2api.EndpointsPlatform;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
@@ -18,15 +20,16 @@ import java.util.HashMap;
 @Listeners({TestAllureListener.class})
 @Test(testName = "Registration :: Sign up")
 @TmsLink("TECH-12068")
-public class SignUpTest extends BaseTest {
+public class SignUpTestBase extends BaseTest {
 
     private HashMap<String, String> signUpInfo = new HashMap<>();
     private PortalLoginPage loginPage;
     private PortalMainPage mainPage;
+    private SoftAssert soft;
     Faker faker;
 
     @BeforeTest
-    private void prepareSignUpInfo(){
+    public void prepareSignUpInfo(){
         System.setProperty("env", "qa");
         faker = new Faker();
         signUpInfo.put("firstName", faker.name().firstName());
@@ -37,29 +40,14 @@ public class SignUpTest extends BaseTest {
         signUpInfo.put("pass", "p@$$w0rd4te$t");
     }
 
+    @BeforeMethod
+    public void initializeSoftAssert(){
+        soft = new SoftAssert();
+    }
 
+    @Description("New account sign up request")
     @Test
-    public void registrationSignUp(){
-        verifyNewSignUpRequest();
-        verifyNewAccountActivation();
-        verifyNewAccountFirstSingUp();
-        verifyNewAccountGDPRLinks();
-        verifyWelcomeNewUser();
-    }
-
-    @AfterTest(alwaysRun = true)
-    public void deactivateTestAccount(){
-        try {
-            ApiHelperPlatform.closeAccount(signUpInfo.get("accountName"),
-                    signUpInfo.get("email"), signUpInfo.get("pass"));
-        }catch (AssertionError e){
-            // Nothing to do. Account was not activated.
-        }
-
-    }
-
-    @Step(value = "Verify sign up request sending")
-    private void verifyNewSignUpRequest(){
+    public void newSignUpRequest(){
         loginPage = PortalSignUpPage.openPortalSignUpPage()
                 .provideSignUpDetails(signUpInfo.get("name"), signUpInfo.get("accountName"),
                                         signUpInfo.get("email"), signUpInfo.get("pass"))
@@ -74,20 +62,23 @@ public class SignUpTest extends BaseTest {
                 "none", "There is no confirmation URL");
     }
 
-    @Step(value = "Verify new account activation")
-    private void verifyNewAccountActivation(){
+    @Description("New account activation")
+    @Test(dependsOnMethods = {"newSignUpRequest"})
+    public void newAccountActivation(){
         loginPage.openConfirmationURL();
 
-        Assert.assertTrue(loginPage.isAccountCreatedMessageShown(),
+        soft.assertTrue(loginPage.isAccountCreatedMessageShown(),
                 "'Your account has successfully been created!' message is not shown");
-        Assert.assertTrue(loginPage.isLoginPageOpened(7),
+        soft.assertTrue(loginPage.isLoginPageOpened(7),
                 "Login Page is not loaded after 7 seconds wait");
+        soft.assertAll();
+
     }
 
-    @Step(value = "Verify new account first sign up")
-    private void verifyNewAccountFirstSingUp(){
+    @Description("New account first Sing Up")
+    @Test(dependsOnMethods = {"newAccountActivation"})
+    public void newAccountFirstSingUp(){
         mainPage = loginPage.login(signUpInfo.get("email"), signUpInfo.get("pass"));
-        SoftAssert soft = new SoftAssert();
 
         soft.assertTrue(mainPage.isUpdatePolicyPopUpOpened(),
                 "Update policy pop up is not shown");
@@ -96,9 +87,9 @@ public class SignUpTest extends BaseTest {
         soft.assertAll();
     }
 
-    @Step(value = "Verify new account GDPR links")
-    private void verifyNewAccountGDPRLinks(){
-        SoftAssert soft = new SoftAssert();
+    @Description("New account GDPR links testing")
+    @Test(dependsOnMethods = {"newAccountActivation"})
+    public void newAccountGDPRLinks(){
         String expectedPolicyLink = "https://www.clickatell.com/legal/general-terms-notices/privacy-notice/";
         String expectedComplianceLink = "https://www.clickatell.com/legal/general-terms-notices/clickatell-maintaining-gdpr-compliance/";
 
@@ -111,10 +102,9 @@ public class SignUpTest extends BaseTest {
         soft.assertAll();
     }
 
-    @Step(value = "Verify welcoming new user")
-    private void verifyWelcomeNewUser(){
-        SoftAssert soft = new SoftAssert();
-
+    @Description("Welcoming new user")
+    @Test(dependsOnMethods = {"newAccountGDPRLinks"}, alwaysRun = true)
+    public void welcomeNewUser(){
         mainPage.closeUpdatePolicyPopup();
         mainPage.closeLandingPage();
 
@@ -126,5 +116,15 @@ public class SignUpTest extends BaseTest {
         soft.assertAll();
     }
 
+    @AfterTest(alwaysRun = true)
+    public void deactivateTestAccount(){
+        try {
+            ApiHelperPlatform.closeAccount(signUpInfo.get("accountName"),
+                    signUpInfo.get("email"), signUpInfo.get("pass"));
+        }catch (AssertionError e){
+            // Nothing to do. Account was not activated.
+        }
+
+    }
 
 }
