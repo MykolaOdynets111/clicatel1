@@ -38,7 +38,7 @@ public class SignUpTest extends BaseTest {
     }
 
 
-    @Test
+    @Test(testName = "Registration :: Sign up method")
     public void registrationSignUp(){
         verifyNewSignUpRequest();
         verifyNewAccountActivation();
