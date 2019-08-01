@@ -35,7 +35,7 @@ public class SignUpTest extends BaseTest {
         signUpInfo.put("pass", "p@$$w0rd4te$t");
     }
 
-    @Description("Registration :: Sign up method")
+    @Description("Registration :: Sign up")
     @Epic("Account Registration")
     @Feature("Sign Up")
     public void registrationSignUp(){

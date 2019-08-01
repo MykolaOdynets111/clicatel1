@@ -89,6 +89,8 @@ public class AllureScenario  implements AllureScenarioInterface {
 
     @JsonProperty("name")
     public String getName() {
+        if(!name.trim().contains(" "))
+            return description; // for mc2 tests as we save TCT name in description filed
         return name;
     }
 

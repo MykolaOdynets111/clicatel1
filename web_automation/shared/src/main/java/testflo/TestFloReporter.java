@@ -16,10 +16,10 @@ public class TestFloReporter {
 
     public static void main(String[] args) {
 //        For debug
-//    System.setProperty("isRemoteAllureReport", "true");
+//    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
-//    System.setProperty("isRerun", "true");
-//    System.setProperty("tplanKey", "TPORT-10166");
+//    System.setProperty("isRerun", "false");
+//    System.setProperty("tplanKey", "TPORT-10180");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
 
@@ -43,7 +43,7 @@ public class TestFloReporter {
 
             // 3. Get executed case from allure
             List<AllureScenarioInterface> executedTests = AllureReportParser
-                    .parseAllureResultsToGetTestCases(ConfigManager.isRemoteAllureReport());
+                    .parseAllureResultsToGetTestCases(ConfigManager.isAllure2Report());
 
             // 4. Filter the cases that should be created in Test Plan
             List<AllureScenarioInterface> executedTestsToBeCreatedInTestPlan = executedTests
@@ -73,7 +73,7 @@ public class TestFloReporter {
 //
 ////            Сreating TCT
 //            System.setProperty("remote", "true");
-//            System.setProperty("isRemoteAllureReport", "true");
+//            System.setProperty("isAllure2Report", "true");
 //            List<String> createdTCT = new ArrayList<>();
 //
 //            // 1. Get executed case from allure
