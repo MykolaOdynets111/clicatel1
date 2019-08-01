@@ -2,8 +2,7 @@ package endtoend.acceptance;
 
 import com.github.javafaker.Faker;
 import endtoend.BaseTest;
-import io.qameta.allure.Step;
-import io.qameta.allure.TmsLink;
+import io.qameta.allure.*;
 import listeners.TestAllureListener;
 import mc2api.ApiHelperPlatform;
 import org.testng.Assert;
@@ -37,8 +36,9 @@ public class SignUpTest extends BaseTest {
         signUpInfo.put("pass", "p@$$w0rd4te$t");
     }
 
-
-    @Test(testName = "Registration :: Sign up method")
+    @Description("Registration :: Sign up method")
+    @Epic("Account Registration")
+    @Feature("Sign Up")
     public void registrationSignUp(){
         verifyNewSignUpRequest();
         verifyNewAccountActivation();
