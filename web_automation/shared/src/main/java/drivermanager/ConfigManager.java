@@ -22,7 +22,7 @@ public class ConfigManager {
     private static final String CREATE_NEW_TPLAN = "createTPlan";
     private static final String JIRA_USER = "jirauser";
     private static final String JIRA_PASS = "jirapass";
-    private static final String REMOTE_ALLURE_REPORT = "isRemoteAllureReport";
+    private static final String IS_ALLURE_2_REPORT = "isAllure2Report";
     private static final String RERUN_TEST_PLAN = "isRerun";
 
 
@@ -111,8 +111,8 @@ public class ConfigManager {
         return System.getProperty(JIRA_USER, "");
     }
 
-    public static boolean isRemoteAllureReport(){
-        String createNewTPlan = System.getProperty(REMOTE_ALLURE_REPORT, "false");
+    public static boolean isAllure2Report(){
+        String createNewTPlan = System.getProperty(IS_ALLURE_2_REPORT, "false");
         return Boolean.parseBoolean(createNewTPlan);
     }
 

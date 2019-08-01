@@ -26,7 +26,6 @@ public class SignUpTest extends BaseTest {
 
     @BeforeTest
     private void prepareSignUpInfo(){
-        System.setProperty("env", "qa");
         faker = new Faker();
         signUpInfo.put("firstName", faker.name().firstName());
         signUpInfo.put("lastName", faker.name().lastName());
@@ -36,7 +35,7 @@ public class SignUpTest extends BaseTest {
         signUpInfo.put("pass", "p@$$w0rd4te$t");
     }
 
-    @Description("Registration :: Sign up method")
+    @Description("Registration :: Sign up")
     @Epic("Account Registration")
     @Feature("Sign Up")
     public void registrationSignUp(){

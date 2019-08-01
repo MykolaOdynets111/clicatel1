@@ -17,9 +17,9 @@ public class AllureReportParser {
    private static final String ALLURE_REPORT_DATA_FOLDER = System.getProperty("user.dir") + "/build/allure-report/data/";
 
 
-   private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper, boolean isRemoteAllureReport){
-       if(isRemoteAllureReport){
-           return parseRemoteAllure(file, objectMapper);
+   private static AllureScenarioInterface parseJSONfILE(File file, ObjectMapper objectMapper, boolean isAllure2Report){
+       if(isAllure2Report){
+           return parseAllure2(file, objectMapper);
        } else{
            return parseLocalAllure(file, objectMapper);
        }
@@ -35,7 +35,7 @@ public class AllureReportParser {
        return new AllureScenario();
    }
 
-    private static AllureScenarioInterface parseRemoteAllure(File file, ObjectMapper objectMapper){
+    private static AllureScenarioInterface parseAllure2(File file, ObjectMapper objectMapper){
        try {
             return objectMapper.readValue(file, AllureScenario.class);
         } catch (IOException|NullPointerException e) {
