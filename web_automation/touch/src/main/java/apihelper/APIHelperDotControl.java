@@ -81,7 +81,7 @@ public class APIHelperDotControl {
                 .body("{\n" +
                         "  \"channels\":" + bodyAdapters +
                         "}")
-                .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+                .put(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }
 
     public static String getBodyAdaptersChannels(String adapters, String url){
