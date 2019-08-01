@@ -88,17 +88,17 @@ public class IncomingTransferWindow extends AbstractUIElementDeprecated {
 
     public boolean isValidImgTransferPicture() {
         waitForDeprecated(1500);//it should be. transfer window apeared but not all(animation);
-        File image = new File("touch/src/test/resources/transferchatimg/transferPicture.png");
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferPicture.png");
         return isWebElementEqualsImage(transferPicture,image, "second agent");
     }
 
     public boolean isValidImTransferChannel() {
-        File image = new File("touch/src/test/resources/transferchatimg/transferChannel.png");
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferChannel.png");
         return isWebElementEqualsImage(transferChannel,image, "second agent");
     }
 
     public boolean isValidImgTransferSentiment() {
-        File image = new File("touch/src/test/resources/transferchatimg/transferSentiment.png");
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferSentiment.png");
         return isWebElementEqualsImage(transferSentiment,image, "second agent");
     }
 
