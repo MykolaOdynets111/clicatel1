@@ -34,6 +34,7 @@ public enum DriverType {
 
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+            options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");
             options.addArguments("disable-web-security");
