@@ -5,6 +5,9 @@ import io.qameta.allure.Attachment;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -12,12 +15,23 @@ import org.testng.internal.BaseTestMethod;
 import org.testng.internal.TestResult;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 
 public class TestAllureListener implements ITestListener {
 
     @Attachment(type = "image/png")
     protected byte[] screenshot(WebDriver driver) {
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
+
+    @Attachment
+    private String chatDeskConsoleOutput(WebDriver driver){
+        StringBuilder result = new StringBuilder();
+        LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            result.append(new Date(entry.getTimestamp())).append(", ").append(entry.getLevel()).append(", ").append(entry.getMessage()).append(";  \n");
+        }
+        return  result.toString();
     }
 
     @Override
@@ -33,12 +47,14 @@ public class TestAllureListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         screenshot(MC2DriverFactory.getPortalDriver());
+        chatDeskConsoleOutput(MC2DriverFactory.getPortalDriver());
         MC2DriverFactory.closePortalBrowser();
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
         screenshot(MC2DriverFactory.getPortalDriver());
+        chatDeskConsoleOutput(MC2DriverFactory.getPortalDriver());
         MC2DriverFactory.closePortalBrowser();
     }
 
