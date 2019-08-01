@@ -32,6 +32,8 @@ public class URLs {
 
     private static String BASE_TOUCH_API_URL = "https://%s-touch.clickatelllabs.com/v6/";
 
+    private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
+
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
 
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
@@ -81,6 +83,10 @@ public class URLs {
 
     public static String getTouchApiBaseURL(){
         return String.format(BASE_TOUCH_API_URL, ConfigManager.getEnv());
+    }
+
+    public static String getTouchApiBaseIntegrationURL(){
+        return String.format(BASE_TOUCH_API_INTEGRATION_URL, ConfigManager.getEnv());
     }
 
     public static String getBaseInternalApiUrl(){

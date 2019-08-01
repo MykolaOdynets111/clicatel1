@@ -80,11 +80,11 @@ public class DotControlRequestIntegrationChanel {
     @Override
     public String toString(){
         return "    {\n" +
+                "      \"apiKey\": \"" + "" + "\",\n" +
                 "      \"name\": \"" + this.getName() + "\",\n" +
                 "      \"enabled\": " + this.getEnabled() + ",\n" +
                 "      \"url\": \"" + this.getUrl() + "\",\n" +
-                "      \"adapter\": \""  + this.getAdapter() + "\",\n"+
-                "      \"config\": {}\n" +
+                "      \"type\": \""  + this.getAdapter() + "\"\n"+
                 "    }\n";
     }
 

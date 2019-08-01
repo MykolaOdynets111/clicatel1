@@ -79,7 +79,7 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
     }
 
     public boolean isValidImg(String adapter) {
-        File image = new File("touch/src/test/resources/adaptericons/" + adapter + ".png");
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/" + adapter + ".png");
           return isWebElementEqualsImage(adapterIcon,image, "main");
     }
 
