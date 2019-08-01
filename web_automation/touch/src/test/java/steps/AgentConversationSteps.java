@@ -356,7 +356,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) can see valid sentiments \\(Neutral sentiment by default, There are 3 icons for sentiments\\)$")
     public void validSentimentsAreShown(String agent) {
-        File image = new File("touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
         Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(image), "Sentiments in agent feedback window as not expected. (Neutral sentiment by default, There are 3 icons for sentiments) \n");
     }
 
@@ -365,13 +365,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         boolean result = false;
         boolean resultHappy = false;
         boolean resultUnsatisfied = false;
-        File imageNeutral = new File("touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
+        File imageNeutral = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowNeutral.png");
         result = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageNeutral);
         getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();
-        File imageHappy = new File("touch/src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
+        File imageHappy = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowHappy.png");
         resultHappy = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageHappy);
         getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentUnsatisfied();
-        File imageUnsatisfied = new File("touch/src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
+        File imageUnsatisfied = new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/sentimentsConcludeWindowUnsatisfied.png");
         resultUnsatisfied = getAgentHomePage(agent).getAgentFeedbackWindow().isValidSentiments(imageUnsatisfied);
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(result, "Neutral. Sentiments in agent feedback window as not expected. \n");

@@ -86,7 +86,7 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
 
     public boolean isValidIconSentiment(String message){
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-        File image =new File("touch/src/test/resources/sentimenticons/"+sentiment+".png");
+        File image =new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/"+sentiment+".png");
         return isWebElementEqualsImage(userSentiment,image, "main");
     }
 

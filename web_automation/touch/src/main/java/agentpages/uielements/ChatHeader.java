@@ -126,7 +126,7 @@ public class ChatHeader extends AbstractUIElementDeprecated {
     }
 
     public boolean isValidChannelImg() {
-        File image = new File("touch/src/test/resources/adaptericons/headerChannel.png");
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/headerChannel.png");
         return isWebElementEqualsImage(channelImg,image, "main");
     }
         //Verify if tame stanp in 24 hours format
