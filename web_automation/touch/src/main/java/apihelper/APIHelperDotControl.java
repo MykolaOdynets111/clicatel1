@@ -60,15 +60,15 @@ public class APIHelperDotControl {
                 .body("{\n" +
                         "  \"channels\": [\n" +
                         "    {\n" +
+                        "      \"apiKey\": \"\",\n" +
                         "      \"name\": \"" + newIntegrationInfo.getName() + "\",\n" +
-                        "      \"enabled\": " + newIntegrationInfo.getIsEnabled() + ",\n" +
+                        "      \"enabled\":" + newIntegrationInfo.getIsEnabled() + ",\n" +
                         "      \"url\": \"" + newIntegrationInfo.getCallBackURL() + "\",\n" +
-                        "      \"adapter\": \"fbmsg\",\n" +
-                        "      \"config\": {}\n" +
+                        "      \"type\": \"fbmsg\"\n" +
                         "    }\n" +
                         "  ]\n" +
                         "}")
-                .post(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+                .put(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }
 
     public static Response createIntegrationForAdapters(String adapters, String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
