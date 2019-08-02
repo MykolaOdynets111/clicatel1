@@ -309,6 +309,13 @@ public class AllureScenario  implements AllureScenarioInterface {
     public List<Map<String, String>> getStepsWithStatuses() {
         List<Map<String, String>> steps = new ArrayList<>();
 
+        if(getTestStage()==null){
+            Map<String, String> map = new HashMap<>();
+            map.put("name", this.getName());
+            map.put("status", "Skipped");
+            steps.add(map);
+            return steps ;
+        }
         getTestStage().getSteps().forEach(e ->
                             {
                                 Map<String, String> map = new HashMap<>();

@@ -119,7 +119,8 @@ public class TestFloReporter {
     }
 
     private static void setTCStatus(String tcKey, String tcStatus, String failureMessage){
-        if(tcStatus.equalsIgnoreCase("canceled")){
+        if(tcStatus.equalsIgnoreCase("canceled") |
+                tcStatus.equalsIgnoreCase("skipped")){
             return;
         }
         moveTicketToInProgress(tcKey);
