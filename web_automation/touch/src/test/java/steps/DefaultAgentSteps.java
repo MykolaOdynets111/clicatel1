@@ -232,21 +232,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
         try {
             SoftAssert soft = new SoftAssert();
-            String expectedUserName = "";
+            String expectedUserName = getUserName(user);
             if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-                expectedUserName = socialaccounts.TwitterUsers.getLoggedInUserName();
                 userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
             }
             if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
-                    expectedUserName = socialaccounts.FacebookUsers.getLoggedInUserName();
                     userMessage = FacebookSteps.getCurrentUserMessageText();
-            }
-            if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
-                    !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
-                expectedUserName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-            }
-            if(user.contains("first chat")){
-                expectedUserName = createdChatsViaDotControl.get(0).getClientId();
             }
             Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
             String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
@@ -260,9 +251,25 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                     "Transferring agent name in Incoming transfer window is not as expected");
             soft.assertAll();
         } catch (NoSuchElementException e){
-            Assert.assertTrue(false,
-                    "Incoming transfer window is not shown.\n Please see the screenshot");
+            Assert.fail("Incoming transfer window is not shown.\n Please see the screenshot");
         }
+    }
+
+    private String getUserName(String userFrom){
+        if(userFrom.contains("first chat")){
+            return createdChatsViaDotControl.get(0).getClientId();
+        }
+        if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
+            return socialaccounts.TwitterUsers.getLoggedInUserName();
+        }
+        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
+            return socialaccounts.FacebookUsers.getLoggedInUserName();
+        }
+        if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
+                !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
+            return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+        }
+        return "";
     }
 
     @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")

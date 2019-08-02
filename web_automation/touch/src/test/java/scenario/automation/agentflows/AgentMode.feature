@@ -25,14 +25,14 @@ Feature: User messages handling in "Agent" tenant mode
     Given I login as agent of Automation
     Given User select Automation tenant
     And Click chat icon
-    When User enter what is your open hours into widget input field
+    When User enter My staff want to bank with you. Can you help? into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
-    Then Conversation area becomes active with what is your open hours user's message
-    Then There is correct suggestion shown on user message "what is your open hours"
-    And The suggestion for user message "what is your open hours" with the biggest confidence is added to the input field
+    Then Conversation area becomes active with My staff want to bank with you. Can you help? user's message
+    Then There is correct suggestion shown on user message "My staff want to bank with you. Can you help?"
+    And The suggestion for user message "My staff want to bank with you. Can you help?" with the biggest confidence is added to the input field
     And Agent is able to delete the suggestion from input field and sends his own "thanks for asking" message
-    Then User have to receive 'thanks for asking' text response for his 'what is your open hours' input
+    Then User have to receive 'thanks for asking' text response for his 'My staff want to bank with you. Can you help?' input
 
 
 
