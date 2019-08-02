@@ -1,10 +1,11 @@
 package endtoend.acceptance;
 
 import com.github.javafaker.Faker;
-import endtoend.BaseTest;
+import emailhelper.CheckEmail;
+import emailhelper.GmailConnector;
+import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
@@ -12,10 +13,14 @@ import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 import portalpages.PortalSignUpPage;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Properties;
 
 @Listeners({TestAllureListener.class})
-@Test(testName = "Registration :: Sign up")
+@Test(testName = "Registration :: Sign up", groups = {"newaccount", "registration"})
 @TmsLink("TECH-12068")
 public class SignUpTest extends BaseTest {
 
@@ -24,7 +29,7 @@ public class SignUpTest extends BaseTest {
     private PortalMainPage mainPage;
     Faker faker;
 
-    @BeforeTest
+    @BeforeClass
     private void prepareSignUpInfo(){
         faker = new Faker();
         signUpInfo.put("firstName", faker.name().firstName());
@@ -33,6 +38,10 @@ public class SignUpTest extends BaseTest {
         signUpInfo.put("accountName", "aqa_" + faker.lorem().word() + faker.number().digits(3));
         signUpInfo.put("email", "automationmc2+" + System.currentTimeMillis() +"@gmail.com");
         signUpInfo.put("pass", "p@$$w0rd4te$t");
+        saveNewAccountProperties();
+
+        GmailConnector.loginAndGetInboxFolder(signUpInfo.get("email"), signUpInfo.get("pass"));
+        CheckEmail.clearEmailInbox();
     }
 
     @Description("Registration :: Sign up")
@@ -46,16 +55,6 @@ public class SignUpTest extends BaseTest {
         verifyWelcomeNewUser();
     }
 
-    @AfterTest(alwaysRun = true)
-    public void deactivateTestAccount(){
-        try {
-            ApiHelperPlatform.closeAccount(signUpInfo.get("accountName"),
-                    signUpInfo.get("email"), signUpInfo.get("pass"));
-        }catch (AssertionError e){
-            // Nothing to do. Account was not activated.
-        }
-
-    }
 
     @Step(value = "Verify sign up request sending")
     private void verifyNewSignUpRequest(){
@@ -83,7 +82,7 @@ public class SignUpTest extends BaseTest {
                 "Login Page is not loaded after 7 seconds wait");
     }
 
-    @Step(value = "Verify new account first sign up")
+    @Step(value = "Verify new account first log in")
     private void verifyNewAccountFirstSingUp(){
         mainPage = loginPage.login(signUpInfo.get("email"), signUpInfo.get("pass"));
         SoftAssert soft = new SoftAssert();
@@ -91,7 +90,7 @@ public class SignUpTest extends BaseTest {
         soft.assertTrue(mainPage.isUpdatePolicyPopUpOpened(),
                 "Update policy pop up is not shown");
         soft.assertTrue(mainPage.isLandingPopUpOpened(),
-                "Login Page is not loaded after 7 seconds wait");
+                "Landing pop up is not shown");
         soft.assertAll();
     }
 
@@ -125,5 +124,26 @@ public class SignUpTest extends BaseTest {
         soft.assertAll();
     }
 
+    private void saveNewAccountProperties(){
+        try {
+            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+            Properties props = new Properties();
+            props.load(in);
+            in.close();
+
+            FileOutputStream out = new FileOutputStream("src/test/resources/newaccount.properties");
+            props.setProperty("accountName", signUpInfo.get("accountName"));
+            props.setProperty("email", signUpInfo.get("email"));
+            props.setProperty("pass", signUpInfo.get("pass"));
+            props.setProperty("firstName", signUpInfo.get("firstName"));
+            props.setProperty("lastName", signUpInfo.get("lastName"));
+            props.setProperty("name", signUpInfo.get("firstName") + " " + signUpInfo.get("lastName"));
+
+            props.store(out, null);
+            out.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
 }

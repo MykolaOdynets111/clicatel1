@@ -13,7 +13,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import portaluielem.PageHeader;
 
 import java.util.List;
 
@@ -48,7 +47,6 @@ public class PortalLoginPage extends PortalAbstractPage {
 
     private String confirmationURL = "none";
 
-    PageHeader pageHeader;
 
     // == Constructors == //
 
@@ -66,6 +64,12 @@ public class PortalLoginPage extends PortalAbstractPage {
         driver.get(EndpointsPlatform.PORTAL_LOGIN_PAGE);
         return new PortalLoginPage(driver);
     }
+
+    public static PortalLoginPage openPortalLoginPage() {
+        MC2DriverFactory.getPortalDriver().get(EndpointsPlatform.PORTAL_LOGIN_PAGE);
+        return new PortalLoginPage();
+    }
+
 
     @Step(value = "Log in to portal")
     public PortalMainPage login(String email, String pass){

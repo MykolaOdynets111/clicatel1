@@ -175,12 +175,24 @@ public class PortalMainPage extends PortalAbstractPage {
 
     @Step(value = "Verify GDPR and Privacy modal window is displayed")
     public boolean isUpdatePolicyPopUpOpened(){
-        return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 10);
+        return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 5);
     }
 
     @Step(value = "Verify Landing (Get Started) modal window is displayed")
     public boolean isLandingPopUpOpened(){
-        return isElementShown(this.getCurrentDriver(), landingPage, 10);
+        return isElementShown(this.getCurrentDriver(), landingPage, 5);
+    }
+
+
+
+    @Step(value = "Verify GDPR and Privacy modal window is not displayed")
+    public boolean isUpdatePolicyPopUpNotShown(){
+        return isElementNotShown(this.getCurrentDriver(), updatePolicyPopUp, 5);
+    }
+
+    @Step(value = "Verify Landing (Get Started) modal window is not displayed")
+    public boolean isLandingPopUpNotShown(){
+        return isElementNotShown(this.getCurrentDriver(), landingPage, 5);
     }
 
 

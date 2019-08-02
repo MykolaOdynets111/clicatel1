@@ -1,6 +1,7 @@
 package portaluielem;
 
 import abstractclasses.AbstractUIElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -64,6 +65,7 @@ public class PageHeader extends AbstractUIElement {
         return upgradeButton.getText();
     }
 
+    @Step(value = "Log out admin")
     public void logoutAdmin(){
         adminIcon.click();
         waitForElementToBeVisible(this.getCurrentDriver(), adminDropdown, 5);
