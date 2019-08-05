@@ -178,9 +178,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyLoginScreenWithGreeting(String agent){
         String agentFullName = AGENT_FIRST_NAME +" "+ AGENT_LAST_NAME;
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getPortalLoginPage(agent).getWelcomeMessage(6).contains(agentFullName),
+        soft.assertTrue(getPortalLoginPage(agent).getAccountForm().getWelcomeMessage(6).contains(agentFullName),
                         "Welcome message does not contaion "+ agentFullName +"user name");
-        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+        soft.assertTrue(getPortalLoginPage(agent).getAccountForm().areCreatePasswordInputsShown(2),
                 "There are no 2 input fields for creating agent's password");
         soft.assertAll();
 
@@ -190,10 +190,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) redirected to the \"(.*)\" page$")
     public void verifySetNewPasswordScreenShown(String agent, String pageName){
         SoftAssert soft = new SoftAssert();
-        String pageLabel = getPortalLoginPage(agent).getNewPasswordLabel();
+        String pageLabel = getPortalLoginPage(agent).getAccountForm().getNewPasswordLabel();
         soft.assertEquals(pageLabel, pageName,
                 "Set new password label is not as expected");
-        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+        soft.assertTrue(getPortalLoginPage(agent).getAccountForm().areCreatePasswordInputsShown(2),
                 "There are no 2 input fields for creating agent's password");
         soft.assertAll();
     }
@@ -202,7 +202,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void createPassword(String agent){
         Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
         AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
-        getPortalLoginPage(agent).createNewPass(AGENT_PASS)
+        getPortalLoginPage(agent).getAccountForm().createNewPass(AGENT_PASS)
                                     .clickLogin();
     }
 
@@ -349,9 +349,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
         setCurrentPortalLoginPage(new PortalLoginPage(DriverFactory.getDriverForAgent("admin")));
-        softAssert.assertTrue(getCurrentPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
+        softAssert.assertTrue(getCurrentPortalLoginPage().getAccountForm().isMessageAboutConfirmationMailSentShown(),
                 "Message that confirmation email was sent is not shown");
-        softAssert.assertEquals(getCurrentPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
+        softAssert.assertEquals(getCurrentPortalLoginPage().getAccountForm().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
                 "Message about sent confirmation email is not as expected");
         softAssert.assertAll();
     }
@@ -407,7 +407,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Deleted agent is not able to log in portal$")
     public void verifyDeletedAgentIsNotLoggedIn(){
-        getCurrentPortalLoginPage().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
+        getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
+        getCurrentPortalLoginPage().getAccountForm();
         Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -492,7 +493,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
             setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent(agent)));
         }
         MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
-        getCurrentPortalLoginPage().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
+        getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
+        getCurrentPortalLoginPage().getAccountForm().clickLogin();
         Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");

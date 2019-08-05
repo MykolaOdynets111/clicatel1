@@ -15,6 +15,8 @@ public class SignUpBaseTest extends BaseTest {
     protected ThreadLocal<String> email = new ThreadLocal<>();
     protected ThreadLocal<String> pass = new ThreadLocal<>();
     protected ThreadLocal<String> firstName = new ThreadLocal<>();
+    protected ThreadLocal<String> accountName = new ThreadLocal<>();
+
 
     @BeforeClass()
     protected void readCreatedAccountProps(){
@@ -25,6 +27,7 @@ public class SignUpBaseTest extends BaseTest {
             email.set(props.getProperty("email"));
             pass.set(props.getProperty("pass"));
             firstName.set(props.getProperty("firstName"));
+            accountName.set(props.getProperty("accountName"));
         } catch(IOException e){
             e.printStackTrace();
         }

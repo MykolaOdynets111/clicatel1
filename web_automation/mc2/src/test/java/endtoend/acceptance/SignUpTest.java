@@ -65,7 +65,7 @@ public class SignUpTest extends BaseTest {
 
         Assert.assertTrue(loginPage.isLoginPageOpened(5),
                 "Login Page is not opened after providing sign up info");
-        Assert.assertEquals(loginPage.getMessageAboutSendingConfirmationEmail(),
+        Assert.assertEquals(loginPage.getAccountForm().getMessageAboutSendingConfirmationEmail(),
                 "A confirmation email has been sent to "+ signUpInfo.get("email") +" to complete your sign up process",
                 "Message about sending confirmation email is incorrect");
         Assert.assertNotEquals(loginPage.checkConfirmationEmail(signUpInfo.get("accountName"), signUpInfo.get("email"), signUpInfo.get("pass"), 60),

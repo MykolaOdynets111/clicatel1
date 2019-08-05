@@ -72,6 +72,10 @@ public class PageHeader extends AbstractUIElement {
         logoutButton.click();
     }
 
+    public boolean isAdminIconShown(int wait){
+        return isElementShown(this.getCurrentDriver(), adminIcon, wait);
+    }
+
     public String getTopUpBalanceSumm(){
         return topUpBalanceSum.getText().split(" ")[0];
     }
