@@ -4,6 +4,7 @@
         <classes>
             <class name="endtoend.acceptance.SignUpTest" />
             <class name="endtoend.acceptance.SignInOldUserTest" />
+            <class name="endtoend.acceptance.ChangePasswordTest" />
         </classes>
     </test>
 </suite>

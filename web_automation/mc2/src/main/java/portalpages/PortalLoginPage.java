@@ -11,42 +11,17 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
+import portaluielem.AccountForm;
 
 public class PortalLoginPage extends PortalAbstractPage {
-
-    @FindBy(css = "input[type='email']")
-    private WebElement emailInput;
-
-    @FindBy(css = "input[type='password']")
-    private WebElement passInput;
-
-    @FindAll({
-        @FindBy(xpath = "//button[text()='Login']"),
-        @FindBy(css = "div.account-form button.button.button-primary")
-    })
-    private WebElement loginButton;
-
-    @FindBy(css = "div[ng-show='newAccountEmail']")
-    private WebElement confirmationEmailMessage;
-
-    @FindBy(css = "input[type='password']")
-    private List<WebElement> createPassInput;
-
-    @FindBy(css = "div.invitation-welcome.ng-binding")
-    private WebElement invitationWelcomeMsg;
-
-    @FindBy(css = "div.set-new-password")
-    private WebElement setNewPasswordLabel;
 
     @FindBy(xpath = "//*[text()='Your account has successfully been created!']")
     private WebElement accountCreatedMessage;
 
     private String confirmationURL = "none";
 
+    private AccountForm accountForm;
 
     // == Constructors == //
 
@@ -58,6 +33,11 @@ public class PortalLoginPage extends PortalAbstractPage {
     }
     public PortalLoginPage(WebDriver driver) {
         super(driver);
+    }
+
+    public AccountForm getAccountForm(){
+        accountForm.setCurrentDriver(this.getCurrentDriver());
+        return accountForm;
     }
 
     public static PortalLoginPage openPortalLoginPage(WebDriver driver) {
@@ -74,72 +54,24 @@ public class PortalLoginPage extends PortalAbstractPage {
     @Step(value = "Log in to portal")
     public PortalMainPage login(String email, String pass){
         try{
-            enterAdminCreds(email, pass);
-            clickLogin();
+            getAccountForm().enterAdminCreds(email, pass);
+            getAccountForm().clickLogin();
         }catch(TimeoutException e){
             getPageHeader().logoutAdmin();
-            enterAdminCreds(email, pass);
-            clickLogin();
+            getAccountForm().enterAdminCreds(email, pass);
+            getAccountForm().clickLogin();
         }
         waitWhileProcessing(2, 14);
         return new PortalMainPage(this.getCurrentDriver());
     }
 
-    public void enterAdminCreds(String email, String pass){
-        waitForElementToBeVisible(this.getCurrentDriver(), emailInput, 6);
-        emailInput.sendKeys(email);
-        passInput.sendKeys(pass);
-//        clickLogin();
-    }
-
-    public void clickLogin(){
-        clickElem(this.getCurrentDriver(), loginButton, 1, "Login Button" );
-    }
-
-    public boolean isMessageAboutConfirmationMailSentShown(){
-        return isElementShown(this.getCurrentDriver(), confirmationEmailMessage, 15);
-    }
-
-    @Step(value = "Get message about confirmation email sent")
-    public String getMessageAboutSendingConfirmationEmail(){
-        try {
-            return confirmationEmailMessage.getText();
-        }catch(NoSuchElementException e){
-            return "no elemnt to get the text from";
-        }
-    }
-
     @Step(value = "Verify Portal Login page opened")
     public  boolean isLoginPageOpened(int wait){
-        return isElementShown(this.getCurrentDriver(), emailInput, wait);
+        return getAccountForm().isEmailInputShown(wait);
     }
 
-    public boolean areCreatePasswordInputsShown(int wait){
-        int numbers = createPassInput.size();
-        if(numbers!=2){
-            waitFor(wait);
-            numbers = createPassInput.size();
-        }
-        return numbers==2;
-    }
 
-    public String getWelcomeMessage(int wait){
-        return getTextFromElem(this.getCurrentDriver(), invitationWelcomeMsg, wait,
-                "Welcome Text in Login screen");
-    }
-
-    public PortalLoginPage createNewPass(String pass){
-        for(WebElement elem : createPassInput){
-            elem.sendKeys(pass);
-        }
-        return this;
-    }
-
-    public String getNewPasswordLabel(){
-        return getTextFromElem(this.getCurrentDriver(), setNewPasswordLabel, 4, "Set new password");
-    }
-
-    @Step(value = "Verify confirmation sign up email arrives")
+    @Step(value = "Verify confirmation email arrives")
     public String checkConfirmationEmail(String account, String email, String emailPass, int wait){
 
         if (ConfigManager.getEnv().equals("testing")){
@@ -155,10 +87,33 @@ public class PortalLoginPage extends PortalAbstractPage {
         return confirmationURL;
     }
 
-    @Step(value = "Open account set up confirmation email")
+    @Step(value = "Verify reset password confirmation email arrives")
+    public String checkResetPassConfirmationEmail(String email, String emailPass, int wait){
+
+        if (ConfigManager.getEnv().equals("testing")){
+            String resetId = DBConnector.getResetPassId(ConfigManager.getEnv(),
+                    email);
+            if(resetId==null) return "none";
+            confirmationURL = EndpointsPlatform.PORTAL_RESET_PASS_URL + resetId;
+        }else {
+            GmailConnector.loginAndGetInboxFolder(email, emailPass);
+            confirmationURL = CheckEmail
+                    .getConfirmationURL("Clickatell <no-reply@clickatell.com>", wait);
+        }
+        return confirmationURL;
+    }
+
+
+    @Step(value = "Open confirmation email")
     public void openConfirmationURL(){
         MC2DriverFactory.getPortalDriver().get(confirmationURL);
 
+    }
+
+
+    public void enterEmailAndSubmit(String email){
+        getAccountForm().enterEmailAndSubmit(email);
+        waitWhileProcessing(2, 4);
     }
 
     @Step(value = "Verify 'Your account has successfully been created!' message shown")

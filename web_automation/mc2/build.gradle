@@ -7,7 +7,7 @@ version '1.0-SNAPSHOT'
 
 def allureVersion = "2.12.1"
 def suite = "all"
-def baseXmlPath = "/src/test/resources/"
+def baseXmlPath = "/src/test/resources/xmls"
 
 
 allure {

@@ -212,7 +212,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
     public boolean isPortalPageOpened(){
-        return isElementShown(this.getCurrentDriver(), getPageHeader().getWrappedElement(), 2);
+        return getPageHeader().isAdminIconShown(3);
     }
 
     @Step(value = "Close GDPR and Privacy modal window ")

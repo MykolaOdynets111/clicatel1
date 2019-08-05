@@ -10,7 +10,7 @@ import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
 
-@Test(testName = "Registration :: Sign in old user", groups = {"newaccount"}, dependsOnGroups = {"registration"})
+@Test(testName = "Registration :: Sign in old user", groups = {"newaccount", "secondlogin"}, dependsOnGroups = {"registration"})
 @TmsLink("TECH-12060")
 public class SignInOldUserTest extends SignUpBaseTest {
 
@@ -20,7 +20,7 @@ public class SignInOldUserTest extends SignUpBaseTest {
     @Description("Registration :: Sign in old user")
     @Epic("Account Registration")
     @Feature("Sign in old user")
-    public void registrationSignUp(){
+    public void signInOldUser(){
         verifyNewAccountSecondLogin();
         verifyNewAccountLogout();
     }
