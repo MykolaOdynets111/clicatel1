@@ -7,12 +7,10 @@ import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import io.qameta.allure.Step;
 import mc2api.EndpointsPlatform;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -157,8 +155,13 @@ public class PortalLoginPage extends PortalAbstractPage {
 
     @Step(value = "Open account set up confirmation email")
     public void openConfirmationURL(){
-        MC2DriverFactory.getPortalDriver().get(confirmationURL);
-
+        try {
+            MC2DriverFactory.getPortalDriver().get(confirmationURL);
+        }catch (WebDriverException e){
+            Assert.fail("WebDriver exception faced: \n" +
+                    e + "\n" +
+            "confirmationURL: " + confirmationURL);
+        }
     }
 
     @Step(value = "Verify 'Your account has successfully been created!' message shown")
