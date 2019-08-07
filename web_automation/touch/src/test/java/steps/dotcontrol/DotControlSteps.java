@@ -400,7 +400,7 @@ public class DotControlSteps implements WebWait {
 
     private void waitFotResponseToComeToServer(int wait) {
         for(int i = 0; i<wait; i++) {
-            if (!Server.incomingRequests.isEmpty() &
+            if ((!Server.incomingRequests.isEmpty()) &
                     Server.incomingRequests.keySet().contains(clientId.get())) {
                 break;
             }
