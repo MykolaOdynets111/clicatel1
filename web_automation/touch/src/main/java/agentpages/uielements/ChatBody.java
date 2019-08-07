@@ -18,7 +18,7 @@ public class ChatBody extends AbstractUIElementDeprecated {
 
     private String scrollElement = "div.chat-body";
 
-    private String fromUserMessagesXPATH = "//li[@class='from']//span[text()='%s']";
+    private String fromUserMessagesXPATH = "//li[contains(@class, 'from')]//span[text()='%s']";
 
     private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[not(@class='empty')]";
 
