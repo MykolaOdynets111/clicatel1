@@ -45,9 +45,6 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div > div.active")
     private WebElement customer360Button;
 
-    @FindBy(css = "div.touch-button")
-    private WebElement touchButton;
-
     @FindBy(css = "div.context-menu>div.active")
     private WebElement selectedTab;
 
@@ -216,10 +213,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public String getCustomer360ButtonColor() {
         return Color.fromString(customer360Button.getCssValue("background-color")).asHex();
-    }
-
-    public String getTouchButtonColor() {
-        return Color.fromString(touchButton.getCssValue("background-color")).asHex();
     }
 
     public String getSelectedTabHeader(){

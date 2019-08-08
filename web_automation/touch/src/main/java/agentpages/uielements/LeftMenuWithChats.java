@@ -45,7 +45,7 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
     @FindBy(css = "div.scrollable-content")
     private WebElement scrollableArea;
 
-    @FindBy(xpath = "//div[@class='Select-control']//input")
+    @FindBy(xpath = "//div[@class='scrollable-roster']//input")
     private WebElement searchChatInput;
 
     @FindBy(xpath = "//div[@class='empty-icon no-border']")

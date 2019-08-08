@@ -1416,8 +1416,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
         soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getExpandFilterButtonColor(),
                 tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getTouchButtonColor(),
-                tenantInfo.get("newColor"), "Color for tenant chat button is not correct");
         soft.assertAll();
     }
 
