@@ -407,7 +407,8 @@ public class DotControlSteps implements WebWait {
             waitFor(1000);
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
-            Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
+            Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'\n" +
+                    "Server.incomingRequests: " +Server.incomingRequests.toString() + "\n");
         }
     }
 
