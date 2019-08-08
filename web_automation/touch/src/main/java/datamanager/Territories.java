@@ -2,8 +2,8 @@ package datamanager;
 
 
 import apihelper.Endpoints;
-import mc2api.PortalAuthToken;
 import datamanager.jacksonschemas.Territory;
+import mc2api.PortalAuthToken;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 

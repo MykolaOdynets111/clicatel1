@@ -81,9 +81,8 @@ public class DBConnector {
     }
 
 
-    public static String getAccountActivationIdFromMC2DB(String env, String accountName) {
+    public static String getAccountActivationIdFromMC2DB(String env, String accountId) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
-        String accountId = getAccountIdFromMC2DB(env, accountName);
 
         String query = "SELECT * FROM "+tableName+".account_activation where account_id = '"+accountId+"';";
         Statement statement = null;

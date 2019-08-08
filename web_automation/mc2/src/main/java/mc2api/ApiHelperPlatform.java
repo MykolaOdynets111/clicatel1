@@ -1,6 +1,9 @@
 package mc2api;
 
-import datamanager.jacksonschemas.MC2AccountBalance;
+import datamanager.mc2jackson.AccountSignUp;
+import datamanager.mc2jackson.MC2AccountBalance;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -200,5 +203,24 @@ public class ApiHelperPlatform {
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(EndpointsPlatform.PLATFORM_ACCOUNT_BALANCE)
                 .getBody().as(MC2AccountBalance.class);
+    }
+
+    public static Response sendSignUpRequest(AccountSignUp accountSignUp){
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(accountSignUp)
+                .post(EndpointsPlatform.PLATFORM_ACCOUNT_SIGN_UP);
+    }
+
+    public static Response activateAccount(String activationID){
+        return RestAssured.given().log().all()
+                .post(String.format(EndpointsPlatform.PLATFORM_ACCOUNT_ACTIVATION, activationID));
+    }
+
+    public static void createNewAccount(AccountSignUp accountSignUp){
+        Response resp = sendSignUpRequest(accountSignUp);
+        String accountId = resp.getBody().jsonPath().getString("accountId");
+        String activationID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(), accountId);
+        activateAccount(activationID);
     }
 }

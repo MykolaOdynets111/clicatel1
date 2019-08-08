@@ -30,6 +30,10 @@ public class EndpointsPlatform {
 
     public static String PLATFORM_ACCOUNT_BALANCE = MC2URLs.getBasePlatformUrl() + "/accounts/balance";
 
+    public static String PLATFORM_ACCOUNT_SIGN_UP = MC2URLs.getBasePlatformUrl() + "/auth/sign-up";
+
+    public static String PLATFORM_ACCOUNT_ACTIVATION = MC2URLs.getBasePlatformUrl() + "/auth/accounts/%s/activated";
+
     // ====================  PORTAL ================= //
 
     public static String PORTAL_LOGIN_PAGE = MC2URLs.getBasePortalUrl() + "#/login";

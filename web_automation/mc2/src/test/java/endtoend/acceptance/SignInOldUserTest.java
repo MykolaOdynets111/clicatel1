@@ -33,12 +33,12 @@ public class SignInOldUserTest extends SignUpBaseTest {
 
         soft.assertTrue(mainPage.isUpdatePolicyPopUpNotShown(),
                 "Update policy pop up is shown in second time");
-        soft.assertTrue(mainPage.isLandingPopUpNotShown(),
+        soft.assertTrue(mainPage.isGetStartedWindowNotShown(),
                 "Landing pop up is shown in second time");
         soft.assertEquals(mainPage.getGreetingMessage(),
                 "Welcome, "+ firstName.get() + ". Add a solution to your account.",
                 "Greeting is not as expected");
-        soft.assertTrue(mainPage.isGetStartedWithTouchButtonIsShown(),
+        soft.assertTrue(mainPage.getLaunchpad().isGetStartedWithTouchButtonShown(),
                 "'Get started' button is not shown");
         soft.assertAll();
     }

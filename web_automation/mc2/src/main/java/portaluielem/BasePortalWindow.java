@@ -3,11 +3,7 @@ package portaluielem;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import java.util.List;
-
-//import com.paulhammant.ngwebdriver.NgWebDriver;
-
 
 public class BasePortalWindow extends AbstractUIElement {
 

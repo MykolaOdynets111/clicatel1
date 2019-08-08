@@ -35,6 +35,9 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.balance-total.ng-binding")
     private WebElement topUpBalanceSum;
 
+    @FindBy(xpath = ".//button[text() = 'Top up balance']")
+    private WebElement topUpBalanceButton;
+
     public void setCurrentDriver(WebDriver driver){
         this.currentDriver = driver;
     }
@@ -78,5 +81,10 @@ public class PageHeader extends AbstractUIElement {
 
     public String getTopUpBalanceSumm(){
         return topUpBalanceSum.getText().split(" ")[0];
+    }
+
+    @Step(value = "Verify 'Top up balance' button shown")
+    public boolean isTopUpBalanceButtonShown(){
+        return isElementShown(this.getCurrentDriver(), topUpBalanceButton, 5);
     }
 }

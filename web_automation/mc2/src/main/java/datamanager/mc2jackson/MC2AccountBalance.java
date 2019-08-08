@@ -1,4 +1,4 @@
-package datamanager.jacksonschemas;
+package datamanager.mc2jackson;
 
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 

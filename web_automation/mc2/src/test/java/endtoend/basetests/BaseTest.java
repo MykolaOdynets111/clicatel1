@@ -1,8 +1,6 @@
 package endtoend.basetests;
 
-import driverfactory.MC2DriverFactory;
 import drivermanager.ConfigManager;
-import mc2api.ApiHelperPlatform;
 import org.testng.annotations.*;
 
 import java.io.FileInputStream;
@@ -13,10 +11,7 @@ import java.util.Properties;
 @Test
 public class BaseTest {
 
-    @AfterTest(alwaysRun = true)
-    protected void closeBrowser(){
-        MC2DriverFactory.closePortalBrowser();
-    }
+
 
     @AfterSuite(alwaysRun = true)
     protected void setUpEnvsProp(){
@@ -37,18 +32,5 @@ public class BaseTest {
         }
     }
 
-    @AfterGroups("newaccount")
-    protected void closeAccount(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
-            Properties props = new Properties();
-            props.load(in);
-
-            ApiHelperPlatform.closeAccount(props.getProperty("accountName"),
-                    props.getProperty("email"), props.getProperty("pass"));
-        }catch (IOException | AssertionError e){
-            // Nothing to do. Account was not activated.
-        }
-    }
 
 }

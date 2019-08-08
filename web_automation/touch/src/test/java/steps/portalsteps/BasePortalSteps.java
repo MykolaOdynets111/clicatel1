@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
+import datamanager.jacksonschemas.AvailableAgent;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import mc2api.ApiHelperPlatform;
@@ -12,7 +13,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.*;
-import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
@@ -328,13 +328,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
-        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+        String accountId = DBConnector.getAccountIdFromMC2DB(ConfigManager.getEnv(),
                 MC2Account.getTouchGoAccount().getAccountName());
+        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),accountId);
         for(int i=0; i<4; i++){
             if (activationAccountID==null){
                 getPortalSignUpPage().waitFor(1000);
-                activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                        MC2Account.getTouchGoAccount().getAccountName());
+                activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(), accountId);
             }
         }
         Assert.assertNotNull(activationAccountID,
@@ -574,13 +574,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Landing pop up is shown$")
     public void verifyLandingPopupShown(){
         getPortalMainPage().waitWhileProcessing(3,2);
-        Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
+        Assert.assertTrue(getPortalMainPage().isGetStartedWindowShown(),
                 "Landing popup is not shown");
     }
 
     @When("Close landing popup$")
     public void acceptLandingPopup(){
-        getPortalMainPage().closeLandingPage();
+        getPortalMainPage().closeGetStartedWindow();
     }
 
     @Then("^Main portal page with welcome message is shown$")
@@ -591,13 +591,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"Get started with Touch\" button is shown$")
     public void verifyGetStartedWithTouchButtonShown(){
-        Assert.assertTrue(getPortalMainPage().isGetStartedWithTouchButtonIsShown(),
+        Assert.assertTrue(getPortalMainPage().getLaunchpad().isGetStartedWithTouchButtonShown(),
                 "'Get started with Touch' is not shown");
     }
 
     @When("^Click \"Get started with Touch\" button$")
     public void clickGetStartedWithTouchButton(){
-        getPortalMainPage().clickGetStartedWithTouchButton();
+        getPortalMainPage().getLaunchpad().clickGetStartedWithTouchButton();
     }
 
     @When("^\"Get started with Touch Go\" window is opened$")

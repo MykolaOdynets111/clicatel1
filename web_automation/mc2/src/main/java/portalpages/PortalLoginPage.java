@@ -73,8 +73,10 @@ public class PortalLoginPage extends PortalAbstractPage {
     public String checkConfirmationEmail(String account, String email, String emailPass, int wait){
 
         if (ConfigManager.getEnv().equals("testing")){
-            String activationID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+            String accountId = DBConnector.getAccountIdFromMC2DB(ConfigManager.getEnv(),
                     account);
+            String activationID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+                    accountId);
             if(activationID==null) return "none";
             confirmationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationID);;
         }else {

@@ -75,6 +75,7 @@ public class SignUpTest extends BaseTest {
     @Step(value = "Verify new account activation")
     private void verifyNewAccountActivation(){
         loginPage.openConfirmationURL();
+        loginPage.waitWhileProcessing(2,5);
 
         Assert.assertTrue(loginPage.isAccountCreatedMessageShown(),
                 "'Your account has successfully been created!' message is not shown");
@@ -89,7 +90,7 @@ public class SignUpTest extends BaseTest {
 
         soft.assertTrue(mainPage.isUpdatePolicyPopUpOpened(),
                 "Update policy pop up is not shown");
-        soft.assertTrue(mainPage.isLandingPopUpOpened(),
+        soft.assertTrue(mainPage.isGetStartedWindowShown(),
                 "Landing pop up is not shown");
         soft.assertAll();
     }
@@ -100,11 +101,9 @@ public class SignUpTest extends BaseTest {
         String expectedPolicyLink = "https://www.clickatell.com/legal/general-terms-notices/privacy-notice/";
         String expectedComplianceLink = "https://www.clickatell.com/legal/general-terms-notices/clickatell-maintaining-gdpr-compliance/";
 
-        soft.assertTrue(mainPage.getGdprWindow().clickGDPRPolicyLink()
-                                                .verifyCorrectnessGDPRLink(expectedPolicyLink),
+        soft.assertEquals(mainPage.getGdprWindow().clickGDPRPolicyLink().getGDPRLink(),  expectedPolicyLink,
                 "GDPR policy link is incorrect. \n Expected: " + expectedPolicyLink );
-        soft.assertTrue(mainPage.getGdprWindow().clickGDPRComplianceLink()
-                        .verifyCorrectnessGDPRLink(expectedComplianceLink),
+        soft.assertEquals(mainPage.getGdprWindow().clickGDPRComplianceLink().getGDPRLink(), expectedComplianceLink,
                 "GDPR compliance is incorrect. \n Expected: " + expectedComplianceLink);
         soft.assertAll();
     }
@@ -114,12 +113,12 @@ public class SignUpTest extends BaseTest {
         SoftAssert soft = new SoftAssert();
 
         mainPage.closeUpdatePolicyPopup();
-        mainPage.closeLandingPage();
+        mainPage.closeGetStartedWindow();
 
         soft.assertEquals(mainPage.getGreetingMessage(),
                 "Welcome, "+ signUpInfo.get("firstName") + ". Add a solution to your account.",
                 "Greeting is not as expected");
-        soft.assertTrue(mainPage.isGetStartedWithTouchButtonIsShown(),
+        soft.assertTrue(mainPage.isGetStartedButtonShown(),
                 "'Get started' button is not shown");
         soft.assertAll();
     }

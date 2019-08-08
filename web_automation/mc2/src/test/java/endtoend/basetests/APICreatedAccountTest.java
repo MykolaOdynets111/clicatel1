@@ -6,12 +6,13 @@ import mc2api.ApiHelperPlatform;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 @Listeners({TestAllureListener.class})
-public class SignUpBaseTest extends BaseTest {
+public class APICreatedAccountTest extends BaseTest {
 
     protected ThreadLocal<String> email = new ThreadLocal<>();
     protected ThreadLocal<String> pass = new ThreadLocal<>();
@@ -22,7 +23,7 @@ public class SignUpBaseTest extends BaseTest {
     @BeforeClass()
     protected void readCreatedAccountProps(){
         try {
-            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
             Properties props = new Properties();
             props.load(in);
             email.set(props.getProperty("email"));

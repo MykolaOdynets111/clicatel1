@@ -31,17 +31,11 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "div.cl-greeting-text")
     private WebElement greetingMessage;
 
-    @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
-    private WebElement getStartedWithTouchButton;
+    @FindBy(css = "button[ng-click='openGetStarted()']")
+    private WebElement getStartedButton;
 
     @FindBy(css = "button.launchpad-btn")
     private WebElement launchpadButton;
-
-    @FindBy(css = "div[ng-controller='WizardCtrl']")
-    private WebElement landingPage;
-
-    @FindBy(css = "span.svg-close.cl-clickable.push-right")
-    private WebElement closeLandingPage;
 
     @FindBy(css = "div.button-container button.button.button-primary.ng-binding")
     private WebElement closeLandingPageConfirmation;
@@ -51,6 +45,7 @@ public class PortalMainPage extends PortalAbstractPage {
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
     private GDPRWindow gdprWindow;
+    private GetStartedWindow getStartedWindow;
 
     // == Constructors == //
 
@@ -69,6 +64,11 @@ public class PortalMainPage extends PortalAbstractPage {
         return gdprWindow;
     }
 
+    public GetStartedWindow getStartedWindow(){
+        getStartedWindow.setCurrentDriver(this.getCurrentDriver());
+        return getStartedWindow;
+    }
+
     public ConfigureTouchWindow getConfigureTouchWindow() {
         configureTouchWindow.setCurrentDriver(this.getCurrentDriver());
         return configureTouchWindow;
@@ -84,6 +84,9 @@ public class PortalMainPage extends PortalAbstractPage {
         return upgradeYourPlanWindow;
     }
 
+    public PortalLaunchpadPage getLaunchpad(){
+        return new PortalLaunchpadPage(this.getCurrentDriver());
+    }
 
     public LeftMenu getLeftMenu() {
         waitForElementToBeVisible(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
@@ -179,11 +182,9 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     @Step(value = "Verify Landing (Get Started) modal window is displayed")
-    public boolean isLandingPopUpOpened(){
-        return isElementShown(this.getCurrentDriver(), landingPage, 5);
+    public boolean isGetStartedWindowShown(){
+        return isElementShown(this.getCurrentDriver(), getStartedWindow.getWrappedElement(), 5);
     }
-
-
 
     @Step(value = "Verify GDPR and Privacy modal window is not displayed")
     public boolean isUpdatePolicyPopUpNotShown(){
@@ -191,21 +192,20 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     @Step(value = "Verify Landing (Get Started) modal window is not displayed")
-    public boolean isLandingPopUpNotShown(){
-        return isElementNotShown(this.getCurrentDriver(), landingPage, 5);
+    public boolean isGetStartedWindowNotShown(){
+        return isElementNotShown(this.getCurrentDriver(), getStartedWindow.getWrappedElement(), 5);
     }
 
 
     @Step(value = "Close Landing (Get Started) modal window ")
-    public void closeLandingPage(){
+    public void closeGetStartedWindow(){
         try {
-            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            getStartedWindow().clickCloseGetStartedWindow();
             clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
         }catch (WebDriverException e){
             waitFor(1000);
-            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            getStartedWindow().clickCloseGetStartedWindow();
             clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
-
         }
 
     }
@@ -215,10 +215,12 @@ public class PortalMainPage extends PortalAbstractPage {
         return getPageHeader().isAdminIconShown(3);
     }
 
-    @Step(value = "Close GDPR and Privacy modal window ")
+    @Step(value = "Make sure GDPR and Privacy modal window closed")
     public void closeUpdatePolicyPopup(){
-        gotItButton.click();
-        waitWhileProcessing(2, 3);
+        if(isElementShown(this.getCurrentDriver(),gotItButton, 2)){
+            gotItButton.click();
+            waitWhileProcessing(2, 3);
+        }
     }
 
     @Step(value = "Get user greeting from Portal Main page")
@@ -227,14 +229,28 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     @Step(value = "Verify if 'Get started' button shown")
-    public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShown(this.getCurrentDriver(), getStartedWithTouchButton, 2);}
-
-    public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
+    public boolean isGetStartedButtonShown(){
+        return isElementShown(this.getCurrentDriver(), getStartedButton, 2);
+    }
 
     public boolean isConfigureTouchWindowOpened(){
         return isElementShown(this.getCurrentDriver(), getConfigureTouchWindow().getWrappedElement(), 2);
     }
 
     public void clickLaunchpadButton(){
-        if(isElementShown(this.getCurrentDriver(), launchpadButton,2)) launchpadButton.click();}
+        if(isElementShown(this.getCurrentDriver(), launchpadButton,2)) launchpadButton.click();
+    }
+
+
+   public void makeSureGetStartedWindowOpened(){
+        if (!isElementShown(this.getCurrentDriver(), getStartedWindow.getWrappedElement(), 2)){
+            clickGetStartedButton();
+        }
+   }
+
+   @Step(value = "Click 'Get Started' button")
+   public void clickGetStartedButton(){
+       clickElem(this.getCurrentDriver(), getStartedButton, 2, "'Get Started' button");
+   }
+
 }

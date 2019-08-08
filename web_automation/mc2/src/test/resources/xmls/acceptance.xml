@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Acceptance suite" >
-    <test name="New account registration">
-        <classes>
-            <class name="endtoend.acceptance.SignUpTest" />
-            <class name="endtoend.acceptance.SignInOldUserTest" />
-            <class name="endtoend.acceptance.ChangePasswordTest" />
-        </classes>
-    </test>
+        <suite-files>
+            <suite-file path="accountregistration.xml" />
+            <suite-file path="withoutbillingtests.xml" />
+        </suite-files>
 </suite>
