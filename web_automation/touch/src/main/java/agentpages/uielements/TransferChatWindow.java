@@ -4,6 +4,8 @@ import abstractclasses.AbstractUIElementDeprecated;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 @FindBy(css = "div.modal-content")
 public class TransferChatWindow extends AbstractUIElementDeprecated {
 
@@ -16,8 +18,11 @@ public class TransferChatWindow extends AbstractUIElementDeprecated {
     @FindBy(css = "span.icon.icon-down")
     private WebElement openDropdownButton;
 
-    @FindBy(xpath = "//div[@class='Select-menu-outer']/*")
+    @FindBy(xpath = "//div[@class='Select-menu-outer']")
     private WebElement availableAgent;
+
+    @FindBy(xpath = "//div[@class='Select-menu-outer']//div[contains(@class,'Select-option')]")
+    private List<WebElement> availableAgentList;
 
     @FindBy(xpath = "//div[@class='Select-control']")
     private WebElement dropDown;
@@ -56,8 +61,13 @@ public class TransferChatWindow extends AbstractUIElementDeprecated {
 //        if(!isElementShownAgentByCSS(openedMenu, 5, agent)) openDropdownButton.click();
         if(!isElementShownAgent(availableAgent, 2, agent)) openDropdownButton.click();
         waitForElementToBeVisibleAgent(availableAgent,5, agent);
-        for(int i=0; i<15; i++){
-            if(availableAgent.getAttribute("innerText").contains("AQA")) break;
+        for(int i=0; i<10; i++){
+            if(availableAgent.getAttribute("innerText").contains("AQA")) {
+                WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().toUpperCase().contains("AQA")).findFirst().get();
+                String agentName = currentAgent.getText();
+                currentAgent.click();
+                return agentName;
+            }
             else waitForDeprecated(500);
         }
         String agentName = availableAgent.getAttribute("innerText");
