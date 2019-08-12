@@ -1,0 +1,228 @@
+package portalpages;
+
+import io.qameta.allure.Step;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+import portaluielem.*;
+
+public class PortalMainPage extends PortalAbstractPage {
+
+    private String addedToCartAlertXPATH = "//div[@ng-bind-html='alert'][text()='Added to cart']";
+
+    @FindBy(xpath = "//div[@ng-bind-html='alert'][text()='Added to cart']")
+    private WebElement addedToCartAlert;
+
+    @FindBy(xpath = "//span[text() = 'Billing Not Setup']")
+    private WebElement billingNotSetUpPopupHeader;
+
+    @FindBy(xpath = "//button[text() = 'Setup Billing']")
+    private WebElement setUpBillingButton;
+
+    @FindBy(xpath = "//button[contains(@class, 'close-discard-modal')]")
+    private WebElement closeSetUpBillingPopUp;
+
+    @FindBy(xpath = "//h3[text()='We’ve updated our privacy policy']")
+    private WebElement updatePolicyPopUp;
+
+    @FindBy(xpath = "//button[text()='Got it']")
+    private WebElement gotItButton;
+
+    @FindBy(css = "div.cl-greeting-text")
+    private WebElement greetingMessage;
+
+    @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
+    private WebElement getStartedWithTouchButton;
+
+    @FindBy(css = "button.launchpad-btn")
+    private WebElement launchpadButton;
+
+    @FindBy(css = "div[ng-controller='WizardCtrl']")
+    private WebElement landingPage;
+
+    @FindBy(css = "span.svg-close.cl-clickable.push-right")
+    private WebElement closeLandingPage;
+
+    @FindBy(css = "div.button-container button.button.button-primary.ng-binding")
+    private WebElement closeLandingPageConfirmation;
+
+    private LeftMenu leftMenu;
+    private UpgradeYourPlanWindow upgradeYourPlanWindow;
+    private CartPage cartPage;
+    private ConfigureTouchWindow configureTouchWindow;
+    private GDPRWindow gdprWindow;
+
+    // == Constructors == //
+
+    public PortalMainPage(WebDriver driver) {
+        super(driver);
+    }
+    public PortalMainPage(String agent) {
+        super(agent);
+    }
+    public PortalMainPage() {
+        super();
+    }
+
+    public GDPRWindow getGdprWindow(){
+        gdprWindow.setCurrentDriver(this.getCurrentDriver());
+        return gdprWindow;
+    }
+
+    public ConfigureTouchWindow getConfigureTouchWindow() {
+        configureTouchWindow.setCurrentDriver(this.getCurrentDriver());
+        return configureTouchWindow;
+    }
+
+    public UpgradeYourPlanWindow getUpgradeYourPlanWindow() {
+        try {
+            waitForElementToBeVisible(this.getCurrentDriver(), upgradeYourPlanWindow.getWrappedElement(), 5);
+        } catch (TimeoutException | NoSuchElementException e){
+            Assert.fail("Upgrade window is not shown");
+        }
+        upgradeYourPlanWindow.setCurrentDriver(this.getCurrentDriver());
+        return upgradeYourPlanWindow;
+    }
+
+
+    public LeftMenu getLeftMenu() {
+        waitForElementToBeVisible(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
+        leftMenu.setCurrentDriver(this.getCurrentDriver());
+        return leftMenu;
+    }
+
+    public void upgradePlan(int agentSeats){
+        addAgentSeatsIntoCart(agentSeats);
+        openAgentsPurchasingConfirmationWindow();
+        checkoutAndBuy(cartPage);
+    }
+
+    public void checkoutAndBuy(CartPage localCartPage){
+        if(localCartPage.getConfirmPaymentDetailsWindow().isBillingContactShown()){
+            localCartPage.getConfirmPaymentDetailsWindow().clickNexButton();
+        }
+        localCartPage.getConfirmPaymentDetailsWindow()
+                .clickSelectPaymentField()
+                .selectPaymentMethod("VISA")
+                .clickNexButton()
+                .acceptTerms()
+                .clickNexButton()
+                .waitFotPaymentSummaryScreenToLoad()
+                .acceptTerms()
+                .clickPayNowButton();
+        waitWhileProcessing(14, 20);
+    }
+
+    public void upgradePlanWithoutTerms(int agentSeats){
+        addAgentSeatsIntoCart(agentSeats);
+        openAgentsPurchasingConfirmationWindow();
+        ConfirmPaymentDetailsWindow confirmPaymentDetailsWindow = cartPage.getConfirmPaymentDetailsWindow();
+        if (!confirmPaymentDetailsWindow.isSelectPaymentShown()){
+            confirmPaymentDetailsWindow.clickNexButton();
+        }
+        confirmPaymentDetailsWindow
+                .clickSelectPaymentField()
+                .selectPaymentMethod("VISA")
+                .clickNexButton()
+                .acceptTerms()
+                .clickNexButton();
+        waitWhileProcessing(14, 20);
+        confirmPaymentDetailsWindow.waitFotPaymentSummaryScreenToLoad()
+                                    .clickPayNowButton();
+    }
+
+    public void addAgentSeatsIntoCart(int agentSeats){
+        getPageHeader().clickUpgradeButton();
+        getUpgradeYourPlanWindow()
+                .selectAgentSeats(agentSeats)
+                .selectMonthly()
+                .clickAddToCardButton();
+        waitWhileProcessing(14, 20);
+        try {
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), addedToCartAlertXPATH, 10);
+            waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),addedToCartAlertXPATH, 20);
+        } catch (TimeoutException e){
+//            Assert.assertTrue(false, "Item is not added to the cart");
+        }
+    }
+
+    public void openAgentsPurchasingConfirmationWindow(){
+        cartPage = getPageHeader().openCart();
+        cartPage.clickCheckoutButton();
+    }
+
+    public CartPage getCartPage() {
+        if (cartPage==null) {
+            cartPage =  new CartPage(this.getCurrentDriver());
+            return cartPage;
+        } else{
+            return cartPage;
+        }
+    }
+
+    public boolean isBillingNotSetUpPopupShown(int wait){
+        return isElementShown(this.getCurrentDriver(), billingNotSetUpPopupHeader, wait);
+    }
+
+    public PortalBillingDetailsPage clickSetupBillingButton(){
+        setUpBillingButton.click();
+        return new PortalBillingDetailsPage(this.getCurrentDriver());
+    }
+
+    public void closeSetupBillingPopUpModal(){
+        closeSetUpBillingPopUp.click();
+    }
+
+    @Step(value = "Verify GDPR and Privacy modal window is displayed")
+    public boolean isUpdatePolicyPopUpOpened(){
+        return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 10);
+    }
+
+    @Step(value = "Verify Landing (Get Started) modal window is displayed")
+    public boolean isLandingPopUpOpened(){
+        return isElementShown(this.getCurrentDriver(), landingPage, 10);
+    }
+
+
+    @Step(value = "Close Landing (Get Started) modal window ")
+    public void closeLandingPage(){
+        try {
+            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
+        }catch (WebDriverException e){
+            waitFor(1000);
+            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
+
+        }
+
+    }
+
+
+    public boolean isPortalPageOpened(){
+        return isElementShown(this.getCurrentDriver(), getPageHeader().getWrappedElement(), 2);
+    }
+
+    @Step(value = "Close GDPR and Privacy modal window ")
+    public void closeUpdatePolicyPopup(){
+        gotItButton.click();
+        waitWhileProcessing(2, 3);
+    }
+
+    @Step(value = "Get user greeting from Portal Main page")
+    public String getGreetingMessage(){
+        return getTextFromElem(this.getCurrentDriver(), greetingMessage, 3, "Welcome message");
+    }
+
+    @Step(value = "Verify if 'Get started' button shown")
+    public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShown(this.getCurrentDriver(), getStartedWithTouchButton, 2);}
+
+    public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
+
+    public boolean isConfigureTouchWindowOpened(){
+        return isElementShown(this.getCurrentDriver(), getConfigureTouchWindow().getWrappedElement(), 2);
+    }
+
+    public void clickLaunchpadButton(){
+        if(isElementShown(this.getCurrentDriver(), launchpadButton,2)) launchpadButton.click();}
+}

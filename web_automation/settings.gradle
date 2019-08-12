@@ -1,2 +1,5 @@
 rootProject.name = 'web_automation'
+include 'mc2'
+include 'touch'
+include 'shared'
 
