@@ -36,6 +36,7 @@ public class LongNumberTest extends APICreatedAccountTest {
                 "Incorrect modal window message \n");
         soft.assertEquals(launchpadPage.getModalWindow().getModalPrimaryButton(), "Setup Billing",
                 "Incorrect modal window button text \n");
+        soft.assertAll();
     }
 
 

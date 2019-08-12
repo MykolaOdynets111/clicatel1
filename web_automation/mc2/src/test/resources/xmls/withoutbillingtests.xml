@@ -5,4 +5,10 @@
             <class name="endtoend.acceptance.LongNumberTest" />
         </classes>
     </test>
+    <test name="Test Phones">
+        <classes>
+            <class name="endtoend.acceptance.TestPhoneAddingTest" />
+            <class name="endtoend.acceptance.MultipleTestPhoneAddingTest" />
+        </classes>
+    </test>
 </suite>

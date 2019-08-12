@@ -46,6 +46,7 @@ public class PortalMainPage extends PortalAbstractPage {
     private ConfigureTouchWindow configureTouchWindow;
     private GDPRWindow gdprWindow;
     private GetStartedWindow getStartedWindow;
+    private AddTestPhoneWindow addTestPhoneWindow;
 
     // == Constructors == //
 
@@ -57,6 +58,11 @@ public class PortalMainPage extends PortalAbstractPage {
     }
     public PortalMainPage() {
         super();
+    }
+
+    public AddTestPhoneWindow getAddTestPhoneWindow(){
+        addTestPhoneWindow.setCurrentDriver(this.getCurrentDriver());
+        return addTestPhoneWindow;
     }
 
     public GDPRWindow getGdprWindow(){

@@ -82,11 +82,11 @@ public interface JSHelper {
         JavascriptExecutor jsExec = (JavascriptExecutor) driver;
 //        jsExec.executeScript("angular.element(arguments[0]).click();", elem);
         jsExec.executeScript("angular.element(arguments[0]).triggerHandler('click')", elem);
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(200);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     default void executeClickInElemListWithWait(WebDriver driver, List<WebElement> list, String item){

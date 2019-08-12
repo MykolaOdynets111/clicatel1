@@ -18,6 +18,7 @@ public class APICreatedAccountTest extends BaseTest {
     protected ThreadLocal<String> pass = new ThreadLocal<>();
     protected ThreadLocal<String> firstName = new ThreadLocal<>();
     protected ThreadLocal<String> accountName = new ThreadLocal<>();
+    protected ThreadLocal<String> accountID = new ThreadLocal<>();
 
 
     @BeforeClass()
@@ -30,6 +31,8 @@ public class APICreatedAccountTest extends BaseTest {
             pass.set(props.getProperty("pass"));
             firstName.set(props.getProperty("firstName"));
             accountName.set(props.getProperty("accountName"));
+            accountID.set(props.getProperty("accountID"));
+
         } catch(IOException e){
             e.printStackTrace();
         }

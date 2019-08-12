@@ -20,7 +20,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(css = "section.cl-page-tabs ol.list-unstyled.list-inline")
     private WebElement selectionNavBar;
 
-    @FindBy(css = "li[ng-repeat='tab in clTabs']")
+    @FindBy(css = "section.cl-page-tabs ol.list-unstyled.list-inline li[ng-repeat]")
     private List<WebElement> pageNavButtons;
 
     @FindBy(css = "div.cl-header--controls.cl-header--item button")
@@ -102,9 +102,10 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     }
 
     public void clickPageNavButton(String buttonName){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
         WebElement targetButton = pageNavButtons.stream()
-                                        .filter(e -> e.getText().equalsIgnoreCase(buttonName))
+                                        .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
                                         .findFirst().get();
         clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
     }

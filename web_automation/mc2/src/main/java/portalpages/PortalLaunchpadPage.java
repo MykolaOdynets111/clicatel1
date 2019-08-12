@@ -10,6 +10,8 @@ import java.util.List;
 
 public class PortalLaunchpadPage extends PortalAbstractPage {
 
+    @FindBy(xpath = "//button[text()='Remove']")
+    private WebElement confirmRemovingTestPhone;
 
     @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
     private WebElement getStartedWithTouchButton;
@@ -22,6 +24,7 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
     private List<WebElement> getStartedCards;
 
     private ModalWindow modalWindow;
+
     // == Constructors == //
 
     public PortalLaunchpadPage(WebDriver driver) {
@@ -46,7 +49,9 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
     public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
 
     public GetStartedSection getTargetSection(String targetCard){
-        waitForElementsToBeVisible(this.getCurrentDriver(), getStartedCards, 5);
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
+        waitForElementsToBeVisible(this.getCurrentDriver(), getStartedCards, 10);
         try {
             return getStartedCards.stream().map(e -> new GetStartedSection(e).setCurrentDriver(this.getCurrentDriver()))
                     .filter(card -> card.getCardTitle().equals(targetCard))
@@ -59,6 +64,8 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
 
     @Step(value = "Verify '{sectionTitle}' launchpad section presence")
     public boolean isSectionPresent(String sectionTitle, int wait){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         GetStartedSection card = getTargetSection(sectionTitle);
         for(int i = 0; i < wait; i++){
             if(card!=null) return true;
@@ -73,5 +80,11 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
     @Step(value = "Get number of section on Launchpad")
     public int getNumberOfSections(){
         return getStartedCards.size();
+    }
+
+    @Step(value = "Confirm test phone deleting")
+    public void confirmTestPhoneDeleting(){
+        clickElem(this.getCurrentDriver(), confirmRemovingTestPhone, 4, "Confirm test phone deleting");
+        waitWhileProcessing(1, 4);
     }
 }

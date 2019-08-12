@@ -71,7 +71,7 @@ public class CheckEmail {
         }
         GmailConnector.getFolder().close(false);
         GmailConnector.getStore().close();
-        return "";
+        return "none";
     }
 
     public static Message getLastMessageBySender(String expectedSender, int wait){

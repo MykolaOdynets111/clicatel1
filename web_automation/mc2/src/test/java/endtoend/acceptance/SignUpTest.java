@@ -62,6 +62,7 @@ public class SignUpTest extends BaseTest {
                 .provideSignUpDetails(signUpInfo.get("name"), signUpInfo.get("accountName"),
                                         signUpInfo.get("email"), signUpInfo.get("pass"))
                 .clickSignUpButton();
+        loginPage.waitWhileProcessing(1,5);
 
         Assert.assertTrue(loginPage.isLoginPageOpened(5),
                 "Login Page is not opened after providing sign up info");
@@ -69,7 +70,7 @@ public class SignUpTest extends BaseTest {
                 "A confirmation email has been sent to "+ signUpInfo.get("email") +" to complete your sign up process",
                 "Message about sending confirmation email is incorrect");
         Assert.assertNotEquals(loginPage.checkConfirmationEmail(signUpInfo.get("accountName"), signUpInfo.get("email"), signUpInfo.get("pass"), 60),
-                "none", "There is no confirmation URL");
+                "none", "There is no confirmation letter");
     }
 
     @Step(value = "Verify new account activation")

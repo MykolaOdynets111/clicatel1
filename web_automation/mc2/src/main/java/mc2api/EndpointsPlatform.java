@@ -34,6 +34,9 @@ public class EndpointsPlatform {
 
     public static String PLATFORM_ACCOUNT_ACTIVATION = MC2URLs.getBasePlatformUrl() + "/auth/accounts/%s/activated";
 
+    public static String PLATFORM_SANDBOX_NUMBERS = MC2URLs.getBasePlatformUrl() + "/sandbox-numbers";
+
+
     // ====================  PORTAL ================= //
 
     public static String PORTAL_LOGIN_PAGE = MC2URLs.getBasePortalUrl() + "#/login";

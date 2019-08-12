@@ -7,36 +7,34 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
-public class GetStartedSection extends AbstractWidget {
+public class ConfigureSMSSection extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(xpath = ".//div[contains(@class, 'cl-media')]/following-sibling::p")
-    private WebElement cardTitle;
+    @FindBy(css = "h3[ng-if='contentWindow.title']")
+    private WebElement sectionTitle;
 
-    @FindBy(css = "button.status-button.ng-scope span")
-    private WebElement cardStatus;
+//    private String sectionTitleCss = "h3[ng-if='contentWindow.title']";
 
-    @FindBy(xpath = "//button[contains(@class, 'button-secondary')]|//button[contains(@class, 'button-primary')]")
+    @FindBy(css = "span[phone]")
+    private List<WebElement> phoneNumbers;
+
+    @FindBy(xpath = ".//button[contains(@class, 'button-secondary')]|.//button[contains(@class, 'button-primary')]")
     private List<WebElement> cardButtons;
 
     @FindBy(css = "ul.integration-phones li span.default-cursor")
-    private List<WebElement> testPhones;
+    private WebElement testPhone;
 
-    @FindBy(css = "button.add-remove-item-bttn")
-    private WebElement deleteTestPhone;
-
-    public GetStartedSection(WebElement element) {
+    public ConfigureSMSSection(WebElement element) {
         super(element);
     }
 
-    public GetStartedSection setCurrentDriver(WebDriver currentDriver){
+    public ConfigureSMSSection setCurrentDriver(WebDriver currentDriver){
         this.currentDriver = currentDriver;
         return this;
     }
@@ -50,14 +48,12 @@ public class GetStartedSection extends AbstractWidget {
         }
     }
 
-    public String getCardTitle(){
-        return cardTitle.getText().trim();
+    public String getSectionTitle(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        return getTextFromElem(this.getCurrentDriver(), sectionTitle, 5,
+                "Section title on Configure SMS page");
     }
 
-    @Step(value = "Get card status")
-    public String getCardStatus(){
-        return cardStatus.getText().trim();
-    }
 
     @Step(value = "Verify button is displayed")
     public boolean isButtonDisplayed(String buttonName, int wait){
@@ -96,14 +92,9 @@ public class GetStartedSection extends AbstractWidget {
     }
 
     @Step(value = "Get test phones")
-    public List<String> getTestPhones(){
-        waitForElementsToBeVisible(this.getCurrentDriver(), testPhones, 5);
-        if(testPhones.size()==0) Assert.fail("Test Phones list is empty");
-        return testPhones.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
-    }
-
-    @Step(value = "Click 'Remove' button for test phone on Launchpad")
-    public void clickDeletePhoneButton(){
-        clickElem(this.getCurrentDriver(), deleteTestPhone, 3, "Delete test phone button");
+    public List<String> getTestPhone(){
+        waitForElementsToBeVisible(this.getCurrentDriver(), phoneNumbers, 4);
+        if(phoneNumbers.size()==0) Assert.fail("Test Phones list is empty");
+        return phoneNumbers.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
     }
 }

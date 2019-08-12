@@ -25,6 +25,7 @@ import java.util.*;
 @TmsLink("TECH-12055")
 public class LaunchpadTest extends BaseTest {
 
+    private String accountID;
     private PortalMainPage mainPage;
     private AccountSignUp accountSignUp;
     private Map<String, String> navButtons = new LinkedHashMap<String, String>() {{
@@ -44,9 +45,9 @@ public class LaunchpadTest extends BaseTest {
                         .setEmail("aqatest_" + System.currentTimeMillis() +"@gmail.com")
                         .setFirstName(faker.name().firstName())
                         .setLastName(faker.name().lastName());
-        saveNewAccountProperties();
 
-        ApiHelperPlatform.createNewAccount(accountSignUp);
+        accountID = ApiHelperPlatform.createNewAccount(accountSignUp);
+        saveNewAccountProperties();
     }
 
     @Description("Launchpad :: Check sections for new account")
@@ -257,6 +258,7 @@ public class LaunchpadTest extends BaseTest {
             props.setProperty("firstName", accountSignUp.getFirstName());
             props.setProperty("lastName", accountSignUp.getLastName());
             props.setProperty("name", accountSignUp.getFirstName() + " " + accountSignUp.getLastName());
+            props.setProperty("accountID", accountID);
 
             props.store(out, null);
             out.close();

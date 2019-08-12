@@ -520,7 +520,26 @@ public class DBConnector {
         return resetId;
     }
 
-
+    public static String getVerificationOTPCode(String env, String account_id, String phone) {
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
+        String query = "SELECT * FROM "+ tableName +".sandbox_number where " +
+                "account_id='"+account_id+"' and deleted=0 and number='"+phone.replace("+", "")+"'";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "mc2").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = String.valueOf(results.getInt("verification_code"));
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
 
 //    public static void main(String args[]){
 //        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");

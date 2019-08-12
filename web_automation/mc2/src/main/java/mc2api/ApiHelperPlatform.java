@@ -2,11 +2,13 @@ package mc2api;
 
 import datamanager.mc2jackson.AccountSignUp;
 import datamanager.mc2jackson.MC2AccountBalance;
+import datamanager.mc2jackson.MC2SandboxNumber;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.testng.Assert;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -206,21 +208,52 @@ public class ApiHelperPlatform {
     }
 
     public static Response sendSignUpRequest(AccountSignUp accountSignUp){
-        return RestAssured.given().log().all()
+         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(accountSignUp)
                 .post(EndpointsPlatform.PLATFORM_ACCOUNT_SIGN_UP);
+        if (resp.statusCode()!=201) {
+            Assert.fail("Account sign up was unsuccessful\n" + resp.statusCode() + "\n" + "\n" +
+                    "URL: " + EndpointsPlatform.PLATFORM_ACCOUNT_SIGN_UP + "\n"
+                    +resp.getBody().asString());
+        }
+         return resp;
     }
 
     public static Response activateAccount(String activationID){
-        return RestAssured.given().log().all()
+        Response resp = RestAssured.given().log().all()
                 .post(String.format(EndpointsPlatform.PLATFORM_ACCOUNT_ACTIVATION, activationID));
+        if (resp.statusCode()!=200) {
+            Assert.fail("Account activation was unsuccessful\n" + resp.statusCode() + "\n" + "\n" +
+                    "URL: " + String.format(EndpointsPlatform.PLATFORM_ACCOUNT_ACTIVATION, activationID) + "\n"
+                    +resp.getBody().asString());
+        }
+        return resp;
     }
 
-    public static void createNewAccount(AccountSignUp accountSignUp){
+    public static String createNewAccount(AccountSignUp accountSignUp){
         Response resp = sendSignUpRequest(accountSignUp);
         String accountId = resp.getBody().jsonPath().getString("accountId");
         String activationID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(), accountId);
         activateAccount(activationID);
+        return accountId;
+    }
+
+    public static List<MC2SandboxNumber> getTestNumbers(String accName, String email, String pass){
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(accName, email, pass))
+                .get(EndpointsPlatform.PLATFORM_SANDBOX_NUMBERS)
+                .getBody().jsonPath().getList("sandboxNumberList", MC2SandboxNumber.class);
+    }
+
+    public static void deleteAllTestNumbers(String accName, String email, String pass){
+        List<MC2SandboxNumber> numbers = getTestNumbers(accName, email, pass);
+        for (MC2SandboxNumber number : numbers){
+            RestAssured.given().log().all()
+                    .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(accName, email, pass))
+                    .delete(EndpointsPlatform.PLATFORM_SANDBOX_NUMBERS + "/" + number.getId());
+
+        }
     }
 }

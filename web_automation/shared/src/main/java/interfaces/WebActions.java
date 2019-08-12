@@ -45,7 +45,7 @@ public interface WebActions extends WebWait {
     default String getTextFromElem(WebDriver driver, WebElement element, int wait, String elemName){
         try {
             waitForElementToBeVisible(driver, element, wait);
-            return element.getText();
+            return element.getText().trim();
         } catch (TimeoutException|NoSuchElementException e){
             Assert.fail("Cannot get text from  '" + elemName + "' because element is not visible.");
             return "no text elem";
