@@ -63,6 +63,54 @@ public class DotControlSteps implements WebWait {
         apiToken.set(token);
     }
 
+    @Given("Create second .Control integration for (.*) tenant")
+    public void createSecondIntegration(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+
+        Response resp = APIHelperDotControl.createIntegration(tenantOrgName,
+                generateInfoForCreatingIntegration(Server.getServerURL()).get());
+
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
+        System.out.println("!! Api token from creating integration: " + token);
+        if(token==null){
+            Assert.fail("apiToken is absent in create integration response " +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        if(apiToken.get()!=null){
+            if(token.equals(apiToken.get())){
+                Assert.fail("apiToken was not changed. integration response: " +
+                        "Status code " + resp.statusCode()+
+                        "\n Body: " + resp.getBody().asString());
+            }
+        }
+        apiToken.remove();
+        apiToken.set(token);
+    }
+
+    @Given("Update .Control integration for (.*) tenant")
+    public void updateIntegration(String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+
+        Response resp = APIHelperDotControl.updateIntegration(tenantOrgName,
+                generateInfoForCreatingIntegration(Server.getServerURL()).get(),apiToken.get());
+
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
+        if(!token.equals(apiToken.get())){
+            Assert.fail("apiToken was changed. integration response: " +
+                    "Status code " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+    }
+
     @Given("Create .Control '(.*)' adapters integration for (.*) tenant")
     public void createIntegrationAdapters(String adapters, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
@@ -404,11 +452,11 @@ public class DotControlSteps implements WebWait {
                     Server.incomingRequests.keySet().contains(clientId.get())) {
                 break;
             }
+
             waitFor(1000);
         }
         if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
-            Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'\n" +
-                    "Server.incomingRequests: " +Server.incomingRequests.toString() + "\n");
+            Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
         }
     }
 

@@ -71,6 +71,24 @@ public class APIHelperDotControl {
                 .put(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
     }
 
+    public static Response updateIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo, String apiToken){
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .body("{\n" +
+                        "  \"channels\": [\n" +
+                        "    {\n" +
+                        "      \"apiKey\": \""+apiToken+"\",\n" +
+                        "      \"name\": \"" + newIntegrationInfo.getName() + "\",\n" +
+                        "      \"enabled\":" + newIntegrationInfo.getIsEnabled() + ",\n" +
+                        "      \"url\": \"" + newIntegrationInfo.getCallBackURL() + "\",\n" +
+                        "      \"type\": \"fbmsg\"\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}")
+                .put(Endpoints.DOT_CONTROL_HTTP_INTEGRATION);
+    }
+
     public static Response createIntegrationForAdapters(String adapters, String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
         PortalAuthToken.clearAccessTokenForPortalUser();
         String url =  newIntegrationInfo.getCallBackURL();
