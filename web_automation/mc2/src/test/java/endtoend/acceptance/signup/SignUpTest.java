@@ -1,4 +1,4 @@
-package endtoend.acceptance;
+package endtoend.acceptance.signup;
 
 import com.github.javafaker.Faker;
 import emailhelper.CheckEmail;

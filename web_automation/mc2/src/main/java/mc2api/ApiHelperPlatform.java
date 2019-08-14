@@ -156,10 +156,10 @@ public class ApiHelperPlatform {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> getListOfActivePaymentMethods(String tenantOrgName, String paymentType){
+    public static List<String> getListOfActivePaymentMethods(String authToken, String paymentType){
         Response resp =   RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", authToken)
                 .get(EndpointsPlatform.PLATFORM_PAYMENT_METHODS);
 
         return resp.getBody().jsonPath().getList("paymentMethods", Map.class)
@@ -168,11 +168,16 @@ public class ApiHelperPlatform {
                 .collect(Collectors.toList());
     }
 
-    public static void deletePaymentMethod(String tenantOrgName, String paymentID){
+    public static void deletePaymentMethod(String authToken, String paymentID){
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", authToken)
                 .delete(EndpointsPlatform.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
+    }
+
+    public static void deleteAllPayments(String authToken, String paymentType){
+        List<String> paymentIds = getListOfActivePaymentMethods(authToken, paymentType);
+        paymentIds.forEach(e -> deletePaymentMethod(authToken, e));
     }
 
     public static void closeAccount(String accountName, String email, String pass){

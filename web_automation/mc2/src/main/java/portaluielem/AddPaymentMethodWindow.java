@@ -1,5 +1,6 @@
 package portaluielem;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,7 +28,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     @FindBy(xpath =  "(//ul[@class = 'ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-scope']//div[contains(@class, 'ui-select-choices-row ng-scope')])[3]")
     private WebElement thirdYear;
 
-    @FindBy(css = "input[type='checkbox']+span")
+    @FindBy(css = "div[cl-checkbox]")
     private List<WebElement> checkboxes;
 
     private String cardNumber = "input#cardNumber";
@@ -40,20 +41,9 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     private String paymentAddedAlert = "//div[@ng-bind-html='alert'][text()='Payment method has been configured successfully']";
 
+    @Step(value = "Add new payment card")
     public AddPaymentMethodWindow addTestCardAsANewPayment(){
-        selectPaymentBox.click();
-        waitForElementsToBeVisible(this.getCurrentDriver(), selectOptionsInDropdown, 5);
-        cardOption.click();
-        findElemByCSS(this.getCurrentDriver(), cardNumber).sendKeys("4111111111111111");
-        expirationMonth.click();
-        waitForElementToBeClickable(this.getCurrentDriver(), thirdMons, 2);
-        thirdMons.click();
-        expirationYear.click();
-        waitForElementToBeClickable(this.getCurrentDriver(), thirdYear, 2);
-        thirdYear.click();
-        findElemByCSS(this.getCurrentDriver(), cardCvv).sendKeys("112");
-        findElemByCSS(this.getCurrentDriver(), firstName).sendKeys("AQA");
-        findElemByCSS(this.getCurrentDriver(), lastName).sendKeys("Test");
+        fillInNewCardInfo();
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(this.getCurrentDriver());
         waitFor(2000);
@@ -62,19 +52,32 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         return this;
     }
 
-    public void checkAllCheckboxesForAddingNewPayment(){
+    @Step(value = "Check all checkboxes")
+    public AddPaymentMethodWindow checkAllCheckboxesForAddingNewPayment(){
         checkboxes.forEach(WebElement::click);
-
+        return this;
     }
 
+    @Step(value = "Select '{checkBox}' checkbox")
+    public AddPaymentMethodWindow selectCheckBox(String checkBox){
+        checkboxes.stream().filter(e -> e.getText().trim().equals(checkBox))
+                                                            .findFirst().get().click();
+        return this;
+    }
+
+    @Step(value = "Fill in new card info")
     public AddPaymentMethodWindow fillInNewCardInfo(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
         selectPaymentBox.click();
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementToBeVisible(this.getCurrentDriver(), selectOptionsInDropdown.get(0), 5);
         cardOption.click();
         findElemByCSS(this.getCurrentDriver(), cardNumber).sendKeys("4111111111111111");
         expirationMonth.click();
+        waitForElementToBeClickable(this.getCurrentDriver(), thirdMons, 2);
         thirdMons.click();
         expirationYear.click();
+        waitForElementToBeClickable(this.getCurrentDriver(), thirdMons, 2);
         thirdYear.click();
         findElemByCSS(this.getCurrentDriver(), cardCvv).sendKeys("112");
         findElemByCSS(this.getCurrentDriver(), firstName).sendKeys("AQA");
@@ -90,13 +93,16 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         executeAngularClick(this.getCurrentDriver(), nextButton);
     }
 
+    @Step(value = "Click 'Add payments method' button")
     public void clickAddPaymentButton(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         waitForElementToBeClickable(this.getCurrentDriver(), primaryBindingButton, 15);
-        waitFor(2000);
+//        waitFor(2000);
         executeAngularClick(this.getCurrentDriver(), primaryBindingButton);
     }
 
-
+    @Step(value = "Verify if 'Add payments method' button enabled")
     public boolean isAddPaymentButtonEnabled(){
         executeJSHover(primaryBindingButton, this.getCurrentDriver());
         return primaryBindingButton.isEnabled();

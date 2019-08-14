@@ -4,6 +4,7 @@ import driverfactory.MC2DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
+import io.qameta.allure.Step;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -75,7 +76,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public String getNotificationAlertText(){
         if(isElementShownByCSS(this.getCurrentDriver(), notificationAlert, 2)) {
-            return findElemByCSS(this.getCurrentDriver(), notificationAlert).getText();
+            String alertText = findElemByCSS(this.getCurrentDriver(), notificationAlert).getText();
+            waitForNotificationAlertToBeProcessed(1, 5);
+            return alertText;
         } else{
             return "no notification alert";
         }
@@ -101,6 +104,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         } catch(NoSuchElementException|TimeoutException e){}
     }
 
+    @Step(value = "Click page navigation button")
     public void clickPageNavButton(String buttonName){
         waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);

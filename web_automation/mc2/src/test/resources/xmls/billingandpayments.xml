@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Billing and Payments " >
+    <test name="Adding Billing Details">
+        <classes>
+            <class name="endtoend.acceptance.billingandpayments.BillingDetailsAddingTest" />
+        </classes>
+    </test>
+    <test name="Adding Payments">
+        <classes>
+            <class name="endtoend.acceptance.billingandpayments.AddPaymentTest" />
+        </classes>
+    </test>
+
+</suite>

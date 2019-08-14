@@ -1,5 +1,6 @@
 package portalpages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -80,13 +81,12 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), getAddPaymentMethodWindow().getWrappedElement(), wait);
     }
 
+    @Step(value = "Click 'Add Payment Method' button")
     public void clickAddPaymentButton(){
         addPaymentMethodButton.click();
     }
 
     public boolean isNewPaymentAdded() {
-        waitWhileProcessing(14, 20);
-        waitForNotificationAlertToDisappear();
         return isElementShown(this.getCurrentDriver(), addedPayment, 20);
     }
 

@@ -1,4 +1,4 @@
-package endtoend.acceptance;
+package endtoend.acceptance.testphones;
 
 import endtoend.basetests.APICreatedAccountTest;
 import interfaces.VerificationHelper;

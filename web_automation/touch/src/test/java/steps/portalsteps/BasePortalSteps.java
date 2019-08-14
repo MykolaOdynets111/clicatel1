@@ -19,6 +19,7 @@ import emailhelper.GmailConnector;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import mc2api.EndpointsPlatform;
+import mc2api.PortalAuthToken;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
@@ -394,8 +395,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
-        List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
-        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
+        String authToken = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main");
+        List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(authToken, "CREDIT_CARD");
+        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(authToken, e));
     }
 
     @When("^Login as (.*)$")
@@ -1202,6 +1204,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^New card is shown in Payment methods tab$")
     public void verifyNewPaymentAdded(){
         SoftAssert soft = new SoftAssert();
+        getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
+        getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
         boolean isPaymentAdded = getPortalBillingDetailsPage().isNewPaymentAdded();
         ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
         soft.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");

@@ -1,11 +1,13 @@
 package portaluielem;
 
 import com.github.javafaker.Faker;
+import io.qameta.allure.Step;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @FindBy(css = "form[name=billingDetailsForm]")
 public class BillingContactsDetails extends BasePortalWindow {
@@ -57,6 +59,7 @@ public class BillingContactsDetails extends BasePortalWindow {
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement saveChangesButton;
 
+    @Step("Fill in new billing info")
     public Map fillInBillingDetailsForm() {
         Map billingInfo = new HashMap();
         String firstName = faker.name().firstName();
@@ -87,8 +90,59 @@ public class BillingContactsDetails extends BasePortalWindow {
         clickElem(getCurrentDriver(), selectCurrency,1,"'Select currency' option");
         billingInfo.put("currency", firstAvailableCurrency.getText());
         clickElem(getCurrentDriver(), firstAvailableCurrency,1,"First 'Select currency' option");
-        clickElem(getCurrentDriver(), saveChangesButton,1, "'Save changes' button");
+        clickSaveChanges();
        return billingInfo;
     }
 
+    @Step(value = "Verify mandatory input fields")
+    public Map<Boolean, List<String>> verifyMandatoryInputFields(){
+        Map<Boolean, List<String>> resultMap = new HashMap<>();
+        List<String> inputsFailedVerification = new ArrayList<>();
+        List<WebElement> requiredInputsList = Arrays.asList(firstNameInput, lastNameInput, companyNameInput,
+                                        emailAddressInput, address1Input, cityInput, postalInput);
+        requiredInputsList.forEach(e -> {
+                boolean check = e.getAttribute("class").contains("ng-invalid");
+                if(!check){
+                    inputsFailedVerification.add(e.getAttribute("placeholder"));
+                }
+        });
+        boolean result = inputsFailedVerification.size() == 0;
+        resultMap.put(result, inputsFailedVerification);
+        return resultMap;
+    }
+
+    @Step(value = "Verify mandatory dropdows fields")
+    public Map<Boolean, List<String>> verifyMandatoryDropdowns(){
+        Map<Boolean, List<String>> resultMap = new HashMap<>();
+        List<String> inputsFailedVerification = new ArrayList<>();
+        List<WebElement> requiredDropdown = Arrays.asList(selectCountry, selectAccount, selectCurrency).stream()
+                .map(e -> (WebElement) e.findElement(By.xpath(".//parent::div"))).collect(Collectors.toList());
+
+        requiredDropdown.forEach(e -> {
+            boolean check = e.getAttribute("class").contains("ng-invalid ng-invalid-required");
+            if(!check){
+                inputsFailedVerification.add(e.getAttribute("innerText").trim());
+            }
+        });
+        boolean result = inputsFailedVerification.size() == 0;
+        resultMap.put(result, inputsFailedVerification);
+        return resultMap;
+    }
+
+    @Step(value = "Enter new postal code")
+    public BillingContactsDetails enterPostalCode(String value){
+        postalInput.clear();
+        postalInput.sendKeys(value);
+        return this;
+    }
+
+    @Step(value = "Save changes")
+    public void clickSaveChanges(){
+        clickElem(this.getCurrentDriver(), saveChangesButton, 1, "'Save changes' button");
+    }
+
+    @Step(value = "Get postal code")
+    public String getPostalCode(){
+        return readValueFromInput(postalInput, this.getCurrentDriver());
+    }
 }

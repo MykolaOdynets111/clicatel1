@@ -3,5 +3,6 @@
         <suite-files>
             <suite-file path="accountregistration.xml" />
             <suite-file path="withoutbillingtests.xml" />
+            <suite-file path="billingandpayments.xml" />
         </suite-files>
 </suite>

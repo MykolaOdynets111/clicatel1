@@ -25,6 +25,11 @@ public interface JSHelper {
         ((JavascriptExecutor) driver).executeScript(javaScript, element);
     }
 
+    default String readValueFromInput(WebElement elem, WebDriver driver){
+        JavascriptExecutor exec = (JavascriptExecutor) driver;
+        return (String) exec.executeScript("return arguments[0].value", elem);
+    }
+
     /**
      * Positive offset scroll will scroll element to the bottom, negative - to the top.
      * @author tmytlovych
