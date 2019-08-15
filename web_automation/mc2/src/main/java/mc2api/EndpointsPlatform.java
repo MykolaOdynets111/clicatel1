@@ -36,6 +36,9 @@ public class EndpointsPlatform {
 
     public static String PLATFORM_SANDBOX_NUMBERS = MC2URLs.getBasePlatformUrl() + "/sandbox-numbers";
 
+    public static String PLATFORM_CART_ORDER = MC2URLs.getBasePlatformUrl() + "/orders";
+
+    public static String PLATFORM_CART_ITEMS = MC2URLs.getBasePlatformUrl() + "/orders/items/";
 
     // ====================  PORTAL ================= //
 

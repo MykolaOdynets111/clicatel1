@@ -1,6 +1,7 @@
 package portaluielem;
 
 import abstractclasses.AbstractUIElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import java.util.List;
@@ -26,6 +27,7 @@ public class BasePortalWindow extends AbstractUIElement {
     protected WebElement addToCardButton;
 
 
+    @Step(value = "Click 'Add to cart' button")
     public void clickAddToCardButton(){
         executeJSclick(addToCardButton, getCurrentDriver());
     }

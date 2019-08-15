@@ -2,10 +2,14 @@ package portaluielem;
 
 import abstractclasses.AbstractUIElement;
 import io.qameta.allure.Step;
+import mc2api.ApiHelperPlatform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.CartPage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @FindBy(css = "div.header.ng-scope")
@@ -86,5 +90,53 @@ public class PageHeader extends AbstractUIElement {
     @Step(value = "Verify 'Top up balance' button shown")
     public boolean isTopUpBalanceButtonShown(){
         return isElementShown(this.getCurrentDriver(), topUpBalanceButton, 5);
+    }
+
+    @Step(value = "Click 'Top up balance' button")
+    public void clickTopUpBalanceButton(){
+        clickElem(this.getCurrentDriver(), topUpBalanceButton, 5, "'Top up balance'");
+    }
+
+    @Step(value = "Verify Top Up updated in the page header")
+    public Map isTopUpUpdated(String authToken, int waitMinutes){
+        Map output = new HashMap();
+        String valueFromPortal = getTopUpBalanceSumm();
+        String actualInfo="";
+        double valueFromBackend = ApiHelperPlatform.getAccountBalance(authToken).getBalance();
+        boolean result = false;
+        for(int i = 0; i<(waitMinutes*60)/25; i++){
+            valueFromPortal = valueFromPortal.replace(",", "");
+            actualInfo = String.format("%1.2f", valueFromBackend);
+            if(valueFromPortal.equals(actualInfo)){
+                result = true;
+                break;
+            } else{
+                waitFor(25000);
+                valueFromPortal = getTopUpBalanceSumm();
+            }
+        }
+        output.put("result", result);
+        output.put("valueFromBackend", valueFromBackend);
+        output.put("actualInfo", actualInfo);
+        output.put("valueFromPortal", valueFromPortal);
+        return output;
+    }
+
+
+    @Step(value = "Verify top up updated on backend")
+    public boolean isTopUpUpdatedOnBackend(double expectedAmount, int waitMinutes, String authToken){
+        double valueFromBackend = ApiHelperPlatform.getAccountBalance(authToken).getBalance();
+        boolean result = false;
+        for(int i = 0; i<(waitMinutes*60)/25; i++){
+
+            if(valueFromBackend > (expectedAmount-0.5) & valueFromBackend <= expectedAmount){ //0.5 - possible withheld commission by tract
+                result = true;
+                break;
+            } else{
+                waitFor(25000);
+                valueFromBackend = ApiHelperPlatform.getAccountBalance(authToken).getBalance();
+            }
+        }
+        return result;
     }
 }

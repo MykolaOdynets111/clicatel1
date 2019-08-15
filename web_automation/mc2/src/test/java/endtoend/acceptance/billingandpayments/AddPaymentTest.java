@@ -51,7 +51,7 @@ public class AddPaymentTest extends APICreatedAccountTest  {
         billingDetailsPage.clickPageNavButton("Payment methods");
         billingDetailsPage.clickAddPaymentButton();
 
-        billingDetailsPage.getAddPaymentMethodWindow().fillInNewCardInfo();
+        billingDetailsPage.getAddPaymentMethodWindow().fillInNewCardInfo("AQA", "Test");
 
         soft.assertFalse(billingDetailsPage.getAddPaymentMethodWindow().isAddPaymentButtonEnabled(),
                 "'Add payments method' button is enabled when checkboxes were not selected");

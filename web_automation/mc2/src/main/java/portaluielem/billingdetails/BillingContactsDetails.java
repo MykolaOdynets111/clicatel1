@@ -1,10 +1,11 @@
-package portaluielem;
+package portaluielem.billingdetails;
 
 import com.github.javafaker.Faker;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portaluielem.BasePortalWindow;
 
 import java.util.*;
 import java.util.stream.Collectors;

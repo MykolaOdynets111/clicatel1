@@ -47,6 +47,8 @@ public class PortalMainPage extends PortalAbstractPage {
     private GDPRWindow gdprWindow;
     private GetStartedWindow getStartedWindow;
     private AddTestPhoneWindow addTestPhoneWindow;
+    private TopUpBalanceWindow topUpBalanceWindow;
+    private AddPaymentMethodWindow addPaymentMethodWindow;
 
     // == Constructors == //
 
@@ -58,6 +60,16 @@ public class PortalMainPage extends PortalAbstractPage {
     }
     public PortalMainPage() {
         super();
+    }
+
+    public TopUpBalanceWindow getTopUpBalanceWindow(){
+        topUpBalanceWindow.setCurrentDriver(this.getCurrentDriver());
+        return topUpBalanceWindow;
+    }
+
+    public AddPaymentMethodWindow getAddPaymentMethodWindow(){
+        addPaymentMethodWindow.setCurrentDriver(this.getCurrentDriver());
+        return addPaymentMethodWindow;
     }
 
     public AddTestPhoneWindow getAddTestPhoneWindow(){

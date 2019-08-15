@@ -8,6 +8,8 @@
     <test name="Adding Payments">
         <classes>
             <class name="endtoend.acceptance.billingandpayments.AddPaymentTest" />
+            <class name="endtoend.acceptance.billingandpayments.AddPaymentFromCheckoutTest" />
+            <class name="endtoend.acceptance.billingandpayments.AddTopUpTest" />
         </classes>
     </test>
 

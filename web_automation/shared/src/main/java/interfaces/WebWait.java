@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface WebWait {
 
+    String processingAlert = "div.loader-bar-text";
+
     default void waitFor(int milisecs){
         try {
             Thread.sleep(milisecs);
@@ -161,5 +163,12 @@ public interface WebWait {
                 isReady = (boolean) jsExec.executeScript("return (window.angular !== undefined) && (angular.element(document.body).injector() !== undefined) && (angular.element(document.body).injector().get('$http').pendingRequests.length === 0);");
             }
         }
+    }
+
+    default void waitWhileProcessing(WebDriver driver, int toAppears, int toDisappear){
+        try {
+            waitForElementToBeVisibleByCss(driver, processingAlert, toAppears);
+            waitForElementToBeInVisibleByCss(driver, processingAlert, toDisappear);
+        } catch(NoSuchElementException|TimeoutException e){}
     }
 }

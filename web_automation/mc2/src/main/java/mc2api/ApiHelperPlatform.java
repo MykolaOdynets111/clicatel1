@@ -1,6 +1,7 @@
 package mc2api;
 
 import datamanager.mc2jackson.AccountSignUp;
+import datamanager.mc2jackson.CartOrder;
 import datamanager.mc2jackson.MC2AccountBalance;
 import datamanager.mc2jackson.MC2SandboxNumber;
 import dbmanager.DBConnector;
@@ -205,9 +206,9 @@ public class ApiHelperPlatform {
                 .get(EndpointsPlatform.PLATFORM_BILLING_INFO);
     }
 
-    public static MC2AccountBalance getAccountBalance(String tenantOrgName){
+    public static MC2AccountBalance getAccountBalance(String token){
         return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", token)
                 .get(EndpointsPlatform.PLATFORM_ACCOUNT_BALANCE)
                 .getBody().as(MC2AccountBalance.class);
     }
@@ -259,6 +260,24 @@ public class ApiHelperPlatform {
                     .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(accName, email, pass))
                     .delete(EndpointsPlatform.PLATFORM_SANDBOX_NUMBERS + "/" + number.getId());
 
+        }
+    }
+
+    public static List<CartOrder> getAllCartItems(String authToken){
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", authToken)
+                .get(EndpointsPlatform.PLATFORM_CART_ORDER)
+                .getBody().jsonPath().getList("items", CartOrder.class);
+    }
+
+    public static void deleteAllFromCart(String authToken){
+        List<CartOrder> cartItems = getAllCartItems(authToken);
+        for(CartOrder order : cartItems){
+            RestAssured.given().log().all()
+                    .contentType(ContentType.JSON)
+                    .header("Authorization", authToken)
+                    .delete(EndpointsPlatform.PLATFORM_CART_ITEMS + order.getId());
         }
     }
 }

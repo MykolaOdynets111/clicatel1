@@ -4,6 +4,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     @Step(value = "Add new payment card")
     public AddPaymentMethodWindow addTestCardAsANewPayment(){
-        fillInNewCardInfo();
+        fillInNewCardInfo("AQA", "Test");
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(this.getCurrentDriver());
         waitFor(2000);
@@ -65,8 +66,20 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         return this;
     }
 
+    @Step(value = "Verify '{checkBox}' checkbox {expectedStatus}")
+    public boolean isCheckBoxDisabled(String checkBox, String expectedStatus){
+        String disabled = checkboxes.stream().filter(e -> e.getText().trim().equals(checkBox))
+                .findFirst().get().getAttribute("disabled");
+        if(disabled == null) return false;
+        if(disabled.equals("true")) return true;
+        else{
+            Assert.fail("Unexpected 'disabled' attribute value: \n" + disabled.toString());
+            return false;
+        }
+    }
+
     @Step(value = "Fill in new card info")
-    public AddPaymentMethodWindow fillInNewCardInfo(){
+    public AddPaymentMethodWindow fillInNewCardInfo(String cardHolderName, String cardHolerLastName){
         waitForAngularRequestsToFinish(this.getCurrentDriver());
         selectPaymentBox.click();
         waitForAngularRequestsToFinish(this.getCurrentDriver());
@@ -80,8 +93,8 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         waitForElementToBeClickable(this.getCurrentDriver(), thirdMons, 2);
         thirdYear.click();
         findElemByCSS(this.getCurrentDriver(), cardCvv).sendKeys("112");
-        findElemByCSS(this.getCurrentDriver(), firstName).sendKeys("AQA");
-        findElemByCSS(this.getCurrentDriver(), lastName).sendKeys("Test");
+        findElemByCSS(this.getCurrentDriver(), firstName).sendKeys(cardHolderName);
+        findElemByCSS(this.getCurrentDriver(), lastName).sendKeys(cardHolerLastName);
         return this;
     }
 
@@ -89,6 +102,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         checkboxes.get(checkboxOrder-1).click();
     }
 
+    @Step(value = "Click 'Next' button")
     public void clickNextButton(){
         executeAngularClick(this.getCurrentDriver(), nextButton);
     }
@@ -106,6 +120,12 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     public boolean isAddPaymentButtonEnabled(){
         executeJSHover(primaryBindingButton, this.getCurrentDriver());
         return primaryBindingButton.isEnabled();
+    }
+
+    @Step(value = "Verify if 'Next' button {expectedStatus}")
+    public boolean isNextButtonEnabled(String expectedStatus){
+        executeJSHover(nextButton, this.getCurrentDriver());
+        return nextButton.isEnabled();
     }
 
     public void waitForAddingNewPaymentConfirmationPopup(){

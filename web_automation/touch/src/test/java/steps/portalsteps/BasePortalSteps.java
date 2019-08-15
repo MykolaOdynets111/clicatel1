@@ -1071,7 +1071,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Agent enter allowed top up sum$")
     public void enterNewBalanceAmount(){
-        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance());
+        String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
+        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBalance(token).getBalance());
         String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
         int addingSum = Integer.valueOf(minValue) + 1;
         double afterTest = topUpBalance.get("preTest") + addingSum;
@@ -1081,7 +1082,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Agent enter (.*) top up amount$")
     public void enterMaxValueForTopUp(String value){
-        accountCurrency = ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getCurrency().toUpperCase();
+        String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
+        accountCurrency = ApiHelperPlatform.getAccountBalance(token).getCurrency().toUpperCase();
         int invalidSum;
         if(value.contains("max")){
             invalidSum = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency) +1 ;
@@ -1119,27 +1121,16 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Top up balance updated up to (.*) minutes$")
     public void verifyTopUpUpdated(int mints){
-        String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
-        String actualInfo="";
-        double valueFromBackend = ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance();
-        boolean result = false;
-        for(int i = 0; i<(mints*60)/25; i++){
-            valueFromPortal = valueFromPortal.replace(",", "");
-            actualInfo = String.format("%1.2f", valueFromBackend);
-            if(valueFromPortal.equals(actualInfo)){
-                result = true;
-                break;
-            } else{
-                getPortalMainPage().waitFor(25000);
-                valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
-            }
-        }
-        Assert.assertTrue(result, "Balance was not updated after top up\n" +
+        String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
+
+        Map outputMap = getPortalMainPage().getPageHeader().isTopUpUpdated(token, mints);
+
+        Assert.assertTrue((boolean) outputMap.get("result"), "Balance was not updated after top up\n" +
                 "Balance from backend before test: " + topUpBalance.get("preTest") + "\n" +
                 "Value to be set: " + topUpBalance.get("afterTest") + "\n" +
-                "Balance from backend after test: " + valueFromBackend +"\n" +
-                "Expected: " + actualInfo + "\n" +
-                "Actual: " + valueFromPortal);
+                "Balance from backend after test: " + outputMap.get("valueFromBackend") +"\n" +
+                "Expected: " + outputMap.get("actualInfo") + "\n" +
+                "Actual: " + outputMap.get("valueFromPortal"));
     }
 
 
@@ -1169,7 +1160,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Admin provides all card info$")
     public void fillInNewCardInfo(){
-        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo();
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo("AQA", "Test");
     }
 
     @Then("^'Add payment method' button is disabled$")

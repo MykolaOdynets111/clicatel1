@@ -24,6 +24,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(css = "section.cl-page-tabs ol.list-unstyled.list-inline li[ng-repeat]")
     private List<WebElement> pageNavButtons;
 
+    @FindBy(css = "section.cl-page-tabs ol.list-unstyled.list-inline li.active")
+    private WebElement focusedNavButton;
+
     @FindBy(css = "div.cl-header--controls.cl-header--item button")
     private List<WebElement> pageActionButtons;
 
@@ -34,8 +37,6 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     private WebElement saveChangesButton ;
 
     private static String notificationAlert = "div[ng-bind-html='alert']";
-
-    private static String processingAlert = "div.loader-bar-text";
 
     private PageHeader pageHeader;
 
@@ -74,6 +75,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         return pageHeader;
     }
 
+    @Step(value = "Get notification alert text")
     public String getNotificationAlertText(){
         if(isElementShownByCSS(this.getCurrentDriver(), notificationAlert, 2)) {
             String alertText = findElemByCSS(this.getCurrentDriver(), notificationAlert).getText();
@@ -97,12 +99,6 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         } catch(NoSuchElementException|TimeoutException e){}
     }
 
-    public void waitWhileProcessing(int toAppears, int toDisappear){
-        try {
-            waitForElementToBeVisibleByCss(this.getCurrentDriver(), processingAlert, toAppears);
-            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), processingAlert, toDisappear);
-        } catch(NoSuchElementException|TimeoutException e){}
-    }
 
     @Step(value = "Click page navigation button")
     public void clickPageNavButton(String buttonName){
@@ -112,6 +108,13 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
                                         .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
                                         .findFirst().get();
         clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
+    }
+
+    @Step(value = "Get opened tab title")
+    public String getOpenedTabTitle(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
+        return focusedNavButton.getText().trim();
     }
 
     public void clickPageActionButton(String buttonName){
@@ -126,4 +129,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         clickElem(this.getCurrentDriver(), saveChangesButton,1, "Save changes");
     }
 
+    public void waitWhileProcessing(int toAppears, int toDisappear) {
+        waitWhileProcessing(this.getCurrentDriver(), toAppears, toDisappear);
+    }
 }

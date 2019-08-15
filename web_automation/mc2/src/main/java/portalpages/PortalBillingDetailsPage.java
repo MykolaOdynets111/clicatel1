@@ -7,8 +7,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portaluielem.AddPaymentMethodWindow;
-import portaluielem.BillingContactsDetails;
+import portaluielem.billingdetails.BillingContactsDetails;
 import portaluielem.TopUpBalanceWindow;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class PortalBillingDetailsPage extends PortalAbstractPage {
@@ -23,7 +26,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     private WebElement addedPayment;
 
     @FindBy(css = "div.dashboard-step-content")
-    private WebElement paymentMethodDetails;
+    private List<WebElement> paymentMethodDetails;
 
     @FindBy(css = "div.payment-method button")
     private WebElement managePaymentMethodButton;
@@ -90,7 +93,10 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), addedPayment, 20);
     }
 
-    public String getPaymentMethodDetails(){ return paymentMethodDetails.getText();}
+    @Step("Get Payment method (card) details on Payment Methods tab")
+    public String getPaymentMethodDetails(){
+        return paymentMethodDetails.stream().map(e -> e.getText().trim()).collect(Collectors.joining());
+    }
 
     public void deletePaymentMethod(){
         managePaymentMethodButton.click();
