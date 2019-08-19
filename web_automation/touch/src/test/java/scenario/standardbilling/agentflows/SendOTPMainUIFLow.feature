@@ -1,5 +1,7 @@
 @TestCaseId("https://jira.clickatell.com/browse/TPORT-5968")
 Feature: General Send OTP flow
+
+  @Issue("https://jira.clickatell.com/browse/TPORT-10789")
   Scenario: Send OTP for new user
     Given sms integration status is set to enabled for Standard Billing tenant
     Given I login as agent of Standard Billing

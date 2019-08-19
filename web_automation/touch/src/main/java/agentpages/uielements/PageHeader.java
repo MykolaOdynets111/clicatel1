@@ -92,7 +92,7 @@ public class PageHeader extends AbstractUIElementDeprecated {
     }
 
     public void selectStatus(String status){
-        if(!isElementShown(agentName)){
+        if(!isElementShownAgent(agentName)){
             clickIconWithInitials();
         }
 //        WebElement targetElem = findElemsByCSSAgent(statusElem).stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();

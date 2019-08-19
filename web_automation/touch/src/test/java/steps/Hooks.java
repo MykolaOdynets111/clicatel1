@@ -128,11 +128,6 @@ public class Hooks implements JSHelper {
             ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
 
-        if(scenario.getSourceTagNames().contains("@new_agent")){
-            newAgent();
-        }
-
-
         finishAgentFlowIfExists(scenario);
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {

@@ -1,3 +1,4 @@
+@no_widget
 Feature: Available agents on headphones
 
 

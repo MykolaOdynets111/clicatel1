@@ -312,9 +312,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         // And we are verifying that expected intent is among the choice options
         if(intentsCount>1){
             if (!widgetConversationArea.isCardContainsButton(userInput, intent)){
-                Assert.assertTrue(false, "CreatedIntent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
-
+                Assert.fail("CreatedIntent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
             }
+            expectedTextResponse = expectedTextResponse.replace("Hi "+ getClientIdFromLocalStorage() +". ", "");
             widgetConversationArea.clickOptionInTheCard(userInput, intent);
             verifyTextResponse(intent, expectedTextResponse, 10);
         }
@@ -328,7 +328,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                 String textInCard = widgetConversationArea.getCardTextForUserMessage(userInput);
                 String expectedText = "Do you mean \""+intent + "\"?";
                 if(!expectedText.equals(textInCard)){
-                    Assert.assertTrue(false, "Card text on user message '"+userInput+"' is not as expected.\n" +
+                    Assert.fail( "Card text on user message '"+userInput+"' is not as expected.\n" +
                             "Expected: " + expectedText + "\n" +
                             "But found: " + textInCard + "\n");
                 }
@@ -543,12 +543,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^User sees name of tenant: (.*) and its short description in the header$")
     public void verifyWidgetHeader(String tenantOrgName){
-        String expectedDescription = ApiHelper.getTenantInfoMap(tenantOrgName).get("shortDescription");
+        Map<String, String> tenantInfo = ApiHelper.getTenantInfoMap(tenantOrgName);
+        String expectedDescription = tenantInfo.get("shortDescription");
+        String dynamicTenantOrgName = tenantInfo.get("tenantOrgName");
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), tenantOrgName,
-                tenantOrgName + " tenant name is not shown in the widget header");
+        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), dynamicTenantOrgName,
+                dynamicTenantOrgName + " tenant name is not shown in the widget header");
         soft.assertEquals(getWidgetHeader().getDisplayedTenantDescription(), expectedDescription,
-                expectedDescription + " description is not shown for " +tenantOrgName+ " tenant");
+                expectedDescription + " description is not shown for " +dynamicTenantOrgName+ " tenant");
         soft.assertAll();
     }
 

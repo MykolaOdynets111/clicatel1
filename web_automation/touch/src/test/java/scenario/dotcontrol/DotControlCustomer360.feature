@@ -3,6 +3,7 @@
 @dot_control
 Feature: .Control customer 360
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4379")
   Scenario: Viewing .Control customer 360 info and editing it
     Given Create .Control integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo

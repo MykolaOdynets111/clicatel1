@@ -5,7 +5,6 @@ Feature: Newly created agent should be able to login into to chat desk
     Given User opens General Bank Demo tenant page
     And Click chat icon
 
-  @skip_for_demo1
   Scenario: Newly created agent should be able to login into to chat desk
     Given Brand New General Bank Demo agent is created
     Then New agent is added into touch database

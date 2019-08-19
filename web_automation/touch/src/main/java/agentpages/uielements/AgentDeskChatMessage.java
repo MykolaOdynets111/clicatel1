@@ -20,7 +20,7 @@ public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated
     @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
     private List<WebElement> toUserTextResponses;
 
-    @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='emoji-mart-emoji']")
+    @FindBy(xpath = "./following-sibling::li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
     private WebElement sentEmoji;
 
     @FindBy(css = "span.text-parsed-by-emoji")

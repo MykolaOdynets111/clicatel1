@@ -10,6 +10,7 @@ Feature: Customer 360 from widget
     Then Correct touch client details are shown
     And Tab with user info has "Customer 360" header
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4379")
   Scenario: Editing Customer 360 info (touch user)
     Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant

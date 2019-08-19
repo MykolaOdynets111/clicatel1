@@ -1196,15 +1196,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^New card is shown in Payment methods tab$")
     public void verifyNewPaymentAdded(){
-        SoftAssert soft = new SoftAssert();
         getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
         boolean isPaymentAdded = getPortalBillingDetailsPage().isNewPaymentAdded();
         ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
-        soft.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
-        soft.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
+        Assert.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
+        Assert.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
                 "Cardholder name of added card is not as expected");
-        soft.assertAll();
     }
 
     @Then("^Payment method is not shown in Payment methods tab$")

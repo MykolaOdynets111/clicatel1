@@ -21,6 +21,7 @@ Feature: OTP, Verify and Re-send OTP functionality
     And 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
 #    And New OTP code is different from the previous one   //in case of using API to 'send' first OTP message - no chat separator with OTP code will be displayed
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-10789")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5971")
   Scenario: Verifying and Editing verified phone number
     Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
@@ -35,6 +36,7 @@ Feature: OTP, Verify and Re-send OTP functionality
     Then 'Verified' label become invisible
     And Send OTP button is displayed in Customer 360
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-10789")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5970")
   Scenario: No data in 'Verify phone' pop-up window
     When Click 'Edit' button in Customer 360 view
