@@ -34,18 +34,18 @@ public class SignUpBaseTest extends BaseTest {
         }
     }
 
-    @AfterGroups("newaccount")
-    protected void closeAccount(){
-        System.out.println("\n !!     protected void closeAccount() !! \n");
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
-            Properties props = new Properties();
-            props.load(in);
-
-            ApiHelperPlatform.closeAccount(props.getProperty("accountName"),
-                    props.getProperty("email"), props.getProperty("pass"));
-        }catch (IOException | AssertionError e){
-            // Nothing to do. Account was not activated.
-        }
-    }
+//    @AfterGroups("newaccount")
+//    protected void closeAccount(){
+//        System.out.println("\n !!     protected void closeAccount() !! \n");
+//        try {
+//            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+//            Properties props = new Properties();
+//            props.load(in);
+//
+//            ApiHelperPlatform.closeAccount(props.getProperty("accountName"),
+//                    props.getProperty("email"), props.getProperty("pass"));
+//        }catch (IOException | AssertionError e){
+//            // Nothing to do. Account was not activated.
+//        }
+//    }
 }

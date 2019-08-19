@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BasePortalWindow extends AbstractUIElement {
 
-    @FindBy(xpath = "//button[@class='button button-primary ng-scope']")
+    @FindBy(xpath = ".//button[@class='button button-primary ng-scope']")
     protected WebElement nextButton;
 
     @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
@@ -32,7 +32,12 @@ public class BasePortalWindow extends AbstractUIElement {
         executeJSclick(addToCardButton, getCurrentDriver());
     }
 
-    public void clickPrimaryBindingButton(String agent, String buttonName){
+    public void clickPrimaryBindingButton(String buttonName){
         clickElem(getCurrentDriver(), primaryBindingButton, 5, buttonName);
+    }
+
+    @Step(value = "Click 'Next' button")
+    public void clickNextButton(){
+        executeAngularClick(this.getCurrentDriver(), nextButton);
     }
 }

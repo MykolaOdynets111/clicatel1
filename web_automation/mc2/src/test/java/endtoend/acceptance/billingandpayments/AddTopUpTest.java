@@ -1,7 +1,9 @@
 package endtoend.acceptance.billingandpayments;
 
+import datamanager.ExistedAccount;
 import datamanager.TopUpBalanceLimits;
 import datamanager.mc2jackson.MC2AccountBalance;
+import endtoend.basetests.BaseTest;
 import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
@@ -23,7 +25,7 @@ import java.util.TimeZone;
 @Listeners({TestAllureListener.class})
 @Test(testName = "Billing & Payments :: Add top up", groups = {"newaccount", "billingspayments", "payment"})
 @TmsLink("TECH-5991")
-public class AddTopUpTest extends APICreatedAccountTest  {
+public class AddTopUpTest extends BaseTest {
 
     private PortalMainPage mainPage;
     private PortalBillingDetailsPage billingDetailsPage;
@@ -34,11 +36,16 @@ public class AddTopUpTest extends APICreatedAccountTest  {
     private String authToken;
     private MC2AccountBalance preTestBalance;
     private int topUpAmount;
+    private ExistedAccount account;
+
 
     @BeforeClass
     private void setUp(){
+        account = ExistedAccount.getExistedAccount();
+
         billingDetailsPage = new PortalBillingDetailsPage();
-        authToken = PortalAuthToken.getAccessTokenForPortalUser(accountName.get(), email.get(), pass.get());
+        authToken = PortalAuthToken.getAccessTokenForPortalUser(account.getAccountName(), account.getEmail(), account.getPass());
+
         preTestBalance = ApiHelperPlatform.getAccountBalance(authToken);
         accCurrency = preTestBalance.getCurrency().toUpperCase();
         boundaryErrorMessage = "The minimum purchase amount is " + TopUpBalanceLimits.getMinValueByCurrency(accCurrency)
@@ -51,14 +58,15 @@ public class AddTopUpTest extends APICreatedAccountTest  {
     @Epic("Billing & Payments")
     @Feature("Add top up")
     public void addTopUp(){
+        mainPage = PortalLoginPage.openPortalLoginPage().login(account.getEmail(), account.getPass());
 
-        mainPage = PortalLoginPage.openPortalLoginPage().login(email.get(), pass.get());
 
         addLessThenMinimumAmount();
         addValidAmountToTheCart();
         verifyTopUpPayment();
         verifyBalanceUpdated();
-        verifyBalanceOnBillingAndPayments();
+//        verifyTransactionOnBillingAndPayments(); -- commented out because discussion needed
+
 
     }
 
@@ -117,13 +125,17 @@ public class AddTopUpTest extends APICreatedAccountTest  {
         cartPage.getConfirmPaymentDetailsWindow().closeWindow();
         Assert.assertTrue(cartPage.getPageHeader()
                         .isTopUpUpdatedOnBackend(preTestBalance.getBalance()+minValue, 5, authToken),
-                "Balance was not updated on backend\n");
+                "Balance was not updated on backend\n" +
+                        "Expected: " + (preTestBalance.getBalance() + minValue) + "\n" +
+                        "Actual: " + ApiHelperPlatform.getAccountBalance(authToken).getBalance()
+        );
+
         Assert.assertTrue((boolean) cartPage.getPageHeader().isTopUpUpdated(authToken, 2).get("result"),
                 "Balance was not updated \n");
     }
 
-    @Step(value = "Verify balance on Billing & payments > Transactions page")
-    private void verifyBalanceOnBillingAndPayments(){
+    @Step(value = "Verify transaction on Billing & payments > Transactions page")
+    private void verifyTransactionOnBillingAndPayments(){
         PortalBillingTransactionsPage transactionsPage = new PortalBillingTransactionsPage();
         mainPage.getLeftMenu().navigateINLeftMenuWithSubmenu("Settings", "Billing & payments");
         billingDetailsPage.clickPageNavButton("Transactions");

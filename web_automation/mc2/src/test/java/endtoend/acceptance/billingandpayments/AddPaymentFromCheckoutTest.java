@@ -1,6 +1,8 @@
 package endtoend.acceptance.billingandpayments;
 
 import com.github.javafaker.Faker;
+import datamanager.ExistedAccount;
+import endtoend.basetests.BaseTest;
 import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
@@ -18,7 +20,7 @@ import portaluielem.ConfirmPaymentDetailsWindow;
 @Listeners({TestAllureListener.class})
 @Test(testName = "Billing & Payments :: Add credit card during checkout", groups = {"newaccount", "billingspayments"})
 @TmsLink("TECH-5829")
-public class AddPaymentFromCheckoutTest extends APICreatedAccountTest  {
+public class AddPaymentFromCheckoutTest extends BaseTest {
 
     private PortalMainPage mainPage;
     private PortalBillingDetailsPage billingDetailsPage;
@@ -26,9 +28,12 @@ public class AddPaymentFromCheckoutTest extends APICreatedAccountTest  {
     private CartPage cartPage;
     private ConfirmPaymentDetailsWindow confirmPaymentDetails;
     private String cardHolderLastName;
+    private ExistedAccount account;
+
 
     @BeforeClass
     private void setUp(){
+        account = ExistedAccount.getExistedAccount();
         billingDetailsPage = new PortalBillingDetailsPage();
         soft = new SoftAssert();
         cartPage = new CartPage();
@@ -40,8 +45,7 @@ public class AddPaymentFromCheckoutTest extends APICreatedAccountTest  {
     @Epic("Billing & Payments")
     @Feature("Add credit card during checkout")
     public void addingPaymentMethodDuringCheckout(){
-
-        mainPage = PortalLoginPage.openPortalLoginPage().login(email.get(), pass.get());
+        mainPage = PortalLoginPage.openPortalLoginPage().login(account.getEmail(), account.getPass());
 
         addTopUpToTheCart();
         openPaymentTab();

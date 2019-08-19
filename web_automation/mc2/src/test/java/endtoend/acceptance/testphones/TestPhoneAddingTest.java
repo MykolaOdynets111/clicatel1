@@ -1,6 +1,7 @@
 package endtoend.acceptance.testphones;
 
-import endtoend.basetests.APICreatedAccountTest;
+import datamanager.ExistedAccount;
+import endtoend.basetests.BaseTest;
 import interfaces.VerificationHelper;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
@@ -16,17 +17,20 @@ import portalpages.*;
 @Listeners({TestAllureListener.class})
 @Test(testName = "Test Phone :: Add test phone from Launchpad", groups = {"newaccount", "testphone"})
 @TmsLink("TECH-5745")
-public class TestPhoneAddingTest extends APICreatedAccountTest implements VerificationHelper {
+public class TestPhoneAddingTest extends BaseTest implements VerificationHelper {
 
     private PortalMainPage mainPage;
     private PortalManageTestPhonesPage testPhonesPage;
     private PortalConfigureSMSPage configureSMSPage;
     private String testPhone;
+    private ExistedAccount account;
 
     @BeforeClass
     private void generateTestPhone(){
-        ApiHelperPlatform.deleteAllTestNumbers(accountName.get(), email.get(), pass.get());
+        account = ExistedAccount.getExistedAccount();
+        ApiHelperPlatform.deleteAllTestNumbers(account.getAccountName(), account.getEmail(), account.getPass());
         testPhone = generateUSCellPhoneNumber();
+
     }
 
 
@@ -34,7 +38,7 @@ public class TestPhoneAddingTest extends APICreatedAccountTest implements Verifi
     @Epic("Test Phone")
     @Feature("Add test phone from Launchpad")
     public void addingTestPhoneTest(){
-        mainPage = PortalLoginPage.openPortalLoginPage().login(email.get(), pass.get());
+        mainPage = PortalLoginPage.openPortalLoginPage().login(account.getEmail(), account.getPass());
 
         validateTestPhoneNumber();
         verifyManageTestPhonesSection();
@@ -51,7 +55,7 @@ public class TestPhoneAddingTest extends APICreatedAccountTest implements Verifi
 
         mainPage.getAddTestPhoneWindow().enterTestPhone(testPhone)
                                         .clickAddPhoneButton()
-                                        .enterVerificationOTPCode(accountID.get(), testPhone)
+                                        .enterVerificationOTPCode(account.getAccountID(), testPhone)
                                         .clickRegisterButton();
         Assert.assertEquals(mainPage.getAddTestPhoneWindow().getSuccessMessage(),
                 testPhone + " has been added to your account.",

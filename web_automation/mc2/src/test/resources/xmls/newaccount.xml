@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="New account">
+    <test name="New account Sign up">
+        <classes>
+            <class name="endtoend.acceptance.signup.SignUpTest" />
+        </classes>
+    </test>
+    <test name="New account Change password">
+        <classes>
+            <class name="endtoend.acceptance.ChangePasswordTest" />
+        </classes>
+    </test>
+    <test name="New account Launchpad">
+        <classes>
+            <class name="endtoend.acceptance.LaunchpadTest" />
+        </classes>
+    </test>
+    <test name="Long Number">
+        <classes>
+            <class name="endtoend.acceptance.LongNumberTest" />
+        </classes>
+    </test>
+    <test name="Adding Billing Details">
+        <classes>
+            <class name="endtoend.acceptance.billingandpayments.BillingDetailsAddingTest" />
+        </classes>
+    </test>
+</suite>

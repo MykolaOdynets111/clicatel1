@@ -113,7 +113,11 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @Step(value = "Get opened tab title")
     public String getOpenedTabTitle(){
         waitForAngularRequestsToFinish(this.getCurrentDriver());
-        waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
+        try {
+            waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
+        }catch(TimeoutException e){
+            Assert.fail("Selection nav bar Billing Details page is not visible");
+        }
         return focusedNavButton.getText().trim();
     }
 

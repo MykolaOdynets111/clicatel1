@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Listeners({TestAllureListener.class})
 @Test(testName = "Registration :: Sign up", groups = {"newaccount", "registration"})
-@TmsLink("TECH-12068")
+@TmsLink("TECH-5671")
 public class SignUpTest extends BaseTest {
 
     private HashMap<String, String> signUpInfo = new HashMap<>();

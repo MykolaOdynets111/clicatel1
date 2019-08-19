@@ -1,7 +1,6 @@
 package apihelper;
 
 import com.github.javafaker.Faker;
-import datamanager.Customer360PersonalInfo;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.Territories;

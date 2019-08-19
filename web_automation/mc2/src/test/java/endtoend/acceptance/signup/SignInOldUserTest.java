@@ -1,21 +1,29 @@
 package endtoend.acceptance.signup;
 
 
-import endtoend.basetests.SignUpBaseTest;
+import datamanager.ExistedAccount;
+import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
 
-@Test(testName = "Registration :: Sign in old user", groups = {"newaccount", "secondlogin"}, dependsOnGroups = {"registration"})
-@TmsLink("TECH-12060")
-public class SignInOldUserTest extends SignUpBaseTest {
+@Test(testName = "Registration :: Sign in old user", groups = {"secondlogin"})
+@TmsLink("TECH-5672")
+public class SignInOldUserTest extends BaseTest {
 
     private PortalMainPage mainPage;
     private PortalLoginPage loginPage;
+    private ExistedAccount account;
+
+    @BeforeClass
+    private void getAccountForTest(){
+        account = ExistedAccount.getExistedAccount();
+    }
 
     @Description("Registration :: Sign in old user")
     @Epic("Account Registration")
@@ -28,7 +36,7 @@ public class SignInOldUserTest extends SignUpBaseTest {
     @Step(value = "Verify new account second log in")
     private void verifyNewAccountSecondLogin(){
         loginPage = PortalLoginPage.openPortalLoginPage();
-        mainPage = loginPage.login(email.get(), pass.get());
+        mainPage = loginPage.login(account.getEmail(), account.getPass());
         SoftAssert soft = new SoftAssert();
 
         soft.assertTrue(mainPage.isUpdatePolicyPopUpNotShown(),
@@ -36,7 +44,7 @@ public class SignInOldUserTest extends SignUpBaseTest {
         soft.assertTrue(mainPage.isGetStartedWindowNotShown(),
                 "Landing pop up is shown in second time");
         soft.assertEquals(mainPage.getGreetingMessage(),
-                "Welcome, "+ firstName.get() + ". Add a solution to your account.",
+                "Welcome, "+ account.getFirstName() + ". Add a solution to your account.",
                 "Greeting is not as expected");
         soft.assertTrue(mainPage.getLaunchpad().isGetStartedWithTouchButtonShown(),
                 "'Get started' button is not shown");

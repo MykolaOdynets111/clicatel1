@@ -86,7 +86,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
 
     @Step(value = "Click 'Add Payment Method' button")
     public void clickAddPaymentButton(){
-        addPaymentMethodButton.click();
+        clickElem(this.getCurrentDriver(), addPaymentMethodButton, 3, "Add Payment Method");
     }
 
     public boolean isNewPaymentAdded() {

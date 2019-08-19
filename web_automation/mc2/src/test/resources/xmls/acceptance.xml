@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="Acceptance suite" >
+<suite name="Acceptance suite" paralle = "true" thread-count="2">
         <suite-files>
-            <suite-file path="accountregistration.xml" />
-            <suite-file path="withoutbillingtests.xml" />
-            <suite-file path="billingandpayments.xml" />
+            <suite-file path="newaccount.xml" />
+            <suite-file path="existingaccount.xml" />
         </suite-files>
 </suite>

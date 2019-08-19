@@ -13,8 +13,8 @@ import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
 
-@Test(testName = "Registration :: Change password", groups = {"newaccount"}, dependsOnGroups = {"secondlogin"}, alwaysRun = true)
-@TmsLink("TECH-12039")
+@Test(testName = "Registration :: Change password", groups = {"newaccount"})
+@TmsLink("TECH-5699")
 public class ChangePasswordTest extends SignUpBaseTest {
 
     private PortalMainPage mainPage;

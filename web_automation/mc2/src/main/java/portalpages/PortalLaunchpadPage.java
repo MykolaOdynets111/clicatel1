@@ -25,6 +25,8 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
 
     private ModalWindow modalWindow;
 
+    private GetLongNumberWindow longNumberWindow;
+
     // == Constructors == //
 
     public PortalLaunchpadPage(WebDriver driver) {
@@ -35,6 +37,11 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
     }
     public PortalLaunchpadPage() {
         super();
+    }
+
+    public GetLongNumberWindow getLongNumberWindow(){
+        longNumberWindow.setCurrentDriver(this.getCurrentDriver());
+        return longNumberWindow;
     }
 
 
@@ -77,7 +84,7 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
         return false;
     }
 
-    @Step(value = "Get number of section on Launchpad")
+    @Step(value = "Get number of sections on Launchpad")
     public int getNumberOfSections(){
         return getStartedCards.size();
     }

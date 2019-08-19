@@ -102,11 +102,6 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         checkboxes.get(checkboxOrder-1).click();
     }
 
-    @Step(value = "Click 'Next' button")
-    public void clickNextButton(){
-        executeAngularClick(this.getCurrentDriver(), nextButton);
-    }
-
     @Step(value = "Click 'Add payments method' button")
     public void clickAddPaymentButton(){
         waitForAngularRequestsToFinish(this.getCurrentDriver());

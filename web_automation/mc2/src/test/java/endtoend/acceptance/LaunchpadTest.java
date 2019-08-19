@@ -22,7 +22,7 @@ import java.util.*;
 
 @Listeners({TestAllureListener.class})
 @Test(testName = "Launchpad :: Check sections for new account", groups = {"newaccount", "launchpad"})
-@TmsLink("TECH-12055")
+@TmsLink("TECH-5731")
 public class LaunchpadTest extends BaseTest {
 
     private String accountID;

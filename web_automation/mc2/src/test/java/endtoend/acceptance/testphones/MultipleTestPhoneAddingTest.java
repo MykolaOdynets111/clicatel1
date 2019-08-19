@@ -1,6 +1,7 @@
 package endtoend.acceptance.testphones;
 
-import endtoend.basetests.APICreatedAccountTest;
+import datamanager.ExistedAccount;
+import endtoend.basetests.BaseTest;
 import interfaces.VerificationHelper;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
@@ -19,15 +20,18 @@ import java.util.List;
 @Listeners({TestAllureListener.class})
 @Test(testName = "Test Phone :: Add multiple test phones from SMS Add-ons", groups = {"newaccount", "testphone"})
 @TmsLink("TECH-6173")
-public class MultipleTestPhoneAddingTest extends APICreatedAccountTest implements VerificationHelper {
+public class MultipleTestPhoneAddingTest extends BaseTest implements VerificationHelper {
 
     private PortalMainPage mainPage;
     private PortalConfigureSMSPage configureSMSPage;
     private List<String> testPhones;
+    private ExistedAccount account;
+
 
     @BeforeClass
     private void generateTestPhones(){
-        ApiHelperPlatform.deleteAllTestNumbers(accountName.get(), email.get(), pass.get());
+        account = ExistedAccount.getExistedAccount();
+        ApiHelperPlatform.deleteAllTestNumbers(account.getAccountName(), account.getEmail(), account.getPass());
         testPhones = Arrays.asList(generateUSCellPhoneNumber(),
                                     generateUSCellPhoneNumber(),
                                     generateUSCellPhoneNumber());
@@ -38,7 +42,7 @@ public class MultipleTestPhoneAddingTest extends APICreatedAccountTest implement
     @Epic("Test Phone")
     @Feature("Add multiple test phones from SMS Add-ons")
     public void addingMultipleTestPhonesTest(){
-        mainPage = PortalLoginPage.openPortalLoginPage().login(email.get(), pass.get());
+        mainPage = PortalLoginPage.openPortalLoginPage().login(account.getEmail(), account.getPass());
 
         mainPage.getLaunchpad().getTargetSection("Configure test phone")
                 .clickButton("Add test phone", 3);
@@ -57,7 +61,7 @@ public class MultipleTestPhoneAddingTest extends APICreatedAccountTest implement
         for(String phoneNumber : testPhones) {
             mainPage.getAddTestPhoneWindow().enterTestPhone(phoneNumber)
                     .clickAddPhoneButton()
-                    .enterVerificationOTPCode(accountID.get(), phoneNumber)
+                    .enterVerificationOTPCode(account.getAccountID(), phoneNumber)
                     .clickRegisterButton();
             soft.assertEquals(mainPage.getAddTestPhoneWindow().getSuccessMessage(),
                     phoneNumber + " has been added to your account.",
