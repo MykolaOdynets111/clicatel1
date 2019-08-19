@@ -1,4 +1,4 @@
-package mc2api.auth.provider.dto;
+package mc2api.auth.dto;
 
 public class SignInRequest {
     private String email;

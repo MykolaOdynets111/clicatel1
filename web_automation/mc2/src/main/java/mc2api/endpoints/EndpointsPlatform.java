@@ -1,4 +1,4 @@
-package mc2api;
+package mc2api.endpoints;
 
 import driverfactory.MC2URLs;
 

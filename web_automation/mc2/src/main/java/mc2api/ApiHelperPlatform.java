@@ -9,7 +9,9 @@ import drivermanager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import mc2api.auth.provider.dto.SignInRequest;
+import mc2api.auth.PortalAuthToken;
+import mc2api.auth.dto.SignInRequest;
+import mc2api.endpoints.EndpointsPlatform;
 import org.testng.Assert;
 
 import java.util.*;

@@ -2,7 +2,7 @@ package portalpages;
 
 import driverfactory.MC2DriverFactory;
 import io.qameta.allure.Step;
-import mc2api.EndpointsPlatform;
+import mc2api.endpoints.EndpointsPlatform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

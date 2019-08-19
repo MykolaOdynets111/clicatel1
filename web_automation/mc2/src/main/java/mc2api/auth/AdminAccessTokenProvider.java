@@ -1,10 +1,10 @@
-package mc2api.auth.provider;
+package mc2api.auth;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import mc2api.EndpointsPlatform;
-import mc2api.auth.provider.dto.SignInRequest;
-import mc2api.auth.provider.dto.SignInResponse;
+import mc2api.auth.dto.SignInResponse;
+import mc2api.endpoints.EndpointsPlatform;
+import mc2api.auth.dto.SignInRequest;
 import org.apache.http.HttpStatus;
 
 public class AdminAccessTokenProvider {

@@ -1,6 +1,4 @@
-package mc2api.auth.provider;
-
-import mc2api.PortalAuth;
+package mc2api.auth;
 
 public class UserAccessTokenProvider {
 

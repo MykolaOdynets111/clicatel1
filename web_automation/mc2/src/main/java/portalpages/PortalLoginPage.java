@@ -6,7 +6,7 @@ import drivermanager.ConfigManager;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import io.qameta.allure.Step;
-import mc2api.EndpointsPlatform;
+import mc2api.endpoints.EndpointsPlatform;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
 import org.testng.Assert;

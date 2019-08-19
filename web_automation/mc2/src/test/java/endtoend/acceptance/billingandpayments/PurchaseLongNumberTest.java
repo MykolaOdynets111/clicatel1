@@ -1,23 +1,12 @@
 package endtoend.acceptance.billingandpayments;
 
-import datamanager.TopUpBalanceLimits;
-import datamanager.mc2jackson.MC2AccountBalance;
 import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
-import mc2api.PortalAuthToken;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import portalpages.*;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
 
 
 @Listeners({TestAllureListener.class})

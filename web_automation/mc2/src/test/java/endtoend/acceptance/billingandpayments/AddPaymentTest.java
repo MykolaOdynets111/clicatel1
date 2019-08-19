@@ -5,7 +5,7 @@ import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
 import mc2api.ApiHelperPlatform;
-import mc2api.PortalAuthToken;
+import mc2api.auth.PortalAuthToken;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;

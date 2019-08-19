@@ -8,7 +8,7 @@ import datamanager.jacksonschemas.SupportHoursItem;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import emailhelper.CheckEmail;
-import mc2api.PortalAuthToken;
+import mc2api.auth.PortalAuthToken;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

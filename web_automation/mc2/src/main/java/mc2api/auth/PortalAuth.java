@@ -1,7 +1,8 @@
-package mc2api;
+package mc2api.auth;
 
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
+import mc2api.ApiHelperPlatform;
 import org.testng.Assert;
 
 import java.util.HashMap;

@@ -19,7 +19,7 @@ import interfaces.JSHelper;
 import io.restassured.response.Response;
 import javaserver.Server;
 import mc2api.ApiHelperPlatform;
-import mc2api.PortalAuthToken;
+import mc2api.auth.PortalAuthToken;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
