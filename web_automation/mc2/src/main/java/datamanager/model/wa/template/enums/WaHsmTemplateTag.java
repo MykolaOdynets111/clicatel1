@@ -1,4 +1,4 @@
-package apitests.data.wa.template.enums;
+package datamanager.model.wa.template.enums;
 
 public enum WaHsmTemplateTag {
     ACCOUNT_UPDATE(1, "Account update"),

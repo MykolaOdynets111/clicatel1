@@ -2,7 +2,7 @@ package endtoend.acceptance.billingandpayments;
 
 import datamanager.ExistedAccount;
 import datamanager.TopUpBalanceLimits;
-import datamanager.mc2jackson.MC2AccountBalance;
+import datamanager.model.MC2AccountBalance;
 import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;

@@ -1,4 +1,4 @@
-package apitests.data.language.enums;
+package datamanager.model.language.enums;
 
 public enum LanguageLocale {
     ENGLISH_BRITAIN(1, "en_gb");

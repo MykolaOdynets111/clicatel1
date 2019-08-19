@@ -1,4 +1,4 @@
-package apitests.data.language.enums;
+package datamanager.model.language.enums;
 
 public enum Language {
     ENGLISH(1, "en"), FRENCH(2, "fr");

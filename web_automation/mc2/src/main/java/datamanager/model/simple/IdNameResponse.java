@@ -1,4 +1,4 @@
-package apitests.data.simple;
+package datamanager.model.simple;
 
 public class IdNameResponse {
 
