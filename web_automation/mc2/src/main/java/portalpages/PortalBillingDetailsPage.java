@@ -105,8 +105,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
             findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
         } catch(InvalidElementStateException e){
             waitFor(200);
-            findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
-
+                findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
         }
         if(isElementShown(this.getCurrentDriver(), removePaymentConfirmationButton, 3))
             removePaymentConfirmationButton.click();

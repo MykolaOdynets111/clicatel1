@@ -138,8 +138,12 @@ public class AgentFeedbackWindow extends AbstractUIElementDeprecated {
 
     public void selectTags(int iter) {
         clickElemAgent(openDropdownButton, 5, "main agent", "Open dropdown button" );
-        if(availableTagsContainer.getText().isEmpty()) {
-            Assert.assertTrue(false, "Have not Tags to be selected");
+        String tagcont=availableTagsContainer.getText();
+        if(availableTagsContainer.getText().equals("No results found")) {
+            waitFor(1000);
+            if(availableTagsContainer.getText().equals("No results found")) {
+                Assert.assertTrue(false, "Have not Tags to be selected");
+            }
         } else {
             clickElemAgent(openDropdownButton, 3, "main agent", "Open dropdown button" );
             while (iter > 0) {

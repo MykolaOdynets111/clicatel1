@@ -405,12 +405,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String email = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
         if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
         getPortalLoginPage(agent).login(email, Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+        getPortalMainPage().closeUpdatePolicyPopup();
     }
 
     @Then("^Deleted agent is not able to log in portal$")
     public void verifyDeletedAgentIsNotLoggedIn(){
         getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
-        getCurrentPortalLoginPage().getAccountForm();
+        getCurrentPortalLoginPage().getAccountForm().clickLogin();
         Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -622,6 +623,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void navigateInLeftMenu(String menuItem, String submenu){
         getPortalMainPage().waitWhileProcessing(1,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        getPortalMainPage().waitWhileProcessing(1,5);
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
