@@ -44,14 +44,14 @@ task copyConfig(type: Copy) {
 task runAcceptanceTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "/acceptance.xml"
+        suites baseXmlPath + "/ui/acceptance.xml"
     }
 }
 
 task runApiTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "/apiexample.xml"
+        suites baseXmlPath + "/api/api.xml"
     }
 }
 
