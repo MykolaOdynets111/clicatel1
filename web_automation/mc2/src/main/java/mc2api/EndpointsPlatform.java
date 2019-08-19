@@ -10,6 +10,8 @@ public class EndpointsPlatform {
 
     public static  String PLATFORM_SIGN_IN = MC2URLs.getBasePlatformUrl() + "/auth/accounts/sign-in";
 
+    public static  String PLATFORM_ADMIN_SIGN_IN = MC2URLs.getBasePlatformUrl() + "/admin/auth/sign-in";
+
     public static String PLATFORM_SEND_INVITATION = MC2URLs.getBasePlatformUrl() + "/invitations";
 
     public static String PLATFORM_ACCEPT_INVITATION = MC2URLs.getBasePlatformUrl() + "/invitations/%s/accepted";

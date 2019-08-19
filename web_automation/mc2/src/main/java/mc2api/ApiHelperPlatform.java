@@ -9,6 +9,7 @@ import drivermanager.ConfigManager;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import mc2api.auth.provider.dto.SignInRequest;
 import org.testng.Assert;
 
 import java.util.*;
@@ -20,10 +21,7 @@ public class ApiHelperPlatform {
         return  RestAssured.given()
                 .log().all()
                 .contentType(ContentType.JSON)
-                .body("{\n" +
-                        "  \"email\": \"" + userName + "\",\n" +
-                        "  \"password\": \"" + userPass + "\"\n" +
-                        "}")
+                .body(new SignInRequest(userName, userPass))
                 .post(EndpointsPlatform.PLATFORM_ACCOUNTS);
     }
 
