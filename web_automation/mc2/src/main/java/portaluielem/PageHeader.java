@@ -3,11 +3,13 @@ package portaluielem;
 import abstractclasses.AbstractUIElement;
 import io.qameta.allure.Step;
 import mc2api.ApiHelperPlatform;
+import org.apache.commons.math3.util.Precision;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.CartPage;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,7 +127,10 @@ public class PageHeader extends AbstractUIElement {
 
     @Step(value = "Verify top up updated on backend")
     public boolean isTopUpUpdatedOnBackend(double expectedAmount, int waitMinutes, String authToken){
-        double valueFromBackend = ApiHelperPlatform.getAccountBalance(authToken).getBalance();
+        expectedAmount = Precision.round(expectedAmount, 2);
+        DecimalFormat df = new DecimalFormat("####0.00");
+        double valueFromBackend = Precision.round(ApiHelperPlatform.getAccountBalance(authToken).getBalance(),2);
+
         boolean result = false;
         for(int i = 0; i<(waitMinutes*60)/25; i++){
 
@@ -134,7 +139,7 @@ public class PageHeader extends AbstractUIElement {
                 break;
             } else{
                 waitFor(25000);
-                valueFromBackend = ApiHelperPlatform.getAccountBalance(authToken).getBalance();
+                valueFromBackend = Precision.round(ApiHelperPlatform.getAccountBalance(authToken).getBalance(),2);
             }
         }
         return result;
