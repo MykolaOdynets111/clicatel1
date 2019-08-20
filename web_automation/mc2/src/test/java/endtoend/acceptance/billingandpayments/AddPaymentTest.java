@@ -28,7 +28,7 @@ public class AddPaymentTest extends BaseTest {
 
     @BeforeClass
     private void generateTestPhone(){
-        account = ExistedAccount.getExistedAccount();
+        account = ExistedAccount.getExistedAccountForBilling();
         billingDetailsPage = new PortalBillingDetailsPage();
         soft = new SoftAssert();
         String authToken = PortalAuthToken.getAccessTokenForPortalUser(account.getAccountName(), account.getEmail(), account.getPass());

@@ -40,7 +40,7 @@ public class AddTopUpTest extends BaseTest {
 
     @BeforeClass
     private void setUp(){
-        account = ExistedAccount.getExistedAccount();
+        account = ExistedAccount.getExistedAccountForPayments();
 
         billingDetailsPage = new PortalBillingDetailsPage();
         authToken = PortalAuthToken.getAccessTokenForPortalUser(account.getAccountName(), account.getEmail(), account.getPass());

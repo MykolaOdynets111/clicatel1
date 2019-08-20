@@ -27,7 +27,7 @@ public class TestPhoneAddingTest extends BaseTest implements VerificationHelper 
 
     @BeforeClass
     private void generateTestPhone(){
-        account = ExistedAccount.getExistedAccount();
+        account = ExistedAccount.getExistedAccountForPayments();
         ApiHelperPlatform.deleteAllTestNumbers(account.getAccountName(), account.getEmail(), account.getPass());
         testPhone = generateUSCellPhoneNumber();
 

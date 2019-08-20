@@ -22,7 +22,7 @@ public class SignInOldUserTest extends BaseTest {
 
     @BeforeClass
     private void getAccountForTest(){
-        account = ExistedAccount.getExistedAccount();
+        account = ExistedAccount.getExistedAccountForPayments();
     }
 
     @Description("Registration :: Sign in old user")

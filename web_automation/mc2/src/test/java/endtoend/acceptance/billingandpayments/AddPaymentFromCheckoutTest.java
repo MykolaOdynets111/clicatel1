@@ -3,7 +3,6 @@ package endtoend.acceptance.billingandpayments;
 import com.github.javafaker.Faker;
 import datamanager.ExistedAccount;
 import endtoend.basetests.BaseTest;
-import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
 import org.testng.annotations.BeforeClass;
@@ -33,7 +32,7 @@ public class AddPaymentFromCheckoutTest extends BaseTest {
 
     @BeforeClass
     private void setUp(){
-        account = ExistedAccount.getExistedAccount();
+        account = ExistedAccount.getExistedAccountForBilling();
         billingDetailsPage = new PortalBillingDetailsPage();
         soft = new SoftAssert();
         cartPage = new CartPage();

@@ -30,7 +30,7 @@ public class MultipleTestPhoneAddingTest extends BaseTest implements Verificatio
 
     @BeforeClass
     private void generateTestPhones(){
-        account = ExistedAccount.getExistedAccount();
+        account = ExistedAccount.getExistedAccountForPayments();
         ApiHelperPlatform.deleteAllTestNumbers(account.getAccountName(), account.getEmail(), account.getPass());
         testPhones = Arrays.asList(generateUSCellPhoneNumber(),
                                     generateUSCellPhoneNumber(),

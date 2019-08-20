@@ -13,9 +13,13 @@
     </test>
     <test name="Payments">
         <classes>
+            <class name="endtoend.acceptance.billingandpayments.AddTopUpTest" />
+        </classes>
+    </test>
+    <test name="Adding payment methods">
+        <classes>
             <class name="endtoend.acceptance.billingandpayments.AddPaymentTest" />
             <class name="endtoend.acceptance.billingandpayments.AddPaymentFromCheckoutTest" />
-            <class name="endtoend.acceptance.billingandpayments.AddTopUpTest" />
         </classes>
     </test>
 </suite>
