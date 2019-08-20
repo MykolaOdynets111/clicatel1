@@ -1,4 +1,4 @@
-package apitests.data.wa.account;
+package datamanager.model.wa.account;
 
 public class WhatsAppAccountResponse {
     private String id;

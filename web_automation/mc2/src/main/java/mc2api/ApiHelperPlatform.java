@@ -1,9 +1,9 @@
 package mc2api;
 
-import datamanager.mc2jackson.AccountSignUp;
-import datamanager.mc2jackson.CartOrder;
-import datamanager.mc2jackson.MC2AccountBalance;
-import datamanager.mc2jackson.MC2SandboxNumber;
+import datamanager.model.AccountSignUp;
+import datamanager.model.CartOrder;
+import datamanager.model.MC2AccountBalance;
+import datamanager.model.MC2SandboxNumber;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.restassured.RestAssured;

@@ -1,4 +1,4 @@
-package datamanager.mc2jackson;
+package datamanager.model;
 
 
 import java.util.Arrays;

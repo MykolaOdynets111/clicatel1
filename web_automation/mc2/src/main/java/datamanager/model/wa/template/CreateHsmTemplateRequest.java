@@ -1,4 +1,4 @@
-package apitests.data.wa.template;
+package datamanager.model.wa.template;
 
 public class CreateHsmTemplateRequest {
     private String name;

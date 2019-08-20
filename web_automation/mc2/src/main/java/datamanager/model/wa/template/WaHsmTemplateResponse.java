@@ -1,7 +1,7 @@
-package apitests.data.wa.template;
+package datamanager.model.wa.template;
 
-import apitests.data.language.LanguageResponse;
-import apitests.data.wa.account.WhatsAppAccountResponse;
+import datamanager.model.language.LanguageResponse;
+import datamanager.model.wa.account.WhatsAppAccountResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WaHsmTemplateResponse {

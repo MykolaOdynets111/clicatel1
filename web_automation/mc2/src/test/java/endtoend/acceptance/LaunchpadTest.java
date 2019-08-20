@@ -1,7 +1,7 @@
 package endtoend.acceptance;
 
 import com.github.javafaker.Faker;
-import datamanager.mc2jackson.AccountSignUp;
+import datamanager.model.AccountSignUp;
 import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;

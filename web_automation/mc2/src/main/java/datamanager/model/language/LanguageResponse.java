@@ -1,4 +1,4 @@
-package apitests.data.language;
+package datamanager.model.language;
 
 public class LanguageResponse {
     private String fullName;

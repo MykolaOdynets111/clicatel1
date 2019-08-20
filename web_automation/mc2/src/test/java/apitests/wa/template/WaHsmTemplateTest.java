@@ -1,9 +1,10 @@
-package apitests;
+package apitests.wa.template;
 
-import apitests.data.language.enums.Language;
-import apitests.data.language.enums.LanguageLocale;
-import apitests.data.wa.template.*;
-import apitests.data.wa.template.enums.WaHsmTemplateTag;
+import apitests.BaseApiTest;
+import datamanager.model.language.enums.Language;
+import datamanager.model.language.enums.LanguageLocale;
+import datamanager.model.wa.template.*;
+import datamanager.model.wa.template.enums.WaHsmTemplateTag;
 import io.restassured.RestAssured;
 import mc2api.auth.AdminAccessTokenProvider;
 import mc2api.auth.UserAccessTokenProvider;
@@ -45,7 +46,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
         CreateHsmTemplateRequest createHsmTemplateRequest = new CreateHsmTemplateRequest(addDateTime(HSM_TEMPLATE_NAME), HSM_TEMPLATE, HSM_TAG_ID, HSM_LANGUAGE);
 
         CreateHsmTemplateResponse response = jsonRequestBuilder()
-                .header(AUTHORIZATION, simpleUserAuthToken + "asd")
+                .header(AUTHORIZATION, simpleUserAuthToken)
                 .body(createHsmTemplateRequest)
                 .when()
                 .post(PLATFORM_WA_HSM_TEMPLATE)
