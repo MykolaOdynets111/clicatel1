@@ -282,7 +282,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(?:Error|Notification) popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
         String notificationAlert = getPortalSignUpPage().getNotificationAlertText().trim();
-        boolean result = notificationAlert.equals(expectedMessage) |
+        boolean result = notificationAlert.equals(expectedMessage.trim()) ||
                 notificationAlert.equals("Error while sign up");
         Assert.assertTrue(result,
                 "Field verification is not working.\n " +
