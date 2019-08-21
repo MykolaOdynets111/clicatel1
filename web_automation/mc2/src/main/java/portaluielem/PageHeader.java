@@ -38,11 +38,17 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(xpath = "//a[text() = 'Logout']")
     private WebElement logoutButton;
 
+    @FindBy(xpath = "//a[text() = 'Profile settings']")
+    private WebElement profileSettings;
+
     @FindBy(css = "div.balance-total.ng-binding")
     private WebElement topUpBalanceSum;
 
     @FindBy(xpath = ".//button[text() = 'Top up balance']")
     private WebElement topUpBalanceButton;
+
+    @FindBy(css = "span.agent-seats-info")
+    private WebElement agentSeatsInfo;
 
     public void setCurrentDriver(WebDriver driver){
         this.currentDriver = driver;
@@ -65,13 +71,20 @@ public class PageHeader extends AbstractUIElement {
         return new CartPage(this.currentDriver);
     }
 
+    @Step(value = "Get touch go plan name")
     public String getTouchGoPlanName(){
         if(isElementShown(this.getCurrentDriver(), touchGoPlanName,3)) return touchGoPlanName.getText();
         else return "no Touch Go plan name is shown";
     }
 
-    public String getTextOfUpgradeButton(){
-        return upgradeButton.getText();
+    @Step(value = "Get text from buying agents button")
+    public String getTextFromBuyingAgentsButton(){
+        return getTextFromElem(this.getCurrentDriver(), upgradeButton, 3, "Buying agents button");
+    }
+
+    @Step(value = "Get Agents seats info")
+    public String getAgentSeatsInfo(){
+        return getTextFromElem(this.getCurrentDriver(), agentSeatsInfo, 3, "Agent seats info");
     }
 
     @Step(value = "Log out admin")
@@ -79,6 +92,13 @@ public class PageHeader extends AbstractUIElement {
         adminIcon.click();
         waitForElementToBeVisible(this.getCurrentDriver(), adminDropdown, 5);
         logoutButton.click();
+    }
+
+    @Step()
+    public void openProfileSettings(){
+        adminIcon.click();
+        waitForElementToBeVisible(this.getCurrentDriver(), adminDropdown, 5);
+        clickElem(this.getCurrentDriver(), profileSettings, 3, "'Profile settings' button");
     }
 
     public boolean isAdminIconShown(int wait){

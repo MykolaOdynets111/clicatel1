@@ -10,8 +10,12 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 
 @Listeners({TestAllureListener.class})
@@ -22,6 +26,7 @@ public class BillingDetailsAddingTest extends APICreatedAccountTest  {
     private PortalMainPage mainPage;
     private PortalBillingDetailsPage billingDetailsPage;
     private SoftAssert soft;
+    private Map details;
 
     @BeforeClass
     private void generateTestPhone(){
@@ -60,7 +65,8 @@ public class BillingDetailsAddingTest extends APICreatedAccountTest  {
 
     @Step(value = "Verify saving valid billing info")
     private void provideBillingINFO(){
-        billingDetailsPage.getBillingContactsDetails().fillInBillingDetailsForm();
+        details = billingDetailsPage.getBillingContactsDetails().fillInBillingDetailsForm();
+        saveNewAccountCompanyName();
         billingDetailsPage.waitWhileProcessing(2,2);
 
         soft.assertEquals(billingDetailsPage.getNotificationAlertText(),
@@ -80,4 +86,21 @@ public class BillingDetailsAddingTest extends APICreatedAccountTest  {
         soft.assertEquals(billingDetailsPage.getBillingContactsDetails().getPostalCode(), "79032",
                 "Postal code was not changed after updating");
     }
+
+    private void saveNewAccountCompanyName(){
+        try {
+            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+            Properties props = new Properties();
+            props.load(in);
+            in.close();
+
+            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
+            props.setProperty("companyName", (String) details.get("companyName"));
+            props.store(out, null);
+            out.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }

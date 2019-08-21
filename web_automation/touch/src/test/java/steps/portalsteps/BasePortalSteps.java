@@ -877,12 +877,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Not see \"(.*)\" button$")
     public void verifyNotShowingUpgradeButtonText(String textNotToBeShown){
-        Assert.assertNotEquals(getPortalMainPage().getPageHeader().getTextOfUpgradeButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertNotEquals(getPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @Then("^See \"(.*)\" button$")
     public void verifyNShowingUpgradeButtonText(String textToBeShown){
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTextOfUpgradeButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertEquals(getPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @When("^(.*) the (.*) integration$")

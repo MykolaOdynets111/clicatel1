@@ -1,5 +1,6 @@
 package portalpages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,7 +12,7 @@ import portaluielem.IntegrationRow;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PortalIntegrationsPage extends PortalAbstractPage {
+public class PortalTouchIntegrationsPage extends PortalAbstractPage {
 
     @FindBy(css = "tr[ng-repeat='channel in channels']")
     private List<WebElement> integrationRows;
@@ -19,17 +20,20 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[contains(@class,'integration-type cl-card')]")
     private List<WebElement> integrationCards;
 
+    @FindBy(css = "div.mod-touch-integration")
+    private WebElement touchPage;
+
     private CreateIntegrationWindow createIntegrationWindow;
 
     // == Constructors == //
 
-    public PortalIntegrationsPage() {
+    public PortalTouchIntegrationsPage() {
         super();
     }
-    public PortalIntegrationsPage(String agent) {
+    public PortalTouchIntegrationsPage(String agent) {
         super(agent);
     }
-    public PortalIntegrationsPage(WebDriver driver) {
+    public PortalTouchIntegrationsPage(WebDriver driver) {
         super(driver);
     }
 
@@ -69,15 +73,22 @@ public class PortalIntegrationsPage extends PortalAbstractPage {
             clickToggleFor(integrationName);
     }
 
+    @Step(value = "Get '{integrationName}' integration status in the table")
     public String getIntegrationRowStatus(String integrationName){
         return getTargetIntegrationRow(integrationName).getStatus();
     }
 
+    @Step(value = "Get '{integrationName}' integration status in the card")
     public String getIntegrationCardStatus(String integrationName){
         return getTargetIntegrationCard(integrationName).getStatus();
     }
 
     public void clickActionButtonForIntegration(String integrationName){
         getTargetIntegrationCard(integrationName).clickActionButton();
+    }
+
+    @Step(value = "Is Touch Integrations page opened")
+    public boolean isPageOpened(){
+        return  isElementShown(this.getCurrentDriver(), touchPage, 3);
     }
 }

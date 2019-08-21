@@ -251,6 +251,7 @@ public class PortalMainPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), getStartedButton, 2);
     }
 
+    @Step(value = "Verify if 'Get started with touch' window opened")
     public boolean isConfigureTouchWindowOpened(){
         return isElementShown(this.getCurrentDriver(), getConfigureTouchWindow().getWrappedElement(), 2);
     }

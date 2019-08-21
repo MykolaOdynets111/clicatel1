@@ -17,7 +17,7 @@ public class AbstractPortalSteps implements JSHelper {
 
     private static ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
 
-    private static ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
+    private static ThreadLocal<PortalTouchIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
 
     private static ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
 
@@ -93,16 +93,16 @@ public class AbstractPortalSteps implements JSHelper {
     }
 
 
-    public static PortalIntegrationsPage getPortalIntegrationsPage() {
+    public static PortalTouchIntegrationsPage getPortalIntegrationsPage() {
         if (portalIntegrationsPage.get()==null) {
-            portalIntegrationsPage.set(new PortalIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
+            portalIntegrationsPage.set(new PortalTouchIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
             return portalIntegrationsPage.get();
         } else{
             return portalIntegrationsPage.get();
         }
     }
 
-    public static void setPortalIntegrationsPage(PortalIntegrationsPage integrationsPage) {
+    public static void setPortalIntegrationsPage(PortalTouchIntegrationsPage integrationsPage) {
         portalIntegrationsPage.set(integrationsPage);
     }
 
