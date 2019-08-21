@@ -170,10 +170,15 @@ public class ApiHelperPlatform {
     }
 
     public static void deletePaymentMethod(String authToken, String paymentID){
-        RestAssured.given()
+        Response resp = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
                 .delete(EndpointsPlatform.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
+        if(resp.statusCode()!=200) {
+            Assert.fail("Deleting "+ paymentID +" payment was not successful\n" +
+                    "Status code: " + resp.statusCode() + "\n" +
+                    "Resp code: " + resp.getBody().asString());
+        }
     }
 
     public static void deleteAllPayments(String authToken, String paymentType){
