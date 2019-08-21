@@ -30,6 +30,7 @@ public class BasePortalWindow extends AbstractUIElement {
     @Step(value = "Click 'Add to cart' button")
     public void clickAddToCardButton(){
         executeJSclick(addToCardButton, getCurrentDriver());
+        waitWhileProcessing(this.getCurrentDriver(), 1, 5);
     }
 
     public void clickPrimaryBindingButton(String buttonName){

@@ -28,6 +28,7 @@
     <test name="Touch integration">
         <classes>
             <class name="endtoend.acceptance.touch.GetStartedWithTouchTest" />
+            <class name="endtoend.acceptance.touch.Add10AgentsTest" />
         </classes>
     </test>
 </suite>

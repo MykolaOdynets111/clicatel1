@@ -10,6 +10,9 @@ public class CartRow extends AbstractWidget {
     @FindBy(xpath = ".//td[contains(@ng-bind, 'cartItemType')]")
     private WebElement itemType;
 
+    @FindBy(xpath = ".//td[contains(@class, 'depend-on-state')]//button/following-sibling::span")
+    private WebElement itemName;
+
     @FindBy(xpath = ".//td[contains(@ng-bind, 'currency')]")
     private WebElement totalAmount;
 
@@ -24,6 +27,10 @@ public class CartRow extends AbstractWidget {
 
     public String getCartItemType(){
         return getTextFromElem(this.getCurrentDriver(), itemType, 3, "Item type");
+    }
+
+    public String getCartItemName(){
+        return getTextFromElem(this.getCurrentDriver(), itemName, 3, "Item Name");
     }
 
     public String getCartItemTotal(){

@@ -54,6 +54,7 @@ public class PageHeader extends AbstractUIElement {
         this.currentDriver = driver;
     }
 
+    @Step("Click button for adding agents")
     public void clickUpgradeButton(){
         waitForElementToBeClickable(this.getCurrentDriver(), upgradeButton, 5);
         try {
@@ -64,6 +65,7 @@ public class PageHeader extends AbstractUIElement {
         }
     }
 
+    @Step(value = "Open Cart")
     public CartPage openCart(){
         cartIcon.click();
         waitForElementToBeVisible(this.getCurrentDriver(), checkoutCartButton, 10);

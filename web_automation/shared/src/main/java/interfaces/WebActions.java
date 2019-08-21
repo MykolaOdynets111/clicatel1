@@ -52,8 +52,8 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default String getAttributeFromElemAgent(WebDriver driver, WebElement element, int wait,
-                                             String elemName, String attribute){
+    default String getAttributeFromElem(WebDriver driver, WebElement element, int wait,
+                                        String elemName, String attribute){
         try {
             waitForElementToBeVisible(driver, element, wait);
             return element.getAttribute(attribute);
