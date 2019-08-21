@@ -74,19 +74,16 @@ public class CheckEmail {
         return "none";
     }
 
-    public static Message getLastMessageBySender(String expectedSender, int wait){
+    public static Message getLastMessageBySender(String expectedSender, int secondsWait){
         Message lastTargetMessage = null;
         try {
-            if (newLetterFromSenderArrives(expectedSender, wait)) {
+            if (newLetterFromSenderArrives(expectedSender, secondsWait)) {
                 List<Message> targetSenderNewMails = getAllMessagesFromSender(GmailConnector.getFolder(), expectedSender);
                 lastTargetMessage = targetSenderNewMails.get(targetSenderNewMails.size()-1);
-                GmailConnector.getFolder().close(true);
-                GmailConnector.getStore().close();
                 return lastTargetMessage;
             }
             GmailConnector.getFolder().close(false);
             GmailConnector.getStore().close();
-            return lastTargetMessage;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,10 +113,9 @@ public class CheckEmail {
         return emailContent;
     }
 
-    public static boolean newLetterFromSenderArrives(String expectedSender, int wait){
-        int unreadMessagesCount = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender).size();
+    public static boolean newLetterFromSenderArrives(String expectedSender, int secondsWait){
         List<Message> targetSenderNewMails = getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
-        for (int i=0; i<wait; i++){
+        for (int i=0; i<secondsWait; i++){
             if(targetSenderNewMails.isEmpty()){
                 try {
                     Thread.sleep(1000);

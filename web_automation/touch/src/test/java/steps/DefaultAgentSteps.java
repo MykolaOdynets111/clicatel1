@@ -8,6 +8,7 @@ import datamanager.jacksonschemas.SupportHoursItem;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import emailhelper.CheckEmail;
+import emailhelper.GmailParser;
 import mc2api.auth.PortalAuthToken;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -846,7 +847,26 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         // Checking added "standarttouchgoplan@gmail.com" email for chat transcript emails
         GmailConnector.loginAndGetInboxFolder(MC2Account.QA_STANDARD_ACCOUNT.getEmail(), MC2Account.QA_STANDARD_ACCOUNT.getPass());
 
-        chatTranscriptEmail = CheckEmail.getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 60);
+        chatTranscriptEmail = CheckEmail
+                .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
+        clientIDGlobal = "tess";
+        for (int i = 0; i < 5; i ++){
+            if(chatTranscriptEmail==null){
+                GmailConnector.reopenFolder();
+                chatTranscriptEmail = CheckEmail
+                        .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
+                continue;
+            }
+            if(GmailParser.getUserId(chatTranscriptEmail).equals(clientIDGlobal)) {
+                break;
+            }
+            else{
+                getAgentHomePage("main").waitForDeprecated(15000);
+                GmailConnector.reopenFolder();
+                chatTranscriptEmail = CheckEmail
+                        .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 1);
+            }
+        }
 
         Assert.assertFalse(CheckEmail.getEmailSubject(chatTranscriptEmail).isEmpty(), "No Chat Transcript message received");
     }
@@ -859,9 +879,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         String chatTranscriptEmailTitle = CheckEmail.getEmailSubject(chatTranscriptEmail);
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(getAdapter(adapter), getAdapterFromEmailSubject(chatTranscriptEmailTitle), "Adapters are not match");
-        softAssert.assertEquals(getSecondParameterPerAdapter(adapter), getClientIDFromEmailSubject(chatTranscriptEmailTitle), "ClientIDs are not match");
-        softAssert.assertEquals(chatID, getChatIDFromEmailSubject(chatTranscriptEmailTitle), "chatIDs are not match");
+        softAssert.assertEquals(getAdapter(adapter), getAdapterFromEmailSubject(chatTranscriptEmailTitle),
+                "Adapters does not match");
+        softAssert.assertEquals(getSecondParameterPerAdapter(adapter), getClientIDFromEmailSubject(chatTranscriptEmailTitle),
+                "Client email does not match");
+        softAssert.assertEquals(chatID, getChatIDFromEmailSubject(chatTranscriptEmailTitle),
+                "chatIDs does not match");
         softAssert.assertEquals(sessionsNumber, getLastSessionNumberFromEmailSubject(chatTranscriptEmailTitle), "Different session number");
         softAssert.assertAll();
     }

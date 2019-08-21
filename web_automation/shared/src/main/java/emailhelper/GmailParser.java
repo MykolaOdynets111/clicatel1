@@ -65,6 +65,21 @@ public class GmailParser {
         return chat;
     }
 
+    public static String getUserId(Message newEMail) {
+        String emailContent = null;
+        String [] list = null;
+        try {
+            emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+        }
+
+        list = emailContent.split("\r\n");
+
+        return Arrays.stream(list).filter(e -> e.startsWith("User id:")).findFirst().get().split(":")[1].trim();
+
+    }
+
     public static String getResetPasswordLink(javax.mail.Message newEMail, String expectedSender) {
         String emailContent = null;
         try {

@@ -21,9 +21,8 @@ public class GmailConnector {
         return folder;
     }
 
-    public static void refreshFolder(){
+    public static void reopenFolder(){
         try {
-            folder = store.getFolder("INBOX");
             folder.open(Folder.READ_WRITE);
         } catch (MessagingException e) {
             e.printStackTrace();
