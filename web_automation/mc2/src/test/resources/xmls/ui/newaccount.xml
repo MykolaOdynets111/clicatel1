@@ -25,4 +25,9 @@
             <class name="endtoend.acceptance.billingandpayments.BillingDetailsAddingTest" />
         </classes>
     </test>
+    <test name="Touch integration">
+        <classes>
+            <class name="endtoend.acceptance.touch.GetStartedWithTouchTest" />
+        </classes>
+    </test>
 </suite>
