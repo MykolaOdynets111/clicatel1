@@ -4,14 +4,16 @@ package endtoend.acceptance.signup;
 import datamanager.ExistedAccount;
 import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
+import listeners.TestAllureListener;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
-
+@Listeners({TestAllureListener.class})
 @Test(testName = "Registration :: Sign in old user", groups = {"secondlogin"})
 @TmsLink("TECH-5672")
 public class SignInOldUserTest extends BaseTest {
@@ -22,7 +24,7 @@ public class SignInOldUserTest extends BaseTest {
 
     @BeforeClass
     private void getAccountForTest(){
-        account = ExistedAccount.getExistedAccountForPayments();
+        account = ExistedAccount.getExistedAccountForBilling();
     }
 
     @Description("Registration :: Sign in old user")
