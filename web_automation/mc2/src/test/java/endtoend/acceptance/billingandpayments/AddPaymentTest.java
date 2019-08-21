@@ -27,7 +27,7 @@ public class AddPaymentTest extends BaseTest {
 
 
     @BeforeClass
-    private void generateTestPhone(){
+    private void deleteAllPayments(){
         account = ExistedAccount.getExistedAccountForBilling();
         billingDetailsPage = new PortalBillingDetailsPage();
         soft = new SoftAssert();
