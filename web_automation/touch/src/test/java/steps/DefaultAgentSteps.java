@@ -438,6 +438,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
     }
 
+    @When("Close chat to generate history record")
+    public void closeChats(){
+        ApiHelper.closeActiveChats("admin");
+    }
+
     private boolean waitForDotControlRequestOnChatDesk(String agent){
         for(int i = 0; i<5; i++) {
             String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
