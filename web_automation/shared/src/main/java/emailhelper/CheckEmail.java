@@ -130,6 +130,11 @@ public class CheckEmail {
         return false;
     }
 
+    public List<Message> waitForNeLetterToArrive(String expectedSender, int secondsWait){
+        if(!newLetterFromSenderArrives(expectedSender, secondsWait)) Assert.fail("No new letter arrives");
+        return  getNewMessagesFromSender(GmailConnector.getFolder(), expectedSender);
+    }
+
     public static void deleteAllNewMassages(){
         List<Message> msgs = getAllNewMessages(GmailConnector.getFolder());
         try {
@@ -137,6 +142,17 @@ public class CheckEmail {
                 msg.setFlag(Flags.Flag.SEEN, true);
                 msg.setFlag(Flags.Flag.DELETED, true);
         }
+            GmailConnector.getFolder().close(true);
+            GmailConnector.getStore().close();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteMassage(Message msg){
+        try {
+            msg.setFlag(Flags.Flag.SEEN, true);
+            msg.setFlag(Flags.Flag.DELETED, true);
             GmailConnector.getFolder().close(true);
             GmailConnector.getStore().close();
         } catch (MessagingException e) {

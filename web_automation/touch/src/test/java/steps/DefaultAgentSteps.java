@@ -50,7 +50,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
     private String clientIDGlobal;
     private Message chatTranscriptEmail;
-
+    private Map activeTranscriptSession;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -840,12 +840,16 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             clientIDGlobal = socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId();
         else
             clientIDGlobal = getAgentHomePage("main").getCustomer360Container().getUserFullName();
+        activeTranscriptSession = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath()
+                .getList("content").stream().filter(e -> ((Map) e).get("clientId").equals(clientIDGlobal));
     }
 
     @Then("Chat Transcript email arrives")
     public void verifyChatTranscriptEmail(){
         // Checking added "standarttouchgoplan@gmail.com" email for chat transcript emails
         GmailConnector.loginAndGetInboxFolder(MC2Account.QA_STANDARD_ACCOUNT.getEmail(), MC2Account.QA_STANDARD_ACCOUNT.getPass());
+
+//        List<Message> messages = CheckEmail.waitForNeLetterToArrive(GmailConnector.getFolder(), "Clickatell <transcripts@clickatell.com>");
 
         chatTranscriptEmail = CheckEmail
                 .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
@@ -860,6 +864,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 break;
             }
             else{
+
                 getAgentHomePage("main").waitForDeprecated(15000);
                 GmailConnector.reopenFolder();
                 chatTranscriptEmail = CheckEmail
@@ -882,9 +887,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Adapters does not match");
         softAssert.assertEquals(getSecondParameterPerAdapter(adapter), getClientIDFromEmailSubject(chatTranscriptEmailTitle),
                 "Client email does not match");
-        softAssert.assertEquals(chatID, getChatIDFromEmailSubject(chatTranscriptEmailTitle),
-                "chatIDs does not match");
-        softAssert.assertEquals(sessionsNumber, getLastSessionNumberFromEmailSubject(chatTranscriptEmailTitle), "Different session number");
+//        softAssert.assertEquals(chatID, getChatIDFromEmailSubject(chatTranscriptEmailTitle),
+//                "chatIDs does not match");
+//        softAssert.assertEquals(sessionsNumber, getLastSessionNumberFromEmailSubject(chatTranscriptEmailTitle), "Different session number");
         softAssert.assertAll();
     }
 
