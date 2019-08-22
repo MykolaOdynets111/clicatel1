@@ -56,6 +56,6 @@ public class ConfigureTouchWindow extends BasePortalWindow {
         nextButton.click();
         transcriptsEmailInput.sendKeys(transcriptsEmail);
         clickElem(this.getCurrentDriver(), nextButton, 5,"Finish button");
-        waitWhileProcessing(this.getCurrentDriver(), 2, 5);
+        waitWhileProcessing(this.getCurrentDriver(), 3, 5);
     }
 }

@@ -79,6 +79,19 @@ public class PageHeader extends AbstractUIElement {
         else return "no Touch Go plan name is shown";
     }
 
+    @Step(value = "Is correct agent seats shown")
+    public boolean isCorrectAgentSeatsShown(String expected, int secondsWait){
+        String actualAgents = getAgentSeatsInfo();
+        for(int i = 0; i< secondsWait; i++){
+            if(actualAgents.equals(expected)) return true;
+            else{
+                waitFor(1000);
+                actualAgents = getAgentSeatsInfo();
+            }
+        }
+        return false;
+    }
+
     @Step(value = "Get text from buying agents button")
     public String getTextFromBuyingAgentsButton(){
         return getTextFromElem(this.getCurrentDriver(), upgradeButton, 3, "Buying agents button");

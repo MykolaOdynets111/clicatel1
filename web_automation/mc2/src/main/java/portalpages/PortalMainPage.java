@@ -118,6 +118,7 @@ public class PortalMainPage extends PortalAbstractPage {
         checkoutAndBuy(cartPage);
     }
 
+    @Step(value = "Checkout and buy")
     public void checkoutAndBuy(CartPage localCartPage){
         if(localCartPage.getConfirmPaymentDetailsWindow().isBillingContactShown()){
             localCartPage.getConfirmPaymentDetailsWindow().clickNexButton();
@@ -131,7 +132,7 @@ public class PortalMainPage extends PortalAbstractPage {
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickPayNowButton();
-        waitWhileProcessing(14, 20);
+        waitWhileProcessing(3, 20);
     }
 
     public void upgradePlanWithoutTerms(int agentSeats){

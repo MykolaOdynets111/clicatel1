@@ -1,4 +1,4 @@
-package endtoend.acceptance.touch;
+package endtoend.acceptance.billingandpayments;
 
 import drivermanager.ConfigManager;
 import endtoend.basetests.APICreatedAccountTest;
@@ -11,17 +11,19 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import portalpages.*;
+import portalpages.CartPage;
+import portalpages.PortalLoginPage;
+import portalpages.PortalMainPage;
 
 
 @Listeners({TestAllureListener.class})
-@Test(testName = "Touch :: Add 10 agent seats to cart", groups = {"newaccount", "touch"})
-@TmsLink("TECH-6540")
-public class Add10AgentsTest extends APICreatedAccountTest  {
+@Test(testName = "Billing & Payments :: Purchase 1 agent seat", groups = {"newaccount", "touch"})
+@TmsLink("TECH-6539")
+public class Purchase1AgentSeatTest extends APICreatedAccountTest  {
 
     private PortalMainPage mainPage;
     private SoftAssert soft;
-
+    private CartPage cartPage;
 
     @BeforeClass
     private void cleanCart(){
@@ -30,15 +32,16 @@ public class Add10AgentsTest extends APICreatedAccountTest  {
     }
 
 
-    @Description("Touch :: Add 10 agent seats to cart")
-    @Epic("Touch")
-    @Feature("Add 10 agent seats to cart")
-    public void add10AgentsTest(){
+    @Description("Billing & Payments :: Purchase 1 agent seat")
+    @Epic("Billing & Payments")
+    @Feature("Purchase 1 agent seat")
+    public void purchase1AgentTest(){
         mainPage = PortalLoginPage.openPortalLoginPage().login(email.get(), pass.get());
 
         verifyDefaultUpgradeValues();
-        clickPlusButtonNineTimes();
-        verifyAddingToCart();
+        addAgentToCart();
+        verifyPurchaseAgent();
+        verifyPurchasedAgentAdded();
     }
 
     @Step(value = "Verify default Upgrade values")
@@ -50,21 +53,11 @@ public class Add10AgentsTest extends APICreatedAccountTest  {
                 "Add agent seats button is not shown");
         soft.assertEquals(mainPage.getUpgradeYourPlanWindow().getAgentSeatsInfo(), "1 x Agent seat(s)",
                 "Incorrect add agent seats default label");
-        soft.assertTrue(mainPage.getUpgradeYourPlanWindow().verifyMonthlySelected(),
-                "'Monthly' radio is not selected be default");
         soft.assertAll();
     }
 
-    @Step(value = "Click '+' 9 times")
-    private void clickPlusButtonNineTimes() {
-        mainPage.getUpgradeYourPlanWindow().selectAgentSeats(10);
-
-        Assert.assertEquals(mainPage.getUpgradeYourPlanWindow().getAgentSeatsInfo(), "10 x Agent seat(s)",
-                "Incorrect add agent seats default label");
-    }
-
-    @Step(value = "Verify adding to cart")
-    private void verifyAddingToCart() {
+    @Step(value = "Add 1 agent to the cart")
+    private void addAgentToCart() {
         soft = new SoftAssert();
         if (ConfigManager.getEnv().equals("testing") |
                 ConfigManager.getEnv().equals("qa"))  mainPage.getUpgradeYourPlanWindow().selectMonthly();
@@ -73,11 +66,28 @@ public class Add10AgentsTest extends APICreatedAccountTest  {
         soft.assertEquals(mainPage.getNotificationAlertText(), "Added to cart",
                 "Notification about adding to cart is not shown");
 
-        mainPage.getPageHeader().openCart();
-        soft.assertTrue(new CartPage().getCartTable().isItemAddedToTheCart("1x Touch Agent Seats 10-pack", 5),
+        cartPage = mainPage.getPageHeader().openCart();
+        soft.assertTrue(new CartPage().getCartTable().isItemAddedToTheCart("1x Touch Agent Seats", 5),
                 "Item was not added to the cart");
         soft.assertAll();
     }
 
+    @Step(value = "Verify 1 agent purchasing")
+    private void verifyPurchaseAgent() {
+        cartPage.clickCheckoutButton();
+        mainPage.checkoutAndBuy(cartPage);
+
+        Assert.assertEquals(cartPage.getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
+                "Payment Successful", "Payment successful message was not shown");
+    }
+
+    @Step(value = "Verify 1 agent added")
+    private void verifyPurchasedAgentAdded() {
+
+        cartPage.getConfirmPaymentDetailsWindow().closeWindow();
+
+        Assert.assertTrue(cartPage.getPageHeader().isCorrectAgentSeatsShown("2x AGENT SEATS", 2),
+                "Incorrect number of agents added.");
+    }
 
 }
