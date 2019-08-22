@@ -2,8 +2,12 @@ package dbmanager;
 import org.testng.Assert;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class DBConnector {
 
@@ -376,10 +380,15 @@ public class DBConnector {
         return sessionDetails;
     }
 
-    public static int getNumberOfSessionsInConversation(String env, String chatID){
+    public static int getNumberOfSessionsInConversationForLast3Days(String env, String chatID){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> details = new HashMap<>();
-        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"';";
+
+        ZoneId zoneId = TimeZone.getTimeZone("UTC").toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime nowMinus3Days = LocalDateTime.now(zoneId).minusDays(3);
+        String date = nowMinus3Days.format(formatter);
+        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"' and started_date > '"+date+"';";
         Statement statement = null;
         ResultSet results = null;
         int sessionsCount = 0;
