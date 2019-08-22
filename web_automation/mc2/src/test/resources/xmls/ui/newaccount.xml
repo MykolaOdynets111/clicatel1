@@ -31,4 +31,9 @@
             <class name="endtoend.acceptance.touch.Add10AgentsTest" />
         </classes>
     </test>
+    <test name="Adding payment methods">
+        <classes>
+            <class name="endtoend.acceptance.billingandpayments.AddPaymentTest" />
+        </classes>
+    </test>
 </suite>

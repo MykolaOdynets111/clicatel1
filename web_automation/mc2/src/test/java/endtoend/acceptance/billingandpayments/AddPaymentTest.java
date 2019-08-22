@@ -1,11 +1,8 @@
 package endtoend.acceptance.billingandpayments;
 
-import datamanager.ExistedAccount;
-import endtoend.basetests.BaseTest;
+import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
-import mc2api.auth.PortalAuthToken;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -18,21 +15,16 @@ import portalpages.PortalMainPage;
 @Listeners({TestAllureListener.class})
 @Test(testName = "Billing & Payments :: Add credit card on Payment methods page", groups = {"newaccount", "billingspayments"})
 @TmsLink("TECH-5828")
-public class AddPaymentTest extends BaseTest {
+public class AddPaymentTest extends APICreatedAccountTest {
 
     private PortalMainPage mainPage;
     private PortalBillingDetailsPage billingDetailsPage;
     private SoftAssert soft;
-    private ExistedAccount account;
-
 
     @BeforeClass
     private void deleteAllPayments(){
-        account = ExistedAccount.getExistedAccountForBilling();
         billingDetailsPage = new PortalBillingDetailsPage();
         soft = new SoftAssert();
-        String authToken = PortalAuthToken.getAccessTokenForPortalUser(account.getAccountName(), account.getEmail(), account.getPass());
-        ApiHelperPlatform.deleteAllPayments(authToken, "CREDIT_CARD");
     }
 
 
@@ -41,7 +33,7 @@ public class AddPaymentTest extends BaseTest {
     @Feature("Add credit card on Payment methods page")
     public void addingPaymentMethod(){
 
-        mainPage = PortalLoginPage.openPortalLoginPage().login(account.getEmail(), account.getPass());
+        mainPage = PortalLoginPage.openPortalLoginPage().login(email.get(), pass.get());
         mainPage.getLeftMenu().navigateINLeftMenuWithSubmenu("Settings", "Billing & payments");
 
         verifyCheckBoxesMandatory();
