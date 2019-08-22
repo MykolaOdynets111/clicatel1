@@ -23,7 +23,7 @@ public class GmailConnector {
 
     public static void reopenFolder(){
         try {
-            folder.open(Folder.READ_WRITE);
+            if(!folder.isOpen()) folder.open(Folder.READ_WRITE);
         } catch (MessagingException e) {
             e.printStackTrace();
         }

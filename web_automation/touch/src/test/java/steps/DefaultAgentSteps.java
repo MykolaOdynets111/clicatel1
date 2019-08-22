@@ -849,7 +849,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         chatTranscriptEmail = CheckEmail
                 .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
-        clientIDGlobal = "tess";
         for (int i = 0; i < 5; i ++){
             if(chatTranscriptEmail==null){
                 GmailConnector.reopenFolder();
