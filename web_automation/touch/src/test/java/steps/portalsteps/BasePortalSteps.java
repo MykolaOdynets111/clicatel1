@@ -3,6 +3,7 @@ package steps.portalsteps;
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import datamanager.jacksonschemas.AvailableAgent;
+import datamanager.model.PaymentMethod;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import mc2api.ApiHelperPlatform;
@@ -32,6 +33,7 @@ import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BasePortalSteps extends AbstractPortalSteps {
 
@@ -401,8 +403,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         String authToken = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main");
-        List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(authToken, "CREDIT_CARD");
-        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(authToken, e));
+        List<PaymentMethod> ids = ApiHelperPlatform.getAllActivePaymentMethods(authToken)
+                .stream().filter(e -> e.getPaymentType().equals("CREDIT_CARD")).collect(Collectors.toList());
+        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(authToken, e.getId()));
     }
 
     @When("^Login as (.*)$")

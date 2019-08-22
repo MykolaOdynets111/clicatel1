@@ -1,9 +1,6 @@
 package mc2api;
 
-import datamanager.model.AccountSignUp;
-import datamanager.model.CartOrder;
-import datamanager.model.MC2AccountBalance;
-import datamanager.model.MC2SandboxNumber;
+import datamanager.model.*;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.restassured.RestAssured;
@@ -157,15 +154,17 @@ public class ApiHelperPlatform {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> getListOfActivePaymentMethods(String authToken, String paymentType){
-        Response resp =   RestAssured.given()
+    public static List<PaymentMethod> getAllActivePaymentMethods(String authToken){
+        return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", authToken)
-                .get(EndpointsPlatform.PLATFORM_PAYMENT_METHODS);
+                .get(EndpointsPlatform.PLATFORM_PAYMENT_METHODS)
+                .getBody().jsonPath().getList("paymentMethods", PaymentMethod.class);
+    }
 
-        return resp.getBody().jsonPath().getList("paymentMethods", Map.class)
-                .stream().filter(e -> e.get("paymentType").equals(paymentType))
-                .map(e -> ((String) e.get("id")))
+    public static List<PaymentMethod> getAllNotDefaultPaymentMethods(String authToken){
+        return getAllActivePaymentMethods(authToken)
+                .stream().filter(e -> e.getDefaultPaymentMethod().equals(false))
                 .collect(Collectors.toList());
     }
 
@@ -176,9 +175,9 @@ public class ApiHelperPlatform {
                 .delete(EndpointsPlatform.PLATFORM_PAYMENT_METHODS+"/"+paymentID);
     }
 
-    public static void deleteAllPayments(String authToken, String paymentType){
-        List<String> paymentIds = getListOfActivePaymentMethods(authToken, paymentType);
-        paymentIds.forEach(e -> deletePaymentMethod(authToken, e));
+    public static void deleteAllNotDefaultPayments(String authToken, String paymentType){
+        getAllNotDefaultPaymentMethods(authToken)
+                .forEach(e -> deletePaymentMethod(authToken, e.getId()));
     }
 
     public static void closeAccount(String accountName, String email, String pass){
