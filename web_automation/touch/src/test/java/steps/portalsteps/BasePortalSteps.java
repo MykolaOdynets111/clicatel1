@@ -1377,6 +1377,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         getPortalUserProfileEditingPage().uploadPhoto("touch/src/test/resources/agentphoto/agent_photo.png");
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(2, 5);
+        getPortalUserProfileEditingPage().clickPageActionButton("Save changes");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
