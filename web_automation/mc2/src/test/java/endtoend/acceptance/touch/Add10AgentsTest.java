@@ -66,8 +66,7 @@ public class Add10AgentsTest extends APICreatedAccountTest  {
     @Step(value = "Verify adding to cart")
     private void verifyAddingToCart() {
         soft = new SoftAssert();
-        if (ConfigManager.getEnv().equals("testing") |
-                ConfigManager.getEnv().equals("qa"))  mainPage.getUpgradeYourPlanWindow().selectMonthly();
+        mainPage.getUpgradeYourPlanWindow().selectMonthly();
         mainPage.getUpgradeYourPlanWindow().clickAddToCardButton();
 
         soft.assertEquals(mainPage.getNotificationAlertText(), "Added to cart",
