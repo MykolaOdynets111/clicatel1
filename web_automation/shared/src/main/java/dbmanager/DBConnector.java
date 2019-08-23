@@ -388,7 +388,7 @@ public class DBConnector {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime nowMinus3Days = LocalDateTime.now(zoneId).minusDays(3);
         String date = nowMinus3Days.format(formatter);
-        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"' and started_date > '"+date+"';";
+        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"' and ended_date > '"+date+"';";
         Statement statement = null;
         ResultSet results = null;
         int sessionsCount = 0;
