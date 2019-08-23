@@ -13,10 +13,11 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     @FindBy(xpath = "//label[text()='Payment Method']")
     private WebElement paymentethodWindowHeader;
 
+    @FindBy(xpath = "//legend[text()='Billing contact']")
+    private WebElement billingContactWindowHeader;
+
     @FindBy(css = "span[aria-label='Select box activate']")
     private WebElement selectPaymentBox;
-
-    private String billingContactHeader = "//legend[text()='Billing contact']";
 
     private String choisesGroup = "li.ui-select-choices-group";
 
@@ -66,6 +67,11 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
 
     public boolean isSelectPaymentShown(){
         return isElementShown(this.getCurrentDriver(), paymentethodWindowHeader, 5);
+    }
+
+
+    public boolean isBilingContactShown(){
+        return isElementShown(this.getCurrentDriver(), billingContactWindowHeader, 5);
     }
 
     @Step(value = "Click 'Next' button")
