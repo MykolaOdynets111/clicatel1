@@ -163,13 +163,15 @@ public class PageHeader extends AbstractUIElement {
     @Step(value = "Verify top up updated on backend")
     public boolean isTopUpUpdatedOnBackend(double expectedAmount, int waitMinutes, String authToken){
         expectedAmount = Precision.round(expectedAmount, 2);
-        DecimalFormat df = new DecimalFormat("####0.00");
         double valueFromBackend = Precision.round(ApiHelperPlatform.getAccountBalance(authToken).getBalance(),2);
 
         boolean result = false;
         for(int i = 0; i<(waitMinutes*60)/25; i++){
-
-            if(valueFromBackend > (expectedAmount-0.5) & valueFromBackend <= expectedAmount){ //0.5 - possible withheld commission by tract
+            if(valueFromBackend == expectedAmount){
+                result = true;
+                break;
+            }
+            if(valueFromBackend > (expectedAmount-0.5) & valueFromBackend <= (expectedAmount - 0.001)){ //0.5 - possible withheld commission by tract
                 result = true;
                 break;
             } else{

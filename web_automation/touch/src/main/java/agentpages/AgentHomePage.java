@@ -82,7 +82,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatForm getChatForm() {
-        chatForm.setCurrentAgent(this.getCurrentAgent());
+        chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
     }
 

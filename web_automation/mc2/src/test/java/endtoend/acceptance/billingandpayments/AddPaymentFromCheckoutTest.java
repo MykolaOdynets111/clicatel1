@@ -126,7 +126,7 @@ public class AddPaymentFromCheckoutTest extends BaseTest {
 
         soft.assertEquals(billingDetailsPage.getOpenedTabTitle(), "Payment methods",
                 "Payment method  page is not opened after closing Confirm Payment details window");
-        soft.assertTrue(billingDetailsPage.getPaymentMethodDetails().contains("AQA " + cardHolderLastName),
+        soft.assertTrue(billingDetailsPage.isPaymentShown("AQA " + cardHolderLastName, 3),
                 "Cardholder name of added card is not as expected");
     }
 }

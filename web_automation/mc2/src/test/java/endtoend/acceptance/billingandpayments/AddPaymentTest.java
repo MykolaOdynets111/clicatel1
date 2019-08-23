@@ -64,10 +64,8 @@ public class AddPaymentTest extends APICreatedAccountTest {
 
         soft.assertEquals(billingDetailsPage.getNotificationAlertText(), "Payment method has been configured successfully",
                 "Notification about new payment added is not shown");
-        soft.assertTrue(billingDetailsPage.isNewPaymentAdded(),
+        soft.assertTrue(billingDetailsPage.isPaymentShown("AQA Test", 5),
                 "New payment is not shown on 'Billing & payments' page");
-        soft.assertTrue(billingDetailsPage.getPaymentMethodDetails().contains("AQA Test"),
-                "Cardholder name of added card is not as expected");
     }
 
 }

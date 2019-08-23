@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
 
+//DRAFT (Test Case clarification needed)
 
 @Listeners({TestAllureListener.class})
 @Test(testName = "Test Phone :: Add test phone from Launchpad", groups = {"newaccount", "testphone"}, dependsOnMethods = "addingTestPhoneTest")

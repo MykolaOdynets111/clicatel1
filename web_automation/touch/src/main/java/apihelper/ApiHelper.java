@@ -521,6 +521,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             fullList.addAll(allUnassignedTickets);
             if (fullList.size() > 0) processTickets(fullList, agentId);
         }catch(NullPointerException e){}
+        catch (JsonPathException e){
+            Assert.fail("Unable to close overnight tickets");
+        }
     }
 
     public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber){

@@ -19,6 +19,7 @@
     <test name="Adding payment methods">
         <classes>
             <class name="endtoend.acceptance.billingandpayments.AddPaymentFromCheckoutTest" />
+            <class name="endtoend.acceptance.billingandpayments.RemoveCreditCardTest" />
         </classes>
     </test>
 </suite>

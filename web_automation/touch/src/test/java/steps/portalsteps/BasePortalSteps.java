@@ -1206,22 +1206,21 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyNewPaymentAdded(){
         getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
-        boolean isPaymentAdded = getPortalBillingDetailsPage().isNewPaymentAdded();
+        boolean isPaymentAdded = getPortalBillingDetailsPage().isPaymentShown("AQA Test", 3);
         ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
         Assert.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
-        Assert.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
-                "Cardholder name of added card is not as expected");
     }
 
     @Then("^Payment method is not shown in Payment methods tab$")
     public void paymentMethodIsNotShown(){
-        Assert.assertFalse(getPortalBillingDetailsPage().isNewPaymentAdded(),
+        Assert.assertFalse(getPortalBillingDetailsPage().isPaymentShown("AQA Test", 2),
                 "New payment is not shown in 'Billing & payments' page");
     }
 
     @When("^Admin clicks Manage -> Remove payment$")
     public void deletePaymentMethod(){
-        getPortalBillingDetailsPage().deletePaymentMethod();
+        getPortalBillingDetailsPage().clickManageButton("AQA Test");
+        new PaymentMethodPage(DriverFactory.getAgentDriverInstance()).deletePaymentMethod();
     }
 
     @When("^Admin adds to cart (.*) agents$")

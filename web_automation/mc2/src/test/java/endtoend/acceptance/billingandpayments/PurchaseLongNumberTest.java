@@ -8,6 +8,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import portalpages.*;
 
+// DRAFT (blocked because has no available phone numbers to buy)
 
 @Listeners({TestAllureListener.class})
 @Test(testName = "Billing & Payments :: Purchase a long number", groups = {"newaccount", "billingspayments", "payment"})
