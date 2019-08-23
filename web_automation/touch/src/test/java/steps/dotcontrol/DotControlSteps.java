@@ -318,23 +318,22 @@ public class DotControlSteps implements WebWait {
 
     @When("^Send parameterized init call with context correct response is returned$")
     public void sendInitCalWithAdditionalParameters(){
-        List<History> history = Arrays.asList(new History("hi", "CLIENT"),
-                                                new History("Hello. How can I help you?", "AGENT"),
-                                                new History("Do you offer business accounts? ", "CLIENT"),
-                                                new History("Sorry, no. We only offer accounts for Personal Banking", "AGENT"));
         DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
-        initRequest.setHistory(history);
+        initRequest.setInitContext(new InitContext());
         Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
         Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
                         resp.getBody().asString() + "\n\n");
-
     }
 
     @When("^Send parameterized init call with history$")
     public void sendInitCalWithHistory(){
+        List<History> history = Arrays.asList(new History("hi", "CLIENT"),
+                new History("Hello. How can I help you?", "AGENT"),
+                new History("Do you offer business accounts? ", "CLIENT"),
+                new History("Sorry, no. We only offer accounts for Personal Banking", "AGENT"));
         DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
-        initRequest.setInitContext(new InitContext());
+        initRequest.setHistory(history);
         Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
         Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
