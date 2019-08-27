@@ -78,7 +78,9 @@ public class ApiHelperTie {
     }
 
     public static String getTIESentimentOnMessage(String userMessage){
-        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        Response resp = RestAssured.given()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
+                .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().get("sentiment_verdict");
     }
 
