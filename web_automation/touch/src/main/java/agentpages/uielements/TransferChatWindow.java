@@ -1,8 +1,10 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -49,6 +51,19 @@ public class TransferChatWindow extends AbstractUIElement {
         return agentName;
     }
 
+    public String transferOvernightTicket(String agent) {
+        openDropDownAgent();
+        String agentName = selectDropDownAgent(agent);
+        if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
+            clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
+            new ChatHeader().clickTransferButton(agent);
+            agentName = selectDropDownAgent(agent);
+            sentNote();
+        }
+        clickTransferChatButton();
+        return agentName;
+    }
+
     public boolean isTransferChatShown() {
         return  isElementShown(this.getCurrentDriver(), submitTransferChatButton, 5);
     }
@@ -84,8 +99,12 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public void sentNote() {
-        waitForElementToBeVisible(this.getCurrentDriver(), noteInput, 5);
-        noteInput.sendKeys("Please take care of this one");
+        try {
+            waitForElementToBeVisible(this.getCurrentDriver(), noteInput, 5);
+            noteInput.sendKeys("Please take care of this one");
+        }catch (TimeoutException e){
+            Assert.fail("Notes field is not shown");
+        }
     }
 
     public String getNoteInputColor() {

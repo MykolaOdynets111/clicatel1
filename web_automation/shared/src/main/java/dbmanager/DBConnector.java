@@ -410,7 +410,7 @@ public class DBConnector {
     public static Map<String, String> getChatAgentHistoryDetailsBySessionID(String env, String sessionID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> details = new HashMap<>();
-        String query = "SELECT * FROM "+tableName+".chat_agent_history where session_id = '"+sessionID+"';";
+        String query = "SELECT * FROM "+tableName+".chat_agent_history_active where session_id = '"+sessionID+"';";
         Statement statement = null;
         ResultSet results = null;
         try {

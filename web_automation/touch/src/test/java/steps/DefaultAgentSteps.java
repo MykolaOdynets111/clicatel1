@@ -1315,6 +1315,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^(.*) transfers overnight ticket$")
     public void agentTransfersOvernightTicket(String agent) {
         getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
-        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket(agent);
     }
 }
