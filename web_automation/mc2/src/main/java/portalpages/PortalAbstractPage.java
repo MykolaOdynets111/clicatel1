@@ -100,7 +100,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     }
 
 
-    @Step(value = "Click page navigation button")
+    @Step(value = "Click '{userManagementPage}' page navigation button")
     public void clickPageNavButton(String buttonName){
         waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
@@ -121,6 +121,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         return focusedNavButton.getText().trim();
     }
 
+    @Step(value = "Click '{buttonName}' page action button")
     public void clickPageActionButton(String buttonName){
         waitForElementToBeVisible(this.getCurrentDriver(), headerControlsContainer, 8);
         WebElement targetButton = pageActionButtons.stream()
