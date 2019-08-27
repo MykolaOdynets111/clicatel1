@@ -56,6 +56,12 @@ task runApiTests(type:Test) {
     }
 }
 
+task rundbTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "dbtest.xml"
+    }
+}
 
 // =============== !! MAIN TASK !! ============== //
 
@@ -69,6 +75,10 @@ task runTests(type:Test) {
 
     if(suite == "api") {
         runTests.dependsOn(runApiTests)
+    }
+
+    if(suite == "db") {
+        runTests.dependsOn(rundbTests)
     }
 
     runTests.finalizedBy(copyConfig)
