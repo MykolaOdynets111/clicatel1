@@ -123,7 +123,10 @@ public class AgentHomePage extends AgentAbstractPage {
         return incomingTransferWindow;
     }
 
-    public TransferChatWindow getTransferChatWindow() {return transferChatWindow;}
+    public TransferChatWindow getTransferChatWindow() {
+        transferChatWindow.setCurrentDriver(this.getCurrentDriver());
+        return transferChatWindow;
+    }
 
     public ProfileWindow getProfileWindow() {
         return profileWindow;

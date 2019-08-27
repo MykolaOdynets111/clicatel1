@@ -1,30 +1,30 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 @FindBy(css = "div.modal-content")
-public class TransferChatWindow extends AbstractUIElementDeprecated {
+public class TransferChatWindow extends AbstractUIElement {
 
-    @FindBy(css = "button.btn.pull-left.btn-default")
+    @FindBy(xpath = ".//button[text()='Cancel']")
     private WebElement cancelTransferButton;
 
-    @FindBy(xpath = "//button[text()='Transfer']")
+    @FindBy(xpath = ".//button[text()='Transfer chat']")
     private WebElement submitTransferChatButton;
 
-    @FindBy(css = "span.icon.icon-down")
+    @FindBy(xpath = ".//label[@for='agentsList']/following-sibling::div//div[@class='Select-control']")
     private WebElement openDropdownButton;
 
-    @FindBy(xpath = "//div[@class='Select-menu-outer']")
+    @FindBy(xpath = ".//div[@class='Select-menu-outer']")
     private WebElement availableAgent;
 
-    @FindBy(xpath = "//div[@class='Select-menu-outer']//div[contains(@class,'Select-option')]")
+    @FindBy(xpath = ".//div[@class='Select-menu-outer']//div[contains(@class,'Select-option')]")
     private List<WebElement> availableAgentList;
 
-    @FindBy(xpath = "//div[@class='Select-control']")
+    @FindBy(xpath = ".//div[@class='Select-control']")
     private WebElement dropDown;
 
     private String openedMenu = "div.Select-menu-outer";
@@ -32,15 +32,15 @@ public class TransferChatWindow extends AbstractUIElementDeprecated {
     @FindBy(css = "textarea")
     private WebElement noteInput;
 
-    @FindBy(css = "div.Select-placeholder")
+    @FindBy(xpath = "//label[@for='agentsList']/following-sibling::div//div[@class='Select-placeholder']")
     private WebElement selectAgentPlaceholder;
 
     public String transferChat(String agent) {
         openDropDownAgent();
         String agentName = selectDropDownAgent(agent);
         sentNote();
-        if(isElementShownAgent(selectAgentPlaceholder, 1, agent)){
-            clickElemAgent(cancelTransferButton, 1, agent, "Cancel transfer button");
+        if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
+            clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader().clickTransferButton(agent);
             agentName = selectDropDownAgent(agent);
             sentNote();
@@ -50,17 +50,16 @@ public class TransferChatWindow extends AbstractUIElementDeprecated {
     }
 
     public boolean isTransferChatShown() {
-        return  isElementShown(submitTransferChatButton, 5);
+        return  isElementShown(this.getCurrentDriver(), submitTransferChatButton, 5);
     }
 
     public void openDropDownAgent() {
-        clickElemAgent(openDropdownButton,5,"main", "Open drop down button");
+        clickElem(this.getCurrentDriver(), openDropdownButton,5,"Open drop down button");
     }
 
     public String selectDropDownAgent(String agent) {
-//        if(!isElementShownAgentByCSS(openedMenu, 5, agent)) openDropdownButton.click();
-        if(!isElementShownAgent(availableAgent, 2, agent)) openDropdownButton.click();
-        waitForElementToBeVisibleAgent(availableAgent,5, agent);
+        if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openDropdownButton.click();
+        waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
         for(int i=0; i<10; i++){
             if(availableAgent.getAttribute("innerText").contains("AQA")) {
                 WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().toUpperCase().contains("AQA")).findFirst().get();
@@ -68,7 +67,7 @@ public class TransferChatWindow extends AbstractUIElementDeprecated {
                 currentAgent.click();
                 return agentName;
             }
-            else waitForDeprecated(500);
+            else waitFor(500);
         }
         String agentName = availableAgent.getAttribute("innerText");
         availableAgent.click();
@@ -76,14 +75,16 @@ public class TransferChatWindow extends AbstractUIElementDeprecated {
     }
 
     public String getTextDropDownMessage() {
-        return getTextFromElemAgent(availableAgent,6,"main agent","Drop down menu");
+        return getTextFromElem(this.getCurrentDriver(), availableAgent,6,"Drop down menu");
     }
 
     public void clickTransferChatButton() {
-        clickElemAgent(submitTransferChatButton,5,"main", "Transfer button");
+        waitForElementToBeVisible(this.getCurrentDriver(), submitTransferChatButton,5);
+        executeJSclick(this.getCurrentDriver(), submitTransferChatButton);
     }
 
     public void sentNote() {
+        waitForElementToBeVisible(this.getCurrentDriver(), noteInput, 5);
         noteInput.sendKeys("Please take care of this one");
     }
 

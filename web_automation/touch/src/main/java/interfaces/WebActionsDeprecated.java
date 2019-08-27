@@ -45,7 +45,7 @@ public interface WebActionsDeprecated extends WebWaitDeprecated {
             waitForElementToBeVisibleAgent(element, time, agent);
             return element.getText();
         } catch (TimeoutException|NoSuchElementException e){
-            Assert.assertTrue(false, "Cannot get text from  '"+elemName+"' because element is not visible.");
+            Assert.fail("Cannot get text from  '"+elemName+"' because element is not visible.");
             return "no text elem";
         }
     }
