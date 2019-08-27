@@ -59,7 +59,7 @@ task runApiTests(type:Test) {
 task rundbTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "dbtest.xml"
+        suites baseXmlPath + "/dbtest.xml"
     }
 }
 
