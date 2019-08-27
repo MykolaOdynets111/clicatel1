@@ -71,7 +71,7 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-        suggestionInputFieldContainer.click();
+//        suggestionInputFieldContainer.click();
         clearAndSendResponseToUser(message);
     }
 
@@ -94,10 +94,10 @@ public class ChatForm extends AbstractUIElement {
 
     public void clearAndSendResponseToUser(String response){
         waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
-        moveToElemAndClick(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), messageInputLocator));
         if(isElementShown(this.getCurrentDriver(), suggestionInputField, 2)){
             suggestionInputField.click();
             waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
+            messageInput.click();
             messageInput.clear();
         }
         int symbolsNumber = messageInput.getText().length();
