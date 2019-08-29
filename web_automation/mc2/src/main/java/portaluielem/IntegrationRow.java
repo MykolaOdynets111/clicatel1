@@ -2,6 +2,7 @@ package portaluielem;
 
 import abstractclasses.AbstractWidget;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -26,7 +27,14 @@ public class IntegrationRow extends AbstractWidget {
     }
 
    public String getIntegrationName(){
-        return baseWebElem.findElement(By.xpath(integrationName)).getText();
+       waitForAngularRequestsToFinish(this.getCurrentDriver());
+       waitForAngularToBeReady(this.getCurrentDriver());
+       try {
+           return baseWebElem.findElement(By.xpath(integrationName)).getText();
+       }catch (StaleElementReferenceException e){
+           waitFor(500);
+           return baseWebElem.findElement(By.xpath(integrationName)).getText();
+       }
    }
 
    public boolean isToggleEnabled(){
