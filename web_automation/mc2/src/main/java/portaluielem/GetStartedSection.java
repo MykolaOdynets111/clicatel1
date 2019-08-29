@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -99,7 +100,9 @@ public class GetStartedSection extends AbstractWidget {
     public List<String> getTestPhones(){
         waitForElementsToBeVisible(this.getCurrentDriver(), testPhones, 5);
         if(testPhones.size()==0) Assert.fail("Test Phones list is empty");
-        return testPhones.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
+        List<String> phones =  testPhones.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
+        Collections.sort(phones);
+        return phones;
     }
 
     @Step(value = "Click 'Remove' button for test phone on Launchpad")

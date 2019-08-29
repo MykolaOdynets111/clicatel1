@@ -14,6 +14,7 @@ import org.testng.asserts.SoftAssert;
 import portalpages.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -75,6 +76,7 @@ public class MultipleTestPhoneAddingTest extends BaseTest implements Verificatio
     @Step(value = "Verify new test phones are shown on Launchpad Manage test phones section")
     private void verifyManageTestPhonesSection(){
         SoftAssert soft = new SoftAssert();
+        Collections.sort(testPhones);
 
         mainPage.getAddTestPhoneWindow().clickFinishButton();
         mainPage.waitWhileProcessing(1, 2);

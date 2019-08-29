@@ -40,7 +40,7 @@ public class RemoveCreditCardTest extends BaseTest {
 
         String authToken = PortalAuthToken.getAccessTokenForPortalUser(account.getAccountName(), account.getEmail(), account.getPass());
         List<PaymentMethod> list = ApiHelperPlatform.getAllNotDefaultPaymentMethods(authToken);
-        if(list.size()==0) new SkipException("There is no Payments to delete\n. Please check test on adding payments");
+        if(list.size()==0) Assert.fail("There is no Payments to delete\n. Please check test on adding payments");
         paymentMethod = ApiHelperPlatform.getAllNotDefaultPaymentMethods(authToken).get(0);
         cardHolder = paymentMethod.getCardHolderFirstName() + " " + paymentMethod.getCardHolderLastName();
     }

@@ -42,7 +42,7 @@ public class ConfirmPaymentDetailsWindow extends BasePortalWindow {
     @Step(value = "Select payment method option")
     public ConfirmPaymentDetailsWindow selectPaymentMethod(String payment){
         String paymentMethod = String.format(paymentMethodXpath, payment);
-        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), paymentMethod, 8);
+        isElementShownByXpath(this.getCurrentDriver(), paymentMethod, 8);
         clickHoldRelease(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), paymentMethod),
                 3, "Add Credit / Debit Card");
 //        findElemByXPATH(this.getCurrentDriver(), paymentMethod).click();
