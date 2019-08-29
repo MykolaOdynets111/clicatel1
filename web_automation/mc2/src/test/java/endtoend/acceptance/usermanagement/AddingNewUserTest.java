@@ -1,6 +1,7 @@
 package endtoend.acceptance.usermanagement;
 
 import datamanager.ExistedAccount;
+import datamanager.model.NewUserModel;
 import endtoend.basetests.BaseTest;
 import interfaces.VerificationHelper;
 import io.qameta.allure.*;
@@ -22,12 +23,13 @@ public class AddingNewUserTest extends BaseTest implements VerificationHelper {
     private PortalMainPage mainPage;
     private PortalManageTestPhonesPage testPhonesPage;
     private PortalConfigureSMSPage configureSMSPage;
-    private String testPhone;
+    private NewUserModel userModel;
     private ExistedAccount account;
     private PortalUserManagementPage userManagementPage;
 
     @BeforeClass
     private void generateUserData(){
+        userModel = new NewUserModel();
         account = ExistedAccount.getExistedAccountForPayments();
         userManagementPage = new PortalUserManagementPage();
     }
@@ -40,9 +42,15 @@ public class AddingNewUserTest extends BaseTest implements VerificationHelper {
         mainPage = PortalLoginPage.openPortalLoginPage().login(account.getEmail(), account.getPass());
         mainPage.getLeftMenu().navigateINLeftMenuWithSubmenu("Settings", "User management");
 
-        userManagementPage.clickPageActionButton("Add user");
+        verifyProvidingNewUserDetails();
     }
 
+    @Step(value = "Provide new user details")
+    private void verifyProvidingNewUserDetails(){
+        userManagementPage.clickPageActionButton("Add user");
+        userManagementPage.getAddNewUserWindow().provideNewUserDetailsInfo(userModel)
+                                                .clickNextButton();
+    }
 
 
 

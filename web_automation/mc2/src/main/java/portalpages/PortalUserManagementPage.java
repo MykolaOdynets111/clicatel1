@@ -27,7 +27,7 @@ public class PortalUserManagementPage extends PortalAbstractPage {
         super(driver);
     }
 
-    public AddNewUserWindow addNewUserWindow(){
+    public AddNewUserWindow getAddNewUserWindow(){
         addNewUserWindow.setCurrentDriver(this.getCurrentDriver());
         return addNewUserWindow;
     }
