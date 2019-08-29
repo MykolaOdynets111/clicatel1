@@ -8,11 +8,14 @@ import listeners.TestAllureListener;
 import mc2api.ApiHelperPlatform;
 import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
+
+import java.util.List;
 
 
 @Listeners({TestAllureListener.class})
@@ -36,6 +39,8 @@ public class RemoveCreditCardTest extends BaseTest {
         soft = new SoftAssert();
 
         String authToken = PortalAuthToken.getAccessTokenForPortalUser(account.getAccountName(), account.getEmail(), account.getPass());
+        List<PaymentMethod> list = ApiHelperPlatform.getAllNotDefaultPaymentMethods(authToken);
+        if(list.size()==0) new SkipException("There is no Payments to delete\n. Please check test on adding payments");
         paymentMethod = ApiHelperPlatform.getAllNotDefaultPaymentMethods(authToken).get(0);
         cardHolder = paymentMethod.getCardHolderFirstName() + " " + paymentMethod.getCardHolderLastName();
     }
