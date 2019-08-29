@@ -25,8 +25,8 @@ public class Add10AgentsTest extends APICreatedAccountTest  {
 
     @BeforeClass
     private void cleanCart(){
-        String authToken = PortalAuthToken.getAccessTokenForPortalUser(accountName.get(),email.get(), pass.get());
-        ApiHelperPlatform.deleteAllFromCart(authToken);
+//        String authToken = PortalAuthToken.getAccessTokenForPortalUser(accountName.get(),email.get(), pass.get());
+//        ApiHelperPlatform.deleteAllFromCart(authToken);
     }
 
 

@@ -15,6 +15,9 @@ public class UpgradeYourPlanWindow  extends BasePortalWindow {
     private WebElement addAgentSeatsButton;
 
     @FindBy(xpath = "//span[contains(@value, 'MONTH')]//span[contains(@class, 'cl-input-label')]")
+    private WebElement monthlySelectableButton;
+
+    @FindBy(xpath = "//span[contains(@value, 'MONTH')]//input[@type='radio']")
     private WebElement monthlyRadioButton;
 
     @FindBy(css = "span.x-agents-label")
@@ -39,7 +42,7 @@ public class UpgradeYourPlanWindow  extends BasePortalWindow {
 
     @Step(value = "Select monthly")
     public UpgradeYourPlanWindow selectMonthly(){
-        monthlyRadioButton.click();
+        monthlySelectableButton.click();
         return this;
     }
 
@@ -58,8 +61,9 @@ public class UpgradeYourPlanWindow  extends BasePortalWindow {
     public boolean verifyMonthlySelected(){
         if(ConfigManager.getEnv().equals("prod") |
                 ConfigManager.getEnv().equals("stage")){
-            return getAttributeFromElem(this.getCurrentDriver(), monthlyRadioButton, 3,
-                    "Monthly radio", "class").contains("ng-valid-parse");
+            return monthlyRadioButton.isSelected();
+//            getAttributeFromElem(this.getCurrentDriver(), monthlyRadioButton, 3,
+//                    "Monthly radio", "class").contains("ng-valid-parse");
         }else {
             return true; // the verification is valid only for stage and prod envs
         }

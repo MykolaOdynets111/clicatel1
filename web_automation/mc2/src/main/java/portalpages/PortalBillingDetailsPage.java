@@ -99,7 +99,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
                 waitFor(5000);
                 this.getCurrentDriver().navigate().refresh();
                 waitWhileProcessing(this.getCurrentDriver(), 2, 5);
-                waitForElementsToBeVisible(this.getCurrentDriver(), addedPayments, 5);
+                areElementsShown(this.getCurrentDriver(), addedPayments, 5);
                 payment = getTargetPaymentMethod(cartHolder);
             }
         }
