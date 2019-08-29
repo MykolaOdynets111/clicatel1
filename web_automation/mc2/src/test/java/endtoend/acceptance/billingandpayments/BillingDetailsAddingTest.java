@@ -67,7 +67,7 @@ public class BillingDetailsAddingTest extends APICreatedAccountTest  {
     private void provideBillingINFO(){
         details = billingDetailsPage.getBillingContactsDetails().fillInBillingDetailsForm();
         saveNewAccountCompanyName();
-        billingDetailsPage.waitWhileProcessing(2,2);
+        billingDetailsPage.waitWhileProcessing(2,9);
 
         soft.assertEquals(billingDetailsPage.getNotificationAlertText(),
                 "Your changes have been saved successfully",
@@ -78,7 +78,7 @@ public class BillingDetailsAddingTest extends APICreatedAccountTest  {
     private void changeZipCode(){
         billingDetailsPage.getBillingContactsDetails().enterPostalCode("79032")
                                                         .clickSaveChanges();
-        billingDetailsPage.waitWhileProcessing(1,1);
+        billingDetailsPage.waitWhileProcessing(2,9);
 
         soft.assertEquals(billingDetailsPage.getNotificationAlertText(),
                 "Your changes have been saved successfully",
