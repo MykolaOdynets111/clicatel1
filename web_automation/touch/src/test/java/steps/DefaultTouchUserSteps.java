@@ -242,7 +242,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             String expectedAnswerOnSelectedIntent = selectedIntentItem.getText();
             String selectedIntentName = selectedIntentItem.getIntent();
             if(expectedAnswerOnSelectedIntent==null){
-                Assert.assertTrue(false, "Answer is not provided by the tie for '"+selectedIntentName+"' intent");
+                Assert.fail("Answer is not provided by the tie for '"+selectedIntentName+"' intent");
             }
             widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
             verifyTextResponseWithIntent(expectedAnswerOnSelectedIntent, selectedIntentName, selectedIntentTitle);
