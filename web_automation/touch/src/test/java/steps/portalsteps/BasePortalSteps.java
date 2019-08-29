@@ -403,7 +403,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
         String authToken = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main");
-        List<PaymentMethod> ids = ApiHelperPlatform.getAllActivePaymentMethods(authToken)
+        List<PaymentMethod> ids = ApiHelperPlatform.getAllNotDefaultPaymentMethods(authToken)
                 .stream().filter(e -> e.getPaymentType().equals("CREDIT_CARD")).collect(Collectors.toList());
         if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(authToken, e.getId()));
     }
@@ -1145,14 +1145,25 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
 
     @Then("^'Add a payment method now\\?' button is shown$")
-    public void verifyAddPaymentButtonShown(){
+    public void verifyAddPaymentButtonNowShown(){
         Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodButtonShown(5),
                 "'Add a payment method now?' is not shown");
     }
 
+    @Then("^'Add Payment Method' button is shown$")
+    public void verifyAddPaymentButtonShown(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isPageActionButton("Add payment method"),
+                "'Add a payment method' button is not shown");
+    }
+
     @Then("^Admin clicks 'Add a payment method now\\?' button$")
-    public void clickAddPaymentButton(){
+    public void clickAddPaymentNowButton(){
         getPortalBillingDetailsPage().clickAddPaymentButton();
+    }
+
+    @Then("^Admin clicks 'Add Payment Method' button$")
+    public void clickAddPaymentButton(){
+        getPortalBillingDetailsPage().clickPageActionButton("Add payment method");
     }
 
     @Then("^'Add Payment Method' window is opened$")
@@ -1161,16 +1172,21 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 "'Add Payment Method' is not opened");
     }
 
-    @When("^Admin tries to add new card$")
-    public void addNewCard(){
-        getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+    @When("^Admin tries to add new card for (.*)$")
+    public void addNewCard(String cardHolder){
+        String name = cardHolder.split(" ")[0];
+        String lastName = cardHolder.split(" ")[1];
+
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment(name, lastName);
         getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
-    @When("^Admin provides all card info$")
-    public void fillInNewCardInfo(){
-        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo("AQA", "Test");
+    @When("^Admin provides all card info for (.*) cardholder$")
+    public void fillInNewCardInfo(String cardHolder){
+        String name = cardHolder.split(" ")[0];
+        String lastName = cardHolder.split(" ")[1];
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo(name, lastName);
     }
 
     @Then("^'Add payment method' button is disabled$")
@@ -1202,24 +1218,24 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
     }
 
-    @Then("^New card is shown in Payment methods tab$")
-    public void verifyNewPaymentAdded(){
+    @Then("^New card for (.*) is shown in Payment methods tab$")
+    public void verifyNewPaymentAdded(String cardHolder){
         getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
-        boolean isPaymentAdded = getPortalBillingDetailsPage().isPaymentShown("AQA Test", 3);
+        boolean isPaymentAdded = getPortalBillingDetailsPage().isPaymentShown(cardHolder, 3);
         ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
         Assert.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
     }
 
-    @Then("^Payment method is not shown in Payment methods tab$")
-    public void paymentMethodIsNotShown(){
-        Assert.assertFalse(getPortalBillingDetailsPage().isPaymentShown("AQA Test", 2),
+    @Then("^Payment method for (.*) is not shown in Payment methods tab$")
+    public void paymentMethodIsNotShown(String cardHolder){
+        Assert.assertFalse(getPortalBillingDetailsPage().isPaymentShown(cardHolder, 2),
                 "New payment is not shown in 'Billing & payments' page");
     }
 
-    @When("^Admin clicks Manage -> Remove payment$")
-    public void deletePaymentMethod(){
-        getPortalBillingDetailsPage().clickManageButton("AQA Test");
+    @When("^Admin clicks Manage -> Remove payment for (.*)$")
+    public void deletePaymentMethod(String cardHolder){
+        getPortalBillingDetailsPage().clickManageButton(cardHolder);
         new PaymentMethodPage(DriverFactory.getAgentDriverInstance()).deletePaymentMethod();
     }
 

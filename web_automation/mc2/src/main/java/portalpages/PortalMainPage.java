@@ -154,6 +154,8 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public void addAgentSeatsIntoCart(int agentSeats){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         getPageHeader().clickUpgradeButton();
         getUpgradeYourPlanWindow()
                 .selectAgentSeats(agentSeats)

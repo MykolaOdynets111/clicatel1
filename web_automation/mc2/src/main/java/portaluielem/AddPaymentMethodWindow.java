@@ -43,8 +43,8 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     private String paymentAddedAlert = "//div[@ng-bind-html='alert'][text()='Payment method has been configured successfully']";
 
     @Step(value = "Add new payment card")
-    public AddPaymentMethodWindow addTestCardAsANewPayment(){
-        fillInNewCardInfo("AQA", "Test");
+    public AddPaymentMethodWindow addTestCardAsANewPayment(String cartHolderName, String cartHolderLastName){
+        fillInNewCardInfo(cartHolderName, cartHolderLastName);
         checkAllCheckboxesForAddingNewPayment();
         waitForAngularToBeReady(this.getCurrentDriver());
         waitFor(2000);
@@ -55,7 +55,8 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
 
     @Step(value = "Check all checkboxes")
     public AddPaymentMethodWindow checkAllCheckboxesForAddingNewPayment(){
-        checkboxes.forEach(WebElement::click);
+        selectCheckBox("I Agree to Clickatell's Terms and Conditions");
+        selectCheckBox("I authorise Clickatell to store this card for future transactions");
         return this;
     }
 
