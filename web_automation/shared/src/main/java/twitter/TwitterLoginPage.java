@@ -46,6 +46,9 @@ public class TwitterLoginPage extends AbstractSocialPage {
     @FindBy(css = "input#email_challenge_submit")
     private WebElement submitVerification;
 
+    @FindBy(css = "form#login-challenge-form")
+    private WebElement loginChallengeForm;
+
     @FindAll({
             @FindBy(css = "a.StaticLoggedOutHomePage-buttonLogin"),
             @FindBy(css = "a[href='/login']"),
@@ -80,6 +83,11 @@ public class TwitterLoginPage extends AbstractSocialPage {
             emailInputField.sendKeys(TwitterUsers.THIRD_USER.getTwitterUserEmail());
             passInputField.sendKeys(TwitterUsers.THIRD_USER.getTwitterUserPass());
             loginButton.click();
+        }
+        if(isElementShown(this.getCurrentDriver(), loginChallengeForm, 2)){
+            findElemByCSS(this.getCurrentDriver(), filedForTelefonVerification)
+                    .sendKeys(TwitterUsers.THIRD_USER.getUserPhone());
+            loginChallengeForm.submit();
         }
         TwitterUsers.setLoggedInUser(TwitterUsers.THIRD_USER);
         waitForElementToBeVisible(this.getCurrentDriver(), profileButton, 10);
