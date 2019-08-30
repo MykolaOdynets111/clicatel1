@@ -43,6 +43,8 @@ public class PortalTouchIntegrationsPage extends PortalAbstractPage {
     }
 
     private IntegrationRow getTargetIntegrationRow(String integrationName){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         return integrationRows.stream().map(e -> new IntegrationRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .collect(Collectors.toList())
                 .stream().filter(a -> a.getIntegrationName().toLowerCase().contains(integrationName.toLowerCase()))
