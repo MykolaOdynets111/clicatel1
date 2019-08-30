@@ -17,8 +17,8 @@ Feature: Admin should be able to add payment methods
     Then 'Add a payment method now?' button is shown
     When Admin clicks 'Add a payment method now?' button
     Then 'Add Payment Method' window is opened
-    When Admin tries to add new card
-    Then New card is shown in Payment methods tab
+    When Admin tries to add new card for Tom Schmied
+    Then New card for Tom Schmied is shown in Payment methods tab
     When Admin adds to cart 3 agents
     And Admin opens Confirm Details window
     Then Added payment method is able to be selected
