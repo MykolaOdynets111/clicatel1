@@ -72,15 +72,16 @@ public class TwitterLoginPage extends AbstractSocialPage {
             logInButton.click();
             waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), emailInputOnSeparatePageXPATH, 4);
             findElemByXPATH(this.getCurrentDriver(),emailInputOnSeparatePageXPATH)
-                    .sendKeys(TwitterUsers.FIRST_USER.getTwitterUserEmail());
-            findElemByXPATH(this.getCurrentDriver(), passInputFieldOnSeparatePageXPATH).sendKeys(TwitterUsers.FIRST_USER.getTwitterUserPass());
+                    .sendKeys(TwitterUsers.SECOND_USER.getTwitterUserEmail());
+            findElemByXPATH(this.getCurrentDriver(), passInputFieldOnSeparatePageXPATH)
+                    .sendKeys(TwitterUsers.SECOND_USER.getTwitterUserPass());
             findElemByXPATH(this.getCurrentDriver(), loginButtonOnSeparatePageXPATH).click();
         } else {
-            emailInputField.sendKeys(TwitterUsers.FIRST_USER.getTwitterUserEmail());
-            passInputField.sendKeys(TwitterUsers.FIRST_USER.getTwitterUserPass());
+            emailInputField.sendKeys(TwitterUsers.SECOND_USER.getTwitterUserEmail());
+            passInputField.sendKeys(TwitterUsers.SECOND_USER.getTwitterUserPass());
             loginButton.click();
         }
-        TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
+        TwitterUsers.setLoggedInUser(TwitterUsers.SECOND_USER);
         waitForElementToBeVisible(this.getCurrentDriver(), profileButton, 10);
         return this;
     }
