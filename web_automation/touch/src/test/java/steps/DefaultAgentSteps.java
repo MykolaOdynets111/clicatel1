@@ -882,11 +882,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         String chatTranscriptEmailTitle = CheckEmail.getEmailSubject(chatTranscriptEmail);
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(getAdapter(adapter), getAdapterFromEmailSubject(chatTranscriptEmailTitle),
+        softAssert.assertEquals(getAdapterFromEmailSubject(chatTranscriptEmailTitle), getAdapter(adapter),
                 "Adapters does not match");
-        softAssert.assertEquals(getSecondParameterPerAdapter(adapter), getClientIDFromEmailSubject(chatTranscriptEmailTitle),
+        softAssert.assertEquals(getClientIDFromEmailSubject(chatTranscriptEmailTitle), getSecondParameterPerAdapter(adapter),
                 "Client email does not match");
-        softAssert.assertEquals(chatIDTranscript, getChatIDFromEmailSubject(chatTranscriptEmailTitle),
+        softAssert.assertEquals(getChatIDFromEmailSubject(chatTranscriptEmailTitle), chatIDTranscript,
                 "chatIDs does not match");
         softAssert.assertEquals(sessionsNumber, getLastSessionNumberFromEmailSubject(chatTranscriptEmailTitle), "Different session number");
         softAssert.assertAll();
@@ -929,11 +929,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "fbmsg":
                 return clientAttributes.getAttributes().getFirstName();
             case "twdm":
-                if(clientAttributes.getAttributes().getLastName() == null) {
-                    return clientAttributes.getAttributes().getFirstName();
-                }else {
-                    return clientAttributes.getAttributes().getFirstName() + " " + clientAttributes.getAttributes().getLastName();
-                }
+                return clientAttributes.getAttributes().getFirstName();
             case "webchat":
                 return clientAttributes.getAttributes().getEmail();
             default:
