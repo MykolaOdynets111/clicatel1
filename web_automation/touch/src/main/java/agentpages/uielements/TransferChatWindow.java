@@ -37,6 +37,9 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = "//label[@for='agentsList']/following-sibling::div//div[@class='Select-placeholder']")
     private WebElement selectAgentPlaceholder;
 
+    @FindBy(css = "div.error-text.error-text-al")
+    private WebElement noteInputError;
+
     public String transferChat(String agent) {
         openDropDownAgent();
         String agentName = selectDropDownAgent(agent);
@@ -65,7 +68,11 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public boolean isTransferChatShown() {
-        return  isElementShown(this.getCurrentDriver(), submitTransferChatButton, 5);
+        return isElementShown(this.getCurrentDriver(), submitTransferChatButton, 5);
+    }
+
+    public boolean isTransferChatEnabled() {
+        return submitTransferChatButton.isEnabled();
     }
 
     public void openDropDownAgent() {
@@ -115,4 +122,11 @@ public class TransferChatWindow extends AbstractUIElement {
         return  dropDown.getCssValue("border-color");
     }
 
+    public boolean isNoteShown(){
+        return isElementShown(this.getCurrentDriver(), noteInput, 5);
+    }
+
+    public String getNoteInputErrorText(){
+        return getTextFromElem(this.getCurrentDriver(), noteInputError, 3, "Required notes error");
+    }
 }

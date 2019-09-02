@@ -16,8 +16,6 @@ Feature: Transfer chat with no Agents available
     Then Transfer chat pop up appears
     When Select 'Transfer to' drop down
     Then Agent sees 'There is no available online agents .'
-    When Click on 'Transfer' button in pop-up
-    Then 'Transfer to' fields highlighted red color
-    And 'Note' fields highlighted red color
+    And Button 'Transfer chat' is not active
 
 

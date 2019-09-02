@@ -929,7 +929,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "fbmsg":
                 return clientAttributes.getAttributes().getFirstName();
             case "twdm":
-                return clientAttributes.getAttributes().getFirstName() + " " + clientAttributes.getAttributes().getLastName();
+                if(clientAttributes.getAttributes().getLastName() == null) {
+                    return clientAttributes.getAttributes().getFirstName();
+                }else {
+                    return clientAttributes.getAttributes().getFirstName() + " " + clientAttributes.getAttributes().getLastName();
+                }
             case "webchat":
                 return clientAttributes.getAttributes().getEmail();
             default:
@@ -1234,9 +1238,26 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
     }
 
+    @Then("^Agent notes field is appeared$")
+    public void verifyNotesFieldAppears(){
+        Assert.assertTrue(getAgentHomePage("first").getTransferChatWindow().isNoteShown(),
+                "'Note' input is not shown after selecting agent");
+    }
+
     @Then("^Agent sees '(.*)'$")
     public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
         Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
+    }
+
+    @Then("Agent sees error message 'Notes are required when specific agent is selected.'")
+    public void verifyRequiredNotesField(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputErrorText(),
+                "Notes are required when specific agent is selected.",
+                "Error about required notes is not as expected");
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),
+                "rgb(242, 105, 33)", "Note input: expected Notes boarder color is not as expected" );
+        soft.assertAll();
     }
 
     @When("^Click on 'Transfer' button in pop-up$")
@@ -1244,22 +1265,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomeForMainAgent().getTransferChatWindow().clickTransferChatButton();
     }
 
+    @When("^Button 'Transfer chat' is not active$")
+    public void isTransferChatActive() {
+        Assert.assertFalse(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatEnabled(),
+                "Transfer chat is active");
+    }
+
     @When("^Complete 'Note' field$")
     public void sentNotesTransferChatPopup() {
         getAgentHomeForMainAgent().getTransferChatWindow().sentNote();
     }
 
-    @Then("^'Transfer to' fields highlighted red color$")
-    public void transferToFieldsHighlightedRedColor() {
-        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getDropDownColor(),"rgb(242, 105, 33)",
-                "Drop down: not expected border color");
-    }
-
-    @Then("^'Note' fields highlighted red color$")
-    public void noteFieldsHighlightedRedColor() {
-        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),"rgb(242, 105, 33)",
-                "Note: not expected border color");
-    }
 
     @Given("^(.*) receives a few conversation requests$")
     public void create2DotControlChats(String agent){
