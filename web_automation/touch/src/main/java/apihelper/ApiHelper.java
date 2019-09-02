@@ -602,7 +602,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             fullName = respJSON.getString("personalDetails.firstName") + " " + lastName;
         }
         String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
-
+        if(location.isEmpty()) location = "Unknown location";
         String customerSince = getCustomerSince(respJSON);
 
         String channelUsername = "";
@@ -610,12 +610,12 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             channelUsername = respJSON.getString("personalDetails.channelUsername").isEmpty() ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
         }catch (NullPointerException e){
             channelUsername = respJSON.getString("personalDetails.channelUsername") == null ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
-
         }
+        if(channelUsername.contains("_")) channelUsername = "@" + channelUsername;
         String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
         String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
-        return new Customer360PersonalInfo(fullName, location,
+        return new Customer360PersonalInfo(fullName.trim(), location,
                 "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
     }
