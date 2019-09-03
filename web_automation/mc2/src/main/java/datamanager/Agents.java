@@ -110,9 +110,7 @@ public enum Agents {
     }
 
     public static Agents getMainAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
-        Agents[] agentsArray = Agents.values();
-        List<Agents> agentsList = Arrays.asList(agentsArray);
-        return agentsList.stream()
+        return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
                         && !e.getAgentEmail().contains("second"))
@@ -120,9 +118,7 @@ public enum Agents {
     }
 
     public static Agents getSecondAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
-        Agents[] agentsArray = Agents.values();
-        List<Agents> agentsList = Arrays.asList(agentsArray);
-        return agentsList.stream()
+        return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
                         && e.toString().toLowerCase().contains("second"))

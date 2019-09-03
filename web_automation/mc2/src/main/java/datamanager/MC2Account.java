@@ -101,27 +101,21 @@ public enum MC2Account {
     }
 
     public MC2Account getAccount(String env, String touchGoPlan){
-        MC2Account[] accountsArray = MC2Account.values();
-        List<MC2Account> agentsList = Arrays.asList(accountsArray);
-        return agentsList.stream()
+        return Arrays.stream(MC2Account.values())
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getTouchGoPlan().equalsIgnoreCase(tenantOrgName))
                 .findFirst().get();
     }
 
     public static MC2Account getAccountByOrgName(String env, String tenantOrgName){
-        MC2Account[] accountsArray = MC2Account.values();
-        List<MC2Account> agentsList = Arrays.asList(accountsArray);
-        return agentsList.stream()
+        return Arrays.stream(MC2Account.values())
                 .filter(e -> e.getEnv().equalsIgnoreCase(env)
                         && e.getTenantOrgName().equalsIgnoreCase(tenantOrgName))
                 .findFirst().get();
     }
 
     public static MC2Account getAccountDetailsByAccountName(String env, String accounName){
-        MC2Account[] accountsArray = MC2Account.values();
-        List<MC2Account> agentsList = Arrays.asList(accountsArray);
-        return agentsList.stream()
+        return Arrays.stream(MC2Account.values())
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAccountName().equalsIgnoreCase(accounName))
                 .findFirst().get();
