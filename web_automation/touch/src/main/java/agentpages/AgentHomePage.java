@@ -145,6 +145,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public VerifyPhoneNumberWindow getVerifyPhoneNumberWindow() {
+        verifyPhoneNumberWindow.setCurrentDriver(this.getCurrentDriver());
         return verifyPhoneNumberWindow;
     }
 

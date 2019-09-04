@@ -1,12 +1,12 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(xpath = "//div[text()='Verify phone number']/parent::div")
-public class VerifyPhoneNumberWindow extends AbstractUIElementDeprecated {
+@FindBy(xpath = "//h4[text()='Verify phone number']/ancestor::div[@class='modal-dialog']")
+public class VerifyPhoneNumberWindow extends AbstractUIElement {
 
     String overlappedPage = "//section[@id='app'][@aria-hidden='true']";
 
@@ -30,11 +30,11 @@ public class VerifyPhoneNumberWindow extends AbstractUIElementDeprecated {
     }
 
     public void sendOTPMessage(){
-        clickElemAgent(sendOTPButton, 1, "main", "Send OTP");
+        clickElem(this.getCurrentDriver(), sendOTPButton, 1,"Send OTP");
     }
 
     public void closeSendOTPPopUp(){
-        clickElemAgent(cancelButton, 1, "main", "Cancel");
+        clickElem(this.getCurrentDriver(), cancelButton, 1,"Cancel");
     }
 
     public void sendOrCancelClick(String buttonName){
@@ -47,10 +47,10 @@ public class VerifyPhoneNumberWindow extends AbstractUIElementDeprecated {
     }
 
     public boolean isOpened(){
-        return isElementShownAgent(this.getWrappedElement(), 1);
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 1);
     }
 
     public boolean isClosed(){
-        return isElementNotShown(this.getWrappedElement(), 1);
+        return isElementNotShown(this.getCurrentDriver(), this.getWrappedElement(), 1);
     }
 }
