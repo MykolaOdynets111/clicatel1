@@ -102,14 +102,17 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public HistoryDetailsWindow getHistoryDetailsWindow() {
+        historyDetailsWindow.setCurrentDriver(this.getCurrentDriver());
         return historyDetailsWindow;
     }
 
     public ChatHistoryContainer getChatHistoryContainer() {
+        chatHistoryContainer.setCurrentDriver(this.getCurrentDriver());
         return chatHistoryContainer;
     }
 
     public AgentFeedbackWindow getAgentFeedbackWindow() {
+        agentFeedbackWindow.setCurrentDriver(this.getCurrentDriver());
         return agentFeedbackWindow;
     }
 
@@ -179,7 +182,7 @@ public class AgentHomePage extends AgentAbstractPage {
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
             try {
-                waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),chatContainer, 5);
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),chatContainer, 5);
             }catch (TimeoutException e){
                 Assert.fail("Chat container does not disappear after 5 second wait");
             }
@@ -214,7 +217,7 @@ public class AgentHomePage extends AgentAbstractPage {
         catch (TimeoutException e){
             Assert.fail("There is no Error message for pin chat");
         }
-        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
     }
 
     public String getCustomer360ButtonColor() {

@@ -127,7 +127,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     public void waitForAddingNewPaymentConfirmationPopup(){
         try {
             waitForElementToBeVisibleByXpath(this.getCurrentDriver(), paymentAddedAlert, 15);
-            waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), paymentAddedAlert, 5);
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), paymentAddedAlert, 5);
         }catch(TimeoutException e){
             // nothing to do 'cause it were stabilizing waits before continuing
         }

@@ -18,12 +18,12 @@ public class DeleteCRMConfirmationPopup extends AbstractUIElement {
 
     public void clickCancel() {
         clickElem(this.getCurrentDriver(), cancelButton, 3,"'Cancel' deleting CRM button" );
-        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
     public void clickDelete() {
         clickElem(this.getCurrentDriver(), deleteButton, 3,"'Cancel' deleting CRM button" );
-        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
     public boolean isOpened(){

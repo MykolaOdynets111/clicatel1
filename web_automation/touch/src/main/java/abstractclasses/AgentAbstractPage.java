@@ -1,11 +1,9 @@
 package abstractclasses;
 
 import driverfactory.DriverFactory;
-import driverfactory.MC2DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
 import interfaces.WebActions;
-import interfaces.WebActionsDeprecated;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
@@ -29,7 +27,7 @@ public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JS
             try {
                 waitForElementToBeVisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToAppear);
             }catch (TimeoutException e){ }
-                waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToDisappear);
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToDisappear);
             return true;
         }
         catch (TimeoutException e){

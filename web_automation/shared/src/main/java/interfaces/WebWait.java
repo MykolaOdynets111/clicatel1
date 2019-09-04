@@ -129,7 +129,7 @@ public interface WebWait {
                 .until(ExpectedConditions.invisibilityOf(element));
     }
 
-    default void waitForElementToBeInVisibleByXpath(WebDriver driver, String xpath, int wait){
+    default void waitForElementToBeInvisibleByXpath(WebDriver driver, String xpath, int wait){
         initWait(driver, wait).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(xpath)));

@@ -164,7 +164,7 @@ public class PortalMainPage extends PortalAbstractPage {
         waitWhileProcessing(14, 20);
         try {
             waitForElementToBeVisibleByXpath(this.getCurrentDriver(), addedToCartAlertXPATH, 10);
-            waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),addedToCartAlertXPATH, 20);
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),addedToCartAlertXPATH, 20);
         } catch (TimeoutException e){
 //            Assert.assertTrue(false, "Item is not added to the cart");
         }

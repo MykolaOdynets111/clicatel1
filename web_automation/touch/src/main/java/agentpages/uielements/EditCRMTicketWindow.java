@@ -29,7 +29,7 @@ public class EditCRMTicketWindow extends AbstractUIElement {
 
     public void clickCancel() {
         clickElem(this.getCurrentDriver(), cancelButton, 5, "Cancel CRM editing button" );
-        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
     public EditCRMTicketWindow provideCRMNewTicketInfo(Map<String, String> info){
@@ -45,7 +45,7 @@ public class EditCRMTicketWindow extends AbstractUIElement {
 
     public void saveChanges() {
         clickElem(this.getCurrentDriver(), edidTicketButton, 5,"Edit CRM ticket button" );
-        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
         waitFor(200); //Just for test
     }
 
