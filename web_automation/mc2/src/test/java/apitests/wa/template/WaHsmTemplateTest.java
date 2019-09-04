@@ -5,6 +5,7 @@ import datamanager.model.language.enums.Language;
 import datamanager.model.language.enums.LanguageLocale;
 import datamanager.model.wa.template.*;
 import datamanager.model.wa.template.enums.WaHsmTemplateTag;
+import io.qameta.allure.Epic;
 import io.restassured.RestAssured;
 import mc2api.auth.AdminAccessTokenProvider;
 import mc2api.auth.UserAccessTokenProvider;
@@ -41,6 +42,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
+    @Epic("WhatsApp HSM Template")
     @Test
     public void createHsmTemplate() {
         CreateHsmTemplateRequest createHsmTemplateRequest = new CreateHsmTemplateRequest(addDateTime(HSM_TEMPLATE_NAME), HSM_TEMPLATE, HSM_TAG_ID, HSM_LANGUAGE);
@@ -56,6 +58,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
         hsmTemplateId = response.getId();
     }
 
+    @Epic("WhatsApp HSM Template")
     @Test(dependsOnMethods = "createHsmTemplate")
     public void adminRejectHsmTemplate() {
         String urlWithTemplateId = String.format(PLATFORM_WA_HSM_TEMPLATE_DECLINE, hsmTemplateId);
@@ -68,6 +71,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
                 .assertThat().statusCode(HttpStatus.SC_OK);
     }
 
+    @Epic("WhatsApp HSM Template")
     @Test(dependsOnMethods = "adminRejectHsmTemplate")
     public void adminUpdateHsmTemplateLanguage() {
         UpdateHsmTemplateRequest request = new UpdateHsmTemplateRequest(null, addDateTime(HSM_TEMPLATE_NAME),
@@ -84,6 +88,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
                 .assertThat().statusCode(HttpStatus.SC_OK);
     }
 
+    @Epic("WhatsApp HSM Template")
     @Test(dependsOnMethods = "adminRejectHsmTemplate")
     public void userGetHsmTemplate() {
         UpdateHsmTemplateRequest request = new UpdateHsmTemplateRequest(null, addDateTime(HSM_TEMPLATE_NAME),
@@ -103,6 +108,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
         Assert.assertEquals(HSM_LANGUAGE_UPDATE, authorization.getLanguage().getShortName());
     }
 
+    @Epic("WhatsApp HSM Template")
     @Test(dependsOnMethods = "userGetHsmTemplate")
     public void getHsmTemplateForAdmin() {
         UpdateHsmTemplateRequest request = new UpdateHsmTemplateRequest(null, addDateTime(HSM_TEMPLATE_NAME),
@@ -122,6 +128,7 @@ public class WaHsmTemplateTest extends BaseApiTest {
         Assert.assertEquals(HSM_LANGUAGE_UPDATE, authorization.getLanguage().getShortName());
     }
 
+    @Epic("WhatsApp HSM Template")
     @Test(dependsOnMethods = "getHsmTemplateForAdmin")
     public void adminApproveHsmTemplate() {
         String urlWithTemplateId = String.format(PLATFORM_WA_HSM_TEMPLATE_APPROVE, hsmTemplateId);
