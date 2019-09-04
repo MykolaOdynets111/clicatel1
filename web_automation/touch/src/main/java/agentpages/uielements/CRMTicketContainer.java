@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.user-tickets-container")
-public class CRMTicketContainer extends AbstractUIElementDeprecated {
+public class CRMTicketContainer extends AbstractUIElement {
 
     @FindBy(css = "div.ticket-item-block")
     private List<WebElement> crmTickets;
@@ -20,11 +20,11 @@ public class CRMTicketContainer extends AbstractUIElementDeprecated {
     private WebElement containerHeader;
 
     public boolean isTicketContainerShown(){
-        return isElementShownAgent(this.getWrappedElement(), 4);
+        return isElementShown(this.getCurrentDriver(),this.getWrappedElement(), 4);
     }
 
     public boolean isTicketContainerRemoved(){
-        return isElementNotShownAgentByCSS( "div.user-tickets-container", 4);
+        return isElementNotShownByCSS( this.getCurrentDriver(), "div.user-tickets-container", 4);
     }
 
     public CRMTicket getFirstTicket(){

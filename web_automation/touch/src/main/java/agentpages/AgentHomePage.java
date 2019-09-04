@@ -87,14 +87,17 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
+        deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());
         return deleteCRMConfirmationPopup;
     }
 
     public EditCRMTicketWindow getEditCRMTicketWindow() {
+        editCRMTicketWindow.setCurrentDriver(this.getCurrentDriver());
         return editCRMTicketWindow;
     }
 
     public CRMTicketContainer getCrmTicketContainer() {
+        crmTicketContainer.setCurrentDriver(this.getCurrentDriver());
         return crmTicketContainer;
     }
 
