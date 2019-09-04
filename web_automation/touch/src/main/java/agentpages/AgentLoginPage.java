@@ -51,18 +51,18 @@ public class AgentLoginPage extends AgentAbstractPage {
    }
 
    private void logIn(Agents agent, String ordinalAgentNumber){
-       waitForElementToBeVisibleAgent(userNameInput, 5, ordinalAgentNumber);
+       waitForElementToBeVisible(this.getCurrentDriver(),userNameInput, 5);
        userNameInput.sendKeys(agent.getAgentEmail());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();
    }
 
    public void waitForLoginPageToOpen(String agent) {
-        waitForElementToBeVisibleAgent(loginForm, 6, agent);
+        waitForElementToBeVisible(this.getCurrentDriver(), loginForm, 6);
    }
 
     public String getLoginButtonColor() {
-        waitForElementToBeVisibleAgent(loginButton, 6, "second agent");
+        waitForElementToBeVisible(this.getCurrentDriver(), loginButton, 6);
         return Color.fromString(loginButton.getCssValue("color")).asHex();
     }
 

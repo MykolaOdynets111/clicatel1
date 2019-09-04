@@ -60,7 +60,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
             Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), dataForNewCRMTicket);
             createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
-            getAgentHomeForMainAgent().waitForDeprecated(1100);
+            getAgentHomeForMainAgent().waitFor(1100);
         }
         createdCrmTicketsList.set(createdCRMTicket);
         Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").size(), ticketsNumber,

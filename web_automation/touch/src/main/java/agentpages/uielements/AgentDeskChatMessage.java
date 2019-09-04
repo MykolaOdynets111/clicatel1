@@ -1,18 +1,16 @@
 package agentpages.uielements;
 
-import interfaces.WebActionsDeprecated;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.Widget;
+import abstractclasses.AbstractWidget;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated {
+public class AgentDeskChatMessage extends AbstractWidget {
 
     @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
     private WebElement toUserTextResponse;
@@ -37,8 +35,13 @@ public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated
 
     public AgentDeskChatMessage(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
+
+    public AgentDeskChatMessage setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
+    }
+
 
     public String getMessageText() {
         try {
@@ -50,7 +53,7 @@ public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated
 
     public boolean isTextResponseShown(int wait) {
         try {
-            waitForElementToBeVisible(messageText, wait);
+            waitForElementToBeVisible(this.getCurrentDriver(), messageText, wait);
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -59,10 +62,10 @@ public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated
 
     public String getMessageTime() {
         try{
-            waitForElementToBeVisibleAgent(messageTime, 5);
+            waitForElementToBeVisible(this.getCurrentDriver(), messageTime, 5);
             return messageTime.getAttribute("innerText").trim();
         }catch (NoSuchElementException|TimeoutException e){
-            waitForDeprecated(500);
+            waitFor(500);
             return messageTime.getAttribute("innerText").trim();
         }
     }
@@ -77,7 +80,7 @@ public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated
 
     public boolean isToUserTextResponseShown(int wait) {
         try {
-            waitForElementToBeVisible(toUserTextResponse, wait);
+            waitForElementToBeVisible(this.getCurrentDriver(), toUserTextResponse, wait);
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -89,12 +92,12 @@ public class AgentDeskChatMessage extends Widget implements WebActionsDeprecated
         for(int i = 0; i < 15; i++){
             result = toUserTextResponses.stream().anyMatch(e -> e.getText().equals(expectedMessage));
             if (result) return true;
-            waitForDeprecated(500);
+            waitFor(500);
         }
         return result;
     }
 
-    public String getAgentResponseEmoji(String agent) {
-        return getAttributeFromElemAgent(sentEmoji, "aria-label", 3, agent, "Sent by Agent Emoji");
+    public String getAgentResponseEmoji() {
+        return getAttributeFromElem(this.getCurrentDriver(), sentEmoji, 3, "Sent by Agent Emoji", "aria-label");
     }
 }

@@ -149,20 +149,20 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatBody getChatBody() {
-        chatBody.setCurrentAgent(this.getCurrentAgent());
+        chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
     }
 
 
     public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
-        if (isElementShownAgent(conversationAreaContainer,10, ordinalAgentNumber)) {
-            return waitForLoadingInLeftMenuToDisappear(ordinalAgentNumber, 6, 10);
+        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,10)) {
+            return waitForLoadingInLeftMenuToDisappear(6, 10);
         } else { return false;}
     }
 
     public boolean isConnectionErrorShown(String ordinalAgentNumber){
         try{
-            waitForElementToBeVisibleAgent(connectionErrorImage, 10, ordinalAgentNumber);
+            waitForElementToBeVisible(this.getCurrentDriver(), connectionErrorImage, 10);
             return true;
         }
         catch (TimeoutException e){
@@ -175,7 +175,7 @@ public class AgentHomePage extends AgentAbstractPage {
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
             try {
-                waitForElementsToBeInvisibleByXpathAgent(chatContainer, 5, getCurrentAgent());
+                waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),chatContainer, 5);
             }catch (TimeoutException e){
                 Assert.fail("Chat container does not disappear after 5 second wait");
             }
@@ -187,31 +187,30 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public boolean isProfanityPopupShown(){
-        return isElementShownAgent(profanityPopup,10);
+        return isElementShown(this.getCurrentDriver(), profanityPopup,10);
     }
 
     public void clickAcceptProfanityPopupButton(){
         acceptProfanityPopupButton.click();
         for(int i = 0; i<10;i++){
-            if (!isElementShownAgent(profanityPopup, 1, "main agent")){
+            if (!isElementShown(this.getCurrentDriver(), profanityPopup, 1)){
                 break;
             }
         }
     }
 
     public boolean isAgentLimitReachedPopupShown(int wait){
-        return isElementShownAgent(agentLimitReachedPopup,wait);
+        return isElementShown(this.getCurrentDriver(), agentLimitReachedPopup,wait);
     }
 
     public void isPinErrorMassageShown(String Agent){
         try{
-            waitForElementToBeVisibleAgent(pinErrorMessage, 10, Agent);
+            waitForElementToBeVisible(this.getCurrentDriver(), pinErrorMessage, 10);
         }
         catch (TimeoutException e){
-            Assert.assertTrue(false,
-                    "There is no Error message for pin chat");
+            Assert.fail("There is no Error message for pin chat");
         }
-        waitForElementsToBeInvisibleByXpathAgent(pinErrorMessageXpath,10, Agent);
+        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
     }
 
     public String getCustomer360ButtonColor() {
@@ -223,16 +222,16 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String getTipIfNoChatSelected(){
-        return getTextFromElemAgent(tipNoteInConversationArea, 5, getCurrentAgent(), "Tips in conversation area if no chat selected");
+        return getTextFromElem(this.getCurrentDriver(), tipNoteInConversationArea, 5, "Tips in conversation area if no chat selected");
     }
 
 
     public String getTipIfNoChatSelectedFromContextArea(){
-        return getTextFromElemAgent(tipNoteInRightArea, 5, getCurrentAgent(), "Tips in context area if no chat selected");
+        return getTextFromElem(this.getCurrentDriver(), tipNoteInRightArea, 5, "Tips in context area if no chat selected");
     }
 
     public List<WebElement> getCollapsedTransfers(){
-        waitForElementsToBeVisibleAgent(notificationsList, 6, this.getCurrentAgent());
+        waitForElementsToBeVisible(this.getCurrentDriver(), notificationsList, 6);
         return notificationsList;
     }
 
@@ -248,6 +247,6 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void waitForModalWindowToDisappear(){
-        waitForElementToBeInVisibleByCssAgent(modalWindow, 6);
+        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), modalWindow, 6);
     }
 }

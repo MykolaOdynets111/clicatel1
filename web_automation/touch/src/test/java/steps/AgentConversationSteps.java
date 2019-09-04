@@ -130,7 +130,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
         getAgentHomePage("main").clickAgentAssistantButton();
-        getAgentHomePage("main").waitForElementToBeVisible(getAgentHomePage("main").getSuggestedGroup());
+        getAgentHomePage("main").waitForElementToBeVisible(getAgentHomePage("main").getCurrentDriver(),
+                getAgentHomePage("main").getSuggestedGroup(), 4);
         if (getSuggestedGroup("main").isSuggestionListEmpty()) {
             Assert.fail("Suggestion list is empty");
         }
@@ -338,7 +339,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         String sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())).getBody().jsonPath().get("data[0].attributes.sentiment");
         for (int i = 0; i < 8; i++) {
             if (!expectedSentiment.equalsIgnoreCase(sentimentFromAPI)) {
-                getAgentHomePage("main").waitForDeprecated(1000);
+                getAgentHomePage("main").waitFor(1000);
                 sentimentFromAPI = ApiHelper.getSessionDetails(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())).getBody().jsonPath().get("data[0].attributes.sentiment");
             } else {
                 break;

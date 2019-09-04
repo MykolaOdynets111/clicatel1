@@ -183,7 +183,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             for(int i = 0; i<11; i ++){
                 if(availableAgents<2) {
-                    getAgentHomePage(agent).waitForDeprecated(1000);
+                    getAgentHomePage(agent).waitFor(1000);
                     availableAgents = ApiHelper.getNumberOfLoggedInAgents();
                 } else{
                     break;
@@ -545,7 +545,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             case "for all week":
                 resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week",
                         "00:00", "23:59");
-                getAgentHomePage("main").waitForDeprecated(1500);
+                getAgentHomePage("main").waitFor(1500);
                 break;
         }
         Assert.assertEquals(resp.statusCode(), 200,
@@ -818,7 +818,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) searches and selects random chat is chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber){
-        getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(ordinalAgentNumber, 3,7);
+        getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
         getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
     }
 
@@ -865,7 +865,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 break;
             }
             else{
-                getAgentHomePage("main").waitForDeprecated(15000);
+                getAgentHomePage("main").waitFor(15000);
                 GmailConnector.reopenFolder();
                 chatTranscriptEmail = CheckEmail
                         .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 1);
@@ -1053,7 +1053,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 isReduced = true;
                 break;
             }
-            else getAgentHomeForMainAgent().waitForDeprecated(200);
+            else getAgentHomeForMainAgent().waitFor(200);
         }
         Assert.assertTrue(isReduced, "Shown tickets number is not as expected");
     }

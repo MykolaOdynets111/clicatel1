@@ -36,12 +36,12 @@ public class HistoryDetailsWindow extends AbstractUIElementDeprecated {
     public List<String> getAllMessages(){
         waitForElementToBeVisibleAgent(messagesInChatBody.get(1), 5, "main");
         try {
-            return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
+            return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo())
                     .collect(Collectors.toList());
         }catch (NoSuchElementException e1){
             waitForDeprecated(2000);
-            return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e))
+            return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo())
                     .collect(Collectors.toList());
         }

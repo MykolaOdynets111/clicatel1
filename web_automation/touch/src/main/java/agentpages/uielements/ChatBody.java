@@ -49,7 +49,7 @@ public class ChatBody extends AbstractUIElementDeprecated {
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
-            AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e))
+            AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .filter(e1 -> e1.getMessageText().equals(messageText))
                     .findFirst().get();
             return theMessage.getWrappedElement();
@@ -97,7 +97,7 @@ public class ChatBody extends AbstractUIElementDeprecated {
 
     private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
         return findElemsByXPATHAgent(fromUserMessagesXPATH).stream()
-                .map(AgentDeskChatMessage::new)
+                .map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                 .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
     }
 
@@ -106,12 +106,14 @@ public class ChatBody extends AbstractUIElementDeprecated {
     }
 
     public boolean isResponseOnUserMessageShown(String userMessage) {
-        return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).isToUserTextResponseShown(5);
+        return new AgentDeskChatMessage(getFromUserWebElement(userMessage)).setCurrentDriver(this.getCurrentDriver())
+                .isToUserTextResponseShown(5);
     }
 
     public String getAgentEmojiResponseOnUserMessage(String userMessage) {
         return new AgentDeskChatMessage(getFromUserWebElement(userMessage))
-                .getAgentResponseEmoji(this.currentAgent);
+                .setCurrentDriver(this.getCurrentDriver())
+                .getAgentResponseEmoji();
     }
 
     public boolean isToUserMessageShown(String userMessage){
@@ -132,7 +134,7 @@ public class ChatBody extends AbstractUIElementDeprecated {
 
     public List<String> getAllMessages(){
         return findElemsByXPATHAgent(messagesInChatBodyXPATH)
-                    .stream().map(e -> new AgentDeskChatMessage(e))
+                    .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
 
