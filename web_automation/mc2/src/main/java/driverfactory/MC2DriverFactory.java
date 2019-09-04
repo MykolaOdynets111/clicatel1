@@ -28,7 +28,7 @@ public class MC2DriverFactory {
     }
 
 
-    public static WebDriver startNewPortalDriverInstance(){
+    public static synchronized WebDriver startNewPortalDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {
