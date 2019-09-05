@@ -672,7 +672,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^'Verify phone' window is (.*)$")
     public void verifyPhoneNumberWindowOpened(String isWindowOpen) {
         if (isWindowOpen.equalsIgnoreCase("opened"))
-            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(),
+            Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isOpened(3),
                     "'Verify phone' window is not opened.");
         else
             Assert.assertTrue(getAgentHomeForMainAgent().getVerifyPhoneNumberWindow().isClosed(),

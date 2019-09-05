@@ -158,12 +158,11 @@ public interface WebActions extends WebWait {
     }
 
     default boolean isElementRemoved(WebDriver driver, WebElement element, int wait){
-        try {
-            waitForElementToBeInvisible(driver, element, wait);
-            return true;
-        } catch (TimeoutException|NoSuchElementException e) {
-            return false;
+        for(int i = 0; i<wait; i++){
+            if(!isElementShown(driver, element, 1)) return true;
+            else waitFor(1000);
         }
+        return false;
     }
 
     default boolean isElementEnabled(WebDriver driver, WebElement element, int wait){

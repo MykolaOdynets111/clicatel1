@@ -10,6 +10,9 @@ public class VerifyPhoneNumberWindow extends AbstractUIElement {
 
     String overlappedPage = "//section[@id='app'][@aria-hidden='true']";
 
+    @FindBy(css = "h4")
+    private WebElement popUpTitle;
+
     @FindBy(css = "#otpcontactPhone")
     private WebElement phoneNumberInputField;
 
@@ -46,11 +49,11 @@ public class VerifyPhoneNumberWindow extends AbstractUIElement {
             throw new NoSuchElementException("No such button with specified name");
     }
 
-    public boolean isOpened(){
-        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 3);
+    public boolean isOpened(int wait){
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), wait);
     }
 
     public boolean isClosed(){
-        return isElementRemoved(this.getCurrentDriver(), this.getWrappedElement(), 3);
+        return isElementRemoved(this.getCurrentDriver(), popUpTitle, 3);
     }
 }
