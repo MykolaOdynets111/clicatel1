@@ -160,6 +160,7 @@ public interface WebActions extends WebWait {
     default boolean isElementRemoved(WebDriver driver, WebElement element, int wait){
         for(int i = 0; i<wait; i++){
             if(!isElementShown(driver, element, 1)) return true;
+            waitFor(1000);
         }
         return false;
     }

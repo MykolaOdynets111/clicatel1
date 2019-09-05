@@ -172,6 +172,6 @@ public class Customer360Container extends AbstractUIElement {
     }
 
     public boolean isVerifiedLabelHidden(){
-        return isElementRemoved(this.getCurrentDriver(), verifiedLabel, 1);
+        return isElementRemoved(this.getCurrentDriver(), verifiedLabel, 3);
     }
 }
