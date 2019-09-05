@@ -173,7 +173,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) transfers chat$")
     public void transferChat(String agent){
-        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        getAgentHomePage(agent).getChatHeader().clickTransferButton();
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
     }
 
@@ -346,13 +346,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click 'Pin' button$")
     public void pinChat(String agent){
-        getAgentHomePage(agent).getChatHeader().clickPinButton(agent);
+        getAgentHomePage(agent).getChatHeader().clickPinButton();
     }
 
 
     @When("^(.*) click 'Unpin' button$")
     public void unpinChat(String agent) {
-        getAgentHomePage(agent).getChatHeader().clickUnpinButton(agent);
+        getAgentHomePage(agent).getChatHeader().clickUnpinButton();
     }
 
     @Then("^(.*) can not click '(.*)' button$")
@@ -1195,7 +1195,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on 'Transfer' chat$")
     public void agentClickOnTransferChat(String agent) {
-        getAgentHomeForMainAgent().getChatHeader().clickTransferButton(agent);
+        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
     }
 
 
@@ -1295,7 +1295,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click 'Cancel transfer' button$")
     public void cancelTransferChat(String agent){
-        getAgentHomePage(agent).getChatHeader().clickCancelTransferButton(agent);
+        getAgentHomePage(agent).getChatHeader().clickCancelTransferButton();
     }
 
     @Then("^(.*) has not see incoming transfer pop-up$")
@@ -1326,7 +1326,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @And("^(.*) transfers overnight ticket$")
     public void agentTransfersOvernightTicket(String agent) {
-        getAgentHomePage(agent).getChatHeader().clickTransferButton(agent);
+        getAgentHomePage(agent).getChatHeader().clickTransferButton();
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket(agent);
     }
 }

@@ -117,6 +117,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatHeader getChatHeader() {
+        chatHeader.setCurrentDriver(this.getCurrentDriver());
         return chatHeader;
     }
 
@@ -178,7 +179,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void endChat(){
-        if(getChatHeader().isEndChatShown(getCurrentAgent())){
+        if(getChatHeader().isEndChatShown()){
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
             try {

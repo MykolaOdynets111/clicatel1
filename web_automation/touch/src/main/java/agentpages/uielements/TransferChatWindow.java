@@ -46,7 +46,7 @@ public class TransferChatWindow extends AbstractUIElement {
         sentNote();
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
-            new ChatHeader().clickTransferButton(agent);
+            new ChatHeader(this.getCurrentDriver()).clickTransferButton();
             agentName = selectDropDownAgent(agent);
             sentNote();
         }
@@ -59,7 +59,7 @@ public class TransferChatWindow extends AbstractUIElement {
         String agentName = selectDropDownAgent(agent);
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
-            new ChatHeader().clickTransferButton(agent);
+            new ChatHeader(this.getCurrentDriver()).clickTransferButton();
             agentName = selectDropDownAgent(agent);
             sentNote();
         }
