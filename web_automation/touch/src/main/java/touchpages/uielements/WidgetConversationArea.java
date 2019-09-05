@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -128,7 +129,12 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public void clickOptionInTheCard(String userMessageText, String buttonName) {
-        new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+        try {
+            new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+        }catch (ElementClickInterceptedException e){
+            waitFor(1000);
+            new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+        }
     }
 
     public boolean isTextShown(String text, int wait){

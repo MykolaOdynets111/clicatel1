@@ -36,7 +36,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "span.connection-error-img")
     private WebElement connectionErrorImage;
 
-    @FindBy(xpath = "//div[text()='Agent limit reached']")
+    @FindBy(xpath = "//h4[text()='Agent limit reached']")
     private WebElement agentLimitReachedPopup;
 
     @FindBy(css = "div.history-details")
