@@ -16,16 +16,16 @@ import java.util.List;
         },
         monochrome = true,
         features = {
-                Path.GENBANK_TESTS + "AgentAnswersDMFacebook.feature",
-                Path.GENBANK_TESTS + "AgentAnswersIntoTwoChannels.feature",
-                Path.GENBANK_TESTS + "AgentAnswersOnNegativePost.feature",
-                Path.GENBANK_TESTS + "AgentAnswersOnPost.feature",
-                Path.GENBANK_TESTS + "AgentAvailabilityFBDM.feature",
-                Path.GENBANK_TESTS + "Customer360FromFB.feature",
-                Path.GENBANK_TESTS + "FacebookChatTranscript.feature",
-                Path.GENBANK_TESTS + "FBTransferringChat.feature",
-                Path.GENBANK_TESTS + "RedirectToAgentNegativeDMMessage.feature",
-                Path.GENBANK_TESTS + "SendingEditedSuggestionToFacebook.feature"
+                Path.FB_TESTS + "AgentAnswersDMFacebook.feature",
+                Path.FB_TESTS + "AgentAnswersIntoTwoChannels.feature",
+                Path.FB_TESTS + "AgentAnswersOnNegativePost.feature",
+                Path.FB_TESTS + "AgentAnswersOnPost.feature",
+                Path.FB_TESTS + "AgentAvailabilityFBDM.feature",
+                Path.FB_TESTS + "Customer360FromFB.feature",
+                Path.FB_TESTS + "FacebookChatTranscript.feature",
+                Path.FB_TESTS + "FBTransferringChat.feature",
+                Path.FB_TESTS + "RedirectToAgentNegativeDMMessage.feature",
+                Path.FB_TESTS + "SendingEditedSuggestionToFacebook.feature"
         },
         glue ="steps")
 public class RunFacebookAgentGenBankTest {

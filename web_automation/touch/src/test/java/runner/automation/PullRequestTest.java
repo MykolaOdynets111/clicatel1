@@ -7,18 +7,29 @@ import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import static runner.automation.Path.PATH;
+import static runner.automation.Path.DOTCONTROL;
 
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/automation/agentflows",
+        features ={
+                PATH + "AgentFeedbackManagingAgentMode.feature",
+                PATH + "AgentMode.feature",
+                PATH + "AutomaticScheduler.feature",
+                PATH + "DisablingWidget.feature",
+                PATH + "MaxChatsLImitationAgentMode.feature",
+                PATH + "OutOfSupportHoursAgentMode.feature",
+                PATH + "RedirectionOnAgentAfterProvidingUserInfo.feature",
+                DOTCONTROL + "DotControlMessagesForAllAdapter.feature",
+
+        },
         glue ="steps")
-public class RunChatdeskTest {
+public class PullRequestTest {
 
         @Factory
         public Object[] features() {

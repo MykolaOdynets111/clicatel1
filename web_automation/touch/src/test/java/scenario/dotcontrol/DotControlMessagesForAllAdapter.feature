@@ -5,8 +5,8 @@
 Feature: Creating .Control integration and sending messages for different adapters
 
   Scenario Outline: Sending message to .Control (to agent) using <adapter> adapter
-    Given Create .Control '<adapter>' adapters integration for General Bank Demo tenant
-    Given I login as agent of General Bank Demo
+    Given Create .Control '<adapter>' adapters integration for Automation tenant
+    Given I login as agent of Automation
     When Send '<message>' messages for .Control '<adapter>' adapter
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol

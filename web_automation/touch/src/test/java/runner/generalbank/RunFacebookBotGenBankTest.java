@@ -16,8 +16,8 @@ import java.util.List;
         },
         monochrome = true,
         features = {
-                Path.GENBANK_TESTS + "BotAnswerOnPost.feature",
-                Path.GENBANK_TESTS + "BotAnswersDMFacebook.feature",
+                Path.FB_TESTS + "BotAnswerOnPost.feature",
+                Path.FB_TESTS + "BotAnswersDMFacebook.feature",
         },
         glue ="steps")
 public class RunFacebookBotGenBankTest {

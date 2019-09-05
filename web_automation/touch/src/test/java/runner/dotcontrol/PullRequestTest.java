@@ -1,4 +1,4 @@
-package runner.automation;
+package runner.dotcontrol;
 
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
@@ -11,14 +11,20 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static runner.dotcontrol.Path.PATH;
+
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/automation/agentflows",
+        features ={
+                PATH + "DotControlCreatingIntegration.feature",
+                PATH + "DotControlInvalidInitCall.feature",
+                PATH + "DotControlMessaging.feature"
+        },
         glue ="steps")
-public class RunChatdeskTest {
+public class PullRequestTest {
 
         @Factory
         public Object[] features() {

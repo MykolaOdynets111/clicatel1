@@ -128,6 +128,13 @@ task runPullRequestTests(type:Test){
     }
 }
 
+task runPullRequestTestsDev(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/pullrequest.xml"
+    }
+}
+
 task runTiePullRequestTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
@@ -233,6 +240,10 @@ task runTests(type: Test) {
 
     if(suite=="pullrequest") {
         runTests.dependsOn(runPullRequestTests)
+    }
+
+    if(suite=="pullrequest_dev") {
+        runTests.dependsOn(runPullRequestTestsDev)
     }
 
     if(suite=="widgetonly") {

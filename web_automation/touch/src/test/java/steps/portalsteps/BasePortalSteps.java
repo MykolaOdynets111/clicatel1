@@ -1033,7 +1033,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void fillInBillingDetails(){
         billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails()
                 .fillInBillingDetailsForm();
-        getPortalBillingDetailsPage().waitWhileProcessing(2,2);
+        getPortalBillingDetailsPage().waitWhileProcessing(2,8);
         getPortalBillingDetailsPage().waitForNotificationAlertToBeProcessed(2,2);
     }
 
@@ -1060,10 +1060,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }catch(NullPointerException e){
             String message = "NULL_POINTER!! \n";
             if(info!=null) {
-                if (info.get("billingContact") != null) message = message + info.get("billingContact");
+                if (info.get("billingContact") != null) message = message + "Billing info from mc2 backend: \n"
+                        + info.get("billingContact");
                 else message = message + resp.getBody().asString();
             }
-            if(billingInfo!=null) message = message + "\n\n" + billingInfo.toString();
+            if(billingInfo!=null) message = message + "\n\n" + "expected billing info: \n" + billingInfo.toString();
             Assert.fail(message);
         }
     }

@@ -1,4 +1,4 @@
-package runner.automation;
+package runner.automationbot;
 
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
@@ -11,14 +11,27 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static runner.automationbot.Path.PATH;
+import static runner.automationbot.Path.DOTCONTROL;
+
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/automation/agentflows",
+        features ={
+                PATH + "AgentPhotoManaging.feature",
+                PATH + "AvailableAgentsHeadphones.feature",
+                PATH + "ChatConsoleWaitingCustomers.feature",
+                PATH + "EditAutorespondersViaPortalUI.feature",
+                PATH + "OutOfSupportHoursBotMode.feature",
+                PATH + "TenantBrandImageManaging.feature",
+                PATH + "TransferingChatViaTimeout.feature",
+                PATH + "TransferOvernigthTicket.feature",
+                DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
+        },
         glue ="steps")
-public class RunChatdeskTest {
+public class PullRequestTest {
 
         @Factory
         public Object[] features() {

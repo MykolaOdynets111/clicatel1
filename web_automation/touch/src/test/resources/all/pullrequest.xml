@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Pull request" parallel="tests" thread-count="6">
+<!--    <test name="Agent mode tests" >-->
+<!--        <classes>-->
+<!--            <class name="runner.automation.PullRequestTest" />-->
+<!--        </classes>-->
+<!--    </test>-->
+    <test name="Automation bot tests">
+        <classes>
+            <class name="runner.automationbot.PullRequestTest" />
+        </classes>
+    </test>
+    <test name="General Bank Demo tests">
+        <classes>
+            <class name="runner.generalbank.PullRequestTest" />
+        </classes>
+    </test>
+    <test name="Dot control without agent tests">
+        <classes>
+            <class name="runner.dotcontrol.PullRequestTest" />
+        </classes>
+    </test>
+    <test name="TIE tests" >
+        <classes>
+            <class name="runner.generalbank.RunTIEPullRequestTest" />
+        </classes>
+    </test>
+    <test name="Widget tests">
+        <classes>
+            <class name="runner.generalbank.RunGenBankWidgetInteractionTest" />
+            <class name="runner.generalbank.RunGenBankSmokeFAQsTest" />
+        </classes>
+    </test>
+    <test name="Social Health check (pull request)">
+        <classes>
+            <class name="runner.SocialHealthCheckTest" />
+        </classes>
+    </test>
+</suite>
