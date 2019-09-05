@@ -2,11 +2,11 @@
 Feature: Turning on / off AGENT_FEEDBACK feature for Bot mode tenant
 
   Background:
-#    Given User select Automation Bot tenant
-#    And Click chat icon
+    Given User select Automation Bot tenant
+    And Click chat icon
 
   Scenario: Turning off AGENT_FEEDBACK feature (Bot mode tenant)
-#    Given AGENT_FEEDBACK tenant feature is set to false for Automation Bot
+    Given AGENT_FEEDBACK tenant feature is set to false for Automation Bot
     And I login as agent of Automation Bot
     When User enter Chat to Support into widget input field
     Then Agent has new conversation request
