@@ -211,14 +211,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("(.*) receives incoming transfer with \"(.*)\" header")
     public void verifyIncomingTransferHeader(String agent, String expectedHeader){
-        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferWindowHeader(agent),
+        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferWindowHeader(),
                 expectedHeader,
                 "Header in incoming transfer window is not as expected");
     }
 
     @Then("^Correct Rejected by field is shown for (.*)$")
     public void verifyRejectedByField(String agent){
-        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getRejectedBy(agent),
+        Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getRejectedBy(),
                 "Rejected by:\n" + secondAgentName,
                 "Header in incoming transfer window is not as expected");
     }
@@ -302,7 +302,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) click \"Accept\" button$")
     public void acceptRejectedTransfer(String agent){
-        getAgentHomePage(agent).getIncomingTransferWindow().acceptRejectTransfer(agent);
+        getAgentHomePage(agent).getIncomingTransferWindow().acceptRejectTransfer();
     }
 
     @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
@@ -1301,7 +1301,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) has not see incoming transfer pop-up$")
     public void secondAgentHasNotSeeIncomingTransferPopUp(String agent) {
            Assert.assertTrue(
-            getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(agent),
+            getAgentHomePage(agent).getIncomingTransferWindow().isTransferWindowHeaderNotShown(),
                    "Transfer chat header is shown for "+ agent + " agent");
 
     }

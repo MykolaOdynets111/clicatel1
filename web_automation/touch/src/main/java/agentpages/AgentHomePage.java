@@ -127,6 +127,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
+        incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
         return incomingTransferWindow;
     }
 
