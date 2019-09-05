@@ -47,10 +47,10 @@ public class VerifyPhoneNumberWindow extends AbstractUIElement {
     }
 
     public boolean isOpened(){
-        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 1);
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 3);
     }
 
     public boolean isClosed(){
-        return isElementNotShown(this.getCurrentDriver(), this.getWrappedElement(), 1);
+        return isElementRemoved(this.getCurrentDriver(), this.getWrappedElement(), 3);
     }
 }

@@ -148,21 +148,21 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default boolean isElementNotShownByCSS(WebDriver driver, String css, int wait){
+    default boolean isElementRemovedByCSS(WebDriver driver, String css, int wait){
         try {
             waitForElementToBeInVisibleByCss(driver, css, wait);
-            return false;
-        } catch (TimeoutException|NoSuchElementException e) {
             return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
         }
     }
 
-    default boolean isElementNotShown(WebDriver driver, WebElement element, int wait){
+    default boolean isElementRemoved(WebDriver driver, WebElement element, int wait){
         try {
             waitForElementToBeInvisible(driver, element, wait);
-            return false;
-        } catch (TimeoutException|NoSuchElementException e) {
             return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
         }
     }
 

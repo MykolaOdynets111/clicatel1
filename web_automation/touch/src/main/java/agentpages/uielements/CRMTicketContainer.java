@@ -19,12 +19,14 @@ public class CRMTicketContainer extends AbstractUIElement {
     @FindBy(xpath = "//div[@class='user-tickets-container']/preceding-sibling::h2")
     private WebElement containerHeader;
 
+    private String ticketContainer = "div.user-tickets-container";
+
     public boolean isTicketContainerShown(){
         return isElementShown(this.getCurrentDriver(),this.getWrappedElement(), 4);
     }
 
     public boolean isTicketContainerRemoved(){
-        return isElementNotShownByCSS( this.getCurrentDriver(), "div.user-tickets-container", 4);
+        return isElementRemovedByCSS( this.getCurrentDriver(), ticketContainer, 4);
     }
 
     public CRMTicket getFirstTicket(){
