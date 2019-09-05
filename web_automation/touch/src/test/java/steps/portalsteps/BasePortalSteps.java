@@ -828,7 +828,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("Admin click BACK button in left menu")
     public void clickBackButton(){
-        getLeftMenu().clickBackButton();
+        if(getLeftMenu().isBackButtonShown()) getLeftMenu().clickBackButton();
     }
 
     @When("^(?:I|Admin) select (.*) in left menu$")

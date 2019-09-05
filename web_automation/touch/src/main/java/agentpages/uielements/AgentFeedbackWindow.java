@@ -45,17 +45,20 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(xpath = "//div[@class='Select-menu-outer']/div[@role='listbox']")
     private WebElement availableTagsContainer;
 
+    @FindBy(css = "div.Select-control")
+    private WebElement tagsInput;
+
     @FindBy(xpath = "//div[@class='Select-menu-outer']//div[@role='option']")
     private List<WebElement> availableTags;
 
     private String inputTagField =  "div.Select-input > input";
 
-    @FindBy(xpath = "//span[@class='Select-arrow-zone']")
+    @FindBy(xpath = "//span[@class='Select-arrow-zone']/span")
     private WebElement openDropdownButton;
 
-    private String openDropdownButtoncss = ".Select-control";
+    private String tagsOptionsCss = "div.Select-option";
 
-    private String openDropdownButtoncssTags = ".Select-multi-value-wrapper";
+    private String selectedButtonTagsCss = "span.conclude-conversation-tag";
 
     private String openDropdownButtonXpathClear = "//div[contains(@class,'Select-placeholder')]";
 
@@ -137,22 +140,24 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
 
     public void selectTags(int iter) {
-        clickElem(this.getCurrentDriver(), openDropdownButton, 5,"Open dropdown button" );
-        String tagcont=availableTagsContainer.getText();
-        if(availableTagsContainer.getText().equals("No results found")) {
-            waitFor(1000);
-            if(availableTagsContainer.getText().equals("No results found")) {
-                Assert.fail("Have not Tags to be selected");
-            }
-        } else {
-            clickElem(this.getCurrentDriver(), openDropdownButton, 3,"Open dropdown button" );
-            while (iter > 0) {
-                clickElem(this.getCurrentDriver(), openDropdownButton, 3,"Open dropdown button" );
-                availableTagsContainer.click();
-                findElemByCSS(this.getCurrentDriver(), openDropdownButtoncss).click();
-                iter--;
-            }
+        for (int i = 0; i<iter; i++){
+            selectTag(i);
         }
+    }
+
+    public void selectTag(int ordinalNumber){
+        waitForElementToBeVisible(this.getCurrentDriver(), tagsInput, 3);
+        tagsInput.click();
+        if(!isElementShown(this.getCurrentDriver(), availableTagsContainer, 2)) {
+            openDropdownButton.click();
+        }
+        waitForElementsToBeVisibleByCss(this.getCurrentDriver(), tagsOptionsCss, 3);
+        List<WebElement> availableTags = findElemsByCSS(this.getCurrentDriver(), tagsOptionsCss);
+        if(availableTags.size()==1 && availableTags.get(0).getText().equalsIgnoreCase("No results found")){
+            Assert.fail("Have no Tags to be selected");
+        }
+        availableTags.get(ordinalNumber).click();
+        isElementShownByCSS(this.getCurrentDriver(), selectedButtonTagsCss, 2);
     }
 
     public List<String> getTags() {
@@ -174,16 +179,19 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public List<String> getChosenTags() {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
-        List<String> result = new ArrayList<>();
         if (!isElementShownByXpath(this.getCurrentDriver(), openDropdownButtonXpathClear,2)){
-            result.addAll(Arrays.asList(findElemByCSS(this.getCurrentDriver(), openDropdownButtoncssTags).getText().split("[\n]+[ ]")));
+            waitForElementsToBeVisibleByCss(this.getCurrentDriver(), selectedButtonTagsCss, 3);
+            return findElemsByCSS(this.getCurrentDriver(), selectedButtonTagsCss).stream()
+                    .map(e -> e.getText().trim())
+                    .collect(Collectors.toList());
+        } else{
+            return new ArrayList<>();
         }
-        return result;
     }
 
     public void typeTags(String tag) {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
-        findElemByCSS(this.getCurrentDriver(), openDropdownButtoncss).click();
+        findElemByCSS(this.getCurrentDriver(), tagsOptionsCss).click();
         findElemByCSS(this.getCurrentDriver(), inputTagField).sendKeys(tag);
     }
 

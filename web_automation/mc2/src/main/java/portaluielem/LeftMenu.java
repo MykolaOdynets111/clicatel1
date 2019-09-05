@@ -66,4 +66,8 @@ public class LeftMenu extends AbstractUIElement {
     public void clickBackButton(){
         clickElem(this.getCurrentDriver(), backLaunchpadButton, 3, " Back button in left menu");
     }
+
+    public boolean isBackButtonShown(){
+        return isElementShown(this.getCurrentDriver(), backLaunchpadButton, 3);
+    }
 }
