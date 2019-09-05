@@ -64,7 +64,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
         try{
             waitForElementToBeVisible(this.getCurrentDriver(), messageTime, 5);
             return messageTime.getAttribute("innerText").trim();
-        }catch (NoSuchElementException|TimeoutException e){
+        }catch (NoSuchElementException|TimeoutException|NullPointerException e){
             waitFor(500);
             return messageTime.getAttribute("innerText").trim();
         }
