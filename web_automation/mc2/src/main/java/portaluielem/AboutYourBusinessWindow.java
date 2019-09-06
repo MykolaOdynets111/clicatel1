@@ -65,6 +65,8 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     }
 
     public String  getCompanyCountry(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         waitForElementToBeVisibleByXpath(this.getCurrentDriver(), companyCountryFlag, 7);
         return selectCompanyCountry.getText();
     }

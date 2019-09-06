@@ -1593,6 +1593,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyCity(tenantInfo.get("companyCity"));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(2, 9);
     }
 
     @And("^Refresh page and verify business details was changed for (.*)$")
