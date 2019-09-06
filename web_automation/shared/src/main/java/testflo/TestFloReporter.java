@@ -5,6 +5,7 @@ import testflo.jacksonschemas.AllureScenarioInterface;
 import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 
 import java.io.*;
+import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -107,37 +108,57 @@ public class TestFloReporter {
         }catch(NoSuchElementException e){
             return;
         }
-
-        setTCStatus(testCase.getKey(), executedTest.getStatus(), executedTest.getFailureMessage());
+        String testFloTestStatus = testCase.getFields().getStatus().getName().toLowerCase();
+        if(!executedTest.getStatus().contains(testFloTestStatus)) {
+            try {
+                setTCStatus(testCase.getKey(), testFloTestStatus, executedTest.getStatus(), executedTest.getFailureMessage());
+            }catch (SocketTimeoutException e){
+                return;
+            }
+        }
     }
 
     public static void addMissingScenarios(AllureScenarioInterface scenario, String testPlan){
         Map<String, String> newTC = JiraApiHelper.createNewTestCase(scenario, testPlan);
-
-        setTCStatus(newTC.get("key"), scenario.getStatus(), scenario.getFailureMessage());
-
-    }
-
-    private static void setTCStatus(String tcKey, String tcStatus, String failureMessage){
-        if(tcStatus.equalsIgnoreCase("canceled") |
-                tcStatus.equalsIgnoreCase("skipped")){
+        try {
+            setTCStatus(newTC.get("key"), "open", scenario.getStatus(), scenario.getFailureMessage());
+        }catch (SocketTimeoutException e){
             return;
         }
-        moveTicketToInProgress(tcKey);
-        setStatusForTestCase(tcKey, tcStatus, failureMessage);
     }
 
-    private static void moveTicketToInProgress(String tcKey){
-        if(ConfigManager.rerunTestPlan()) {
-            JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves ticket "Re-test" status
-            JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "In Progress" status
-        } else{
-            JiraApiHelper.changeTestCaseStatus(tcKey, "11"); // moves ticket "In Progress" status
+    private static void setTCStatus(String tcKey, String currentStatus, String executionStatus, String failureMessage)
+    throws SocketTimeoutException{
+        if(executionStatus.equalsIgnoreCase("canceled") |
+                executionStatus.equalsIgnoreCase("skipped")){
+            return;
         }
-
+        moveTicketToInProgress(tcKey, currentStatus);
+        setStatusForTestCase(tcKey, executionStatus, failureMessage);
     }
 
-    private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage){
+    private static void moveTicketToInProgress (String tcKey, String currentStatus) throws SocketTimeoutException{
+        if(!currentStatus.equalsIgnoreCase("open")) retestTestCase(tcKey, currentStatus);
+        else JiraApiHelper.changeTestCaseStatus(tcKey, "11"); // moves ticket "In Progress" status
+    }
+
+    private static void retestTestCase(String tcKey, String currentStatus) throws SocketTimeoutException {
+        if(ConfigManager.rerunTestPlan()) {
+            if (currentStatus.equalsIgnoreCase("pass")) {
+                JiraApiHelper.changeTestCaseStatus(tcKey, "61"); // moves passed ticket "Re-test" status
+            } else {
+                JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves failed ticket "Re-test" status
+            }
+            waitFor(4500); // To eliminate JIRA API hang out
+            JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "Test" status
+            if(JiraApiHelper.getNextTransitionId(tcKey)==81){
+                waitFor(1000);
+                JiraApiHelper.changeTestCaseStatus(tcKey, "81");
+            }
+        }
+    }
+
+    private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage) throws SocketTimeoutException{
         if (tcStatus.equalsIgnoreCase("passed")) {
             JiraApiHelper.changeTestCaseStatus(tcKey, "21");
         }
@@ -147,7 +168,6 @@ public class TestFloReporter {
             JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
         }
     }
-
 
     private static String readBaseTestPlanKey(){
             try {
@@ -169,5 +189,21 @@ public class TestFloReporter {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+
+    private static void waitFor(int milis){
+        try {
+            Thread.sleep(milis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void waifForStatusToBeTest(String testCaseKey, int seconds){
+        for (int i = 0; i<seconds*5; i++){
+            int nextTransition = JiraApiHelper.getNextTransitionId(testCaseKey);
+            if(nextTransition==81) break;
+            else waitFor(200);
+        }
     }
 }
