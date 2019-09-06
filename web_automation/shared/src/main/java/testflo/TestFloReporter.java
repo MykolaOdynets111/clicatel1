@@ -18,8 +18,8 @@ public class TestFloReporter {
 //        For debug
 //    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
-//    System.setProperty("isRerun", "false");
-//    System.setProperty("tplanKey", "TPORT-10180");
+//    System.setProperty("isRerun", "true");
+//    System.setProperty("tplanKey", "TPORT-11023");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
 

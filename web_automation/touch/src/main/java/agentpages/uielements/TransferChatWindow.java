@@ -40,27 +40,27 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = "div.error-text.error-text-al")
     private WebElement noteInputError;
 
-    public String transferChat(String agent) {
+    public String transferChat() {
         openDropDownAgent();
-        String agentName = selectDropDownAgent(agent);
+        String agentName = selectDropDownAgent();
         sentNote();
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader(this.getCurrentDriver()).clickTransferButton();
-            agentName = selectDropDownAgent(agent);
+            agentName = selectDropDownAgent();
             sentNote();
         }
         clickTransferChatButton();
         return agentName;
     }
 
-    public String transferOvernightTicket(String agent) {
+    public String transferOvernightTicket() {
         openDropDownAgent();
-        String agentName = selectDropDownAgent(agent);
+        String agentName = selectDropDownAgent();
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader(this.getCurrentDriver()).clickTransferButton();
-            agentName = selectDropDownAgent(agent);
+            agentName = selectDropDownAgent();
             sentNote();
         }
         clickTransferChatButton();
@@ -79,7 +79,7 @@ public class TransferChatWindow extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), openDropdownButton,5,"Open drop down button");
     }
 
-    public String selectDropDownAgent(String agent) {
+    public String selectDropDownAgent() {
         if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openDropdownButton.click();
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
         for(int i=0; i<10; i++){

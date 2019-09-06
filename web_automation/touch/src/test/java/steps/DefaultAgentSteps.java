@@ -174,7 +174,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) transfers chat$")
     public void transferChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
-        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat();
     }
 
     @When("^(.*) transfer a few chats$")
@@ -1231,7 +1231,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) select an agent in 'Transfer to' drop down$")
     public void selectAgentTransferToDropDown(String agent) {
-        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
+        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent();
     }
 
     @Then("^Agent notes field is appeared$")
@@ -1327,6 +1327,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^(.*) transfers overnight ticket$")
     public void agentTransfersOvernightTicket(String agent) {
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
-        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket(agent);
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket();
     }
 }
