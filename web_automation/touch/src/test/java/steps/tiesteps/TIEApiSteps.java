@@ -49,7 +49,7 @@ public class TIEApiSteps implements DateTimeHelper {
 
     private static String createNewTenantName() {
         Faker faker = new Faker();
-        return "testing"+ Thread.currentThread().getId() + "_" + faker.lorem().word() + faker.lorem().word();
+        return "testing"+ Thread.currentThread().getId() + "_" + System.currentTimeMillis();
     }
 
     private static TieNERItem NER_DATA_SET = createNERDataSet();
