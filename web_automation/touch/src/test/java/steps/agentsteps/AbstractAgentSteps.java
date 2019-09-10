@@ -4,12 +4,9 @@ import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
 import com.github.javafaker.Faker;
-import interfaces.DateTimeHelper;
-import interfaces.JSHelper;
-import interfaces.VerificationHelper;
-import interfaces.WebWaitDeprecated;
+import interfaces.*;
 
-public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWaitDeprecated {
+public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
     private static ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
 

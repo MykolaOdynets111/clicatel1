@@ -215,12 +215,12 @@ public interface WebActions extends WebWait {
         driver.switchTo().window(windowToSwitch);
     }
 
-//    default void scrollUpWidget(int scrollPosition){
-//        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
-//        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
-//        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
-//                DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(widgetScroller)));
-//    }
+    default void scrollUp(WebDriver driver, String cssScroller, int scrollPosition){
+        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
+        JavascriptExecutor jsExec = (JavascriptExecutor) driver;
+        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
+                driver.findElement(By.cssSelector(cssScroller)));
+    }
 
     /**
      * Verify if scren of element equals image (deviation 5%).

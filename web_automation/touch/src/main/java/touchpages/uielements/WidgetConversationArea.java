@@ -35,7 +35,8 @@ public class WidgetConversationArea extends AbstractUIElement {
      */
     private WebElement getFromUserWebElement(String messageText) {
         try {
-             List<FromUserMessage> listWithUserMessages = fromUserMessages.stream().map(FromUserMessage::new)
+             List<FromUserMessage> listWithUserMessages = fromUserMessages.stream()
+                     .map(e -> new FromUserMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .filter(e1 -> e1.getMessageText().equals(messageText))
                     .collect(Collectors.toList());
             FromUserMessage theMessage = listWithUserMessages.get(listWithUserMessages.size()-1);

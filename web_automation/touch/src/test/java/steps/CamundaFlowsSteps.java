@@ -10,7 +10,7 @@ import datamanager.jacksonschemas.TafMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
-import interfaces.WebActionsDeprecated;
+import interfaces.WebActions;
 import socialaccounts.TwitterUsers;
 import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;
@@ -18,7 +18,7 @@ import org.testng.Assert;
 
 import java.util.Random;
 
-public class CamundaFlowsSteps implements JSHelper, WebActionsDeprecated {
+public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     private Faker faker = new Faker();
 

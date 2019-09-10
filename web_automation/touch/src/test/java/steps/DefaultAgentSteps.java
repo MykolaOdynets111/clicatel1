@@ -507,7 +507,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on new conversation$")
     public void acceptUserConversation(String ordinalAgentNumber) {
-        getLeftMenu(ordinalAgentNumber).openNewConversationRequestByAgent(ordinalAgentNumber);
+        getLeftMenu(ordinalAgentNumber).openNewConversationRequestByAgent();
     }
 
     @When("^(.*) changes status to: (.*)$")
@@ -1013,7 +1013,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         soft.assertEquals(actualChatHistoryItem.getChatHistoryTime(), expectedChatHistoryTime,
                 "Incorrect time for chat in chat history shown.");
-        soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(agent),
+        soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(),
                 "'View chat' button is not enabled.");
         soft.assertAll();
     }

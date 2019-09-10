@@ -15,7 +15,7 @@ public class ChatHistoryContainer extends AbstractUIElement {
 
     public ChatInActiveChatHistory getFirstChatHistoryItems(){
         try{
-            return new ChatInActiveChatHistory(chatHistoryList.get(0));
+            return new ChatInActiveChatHistory(chatHistoryList.get(0)).setCurrentDriver(this.getCurrentDriver());
         } catch (IndexOutOfBoundsException e){
             Assert.fail("Chat history container in active chat is empty");
             return null;

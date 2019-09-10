@@ -30,7 +30,7 @@ public class CRMTicketContainer extends AbstractUIElement {
     }
 
     public CRMTicket getFirstTicket(){
-        return new CRMTicket(crmTickets.get(0));
+        return new CRMTicket(crmTickets.get(0)).setCurrentDriver(this.getCurrentDriver());
     }
 
     public String getContainerHeader(){
@@ -46,14 +46,14 @@ public class CRMTicketContainer extends AbstractUIElement {
 
     public List<Map<String, String>> getAllTicketsInfo(){
         return crmTickets.stream()
-                .map(e -> new CRMTicket(e))
+                .map(e -> new CRMTicket(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getTicketInfo())
                 .collect(Collectors.toList());
     }
 
     public List<Map<String, String>> getAllTicketsInfoExceptDate(){
         return crmTickets.stream()
-                .map(e -> new CRMTicket(e))
+                .map(e -> new CRMTicket(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getTicketInfoExceptDate())
                 .collect(Collectors.toList());
     }

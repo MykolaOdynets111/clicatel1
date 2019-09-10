@@ -58,17 +58,19 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private String loadingSpinner = "//*[text()='Connecting...']";
 
     private WebElement getTargetChat(String userName){
-        return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
+        return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
+                .getUserName().equals(userName)).findFirst().get();
     }
 
     private WebElement getActiveTargetChat(String userName){
-        return chatsList.stream().filter(e-> new ChatInLeftMenu(e).getUserName().equals(userName)).findFirst().get();
+        return chatsList.stream().filter(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
+                .getUserName().equals(userName)).findFirst().get();
     }
 
-    public void openNewConversationRequestByAgent(String agent) {
+    public void openNewConversationRequestByAgent() {
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         try {
-            new ChatInLeftMenu(getTargetChat(userName)).openConversation();
+            new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
         } catch(WebDriverException|NoSuchElementException e){
             Assert.fail("Chat for '"+userName+"' disappears from chat desk when tries to open it.\n" +
                     "UserID: "+ getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
@@ -76,7 +78,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void openNewFromSocialConversationRequest(String userName) {
-        new ChatInLeftMenu(getTargetChat(userName)).openConversation();
+        new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }
 
     public boolean isNewConversationRequestIsShown(int wait) {
@@ -90,24 +92,24 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public boolean isOvernightTicketIconShown(String userName){
-        return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketIconShown();
+        return new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isOvernightTicketIconShown();
     }
 
     public boolean isFlagIconShown(String userName){
-        return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconShown();
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isFlagIconShown();
     }
 
     public boolean isFlagIconRemoved(String userName){
-        return new ChatInLeftMenu(getActiveTargetChat(userName)).isFlagIconRemoved();
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isFlagIconRemoved();
     }
 
     public boolean isProfileIconNotShown(String userName){
-        return new ChatInLeftMenu(getActiveTargetChat(userName)).isProfileIconNotShown();
+        return new ChatInLeftMenu(getActiveTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isProfileIconNotShown();
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){
         try {
-            return new ChatInLeftMenu(getTargetChat(userName)).isOvernightTicketRemoved();
+            return new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isOvernightTicketRemoved();
         } catch(NoSuchElementException e){
             return true;
         }
@@ -117,8 +119,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
         try{
             waitForElementToBeVisible(this.getCurrentDriver(), newConversationIcon, wait);
             return  newConversationRequests.stream().
-                    anyMatch(e-> new ChatInLeftMenu(e).getUserName().equals(userName)
-                                &  new ChatInLeftMenu(e).getChatsChannel().equalsIgnoreCase(channel));
+                    anyMatch(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()).getUserName().equals(userName)
+                                &  new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()).getChatsChannel().equalsIgnoreCase(channel));
         } catch(TimeoutException|NoSuchElementException e) {
             return false;
         }
@@ -161,7 +163,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
             // nothing to do, just stabilizing wait
         }
         List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
-                .map(webElement -> new ChatInLeftMenu(webElement))
+                .map(webElement -> new ChatInLeftMenu(webElement).setCurrentDriver(this.getCurrentDriver()))
                 .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
                 .filter(userName -> userName.startsWith("test"))
                 .collect(Collectors.toList());
@@ -177,24 +179,24 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public String getActiveChatUserName(){
-        return new ChatInLeftMenu(activeCaht).getUserName();
+        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).getUserName();
     }
 
     public String getActiveChatLocation(){
-        return new ChatInLeftMenu(activeCaht).getLocation();
+        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).getLocation();
     }
 
     public String getActiveChatLastMessage(){
-        return new ChatInLeftMenu(activeCaht).getLastMessageText();
+        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).getLastMessageText();
     }
 
 
     public boolean isValidImgForActiveChat(String adapter) {
-      return new ChatInLeftMenu(activeCaht).isValidImg(adapter);
+      return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isValidImg(adapter);
     }
 
     public boolean isValidIconSentimentForActiveChat(String message) {
-         return new ChatInLeftMenu(activeCaht).isValidIconSentiment(message);
+         return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isValidIconSentiment(message);
     }
 
     public String getExpandFilterButtonColor() {
