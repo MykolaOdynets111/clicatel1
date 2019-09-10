@@ -84,25 +84,30 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public boolean isCardShownFor(String userMessageText, int wait) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isTextInCardShown(wait);
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isTextInCardShown(wait);
     }
 
     public boolean isCardNotShownFor(String userMessageText, int wait) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isCardNotShown(wait);
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isCardNotShown(wait);
     }
 
     public String getCardTextForUserMessage(String userMessageText) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromCard();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getTextFromCard();
     }
 
     public String getCardAboveButtonsTextForUserMessage(String userMessageText) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromAboveCardButton();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getTextFromAboveCardButton();
     }
 
     public boolean checkIfCardButtonsShownFor(String userMessageText, List<String> buttons) {
         boolean result = false;
         for (String button : buttons) {
-            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
+            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                    .setCurrentDriver(this.getCurrentDriver()).isButtonShown(button.trim());
             if(!result){
                 Assert.fail("Button '"+button+"' is not shown in the card on '"+userMessageText+"' user message");
             }
@@ -111,7 +116,8 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public boolean isCardContainsButton(String userMessageText, String button) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isButtonShown(button.trim());
     }
 
     public void  waitForSalutation() {
@@ -138,10 +144,12 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public void clickOptionInTheCard(String userMessageText, String buttonName) {
         try {
-            new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+            new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).setCurrentDriver(this.getCurrentDriver())
+                    .clickButton(buttonName);
         }catch (ElementClickInterceptedException e){
             waitFor(1000);
-            new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+            new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                    .setCurrentDriver(this.getCurrentDriver()).clickButton(buttonName);
         }
     }
 
@@ -160,6 +168,7 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public void submitCardWithUserInfo(String userMessageText, VMQuoteRequestUserData userData) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                                        .setCurrentDriver(this.getCurrentDriver())
                                         .fillInInputFieldWithAPlaceholder("Last Name", userData.getLastName())
                                         .fillInInputFieldWithAPlaceholder("Contact Number", userData.getContactNumber())
                                         .fillInInputFieldWithAPlaceholder("Email", userData.getEmail())
@@ -167,24 +176,29 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public void clickSubmitButton(String userMessageText) {
-        new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton("Submit");
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).clickButton("Submit");
     }
 
     public void fillInTheField(String userMessageText, String field, String value) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver())
                 .fillInInputFieldWithAPlaceholder(field, value);
     }
 
     public int getNumberOfFieldRequiredErrorsInCardOnUserMessage(String userMessageText){
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getNumberOfFieldRequiredErrors();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getNumberOfFieldRequiredErrors();
     }
 
     public boolean areFieldRequiredErrorsInCardOnUserMessageShown(String userMessageText){
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).areRequiredFieldErrorsShown();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).areRequiredFieldErrorsShown();
     }
 
     public void provideInfoBeforeGoingToAgent(String userMessageText, String userName, String userPass) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver())
                 .fillInInputFieldWithAPlaceholder("Name", userName)
                 .fillInInputFieldWithAPlaceholder("Email", userPass);
     }
