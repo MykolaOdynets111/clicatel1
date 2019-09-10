@@ -113,11 +113,11 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public boolean isFlagIconRemoved(){
-        return isElementRemoved(this.getCurrentDriver(), flagIcon, 1);
+        return isElementRemoved(this.getCurrentDriver(), flagIcon, 3);
     }
 
     public boolean isProfileIconNotShown(){
-        return isElementRemoved(this.getCurrentDriver(), usercImg, 1);
+        return isElementRemoved(this.getCurrentDriver(), usercImg, 3);
     }
 
     public boolean isOvernightTicketRemoved(){
