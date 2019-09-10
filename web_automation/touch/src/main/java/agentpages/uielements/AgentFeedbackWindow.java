@@ -191,7 +191,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public void typeTags(String tag) {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
-        findElemByCSS(this.getCurrentDriver(), tagsOptionsCss).click();
+        tagsInput.click();
         findElemByCSS(this.getCurrentDriver(), inputTagField).sendKeys(tag);
     }
 
@@ -201,7 +201,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void deleteTags() {
-             findElemByCSS(this.getCurrentDriver(), cleareAll).click();
+        waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
+        tagsInput.click();
+        findElemByCSS(this.getCurrentDriver(), cleareAll).click();
     }
 
     public String getPlaceholder() {
