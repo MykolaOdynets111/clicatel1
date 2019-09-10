@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Pull request" parallel="tests" thread-count="6">
-<!--    <test name="Agent mode tests" >-->
-<!--        <classes>-->
-<!--            <class name="runner.automation.PullRequestTest" />-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="Agent mode tests" >
+        <classes>
+            <class name="runner.automation.PullRequestTest" />
+        </classes>
+    </test>
     <test name="Automation bot tests">
         <classes>
             <class name="runner.automationbot.PullRequestTest" />

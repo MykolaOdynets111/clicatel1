@@ -47,6 +47,8 @@ public enum Agents {
     DEV_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "dev"),
     DEMO_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo"),
     DEMO1_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo1"),
+    INTEGRATION_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "integration"),
+
 
     // =======  Active agents for Bot mode for Camunda flows tests ======== //
     // ==== phone number for Gmail inbox +380 50 5083662
