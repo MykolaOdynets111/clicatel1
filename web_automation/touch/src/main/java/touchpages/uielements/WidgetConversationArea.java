@@ -48,32 +48,39 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public String getResponseTextOnUserInput(String userMessageText) {
-            return new ToUserTextMessage(getFromUserWebElement(userMessageText)).getMessageText();
+            return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                    .setCurrentDriver(this.getCurrentDriver()).getMessageText();
     }
 
     public String getSecondResponseTextOnUserInput(String userMessageText) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).getSecondMessageText();
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getSecondMessageText();
     }
 
 
     public boolean isTextResponseShownFor(String userMessageText, int wait) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isTextResponseShown(wait);
     }
 
     public boolean isSecondTextResponseShownFor(String userMessageText, int wait) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseShown(wait);
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isSecondResponseShown(wait);
     }
 
     public boolean isSecondTextResponseNotShownFor(String userMessageText, int wait) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseNotShown(wait);
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isSecondResponseNotShown(wait);
     }
 
     public boolean isTextResponseShownAmongOtherForUserMessage(String userInput, String expectedResponse) {
-        return new ToUserTextMessage(getFromUserWebElement(userInput)).isTextResponseShownAmongOthers(expectedResponse);
+        return new ToUserTextMessage(getFromUserWebElement(userInput))
+                .setCurrentDriver(this.getCurrentDriver()).isTextResponseShownAmongOthers(expectedResponse);
     }
 
     public boolean isOnlyOneTextResponseShownFor(String userMessage) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessage)).isOnlyOneTextResponseShwon();
+        return new ToUserTextMessage(getFromUserWebElement(userMessage))
+                .setCurrentDriver(this.getCurrentDriver()).isOnlyOneTextResponseShwon();
     }
 
     public boolean isCardShownFor(String userMessageText, int wait) {
