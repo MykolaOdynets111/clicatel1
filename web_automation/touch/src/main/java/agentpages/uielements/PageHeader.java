@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.header")
-public class PageHeader extends AbstractUIElementDeprecated {
+public class PageHeader extends AbstractUIElement {
 
     @FindBy(css = "button#top-menu-dropdown")
     private WebElement iconWithAgentInitials;
@@ -57,21 +57,20 @@ public class PageHeader extends AbstractUIElementDeprecated {
     private String tenantLogoBorderXpath = "//div[contains(@class, 'logo')]//img";
     private String tenantNameXpath = "//div[contains(@class, 'logo')]//h1";
 
-    public PageHeader logOut(String agent) {
-            waitForElementToBeVisibleAgent(iconWithAgentInitials, 5, agent);
+    public PageHeader logOut() {
+            waitForElementToBeVisible(this.getCurrentDriver(), iconWithAgentInitials, 5);
             iconWithAgentInitials.click();
-            waitForElementToBeVisibleAgent(logOutButton, 6, agent);
+            waitForElementToBeVisible(this.getCurrentDriver(), logOutButton, 6);
             logOutButton.click();
-//        waitForElementsToBeVisibleByCssAgent(topMenuDropdownCSS, 6,agent);
         return this;
     }
 
     public String getTextFromIcon(){
-        return waitForElementToBeVisibleAgent(iconWithAgentInitials, 5).getText();
+        return waitForElementToBeVisible(this.getCurrentDriver(), iconWithAgentInitials, 5).getText();
     }
 
     public void clickIconWithInitials(){
-        waitForElementToBeClickableAgent(iconWithAgentInitials, 10, "main agent");
+        waitForElementToBeClickable(this.getCurrentDriver(), iconWithAgentInitials, 10);
         iconWithAgentInitials.click();
     }
 
@@ -92,34 +91,33 @@ public class PageHeader extends AbstractUIElementDeprecated {
     }
 
     public void selectStatus(String status){
-        if(!isElementShownAgent(agentName)){
+        if(!isElementShown(this.getCurrentDriver(), agentName, 2)){
             clickIconWithInitials();
         }
-//        WebElement targetElem = findElemsByCSSAgent(statusElem).stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
         WebElement targetElem = statusElems.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
         targetElem.click();
-        //    executeJSclick(targetElem);
-//        targetElem.findElement(By.cssSelector("input")).click();
     }
 
     public boolean isAgentImageShown(){
-        return isElementShownAgent(agentIcon, 10, "main agent");
+        return isElementShown(this.getCurrentDriver(), agentIcon, 10);
     }
 
     public boolean isTenantImageShown(){
-        return isElementShownAgent(tenantLogoImage, 10, "main agent");
+        return isElementShown(this.getCurrentDriver(), tenantLogoImage, 10);
     }
 
     public String getTenantNameColor() {
-        return Color.fromString(findElemByXPATHAgent(tenantNameXpath,"second agent").getCssValue("color")).asHex();
+        return Color.fromString(findElemByXPATH(this.getCurrentDriver(), tenantNameXpath)
+                .getCssValue("color")).asHex();
     }
 
     public String getTenantLogoBorderColor() {
-        return Color.fromString(findElemByXPATHAgent(tenantLogoBorderXpath,"second agent").getCssValue("border-bottom-color")).asHex();
+        return Color.fromString(findElemByXPATH(this.getCurrentDriver(), tenantLogoBorderXpath)
+                .getCssValue("border-bottom-color")).asHex();
     }
 
-    public void clickHeadPhonesButton(String agent){
-        clickElemAgent(headPhones,3,agent, "Head Phones button");
+    public void clickHeadPhonesButton(){
+        clickElem(this.getCurrentDriver(), headPhones,3, "Head Phones button");
     }
 
     public List<String> getAvailableAgents(){

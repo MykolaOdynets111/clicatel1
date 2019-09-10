@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.chat-body")
-public class ChatBody extends AbstractUIElementDeprecated {
+public class ChatBody extends AbstractUIElement {
 
     private String scrollElement = "div.chat-body";
 
@@ -59,46 +59,20 @@ public class ChatBody extends AbstractUIElementDeprecated {
         }
     }
 
-    public boolean isUserMessageShown(String usrMessage) {
+        public boolean isUserMessageShown(String usrMessage) {
         try {
-
-            waitForElementsToBeVisible(fromUserMessages, 15);
-            for (int i = 0; i < 35; i++) {
-                if (checkThatExpectedUserMessageOnAgentDesk(usrMessage)) {
-                    return true;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return false;
-        } catch(TimeoutException e1){
-            return false;
-        }
-    }
-
-    public boolean isUserMessageShown(String usrMessage, String agent) {
-        try {
-            waitForElementToBeVisibleByCssAgent(scrollElement, 5, agent);
+            waitForElementToBeVisibleByCss(this.getCurrentDriver(), scrollElement, 5);
         } catch(TimeoutException e){
             Assert.fail("Chat body is not visible");
         }
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         // ToDo: update timeout after it is provided in System timeouts confluence page
         // ToDo: If for social chatting timeout is bigger - introduce another method for social
-        if(!isElementShownAgentByXpath(locator, 15, agent)){
-            scrollToElem(DriverFactory.getDriverForAgent(agent), locator,
+        if(!isElementShownByXpath(this.getCurrentDriver(), locator, 15)){
+            scrollToElem(this.getCurrentDriver(), locator,
                     "'" +usrMessage + "' user message on chatdesk");
         }
-        return isElementShownAgentByXpath(locator, 10, agent);
-    }
-
-    private boolean checkThatExpectedUserMessageOnAgentDesk(String usrMessage) {
-        return findElemsByXPATHAgent(fromUserMessagesXPATH).stream()
-                .map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
-                .anyMatch(e2 -> e2.getMessageText().equalsIgnoreCase(usrMessage));
+        return isElementShownByXpath(this.getCurrentDriver(), locator, 10);
     }
 
     public boolean isMoreThanOneUserMassageShown() {
@@ -120,11 +94,11 @@ public class ChatBody extends AbstractUIElementDeprecated {
         boolean result = false;
         for(int i = 0; i<3; i++){
             try {
-                result =  findElemsByCSSAgent(toUserMessagesCSS).
+                result =  findElemsByCSS(this.getCurrentDriver(), toUserMessagesCSS).
                     stream().anyMatch(e -> e.getText().contains(userMessage));
             }catch(StaleElementReferenceException ex){
-                waitForDeprecated(200);
-                result =  findElemsByCSSAgent(toUserMessagesCSS).
+                waitFor(200);
+                result =  findElemsByCSS(this.getCurrentDriver(), toUserMessagesCSS).
                     stream().anyMatch(e -> e.getText().contains(userMessage));
             }
             if (result) break;
@@ -133,7 +107,7 @@ public class ChatBody extends AbstractUIElementDeprecated {
     }
 
     public List<String> getAllMessages(){
-        return findElemsByXPATHAgent(messagesInChatBodyXPATH)
+        return findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
                     .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
@@ -142,19 +116,22 @@ public class ChatBody extends AbstractUIElementDeprecated {
 
     public boolean isOTPDividerDisplayed(){
         if (otpDividersBlocks.size() > 0) {
-            return isElementShown(otpDividersBlocks.get(otpDividersBlocks.size() - 1));
+            return isElementShown(this.getCurrentDriver(), otpDividersBlocks.get(otpDividersBlocks.size() - 1), 3);
         }
         else
             return false;
     }
 
     public String getLastOTPCode(){
-        return getTextFrom(lastOTPDividerBlock).substring(4, 8);
+        return getTextFromElem(this.getCurrentDriver(), lastOTPDividerBlock, 2, "Last OTP divider block")
+                .substring(4, 8);
     }
 
     public boolean isNewOTPCodeDifferent(){
-        String lastCode = getTextFrom(otpDividersBlocks.get(otpDividersBlocks.size()-1));
-        String previousCode = getTextFrom(otpDividersBlocks.get(otpDividersBlocks.size()-2));
+        String lastCode = getTextFromElem(this.getCurrentDriver(), (otpDividersBlocks.get(otpDividersBlocks.size()-1)),
+                3, "");
+        String previousCode = getTextFromElem(this.getCurrentDriver(), (otpDividersBlocks.get(otpDividersBlocks.size()-2)),
+                3, "");
         return !lastCode.equals(previousCode);
     }
 

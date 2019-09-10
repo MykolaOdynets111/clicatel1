@@ -307,7 +307,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(20, agent);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(20);
         int sessionCapacity;
         if(!isConversationShown){
             sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
@@ -378,7 +378,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(timeout, agent),
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(timeout),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
@@ -434,7 +434,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
                 if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
-                Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40, agent),
+                Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
     }
 
@@ -446,7 +446,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private boolean waitForDotControlRequestOnChatDesk(String agent){
         for(int i = 0; i<5; i++) {
             String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,4, "main")) return true;
+            if(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,4)) return true;
             else {
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
             }
@@ -819,7 +819,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) searches and selects random chat is chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
-        getLeftMenu(ordinalAgentNumber).selectRandomChat(ordinalAgentNumber);
+        getLeftMenu(ordinalAgentNumber).selectRandomChat();
     }
 
     @When("^(.*) sees correct chat history$")
@@ -1284,11 +1284,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(0).getClientId(),20, agent),
+                                createdChatsViaDotControl.get(0).getClientId(),20),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(1).getClientId(),20, agent),
+                                createdChatsViaDotControl.get(1).getClientId(),20),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }
@@ -1308,7 +1308,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
     public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {
-        getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton(agent);
+        getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton();
         List<String> availableAgents = getAgentHomePage(agent).getPageHeader().getAvailableAgents();
         Assert.assertEquals(
                 availableAgents.size(), availableAgent,

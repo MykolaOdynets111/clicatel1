@@ -1,9 +1,8 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import driverfactory.DriverFactory;
-import interfaces.JSHelper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -17,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.scrollable-roster")
-public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JSHelper {
+public class LeftMenuWithChats extends AbstractUIElement {
 
     private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
 
@@ -80,10 +79,10 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
         new ChatInLeftMenu(getTargetChat(userName)).openConversation();
     }
 
-    public boolean isNewConversationRequestIsShown(int wait, String agent) {
+    public boolean isNewConversationRequestIsShown(int wait) {
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         try{
-            waitForElementToBeVisibleByXpathAgent(String.format(targetProfile, userName), wait, agent);
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), String.format(targetProfile, userName), wait);
             return true;
         } catch(TimeoutException e) {
             return false;
@@ -116,7 +115,7 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
 
     public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait){
         try{
-            waitForElementToBeVisible(newConversationIcon, wait);
+            waitForElementToBeVisible(this.getCurrentDriver(), newConversationIcon, wait);
             return  newConversationRequests.stream().
                     anyMatch(e-> new ChatInLeftMenu(e).getUserName().equals(userName)
                                 &  new ChatInLeftMenu(e).getChatsChannel().equalsIgnoreCase(channel));
@@ -125,19 +124,15 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
         }
     }
 
-    public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait, String agent) {
-        try{
-            waitForElementToBeVisibleByXpathAgent(String.format(targetProfile, userName), wait, agent);
-            return true;
-        } catch(TimeoutException e) {
-            return false;
-        }
+    public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait) {
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(targetProfile, userName), wait);
     }
 
     public boolean isConversationRequestIsRemoved(int wait) {
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         try{
-            waitForElementToBeInVisibleByXpathAgent(String.format(String.format(targetProfile, userName), userName), wait);
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), String.format(String.format(targetProfile,
+                    userName), userName), wait);
             return true;
         } catch(TimeoutException e) {
             return false;
@@ -146,7 +141,7 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
 
     public void selectFilterOption(String option){
         expandFilterButton.click();
-        waitForElementToBeVisibleAgent(filterDropdownMenu, 4);
+        waitForElementToBeVisible(this.getCurrentDriver(), filterDropdownMenu, 4);
         filterOptions.stream()
                 .filter(e -> e.getText().toLowerCase().contains(option.toLowerCase()))
                 .findFirst().get()
@@ -155,13 +150,13 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
 
     public List<String> getFilterOption(){
         expandFilterButton.click();
-        waitForElementToBeVisibleAgent(filterDropdownMenu, 10);
+        waitForElementToBeVisible(this.getCurrentDriver(), filterDropdownMenu, 10);
         return filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
     }
 
-    public void selectRandomChat(String agent){
+    public void selectRandomChat(){
         try {
-            waitForElementToBePresentByXpathAgent(tenthChat, 8);
+            waitForElementToBePresentByXpath(this.getCurrentDriver(), tenthChat, 8);
         }catch(TimeoutException e){
             // nothing to do, just stabilizing wait
         }
@@ -175,7 +170,7 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
                                                 ApiHelper.getSessionDetails(clientId).getBody().jsonPath().getList("data.sessionId").size()==1)
                                             .findAny()
                                             .get();
-        waitForElementToBeClickableAgent(searchChatInput, 8, agent);
+        waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 8);
         searchChatInput.sendKeys(randomClientIdWithOneSession);
         searchChatInput.sendKeys(Keys.ENTER);
         getTargetChat(randomClientIdWithOneSession).click();
@@ -211,7 +206,7 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
     }
 
     public String getUserMsgCountColor() {
-        waitForElementToBeVisible(userMsgCount,10);
+        waitForElementToBeVisible(this.getCurrentDriver(), userMsgCount,10);
         String hexColor = Color.fromString(userMsgCount.getCssValue("background-color")).asHex();
         userMsgCount.click();
         return hexColor;
@@ -226,7 +221,7 @@ public class LeftMenuWithChats extends AbstractUIElementDeprecated implements JS
         for(int i =0; i<secondsWait; i++){
             if(size==0) break;
             else{
-                waitForDeprecated(i*1000);
+                waitFor(i*1000);
                 size = chatsList.size();
             }
         }

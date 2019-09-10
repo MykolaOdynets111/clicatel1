@@ -35,7 +35,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
                     "health@test.com";
         }
-        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage, "main agent"),
+        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area");
     }
 
@@ -52,13 +52,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         } else {
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
-        Assert.assertTrue(getChatBody("main").isUserMessageShown(userMessage, "main agent"),
+        Assert.assertTrue(getChatBody("main").isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area");
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
     public void verifyUserMessageOnAgentDeskFromFB(String userMessage) {
-        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(FacebookSteps.getCurrentUserMessageText(), "main agent"),
+        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
                 "'" + userMessage + "' User message is not shown in conversation area (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
     }
 
@@ -70,7 +70,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         if (ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
-        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage, agent),
+        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
     }
 

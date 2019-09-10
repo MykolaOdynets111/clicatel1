@@ -11,13 +11,11 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
-    private String agent="main agent";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
     protected WebDriver currentDriver;
 
     public AgentAbstractPage(String agent) {
-        this.agent = agent;
         currentDriver = DriverFactory.getDriverForAgent(agent);
         HtmlElementLoader.populatePageObject(this, currentDriver);
     }
@@ -33,10 +31,6 @@ public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JS
         catch (TimeoutException e){
             return false;
         }
-    }
-
-    public String getCurrentAgent(){
-        return agent;
     }
 
     public WebDriver getCurrentDriver(){

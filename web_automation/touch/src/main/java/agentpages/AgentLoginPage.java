@@ -43,7 +43,7 @@ public class AgentLoginPage extends AgentAbstractPage {
        try{
            logIn(agent, ordinalAgentNumber);
        }catch(NoSuchElementException|TimeoutException e){
-           new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut(ordinalAgentNumber);
+           new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut();
            logIn(agent, ordinalAgentNumber);
        }
        return this;

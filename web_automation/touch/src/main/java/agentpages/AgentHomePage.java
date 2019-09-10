@@ -137,18 +137,22 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ProfileWindow getProfileWindow() {
+        profileWindow.setCurrentDriver(this.getCurrentDriver());
         return profileWindow;
     }
 
     public SuggestedGroup getSuggestedGroup() {
+        suggestedGroup.setCurrentDriver(this.getCurrentDriver());
         return suggestedGroup;
     }
 
     public PageHeader getPageHeader() {
+        pageHeader.setCurrentDriver(this.getCurrentDriver());
         return pageHeader;
     }
 
     public LeftMenuWithChats getLeftMenuWithChats() {
+        leftMenuWithChats.setCurrentDriver(this.getCurrentDriver());
         return leftMenuWithChats;
     }
 
