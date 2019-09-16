@@ -27,5 +27,6 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |Where can I find a branch?                                     |where can i find a branch                                        |
       |hi                                                             |hello                                                            |
       |Hi                                                             |hello                                                            |
-#      |interest                                                       |how much interest will i earn on my savings  ToDo: find another text input that will not conflict with another tie intents                     |
+      |why can't i view my balance in your app?                       |balance check                                                    |
+      |Why don't you offer business accounts                          |business account                                                 |
       |how to check balance at home?                                  |balance check                                                    |
