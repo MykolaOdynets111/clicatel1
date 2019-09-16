@@ -267,8 +267,8 @@ public interface WebActions extends WebWait {
         bg.dispose();
         return bi;
     }
-//
-//    default void createElementImage(WebElement element, String name, String path){
-//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
-//    }
+
+    default void createElementImage(WebDriver driver, WebElement element, String name, String path){
+            Shutterbug.shootElement(driver ,element,true ).withName(name).save(path);
+    }
 }

@@ -31,11 +31,7 @@ public class ChatInLeftMenu extends AbstractWidget {
         return adapterIcon;
     }
 
-    @FindAll({
-        @FindBy(xpath = "//div[contains(@class,'context-info')]//span[contains(@class,'icon svg-icon-webchat')]/*"),
-        @FindBy(xpath = "//span[contains(@class,'http-icon')]//span/*"),
-        @FindBy(xpath = "//span[contains(@class,'http-icon')]/span[contains(@class,'icon icon')]")
-    })
+    @FindBy(xpath = ".//div[@class='icons']/span[contains(@class,'icon')][child::*]/*")
     private WebElement adapterIcon;
 
     @FindBy( css = "span.icon.svg-icon-flagged")
