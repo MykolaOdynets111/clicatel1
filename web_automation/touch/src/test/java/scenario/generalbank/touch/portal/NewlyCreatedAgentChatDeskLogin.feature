@@ -16,4 +16,4 @@ Feature: Newly created agent should be able to login into to chat desk
     When Agent click on new conversation
     Then Conversation area becomes active with Chat to Support user's message
     When Agent responds with Hello, how can I help you? to User
-    Then User have to receive 'Hello, how can I help you?' text response for his 'Chat to Support' input
+    Then User have to receive 'Hello, how can I help you?' text response as a second response for his 'Chat to Support' input

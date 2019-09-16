@@ -25,7 +25,7 @@ Feature: Pinned chat is disabled to close and to transfer
     Then End chat popup should be opened
     When Agent click 'Skip' button
     Then Agent should not see from user chat in agent desk
-    Then User have to receive 'exit' text response for his 'connect to agent' input
+    Then User should see 'exit' text response for his 'connect to agent' input
 
 
   Scenario: "Transfer chat" button disabled for pined chat
