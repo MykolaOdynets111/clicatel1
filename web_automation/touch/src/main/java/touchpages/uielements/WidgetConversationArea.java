@@ -78,6 +78,12 @@ public class WidgetConversationArea extends AbstractUIElement {
                 .setCurrentDriver(this.getCurrentDriver()).isTextResponseShownAmongOthers(expectedResponse);
     }
 
+    public boolean isTextResponseNotShownAmongOther(String userInput, String expectedResponse, int secWait) {
+        return new ToUserTextMessage(getFromUserWebElement(userInput))
+                .setCurrentDriver(this.getCurrentDriver()).isTextResponseNotShownAmongOthers(expectedResponse, secWait);
+    }
+
+
     public boolean isOnlyOneTextResponseShownFor(String userMessage) {
         return new ToUserTextMessage(getFromUserWebElement(userMessage))
                 .setCurrentDriver(this.getCurrentDriver()).isOnlyOneTextResponseShwon();

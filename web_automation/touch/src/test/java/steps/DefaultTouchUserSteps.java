@@ -212,9 +212,11 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User should not receive '(.*)' message after his '(.*)' message in widget$")
     public void verifyMessageIsNotShownAfterUserMessage(String messageShouldNotBeShown, String userInput){
         widgetConversationArea = widget.getWidgetConversationArea();
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(messageShouldNotBeShown);
 
-        Assert.assertFalse(widgetConversationArea.isSecondTextResponseNotShownFor(userInput, 10000),
-                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
+        Assert.assertFalse(widgetConversationArea.isTextResponseNotShownAmongOther(userInput, expectedTextResponse, 3),
+                "Unexpected text response is shown on '"+userInput+"' user's input " +
+                        "(Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
     }
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")

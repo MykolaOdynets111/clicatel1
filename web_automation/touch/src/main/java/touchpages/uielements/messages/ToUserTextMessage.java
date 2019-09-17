@@ -94,6 +94,16 @@ public class ToUserTextMessage extends AbstractWidget {
         return result;
     }
 
+    public boolean isTextResponseNotShownAmongOthers(String expectedMessage, int wait) {
+        boolean result = false;
+        for(int i = 0; i < wait; i++){
+            result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+            if (result) return true;
+            waitFor(1000);
+        }
+        return result;
+    }
+
     public boolean isOnlyOneTextResponseShwon(){
         if (toUserTextMessages.size()>1)
             return false;
