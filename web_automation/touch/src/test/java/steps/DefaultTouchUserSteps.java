@@ -63,6 +63,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Assert.assertTrue(widget.isWidgetCollapsed(), "Widget is not collapsed");
     }
 
+    @Given("^Widget for (.*) is turned on$")
+    public void turnOnWidget(String tenantOrgName){
+        ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
+        ApiHelper.setAvailableForAllTerritories(tenantOrgName);
+    }
+
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page)$")
     public void openTenantPage(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
