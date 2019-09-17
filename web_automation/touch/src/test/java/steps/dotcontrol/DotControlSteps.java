@@ -206,10 +206,11 @@ public class DotControlSteps implements WebWait {
             }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
         String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
-        waitFotResponseToComeToServer(10);
         try {
-            Assert.assertEquals(Server.incomingRequests.get(dotControlRequestMessage.get().getClientId()).getMessage(), expectedMessage,
-                    "Message is not as expected");
+            Assert.assertTrue(isResponseComeToServer(expectedMessage, 10),
+                    "Message is not as expected\n Found: "
+                            + Server.incomingRequests.get(clientId.get()).getMessage()
+                            + "\nExpected: " + expectedMessage);
         }catch(NullPointerException e){
             Assert.fail("Nullpointer exception was faced\n " +
                     "The request: " + dotControlRequestMessage.get().toString() + "\n" +
@@ -231,21 +232,25 @@ public class DotControlSteps implements WebWait {
         responseOnSentRequest.get();
     }
 
-    @Then("Verify dot .Control returns (.*) response")
-    public void verifyDotControlReturnedCorrectResponse(String expectedResponse){
+    @Then("Verify dot .Control returns (.*) response during (.*) seconds")
+    public void verifyDotControlReturnedCorrectResponse(String expectedResponse, int wait){
         try {
-            if (expectedResponse.equalsIgnoreCase("agents_available")) {
-                waitFotResponseToComeToServer(40);
-                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
-                        "Message is not as expected");
-            } else {
-                waitFotResponseToComeToServer(10);
-                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
-                        "Message is not as expected");
-            }
+            Assert.assertTrue(isResponseComeToServer(expectedResponse, wait),
+                    "Message is not as expected\n Found: "
+                            + Server.incomingRequests.get(clientId.get()).getMessage()
+                            + "\nExpected: " + expectedResponse);
+//            if (expectedResponse.equalsIgnoreCase("agents_available")) {
+//                waitFotResponseToComeToServer(40);
+//                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
+//                        "Message is not as expected");
+//            } else {
+//                waitFotResponseToComeToServer(10);
+//                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
+//                        "Message is not as expected");
+//            }
         }catch(NullPointerException e){
             Assert.fail("NullPointerException was faced\n" +
-            "Keyset from server: " + Server.incomingRequests.keySet() + "\n" +
+            "Key set from server: " + Server.incomingRequests.keySet() + "\n" +
             "clientId from created integration" + clientId.get() + "\n" +
             "" + Server.incomingRequests.toString()
             );
@@ -463,17 +468,24 @@ public class DotControlSteps implements WebWait {
         return dotControlRequestMessage;
     }
 
-    private void waitFotResponseToComeToServer(int wait) {
+    private boolean isResponseComeToServer(String message, int wait) {
         for(int i = 0; i<wait; i++) {
-            if ((!Server.incomingRequests.isEmpty()) &
-                    Server.incomingRequests.keySet().contains(clientId.get())) {
-                break;
-            }
-
+            if (isExpectedResponseArrives(message)) return true;
             waitFor(1000);
         }
-        if(Server.incomingRequests.isEmpty()|!(Server.incomingRequests.keySet().contains(clientId.get()))){
-            Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
+        Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
+        return false;
+    }
+
+    private boolean isExpectedResponseArrives(String message){
+        if (message.equalsIgnoreCase("agents_available")) {
+            return (!Server.incomingRequests.isEmpty()) &
+                    Server.incomingRequests.keySet().contains(clientId.get()) &
+                   Server.incomingRequests.get(clientId.get()).getMessageType().equals("AGENT_AVAILABLE");
+        } else {
+            return (!Server.incomingRequests.isEmpty()) &
+                    Server.incomingRequests.keySet().contains(clientId.get()) &
+                    Server.incomingRequests.get(clientId.get()).getMessage().equals(message);
         }
     }
 

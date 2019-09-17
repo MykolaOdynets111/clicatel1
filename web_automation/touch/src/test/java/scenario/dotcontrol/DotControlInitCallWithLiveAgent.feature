@@ -22,4 +22,4 @@ Feature: Creating .Control integration and sending messages with live agents
     When Send init call with provided messageId and no active agents correct response is returned
     And MessageId is not null
     Given I login as agent of General Bank Demo
-    Then Verify dot .Control returns agents_available response
+    Then Verify dot .Control returns agents_available response during 40 seconds

@@ -11,7 +11,7 @@ Feature: Creating .Control integration and sending messages with agent
     When Agent click on new conversation request from dotcontrol
     Then Conversation area becomes active with chat to agent user's message
     When Agent responds with hello from agent to User
-    Then Verify dot .Control returns hello from agent response
+    Then Verify dot .Control returns hello from agent response during 10 seconds
     When Send hi, need your help with my card message for .Control
     Then Conversation area contains hi, need your help with my card user's message
 
