@@ -337,7 +337,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
 
             } else{
-                Assert.assertTrue(false, "Unexpected card is shown as a response on '"+userInput+"' user message.");
+                Assert.fail("Unexpected card is shown as a response on '"+userInput+"' user message.");
             }
         }
 
