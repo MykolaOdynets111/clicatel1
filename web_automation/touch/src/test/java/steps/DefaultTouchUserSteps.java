@@ -555,10 +555,10 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         String expectedDescription = tenantInfo.get("shortDescription");
         String dynamicTenantOrgName = tenantInfo.get("tenantOrgName");
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), dynamicTenantOrgName,
-                dynamicTenantOrgName + " tenant name is not shown in the widget header");
+        soft.assertEquals(getWidgetHeader().getDisplayedTenantName().toLowerCase(), dynamicTenantOrgName.toLowerCase(),
+                dynamicTenantOrgName + " tenant name is not shown in the widget header\n");
         soft.assertEquals(getWidgetHeader().getDisplayedTenantDescription(), expectedDescription,
-                expectedDescription + " description is not shown for " +dynamicTenantOrgName+ " tenant");
+                expectedDescription + " description is not shown for " +dynamicTenantOrgName+ " tenant\n");
         soft.assertAll();
     }
 

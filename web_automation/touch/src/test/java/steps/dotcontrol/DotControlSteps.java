@@ -239,15 +239,6 @@ public class DotControlSteps implements WebWait {
                     "Message is not as expected\n Found: "
                             + Server.incomingRequests.get(clientId.get()).getMessage()
                             + "\nExpected: " + expectedResponse);
-//            if (expectedResponse.equalsIgnoreCase("agents_available")) {
-//                waitFotResponseToComeToServer(40);
-//                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessageType(), "AGENT_AVAILABLE",
-//                        "Message is not as expected");
-//            } else {
-//                waitFotResponseToComeToServer(10);
-//                Assert.assertEquals(Server.incomingRequests.get(clientId.get()).getMessage(), expectedResponse,
-//                        "Message is not as expected");
-//            }
         }catch(NullPointerException e){
             Assert.fail("NullPointerException was faced\n" +
             "Key set from server: " + Server.incomingRequests.keySet() + "\n" +
@@ -479,12 +470,12 @@ public class DotControlSteps implements WebWait {
 
     private boolean isExpectedResponseArrives(String message){
         if (message.equalsIgnoreCase("agents_available")) {
-            return (!Server.incomingRequests.isEmpty()) &
-                    Server.incomingRequests.keySet().contains(clientId.get()) &
+            return (!Server.incomingRequests.isEmpty()) &&
+                    Server.incomingRequests.keySet().contains(clientId.get()) &&
                    Server.incomingRequests.get(clientId.get()).getMessageType().equals("AGENT_AVAILABLE");
         } else {
-            return (!Server.incomingRequests.isEmpty()) &
-                    Server.incomingRequests.keySet().contains(clientId.get()) &
+            return (!Server.incomingRequests.isEmpty()) &&
+                    Server.incomingRequests.keySet().contains(clientId.get()) &&
                     Server.incomingRequests.get(clientId.get()).getMessage().equals(message);
         }
     }
