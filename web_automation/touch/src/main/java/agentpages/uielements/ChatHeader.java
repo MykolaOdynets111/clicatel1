@@ -25,10 +25,10 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='End chat']")
     private WebElement endChatButton;
 
-    @FindBy(xpath = ".//button[text()='Pin chat']")
+    @FindBy(xpath = ".//button[text()='Flag chat']")
     private WebElement pinChatButton;
 
-    @FindBy(xpath = ".//button[text()='Unpin chat']")
+    @FindBy(xpath = ".//button[text()='Unflag chat']")
     private WebElement unpinChatButton;
 
     @FindBy(xpath = ".//button[text()='Transfer chat']")

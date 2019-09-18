@@ -15,11 +15,11 @@ Feature: Pinned chat is disabled to close and to transfer
 
 
   Scenario: Agent receives error message when tries to close the pined chat
-    When Agent click 'Pin' button
+    When Agent click 'Flag chat' button
     Then Agent sees 'flag' icon in this chat
     When Agent click "End chat" button
     Then Agent receives 'pin' error message
-    When Agent click 'Unpin' button
+    When Agent click 'Unflag chat' button
     Then Agent do not see 'flag' icon in this chat
     Then Agent click "End chat" button
     Then End chat popup should be opened
@@ -29,10 +29,10 @@ Feature: Pinned chat is disabled to close and to transfer
 
 
   Scenario: "Transfer chat" button disabled for pined chat
-    When Agent click 'Pin' button
+    When Agent click 'Flag chat' button
     Then Agent sees 'flag' icon in this chat
     Then Agent can not click 'Transfer chat' button
-    Then Agent click 'Unpin' button
+    Then Agent click 'Unflag chat' button
     Given I login as second agent of General Bank Demo
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming transfer" header

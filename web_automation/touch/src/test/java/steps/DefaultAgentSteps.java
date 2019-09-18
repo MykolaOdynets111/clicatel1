@@ -344,13 +344,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     }
 
-    @When("^(.*) click 'Pin' button$")
+    @When("^(.*) click 'Flag chat' button$")
     public void pinChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickPinButton();
     }
 
 
-    @When("^(.*) click 'Unpin' button$")
+    @When("^(.*) click 'Unflag chat' button$")
     public void unpinChat(String agent) {
         getAgentHomePage(agent).getChatHeader().clickUnpinButton();
     }
