@@ -142,7 +142,7 @@ public class ChatHeader extends AbstractUIElement {
         Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
                 ,getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         String startedDate = sessionDetails.get("startedDate");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         LocalDateTime formatDateTime = LocalDateTime.parse(startedDate, formatter).atZone(ZoneId.of("UTC")).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("'Started:' dd MMM, HH:mm|");
         return timeStamp.getAttribute("textContent").equals(formatDateTime.format(formatter2));
