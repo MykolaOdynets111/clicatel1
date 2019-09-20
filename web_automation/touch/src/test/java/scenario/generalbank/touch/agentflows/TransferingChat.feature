@@ -19,6 +19,7 @@ Feature: Transferring chat
     And Second agent can see transferring agent name, user name and following user's message: 'connect to agent'
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request
+    And First Agent of General Bank Demo is logged in
     And Agent should not see from user chat in agent desk
     When Second agent click on new conversation
     Then Conversation area becomes active with connect to agent user's message in it for second agent

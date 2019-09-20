@@ -93,6 +93,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
 
+    @Then("^(.*) of (.*) is logged in")
+    public void verifyAgentLoggedIn(String ordinalAgentNumber, String tenantOrgName){
+
+        Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
+                "Agent is not logged in.");
+    }
+
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
         ApiHelper.closeActiveChats(agent);

@@ -21,3 +21,5 @@ Feature: Transfer overnight ticket
     Then Second Agent has new conversation request
     When Second agent click on new conversation
     And Message that it is overnight ticket is shown for Second Agent
+    And First Agent of General Bank Demo is logged in
+    And First agent should not see from user chat in agent desk
