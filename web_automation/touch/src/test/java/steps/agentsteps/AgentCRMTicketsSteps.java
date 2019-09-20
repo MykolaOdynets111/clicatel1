@@ -342,6 +342,32 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         return dataForNewCRMTicket;
     }
 
+    @Then("^Agent sees (.*) CRM tickets$")
+    public void verifyTicketsNumber(int expectedNumber){
+        Assert.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets(), expectedNumber,
+                "Shown tickets number is not as expected");
+    }
+
+    @Then("^Tickets number is reduced to (.*)$")
+    public void verifyTicketsNumberReduced(int expectedNumber){
+        boolean isReduced = false;
+        for(int i =0; i < 6; i++){
+            if(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets() == expectedNumber) {
+                isReduced = true;
+                break;
+            }
+            else getAgentHomeForMainAgent().waitFor(200);
+        }
+        Assert.assertTrue(isReduced, "Shown tickets number is not as expected");
+    }
+
+
+    @When("^(.*) deletes first ticket$")
+    public void deleteFirstTicket(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
+    }
+
     private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(createdCrmTicket.get().getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))

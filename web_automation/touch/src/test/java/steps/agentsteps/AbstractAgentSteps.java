@@ -3,7 +3,9 @@ package steps.agentsteps;
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
+import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
+import cucumber.api.java.en.When;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -59,6 +61,10 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         }
         return mainAgentLoginPage.get();
     }
+
+    private String clientIDGlobal;
+
+    private String chatIDTranscript;
 
 
     public static void setCurrentLoginPage(AgentLoginPage loginPage) {
@@ -164,4 +170,22 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         return "";
     }
 
+    @When("Save clientID value for (.*) user")
+    public void saveClientIDValue(String userFrom){
+        if (userFrom.equalsIgnoreCase("facebook"))
+            clientIDGlobal = socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString();
+        else if (userFrom.equalsIgnoreCase("twitter"))
+            clientIDGlobal = socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId();
+        else
+            clientIDGlobal = getAgentHomePage("main").getCustomer360Container().getUserFullName();
+        chatIDTranscript = (String) ApiHelper.getActiveSessionByClientId(clientIDGlobal).get("conversationId");
+    }
+
+    public String getClientIDGlobal(){
+        return clientIDGlobal;
+    }
+
+    public String getChatIDTranscript(){
+        return chatIDTranscript;
+    }
 }

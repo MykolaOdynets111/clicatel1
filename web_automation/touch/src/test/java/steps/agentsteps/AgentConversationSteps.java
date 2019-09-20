@@ -383,4 +383,23 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
+
+    @Then("^(.*) sees \"(.*)\" tip in conversation area$")
+    public void verifyTipIfNoSelectedChat(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
+                "Tip note if no chat selected is not as expected");
+    }
+
+    @Then("^(.*) sees \"(.*)\" tip in context area$")
+    public void verifyTipIfNoSelectedChatInContextArea(String agent, String note){
+        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelectedFromContextArea(), note,
+                "Tip note in context area if no chat selected is not as expected");
+    }
+
+    @Then("^(.*) sees \"(.*)\" placeholder in input field$")
+    public void verifyInputFieldPlaceholder(String agent, String placeholder){
+        Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
+                "Placeholder in input field in opened chat is not as expected");
+
+    }
 }

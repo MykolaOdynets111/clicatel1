@@ -6,8 +6,6 @@ import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.SupportHoursItem;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
-import emailhelper.CheckEmail;
-import emailhelper.GmailParser;
 import mc2api.auth.PortalAuthToken;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -15,9 +13,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.*;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
-import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import dbmanager.DBConnector;
-import emailhelper.GmailConnector;
 import io.restassured.response.Response;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
@@ -28,7 +24,6 @@ import steps.DefaultTouchUserSteps;
 import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
 
-import javax.mail.Message;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -43,9 +38,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private static Customer360PersonalInfo customer360InfoForUpdating;
     private List<ChatHistoryItem> chatHistoryItems;
     private Map selectedChatForHistoryTest;
-    private String clientIDGlobal;
-    private Message chatTranscriptEmail;
-    private String chatIDTranscript;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -67,14 +59,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         return TEST_FEATURE_STATUS_CHANGES.get().get(featureName);
     }
 
-
-
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
         ApiHelper.closeActiveChats(agent);
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
-
 
     @When("I check primary color for tenant in login page")
     public void checkPrimaryColorLoginPage(){
@@ -85,8 +74,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Color for tenant 'Forgot password?' string is not correct");
         soft.assertAll();
     }
-
-
 
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
@@ -104,7 +91,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
                 "Agent feature is not expected");
     }
-
 
     @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
@@ -126,25 +112,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         );
     }
 
-    @Then("^(.*) sees \"(.*)\" tip in conversation area$")
-    public void verifyTipIfNoSelectedChat(String agent, String note){
-        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelected(), note,
-                "Tip note if no chat selected is not as expected");
-    }
-
-    @Then("^(.*) sees \"(.*)\" tip in context area$")
-    public void verifyTipIfNoSelectedChatInContextArea(String agent, String note){
-        Assert.assertEquals(getAgentHomePage(agent).getTipIfNoChatSelectedFromContextArea(), note,
-                "Tip note in context area if no chat selected is not as expected");
-    }
-
-    @Then("^(.*) sees \"(.*)\" placeholder in input field$")
-    public void verifyInputFieldPlaceholder(String agent, String placeholder){
-        Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
-                "Placeholder in input field in opened chat is not as expected");
-
-    }
-
     @Then("^(.*) button is (.+) on Chat header$")
     public void isButtonEnabled(String button, String state){
         if (state.equalsIgnoreCase("disabled"))
@@ -158,7 +125,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             Assert.assertFalse( getAgentHomePage("main").getChatHeader().isButtonEnabled(button),
                     "'" + button + "' button is displayed");
     }
-
 
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
@@ -609,126 +575,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Actual list: " + messagesFromChatBody);
     }
 
-    @When("Save clientID value for (.*) user")
-    public void saveClientIDValue(String userFrom){
-        if (userFrom.equalsIgnoreCase("facebook"))
-            clientIDGlobal = socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString();
-        else if (userFrom.equalsIgnoreCase("twitter"))
-            clientIDGlobal = socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId();
-        else
-            clientIDGlobal = getAgentHomePage("main").getCustomer360Container().getUserFullName();
-        chatIDTranscript = (String) ApiHelper.getActiveSessionByClientId(clientIDGlobal).get("conversationId");
-    }
-
-    @Then("Chat Transcript email arrives")
-    public void verifyChatTranscriptEmail(){
-        // Checking added "standarttouchgoplan@gmail.com" email for chat transcript emails
-        GmailConnector.loginAndGetInboxFolder(MC2Account.QA_STANDARD_ACCOUNT.getEmail(), MC2Account.QA_STANDARD_ACCOUNT.getPass());
-        chatTranscriptEmail = CheckEmail
-                .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
-        for (int i = 0; i < 5; i ++){
-            if(chatTranscriptEmail==null){
-                GmailConnector.reopenFolder();
-                chatTranscriptEmail = CheckEmail
-                        .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
-                continue;
-            }
-            if(GmailParser.getUserId(chatTranscriptEmail).equals(clientIDGlobal)) {
-                break;
-            }
-            else{
-                getAgentHomePage("main").waitFor(15000);
-                GmailConnector.reopenFolder();
-                chatTranscriptEmail = CheckEmail
-                        .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 1);
-            }
-        }
-
-        Assert.assertFalse(CheckEmail.getEmailSubject(chatTranscriptEmail).isEmpty(), "No Chat Transcript message received");
-    }
-
-    @Then("Email title contains (.*) adapter, client ID/Name/Email, chat ID, session number values")
-    public void verifyChatTranscriptTitle(String adapter){
-//        String chatID = (String) ApiHelper.getActiveSessionByClientId(clientIDGlobal).get("conversationId");
-        int sessionsNumber = DBConnector.getNumberOfSessionsInConversationForLast3Days(ConfigManager.getEnv(), chatIDTranscript);
-
-        String chatTranscriptEmailTitle = CheckEmail.getEmailSubject(chatTranscriptEmail);
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(getAdapterFromEmailSubject(chatTranscriptEmailTitle), getAdapter(adapter),
-                "Adapters does not match");
-        softAssert.assertEquals(getClientIDFromEmailSubject(chatTranscriptEmailTitle), getSecondParameterPerAdapter(adapter),
-                "Client email does not match");
-        softAssert.assertEquals(getChatIDFromEmailSubject(chatTranscriptEmailTitle), chatIDTranscript,
-                "chatIDs does not match");
-        softAssert.assertEquals(sessionsNumber, getLastSessionNumberFromEmailSubject(chatTranscriptEmailTitle), "Different session number");
-        softAssert.assertAll();
-    }
-
-    @Then("Email content contains chat history from the terminated conversation")
-    public void compareHistoriesInChatTranscript(){
-        List<String> historyFromEmail = CheckEmail.getChatTranscriptEmailContent(chatTranscriptEmail);
-
-        String lastSessionID = DBConnector.getLastSessioinID(ConfigManager.getEnv(), Tenants.getTenantUnderTestName(), clientIDGlobal);
-        List<ChatHistoryItem> chatItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), lastSessionID);
-        List<String> historyFromDB = getBareChatHistory(chatItems);
-
-        Assert.assertEquals(historyFromEmail, historyFromDB, "Histories in Email and in DB are different");
-    }
-
-    // WARNING: Bad Code!
-    public String getAdapter(String adapter){
-        switch(adapter.toLowerCase()) {
-            //Because of we are creating .Control integration for "fbmsg" adapter, this method will return this adapter name
-            case "dotcontrol":
-                return "fbmsg";
-
-            default:
-                return adapter;
-        }
-    }
-
-    public String getAdapterFromEmailSubject(String chatTranscriptEmailTitle) {
-        String [] dataInString = chatTranscriptEmailTitle.split(",");
-        return dataInString[0].trim();
-    }
-
-    public String getSecondParameterPerAdapter(String adapter){
-        ClientProfile clientAttributes = ApiHelper.getClientAttributes(ApiHelper.getClientProfileId(clientIDGlobal));
-        switch(adapter.toLowerCase()){
-            case "dotcontrol":
-            case "whatsapp":
-                return clientIDGlobal;
-            case "fbmsg":
-                return clientAttributes.getAttributes().getFirstName();
-            case "twdm":
-                return clientAttributes.getAttributes().getFirstName();
-            case "webchat":
-                return clientAttributes.getAttributes().getEmail();
-            default:
-                return null;
-        }
-    }
-
-    public String getClientIDFromEmailSubject(String chatTranscriptEmailTitle) {
-        String [] dataInString = chatTranscriptEmailTitle.split(",");
-        return dataInString[1].trim();
-    }
-
-    private String getChatIDAndSessionNumberFromEmailSubject(String chatTranscriptEmailTitle) {
-        String [] dataInString = chatTranscriptEmailTitle.split(",");
-        return dataInString[2].trim();
-    }
-
-    public String getChatIDFromEmailSubject(String chatTranscriptEmailTitle) {
-        String chatAndSessionID = getChatIDAndSessionNumberFromEmailSubject(chatTranscriptEmailTitle);
-        return chatAndSessionID.substring(0, chatAndSessionID.indexOf("(")).trim();
-    }
-
-    public int getLastSessionNumberFromEmailSubject(String chatTranscriptEmailTitle) {
-        String chatAndSessionID = getChatIDAndSessionNumberFromEmailSubject(chatTranscriptEmailTitle);
-        return Integer.parseInt(chatAndSessionID.substring(chatAndSessionID.indexOf("(")+1, chatAndSessionID.indexOf(")")));
-    }
-
     private List<String> getExpectedChatHistoryItems(ZoneId zoneId, List<ChatHistoryItem> items){
         List<String> expectedMessagesList = new ArrayList<>();
         expectedMessagesList.add(0, formDaySeparator(items.get(0).getMessageTime(), zoneId));
@@ -740,19 +586,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
         return expectedMessagesList;
     }
-
-    private List<String> getBareChatHistory(List<ChatHistoryItem> items){
-        List<String> expectedMessagesList = new ArrayList<>();
-
-        for (ChatHistoryItem historyItem : items) {
-            String expectedChatItem = historyItem.getDisplayMessage().replace("\n", "");
-            if(expectedChatItem.contains("Input card")) expectedChatItem =
-                    expectedChatItem.replace("Input card", "Let me connect you with a live agent to assist you further. Before I transfer you, please give us some basic info:");
-            expectedMessagesList.add(expectedChatItem);
-        }
-        return expectedMessagesList;
-    }
-
 
     private String formDaySeparator(long time, ZoneId zoneId){
         LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId);
@@ -811,48 +644,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    @Then("^Agent sees (.*) CRM tickets$")
-    public void verifyTicketsNumber(int expectedNumber){
-        Assert.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets(), expectedNumber,
-                "Shown tickets number is not as expected");
-    }
 
-    @Then("^Tickets number is reduced to (.*)$")
-    public void verifyTicketsNumberReduced(int expectedNumber){
-        boolean isReduced = false;
-        for(int i =0; i < 6; i++){
-            if(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets() == expectedNumber) {
-                isReduced = true;
-                break;
-            }
-            else getAgentHomeForMainAgent().waitFor(200);
-        }
-        Assert.assertTrue(isReduced, "Shown tickets number is not as expected");
-    }
-
-
-    @When("^(.*) deletes first ticket$")
-    public void deleteFirstTicket(String agent){
-        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
-        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
-    }
-
-    @Given("Clear Chat Transcript email inbox")
-    public void clearInbox(){
-        // using standarttouchgoplan@gmail.com for all chat transcripts
-        GmailConnector.loginAndGetInboxFolder(MC2Account.QA_STANDARD_ACCOUNT.getEmail(), MC2Account.QA_STANDARD_ACCOUNT.getPass());
-        CheckEmail.clearEmailInbox();
-    }
-
-    @Given("Set Chat Transcript attribute to (.*) for (.*) tenant")
-    public void setConfigAttributeValueTo(String value, String tenantOrgName){
-        if (Tenants.getTenantUnderTestOrgName() == null)  // should it be applied?
-            Tenants.setTenantUnderTestOrgName(tenantOrgName);
-        // Adding "standarttouchgoplan@gmail.com" email from MC2 accounts for chat transcript emails
-        ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + MC2Account.QA_STANDARD_ACCOUNT.getEmail() + "\"");
-        ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\""+value+"\"");
-
-    }
 
     private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
