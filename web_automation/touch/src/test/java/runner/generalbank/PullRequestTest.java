@@ -20,7 +20,7 @@ import static runner.generalbank.Path.DOTCONTROL;
         },
         monochrome = true,
         features ={
-//                PATH + "AgentDeskSuggestions.feature",
+//                PATH + "AgentDeskSuggestions.feature", need to check the time it takes to run the whole suite if will have some time can add these tests
 //                PATH + "ClosingSession.feature",
 //                PATH + "DisconnectingAgent.feature",
 //                PATH + "RedirectionOnAgent.feature",
@@ -33,10 +33,10 @@ import static runner.generalbank.Path.DOTCONTROL;
                 PATH + "FilteringPinnedChat.feature",
                 PATH + "PinChatCloseTransfer.feature",
                 PATH + "RejectTransferingChat.feature",
-                PATH + "TransfeBackTransferedChat.feature",
+//                PATH + "TransfeBackTransferedChat.feature", need to wait till message preview is fixed
                 PATH + "TransfedChatContainElements.feature",
                 PATH + "Transfering2Chats.feature",
-                PATH + "TransferingChat.feature",
+//                PATH + "TransferingChat.feature", need to wait till message preview is fixed
                 PATH + "TransferingChatWithNoAvailableAgent.feature",
                 DOTCONTROL + "DotControlCustomer360.feature",
                 DOTCONTROL + "DotControlEditedSuggestionSending.feature",

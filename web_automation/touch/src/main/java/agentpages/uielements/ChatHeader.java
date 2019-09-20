@@ -109,12 +109,12 @@ public class ChatHeader extends AbstractUIElement {
         return chatHeaderTitle.getText();
     }
 
-    public void clickPinButton(){
-        clickElem(this.getCurrentDriver(), pinChatButton, 2,"Pin chat");
+    public void clickFlagChatButton(){
+        clickElem(this.getCurrentDriver(), pinChatButton, 2,"Flag chat");
     }
 
-    public void clickUnpinButton(){
-        clickElem(this.getCurrentDriver(), unpinChatButton, 2, "Unpin chat");
+    public void clickUnflagChatButton(){
+        clickElem(this.getCurrentDriver(), unpinChatButton, 2, "Unflag chat");
     }
 
     public void clickCancelTransferButton(){

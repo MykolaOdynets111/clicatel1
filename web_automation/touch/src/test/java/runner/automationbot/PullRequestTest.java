@@ -26,7 +26,7 @@ import static runner.automationbot.Path.DOTCONTROL;
                 PATH + "EditAutorespondersViaPortalUI.feature",
                 PATH + "OutOfSupportHoursBotMode.feature",
                 PATH + "TenantBrandImageManaging.feature",
-                PATH + "TransferingChatViaTimeout.feature",
+//                PATH + "TransferingChatViaTimeout.feature", , need to wait till message preview is fixed
                 PATH + "TransferOvernigthTicket.feature",
                 DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
         },
