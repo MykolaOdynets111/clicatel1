@@ -1,4 +1,4 @@
-package steps;
+package steps.agentsteps;
 
 import agentpages.uielements.Suggestion;
 import apihelper.ApiHelper;
@@ -12,6 +12,8 @@ import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.FacebookSteps;
+import steps.TwitterSteps;
 import steps.agentsteps.AbstractAgentSteps;
 
 import java.io.File;

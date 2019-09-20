@@ -30,6 +30,7 @@ import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
+import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;

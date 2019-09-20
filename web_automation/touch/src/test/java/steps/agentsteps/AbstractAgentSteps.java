@@ -4,7 +4,13 @@ import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
 import com.github.javafaker.Faker;
+import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
 import interfaces.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
@@ -21,6 +27,8 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
     private static ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
 
     public static Faker faker = new Faker();
+
+    protected List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
 
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -137,6 +145,23 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         mainAgentHomePage.remove();
         currentAgentHomePage.remove();
         secondAgentHomePage.remove();
+    }
+
+    protected String getUserName(String userFrom){
+        if(userFrom.contains("first chat")){
+            return createdChatsViaDotControl.get(0).getClientId();
+        }
+        if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
+            return socialaccounts.TwitterUsers.getLoggedInUserName();
+        }
+        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
+            return socialaccounts.FacebookUsers.getLoggedInUserName();
+        }
+        if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
+                !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
+            return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+        }
+        return "";
     }
 
 }
