@@ -15,7 +15,6 @@ import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -37,14 +36,14 @@ public class LaunchpadTest extends BaseTest {
                                             }};
 
     @BeforeClass()
-    private void createAccount() throws FileNotFoundException, IOException {
+    private void createAccount() {
         Faker faker = new Faker();
         accountSignUp = new AccountSignUp();
         accountSignUp.setAccountName( "aqa_" + faker.lorem().word() + faker.number().digits(3))
                         .setPassword("p@$$w0rd4te$t")
                         .setEmail("aqatest_" + System.currentTimeMillis() +"@gmail.com")
-                        .setFirstName(faker.name().firstName())
-                        .setLastName(faker.name().lastName());
+                        .setFirstName("Clickatell")
+                        .setLastName("Test");
 
         accountID = ApiHelperPlatform.createNewAccount(accountSignUp);
         saveNewAccountProperties();

@@ -34,7 +34,7 @@ public class SignUpTest extends BaseTest {
         faker = new Faker();
         signUpInfo.put("firstName", faker.name().firstName());
         signUpInfo.put("lastName", faker.name().lastName());
-        signUpInfo.put("name", signUpInfo.get("firstName") + " " + signUpInfo.get("lastName"));
+        signUpInfo.put("name", "Clickatell Test");
         signUpInfo.put("accountName", "aqa_" + faker.lorem().word() + faker.number().digits(3));
         signUpInfo.put("email", "automationmc2+" + System.currentTimeMillis() +"@gmail.com");
         signUpInfo.put("pass", "p@$$w0rd4te$t");
