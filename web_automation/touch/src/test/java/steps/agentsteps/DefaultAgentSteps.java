@@ -59,6 +59,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         return TEST_FEATURE_STATUS_CHANGES.get().get(featureName);
     }
 
+    @When("Save clientID value for (.*) user")
+    public void saveClientIDValues(String userFrom){
+        saveClientIDValue(userFrom);
+    }
+
     @Given("^(.*) has no active chats$")
     public void closeActiveChats(String agent){
         ApiHelper.closeActiveChats(agent);

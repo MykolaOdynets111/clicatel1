@@ -170,7 +170,6 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         return "";
     }
 
-    @When("Save clientID value for (.*) user")
     public void saveClientIDValue(String userFrom){
         if (userFrom.equalsIgnoreCase("facebook"))
             clientIDGlobal = socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString();
