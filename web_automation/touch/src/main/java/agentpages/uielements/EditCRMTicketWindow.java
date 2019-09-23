@@ -33,6 +33,8 @@ public class EditCRMTicketWindow extends AbstractUIElement {
     }
 
     public EditCRMTicketWindow provideCRMNewTicketInfo(Map<String, String> info){
+        waitForElementToBeClickable(this.getCurrentDriver(), noteInput, 3);
+        noteInput.click();
         noteInput.clear();
         noteInput.sendKeys(info.get("agentNote"));
         linkInput.clear();
