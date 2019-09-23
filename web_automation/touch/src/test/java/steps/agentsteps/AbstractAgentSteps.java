@@ -10,11 +10,12 @@ import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import interfaces.*;
+import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
+public class AbstractAgentSteps extends AbstractPortalSteps {
 
     private static ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
 

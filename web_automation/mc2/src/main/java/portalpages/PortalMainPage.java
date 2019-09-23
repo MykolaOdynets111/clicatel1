@@ -275,4 +275,21 @@ public class PortalMainPage extends PortalAbstractPage {
        clickElem(this.getCurrentDriver(), getStartedButton, 2, "'Get Started' button");
    }
 
+
+   public void launchChatDesk(){
+       waitWhileProcessing(2,5);
+       String currentWindow = this.getCurrentDriver().getWindowHandle();
+       getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+
+       while(this.getCurrentDriver().getWindowHandles().size() !=2 ){
+           getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+       }
+       if(this.getCurrentDriver().getWindowHandles().size()>1) {
+           for (String winHandle : this.getCurrentDriver().getWindowHandles()) {
+               if (!winHandle.equals(currentWindow)) {
+                   this.getCurrentDriver().switchTo().window(winHandle);
+               }
+           }
+       }
+   }
 }

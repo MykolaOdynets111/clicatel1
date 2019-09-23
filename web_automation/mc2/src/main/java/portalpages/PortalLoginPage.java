@@ -43,6 +43,10 @@ public class PortalLoginPage extends PortalAbstractPage {
         return new PortalLoginPage(driver);
     }
 
+    public void openLoginPage(WebDriver driver) {
+        driver.get(EndpointsPlatform.PORTAL_LOGIN_PAGE);
+    }
+
     public static PortalLoginPage openPortalLoginPage() {
         MC2DriverFactory.getPortalDriver().get(EndpointsPlatform.PORTAL_LOGIN_PAGE);
         return new PortalLoginPage();

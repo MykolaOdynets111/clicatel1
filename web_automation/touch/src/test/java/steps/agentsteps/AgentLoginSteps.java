@@ -5,7 +5,9 @@ import apihelper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.Agents;
 import datamanager.Tenants;
+import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.testng.Assert;
 
@@ -15,12 +17,19 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
-//        if(!ordinalAgentNumber.contains("second")) ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName());
-        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName)
-                .loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
-        setAgentLoginPage(ordinalAgentNumber, loginPage);
+        loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
+    }
+
+    private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
+        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+        getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
+        getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
+
+        if(!ordinalAgentNumber.toLowerCase().contains("second")){
+            getPortalMainPage().launchChatDesk();
+        }
     }
 
     @Given("^Try to login as (.*) of (.*)")

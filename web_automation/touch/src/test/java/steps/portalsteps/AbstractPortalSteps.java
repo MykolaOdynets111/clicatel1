@@ -2,12 +2,15 @@ package steps.portalsteps;
 
 import com.github.javafaker.Faker;
 import driverfactory.DriverFactory;
+import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import interfaces.VerificationHelper;
+import interfaces.WebWait;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
 
-public class AbstractPortalSteps implements JSHelper {
+public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
     private static ThreadLocal<PortalLoginPage> currentPortalLoginPage = new ThreadLocal<>();
 

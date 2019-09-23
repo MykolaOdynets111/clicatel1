@@ -68,6 +68,7 @@ public class PortalTouchIntegrationsPage extends PortalAbstractPage {
 
     // changing toggle state if it's required
     public void switchToggleStateTo(String integrationName, String toggleAction){
+        waitForElementsToBeVisible(this.getCurrentDriver(), integrationRows, 5);
         if ((toggleAction.equalsIgnoreCase("enable") && getTargetIntegrationRow(integrationName).isToggleEnabled()) ||
             (toggleAction.equalsIgnoreCase("disable") && !getTargetIntegrationRow(integrationName).isToggleEnabled()))
             return;  // we are in required toggle state

@@ -54,7 +54,7 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
                 GmailConnector.reopenFolder();
                 chatTranscriptEmail = CheckEmail
                         .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
-                continue;
+                 continue;
             }
             if(GmailParser.getUserId(chatTranscriptEmail).equals(getClientIDGlobal())) {
                 break;
@@ -67,6 +67,7 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
             }
         }
 
+        Assert.assertNotNull(chatTranscriptEmail, "There is no chat transcript email");
         Assert.assertFalse(CheckEmail.getEmailSubject(chatTranscriptEmail).isEmpty(), "No Chat Transcript message received");
     }
 
