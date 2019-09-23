@@ -26,7 +26,8 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
         getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
         getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
-
+        Assert.assertTrue(getPortalMainPage().isPortalPageOpened(),
+                "User is not logged in to portal");
         if(!ordinalAgentNumber.toLowerCase().contains("second")){
             getPortalMainPage().launchChatDesk();
         }

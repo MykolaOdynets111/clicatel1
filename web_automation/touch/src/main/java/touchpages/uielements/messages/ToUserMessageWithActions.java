@@ -66,7 +66,10 @@ public class ToUserMessageWithActions extends AbstractWidget {
     }
 
     public void clickButton(String buttonName) {
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         WebElement targetButton =  buttons.stream().filter(e -> e.getAttribute("innerText").equalsIgnoreCase(buttonName)).findFirst().get();
+        waitForElementToBeClickable(this.getCurrentDriver(), targetButton, 3);
         try {
             targetButton.click();
         } catch(ElementNotVisibleException e){
