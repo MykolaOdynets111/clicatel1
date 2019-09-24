@@ -10,6 +10,7 @@ import datamanager.Tenants;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.testng.Assert;
+import portalpages.PortalMainPage;
 
 public class AgentLoginSteps extends AbstractAgentSteps {
 
@@ -52,12 +53,14 @@ public class AgentLoginSteps extends AbstractAgentSteps {
 
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
-        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName)
-                .loginAsAgentOf(tenantOrgName, "main agent");
-        setAgentLoginPage("second agent", loginPage);
+        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, "main");
 
-        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"),
-                "Agent is not logged in.");
+        getPortalLoginPage("second agent").openLoginPage(DriverFactory.getDriverForAgent("second agent"));
+        PortalMainPage mainPage = getPortalLoginPage("second agent").login(agent.getAgentEmail(), agent.getAgentPass());
+        Assert.assertTrue(mainPage.isPortalPageOpened(),
+                "User is not logged in to portal");
+        mainPage.launchChatDesk();
+
     }
 
     @When("I open browser to log in in chat desk as an agent of (.*)")
