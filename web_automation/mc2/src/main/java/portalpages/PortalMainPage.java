@@ -281,8 +281,9 @@ public class PortalMainPage extends PortalAbstractPage {
        String currentWindow = this.getCurrentDriver().getWindowHandle();
        getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
 
-       while(this.getCurrentDriver().getWindowHandles().size() !=2 ){
-           getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+       for (int i = 0; i < 4; i++){
+           if(this.getCurrentDriver().getWindowHandles().size() == 2) break;
+           else getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
        }
        if(this.getCurrentDriver().getWindowHandles().size()>1) {
            for (String winHandle : this.getCurrentDriver().getWindowHandles()) {
