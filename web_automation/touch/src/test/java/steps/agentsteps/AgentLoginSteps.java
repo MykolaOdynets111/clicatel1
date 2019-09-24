@@ -18,9 +18,11 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
+        System.out.println("Log in to portal is started");
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
+        System.out.println("Log in to portal is finished");
     }
 
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
