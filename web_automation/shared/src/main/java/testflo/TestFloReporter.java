@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public class TestFloReporter {
 
     public static void main(String[] args) {
-//        For debug
+////        For debug
 //    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
 //    System.setProperty("isRerun", "true");
-//    System.setProperty("tplanKey", "TPORT-11023");
+//    System.setProperty("tplanKey", "TPORT-11775");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
 

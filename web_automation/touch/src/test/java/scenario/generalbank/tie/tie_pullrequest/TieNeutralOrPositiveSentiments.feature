@@ -22,7 +22,6 @@ Feature: TIE should give NEUTRAL or POSITIVE sentiments
       |How much interest will I earn on my savings                    |how much interest will i earn on my savings             |
       |I want to open an account.                                     |open account                                            |
       |OK, Thanks                                                     |thank you                                               |
-      |Are you open on weekends?                                      |trading hours                                           |
       |Why is my card blocked?                                        |why was my pin blocked after i entered it incorrectly a few times|
       |Where can I find a branch?                                     |where can i find a branch                                        |
       |hi                                                             |hello                                                            |
