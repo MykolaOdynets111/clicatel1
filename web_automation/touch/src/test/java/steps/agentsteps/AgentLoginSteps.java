@@ -7,10 +7,15 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Agents;
 import datamanager.Tenants;
+import datamanager.model.user.Permission;
+import datamanager.model.user.UserRole;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.testng.Assert;
 import portalpages.PortalMainPage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgentLoginSteps extends AbstractAgentSteps {
 
@@ -27,13 +32,17 @@ public class AgentLoginSteps extends AbstractAgentSteps {
 
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
         Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+        List<Permission> permissions = new ArrayList<>();
+        ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber)
+                .getBody().jsonPath().getList("roles", UserRole.class).stream().forEach(e -> permissions.addAll(e.getPermissions()));
+
         getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
         getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
 
-        if(!ordinalAgentNumber.toLowerCase().contains("second")){
-            Assert.assertTrue(getPortalMainPage().isPortalPageOpened(),
+        if(permissions.stream().anyMatch(e -> e.getSolution().equalsIgnoreCase("PLATFORM"))){
+            Assert.assertTrue(getPortalMainPage(ordinalAgentNumber).isPortalPageOpened(),
                     "User is not logged in to portal");
-            getPortalMainPage().launchChatDesk();
+            getPortalMainPage(ordinalAgentNumber).launchChatDesk();
         }
     }
 

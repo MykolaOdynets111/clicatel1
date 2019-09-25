@@ -20,6 +20,8 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
 
+    private static ThreadLocal<PortalMainPage> secondPortalMainPage = new ThreadLocal<>();
+
     private static ThreadLocal<PortalTouchIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
 
     private static ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
@@ -82,12 +84,28 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     }
 
 
-    public static PortalMainPage getPortalMainPage() {
+    public static PortalMainPage getAdminPortalMainPage() {
         if (portalMainPage.get()==null) {
             portalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("admin")));
             return portalMainPage.get();
         } else{
             return portalMainPage.get();
+        }
+    }
+
+    public static PortalMainPage getPortalMainPage(String agent) {
+        if (agent.equalsIgnoreCase("second agent")) {
+            return getSecondPortalMainPage();
+        } else {
+            return getAdminPortalMainPage();
+        }
+    }
+    public static PortalMainPage getSecondPortalMainPage() {
+        if (secondPortalMainPage.get()==null) {
+            secondPortalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("second agent")));
+            return secondPortalMainPage.get();
+        } else{
+            return secondPortalMainPage.get();
         }
     }
 
@@ -250,7 +268,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     }
 
     public static LeftMenu getLeftMenu() {
-        return getPortalMainPage().getLeftMenu();
+        return getAdminPortalMainPage().getLeftMenu();
     }
 
 

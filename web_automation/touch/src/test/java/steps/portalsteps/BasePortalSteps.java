@@ -152,7 +152,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
                     Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
             if(resetPassID.equals("none")) {
-                getPortalMainPage().waitFor(1500);
+                getAdminPortalMainPage().waitFor(1500);
                 resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
                         Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
             }else{
@@ -413,7 +413,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String email = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
         if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
         getPortalLoginPage(agent).login(email, Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
-        getPortalMainPage().closeUpdatePolicyPopup();
+        getAdminPortalMainPage().closeUpdatePolicyPopup();
     }
 
     @Then("^Deleted agent is not able to log in portal$")
@@ -448,7 +448,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I click Launchpad button$")
     public void clickLaunchpadButton(){
-        getPortalMainPage().clickLaunchpadButton();
+        getAdminPortalMainPage().clickLaunchpadButton();
     }
 
     // page_action_to_remove
@@ -520,7 +520,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
+        boolean isPortalPageOpened = getAdminPortalMainPage().isPortalPageOpened();
         ConfigManager.setIsNewAccountCreated(String.valueOf(isPortalPageOpened));
         Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
     }
@@ -572,54 +572,54 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"Update policy\" pop up is shown$")
     public void verifyUpdatePolicyPopupShown(){
-        Assert.assertTrue(getPortalMainPage().isUpdatePolicyPopUpOpened(),
+        Assert.assertTrue(getAdminPortalMainPage().isUpdatePolicyPopUpOpened(),
                 "User is not logged in Portal");
     }
 
     @When("^Accept \"Update policy\" popup$")
     public void acceptUpdatedPolicyPopup(){
-        getPortalMainPage().closeUpdatePolicyPopup();
-        getPortalMainPage().waitWhileProcessing(2, 3);
+        getAdminPortalMainPage().closeUpdatePolicyPopup();
+        getAdminPortalMainPage().waitWhileProcessing(2, 3);
     }
 
     @Then("^Landing pop up is shown$")
     public void verifyLandingPopupShown(){
-        getPortalMainPage().waitWhileProcessing(3,2);
-        Assert.assertTrue(getPortalMainPage().isGetStartedWindowShown(),
+        getAdminPortalMainPage().waitWhileProcessing(3,2);
+        Assert.assertTrue(getAdminPortalMainPage().isGetStartedWindowShown(),
                 "Landing popup is not shown");
     }
 
     @When("Close landing popup$")
     public void acceptLandingPopup(){
-        getPortalMainPage().closeGetStartedWindow();
+        getAdminPortalMainPage().closeGetStartedWindow();
     }
 
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
-        Assert.assertEquals(getPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
+        Assert.assertEquals(getAdminPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
                 ". Add a solution to your account.", "Welcome message is not shown.");
     }
 
     @Then("^\"Get started with Touch\" button is shown$")
     public void verifyGetStartedWithTouchButtonShown(){
-        Assert.assertTrue(getPortalMainPage().getLaunchpad().isGetStartedWithTouchButtonShown(),
+        Assert.assertTrue(getAdminPortalMainPage().getLaunchpad().isGetStartedWithTouchButtonShown(),
                 "'Get started with Touch' is not shown");
     }
 
     @When("^Click \"Get started with Touch\" button$")
     public void clickGetStartedWithTouchButton(){
-        getPortalMainPage().getLaunchpad().clickGetStartedWithTouchButton();
+        getAdminPortalMainPage().getLaunchpad().clickGetStartedWithTouchButton();
     }
 
     @When("^\"Get started with Touch Go\" window is opened$")
     public void verifyStartedWithTouchGoWindowOpened(){
-        Assert.assertTrue(getPortalMainPage().isConfigureTouchWindowOpened(),
+        Assert.assertTrue(getAdminPortalMainPage().isConfigureTouchWindowOpened(),
                 "\"Get started with Touch Go\" window is not opened");
     }
 
     @When("^I try to create new (.*) tenant$")
     public void createNewTenant(String tenantOrgName){
-        getPortalMainPage().getConfigureTouchWindow()
+        getAdminPortalMainPage().getConfigureTouchWindow()
                 .createNewTenant(tenantOrgName, MC2Account.getTouchGoAccount().getEmail());
     }
 
@@ -629,9 +629,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
-        getPortalMainPage().waitWhileProcessing(1,5);
+        getAdminPortalMainPage().waitWhileProcessing(1,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        getPortalMainPage().waitWhileProcessing(1,5);
+        getAdminPortalMainPage().waitWhileProcessing(1,5);
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
@@ -645,7 +645,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I launch chatdesk from portal$")
     public void launchChatdeskFromPortal(){
-        getPortalMainPage().launchChatDesk();
+        getAdminPortalMainPage().launchChatDesk();
     }
 
     @When("^Save (.*) pre-test widget value$")
@@ -710,12 +710,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
     public void clickNavButton(String navButton){
-        getPortalMainPage().clickPageNavButton(navButton);
+        getAdminPortalMainPage().clickPageNavButton(navButton);
     }
 
     @When("^I click \"(.*)\" page action button$")
     public void clickActionButton(String actionButton){
-        getPortalMainPage().clickPageActionButton(actionButton);
+        getAdminPortalMainPage().clickPageActionButton(actionButton);
     }
 
 
@@ -834,45 +834,45 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I try to upgrade and buy (.*) agent seats$")
     public void upgradeTouchGoPlan(int agentSeats){
-        getPortalMainPage().upgradePlan(agentSeats);
+        getAdminPortalMainPage().upgradePlan(agentSeats);
     }
 
     @When("^I try to upgrade and buy (.*) agent seats without accept Clickatell's Terms and Conditions$")
     public void upgradeTouchGoPlanWithoutTerms(int agentSeats){
-        getPortalMainPage().upgradePlanWithoutTerms(agentSeats);
+        getAdminPortalMainPage().upgradePlanWithoutTerms(agentSeats);
     }
 
     @Then("^Payment is not proceeded and Payment Summary tab is still opened$")
     public void verifyPaymentSummaryTabOpened(){
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentSummaryTabOpened(),
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentSummaryTabOpened(),
                 "'Payment Summary' tab is not still opened when admin tries to proceed without accepting Terms and Conditions");
     }
 
     @When("^Admin clicks 'Upgrade' button$")
     public void clickUpgradeTouchGoPlanButton(){
-        getPortalMainPage().getPageHeader().clickUpgradeButton();
+        getAdminPortalMainPage().getPageHeader().clickUpgradeButton();
     }
 
     @Then("^I see \"Payment Successful\" message$")
     public void verifyPaymentSuccessfulMessage(){
-        Assert.assertEquals(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
+        Assert.assertEquals(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
                 "Payment Successful", "Payment successful message was not shown");
     }
 
     @Then("^Admin should see \"(.*)\" in the page header$")
     public void verifyTouchGoPlanNamePresence(String expectedTouchGo){
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
     @Then("^Not see \"(.*)\" button$")
     public void verifyNotShowingUpgradeButtonText(String textNotToBeShown){
-        Assert.assertNotEquals(getPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertNotEquals(getAdminPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @Then("^See \"(.*)\" button$")
     public void verifyNShowingUpgradeButtonText(String textToBeShown){
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @When("^(.*) the (.*) integration$")
@@ -964,7 +964,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
         for(int i=0; i<120; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
-                getPortalMainPage().waitFor(15000);
+                getAdminPortalMainPage().waitFor(15000);
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
                 actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
             } else{
@@ -984,30 +984,30 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
         DriverFactory.getAgentDriverInstance().navigate().refresh();
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
     @Then("^'Billing Not Setup' pop up (.*) shown$")
     public void verifyBillingNotSetUpPopupShown(String isShown){
         if (isShown.contains("not"))
-            Assert.assertFalse(getPortalMainPage().isBillingNotSetUpPopupShown(2),
+            Assert.assertFalse(getAdminPortalMainPage().isBillingNotSetUpPopupShown(2),
                     "'Billing Not Setup' pop up still shown");
         else
-            Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
+            Assert.assertTrue(getAdminPortalMainPage().isBillingNotSetUpPopupShown(5),
                 "'Billing Not Setup' pop up is not shown");
     }
 
     @When("^Admin clicks 'Setup Billing' button$")
     public void clickSetupBillingButton(){
         setPortalBillingDetailsPage(
-                getPortalMainPage().clickSetupBillingButton()
+                getAdminPortalMainPage().clickSetupBillingButton()
         );
     }
 
     @When("Close 'Billing not setup' modal window")
     public void closeSetupBillingModal(){
-        getPortalMainPage().closeSetupBillingPopUpModal();
+        getAdminPortalMainPage().closeSetupBillingPopUpModal();
     }
 
     @Then("^Billing Details page is opened$")
@@ -1113,15 +1113,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Make the balance top up payment$")
     public void buyTopUpBalance(){
-        getPortalMainPage().getCartPage().clickCheckoutButton();
-        getPortalMainPage().checkoutAndBuy(getPortalMainPage().getCartPage());
+        getAdminPortalMainPage().getCartPage().clickCheckoutButton();
+        getAdminPortalMainPage().checkoutAndBuy(getAdminPortalMainPage().getCartPage());
     }
 
     @Then("^Top up balance updated up to (.*) minutes$")
     public void verifyTopUpUpdated(int mints){
         String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
 
-        Map outputMap = getPortalMainPage().getPageHeader().isTopUpUpdated(token, mints);
+        Map outputMap = getAdminPortalMainPage().getPageHeader().isTopUpUpdated(token, mints);
 
         Assert.assertTrue((boolean) outputMap.get("result"), "Balance was not updated after top up\n" +
                 "Balance from backend before test: " + topUpBalance.get("preTest") + "\n" +
@@ -1229,50 +1229,50 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Admin adds to cart (.*) agents$")
     public void addAgentsToTheCart(int agentsNumber){
-        getPortalMainPage().addAgentSeatsIntoCart(agentsNumber);
+        getAdminPortalMainPage().addAgentSeatsIntoCart(agentsNumber);
     }
 
     @When("^Admin opens Confirm Details window$")
     public void openConfirmDetailsPage(){
-        getPortalMainPage().openAgentsPurchasingConfirmationWindow();
+        getAdminPortalMainPage().openAgentsPurchasingConfirmationWindow();
     }
 
     @Then("Added payment method is able to be selected")
     public void verifyCardIsAvailableToSelecting(){
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow()
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow()
                         .getTestVisaCardToPayDetails().contains("1111"),
                 "Added payment method is not available for purchasing");
     }
 
     @When("^Click Next button on Details tab$")
     public void clickNextButtonOnConfirmDetailsWindow(){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButtonOnDetailsTab();
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButtonOnDetailsTab();
     }
 
     @When("^\"(.*)\" shown in payment methods dropdown$")
     public void verifyPresencePaymentOptionForBuyingAgentSeats(String option){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionShown(option),
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionShown(option),
                 "'"+option+"' is not shown in payment options");
     }
 
     @When("^Admin selects \"(.*)\" in payment methods dropdown$")
     public void selectPaymentOptionWhileBuyingAgents(String option){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
     }
 
 
     @Then("^Payment review tab is opened$")
     public void verifyPaymentReviewTabIsOpened(){
-        getPortalMainPage().waitForNotificationAlertToDisappear();
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
+        getAdminPortalMainPage().waitForNotificationAlertToDisappear();
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
 
     }
 
     @When("^Admin closes Confirm details window$")
     public void closeConfirmDetailsWindow(){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
     }
 
     @When("^Click 'Manage' button for (.*) user$")
