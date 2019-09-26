@@ -30,7 +30,6 @@ Feature: Pinned chat is disabled to close and to transfer
 
   Scenario: "Transfer chat" button disabled for pined chat
     When Agent click 'Flag chat' button
-    Then Agent sees 'flag' icon in this chat
     Then Agent can not click 'Transfer chat' button
     Then Agent click 'Unflag chat' button
     Given I login as second agent of General Bank Demo

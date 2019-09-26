@@ -10,7 +10,6 @@ Feature: Agent should be able to filter flagged chats
     Then Agent has new conversation request
     When Agent click on new conversation
     When Agent click 'Flag chat' button
-    Then Agent sees 'flag' icon in this chat
     When Agent select "Flagged chats" filter option
     Then Agent has new conversation request
     When Agent click on new conversation request from touch

@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -15,6 +16,7 @@ import org.testng.Assert;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TimeZone;
@@ -142,7 +144,9 @@ public class ChatHeader extends AbstractUIElement {
         Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
                 ,getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         String startedDate = sessionDetails.get("startedDate");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        int numberOfMillis = startedDate.split("\\.")[1].length();
+        String dateFormat = "yyyy-MM-dd HH:mm:ss." + StringUtils.repeat("S", numberOfMillis);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
         LocalDateTime formatDateTime = LocalDateTime.parse(startedDate, formatter).atZone(ZoneId.of("UTC")).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("'Started:' dd MMM, HH:mm|");
         return timeStamp.getAttribute("textContent").equals(formatDateTime.format(formatter2));
