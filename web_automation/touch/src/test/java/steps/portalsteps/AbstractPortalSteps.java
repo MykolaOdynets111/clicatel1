@@ -277,6 +277,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         portalLoginPage.remove();
         secondAgentPortalLoginPage.remove();
         portalMainPage.remove();
+        secondPortalMainPage.remove();
         portalIntegrationsPage.remove();
         portalBillingDetailsPage.remove();
         portalSignUpPage.remove();
