@@ -93,7 +93,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
-    public static PortalMainPage getPortalMainPage(String agent) {
+    public static synchronized PortalMainPage getPortalMainPage(String agent) {
         if (agent.equalsIgnoreCase("second agent")) {
             return getSecondPortalMainPage();
         } else {
