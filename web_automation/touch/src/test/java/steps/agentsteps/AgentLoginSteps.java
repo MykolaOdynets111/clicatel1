@@ -80,13 +80,6 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         setCurrentLoginPage(AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName));
     }
 
-    @When("I login in another browser as an agent of (.*)")
-    public void loginWithTheSameAnotherBrowser(String tenantOrgName){
-        getCurrentLoginPage().loginAsAgentOf(tenantOrgName, "main agent");
-        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"),
-                "Agent is not logged in.");
-    }
-
     @Then("^In the first browser Connection Error should be shown$")
     public void verifyAgentIsDisconnected(){
         Assert.assertTrue(getAgentHomePage("first agent").isConnectionErrorShown("first agent"),

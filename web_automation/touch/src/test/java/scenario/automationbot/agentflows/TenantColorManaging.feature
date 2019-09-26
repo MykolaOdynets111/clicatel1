@@ -17,15 +17,13 @@ Feature: Managing brand color
     When I select Touch in left menu and Touch preferences in submenu
     And Click "Configure your brand" nav button
     And Change primary color for tenant
-    When I open browser to log in in chat desk as an agent of Automation Bot
-    Then I check primary color for tenant in login page
-    And I login in another browser as an agent of Automation Bot
-    And User select Automation Bot tenant
+    And I launch chatdesk from portal
+    When User select Automation Bot tenant
     Then I check primary color for tenant in widget
     And Click chat icon
     Then Welcome message with correct text is shown
     When User enter chat to agent into widget input field
-    Then Second agent has new conversation request
+    Then Agent has new conversation request
     Then I check primary color for tenant in opened widget
     Then I check primary color for tenant in agent desk
     Then Check primary color for incoming chat and 360Container

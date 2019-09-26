@@ -1428,9 +1428,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^I check primary color for tenant in agent desk$")
     public void iCheckPrimaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getCustomer360ButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getCustomer360ButtonColor(),
                 tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
-        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getExpandFilterButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getExpandFilterButtonColor(),
                 tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
         soft.assertAll();
     }
@@ -1449,23 +1449,23 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Check primary color for incoming chat and 360Container$")
     public void checkPrimaryColorForIncomingChatAndContainer() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getUserMsgCountColor(),
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getUserMsgCountColor(),
                             tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getUserPictureColor(),
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getUserPictureColor(),
                             tenantInfo.get("newColor"), "Color for User Picture in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getUserPictureColor(),
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getUserPictureColor(),
                             tenantInfo.get("newColor"), "Color for User Picture in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getSaveEditButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getSaveEditButtonColor(),
                             tenantInfo.get("newColor"), "Color for Edit button in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getMailColor(),
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getMailColor(),
                             tenantInfo.get("newColor"), "Color for Email in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getPinChatButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getPinChatButtonColor(),
                             tenantInfo.get("newColor"), "Color for Pin chat button in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getTransferButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getTransferButtonColor(),
                             tenantInfo.get("newColor"), "Color for Transfer chat button in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getEndChatButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getEndChatButtonColor(),
                             tenantInfo.get("newColor"), "Color for End chat button in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(),
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getChatForm().getSubmitMessageButton(),
                             tenantInfo.get("newColor"), "Color for Send button in agent desk window is not correct");
         soft.assertAll();
     }
@@ -1476,6 +1476,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomPrimaryColor(tenantInfo.get("color")));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(5, 10);
     }
 
     @When("^Add new touch (.*) solution$")
