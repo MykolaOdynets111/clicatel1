@@ -65,9 +65,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Given("^(.*) New (.*) agent is created$")
     public void createNewAgent(String agentEmail, String tenantOrgName){
         if (agentEmail.equalsIgnoreCase("brand")) {
-           AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
-           Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
+            AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        } else{
+            AGENT_EMAIL = generatePredefinedAgentEmail();
         }
+        Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
@@ -89,13 +91,19 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
     }
 
+    private String generatePredefinedAgentEmail(){
+        return Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail() + System.currentTimeMillis() + "@gmail.com";
+    }
+
     @When("^Create new Agent$")
     public void createNewAgent(){
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        AGENT_EMAIL = generatePredefinedAgentEmail();
+
         Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
         Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+        Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);

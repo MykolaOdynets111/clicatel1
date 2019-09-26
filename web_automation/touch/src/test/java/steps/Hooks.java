@@ -129,6 +129,11 @@ public class Hooks implements JSHelper {
             ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
 
+        if(scenario.getSourceTagNames().contains("@new_agent") && scenario.isFailed()) {
+            new BasePortalSteps().createNewAgent("existed",
+                    MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+        }
+
         finishAgentFlowIfExists(scenario);
 
         if(scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility"))) {

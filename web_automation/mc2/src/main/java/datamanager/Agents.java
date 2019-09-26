@@ -81,7 +81,7 @@ public enum Agents {
 
     // ======= User of newly created tenant for touch go tests =========== //
     TOUCH_GO_ADMIN("", "p@$$w0rd4te$t", "", ""),
-    TOUCH_GO_SECOND_AGENT("touchgoagent@gmail.com", "p@$$w0rd4te$t", "", ""),
+    TOUCH_GO_SECOND_AGENT("touchgoagent+", "p@$$w0rd4te$t", "", ""),
     ;
 
     String email;
