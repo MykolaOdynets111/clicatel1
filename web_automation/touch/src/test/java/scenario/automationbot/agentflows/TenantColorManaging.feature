@@ -6,9 +6,9 @@ Feature: Managing brand color
     When I select Touch in left menu and Touch preferences in submenu
     And Click "Configure your brand" nav button
     And Change secondary color for tenant
+    And I launch chatdesk from portal
     And User select Automation Bot tenant
     Then I check secondary color for tenant in widget
-    When I login with the same credentials in another browser as an agent of Automation Bot
     Then I check secondary color for tenant in agent desk
 
   Scenario: Check changing primary color

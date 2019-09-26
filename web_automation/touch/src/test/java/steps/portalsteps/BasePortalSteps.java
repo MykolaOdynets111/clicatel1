@@ -1408,6 +1408,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomSecondaryColor(tenantInfo.get("color")));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
     @Then("^I check secondary color for tenant in widget$")
@@ -1439,9 +1440,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^I check secondary color for tenant in agent desk$")
     public void iCheckSecondaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getPageHeader("second agent").getTenantNameColor(),
+        soft.assertEquals(AbstractAgentSteps.getPageHeader("agent").getTenantNameColor(),
                 tenantInfo.get("newColor"), "Color for tenant name in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getPageHeader("second agent").getTenantLogoBorderColor(),
+        soft.assertEquals(AbstractAgentSteps.getPageHeader("agent").getTenantLogoBorderColor(),
                 tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
         soft.assertAll();
     }
