@@ -20,9 +20,10 @@ public class TestFloReporter {
 //    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
 //    System.setProperty("isRerun", "true");
-//    System.setProperty("tplanKey", "TPORT-11775");
+//    System.setProperty("tplanKey", "TPORT-12496");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
+
 
         if(ConfigManager.reportToTouchFlo()) {
 
@@ -62,6 +63,11 @@ public class TestFloReporter {
             // 7. Create missing test cases and set their status
             String testPlan = newTPlanKey;
             executedTestsToBeCreatedInTestPlan.forEach(e -> addMissingScenarios(e, testPlan));
+
+            // 8. Add logs about failed actions
+
+            System.out.println("\n!!! reporting errors \n" +
+                    JiraApiHelper.getErrors().toString());
 
         } else{
             System.out.println("!!! reporting to TestFLO is turned off. \n" +
@@ -161,9 +167,7 @@ public class TestFloReporter {
     private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage) throws SocketTimeoutException{
         if (tcStatus.equalsIgnoreCase("passed")) {
             JiraApiHelper.changeTestCaseStatus(tcKey, "21");
-        }
-        if (tcStatus.equalsIgnoreCase("broken") |
-                tcStatus.equalsIgnoreCase("failed")) {
+        } else {
             JiraApiHelper.changeTestCaseStatus(tcKey, "31");
             JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
         }
