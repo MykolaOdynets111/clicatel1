@@ -7,6 +7,7 @@ Feature: Managing brand color
     And Click "Configure your brand" nav button
     And Change secondary color for tenant
     And I launch chatdesk from portal
+    Then Agent of Automation Bot is logged in
     And User select Automation Bot tenant
     Then I check secondary color for tenant in widget
     Then I check secondary color for tenant in agent desk
@@ -18,6 +19,7 @@ Feature: Managing brand color
     And Click "Configure your brand" nav button
     And Change primary color for tenant
     And I launch chatdesk from portal
+    Then Agent of Automation Bot is logged in
     When User select Automation Bot tenant
     Then I check primary color for tenant in widget
     And Click chat icon
