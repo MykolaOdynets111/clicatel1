@@ -136,7 +136,14 @@ public class DotControlSteps implements WebWait {
         }
     }
 
-    @When("^Send (.*) message for .Control$")
+    @Given("Prepare payload for sending '(.*)' messages for .Control '(.*)' adapter")
+    public void sendMessageToDotControlAdapter(String message,String adapter ){
+        createRequestMessage(adapterApiTokens.get(adapter), message);
+        dotControlRequestMessage.get().setContext(new DotControlRequestMessageContext().setLastName(dotControlRequestMessage.get().getClientId()));
+
+    }
+
+    @Given("^Prepare payload for sending (.*) message for .Control$")
     public DotControlRequestMessage sendMessageToDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
         else{
@@ -148,11 +155,15 @@ public class DotControlSteps implements WebWait {
         if (message.contains("empty")) dotControlRequestMessage.get().setMessage("");
         if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
 
+        return dotControlRequestMessage.get();
+    }
+
+    @When("Send message call")
+    public void sendMessageCall(){
         responseOnSentRequest.set(
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
         clientId.set(dotControlRequestMessage.get().getClientId());
-        return dotControlRequestMessage.get();
     }
 
     @When("^Send (.*) message for .Control from existed client$")
@@ -164,15 +175,7 @@ public class DotControlSteps implements WebWait {
                 "Sending .Control message from " + initCallBody.get().getClientId() + " was not successful");
     }
 
-    @When("Send '(.*)' messages for .Control '(.*)' adapter")
-    public void sendMessageToDotControlAdapter(String message,String adapter ){
-        createRequestMessage(adapterApiTokens.get(adapter), message);
-        dotControlRequestMessage.get().setContext(new DotControlRequestMessageContext().setLastName(dotControlRequestMessage.get().getClientId()));
-        responseOnSentRequest.set(
-                APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
-        );
-        clientId.set(dotControlRequestMessage.get().getClientId());
-    }
+
 
     @Then("^Message should not be sent$")
     public void verifyMessageIsNotSent(){
@@ -310,10 +313,18 @@ public class DotControlSteps implements WebWait {
         soft.assertAll();
     }
 
-    @When("^Send parameterized init call with context correct response is returned$")
-    public void sendInitCalWithAdditionalParameters(){
+    @When("^Send parameterized init call with (.*) correct response is returned$")
+    public void sendInitCalWithAdditionalParameters(String contextStrategy){
         DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
-        initRequest.setInitContext(new InitContext());
+        InitContext initContext;
+        if(contextStrategy.equals("context")) initContext = new InitContext();
+        else {
+            initRequest.setClientId(dotControlRequestMessage.get().getClientId());
+            initContext = new InitContext().setFirstName("AQA").setLastName(
+                    dotControlRequestMessage.get().getClientId()
+            );
+        }
+        initRequest.setInitContext(initContext);
         Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
         Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +

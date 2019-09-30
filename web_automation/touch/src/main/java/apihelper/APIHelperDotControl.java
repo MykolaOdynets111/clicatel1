@@ -123,7 +123,7 @@ public class APIHelperDotControl {
                     .body("{\n" +
                             "  \"apiToken\": \""+ requestMessage.getApiToken() +"\",\n" +
                             "  \"clientId\": \"" +requestMessage.getClientId()+ "\",\n" +
-                            "  \"context\": {" + requestMessage.getContext() +"},\n" +
+                            "  \"context\": {},\n" +
                             "  \"message\": \""+ requestMessage.getMessage() +"\",\n" +
                             "  \"messageId\": null,\n" +
                             "  \"messageType\": \"PLAIN\",\n" +

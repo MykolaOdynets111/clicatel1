@@ -6,6 +6,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@JsonIgnoreProperties(value = { "fullName"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "firstName",
@@ -15,6 +16,8 @@ import java.util.Map;
 })
 public class InitContext {
 
+    @JsonProperty("fullName")
+    private String fullName;
     @JsonProperty("firstName")
     private String firstName;
     @JsonProperty("lastName")
@@ -41,8 +44,9 @@ public class InitContext {
     }
 
     @JsonProperty("firstName")
-    public void setFirstName(String firstName) {
+    public InitContext setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     @JsonProperty("lastName")
@@ -51,8 +55,9 @@ public class InitContext {
     }
 
     @JsonProperty("lastName")
-    public void setLastName(String lastName) {
+    public InitContext setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     @JsonProperty("email")
@@ -86,6 +91,8 @@ public class InitContext {
     }
 
     public String getFullName(){
-        return this.firstName + " " + this.lastName;
+        fullName = this.firstName + " " + this.lastName;
+        return fullName;
     }
+
 }
