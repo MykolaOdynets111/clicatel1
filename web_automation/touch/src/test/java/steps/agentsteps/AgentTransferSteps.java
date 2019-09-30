@@ -149,9 +149,9 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
         dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
-        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("connect to agent'"));
+        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForDotControl("connect to agent'"));
         DotControlSteps.cleanUPDotControlRequestMessage();
-        createdChatsViaDotControl.add(dotControlSteps.sendMessageToDotControl("chat to support"));
+        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForDotControl("chat to support"));
 
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(

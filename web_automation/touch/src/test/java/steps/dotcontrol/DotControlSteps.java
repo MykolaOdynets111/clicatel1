@@ -144,7 +144,7 @@ public class DotControlSteps implements WebWait {
     }
 
     @Given("^Prepare payload for sending (.*) message for .Control$")
-    public DotControlRequestMessage sendMessageToDotControl(String message){
+    public DotControlRequestMessage preparePayloadForDotControl(String message){
         if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
         else{
                 dotControlRequestMessage.get().setMessage(message);
@@ -175,7 +175,11 @@ public class DotControlSteps implements WebWait {
                 "Sending .Control message from " + initCallBody.get().getClientId() + " was not successful");
     }
 
-
+    @When("Send (.*) message for .Control")
+    public void sendMessage(String message){
+        preparePayloadForDotControl(message);
+        sendMessageCall();
+    }
 
     @Then("^Message should not be sent$")
     public void verifyMessageIsNotSent(){
