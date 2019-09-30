@@ -12,10 +12,7 @@ import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.Integration;
 import datamanager.jacksonschemas.SupportHoursItem;
-import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
-import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
-import datamanager.jacksonschemas.dotcontrol.History;
-import datamanager.jacksonschemas.dotcontrol.InitContext;
+import datamanager.jacksonschemas.dotcontrol.*;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.WebWait;
@@ -170,6 +167,7 @@ public class DotControlSteps implements WebWait {
     @When("Send '(.*)' messages for .Control '(.*)' adapter")
     public void sendMessageToDotControlAdapter(String message,String adapter ){
         createRequestMessage(adapterApiTokens.get(adapter), message);
+        dotControlRequestMessage.get().setContext(new DotControlRequestMessageContext().setLastName(dotControlRequestMessage.get().getClientId()));
         responseOnSentRequest.set(
                 APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
         );
