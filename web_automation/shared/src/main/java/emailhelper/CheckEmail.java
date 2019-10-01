@@ -218,7 +218,7 @@ public class CheckEmail {
             }
             GmailConnector.getFolder().close(true);
             GmailConnector.getStore().close();
-        } catch (MessagingException e){
+        } catch (MessagingException|NullPointerException e){
             e.printStackTrace();
         }
     }
