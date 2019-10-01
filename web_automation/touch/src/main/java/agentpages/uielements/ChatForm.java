@@ -95,7 +95,7 @@ public class ChatForm extends AbstractUIElement {
     public void clearAndSendResponseToUser(String response){
         waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
         if(isElementShown(this.getCurrentDriver(), suggestionInputField, 2)){
-            suggestionInputField.click();
+            clickElem(this.getCurrentDriver(), suggestionInputField, 4, "Suggestion input field");
             waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
             messageInput.click();
             messageInput.clear();

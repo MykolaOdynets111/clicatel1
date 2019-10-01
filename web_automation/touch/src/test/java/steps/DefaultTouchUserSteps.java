@@ -504,6 +504,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
         List<String> toRemove = Arrays.asList("mobile banking 120 3279", "global one",
+                                                "cellphone banking app", "general",
                                                 "general bank masterpass app", "travel help",
                                                 "milleage plus programme help", "travel policies");
         entities.removeIf(e -> toRemove.contains(e));

@@ -277,7 +277,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
    public void launchChatDesk(){
-       waitWhileProcessing(2,5);
+       waitWhileProcessing(1,5);
        String currentWindow = this.getCurrentDriver().getWindowHandle();
        getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
 
