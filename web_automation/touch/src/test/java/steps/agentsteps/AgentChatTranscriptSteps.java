@@ -3,9 +3,8 @@ package steps.agentsteps;
 import apihelper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import datamanager.MC2Account;
 import datamanager.Tenants;
+import datamanager.TranscriptEmail;
 import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import dbmanager.DBConnector;
@@ -13,14 +12,11 @@ import drivermanager.ConfigManager;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import emailhelper.GmailParser;
-import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-
 import javax.mail.Message;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class AgentChatTranscriptSteps extends AbstractAgentSteps{
 
@@ -28,8 +24,8 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
 
     @Given("Clear Chat Transcript email inbox")
     public void clearInbox(){
-        // using standarttouchgoplan@gmail.com for all chat transcripts
-        GmailConnector.loginAndGetInboxFolder(MC2Account.QA_STANDARD_ACCOUNT.getEmail(), MC2Account.QA_STANDARD_ACCOUNT.getPass());
+        TranscriptEmail email = TranscriptEmail.getMailByEnv();
+        GmailConnector.loginAndGetInboxFolder(email.getEmail(),email.getEmailPass());
         CheckEmail.clearEmailInbox();
     }
 
@@ -37,16 +33,16 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
     public void setConfigAttributeValueTo(String value, String tenantOrgName){
         if (Tenants.getTenantUnderTestOrgName() == null)  // should it be applied?
             Tenants.setTenantUnderTestOrgName(tenantOrgName);
-        // Adding "standarttouchgoplan@gmail.com" email from MC2 accounts for chat transcript emails
-        ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + MC2Account.QA_STANDARD_ACCOUNT.getEmail() + "\"");
+        TranscriptEmail email = TranscriptEmail.getMailByEnv();
+        ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + email.getEmail() + "\"");
         ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\""+value+"\"");
 
     }
 
     @Then("Chat Transcript email arrives")
     public void verifyChatTranscriptEmail(){
-        // Checking added "standarttouchgoplan@gmail.com" email for chat transcript emails
-        GmailConnector.loginAndGetInboxFolder(MC2Account.QA_STANDARD_ACCOUNT.getEmail(), MC2Account.QA_STANDARD_ACCOUNT.getPass());
+        TranscriptEmail email = TranscriptEmail.getMailByEnv();
+        GmailConnector.loginAndGetInboxFolder(email.getEmail(), email.getEmailPass());
         chatTranscriptEmail = CheckEmail
                 .getLastMessageBySender("Clickatell <transcripts@clickatell.com>", 15);
         for (int i = 0; i < 5; i ++){
