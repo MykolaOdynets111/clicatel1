@@ -63,9 +63,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return mainAgentLoginPage.get();
     }
 
-    private String clientIDGlobal;
+    private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
-    private String chatIDTranscript;
+    private static ThreadLocal<String> chatIDTranscript = new ThreadLocal<>();
 
 
     public static void setCurrentLoginPage(AgentLoginPage loginPage) {
@@ -171,21 +171,21 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return "";
     }
 
-    public void saveClientIDValue(String userFrom){
+    public synchronized void saveClientIDValue(String userFrom){
         if (userFrom.equalsIgnoreCase("facebook"))
-            clientIDGlobal = socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString();
+            clientIDGlobal.set(socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString());
         else if (userFrom.equalsIgnoreCase("twitter"))
-            clientIDGlobal = socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId();
+            clientIDGlobal.set(socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId());
         else
-            clientIDGlobal = getAgentHomePage("main").getCustomer360Container().getUserFullName();
-        chatIDTranscript = (String) ApiHelper.getActiveSessionByClientId(clientIDGlobal).get("conversationId");
+            clientIDGlobal.set(getAgentHomePage("main").getCustomer360Container().getUserFullName());
+        chatIDTranscript.set(ApiHelper.getActiveSessionByClientId(clientIDGlobal.get()).get("conversationId").toString());
     }
 
     public String getClientIDGlobal(){
-        return clientIDGlobal;
+        return clientIDGlobal.get();
     }
 
     public String getChatIDTranscript(){
-        return chatIDTranscript;
+        return chatIDTranscript.get();
     }
 }
