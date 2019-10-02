@@ -211,6 +211,9 @@ public class CheckEmail {
 
     public static void clearEmailInbox(){
         try {
+            if(GmailConnector.getFolder()==null){
+                Assert.fail("\n GmailConnector.getFolder()==null \n");
+            }
             if (!GmailConnector.getFolder().isOpen())
                 GmailConnector.getFolder().open(Folder.READ_WRITE);
             for (Message message : GmailConnector.getFolder().getMessages()){
