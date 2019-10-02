@@ -4,7 +4,7 @@
 Feature: Creating .Control integration and sending messages for different adapters
 
   Scenario Outline: Sending message to .Control (to agent) using <adapter> adapter
-    Given Create .Control integration for Automation and adapter: fbmsg
+    Given Create .Control integration for Automation and adapter: <adapter>
     Given I login as agent of Automation
     When Prepare payload for sending <message> message for .Control
     Given Send parameterized init call with clientId context correct response is returned
