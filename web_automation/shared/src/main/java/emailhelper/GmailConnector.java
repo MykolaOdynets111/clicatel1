@@ -1,4 +1,7 @@
 package emailhelper;
+
+import org.testng.Assert;
+
 import javax.mail.*;
 import java.util.Properties;
 
@@ -45,8 +48,8 @@ public class GmailConnector {
             getStore().connect(gMailAuthenticator.host, gMailAuthenticator.mail, gMailAuthenticator.password);
             setFolder(getStore().getFolder("INBOX"));
             getFolder().open(Folder.READ_WRITE);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Assert.fail("\n MessagingException e: \n" + e);
         }
         return getFolder();
     }
