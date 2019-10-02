@@ -21,31 +21,38 @@ import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DotControlSteps implements WebWait {
 
-    private static ThreadLocal<DotControlCreateIntegrationInfo> infoForCreatingIntegration = new ThreadLocal<>();
-    private static ThreadLocal<DotControlRequestMessage> dotControlRequestMessage = new ThreadLocal<>();
+    private static ThreadLocal<DotControlCreateIntegrationInfo> createIntegrationCallBody = new ThreadLocal<>();
+    private static ThreadLocal<DotControlRequestMessage> messageCallBody = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
+    private static ThreadLocal<String> clientFullName = new ThreadLocal<>();
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
-//    private static ThreadLocal<String> initCallMessageId = new ThreadLocal<>();
-
     private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
-    private static Map<String, String> adapterApiTokens= new HashMap<>();
+    private static ThreadLocal<String> chatIDTranscript = new ThreadLocal<>();
     Faker faker = new Faker();
 
-    @Given("Create .Control integration for (.*) tenant")
-    public void createIntegration(String tenantOrgName){
+    public static void setChatIDTranscript(String chatId){
+        chatIDTranscript.set(chatId);
+    }
+
+    public static String getChatIDTranscript(){
+        return chatIDTranscript.get();
+    }
+
+    @Given("Create .Control integration for (.*)(?: tenant| and adapter: )(.*)")
+    public void createIntegration(String tenantOrgName, String adaptor){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+        if (adaptor.isEmpty()) adaptor = "fbmsg";
 
-        Response resp = APIHelperDotControl.createIntegration(tenantOrgName,
-                generateInfoForCreatingIntegration(Server.getServerURL()).get());
+        Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName,
+                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
@@ -64,31 +71,15 @@ public class DotControlSteps implements WebWait {
 
     @Given("Create second .Control integration for (.*) tenant")
     public void createSecondIntegration(String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
+            createIntegration(tenantOrgName, "fbmsg");
+    }
 
-        Response resp = APIHelperDotControl.createIntegration(tenantOrgName,
-                generateInfoForCreatingIntegration(Server.getServerURL()).get());
-
-        if(!(resp.statusCode()==200)) {
-            Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
-        }
-        String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
-        System.out.println("!! Api token from creating integration: " + token);
-        if(token==null){
-            Assert.fail("apiToken is absent in create integration response " +
-                    "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
-        }
-        if(apiToken.get()!=null){
-            if(token.equals(apiToken.get())){
-                Assert.fail("apiToken was not changed. integration response: " +
-                        "Status code " + resp.statusCode()+
-                        "\n Body: " + resp.getBody().asString());
-            }
-        }
-        apiToken.remove();
-        apiToken.set(token);
+    @Then("^(.*) status code for multiple integration creation$")
+    public void verifyMultipleIntegrationsCreating(int statusCode){
+        Response resp = APIHelperDotControl.createIntegrationForAdapters("fbmsg", Tenants.getTenantUnderTestOrgName(),
+                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
+        Assert.assertEquals(resp.getStatusCode(), statusCode,
+                "Wrong status code after trying to create second integration");
     }
 
     @Given("Update .Control integration for (.*) tenant")
@@ -96,7 +87,7 @@ public class DotControlSteps implements WebWait {
         Tenants.setTenantUnderTestNames(tenantOrgName);
 
         Response resp = APIHelperDotControl.updateIntegration(tenantOrgName,
-                generateInfoForCreatingIntegration(Server.getServerURL()).get(),apiToken.get());
+                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get(),apiToken.get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
@@ -110,75 +101,148 @@ public class DotControlSteps implements WebWait {
         }
     }
 
-    @Given("Create .Control '(.*)' adapters integration for (.*) tenant")
-    public void createIntegrationAdapters(String adapters, String tenantOrgName){
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
-
-        Response resp = APIHelperDotControl.createIntegrationForAdapters(adapters, tenantOrgName,
-                generateInfoForCreatingIntegration(Server.getServerURL()).get());
-
-        if(!(resp.statusCode()==200)) {
-            Assert.fail("Integration creating was not successful\n" +
-                    "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
-        }
-        String[] arrayAdapters = adapters.split(",");
-        for (int i=0; i<arrayAdapters.length; i++){
-            String adapter = resp.getBody().jsonPath().get("channels["+i+"].adapter");
-            String token = resp.getBody().jsonPath().get("channels["+i+"].config.apiToken");
-            adapterApiTokens.put(adapter,token);
-        }
-        if(adapterApiTokens.isEmpty()){
-            Assert.fail("apiToken is absent in create integration response " +
-                    "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
-        }
-    }
-
-    @Given("Prepare payload for sending '(.*)' messages for .Control '(.*)' adapter")
-    public void sendMessageToDotControlAdapter(String message,String adapter ){
-        createRequestMessage(adapterApiTokens.get(adapter), message);
-        dotControlRequestMessage.get().setContext(new DotControlRequestMessageContext().setLastName(dotControlRequestMessage.get().getClientId()));
-
-    }
-
     @Given("^Prepare payload for sending (.*) message for .Control$")
-    public DotControlRequestMessage preparePayloadForDotControl(String message){
-        if (dotControlRequestMessage.get()==null) createRequestMessage(apiToken.get(), message);
+    public DotControlRequestMessage preparePayloadForMessageEndpoint(String message){
+        if (messageCallBody.get()==null) createRequestMessage(apiToken.get(), message);
         else{
-                dotControlRequestMessage.get().setMessage(message);
-                dotControlRequestMessage.get().setMessageId(
-                        dotControlRequestMessage.get().getMessageId() + faker.number().randomNumber(7, false));
+                messageCallBody.get().setMessage(message);
+                messageCallBody.get().setMessageId(
+                        messageCallBody.get().getMessageId() + faker.number().randomNumber(7, false));
         }
-        if (message.contains("invalid apiToken")) dotControlRequestMessage.get().setApiToken("invalid_token");
-        if (message.contains("empty")) dotControlRequestMessage.get().setMessage("");
-        if (message.contains("empty clientID in")) dotControlRequestMessage.get().setClientId("");
+        if (message.contains("invalid apiToken")) messageCallBody.get().setApiToken("invalid_token");
+        if (message.contains("empty")) messageCallBody.get().setMessage("");
+        if (message.contains("empty clientID in")) messageCallBody.get().setClientId("");
 
-        return dotControlRequestMessage.get();
+        return messageCallBody.get();
     }
 
-    @When("Send message call")
+    private ThreadLocal<DotControlRequestMessage> createRequestMessage(String apiKey, String message){
+        messageCallBody.set(new DotControlRequestMessage(apiKey, message));
+        return messageCallBody;
+    }
+
+    private ThreadLocal<DotControlCreateIntegrationInfo> preparePayloadForCreateIntegrationEndpoint(String callBackURL){
+        createIntegrationCallBody.set(new DotControlCreateIntegrationInfo(true, callBackURL));
+        return createIntegrationCallBody;
+    }
+
+    public DotControlInitRequest preparePayloadForInitEndpoint(String apiToken, String clientIdStrategy, String messageIdStrategy){
+
+        DotControlInitRequest body = new DotControlInitRequest(apiToken,
+                generateInitCallClientId(clientIdStrategy),
+                generateInitCallMessageId(messageIdStrategy));
+        initCallBody.set(body);
+        return initCallBody.get();
+    }
+
+    @When("^Send init call with (.*) messageId correct (.*)response is returned$")
+    public void sendInitCall(String messageIdStrategy, String expMessage){
+        List<SupportHoursItem> expectedBusinessHours = new ArrayList<>();
+        if(expMessage.isEmpty()) expMessage = "OK";
+        if(expMessage.trim().equals("OUT_OF_BUSINESS_HOURS")){
+            expectedBusinessHours =
+                    ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+        }
+        SoftAssert soft = new SoftAssert();
+
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                preparePayloadForInitEndpoint(apiToken.get(), "generated", messageIdStrategy));
+        clientId.set(initCallBody.get().getClientId());
+        soft.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n"+
+                        resp.getBody().asString() + "\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
+                "\nResponse on INIT call contains incorrect clientId\n");
+        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
+                "\nResponse on INIT call contains incorrect conversationId\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), expMessage.trim(),
+                "\nResponse on INIT call contains incorrect agentStatus\n");
+        soft.assertEquals(resp.getBody().jsonPath().getList("businessHours", SupportHoursItem.class), expectedBusinessHours,
+                "\nResponse on INIT call contains incorrect businessHours\n");
+        soft.assertAll();
+    }
+
+    @When("^Send parameterized init call with (.*) correct response is returned$")
+    public void sendInitCalWithAdditionalParameters(String contextStrategy){
+        DotControlInitRequest initRequest = preparePayloadForInitEndpoint(apiToken.get(), "generated", "provided");
+        InitContext initContext;
+        if(contextStrategy.equals("context")) initContext = new InitContext();
+        else {
+            initRequest.setClientId(messageCallBody.get().getClientId());
+            initContext = new InitContext().setFirstName("AQA").setLastName(
+                    messageCallBody.get().getClientId()
+            );
+        }
+        initRequest.setInitContext(initContext);
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
+        Assert.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n" +
+                        resp.getBody().asString() + "\n\n");
+    }
+
+    @When("^Send parameterized init call with history$")
+    public void sendInitCalWithHistory(){
+        List<History> history = Arrays.asList(new History("hi", "CLIENT"),
+                new History("Hello. How can I help you?", "AGENT"),
+                new History("Do you offer business accounts? ", "CLIENT"),
+                new History("Sorry, no. We only offer accounts for Personal Banking", "AGENT"));
+        DotControlInitRequest initRequest = preparePayloadForInitEndpoint(apiToken.get(), "generated", "provided");
+        initRequest.setHistory(history);
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
+        Assert.assertEquals(resp.getStatusCode(), 200,
+                "\nResponse status code is not as expected after sending INIT message\n" +
+                        resp.getBody().asString() + "\n\n");
+
+    }
+
+    @When("^Send init call with provided messageId and empty clientId then correct response is returned$")
+    public void sendInitCallWithEmptyClientId(){
+        SoftAssert soft = new SoftAssert();
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                preparePayloadForInitEndpoint(apiToken.get(), "empty", "provided"));
+        soft.assertEquals(resp.getStatusCode(), 400,
+                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Invalid client id",
+                "\nResponse on INIT call contains incorrect error message\n");
+        soft.assertAll();
+    }
+
+    @When("^Send init call with provided messageId and not registered apiToken then correct response is returned$")
+    public void sendInitCallWithNotRegisteredApiToken(){
+        SoftAssert soft = new SoftAssert();
+
+        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
+                preparePayloadForInitEndpoint("eQscd8r4_notRegistered", "generated", "provided"));
+        soft.assertEquals(resp.getStatusCode(), 401,
+                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
+                        resp.getBody().asString() + "\n\n");
+        soft.assertEquals(resp.getBody().jsonPath().get("error"), "API token is not registered",
+                "\nResponse on INIT call contains incorrect error message\n");
+        soft.assertAll();
+    }
+
+    @When("^Send (.*) message for .Control$")
+    public void sendMessage(String message){
+        preparePayloadForMessageEndpoint(message);
+        sendMessageCall();
+    }
+
+    @When("^Send message call$")
     public void sendMessageCall(){
         responseOnSentRequest.set(
-                APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get())
+                APIHelperDotControl.sendMessageWithWait(messageCallBody.get())
         );
-        clientId.set(dotControlRequestMessage.get().getClientId());
+        clientFullName.set(DotControlSteps.getClient());
+        clientId.set(messageCallBody.get().getClientId());
     }
 
     @When("^Send (.*) message for .Control from existed client$")
     public void sendMessageToDotControlFromExistedClient(String message){
-        createRequestMessage(apiToken.get(), message);
-        dotControlRequestMessage.get().setClientId(initCallBody.get().getClientId());
-        Response resp = APIHelperDotControl.sendMessageWithWait(dotControlRequestMessage.get());
+        messageCallBody.get().setClientId(initCallBody.get().getClientId());
+        Response resp = APIHelperDotControl.sendMessageWithWait(messageCallBody.get());
         Assert.assertEquals(resp.statusCode(), 200,
                 "Sending .Control message from " + initCallBody.get().getClientId() + " was not successful");
-    }
-
-    @When("Send (.*) message for .Control")
-    public void sendMessage(String message){
-        preparePayloadForDotControl(message);
-        sendMessageCall();
     }
 
     @Then("^Message should not be sent$")
@@ -204,7 +268,7 @@ public class DotControlSteps implements WebWait {
     public void verifyDotControlResponse(String initialMessage){
         if(!(responseOnSentRequest.get().statusCode()==200)) {
                 Assert.fail("Sending message was not successful\n" +
-                        "Sent data in the request: " + dotControlRequestMessage.get().toString() + "\n\n" +
+                        "Sent data in the request: " + messageCallBody.get().toString() + "\n\n" +
                         "Status code " + responseOnSentRequest.get().statusCode()+
                         "\nResponse Body: " + responseOnSentRequest.get().getBody().asString() + "\n\n" +
                 "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP").toString());
@@ -218,8 +282,8 @@ public class DotControlSteps implements WebWait {
                             + "\nExpected: " + expectedMessage);
         }catch(NullPointerException e){
             Assert.fail("Nullpointer exception was faced\n " +
-                    "The request: " + dotControlRequestMessage.get().toString() + "\n" +
-                    "clientId from request:" + dotControlRequestMessage.get().getClientId() + "\n" +
+                    "The request: " + messageCallBody.get().toString() + "\n" +
+                    "clientId from request:" + messageCallBody.get().getClientId() + "\n" +
             "Received clientId from .Control response" + Server.incomingRequests.keySet());
         }
     }
@@ -266,13 +330,6 @@ public class DotControlSteps implements WebWait {
         soft.assertAll();
     }
 
-    @Then("^(.*) status code for multiple integration creation$")
-    public void verifyMultipleIntegrationsCreating(int statusCode){
-        Response resp = APIHelperDotControl.createIntegration(Tenants.getTenantUnderTestOrgName(),
-                generateInfoForCreatingIntegration(Server.getServerURL()).get());
-        Assert.assertEquals(resp.getStatusCode(), statusCode,
-                "Wrong status code after trying to create second integration");
-    }
 
     @When("^I delete .Control integration$")
     public void deleteHTTPIntegration(){
@@ -296,108 +353,6 @@ public class DotControlSteps implements WebWait {
         soft.assertAll();
     }
 
-
-    @When("^Send init call with (.*) messageId correct response is returned$")
-    public void sendInitCall(String messageIdStrategy){
-        SoftAssert soft = new SoftAssert();
-
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
-                            formInitRequestBody(apiToken.get(), "generated", messageIdStrategy));
-        soft.assertEquals(resp.getStatusCode(), 200,
-                "\nResponse status code is not as expected after sending INIT message\n"+
-                resp.getBody().asString() + "\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
-                "\nResponse on INIT call contains incorrect clientId\n");
-        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
-                "\nResponse on INIT call contains incorrect conversationId\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "OK",
-                "\nResponse on INIT call contains incorrect agentStatus\n");
-        soft.assertTrue(resp.getBody().jsonPath().get("businessHours") == null,
-                "\nResponse on INIT call contains incorrect businessHours\n");
-        soft.assertAll();
-    }
-
-    @When("^Send parameterized init call with (.*) correct response is returned$")
-    public void sendInitCalWithAdditionalParameters(String contextStrategy){
-        DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
-        InitContext initContext;
-        if(contextStrategy.equals("context")) initContext = new InitContext();
-        else {
-            initRequest.setClientId(dotControlRequestMessage.get().getClientId());
-            initContext = new InitContext().setFirstName("AQA").setLastName(
-                    dotControlRequestMessage.get().getClientId()
-            );
-        }
-        initRequest.setInitContext(initContext);
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
-        Assert.assertEquals(resp.getStatusCode(), 200,
-                "\nResponse status code is not as expected after sending INIT message\n" +
-                        resp.getBody().asString() + "\n\n");
-    }
-
-    @When("^Send parameterized init call with history$")
-    public void sendInitCalWithHistory(){
-        List<History> history = Arrays.asList(new History("hi", "CLIENT"),
-                new History("Hello. How can I help you?", "AGENT"),
-                new History("Do you offer business accounts? ", "CLIENT"),
-                new History("Sorry, no. We only offer accounts for Personal Banking", "AGENT"));
-        DotControlInitRequest initRequest = formInitRequestBody(apiToken.get(), "generated", "provided");
-        initRequest.setHistory(history);
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
-        Assert.assertEquals(resp.getStatusCode(), 200,
-                "\nResponse status code is not as expected after sending INIT message\n" +
-                        resp.getBody().asString() + "\n\n");
-
-    }
-
-
-    @When("^Send init call with (.*) messageId and no active agents correct response is returned$")
-    public void sendInitCallWithoutAgent(String messageIdStrategy){
-        SoftAssert soft = new SoftAssert();
-
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
-                formInitRequestBody(apiToken.get(), "generated", messageIdStrategy));
-        soft.assertEquals(resp.getStatusCode(), 200,
-                "\nResponse status code is not as expected after sending INIT message\n" +
-                        resp.getBody().asString() + "\n\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
-                "\nResponse on INIT call contains incorrect clientId\n");
-        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
-                "\nResponse on INIT call contains 'null' conversationId\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "NO_AGENTS_AVAILABLE",
-                "\nResponse on INIT call contains incorrect agentStatus\n");
-        soft.assertTrue(resp.getBody().jsonPath().get("businessHours") == null,
-                "\nResponse on INIT call contains not null businessHours\n");
-        soft.assertAll();
-    }
-
-    @When("^Send init call with provided messageId and not registered apiToken then correct response is returned$")
-    public void sendInitCallWithNotRegisteredApiToken(){
-        SoftAssert soft = new SoftAssert();
-
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
-                formInitRequestBody("eQscd8r4_notRegistered", "generated", "provided"));
-        soft.assertEquals(resp.getStatusCode(), 401,
-                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
-                        resp.getBody().asString() + "\n\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("error"), "API token is not registered",
-                "\nResponse on INIT call contains incorrect error message\n");
-        soft.assertAll();
-    }
-
-    @When("^Send init call with provided messageId and empty clientId then correct response is returned$")
-    public void sendInitCallWithEmptyClientId(){
-        SoftAssert soft = new SoftAssert();
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
-                formInitRequestBody(apiToken.get(), "empty", "provided"));
-        soft.assertEquals(resp.getStatusCode(), 400,
-                "\nResponse status code is not as expected after sending INIT with not registered ApiToken \n" +
-                        resp.getBody().asString() + "\n\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("error"), "Invalid client id",
-                "\nResponse on INIT call contains incorrect error message\n");
-        soft.assertAll();
-    }
-
     @Then("^MessageId is not null$")
     public void checkMessageIdSavingInINITCall(){
             String sessionId = DBConnector.getActiveSessionDetailsByClientProfileID(ConfigManager.getEnv(), clientId.get()).get("sessionId");
@@ -416,35 +371,12 @@ public class DotControlSteps implements WebWait {
                 "Message id is not auto generated");
     }
 
-
-    @When("^Send init call with (.*) messageId correct response without of support hours is returned$")
-    public void sendInitCallOutOfSupport(String messageIdStrategy){
-        SoftAssert soft = new SoftAssert();
-        List<SupportHoursItem> expectedBusinessHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
-        Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(),
-                formInitRequestBody(apiToken.get(), "generated", messageIdStrategy));
-        soft.assertEquals(resp.getStatusCode(), 200,
-                "\nResponse status code is not as expected after sending INIT message\n"+
-                        resp.getBody().asString() + "\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("clientId"), clientId.get(),
-                "\nResponse on INIT call contains incorrect clientId\n");
-        soft.assertTrue(resp.getBody().jsonPath().get("conversationId")!=null,
-                "\nResponse on INIT call contains incorrect conversationId\n");
-        soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), "OUT_OF_BUSINESS_HOURS",
-                "\nResponse on INIT call contains incorrect agentStatus\n");
-        soft.assertEquals(resp.getBody().jsonPath().getList("businessHours", SupportHoursItem.class), expectedBusinessHours,
-                "\nResponse on INIT call contains incorrect businessHours\n");
-        soft.assertAll();
-    }
-
-
     @When("^Set session capacity to (.*) for (.*) tenant$")
     public void updateSessionCapacity(int chats, String tenantOrgName){
         Response resp = ApiHelper.updateSessionCapacity(tenantOrgName, chats);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Updating session capacity was not successful\n" +
                 "resp body: " + resp.getBody().asString());
-
     }
 
     public static String getClient(){
@@ -452,24 +384,13 @@ public class DotControlSteps implements WebWait {
             if (initCallBody.get().getInitContext()!=null){
                 return initCallBody.get().getInitContext().getFullName();
             }
-            return dotControlRequestMessage.get().getClientId();
+            return messageCallBody.get().getClientId();
         }
-        else return dotControlRequestMessage.get().getClientId();
+        else return messageCallBody.get().getClientId();
     }
-
 
     public static DotControlRequestMessage getFromClientRequestMessage(){
-        return dotControlRequestMessage.get();
-    }
-
-    private ThreadLocal<DotControlCreateIntegrationInfo> generateInfoForCreatingIntegration(String callBackURL){
-        infoForCreatingIntegration.set(new DotControlCreateIntegrationInfo(true, callBackURL));
-        return infoForCreatingIntegration;
-    }
-
-    private ThreadLocal<DotControlRequestMessage> createRequestMessage(String apiKey, String message){
-        dotControlRequestMessage.set(new DotControlRequestMessage(apiKey, message));
-        return dotControlRequestMessage;
+        return messageCallBody.get();
     }
 
     private boolean isResponseComeToServer(String message, int wait) {
@@ -477,7 +398,7 @@ public class DotControlSteps implements WebWait {
             if (isExpectedResponseArrives(message)) return true;
             waitFor(1000);
         }
-        Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+clientId.get()+"'");
+        Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+ clientId.get()+"'");
         return false;
     }
 
@@ -493,28 +414,12 @@ public class DotControlSteps implements WebWait {
         }
     }
 
-
-    public static void cleanUPMessagesInfo(){
-        Server.incomingRequests.clear();
-        responseOnSentRequest.remove();
-        infoForCreatingIntegration.remove();
-        dotControlRequestMessage.remove();
-        apiToken.remove();
-        clientId.remove();
-        initCallBody.remove();
-    }
-
     public static void cleanUPDotControlRequestMessage(){
-        dotControlRequestMessage.remove();
+        messageCallBody.remove();
     }
 
-    public DotControlInitRequest formInitRequestBody(String apiToken, String clientIdStrategy, String messageIdStrategy){
-
-        DotControlInitRequest body = new DotControlInitRequest(apiToken,
-                                                            generateInitCallClientId(clientIdStrategy),
-                                                            generateInitCallMessageId(messageIdStrategy));
-        initCallBody.set(body);
-        return initCallBody.get();
+    public static String getClientId(){
+        return clientId.get();
     }
 
     public static InitContext getInitContext(){
@@ -547,7 +452,17 @@ public class DotControlSteps implements WebWait {
                 clientIdString = clientIdStrategy;
                 break;
         }
-        clientId.set(clientIdString);
         return clientIdString;
+    }
+
+    public static void cleanUPMessagesInfo(){
+        Server.incomingRequests.clear();
+        responseOnSentRequest.remove();
+        createIntegrationCallBody.remove();
+        messageCallBody.remove();
+        apiToken.remove();
+        clientFullName.remove();
+        initCallBody.remove();
+        clientId.remove();
     }
 }

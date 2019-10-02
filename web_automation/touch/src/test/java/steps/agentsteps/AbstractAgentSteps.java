@@ -5,11 +5,10 @@ import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
-import cucumber.api.java.en.When;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
-import interfaces.*;
+import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.ArrayList;
@@ -30,6 +29,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     private static ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
 
     public static Faker faker = new Faker();
+
+    private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
+
 
     protected List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
 
@@ -63,9 +65,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return mainAgentLoginPage.get();
     }
 
-    private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
-    private static ThreadLocal<String> chatIDTranscript = new ThreadLocal<>();
 
 
     public static void setCurrentLoginPage(AgentLoginPage loginPage) {
@@ -176,16 +176,15 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
             clientIDGlobal.set(socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString());
         else if (userFrom.equalsIgnoreCase("twitter"))
             clientIDGlobal.set(socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId());
+        else if (userFrom.equalsIgnoreCase("dotcontrol"))
+            clientIDGlobal.set(DotControlSteps.getClientId());
         else
             clientIDGlobal.set(getAgentHomePage("main").getCustomer360Container().getUserFullName());
-        chatIDTranscript.set(ApiHelper.getActiveSessionByClientId(clientIDGlobal.get()).get("conversationId").toString());
+        DotControlSteps.setChatIDTranscript(ApiHelper
+                .getActiveSessionByClientId(clientIDGlobal.get()).get("conversationId").toString());
     }
 
-    public String getClientIDGlobal(){
+    public static String getClientIDGlobal(){
         return clientIDGlobal.get();
-    }
-
-    public String getChatIDTranscript(){
-        return chatIDTranscript.get();
     }
 }

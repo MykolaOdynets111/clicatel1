@@ -1,4 +1,3 @@
-@start_server
 @no_widget
 @dot_control
 @chat_transcript
@@ -11,7 +10,9 @@
       Given Set Chat Transcript attribute to ALL for Automation tenant
       Given Clear Chat Transcript email inbox
       Given I login as agent of Automation
-      When Send chat to agent message for .Control
+      When Prepare payload for sending chat to agent message for .Control
+      Given Send parameterized init call with clientId context correct response is returned
+      When Send message call
       Then Agent has new conversation request from dotcontrol user
       When Agent click on new conversation request from dotcontrol
       And Save clientID value for dotcontrol user

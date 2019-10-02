@@ -1,13 +1,12 @@
-@start_server
 @no_widget
 @dot_control
 @img
 Feature: Creating .Control integration and sending messages for different adapters
 
   Scenario Outline: Sending message to .Control (to agent) using <adapter> adapter
-    Given Create .Control '<adapter>' adapters integration for Automation tenant
+    Given Create .Control integration for Automation and adapter: fbmsg
     Given I login as agent of Automation
-    When Prepare payload for sending '<message>' messages for .Control '<adapter>' adapter
+    When Prepare payload for sending <message> message for .Control
     Given Send parameterized init call with clientId context correct response is returned
     When Send message call
     Then Agent has new conversation request from dotcontrol user

@@ -148,10 +148,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void create2DotControlChats(String agent){
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
-        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName());
-        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForDotControl("connect to agent'"));
+        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName(), "fbmsg");
+        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForMessageEndpoint("connect to agent'"));
         DotControlSteps.cleanUPDotControlRequestMessage();
-        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForDotControl("chat to support"));
+        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForMessageEndpoint("chat to support"));
 
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
