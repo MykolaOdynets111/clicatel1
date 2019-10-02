@@ -14,6 +14,7 @@ import emailhelper.GmailConnector;
 import emailhelper.GmailParser;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.dotcontrol.DotControlSteps;
 import javax.mail.Message;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,8 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
     @Then("Email title contains (.*) adapter, client ID/Name/Email, chat ID, session number values")
     public void verifyChatTranscriptTitle(String adapter){
 //        String chatID = (String) ApiHelper.getActiveSessionByClientId(clientIDGlobal).get("conversationId");
-        int sessionsNumber = DBConnector.getNumberOfSessionsInConversationForLast3Days(ConfigManager.getEnv(), getChatIDTranscript());
+        int sessionsNumber = DBConnector.getNumberOfSessionsInConversationForLast3Days(ConfigManager.getEnv(),
+                DotControlSteps.getChatIDTranscript());
 
         String chatTranscriptEmailTitle = CheckEmail.getEmailSubject(chatTranscriptEmail);
         SoftAssert softAssert = new SoftAssert();
@@ -79,7 +81,7 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
                 "Adapters does not match");
         softAssert.assertEquals(getClientIDFromEmailSubject(chatTranscriptEmailTitle), getSecondParameterPerAdapter(adapter),
                 "Client email does not match");
-        softAssert.assertEquals(getChatIDFromEmailSubject(chatTranscriptEmailTitle), getChatIDTranscript(),
+        softAssert.assertEquals(getChatIDFromEmailSubject(chatTranscriptEmailTitle), DotControlSteps.getChatIDTranscript(),
                 "chatIDs does not match");
         softAssert.assertEquals(sessionsNumber, getLastSessionNumberFromEmailSubject(chatTranscriptEmailTitle), "Different session number");
         softAssert.assertAll();

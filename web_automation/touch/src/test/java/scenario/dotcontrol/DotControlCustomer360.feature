@@ -1,4 +1,3 @@
-@start_server
 @no_widget
 @dot_control
 Feature: .Control customer 360

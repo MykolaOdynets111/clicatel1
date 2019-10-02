@@ -25,6 +25,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
         System.out.println("Log in to portal is started");
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
+        System.out.println("Log in to chatdesk assertion is started");
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
         System.out.println("Log in to portal is finished");

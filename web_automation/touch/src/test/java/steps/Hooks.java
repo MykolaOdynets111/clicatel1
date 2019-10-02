@@ -13,6 +13,7 @@ import datamanager.jacksonschemas.CRMTicket;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
+import emailhelper.GmailConnector;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
@@ -189,6 +190,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@chat_transcript")){
+            GmailConnector.cleanMailObjects();
             String tenantOrgName = Tenants.getTenantUnderTestOrgName();
             String contactEmail = ApiHelper.getTenantInfoMap(tenantOrgName).get("contactEmail");
             ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + contactEmail + "\"");
