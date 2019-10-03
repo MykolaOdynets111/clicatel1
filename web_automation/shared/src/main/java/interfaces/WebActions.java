@@ -95,6 +95,15 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean areElementsShownByXpath(WebDriver driver, String xpath, int wait){
+        try {
+            waitForElementsToBeVisibleByXpath(driver, xpath, wait);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementShown(WebDriver driver, WebElement element, int wait){
         try {
             return waitForElementToBeVisible(driver, element, wait).isDisplayed();

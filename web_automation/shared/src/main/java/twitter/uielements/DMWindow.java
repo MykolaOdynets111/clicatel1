@@ -55,9 +55,12 @@ public class DMWindow extends AbstractUIElement {
         return new DMToUserMessage(this.getCurrentDriver()).isTextResponseShown(userMessage,40);// clarify_timeout
     }
 
-
     public String getToUserResponse(String userMessage){
         return new DMToUserMessage(this.getCurrentDriver()).getMessageText(userMessage);
+    }
+
+    public List<String> getToUserResponses(String userMessage){
+        return new DMToUserMessage(this.getCurrentDriver()).getAllToUserMessages(userMessage, 40);
 
     }
 }

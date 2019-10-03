@@ -4,6 +4,9 @@ import abstractclasses.AbstractSocialPage;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class DMToUserMessage extends AbstractSocialPage {
 
@@ -21,6 +24,13 @@ public class DMToUserMessage extends AbstractSocialPage {
         } catch (TimeoutException e) {
             return "Exeption:no text response found";
         }
+    }
+
+    public List<String> getAllToUserMessages(String userMessage, int wait){
+        String locator = String.format(toUserTextMessagesXPATH, userMessage);
+        areElementsShownByXpath(this.getCurrentDriver(), locator, wait);
+        return findElemsByXPATH(this.getCurrentDriver(), locator)
+                .stream().map(e -> e.getText()).collect(Collectors.toList());
     }
 
     public boolean isTextResponseShown(String message, int wait) {
