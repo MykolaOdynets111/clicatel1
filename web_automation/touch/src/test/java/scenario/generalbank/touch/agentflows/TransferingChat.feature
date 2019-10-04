@@ -24,4 +24,4 @@ Feature: Transferring chat
     When Second agent click on new conversation
     Then Conversation area becomes active with connect to agent user's message in it for second agent
     When Second agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'connect to agent' input
+    Then User should see 'hello' text response for his 'connect to agent' input
