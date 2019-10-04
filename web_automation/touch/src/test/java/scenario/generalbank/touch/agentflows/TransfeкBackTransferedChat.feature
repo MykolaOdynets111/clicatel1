@@ -27,5 +27,5 @@ Feature: Chat transfer back
     Then First agent has new conversation request
     When First agent click on new conversation
     And First agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'connect to agent' input
+    Then User should see 'hello' text response for his 'connect to agent' input
 

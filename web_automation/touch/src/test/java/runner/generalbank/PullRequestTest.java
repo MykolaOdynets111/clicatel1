@@ -33,7 +33,7 @@ import static runner.generalbank.Path.DOTCONTROL;
                 PATH + "FilteringPinnedChat.feature",
                 PATH + "PinChatCloseTransfer.feature",
                 PATH + "RejectTransferingChat.feature",
-//                PATH + "TransfeBackTransferedChat.feature", need to wait till message preview is fixed
+//                PATH + "TransfeкBackTransferedChat.feature", need to wait till message preview is fixed
                 PATH + "TransfedChatContainElements.feature",
                 PATH + "Transfering2Chats.feature",
 //                PATH + "TransferingChat.feature", need to wait till message preview is fixed

@@ -6,6 +6,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
@@ -49,7 +50,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @When("^(.*) transfer a few chats$")
     public void transferFewDotControlChats(String agent){
-        for(DotControlRequestMessage chat : createdChatsViaDotControl) {
+        for(DotControlInitRequest chat : createdChatsViaDotControl) {
             int availableAgents = ApiHelper.getNumberOfLoggedInAgents();
             for(int i = 0; i<11; i ++){
                 if(availableAgents<2) {
@@ -61,10 +62,9 @@ public class AgentTransferSteps extends AbstractAgentSteps {
             }
             if(availableAgents<2) Assert.fail(
                     "Second agent is not available after waiting 11 seconds after chat transfer");
-            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getClientId());
+            getLeftMenu(agent).openNewFromSocialConversationRequest(chat.getInitContext().getFullName());
             transferChat(agent);
             getAgentHomePage(agent).waitForModalWindowToDisappear();
-
         }
     }
 
@@ -149,20 +149,21 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
         dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName(), "fbmsg");
-        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForMessageEndpoint("connect to agent'"));
+        createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("connect to agent'"));
         DotControlSteps.cleanUPDotControlRequestMessage();
-        createdChatsViaDotControl.add(dotControlSteps.preparePayloadForMessageEndpoint("chat to support"));
+        createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("chat to support"));
 
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(0).getClientId(),20),
+                                createdChatsViaDotControl.get(0).getInitContext().getFullName(),20),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(1).getClientId(),20),
+                                createdChatsViaDotControl.get(1).getInitContext().getFullName(),20),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }
+
 
     @Then("(.*) can see transferring agent name, (.*) and following user's message: '(.*)'")
     public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {

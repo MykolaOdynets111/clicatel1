@@ -5,6 +5,7 @@ import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
+import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -32,7 +33,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
 
     private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
-    protected List<DotControlRequestMessage> createdChatsViaDotControl = new ArrayList<>();
+    protected List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -152,7 +153,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
 
     protected String getUserName(String userFrom){
         if(userFrom.contains("first chat")){
-            return createdChatsViaDotControl.get(0).getClientId();
+            return createdChatsViaDotControl.get(0).getInitContext().getFullName();
         }
         if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
             return socialaccounts.TwitterUsers.getLoggedInUserName();

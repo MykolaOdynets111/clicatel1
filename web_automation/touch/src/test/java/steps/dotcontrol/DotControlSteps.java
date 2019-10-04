@@ -228,6 +228,13 @@ public class DotControlSteps implements WebWait {
         sendMessageCall();
     }
 
+    public DotControlInitRequest createOfferToDotControl(String message){
+        preparePayloadForMessageEndpoint(message);
+        sendInitCalWithAdditionalParameters("clientId");
+        sendMessageCall();
+        return initCallBody.get();
+    }
+
     @When("^Send message call$")
     public void sendMessageCall(){
         responseOnSentRequest.set(
