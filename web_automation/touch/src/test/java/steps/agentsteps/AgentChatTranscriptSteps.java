@@ -141,6 +141,7 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
         ClientProfile clientAttributes = ApiHelper.getClientAttributes(ApiHelper.getClientProfileId(getClientIDGlobal()));
         switch(adapter.toLowerCase()){
             case "dotcontrol":
+                return clientAttributes.getAttributes().getEmail();
             case "whatsapp":
                 return getClientIDGlobal();
             case "fbmsg":

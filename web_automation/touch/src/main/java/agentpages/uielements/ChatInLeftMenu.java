@@ -37,6 +37,8 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy( css = "span.icon.svg-icon-flagged")
     private WebElement flagIcon;
 
+    private String flagIconCss =  "span.icon.svg-icon-flagged";
+
     @FindBy(xpath = "//div[@class='profile-img']//div[@class='empty-icon no-border']")
     private WebElement usercImg;
 
@@ -109,7 +111,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public boolean isFlagIconRemoved(){
-        return isElementRemoved(this.getCurrentDriver(), flagIcon, 3);
+        return isElementRemoved(this.getCurrentDriver(), findElemByCSS(this.getCurrentDriver(), flagIconCss), 3);
     }
 
     public boolean isProfileIconNotShown(){
