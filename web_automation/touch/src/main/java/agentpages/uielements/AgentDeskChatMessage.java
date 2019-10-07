@@ -25,7 +25,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
     private WebElement messageText;
 
     @FindAll({
-            @FindBy(xpath = ".//div/following-sibling::span[not(@class='icons msg-status')]"),
+            @FindBy(xpath = "./span[not(@class)]"),
             @FindBy(xpath = ".//div[@data-name='card-container']//span[contains(@style, 'align-self')]")
     })
     private WebElement messageTime;
