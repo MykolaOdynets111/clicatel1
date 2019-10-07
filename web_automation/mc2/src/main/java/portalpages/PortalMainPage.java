@@ -107,7 +107,7 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public LeftMenu getLeftMenu() {
-        waitForElementToBeVisible(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
+        isElementShown(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
         leftMenu.setCurrentDriver(this.getCurrentDriver());
         return leftMenu;
     }
