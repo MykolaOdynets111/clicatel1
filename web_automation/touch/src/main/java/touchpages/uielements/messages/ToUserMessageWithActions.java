@@ -62,6 +62,7 @@ public class ToUserMessageWithActions extends AbstractWidget {
     }
 
     public boolean isButtonShown(String buttonText) {
+        waitForElementsToBeVisible(this.getCurrentDriver(), buttons, 5);
         return buttons.stream().anyMatch(e -> e.getAttribute("innerText").equalsIgnoreCase(buttonText));
     }
 

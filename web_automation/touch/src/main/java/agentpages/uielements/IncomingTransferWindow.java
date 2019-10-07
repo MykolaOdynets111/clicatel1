@@ -36,7 +36,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = "dl.dl-horizontal")
     private WebElement rejectedBy;
 
-    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    @FindBy(xpath = "//span[@class='profile-icon']")
     private WebElement transferPicture;
 
     @FindBy(xpath = "//div[@class='icons']/span/*")
@@ -86,10 +86,9 @@ public class IncomingTransferWindow extends AbstractUIElement {
         return getTextFromElem(this.getCurrentDriver(),rejectedBy, 2,"Transfer chat window header");
     }
 
-    public boolean isValidImgTransferPicture() {
-        waitFor(1500);//it should be. transfer window apeared but not all(animation);
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferPicture.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), transferPicture, image);
+    public boolean isValidImgTransferPicture(String userName) {
+        isElementShown(this.getCurrentDriver(), transferPicture, 5);
+        return transferPicture.getText().equalsIgnoreCase(String.valueOf(userName.charAt(0)));
     }
 
     public boolean isValidImTransferChannel() {

@@ -43,11 +43,10 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "svg#emoticon")
     public WebElement emoticonButton;
 
-    @FindBy(css = "section.emoji-mart")
-    public WebElement emojiMart;
-
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
+
+    private String emojiMartCss = "section.emoji-mart";
 
     public boolean isSuggestionFieldShown() {
         try {
@@ -172,7 +171,7 @@ public class ChatForm extends AbstractUIElement {
 
     public void clickEmoticonButton(){
         clickElem(this.getCurrentDriver(), emoticonButton, 2,"Emoticon button in chatdesk");
-        waitForElementToBeVisible(this.getCurrentDriver(), emojiMart, 2);
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), emojiMartCss,  5);
     }
 
     public String selectRandomFrequentlyUsedEmoji(){

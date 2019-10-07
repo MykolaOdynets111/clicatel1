@@ -203,6 +203,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void deleteTags() {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), cleareAll, 6);
         findElemByCSS(this.getCurrentDriver(), cleareAll).click();
     }
 
