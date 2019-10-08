@@ -91,9 +91,9 @@ public class IncomingTransferWindow extends AbstractUIElement {
         return transferPicture.getText().equalsIgnoreCase(String.valueOf(userName.charAt(0)));
     }
 
-    public boolean isValidImTransferChannel() {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferChannel.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), transferChannel, image);
+    public boolean isValidImTransferChannel(String channel) {
+        return getAttributeFromElem(this.getCurrentDriver(), transferChannel, 5, "Channel icon", "id")
+                .equals(channel);
     }
 
     public boolean isValidImgTransferSentiment() {
