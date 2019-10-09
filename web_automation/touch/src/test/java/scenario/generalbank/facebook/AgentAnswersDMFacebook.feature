@@ -4,6 +4,7 @@
 Feature: Communication between user and agent in FB messenger
 
   Background:
+    Given Login to fb
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 

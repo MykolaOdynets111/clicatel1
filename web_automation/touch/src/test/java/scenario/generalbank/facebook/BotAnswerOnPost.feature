@@ -4,6 +4,7 @@
 Feature:  Bot answers on post
 
   Scenario: Facebook: Bot should answer with comment on users's post
+    Given Login to fb
     Given Open General Bank Demo page
     When User makes post message regarding account balance
     Then Post response arrives

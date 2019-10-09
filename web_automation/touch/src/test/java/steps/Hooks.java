@@ -14,7 +14,6 @@ import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
 import emailhelper.GmailConnector;
-import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
@@ -62,23 +61,11 @@ public class Hooks implements JSHelper {
             throw new cucumber.api.PendingException();
         }
 
-        if(scenario.getSourceTagNames().contains("@skip_for_demo1")& ConfigManager.getEnv().equalsIgnoreCase("demo1")){
-                    throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
-                            " connection to DB is used and demo1 DB located in different network than other DBs");
-        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
                     "On other envs the test may break the limit of sent activation emails and cause " +
                     "Clickatell to be billed for that");
-        }
-
-        if (scenario.getSourceTagNames().contains("@facebook")) {
-          //      ApiHelper.closeAllOvernightTickets("General Bank Demo");
-                FBLoginPage.openFacebookLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
-                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
-                    DriverFactory.getAgentDriverInstance();
-                }
         }
 
         if (scenario.getSourceTagNames().contains("@twitter")) {

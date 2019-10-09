@@ -4,6 +4,7 @@
 Feature: Customer 360 from fb
 
   Scenario: Facebook: Customer 360 from fb
+    Given Login to fb
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
     When User opens Messenger and send message regarding chat to agent

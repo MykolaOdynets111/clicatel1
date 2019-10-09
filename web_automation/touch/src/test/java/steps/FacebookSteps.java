@@ -8,6 +8,7 @@ import datamanager.Tenants;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import facebook.FBHomePage;
+import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
 import facebook.FBYourPostPage;
@@ -23,6 +24,13 @@ public class FacebookSteps {
     private MessengerWindow messengerWindow;
     private FBYourPostPage FBYourPostPage;
     @GuardedBy("this") private static String fbMessage;
+
+    @Given("Login to fb")
+    public void loginToFb(){
+        //      ApiHelper.closeAllOvernightTickets("General Bank Demo");
+        FBLoginPage.openFacebookLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
+    }
+
 
     @Given("^Open (.*) page$")
     public void openTenantPage(String tenantOrgName){
