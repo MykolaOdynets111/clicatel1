@@ -23,9 +23,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
-        System.out.println("Log in to portal is started");
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
-        System.out.println("Log in to chatdesk assertion is started");
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
         System.out.println("Log in to portal is finished");
@@ -43,7 +41,9 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         if(permissions.stream().anyMatch(e -> e.getSolution().equalsIgnoreCase("PLATFORM"))){
             Assert.assertTrue(getPortalMainPage(ordinalAgentNumber).isPortalPageOpened(),
                     "User is not logged in to portal");
+            System.out.println("Log in to portal is portal opened verification started");
             getPortalMainPage(ordinalAgentNumber).launchChatDesk();
+            System.out.println("Log in to portal is portal opened verification started");
         }
     }
 

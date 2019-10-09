@@ -34,7 +34,7 @@ public class LeftMenu extends AbstractUIElement {
 
     @Step(value = "Navigate in Left menu")
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
-        waitForAngularRequestsToFinish(this.getCurrentDriver());
+//        waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementsToBeVisible(this.getCurrentDriver(), launchpadMenuItems, 5);
         WebElement elem = activeLeftMenuItems
                 .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get();
