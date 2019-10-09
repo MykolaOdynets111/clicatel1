@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import apihelper.ApiHelperTie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -96,9 +97,10 @@ public class IncomingTransferWindow extends AbstractUIElement {
                 .equals(channel);
     }
 
-    public boolean isValidImgTransferSentiment() {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferSentiment.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), transferSentiment, image);
+    public boolean isValidImgTransferSentiment(String userMessage) {
+        String expSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
+        return getAttributeFromElem(this.getCurrentDriver(), transferSentiment, 5, "Channel icon", "class")
+                .contains(expSentiment.toLowerCase());
     }
 
     public boolean isRigthSideTransferChatWindow() {
