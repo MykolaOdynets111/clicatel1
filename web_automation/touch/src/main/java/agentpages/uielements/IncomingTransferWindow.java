@@ -80,7 +80,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public boolean isTransferWindowHeaderNotShown(){
-        return isElementRemoved(this.getCurrentDriver(), transferWindowHeader,2);
+        return isElementRemoved(this.getCurrentDriver(), transferWindowHeader,6);
     }
 
     public String getRejectedBy(){
