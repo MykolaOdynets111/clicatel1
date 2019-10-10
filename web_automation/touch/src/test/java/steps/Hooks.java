@@ -158,6 +158,9 @@ public class Hooks implements JSHelper {
         if(scenario.getSourceTagNames().contains("@dot_control")){
             DotControlSteps.cleanUPMessagesInfo();
             APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+        }
+
+        if(scenario.getSourceTagNames().contains("@start_server")){
             Server.stopServer();
             APIHelperDotControl.waitForServerToBeClosed();
         }
