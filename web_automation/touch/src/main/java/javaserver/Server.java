@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class Server {
 
     public static final String INTERNAL_CI_IP = "172.31.16.120";
-    public static final int SERVER_PORT = 5000;
+    public static int SERVER_PORT = 5000;
     private static boolean running = true;
     public static volatile Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
 
@@ -31,7 +31,8 @@ public class Server {
         running = false;
     }
 
-    public static String getServerURL(){
+    public static synchronized String getServerURL(){
+        SERVER_PORT += 1;
         if(ConfigManager.isRemote()){
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
