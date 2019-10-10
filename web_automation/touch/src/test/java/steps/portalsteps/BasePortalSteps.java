@@ -134,7 +134,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^There is no new emails in target email box$")
     public void cleanUpEmailBox(){
-        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
         CheckEmail.clearEmailInbox();
     }
 
@@ -158,11 +158,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         boolean result = false;
         if (ConfigManager.getEnv().equals("testing")){
             String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
-                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+                    Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail());
             if(resetPassID.equals("none")) {
                 getAdminPortalMainPage().waitFor(1500);
                 resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
-                        Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+                        Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail());
             }else{
                 result = true;
             }

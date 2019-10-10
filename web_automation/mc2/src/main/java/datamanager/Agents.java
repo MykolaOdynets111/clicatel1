@@ -96,6 +96,10 @@ public enum Agents {
         this.env = env;
     }
 
+    public String getOriginalEmail(){
+        return "touchgoagent@gmail.com"; // For Touch Go tests
+    }
+
     public String getAgentPass() {
         return this.userPass;
     }
