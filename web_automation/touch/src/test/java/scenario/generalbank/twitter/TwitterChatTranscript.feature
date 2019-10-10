@@ -2,9 +2,10 @@
 @agent_to_user_conversation
 @chat_transcript
 @without_tct
+Feature: Chat Transcript for Twitter
 
-  Feature: Chat Transcript for Twitter
     Scenario: Agent receiving chat transcript after Twitter conversation ends
+      Given Login to twitter
       Given Set Chat Transcript attribute to ALL for General Bank Demo tenant
       Given Clear Chat Transcript email inbox
       Given I login as agent of General Bank Demo

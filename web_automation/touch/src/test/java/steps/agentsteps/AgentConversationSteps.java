@@ -292,15 +292,15 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         SoftAssert soft = new SoftAssert();
         Map<String, String> sessionDetails = DBConnector
                 .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+
         Map<String, String> chatAgentDetails = DBConnector
                 .getChatAgentHistoryDetailsBySessionID(ConfigManager.getEnv(), sessionDetails.get("sessionId"));
         Map<String, String> conversationDetails = DBConnector
                 .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
 
-        soft.assertEquals(sessionDetails.get("state"), "TERMINATED",
+        soft.assertTrue(waitForSessionToBeClosed(6),
+                "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat" +
                 "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. ");
-        soft.assertTrue(sessionDetails.get("endedDate") != null,
-                "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
                 "Ended date is not set for chat agent history record after ending chat." +
                         "\nSession " + sessionDetails.get("sessionId") + "");
@@ -308,6 +308,16 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "Conversation is still active after ending chat." +
                         "\nSession " + sessionDetails.get("sessionId") + "");
         soft.assertAll();
+    }
+
+    private boolean waitForSessionToBeClosed(int wait){
+        Map<String, String> sessionDetails = DBConnector
+                .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        for(int i=0; i<wait; i++){
+            if(sessionDetails.get("state").equals("TERMINATED") & sessionDetails.get("endedDate") != null) return true;
+            else waitFor(1000);
+        }
+        return false;
     }
 
     @When("(.*) click 'Cancel' button$")

@@ -68,13 +68,6 @@ public class Hooks implements JSHelper {
                     "Clickatell to be billed for that");
         }
 
-        if (scenario.getSourceTagNames().contains("@twitter")) {
-                TwitterLoginPage.openTwitterLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
-                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
-                    DriverFactory.getAgentDriverInstance();
-                }
-        }
-
         if(scenario.getSourceTagNames().contains("@tie")){
                 BaseTieSteps.request = new ByteArrayOutputStream();
                 BaseTieSteps.response = new ByteArrayOutputStream();

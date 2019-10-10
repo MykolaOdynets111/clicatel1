@@ -12,6 +12,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import twitter.TwitterHomePage;
+import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.TweetsSection;
 import twitter.uielements.DMWindow;
@@ -29,6 +30,11 @@ public class TwitterSteps {
     private OpenedTweet openedTweet;
     private static int invocationCount = 0;
     private static String tweetMessage;
+
+    @Given("Login to twitter")
+    public void loginToTwitter(){
+        TwitterLoginPage.openTwitterLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
+    }
 
     @Given("^Open twitter page of (.*)$")
     public void openTwitterPage(String tenantOrgName){
