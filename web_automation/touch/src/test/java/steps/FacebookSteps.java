@@ -29,7 +29,6 @@ public class FacebookSteps {
 
     @Given("Login to fb")
     public void loginToFb(){
-        //      ApiHelper.closeAllOvernightTickets("General Bank Demo");
         FBLoginPage.openFacebookLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
     }
 
