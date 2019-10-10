@@ -12,6 +12,7 @@ import mc2api.auth.PortalAuthToken;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.net.ConnectException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -39,19 +40,27 @@ public class APIHelperDotControl {
     }
 
     public static void waitForServerToBeClosed() {
-        for(int i = 0; i<10; i++){
-            if(RestAssured.get(Server.getServerURL()).statusCode()==502){
-                break;
-            }else{
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        try {
+            for (int i = 0; i < 10; i++) {
+                if (callServer().statusCode() == 502) {
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+        }catch (ConnectException e){
+            // Server is not available
         }
     }
 
+
+    private static Response callServer() throws ConnectException{
+        return RestAssured.get(Server.getServerURL());
+    }
 
 
     public static Response updateIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo, String apiToken){
