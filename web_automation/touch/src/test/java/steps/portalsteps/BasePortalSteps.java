@@ -209,9 +209,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    @When("(.*) provides new password and click Login")
-    public void createPassword(String agent){
-        Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
+    @When("(.*) provides (.*) password and click Login")
+    public void createPassword(String agent, String pass){
+        if(pass.equals("new")) Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
         AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
         getPortalLoginPage(agent).getAccountForm().createNewPass(AGENT_PASS)
                                     .clickLogin();
