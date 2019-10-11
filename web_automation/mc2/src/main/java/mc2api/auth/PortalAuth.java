@@ -23,7 +23,8 @@ public class PortalAuth {
             List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
             HashMap<String, String> targetAccount = accounts.stream()
                     .filter(e -> e.get("name")
-                    .equals(accountName)).findFirst().orElse(null);
+                    .equals(accountName)).findFirst().orElseThrow(() -> new AssertionError(
+                            "Unsupported '"+accountName+"' accountName"));
 
             if(targetAccount == null) {
                 Assert.fail("Passed accountName " + accountName + " is not returned from mc2\n"

@@ -101,25 +101,21 @@ public enum MC2Account {
         return tenantID;
     }
 
-    public MC2Account getAccount(String env, String touchGoPlan){
-        return Arrays.stream(MC2Account.values())
-                .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
-                        && e.getTouchGoPlan().equalsIgnoreCase(tenantOrgName))
-                .findFirst().get();
-    }
-
     public static MC2Account getAccountByOrgName(String env, String tenantOrgName){
         return Arrays.stream(MC2Account.values())
                 .filter(e -> e.getEnv().equalsIgnoreCase(env)
                         && e.getTenantOrgName().equalsIgnoreCase(tenantOrgName))
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new AssertionError(
+                        "No admin user found for " + tenantOrgName + ", env: " + ConfigManager.getEnv()));
     }
 
     public static MC2Account getAccountDetailsByAccountName(String env, String accounName){
         return Arrays.stream(MC2Account.values())
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAccountName().equalsIgnoreCase(accounName))
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new AssertionError(
+                "No admin user found for " + accounName + ", env: " + ConfigManager.getEnv()));
+
     }
 
     public MC2Account setTouchGoPlan(String touchGoPlan) {

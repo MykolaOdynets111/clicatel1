@@ -9,7 +9,7 @@ import org.apache.http.HttpStatus;
 
 public class AdminAccessTokenProvider {
 
-    private static volatile ThreadLocal<String> SHARED_ADMIN_ACCESS_TOKEN = new ThreadLocal<>();
+    private static ThreadLocal<String> SHARED_ADMIN_ACCESS_TOKEN = new ThreadLocal<>();
 
     public static String getThreadLocalToken(String email, String pass) {
         if (SHARED_ADMIN_ACCESS_TOKEN.get()==null) {
