@@ -92,7 +92,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     private String generatePredefinedAgentEmail(){
-        return Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail() + System.currentTimeMillis() + "@gmail.com";
+        String[] email = Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail().split("@");
+        return email[0] + "+" + System.currentTimeMillis() + "@gmail.com";
     }
 
     @When("^Create new Agent$")
