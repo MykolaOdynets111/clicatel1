@@ -2,6 +2,7 @@ package facebook;
 
 import abstractclasses.AbstractSocialPage;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import socialaccounts.FacebookUsers;
@@ -14,10 +15,16 @@ public class FBLoginPage extends AbstractSocialPage {
     @FindBy(css = "form#login_form")
     private WebElement loginForm;
 
-    @FindBy(xpath = "//input[@id='email']")
+    @FindAll({
+            @FindBy(xpath = "//input[@id='email']"),
+            @FindBy(xpath = "//input[@name='email']")
+    })
     private WebElement emailInputField;
 
-    @FindBy(xpath = "//input[@id='pass']")
+    @FindAll({
+            @FindBy(xpath = "//input[@id='pass']"),
+            @FindBy(xpath = "//input[@name='pass']")
+    })
     private WebElement passInputField;
 
     @FindBy(name = "login")
