@@ -50,9 +50,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     @Given("^Try to login as (.*) of (.*)")
     public void tryToLoginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName)
-                .loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
-        setAgentLoginPage(ordinalAgentNumber, loginPage);
+        loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
     }
 
 

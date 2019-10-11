@@ -49,7 +49,7 @@ public class GmailConnector {
             setFolder(getStore().getFolder("INBOX"));
             getFolder().open(Folder.READ_WRITE);
         } catch (Exception e) {
-            Assert.fail("\n MessagingException e: \n" + e);
+            Assert.fail("\n MessagingException e: \n" + e + "mail creds: " + mail);
         }
         return getFolder();
     }
