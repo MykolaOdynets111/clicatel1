@@ -3,7 +3,7 @@ package apihelper;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestIntegrationChanel;
-import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import datamanager.jacksonschemas.dotcontrol.MessageRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -105,7 +105,7 @@ public class APIHelperDotControl {
 
 
 
-    public static Response sendMessage(DotControlRequestMessage requestMessage){
+    public static Response sendMessage(MessageRequest requestMessage){
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         LocalDateTime ldt = LocalDateTime.now(zoneId);
         ZonedDateTime zdt = ldt.atZone(zoneId);
@@ -126,7 +126,7 @@ public class APIHelperDotControl {
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
     }
 
-    public static Response sendMessageWithWait(DotControlRequestMessage requestMessage){
+    public static Response sendMessageWithWait(MessageRequest requestMessage){
         Response resp = sendMessage(requestMessage);
         for (int i =0; i<13; i++){
             if (resp.statusCode() != 401) break;

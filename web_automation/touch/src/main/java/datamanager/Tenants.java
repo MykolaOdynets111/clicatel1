@@ -31,6 +31,12 @@ public class Tenants {
         TENANT_UNDER_TEST_NAME.set(tenantName);
     }
 
+    public static void setTenantInfo(String tenantName, String tenantOrgName){
+        Tenants.setTenantUnderTestName(tenantName);
+        Tenants.setTenantUnderTestOrgName(tenantOrgName);
+        TENANT_UNDER_TEST.get().put(tenantOrgName, tenantName);
+    }
+
     public static String getTenantUnderTestName(){
         return TENANT_UNDER_TEST_NAME.get();
     }
@@ -73,50 +79,32 @@ public class Tenants {
         TENANT_UNDER_TEST.set(new HashMap<>());
         switch (tenantOrgName) {
             case "General Bank Demo":
-                Tenants.setTenantUnderTestName("generalbank");
-                Tenants.setTenantUnderTestOrgName("General Bank Demo");
-                TENANT_UNDER_TEST.get().put("General Bank Demo", "generalbank");
+                setTenantInfo("generalbank", "General Bank Demo");
                 break;
             case "Virgin Money":
-                Tenants.setTenantUnderTestName("virgin-money");
-                Tenants.setTenantUnderTestOrgName("Virgin Money");
-                TENANT_UNDER_TEST.get().put("Virgin Money", "virgin-money");
+                setTenantInfo("virgin-money", "Virgin Money");
                 break;
             case "Starter AQA" :
-                Tenants.setTenantUnderTestName("starter-aqa");
-                Tenants.setTenantUnderTestOrgName("Starter AQA");
-                TENANT_UNDER_TEST.get().put("Starter AQA", "starter-aqa");
+                setTenantInfo("starter-aqa", "Starter AQA");
                 break;
             case "Standard AQA" :
-                Tenants.setTenantUnderTestName("standardplan");
-                Tenants.setTenantUnderTestOrgName("Standard AQA");
-                TENANT_UNDER_TEST.get().put("Standard AQA", "standardplan");
+                setTenantInfo("standardplan", "Standard AQA");
                 break;
             case "Updating AQA" :
-                Tenants.setTenantUnderTestName("updatingplan");
-                Tenants.setTenantUnderTestOrgName("Updating AQA");
-                if(ConfigManager.getEnv().equals("qa")) Tenants.setTenantUnderTestName("updatingaccount");
-                TENANT_UNDER_TEST.get().put("Updating AQA", "updatingplan");
+                setTenantInfo("updatingplan", "Updating AQA");
+                if(ConfigManager.getEnv().equals("qa")) setTenantInfo("updatingaccount", "Updating AQA");
                 break;
             case "Automation":
-                Tenants.setTenantUnderTestName("agentmode");
-                Tenants.setTenantUnderTestOrgName("Automation");
-                TENANT_UNDER_TEST.get().put("Automation", "agentmode");
+                setTenantInfo("agentmode", "Automation");
                 break;
             case "Automation Bot":
-                Tenants.setTenantUnderTestName("automationbot");
-                Tenants.setTenantUnderTestOrgName("Automation Bot");
-                TENANT_UNDER_TEST.get().put("Automation Bot", "agentmode");
+                setTenantInfo("automationbot", "Automation Bot");
                 break;
             case "Automation Common":
-                Tenants.setTenantUnderTestName("aqacomon");
-                Tenants.setTenantUnderTestOrgName("Automation Common");
-                TENANT_UNDER_TEST.get().put("Automation Common", "aqacomon");
+                setTenantInfo("aqacomon", "Automation Common");
                 break;
             case "Standard Billing":
-                Tenants.setTenantUnderTestName("standardbilling");
-                Tenants.setTenantUnderTestOrgName("Standard Billing");
-                TENANT_UNDER_TEST.get().put("Standard Billing", "standardbilling");
+                setTenantInfo("standardbilling", "Standard Billing");
                 break;
             default:
                 Tenants.setTenantUnderTestOrgName(tenantOrgName);

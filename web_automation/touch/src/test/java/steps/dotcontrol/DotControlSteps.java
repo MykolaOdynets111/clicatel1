@@ -28,7 +28,7 @@ import java.util.List;
 public class DotControlSteps implements WebWait {
 
     private static ThreadLocal<DotControlCreateIntegrationInfo> createIntegrationCallBody = new ThreadLocal<>();
-    private static ThreadLocal<DotControlRequestMessage> messageCallBody = new ThreadLocal<>();
+    private static ThreadLocal<MessageRequest> messageCallBody = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
     private static ThreadLocal<String> clientFullName = new ThreadLocal<>();
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
@@ -102,7 +102,7 @@ public class DotControlSteps implements WebWait {
     }
 
     @Given("^Prepare payload for sending (.*) message for .Control$")
-    public DotControlRequestMessage preparePayloadForMessageEndpoint(String message){
+    public MessageRequest preparePayloadForMessageEndpoint(String message){
         if (messageCallBody.get()==null) createRequestMessage(apiToken.get(), message);
         else{
                 messageCallBody.get().setMessage(message);
@@ -116,8 +116,8 @@ public class DotControlSteps implements WebWait {
         return messageCallBody.get();
     }
 
-    private ThreadLocal<DotControlRequestMessage> createRequestMessage(String apiKey, String message){
-        messageCallBody.set(new DotControlRequestMessage(apiKey, message));
+    private ThreadLocal<MessageRequest> createRequestMessage(String apiKey, String message){
+        messageCallBody.set(new MessageRequest(apiKey, message));
         return messageCallBody;
     }
 
@@ -396,7 +396,7 @@ public class DotControlSteps implements WebWait {
         else return messageCallBody.get().getClientId();
     }
 
-    public static DotControlRequestMessage getFromClientRequestMessage(){
+    public static MessageRequest getFromClientRequestMessage(){
         return messageCallBody.get();
     }
 

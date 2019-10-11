@@ -14,12 +14,9 @@ import java.util.Map;
         "referenceId",
         "conversationId",
         "messageType",
-        "message",
-        "timestamp",
-        "source",
-        "context"
+        "message"
 })
-public class BotMessageResponse {
+public class MessageBase {
 
     @JsonProperty("apiToken")
     private String apiToken;
@@ -33,14 +30,6 @@ public class BotMessageResponse {
     private String messageType;
     @JsonProperty("message")
     private String message;
-    @JsonProperty("timestamp")
-    private Long timestamp;
-    @JsonProperty("source")
-    private Object source;
-    @JsonProperty("context")
-    private BotMessageResponseContext context;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("apiToken")
     public String getApiToken() {
@@ -102,59 +91,5 @@ public class BotMessageResponse {
         this.message = message;
     }
 
-    @JsonProperty("timestamp")
-    public Long getTimestamp() {
-        return timestamp;
-    }
 
-    @JsonProperty("timestamp")
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    @JsonProperty("source")
-    public Object getSource() {
-        return source;
-    }
-
-    @JsonProperty("source")
-    public void setSource(Object source) {
-        this.source = source;
-    }
-
-    @JsonProperty("context")
-    public BotMessageResponseContext getContext() {
-        return context;
-    }
-
-    @JsonProperty("context")
-    public void setContext(BotMessageResponseContext context) {
-        this.context = context;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return "BotMessageResponse{" +
-                "apiToken='" + apiToken + '\'' +
-                ", clientId='" + clientId + '\'' +
-                ", referenceId='" + referenceId + '\'' +
-                ", conversationId='" + conversationId + '\'' +
-                ", messageType='" + messageType + '\'' +
-                ", message='" + message + '\'' +
-                ", timestamp=" + timestamp +
-                ", source=" + source +
-                ", context=" + context +
-                ", additionalProperties=" + additionalProperties +
-                "}\n";
-    }
 }

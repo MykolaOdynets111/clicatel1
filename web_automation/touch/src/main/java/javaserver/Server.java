@@ -3,7 +3,7 @@ package javaserver;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import datamanager.jacksonschemas.dotcontrol.BotMessageResponse;
+import datamanager.jacksonschemas.dotcontrol.MessageResponse;
 import drivermanager.ConfigManager;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
@@ -25,7 +25,7 @@ public class Server {
     public static final String INTERNAL_CI_IP = "172.31.16.120";
     public static volatile int SERVER_PORT = 5000;
     private static boolean running = true;
-    public static volatile Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
+    public static volatile Map<String, MessageResponse> incomingRequests = new HashMap<>();
 
     public static void stopServer(){
         running = false;
@@ -36,7 +36,7 @@ public class Server {
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "http://aa5bcffa.ngrok.io";
+            return "http://7958ad2e.ngrok.io";
         }
     }
 
@@ -106,7 +106,7 @@ public class Server {
             os.write(response.getBytes());
             os.close();
 
-            BotMessageResponse incomingRequest = null;
+            MessageResponse incomingRequest = null;
 
             if(t.getRequestMethod().equalsIgnoreCase("post")){
                 incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
@@ -116,19 +116,19 @@ public class Server {
 
         }
 
-        private BotMessageResponse convertStringBotResponseBodyToObject(String body) {
+        private MessageResponse convertStringBotResponseBodyToObject(String body) {
             if(body.contains("CHAT_SUMMARY")){
-                return new BotMessageResponse();
+                return new MessageResponse();
             }
             if ((body.charAt(0) + "").equals("[")) {
                 body = body.replace("[", "");
                 body = body.replace("]", "");
             }
             System.out.println("Incomming body :" + body);
-            BotMessageResponse botMessage = null;
+            MessageResponse botMessage = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
-                botMessage = mapper.readValue(body, BotMessageResponse.class);
+                botMessage = mapper.readValue(body, MessageResponse.class);
             } catch (IOException e) {
                 Assert.fail("Incorrect schema of response from .Control \n" +"Catched Body "+ body);
             }

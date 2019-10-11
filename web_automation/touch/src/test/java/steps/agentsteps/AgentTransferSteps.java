@@ -7,7 +7,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
-import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
