@@ -106,17 +106,9 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
         WebElement targetButton = pageNavButtons.stream()
                                         .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
-                                        .findFirst().get();
+                                        .findFirst().orElseThrow(() ->
+                        new AssertionError(buttonName + " navigation button is not available to click"));
         clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
-    }
-
-    public boolean isPageNavButtonShown(String buttonName){
-        waitForAngularRequestsToFinish(this.getCurrentDriver());
-        waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
-        WebElement targetButton = pageNavButtons.stream()
-                .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
-                .findFirst().orElseGet(null);
-        return targetButton != null;
     }
 
     @Step(value = "Get opened tab title")
@@ -135,7 +127,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         waitForElementToBeVisible(this.getCurrentDriver(), headerControlsContainer, 8);
         WebElement targetButton = pageActionButtons.stream()
                 .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
-                .findFirst().get();
+                .findFirst().orElseThrow(() ->
+                        new AssertionError(buttonName + " navigation button is not available to click") );
         clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
     }
 

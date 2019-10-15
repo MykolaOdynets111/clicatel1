@@ -4,7 +4,6 @@ import datamanager.Accounts;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import drivermanager.ConfigManager;
-import mc2api.auth.PortalAuth;
 
 
 public class PortalAuthToken {
