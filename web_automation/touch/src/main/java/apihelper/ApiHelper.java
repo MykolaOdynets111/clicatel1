@@ -381,7 +381,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static Response getAgentInfo(String tenantOrgName, String agent) {
+        apiHelperlog.get().info("!! {} BEFORE MC2 LOGIN", tenantOrgName);
         String token = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, agent);
+        apiHelperlog.get().info("!! {} After getting  MC2 Token", tenantOrgName);
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", token)
