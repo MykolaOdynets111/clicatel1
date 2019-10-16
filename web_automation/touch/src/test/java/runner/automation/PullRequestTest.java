@@ -19,7 +19,7 @@ import static runner.automation.Path.DOTCONTROL;
         monochrome = true,
         features ={
                 PATH + "AgentFeedbackManagingAgentMode.feature",
-//                PATH + "AgentMode.feature",
+                PATH + "AgentMode.feature",
                 PATH + "AgentModeSuggestion.feature",
                 PATH + "AutomaticScheduler.feature",
                 PATH + "DisablingWidget.feature",

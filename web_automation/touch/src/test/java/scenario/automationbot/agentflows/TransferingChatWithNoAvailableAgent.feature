@@ -3,8 +3,8 @@ Feature: Transfer chat with no Agents available
   Verification of basic transfer chat functionality
 
   Background:
-    Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
+    Given User select Automation Bot tenant
+    Given I login as agent of Automation Bot
     And Click chat icon
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1676")

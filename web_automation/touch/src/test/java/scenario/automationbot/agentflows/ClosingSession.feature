@@ -4,8 +4,8 @@ Feature: Closing session
     In session table session should have "TERMINATED" status and ended date not null
     In chat_agent_history table item by session id should have ended date
     In conversation table conversation should have "0" in active column
-    Given I login as agent of General Bank Demo
-    When User select General Bank Demo tenant
+    Given I login as agent of Automation Bot
+    When User select Automation Bot tenant
     And Click chat icon
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
