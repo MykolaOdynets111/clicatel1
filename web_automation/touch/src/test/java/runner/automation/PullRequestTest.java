@@ -20,13 +20,13 @@ import static runner.automation.Path.DOTCONTROL;
         features ={
                 PATH + "AgentFeedbackManagingAgentMode.feature",
                 PATH + "AgentMode.feature",
-                PATH + "AgentModeSuggestion.feature",
-                PATH + "AutomaticScheduler.feature",
-                PATH + "DisablingWidget.feature",
-                PATH + "MaxChatsLImitationAgentMode.feature",
-                PATH + "OutOfSupportHoursAgentMode.feature",
-                PATH + "RedirectionOnAgentAfterProvidingUserInfo.feature",
-                DOTCONTROL + "DotControlMessagesForAllAdapter.feature",
+//                PATH + "AgentModeSuggestion.feature",
+//                PATH + "AutomaticScheduler.feature",
+//                PATH + "DisablingWidget.feature",
+//                PATH + "MaxChatsLImitationAgentMode.feature",
+//                PATH + "OutOfSupportHoursAgentMode.feature",
+//                PATH + "RedirectionOnAgentAfterProvidingUserInfo.feature",
+//                DOTCONTROL + "DotControlMessagesForAllAdapter.feature",
 
         },
         glue ="steps")

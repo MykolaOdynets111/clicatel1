@@ -125,7 +125,8 @@ public class AvailableAgent {
     }
 
     @JsonProperty("email")
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 

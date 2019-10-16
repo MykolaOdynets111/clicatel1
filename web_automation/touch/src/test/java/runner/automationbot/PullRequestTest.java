@@ -23,14 +23,14 @@ import static runner.automationbot.Path.DOTCONTROL;
                 PATH + "ClosingSession.feature",
                 PATH + "TransferingChatWithNoAvailableAgent.feature",
                 PATH + "AgentPhotoManaging.feature",
-                PATH + "AvailableAgentsHeadphones.feature",
-                PATH + "ChatConsoleWaitingCustomers.feature",
-                PATH + "EditAutorespondersViaPortalUI.feature",
-                PATH + "OutOfSupportHoursBotMode.feature",
-                PATH + "TenantBrandImageManaging.feature",
-                PATH + "TransferingChatViaTimeout.feature",
-                PATH + "TransferOvernigthTicket.feature",
-                DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
+//                PATH + "AvailableAgentsHeadphones.feature",
+//                PATH + "ChatConsoleWaitingCustomers.feature",
+//                PATH + "EditAutorespondersViaPortalUI.feature",
+//                PATH + "OutOfSupportHoursBotMode.feature",
+//                PATH + "TenantBrandImageManaging.feature",
+//                PATH + "TransferingChatViaTimeout.feature",
+//                PATH + "TransferOvernigthTicket.feature",
+//                DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
         },
         glue ="steps")
 public class PullRequestTest {
