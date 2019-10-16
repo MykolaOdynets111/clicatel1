@@ -32,9 +32,6 @@ import java.util.*;
 
 public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
-    private static ThreadLocal<org.slf4j.Logger> apiHelperlog = new ThreadLocal<>();
-
-
     private static  List<HashMap> tenantsInfo=null;
     private static List<TafMessage> tenantMessages=null;
 
@@ -381,9 +378,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static Response getAgentInfo(String tenantOrgName, String agent) {
-        apiHelperlog.get().info("!! {} BEFORE MC2 LOGIN", tenantOrgName);
         String token = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, agent);
-        apiHelperlog.get().info("!! {} After getting  MC2 Token", tenantOrgName);
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", token)
@@ -518,27 +513,19 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
-        apiHelperlog.set(LoggerFactory.getLogger(ApiHelper.class));
         try {
-            apiHelperlog.get().info("!! {} OVERNIGHT TICKETS STARTED", tenantOrgName);
             String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
-            apiHelperlog.get().info(" {} After getting agentId", tenantOrgName);
             List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
-            apiHelperlog.get().info(" {} After getting allAssignedTickets", tenantOrgName);
             List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
-            apiHelperlog.get().info(" {} After getting allUnassignedTickets", tenantOrgName);
 
             List<OvernightTicket> fullList = new ArrayList<>();
             fullList.addAll(allAssignedTickets);
             fullList.addAll(allUnassignedTickets);
-            apiHelperlog.get().info(" {} Before processing Tickets", tenantOrgName);
             if (fullList.size() > 0) processTickets(fullList, agentId);
         }catch(NullPointerException e){}
         catch (JsonPathException e){
             Assert.fail("Unable to close overnight tickets");
         }
-        apiHelperlog.get().info("!!  {} OVERNIGHT TICKETS ENDED !!", tenantOrgName);
-
     }
 
     public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber){

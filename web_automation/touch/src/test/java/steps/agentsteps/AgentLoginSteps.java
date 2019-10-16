@@ -21,47 +21,29 @@ import java.util.List;
 public class AgentLoginSteps extends AbstractAgentSteps {
 
 
-    private static ThreadLocal<org.slf4j.Logger> log = new ThreadLocal<>();
-
-
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
-        log.set(LoggerFactory.getLogger(AgentLoginSteps.class));
-        log.get().info("{} tenant login  started. Time: ", tenantOrgName);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
-        log.get().info(" {} tenant finished closing overnight ticket.\n" +
-                "Before login to portal. Time: ", tenantOrgName);
-
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
-        log.get().info(" {} After launching chatdesk ", tenantOrgName);
 
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
-        log.get().info(" \n {} LOGIN ENDED \n ", tenantOrgName);
 
     }
 
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
         Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
         List<Permission> permissions = new ArrayList<>();
-        log.get().info(tenantOrgName + " before getting agent roles. Time: " + System.currentTimeMillis());
         ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber)
                 .getBody().jsonPath().getList("roles", UserRole.class).stream().forEach(e -> permissions.addAll(e.getPermissions()));
-        log.get().info(tenantOrgName + " before opening login page. Time: " + System.currentTimeMillis());
         getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
-        log.get().info(tenantOrgName + " before login agent. Time: " + System.currentTimeMillis());
         getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
-        log.get().info(tenantOrgName + " After login agent\n");
 
         if(permissions.stream().anyMatch(e -> e.getSolution().equalsIgnoreCase("PLATFORM"))){
-            log.get().info(tenantOrgName + " Before check that isPortalPageOpened. Time: " + System.currentTimeMillis());
             Assert.assertTrue(getPortalMainPage(ordinalAgentNumber).isPortalPageOpened(),
                     "User is not logged in to portal");
-            log.get().info(tenantOrgName + " After check that isPortalPageOpened\n" +
-                    "Before opening chatdesk . Time: " + System.currentTimeMillis());
             getPortalMainPage(ordinalAgentNumber).launchChatDesk();
-            log.get().info(tenantOrgName + " After chatdesk launching");
         }
     }
 

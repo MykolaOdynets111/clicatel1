@@ -63,6 +63,26 @@ You can find Allure report by path
 web_automation/build/allure-report/index.html
 ```
 
+* ### Logback
+There is a possibility to use Logback library.
+For this purpose you have to create logger instance in a class you want to extract some logs from.
+ Like:
+```
+private static ThreadLocal<org.slf4j.Logger> apiHelperlog = new ThreadLocal<>();
+
+public static token getMC2Token(String tenantOrgName, String agent) {
+        apiHelperlog.get().info("!! {} BEFORE MC2 LOGIN", tenantOrgName);
+        String token = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, agent);
+        apiHelperlog.get().info("!! {} After getting  MC2 Token", tenantOrgName);
+        return token;
+    }
+```
+For configuration this logger you may use the logback.xml file.
+It is located by the path:
+ ```
+ web_automation/touch/src/main/resources/logback.xml
+ ```
+
 * ### Default parameters' values:
 - Dsuite=all
 - Dtenant=all
