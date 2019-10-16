@@ -21,6 +21,7 @@ import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import mc2api.auth.PortalAuthToken;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ApiHelper implements DateTimeHelper, VerificationHelper {
+
+    private static ThreadLocal<org.slf4j.Logger> log = new ThreadLocal<>();
+
 
     private static  List<HashMap> tenantsInfo=null;
     private static List<TafMessage> tenantMessages=null;
@@ -512,18 +516,27 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
+        log.set(LoggerFactory.getLogger(ApiHelper.class));
         try {
+            log.get().info("!! {} OVERNIGHT TICKETS STARTED", tenantOrgName);
             String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
+            log.get().info(" {} After getting agentId", tenantOrgName);
             List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
+            log.get().info(" {} After getting allAssignedTickets", tenantOrgName);
             List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
+            log.get().info(" {} After getting allUnassignedTickets", tenantOrgName);
+
             List<OvernightTicket> fullList = new ArrayList<>();
             fullList.addAll(allAssignedTickets);
             fullList.addAll(allUnassignedTickets);
+            log.get().info(" {} Before processing Tickets", tenantOrgName);
             if (fullList.size() > 0) processTickets(fullList, agentId);
         }catch(NullPointerException e){}
         catch (JsonPathException e){
             Assert.fail("Unable to close overnight tickets");
         }
+        log.get().info("!!  {} OVERNIGHT TICKETS ENDED !!", tenantOrgName);
+
     }
 
     public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber){

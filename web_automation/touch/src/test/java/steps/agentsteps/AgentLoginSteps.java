@@ -34,8 +34,12 @@ public class AgentLoginSteps extends AbstractAgentSteps {
                 "Before login to portal. Time: ", tenantOrgName);
 
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
+        log.get().info(" {} After launching chatdesk ", tenantOrgName);
+
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
+        log.get().info(" \n {} LOGIN ENDED \n ", tenantOrgName);
+
     }
 
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
@@ -48,8 +52,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
         log.get().info(tenantOrgName + " before login agent. Time: " + System.currentTimeMillis());
         getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
-        log.get().info(tenantOrgName + " after login agent\n" +
-                "Before permission check. Time: " + System.currentTimeMillis());
+        log.get().info(tenantOrgName + " After login agent\n");
 
         if(permissions.stream().anyMatch(e -> e.getSolution().equalsIgnoreCase("PLATFORM"))){
             log.get().info(tenantOrgName + " Before check that isPortalPageOpened. Time: " + System.currentTimeMillis());
@@ -58,7 +61,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
             log.get().info(tenantOrgName + " After check that isPortalPageOpened\n" +
                     "Before opening chatdesk . Time: " + System.currentTimeMillis());
             getPortalMainPage(ordinalAgentNumber).launchChatDesk();
-            log.get().info(tenantOrgName + " After cchatdesk");
+            log.get().info(tenantOrgName + " After chatdesk launching");
         }
     }
 
