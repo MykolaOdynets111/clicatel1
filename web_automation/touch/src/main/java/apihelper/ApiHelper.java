@@ -32,7 +32,7 @@ import java.util.*;
 
 public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
-    private static ThreadLocal<org.slf4j.Logger> log = new ThreadLocal<>();
+    private static ThreadLocal<org.slf4j.Logger> apiHelperlog = new ThreadLocal<>();
 
 
     private static  List<HashMap> tenantsInfo=null;
@@ -516,26 +516,26 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
-        log.set(LoggerFactory.getLogger(ApiHelper.class));
+        apiHelperlog.set(LoggerFactory.getLogger(ApiHelper.class));
         try {
-            log.get().info("!! {} OVERNIGHT TICKETS STARTED", tenantOrgName);
+            apiHelperlog.get().info("!! {} OVERNIGHT TICKETS STARTED", tenantOrgName);
             String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
-            log.get().info(" {} After getting agentId", tenantOrgName);
+            apiHelperlog.get().info(" {} After getting agentId", tenantOrgName);
             List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
-            log.get().info(" {} After getting allAssignedTickets", tenantOrgName);
+            apiHelperlog.get().info(" {} After getting allAssignedTickets", tenantOrgName);
             List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
-            log.get().info(" {} After getting allUnassignedTickets", tenantOrgName);
+            apiHelperlog.get().info(" {} After getting allUnassignedTickets", tenantOrgName);
 
             List<OvernightTicket> fullList = new ArrayList<>();
             fullList.addAll(allAssignedTickets);
             fullList.addAll(allUnassignedTickets);
-            log.get().info(" {} Before processing Tickets", tenantOrgName);
+            apiHelperlog.get().info(" {} Before processing Tickets", tenantOrgName);
             if (fullList.size() > 0) processTickets(fullList, agentId);
         }catch(NullPointerException e){}
         catch (JsonPathException e){
             Assert.fail("Unable to close overnight tickets");
         }
-        log.get().info("!!  {} OVERNIGHT TICKETS ENDED !!", tenantOrgName);
+        apiHelperlog.get().info("!!  {} OVERNIGHT TICKETS ENDED !!", tenantOrgName);
 
     }
 
