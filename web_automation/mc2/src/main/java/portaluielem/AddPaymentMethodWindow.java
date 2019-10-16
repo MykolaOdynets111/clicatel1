@@ -63,14 +63,17 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
     @Step(value = "Select '{checkBox}' checkbox")
     public AddPaymentMethodWindow selectCheckBox(String checkBox){
         checkboxes.stream().filter(e -> e.getText().trim().equals(checkBox))
-                                                            .findFirst().get().click();
+                           .findFirst().orElseThrow(() -> new AssertionError("Cannot select '" + checkBox + "' checkbox"))
+                           .click();
         return this;
     }
 
     @Step(value = "Verify '{checkBox}' checkbox {expectedStatus}")
     public boolean isCheckBoxDisabled(String checkBox, String expectedStatus){
         String disabled = checkboxes.stream().filter(e -> e.getText().trim().equals(checkBox))
-                .findFirst().get().getAttribute("disabled");
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot get attribute from '" + checkBox + "' checkbox"))
+                .getAttribute("disabled");
         if(disabled == null) return false;
         if(disabled.equals("true")) return true;
         else{

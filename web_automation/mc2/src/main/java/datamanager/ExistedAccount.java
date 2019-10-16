@@ -57,7 +57,8 @@ public enum ExistedAccount {
         return agentsList.stream()
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                 & e.name().toLowerCase().contains("payment"))
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new AssertionError(
+                        "No admin user of account for payments tests found for env: " + ConfigManager.getEnv()));
     }
 
     public static ExistedAccount getExistedAccountForBilling() {
@@ -66,7 +67,8 @@ public enum ExistedAccount {
         return agentsList.stream()
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         & e.name().toLowerCase().contains("billing"))
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new AssertionError(
+                        "No admin user of account for billing tests found for env: " + ConfigManager.getEnv()));
     }
 
     public static ExistedAccount getExistedAccountWithValidMail() {
@@ -74,7 +76,7 @@ public enum ExistedAccount {
         List<ExistedAccount> agentsList = Arrays.asList(agentsArray);
         return agentsList.stream()
                 .filter(e -> e.getEnv().equalsIgnoreCase(ConfigManager.getEnv()))
-                .findFirst().get();
+                .findFirst().orElse(TESTING_BILLING);
     }
 
     public String getAccountName() {

@@ -23,13 +23,11 @@ public class PortalAuth {
             List<HashMap<String, String>> accounts = resp.jsonPath().get("accounts");
             HashMap<String, String> targetAccount = accounts.stream()
                     .filter(e -> e.get("name")
-                    .equals(accountName)).findFirst().orElse(null);
+                    .equals(accountName)).findFirst().orElseThrow(() -> new AssertionError(
+                            "Passed accountName " + accountName + " is not returned from mc2\n"
+                                    +"Returned account name from getCorrectAccountName(tenantOrgName) " + accountName + "\n"
+                                    +"Returned response " + resp.getBody().asString()));
 
-            if(targetAccount == null) {
-                Assert.fail("Passed accountName " + accountName + " is not returned from mc2\n"
-                        +"Returned account name from getCorrectAccountName(tenantOrgName) " + accountName + "\n"
-                        +"Returned response " + resp.getBody().asString());
-            }
             tokenAndAccount.put("accountId", targetAccount.get("id"));
         }catch(JsonPathException e){
             Assert.fail("Unexpected response received while getting portal access token\n" +
