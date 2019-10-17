@@ -148,7 +148,7 @@ public enum Agents {
     }
 
     public Agents setEnv(String env) {
-        this.env = Environment.valueOf(env);
+        this.env = Environment.fromString(env);
         return this;
     }
 
