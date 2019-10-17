@@ -157,6 +157,11 @@ public class TwitterSteps {
         }
     }
 
+    /**
+     * Method to verify that response arrived right after the user's message
+     * @param expectedResponse
+     * @param userMessage
+     */
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
     public void verifyDMTwitterResponse(String expectedResponse, String userMessage){
         SoftAssert soft = new SoftAssert();
@@ -169,6 +174,16 @@ public class TwitterSteps {
         "Actual message: " + getDmWindow().getToUserResponse(userMessage) + "\n" +
         "Expected message: " + expectedResponse);
         soft.assertAll();
+    }
+
+    /**
+     * Method to verify that response arrived regardless its position
+     * @param expectedResponse
+     * @param userMessage
+     */
+    @Then("^User have to receive response \"(.*)\" on his message \"(.*)\"$")
+    public void verifyDMTwitterResponseAmongOthers(String expectedResponse, String userMessage){
+
     }
 
     @Then("^User have to receive (.*) auto responder on his message \"(.*)\"$")
