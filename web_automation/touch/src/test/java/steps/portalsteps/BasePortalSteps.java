@@ -1302,7 +1302,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Click on (.*) user from the table$")
     public void clickUser(String fullName){
         if(fullName.equalsIgnoreCase("created")){
-//            fullName = "Touch AQA";
             fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         }
         if(fullName.equalsIgnoreCase("admin")){
@@ -1310,7 +1309,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                     Tenants.getTenantUnderTestOrgName()).getAgentEmail();
             fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
         }
-//        getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
         try {
             getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
         }catch (NoSuchElementException e){

@@ -10,13 +10,13 @@ public class PortalUserRow extends AbstractWidget {
 
     @FindAll({
             @FindBy(css = "td.limited-table-cell-small b.agent-initials"),
-            @FindBy(xpath = ".//td[contains(@class, 'cl-name-item')][not(contains(@class, 'limited-cell-table'))]//a/b")
+            @FindBy(xpath = ".//td[contains(@class, 'cl-name-item')][not(contains(@class, 'user-management-table-cell'))]//a/b")
     })
     private WebElement agentFirstName;
 
     @FindAll({
             @FindBy(css = "td.limited-table-cell-medium b.agent-initials"),
-            @FindBy(xpath = ".//td[contains(@class, 'limited-cell-table')]//a/b")
+            @FindBy(xpath = ".//td[contains(@class, 'user-management-table-cell')]//a/b")
     })
     private WebElement agentLastName;
 

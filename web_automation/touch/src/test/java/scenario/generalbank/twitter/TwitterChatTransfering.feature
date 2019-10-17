@@ -23,4 +23,4 @@ Feature: Twitter chat transferring
     When Second agent click on new conversation request from twitter
     Then Conversation area becomes active with connect to support user's message in it for second agent
     When Second agent responds with hello to User
-    Then User have to receive the following on his message regarding chat to support: "hello"
+    Then User have to receive correct response "hello" on his message "chat to support"

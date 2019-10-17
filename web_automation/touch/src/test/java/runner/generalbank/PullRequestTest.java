@@ -19,28 +19,28 @@ import static runner.generalbank.Path.DOTCONTROL;
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ={
-                PATH + "AgentDeskSuggestions.feature",
-                PATH + "DisconnectingAgent.feature",
-                PATH + "UserSentimentUpdating.feature",
-                PATH + "AgentAvailability.feature",
-                PATH + "CancelTransferingChat.feature",
-                PATH + "ChatConsoleAgentTab.feature",
-                PATH + "ChatConsoleInbox.feature",
-                PATH + "ChatConsoleOverview.feature",
-                PATH + "Customer360FromWidget.feature",
-                PATH + "FilteringPinnedChat.feature",
-                PATH + "PinChatCloseTransfer.feature",
-                PATH + "RejectTransferingChat.feature",
-                PATH + "TransferBackTransferedChat.feature",
-                PATH + "TransfedChatContainElements.feature",
-                PATH + "Transfering2Chats.feature",
-                PATH + "TransferingChat.feature",
-                DOTCONTROL + "DotControlCustomer360.feature",
-                DOTCONTROL + "DotControlEditedSuggestionSending.feature",
-                DOTCONTROL + "DotControlInitCallWithLiveAgent.feature",
-                DOTCONTROL + "DotControlMessagingWithAgent.feature",
-                DOTCONTROL + "DotControlWithContext.feature"
+        features = {
+                PATH + "AgentDeskSuggestions.feature", //  +-
+                PATH + "DisconnectingAgent.feature", //  move
+                PATH + "UserSentimentUpdating.feature", // +
+                PATH + "AgentAvailability.feature", // +
+                PATH + "CancelTransferingChat.feature", // move
+                PATH + "ChatConsoleAgentTab.feature", // +
+                PATH + "ChatConsoleInbox.feature", // move
+                PATH + "ChatConsoleOverview.feature", // +
+                PATH + "Customer360FromWidget.feature", // +
+                PATH + "FilteringPinnedChat.feature", // move
+                PATH + "PinChatCloseTransfer.feature", // +
+                PATH + "RejectTransferingChat.feature", // move
+                PATH + "TransferBackTransferedChat.feature", // +
+                PATH + "TransfedChatContainElements.feature", // move
+                PATH + "Transfering2Chats.feature", // +
+                PATH + "TransferingChat.feature", // +
+                DOTCONTROL + "DotControlCustomer360.feature", // move
+                DOTCONTROL + "DotControlEditedSuggestionSending.feature", // move
+                DOTCONTROL + "DotControlInitCallWithLiveAgent.feature", // +
+                DOTCONTROL + "DotControlMessagingWithAgent.feature", // +
+                DOTCONTROL + "DotControlWithContext.feature" // move
         },
         glue ="steps")
 public class PullRequestTest {
