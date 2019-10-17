@@ -136,7 +136,8 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         waitForElementToBeVisible(this.getCurrentDriver(), headerControlsContainer, 8);
         WebElement targetButton = pageActionButtons.stream()
                 .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
-                .findFirst().orElseGet(null);
+                .findFirst().orElseThrow(() ->
+                        new AssertionError(buttonName + " action button is not available to click") );
         return targetButton != null;
     }
 
