@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class DMToUserMessage extends AbstractSocialPage {
 
     private String toUserTextMessagesXPATH = "//section[@aria-labelledby='detail-header']//span[contains(text(),'%s')]//ancestor::div[not(@class) and not(@style)]/following::div//span";
+    private String toUserTextMessagesXPATHWithRespText = "//section[@aria-labelledby='detail-header']//span[contains(text(),'%s')]//ancestor::div[not(@class) and not(@style)]/following::div//span[contains(text(), '%s')]";
 
 
     public DMToUserMessage(WebDriver driver) {
@@ -36,6 +37,16 @@ public class DMToUserMessage extends AbstractSocialPage {
     public boolean isTextResponseShown(String message, int wait) {
         try{
             waitForElementToBeVisibleByXpath(this.getCurrentDriver(), String.format(toUserTextMessagesXPATH, message), wait);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean isTextResponseShown(String userMessage, String expResponse, int wait) {
+        String locator = String.format(toUserTextMessagesXPATHWithRespText, userMessage, expResponse);
+        try{
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), locator, wait);
             return true;
         } catch (TimeoutException e) {
             return false;

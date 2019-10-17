@@ -183,7 +183,9 @@ public class TwitterSteps {
      */
     @Then("^User have to receive response \"(.*)\" on his message \"(.*)\"$")
     public void verifyDMTwitterResponseAmongOthers(String expectedResponse, String userMessage){
-
+        userMessage = getExpectedResp(userMessage);
+        Assert.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage, expectedResponse),
+                "There is no '" + expectedResponse + "' response on "+userMessage+" user message");
     }
 
     @Then("^User have to receive (.*) auto responder on his message \"(.*)\"$")
