@@ -18,6 +18,8 @@ import static runner.automation.Path.DOTCONTROL;
         },
         monochrome = true,
         features ={
+                PATH + "ChatConsoleInbox.feature",
+                PATH + "FilteringPinnedChat.feature",
                 PATH + "AgentFeedbackManagingAgentMode.feature",
                 PATH + "AgentMode.feature",
                 PATH + "AgentModeSuggestion.feature",
@@ -27,7 +29,9 @@ import static runner.automation.Path.DOTCONTROL;
                 PATH + "OutOfSupportHoursAgentMode.feature",
                 PATH + "RedirectionOnAgentAfterProvidingUserInfo.feature",
                 DOTCONTROL + "DotControlMessagesForAllAdapter.feature",
-
+                DOTCONTROL + "DotControlCustomer360.feature",
+                DOTCONTROL + "DotControlEditedSuggestionSending.feature",
+                DOTCONTROL + "DotControlWithContext.feature"
         },
         glue ="steps")
 public class PullRequestTest {

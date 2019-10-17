@@ -20,6 +20,9 @@ import static runner.automationbot.Path.DOTCONTROL;
         },
         monochrome = true,
         features ={
+                PATH + "DisconnectingAgent.feature",
+                PATH + "RejectTransferingChat.feature",
+                PATH + "TransfedChatContainElements.feature",
                 PATH + "ClosingSession.feature",
                 PATH + "TransferingChatWithNoAvailableAgent.feature",
                 PATH + "AgentPhotoManaging.feature",

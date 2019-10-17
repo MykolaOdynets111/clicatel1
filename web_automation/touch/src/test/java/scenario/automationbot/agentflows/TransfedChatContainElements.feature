@@ -2,15 +2,15 @@
 Feature: Transferring chat, user info
 
   Background:
-    Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
+    Given User select Automation Bot tenant
+    Given I login as agent of Automation Bot
     And Click chat icon
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1742")
   Scenario: Transfer chat: All required fields in pop-up should be filled. Notification should have user's profile picture, channel and sentiment
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
-    Given I login as second agent of General Bank Demo
+    Given I login as second agent of Automation Bot
     When First Agent click on new conversation
     When Agent click on 'Transfer' chat
     Then Transfer chat pop up appears

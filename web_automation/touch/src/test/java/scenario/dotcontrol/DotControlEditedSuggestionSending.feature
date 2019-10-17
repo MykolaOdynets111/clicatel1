@@ -6,8 +6,8 @@
   Feature: Suggestion editing .Control
 
     Scenario: Sending edited suggestion via .Control
-      Given Create .Control integration for General Bank Demo tenant
-      Given I login as agent of General Bank Demo
+      Given Create .Control integration for Automation tenant
+      Given I login as agent of Automation
       When Prepare payload for sending chat to agent message for .Control
       Given Send parameterized init call with clientId context correct response is returned
       When Send message call
