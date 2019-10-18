@@ -7,6 +7,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
@@ -15,6 +16,7 @@ public class ChatForm extends AbstractUIElement {
 
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
     private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
+    private SecureRandom random = new SecureRandom();
 
     @FindBy(css = "div.suggestion-wrapper")
     private WebElement suggestionInputField;
@@ -175,8 +177,8 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public String selectRandomFrequentlyUsedEmoji(){
-        Random generator = new Random();
-        WebElement emoji = frequetlyUsedEmojis.get(generator.nextInt(frequetlyUsedEmojis.size()-1));
+//        Random generator = new Random();
+        WebElement emoji = frequetlyUsedEmojis.get(random.nextInt(frequetlyUsedEmojis.size()-1));
         String emojiText = emoji.getAttribute("aria-label").split(",")[0].trim();
         clickElem(this.getCurrentDriver(), emoji, 2, emojiText + " emoji");
         return emojiText;

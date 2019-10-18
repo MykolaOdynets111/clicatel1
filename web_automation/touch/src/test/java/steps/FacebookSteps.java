@@ -18,10 +18,12 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import javax.annotation.concurrent.GuardedBy;
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class FacebookSteps {
 
+    private static SecureRandom random = new SecureRandom();
     private FBTenantPage fbTenantPage;
     private MessengerWindow messengerWindow;
     private FBYourPostPage FBYourPostPage;
@@ -126,8 +128,7 @@ public class FacebookSteps {
     public synchronized static String createUniqueUserMessage(String baseMessage){
         if(baseMessage.contains("thanks")) fbMessage=baseMessage;
         else {
-            Random rnd = new Random();
-            char c = (char) (rnd.nextInt(26) + 'a');
+            char c = (char) (random.nextInt(26) + 'a');
             fbMessage = baseMessage + c;
         }
         return fbMessage;

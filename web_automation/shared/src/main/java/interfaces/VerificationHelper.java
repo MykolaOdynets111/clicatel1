@@ -1,8 +1,10 @@
 package interfaces;
-
-import java.util.Random;
+import java.security.SecureRandom;
 
 public interface VerificationHelper {
+
+    SecureRandom random = new SecureRandom();
+
     default String generateUSCellPhoneNumber(){
         String finalCellPhoneNumber = "";
         String countryCode = "+1";
@@ -17,7 +19,6 @@ public interface VerificationHelper {
                 "814", "815", "816", "817", "818", "828", "830", "831", "832", "843", "845", "847", "848", "850", "856", "857", "858", "859", "860", "862", "863", "864", "865", "870", "878", "901",
                 "903", "904", "906", "907", "908", "909", "910", "912", "913", "914", "915", "916", "917", "918", "919", "920", "925", "928", "931", "936", "937", "940", "941", "947", "949", "952",
                 "954", "956", "970", "971", "972", "973", "978", "979", "980", "985", "989"};
-        Random random = new Random();
         int areaCode = random.nextInt(areaCodes.length);
         int mainNumber = 2000000 + random.nextInt(8000000);
         finalCellPhoneNumber = countryCode + areaCodes[areaCode] + mainNumber;
