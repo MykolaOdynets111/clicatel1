@@ -31,9 +31,18 @@ public class LeftMenu extends AbstractUIElement {
     @Step(value = "Navigate in Left menu")
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
         waitForElementsToBeVisible(this.getCurrentDriver(), launchpadMenuItems, 5);
-        WebElement elem = activeLeftMenuItems
-                .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find '"+menuItem+"' left menu item"));
+        WebElement elem;
+        try {
+            elem = activeLeftMenuItems
+                    .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot find '" + menuItem + "' left menu item"));
+        }catch (StaleElementReferenceException e){
+            waitFor(300);
+            elem = activeLeftMenuItems
+                    .stream().filter(e1 -> e1.getText().equalsIgnoreCase(menuItem)).findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot find '" + menuItem + "' left menu item"));
+
+        }
         clickElem(this.getCurrentDriver(), elem, 3, menuItem + " left menu item");
         try {
             waitForElementToBeVisible(this.getCurrentDriver(), leftSubMenu, 10);

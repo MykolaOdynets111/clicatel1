@@ -11,7 +11,6 @@ import datamanager.model.user.Permission;
 import datamanager.model.user.UserRole;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import portalpages.PortalMainPage;
 
