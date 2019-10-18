@@ -125,13 +125,12 @@ public class SignUpTest extends BaseTest {
     }
 
     private void saveNewAccountProperties(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+            FileOutputStream out = new FileOutputStream("src/test/resources/newaccount.properties");
+        ) {
             Properties props = new Properties();
             props.load(in);
-            in.close();
 
-            FileOutputStream out = new FileOutputStream("src/test/resources/newaccount.properties");
             props.setProperty("accountName", signUpInfo.get("accountName"));
             props.setProperty("email", signUpInfo.get("email"));
             props.setProperty("pass", signUpInfo.get("pass"));
@@ -140,7 +139,6 @@ public class SignUpTest extends BaseTest {
             props.setProperty("name", signUpInfo.get("firstName") + " " + signUpInfo.get("lastName"));
 
             props.store(out, null);
-            out.close();
         } catch(IOException e){
             e.printStackTrace();
         }

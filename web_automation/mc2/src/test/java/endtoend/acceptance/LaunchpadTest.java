@@ -244,13 +244,13 @@ public class LaunchpadTest extends BaseTest {
     }
 
     private void saveNewAccountProperties(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
+        ) {
+
             Properties props = new Properties();
             props.load(in);
-            in.close();
 
-            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
             props.setProperty("accountName", accountSignUp.getAccountName());
             props.setProperty("email", accountSignUp.getEmail());
             props.setProperty("pass", accountSignUp.getPassword());
@@ -260,7 +260,6 @@ public class LaunchpadTest extends BaseTest {
             props.setProperty("accountID", accountID);
 
             props.store(out, null);
-            out.close();
         } catch(IOException e){
             e.printStackTrace();
         }

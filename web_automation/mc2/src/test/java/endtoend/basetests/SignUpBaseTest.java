@@ -21,8 +21,7 @@ public class SignUpBaseTest extends BaseTest {
 
     @BeforeClass()
     protected void readCreatedAccountProps(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties")) {
             Properties props = new Properties();
             props.load(in);
             email.set(props.getProperty("email"));

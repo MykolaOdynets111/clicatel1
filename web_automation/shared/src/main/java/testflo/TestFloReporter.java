@@ -173,27 +173,6 @@ public class TestFloReporter {
         }
     }
 
-    private static String readBaseTestPlanKey(){
-            try {
-                FileReader fileReader = new FileReader("src/main/java/testflo/testplan.txt");
-                BufferedReader rFile =  new BufferedReader(fileReader);
-                return rFile.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return "TPORT-4030";
-        }
-
-    private static void writeNewBaseTestPlanKey(String key){
-            File file =new File("src/main/java/testflo/testplan.txt");
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-                writer.write(key);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-    }
 
     private static void waitFor(int milis){
         try {

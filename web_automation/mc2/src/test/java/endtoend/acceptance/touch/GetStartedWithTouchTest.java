@@ -92,8 +92,7 @@ public class GetStartedWithTouchTest extends APICreatedAccountTest  {
     }
 
     private String readCompanyName(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties")) {
             Properties props = new Properties();
             props.load(in);
             companyName = props.getProperty("companyName");
