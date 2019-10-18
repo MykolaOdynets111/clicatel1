@@ -507,7 +507,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         List<String> toRemove = Arrays.asList("mobile banking 120 3279", "global one",
                                                 "cellphone banking app", "general",
                                                 "general bank masterpass app", "travel help",
-                                                "milleage plus programme help", "travel policies");
+                                                "milleage plus programme help", "travel policies", "credit card");
         entities.removeIf(e -> toRemove.contains(e));
 
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
