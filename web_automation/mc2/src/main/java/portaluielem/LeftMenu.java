@@ -28,23 +28,20 @@ public class LeftMenu extends AbstractUIElement {
     @FindBy(xpath = "//div[@uib-collapse='menuItem.menuclIsCollapsed'][not(contains(@style,'0px'))]/ul/li//a[@ui-sref-active='active']/span")
     private List<WebElement> submenuItems;
 
-    public void clickLeftMenuItem(String itemName){
-        activeLeftMenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(itemName)).findFirst().get().click();
-    }
-
     @Step(value = "Navigate in Left menu")
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
-//        waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementsToBeVisible(this.getCurrentDriver(), launchpadMenuItems, 5);
         WebElement elem = activeLeftMenuItems
-                .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get();
+                .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot find '"+menuItem+"' left menu item"));
         clickElem(this.getCurrentDriver(), elem, 3, menuItem + " left menu item");
         try {
             waitForElementToBeVisible(this.getCurrentDriver(), leftSubMenu, 10);
             waitForElementsToBeVisible(this.getCurrentDriver(), submenuItems, 3);
         }catch (TimeoutException e){
             executeJSclick(activeLeftMenuItems
-                            .stream().filter(e1 -> e1.getText().equalsIgnoreCase(menuItem)).findFirst().get(),
+                            .stream().filter(e1 -> e1.getText().equalsIgnoreCase(menuItem)).findFirst()
+                            .orElseThrow(() -> new AssertionError("Cannot find '"+menuItem+"' left menu item")),
                     this.getCurrentDriver());
         }
 
@@ -55,7 +52,9 @@ public class LeftMenu extends AbstractUIElement {
         for(int i=0; i<10; i++){
             try{
                 activeLeftMenuItems
-                        .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get().click();
+                        .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst()
+                        .orElseThrow(() -> new AssertionError("Cannot find '"+menuItem+"' left menu item"))
+                        .click();
                 break;
             } catch(NoSuchElementException|StaleElementReferenceException e){
                 waitFor(200);

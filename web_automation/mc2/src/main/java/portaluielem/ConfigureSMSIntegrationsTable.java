@@ -34,7 +34,7 @@ public class ConfigureSMSIntegrationsTable extends BasePortalWindow {
             else break;
         }
         if(integrationRow == null) Assert.fail("Cannot find '" + integration + "' integration on Configure SMS integrations page");
-        integrationRow.openIntegration();
+        else integrationRow.openIntegration();
     }
 
 }
