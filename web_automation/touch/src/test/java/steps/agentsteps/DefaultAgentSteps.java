@@ -769,15 +769,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
     public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {
         getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton();
-        List<String> availableAgents = getAgentHomePage(agent).getPageHeader().getAvailableAgents();
-        Assert.assertEquals(
-                availableAgents.size(), availableAgent,
-                "Quantity of available agents not as expected");
+        Assert.assertTrue(
+                getAgentHomePage(agent).getPageHeader().isExpectedNumbersShown(availableAgent, 8),
+                "Quantity of available agents not as expected ("+ availableAgent+" expected)");
         if (availableAgent==1){
             getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
             String agentName =  getAgentHomePage(agent).getPageHeader().getAgentName();
             Assert.assertFalse(
-                    availableAgents.contains(agentName),
+                    getAgentHomePage(agent).getPageHeader().getAvailableAgents().contains(agentName),
                     "Unavailable agent in list of available agents");
         }
     }
