@@ -158,9 +158,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^The suggestion for user message \"(.*)\" with the biggest confidence is added to the input field$")
     public void verifyAutomaticAddingSuggestingToInputField(String userMessage) {
         String actualSuggestion = getAgentHomePage("main").getChatForm().getSuggestionFromInputFiled();
-        if (actualSuggestion == null) {
-            Assert.assertTrue(false, "There is no added suggestion in input field");
-        }
+        if (actualSuggestion == null) Assert.fail("There is no added suggestion in input field");
         String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(
                 Intents.getIntentWithMaxConfidence(userMessage).getIntent());
         if (expectedMessage.contains("${firstName}")) {
