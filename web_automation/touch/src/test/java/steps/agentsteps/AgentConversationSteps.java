@@ -143,8 +143,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         for (int i = 0; i < listOfIntentsFromTIE.size(); i++) {
             expectedResponse = ApiHelperTie.getExpectedMessageOnIntent(listOfIntentsFromTIE.get(i).getIntent());
             if (expectedResponse.contains("${firstName}")) {
-                expectedResponse = expectedResponse.replace("${firstName}",
-                        getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+                String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[2];
+                expectedResponse = expectedResponse.replace("${firstName}", userName);
             }
 //            ToDo: remove this after tie fixes the issue
             expectedResponse = expectedResponse.replace("  ", " ");
