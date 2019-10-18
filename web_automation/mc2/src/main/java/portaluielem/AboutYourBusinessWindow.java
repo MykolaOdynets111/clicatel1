@@ -50,6 +50,8 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
 
     private String companyCityXpath ="//input[contains(@name,'companyCity')]";
 
+    private String companyCountryFlag = "//span[contains(@class,'flag-icon ng-scope flag-icon') and @style]";
+
     public String  getCompanyName(){
         return companyName.getAttribute("value");
     }
@@ -63,6 +65,9 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     }
 
     public String  getCompanyCountry(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), companyCountryFlag, 7);
         return selectCompanyCountry.getText();
     }
 
@@ -84,6 +89,7 @@ public class AboutYourBusinessWindow extends BasePortalWindow {
     }
 
     public String selectRandomCountry(){
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), companyCountryFlag, 7);
         selectCompanyCountry.click();
         int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, companyCountry.size() - 1);
         companyCountry.get(randomIndustryNumber).click();

@@ -1,14 +1,14 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.Map;
 
 
-@FindBy(xpath = "//div[text()='Edit ticket']/parent::div")
-public class EditCRMTicketWindow extends AbstractUIElementDeprecated {
+@FindBy(xpath = "//h4[text()='Edit ticket']/ancestor::div[@class='modal-dialog']")
+public class EditCRMTicketWindow extends AbstractUIElement {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
@@ -28,11 +28,13 @@ public class EditCRMTicketWindow extends AbstractUIElementDeprecated {
     private WebElement ticketNumberInput;
 
     public void clickCancel() {
-        clickElemAgent(cancelButton, 5, "main agent", "Cancel CRM editing button" );
-        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
+        clickElem(this.getCurrentDriver(), cancelButton, 5, "Cancel CRM editing button" );
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
     public EditCRMTicketWindow provideCRMNewTicketInfo(Map<String, String> info){
+        waitForElementToBeClickable(this.getCurrentDriver(), noteInput, 3);
+        noteInput.click();
         noteInput.clear();
         noteInput.sendKeys(info.get("agentNote"));
         linkInput.clear();
@@ -44,12 +46,12 @@ public class EditCRMTicketWindow extends AbstractUIElementDeprecated {
 
 
     public void saveChanges() {
-        clickElemAgent(edidTicketButton, 5, "main agent", "Edit CRM ticket button" );
-        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
-    waitForDeprecated(200); //Just for test
+        clickElem(this.getCurrentDriver(), edidTicketButton, 5,"Edit CRM ticket button" );
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
+        waitFor(200); //Just for test
     }
 
     public boolean isOpened(){
-        return isElementShownAgent(this.getWrappedElement());
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 3);
     }
 }

@@ -3,9 +3,14 @@
 @no_chatdesk
 Feature: Creating .Control integration
 
-  Scenario: Creating .Control integration
+  Scenario: User can update .Control integration, should receive same apiToken
     When Create .Control integration for General Bank Demo tenant
-    Then Created .Control integration is correctly returned with GET response
-    And 409 status code for multiple integration creation
+    When Update .Control integration for General Bank Demo tenant
+    When I delete .Control integration
+    Then Http integration status is updated after deleting
+
+  Scenario: User can create second .Control integration and should receive new apiToken
+    When Create .Control integration for General Bank Demo tenant
+    Then Create second .Control integration for General Bank Demo tenant
     When I delete .Control integration
     Then Http integration status is updated after deleting

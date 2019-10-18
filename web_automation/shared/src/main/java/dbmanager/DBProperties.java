@@ -17,7 +17,10 @@ public enum DBProperties {
     QA_MC2("qa", "mc2", "mc2", "mc2_platform", "mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
     DEMO_TOUCH("demo", "touch", "touch_demo", "touch_demo", "demo_touch_platform", "jdbc:mysql://touch-db-demo.clickatelllabs.com:3306/demo_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
-    DEMO_MC2("demo", "mc2", "mc2", "mc2_platform", "demo_mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/demo_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true")
+    DEMO_MC2("demo", "mc2", "mc2", "mc2_platform", "demo_mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/demo_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+
+//    STAGE_MC2_LOCAL("stage", "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://db-primary-01a.platform.stage.eu-west-1.aws.clickatell.com:3308"), //For debug only
+    STAGE_MC2_REMOTE("stage", "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://172.26.3.4:3308"),
 
     ;
 

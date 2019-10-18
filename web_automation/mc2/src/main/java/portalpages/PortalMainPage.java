@@ -31,17 +31,11 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "div.cl-greeting-text")
     private WebElement greetingMessage;
 
-    @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
-    private WebElement getStartedWithTouchButton;
+    @FindBy(css = "button[ng-click='openGetStarted()']")
+    private WebElement getStartedButton;
 
     @FindBy(css = "button.launchpad-btn")
     private WebElement launchpadButton;
-
-    @FindBy(css = "div[ng-controller='WizardCtrl']")
-    private WebElement landingPage;
-
-    @FindBy(css = "span.svg-close.cl-clickable.push-right")
-    private WebElement closeLandingPage;
 
     @FindBy(css = "div.button-container button.button.button-primary.ng-binding")
     private WebElement closeLandingPageConfirmation;
@@ -51,6 +45,10 @@ public class PortalMainPage extends PortalAbstractPage {
     private CartPage cartPage;
     private ConfigureTouchWindow configureTouchWindow;
     private GDPRWindow gdprWindow;
+    private GetStartedWindow getStartedWindow;
+    private AddTestPhoneWindow addTestPhoneWindow;
+    private TopUpBalanceWindow topUpBalanceWindow;
+    private AddPaymentMethodWindow addPaymentMethodWindow;
 
     // == Constructors == //
 
@@ -64,9 +62,29 @@ public class PortalMainPage extends PortalAbstractPage {
         super();
     }
 
+    public TopUpBalanceWindow getTopUpBalanceWindow(){
+        topUpBalanceWindow.setCurrentDriver(this.getCurrentDriver());
+        return topUpBalanceWindow;
+    }
+
+    public AddPaymentMethodWindow getAddPaymentMethodWindow(){
+        addPaymentMethodWindow.setCurrentDriver(this.getCurrentDriver());
+        return addPaymentMethodWindow;
+    }
+
+    public AddTestPhoneWindow getAddTestPhoneWindow(){
+        addTestPhoneWindow.setCurrentDriver(this.getCurrentDriver());
+        return addTestPhoneWindow;
+    }
+
     public GDPRWindow getGdprWindow(){
         gdprWindow.setCurrentDriver(this.getCurrentDriver());
         return gdprWindow;
+    }
+
+    public GetStartedWindow getStartedWindow(){
+        getStartedWindow.setCurrentDriver(this.getCurrentDriver());
+        return getStartedWindow;
     }
 
     public ConfigureTouchWindow getConfigureTouchWindow() {
@@ -84,9 +102,12 @@ public class PortalMainPage extends PortalAbstractPage {
         return upgradeYourPlanWindow;
     }
 
+    public PortalLaunchpadPage getLaunchpad(){
+        return new PortalLaunchpadPage(this.getCurrentDriver());
+    }
 
     public LeftMenu getLeftMenu() {
-        waitForElementToBeVisible(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
+        isElementShown(this.getCurrentDriver(), leftMenu.getWrappedElement(), 5);
         leftMenu.setCurrentDriver(this.getCurrentDriver());
         return leftMenu;
     }
@@ -97,6 +118,7 @@ public class PortalMainPage extends PortalAbstractPage {
         checkoutAndBuy(cartPage);
     }
 
+    @Step(value = "Checkout and buy")
     public void checkoutAndBuy(CartPage localCartPage){
         if(localCartPage.getConfirmPaymentDetailsWindow().isBillingContactShown()){
             localCartPage.getConfirmPaymentDetailsWindow().clickNexButton();
@@ -110,7 +132,7 @@ public class PortalMainPage extends PortalAbstractPage {
                 .waitFotPaymentSummaryScreenToLoad()
                 .acceptTerms()
                 .clickPayNowButton();
-        waitWhileProcessing(14, 20);
+        waitWhileProcessing(3, 20);
     }
 
     public void upgradePlanWithoutTerms(int agentSeats){
@@ -132,6 +154,8 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     public void addAgentSeatsIntoCart(int agentSeats){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         getPageHeader().clickUpgradeButton();
         getUpgradeYourPlanWindow()
                 .selectAgentSeats(agentSeats)
@@ -140,7 +164,7 @@ public class PortalMainPage extends PortalAbstractPage {
         waitWhileProcessing(14, 20);
         try {
             waitForElementToBeVisibleByXpath(this.getCurrentDriver(), addedToCartAlertXPATH, 10);
-            waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),addedToCartAlertXPATH, 20);
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),addedToCartAlertXPATH, 20);
         } catch (TimeoutException e){
 //            Assert.assertTrue(false, "Item is not added to the cart");
         }
@@ -175,38 +199,49 @@ public class PortalMainPage extends PortalAbstractPage {
 
     @Step(value = "Verify GDPR and Privacy modal window is displayed")
     public boolean isUpdatePolicyPopUpOpened(){
-        return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 10);
+        return isElementShown(this.getCurrentDriver(), updatePolicyPopUp, 5);
     }
 
     @Step(value = "Verify Landing (Get Started) modal window is displayed")
-    public boolean isLandingPopUpOpened(){
-        return isElementShown(this.getCurrentDriver(), landingPage, 10);
+    public boolean isGetStartedWindowShown(){
+        return isElementShown(this.getCurrentDriver(), getStartedWindow.getWrappedElement(), 5);
+    }
+
+    @Step(value = "Verify GDPR and Privacy modal window is not displayed")
+    public boolean isUpdatePolicyPopUpNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), updatePolicyPopUp, 5);
+    }
+
+    @Step(value = "Verify Landing (Get Started) modal window is not displayed")
+    public boolean isGetStartedWindowNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), getStartedWindow.getWrappedElement(), 5);
     }
 
 
     @Step(value = "Close Landing (Get Started) modal window ")
-    public void closeLandingPage(){
+    public void closeGetStartedWindow(){
         try {
-            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            getStartedWindow().clickCloseGetStartedWindow();
             clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
         }catch (WebDriverException e){
             waitFor(1000);
-            clickElem(this.getCurrentDriver(), closeLandingPage, 5,"Close landing popup");
+            getStartedWindow().clickCloseGetStartedWindow();
             clickElem(this.getCurrentDriver(), closeLandingPageConfirmation, 5,"Close landing popup confirmation");
-
         }
 
     }
 
 
     public boolean isPortalPageOpened(){
-        return isElementShown(this.getCurrentDriver(), getPageHeader().getWrappedElement(), 2);
+        return getPageHeader().isAdminIconShown(3);
     }
 
-    @Step(value = "Close GDPR and Privacy modal window ")
+    @Step(value = "Make sure GDPR and Privacy modal window closed")
     public void closeUpdatePolicyPopup(){
-        gotItButton.click();
-        waitWhileProcessing(2, 3);
+        if(isElementShown(this.getCurrentDriver(),gotItButton, 2)){
+            gotItButton.click();
+            waitWhileProcessing(2, 3);
+        }
     }
 
     @Step(value = "Get user greeting from Portal Main page")
@@ -215,14 +250,47 @@ public class PortalMainPage extends PortalAbstractPage {
     }
 
     @Step(value = "Verify if 'Get started' button shown")
-    public boolean isGetStartedWithTouchButtonIsShown(){ return isElementShown(this.getCurrentDriver(), getStartedWithTouchButton, 2);}
+    public boolean isGetStartedButtonShown(){
+        return isElementShown(this.getCurrentDriver(), getStartedButton, 2);
+    }
 
-    public void clickGetStartedWithTouchButton(){ getStartedWithTouchButton.click();}
-
+    @Step(value = "Verify if 'Get started with touch' window opened")
     public boolean isConfigureTouchWindowOpened(){
         return isElementShown(this.getCurrentDriver(), getConfigureTouchWindow().getWrappedElement(), 2);
     }
 
     public void clickLaunchpadButton(){
-        if(isElementShown(this.getCurrentDriver(), launchpadButton,2)) launchpadButton.click();}
+        if(isElementShown(this.getCurrentDriver(), launchpadButton,2)) launchpadButton.click();
+    }
+
+
+   public void makeSureGetStartedWindowOpened(){
+        if (!isElementShown(this.getCurrentDriver(), getStartedWindow.getWrappedElement(), 2)){
+            clickGetStartedButton();
+        }
+   }
+
+   @Step(value = "Click 'Get Started' button")
+   public void clickGetStartedButton(){
+       clickElem(this.getCurrentDriver(), getStartedButton, 2, "'Get Started' button");
+   }
+
+
+   public void launchChatDesk(){
+       waitWhileProcessing(1,5);
+       String currentWindow = this.getCurrentDriver().getWindowHandle();
+       getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+
+       for (int i = 0; i < 4; i++){
+           if(this.getCurrentDriver().getWindowHandles().size() == 2) break;
+           else getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+       }
+       if(this.getCurrentDriver().getWindowHandles().size()>1) {
+           for (String winHandle : this.getCurrentDriver().getWindowHandles()) {
+               if (!winHandle.equals(currentWindow)) {
+                   this.getCurrentDriver().switchTo().window(winHandle);
+               }
+           }
+       }
+   }
 }

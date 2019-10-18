@@ -1,5 +1,6 @@
 Feature: Agent emoticons
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-10788")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1669")
   Scenario: Agent should be able to send emoticon to user
     Given I login as agent of General Bank Demo

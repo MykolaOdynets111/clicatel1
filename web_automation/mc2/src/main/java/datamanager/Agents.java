@@ -47,6 +47,8 @@ public enum Agents {
     DEV_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "dev"),
     DEMO_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo"),
     DEMO1_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "demo1"),
+    INTEGRATION_AGENT_MODE_ADMIN("tenantagentmode@gmail.com", "p@$$w0rd4te$t", "Automation", "integration"),
+
 
     // =======  Active agents for Bot mode for Camunda flows tests ======== //
     // ==== phone number for Gmail inbox +380 50 5083662
@@ -61,6 +63,7 @@ public enum Agents {
     DEMO_BOT_MODE_SECOND_AGENT("updateplan@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "demo"),
     QA_BOT_MODE_SECOND_AGENT("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "qa"),
     TESTING_BOT_MODE_SECOND_AGENT("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "testing"),
+    INTEGRATION_BOT_MODE_SECOND_AGENT("devgeneralbankdemo@gmail.com", "p@$$w0rd4te$t", "Automation Bot", "integration"),
 
     // =======  Active agents for Bot mode with default settings ======== //
 
@@ -78,7 +81,7 @@ public enum Agents {
 
     // ======= User of newly created tenant for touch go tests =========== //
     TOUCH_GO_ADMIN("", "p@$$w0rd4te$t", "", ""),
-    TOUCH_GO_SECOND_AGENT("touchgoagent@gmail.com", "p@$$w0rd4te$t", "", ""),
+    TOUCH_GO_SECOND_AGENT("touchgoagent+", "p@$$w0rd4te$t", "", ""),
     ;
 
     String email;
@@ -110,9 +113,7 @@ public enum Agents {
     }
 
     public static Agents getMainAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
-        Agents[] agentsArray = Agents.values();
-        List<Agents> agentsList = Arrays.asList(agentsArray);
-        return agentsList.stream()
+        return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
                         && !e.getAgentEmail().contains("second"))
@@ -120,9 +121,7 @@ public enum Agents {
     }
 
     public static Agents getSecondAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
-        Agents[] agentsArray = Agents.values();
-        List<Agents> agentsList = Arrays.asList(agentsArray);
-        return agentsList.stream()
+        return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
                         && e.toString().toLowerCase().contains("second"))

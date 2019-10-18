@@ -1,43 +1,36 @@
 package abstractclasses;
 
 import driverfactory.DriverFactory;
-import driverfactory.MC2DriverFactory;
 import interfaces.ActionsHelper;
 import interfaces.JSHelper;
-import interfaces.WebActionsDeprecated;
+import interfaces.WebActions;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 
-public abstract class AgentAbstractPage implements WebActionsDeprecated, ActionsHelper, JSHelper {
+public abstract class AgentAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
-    private String agent="main agent";
     private String loadingSpinner = "//*[text()='Connecting...']";
 
     protected WebDriver currentDriver;
 
     public AgentAbstractPage(String agent) {
-        this.agent = agent;
         currentDriver = DriverFactory.getDriverForAgent(agent);
         HtmlElementLoader.populatePageObject(this, currentDriver);
     }
 
-    public boolean waitForLoadingInLeftMenuToDisappear(String ordinalAgentNumber, int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+    public boolean waitForLoadingInLeftMenuToDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
         try{
             try {
-                waitForElementToBeVisibleByXpathAgent(loadingSpinner, waitForSpinnerToAppear, ordinalAgentNumber);
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToAppear);
             }catch (TimeoutException e){ }
-            waitForElementsToBeInvisibleByXpathAgent(loadingSpinner, waitForSpinnerToDisappear, ordinalAgentNumber);
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToDisappear);
             return true;
         }
         catch (TimeoutException e){
             return false;
         }
-    }
-
-    public String getCurrentAgent(){
-        return agent;
     }
 
     public WebDriver getCurrentDriver(){

@@ -40,6 +40,13 @@ public class History {
         this.timestamp = 0;
     }
 
+    public History(String message, String source){
+        this.message = message;
+        this.messageType = "PLAIN";
+        this.source = source;
+        this.timestamp = 0;
+    }
+
     @JsonProperty("context")
     public InitHistoryContext getContext() {
         return context;

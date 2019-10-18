@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<suite name="Acceptance suite" >
-    <test name="New account registration">
-        <classes>
-<!--            <class name="endtoend.acceptance.SignUpTestBaseBase" />-->
-            <class name="endtoend.acceptance.SignUpTest" />
-        </classes>
-    </test>
-</suite>

@@ -16,6 +16,6 @@ Feature: Closing chat and no empty CRM ticket creating
     Then End chat popup should be opened
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
-    Then User have to receive 'exit' text response for his 'connect to Support' input
+    Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is not created
 

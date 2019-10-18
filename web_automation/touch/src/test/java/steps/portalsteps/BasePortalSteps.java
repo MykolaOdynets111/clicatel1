@@ -2,6 +2,8 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
+import datamanager.jacksonschemas.AvailableAgent;
+import datamanager.model.PaymentMethod;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import mc2api.ApiHelperPlatform;
@@ -12,13 +14,13 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.*;
-import datamanager.jacksonschemas.AvailableAgent;
 import dbmanager.DBConnector;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
-import mc2api.EndpointsPlatform;
+import mc2api.endpoints.EndpointsPlatform;
+import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
@@ -31,11 +33,12 @@ import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BasePortalSteps extends AbstractPortalSteps {
 
 
-    public static final String FIRST_AND_LAST_NAME = "Touch Go";
+    public static final String FIRST_AND_LAST_NAME = "Clickatell Test";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
     public static String AGENT_EMAIL;
@@ -62,9 +65,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Given("^(.*) New (.*) agent is created$")
     public void createNewAgent(String agentEmail, String tenantOrgName){
         if (agentEmail.equalsIgnoreCase("brand")) {
-           AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
-           Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
+            AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
+        } else{
+            AGENT_EMAIL = generatePredefinedAgentEmail();
         }
+        Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
@@ -86,13 +91,19 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
     }
 
+    private String generatePredefinedAgentEmail(){
+        return Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail() + System.currentTimeMillis() + "@gmail.com";
+    }
+
     @When("^Create new Agent$")
     public void createNewAgent(){
         AGENT_FIRST_NAME = faker.name().firstName();
         AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        AGENT_EMAIL = generatePredefinedAgentEmail();
+
         Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
         Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
+        Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
@@ -149,7 +160,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
                     Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
             if(resetPassID.equals("none")) {
-                getPortalMainPage().waitFor(1500);
+                getAdminPortalMainPage().waitFor(1500);
                 resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
                         Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
             }else{
@@ -178,9 +189,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyLoginScreenWithGreeting(String agent){
         String agentFullName = AGENT_FIRST_NAME +" "+ AGENT_LAST_NAME;
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(getPortalLoginPage(agent).getWelcomeMessage(6).contains(agentFullName),
+        soft.assertTrue(getPortalLoginPage(agent).getAccountForm().getWelcomeMessage(6).contains(agentFullName),
                         "Welcome message does not contaion "+ agentFullName +"user name");
-        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+        soft.assertTrue(getPortalLoginPage(agent).getAccountForm().areCreatePasswordInputsShown(2),
                 "There are no 2 input fields for creating agent's password");
         soft.assertAll();
 
@@ -190,10 +201,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) redirected to the \"(.*)\" page$")
     public void verifySetNewPasswordScreenShown(String agent, String pageName){
         SoftAssert soft = new SoftAssert();
-        String pageLabel = getPortalLoginPage(agent).getNewPasswordLabel();
+        String pageLabel = getPortalLoginPage(agent).getAccountForm().getNewPasswordLabel();
         soft.assertEquals(pageLabel, pageName,
                 "Set new password label is not as expected");
-        soft.assertTrue(getPortalLoginPage(agent).areCreatePasswordInputsShown(2),
+        soft.assertTrue(getPortalLoginPage(agent).getAccountForm().areCreatePasswordInputsShown(2),
                 "There are no 2 input fields for creating agent's password");
         soft.assertAll();
     }
@@ -202,7 +213,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void createPassword(String agent){
         Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
         AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
-        getPortalLoginPage(agent).createNewPass(AGENT_PASS)
+        getPortalLoginPage(agent).getAccountForm().createNewPass(AGENT_PASS)
                                     .clickLogin();
     }
 
@@ -280,8 +291,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^(?:Error|Notification) popup with text (.*) is shown$")
     public void verifyVerificationMessage(String expectedMessage){
-        Assert.assertEquals(getPortalSignUpPage().getNotificationAlertText().trim(), expectedMessage.trim(),
-                "Field verification is not working.");
+        String notificationAlert = getPortalSignUpPage().getNotificationAlertText().trim();
+        boolean result = notificationAlert.equals(expectedMessage.trim()) ||
+                notificationAlert.equals("Error while sign up");
+        Assert.assertTrue(result,
+                "Field verification is not working.\n " +
+                        "Actual notification alert: " + notificationAlert +"\n" +
+                "Expected alert: " + expectedMessage);
     }
 
     @Then("^(?:Error|Notification) popup with text (.*) is shown for (.*)$")
@@ -328,13 +344,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Activation ID record is created in DB$")
     public void verifyActivationIDIsCreatedInDB(){
-        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
+        String accountId = DBConnector.getAccountIdFromMC2DB(ConfigManager.getEnv(),
                 MC2Account.getTouchGoAccount().getAccountName());
+        activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),accountId);
         for(int i=0; i<4; i++){
             if (activationAccountID==null){
                 getPortalSignUpPage().waitFor(1000);
-                activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
-                        MC2Account.getTouchGoAccount().getAccountName());
+                activationAccountID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(), accountId);
             }
         }
         Assert.assertNotNull(activationAccountID,
@@ -349,9 +365,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 " to complete your sign up process";
         SoftAssert softAssert = new SoftAssert();
         setCurrentPortalLoginPage(new PortalLoginPage(DriverFactory.getDriverForAgent("admin")));
-        softAssert.assertTrue(getCurrentPortalLoginPage().isMessageAboutConfirmationMailSentShown(),
+        softAssert.assertTrue(getCurrentPortalLoginPage().getAccountForm().isMessageAboutConfirmationMailSentShown(),
                 "Message that confirmation email was sent is not shown");
-        softAssert.assertEquals(getCurrentPortalLoginPage().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
+        softAssert.assertEquals(getCurrentPortalLoginPage().getAccountForm().getMessageAboutSendingConfirmationEmail(), expectedMessageAboutSentEmail,
                 "Message about sent confirmation email is not as expected");
         softAssert.assertAll();
     }
@@ -394,8 +410,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^Tenant (.*) has no Payment Methods$")
     public void clearPaymentMethods(String tenantOrgName){
-        List<String> ids = ApiHelperPlatform.getListOfActivePaymentMethods(tenantOrgName, "CREDIT_CARD");
-        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(tenantOrgName, e));
+        String authToken = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main");
+        List<PaymentMethod> ids = ApiHelperPlatform.getAllNotDefaultPaymentMethods(authToken)
+                .stream().filter(e -> e.getPaymentType().equals("CREDIT_CARD")).collect(Collectors.toList());
+        if(ids.size()>0) ids.forEach(e -> ApiHelperPlatform.deletePaymentMethod(authToken, e.getId()));
     }
 
     @When("^Login as (.*)$")
@@ -403,11 +421,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String email = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
         if(agent.equalsIgnoreCase("updated")) email = updatedAgentInfo.get("email");
         getPortalLoginPage(agent).login(email, Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+        getAdminPortalMainPage().closeUpdatePolicyPopup();
     }
 
     @Then("^Deleted agent is not able to log in portal$")
     public void verifyDeletedAgentIsNotLoggedIn(){
-        getCurrentPortalLoginPage().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
+        getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(AGENT_EMAIL, AGENT_PASS);
+        getCurrentPortalLoginPage().getAccountForm().clickLogin();
         Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -436,7 +456,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I click Launchpad button$")
     public void clickLaunchpadButton(){
-        getPortalMainPage().clickLaunchpadButton();
+        getAdminPortalMainPage().clickLaunchpadButton();
     }
 
     // page_action_to_remove
@@ -492,7 +512,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
             setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent(agent)));
         }
         MC2Account mc2Account = MC2Account.getAccountByOrgName(ConfigManager.getEnv(), tenantOrgName);
-        getCurrentPortalLoginPage().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
+        getCurrentPortalLoginPage().getAccountForm().enterAdminCreds(mc2Account.getEmail(), mc2Account.getPass());
+        getCurrentPortalLoginPage().getAccountForm().clickLogin();
         Assert.assertEquals(getCurrentPortalLoginPage().getNotificationAlertText(),
                 "Username or password is invalid",
                 "Error about invalid credentials is not shown");
@@ -507,7 +528,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Portal Page is opened$")
     public void verifyPortalPageOpened(){
-        boolean isPortalPageOpened = getPortalMainPage().isPortalPageOpened();
+        boolean isPortalPageOpened = getAdminPortalMainPage().isPortalPageOpened();
         ConfigManager.setIsNewAccountCreated(String.valueOf(isPortalPageOpened));
         Assert.assertTrue(isPortalPageOpened, "User is not logged in Portal");
     }
@@ -559,54 +580,54 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"Update policy\" pop up is shown$")
     public void verifyUpdatePolicyPopupShown(){
-        Assert.assertTrue(getPortalMainPage().isUpdatePolicyPopUpOpened(),
+        Assert.assertTrue(getAdminPortalMainPage().isUpdatePolicyPopUpOpened(),
                 "User is not logged in Portal");
     }
 
     @When("^Accept \"Update policy\" popup$")
     public void acceptUpdatedPolicyPopup(){
-        getPortalMainPage().closeUpdatePolicyPopup();
-        getPortalMainPage().waitWhileProcessing(2, 3);
+        getAdminPortalMainPage().closeUpdatePolicyPopup();
+        getAdminPortalMainPage().waitWhileProcessing(2, 3);
     }
 
     @Then("^Landing pop up is shown$")
     public void verifyLandingPopupShown(){
-        getPortalMainPage().waitWhileProcessing(3,2);
-        Assert.assertTrue(getPortalMainPage().isLandingPopUpOpened(),
+        getAdminPortalMainPage().waitWhileProcessing(3,2);
+        Assert.assertTrue(getAdminPortalMainPage().isGetStartedWindowShown(),
                 "Landing popup is not shown");
     }
 
     @When("Close landing popup$")
     public void acceptLandingPopup(){
-        getPortalMainPage().closeLandingPage();
+        getAdminPortalMainPage().closeGetStartedWindow();
     }
 
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
-        Assert.assertEquals(getPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
+        Assert.assertEquals(getAdminPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
                 ". Add a solution to your account.", "Welcome message is not shown.");
     }
 
     @Then("^\"Get started with Touch\" button is shown$")
     public void verifyGetStartedWithTouchButtonShown(){
-        Assert.assertTrue(getPortalMainPage().isGetStartedWithTouchButtonIsShown(),
+        Assert.assertTrue(getAdminPortalMainPage().getLaunchpad().isGetStartedWithTouchButtonShown(),
                 "'Get started with Touch' is not shown");
     }
 
     @When("^Click \"Get started with Touch\" button$")
     public void clickGetStartedWithTouchButton(){
-        getPortalMainPage().clickGetStartedWithTouchButton();
+        getAdminPortalMainPage().getLaunchpad().clickGetStartedWithTouchButton();
     }
 
     @When("^\"Get started with Touch Go\" window is opened$")
     public void verifyStartedWithTouchGoWindowOpened(){
-        Assert.assertTrue(getPortalMainPage().isConfigureTouchWindowOpened(),
+        Assert.assertTrue(getAdminPortalMainPage().isConfigureTouchWindowOpened(),
                 "\"Get started with Touch Go\" window is not opened");
     }
 
     @When("^I try to create new (.*) tenant$")
     public void createNewTenant(String tenantOrgName){
-        getPortalMainPage().getConfigureTouchWindow()
+        getAdminPortalMainPage().getConfigureTouchWindow()
                 .createNewTenant(tenantOrgName, MC2Account.getTouchGoAccount().getEmail());
     }
 
@@ -616,8 +637,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
-        getPortalMainPage().waitWhileProcessing(1,5);
+        getAdminPortalMainPage().waitWhileProcessing(1,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+        getAdminPortalMainPage().waitWhileProcessing(1,5);
         getLeftMenu().navigateINLeftMenuWithSubmenu(menuItem, submenu);
 
         if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
@@ -631,20 +653,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I launch chatdesk from portal$")
     public void launchChatdeskFromPortal(){
-        getPortalMainPage().waitWhileProcessing(2,5);
-        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        navigateInLeftMenu("Touch", "Launch Chat Desk");
-
-        while(getPortalMainPage().isPortalPageOpened()){
-            navigateInLeftMenu("Touch", "Launch Chat Desk");
-        }
-        if(DriverFactory.getDriverForAgent("main").getWindowHandles().size()>1) {
-            for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
-                if (!winHandle.equals(currentWindow)) {
-                    DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
-                }
-            }
-        }
+        getAdminPortalMainPage().launchChatDesk();
     }
 
     @When("^Save (.*) pre-test widget value$")
@@ -709,12 +718,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
     public void clickNavButton(String navButton){
-        getPortalMainPage().clickPageNavButton(navButton);
+        getAdminPortalMainPage().clickPageNavButton(navButton);
     }
 
     @When("^I click \"(.*)\" page action button$")
     public void clickActionButton(String actionButton){
-        getPortalMainPage().clickPageActionButton(actionButton);
+        getAdminPortalMainPage().clickPageActionButton(actionButton);
     }
 
 
@@ -814,7 +823,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("Admin click BACK button in left menu")
     public void clickBackButton(){
-        getLeftMenu().clickBackButton();
+        if(getLeftMenu().isBackButtonShown()) getLeftMenu().clickBackButton();
     }
 
     @When("^(?:I|Admin) select (.*) in left menu$")
@@ -833,45 +842,45 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I try to upgrade and buy (.*) agent seats$")
     public void upgradeTouchGoPlan(int agentSeats){
-        getPortalMainPage().upgradePlan(agentSeats);
+        getAdminPortalMainPage().upgradePlan(agentSeats);
     }
 
     @When("^I try to upgrade and buy (.*) agent seats without accept Clickatell's Terms and Conditions$")
     public void upgradeTouchGoPlanWithoutTerms(int agentSeats){
-        getPortalMainPage().upgradePlanWithoutTerms(agentSeats);
+        getAdminPortalMainPage().upgradePlanWithoutTerms(agentSeats);
     }
 
     @Then("^Payment is not proceeded and Payment Summary tab is still opened$")
     public void verifyPaymentSummaryTabOpened(){
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentSummaryTabOpened(),
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentSummaryTabOpened(),
                 "'Payment Summary' tab is not still opened when admin tries to proceed without accepting Terms and Conditions");
     }
 
     @When("^Admin clicks 'Upgrade' button$")
     public void clickUpgradeTouchGoPlanButton(){
-        getPortalMainPage().getPageHeader().clickUpgradeButton();
+        getAdminPortalMainPage().getPageHeader().clickUpgradeButton();
     }
 
     @Then("^I see \"Payment Successful\" message$")
     public void verifyPaymentSuccessfulMessage(){
-        Assert.assertEquals(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
+        Assert.assertEquals(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().getSuccessMessageMessage(),
                 "Payment Successful", "Payment successful message was not shown");
     }
 
     @Then("^Admin should see \"(.*)\" in the page header$")
     public void verifyTouchGoPlanNamePresence(String expectedTouchGo){
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
     @Then("^Not see \"(.*)\" button$")
     public void verifyNotShowingUpgradeButtonText(String textNotToBeShown){
-        Assert.assertNotEquals(getPortalMainPage().getPageHeader().getTextOfUpgradeButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertNotEquals(getAdminPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textNotToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @Then("^See \"(.*)\" button$")
     public void verifyNShowingUpgradeButtonText(String textToBeShown){
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTextOfUpgradeButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
+        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTextFromBuyingAgentsButton(), textToBeShown, "'Add Agent seats' button is shown for Starter Touch Go tenant");
     }
 
     @When("^(.*) the (.*) integration$")
@@ -963,7 +972,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
         for(int i=0; i<120; i++){
             if (!actualType.equalsIgnoreCase(expectedTouchGoPlan)){
-                getPortalMainPage().waitFor(15000);
+                getAdminPortalMainPage().waitFor(15000);
                 DriverFactory.getAgentDriverInstance().navigate().refresh();
                 actualType = ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "touchGoType");
             } else{
@@ -983,30 +992,30 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Touch Go plan is updated to \"(.*)\" in portal page$")
     public void verifyPlanUpdatingOnPortalPage(String expectedTouchGo){
         DriverFactory.getAgentDriverInstance().navigate().refresh();
-        Assert.assertEquals(getPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
+        Assert.assertEquals(getAdminPortalMainPage().getPageHeader().getTouchGoPlanName(), expectedTouchGo,
                 "Shown Touch go plan is not as expected.");
     }
 
     @Then("^'Billing Not Setup' pop up (.*) shown$")
     public void verifyBillingNotSetUpPopupShown(String isShown){
         if (isShown.contains("not"))
-            Assert.assertFalse(getPortalMainPage().isBillingNotSetUpPopupShown(2),
+            Assert.assertFalse(getAdminPortalMainPage().isBillingNotSetUpPopupShown(2),
                     "'Billing Not Setup' pop up still shown");
         else
-            Assert.assertTrue(getPortalMainPage().isBillingNotSetUpPopupShown(5),
+            Assert.assertTrue(getAdminPortalMainPage().isBillingNotSetUpPopupShown(5),
                 "'Billing Not Setup' pop up is not shown");
     }
 
     @When("^Admin clicks 'Setup Billing' button$")
     public void clickSetupBillingButton(){
         setPortalBillingDetailsPage(
-                getPortalMainPage().clickSetupBillingButton()
+                getAdminPortalMainPage().clickSetupBillingButton()
         );
     }
 
     @When("Close 'Billing not setup' modal window")
     public void closeSetupBillingModal(){
-        getPortalMainPage().closeSetupBillingPopUpModal();
+        getAdminPortalMainPage().closeSetupBillingPopUpModal();
     }
 
     @Then("^Billing Details page is opened$")
@@ -1019,7 +1028,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void fillInBillingDetails(){
         billingInfo = getPortalBillingDetailsPage().getBillingContactsDetails()
                 .fillInBillingDetailsForm();
-        getPortalBillingDetailsPage().waitWhileProcessing(2,2);
+        getPortalBillingDetailsPage().waitWhileProcessing(2,8);
         getPortalBillingDetailsPage().waitForNotificationAlertToBeProcessed(2,2);
     }
 
@@ -1046,10 +1055,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }catch(NullPointerException e){
             String message = "NULL_POINTER!! \n";
             if(info!=null) {
-                if (info.get("billingContact") != null) message = message + info.get("billingContact");
+                if (info.get("billingContact") != null) message = message + "Billing info from mc2 backend: \n"
+                        + info.get("billingContact");
                 else message = message + resp.getBody().asString();
             }
-            if(billingInfo!=null) message = message + "\n\n" + billingInfo.toString();
+            if(billingInfo!=null) message = message + "\n\n" + "expected billing info: \n" + billingInfo.toString();
             Assert.fail(message);
         }
     }
@@ -1067,7 +1077,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Agent enter allowed top up sum$")
     public void enterNewBalanceAmount(){
-        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance());
+        String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
+        topUpBalance.put("preTest", ApiHelperPlatform.getAccountBalance(token).getBalance());
         String minValue = getPortalBillingDetailsPage().getTopUpBalanceWindow().getMinLimit().trim();
         int addingSum = Integer.valueOf(minValue) + 1;
         double afterTest = topUpBalance.get("preTest") + addingSum;
@@ -1077,7 +1088,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Agent enter (.*) top up amount$")
     public void enterMaxValueForTopUp(String value){
-        accountCurrency = ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getCurrency().toUpperCase();
+        String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
+        accountCurrency = ApiHelperPlatform.getAccountBalance(token).getCurrency().toUpperCase();
         int invalidSum;
         if(value.contains("max")){
             invalidSum = TopUpBalanceLimits.getMaxValueByCurrency(accountCurrency) +1 ;
@@ -1109,45 +1121,45 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Make the balance top up payment$")
     public void buyTopUpBalance(){
-        getPortalMainPage().getCartPage().clickCheckoutButton();
-        getPortalMainPage().checkoutAndBuy(getPortalMainPage().getCartPage());
+        getAdminPortalMainPage().getCartPage().clickCheckoutButton();
+        getAdminPortalMainPage().checkoutAndBuy(getAdminPortalMainPage().getCartPage());
     }
 
     @Then("^Top up balance updated up to (.*) minutes$")
     public void verifyTopUpUpdated(int mints){
-        String valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
-        String actualInfo="";
-        double valueFromBackend = ApiHelperPlatform.getAccountBalance(Tenants.getTenantUnderTestOrgName()).getBalance();
-        boolean result = false;
-        for(int i = 0; i<(mints*60)/25; i++){
-            valueFromPortal = valueFromPortal.replace(",", "");
-            actualInfo = String.format("%1.2f", valueFromBackend);
-            if(valueFromPortal.equals(actualInfo)){
-                result = true;
-                break;
-            } else{
-                getPortalMainPage().waitFor(25000);
-                valueFromPortal = getPortalMainPage().getPageHeader().getTopUpBalanceSumm();
-            }
-        }
-        Assert.assertTrue(result, "Balance was not updated after top up\n" +
+        String token = PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main");
+
+        Map outputMap = getAdminPortalMainPage().getPageHeader().isTopUpUpdated(token, mints);
+
+        Assert.assertTrue((boolean) outputMap.get("result"), "Balance was not updated after top up\n" +
                 "Balance from backend before test: " + topUpBalance.get("preTest") + "\n" +
                 "Value to be set: " + topUpBalance.get("afterTest") + "\n" +
-                "Balance from backend after test: " + valueFromBackend +"\n" +
-                "Expected: " + actualInfo + "\n" +
-                "Actual: " + valueFromPortal);
+                "Balance from backend after test: " + outputMap.get("valueFromBackend") +"\n" +
+                "Expected: " + outputMap.get("actualInfo") + "\n" +
+                "Actual: " + outputMap.get("valueFromPortal"));
     }
 
 
     @Then("^'Add a payment method now\\?' button is shown$")
-    public void verifyAddPaymentButtonShown(){
+    public void verifyAddPaymentButtonNowShown(){
         Assert.assertTrue(getPortalBillingDetailsPage().isAddPaymentMethodButtonShown(5),
                 "'Add a payment method now?' is not shown");
     }
 
+    @Then("^'Add Payment Method' button is shown$")
+    public void verifyAddPaymentButtonShown(){
+        Assert.assertTrue(getPortalBillingDetailsPage().isPageActionButton("Add payment method"),
+                "'Add a payment method' button is not shown");
+    }
+
     @Then("^Admin clicks 'Add a payment method now\\?' button$")
-    public void clickAddPaymentButton(){
+    public void clickAddPaymentNowButton(){
         getPortalBillingDetailsPage().clickAddPaymentButton();
+    }
+
+    @Then("^Admin clicks 'Add Payment Method' button$")
+    public void clickAddPaymentButton(){
+        getPortalBillingDetailsPage().clickPageActionButton("Add payment method");
     }
 
     @Then("^'Add Payment Method' window is opened$")
@@ -1156,16 +1168,21 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 "'Add Payment Method' is not opened");
     }
 
-    @When("^Admin tries to add new card$")
-    public void addNewCard(){
-        getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment();
+    @When("^Admin tries to add new card for (.*)$")
+    public void addNewCard(String cardHolder){
+        String name = cardHolder.split(" ")[0];
+        String lastName = cardHolder.split(" ")[1];
+
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().addTestCardAsANewPayment(name, lastName);
         getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
         getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
     }
 
-    @When("^Admin provides all card info$")
-    public void fillInNewCardInfo(){
-        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo();
+    @When("^Admin provides all card info for (.*) cardholder$")
+    public void fillInNewCardInfo(String cardHolder){
+        String name = cardHolder.split(" ")[0];
+        String lastName = cardHolder.split(" ")[1];
+        getPortalBillingDetailsPage().getAddPaymentMethodWindow().fillInNewCardInfo(name, lastName);
     }
 
     @Then("^'Add payment method' button is disabled$")
@@ -1197,74 +1214,73 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalBillingDetailsPage().getAddPaymentMethodWindow().waitForAddingNewPaymentConfirmationPopup();
     }
 
-    @Then("^New card is shown in Payment methods tab$")
-    public void verifyNewPaymentAdded(){
-        SoftAssert soft = new SoftAssert();
-        boolean isPaymentAdded = getPortalBillingDetailsPage().isNewPaymentAdded();
+    @Then("^New card for (.*) is shown in Payment methods tab$")
+    public void verifyNewPaymentAdded(String cardHolder){
+        getPortalBillingDetailsPage().waitWhileProcessing(14, 20);
+        getPortalBillingDetailsPage().waitForNotificationAlertToDisappear();
+        boolean isPaymentAdded = getPortalBillingDetailsPage().isPaymentShown(cardHolder, 3);
         ConfigManager.setIsPaymentAdded(String.valueOf(isPaymentAdded));
-        soft.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
-        soft.assertTrue(getPortalBillingDetailsPage().getPaymentMethodDetails().contains("AQA Test"),
-                "Cardholder name of added card is not as expected");
-        soft.assertAll();
+        Assert.assertTrue(isPaymentAdded, "New payment is not shown in 'Billing & payments' page");
     }
 
-    @Then("^Payment method is not shown in Payment methods tab$")
-    public void paymentMethodIsNotShown(){
-        Assert.assertFalse(getPortalBillingDetailsPage().isNewPaymentAdded(),
+    @Then("^Payment method for (.*) is not shown in Payment methods tab$")
+    public void paymentMethodIsNotShown(String cardHolder){
+        Assert.assertFalse(getPortalBillingDetailsPage().isPaymentShown(cardHolder, 2),
                 "New payment is not shown in 'Billing & payments' page");
     }
 
-    @When("^Admin clicks Manage -> Remove payment$")
-    public void deletePaymentMethod(){
-        getPortalBillingDetailsPage().deletePaymentMethod();
+    @When("^Admin clicks Manage -> Remove payment for (.*)$")
+    public void deletePaymentMethod(String cardHolder){
+        getPortalBillingDetailsPage().clickManageButton(cardHolder);
+        new PaymentMethodPage(DriverFactory.getAgentDriverInstance()).deletePaymentMethod();
     }
 
     @When("^Admin adds to cart (.*) agents$")
     public void addAgentsToTheCart(int agentsNumber){
-        getPortalMainPage().addAgentSeatsIntoCart(agentsNumber);
+        getAdminPortalMainPage().addAgentSeatsIntoCart(agentsNumber);
     }
 
     @When("^Admin opens Confirm Details window$")
     public void openConfirmDetailsPage(){
-        getPortalMainPage().openAgentsPurchasingConfirmationWindow();
+        getAdminPortalMainPage().openAgentsPurchasingConfirmationWindow();
     }
 
     @Then("Added payment method is able to be selected")
     public void verifyCardIsAvailableToSelecting(){
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow()
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow()
                         .getTestVisaCardToPayDetails().contains("1111"),
                 "Added payment method is not available for purchasing");
     }
 
     @When("^Click Next button on Details tab$")
     public void clickNextButtonOnConfirmDetailsWindow(){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButtonOnDetailsTab();
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickNexButtonOnDetailsTab();
     }
 
     @When("^\"(.*)\" shown in payment methods dropdown$")
     public void verifyPresencePaymentOptionForBuyingAgentSeats(String option){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionShown(option),
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().clickSelectPaymentField();
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentOptionShown(option),
                 "'"+option+"' is not shown in payment options");
     }
 
     @When("^Admin selects \"(.*)\" in payment methods dropdown$")
     public void selectPaymentOptionWhileBuyingAgents(String option){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().selectPaymentMethod(option);
     }
 
 
     @Then("^Payment review tab is opened$")
     public void verifyPaymentReviewTabIsOpened(){
-        getPortalMainPage().waitForNotificationAlertToDisappear();
-        Assert.assertTrue(getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
+        getAdminPortalMainPage().waitForNotificationAlertToDisappear();
+        Assert.assertTrue(getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().isPaymentReviewTabOpened(),
                 "Admin is not redirected to PaymentReview tab after adding new card.");
 
     }
 
     @When("^Admin closes Confirm details window$")
     public void closeConfirmDetailsWindow(){
-        getPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
+        getAdminPortalMainPage().getCartPage().getConfirmPaymentDetailsWindow().closeWindow();
     }
 
     @When("^Click 'Manage' button for (.*) user$")
@@ -1375,6 +1391,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
         getPortalUserProfileEditingPage().uploadPhoto("touch/src/test/resources/agentphoto/agent_photo.png");
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(2, 5);
+        getPortalUserProfileEditingPage().clickPageActionButton("Save changes");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
@@ -1390,6 +1408,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomSecondaryColor(tenantInfo.get("color")));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
     @Then("^I check secondary color for tenant in widget$")
@@ -1410,12 +1429,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^I check primary color for tenant in agent desk$")
     public void iCheckPrimaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getCustomer360ButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getCustomer360ButtonColor(),
                 tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
-        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getExpandFilterButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getExpandFilterButtonColor(),
                 tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getTouchButtonColor(),
-                tenantInfo.get("newColor"), "Color for tenant chat button is not correct");
         soft.assertAll();
     }
 
@@ -1423,9 +1440,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^I check secondary color for tenant in agent desk$")
     public void iCheckSecondaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getPageHeader("second agent").getTenantNameColor(),
+        soft.assertEquals(AbstractAgentSteps.getPageHeader("agent").getTenantNameColor(),
                 tenantInfo.get("newColor"), "Color for tenant name in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getPageHeader("second agent").getTenantLogoBorderColor(),
+        soft.assertEquals(AbstractAgentSteps.getPageHeader("agent").getTenantLogoBorderColor(),
                 tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
         soft.assertAll();
     }
@@ -1433,23 +1450,23 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Check primary color for incoming chat and 360Container$")
     public void checkPrimaryColorForIncomingChatAndContainer() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getUserMsgCountColor(),
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getUserMsgCountColor(),
                             tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getLeftMenu("second agent").getUserPictureColor(),
+        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getUserPictureColor(),
                             tenantInfo.get("newColor"), "Color for User Picture in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getUserPictureColor(),
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getUserPictureColor(),
                             tenantInfo.get("newColor"), "Color for User Picture in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getSaveEditButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getSaveEditButtonColor(),
                             tenantInfo.get("newColor"), "Color for Edit button in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("second agent").getMailColor(),
+        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getMailColor(),
                             tenantInfo.get("newColor"), "Color for Email in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getPinChatButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getPinChatButtonColor(),
                             tenantInfo.get("newColor"), "Color for Pin chat button in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getTransferButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getTransferButtonColor(),
                             tenantInfo.get("newColor"), "Color for Transfer chat button in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getChatHeader("second agent").getEndChatButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getEndChatButtonColor(),
                             tenantInfo.get("newColor"), "Color for End chat button in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("second agent").getChatForm().getSubmitMessageButton(),
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getChatForm().getSubmitMessageButton(),
                             tenantInfo.get("newColor"), "Color for Send button in agent desk window is not correct");
         soft.assertAll();
     }
@@ -1460,6 +1477,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomPrimaryColor(tenantInfo.get("color")));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(5, 10);
     }
 
     @When("^Add new touch (.*) solution$")
@@ -1572,6 +1590,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyCity(tenantInfo.get("companyCity"));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
+        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(2, 9);
     }
 
     @And("^Refresh page and verify business details was changed for (.*)$")

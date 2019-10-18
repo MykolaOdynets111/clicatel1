@@ -1,5 +1,6 @@
 package interfaces;
 
+import com.paulhammant.ngwebdriver.NgWebDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -7,6 +8,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 public interface WebWait {
+
+    String processingAlert = "div.loader-bar-text";
 
     default void waitFor(int milisecs){
         try {
@@ -126,7 +129,7 @@ public interface WebWait {
                 .until(ExpectedConditions.invisibilityOf(element));
     }
 
-    default void waitForElementToBeInVisibleByXpath(WebDriver driver, String xpath, int wait){
+    default void waitForElementToBeInvisibleByXpath(WebDriver driver, String xpath, int wait){
         initWait(driver, wait).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(xpath)));
@@ -136,5 +139,36 @@ public interface WebWait {
         initWait(driver, wait).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(css)));
+    }
+
+    // ================================== Stabilization waits  ======================================== //
+
+    default void waitForAngularRequestsToFinish(WebDriver driver){
+        JavascriptExecutor jsExec = (JavascriptExecutor) driver;
+        new NgWebDriver(jsExec).waitForAngularRequestsToFinish();
+
+    }
+
+    default void waitForAngularToBeReady(WebDriver driver){
+        JavascriptExecutor jsExec = (JavascriptExecutor) driver;
+        boolean isReady = (boolean) jsExec.executeScript("return (window.angular !== undefined) && (angular.element(document.body).injector() !== undefined) && (angular.element(document.body).injector().get('$http').pendingRequests.length === 0);");
+        for(int i=0; i<20; i++){
+            if(isReady) break;
+            else{
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                isReady = (boolean) jsExec.executeScript("return (window.angular !== undefined) && (angular.element(document.body).injector() !== undefined) && (angular.element(document.body).injector().get('$http').pendingRequests.length === 0);");
+            }
+        }
+    }
+
+    default void waitWhileProcessing(WebDriver driver, int toAppears, int toDisappear){
+        try {
+            waitForElementToBeVisibleByCss(driver, processingAlert, toAppears);
+            waitForElementToBeInVisibleByCss(driver, processingAlert, toDisappear);
+        } catch(NoSuchElementException|TimeoutException e){}
     }
 }

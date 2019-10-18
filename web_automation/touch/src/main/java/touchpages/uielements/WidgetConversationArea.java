@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -34,7 +35,8 @@ public class WidgetConversationArea extends AbstractUIElement {
      */
     private WebElement getFromUserWebElement(String messageText) {
         try {
-             List<FromUserMessage> listWithUserMessages = fromUserMessages.stream().map(FromUserMessage::new)
+             List<FromUserMessage> listWithUserMessages = fromUserMessages.stream()
+                     .map(e -> new FromUserMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .filter(e1 -> e1.getMessageText().equals(messageText))
                     .collect(Collectors.toList());
             FromUserMessage theMessage = listWithUserMessages.get(listWithUserMessages.size()-1);
@@ -46,54 +48,72 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public String getResponseTextOnUserInput(String userMessageText) {
-            return new ToUserTextMessage(getFromUserWebElement(userMessageText)).getMessageText();
+            return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                    .setCurrentDriver(this.getCurrentDriver()).getMessageText();
     }
 
     public String getSecondResponseTextOnUserInput(String userMessageText) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).getSecondMessageText();
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getSecondMessageText();
     }
 
 
     public boolean isTextResponseShownFor(String userMessageText, int wait) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isTextResponseShown(wait);
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isTextResponseShown(wait);
     }
 
     public boolean isSecondTextResponseShownFor(String userMessageText, int wait) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseShown(wait);
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isSecondResponseShown(wait);
     }
 
     public boolean isSecondTextResponseNotShownFor(String userMessageText, int wait) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessageText)).isSecondResponseNotShown(wait);
+        return new ToUserTextMessage(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isSecondResponseNotShown(wait);
     }
 
     public boolean isTextResponseShownAmongOtherForUserMessage(String userInput, String expectedResponse) {
-        return new ToUserTextMessage(getFromUserWebElement(userInput)).isTextResponseShownAmongOthers(expectedResponse);
+        return new ToUserTextMessage(getFromUserWebElement(userInput))
+                .setCurrentDriver(this.getCurrentDriver()).isTextResponseShownAmongOthers(expectedResponse);
     }
 
+    public boolean isTextResponseNotShownAmongOther(String userInput, String expectedResponse, int secWait) {
+        return new ToUserTextMessage(getFromUserWebElement(userInput))
+                .setCurrentDriver(this.getCurrentDriver()).isTextResponseNotShownAmongOthers(expectedResponse, secWait);
+    }
+
+
     public boolean isOnlyOneTextResponseShownFor(String userMessage) {
-        return new ToUserTextMessage(getFromUserWebElement(userMessage)).isOnlyOneTextResponseShwon();
+        return new ToUserTextMessage(getFromUserWebElement(userMessage))
+                .setCurrentDriver(this.getCurrentDriver()).isOnlyOneTextResponseShwon();
     }
 
     public boolean isCardShownFor(String userMessageText, int wait) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isTextInCardShown(wait);
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isTextInCardShown(wait);
     }
 
     public boolean isCardNotShownFor(String userMessageText, int wait) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isCardNotShown(wait);
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isCardNotShown(wait);
     }
 
     public String getCardTextForUserMessage(String userMessageText) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromCard();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getTextFromCard();
     }
 
     public String getCardAboveButtonsTextForUserMessage(String userMessageText) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getTextFromAboveCardButton();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getTextFromAboveCardButton();
     }
 
     public boolean checkIfCardButtonsShownFor(String userMessageText, List<String> buttons) {
         boolean result = false;
         for (String button : buttons) {
-            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
+            result = new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                    .setCurrentDriver(this.getCurrentDriver()).isButtonShown(button.trim());
             if(!result){
                 Assert.fail("Button '"+button+"' is not shown in the card on '"+userMessageText+"' user message");
             }
@@ -102,7 +122,8 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public boolean isCardContainsButton(String userMessageText, String button) {
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).isButtonShown(button.trim());
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).isButtonShown(button.trim());
     }
 
     public void  waitForSalutation() {
@@ -128,7 +149,14 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public void clickOptionInTheCard(String userMessageText, String buttonName) {
-        new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton(buttonName);
+        try {
+            new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).setCurrentDriver(this.getCurrentDriver())
+                    .clickButton(buttonName);
+        }catch (ElementClickInterceptedException e){
+            waitFor(1000);
+            new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                    .setCurrentDriver(this.getCurrentDriver()).clickButton(buttonName);
+        }
     }
 
     public boolean isTextShown(String text, int wait){
@@ -146,6 +174,7 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     public void submitCardWithUserInfo(String userMessageText, VMQuoteRequestUserData userData) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                                        .setCurrentDriver(this.getCurrentDriver())
                                         .fillInInputFieldWithAPlaceholder("Last Name", userData.getLastName())
                                         .fillInInputFieldWithAPlaceholder("Contact Number", userData.getContactNumber())
                                         .fillInInputFieldWithAPlaceholder("Email", userData.getEmail())
@@ -153,24 +182,29 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public void clickSubmitButton(String userMessageText) {
-        new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).clickButton("Submit");
+        new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).clickButton("Submit");
     }
 
     public void fillInTheField(String userMessageText, String field, String value) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver())
                 .fillInInputFieldWithAPlaceholder(field, value);
     }
 
     public int getNumberOfFieldRequiredErrorsInCardOnUserMessage(String userMessageText){
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).getNumberOfFieldRequiredErrors();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).getNumberOfFieldRequiredErrors();
     }
 
     public boolean areFieldRequiredErrorsInCardOnUserMessageShown(String userMessageText){
-        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText)).areRequiredFieldErrorsShown();
+        return new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver()).areRequiredFieldErrorsShown();
     }
 
     public void provideInfoBeforeGoingToAgent(String userMessageText, String userName, String userPass) {
         new ToUserMessageWithActions(getFromUserWebElement(userMessageText))
+                .setCurrentDriver(this.getCurrentDriver())
                 .fillInInputFieldWithAPlaceholder("Name", userName)
                 .fillInInputFieldWithAPlaceholder("Email", userPass);
     }

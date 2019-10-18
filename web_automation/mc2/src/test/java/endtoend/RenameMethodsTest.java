@@ -1,26 +1,16 @@
 package endtoend;
 
 import com.github.javafaker.Faker;
-import endtoend.BaseTest;
+import endtoend.basetests.BaseTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
-import org.testng.Assert;
-import org.testng.ITest;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
-import org.testng.internal.BaseTestMethod;
-import org.testng.internal.TestResult;
-import org.testng.xml.XmlTest;
 import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 import portalpages.PortalSignUpPage;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 
 @Listeners({TestAllureListener.class})

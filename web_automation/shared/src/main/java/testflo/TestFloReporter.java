@@ -5,6 +5,7 @@ import testflo.jacksonschemas.AllureScenarioInterface;
 import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 
 import java.io.*;
+import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -15,13 +16,14 @@ import java.util.stream.Collectors;
 public class TestFloReporter {
 
     public static void main(String[] args) {
-//        For debug
+////        For debug
 //    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
-//    System.setProperty("isRerun", "false");
-//    System.setProperty("tplanKey", "TPORT-10180");
+//    System.setProperty("isRerun", "true");
+//    System.setProperty("tplanKey", "TPORT-12496");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
+
 
         if(ConfigManager.reportToTouchFlo()) {
 
@@ -61,6 +63,11 @@ public class TestFloReporter {
             // 7. Create missing test cases and set their status
             String testPlan = newTPlanKey;
             executedTestsToBeCreatedInTestPlan.forEach(e -> addMissingScenarios(e, testPlan));
+
+            // 8. Add logs about failed actions
+
+            System.out.println("\n!!! reporting errors \n" +
+                    JiraApiHelper.getErrors().toString());
 
         } else{
             System.out.println("!!! reporting to TestFLO is turned off. \n" +
@@ -107,46 +114,64 @@ public class TestFloReporter {
         }catch(NoSuchElementException e){
             return;
         }
-
-        setTCStatus(testCase.getKey(), executedTest.getStatus(), executedTest.getFailureMessage());
+        String testFloTestStatus = testCase.getFields().getStatus().getName().toLowerCase();
+        if(!executedTest.getStatus().contains(testFloTestStatus)) {
+            try {
+                setTCStatus(testCase.getKey(), testFloTestStatus, executedTest.getStatus(), executedTest.getFailureMessage());
+            }catch (SocketTimeoutException e){
+                return;
+            }
+        }
     }
 
     public static void addMissingScenarios(AllureScenarioInterface scenario, String testPlan){
         Map<String, String> newTC = JiraApiHelper.createNewTestCase(scenario, testPlan);
-
-        setTCStatus(newTC.get("key"), scenario.getStatus(), scenario.getFailureMessage());
-
-    }
-
-    private static void setTCStatus(String tcKey, String tcStatus, String failureMessage){
-        if(tcStatus.equalsIgnoreCase("canceled")){
+        try {
+            setTCStatus(newTC.get("key"), "open", scenario.getStatus(), scenario.getFailureMessage());
+        }catch (SocketTimeoutException e){
             return;
         }
-        moveTicketToInProgress(tcKey);
-        setStatusForTestCase(tcKey, tcStatus, failureMessage);
     }
 
-    private static void moveTicketToInProgress(String tcKey){
-        if(ConfigManager.rerunTestPlan()) {
-            JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves ticket "Re-test" status
-            JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "In Progress" status
-        } else{
-            JiraApiHelper.changeTestCaseStatus(tcKey, "11"); // moves ticket "In Progress" status
+    private static void setTCStatus(String tcKey, String currentStatus, String executionStatus, String failureMessage)
+    throws SocketTimeoutException{
+        if(executionStatus.equalsIgnoreCase("canceled") |
+                executionStatus.equalsIgnoreCase("skipped")){
+            return;
         }
-
+        moveTicketToInProgress(tcKey, currentStatus);
+        setStatusForTestCase(tcKey, executionStatus, failureMessage);
     }
 
-    private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage){
+    private static void moveTicketToInProgress (String tcKey, String currentStatus) throws SocketTimeoutException{
+        if(!currentStatus.equalsIgnoreCase("open")) retestTestCase(tcKey, currentStatus);
+        else JiraApiHelper.changeTestCaseStatus(tcKey, "11"); // moves ticket "In Progress" status
+    }
+
+    private static void retestTestCase(String tcKey, String currentStatus) throws SocketTimeoutException {
+        if(ConfigManager.rerunTestPlan()) {
+            if (currentStatus.equalsIgnoreCase("pass")) {
+                JiraApiHelper.changeTestCaseStatus(tcKey, "61"); // moves passed ticket "Re-test" status
+            } else {
+                JiraApiHelper.changeTestCaseStatus(tcKey, "51"); // moves failed ticket "Re-test" status
+            }
+            waitFor(4500); // To eliminate JIRA API hang out
+            JiraApiHelper.changeTestCaseStatus(tcKey, "81"); // moves ticket "Test" status
+            if(JiraApiHelper.getNextTransitionId(tcKey)==81){
+                waitFor(1000);
+                JiraApiHelper.changeTestCaseStatus(tcKey, "81");
+            }
+        }
+    }
+
+    private static void setStatusForTestCase(String tcKey, String tcStatus, String failureMessage) throws SocketTimeoutException{
         if (tcStatus.equalsIgnoreCase("passed")) {
             JiraApiHelper.changeTestCaseStatus(tcKey, "21");
-        }
-        if (tcStatus.equalsIgnoreCase("broken") |
-                tcStatus.equalsIgnoreCase("failed")) {
+        } else {
             JiraApiHelper.changeTestCaseStatus(tcKey, "31");
             JiraApiHelper.updateTestCaseDescription(tcKey, failureMessage);
         }
     }
-
 
     private static String readBaseTestPlanKey(){
             try {
@@ -168,5 +193,21 @@ public class TestFloReporter {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+
+    private static void waitFor(int milis){
+        try {
+            Thread.sleep(milis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void waifForStatusToBeTest(String testCaseKey, int seconds){
+        for (int i = 0; i<seconds*5; i++){
+            int nextTransition = JiraApiHelper.getNextTransitionId(testCaseKey);
+            if(nextTransition==81) break;
+            else waitFor(200);
+        }
     }
 }

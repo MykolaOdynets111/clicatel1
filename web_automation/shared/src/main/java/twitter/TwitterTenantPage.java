@@ -11,14 +11,14 @@ public class TwitterTenantPage extends TwitterHomePage {
     @FindBy(xpath = "//span[contains(text(),'Tweet')]")
     private WebElement messageButton;
 
-    @FindBy(xpath = "//div[@aria-labelledby='modal-header']")
+    @FindBy(xpath = "//section[@aria-labelledby='detail-header']")
     private WebElement directConversationArea;
 
     private String newTweetButtonCss = "button.NewTweetButton";
 
     private String tweetSEndPopupCss = "alert-messages.js-message-drawer-visible";
 
-    private String newTweetButtonXpath = "//a[@aria-label='Tweet']/div";
+    private String newDMTweetButtonXpath = "//div[@aria-label='Message']/div";
 
     private DMWindow dmWindow;
     private SendNewTweetWindow tweetWindow;
@@ -38,8 +38,8 @@ public class TwitterTenantPage extends TwitterHomePage {
     }
 
     public void openDMWindow() {
-        waitForElementToBeClickableByXpath(this.getCurrentDriver(),newTweetButtonXpath,5);
-        findElemByXPATH(this.getCurrentDriver(),newTweetButtonXpath).click();
+        waitForElementToBeClickableByXpath(this.getCurrentDriver(),newDMTweetButtonXpath,5);
+        findElemByXPATH(this.getCurrentDriver(),newDMTweetButtonXpath).click();
         waitForElementToBeVisible(this.getCurrentDriver(), directConversationArea, 5);
     }
 

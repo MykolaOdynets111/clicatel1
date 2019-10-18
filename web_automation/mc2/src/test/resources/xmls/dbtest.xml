@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Acceptance suite" paralle = "true" thread-count="2">
+    <test name="Sign in and change password" >
+        <classes>
+            <class name="endtoend.DBConnectionTest" />
+        </classes>
+    </test>
+</suite>

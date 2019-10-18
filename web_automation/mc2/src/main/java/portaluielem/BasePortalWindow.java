@@ -1,17 +1,14 @@
 package portaluielem;
 
 import abstractclasses.AbstractUIElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import java.util.List;
-
-//import com.paulhammant.ngwebdriver.NgWebDriver;
-
 
 public class BasePortalWindow extends AbstractUIElement {
 
-    @FindBy(xpath = "//button[@class='button button-primary ng-scope']")
+    @FindBy(xpath = ".//button[@class='button button-primary ng-scope']")
     protected WebElement nextButton;
 
     @FindBy(xpath = "//button[@class='button button-primary ng-binding ng-scope']")
@@ -30,11 +27,18 @@ public class BasePortalWindow extends AbstractUIElement {
     protected WebElement addToCardButton;
 
 
+    @Step(value = "Click 'Add to cart' button")
     public void clickAddToCardButton(){
         executeJSclick(addToCardButton, getCurrentDriver());
+        waitWhileProcessing(this.getCurrentDriver(), 2, 5);
     }
 
-    public void clickPrimaryBindingButton(String agent, String buttonName){
+    public void clickPrimaryBindingButton(String buttonName){
         clickElem(getCurrentDriver(), primaryBindingButton, 5, buttonName);
+    }
+
+    @Step(value = "Click 'Next' button")
+    public void clickNextButton(){
+        executeAngularClick(this.getCurrentDriver(), nextButton);
     }
 }

@@ -91,7 +91,7 @@ public class Widget extends AbstractSocialPage {
     }
 
     public boolean isWidgetCollapsed() {
-        return isElementNotShown(this.getCurrentDriver(), widgetWindow, 5);
+        return isElementRemoved(this.getCurrentDriver(), widgetWindow, 5);
     }
 
     private boolean isConnectingMessageShown() {

@@ -1,5 +1,6 @@
 package portaluielem;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -37,6 +38,7 @@ public class ConfigureTouchWindow extends BasePortalWindow {
     @FindBy(name = "transcriptsEmail")
     private WebElement transcriptsEmailInput;
 
+    @Step(value = "Create touch configuration")
     public void createNewTenant(String tenantOrgName, String transcriptsEmail){
         waitForElementToBeVisible(this.getCurrentDriver(), businessNameInput, 3).sendKeys(tenantOrgName);
         selectIndustryField.click();
@@ -54,5 +56,6 @@ public class ConfigureTouchWindow extends BasePortalWindow {
         nextButton.click();
         transcriptsEmailInput.sendKeys(transcriptsEmail);
         clickElem(this.getCurrentDriver(), nextButton, 5,"Finish button");
+        waitWhileProcessing(this.getCurrentDriver(), 3, 5);
     }
 }

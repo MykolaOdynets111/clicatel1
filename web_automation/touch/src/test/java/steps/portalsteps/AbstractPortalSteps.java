@@ -2,12 +2,15 @@ package steps.portalsteps;
 
 import com.github.javafaker.Faker;
 import driverfactory.DriverFactory;
+import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
+import interfaces.VerificationHelper;
+import interfaces.WebWait;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
 
-public class AbstractPortalSteps implements JSHelper {
+public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
     private static ThreadLocal<PortalLoginPage> currentPortalLoginPage = new ThreadLocal<>();
 
@@ -17,7 +20,9 @@ public class AbstractPortalSteps implements JSHelper {
 
     private static ThreadLocal<PortalMainPage> portalMainPage = new ThreadLocal<>();
 
-    private static ThreadLocal<PortalIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
+    private static ThreadLocal<PortalMainPage> secondPortalMainPage = new ThreadLocal<>();
+
+    private static ThreadLocal<PortalTouchIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
 
     private static ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
 
@@ -79,7 +84,7 @@ public class AbstractPortalSteps implements JSHelper {
     }
 
 
-    public static PortalMainPage getPortalMainPage() {
+    public static PortalMainPage getAdminPortalMainPage() {
         if (portalMainPage.get()==null) {
             portalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("admin")));
             return portalMainPage.get();
@@ -88,21 +93,37 @@ public class AbstractPortalSteps implements JSHelper {
         }
     }
 
+    public static synchronized PortalMainPage getPortalMainPage(String agent) {
+        if (agent.equalsIgnoreCase("second agent")) {
+            return getSecondPortalMainPage();
+        } else {
+            return getAdminPortalMainPage();
+        }
+    }
+    public static PortalMainPage getSecondPortalMainPage() {
+        if (secondPortalMainPage.get()==null) {
+            secondPortalMainPage.set(new PortalMainPage(DriverFactory.getDriverForAgent("second agent")));
+            return secondPortalMainPage.get();
+        } else{
+            return secondPortalMainPage.get();
+        }
+    }
+
     public static void setPortalMainPage(PortalMainPage mainPage) {
        portalMainPage.set(mainPage);
     }
 
 
-    public static PortalIntegrationsPage getPortalIntegrationsPage() {
+    public static PortalTouchIntegrationsPage getPortalIntegrationsPage() {
         if (portalIntegrationsPage.get()==null) {
-            portalIntegrationsPage.set(new PortalIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
+            portalIntegrationsPage.set(new PortalTouchIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
             return portalIntegrationsPage.get();
         } else{
             return portalIntegrationsPage.get();
         }
     }
 
-    public static void setPortalIntegrationsPage(PortalIntegrationsPage integrationsPage) {
+    public static void setPortalIntegrationsPage(PortalTouchIntegrationsPage integrationsPage) {
         portalIntegrationsPage.set(integrationsPage);
     }
 
@@ -247,7 +268,7 @@ public class AbstractPortalSteps implements JSHelper {
     }
 
     public static LeftMenu getLeftMenu() {
-        return getPortalMainPage().getLeftMenu();
+        return getAdminPortalMainPage().getLeftMenu();
     }
 
 
@@ -256,6 +277,7 @@ public class AbstractPortalSteps implements JSHelper {
         portalLoginPage.remove();
         secondAgentPortalLoginPage.remove();
         portalMainPage.remove();
+        secondPortalMainPage.remove();
         portalIntegrationsPage.remove();
         portalBillingDetailsPage.remove();
         portalSignUpPage.remove();

@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.user-tickets-container")
-public class CRMTicketContainer extends AbstractUIElementDeprecated {
+public class CRMTicketContainer extends AbstractUIElement {
 
     @FindBy(css = "div.ticket-item-block")
     private List<WebElement> crmTickets;
@@ -19,16 +19,18 @@ public class CRMTicketContainer extends AbstractUIElementDeprecated {
     @FindBy(xpath = "//div[@class='user-tickets-container']/preceding-sibling::h2")
     private WebElement containerHeader;
 
+    private String ticketContainer = "div.user-tickets-container";
+
     public boolean isTicketContainerShown(){
-        return isElementShownAgent(this.getWrappedElement(), 4);
+        return isElementShown(this.getCurrentDriver(),this.getWrappedElement(), 4);
     }
 
     public boolean isTicketContainerRemoved(){
-        return isElementNotShownAgentByCSS( "div.user-tickets-container", 4);
+        return isElementRemovedByCSS( this.getCurrentDriver(), ticketContainer, 4);
     }
 
     public CRMTicket getFirstTicket(){
-        return new CRMTicket(crmTickets.get(0));
+        return new CRMTicket(crmTickets.get(0)).setCurrentDriver(this.getCurrentDriver());
     }
 
     public String getContainerHeader(){
@@ -44,14 +46,14 @@ public class CRMTicketContainer extends AbstractUIElementDeprecated {
 
     public List<Map<String, String>> getAllTicketsInfo(){
         return crmTickets.stream()
-                .map(e -> new CRMTicket(e))
+                .map(e -> new CRMTicket(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getTicketInfo())
                 .collect(Collectors.toList());
     }
 
     public List<Map<String, String>> getAllTicketsInfoExceptDate(){
         return crmTickets.stream()
-                .map(e -> new CRMTicket(e))
+                .map(e -> new CRMTicket(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getTicketInfoExceptDate())
                 .collect(Collectors.toList());
     }

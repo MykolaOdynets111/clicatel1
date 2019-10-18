@@ -1,11 +1,13 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -14,20 +16,21 @@ import org.testng.Assert;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TimeZone;
 
 @FindBy(css = "div.chat-header")
-public class ChatHeader extends AbstractUIElementDeprecated {
+public class ChatHeader extends AbstractUIElement {
 
     @FindBy(xpath = ".//button[text()='End chat']")
     private WebElement endChatButton;
 
-    @FindBy(xpath = ".//button[text()='Pin chat']")
+    @FindBy(xpath = ".//button[text()='Flag chat']")
     private WebElement pinChatButton;
 
-    @FindBy(xpath = ".//button[text()='Unpin chat']")
+    @FindBy(xpath = ".//button[text()='Unflag chat']")
     private WebElement unpinChatButton;
 
     @FindBy(xpath = ".//button[text()='Transfer chat']")
@@ -58,36 +61,43 @@ public class ChatHeader extends AbstractUIElementDeprecated {
     private String sendSMSXpath = ".//button[text()='Send SMS']";
     private String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
 
+    public ChatHeader (WebDriver current){
+        this.currentDriver = current;
+    }
+
+    public ChatHeader (){
+        super();
+    }
 
     public void clickEndChatButton() {
-        if (!isElementShownAgent(endChatButton)) {
+        if (!isElementShown(this.getCurrentDriver(), endChatButton, 4)) {
             Assert.fail("'End chat' button is not shown.");
         } else {
-            clickElemAgent(endChatButton, 6, "agent", "End chat button");
+            clickElem(this.getCurrentDriver(), endChatButton, 6, "End chat button");
         }
     }
 
-    public boolean isEndChatShown(String agent){
-        return isElementShownAgent(endChatButton,1, agent);
+    public boolean isEndChatShown(){
+        return isElementShown(this.getCurrentDriver(), endChatButton,1);
     }
 
-    public void clickTransferButton(String agent){
-        waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, agent);
-        findElemByXPATHAgent(transferChatButton,agent).click();
+    public void clickTransferButton(){
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), transferChatButton, 5);
+        findElemByXPATH(this.getCurrentDriver(), transferChatButton).click();
     }
 
     public boolean isButtonEnabled(String buttonTitle){
         try {
             switch (buttonTitle) {
                 case "Transfer chat":
-                    waitForElementToBeVisibleByXpathAgent(transferChatButton, 5, "main agent");
-                    return findElemByXPATHAgent(transferChatButton).isEnabled();
+                    waitForElementToBeVisibleByXpath(this.getCurrentDriver(), transferChatButton, 5);
+                    return findElemByXPATH(this.getCurrentDriver(), transferChatButton).isEnabled();
                 case "Send SMS":
-                    waitForElementToBeVisibleByXpathAgent(sendSMSXpath, 5, "main agent");
-                    return findElemByXPATHAgent(sendSMSXpath).isEnabled();
+                    waitForElementToBeVisibleByXpath(this.getCurrentDriver(), sendSMSXpath, 5);
+                    return findElemByXPATH(this.getCurrentDriver(), sendSMSXpath).isEnabled();
                 case "Send WhatsApp":
-                    waitForElementToBeVisibleByXpathAgent(sendWhatsAppXpath, 5, "main agent");
-                    return findElemByXPATHAgent(sendWhatsAppXpath).isEnabled();
+                    waitForElementToBeVisibleByXpath(this.getCurrentDriver(), sendWhatsAppXpath, 5);
+                    return findElemByXPATH(this.getCurrentDriver(), sendWhatsAppXpath).isEnabled();
 
                 default:
                     throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
@@ -101,16 +111,16 @@ public class ChatHeader extends AbstractUIElementDeprecated {
         return chatHeaderTitle.getText();
     }
 
-    public void clickPinButton(String agent){
-        clickElemAgent(pinChatButton, 2, agent, "Pin chat");
+    public void clickFlagChatButton(){
+        clickElem(this.getCurrentDriver(), pinChatButton, 2,"Flag chat");
     }
 
-    public void clickUnpinButton(String agent){
-        clickElemAgent(unpinChatButton, 2, agent, "Unpin chat");
+    public void clickUnflagChatButton(){
+        clickElem(this.getCurrentDriver(), unpinChatButton, 2, "Unflag chat");
     }
 
-    public void clickCancelTransferButton(String agent){
-        clickElemAgent(cancelTransferButton, 2, agent, "Cancel transfer");
+    public void clickCancelTransferButton(){
+        clickElem(this.getCurrentDriver(), cancelTransferButton, 2, "Cancel transfer");
     }
 
     public String getEndChatButtonColor() {
@@ -127,14 +137,16 @@ public class ChatHeader extends AbstractUIElementDeprecated {
 
     public boolean isValidChannelImg() {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/headerChannel.png");
-        return isWebElementEqualsImage(channelImg,image, "main");
+        return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
         //Verify if tame stanp in 24 hours format
     public boolean isValidTimeStamp() {
         Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
                 ,getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         String startedDate = sessionDetails.get("startedDate");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        int numberOfMillis = startedDate.split("\\.")[1].length();
+        String dateFormat = "yyyy-MM-dd HH:mm:ss." + StringUtils.repeat("S", numberOfMillis);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
         LocalDateTime formatDateTime = LocalDateTime.parse(startedDate, formatter).atZone(ZoneId.of("UTC")).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("'Started:' dd MMM, HH:mm|");
         return timeStamp.getAttribute("textContent").equals(formatDateTime.format(formatter2));

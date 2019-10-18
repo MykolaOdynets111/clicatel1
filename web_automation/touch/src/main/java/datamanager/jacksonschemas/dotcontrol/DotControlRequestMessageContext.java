@@ -49,8 +49,9 @@ public class DotControlRequestMessageContext {
     }
 
     @JsonProperty("lastName")
-    public void setLastName(String lastName) {
+    public DotControlRequestMessageContext setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     @JsonProperty("phone")
@@ -83,4 +84,9 @@ public class DotControlRequestMessageContext {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "\"email\": \"" + email + "\", \"lastName\": \"" + lastName + "\", \"phone\": " +
+                "\"" + phone + "\", \"ticket\": \"" + ticket + "\"";
+    }
 }

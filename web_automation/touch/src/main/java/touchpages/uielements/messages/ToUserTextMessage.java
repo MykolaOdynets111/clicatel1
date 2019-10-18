@@ -1,29 +1,31 @@
 package touchpages.uielements.messages;
 
-import interfaces.WebActionsDeprecated;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.Widget;
+import abstractclasses.AbstractWidget;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class ToUserTextMessage  extends Widget implements WebActionsDeprecated {
+public class ToUserTextMessage extends AbstractWidget {
 
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to']//span[@class=' text-break-mod']")
     private List<WebElement> toUserTextMessages;
 
     public ToUserTextMessage(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
+    }
+
+    public ToUserTextMessage setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
     }
 
     public String getMessageText() {
         try{
             if(toUserTextMessages.get(0).getText().isEmpty()){
-                waitForDeprecated(1000);
+                waitFor(1000);
             }
             return toUserTextMessages.get(0).getAttribute("innerText");
         } catch (IndexOutOfBoundsException e) {
@@ -34,10 +36,10 @@ public class ToUserTextMessage  extends Widget implements WebActionsDeprecated {
     public String getSecondMessageText() {
         for(int i=0; i<4; i++){
             if (toUserTextMessages.size()>1) break;
-            else waitForDeprecated(500);
+            else waitFor(500);
         }
         try{
-            if(toUserTextMessages.get(1).getText().isEmpty())  waitForDeprecated(1000);
+            if(toUserTextMessages.get(1).getText().isEmpty())  waitFor(1000);
             return toUserTextMessages.get(1).getText();
         } catch (IndexOutOfBoundsException e) {
             return "no text response found";
@@ -49,7 +51,7 @@ public class ToUserTextMessage  extends Widget implements WebActionsDeprecated {
             if(toUserTextMessages.size()==2){
                 return true;
             }else {
-                waitForDeprecated(1000);
+                waitFor(1000);
             }
         }
         return false;
@@ -68,14 +70,14 @@ public class ToUserTextMessage  extends Widget implements WebActionsDeprecated {
             }else {
                 isShown=false;
             }
-            waitForDeprecated(1000);
+            waitFor(1000);
         }
         return isShown;
     }
 
     public boolean isTextResponseShown(int wait) {
         try{
-            waitForElementsToBeVisible(toUserTextMessages, wait);
+            waitForElementsToBeVisible(this.getCurrentDriver(), toUserTextMessages, wait);
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -87,7 +89,17 @@ public class ToUserTextMessage  extends Widget implements WebActionsDeprecated {
         for(int i = 0; i < 15; i++){
             result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
             if (result) return true;
-            waitForDeprecated(500);
+            waitFor(500);
+        }
+        return result;
+    }
+
+    public boolean isTextResponseNotShownAmongOthers(String expectedMessage, int wait) {
+        boolean result = false;
+        for(int i = 0; i < wait; i++){
+            result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+            if (result) return true;
+            waitFor(1000);
         }
         return result;
     }

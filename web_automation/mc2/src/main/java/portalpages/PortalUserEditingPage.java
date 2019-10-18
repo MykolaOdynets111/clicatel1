@@ -84,7 +84,8 @@ public class PortalUserEditingPage extends PortalAbstractPage {
         ));
         element.setFileDetector(new LocalFileDetector());
         element.sendKeys(new File(photoPath).getAbsolutePath());
-        savePhotoButton.click();
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        executeAngularClick(this.getCurrentDriver(), savePhotoButton);
 
         waitWhileProcessing(14, 20);
     }

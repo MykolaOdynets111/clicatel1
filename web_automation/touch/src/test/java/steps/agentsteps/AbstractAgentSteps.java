@@ -3,13 +3,19 @@ package steps.agentsteps;
 import agentpages.AgentHomePage;
 import agentpages.AgentLoginPage;
 import agentpages.uielements.*;
+import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
-import interfaces.DateTimeHelper;
-import interfaces.JSHelper;
-import interfaces.VerificationHelper;
-import interfaces.WebWaitDeprecated;
+import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
+import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
+import steps.dotcontrol.DotControlSteps;
+import steps.portalsteps.AbstractPortalSteps;
 
-public class AbstractAgentSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWaitDeprecated {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AbstractAgentSteps extends AbstractPortalSteps {
 
     private static ThreadLocal<AgentLoginPage> currentAgentLoginPage = new ThreadLocal<>();
 
@@ -24,6 +30,10 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
     private static ThreadLocal<AgentHomePage> secondAgentHomePage = new ThreadLocal<>();
 
     public static Faker faker = new Faker();
+
+    private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
+
+    protected List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -54,7 +64,6 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         }
         return mainAgentLoginPage.get();
     }
-
 
     public static void setCurrentLoginPage(AgentLoginPage loginPage) {
         currentAgentLoginPage.set(loginPage);
@@ -142,4 +151,37 @@ public class AbstractAgentSteps implements JSHelper, DateTimeHelper, Verificatio
         secondAgentHomePage.remove();
     }
 
+    protected String getUserName(String userFrom){
+        if(userFrom.contains("first chat")){
+            return createdChatsViaDotControl.get(0).getInitContext().getFullName();
+        }
+        if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
+            return socialaccounts.TwitterUsers.getLoggedInUserName();
+        }
+        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
+            return socialaccounts.FacebookUsers.getLoggedInUserName();
+        }
+        if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
+                !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
+            return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+        }
+        return "";
+    }
+
+    public synchronized void saveClientIDValue(String userFrom){
+        if (userFrom.equalsIgnoreCase("facebook"))
+            clientIDGlobal.set(socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString());
+        else if (userFrom.equalsIgnoreCase("twitter"))
+            clientIDGlobal.set(socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId());
+        else if (userFrom.equalsIgnoreCase("dotcontrol"))
+            clientIDGlobal.set(DotControlSteps.getClientId());
+        else
+            clientIDGlobal.set(getAgentHomePage("main").getCustomer360Container().getUserFullName());
+        DotControlSteps.setChatIDTranscript(ApiHelper
+                .getActiveSessionByClientId(clientIDGlobal.get()).get("conversationId").toString());
+    }
+
+    public static String getClientIDGlobal(){
+        return clientIDGlobal.get();
+    }
 }

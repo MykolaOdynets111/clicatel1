@@ -13,13 +13,14 @@ import datamanager.jacksonschemas.CRMTicket;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
+import emailhelper.GmailConnector;
 import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
 import javaserver.Server;
 import mc2api.ApiHelperPlatform;
-import mc2api.PortalAuthToken;
+import mc2api.auth.PortalAuthToken;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -30,6 +31,7 @@ import org.openqa.selenium.logging.LogType;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
+import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
@@ -128,10 +130,10 @@ public class Hooks implements JSHelper {
             ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
 
-        if(scenario.getSourceTagNames().contains("@new_agent")){
-            newAgent();
+        if(scenario.getSourceTagNames().contains("@new_agent") && scenario.isFailed()) {
+            new BasePortalSteps().createNewAgent("existed",
+                    MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
         }
-
 
         finishAgentFlowIfExists(scenario);
 
@@ -188,6 +190,7 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@chat_transcript")){
+            GmailConnector.cleanMailObjects();
             String tenantOrgName = Tenants.getTenantUnderTestOrgName();
             String contactEmail = ApiHelper.getTenantInfoMap(tenantOrgName).get("contactEmail");
             ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + contactEmail + "\"");
@@ -337,7 +340,7 @@ public class Hooks implements JSHelper {
             AgentHomePage agentHomePage = new AgentHomePage(agent);
             ApiHelper.closeActiveChats(agent);
             //            ApiHelper.logoutTheAgent(Tenants.getTenantUnderTestOrgName()); commented out because API not working now
-            agentHomePage.getPageHeader().logOut(agent);
+            agentHomePage.getPageHeader().logOut();
             new AgentLoginPage(agent).waitForLoginPageToOpen(agent);
         } catch(WebDriverException|AssertionError|NoSuchElementException e){
         }

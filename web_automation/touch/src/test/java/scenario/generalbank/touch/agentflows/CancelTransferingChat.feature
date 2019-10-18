@@ -1,6 +1,5 @@
-Feature: Transferring chat
+Feature: Canceling chat transfer
 
-  Verification of basic transfer chat functionality
 
   Background:
     Given User select General Bank Demo tenant
@@ -15,10 +14,9 @@ Feature: Transferring chat
     When First Agent click on new conversation
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming transfer" header
-    And Second agent can see transferring agent name, user name and following user's message: 'connect to agent'
     When First Agent click 'Cancel transfer' button
     Then Second agent has not see incoming transfer pop-up
     Then Conversation area becomes active with connect to agent user's message in it for first agent
     When First agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'connect to agent' input
+    Then User should see 'hello' text response for his 'connect to agent' input
 

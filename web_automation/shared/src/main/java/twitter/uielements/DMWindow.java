@@ -6,23 +6,23 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(xpath = "//div[@aria-labelledby='modal-header']")
+@FindBy(xpath = "//section[@aria-labelledby='detail-header']")
 public class DMWindow extends AbstractUIElement {
 
     private String cssLocatorDMInputfield = "div#tweet-box-dm-conversation";
-    private String xpathLocatorDMInputfield = "//div[@aria-label='Tweet text']";
-    private String deleteConversationConfirmButton = "button#confirm_dialog_submit_button";
-    private String sendButtonXpath = "//span[text()='Tweet']";
+    private String xpathLocatorDMInputfield = "//div[@class='DraftEditor-editorContainer']/div";
+    private String leaveConversationConfirmButton = "//span[text()='Leave']";
+    private String sendButtonXpath = "//div[@aria-label='Send']";///div[@dir='auto']/svg
 
 
     @FindBy(xpath = "//span[text()='Tweet']")
     private WebElement sendButton;
 
-    @FindBy(css = "span.Icon--info")
+    @FindBy(xpath = "//a[@aria-label='Conversation info']//div[@dir='auto']")
     private WebElement infoButton;
 
-    @FindBy(xpath = "//button[text()='Delete conversation']")
-    private WebElement deleteConversationButton;
+    @FindBy(xpath = "//span[text()='Leave conversation']")
+    private WebElement leaveConversationButton;
 
     @FindBy(xpath = "//li[contains(@class, 'DirectMessage--sent')]//p[contains(@class, 'tweet-text')]")
     private List<WebElement> userMessages;
@@ -32,17 +32,18 @@ public class DMWindow extends AbstractUIElement {
 
 
     public void sendUserMessage(String message){
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(),xpathLocatorDMInputfield,5);
         findElemByXPATH(this.getCurrentDriver(), xpathLocatorDMInputfield).sendKeys(message);
         findElemByXPATH(this.getCurrentDriver(), sendButtonXpath).click();
     }
 
     public void deleteConversation(){
         infoButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), deleteConversationButton, 5);
-        deleteConversationButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), findElemByCSS(this.getCurrentDriver(), deleteConversationConfirmButton), 5);
-        findElemByCSS(this.getCurrentDriver(), deleteConversationConfirmButton).click();
-        waitForElementToBeInvisible(this.getCurrentDriver(), findElemByCSS(this.getCurrentDriver(), deleteConversationConfirmButton), 2);
+        waitForElementToBeVisible(this.getCurrentDriver(), leaveConversationButton, 5);
+        leaveConversationButton.click();
+        waitForElementToBeVisible(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), leaveConversationConfirmButton), 5);
+        findElemByXPATH(this.getCurrentDriver(), leaveConversationConfirmButton).click();
+        waitForElementToBeInvisible(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), leaveConversationConfirmButton), 2);
     }
 
     public void closeDMWindow(){

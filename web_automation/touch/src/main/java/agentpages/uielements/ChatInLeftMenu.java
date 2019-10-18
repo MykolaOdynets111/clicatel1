@@ -1,19 +1,15 @@
 package agentpages.uielements;
 
+import abstractclasses.AbstractWidget;
 import apihelper.ApiHelperTie;
-import interfaces.ActionsHelper;
-import interfaces.JSHelper;
-import interfaces.WebActionsDeprecated;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.Widget;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
 
-public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, ActionsHelper, JSHelper {
+public class ChatInLeftMenu extends AbstractWidget {
 
     @FindBy(css = "div.profile-img")
     private WebElement userIcon;
@@ -35,15 +31,13 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
         return adapterIcon;
     }
 
-    @FindAll({
-        @FindBy(xpath = "//div[contains(@class,'context-info')]//span[contains(@class,'icon svg-icon-webchat')]/*"),
-        @FindBy(xpath = "//span[contains(@class,'http-icon')]//span/*"),
-        @FindBy(xpath = "//span[contains(@class,'http-icon')]/span[contains(@class,'icon icon')]")
-    })
+    @FindBy(xpath = ".//div[@class='icons']/span[contains(@class,'icon')][child::*]/*")
     private WebElement adapterIcon;
 
     @FindBy( css = "span.icon.svg-icon-flagged")
     private WebElement flagIcon;
+
+    private String flagIconCss =  "span.icon.svg-icon-flagged";
 
     @FindBy(xpath = "//div[@class='profile-img']//div[@class='empty-icon no-border']")
     private WebElement usercImg;
@@ -58,11 +52,15 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
 
     public ChatInLeftMenu(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
+    }
+
+    public ChatInLeftMenu setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
     }
 
     public void openConversation() {
-        waitForElementToBeClickableAgent(userIcon, 6, "main");
+        waitForElementToBeClickable(this.getCurrentDriver(), userIcon, 6);
         userIcon.click();
     }
 
@@ -80,14 +78,14 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
 
     public boolean isValidImg(String adapter) {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/" + adapter + ".png");
-          return isWebElementEqualsImage(adapterIcon,image, "main");
+          return isWebElementEqualsImage(this.getCurrentDriver(), adapterIcon,image);
     }
 
 
     public boolean isValidIconSentiment(String message){
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
         File image =new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/"+sentiment+".png");
-        return isWebElementEqualsImage(userSentiment,image, "main");
+        return isWebElementEqualsImage(this.getCurrentDriver(), userSentiment, image);
     }
 
     public String getChatsChannel(){
@@ -105,22 +103,22 @@ public class ChatInLeftMenu extends Widget implements WebActionsDeprecated, Acti
     }
 
     public boolean isOvernightTicketIconShown(){
-        return  isElementExistsInDOMAgentCss(overnightTicketIcon, 10, "main");
+        return  isElementExistsInDOMCss(this.getCurrentDriver(), overnightTicketIcon, 10);
     }
 
     public boolean isFlagIconShown(){
-        return isElementShownAgent(flagIcon, 10, "main");
+        return isElementShown(this.getCurrentDriver(), flagIcon, 10);
     }
 
     public boolean isFlagIconRemoved(){
-        return isElementNotShown(flagIcon, 1);
+        return isElementRemoved(this.getCurrentDriver(), findElemByCSS(this.getCurrentDriver(), flagIconCss), 3);
     }
 
     public boolean isProfileIconNotShown(){
-        return isElementNotShown(usercImg, 1);
+        return isElementRemoved(this.getCurrentDriver(), usercImg, 3);
     }
 
     public boolean isOvernightTicketRemoved(){
-        return isElementNotShownAgentByCSS(overnightTicketIcon, 9);
+        return isElementRemovedByCSS(this.getCurrentDriver(), overnightTicketIcon, 9);
     }
 }

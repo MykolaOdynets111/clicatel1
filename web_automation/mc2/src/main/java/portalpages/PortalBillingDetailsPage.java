@@ -1,13 +1,15 @@
 package portalpages;
 
-import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.Keys;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portaluielem.AddPaymentMethodWindow;
-import portaluielem.BillingContactsDetails;
+import portaluielem.billingdetails.BillingContactsDetails;
 import portaluielem.TopUpBalanceWindow;
+import portaluielem.billingdetails.PaymentMethod;
+
+import java.util.List;
 
 
 public class PortalBillingDetailsPage extends PortalAbstractPage {
@@ -19,16 +21,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     private WebElement addPaymentMethodButton;
 
     @FindBy(css = "div.payment-method")
-    private WebElement addedPayment;
-
-    @FindBy(css = "div.dashboard-step-content")
-    private WebElement paymentMethodDetails;
-
-    @FindBy(css = "div.payment-method button")
-    private WebElement managePaymentMethodButton;
-
-    @FindBy(xpath = "//button[text()='Accept']")
-    private WebElement removePaymentConfirmationButton;
+    private List<WebElement> addedPayments;
 
     @FindBy(xpath = "//header//button[@ng-click='topUpBalance()']")
     private WebElement topUpBalanceButton;
@@ -39,7 +32,6 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
 
     private TopUpBalanceWindow topUpBalanceWindow;
 
-    private String removePaymentButton =  "//button[@ng-click='removeCard()']";
 
     // == Constructors == //
 
@@ -80,32 +72,45 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), getAddPaymentMethodWindow().getWrappedElement(), wait);
     }
 
+    @Step(value = "Click 'Add Payment Method' button")
     public void clickAddPaymentButton(){
-        addPaymentMethodButton.click();
+        clickElem(this.getCurrentDriver(), addPaymentMethodButton, 3, "Add Payment Method");
     }
 
-    public boolean isNewPaymentAdded() {
-        waitWhileProcessing(14, 20);
-        waitForNotificationAlertToDisappear();
-        return isElementShown(this.getCurrentDriver(), addedPayment, 20);
-    }
 
-    public String getPaymentMethodDetails(){ return paymentMethodDetails.getText();}
-
-    public void deletePaymentMethod(){
-        managePaymentMethodButton.click();
-        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), removePaymentButton, 12);
+    public PaymentMethod getTargetPaymentMethod(String cartHolder){
         try{
-            findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
-        } catch(InvalidElementStateException e){
-            waitFor(200);
-            findElemByXPATH(this.getCurrentDriver(), removePaymentButton).sendKeys(Keys.ENTER);
-
+            return addedPayments.stream().map(e -> new PaymentMethod(e).setCurrentDriver(this.getCurrentDriver()))
+                    .filter(e -> e.getCartHolder().equals(cartHolder))
+                    .findFirst().orElseGet(null);
+        }catch (NullPointerException e){
+            return null;
         }
-        if(isElementShown(this.getCurrentDriver(), removePaymentConfirmationButton, 3))
-            removePaymentConfirmationButton.click();
-
     }
+
+    @Step(value = "Verify the payment present on the Billing & payments > Payments page")
+    public boolean isPaymentShown(String cartHolder, int wait){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
+        PaymentMethod payment = getTargetPaymentMethod(cartHolder);
+        for(int i =0; i<wait; i++){
+            if(payment!=null) return true;
+            else{
+                waitFor(5000);
+                this.getCurrentDriver().navigate().refresh();
+                waitWhileProcessing(this.getCurrentDriver(), 2, 5);
+                areElementsShown(this.getCurrentDriver(), addedPayments, 5);
+                payment = getTargetPaymentMethod(cartHolder);
+            }
+        }
+        return false;
+    }
+
+   @Step(value = "Click 'Manage' button")
+   public void clickManageButton(String cartHolder){
+       getTargetPaymentMethod(cartHolder).clickManage();
+   }
+
 
     public void clickTopUPBalance(){
         clickElem(this.getCurrentDriver(), topUpBalanceButton, 5,  "'Top up balance' button" );

@@ -8,7 +8,7 @@ import driverfactory.URLs;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import mc2api.PortalAuthToken;
+import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
 
 import java.util.Comparator;
@@ -78,7 +78,9 @@ public class ApiHelperTie {
     }
 
     public static String getTIESentimentOnMessage(String userMessage){
-        Response resp = RestAssured.get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
+        Response resp = RestAssured.given()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
+                .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().get("sentiment_verdict");
     }
 

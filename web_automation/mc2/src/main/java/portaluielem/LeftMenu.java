@@ -1,6 +1,7 @@
 package portaluielem;
 
 import abstractclasses.AbstractUIElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -31,7 +32,9 @@ public class LeftMenu extends AbstractUIElement {
         activeLeftMenuItems.stream().filter(e -> e.getText().equalsIgnoreCase(itemName)).findFirst().get().click();
     }
 
+    @Step(value = "Navigate in Left menu")
     public void navigateINLeftMenuWithSubmenu(String menuItem, String subMenuItem){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
         waitForElementsToBeVisible(this.getCurrentDriver(), launchpadMenuItems, 5);
         WebElement elem = activeLeftMenuItems
                 .stream().filter(e -> e.getText().equalsIgnoreCase(menuItem)).findFirst().get();
@@ -62,5 +65,9 @@ public class LeftMenu extends AbstractUIElement {
 
     public void clickBackButton(){
         clickElem(this.getCurrentDriver(), backLaunchpadButton, 3, " Back button in left menu");
+    }
+
+    public boolean isBackButtonShown(){
+        return isElementShown(this.getCurrentDriver(), backLaunchpadButton, 3);
     }
 }

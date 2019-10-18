@@ -1,15 +1,24 @@
 package testflo;
 
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.config.HttpClientConfig;
+import io.restassured.config.RestAssuredConfig;
+import org.apache.http.params.CoreConnectionPNames;
+import org.hamcrest.Matchers;
 import testflo.jacksonschemas.AllureScenarioInterface;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import testflo.jacksonschemas.testplansubtasks.ExistedTestCase;
 
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JiraApiHelper {
+
+    private static List<String> errors = new ArrayList<>();
 
 
     public static String copyTestPlan(String testPlan){
@@ -72,8 +81,11 @@ public class JiraApiHelper {
         }
     }
 
-    public static void changeTestCaseStatus(String tcKey, String transitionId){
-        Response resp = RestAssured.given()
+    public static void changeTestCaseStatus (String tcKey, String transitionId) throws SocketTimeoutException {
+        ResponseSpecBuilder resBuilder = new ResponseSpecBuilder();
+        resBuilder.expectResponseTime(Matchers.lessThan(3000l));
+        Response resp =  RestAssured.given()
+                        .config(setTimeouts())
                 .auth().preemptive().basic(JiraUser.USER_EMAIL, JiraUser.USER_PASS)
                 .header("Content-Type", "application/json")
                 .body("{\n" +
@@ -82,6 +94,9 @@ public class JiraApiHelper {
                         "\t} \n" +
                         "}")
                 .post(String.format(JiraEndpoints.MOVE_JIRA_ISSUE, tcKey));
+        if (resp.statusCode()!=204){
+            errors.add("\n\n Status changing for " + tcKey + " failed: " + resp.getBody().asString());
+        }
     }
 
     public static void updateTestCaseDescription(String tcKey, String description){
@@ -91,4 +106,24 @@ public class JiraApiHelper {
                 .body("{\"fields\":{\"description\":\"" + description + "\" } }")
                 .put(JiraEndpoints.JIRA_ISSUE + "/" + tcKey);
     }
+
+    public static int getNextTransitionId(String tcKey){
+        return RestAssured.given()
+                .auth().preemptive().basic(JiraUser.USER_EMAIL, JiraUser.USER_PASS)
+                .header("Content-Type", "application/json")
+                .get(String.format(JiraEndpoints.MOVE_JIRA_ISSUE, tcKey))
+                .getBody().jsonPath().getInt("transitions.id[0]");
+    }
+
+    private static RestAssuredConfig setTimeouts(){
+        return RestAssured.config()
+                .httpClient(HttpClientConfig.httpClientConfig()
+                .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000)
+                .setParam(CoreConnectionPNames.SO_TIMEOUT, 5000));
+    }
+
+    public static List<String> getErrors(){
+        return errors;
+    }
+
 }

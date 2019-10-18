@@ -3,7 +3,6 @@ package agentpages;
 import abstractclasses.AgentAbstractPage;
 import datamanager.Agents;
 import driverfactory.DriverFactory;
-import driverfactory.MC2DriverFactory;
 import driverfactory.URLs;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
@@ -44,25 +43,25 @@ public class AgentLoginPage extends AgentAbstractPage {
        try{
            logIn(agent, ordinalAgentNumber);
        }catch(NoSuchElementException|TimeoutException e){
-           new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut(ordinalAgentNumber);
+           new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut();
            logIn(agent, ordinalAgentNumber);
        }
        return this;
    }
 
    private void logIn(Agents agent, String ordinalAgentNumber){
-       waitForElementToBeVisibleAgent(userNameInput, 5, ordinalAgentNumber);
+       waitForElementToBeVisible(this.getCurrentDriver(),userNameInput, 5);
        userNameInput.sendKeys(agent.getAgentEmail());
        userPassInput.sendKeys(agent.getAgentPass());
        loginButton.click();
    }
 
    public void waitForLoginPageToOpen(String agent) {
-        waitForElementToBeVisibleAgent(loginForm, 6, agent);
+        waitForElementToBeVisible(this.getCurrentDriver(), loginForm, 6);
    }
 
     public String getLoginButtonColor() {
-        waitForElementToBeVisibleAgent(loginButton, 6, "second agent");
+        waitForElementToBeVisible(this.getCurrentDriver(), loginButton, 6);
         return Color.fromString(loginButton.getCssValue("color")).asHex();
     }
 

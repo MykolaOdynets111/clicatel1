@@ -1,12 +1,14 @@
-@start_server
 @no_widget
 @dot_control
 Feature: .Control customer 360
 
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4379")
   Scenario: Viewing .Control customer 360 info and editing it
     Given Create .Control integration for General Bank Demo tenant
     Given I login as agent of General Bank Demo
-    When Send chat to agent message for .Control
+    And Prepare payload for sending chat to agent message for .Control
+    Given Send parameterized init call with clientId context correct response is returned
+    When Send message call
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
     Then Correct dotcontrol client details are shown

@@ -25,6 +25,11 @@ public interface JSHelper {
         ((JavascriptExecutor) driver).executeScript(javaScript, element);
     }
 
+    default String readValueFromInput(WebElement elem, WebDriver driver){
+        JavascriptExecutor exec = (JavascriptExecutor) driver;
+        return (String) exec.executeScript("return arguments[0].value", elem);
+    }
+
     /**
      * Positive offset scroll will scroll element to the bottom, negative - to the top.
      * @author tmytlovych
@@ -76,31 +81,17 @@ public interface JSHelper {
         }
     }
 
-    default void waitForAngularToBeReady(WebDriver driver){
-        JavascriptExecutor jsExec = (JavascriptExecutor) driver;
-        boolean isReady = (boolean) jsExec.executeScript("return (window.angular !== undefined) && (angular.element(document.body).injector() !== undefined) && (angular.element(document.body).injector().get('$http').pendingRequests.length === 0);");
-        for(int i=0; i<20; i++){
-            if(isReady) break;
-            else{
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                isReady = (boolean) jsExec.executeScript("return (window.angular !== undefined) && (angular.element(document.body).injector() !== undefined) && (angular.element(document.body).injector().get('$http').pendingRequests.length === 0);");
-            }
-        }
-    }
+
 
     default void executeAngularClick(WebDriver driver, WebElement elem){
         JavascriptExecutor jsExec = (JavascriptExecutor) driver;
 //        jsExec.executeScript("angular.element(arguments[0]).click();", elem);
         jsExec.executeScript("angular.element(arguments[0]).triggerHandler('click')", elem);
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(200);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     default void executeClickInElemListWithWait(WebDriver driver, List<WebElement> list, String item){

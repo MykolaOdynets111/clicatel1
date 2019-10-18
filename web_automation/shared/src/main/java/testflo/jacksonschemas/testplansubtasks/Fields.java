@@ -28,7 +28,7 @@ public class Fields {
 
     @JsonProperty("summary")
     public String getSummary() {
-        return summary;
+        return summary.trim();
     }
 
     @JsonProperty("summary")

@@ -59,7 +59,6 @@ public class DriverFactory {
     }
 
     public static  WebDriver getDriverForAgent(String agent){
-        System.out.println("!! inside getDriverForAgent \n");
         if (agent.equalsIgnoreCase("second agent")){
             return DriverFactory.getSecondAgentDriverInstance();
         } else {
@@ -67,13 +66,7 @@ public class DriverFactory {
         }
     }
 
-    public static WebDriver getPortalDriverInstance(){
-        if (portalDriver.get() != null)
-            return portalDriver.get();
-        return startNewPortalDriverInstance();
-    }
-
-    public static WebDriver startNewTouchInstance(){
+    public static synchronized WebDriver startNewTouchInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {
@@ -85,7 +78,7 @@ public class DriverFactory {
     }
 
 
-    public static WebDriver startNewAgentDriverInstance(){
+    public static synchronized WebDriver startNewAgentDriverInstance(){
         System.out.println("!!?? INSIDE startNewAgentDriverInstance");
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
@@ -97,7 +90,7 @@ public class DriverFactory {
         return agentDriver.get();
     }
 
-    public static WebDriver startNewSecondAgentDriverInstance(){
+    public static synchronized WebDriver startNewSecondAgentDriverInstance(){
         DriverType driverType = ConfigManager.getDriverType();
         MutableCapabilities capabilities = driverType.getDesiredCapabilities();
         if (ConfigManager.isRemote()) {

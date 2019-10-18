@@ -29,7 +29,6 @@ dependencies {
         compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
         compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'
-
 }
 
 
@@ -126,6 +125,13 @@ task runPullRequestTests(type:Test){
     doLast {
         runTouchPullRequestTests.execute()
         runVisibilityTests.execute()
+    }
+}
+
+task runPullRequestTestsDev(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath+tenantName+"/pullrequest.xml"
     }
 }
 
@@ -234,6 +240,10 @@ task runTests(type: Test) {
 
     if(suite=="pullrequest") {
         runTests.dependsOn(runPullRequestTests)
+    }
+
+    if(suite=="pullrequest_dev") {
+        runTests.dependsOn(runPullRequestTestsDev)
     }
 
     if(suite=="widgetonly") {

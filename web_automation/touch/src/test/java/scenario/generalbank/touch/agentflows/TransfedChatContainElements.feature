@@ -14,12 +14,9 @@ Feature: Transferring chat, user info
     When First Agent click on new conversation
     When Agent click on 'Transfer' chat
     Then Transfer chat pop up appears
-    When Click on 'Transfer' button in pop-up
-    Then 'Transfer to' fields highlighted red color
-    And  'Note' fields highlighted red color
     When Agent select an agent in 'Transfer to' drop down
-    And  Click on 'Transfer' button in pop-up
-    Then 'Note' fields highlighted red color
+    Then Agent notes field is appeared
+    And Agent sees error message 'Notes are required when specific agent is selected.'
     When Complete 'Note' field
     And  Click on 'Transfer' button in pop-up
     Then Second agent receives incoming transfer with "Incoming transfer" header

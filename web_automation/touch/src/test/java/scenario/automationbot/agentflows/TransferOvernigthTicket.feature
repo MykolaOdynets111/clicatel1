@@ -12,14 +12,14 @@ Feature: Transfer overnight ticket
   Scenario: Verify transfer overnight ticket(Chat desk)
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
-    And Agent sees 'overnight' icon in this chat
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with chat to agent user's message
     And Message that it is overnight ticket is shown for Agent
-    And Conversation area contains out_of_support_hours to user message
     Given I login as second agent of Automation Bot
     And Agent transfers overnight ticket
     And Second Agent select "Tickets" filter option
     Then Second Agent has new conversation request
     When Second agent click on new conversation
     And Message that it is overnight ticket is shown for Second Agent
+    And First Agent of General Bank Demo is logged in
+    And First agent should not see from user chat in agent desk

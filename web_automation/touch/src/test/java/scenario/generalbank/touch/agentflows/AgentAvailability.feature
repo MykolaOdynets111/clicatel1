@@ -13,13 +13,13 @@ Feature: Agent availability
     When Agent click on new conversation
     Then Conversation area becomes active with chat to support user's message
     When Agent responds with hello to User
-    Then User have to receive 'hello' text response for his 'chat to support' input
+    Then User should see 'hello' text response for his 'chat to support' input
     When Agent closes chat
     Then Agent should not see from user chat in agent desk
-    Then User have to receive 'exit' text response as a second response for his 'chat to support' input
+    Then User should see 'exit' text response for his 'chat to support' input
     When Agent changes status to: Unavailable
     And User enter connect to agent into widget input field
-    Then User have to receive 'agents_away' text response for his 'connect to agent' input
+    Then User should see 'agents_away' text response for his 'connect to agent' input
     Then Agent should not see from user chat in agent desk
     When Agent changes status to: Available
     Then Agent has new conversation request

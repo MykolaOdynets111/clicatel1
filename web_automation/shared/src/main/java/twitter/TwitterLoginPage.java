@@ -46,6 +46,9 @@ public class TwitterLoginPage extends AbstractSocialPage {
     @FindBy(css = "input#email_challenge_submit")
     private WebElement submitVerification;
 
+    @FindBy(css = "form#login-challenge-form")
+    private WebElement loginChallengeForm;
+
     @FindAll({
             @FindBy(css = "a.StaticLoggedOutHomePage-buttonLogin"),
             @FindBy(css = "a[href='/login']"),
@@ -72,15 +75,21 @@ public class TwitterLoginPage extends AbstractSocialPage {
             logInButton.click();
             waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), emailInputOnSeparatePageXPATH, 4);
             findElemByXPATH(this.getCurrentDriver(),emailInputOnSeparatePageXPATH)
-                    .sendKeys(TwitterUsers.FIRST_USER.getTwitterUserEmail());
-            findElemByXPATH(this.getCurrentDriver(), passInputFieldOnSeparatePageXPATH).sendKeys(TwitterUsers.FIRST_USER.getTwitterUserPass());
+                    .sendKeys(TwitterUsers.THIRD_USER.getTwitterUserEmail());
+            findElemByXPATH(this.getCurrentDriver(), passInputFieldOnSeparatePageXPATH)
+                    .sendKeys(TwitterUsers.THIRD_USER.getTwitterUserPass());
             findElemByXPATH(this.getCurrentDriver(), loginButtonOnSeparatePageXPATH).click();
         } else {
-            emailInputField.sendKeys(TwitterUsers.FIRST_USER.getTwitterUserEmail());
-            passInputField.sendKeys(TwitterUsers.FIRST_USER.getTwitterUserPass());
+            emailInputField.sendKeys(TwitterUsers.THIRD_USER.getTwitterUserEmail());
+            passInputField.sendKeys(TwitterUsers.THIRD_USER.getTwitterUserPass());
             loginButton.click();
         }
-        TwitterUsers.setLoggedInUser(TwitterUsers.FIRST_USER);
+        if(isElementShown(this.getCurrentDriver(), loginChallengeForm, 2)){
+            findElemByCSS(this.getCurrentDriver(), filedForTelefonVerification)
+                    .sendKeys(TwitterUsers.THIRD_USER.getUserPhone());
+            loginChallengeForm.submit();
+        }
+        TwitterUsers.setLoggedInUser(TwitterUsers.THIRD_USER);
         waitForElementToBeVisible(this.getCurrentDriver(), profileButton, 10);
         return this;
     }

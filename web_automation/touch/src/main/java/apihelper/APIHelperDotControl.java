@@ -8,7 +8,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import javaserver.Server;
-import mc2api.PortalAuthToken;
+import mc2api.auth.PortalAuthToken;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -52,15 +52,16 @@ public class APIHelperDotControl {
         }
     }
 
-    public static Response createIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo){
-        PortalAuthToken.clearAccessTokenForPortalUser();
+
+
+    public static Response updateIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo, String apiToken){
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channels\": [\n" +
                         "    {\n" +
-                        "      \"apiKey\": \"\",\n" +
+                        "      \"apiKey\": \""+apiToken+"\",\n" +
                         "      \"name\": \"" + newIntegrationInfo.getName() + "\",\n" +
                         "      \"enabled\":" + newIntegrationInfo.getIsEnabled() + ",\n" +
                         "      \"url\": \"" + newIntegrationInfo.getCallBackURL() + "\",\n" +

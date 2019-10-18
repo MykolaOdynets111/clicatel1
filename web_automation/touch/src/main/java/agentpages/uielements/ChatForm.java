@@ -1,6 +1,6 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 @FindBy(css = "div.chat-form")
-public class ChatForm extends AbstractUIElementDeprecated {
-
-    private String currentAgent;
+public class ChatForm extends AbstractUIElement {
 
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
     private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
@@ -51,13 +49,9 @@ public class ChatForm extends AbstractUIElementDeprecated {
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
-    public void setCurrentAgent(String agent){
-        this.currentAgent = agent;
-    }
-
     public boolean isSuggestionFieldShown() {
         try {
-            return isElementShownAgentByCSS(suggestionInputFieldCSS, 5, "main agent");
+            return isElementShownByCSS(this.getCurrentDriver(), suggestionInputFieldCSS, 5);
         } catch (NoSuchElementException e) {
             return false;
         }
@@ -69,7 +63,7 @@ public class ChatForm extends AbstractUIElementDeprecated {
 
     public boolean isSuggestionContainerDisappears(){
         try {
-            waitForElementToBeInvisibleAgent(suggestionInputField,10);
+            waitForElementToBeInvisible(this.getCurrentDriver(), suggestionInputField,10);
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -77,20 +71,20 @@ public class ChatForm extends AbstractUIElementDeprecated {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-        suggestionInputFieldContainer.click();
+//        suggestionInputFieldContainer.click();
         clearAndSendResponseToUser(message);
     }
 
     public String getTextFromMessageInputField(){
-        waitForElementToBeVisibleByXpathAgent(messageInputLocator, 1, this.currentAgent);
-        moveToElemAndClick(DriverFactory.getDriverForAgent(this.currentAgent), findElemByXPATHAgent(messageInputLocator, this.currentAgent));
-        waitForElementToBeClickableAgent(messageInput, 4, this.currentAgent);
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 1);
+        moveToElemAndClick(this.getCurrentDriver(), findElemByXPATH(this.getCurrentDriver(), messageInputLocator));
+        waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
         return messageInput.getText();
     }
 
     public void addMoreInfo(String additionalMessage){
         try {
-            waitForElementToBeVisible(suggestionInputFieldContainer,6);
+            waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputFieldContainer,6);
             suggestionInputFieldContainer.click();
             messageInput.sendKeys(additionalMessage);
         } catch (StaleElementReferenceException e) {
@@ -99,17 +93,21 @@ public class ChatForm extends AbstractUIElementDeprecated {
     }
 
     public void clearAndSendResponseToUser(String response){
-        waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.currentAgent);
-        moveToElemAndClick(DriverFactory.getDriverForAgent(this.currentAgent), findElemByXPATHAgent(messageInputLocator, this.currentAgent));
-        waitForElementToBeClickableAgent(messageInput, 4, this.currentAgent);
-        messageInput.clear();
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
+        if(isElementShown(this.getCurrentDriver(), suggestionInputField, 2)){
+            waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputField, 4);
+            moveAndClickByOffset(this.getCurrentDriver(), suggestionInputField, 10, 10);
+            waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
+            messageInput.click();
+            messageInput.clear();
+        }
         int symbolsNumber = messageInput.getText().length();
         if(symbolsNumber>0) {
-            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.chord(Keys.CONTROL,"A", Keys.DELETE));
+            findElemByXPATH(this.getCurrentDriver(), messageInputLocator).sendKeys(Keys.chord(Keys.CONTROL,"A", Keys.DELETE));
         }
         int symbolsNumber2 = messageInput.getText().length();
         while (symbolsNumber2>0 && symbolsNumber2<10) {
-            findElemByXPATHAgent(messageInputLocator, this.currentAgent).sendKeys(Keys.BACK_SPACE);
+            findElemByXPATH(this.getCurrentDriver(), messageInputLocator).sendKeys(Keys.BACK_SPACE);
             symbolsNumber2 = messageInput.getText().length();
         }
         sendResponseToUser(response);
@@ -117,7 +115,7 @@ public class ChatForm extends AbstractUIElementDeprecated {
 
     public ChatForm sendResponseToUser(String responseToUser) {
         try {
-            waitForElementToBeClickableAgent(messageInput, 5,  this.currentAgent);
+            waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 5);
             messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
@@ -129,16 +127,16 @@ public class ChatForm extends AbstractUIElementDeprecated {
     }
 
     public void clickSendButton() {
-        clickElemAgent(submitMessageButton, 2, this.currentAgent, "Send Message");
+        clickElem(this.getCurrentDriver(), submitMessageButton, 2, "Send Message");
     }
 
     public boolean isMessageInputFieldEmpty(){
-        waitForElementToBeVisible(messageInput);
+        waitForElementToBeVisible(this.getCurrentDriver(), messageInput, 3);
         boolean result = false;
         for(int i=0; i<3; i++){
             result = messageInput.getText().equals("");
             if (result) return true;
-            waitForDeprecated(1000);
+            waitFor(1000);
         }
         return result;
     }
@@ -148,40 +146,40 @@ public class ChatForm extends AbstractUIElementDeprecated {
     }
 
     public boolean isClearButtonShown(){
-        return isElementShownAgent(clearButton,10);
+        return isElementShown(this.getCurrentDriver(),clearButton,10);
     }
 
     public void clickClearButton(){
-        clickElemAgent(clearButton, 2, this.currentAgent, "Clear suggestion");
+        clickElem(this.getCurrentDriver(), clearButton, 2, "Clear suggestion");
     }
 
     public boolean isEditButtonShown(){
-        return isElementShownAgent(editButton,10);
+        return isElementShown(this.getCurrentDriver(), editButton,10);
     }
 
     public void clickEditButton(){
-        clickElemAgent(editButton, 2, this.currentAgent, "Edit suggestion");
+        clickElem(this.getCurrentDriver(), editButton, 2,"Edit suggestion");
     }
 
-    public boolean isSendEmailForOvernightTicketMessageShown(){ return isElementEnabledAgent(overnightTicketSendEmail, 3, this.currentAgent); }
+    public boolean isSendEmailForOvernightTicketMessageShown(){ return isElementEnabled(this.getCurrentDriver(), overnightTicketSendEmail, 3); }
 
-    public boolean isOvernightTicketMessageShown(){ return isElementShownAgent(overnightTicketLable, 3, this.currentAgent); }
+    public boolean isOvernightTicketMessageShown(){ return isElementShown(this.getCurrentDriver(), overnightTicketLable, 3); }
 
     public String getPlaceholderFromInputLocator(){
-        waitForElementToBeVisibleByXpathAgent(messageInputLocator, 5, this.currentAgent);
-        return findElemByXPATHAgent(messageInputLocator, this.currentAgent).getAttribute("placeholder");
+        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
+        return findElemByXPATH(this.getCurrentDriver(), messageInputLocator).getAttribute("placeholder");
     }
 
     public void clickEmoticonButton(){
-        clickElemAgent(emoticonButton, 2, this.currentAgent,"Emoticon button in chatdesk");
-        waitForElementToBeVisibleAgent(emojiMart, 2, this.currentAgent);
+        clickElem(this.getCurrentDriver(), emoticonButton, 2,"Emoticon button in chatdesk");
+        waitForElementToBeVisible(this.getCurrentDriver(), emojiMart, 2);
     }
 
     public String selectRandomFrequentlyUsedEmoji(){
         Random generator = new Random();
         WebElement emoji = frequetlyUsedEmojis.get(generator.nextInt(frequetlyUsedEmojis.size()-1));
         String emojiText = emoji.getAttribute("aria-label").split(",")[0].trim();
-        clickElemAgent(emoji, 2, this.currentAgent, emojiText + " emoji");
+        clickElem(this.getCurrentDriver(), emoji, 2, emojiText + " emoji");
         return emojiText;
     }
 }

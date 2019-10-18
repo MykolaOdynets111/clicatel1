@@ -15,5 +15,5 @@ Feature: Tenant with Starter plan should be able to have only 1 logged in agent
     When Try to login as second agent of SignedUp AQA
     Then Agent limit reached popup is show for second agent
     When Agent replays with Hi, how can I help you? message
-    Then User have to receive 'Hi, how can I help you?' text response for his 'connect to agent' input
+    Then User should see 'Hi, how can I help you?' text response for his 'connect to agent' input
 

@@ -7,7 +7,7 @@ version '1.0-SNAPSHOT'
 
 def allureVersion = "2.12.1"
 def suite = "all"
-def baseXmlPath = "/src/test/resources/"
+def baseXmlPath = "/src/test/resources/xmls"
 
 
 allure {
@@ -24,7 +24,7 @@ allure {
 dependencies {
     compile project(':shared')
     compile group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
-//    compile group: 'io.github.sskorol', name: 'test-data-supplier', version: '1.7.0'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 
 }
 
@@ -45,17 +45,23 @@ task copyConfig(type: Copy) {
 task runAcceptanceTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "/acceptance.xml"
+        suites baseXmlPath + "/ui/acceptance.xml"
     }
 }
 
 task runApiTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
-        suites baseXmlPath + "/apiexample.xml"
+        suites baseXmlPath + "/api/api.xml"
     }
 }
 
+task rundbTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/dbtest.xml"
+    }
+}
 
 // =============== !! MAIN TASK !! ============== //
 
@@ -69,6 +75,10 @@ task runTests(type:Test) {
 
     if(suite == "api") {
         runTests.dependsOn(runApiTests)
+    }
+
+    if(suite == "db") {
+        runTests.dependsOn(rundbTests)
     }
 
     runTests.finalizedBy(copyConfig)

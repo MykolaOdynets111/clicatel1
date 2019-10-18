@@ -1,5 +1,5 @@
 @smoke
-Feature: User on his demand should be redirected on the agent
+Feature: Chat desk: Default placeholders and tips
 
   Verification of basic placeholders in chatdesk
 

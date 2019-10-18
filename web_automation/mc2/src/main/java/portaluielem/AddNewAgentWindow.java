@@ -21,7 +21,7 @@ public class AddNewAgentWindow extends BasePortalWindow {
         lastNameInput.sendKeys(lastName);
         emailInput.sendKeys(email);
 
-        clickPrimaryBindingButton("main", "Add Agent users");
+        clickPrimaryBindingButton("Add Agent users");
     }
 
 }

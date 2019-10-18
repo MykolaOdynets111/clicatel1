@@ -1,12 +1,12 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-@FindBy(xpath = "//div[text()='Delete Note']/parent::div")
-public class DeleteCRMConfirmationPopup extends AbstractUIElementDeprecated {
+@FindBy(xpath = "//h4[text()='Delete Note']/ancestor::div[@class='modal-dialog']")
+public class DeleteCRMConfirmationPopup extends AbstractUIElement {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
@@ -17,17 +17,17 @@ public class DeleteCRMConfirmationPopup extends AbstractUIElementDeprecated {
     private WebElement deleteButton;
 
     public void clickCancel() {
-        clickElemAgent(cancelButton, 3, "main agent", "'Cancel' deleting CRM button" );
-        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
+        clickElem(this.getCurrentDriver(), cancelButton, 3,"'Cancel' deleting CRM button" );
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
     public void clickDelete() {
-        clickElemAgent(deleteButton, 3, "main agent", "'Cancel' deleting CRM button" );
-        waitForElementsToBeInvisibleByXpathAgent(overlappedPage, 7, "main agent");
+        clickElem(this.getCurrentDriver(), deleteButton, 3,"'Cancel' deleting CRM button" );
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
     public boolean isOpened(){
-        return isElementShownAgent(this.getWrappedElement());
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 3);
     }
 
 }

@@ -27,15 +27,15 @@ public class GDPRWindow extends BasePortalWindow {
         return this;
     }
 
-    @Step(value = "Verify GDPR Privacy Policy link redirected to the correct page")
-    public boolean verifyCorrectnessGDPRLink(String expectedLink){
+    @Step(value = "Get GDPR page link")
+    public String getGDPRLink(){
         String portalWindow = this.getCurrentDriver().getWindowHandle();
         switchDriver(this.getCurrentDriver(), portalWindow);
 
-        boolean result = this.currentDriver.getCurrentUrl().equals(expectedLink);
+        String url = this.currentDriver.getCurrentUrl();
         closeTab(this.getCurrentDriver(), portalWindow);
 
-        return result;
+        return url;
     }
 
 }

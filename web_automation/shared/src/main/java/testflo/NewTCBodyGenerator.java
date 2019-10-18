@@ -79,7 +79,7 @@ public class NewTCBodyGenerator {
              }
          }
 
-         return String.format(newIssueBody, testPlanKey, scenario.getName(),
+         return String.format(newIssueBody, testPlanKey, scenario.getName().replace("\"", "\\\""),
                  scenario.getDescription().replace("null", "").trim(),
                  testTemplateId, testCaseSteps.toString());
      }

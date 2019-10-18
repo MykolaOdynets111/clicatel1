@@ -25,7 +25,7 @@ public class Server {
     public static final String INTERNAL_CI_IP = "172.31.16.120";
     public static final int SERVER_PORT = 5000;
     private static boolean running = true;
-    public static Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
+    public static volatile Map<String, BotMessageResponse> incomingRequests = new HashMap<>();
 
     public static void stopServer(){
         running = false;
@@ -105,10 +105,8 @@ public class Server {
 
             if(t.getRequestMethod().equalsIgnoreCase("post")){
                 incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
-                if (Server.incomingRequests.isEmpty() || !Server.incomingRequests.containsKey(incomingRequest.getClientId())) {
-                    System.out.println("?? Map is empty ?? \n");
-                    Server.incomingRequests.put(incomingRequest.getClientId(), incomingRequest);
-                }
+                Server.incomingRequests.clear();
+                Server.incomingRequests.put(incomingRequest.getClientId(), incomingRequest);
             }
 
         }
@@ -127,7 +125,7 @@ public class Server {
             try {
                 botMessage = mapper.readValue(body, BotMessageResponse.class);
             } catch (IOException e) {
-                Assert.assertTrue(false, "Incorrect schema of response from .Control \n" +"Catched Body "+ body);
+                Assert.fail("Incorrect schema of response from .Control \n" +"Catched Body "+ body);
             }
 
             return botMessage;

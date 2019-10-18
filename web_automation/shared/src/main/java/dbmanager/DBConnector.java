@@ -2,8 +2,12 @@ package dbmanager;
 import org.testng.Assert;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class DBConnector {
 
@@ -81,9 +85,8 @@ public class DBConnector {
     }
 
 
-    public static String getAccountActivationIdFromMC2DB(String env, String accountName) {
+    public static String getAccountActivationIdFromMC2DB(String env, String accountId) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
-        String accountId = getAccountIdFromMC2DB(env, accountName);
 
         String query = "SELECT * FROM "+tableName+".account_activation where account_id = '"+accountId+"';";
         Statement statement = null;
@@ -377,10 +380,15 @@ public class DBConnector {
         return sessionDetails;
     }
 
-    public static int getNumberOfSessionsInConversation(String env, String chatID){
+    public static int getNumberOfSessionsInConversationForLast3Days(String env, String chatID){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> details = new HashMap<>();
-        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"';";
+
+        ZoneId zoneId = TimeZone.getTimeZone("UTC").toZoneId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime nowMinus3Days = LocalDateTime.now(zoneId).minusDays(3);
+        String date = nowMinus3Days.format(formatter);
+        String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"' and ended_date > '"+date+"';";
         Statement statement = null;
         ResultSet results = null;
         int sessionsCount = 0;
@@ -402,7 +410,7 @@ public class DBConnector {
     public static Map<String, String> getChatAgentHistoryDetailsBySessionID(String env, String sessionID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> details = new HashMap<>();
-        String query = "SELECT * FROM "+tableName+".chat_agent_history where session_id = '"+sessionID+"';";
+        String query = "SELECT * FROM "+tableName+".chat_agent_history_active where session_id = '"+sessionID+"';";
         Statement statement = null;
         ResultSet results = null;
         try {
@@ -521,7 +529,26 @@ public class DBConnector {
         return resetId;
     }
 
-
+    public static String getVerificationOTPCode(String env, String account_id, String phone) {
+        String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
+        String query = "SELECT * FROM "+ tableName +".sandbox_number where " +
+                "account_id='"+account_id+"' and deleted=0 and number='"+phone.replace("+", "")+"'";
+        Statement statement = null;
+        ResultSet results = null;
+        String id = null;
+        try {
+            statement = getConnection(env, "mc2").createStatement();
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            id = String.valueOf(results.getInt("verification_code"));
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
 
 //    public static void main(String args[]){
 //        String clientProfileID = DBConnector.getClientProfileID("testing", "camundatest17");

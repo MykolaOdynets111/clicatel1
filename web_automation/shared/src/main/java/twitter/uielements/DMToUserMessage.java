@@ -4,9 +4,11 @@ import abstractclasses.AbstractSocialPage;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
+
 public class DMToUserMessage extends AbstractSocialPage {
 
-    private String toUserTextMessagesXPATH = "//p[text()='%s']//following::li[contains(@class, 'DirectMessage--received')]//p[contains(@class, 'tweet-text')]";
+    private String toUserTextMessagesXPATH = "//section[@aria-labelledby='detail-header']//span[contains(text(),'%s')]//ancestor::div[not(@class) and not(@style)]/following::div//span";
+
 
     public DMToUserMessage(WebDriver driver) {
         super(driver);
@@ -14,16 +16,16 @@ public class DMToUserMessage extends AbstractSocialPage {
 
     public String getMessageText(String userMessage) {
         try{
-            return findElemsByXPATH(this.getCurrentDriver(),String.format(toUserTextMessagesXPATH, userMessage)).get(0).getText();
-        } catch (IndexOutOfBoundsException e) {
-            return "no text response found";
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), String.format(toUserTextMessagesXPATH, userMessage), 5);
+            return findElemByXPATH(this.getCurrentDriver(), String.format(toUserTextMessagesXPATH, userMessage)).getText();
+        } catch (TimeoutException e) {
+            return "Exeption:no text response found";
         }
     }
 
     public boolean isTextResponseShown(String message, int wait) {
         try{
-            waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), String.format(toUserTextMessagesXPATH, message), wait);
-//            waitForElementsToBeVisible(toUserTextMessages, wait);
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), String.format(toUserTextMessagesXPATH, message), wait);
             return true;
         } catch (TimeoutException e) {
             return false;

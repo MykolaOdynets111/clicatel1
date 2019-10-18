@@ -4,9 +4,14 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
-
+import com.assertthat.selenium_shutterbug.utils.web.Browser;
+import java.io.File;
 import java.util.List;
-
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.FileWriter;
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
 
 public interface WebActions extends WebWait {
 
@@ -45,15 +50,15 @@ public interface WebActions extends WebWait {
     default String getTextFromElem(WebDriver driver, WebElement element, int wait, String elemName){
         try {
             waitForElementToBeVisible(driver, element, wait);
-            return element.getText();
+            return element.getText().trim();
         } catch (TimeoutException|NoSuchElementException e){
             Assert.fail("Cannot get text from  '" + elemName + "' because element is not visible.");
             return "no text elem";
         }
     }
 
-    default String getAttributeFromElemAgent(WebDriver driver, WebElement element, int wait,
-                                             String elemName, String attribute){
+    default String getAttributeFromElem(WebDriver driver, WebElement element, int wait,
+                                        String elemName, String attribute){
         try {
             waitForElementToBeVisible(driver, element, wait);
             return element.getAttribute(attribute);
@@ -143,22 +148,21 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default boolean isElementNotShownByCSS(WebDriver driver, String css, int wait){
+    default boolean isElementRemovedByCSS(WebDriver driver, String css, int wait){
         try {
             waitForElementToBeInVisibleByCss(driver, css, wait);
-            return false;
-        } catch (TimeoutException|NoSuchElementException e) {
             return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
         }
     }
 
-    default boolean isElementNotShown(WebDriver driver, WebElement element, int wait){
-        try {
-            waitForElementToBeInvisible(driver, element, wait);
-            return false;
-        } catch (TimeoutException|NoSuchElementException e) {
-            return true;
+    default boolean isElementRemoved(WebDriver driver, WebElement element, int wait){
+        for(int i = 0; i<wait; i++){
+            if(!isElementShown(driver, element, 1)) return true;
+            waitFor(1000);
         }
+        return false;
     }
 
     default boolean isElementEnabled(WebDriver driver, WebElement element, int wait){
@@ -211,60 +215,60 @@ public interface WebActions extends WebWait {
         driver.switchTo().window(windowToSwitch);
     }
 
-//    default void scrollUpWidget(int scrollPosition){
-//        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
-//        JavascriptExecutor jsExec = (JavascriptExecutor) DriverFactory.getTouchDriverInstance();
-//        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
-//                DriverFactory.getTouchDriverInstance().findElement(By.cssSelector(widgetScroller)));
-//    }
+    default void scrollUp(WebDriver driver, String cssScroller, int scrollPosition){
+        String styleTransform = "translate(0px, -%spx) translateZ(0px)";
+        JavascriptExecutor jsExec = (JavascriptExecutor) driver;
+        jsExec.executeScript("arguments[0].style.transform='"+String.format(styleTransform, scrollPosition)+"';",
+                driver.findElement(By.cssSelector(cssScroller)));
+    }
 
-//    /**
-//     * Verify if scren of element equals image (deviation 5%).
-//     *
-//     * @param  element   WebElement for screen shot
-//     * @param  image   File for comparing with scren shot
-//     * @param agent
-//     * @return         Boolean: true or false
-//     * @throws Exception
-//     */
-//    default boolean isWebElementEqualsImage(WebElement element, File image, String agent){
-//        boolean result=false;
-//        Browser browser = new Browser(DriverFactory.getDriverForAgent(agent),true);
-//        Double dpr= browser.getDevicePixelRatio();
-//        try {
-//           if (!image.canRead()) {
-//                BufferedImage img = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent),element,true ).getImage();
-//                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
-//                File newFile = new File(image.getPath());
-//                newFile.getParentFile().mkdirs();
-//                new FileWriter(newFile);
-//                BufferedImage buffered = imageToBufferedImage(newimg);
-//                ImageIO.write(buffered,"PNG",newFile);
-//                System.out.println("!!!!!! File was created !!!!!!!!! \n");
-//            }
-//            BufferedImage expImage = ImageIO.read(image);
-//            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
-//            result = Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element, true).withName("Actual").equals(expectedImage, 0.07);
-//            if (!result) {
-//                Shutterbug.shootElement(DriverFactory.getDriverForAgent(agent), element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
-//            }
-//        }
-//        catch(Exception e) {
-//            e.printStackTrace();
-//            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
-//        }
-//        return result;
-//    }
-//
-//     static  BufferedImage imageToBufferedImage(Image im) {
-//        BufferedImage bi = new BufferedImage (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
-//        Graphics bg = bi.getGraphics();
-//        bg.drawImage(im, 0, 0, null);
-//        bg.dispose();
-//        return bi;
-//    }
-//
-//    default void createElementImage(WebElement element, String name, String path){
-//            Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element,true ).withName(name).save(path);
-//    }
+    /**
+     * Verify if scren of element equals image (deviation 5%).
+     *
+     * @param  element   WebElement for screen shot
+     * @param  image   File for comparing with scren shot
+     * @param driver
+     * @return         Boolean: true or false
+     * @throws Exception
+     */
+    default boolean isWebElementEqualsImage(WebDriver driver, WebElement element, File image){
+        boolean result=false;
+        Browser browser = new Browser(driver,true);
+        Double dpr= browser.getDevicePixelRatio();
+        try {
+           if (!image.canRead()) {
+                BufferedImage img = Shutterbug.shootElement(driver, element,true ).getImage();
+                Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
+                File newFile = new File(image.getPath());
+                newFile.getParentFile().mkdirs();
+                new FileWriter(newFile);
+                BufferedImage buffered = imageToBufferedImage(newimg);
+                ImageIO.write(buffered,"PNG",newFile);
+                System.out.println("!!!!!! File was created !!!!!!!!! \n");
+            }
+            BufferedImage expImage = ImageIO.read(image);
+            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
+            result = Shutterbug.shootElement(driver, element, true).withName("Actual").equals(expectedImage, 0.07);
+            if (!result) {
+                Shutterbug.shootElement(driver, element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            //Shutterbug.shootElement(DriverFactory.getDriverForAgent("main"),element).withName(name).save("src/test/resources/icons/");
+        }
+        return result;
+    }
+
+     static  BufferedImage imageToBufferedImage(Image im) {
+        BufferedImage bi = new BufferedImage (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
+        Graphics bg = bi.getGraphics();
+        bg.drawImage(im, 0, 0, null);
+        bg.dispose();
+        return bi;
+    }
+
+    default void createElementImage(WebDriver driver, WebElement element, String name, String path){
+            Shutterbug.shootElement(driver ,element,true ).withName(name).save(path);
+    }
 }

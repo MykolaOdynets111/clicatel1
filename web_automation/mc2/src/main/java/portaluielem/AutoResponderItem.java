@@ -56,7 +56,7 @@ public class AutoResponderItem extends AbstractWidget {
     }
 
     public String getMessage() {
-        return getAttributeFromElemAgent(this.getCurrentDriver(), textarea, 10, "Test", "value");
+        return getAttributeFromElem(this.getCurrentDriver(), textarea, 10, "Test", "value");
     }
 
     public void clickOnOff(){

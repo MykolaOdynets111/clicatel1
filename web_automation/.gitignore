@@ -10,3 +10,4 @@ target/
 ../Web_touch_automation/
 debug.log
 *.iml
+mc2/src/test/resources/*.properties

@@ -27,7 +27,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']")
     private WebElement pinErrorMessage;
 
-    @FindBy(xpath = "//div[text()='Profanity not allowed']")
+    @FindBy(xpath = "//h4[text()='Profanity not allowed']")
     private WebElement profanityPopup;
 
     @FindBy(xpath = "//button[text()='Accept']")
@@ -36,7 +36,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "span.connection-error-img")
     private WebElement connectionErrorImage;
 
-    @FindBy(xpath = "//div[text()='Agent limit reached']")
+    @FindBy(xpath = "//h4[text()='Agent limit reached']")
     private WebElement agentLimitReachedPopup;
 
     @FindBy(css = "div.history-details")
@@ -44,9 +44,6 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindBy(css = "div > div.active")
     private WebElement customer360Button;
-
-    @FindBy(css = "div.touch-button")
-    private WebElement touchButton;
 
     @FindBy(css = "div.context-menu>div.active")
     private WebElement selectedTab;
@@ -85,35 +82,42 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatForm getChatForm() {
-        chatForm.setCurrentAgent(this.getCurrentAgent());
+        chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
     }
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
+        deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());
         return deleteCRMConfirmationPopup;
     }
 
     public EditCRMTicketWindow getEditCRMTicketWindow() {
+        editCRMTicketWindow.setCurrentDriver(this.getCurrentDriver());
         return editCRMTicketWindow;
     }
 
     public CRMTicketContainer getCrmTicketContainer() {
+        crmTicketContainer.setCurrentDriver(this.getCurrentDriver());
         return crmTicketContainer;
     }
 
     public HistoryDetailsWindow getHistoryDetailsWindow() {
+        historyDetailsWindow.setCurrentDriver(this.getCurrentDriver());
         return historyDetailsWindow;
     }
 
     public ChatHistoryContainer getChatHistoryContainer() {
+        chatHistoryContainer.setCurrentDriver(this.getCurrentDriver());
         return chatHistoryContainer;
     }
 
     public AgentFeedbackWindow getAgentFeedbackWindow() {
+        agentFeedbackWindow.setCurrentDriver(this.getCurrentDriver());
         return agentFeedbackWindow;
     }
 
     public ChatHeader getChatHeader() {
+        chatHeader.setCurrentDriver(this.getCurrentDriver());
         return chatHeader;
     }
 
@@ -123,46 +127,55 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {
+        incomingTransferWindow.setCurrentDriver(this.getCurrentDriver());
         return incomingTransferWindow;
     }
 
-    public TransferChatWindow getTransferChatWindow() {return transferChatWindow;}
+    public TransferChatWindow getTransferChatWindow() {
+        transferChatWindow.setCurrentDriver(this.getCurrentDriver());
+        return transferChatWindow;
+    }
 
     public ProfileWindow getProfileWindow() {
+        profileWindow.setCurrentDriver(this.getCurrentDriver());
         return profileWindow;
     }
 
     public SuggestedGroup getSuggestedGroup() {
+        suggestedGroup.setCurrentDriver(this.getCurrentDriver());
         return suggestedGroup;
     }
 
     public PageHeader getPageHeader() {
+        pageHeader.setCurrentDriver(this.getCurrentDriver());
         return pageHeader;
     }
 
     public LeftMenuWithChats getLeftMenuWithChats() {
+        leftMenuWithChats.setCurrentDriver(this.getCurrentDriver());
         return leftMenuWithChats;
     }
 
     public VerifyPhoneNumberWindow getVerifyPhoneNumberWindow() {
+        verifyPhoneNumberWindow.setCurrentDriver(this.getCurrentDriver());
         return verifyPhoneNumberWindow;
     }
 
     public ChatBody getChatBody() {
-        chatBody.setCurrentAgent(this.getCurrentAgent());
+        chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
     }
 
 
     public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
-        if (isElementShownAgent(conversationAreaContainer,10, ordinalAgentNumber)) {
-            return waitForLoadingInLeftMenuToDisappear(ordinalAgentNumber, 6, 10);
+        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,30)) {
+            return waitForLoadingInLeftMenuToDisappear(6, 10);
         } else { return false;}
     }
 
     public boolean isConnectionErrorShown(String ordinalAgentNumber){
         try{
-            waitForElementToBeVisibleAgent(connectionErrorImage, 10, ordinalAgentNumber);
+            waitForElementToBeVisible(this.getCurrentDriver(), connectionErrorImage, 10);
             return true;
         }
         catch (TimeoutException e){
@@ -171,11 +184,11 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void endChat(){
-        if(getChatHeader().isEndChatShown(getCurrentAgent())){
+        if(getChatHeader().isEndChatShown()){
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
             try {
-                waitForElementsToBeInvisibleByXpathAgent(chatContainer, 5, getCurrentAgent());
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),chatContainer, 5);
             }catch (TimeoutException e){
                 Assert.fail("Chat container does not disappear after 5 second wait");
             }
@@ -187,39 +200,34 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public boolean isProfanityPopupShown(){
-        return isElementShownAgent(profanityPopup,10);
+        return isElementShown(this.getCurrentDriver(), profanityPopup,10);
     }
 
     public void clickAcceptProfanityPopupButton(){
         acceptProfanityPopupButton.click();
         for(int i = 0; i<10;i++){
-            if (!isElementShownAgent(profanityPopup, 1, "main agent")){
+            if (!isElementShown(this.getCurrentDriver(), profanityPopup, 1)){
                 break;
             }
         }
     }
 
     public boolean isAgentLimitReachedPopupShown(int wait){
-        return isElementShownAgent(agentLimitReachedPopup,wait);
+        return isElementShown(this.getCurrentDriver(), agentLimitReachedPopup,wait);
     }
 
     public void isPinErrorMassageShown(String Agent){
         try{
-            waitForElementToBeVisibleAgent(pinErrorMessage, 10, Agent);
+            waitForElementToBeVisible(this.getCurrentDriver(), pinErrorMessage, 10);
         }
         catch (TimeoutException e){
-            Assert.assertTrue(false,
-                    "There is no Error message for pin chat");
+            Assert.fail("There is no Error message for pin chat");
         }
-        waitForElementsToBeInvisibleByXpathAgent(pinErrorMessageXpath,10, Agent);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
     }
 
     public String getCustomer360ButtonColor() {
         return Color.fromString(customer360Button.getCssValue("background-color")).asHex();
-    }
-
-    public String getTouchButtonColor() {
-        return Color.fromString(touchButton.getCssValue("background-color")).asHex();
     }
 
     public String getSelectedTabHeader(){
@@ -227,16 +235,16 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public String getTipIfNoChatSelected(){
-        return getTextFromElemAgent(tipNoteInConversationArea, 5, getCurrentAgent(), "Tips in conversation area if no chat selected");
+        return getTextFromElem(this.getCurrentDriver(), tipNoteInConversationArea, 5, "Tips in conversation area if no chat selected");
     }
 
 
     public String getTipIfNoChatSelectedFromContextArea(){
-        return getTextFromElemAgent(tipNoteInRightArea, 5, getCurrentAgent(), "Tips in context area if no chat selected");
+        return getTextFromElem(this.getCurrentDriver(), tipNoteInRightArea, 5, "Tips in context area if no chat selected");
     }
 
     public List<WebElement> getCollapsedTransfers(){
-        waitForElementsToBeVisibleAgent(notificationsList, 6, this.getCurrentAgent());
+        waitForElementsToBeVisible(this.getCurrentDriver(), notificationsList, 6);
         return notificationsList;
     }
 
@@ -252,6 +260,6 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void waitForModalWindowToDisappear(){
-        waitForElementToBeInVisibleByCssAgent(modalWindow, 6);
+        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), modalWindow, 6);
     }
 }

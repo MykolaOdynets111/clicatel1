@@ -1,13 +1,13 @@
 package agentpages.uielements;
 
-import abstractclasses.AbstractUIElementDeprecated;
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 
 @FindBy(css = "div.touch-pop-up")
-public class IncomingTransferWindow extends AbstractUIElementDeprecated {
+public class IncomingTransferWindow extends AbstractUIElement {
 
     @FindBy(css = "div.touch-header h2")
     private WebElement transferWindowHeader;
@@ -53,13 +53,13 @@ public class IncomingTransferWindow extends AbstractUIElementDeprecated {
         rejectTransfetButton.click();
     }
 
-    public void acceptRejectTransfer(String agent){
-        clickElemAgent(acceptRejectedButton, 3, agent, "'Accept' rejected transfer button");
+    public void acceptRejectTransfer(){
+        clickElem(this.getCurrentDriver(), acceptRejectedButton, 3, "'Accept' rejected transfer button");
     }
 
     public String getTransferNotes(){
         // ToDo: update timeout after it is provided in System timeouts confluence page
-        return getTextFromElemAgent(transferNotes, 10, "second agent", "Transfer notes");
+        return getTextFromElem(this.getCurrentDriver(), transferNotes, 10,"Transfer notes");
     }
 
     public String getClientName(){
@@ -74,37 +74,37 @@ public class IncomingTransferWindow extends AbstractUIElementDeprecated {
         return  fromAgentName.getText();
     }
 
-    public String getTransferWindowHeader(String agent){
-        return getTextFromElemAgent(transferWindowHeader, 2, agent, "Transfer chat window header");
+    public String getTransferWindowHeader(){
+        return getTextFromElem(this.getCurrentDriver(), transferWindowHeader, 2,"Transfer chat window header");
     }
 
-    public boolean isTransferWindowHeaderNotShown(String agent){
-        return isElementNotShownAgent(transferWindowHeader,2,agent);
+    public boolean isTransferWindowHeaderNotShown(){
+        return isElementRemoved(this.getCurrentDriver(), transferWindowHeader,2);
     }
 
-    public String getRejectedBy(String agent){
-        return getTextFromElemAgent(rejectedBy, 2, agent, "Transfer chat window header");
+    public String getRejectedBy(){
+        return getTextFromElem(this.getCurrentDriver(),rejectedBy, 2,"Transfer chat window header");
     }
 
     public boolean isValidImgTransferPicture() {
-        waitForDeprecated(1500);//it should be. transfer window apeared but not all(animation);
+        waitFor(1500);//it should be. transfer window apeared but not all(animation);
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferPicture.png");
-        return isWebElementEqualsImage(transferPicture,image, "second agent");
+        return isWebElementEqualsImage(this.getCurrentDriver(), transferPicture, image);
     }
 
     public boolean isValidImTransferChannel() {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferChannel.png");
-        return isWebElementEqualsImage(transferChannel,image, "second agent");
+        return isWebElementEqualsImage(this.getCurrentDriver(), transferChannel, image);
     }
 
     public boolean isValidImgTransferSentiment() {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferSentiment.png");
-        return isWebElementEqualsImage(transferSentiment,image, "second agent");
+        return isWebElementEqualsImage(this.getCurrentDriver(), transferSentiment, image);
     }
 
     public boolean isRigthSideTransferChatWindow() {
         int xcordElement = transferWindowHeader.getLocation().getX();
-        int xcordWindow = findElemByXPATHAgent("//body","second agent").getSize().getWidth()/2;
+        int xcordWindow = findElemByXPATH(this.getCurrentDriver(),"//body").getSize().getWidth()/2;
         return    xcordElement > xcordWindow;
     }
 

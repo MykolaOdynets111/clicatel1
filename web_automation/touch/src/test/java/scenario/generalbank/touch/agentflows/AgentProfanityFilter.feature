@@ -14,4 +14,4 @@ Feature: Profanity filter on agent's messages
     Then 'Profanity not allowed' pop up is shown
     When Agent closes 'Profanity not allowed' popup
     When Agent clear input and send a new message how can I help you?
-    Then User have to receive 'how can I help you?' text response for his 'chat to support' input
+    Then User should see 'how can I help you?' text response for his 'chat to support' input

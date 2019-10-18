@@ -98,7 +98,7 @@ public class FBYourPostPage extends AbstractSocialPage {
                 .findFirst().get().click();
         waitForElementToBeVisible(this.getCurrentDriver(),deletePostConfirmationPopup, 5);
         confirmDeleteButton.click();
-        waitForElementToBeInVisibleByXpath(this.getCurrentDriver(),deletePostConfirmationPopupXPATH, 25);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),deletePostConfirmationPopupXPATH, 25);
     }
 
     public boolean isExpectedResponseShownInSecondLevelComments(String userMessage, String expectedResponse){// clarify_timeout

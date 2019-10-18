@@ -1,21 +1,22 @@
 package agentpages.uielements;
 
-import interfaces.WebActionsDeprecated;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.Widget;
+import abstractclasses.AbstractWidget;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CRMTicket extends Widget implements WebActionsDeprecated {
+public class CRMTicket extends AbstractWidget {
 
     protected CRMTicket(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
+    }
 
+    public CRMTicket setCurrentDriver(WebDriver currentDriver){
+        this.currentDriver = currentDriver;
+        return this;
     }
 
     @FindBy(xpath = ".//p[@class='date']")
@@ -54,15 +55,15 @@ public class CRMTicket extends Widget implements WebActionsDeprecated {
     }
 
     public void clickTicketNumber(){
-        clickElemAgent(crmNumber, 3, "main", "CRM ticket number");
+        clickElem(this.getCurrentDriver(), crmNumber, 3,"CRM ticket number");
     }
 
 
     public void clickEditButton(){
-        clickElemAgent(editButton, 3, "main", "CRM ticket 'Edit' button");
+        clickElem(this.getCurrentDriver(), editButton, 3,"CRM ticket 'Edit' button");
     }
 
     public void clickDeleteButton(){
-        clickElemAgent(deleteButton, 3, "main", "CRM ticket 'Delete' button");
+        clickElem(this.getCurrentDriver(), deleteButton, 3,"CRM ticket 'Delete' button");
     }
 }

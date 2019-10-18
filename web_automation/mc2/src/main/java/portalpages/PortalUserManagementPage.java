@@ -3,6 +3,7 @@ package portalpages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portaluielem.AddNewUserWindow;
 import portaluielem.PortalUserRow;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public class PortalUserManagementPage extends PortalAbstractPage {
 
     @FindBy(css = "table.table-integration.cl-table--ui>tbody>tr")
     private List<WebElement> userRows;
+
+    private AddNewUserWindow addNewUserWindow;
 
     // == Constructors == //
 
@@ -22,6 +25,11 @@ public class PortalUserManagementPage extends PortalAbstractPage {
     }
     public PortalUserManagementPage(WebDriver driver) {
         super(driver);
+    }
+
+    public AddNewUserWindow getAddNewUserWindow(){
+        addNewUserWindow.setCurrentDriver(this.getCurrentDriver());
+        return addNewUserWindow;
     }
 
     private PortalUserRow getTargetUserRow(String fullName){

@@ -60,7 +60,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
             Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), dataForNewCRMTicket);
             createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
-            getAgentHomeForMainAgent().waitForDeprecated(1100);
+            getAgentHomeForMainAgent().waitFor(1100);
         }
         createdCrmTicketsList.set(createdCRMTicket);
         Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").size(), ticketsNumber,
@@ -108,7 +108,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
         List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId());
-        //Collections.reverse(tags);
+        Collections.sort(tags);
         String crmTicketTags = String.join(", ", tags);
         soft.assertTrue((actualMili-expectedMili)<=3000,
                 "Ticket created date does not match created on the backend \n");
@@ -329,6 +329,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
                 (ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
+        Collections.sort(tags);
         dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
         dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));
         dataForNewCRMTicket.put("sessionId", sessionDetails.get("sessionId"));
@@ -339,6 +340,32 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         dataForNewCRMTicket.put("date", LocalDateTime.now().toString());
         crmTicketInfoForUpdating.set(dataForNewCRMTicket);
         return dataForNewCRMTicket;
+    }
+
+    @Then("^Agent sees (.*) CRM tickets$")
+    public void verifyTicketsNumber(int expectedNumber){
+        Assert.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets(), expectedNumber,
+                "Shown tickets number is not as expected");
+    }
+
+    @Then("^Tickets number is reduced to (.*)$")
+    public void verifyTicketsNumberReduced(int expectedNumber){
+        boolean isReduced = false;
+        for(int i =0; i < 6; i++){
+            if(getAgentHomeForMainAgent().getCrmTicketContainer().getNumberOfTickets() == expectedNumber) {
+                isReduced = true;
+                break;
+            }
+            else getAgentHomeForMainAgent().waitFor(200);
+        }
+        Assert.assertTrue(isReduced, "Shown tickets number is not as expected");
+    }
+
+
+    @When("^(.*) deletes first ticket$")
+    public void deleteFirstTicket(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
+        getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
     }
 
     private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){

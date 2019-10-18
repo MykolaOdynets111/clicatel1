@@ -18,6 +18,7 @@ import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.agentsteps.AgentConversationSteps;
 import steps.portalsteps.BasePortalSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
@@ -61,6 +62,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^Widget is collapsed$")
     public void verifyWidgetCollapsed() {
         Assert.assertTrue(widget.isWidgetCollapsed(), "Widget is not collapsed");
+    }
+
+    @Given("^Widget for (.*) is turned on$")
+    public void turnOnWidget(String tenantOrgName){
+        ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
+        ApiHelper.setAvailableForAllTerritories(tenantOrgName);
     }
 
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page)$")
@@ -212,9 +219,11 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User should not receive '(.*)' message after his '(.*)' message in widget$")
     public void verifyMessageIsNotShownAfterUserMessage(String messageShouldNotBeShown, String userInput){
         widgetConversationArea = widget.getWidgetConversationArea();
+        String expectedTextResponse = formExpectedTextResponseFromBotWidget(messageShouldNotBeShown);
 
-        Assert.assertFalse(widgetConversationArea.isSecondTextResponseNotShownFor(userInput, 10000),
-                "No text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
+        Assert.assertFalse(widgetConversationArea.isTextResponseNotShownAmongOther(userInput, expectedTextResponse, 3),
+                "Unexpected text response is shown on '"+userInput+"' user's input " +
+                        "(Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
     }
 
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
@@ -242,7 +251,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             String expectedAnswerOnSelectedIntent = selectedIntentItem.getText();
             String selectedIntentName = selectedIntentItem.getIntent();
             if(expectedAnswerOnSelectedIntent==null){
-                Assert.assertTrue(false, "Answer is not provided by the tie for '"+selectedIntentName+"' intent");
+                Assert.fail("Answer is not provided by the tie for '"+selectedIntentName+"' intent");
             }
             widgetConversationArea.clickOptionInTheCard(selectedCategory, selectedIntentTitle);
             verifyTextResponseWithIntent(expectedAnswerOnSelectedIntent, selectedIntentName, selectedIntentTitle);
@@ -312,9 +321,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         // And we are verifying that expected intent is among the choice options
         if(intentsCount>1){
             if (!widgetConversationArea.isCardContainsButton(userInput, intent)){
-                Assert.assertTrue(false, "CreatedIntent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
-
+                Assert.fail("CreatedIntent '"+intent+"' is not shown in choice card on '"+userInput+"' user input");
             }
+            expectedTextResponse = expectedTextResponse.replace("Hi "+ getClientIdFromLocalStorage() +". ", "");
             widgetConversationArea.clickOptionInTheCard(userInput, intent);
             verifyTextResponse(intent, expectedTextResponse, 10);
         }
@@ -328,7 +337,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                 String textInCard = widgetConversationArea.getCardTextForUserMessage(userInput);
                 String expectedText = "Do you mean \""+intent + "\"?";
                 if(!expectedText.equals(textInCard)){
-                    Assert.assertTrue(false, "Card text on user message '"+userInput+"' is not as expected.\n" +
+                    Assert.fail( "Card text on user message '"+userInput+"' is not as expected.\n" +
                             "Expected: " + expectedText + "\n" +
                             "But found: " + textInCard + "\n");
                 }
@@ -337,7 +346,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
 
             } else{
-                Assert.assertTrue(false, "Unexpected card is shown as a response on '"+userInput+"' user message.");
+                Assert.fail("Unexpected card is shown as a response on '"+userInput+"' user message.");
             }
         }
 
@@ -494,11 +503,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @When("^User select random (.*) in the card on user message (.*)$")
     public void clickRandomButtonOnToUserCard(String faqEntity, String userMessage) {
         List<String> entities = ApiHelperTie.getLIstOfAllFAGCategories();
-        if(entities.contains("mobile banking 120 3279")){
-            entities.remove("mobile banking 120 3279");
-            entities.remove("general bank masterpass app");
-            entities.remove("global one");
-        }
+        List<String> toRemove = Arrays.asList("mobile banking 120 3279", "global one",
+                                                "cellphone banking app", "general",
+                                                "general bank masterpass app", "travel help",
+                                                "milleage plus programme help", "travel policies");
+        entities.removeIf(e -> toRemove.contains(e));
+
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
 //        enteredUserMessageInTouchWidget.set("generic");
         widgetConversationArea.clickOptionInTheCard(userMessage, enteredUserMessageInTouchWidget.get());
@@ -543,12 +553,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^User sees name of tenant: (.*) and its short description in the header$")
     public void verifyWidgetHeader(String tenantOrgName){
-        String expectedDescription = ApiHelper.getTenantInfoMap(tenantOrgName).get("shortDescription");
+        Map<String, String> tenantInfo = ApiHelper.getTenantInfoMap(tenantOrgName);
+        String expectedDescription = tenantInfo.get("shortDescription");
+        String dynamicTenantOrgName = tenantInfo.get("tenantOrgName");
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getWidgetHeader().getDisplayedTenantName(), tenantOrgName,
-                tenantOrgName + " tenant name is not shown in the widget header");
+        soft.assertEquals(getWidgetHeader().getDisplayedTenantName().toLowerCase(), dynamicTenantOrgName.toLowerCase(),
+                dynamicTenantOrgName + " tenant name is not shown in the widget header\n");
         soft.assertEquals(getWidgetHeader().getDisplayedTenantDescription(), expectedDescription,
-                expectedDescription + " description is not shown for " +tenantOrgName+ " tenant");
+                expectedDescription + " description is not shown for " +dynamicTenantOrgName+ " tenant\n");
         soft.assertAll();
     }
 
