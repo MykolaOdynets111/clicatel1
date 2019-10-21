@@ -5,11 +5,38 @@ import datamanager.Agents;
 import datamanager.MC2Account;
 import drivermanager.ConfigManager;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class PortalAuthToken {
 
+    private static volatile Map<String, String> authTokens = new HashMap<>();
     private static ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
     private static ThreadLocal<String> PORTAL_SECOND_USER_ACCESS_TOKEN = new ThreadLocal<>();
+
+    // ToDo: Code for storing tokens in static map.
+    //  Have not seen any benefits of this approach in comparison with storing token in ThreadLocal
+//    public static synchronized String getAccessTokenForPortalUser(String tenantOrgName, String targetAgent) {
+//        log.set(LoggerFactory.getLogger(PortalAuthToken.class));
+//        log.get().info(tenantOrgName + " get token starts");
+//        Agents agent = Agents
+//                .getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), targetAgent);
+//
+//        String accountName = Accounts.getCorrectAccountName(tenantOrgName);
+//        String authTokenKey = agent.getAgentEmail() + " " + ConfigManager.getEnv();
+//        if(authTokens.keySet().contains(authTokenKey)){
+//            log.get().info(tenantOrgName + " get token ends");
+//
+//            return authTokens.get(authTokenKey);
+//        } else{
+//            String token = PortalAuth.getMC2AuthToken(accountName, agent.getAgentEmail(), agent.getAgentPass());
+//            authTokens.put(authTokenKey, token);
+//            log.get().info(tenantOrgName + " get token ends");
+//
+//            return token;
+//        }
+//    }
+
 
     public static String getAccessTokenForPortalUser(String tenantOrgName, String agent) {
         if(agent.toLowerCase().contains("second")){
