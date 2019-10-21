@@ -37,8 +37,6 @@ import java.util.stream.Collectors;
 
 public class BasePortalSteps extends AbstractPortalSteps {
 
-//    private static ThreadLocal<org.slf4j.Logger> log2 = new ThreadLocal<>();
-
     public static final String FIRST_AND_LAST_NAME = "Clickatell Test";
     public static String AGENT_FIRST_NAME;
     public static String AGENT_LAST_NAME;
