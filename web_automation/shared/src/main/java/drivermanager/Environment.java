@@ -9,7 +9,8 @@ public enum Environment {
     DEMO("demo"),
     DEV("dev"),
     INTEGRATION("integration"),
-    TESTING("testing");
+    TESTING("testing"),
+    STAGE("stage");
 
     String env;
 

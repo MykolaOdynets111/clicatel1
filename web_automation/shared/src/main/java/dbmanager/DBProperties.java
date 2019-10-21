@@ -1,37 +1,41 @@
 package dbmanager;
 
+import drivermanager.Environment;
+
 import java.util.Arrays;
 import java.util.List;
+import static drivermanager.Environment.*;
+
 
 public enum DBProperties {
-    TESTING_MC2("testing", "mc2", "mc2_testing", "mc2_testing", "mc2_testing", "jdbc:mysql://mc2-db-testing.clickatelllabs.com:3306/mc2_testing?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
-    TESTING_TOUCH("testing", "touch", "touch_testing", "touch_testing", "testing_touch_platform", "jdbc:mysql://touch-db-testing.clickatelllabs.com:3306/testing_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    TESTING_MC2(TESTING, "mc2", "mc2_testing", "mc2_testing", "mc2_testing", "jdbc:mysql://mc2-db-testing.clickatelllabs.com:3306/mc2_testing?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    TESTING_TOUCH(TESTING, "touch", "touch_testing", "touch_testing", "testing_touch_platform", "jdbc:mysql://touch-db-testing.clickatelllabs.com:3306/testing_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
-    INTEGRATION_MC2("integration", "mc2", "mc2_int", "mc2_int", "integration_mc2_platform", "jdbc:mysql://mc2-db-integration.clickatelllabs.com:3306/integration_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
-    INTEGRATION_TOUCH("integration", "touch", "touch_int", "touch_int", "integration_touch_platform", "jdbc:mysql://touch-db-integration.clickatelllabs.com:3306/integration_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    INTEGRATION_MC2(INTEGRATION, "mc2", "mc2_int", "mc2_int", "integration_mc2_platform", "jdbc:mysql://mc2-db-integration.clickatelllabs.com:3306/integration_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    INTEGRATION_TOUCH(INTEGRATION, "touch", "touch_int", "touch_int", "integration_touch_platform", "jdbc:mysql://touch-db-integration.clickatelllabs.com:3306/integration_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
-    DEV_TOUCH("dev", "touch", "touch_dev", "touch_dev", "dev_touch_platform", "jdbc:mysql://touch-db-dev.clickatelllabs.com:3306/dev_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
-    DEV_MC2("dev", "mc2", "mc2", "mc2_platform", "mc2_platform", "jdbc:mysql://mc2-platform-dev.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    DEV_TOUCH(DEV, "touch", "touch_dev", "touch_dev", "dev_touch_platform", "jdbc:mysql://touch-db-dev.clickatelllabs.com:3306/dev_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    DEV_MC2(DEV, "mc2", "mc2", "mc2_platform", "mc2_platform", "jdbc:mysql://mc2-platform-dev.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
-    QA_TOUCH("qa", "touch", "touch_qa", "touch_qa", "qa_touch_platform", "jdbc:mysql://touch-db-qa.clickatelllabs.com:3306/qa_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
-    QA_MC2("qa", "mc2", "mc2", "mc2_platform", "mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    QA_TOUCH(QA, "touch", "touch_qa", "touch_qa", "qa_touch_platform", "jdbc:mysql://touch-db-qa.clickatelllabs.com:3306/qa_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    QA_MC2(QA, "mc2", "mc2", "mc2_platform", "mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
-    DEMO_TOUCH("demo", "touch", "touch_demo", "touch_demo", "demo_touch_platform", "jdbc:mysql://touch-db-demo.clickatelllabs.com:3306/demo_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
-    DEMO_MC2("demo", "mc2", "mc2", "mc2_platform", "demo_mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/demo_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    DEMO_TOUCH(DEMO, "touch", "touch_demo", "touch_demo", "demo_touch_platform", "jdbc:mysql://touch-db-demo.clickatelllabs.com:3306/demo_touch_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
+    DEMO_MC2(DEMO, "mc2", "mc2", "mc2_platform", "demo_mc2_platform", "jdbc:mysql://mc2-platform-qa.clb9wu3x1zeb.us-west-2.rds.amazonaws.com:3306/demo_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
-//    STAGE_MC2_LOCAL("stage", "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://db-primary-01a.platform.stage.eu-west-1.aws.clickatell.com:3308"), //For debug only
-    STAGE_MC2_REMOTE("stage", "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://172.26.3.4:3308"),
+//    STAGE_MC2_LOCAL(STAGE, "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://db-primary-01a.platform.stage.eu-west-1.aws.clickatell.com:3308"), //For debug only
+    STAGE_MC2_REMOTE(STAGE, "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://172.26.3.4:3308"),
 
     ;
 
-    String env;
+    Environment env;
     String platform;
     String user;
     String pass;
     String dbName;
     String url;
 
-    DBProperties(String env, String  platform, String user, String pass, String dbName, String url) {
+    DBProperties(Environment env, String  platform, String user, String pass, String dbName, String url) {
         this.env = env;
         this.platform = platform;
         this.user = user;
@@ -45,7 +49,7 @@ public enum DBProperties {
     }
 
     public String getEnv() {
-        return this.env;
+        return this.env.getEnv();
     }
 
     public String getPlatform() {
