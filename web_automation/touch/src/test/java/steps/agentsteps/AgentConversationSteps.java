@@ -291,14 +291,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
 
         soft.assertTrue(waitForSessionToBeClosed(6),
-                "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat" +
-                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. ");
+                "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
+                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
-                "Ended date is not set for chat agent history record after ending chat." +
-                        "\nSession " + sessionDetails.get("sessionId") + "");
+                "Ended date is not set for chat agent history record after ending chat.\n" +
+                        "\nSession " + sessionDetails.get("sessionId") + "\n\n");
         soft.assertEquals(conversationDetails.get("active"), "0",
-                "Conversation is still active after ending chat." +
-                        "\nSession " + sessionDetails.get("sessionId") + "");
+                "Conversation is still active after ending chat.\n" +
+                        "\nSession " + sessionDetails.get("sessionId") + "\n\n");
         soft.assertAll();
     }
 
