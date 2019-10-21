@@ -162,7 +162,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(
                 Intents.getIntentWithMaxConfidence(userMessage).getIntent());
         if (expectedMessage.contains("${firstName}")) {
-            expectedMessage = expectedMessage.replace("${firstName}", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+            String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[2];
+            expectedMessage = expectedMessage.replace("${firstName}", userName);
         }
         Assert.assertEquals(actualSuggestion, expectedMessage, "Suggestion in input field is not as expected");
     }
