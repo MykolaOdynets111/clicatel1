@@ -18,3 +18,20 @@ Like
 ```
 ./gradlew runMC2Tests -Denv=qa
 ```
+
+## General features
+
+* ### Sonar
+Added integration with sonar (local one for now).
+To set up sonar please follow the instructions by this link
+```
+ https://www.c-sharpcorner.com/article/step-by-step-sonarqube-setup-and-run-sonarqube-scanner/
+```
+For configuration sonar used .properties file on project root
+```
+sonar-project.properties
+```
+For starting project scanning please use the command from project root:
+```
+sonar-scanner
+```
