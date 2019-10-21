@@ -19,6 +19,7 @@ import java.util.List;
 
 public class AgentLoginSteps extends AbstractAgentSteps {
 
+//    private static ThreadLocal<org.slf4j.Logger> log1 = new ThreadLocal<>();
 
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
@@ -28,7 +29,6 @@ public class AgentLoginSteps extends AbstractAgentSteps {
 
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
-
     }
 
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){

@@ -41,21 +41,23 @@ public class DBConnector {
     public static String getInvitationIdForCreatedUserFromMC2DB(String env, String userEmail) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
         String query = "SELECT * FROM "+tableName+".invitation where email=\""+userEmail+"\" AND deleted = 0;";
-        Statement statement = null;
-        ResultSet results = null;
-        String id = null;
-        try {
-            statement = getConnection(env, "mc2").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            id = results.getString("id");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
+
+        return getDataFromDb(env, "mc2", query, "id");
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String id = null;
+//        try {
+//            statement = getConnection(env, "mc2").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            id = results.getString("id");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return id;
     }
 
 
@@ -84,48 +86,68 @@ public class DBConnector {
         }
     }
 
+    private static synchronized String getDataFromDb(String env, String platform, String query, String column){
+        ResultSet results = null;
+        String result = null;
+        try(Statement statement = getConnection(env, platform).createStatement();) {
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            result = results.getString(column);
+            statement.close();
+            DBConnector.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public static String getAccountActivationIdFromMC2DB(String env, String accountId) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
 
         String query = "SELECT * FROM "+tableName+".account_activation where account_id = '"+accountId+"';";
-        Statement statement = null;
-        ResultSet results = null;
-        String id = null;
-        try {
-            statement = getConnection(env, "mc2").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            id = results.getString("id");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
+
+        return getDataFromDb(env, "mc2", query, "id");
+//
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String id = null;
+//        try {
+//            statement = getConnection(env, "mc2").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            id = results.getString("id");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return id;
     }
 
     public static String getAccountIdFromMC2DB(String env, String accountName) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
-        String accountId = "";
-
         String query = "SELECT * FROM "+ tableName +".account where name = '" + accountName + "';";
-        Statement statement = null;
-        ResultSet results = null;
-        String id = null;
-        try {
-            statement = getConnection(env, "mc2").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            id = results.getString("id");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
+
+        return getDataFromDb(env, "mc2", query, "id");
+
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String id = null;
+//        try {
+//            statement = getConnection(env, "mc2").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            id = results.getString("id");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return id;
     }
 
     public static boolean isAgentCreatedInDB(String env, String agentEmail) {
@@ -163,45 +185,49 @@ public class DBConnector {
 
     public static String getClientProfileID(String env, String clientID, String type, int isTenantProfile) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-
         String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' " +
                 "and is_tenant_profile="+isTenantProfile+" and type = '"+type+"';";
-        Statement statement = null;
-        ResultSet results = null;
-        String id = null;
-        try {
-            statement = getConnection(env, "touch").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            id = results.getString("id");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
+
+        return getDataFromDb(env, "touch", query, "id");
+
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String id = null;
+//        try {
+//            statement = getConnection(env, "touch").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            id = results.getString("id");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return id;
     }
 
     public static String getLinkedClientProfileID(String env, String clientID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-
         String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' ";
-        Statement statement = null;
-        ResultSet results = null;
-        String id = null;
-        try {
-            statement = getConnection(env, "touch").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            id = results.getString("linked_profile_id");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
+
+        return getDataFromDb(env, "touch", query, "linked_profile_id");
+//
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String id = null;
+//        try {
+//            statement = getConnection(env, "touch").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            id = results.getString("linked_profile_id");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return id;
     }
 
     public static void addPhoneAndOTPStatusIntoDB(String env, String linkedClientProfileID){
@@ -209,14 +235,10 @@ public class DBConnector {
 
         String query = "INSERT INTO `" + tableName + "`.`client_attribute` (`client_profile_id`, `key`, `value`) " +
                 "VALUES ('" + linkedClientProfileID + "', 'otpSent', 'true') ON DUPLICATE KEY UPDATE `value` = 'true';";
-
         Statement statement = null;
-        ResultSet results = null;
-        String id = null;
         try {
             statement = getConnection(env, "touch").createStatement();
             statement.executeUpdate(query);
-            results = statement.getResultSet();
             statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
@@ -269,7 +291,6 @@ public class DBConnector {
         try {
             statement = getConnection(env, "touch").createStatement();
             statement.executeUpdate(query);
-            results = statement.getResultSet();
             statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
@@ -281,21 +302,24 @@ public class DBConnector {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
 
         String query = "SELECT value FROM "+ tableName +".client_attribute where client_profile_id='"+linkedClientProfileId+"' and `key` = 'lastVisit';";
-        Statement statement = null;
-        ResultSet results = null;
-        long timestamp =0;
-        try {
-            statement = getConnection(env, "touch").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            timestamp = results.getLong("value");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return timestamp;
+
+        return Long.valueOf(getDataFromDb(env, "touch", query, "value"));
+//
+//        Statement statement = null;
+//        ResultSet results = null;
+//        long timestamp =0;
+//        try {
+//            statement = getConnection(env, "touch").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            timestamp = results.getLong("value");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return timestamp;
     }
 
 
@@ -382,29 +406,30 @@ public class DBConnector {
 
     public static int getNumberOfSessionsInConversationForLast3Days(String env, String chatID){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-        Map<String, String> details = new HashMap<>();
-
         ZoneId zoneId = TimeZone.getTimeZone("UTC").toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime nowMinus3Days = LocalDateTime.now(zoneId).minusDays(3);
         String date = nowMinus3Days.format(formatter);
         String query = "SELECT count(session_id) FROM "+tableName+".session where conversation_id = '"+chatID+"' and ended_date > '"+date+"';";
-        Statement statement = null;
-        ResultSet results = null;
-        int sessionsCount = 0;
-        try {
-            statement = getConnection(env, "touch").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            sessionsCount = results.getInt("count(session_id)");
-            statement.close();
-            DBConnector.closeConnection();
-            return sessionsCount;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return sessionsCount;
+
+        return Integer.valueOf(getDataFromDb(env, "touch", query, "count(session_id)"));
+
+//        Statement statement = null;
+//        ResultSet results = null;
+//        int sessionsCount = 0;
+//        try {
+//            statement = getConnection(env, "touch").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            sessionsCount = results.getInt("count(session_id)");
+//            statement.close();
+//            DBConnector.closeConnection();
+//            return sessionsCount;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return sessionsCount;
     }
 
     public static Map<String, String> getChatAgentHistoryDetailsBySessionID(String env, String sessionID) {
@@ -431,22 +456,25 @@ public class DBConnector {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> details = new HashMap<>();
         String query = "SELECT * FROM "+tableName+".session where tenant_name = '"+tenantName+"' and client_id = '"+clientID+"' order by started_date desc;";
-        Statement statement = null;
-        ResultSet results = null;
-        String lastSessionID = null;
-        try {
-            statement = getConnection(env, "touch").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            lastSessionID = results.getString("session_id");
-            DBConnector.closeConnection();
-            return lastSessionID;
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return lastSessionID;
+
+        return getDataFromDb(env, "touch", query, "session_id");
+
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String lastSessionID = null;
+//        try {
+//            statement = getConnection(env, "touch").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            lastSessionID = results.getString("session_id");
+//            DBConnector.closeConnection();
+//            return lastSessionID;
+//        }
+//        catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return lastSessionID;
     }
 
     public static Map<String, String> getConversationByID(String env, String conversationID) {
@@ -484,70 +512,79 @@ public class DBConnector {
     public static String getCountryName(String env, String code) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         String query = "SELECT name FROM "+ tableName +".country where code='"+code+"';";
-        Statement statement = null;
-        ResultSet results = null;
-        String name = null;
-        try {
-            statement = getConnection(env, "touch").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            name = results.getString("name");
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return name;
+
+        return getDataFromDb(env, "touch", query, "name");
+
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String name = null;
+//        try {
+//            statement = getConnection(env, "touch").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            name = results.getString("name");
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return name;
     }
 
 
     public static String getResetPassId(String env, String email){
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
         String userMetadataIdQuery = "SELECT id FROM "+ tableName +".user_metadata where email='" + email + "';";
+        String userMetadatId = getDataFromDb(env, "touch", userMetadataIdQuery, "id");
+        String userResetPassQuery = "SELECT id FROM "+ tableName +".password_reset where user_metadata_id='"
+                + userMetadatId + "' and deleted=0;";
+        return getDataFromDb(env, "touch", userResetPassQuery, "id");
 
-        Statement statement = null;
-        ResultSet results = null;
-        String resetId = "none";
-        try {
-            statement = getConnection(env, "mc2").createStatement();
-            results = statement.executeQuery(userMetadataIdQuery);
-            results.next();
-            String userMetadatId = results.getString("id");
-
-            String userResetPassQuery = "SELECT id FROM "+ tableName +".password_reset where user_metadata_id='"
-                    + userMetadatId + "' and deleted=0;";
-            results =  statement.executeQuery(userResetPassQuery);
-            results.next();
-            resetId = results.getString("id");
-
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resetId;
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String resetId = "none";
+//        try {
+//            statement = getConnection(env, "mc2").createStatement();
+//            results = statement.executeQuery(userMetadataIdQuery);
+//            results.next();
+//            String userMetadatId = results.getString("id");
+//
+//            String userResetPassQuery = "SELECT id FROM "+ tableName +".password_reset where user_metadata_id='"
+//                    + userMetadatId + "' and deleted=0;";
+//            results =  statement.executeQuery(userResetPassQuery);
+//            results.next();
+//            resetId = results.getString("id");
+//
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return resetId;
     }
 
     public static String getVerificationOTPCode(String env, String account_id, String phone) {
         String tableName = DBProperties.getPropertiesFor(env,"mc2").getDBName();
         String query = "SELECT * FROM "+ tableName +".sandbox_number where " +
                 "account_id='"+account_id+"' and deleted=0 and number='"+phone.replace("+", "")+"'";
-        Statement statement = null;
-        ResultSet results = null;
-        String id = null;
-        try {
-            statement = getConnection(env, "mc2").createStatement();
-            statement.executeQuery(query);
-            results = statement.getResultSet();
-            results.next();
-            id = String.valueOf(results.getInt("verification_code"));
-            statement.close();
-            DBConnector.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return id;
+
+        return getDataFromDb(env, "touch", query, "verification_code");
+//        Statement statement = null;
+//        ResultSet results = null;
+//        String id = null;
+//        try {
+//            statement = getConnection(env, "mc2").createStatement();
+//            statement.executeQuery(query);
+//            results = statement.getResultSet();
+//            results.next();
+//            id = String.valueOf(results.getInt("verification_code"));
+//            statement.close();
+//            DBConnector.closeConnection();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return id;
     }
 
 //    public static void main(String args[]){
