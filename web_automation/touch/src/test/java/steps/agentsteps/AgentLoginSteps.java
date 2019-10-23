@@ -19,8 +19,6 @@ import java.util.List;
 
 public class AgentLoginSteps extends AbstractAgentSteps {
 
-//    private static ThreadLocal<org.slf4j.Logger> log1 = new ThreadLocal<>();
-
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);

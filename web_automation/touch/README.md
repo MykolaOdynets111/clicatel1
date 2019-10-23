@@ -65,6 +65,7 @@ web_automation/build/allure-report/index.html
 
 * ### Logback
 There is a possibility to use Logback library.
+To do it please go ot touch/src/main/resources and comment out all from logback.xml file
 For this purpose you have to create logger instance in a class you want to extract some logs from.
  Like:
 ```
