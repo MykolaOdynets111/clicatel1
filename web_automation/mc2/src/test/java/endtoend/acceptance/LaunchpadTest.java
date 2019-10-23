@@ -27,16 +27,16 @@ public class LaunchpadTest extends BaseTest {
     private String accountID;
     private PortalMainPage mainPage;
     private AccountSignUp accountSignUp;
-    private Map<String, String> navButtons = new LinkedHashMap<String, String>() {{
-                                                put("Welcome", "Welcome to your Clickatell account");
-                                                put("SMS", "SMS");
-                                                put("WhatsApp", "WhatsApp");
-                                                put("One API", "One API");
-                                                put("Touch", "Touch");
-                                            }};
+    private Map<String, String> navButtons = new LinkedHashMap<>();
 
     @BeforeClass()
     private void createAccount() {
+        navButtons.put("Welcome", "Welcome to your Clickatell account");
+        navButtons.put("SMS", "SMS");
+        navButtons.put("WhatsApp", "WhatsApp");
+        navButtons.put("One API", "One API");
+        navButtons.put("Touch", "Touch");
+
         Faker faker = new Faker();
         accountSignUp = new AccountSignUp();
         accountSignUp.setAccountName( "aqa_" + faker.lorem().word() + faker.number().digits(3))
