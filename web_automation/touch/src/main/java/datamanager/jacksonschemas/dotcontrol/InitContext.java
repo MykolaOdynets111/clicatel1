@@ -95,4 +95,14 @@ public class InitContext {
         return fullName;
     }
 
+    @Override
+    public String toString() {
+        return "InitContext{" +
+                "fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

@@ -18,6 +18,7 @@ import drivermanager.ConfigManager;
 import interfaces.WebWait;
 import io.restassured.response.Response;
 import javaserver.Server;
+import lombok.var;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -51,12 +52,14 @@ public class DotControlSteps implements WebWait {
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
         if (adaptor.isEmpty()) adaptor = "fbmsg";
 
-        Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName,
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
+        DotControlCreateIntegrationInfo createIntegration =
+                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get();
+
+        Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName, createIntegration);
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
+                    "\n Body: " + resp.getBody().asString() + "\n" + "Request: " + createIntegration);
         }
         String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
         System.out.println("!! Api token from creating integration: " + token);
@@ -177,7 +180,8 @@ public class DotControlSteps implements WebWait {
         Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
         Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
-                        resp.getBody().asString() + "\n\n");
+                        "request: " + initRequest.toString() + "\n" +
+                        "response" + resp.getBody().asString() + "\n\n");
     }
 
     @When("^Send parameterized init call with history$")

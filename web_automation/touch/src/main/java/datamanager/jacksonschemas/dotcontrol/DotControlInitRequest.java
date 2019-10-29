@@ -132,4 +132,16 @@ public class DotControlInitRequest {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "DotControlInitRequest{" +
+                "apiToken='" + apiToken + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", initContext=" + initContext +
+                ", departmentId='" + departmentId + '\'' +
+                ", history=" + history +
+                ", referenceId='" + referenceId + '\'' +
+                ", tenantMode='" + tenantMode + '\'' +
+                '}';
+    }
 }

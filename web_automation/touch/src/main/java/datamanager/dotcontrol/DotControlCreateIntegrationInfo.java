@@ -32,5 +32,14 @@ public class DotControlCreateIntegrationInfo {
     public String getCallBackURL() {
         return callBackURL;
     }
+
+    @Override
+    public String toString() {
+        return "DotControlCreateIntegrationInfo{" +
+                "name='" + name + '\'' +
+                ", enabled=" + enabled +
+                ", callBackURL='" + callBackURL + '\'' +
+                '}';
+    }
 }
 

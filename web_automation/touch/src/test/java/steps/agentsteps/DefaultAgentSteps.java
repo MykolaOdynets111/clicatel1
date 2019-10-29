@@ -641,9 +641,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
 
         soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getUserName(), selectedChatForHistoryTest.get("clientId"),
-                "User name is not as expected in opened Chat History Details window");
+                "User name is not as expected in opened Chat ChatHistory Details window");
         soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getChatStartDate(), expectedChatHistoryTime,
-                "Started date is not as expected in opened Chat History Details window");
+                "Started date is not as expected in opened Chat ChatHistory Details window");
         soft.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
                 "Chat history is not as expected in chat history details (in active chat)");
         soft.assertAll();
