@@ -14,6 +14,8 @@ import java.util.Random;
 @FindBy(css = "div.chat-form")
 public class ChatForm extends AbstractUIElement {
 
+    public static String inputMassage;
+
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
     private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
     private SecureRandom random = new SecureRandom();
@@ -88,6 +90,7 @@ public class ChatForm extends AbstractUIElement {
             waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputFieldContainer,6);
             suggestionInputFieldContainer.click();
             messageInput.sendKeys(additionalMessage);
+            inputMassage = messageInput.getText();
         } catch (StaleElementReferenceException e) {
             DriverFactory.getAgentDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
         }

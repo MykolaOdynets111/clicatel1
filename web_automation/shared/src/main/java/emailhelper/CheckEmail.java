@@ -199,10 +199,7 @@ public class CheckEmail {
 
     public static boolean notOpenedMessage(Message e) {
         try {
-            if(e.isSet(Flags.Flag.SEEN))
-                return false;
-            else
-                return true;
+            return !e.isSet(Flags.Flag.SEEN);
         } catch (MessagingException e1) {
             e1.printStackTrace();
             return false;

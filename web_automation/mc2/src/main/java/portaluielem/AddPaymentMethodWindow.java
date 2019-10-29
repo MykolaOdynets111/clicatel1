@@ -77,7 +77,7 @@ public class AddPaymentMethodWindow extends BasePortalWindow {
         if(disabled == null) return false;
         if(disabled.equals("true")) return true;
         else{
-            Assert.fail("Unexpected 'disabled' attribute value: \n" + disabled.toString());
+            Assert.fail("Unexpected 'disabled' attribute value: \n" + disabled);
             return false;
         }
     }

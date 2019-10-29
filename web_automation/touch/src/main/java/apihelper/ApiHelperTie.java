@@ -168,7 +168,7 @@ public class ApiHelperTie {
     public static void deleteAllIntents(){
         List<String> faqIntents = ApiHelperTie.getAllIntentsWithIDs().getBody().jsonPath().getList("data").stream()
                 .map(e -> (List) e)
-                .filter(e -> ((String) e.get(2)).equals("faq"))
+                .filter(e -> e.get(2).equals("faq"))
                 .map(e -> (String) e.get(6))
                 .collect(Collectors.toList());
         for(String id : faqIntents) {

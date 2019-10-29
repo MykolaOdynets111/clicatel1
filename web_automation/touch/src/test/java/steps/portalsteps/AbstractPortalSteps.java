@@ -44,6 +44,8 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<ChatConsoleInboxPage> chatConsoleInboxPage = new ThreadLocal<>();
 
+    private static ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
+
     public static Faker faker = new Faker();
 
     // -- Getters and Setters -- //
@@ -263,6 +265,14 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
+    public static DepartmentsManagementPage getDepartmentsManagementPage(){
+        if (departmentsManagementPage.get()==null) {
+            departmentsManagementPage.set(new DepartmentsManagementPage(DriverFactory.getDriverForAgent("admin")));
+            return departmentsManagementPage.get();
+        } else{
+            return departmentsManagementPage.get();
+        }
+    }
     public static void setChatConsoleInboxPage(ChatConsoleInboxPage chatConsoleInbox) {
         chatConsoleInboxPage.set(chatConsoleInbox);
     }
@@ -289,5 +299,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         portalUserManagementPage.remove();
         portalChatConsolePage.remove();
         chatConsoleInboxPage.remove();
+        departmentsManagementPage.remove();
     }
 }

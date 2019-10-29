@@ -19,4 +19,4 @@
       And The suggestion for user message "Do you have a job for me?" with the biggest confidence is added to the input field
       When Agent add additional info "_Edited suggestion" to suggested message
       When Agent click send button
-      Then Verify dot .Control returns For information regarding vacancies and posts at General Bank you may visit us_Edited suggestion response during 13 seconds
+      Then Verify dot .Control returns edited response in 13 seconds

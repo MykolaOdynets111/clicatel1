@@ -174,5 +174,8 @@ public class Endpoints {
 
     public static String DOT_CONTROL_INIT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/init";
 
+    // ====================  Departments ================= //
+
+    public static String DEPARTMENTS = URLs.getTouchApiBaseURL() + "departments";
 }
 

@@ -82,7 +82,7 @@ public class PortalLoginPage extends PortalAbstractPage {
             String activationID = DBConnector.getAccountActivationIdFromMC2DB(ConfigManager.getEnv(),
                     accountId);
             if(activationID==null) return "none";
-            confirmationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationID);;
+            confirmationURL = String.format(EndpointsPlatform.PORTAL_ACCOUNT_ACTIVATION, activationID);
         }else {
             GmailConnector.loginAndGetInboxFolder(email, emailPass);
             confirmationURL = CheckEmail

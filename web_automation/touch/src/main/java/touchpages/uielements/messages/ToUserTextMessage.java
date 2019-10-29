@@ -65,11 +65,7 @@ public class ToUserTextMessage extends AbstractWidget {
     public boolean isSecondResponseNotShown(int wait){
         boolean isShown = true;
         for(int i = 0; i <= wait/1000; i++ ){
-            if(toUserTextMessages.size()==2){
-                isShown=true;
-            }else {
-                isShown=false;
-            }
+            isShown= toUserTextMessages.size() == 2;
             waitFor(1000);
         }
         return isShown;
@@ -105,9 +101,6 @@ public class ToUserTextMessage extends AbstractWidget {
     }
 
     public boolean isOnlyOneTextResponseShwon(){
-        if (toUserTextMessages.size()>1)
-            return false;
-        else
-            return true;
+        return toUserTextMessages.size() <= 1;
     }
 }
