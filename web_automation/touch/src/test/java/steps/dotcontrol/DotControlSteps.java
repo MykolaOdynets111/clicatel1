@@ -18,7 +18,6 @@ import drivermanager.ConfigManager;
 import interfaces.WebWait;
 import io.restassured.response.Response;
 import javaserver.Server;
-import lombok.var;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
