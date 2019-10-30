@@ -33,7 +33,7 @@ public enum MC2Account {
 
     INTEGRATION_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", INTEGRATION, "", ""),
     DEV_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", DEV, "", ""),
-    DEMO_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", DEV, "", ""),
+    DEMO_COMMON_BOT("starter", "startertgplan@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", DEMO, "", ""),
     TESTING_COMMON_BOT("starter", "commontenant@gmail.com", "p@$$w0rd4te$t", "aqacomon", "Automation Common", TESTING, "", ""),
     QA_COMMON_BOT("starter", "account_signup@aqa.test", "p@$$w0rd4te$t", "aqacomon", "Automation Common", QA, "", ""),
 
