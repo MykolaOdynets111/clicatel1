@@ -28,8 +28,8 @@ public class NewTCStep {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public NewTCStep(){
-        this.defects = Arrays.asList(new Object[0]);
-        this.attachments = Arrays.asList(new Object[0]);
+        this.defects = Arrays.asList();
+        this.attachments = Arrays.asList();
         this.isGroup = false;
         this.group = false;
     }

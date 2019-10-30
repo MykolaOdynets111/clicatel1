@@ -1,5 +1,6 @@
 package steps.dotcontrol;
 
+import agentpages.uielements.ChatForm;
 import apihelper.APIHelperDotControl;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
@@ -311,6 +312,11 @@ public class DotControlSteps implements WebWait {
         responseOnSentRequest.get();
     }
 
+    @Then("Verify dot .Control returns edited response in (.*) seconds")
+    public void verifyDotControlReturnEditedResponse(int wait){
+        verifyDotControlReturnedCorrectResponse(ChatForm.inputMassage, wait);
+    }
+
     @Then("Verify dot .Control returns (.*) response during (.*) seconds")
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse, int wait){
         try {
@@ -415,11 +421,11 @@ public class DotControlSteps implements WebWait {
     private boolean isExpectedResponseArrives(String message){
         if (message.equalsIgnoreCase("agents_available")) {
             return (!Server.incomingRequests.isEmpty()) &&
-                    Server.incomingRequests.keySet().contains(clientId.get()) &&
+                    Server.incomingRequests.containsKey(clientId.get()) &&
                    Server.incomingRequests.get(clientId.get()).getMessageType().equals("AGENT_AVAILABLE");
         } else {
             return (!Server.incomingRequests.isEmpty()) &&
-                    Server.incomingRequests.keySet().contains(clientId.get()) &&
+                    Server.incomingRequests.containsKey(clientId.get()) &&
                     Server.incomingRequests.get(clientId.get()).getMessage().equals(message);
         }
     }

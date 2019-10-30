@@ -88,7 +88,7 @@ public class ApiHelperPlatform {
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(EndpointsPlatform.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
-        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e))
+        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> e)
                         .filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
                         forEach(e -> {ids.add(
                                 (String) e.get("id"));});

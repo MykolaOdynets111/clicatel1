@@ -6,6 +6,7 @@ import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.Territories;
 import datamanager.jacksonschemas.*;
+import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
@@ -22,6 +23,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
+
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -571,6 +573,24 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tickets;
     }
 
+    public static List<Department> getDepartments(String tenantOrgName){
+        Response resp =  RestAssured.given().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "")).get(Endpoints.DEPARTMENTS);
+        List<Department> departments = resp.jsonPath().getList("", Department.class);
+        return departments;
+    }
+
+    public static void deleteDepartmentsById(String tenantOrgName) {
+
+        List<Department> departments = getDepartments(tenantOrgName);
+        for (Department department : departments) {
+            if (department.getName().contains("Auto")) {
+                String departmentId = department.getId();
+                 RestAssured.given()
+                        .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, ""))
+                        .delete(Endpoints.DEPARTMENTS + "/" + department.getId());
+            }
+        }
+    }
 
     public static Map getActiveSessionByClientId(String clientId){
         String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
@@ -578,11 +598,11 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Response resp =  RestAssured.get(url);
         Map activeSession = null;
         try{
-            activeSession =  (HashMap) ((Map) resp.getBody().jsonPath().getList("content.sessions[0]")
+            activeSession = resp.getBody().jsonPath().getList("content.sessions[0]")
                     .stream()
                     .map(e -> (Map) e)
                     .filter(map -> map.get("state").equals("ACTIVE"))
-                    .findFirst().get());
+                    .findFirst().get();
         }catch(JsonPathException e){
             Assert.fail("Failed to get session Id\n"+
                     "resp status: " + resp.statusCode() + "\n" +

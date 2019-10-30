@@ -106,6 +106,11 @@ public class Hooks implements JSHelper {
             }
         }
 
+
+        if(scenario.getSourceTagNames().contains(("@remove_dep"))){
+            ApiHelper.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
+        }
+
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
             ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }

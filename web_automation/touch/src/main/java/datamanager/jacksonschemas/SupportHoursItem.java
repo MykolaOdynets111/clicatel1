@@ -66,13 +66,9 @@ public class SupportHoursItem {
     @Override
     public boolean equals(Object o){
         SupportHoursItem other = (SupportHoursItem) o;
-        if(this.dayOfWeek.equals(other.dayOfWeek)&&
-           this.endWorkTime.equals(other.endWorkTime) &&
-           this.startWorkTime.equals(other.startWorkTime)){
-            return true;
-        } else {
-            return false;
-        }
+        return this.dayOfWeek.equals(other.dayOfWeek) &&
+                this.endWorkTime.equals(other.endWorkTime) &&
+                this.startWorkTime.equals(other.startWorkTime);
     }
 
     @Override
