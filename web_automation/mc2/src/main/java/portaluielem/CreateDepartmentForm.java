@@ -43,7 +43,15 @@ public class CreateDepartmentForm extends BasePortalWindow{
 
     @Step(value = "Select Department Agents checkbox")
     public CreateDepartmentForm selectDepartmentAgentsCheckbox(String agentName){
-        departmentAgentsCheckbox.stream().filter(a -> a.getText().trim().equals(agentName)).findFirst().orElseThrow(() -> new AssertionError("Cannot select '" + agentName + "' checkbox")).click();
+        departmentAgentsCheckbox.stream().filter(a -> a.getText().trim().equals(agentName)).findFirst().orElseThrow(() -> new AssertionError("Cannot find '" + agentName + "' checkbox")).click();
+        return this;
+    }
+
+    @Step(value = "Select Department Agents checkbox")
+    public CreateDepartmentForm selectSeveralDepartmentAgentsCheckbox(List<String> agentNames){
+        for (String agentName : agentNames) {
+            selectDepartmentAgentsCheckbox(agentName);
+        }
         return this;
     }
 

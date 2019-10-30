@@ -74,6 +74,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AGENT_LAST_NAME =  faker.name().lastName();
         AGENT_EMAIL =  Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
 
+        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>(){{
+            put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
+             put("mail", AGENT_EMAIL);
+        }});
+
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         if(resp.statusCode()!=200){
@@ -104,6 +109,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
         Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
         Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
+
+        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>(){{
+            put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
+            put("mail", AGENT_EMAIL);
+        }});
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
@@ -241,8 +251,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^Delete user$")
     public static void deleteAgent(){
-        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
-        ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+        for (Map<String, String> agent: AbstractAgentSteps.getListOfCreatedAgents()){
+            String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agent.get("mail"));
+            ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+        }
     }
 
     @Given("^Second agent of (.*) account does not exist$")

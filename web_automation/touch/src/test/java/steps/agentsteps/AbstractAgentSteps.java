@@ -13,6 +13,7 @@ import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AbstractAgentSteps extends AbstractPortalSteps {
 
@@ -34,12 +35,21 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
 
     protected List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
+    public static ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
+
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
             secondAgentLoginPage.set(loginPage);
         } else {
             mainAgentLoginPage.set(loginPage);
         }
+    }
+
+    public static List<Map<String, String>> getListOfCreatedAgents() {
+        if (createdAgentsMails.get()==null) {
+            createdAgentsMails.set(new ArrayList<Map<String, String>>());
+        }
+        return createdAgentsMails.get();
     }
 
     public static AgentLoginPage getAgentLoginPage(String ordinalAgentNumber) {

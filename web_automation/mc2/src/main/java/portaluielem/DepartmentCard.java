@@ -19,8 +19,11 @@ public class DepartmentCard extends AbstractWidget {
     @FindBy(css = ".cl-actions-dropdown__icon")
     private WebElement threeDotsMenu;
 
-    @FindBy(xpath = "//span[text() = 'Delete department']")
+    @FindBy(xpath = ".//span[text() = 'Delete department']")
     private WebElement deleteDepartmentButton;
+
+    @FindBy(xpath = ".//*[@class ='cl-icon total']/parent::span")
+    private WebElement agentsQuantity;
 
     public DepartmentCard(WebElement element) {
         super(element);
@@ -45,7 +48,9 @@ public class DepartmentCard extends AbstractWidget {
         clickElem(this.getCurrentDriver(), deleteDepartmentButton, 10, "Delete Department Button ");
     }
 
-
+    public int getNumberOfAgents(){
+       return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), agentsQuantity, 0, "Quantity of Agents in card").trim());
+    }
 
 
 }
