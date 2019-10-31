@@ -291,7 +291,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Map<String, String> conversationDetails = DBConnector
                 .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
 
-        soft.assertTrue(waitForSessionToBeClosed(6),
+        soft.assertTrue(waitForSessionToBeClosed(12),
                 "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
                 "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
