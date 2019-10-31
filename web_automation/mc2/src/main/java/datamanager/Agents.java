@@ -113,7 +113,7 @@ public enum Agents {
         return this.tenant;
     }
 
-    public static Agents getMainAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
+    public static synchronized Agents getMainAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
         return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
@@ -122,7 +122,7 @@ public enum Agents {
                         "No admin user found for " + tenantOrgName + ", env: " + ConfigManager.getEnv()));
     }
 
-    public static Agents getSecondAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
+    public static synchronized Agents getSecondAgentFromCurrentEnvByTenantOrgName(String tenantOrgName) {
         return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
