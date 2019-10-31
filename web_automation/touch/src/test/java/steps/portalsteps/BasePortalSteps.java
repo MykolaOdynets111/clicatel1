@@ -616,7 +616,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
         Assert.assertEquals(getAdminPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
-                ". Add a solution to your account.", "Welcome message is not shown.");
+                ". Get started with your Clickatell account.", "Welcome message is not shown.");
     }
 
     @Then("^\"Get started with Touch\" button is shown$")

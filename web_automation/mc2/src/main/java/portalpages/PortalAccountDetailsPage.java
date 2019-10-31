@@ -15,8 +15,8 @@ public class PortalAccountDetailsPage extends PortalAbstractPage {
    @FindBy(css = "div.button-container button.button-primary")
    private WebElement closeAccountConfirmationButton;
 
-    @FindBy(css = "div.button-container button.button-secondary")
-    private WebElement cancelCloseAccountButton;
+   @FindBy(xpath = "//button[@ng-show='options.cancelText']")
+   private WebElement cancelCloseAccountButton;
 
    @FindBy(xpath = "//span[text()='Account confirmation']")
    private WebElement accountConfirmationPopupHeader;
