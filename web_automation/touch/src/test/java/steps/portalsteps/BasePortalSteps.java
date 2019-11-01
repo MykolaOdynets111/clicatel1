@@ -665,6 +665,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^I launch chatdesk from portal$")
     public void launchChatdeskFromPortal(){
         getAdminPortalMainPage().launchChatDesk();
+        AbstractAgentSteps.getAgentHomeForMainAgent().waitForLoadingInLeftMenuToDisappear(6, 10);
+        AbstractAgentSteps.getLeftMenu("agent").waitForConnectingDisappear(6,10);
     }
 
     @When("^Save (.*) pre-test widget value$")

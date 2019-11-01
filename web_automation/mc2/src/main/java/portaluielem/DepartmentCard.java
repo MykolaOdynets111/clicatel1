@@ -6,8 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.List;
-
 public class DepartmentCard extends AbstractWidget {
 
     @FindBy(css = ".card-title__text")
@@ -24,6 +22,12 @@ public class DepartmentCard extends AbstractWidget {
 
     @FindBy(xpath = ".//*[@class ='cl-icon total']/parent::span")
     private WebElement agentsQuantity;
+
+    @FindBy(xpath = ".//*[@class ='cl-icon offline']/parent::span")
+    private WebElement offlineAgentsNumber;
+
+    @FindBy(xpath = ".//*[@class ='cl-icon online']/parent::span")
+    private WebElement onlineAgentsNumber;
 
     public DepartmentCard(WebElement element) {
         super(element);
@@ -50,6 +54,14 @@ public class DepartmentCard extends AbstractWidget {
 
     public int getNumberOfAgents(){
        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), agentsQuantity, 0, "Quantity of Agents in card").trim());
+    }
+
+    public int getOfflineAgentsNumber(){
+        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), offlineAgentsNumber, 0, "Quantity offline Agents in card").trim());
+    }
+
+    public int getOnlineAgentsNumber(){
+        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), onlineAgentsNumber, 0, "Quantity online Agents in card").trim());
     }
 
 

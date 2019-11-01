@@ -213,4 +213,17 @@ public class LeftMenuWithChats extends AbstractUIElement {
             }
         }
     }
+
+    public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        try{
+            try {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToAppear);
+            }catch (TimeoutException e){ }
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), loadingSpinner, waitForSpinnerToDisappear);
+            return true;
+        }
+        catch (TimeoutException e){
+            return false;
+        }
+    }
 }

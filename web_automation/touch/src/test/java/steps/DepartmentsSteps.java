@@ -3,6 +3,7 @@ package steps;
 import cucumber.api.java.en.Then;
 import datamanager.Tenants;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.portalsteps.AbstractPortalSteps;
 
@@ -20,9 +21,11 @@ public class DepartmentsSteps extends AbstractPortalSteps {
 
     @Then("^Create Department with (.*) name (.*) description and (.*) Agent$")
     public void createDepartment(String name, String description, String agent){
+        getDepartmentsManagementPage().switchToFrame();
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectDepartmentAgentsCheckbox(agent).clickCreateButton();
         Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name, 5),
                 "Departments was not created");
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
     @Then("^Create Department with (.*) name (.*) description and with (.*) Agents")
@@ -32,28 +35,38 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         for (int i = agent-1; i > 0; i--){
             agents.add(AbstractAgentSteps.getListOfCreatedAgents().get((i-1)).get("name"));
         }
+        getDepartmentsManagementPage().switchToFrame();
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agents).clickCreateButton();
         Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name, 5),
                 "Departments was not created");
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
 
     @Then("^Remove Department with (.*) name and (.*) description$")
     public void removeDepartment(String name, String description){
-        if(!getDepartmentsManagementPage().switchToFrame().isCardPresent(name, 1)){
+        getDepartmentsManagementPage().switchToFrame();
+        if(!getDepartmentsManagementPage().isCardPresent(name, 1)){
             Assert.fail("Department with '" + name + "' name was not shown");
         }
 
         getDepartmentsManagementPage().findCardByNameAndDescription(name, description).clickDeleteDepartmentButton();
-        Assert.assertFalse(getDepartmentsManagementPage().isCardPresent(name, 1),
+        Assert.assertFalse(getDepartmentsManagementPage().isCardDisappeared(name, 1),
                 "Departments was not removed");
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
 
-    @Then("^Verify that (.*) number of agents present in card with (.*) name and (.*) description$")
-    public void verifyAgentsQuantity(int userNumber, String cardName, String description){
-       Assert.assertEquals(getDepartmentsManagementPage().findCardByNameAndDescription(cardName, description).getNumberOfAgents(), userNumber,
-                "Number of agents should be " + userNumber);
+    @Then("^Verify that card with (.*) name and (.*) description has (.*) total (.*) offline and (.*) active agents$")
+    public void verifyAgentsQuantity(String cardName, String description, int total, int offline, int online){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(getDepartmentsManagementPage().switchToFrame().findCardByNameAndDescription(cardName, description).getNumberOfAgents(), total,
+                "Number of agents should be " + total);
+        softAssert.assertEquals(getDepartmentsManagementPage().findCardByNameAndDescription(cardName, description).getOfflineAgentsNumber(), offline,
+                "Number of agents should be " + offline);
+        softAssert.assertEquals(getDepartmentsManagementPage().findCardByNameAndDescription(cardName, description).getOnlineAgentsNumber(), online,
+                "Number of agents should be " + online);
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
+        softAssert.assertAll();
     }
-
 }

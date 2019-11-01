@@ -59,6 +59,18 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
         return false;
     }
 
+    public boolean isCardDisappeared(String cardName, int time){
+        boolean isCardPresent = false;
+        for (int i = time; i > 0; i--){
+            isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
+            if (!isCardPresent){
+                return true;
+            }
+            waitFor(1000);
+        }
+        return false;
+    }
+
     public DepartmentsManagementPage switchToFrame(){
         this.getCurrentDriver().switchTo().frame(iframeId);
         return this;
@@ -66,7 +78,6 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
 
     @Step(value = "Click 'Create New Department' button")
     public CreateDepartmentForm clickAddNewDepartmentButton() {
-        switchToFrame();
         clickElem(this.getCurrentDriver(), addNewDepartmentButton, 10, "Add New Department button");
         createDepartmentForm.setCurrentDriver(this.getCurrentDriver());
         return createDepartmentForm;
