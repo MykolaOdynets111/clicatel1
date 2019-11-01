@@ -52,7 +52,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @Then("^(.*) sees correct messages in history details window$")
     public void verifyHistoryInOpenedWindow(String agent){
         SoftAssert soft = new SoftAssert();
-        String expectedChatHistoryTime = getExpectedTime(chatHistory.getChatStarted(), DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"), false);
+        String expectedChatHistoryTime = getExpectedTime(chatHistory.getMessages().get(0).getDateTime(), DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"), false);
         List<String> messagesFromChatHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getAllMessages();
 
         List<String> expectedChatHistory = getExpectedChatHistoryItems(chatHistory);
