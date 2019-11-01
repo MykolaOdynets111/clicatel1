@@ -20,7 +20,7 @@ public class TestFloReporter {
 //    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
 //    System.setProperty("isRerun", "true");
-//    System.setProperty("tplanKey", "TPORT-12496");
+//    System.setProperty("tplanKey", "TPORT-14920");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
 

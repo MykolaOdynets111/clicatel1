@@ -6,6 +6,7 @@ import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.Territories;
 import datamanager.jacksonschemas.*;
+import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
@@ -83,7 +84,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return resp;
     }
 
-    public static void createUserProfile(String tenantName, String clientID) {
+    public static Response createUserProfile(String tenantName, String clientID) {
         Response resp;
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
@@ -103,6 +104,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Assert.assertEquals(resp.statusCode(), 200,
                 "Creating of user profile was not successful\n" +
                 "resp body: " + resp.getBody().asString());
+        return resp;
     }
 
     public static void createUserProfileWithPhone(String clientID, String phoneNumber){
@@ -409,7 +411,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                                                             .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
                                                             .getBody().jsonPath().getList("", IntegrationChannel.class);
     return  existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
-            .findFirst().get().getId();
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("Integration channel '" +integrationChanel +"' is absent for " + tenantOrgName + " tenant"))
+            .getId();
     }
 
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
@@ -836,5 +840,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT, clientProfileID))
                 .getBody().as(ClientProfile.class);
+    }
+
+    public static Response createChatHistory(ChatHistory history){
+        return RestAssured.given().log().all()
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(history)
+                .post(Endpoints.INTERNAL_CREATE_HISTORY);
     }
 }

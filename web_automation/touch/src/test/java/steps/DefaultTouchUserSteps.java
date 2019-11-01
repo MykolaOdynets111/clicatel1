@@ -145,7 +145,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), page, 15);
         boolean lastPage = resp.jsonPath().getBoolean("last");
         if(resp.statusCode()!=200){
-            Assert.assertTrue(false, "Getting finished chats was not successful\n" +
+            Assert.fail("Getting finished chats was not successful\n" +
             "statusCode: " + resp.statusCode() + "\n" +
             "errorMessage: " + resp.getBody().asString());
         }

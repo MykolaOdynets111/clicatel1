@@ -1,6 +1,5 @@
 package steps.dotcontrol;
 
-import agentpages.uielements.ChatForm;
 import apihelper.APIHelperDotControl;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
@@ -46,20 +45,22 @@ public class DotControlSteps implements WebWait {
         return chatIDTranscript.get();
     }
 
+    public static DotControlInitRequest getInitCallBody(){
+        return initCallBody.get();
+    }
+
     @Given("Create .Control integration for (.*)(?: tenant| and adapter: )(.*)")
     public void createIntegration(String tenantOrgName, String adaptor){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
         if (adaptor.isEmpty()) adaptor = "fbmsg";
 
-        DotControlCreateIntegrationInfo createIntegration =
-                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get();
-
-        Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName, createIntegration);
+        Response resp = APIHelperDotControl.createIntegrationForAdapters(adaptor, tenantOrgName,
+                preparePayloadForCreateIntegrationEndpoint(Server.getServerURL()).get());
 
         if(!(resp.statusCode()==200)) {
             Assert.fail("Integration creating was not successful\n" + "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString() + "\n" + "Request: " + createIntegration);
+                    "\n Body: " + resp.getBody().asString());
         }
         String token = resp.getBody().jsonPath().get("channels[0].config.apiToken");
         System.out.println("!! Api token from creating integration: " + token);
@@ -165,6 +166,7 @@ public class DotControlSteps implements WebWait {
         soft.assertAll();
     }
 
+
     @When("^Send parameterized init call with (.*) correct response is returned$")
     public void sendInitCalWithAdditionalParameters(String contextStrategy){
         DotControlInitRequest initRequest = preparePayloadForInitEndpoint(apiToken.get(), "generated", "provided");
@@ -180,8 +182,7 @@ public class DotControlSteps implements WebWait {
         Response resp = APIHelperDotControl.sendInitCallWithWait(Tenants.getTenantUnderTestOrgName(), initRequest);
         Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
-                        "request: " + initRequest.toString() + "\n" +
-                        "response" + resp.getBody().asString() + "\n\n");
+                        resp.getBody().asString() + "\n\n");
     }
 
     @When("^Send parameterized init call with history$")
@@ -312,11 +313,6 @@ public class DotControlSteps implements WebWait {
         responseOnSentRequest.get();
     }
 
-    @Then("Verify dot .Control returns edited response in (.*) seconds")
-    public void verifyDotControlReturnEditedResponse(int wait){
-        verifyDotControlReturnedCorrectResponse(ChatForm.inputMassage, wait);
-    }
-
     @Then("Verify dot .Control returns (.*) response during (.*) seconds")
     public void verifyDotControlReturnedCorrectResponse(String expectedResponse, int wait){
         try {
@@ -421,11 +417,11 @@ public class DotControlSteps implements WebWait {
     private boolean isExpectedResponseArrives(String message){
         if (message.equalsIgnoreCase("agents_available")) {
             return (!Server.incomingRequests.isEmpty()) &&
-                    Server.incomingRequests.containsKey(clientId.get()) &&
+                    Server.incomingRequests.keySet().contains(clientId.get()) &&
                    Server.incomingRequests.get(clientId.get()).getMessageType().equals("AGENT_AVAILABLE");
         } else {
             return (!Server.incomingRequests.isEmpty()) &&
-                    Server.incomingRequests.containsKey(clientId.get()) &&
+                    Server.incomingRequests.keySet().contains(clientId.get()) &&
                     Server.incomingRequests.get(clientId.get()).getMessage().equals(message);
         }
     }

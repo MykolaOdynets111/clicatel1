@@ -1,10 +1,11 @@
 @agent_to_user_conversation
 @twitter
 @without_tct
-
-  Feature: Sending edited suggestion via Direct Messages
+@suggestions
+Feature: Sending edited suggestion via Direct Messages
 
     Background:
+      Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo
       Given Login to twitter
       Given I login as agent of General Bank Demo
       Given Open twitter page of General Bank Demo

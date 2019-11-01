@@ -156,26 +156,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
     }
 
-    public void selectRandomChat(){
-        try {
-            waitForElementToBePresentByXpath(this.getCurrentDriver(), tenthChat, 8);
-        }catch(TimeoutException e){
-            // nothing to do, just stabilizing wait
-        }
-        List<String> displayedClientIdsFromAQATests = newConversationRequests.stream()
-                .map(webElement -> new ChatInLeftMenu(webElement).setCurrentDriver(this.getCurrentDriver()))
-                .map(chatInLeftMenu -> chatInLeftMenu.getUserName())
-                .filter(userName -> userName.startsWith("test"))
-                .collect(Collectors.toList());
-       String randomClientIdWithOneSession = displayedClientIdsFromAQATests.stream()
-                                            .filter(clientId ->
-                                                ApiHelper.getSessionDetails(clientId).getBody().jsonPath().getList("data.sessionId").size()==1)
-                                            .findAny()
-                                            .get();
+    public void searchUserChat(String userId){
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 8);
-        searchChatInput.sendKeys(randomClientIdWithOneSession);
+        searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.ENTER);
-        getTargetChat(randomClientIdWithOneSession).click();
+        getTargetChat(userId).click();
     }
 
     public String getActiveChatUserName(){

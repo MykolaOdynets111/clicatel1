@@ -1,12 +1,7 @@
 
 package datamanager.jacksonschemas.chathistory;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -15,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "previousChatId",
     "tenantId",
-    "integration",
-    "userId",
+    "chatUserId",
     "agentId",
     "channelId",
     "chatStarted",
@@ -29,10 +23,8 @@ public class ChatHistory {
     private String previousChatId;
     @JsonProperty("tenantId")
     private String tenantId;
-    @JsonProperty("integration")
-    private String integration;
-    @JsonProperty("userId")
-    private String userId;
+    @JsonProperty("chatUserId")
+    private String chatUserId;
     @JsonProperty("agentId")
     private String agentId;
     @JsonProperty("channelId")
@@ -43,8 +35,16 @@ public class ChatHistory {
     private String chatEnded;
     @JsonProperty("messages")
     private List<Message> messages = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public ChatHistory(String previousChatId, String tenantId, String userId, String agentId, String channelId, String chatStarted, String chatEnded) {
+        this.previousChatId = previousChatId;
+        this.tenantId = tenantId;
+        this.chatUserId = userId;
+        this.agentId = agentId;
+        this.channelId = channelId;
+        this.chatStarted = chatStarted;
+        this.chatEnded = chatEnded;
+    }
 
     @JsonProperty("previousChatId")
     public String getPreviousChatId() {
@@ -66,24 +66,14 @@ public class ChatHistory {
         this.tenantId = tenantId;
     }
 
-    @JsonProperty("integration")
-    public String getIntegration() {
-        return integration;
+    @JsonProperty("chatUserId")
+    public String getChatUserId() {
+        return chatUserId;
     }
 
-    @JsonProperty("integration")
-    public void setIntegration(String integration) {
-        this.integration = integration;
-    }
-
-    @JsonProperty("userId")
-    public String getUserId() {
-        return userId;
-    }
-
-    @JsonProperty("userId")
-    public void setUserId(String userId) {
-        this.userId = userId;
+    @JsonProperty("chatUserId")
+    public void setChatUserId(String chatUserId) {
+        this.chatUserId = chatUserId;
     }
 
     @JsonProperty("agentId")
@@ -132,18 +122,22 @@ public class ChatHistory {
     }
 
     @JsonProperty("messages")
-    public void setMessages(List<Message> messages) {
+    public ChatHistory setMessages(List<Message> messages) {
         this.messages = messages;
+        return this;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    @Override
+    public String toString() {
+        return "ChatHistory{" +
+                "previousChatId='" + previousChatId + '\'' +
+                ", tenantId='" + tenantId + '\'' +
+                ", chatUserId='" + chatUserId + '\'' +
+                ", agentId='" + agentId + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", chatStarted='" + chatStarted + '\'' +
+                ", chatEnded='" + chatEnded + '\'' +
+                ", messages=" + messages +
+                '}';
     }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

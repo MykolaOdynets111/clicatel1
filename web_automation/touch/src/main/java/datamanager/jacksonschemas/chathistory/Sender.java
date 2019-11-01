@@ -1,11 +1,6 @@
 
 package datamanager.jacksonschemas.chathistory;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -21,8 +16,11 @@ public class Sender {
     private String id;
     @JsonProperty("type")
     private String type;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public Sender(String id, String type){
+        this.id = id;
+        this.type = type;
+    }
 
     @JsonProperty("id")
     public String getId() {
@@ -44,14 +42,11 @@ public class Sender {
         this.type = type;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    @Override
+    public String toString() {
+        return "Sender{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

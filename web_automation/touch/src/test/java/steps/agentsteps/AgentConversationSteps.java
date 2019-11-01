@@ -132,7 +132,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
         getAgentHomePage("main").clickAgentAssistantButton();
-        getAgentHomePage("main").waitForElementToBeVisible(getAgentHomePage("main").getCurrentDriver(),
+        getAgentHomePage("main").isElementShown(getAgentHomePage("main").getCurrentDriver(),
                 getAgentHomePage("main").getSuggestedGroup(), 4);
         if (getSuggestedGroup("main").isSuggestionListEmpty()) {
             Assert.fail("Suggestion list is empty");
@@ -275,10 +275,6 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
     }
 
-    @When("(.*) closes chat")
-    public void closeChat(String agent) {
-        getAgentHomePage(agent).endChat();
-    }
 
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {

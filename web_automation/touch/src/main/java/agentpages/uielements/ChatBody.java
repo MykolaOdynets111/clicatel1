@@ -107,6 +107,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
+        waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 5);
         return findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
                     .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo().replace("\n", " "))

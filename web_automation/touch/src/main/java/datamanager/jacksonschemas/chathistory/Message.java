@@ -1,12 +1,8 @@
 
 package datamanager.jacksonschemas.chathistory;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -43,8 +39,17 @@ public class Message {
     private String dateTime;
     @JsonProperty("message")
     private Message_ message;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public Message(String type, String id, String chatId, String tenantId, String sessionId, String source, String dateTime){
+        this.type = type;
+        this.id = id;
+        this.chatId = chatId;
+        this.tenantId = tenantId;
+        this.sessionId = sessionId;
+        this.source = source;
+        this.dateTime = dateTime;
+        this.exclude = new ArrayList<>();
+    }
 
     @JsonProperty("type")
     public String getType() {
@@ -132,18 +137,23 @@ public class Message {
     }
 
     @JsonProperty("message")
-    public void setMessage(Message_ message) {
+    public Message setMessage(Message_ message) {
         this.message = message;
+        return this;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    @Override
+    public String toString() {
+        return "Message{" +
+                "type='" + type + '\'' +
+                ", id='" + id + '\'' +
+                ", chatId='" + chatId + '\'' +
+                ", tenantId='" + tenantId + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", source='" + source + '\'' +
+                ", exclude=" + exclude +
+                ", dateTime='" + dateTime + '\'' +
+                ", message=" + message +
+                '}';
     }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

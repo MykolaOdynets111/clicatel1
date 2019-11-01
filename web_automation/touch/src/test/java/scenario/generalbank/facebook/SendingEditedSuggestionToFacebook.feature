@@ -2,10 +2,11 @@
 @facebook
 @fb_dm
 @without_tct
-
+@suggestions
 Feature: Sending edited suggestion back to Facebook user
 
   Background:
+    Given AGENT_ASSISTANT tenant feature is set to true for General Bank Demo
     Given Login to fb
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page

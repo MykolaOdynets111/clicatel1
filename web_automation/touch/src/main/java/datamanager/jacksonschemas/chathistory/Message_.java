@@ -1,11 +1,6 @@
 
 package datamanager.jacksonschemas.chathistory;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -30,8 +25,11 @@ public class Message_ {
     private Object replyId;
     @JsonProperty("text")
     private String text;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public Message_(String text){
+        this.type = "PLAIN_MESSAGE";
+        this.text = text;
+    }
 
     @JsonProperty("type")
     public String getType() {
@@ -49,8 +47,9 @@ public class Message_ {
     }
 
     @JsonProperty("sender")
-    public void setSender(Sender sender) {
+    public Message_ setSender(Sender sender) {
         this.sender = sender;
+        return this;
     }
 
     @JsonProperty("channel")
@@ -59,8 +58,9 @@ public class Message_ {
     }
 
     @JsonProperty("channel")
-    public void setChannel(Channel channel) {
+    public Message_ setChannel(Channel channel) {
         this.channel = channel;
+        return this;
     }
 
     @JsonProperty("replyId")
@@ -83,14 +83,14 @@ public class Message_ {
         this.text = text;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    @Override
+    public String toString() {
+        return "Message_{" +
+                "type='" + type + '\'' +
+                ", sender=" + sender +
+                ", channel=" + channel +
+                ", replyId=" + replyId +
+                ", text='" + text + '\'' +
+                '}';
     }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }
