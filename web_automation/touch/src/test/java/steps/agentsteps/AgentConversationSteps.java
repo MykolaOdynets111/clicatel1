@@ -275,6 +275,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
     }
 
+    @When("(.*) closes chat")
+    public void closeChat(String agent) {
+        getAgentHomePage(agent).endChat();
+    }
 
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {
