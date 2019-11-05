@@ -20,6 +20,9 @@ public class DepartmentCard extends AbstractWidget {
     @FindBy(xpath = ".//span[text() = 'Delete department']")
     private WebElement deleteDepartmentButton;
 
+    @FindBy(xpath = ".//span[text() = 'Manage department']")
+    private WebElement manageDepartmentButton;
+
     @FindBy(xpath = ".//*[@class ='cl-icon total']/parent::span")
     private WebElement agentsQuantity;
 
@@ -50,6 +53,12 @@ public class DepartmentCard extends AbstractWidget {
     public void clickDeleteDepartmentButton(){
         clickElem(this.getCurrentDriver(), threeDotsMenu, 10, "Three dots menu");
         clickElem(this.getCurrentDriver(), deleteDepartmentButton, 10, "Delete Department Button ");
+    }
+
+    @Step(value = "Click Manage Department Button")
+    public void clickManageDepartmentButton(){
+        clickElem(this.getCurrentDriver(), threeDotsMenu, 10, "Three dots menu");
+        clickElem(this.getCurrentDriver(), manageDepartmentButton, 10, "Delete Department Button ");
     }
 
     public int getNumberOfAgents(){

@@ -596,6 +596,29 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
+    public static void createDepartmen(String name, String description){
+        Response resp;
+        System.out.println(Tenants.getTenantUnderTestOrgName());
+        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), "main").getBody().jsonPath().get("id");
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+
+        resp = RestAssured.given()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), ""))
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{ " +
+                        "\"tenantId\": \"" + tenantId + "\"," +
+                        "\"name\": \"" + name + "\"," +
+                        "\"description\": \"" + description + "\"," +
+                        "\"agentIds\": [\"" + agentId +
+                        "\"]" +
+                        "}")
+                .post(Endpoints.DEPARTMENTS);
+        Assert.assertEquals(resp.statusCode(), 201,
+                "Creating of department was not successful\n" +
+                        "resp body: " + resp.getBody().asString());
+    }
+
     public static Map getActiveSessionByClientId(String clientId){
         String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         String url = String.format(Endpoints.INTERNAL_CHAT_BY_CLIENT, tenantID, clientId);

@@ -1,5 +1,8 @@
 package steps;
 
+import apihelper.ApiHelper;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import datamanager.Tenants;
 import org.testng.Assert;
@@ -42,6 +45,21 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
+    @And("^Edit department with (.*) name (.*) description")
+    public void editDepartment(String name, String description){
+        getDepartmentsManagementPage().switchToFrame().manageDepartment(name, description).
+                setNameField(name + "Edited").setDescriptionForm(description + "Edited").clickSaveButton();
+        Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name + "Edited", 5),
+                "Departments was not updated");
+        getDepartmentsManagementPage().findCardByNameAndDescription(name+ "Edited", description+ "Edited");
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
+    }
+
+    @Then ("^Verify that card has (.*) name and (.*) description")
+    public void verifyDepartmentNameAndDescription(String name, String description){
+        getDepartmentsManagementPage().switchToFrame().findCardByNameAndDescription(name, description);
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
+    }
 
     @Then("^Remove Department with (.*) name and (.*) description$")
     public void removeDepartment(String name, String description){
@@ -68,5 +86,10 @@ public class DepartmentsSteps extends AbstractPortalSteps {
                 "Number of agents should be " + online);
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
         softAssert.assertAll();
+    }
+
+    @Given("^New departments with (.*) name and (.*) description is created$")
+    public void createNewDepartment(String name, String department){
+        ApiHelper.createDepartmen(name, department);
     }
 }

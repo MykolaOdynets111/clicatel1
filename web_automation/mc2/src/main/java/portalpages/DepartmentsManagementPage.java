@@ -88,4 +88,9 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), pageTitle, 5);
     }
 
+    public CreateDepartmentForm manageDepartment(String cardName, String cardDescription){
+        findCardByNameAndDescription(cardName, cardDescription).clickManageDepartmentButton();
+        createDepartmentForm.setCurrentDriver(this.getCurrentDriver());
+        return createDepartmentForm;
+    }
 }

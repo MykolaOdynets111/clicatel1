@@ -73,13 +73,18 @@ public class ApiHelperPlatform {
     }
 
     public static void acceptInvitation(String tenantOrgName, String invitationID, String pass){
-        RestAssured.given()
+        Response resp = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"password\": \""+pass+"\"\n" +
                         "}")
                 .post(String.format(EndpointsPlatform.PLATFORM_ACCEPT_INVITATION, invitationID));
+        if(resp.statusCode()!=201){
+            Assert.fail("Accepting an invitation was not successful \n"+
+                    "Resp status code: " + resp.statusCode() + "\n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
     }
 
     public static List<String> getIdsOfRoles(String tenantOrgName, String roleDescription){
