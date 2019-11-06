@@ -62,17 +62,17 @@ public class CreateDepartmentForm extends BasePortalWindow{
 
     @Step(value = "Click Create button")
     public void clickCreateButton(){
-        createButton.click();
+        clickElem(this.getCurrentDriver(), createButton, 10, "Create button");
     }
 
     @Step(value = "Click Cancel button")
     public void clickCancelButton(){
-        cancelButton.click();
+        clickElem(this.getCurrentDriver(), cancelButton, 10, "Cancel button");
     }
 
     @Step(value = "Click Save button")
     public void clickSaveButton(){
-        saveButton.click();
+        clickElem(this.getCurrentDriver(), saveButton, 10, "Save button");
     }
 
 }

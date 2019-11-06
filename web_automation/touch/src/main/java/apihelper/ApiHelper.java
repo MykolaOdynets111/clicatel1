@@ -598,7 +598,6 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void createDepartmen(String name, String description){
         Response resp;
-        System.out.println(Tenants.getTenantUnderTestOrgName());
         String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), "main").getBody().jsonPath().get("id");
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 

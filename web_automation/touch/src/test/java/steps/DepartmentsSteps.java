@@ -47,10 +47,8 @@ public class DepartmentsSteps extends AbstractPortalSteps {
 
     @And("^Edit department with (.*) name (.*) description")
     public void editDepartment(String name, String description){
-        getDepartmentsManagementPage().switchToFrame().manageDepartment(name, description).
+        getDepartmentsManagementPage().switchToFrame().openDepartmentManageForm(name, description).
                 setNameField(name + "Edited").setDescriptionForm(description + "Edited").clickSaveButton();
-        Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name + "Edited", 5),
-                "Departments was not updated");
         getDepartmentsManagementPage().findCardByNameAndDescription(name+ "Edited", description+ "Edited");
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
