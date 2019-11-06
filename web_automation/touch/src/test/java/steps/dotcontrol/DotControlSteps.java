@@ -1,5 +1,6 @@
 package steps.dotcontrol;
 
+import agentpages.uielements.ChatForm;
 import apihelper.APIHelperDotControl;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
@@ -311,6 +312,11 @@ public class DotControlSteps implements WebWait {
                 "\nResponse on call with invalid clientID contains incorrect error message\n");
         soft.assertAll();
         responseOnSentRequest.get();
+    }
+
+    @Then("Verify dot .Control returns edited response in (.*) seconds")
+    public void verifyDotControlReturnEditedResponse(int wait){
+        verifyDotControlReturnedCorrectResponse(ChatForm.inputMassage, wait);
     }
 
     @Then("Verify dot .Control returns (.*) response during (.*) seconds")

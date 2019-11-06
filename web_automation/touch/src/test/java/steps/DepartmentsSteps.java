@@ -94,7 +94,6 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
-
     @Given("^New departments with (.*) name and (.*) description is created$")
     public void createNewDepartment(String name, String department){
         ApiHelper.createDepartmen(name, department);

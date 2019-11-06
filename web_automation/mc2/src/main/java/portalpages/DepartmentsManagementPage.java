@@ -103,4 +103,5 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
     public String getDuplicationAlertText(){
         return getTextFromElem(this.getCurrentDriver(), duplicationAlert, 3, "Duplication Alert");
     }
+
 }
