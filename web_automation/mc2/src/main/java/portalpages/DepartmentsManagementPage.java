@@ -1,6 +1,7 @@
 package portalpages;
 
 import io.qameta.allure.Step;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,13 +22,14 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[contains(text(), 'Departments Management')]")
     private WebElement pageTitle;
 
-
     @FindBy(xpath = "//div[@class = 'departments-grouping__card']")
     private List<WebElement> departmentCards;
 
+    @FindBy(xpath = "//div[@id = 'swal2-content']")
+    private WebElement duplicationAlert;
+
 
     private CreateDepartmentForm createDepartmentForm;
-
 
     public DepartmentsManagementPage() {
         super();
@@ -49,13 +51,17 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
 
     public boolean isCardPresent(String cardName, int time){
         boolean isCardPresent = false;
-        for (int i = time; i > 0; i--){
-            isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
-            if (isCardPresent){
-                return true;
+        try {
+            for (int i = time; i > 0; i--){
+                isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
+                if (isCardPresent){
+                    return true;
+                }
+                waitFor(1000);
             }
-            waitFor(1000);
+        } catch (StaleElementReferenceException e){
         }
+
         return false;
     }
 
@@ -93,4 +99,9 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
         createDepartmentForm.setCurrentDriver(this.getCurrentDriver());
         return createDepartmentForm;
     }
+
+    public String getDuplicationAlertText(){
+        return getTextFromElem(this.getCurrentDriver(), duplicationAlert, 3, "Duplication Alert");
+    }
+
 }

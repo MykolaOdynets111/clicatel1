@@ -15,6 +15,7 @@ import org.testng.asserts.SoftAssert;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.agentsteps.AbstractAgentSteps;
+import sun.management.resources.agent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -291,7 +292,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Map<String, String> conversationDetails = DBConnector
                 .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
 
-        soft.assertTrue(waitForSessionToBeClosed(12),
+        soft.assertTrue(waitForSessionToBeClosed(5),
                 "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
                 "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
@@ -304,9 +305,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     private boolean waitForSessionToBeClosed(int wait){
-        Map<String, String> sessionDetails = DBConnector
-                .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        Map<String, String> sessionDetails;
         for(int i=0; i<wait; i++){
+            sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
             if(sessionDetails.get("state").equals("TERMINATED") & sessionDetails.get("endedDate") != null) return true;
             else waitFor(1000);
         }

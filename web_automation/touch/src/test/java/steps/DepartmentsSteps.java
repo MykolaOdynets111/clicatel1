@@ -4,6 +4,7 @@ import apihelper.ApiHelper;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -86,8 +87,21 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
+    @When("Add newly created agent to department with (.*) name and (.*) description")
+    public void addNewAgentToDepartment(String name, String description){
+        String newAgent = AbstractAgentSteps.getListOfCreatedAgents().get((0)).get("name");
+        getDepartmentsManagementPage().switchToFrame().openDepartmentManageForm(name, description).selectDepartmentAgentsCheckbox(newAgent).clickSaveButton();
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
+    }
+
     @Given("^New departments with (.*) name and (.*) description is created$")
     public void createNewDepartment(String name, String department){
         ApiHelper.createDepartmen(name, department);
+    }
+
+    @Then("Verify Department Duplication Alert message displayed")
+    public void verifyDuplicationAlert(){
+        Assert.assertEquals(getDepartmentsManagementPage().switchToFrame().getDuplicationAlertText(), "Department already exist.", "Duplication message is not the same");
+        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 }

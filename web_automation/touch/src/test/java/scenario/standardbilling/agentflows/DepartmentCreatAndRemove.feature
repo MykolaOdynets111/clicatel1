@@ -2,6 +2,8 @@
 @remove_dep
 Feature: Add tests on department creating
 
+#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14880")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-10791")
   Scenario: Create and Remove department
     Given I open portal
     And Login into portal as an admin of Standard Billing account

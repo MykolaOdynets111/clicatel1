@@ -86,11 +86,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
             "Resp status code: " + resp.statusCode() + "\n" +
                     "Resp body: " + resp.getBody().asString());
         }
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        waitFor(1500);
+
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
     }
