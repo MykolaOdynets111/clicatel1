@@ -15,7 +15,10 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     private WebElement filterByDefault;
 
     @FindBy(xpath = "//div[@class='cl-table']/div[@class='cl-table-row']")
-    private List<WebElement> chatConsoleInboxRow;
+    private List<WebElement> chatConsoleInboxRows;
+
+    @FindBy(xpath = "//span[text() = 'Route to scheduler']")
+    private WebElement routeToSchedulerButton;
 
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
 
@@ -46,7 +49,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     }
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
-         return chatConsoleInboxRow.stream()
+        return chatConsoleInboxRows.stream()
                  .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
                  .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
@@ -54,4 +57,22 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
                 .findFirst().get();
     }
 
+    public void clickRouteToSchedulerButton(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
+        exitChatConsoleInbox();
+    }
+
+    public void clickThreeDotsButton(String userName){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        getChatConsoleInboxRow(userName).clickThreeDots();
+        exitChatConsoleInbox();
+    }
+
+    public String getCurrentAgentOfTheChat(String userName){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        String currentAgent = getChatConsoleInboxRow(userName).getCurrentAgent();
+        exitChatConsoleInbox();
+        return currentAgent;
+    }
 }

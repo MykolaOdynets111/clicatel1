@@ -101,11 +101,18 @@ public class Hooks implements JSHelper {
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
             Response resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            String agent;
+            if(DriverFactory.isSecondAgentDriverExists()) agent = "second agent";
+            else agent = "main";
+            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
             if(resp.statusCode()!=200) {
                 supportHoursUpdates(resp);
             }
         }
 
+        if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "true");
+        }
 
         if(scenario.getSourceTagNames().contains(("@remove_dep"))){
             ApiHelper.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
