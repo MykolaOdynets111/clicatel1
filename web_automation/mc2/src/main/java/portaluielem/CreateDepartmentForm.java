@@ -1,6 +1,7 @@
 package portaluielem;
 
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -26,10 +27,13 @@ public class CreateDepartmentForm extends BasePortalWindow{
     @FindBy(xpath = ".//button[text() = 'Create']")
     private WebElement createButton;
 
+    @FindBy(xpath = ".//button[text() = 'Save']")
+    private WebElement saveButton;
 
     @Step(value = "Set text to the Name field")
     public CreateDepartmentForm setNameField(String name){
        waitForElementToBeVisible(this.getCurrentDriver(), nameField, 1);
+        nameField.clear();
         nameField.sendKeys(name);
         return this;
     }
@@ -37,6 +41,7 @@ public class CreateDepartmentForm extends BasePortalWindow{
     @Step(value = "Set text to the Description Form")
     public CreateDepartmentForm setDescriptionForm(String name){
         waitForElementToBeVisible(this.getCurrentDriver(), descriptionForm, 1);
+        descriptionForm.clear();
         descriptionForm.sendKeys(name);
         return this;
     }
@@ -57,12 +62,17 @@ public class CreateDepartmentForm extends BasePortalWindow{
 
     @Step(value = "Click Create button")
     public void clickCreateButton(){
-        createButton.click();
+        clickElem(this.getCurrentDriver(), createButton, 10, "Create button");
     }
 
     @Step(value = "Click Cancel button")
     public void clickCancelButton(){
-        cancelButton.click();
+        clickElem(this.getCurrentDriver(), cancelButton, 10, "Cancel button");
+    }
+
+    @Step(value = "Click Save button")
+    public void clickSaveButton(){
+        clickElem(this.getCurrentDriver(), saveButton, 10, "Save button");
     }
 
 }
