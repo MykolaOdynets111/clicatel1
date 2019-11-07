@@ -32,6 +32,9 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     @FindBy(xpath = ".//div[contains(@class, 'cl-table-cell--agent-profile')][preceding-sibling::div[contains(@class, 'cl-table-cell--agent-profile')]]/div")
     private WebElement currentAgent;
 
+    @FindBy(css = "div.cl-table-user-description__name")
+    private WebElement userName;
+
     private String chatConsoleInboxRowNameXpath = "//div[@class='cl-table-user-data__description']//div[2]/../div[1]";
 
     public ChatConsoleInboxRow(WebElement element) {
@@ -65,6 +68,10 @@ public class ChatConsoleInboxRow extends AbstractWidget {
 
     public String getCurrentAgent(){
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
+    }
+
+    public String getUserName(){
+        return getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
     }
 
 }

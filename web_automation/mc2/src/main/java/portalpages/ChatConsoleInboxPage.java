@@ -24,6 +24,14 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(xpath = "//span[text() = 'Assign manually']")
     private WebElement assignManuallyButton;
 
+    @FindBy(css = "div.cl-actions-bar button")
+    private WebElement loadMoreButton;
+
+    @FindBy(css = "div.cl-actions-bar div")
+    private WebElement numberOfChats;
+
+    private String tableLoadingXpath = "(//div[@class='cl-operations-desk']/div)[1]/*";
+
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
 
     private String iframeId = "ticketing-iframe";
@@ -106,4 +114,37 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         getAssignChatWindow().clickAssignChatButton();
         exitChatConsoleInbox();
     }
+
+    public List<String> getUsersNames(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        List<String> list =  chatConsoleInboxRows.stream()
+                .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .map(e -> e.getUserName())
+                .collect(Collectors.toList());
+        exitChatConsoleInbox();
+        return list;
+    }
+
+    public void clickLoadMore(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        clickElem(this.getCurrentDriver(), loadMoreButton, 5, "'Load more'");
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), tableLoadingXpath, 3);
+        exitChatConsoleInbox();
+    }
+
+    public String getNumberOfChats(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        String info = getTextFromElem(this.getCurrentDriver(), numberOfChats, 3, "Number of chats");
+        exitChatConsoleInbox();
+        return info;
+    }
+
+    public boolean areNewChatsLoaded(int previousChats, int wait){
+        for(int i = 0; i< wait*2; i++){
+            if(getUsersNames().size() > previousChats) return true;
+            else waitFor(500);
+        }
+        return false;
+    }
+
 }

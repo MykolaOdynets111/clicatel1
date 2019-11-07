@@ -7,10 +7,15 @@ import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PortalInboxSteps extends AbstractPortalSteps {
 
+    private List<String> shownUsers = new ArrayList<>();
 
     @Given("^autoSchedulingEnabled is set to false$")
     public void turnOffAutoScheduling(){
@@ -65,6 +70,29 @@ public class PortalInboxSteps extends AbstractPortalSteps {
     public void assignChatManually(String agent){
         String agentName = getAgentName(agent);
         getChatConsoleInboxPage().assignChatOnAgent(agentName);
+    }
+
+    @Given("^Save shown chats$")
+    public void saveChats() {
+        shownUsers = getChatConsoleInboxPage().getUsersNames();
+    }
+
+    @Given("^Click 'Load more' button$")
+    public void clickLoadMore(){
+        getChatConsoleInboxPage().clickLoadMore();
+    }
+
+    @Given("^More records are loaded$")
+    public void moreRecordsAreShown(){
+        SoftAssert soft = new SoftAssert();
+        boolean result = getChatConsoleInboxPage().areNewChatsLoaded(shownUsers.size(), 4);
+        List<String> newAllUsers = getChatConsoleInboxPage().getUsersNames();
+
+        soft.assertTrue(result, "New chats are not loaded\n");
+        soft.assertEquals(getChatConsoleInboxPage().getNumberOfChats().split("of")[0].trim(),
+                "displaying " + newAllUsers.size(),
+                "Incorrect size of all chats after loading more\n");
+        soft.assertAll();
     }
 
     private String getAgentName(String agent){
