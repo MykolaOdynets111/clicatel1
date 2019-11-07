@@ -284,6 +284,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {
         SoftAssert soft = new SoftAssert();
+        boolean result = waitForSessionToBeClosed(5);
         Map<String, String> sessionDetails = DBConnector
                 .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
 
@@ -292,7 +293,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Map<String, String> conversationDetails = DBConnector
                 .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
 
-        soft.assertTrue(waitForSessionToBeClosed(5),
+        soft.assertTrue(result,
                 "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
                 "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,

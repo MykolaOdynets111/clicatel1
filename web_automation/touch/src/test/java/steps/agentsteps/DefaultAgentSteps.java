@@ -2,7 +2,6 @@ package steps.agentsteps;
 
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
-import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.SupportHoursItem;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -20,14 +19,9 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
-import steps.DefaultTouchUserSteps;
 import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Collections;
 
@@ -189,17 +183,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
-    }
-
-    private boolean waitForDotControlRequestOnChatDesk(String agent){
-        for(int i = 0; i<5; i++) {
-            String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,4)) return true;
-            else {
-                DriverFactory.getAgentDriverInstance().navigate().refresh();
-            }
-        }
-        return false;
     }
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
@@ -553,8 +536,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     private Customer360PersonalInfo getCustomer360Info(String clientFrom){
-        String clientId = "";
-        String integrationType = "";
+        String clientId;
+        String integrationType;
         switch (clientFrom){
             case "fb dm":
                 Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
@@ -563,7 +546,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                                                             ((Map) e).get("client")
                                                      ).get("type")
                                                 .equals("FACEBOOK"))
-                                        .findFirst().get();
+                                        .findFirst()
+                                        .orElseThrow(() -> new AssertionError("Cannot get active FACEBOOK type chat"));
                 clientId = (String) chatInfo.get("clientId");
                 integrationType = "FACEBOOK";
                 break;

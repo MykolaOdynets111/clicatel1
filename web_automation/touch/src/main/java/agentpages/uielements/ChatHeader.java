@@ -78,7 +78,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isEndChatShown(){
-        return isElementShown(this.getCurrentDriver(), endChatButton,1);
+        return isElementShown(this.getCurrentDriver(), endChatButton,4);
     }
 
     public void clickTransferButton(){

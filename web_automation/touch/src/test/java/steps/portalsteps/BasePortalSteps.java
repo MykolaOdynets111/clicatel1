@@ -1746,12 +1746,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Assert.assertTrue(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
     }
 
-    @Then("^Filter \"(.*)\" is selected by default$")
-    public void filterIsSelectedByDefault(String filterName) {
-        Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
-                "Filter name by default does not match expected");
-    }
-
     private MainPage getMainPage() {
         if (mainPage==null) {
             mainPage = new MainPage();
