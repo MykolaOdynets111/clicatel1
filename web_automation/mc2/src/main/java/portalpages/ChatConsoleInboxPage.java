@@ -3,6 +3,7 @@ package portalpages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portaluielem.AssignChatWindow;
 import portaluielem.ChatConsoleInboxRow;
 
 import java.util.List;
@@ -20,9 +21,14 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(xpath = "//span[text() = 'Route to scheduler']")
     private WebElement routeToSchedulerButton;
 
+    @FindBy(xpath = "//span[text() = 'Assign manually']")
+    private WebElement assignManuallyButton;
+
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
 
     private String iframeId = "ticketing-iframe";
+
+    private AssignChatWindow assignChatWindow;
 
     // == Constructors == //
 
@@ -36,6 +42,11 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         super(driver);
     }
 
+    public AssignChatWindow getAssignChatWindow(){
+        assignChatWindow.setCurrentDriver(this.getCurrentDriver());
+        return assignChatWindow;
+    }
+
     public String getFilterByDefault(){
         this.getCurrentDriver().switchTo().frame(iframeId);
         waitForElementsToBeVisibleByXpath(this.getCurrentDriver(),filterByDefaultXpath,2);
@@ -44,7 +55,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
                             "Default filter");
     }
 
-    public void exitChatConsoleInbox() {
+    private void exitChatConsoleInbox() {
         this.getCurrentDriver().switchTo().defaultContent();
     }
 
@@ -54,12 +65,18 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
                  .collect(Collectors.toList())
                  .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
                         .contains(userName.toLowerCase()))
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
 
     public void clickRouteToSchedulerButton(){
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
+        exitChatConsoleInbox();
+    }
+
+    public void clickAssignManuallyButton(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        clickElem(this.getCurrentDriver(), assignManuallyButton, 5, "'Route to scheduler' button");
         exitChatConsoleInbox();
     }
 
@@ -74,5 +91,19 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         String currentAgent = getChatConsoleInboxRow(userName).getCurrentAgent();
         exitChatConsoleInbox();
         return currentAgent;
+    }
+
+    public boolean isAssignChatWindowOpened(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        boolean result = isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 4);
+        exitChatConsoleInbox();
+        return result;
+    }
+
+    public void assignChatOnAgent(String agentName){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        getAssignChatWindow().selectDropDownAgent(agentName);
+        getAssignChatWindow().clickAssignChatButton();
+        exitChatConsoleInbox();
     }
 }

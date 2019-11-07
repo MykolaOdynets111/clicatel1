@@ -34,6 +34,12 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         getChatConsoleInboxPage().clickRouteToSchedulerButton();
     }
 
+    @When("Click 'Assign manually' button")
+    public void clickAssignManually(){
+        getChatConsoleInboxPage().clickAssignManuallyButton();
+    }
+
+
     @Then("^(.*) is set as 'current agent' for dot control ticket$")
     public void verifyCurrentAgent(String agent){
         Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
@@ -49,4 +55,20 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         Assert.assertTrue(result, "Agent " +agentName+ " is not set up as 'Current agent'");
     }
 
+    @Then("^'Assign chat' window is opened$")
+    public void assignChatWindowOpened(){
+        Assert.assertTrue(getChatConsoleInboxPage().isAssignChatWindowOpened()
+                , "'Assign chat' window is not opened");
+    }
+
+    @When("^I assign chat on (.*)$")
+    public void assignChatManually(String agent){
+        String agentName = getAgentName(agent);
+        getChatConsoleInboxPage().assignChatOnAgent(agentName);
+    }
+
+    private String getAgentName(String agent){
+        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
+        return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+    }
 }
