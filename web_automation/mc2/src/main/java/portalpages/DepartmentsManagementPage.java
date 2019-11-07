@@ -65,15 +65,18 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
         return false;
     }
 
-    public boolean isCardDisappeared(String cardName, int time){
-        boolean isCardPresent = false;
-        for (int i = time; i > 0; i--){
-            isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
-            if (!isCardPresent){
-                return true;
+    public boolean isCardDisappeared(String cardName, int time) {
+        boolean isCardPresent = true;
+        try {
+            for (int i = time; i > 0; i--) {
+                isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
+                if (!isCardPresent) {
+                    return true;
+                }
+                waitFor(1000);
             }
-            waitFor(1000);
-        }
+        } catch (StaleElementReferenceException e) { }
+
         return false;
     }
 

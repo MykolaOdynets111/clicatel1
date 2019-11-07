@@ -68,7 +68,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         }
 
         getDepartmentsManagementPage().findCardByNameAndDescription(name, description).clickDeleteDepartmentButton();
-        Assert.assertFalse(getDepartmentsManagementPage().isCardDisappeared(name, 1),
+        Assert.assertTrue(getDepartmentsManagementPage().isCardDisappeared(name, 2),
                 "Departments was not removed");
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
