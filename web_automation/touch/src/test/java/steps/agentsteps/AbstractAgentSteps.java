@@ -33,9 +33,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
 
     private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
-    protected List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
+    private List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
-    public static ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
+    private static ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
 
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){

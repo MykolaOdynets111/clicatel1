@@ -1,8 +1,7 @@
 @no_widget
 @remove_dep
-Feature: Departments: Create a department with 3 agents
+Feature: Departments : Edit department name/description
 
-#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14866")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14859")
   Scenario: Edit department name and description
     Given I open portal

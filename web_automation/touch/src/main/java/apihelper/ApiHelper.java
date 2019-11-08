@@ -596,13 +596,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
-    public static void createDepartmen(String name, String description){
-        Response resp;
-        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), "main").getBody().jsonPath().get("id");
-        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
+    public static void createDepartment(String name, String description, String agent ){
+        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).getBody().jsonPath().get("id");
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        Response resp;
         resp = RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), ""))
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{ " +
