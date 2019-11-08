@@ -84,6 +84,8 @@ public class Hooks implements JSHelper {
 
         makeScreenshotAndConsoleOutputFromChatdesk(scenario);
 
+        System.out.println("Scenario: \"" + scenario.getName() + "\" has finished with status: " + scenario.getStatus());
+
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
