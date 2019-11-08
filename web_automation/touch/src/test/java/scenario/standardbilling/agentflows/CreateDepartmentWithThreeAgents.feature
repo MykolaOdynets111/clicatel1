@@ -1,6 +1,5 @@
 @no_widget
 @remove_dep
-#@newagent
 Feature: Departments: Create a department with 3 agents
 
 #  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14850")
