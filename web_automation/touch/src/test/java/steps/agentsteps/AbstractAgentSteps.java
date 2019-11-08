@@ -33,7 +33,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
 
     private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
-    private List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
+    public List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
 
     private static ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
 
