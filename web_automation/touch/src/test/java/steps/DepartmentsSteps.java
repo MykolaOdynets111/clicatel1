@@ -104,4 +104,9 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         Assert.assertEquals(getDepartmentsManagementPage().switchToFrame().getDuplicationAlertText(), "Department already exist.", "Duplication message is not the same");
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
+
+    @And("Wait (.*) seconds")
+    public void waitForSomeTime(int seccond){
+        waitFor(seccond*1000);
+    }
 }
