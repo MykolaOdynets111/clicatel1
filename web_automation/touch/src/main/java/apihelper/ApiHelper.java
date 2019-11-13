@@ -602,7 +602,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         Response resp;
         resp = RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{ " +

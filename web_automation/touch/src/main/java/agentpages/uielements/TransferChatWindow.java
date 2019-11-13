@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -18,7 +19,10 @@ public class TransferChatWindow extends AbstractUIElement {
     private WebElement submitTransferChatButton;
 
     @FindBy(xpath = ".//label[@for='agentsList']/following-sibling::div//div[@class='Select-control']")
-    private WebElement openDropdownButton;
+    private WebElement openAgentDropdownButton;
+
+    @FindBy(xpath = ".//label[@for='departmentsList']/following-sibling::div//div[@class='Select-control']")
+    private WebElement openDepartmentDropdownButton;
 
     @FindBy(xpath = ".//div[@class='Select-menu-outer']")
     private WebElement availableAgent;
@@ -39,6 +43,13 @@ public class TransferChatWindow extends AbstractUIElement {
 
     @FindBy(css = "div.error-text.error-text-al")
     private WebElement noteInputError;
+
+    public TransferChatWindow (WebDriver current){
+        this.currentDriver = current;
+    }
+    public TransferChatWindow (){
+        super();
+    }
 
     public String transferChat() {
         openDropDownAgent();
@@ -67,6 +78,13 @@ public class TransferChatWindow extends AbstractUIElement {
         return agentName;
     }
 
+    public void transferChatToDepartment(String departmentName){
+        System.out.println(this.currentDriver.toString());
+        openDropDownDepartment();
+        selectDepartmentFromDropDown(departmentName);
+        clickTransferChatButton();
+    }
+
     public boolean isTransferChatShown() {
         return isElementShown(this.getCurrentDriver(), submitTransferChatButton, 5);
     }
@@ -76,11 +94,22 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public void openDropDownAgent() {
-        clickElem(this.getCurrentDriver(), openDropdownButton,5,"Open drop down button");
+        clickElem(this.getCurrentDriver(), openAgentDropdownButton,5,"Open Agents drop down button");
+    }
+
+    public void openDropDownDepartment() {
+        clickElem(this.getCurrentDriver(), openDepartmentDropdownButton,5,"Open Departments drop down button");
+    }
+
+    public void selectDepartmentFromDropDown(String departmentName){
+        if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openDepartmentDropdownButton.click();
+        waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
+        WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().get();
+        currentAgent.click();
     }
 
     public String selectDropDownAgent() {
-        if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openDropdownButton.click();
+        if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openAgentDropdownButton.click();
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
         for(int i=0; i<10; i++){
             if(availableAgent.getAttribute("innerText").contains("AQA")) {
