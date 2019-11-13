@@ -576,41 +576,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             return !phone.equalsIgnoreCase("unknown");
     }
 
-    @Then("^Agent add (.*) tag$")
-    public void agentAddSelectedTag(int iter) {
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
-        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
-                "Not all tags was added \n");
-    }
-
-    @Then("^Agent delete all tags$")
-    public void agentDeleteAllTags() {
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().deleteTags();
-    }
-
-    @Then("^All tags for tenant is available in the dropdown$")
-    public void allTagsForTenantIsAvailableInTheDropdown() {
-        List<String> tags= ApiHelper.getAllTags();
-        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        Assert.assertEquals(tags, tagsInCRM, " CRM ticket 'Tags' does not match created on the backend \n");
-    }
-
-    @Then("^Agent can search tag and select tag, selected tag added in tags field$")
-    public void agentCanSearchTagAndSelectTag() {
-        SoftAssert soft = new SoftAssert();
-        List<String> tags= ApiHelper.getAllTags();
-        String randomTag= tags.get((int)(Math.random() * tags.size()));
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
-        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
-        List<String> chosenTags = getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags();
-        soft.assertTrue(tagsInCRM.contains(randomTag),
-                "CRM ticket 'Tags' does not match in search \n");
-        soft.assertTrue(chosenTags.contains(randomTag),
-                "CRM ticket: selected 'Tag' does not match (or was not added) into the input field for Tags \n");
-        soft.assertAll();
-    }
-
     @Given("^Create (.*) chat via API$")
     public void createChatViaAPI(String chatOrigin){
         switch (chatOrigin){

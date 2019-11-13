@@ -90,12 +90,13 @@ public class FBYourPostPage extends AbstractSocialPage {
     }
 
     public void deletePost(){
-//        makeAPost("end");
         scrollPageToTheTop(this.getCurrentDriver());
         treeDotsButton.click();
         waitForElementToBeVisible(this.getCurrentDriver(),contextLayover, 5);
         contextLayoverButtons.stream().filter(e -> e.getText().equalsIgnoreCase("Delete"))
-                .findFirst().get().click();
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot find button 'Delete'"))
+                .click();
         waitForElementToBeVisible(this.getCurrentDriver(),deletePostConfirmationPopup, 5);
         confirmDeleteButton.click();
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),deletePostConfirmationPopupXPATH, 25);

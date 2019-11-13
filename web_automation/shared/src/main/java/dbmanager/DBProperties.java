@@ -74,6 +74,8 @@ public enum DBProperties {
         return agentsList.stream()
                 .filter(e -> e.getEnv().equalsIgnoreCase(env)
                         && e.getPlatform().equalsIgnoreCase(platform))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() ->
+                        new AssertionError("Cannot get properties for desired configuration:\n" + "env: " + env +"\n" + "platform: " + platform));
     }
 }

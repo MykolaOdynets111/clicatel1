@@ -65,7 +65,8 @@ public enum FacebookPages {
         return pagesList.stream()
                 .filter(e -> e.getFBPageEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getFBPageTenant().equalsIgnoreCase(tenantOrgName))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot get facebook page for '" + tenantOrgName + "' on " + ConfigManager.getEnv() + " env"));
     }
 
 }

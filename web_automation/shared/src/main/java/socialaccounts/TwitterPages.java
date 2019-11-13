@@ -26,7 +26,8 @@ public enum TwitterPages {
         List<TwitterPages> pagesList = Arrays.asList(pages);
         return pagesList.stream().filter(e -> e.getPageTenantName().equals(tenantName) &&
                 e.getPageEnv().equals(env))
-                .findFirst().get()
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot get twitter page for '" +tenantName +"' tenant on " + env))
                 .getPageURL();
     }
 

@@ -330,7 +330,7 @@ public class DBConnector {
         return getDataFromDb(env, "touch", query, "verification_code");
     }
 
-    private static void waitFor(int wait){
+    private static void waitFor(int wait) {
         try {
             Thread.sleep(wait);
         } catch (InterruptedException e) {
