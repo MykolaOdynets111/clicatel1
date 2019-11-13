@@ -79,7 +79,6 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public void transferChatToDepartment(String departmentName){
-        System.out.println(this.currentDriver.toString());
         openDropDownDepartment();
         selectDepartmentFromDropDown(departmentName);
         clickTransferChatButton();
@@ -104,7 +103,8 @@ public class TransferChatWindow extends AbstractUIElement {
     public void selectDepartmentFromDropDown(String departmentName){
         if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openDepartmentDropdownButton.click();
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
-        WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().get();
+        WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().
+                orElseThrow(() -> new AssertionError("Cannot find '" + departmentName + "' department from dropdown list"));
         currentAgent.click();
     }
 

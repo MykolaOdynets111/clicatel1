@@ -105,8 +105,4 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
-    @And("Wait (.*) seconds")
-    public void waitForSomeTime(int seccond){
-        waitFor(seccond*1000);
-    }
 }

@@ -2,11 +2,10 @@
 Feature: Departments: Verify if possible to transfer chat to department
 
   Background:
+    Given I login as agent of Standard Billing
+    And New departments with AutomationSecond name AutoDescriptionSecond description and second agent is created
     Given User select Standard Billing tenant
-    And New departments with Automation name AutoDescription description and main agent is created
-    Given New departments with AutomationSecond name AutoDescriptionSecond description and second agent is created
-    And I login as agent of Standard Billing
-    Given Click chat icon
+    And Click chat icon
     And User enter connect to agent2 into widget input field
 
   @TestCaseId("https://jira.clickatell.com/browse/TPLAT-4561")

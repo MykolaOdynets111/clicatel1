@@ -5,7 +5,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testcontainers.shaded.org.bouncycastle.tsp.TSPUtil;
 import portaluielem.CreateDepartmentForm;
 import portaluielem.DepartmentCard;
 
