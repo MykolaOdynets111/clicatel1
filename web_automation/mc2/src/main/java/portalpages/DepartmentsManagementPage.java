@@ -78,7 +78,6 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
         } catch (StaleElementReferenceException e) {
             return true;
         }
-
         return false;
     }
 

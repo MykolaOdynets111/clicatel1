@@ -40,3 +40,4 @@ Then use the command from project root:
 ```
 sonar-scanner
 ```
+After sonar finishes scanning. you will see in the console link where to find report.

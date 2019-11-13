@@ -250,10 +250,8 @@ public interface WebActions extends WebWait {
                 Image newimg = img.getScaledInstance((int)Math.ceil(img.getWidth()/dpr),(int)Math.ceil(img.getHeight()/dpr),Image.SCALE_DEFAULT);
                 File newFile = new File(image.getPath());
                 newFile.getParentFile().mkdirs();
-                new FileWriter(newFile);
                 BufferedImage buffered = imageToBufferedImage(newimg);
                 ImageIO.write(buffered,"PNG",newFile);
-                System.out.println("!!!!!! File was created !!!!!!!!! \n");
             }
             BufferedImage expImage = ImageIO.read(image);
             BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));

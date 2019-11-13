@@ -38,6 +38,7 @@ subprojects {
 
         compileOnly 'org.projectlombok:lombok:1.18.10'
         annotationProcessor 'org.projectlombok:lombok:1.18.10'
+        compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
     }
     
 
