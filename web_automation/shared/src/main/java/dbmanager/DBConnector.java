@@ -1,6 +1,6 @@
 package dbmanager;
+import org.jetbrains.annotations.NotNull;
 import org.testng.Assert;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,15 +27,12 @@ public class DBConnector {
         }
     }
 
-
-    private static Connection getConnection(String env, String platform) {
+    @NotNull
+    private static  Connection getConnection(String env, String platform) {
         if (connection == null) {
             createConnection(env, platform);
-            if(connection == null){
-                Assert.fail("DB connection was not established");
-            }
         }
-            return connection;
+           return connection;
         }
 
     private static synchronized String getDataFromDb(String env, String platform, String query, String column){
@@ -220,17 +217,14 @@ public class DBConnector {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> sessionDetails = new HashMap<>();
         String query = "SELECT * FROM "+tableName+".session where client_id = '"+clientID+"' and state = 'ACTIVE';";
-        Statement statement = null;
         ResultSet results = null;
-        try {
-            statement = getConnection(env, "touch").createStatement();
+        try(Statement statement = getConnection(env, "touch").createStatement()) {
             statement.executeQuery(query);
             results = statement.getResultSet();
             results.next();
             sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
             sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
             sessionDetails.put("conversationId",  getColumnValue(results,"conversation_id"));
-            statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -242,10 +236,8 @@ public class DBConnector {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         Map<String, String> sessionDetails = new HashMap<>();
         String query = "SELECT * FROM "+tableName+".session where client_id = '"+clientID+"';";
-        Statement statement = null;
         ResultSet results = null;
-        try {
-            statement = getConnection(env, "touch").createStatement();
+        try(Statement statement = getConnection(env, "touch").createStatement()) {
             statement.executeQuery(query);
             results = statement.getResultSet();
             results.next();
@@ -256,7 +248,6 @@ public class DBConnector {
             sessionDetails.put("sessionId", getColumnValue(results, "session_id"));
             sessionDetails.put("clientProfileId",  getColumnValue(results,"client_profile_id"));
             sessionDetails.put("conversationId",  getColumnValue(results,"conversation_id"));
-            statement.close();
             DBConnector.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
