@@ -1,14 +1,17 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import driverfactory.DriverFactory;
+import apihelper.ApiHelper;
+import datamanager.Tenants;
+import org.apache.commons.lang3.Range;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -31,6 +34,9 @@ public class ChatBody extends AbstractUIElement {
     public void setCurrentAgent(String agent){
         this.currentAgent = agent;
     }
+
+    @FindBy(css = "li.from span.profile-icon span")
+    private WebElement userProfileIcon;
 
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
@@ -59,7 +65,7 @@ public class ChatBody extends AbstractUIElement {
         }
     }
 
-        public boolean isUserMessageShown(String usrMessage) {
+    public boolean isUserMessageShown(String usrMessage) {
         try {
             waitForElementToBeVisibleByCss(this.getCurrentDriver(), scrollElement, 5);
         } catch(TimeoutException e){
@@ -74,6 +80,8 @@ public class ChatBody extends AbstractUIElement {
         }
         return isElementShownByXpath(this.getCurrentDriver(), locator, 10);
     }
+
+
 
     public boolean isMoreThanOneUserMassageShown() {
         return fromUserMessages.size() > 1;
@@ -136,7 +144,37 @@ public class ChatBody extends AbstractUIElement {
         return !lastCode.equals(previousCode);
     }
 
-    public String getTenantMsgColor() {
-        return Color.fromString(toUserMessages.get(0).getCssValue("color")).asHex();
+    public boolean verifyMessagesPosition(){
+        Rectangle rect = this.getWrappedElement().getRect();
+        int chatBodyCenter = rect.getX() + rect.getWidth()/2;
+        boolean agentMessageRight = toUserMessages.stream()
+                .allMatch(e -> (e.getRect().getX()+e.getRect().getWidth()) > chatBodyCenter);
+        boolean chatMessageLeft = fromUserMessages .stream()
+                .allMatch(e -> e.getLocation().getX() < chatBodyCenter);
+
+        return agentMessageRight && chatMessageLeft;
+    }
+
+    public boolean verifyAgentMessageColours(){
+        String primaryHex = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName())
+                .getBody().jsonPath().getString("tenantProperties.value[0]");
+        String primaryColorRgb = Color.fromString("#"+primaryHex).asRgb();
+        int expRrbSum = calculateRgbSum(primaryColorRgb);
+        Range<Integer> expRange = Range.between(expRrbSum-2, expRrbSum+2);
+
+        boolean agentMessageColor = toUserMessages.stream()
+                .map(e -> Color.fromString(e.getCssValue("background-color")).asRgb())
+                .map(this::calculateRgbSum)
+                .allMatch(expRange::contains);
+
+        String agentIconRgb = Color.fromString(agentIconWIthInitials.getCssValue("background-color")).asRgb();
+        boolean agentIconColor = expRange.contains(calculateRgbSum(agentIconRgb));
+
+        return agentMessageColor && agentIconColor;
+    }
+
+    private int calculateRgbSum(String rgb){
+        return Arrays.stream(rgb.split("\\(")[1].replace(")", "").split(","))
+                .map(String::trim).mapToInt(Integer::parseInt).sum();
     }
 }

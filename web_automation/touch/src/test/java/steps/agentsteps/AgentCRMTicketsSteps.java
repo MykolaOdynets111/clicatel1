@@ -317,6 +317,12 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         return dataForNewCRMTicket;
     }
 
+    @Then("^Correct (.*) sentiment selected$")
+    public void verifyCorrectSentimentSelected(String sentiment){
+        Assert.assertTrue(getAgentHomePage("main").getAgentFeedbackWindow().getSelectedSentiment()
+                .contains(sentiment), "Sentiment '" + sentiment + "' is not selecyed in Conclusion window");
+    }
+
     private void formDataForCRMUpdating(){
         Map<String, String> info = new HashMap<>();
         info.put("agentNote", "Note for updating ticket");
@@ -366,6 +372,41 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     public void deleteFirstTicket(String agent){
         getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickDeleteButton();
         getAgentHomePage(agent).getDeleteCRMConfirmationPopup().clickDelete();
+    }
+
+    @Then("^Agent add (.*) tag$")
+    public void agentAddSelectedTag(int iter) {
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
+        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
+                "Not all tags was added \n");
+    }
+
+    @Then("^Agent delete all tags$")
+    public void agentDeleteAllTags() {
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().deleteTags();
+    }
+
+    @Then("^All tags for tenant is available in the dropdown$")
+    public void allTagsForTenantIsAvailableInTheDropdown() {
+        List<String> tags= ApiHelper.getAllTags();
+        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
+        Assert.assertEquals(tags, tagsInCRM, " CRM ticket 'Tags' does not match created on the backend \n");
+    }
+
+    @Then("^Agent can search tag and select tag, selected tag added in tags field$")
+    public void agentCanSearchTagAndSelectTag() {
+        SoftAssert soft = new SoftAssert();
+        List<String> tags= ApiHelper.getAllTags();
+        String randomTag= tags.get((int)(Math.random() * tags.size()));
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
+        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
+        List<String> chosenTags = getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags();
+        soft.assertTrue(tagsInCRM.contains(randomTag),
+                "CRM ticket 'Tags' does not match in search \n");
+        soft.assertTrue(chosenTags.contains(randomTag),
+                "CRM ticket: selected 'Tag' does not match (or was not added) into the input field for Tags \n");
+        soft.assertAll();
     }
 
     private String formExpectedCRMTicketCreatedDate(String createdTimeFromBackend){
