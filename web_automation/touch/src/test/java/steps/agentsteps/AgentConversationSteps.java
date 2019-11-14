@@ -14,8 +14,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
-import steps.agentsteps.AbstractAgentSteps;
-import sun.management.resources.agent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -405,6 +403,15 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyInputFieldPlaceholder(String agent, String placeholder){
         Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
                 "Placeholder in input field in opened chat is not as expected");
+    }
 
+    @Then("Messages is correctly displayed and has correct color")
+    public void verifyMessages(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getChatBody("main agent").verifyAgentMessageColours(),
+                "Agent messages' color is not as expected");
+        soft.assertTrue(getChatBody("main agent").verifyMessagesPosition(),
+                "Messages location is not as expected");
+        soft.assertAll();
     }
 }
