@@ -265,6 +265,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
             System.out.println("New agent is removed "  + agent.get("name"));
         }
+        AbstractAgentSteps.getListOfCreatedAgents().clear();
     }
 
     @Given("^Second agent of (.*) account does not exist$")
