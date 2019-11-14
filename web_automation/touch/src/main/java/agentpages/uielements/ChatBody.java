@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,7 +36,7 @@ public class ChatBody extends AbstractUIElement {
         this.currentAgent = agent;
     }
 
-    @FindBy(css = "li.from span.profile-icon span")
+    @FindBy(css = "li.from span.profile-icon div.empty-icon")
     private WebElement userProfileIcon;
 
     @FindBy(css = "li.from")
@@ -80,8 +81,6 @@ public class ChatBody extends AbstractUIElement {
         }
         return isElementShownByXpath(this.getCurrentDriver(), locator, 10);
     }
-
-
 
     public boolean isMoreThanOneUserMassageShown() {
         return fromUserMessages.size() > 1;
@@ -176,5 +175,10 @@ public class ChatBody extends AbstractUIElement {
     private int calculateRgbSum(String rgb){
         return Arrays.stream(rgb.split("\\(")[1].replace(")", "").split(","))
                 .map(String::trim).mapToInt(Integer::parseInt).sum();
+    }
+
+    public boolean isValidDefaultUserProfileIcon() {
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/profileicons/user_default.png");
+        return isWebElementEqualsImage(this.getCurrentDriver(), userProfileIcon, image);
     }
 }
