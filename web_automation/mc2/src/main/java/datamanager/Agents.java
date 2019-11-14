@@ -76,6 +76,13 @@ public enum Agents {
     QA_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", QA),
     TESTING_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", TESTING),
 
+    DEV_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", DEV),
+    DEMO_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", DEMO),
+    QA_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", QA),
+    TESTING_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", TESTING),
+
+
+
     // ======= User of newly created tenant for touch go tests =========== //
     TOUCH_GO_ADMIN("", "p@$$w0rd4te$t", "", TESTING),
     TOUCH_GO_SECOND_AGENT("touchgoagent+", "p@$$w0rd4te$t", "", TESTING),

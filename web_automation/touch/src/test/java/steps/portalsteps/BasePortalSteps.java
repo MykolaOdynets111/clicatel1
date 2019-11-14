@@ -2,6 +2,8 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
+import cucumber.api.Scenario;
+import cucumber.runtime.ScenarioImpl;
 import datamanager.jacksonschemas.AvailableAgent;
 import datamanager.model.PaymentMethod;
 import driverfactory.DriverFactory;
@@ -78,6 +80,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
             put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
              put("mail", AGENT_EMAIL);
         }});
+
+        System.out.println("Adding the agent to the list = " +  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME + " mail: " + AGENT_EMAIL);
+        System.out.println("Number of agents in the list after adding = " + AbstractAgentSteps.getListOfCreatedAgents().size());
+        for (Map<String, String> map : AbstractAgentSteps.getListOfCreatedAgents()){
+            for (String key: map.keySet()){
+                System.out.println("Agent in the list after adding"  + map.get("name") + " and mail: " + map.get("mail"));
+            }
+        }
 
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
@@ -249,9 +259,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^Delete user$")
     public static void deleteAgent(){
+        System.out.println("Number of agents in the list before removing = " + AbstractAgentSteps.getListOfCreatedAgents().size());
         for (Map<String, String> agent: AbstractAgentSteps.getListOfCreatedAgents()){
             String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agent.get("mail"));
             ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+            System.out.println("New agent is removed "  + agent.get("name"));
         }
     }
 

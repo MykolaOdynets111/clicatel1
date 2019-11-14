@@ -42,6 +42,12 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat();
     }
 
+    @And("^(.*) transfers chat to (.*) department$")
+    public void transferChatTodDepartment(String agent, String departmentName){
+        getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getTransferChatWindow().transferChatToDepartment(departmentName);
+    }
+
     @And("^(.*) transfers overnight ticket$")
     public void agentTransfersOvernightTicket(String agent) {
         getAgentHomePage(agent).getChatHeader().clickTransferButton();

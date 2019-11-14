@@ -5,7 +5,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testcontainers.shaded.org.bouncycastle.tsp.TSPUtil;
 import portaluielem.CreateDepartmentForm;
 import portaluielem.DepartmentCard;
 
@@ -49,19 +48,19 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot Find the card with '" + cardName + "'  name and '" + cardDescription + "' description"));
     }
 
-    public boolean isCardPresent(String cardName, int time){
+    public boolean isCardPresent(String cardName, int time) {
         boolean isCardPresent = false;
-        try {
-            for (int i = time; i > 0; i--){
-                isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
-                if (isCardPresent){
-                    return true;
-                }
-                waitFor(1000);
-            }
-        } catch (StaleElementReferenceException e){
-        }
 
+        for (int i = time; i > 0; i--) {
+            try {
+                isCardPresent = departmentCards.stream().anyMatch(e -> e.getText().contains(cardName));
+            } catch (StaleElementReferenceException e) {
+            }
+            if (isCardPresent) {
+                return true;
+            }
+            waitFor(1000);
+        }
         return false;
     }
 
@@ -75,8 +74,9 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
                 }
                 waitFor(1000);
             }
-        } catch (StaleElementReferenceException e) { }
-
+        } catch (StaleElementReferenceException e) {
+            return true;
+        }
         return false;
     }
 

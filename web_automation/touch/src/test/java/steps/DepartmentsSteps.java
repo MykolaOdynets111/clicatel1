@@ -94,9 +94,9 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
 
-    @Given("^New departments with (.*) name and (.*) description is created$")
-    public void createNewDepartment(String name, String department){
-        ApiHelper.createDepartmen(name, department);
+    @Given("^New departments with (.*) name (.*) description and (.*) agent is created$")
+    public void createNewDepartment(String name, String department, String agent){
+        ApiHelper.createDepartment(name, department, agent);
     }
 
     @Then("Verify Department Duplication Alert message displayed")
@@ -104,4 +104,5 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         Assert.assertEquals(getDepartmentsManagementPage().switchToFrame().getDuplicationAlertText(), "Department already exist.", "Duplication message is not the same");
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
+
 }
