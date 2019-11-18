@@ -7,8 +7,6 @@ Feature: Departments: Create a department with 3 agents
     Given Brand New Standard Billing agent is created
     And Brand New Standard Billing agent is created
 
-#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14850")
-#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14853")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14856")
   Scenario: Verify correct agents numbers in created department
     Given I open portal
