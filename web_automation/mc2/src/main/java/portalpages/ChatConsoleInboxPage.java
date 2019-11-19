@@ -30,7 +30,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(css = "div.cl-actions-bar div")
     private WebElement numberOfChats;
 
-    private String tableLoadingXpath = "(//div[@class='cl-operations-desk']/div)[1]/*";
+    private String tableLoadingXpath = "//div[@class='spinner']";
 
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
 
@@ -127,6 +127,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     public void clickLoadMore(){
         this.getCurrentDriver().switchTo().frame(iframeId);
+        scrollToElem(this.getCurrentDriver(), loadMoreButton,  "'Load more'");
         clickElem(this.getCurrentDriver(), loadMoreButton, 5, "'Load more'");
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), tableLoadingXpath, 3);
         exitChatConsoleInbox();

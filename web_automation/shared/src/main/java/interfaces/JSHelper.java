@@ -81,6 +81,14 @@ public interface JSHelper {
         }
     }
 
+    default void scrollToElem(WebDriver driver, WebElement element, String elemName){
+        try {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        }catch(NoSuchElementException e){
+            Assert.fail(elemName +" is not found");
+        }
+    }
+
 
 
     default void executeAngularClick(WebDriver driver, WebElement elem){
