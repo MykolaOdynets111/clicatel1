@@ -7,5 +7,5 @@ Feature: Chat console: Inbox tab
     Given I open portal
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Chat console in submenu
-    And Select "Inbox" in nav menu
+    And Select Inbox in Chat console
     Then Filter "Any" is selected by default

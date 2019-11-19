@@ -16,7 +16,7 @@ Feature: Supervisor in box : assign ticket manually
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Chat console in submenu
-    And Select "Inbox" in nav menu
+    And Select Inbox in Chat console
     Given I login as second agent of Automation Bot
     When Click three dots for dot control ticket
     And Click 'Assign manually' button

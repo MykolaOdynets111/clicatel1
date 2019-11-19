@@ -50,6 +50,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     public void editDepartment(String name, String description){
         getDepartmentsManagementPage().switchToFrame().openDepartmentManageForm(name, description).
                 setNameField(name + "Edited").setDescriptionForm(description + "Edited").clickSaveButton();
+        getDepartmentsManagementPage().isCardPresent(name+ "Edited", 2);
         getDepartmentsManagementPage().findCardByNameAndDescription(name+ "Edited", description+ "Edited");
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }

@@ -6,10 +6,7 @@ Feature: Supervisor in box : verify Load more button
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Chat console in submenu
-    And Select "Inbox" in nav menu
+    And Select Inbox in Chat console
     Given Save shown chats
     When Click 'Load more' button
     Then More records are loaded
-
-
-

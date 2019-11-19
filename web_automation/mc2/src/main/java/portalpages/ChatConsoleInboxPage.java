@@ -1,5 +1,6 @@
 package portalpages;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -30,7 +31,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(css = "div.cl-actions-bar div")
     private WebElement numberOfChats;
 
-    private String tableLoadingXpath = "//div[@class='spinner']";
+    private String spinner = "//div[@class='spinner']";
 
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
 
@@ -129,8 +130,21 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         this.getCurrentDriver().switchTo().frame(iframeId);
         scrollToElem(this.getCurrentDriver(), loadMoreButton,  "'Load more'");
         clickElem(this.getCurrentDriver(), loadMoreButton, 5, "'Load more'");
-        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), tableLoadingXpath, 3);
+        waitForConnectingDisappear(2,3);
         exitChatConsoleInbox();
+    }
+
+    public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        try{
+            try {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToAppear);
+            }catch (TimeoutException e){ }
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToDisappear);
+            return true;
+        }
+        catch (TimeoutException e){
+            return false;
+        }
     }
 
     public String getNumberOfChats(){

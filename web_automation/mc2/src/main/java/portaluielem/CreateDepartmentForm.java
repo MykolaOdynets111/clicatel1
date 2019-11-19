@@ -32,7 +32,7 @@ public class CreateDepartmentForm extends BasePortalWindow{
 
     @Step(value = "Set text to the Name field")
     public CreateDepartmentForm setNameField(String name){
-       waitForElementToBeVisible(this.getCurrentDriver(), nameField, 1);
+       waitForElementToBeClickable(this.getCurrentDriver(), nameField, 1);
         nameField.clear();
         nameField.sendKeys(name);
         return this;
@@ -40,7 +40,7 @@ public class CreateDepartmentForm extends BasePortalWindow{
 
     @Step(value = "Set text to the Description Form")
     public CreateDepartmentForm setDescriptionForm(String name){
-        waitForElementToBeVisible(this.getCurrentDriver(), descriptionForm, 1);
+        waitForElementToBeClickable(this.getCurrentDriver(), descriptionForm, 1);
         descriptionForm.clear();
         descriptionForm.sendKeys(name);
         return this;

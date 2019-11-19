@@ -745,6 +745,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getAdminPortalMainPage().clickPageNavButton(navButton);
     }
 
+    @When("^Select Inbox in Chat console$")
+    public void openCCInbox(){
+        getAdminPortalMainPage().clickPageNavButton("Inbox");
+        getChatConsoleInboxPage().waitForConnectingDisappear(2,3);
+        getChatConsoleInboxPage().waitForConnectingDisappear(1,3);
+    }
+
     @When("^I click \"(.*)\" page action button$")
     public void clickActionButton(String actionButton){
         getAdminPortalMainPage().clickPageActionButton(actionButton);
