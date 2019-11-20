@@ -10,7 +10,7 @@ public class WidgetFooter extends AbstractUIElement {
     @FindBy(css = "textarea.ctl-text-input")
     private WebElement textInput;
 
-    @FindBy(css = "div.svg-bttn-click-area")
+    @FindBy(css = "span.svg-bttn-container")
     private WebElement sendMesageButton;
 
     public WidgetFooter enterMessage(String text) {
@@ -19,7 +19,7 @@ public class WidgetFooter extends AbstractUIElement {
     }
 
     public WidgetFooter sendMessage() {
-        sendMesageButton.click();
+        clickElem(this.getCurrentDriver(), sendMesageButton, 2, "Send Message button");
         return this;
     }
 
