@@ -11,6 +11,7 @@ import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
@@ -130,6 +131,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Given("^User opens page with desired tenant widget$")
     public DefaultTouchUserSteps openPageForDynamicallyPassedTenant() {
         DriverFactory.openUrlForDynamicTenant();
+        Tenants.setTenantUnderTestNames(ConfigManager.getTenantOrgName().replace("_", " "));
         return this;
     }
 

@@ -118,6 +118,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     public List<String> getUsersNames(){
         this.getCurrentDriver().switchTo().frame(iframeId);
+        waitForElementsToBeVisible(this.getCurrentDriver(), chatConsoleInboxRows, 3);
         List<String> list =  chatConsoleInboxRows.stream()
                 .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getUserName())

@@ -92,7 +92,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(20);
-        int sessionCapacity;
+        int sessionCapacity = 0;
         if(!isConversationShown){
             sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
             if (sessionCapacity==0) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
@@ -104,8 +104,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(isConversationShown,
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
-                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + "\n" +
-                        "Support hours: " + supportHours + "\n"
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + " and was: "+ sessionCapacity +"before updating \n" +
+                        "Support hours: " + supportHours + "\n" +
+                        "and was:" +supportHours +" before changing\n"
         );
     }
 
