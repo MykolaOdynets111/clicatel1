@@ -3,6 +3,7 @@
 Feature: Customer 360 info for twitter user
 
   Background:
+    Given Login to twitter
     Given I login as agent of General Bank Demo
     Given Open twitter page of General Bank Demo
     Given Open direct message channel

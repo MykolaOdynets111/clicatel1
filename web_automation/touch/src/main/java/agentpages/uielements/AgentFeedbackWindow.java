@@ -15,12 +15,6 @@ import java.util.stream.Collectors;
 @FindBy(css = "div.modal-content")
 public class AgentFeedbackWindow extends AbstractUIElement {
 
-    private String windowCss = "div.modal-content";
-
-    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
-
-    private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
-
     @FindBy(xpath = "//button[text()='Cancel']")
     private WebElement cancelButton;
 
@@ -39,6 +33,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".icon-positive")
     private WebElement sentimentHappy;
 
+    @FindBy(css = "div.conclude-chat-sentiment>span.active")
+    private WebElement selectedSentiment;
+
     @FindBy(css = ".icons.conclude-chat-sentiment")
     private WebElement sentimentsAll;
 
@@ -51,10 +48,14 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(xpath = "//div[@class='Select-menu-outer']//div[@role='option']")
     private List<WebElement> availableTags;
 
-    private String inputTagField =  "div.Select-input > input";
-
     @FindBy(xpath = "//span[@class='Select-arrow-zone']/span")
     private WebElement openDropdownButton;
+
+    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
+
+    private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
+
+    private String inputTagField =  "div.Select-input > input";
 
     private String tagsOptionsCss = "div.Select-option";
 
@@ -203,6 +204,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void deleteTags() {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), cleareAll, 6);
         findElemByCSS(this.getCurrentDriver(), cleareAll).click();
     }
 
@@ -212,6 +214,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public boolean isValidSentiments(File image) {
         return isWebElementEqualsImage(this.getCurrentDriver(), sentimentsAll, image);
+    }
+
+    public String getSelectedSentiment(){
+        return getAttributeFromElem(this.getCurrentDriver(), selectedSentiment, 3, "Selected sentiment", "class");
     }
 
 }

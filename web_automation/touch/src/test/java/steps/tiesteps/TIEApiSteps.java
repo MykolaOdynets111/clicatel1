@@ -992,16 +992,19 @@ public class TIEApiSteps implements DateTimeHelper {
         boolean isTrained = false;
         String createdModelName = getExpectedModelName();
         int timeout = (minutes*60)/15;
+        Response resp = null;
         for(int i = 0; i < timeout; i++){
             if(!isTrained){
                 waitFor(15000);
                 try {
-                    isTrained = ApiHelperTie.getModels().getBody().jsonPath().getList("intent")
+                    resp = ApiHelperTie.getModels();
+                    isTrained = resp.getBody().jsonPath().getList("intent")
                             .stream().map(e -> (Map) e)
                             .filter(e -> e.get("name").equals(createdModelName))
                             .anyMatch(e -> e.get("status").equals("finished"));
                 }catch (JsonPathException e){
-                    Assert.fail("Unable to get trained models");
+                    Assert.fail("Unable to get trained models \n" + "resp: status code " + resp.statusCode() + "\n"
+                    + "resp body: " + resp.getBody().asString());
                 }
             } else{
                 break;

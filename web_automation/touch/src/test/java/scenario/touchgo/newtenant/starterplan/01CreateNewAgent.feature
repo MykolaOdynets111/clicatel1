@@ -19,7 +19,7 @@ Feature: Creating new agent
     Then Confirmation Email arrives
     When Second agent opens confirmation URL
     Then Login screen with new Second Agent name opened
-    When Second Agent provides new password and click Login
+    When Second Agent provides his password and click Login
     Then Notification popup with text Your account has been created is shown for Second agent
     When Login as second agent
     Then Second Agent is logged in chat desk

@@ -20,14 +20,19 @@ import static runner.automationbot.Path.DOTCONTROL;
         },
         monochrome = true,
         features ={
+                PATH + "DisconnectingAgent.feature",
+                PATH + "RejectTransferingChat.feature",
+                PATH + "TransfedChatContainElements.feature",
+                PATH + "ClosingSession.feature",
+                PATH + "TransferingChatWithNoAvailableAgent.feature",
                 PATH + "AgentPhotoManaging.feature",
                 PATH + "AvailableAgentsHeadphones.feature",
                 PATH + "ChatConsoleWaitingCustomers.feature",
                 PATH + "EditAutorespondersViaPortalUI.feature",
                 PATH + "OutOfSupportHoursBotMode.feature",
                 PATH + "TenantBrandImageManaging.feature",
-//                PATH + "TransferingChatViaTimeout.feature",  need to wait till message preview is fixed
-//                PATH + "TransferOvernigthTicket.feature", need to wait till message preview is fixed
+//                PATH + "TransferingChatViaTimeout.feature", - not stable one
+                PATH + "TransferOvernigthTicket.feature",
                 DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
         },
         glue ="steps")

@@ -16,7 +16,7 @@ public class GmailConnector {
     private static ThreadLocal<Folder> folder = new ThreadLocal<>();
 
 
-    public static Store getStore(){
+    public static synchronized Store getStore(){
         return store.get();
     }
 
@@ -24,7 +24,7 @@ public class GmailConnector {
         store.set(newStore);
     }
 
-    public static Folder getFolder(){
+    public static synchronized Folder getFolder(){
         return folder.get();
     }
 
@@ -49,7 +49,7 @@ public class GmailConnector {
             setFolder(getStore().getFolder("INBOX"));
             getFolder().open(Folder.READ_WRITE);
         } catch (Exception e) {
-            Assert.fail("\n MessagingException e: \n" + e);
+            Assert.fail("\n MessagingException e: \n" + e + "mail creds: " + mail[0] + " " + mail[1]);
         }
         return getFolder();
     }

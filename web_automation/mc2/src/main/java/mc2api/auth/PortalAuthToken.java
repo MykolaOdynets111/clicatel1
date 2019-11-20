@@ -4,13 +4,11 @@ import datamanager.Accounts;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import drivermanager.ConfigManager;
-import mc2api.auth.PortalAuth;
-
 
 public class PortalAuthToken {
 
-    private static volatile ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
-    private static volatile ThreadLocal<String> PORTAL_SECOND_USER_ACCESS_TOKEN = new ThreadLocal<>();
+    private static ThreadLocal<String> PORTAL_USER_ACCESS_TOKEN = new ThreadLocal<>();
+    private static ThreadLocal<String> PORTAL_SECOND_USER_ACCESS_TOKEN = new ThreadLocal<>();
 
     public static String getAccessTokenForPortalUser(String tenantOrgName, String agent) {
         if(agent.toLowerCase().contains("second")){

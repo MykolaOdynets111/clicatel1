@@ -98,6 +98,8 @@ public class Endpoints {
 
     public static String INTERNAL_PROCESS_TICKET = URLs.getBaseInternalApiUrl() + "chats/ticket/process";
 
+    public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() +  "chats/chat/history";
+
     // ====================  tie ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";
@@ -174,5 +176,8 @@ public class Endpoints {
 
     public static String DOT_CONTROL_INIT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/init";
 
+    // ====================  Departments ================= //
+
+    public static String DEPARTMENTS = URLs.getTouchApiBaseURL() + "departments";
 }
 

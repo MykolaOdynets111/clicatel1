@@ -4,6 +4,7 @@ import abstractclasses.AbstractWidget;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import lombok.NonNull;
 
 public class AutoResponderItem extends AbstractWidget {
 
@@ -43,8 +44,8 @@ public class AutoResponderItem extends AbstractWidget {
         clickElem(this.getCurrentDriver(), resetToDefaultButton, 1,"Reset to default button");
     }
 
-    public AutoResponderItem typeMessage(String msg) {
-        if (msg != null || !msg.equals("")) {
+    public AutoResponderItem typeMessage(@NonNull String msg) {
+        if (!msg.equals("")) {
             textarea.clear();
             inputText(this.getCurrentDriver(), textarea, 5, "Note number", msg);
         }

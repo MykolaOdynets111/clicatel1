@@ -37,7 +37,8 @@ public class PortalManageAgentUsersPage extends PortalAbstractPage {
         return new PortalUserRow (
                 userRows.stream().filter(e -> new PortalUserRow(e).setCurrentDriver(this.getCurrentDriver())
                         .getAgentFullName().equals(fullName))
-                .findFirst().get()
+                .findFirst().orElseThrow(() ->
+                        new AssertionError(fullName + " user is not shown on Manage Agent User page"))
         );
     }
 

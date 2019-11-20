@@ -4,10 +4,14 @@ import abstractclasses.AbstractSocialPage;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class DMToUserMessage extends AbstractSocialPage {
 
     private String toUserTextMessagesXPATH = "//section[@aria-labelledby='detail-header']//span[contains(text(),'%s')]//ancestor::div[not(@class) and not(@style)]/following::div//span";
+    private String toUserTextMessagesXPATHWithRespText = "//section[@aria-labelledby='detail-header']//span[contains(text(),'%s')]//ancestor::div[not(@class) and not(@style)]/following::div//span[contains(text(), '%s')]";
 
 
     public DMToUserMessage(WebDriver driver) {
@@ -23,9 +27,26 @@ public class DMToUserMessage extends AbstractSocialPage {
         }
     }
 
+    public List<String> getAllToUserMessages(String userMessage, int wait){
+        String locator = String.format(toUserTextMessagesXPATH, userMessage);
+        areElementsShownByXpath(this.getCurrentDriver(), locator, wait);
+        return findElemsByXPATH(this.getCurrentDriver(), locator)
+                .stream().map(e -> e.getText()).collect(Collectors.toList());
+    }
+
     public boolean isTextResponseShown(String message, int wait) {
         try{
             waitForElementToBeVisibleByXpath(this.getCurrentDriver(), String.format(toUserTextMessagesXPATH, message), wait);
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean isTextResponseShown(String userMessage, String expResponse, int wait) {
+        String locator = String.format(toUserTextMessagesXPATHWithRespText, userMessage, expResponse);
+        try{
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), locator, wait);
             return true;
         } catch (TimeoutException e) {
             return false;

@@ -15,18 +15,16 @@ public class BaseTest {
 
     @AfterSuite(alwaysRun = true)
     protected void setUpEnvsProp(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/allureconfigs/environment.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/allureconfigs/environment.properties");
+            FileOutputStream out = new FileOutputStream("src/test/resources/allureconfigs/environment.properties");
+        ) {
             Properties props = new Properties();
             props.load(in);
-            in.close();
 
-            FileOutputStream out = new FileOutputStream("src/test/resources/allureconfigs/environment.properties");
             props.setProperty("Browser", ConfigManager.getDriverType().name());
             props.setProperty("Env", ConfigManager.getEnv());
 
             props.store(out, null);
-            out.close();
         } catch(IOException e){
             e.printStackTrace();
         }

@@ -124,7 +124,8 @@ public enum FacebookUsers {
         List<FacebookUsers> fbUsersList = Arrays.asList(fbUsersArray);
         return fbUsersList.stream()
                 .filter(e -> e.getFBUSerEnv().equalsIgnoreCase(ConfigManager.getEnv()))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot get facebook user for on " + ConfigManager.getEnv() + " env"));
     }
 
 }

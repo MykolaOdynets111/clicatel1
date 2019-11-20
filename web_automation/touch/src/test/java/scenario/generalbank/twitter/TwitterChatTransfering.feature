@@ -3,6 +3,7 @@
 Feature: Twitter chat transferring
 
   Background:
+    Given Login to twitter
     Given I login as agent of General Bank Demo
     Given Open twitter page of General Bank Demo
     Given Open direct message channel
@@ -22,4 +23,4 @@ Feature: Twitter chat transferring
     When Second agent click on new conversation request from twitter
     Then Conversation area becomes active with connect to support user's message in it for second agent
     When Second agent responds with hello to User
-    Then User have to receive correct response "hello" on his message "chat to support"
+    Then User have to receive response "hello" on his message "chat to support"

@@ -17,7 +17,7 @@ public class AgentInfoSteps extends AbstractAgentSteps{
     public void verifyUserInitials(String agent, String tenantOrgName){
         Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
         String expectedInitials = Character.toString(agentInfoResp.getBody().jsonPath().get("firstName").toString().charAt(0)) +
-                Character.toString(agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0));
+                agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0);
 
         Assert.assertEquals(getPageHeader(agent).getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
     }
@@ -49,7 +49,7 @@ public class AgentInfoSteps extends AbstractAgentSteps{
         Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
         SoftAssert soft = new SoftAssert();
         List<String> expected=new ArrayList<>();
-        agentInfoResp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e)).forEach(e -> {expected.add(
+        agentInfoResp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> e).forEach(e -> {expected.add(
                 e.get("name").toString().toUpperCase() + " ("+
                         e.get("solution").toString().toUpperCase() +        ")"
         );});

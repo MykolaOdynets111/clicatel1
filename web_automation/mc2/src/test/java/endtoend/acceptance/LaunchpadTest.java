@@ -27,16 +27,16 @@ public class LaunchpadTest extends BaseTest {
     private String accountID;
     private PortalMainPage mainPage;
     private AccountSignUp accountSignUp;
-    private Map<String, String> navButtons = new LinkedHashMap<String, String>() {{
-                                                put("Welcome", "Welcome to your Clickatell account");
-                                                put("SMS", "SMS");
-                                                put("WhatsApp", "WhatsApp");
-                                                put("One API", "One API");
-                                                put("Touch", "Touch");
-                                            }};
+    private Map<String, String> navButtons = new LinkedHashMap<>();
 
     @BeforeClass()
     private void createAccount() {
+        navButtons.put("Welcome", "Welcome to your Clickatell account");
+        navButtons.put("SMS", "SMS");
+        navButtons.put("WhatsApp", "WhatsApp");
+        navButtons.put("One API", "One API");
+        navButtons.put("Touch", "Touch");
+
         Faker faker = new Faker();
         accountSignUp = new AccountSignUp();
         accountSignUp.setAccountName( "aqa_" + faker.lorem().word() + faker.number().digits(3))
@@ -244,13 +244,13 @@ public class LaunchpadTest extends BaseTest {
     }
 
     private void saveNewAccountProperties(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
+        ) {
+
             Properties props = new Properties();
             props.load(in);
-            in.close();
 
-            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
             props.setProperty("accountName", accountSignUp.getAccountName());
             props.setProperty("email", accountSignUp.getEmail());
             props.setProperty("pass", accountSignUp.getPassword());
@@ -260,7 +260,6 @@ public class LaunchpadTest extends BaseTest {
             props.setProperty("accountID", accountID);
 
             props.store(out, null);
-            out.close();
         } catch(IOException e){
             e.printStackTrace();
         }

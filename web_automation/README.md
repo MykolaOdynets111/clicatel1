@@ -18,3 +18,26 @@ Like
 ```
 ./gradlew runMC2Tests -Denv=qa
 ```
+
+## General features
+
+* ### Sonar
+Added integration with sonar (local one for now).
+To set up sonar please follow the instructions by this link
+```
+ https://www.c-sharpcorner.com/article/step-by-step-sonarqube-setup-and-run-sonarqube-scanner/
+```
+For configuration sonar used .properties file on project root
+```
+sonar-project.properties
+```
+For starting project scanning please navigate to sonar dir and launch sonar locally. Like for mac OS:
+```
+/Users/tmytlovych/sonarqube-6.7.7/bin/macosx-universal-64
+./sonar.sh console
+```
+Then use the command from project root:
+```
+sonar-scanner
+```
+After sonar finishes scanning. you will see in the console link where to find report.

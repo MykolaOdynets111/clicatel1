@@ -4,6 +4,7 @@
 Feature: Agent availability in terms of fb direct messages
 
   Background:
+    Given Login to fb
     Given I login as agent of General Bank Demo
     Given Open General Bank Demo page
 

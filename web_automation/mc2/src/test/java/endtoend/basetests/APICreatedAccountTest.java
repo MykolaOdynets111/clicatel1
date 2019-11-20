@@ -23,8 +23,7 @@ public class APICreatedAccountTest extends BaseTest {
 
     @BeforeClass()
     protected void readCreatedAccountProps(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties")) {
             Properties props = new Properties();
             props.load(in);
             email.set(props.getProperty("email"));
@@ -40,9 +39,7 @@ public class APICreatedAccountTest extends BaseTest {
 
     @AfterGroups("newaccount")
     protected void closeAccount(){
-        System.out.println("\n !!     protected void closeAccount() !! \n");
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newaccount.properties")) {
             Properties props = new Properties();
             props.load(in);
 

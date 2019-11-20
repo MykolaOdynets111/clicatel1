@@ -29,12 +29,16 @@ subprojects {
         compile group: 'org.testcontainers', name: 'selenium', version: '1.11.3'
         compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
         compile group: 'io.rest-assured', name: 'rest-assured', version: '4.0.0'
-        compile group: 'io.appium', name: 'java-client', version: '6.1.0'
+        compile group: 'io.appium', name: 'java-client', version: '7.2.0'
         compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '2.2.5'
-        compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.18'
+        compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.20.0'
         compile group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
         compile group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.1'
         compile 'com.assertthat:selenium-shutterbug:0.9.1'
+
+        compileOnly 'org.projectlombok:lombok:1.18.10'
+        annotationProcessor 'org.projectlombok:lombok:1.18.10'
+        compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
     }
     
 

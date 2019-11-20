@@ -117,4 +117,15 @@ public class History {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "History{" +
+                "context=" + context +
+                ", message='" + message + '\'' +
+                ", messageId='" + messageId + '\'' +
+                ", messageType='" + messageType + '\'' +
+                ", source='" + source + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

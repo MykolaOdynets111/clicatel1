@@ -9,5 +9,6 @@ target/
 ../touch-rest-api-tests/
 ../Web_touch_automation/
 debug.log
+tests.log
 *.iml
 mc2/src/test/resources/*.properties

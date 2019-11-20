@@ -3,7 +3,7 @@ package apihelper;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import datamanager.jacksonschemas.dotcontrol.DotControlRequestIntegrationChanel;
-import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import datamanager.jacksonschemas.dotcontrol.MessageRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -12,6 +12,7 @@ import mc2api.auth.PortalAuthToken;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.net.ConnectException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -39,19 +40,27 @@ public class APIHelperDotControl {
     }
 
     public static void waitForServerToBeClosed() {
-        for(int i = 0; i<10; i++){
-            if(RestAssured.get(Server.getServerURL()).statusCode()==502){
-                break;
-            }else{
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        try {
+            for (int i = 0; i < 10; i++) {
+                if (callServer().statusCode() == 502) {
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+        }catch (ConnectException e){
+            // Server is not available
         }
     }
 
+
+    private static Response callServer() throws ConnectException{
+        return RestAssured.get(Server.getServerURL());
+    }
 
 
     public static Response updateIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo, String apiToken){
@@ -96,7 +105,7 @@ public class APIHelperDotControl {
 
 
 
-    public static Response sendMessage(DotControlRequestMessage requestMessage){
+    public static Response sendMessage(MessageRequest requestMessage){
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         LocalDateTime ldt = LocalDateTime.now(zoneId);
         ZonedDateTime zdt = ldt.atZone(zoneId);
@@ -117,7 +126,7 @@ public class APIHelperDotControl {
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
     }
 
-    public static Response sendMessageWithWait(DotControlRequestMessage requestMessage){
+    public static Response sendMessageWithWait(MessageRequest requestMessage){
         Response resp = sendMessage(requestMessage);
         for (int i =0; i<13; i++){
             if (resp.statusCode() != 401) break;

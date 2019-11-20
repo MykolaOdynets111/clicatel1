@@ -1,6 +1,8 @@
 package datamanager;
 
 
+import drivermanager.ConfigManager;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +39,9 @@ public enum TopUpBalanceLimits {
        List<TopUpBalanceLimits> currencyList = Arrays.asList(currencyArray);
        return currencyList.stream().filter(e -> e.getCurrency().equalsIgnoreCase(currency) &&
                                                 e.toString().toLowerCase().contains("max"))
-               .findFirst().get().getMaxValue();
+               .findFirst().orElseThrow(() -> new AssertionError(
+               "Unsupported '"+currency+"' curency type"))
+               .getMaxValue();
     }
 
     public static int getMinValueByCurrency(String currency){
@@ -45,6 +49,8 @@ public enum TopUpBalanceLimits {
         List<TopUpBalanceLimits> currencyList = Arrays.asList(currencyArray);
         return currencyList.stream().filter(e -> e.getCurrency().equalsIgnoreCase(currency) &&
                 e.toString().toLowerCase().contains("min"))
-                .findFirst().get().getMaxValue();
+                .findFirst().orElseThrow(() -> new AssertionError(
+                "Unsupported '"+currency+"' curency type"))
+                .getMaxValue();
     }
 }

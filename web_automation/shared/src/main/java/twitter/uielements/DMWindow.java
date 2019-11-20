@@ -1,6 +1,7 @@
 package twitter.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -55,9 +56,25 @@ public class DMWindow extends AbstractUIElement {
         return new DMToUserMessage(this.getCurrentDriver()).isTextResponseShown(userMessage,40);// clarify_timeout
     }
 
+    public boolean isTextResponseForUserMessageShown(String userMessage, String expResponse){
+        return new DMToUserMessage(this.getCurrentDriver()).isTextResponseShown(userMessage, expResponse,40);
+    }
 
     public String getToUserResponse(String userMessage){
         return new DMToUserMessage(this.getCurrentDriver()).getMessageText(userMessage);
-
     }
+
+    public List<String> getToUserResponses(String userMessage){
+        return new DMToUserMessage(this.getCurrentDriver()).getAllToUserMessages(userMessage, 40);
+    }
+
+//    public boolean isExpectedToUserMessageShown(String userMessage, String expectedResponse, int wait) {
+//        String expectedElem = String.format(toUserMessage, userMessage, expectedResponse);
+//        try {
+//            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), expectedElem, wait);
+//            return true;
+//        } catch(TimeoutException e){
+//            return false;
+//        }
+//    }
 }

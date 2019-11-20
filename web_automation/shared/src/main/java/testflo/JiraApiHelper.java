@@ -3,6 +3,7 @@ package testflo;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.config.HttpClientConfig;
 import io.restassured.config.RestAssuredConfig;
+import io.restassured.path.json.exception.JsonPathException;
 import org.apache.http.params.CoreConnectionPNames;
 import org.hamcrest.Matchers;
 import testflo.jacksonschemas.AllureScenarioInterface;
@@ -108,11 +109,25 @@ public class JiraApiHelper {
     }
 
     public static int getNextTransitionId(String tcKey){
-        return RestAssured.given()
+        Response resp = RestAssured.given()
                 .auth().preemptive().basic(JiraUser.USER_EMAIL, JiraUser.USER_PASS)
                 .header("Content-Type", "application/json")
-                .get(String.format(JiraEndpoints.MOVE_JIRA_ISSUE, tcKey))
-                .getBody().jsonPath().getInt("transitions.id[0]");
+                .get(String.format(JiraEndpoints.MOVE_JIRA_ISSUE, tcKey));
+        if (resp.statusCode()!=200){
+            waitFor(1000);
+            resp = RestAssured.given()
+                    .auth().preemptive().basic(JiraUser.USER_EMAIL, JiraUser.USER_PASS)
+                    .header("Content-Type", "application/json")
+                    .get(String.format(JiraEndpoints.MOVE_JIRA_ISSUE, tcKey));
+        }
+        int id=51;
+        try{
+            id = resp.getBody().jsonPath().getInt("transitions.id[0]");
+        }catch (JsonPathException e){
+            System.out.println("\n\n !! Error while getting transaction Id" + resp.getBody().asString() + "\n\n");
+        }
+
+        return id;
     }
 
     private static RestAssuredConfig setTimeouts(){
@@ -124,6 +139,14 @@ public class JiraApiHelper {
 
     public static List<String> getErrors(){
         return errors;
+    }
+
+    private static void waitFor(int wait){
+        try {
+            Thread.sleep(wait);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

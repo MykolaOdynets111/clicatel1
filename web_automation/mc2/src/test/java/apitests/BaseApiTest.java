@@ -14,18 +14,16 @@ public class BaseApiTest {
 
     @AfterSuite(alwaysRun = true)
     public void setUpEnvsProp(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/allureconfigs/environment.properties");
-            Properties props = new Properties();
-            props.load(in);
-            in.close();
-
+        try(FileInputStream in = new FileInputStream("src/test/resources/allureconfigs/environment.properties");
             FileOutputStream out = new FileOutputStream("src/test/resources/allureconfigs/environment.properties");
-            props.setProperty("Browser", "API tests");
-            props.setProperty("Env", ConfigManager.getEnv());
+            ) {
+                Properties props = new Properties();
+                props.load(in);
 
-            props.store(out, null);
-            out.close();
+                props.setProperty("Browser", "API tests");
+                props.setProperty("Env", ConfigManager.getEnv());
+
+                props.store(out, null);
         } catch(IOException e){
             e.printStackTrace();
         }

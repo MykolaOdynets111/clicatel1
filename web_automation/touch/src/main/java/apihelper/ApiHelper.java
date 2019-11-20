@@ -6,6 +6,8 @@ import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.Territories;
 import datamanager.jacksonschemas.*;
+import datamanager.jacksonschemas.chathistory.ChatHistory;
+import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
@@ -22,6 +24,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
+
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -81,7 +84,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return resp;
     }
 
-    public static void createUserProfile(String tenantName, String clientID) {
+    public static Response createUserProfile(String tenantName, String clientID) {
         Response resp;
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
@@ -101,6 +104,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Assert.assertEquals(resp.statusCode(), 200,
                 "Creating of user profile was not successful\n" +
                 "resp body: " + resp.getBody().asString());
+        return resp;
     }
 
     public static void createUserProfileWithPhone(String clientID, String phoneNumber){
@@ -407,7 +411,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                                                             .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
                                                             .getBody().jsonPath().getList("", IntegrationChannel.class);
     return  existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
-            .findFirst().get().getId();
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("Integration channel '" +integrationChanel +"' is absent for " + tenantOrgName + " tenant"))
+            .getId();
     }
 
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
@@ -516,6 +522,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
             List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
             List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
+
             List<OvernightTicket> fullList = new ArrayList<>();
             fullList.addAll(allAssignedTickets);
             fullList.addAll(allUnassignedTickets);
@@ -570,6 +577,46 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tickets;
     }
 
+    public static List<Department> getDepartments(String tenantOrgName){
+        Response resp =  RestAssured.given().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "")).get(Endpoints.DEPARTMENTS);
+        List<Department> departments = resp.jsonPath().getList("", Department.class);
+        return departments;
+    }
+
+    public static void deleteDepartmentsById(String tenantOrgName) {
+
+        List<Department> departments = getDepartments(tenantOrgName);
+        for (Department department : departments) {
+            if (department.getName().contains("Auto")) {
+                String departmentId = department.getId();
+                 RestAssured.given()
+                        .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, ""))
+                        .delete(Endpoints.DEPARTMENTS + "/" + department.getId());
+            }
+        }
+    }
+
+
+    public static void createDepartment(String name, String description, String agent ){
+        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).getBody().jsonPath().get("id");
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        Response resp;
+        resp = RestAssured.given()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{ " +
+                        "\"tenantId\": \"" + tenantId + "\"," +
+                        "\"name\": \"" + name + "\"," +
+                        "\"description\": \"" + description + "\"," +
+                        "\"agentIds\": [\"" + agentId +
+                        "\"]" +
+                        "}")
+                .post(Endpoints.DEPARTMENTS);
+        Assert.assertEquals(resp.statusCode(), 201,
+                "Creating of department was not successful\n" +
+                        "resp body: " + resp.getBody().asString());
+    }
 
     public static Map getActiveSessionByClientId(String clientId){
         String tenantID = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
@@ -577,11 +624,11 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Response resp =  RestAssured.get(url);
         Map activeSession = null;
         try{
-            activeSession =  (HashMap) ((Map) resp.getBody().jsonPath().getList("content.sessions[0]")
+            activeSession = resp.getBody().jsonPath().getList("content.sessions[0]")
                     .stream()
                     .map(e -> (Map) e)
                     .filter(map -> map.get("state").equals("ACTIVE"))
-                    .findFirst().get());
+                    .findFirst().get();
         }catch(JsonPathException e){
             Assert.fail("Failed to get session Id\n"+
                     "resp status: " + resp.statusCode() + "\n" +
@@ -815,5 +862,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT, clientProfileID))
                 .getBody().as(ClientProfile.class);
+    }
+
+    public static Response createChatHistory(ChatHistory history){
+        return RestAssured.given().log().all()
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON)
+                .body(history)
+                .post(Endpoints.INTERNAL_CREATE_HISTORY);
     }
 }

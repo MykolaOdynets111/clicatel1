@@ -1,11 +1,10 @@
 package facebook;
 
 import abstractclasses.AbstractSocialPage;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import socialaccounts.FacebookUsers;
 
 public class FBLoginPage extends AbstractSocialPage {
@@ -16,10 +15,16 @@ public class FBLoginPage extends AbstractSocialPage {
     @FindBy(css = "form#login_form")
     private WebElement loginForm;
 
-    @FindBy(xpath = "//input[@id='email']")
+    @FindAll({
+            @FindBy(xpath = "//input[@id='email']"),
+            @FindBy(xpath = "//input[@name='email']")
+    })
     private WebElement emailInputField;
 
-    @FindBy(xpath = "//input[@id='pass']")
+    @FindAll({
+            @FindBy(xpath = "//input[@id='pass']"),
+            @FindBy(xpath = "//input[@name='pass']")
+    })
     private WebElement passInputField;
 
     @FindBy(name = "login")
@@ -37,7 +42,11 @@ public class FBLoginPage extends AbstractSocialPage {
     }
 
     public void loginUser() {
-        waitForElementToBeVisible(this.getCurrentDriver(), emailInputField, 6);
+        try {
+            waitForElementToBeVisible(this.getCurrentDriver(), emailInputField, 6);
+        }catch (TimeoutException e){
+            Assert.fail("Login to fb unsuccessful\n page source: \n" + this.getCurrentDriver().getPageSource());
+        }
         FacebookUsers fbUser = FacebookUsers.getFBTestUserFromCurrentEnv();
         emailInputField.sendKeys(fbUser.getFBUserEmail());
         passInputField.sendKeys(fbUser.getFBUserPass());

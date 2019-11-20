@@ -7,6 +7,13 @@ buildscript {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources"
+        }
+    }
+}
 
 apply plugin: 'ru.d10xa.allure'
 
@@ -29,6 +36,10 @@ dependencies {
         compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
         compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
         compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'
+
+        compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.28'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 }
 
 

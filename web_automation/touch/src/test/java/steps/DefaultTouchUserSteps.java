@@ -14,6 +14,7 @@ import driverfactory.DriverFactory;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
+import interfaces.WebWait;
 import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
@@ -34,7 +35,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, VerificationHelper {
+public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
     private MainPage mainPage;
     private Widget widget;
@@ -144,7 +145,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Response resp = ApiHelper.getFinishedChatsByLoggedInAgentAgent(Tenants.getTenantUnderTestOrgName(), page, 15);
         boolean lastPage = resp.jsonPath().getBoolean("last");
         if(resp.statusCode()!=200){
-            Assert.assertTrue(false, "Getting finished chats was not successful\n" +
+            Assert.fail("Getting finished chats was not successful\n" +
             "statusCode: " + resp.statusCode() + "\n" +
             "errorMessage: " + resp.getBody().asString());
         }
@@ -506,7 +507,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         List<String> toRemove = Arrays.asList("mobile banking 120 3279", "global one",
                                                 "cellphone banking app", "general",
                                                 "general bank masterpass app", "travel help",
-                                                "milleage plus programme help", "travel policies");
+                                                "milleage plus programme help", "travel policies", "credit card");
         entities.removeIf(e -> toRemove.contains(e));
 
         enteredUserMessageInTouchWidget.set(entities.get(new Random().nextInt(entities.size()-1)));
@@ -564,46 +565,23 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         soft.assertAll();
     }
 
-    @Then("^User session is ended$")
-    public void verifyUserSessionEnded(){
+    @Then("^User session is (.*)$")
+    public void verifyUserSessionStatus(String sessionStatus){
+        String expStatus = "terminated";
+        if(sessionStatus.equals("created")) expStatus = "active";
         boolean result = false;
         for(int i = 0; i<15; i++){
-            result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()))
-                    .equalsIgnoreCase("terminated");
+            result = Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()))
+                    .equalsIgnoreCase(expStatus);
             if(result){
                 break;
             } else{
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                waitFor(500);
             }
         }
        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), Tenants.getTenantUnderTestName()).getSessionId() +
-                                            "is not terminated for user: " +getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) +
+                                            "is not " + expStatus + " for user: " +getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) +
                                                 " after bot response.");
-    }
-
-    @Then("^User session is created")
-    public void verifyUserSessionCreated(){
-        boolean result = false;
-        for(int i = 0; i<6; i++){
-            result =  Tenants.getLastUserSessionStatus(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()))
-                    .equalsIgnoreCase("active");
-            if(result){
-                break;
-            } else{
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        Assert.assertTrue(result, "Session with id "+ApiHelper.getLastUserSession(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), Tenants.getTenantUnderTestName()).getSessionId() +
-                "is not created for user: " +getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) +
-                " after bot response.");
     }
 
     @When("^User submit card with personal information after user's message: (.*)$")

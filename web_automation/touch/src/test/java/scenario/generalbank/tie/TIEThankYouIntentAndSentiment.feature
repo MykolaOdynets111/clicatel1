@@ -18,8 +18,4 @@ Feature: TIE should correctly identify "thank you" intent
       |thanks for your help                          |
       |thank you so much for your help               |
       |a big thank you                               |
-      |gracias                                       |
-      |merci                                         |
-      |danke                                         |
-      |dankie                                        |
       |OK, Thanks                                    |

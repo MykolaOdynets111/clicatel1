@@ -55,7 +55,6 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Then("^Last visit date is saved to DB after (.*) minutes$")
     public void checkThanLastVisitDateIsSaved(int minutes){
         String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-//        ApiHelper.getClientProfileId(getUserNameFromLocalStorage());
         Assert.assertTrue(DBConnector.isLastVisitSavedInDB(ConfigManager.getEnv(), linkedClientProfileId, minutes),
                 "It takes more than " + minutes +" minutes to save lastVisit after last response to user in widget");
 

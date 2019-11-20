@@ -3,6 +3,7 @@
 Feature: Communication with bot via tweet
 
   Background:
+    Given Login to twitter
     Given Open twitter page of General Bank Demo
     Given Open new tweet window
 

@@ -1,8 +1,8 @@
 Feature: Agent should be able to filter flagged chats
 
   Background:
-    Given User select General Bank Demo tenant
-    Given I login as agent of General Bank Demo
+    Given User select Automation tenant
+    Given I login as agent of Automation
     And Click chat icon
 
   Scenario: Verify agent can filter flagged chats

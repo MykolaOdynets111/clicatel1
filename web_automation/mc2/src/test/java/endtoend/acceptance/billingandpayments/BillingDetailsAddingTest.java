@@ -88,16 +88,14 @@ public class BillingDetailsAddingTest extends APICreatedAccountTest  {
     }
 
     private void saveNewAccountCompanyName(){
-        try {
-            FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+        try(FileInputStream in = new FileInputStream("src/test/resources/newapiaccount.properties");
+            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
+        ) {
             Properties props = new Properties();
             props.load(in);
-            in.close();
 
-            FileOutputStream out = new FileOutputStream("src/test/resources/newapiaccount.properties");
             props.setProperty("companyName", (String) details.get("companyName"));
             props.store(out, null);
-            out.close();
         } catch(IOException e){
             e.printStackTrace();
         }

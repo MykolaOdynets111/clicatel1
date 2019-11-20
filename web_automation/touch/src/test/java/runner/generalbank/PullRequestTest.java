@@ -19,30 +19,20 @@ import static runner.generalbank.Path.DOTCONTROL;
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ={
-//                PATH + "AgentDeskSuggestions.feature", need to check the time it takes to run the whole suite if will have some time can add these tests
-//                PATH + "ClosingSession.feature",
-//                PATH + "DisconnectingAgent.feature",
-//                PATH + "RedirectionOnAgent.feature",
-                PATH + "AgentAvailability.feature",
+        features = {
+                PATH + "AgentDeskSuggestions.feature", //  +
+                PATH + "UserSentimentUpdating.feature", // +
+                PATH + "AgentAvailability.feature", // +
+                PATH + "ChatConsoleAgentTab.feature", // +
+                PATH + "ChatConsoleOverview.feature", // +
+                PATH + "Customer360FromWidget.feature", // +
+                PATH + "PinChatCloseTransfer.feature", // +
                 PATH + "CancelTransferingChat.feature",
-                PATH + "ChatConsoleAgentTab.feature",
-                PATH + "ChatConsoleInbox.feature",
-                PATH + "ChatConsoleOverview.feature",
-                PATH + "Customer360FromWidget.feature",
-                PATH + "FilteringPinnedChat.feature",
-                PATH + "PinChatCloseTransfer.feature",
-                PATH + "RejectTransferingChat.feature",
-//                PATH + "TransfeкBackTransferedChat.feature", need to wait till message preview is fixed
-                PATH + "TransfedChatContainElements.feature",
-                PATH + "Transfering2Chats.feature",
-//                PATH + "TransferingChat.feature", need to wait till message preview is fixed
-                PATH + "TransferingChatWithNoAvailableAgent.feature",
-                DOTCONTROL + "DotControlCustomer360.feature",
-                DOTCONTROL + "DotControlEditedSuggestionSending.feature",
-                DOTCONTROL + "DotControlInitCallWithLiveAgent.feature",
-                DOTCONTROL + "DotControlMessagingWithAgent.feature",
-                DOTCONTROL + "DotControlWithContext.feature"
+                PATH + "TransferBackTransferedChat.feature", // +
+                PATH + "Transfering2Chats.feature", // +
+                PATH + "TransferingChat.feature", // +
+                DOTCONTROL + "DotControlInitCallWithLiveAgent.feature", // +
+                DOTCONTROL + "DotControlMessagingWithAgent.feature", // +
         },
         glue ="steps")
 public class PullRequestTest {

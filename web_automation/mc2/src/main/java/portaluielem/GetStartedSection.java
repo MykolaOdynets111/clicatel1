@@ -45,7 +45,8 @@ public class GetStartedSection extends AbstractWidget {
     private WebElement getTargetButton(String buttonName){
         try{
             return cardButtons.stream().filter(e -> e.getText().trim().equals(buttonName))
-                    .findFirst().get();
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError("Cannot click '" + buttonName + "' button in Get Started section"));
         }catch(NoSuchElementException e){
             return null;
         }

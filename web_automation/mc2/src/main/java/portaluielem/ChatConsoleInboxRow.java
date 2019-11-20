@@ -14,20 +14,26 @@ public class ChatConsoleInboxRow extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(xpath = "//div[@class='cl-actions-dropdown dropdown btn-group']/button")
+    @FindBy(xpath = ".//div[@class='cl-actions-dropdown dropdown btn-group']/button")
     private WebElement threeDots;
 
-    @FindBy(xpath = "//li[@class='cl-actions-dropdown__menu-item']//span[text()='Assign manually']")
+    @FindBy(xpath = ".//li[@class='cl-actions-dropdown__menu-item']//span[text()='Assign manually']")
     private WebElement assing;
 
-    @FindBy(xpath = "//div[@class='Select-placeholder']")
+    @FindBy(xpath = ".//div[@class='Select-placeholder']")
     private WebElement select;
 
-    @FindBy(xpath = "//div[@class='Select-menu']/div")
+    @FindBy(xpath = ".//div[@class='Select-menu']/div")
     private List<WebElement> listOfAgents;
 
-    @FindBy(xpath = "//div[@class='modal-footer']//button[text()='Assign']")
+    @FindBy(xpath = ".//div[@class='modal-footer']//button[text()='Assign']")
     private WebElement assignButton;
+
+    @FindBy(xpath = ".//div[contains(@class, 'cl-table-cell--agent-profile')][preceding-sibling::div[contains(@class, 'cl-table-cell--agent-profile')]]/div")
+    private WebElement currentAgent;
+
+    @FindBy(css = "div.cl-table-user-description__name")
+    private WebElement userName;
 
     private String chatConsoleInboxRowNameXpath = "//div[@class='cl-table-user-data__description']//div[2]/../div[1]";
 
@@ -60,5 +66,12 @@ public class ChatConsoleInboxRow extends AbstractWidget {
         return baseWebElem.findElement(By.xpath(chatConsoleInboxRowNameXpath)).getText();
     }
 
+    public String getCurrentAgent(){
+        return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
+    }
+
+    public String getUserName(){
+        return getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
+    }
 
 }

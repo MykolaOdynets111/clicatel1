@@ -22,13 +22,10 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), ordinalAgentNumber);
-        System.out.println("Log in to portal is started");
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
-        System.out.println("Log in to chatdesk assertion is started");
+
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");
-        System.out.println("Log in to portal is finished");
     }
 
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
@@ -36,7 +33,6 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         List<Permission> permissions = new ArrayList<>();
         ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber)
                 .getBody().jsonPath().getList("roles", UserRole.class).stream().forEach(e -> permissions.addAll(e.getPermissions()));
-
         getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
         getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
 
@@ -50,9 +46,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     @Given("^Try to login as (.*) of (.*)")
     public void tryToLoginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AgentLoginPage loginPage = AgentLoginPage.openAgentLoginPage(ordinalAgentNumber, tenantOrgName)
-                .loginAsAgentOf(tenantOrgName, ordinalAgentNumber);
-        setAgentLoginPage(ordinalAgentNumber, loginPage);
+        loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
     }
 
 

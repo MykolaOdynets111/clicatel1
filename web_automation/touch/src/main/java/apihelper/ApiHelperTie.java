@@ -24,7 +24,7 @@ public class ApiHelperTie {
         Response resp = RestAssured
                 .given()
                 .header("Authorization",
-                        PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
+                        PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().getList("intents_result.intents", Intent.class).stream()
                 .sorted(Comparator.comparing(Intent::getConfidence).reversed()).collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class ApiHelperTie {
     public static String getExpectedMessageOnIntent(String intent) {
         Response resp  = RestAssured.given()
                 .header("Authorization",
-                        PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
+                        PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(URLs.getTIEURLForAnswers(Tenants.getTenantUnderTestName(), intent));
         String answer = resp.jsonPath().get("text");
         if(answer == null) Assert.fail("Empty answer on '" + intent + "' intent\n"
@@ -79,7 +79,7 @@ public class ApiHelperTie {
 
     public static String getTIESentimentOnMessage(String userMessage){
         Response resp = RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestName(), "main"))
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(URLs.getTieURL(Tenants.getTenantUnderTestName(), userMessage));
         return resp.jsonPath().get("sentiment_verdict");
     }
@@ -168,7 +168,7 @@ public class ApiHelperTie {
     public static void deleteAllIntents(){
         List<String> faqIntents = ApiHelperTie.getAllIntentsWithIDs().getBody().jsonPath().getList("data").stream()
                 .map(e -> (List) e)
-                .filter(e -> ((String) e.get(2)).equals("faq"))
+                .filter(e -> e.get(2).equals("faq"))
                 .map(e -> (String) e.get(6))
                 .collect(Collectors.toList());
         for(String id : faqIntents) {

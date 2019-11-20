@@ -7,14 +7,18 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 @FindBy(css = "div.chat-form")
 public class ChatForm extends AbstractUIElement {
 
+    public static String inputMassage;
+
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
     private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
+    private SecureRandom random = new SecureRandom();
 
     @FindBy(css = "div.suggestion-wrapper")
     private WebElement suggestionInputField;
@@ -43,11 +47,10 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "svg#emoticon")
     public WebElement emoticonButton;
 
-    @FindBy(css = "section.emoji-mart")
-    public WebElement emojiMart;
-
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
+
+    private String emojiMartCss = "section.emoji-mart";
 
     public boolean isSuggestionFieldShown() {
         try {
@@ -87,6 +90,7 @@ public class ChatForm extends AbstractUIElement {
             waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputFieldContainer,6);
             suggestionInputFieldContainer.click();
             messageInput.sendKeys(additionalMessage);
+            inputMassage = messageInput.getText();
         } catch (StaleElementReferenceException e) {
             DriverFactory.getAgentDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
         }
@@ -172,12 +176,12 @@ public class ChatForm extends AbstractUIElement {
 
     public void clickEmoticonButton(){
         clickElem(this.getCurrentDriver(), emoticonButton, 2,"Emoticon button in chatdesk");
-        waitForElementToBeVisible(this.getCurrentDriver(), emojiMart, 2);
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), emojiMartCss,  5);
     }
 
     public String selectRandomFrequentlyUsedEmoji(){
-        Random generator = new Random();
-        WebElement emoji = frequetlyUsedEmojis.get(generator.nextInt(frequetlyUsedEmojis.size()-1));
+//        Random generator = new Random();
+        WebElement emoji = frequetlyUsedEmojis.get(random.nextInt(frequetlyUsedEmojis.size()-1));
         String emojiText = emoji.getAttribute("aria-label").split(",")[0].trim();
         clickElem(this.getCurrentDriver(), emoji, 2, emojiText + " emoji");
         return emojiText;

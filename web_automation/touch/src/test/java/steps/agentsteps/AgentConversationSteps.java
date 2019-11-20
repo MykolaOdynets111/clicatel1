@@ -14,7 +14,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
-import steps.agentsteps.AbstractAgentSteps;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -132,7 +131,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^There is correct suggestion shown on user message \"(.*)\"(?: and sorted by confidence|)$")
     public void verifySuggestionsCorrectnessFor(String userMessage) {
         getAgentHomePage("main").clickAgentAssistantButton();
-        getAgentHomePage("main").waitForElementToBeVisible(getAgentHomePage("main").getCurrentDriver(),
+        getAgentHomePage("main").isElementShown(getAgentHomePage("main").getCurrentDriver(),
                 getAgentHomePage("main").getSuggestedGroup(), 4);
         if (getSuggestedGroup("main").isSuggestionListEmpty()) {
             Assert.fail("Suggestion list is empty");
@@ -143,8 +142,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         for (int i = 0; i < listOfIntentsFromTIE.size(); i++) {
             expectedResponse = ApiHelperTie.getExpectedMessageOnIntent(listOfIntentsFromTIE.get(i).getIntent());
             if (expectedResponse.contains("${firstName}")) {
-                expectedResponse = expectedResponse.replace("${firstName}",
-                        getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+                String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[2];
+                expectedResponse = expectedResponse.replace("${firstName}", userName);
             }
 //            ToDo: remove this after tie fixes the issue
             expectedResponse = expectedResponse.replace("  ", " ");
@@ -158,13 +157,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^The suggestion for user message \"(.*)\" with the biggest confidence is added to the input field$")
     public void verifyAutomaticAddingSuggestingToInputField(String userMessage) {
         String actualSuggestion = getAgentHomePage("main").getChatForm().getSuggestionFromInputFiled();
-        if (actualSuggestion == null) {
-            Assert.assertTrue(false, "There is no added suggestion in input field");
-        }
+        if (actualSuggestion == null) Assert.fail("There is no added suggestion in input field");
         String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(
                 Intents.getIntentWithMaxConfidence(userMessage).getIntent());
         if (expectedMessage.contains("${firstName}")) {
-            expectedMessage = expectedMessage.replace("${firstName}", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+            String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[2];
+            expectedMessage = expectedMessage.replace("${firstName}", userName);
         }
         Assert.assertEquals(actualSuggestion, expectedMessage, "Suggestion in input field is not as expected");
     }
@@ -264,16 +262,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
-//    @When("(.*) click 'Close chat' button$")
-//    public void agentClickCloseСhatButton(String agent) {
-//        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseСhat();
-//    }
-
     @When("(.*) click 'Skip' button$")
     public void agentClickSkipButton(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickSkip();
     }
-
 
     @When("(.*) fills form$")
     public void agentFillsForm(String agent) {
@@ -290,24 +282,35 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {
         SoftAssert soft = new SoftAssert();
+        boolean result = waitForSessionToBeClosed(5);
         Map<String, String> sessionDetails = DBConnector
                 .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+
         Map<String, String> chatAgentDetails = DBConnector
                 .getChatAgentHistoryDetailsBySessionID(ConfigManager.getEnv(), sessionDetails.get("sessionId"));
         Map<String, String> conversationDetails = DBConnector
                 .getConversationByID(ConfigManager.getEnv(), sessionDetails.get("conversationId"));
 
-        soft.assertEquals(sessionDetails.get("state"), "TERMINATED",
-                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. ");
-        soft.assertTrue(sessionDetails.get("endedDate") != null,
-                "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat");
+        soft.assertTrue(result,
+                "Ended date is not set for session " + sessionDetails.get("sessionId") + " after ending chat\n" +
+                "Session " + sessionDetails.get("sessionId") + " is not terminated after ending chat. \n\n");
         soft.assertTrue(chatAgentDetails.get("endedDate") != null,
-                "Ended date is not set for chat agent history record after ending chat." +
-                        "\nSession " + sessionDetails.get("sessionId") + "");
+                "Ended date is not set for chat agent history record after ending chat.\n" +
+                        "\nSession " + sessionDetails.get("sessionId") + "\n\n");
         soft.assertEquals(conversationDetails.get("active"), "0",
-                "Conversation is still active after ending chat." +
-                        "\nSession " + sessionDetails.get("sessionId") + "");
+                "Conversation is still active after ending chat.\n" +
+                        "\nSession " + sessionDetails.get("sessionId") + "\n\n");
         soft.assertAll();
+    }
+
+    private boolean waitForSessionToBeClosed(int wait){
+        Map<String, String> sessionDetails;
+        for(int i=0; i<wait; i++){
+            sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+            if(sessionDetails.get("state").equals("TERMINATED") & sessionDetails.get("endedDate") != null) return true;
+            else waitFor(1000);
+        }
+        return false;
     }
 
     @When("(.*) click 'Cancel' button$")
@@ -400,6 +403,21 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyInputFieldPlaceholder(String agent, String placeholder){
         Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
                 "Placeholder in input field in opened chat is not as expected");
-
     }
+    @Then("Messages is correctly displayed and has correct color")
+    public void verifyMessages(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getChatBody("main agent").verifyAgentMessageColours(),
+                "Agent messages' color is not as expected");
+        soft.assertTrue(getChatBody("main agent").verifyMessagesPosition(),
+                "Messages location is not as expected");
+        soft.assertAll();
+    }
+
+    @Then("Default user image is shown")
+    public void verifyDefaultUserImage() {
+        Assert.assertTrue(getChatBody("main agent").isValidDefaultUserProfileIcon(),
+                "Incorrect default user picture shown");
+    }
+
 }

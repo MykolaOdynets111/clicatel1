@@ -7,7 +7,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
-import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
+import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 import org.openqa.selenium.NoSuchElementException;
@@ -40,6 +40,12 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void transferChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat();
+    }
+
+    @And("^(.*) transfers chat to (.*) department$")
+    public void transferChatTodDepartment(String agent, String departmentName){
+        getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getTransferChatWindow().transferChatToDepartment(departmentName);
     }
 
     @And("^(.*) transfers overnight ticket$")
@@ -195,11 +201,12 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")
     public void secondAgentReceivesIncomingTransferOnTheRightSideOfTheScreenWithUserSProfilePicturePriorityChannelAndSentiment(String agent) {
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(),
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(
+                getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "User picture as not expected");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel(),
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel("touch"),
                 "Channel picture as not expected");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment(),
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment("connect to agent"),
                 "Sentiment picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
                 "Transfered chat window not on the right side of the screen");

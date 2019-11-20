@@ -2,6 +2,8 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
+import cucumber.api.Scenario;
+import cucumber.runtime.ScenarioImpl;
 import datamanager.jacksonschemas.AvailableAgent;
 import datamanager.model.PaymentMethod;
 import driverfactory.DriverFactory;
@@ -36,7 +38,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BasePortalSteps extends AbstractPortalSteps {
-
 
     public static final String FIRST_AND_LAST_NAME = "Clickatell Test";
     public static String AGENT_FIRST_NAME;
@@ -75,6 +76,19 @@ public class BasePortalSteps extends AbstractPortalSteps {
         AGENT_LAST_NAME =  faker.name().lastName();
         AGENT_EMAIL =  Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
 
+        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>(){{
+            put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
+             put("mail", AGENT_EMAIL);
+        }});
+
+        System.out.println("Adding the agent to the list = " +  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME + " mail: " + AGENT_EMAIL);
+        System.out.println("Number of agents in the list after adding = " + AbstractAgentSteps.getListOfCreatedAgents().size());
+        for (Map<String, String> map : AbstractAgentSteps.getListOfCreatedAgents()){
+            for (String key: map.keySet()){
+                System.out.println("Agent in the list after adding"  + map.get("name") + " and mail: " + map.get("mail"));
+            }
+        }
+
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
         if(resp.statusCode()!=200){
@@ -82,17 +96,16 @@ public class BasePortalSteps extends AbstractPortalSteps {
             "Resp status code: " + resp.statusCode() + "\n" +
                     "Resp body: " + resp.getBody().asString());
         }
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        waitFor(1500);
+
         String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(ConfigManager.getEnv(), AGENT_EMAIL);
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
     }
 
     private String generatePredefinedAgentEmail(){
-        return Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail() + System.currentTimeMillis() + "@gmail.com";
+        String[] email = Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail().split("@");
+        return email[0] + "+" + System.currentTimeMillis() + "@gmail.com";
     }
 
     @When("^Create new Agent$")
@@ -104,6 +117,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
         Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
         Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
+
+        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>(){{
+            put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
+            put("mail", AGENT_EMAIL);
+        }});
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
@@ -134,7 +152,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^There is no new emails in target email box$")
     public void cleanUpEmailBox(){
-        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
+        GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
         CheckEmail.clearEmailInbox();
     }
 
@@ -158,11 +176,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         boolean result = false;
         if (ConfigManager.getEnv().equals("testing")){
             String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
-                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+                    Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail());
             if(resetPassID.equals("none")) {
                 getAdminPortalMainPage().waitFor(1500);
                 resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
-                        Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+                        Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail());
             }else{
                 result = true;
             }
@@ -209,9 +227,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    @When("(.*) provides new password and click Login")
-    public void createPassword(String agent){
-        Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
+    @When("(.*) provides (.*) password and click Login")
+    public void createPassword(String agent, String pass){
+        if(pass.equals("new")) Agents.TOUCH_GO_SECOND_AGENT.setPass("newp@ssw0rd");
         AGENT_PASS =  Agents.TOUCH_GO_SECOND_AGENT.getAgentPass();
         getPortalLoginPage(agent).getAccountForm().createNewPass(AGENT_PASS)
                                     .clickLogin();
@@ -241,8 +259,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Given("^Delete user$")
     public static void deleteAgent(){
-        String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
-        ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+        System.out.println("Number of agents in the list before removing = " + AbstractAgentSteps.getListOfCreatedAgents().size());
+        for (Map<String, String> agent: AbstractAgentSteps.getListOfCreatedAgents()){
+            String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(), agent.get("mail"));
+            ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+            System.out.println("New agent is removed "  + agent.get("name"));
+        }
+        AbstractAgentSteps.getListOfCreatedAgents().clear();
     }
 
     @Given("^Second agent of (.*) account does not exist$")
@@ -313,9 +336,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^I open portal$")
     public void openPortal(){
-        setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent("admin")));
+       setCurrentPortalLoginPage(PortalLoginPage.openPortalLoginPage(DriverFactory.getDriverForAgent("admin")));
     }
-
 
     @When("(.*) test accounts is closed")
     public void closeAllTestAccount(String tenantOrgName){
@@ -605,7 +627,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Main portal page with welcome message is shown$")
     public void verifyMainPageWithWelcomeMessageShown(){
         Assert.assertEquals(getAdminPortalMainPage().getGreetingMessage(), "Welcome, "+ FIRST_AND_LAST_NAME.split(" ")[0] +
-                ". Add a solution to your account.", "Welcome message is not shown.");
+                ". Get started with your Clickatell account.", "Welcome message is not shown.");
     }
 
     @Then("^\"Get started with Touch\" button is shown$")
@@ -654,6 +676,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^I launch chatdesk from portal$")
     public void launchChatdeskFromPortal(){
         getAdminPortalMainPage().launchChatDesk();
+        AbstractAgentSteps.getAgentHomeForMainAgent().waitForLoadingInLeftMenuToDisappear(6, 10);
+        AbstractAgentSteps.getLeftMenu("agent").waitForConnectingDisappear(6,10);
     }
 
     @When("^Save (.*) pre-test widget value$")
@@ -719,6 +743,13 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
     public void clickNavButton(String navButton){
         getAdminPortalMainPage().clickPageNavButton(navButton);
+    }
+
+    @When("^Select Inbox in Chat console$")
+    public void openCCInbox(){
+        getAdminPortalMainPage().clickPageNavButton("Inbox");
+        getChatConsoleInboxPage().waitForConnectingDisappear(2,3);
+        getChatConsoleInboxPage().waitForConnectingDisappear(1,3);
     }
 
     @When("^I click \"(.*)\" page action button$")
@@ -1301,7 +1332,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Click on (.*) user from the table$")
     public void clickUser(String fullName){
         if(fullName.equalsIgnoreCase("created")){
-//            fullName = "Touch AQA";
             fullName =  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME;
         }
         if(fullName.equalsIgnoreCase("admin")){
@@ -1309,7 +1339,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
                     Tenants.getTenantUnderTestOrgName()).getAgentEmail();
             fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
         }
-//        getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
         try {
             getPortalManagingUsersPage().getTargetUserRow(fullName).clickOnUserName();
         }catch (NoSuchElementException e){
@@ -1735,12 +1764,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
     public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
         Assert.assertTrue(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
-    }
-
-    @Then("^Filter \"(.*)\" is selected by default$")
-    public void filterIsSelectedByDefault(String filterName) {
-        Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(),filterName,
-                "Filter name by default does not match expected");
     }
 
     private MainPage getMainPage() {

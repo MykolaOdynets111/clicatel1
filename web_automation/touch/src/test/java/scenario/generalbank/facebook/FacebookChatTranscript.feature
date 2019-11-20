@@ -3,10 +3,11 @@
 @fb_dm
 @chat_transcript
 @without_tct
+@Issue("https://jira.clickatell.com/browse/TPLAT-4385")
+Feature: Feature: Chat Transcript for Facebook
 
-  @Issue("https://jira.clickatell.com/browse/TPLAT-4385")
-  Feature: Feature: Chat Transcript for Facebook
     Scenario: Agent receiving chat transcript after Facebook conversation ends
+      Given Login to fb
       Given Set Chat Transcript attribute to ALL for General Bank Demo tenant
       Given Clear Chat Transcript email inbox
       Given I login as agent of General Bank Demo

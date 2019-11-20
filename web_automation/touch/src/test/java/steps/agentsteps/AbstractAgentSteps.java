@@ -6,7 +6,6 @@ import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
-import datamanager.jacksonschemas.dotcontrol.DotControlRequestMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import steps.dotcontrol.DotControlSteps;
@@ -14,6 +13,7 @@ import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AbstractAgentSteps extends AbstractPortalSteps {
 
@@ -33,7 +33,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
 
     private static ThreadLocal<String> clientIDGlobal = new ThreadLocal<>();
 
-    protected List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
+    public List<DotControlInitRequest> createdChatsViaDotControl = new ArrayList<>();
+
+    private static ThreadLocal<List<Map<String, String>>> createdAgentsMails = new ThreadLocal<>();
 
     public static void setAgentLoginPage(String ordinalAgentNumber, AgentLoginPage loginPage) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
@@ -41,6 +43,13 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         } else {
             mainAgentLoginPage.set(loginPage);
         }
+    }
+
+    public static List<Map<String, String>> getListOfCreatedAgents() {
+        if (createdAgentsMails.get()==null) {
+            createdAgentsMails.set(new ArrayList<Map<String, String>>());
+        }
+        return createdAgentsMails.get();
     }
 
     public static AgentLoginPage getAgentLoginPage(String ordinalAgentNumber) {
@@ -64,6 +73,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         }
         return mainAgentLoginPage.get();
     }
+
+
+
 
     public static void setCurrentLoginPage(AgentLoginPage loginPage) {
         currentAgentLoginPage.set(loginPage);
@@ -113,7 +125,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     }
 
     public static ProfileWindow getProfileWindow(String ordinalAgentNumber){
-            return getAgentHomePage(ordinalAgentNumber).getProfileWindow();
+        return getAgentHomePage(ordinalAgentNumber).getProfileWindow();
     }
 
     public static LeftMenuWithChats getLeftMenu(String agent) {

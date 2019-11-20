@@ -13,7 +13,7 @@ public class PortalLaunchpadPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[text()='Remove']")
     private WebElement confirmRemovingTestPhone;
 
-    @FindBy(xpath = "//button[contains(text(), ' Get started with Touch')]")
+    @FindBy(xpath = "//button[@ng-click='getStartedWithTouch()']")
     private WebElement getStartedWithTouchButton;
 
     @FindAll({

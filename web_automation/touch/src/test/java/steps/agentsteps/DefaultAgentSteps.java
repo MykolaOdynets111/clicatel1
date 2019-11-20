@@ -2,7 +2,6 @@ package steps.agentsteps;
 
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
-import datamanager.jacksonschemas.ChatHistoryItem;
 import datamanager.jacksonschemas.SupportHoursItem;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -20,14 +19,9 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
-import steps.DefaultTouchUserSteps;
 import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Collections;
 
@@ -36,8 +30,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
     private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static Customer360PersonalInfo customer360InfoForUpdating;
-    private List<ChatHistoryItem> chatHistoryItems;
-    private Map selectedChatForHistoryTest;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -185,28 +177,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
-                String userName=null;
-                if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
-                if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
-                if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
-                Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40),
+        String userName=null;
+        if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
+        if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
+        if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
+        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
-    }
-
-    @When("Close chat to generate history record")
-    public void closeChats(){
-        ApiHelper.closeActiveChats("admin");
-    }
-
-    private boolean waitForDotControlRequestOnChatDesk(String agent){
-        for(int i = 0; i<5; i++) {
-            String userName = DotControlSteps.getFromClientRequestMessage().getClientId();
-            if(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,4)) return true;
-            else {
-                DriverFactory.getAgentDriverInstance().navigate().refresh();
-            }
-        }
-        return false;
     }
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
@@ -559,110 +535,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Tenant image is not shown on chatdesk");
     }
 
-    @When("^(.*) searches and selects random chat is chat history list$")
-    public void selectRandomChatFromHistory(String ordinalAgentNumber){
-        getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
-        getLeftMenu(ordinalAgentNumber).selectRandomChat();
-    }
-
-    @When("^(.*) sees correct chat history$")
-    public void getChatHistoryFromBackend(String agent){
-        String clientID = getCustomer360Container(agent).getUserFullName();
-        Response sessionDetails  = ApiHelper.getSessionDetails(clientID);
-        List<String> sessionIds = sessionDetails.getBody().jsonPath().getList("data.sessionId");
-        List<ChatHistoryItem> chatItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), sessionIds.get(0));
-        List<String> messagesFromChatBody = getChatBody(agent).getAllMessages();
-        List<String> expectedMessagesList = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatItems);
-
-        Assert.assertEquals(messagesFromChatBody, expectedMessagesList,
-                "Shown on chatdesk messages are not as expected from API \n" +
-                "Expected list: " + expectedMessagesList + "\n" +
-                "Actual list: " + messagesFromChatBody);
-    }
-
-    private List<String> getExpectedChatHistoryItems(ZoneId zoneId, List<ChatHistoryItem> items){
-        List<String> expectedMessagesList = new ArrayList<>();
-        expectedMessagesList.add(0, formDaySeparator(items.get(0).getMessageTime(), zoneId));
-        for(int i=0; i<items.size(); i++){
-            String expectedChatItem = formExpectedChatItem(items.get(i), zoneId).replace("\n", " ");
-            if(expectedChatItem.contains("Input card")) expectedChatItem =
-                    expectedChatItem.replace("Input card", "Let me connect you with a live agent to assist you further. Before I transfer you, please give us some basic info:");
-            expectedMessagesList.add(i+1, expectedChatItem);
-        }
-        return expectedMessagesList;
-    }
-
-    private String formDaySeparator(long time, ZoneId zoneId){
-        LocalDateTime itemDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId);
-        LocalDateTime currentDayTime = LocalDateTime.now(zoneId);
-        String timeSeparator = formTimeStringFromMillis(time, zoneId, DateTimeFormatter.ofPattern("EEEE, MM d, yyyy"));
-
-        if(itemDateTime.getDayOfYear() == currentDayTime.getDayOfYear()) timeSeparator="Today";
-        if(itemDateTime.getDayOfYear() == (currentDayTime.minusDays(1).getDayOfYear())) timeSeparator="Yesterday";
-
-        return timeSeparator;
-    }
-
-    private String formExpectedChatItem(ChatHistoryItem item, ZoneId zoneId){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String message = item.getDisplayMessage();
-        long time = item.getMessageTime();
-        String chatTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), zoneId)
-                .format(formatter);
-        return message + " " + chatTime;
-    }
-
-    @Then("^(.*) sees correct chat with basic info in chat history container$")
-    public void verifyChatHistoryItemInActiveChatView(String agent){
-        SoftAssert soft = new SoftAssert();
-        selectedChatForHistoryTest = DefaultTouchUserSteps.getSelectedClientForChatHistoryTest();
-        String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
-        ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems();
-        chatHistoryItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(),
-                (String) selectedChatForHistoryTest.get("sessionId"));
-
-        soft.assertEquals(actualChatHistoryItem.getChatHistoryTime(), expectedChatHistoryTime,
-                "Incorrect time for chat in chat history shown.");
-        soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(),
-                "'View chat' button is not enabled.");
-        soft.assertAll();
-    }
-
-    @When("^(.*) click 'View chat' button$")
-    public void clickViewChatButton(String agent){
-        getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems().clickViewButton();
-    }
-
-    @Then("^(.*) sees correct messages in history details window$")
-    public void verifyHistoryInOpenedWindow(String agent){
-        SoftAssert soft = new SoftAssert();
-        String expectedChatHistoryTime = getExpectedChatStartTimeForChatHistoryInActiveChat();
-        List<String> messagesFromChatHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getAllMessages();
-        List<String> expectedChatHistory = getExpectedChatHistoryItems(TimeZone.getDefault().toZoneId(), chatHistoryItems);
-
-        soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getUserName(), selectedChatForHistoryTest.get("clientId"),
-                "User name is not as expected in opened Chat History Details window");
-        soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getChatStartDate(), expectedChatHistoryTime,
-                "Started date is not as expected in opened Chat History Details window");
-        soft.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
-                "Chat history is not as expected in chat history details (in active chat)");
-        soft.assertAll();
-    }
-
-
-
-    private String getExpectedChatStartTimeForChatHistoryInActiveChat(){
-        ZoneId zoneId =  TimeZone.getDefault().toZoneId();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        LocalDateTime chatTimeFromBackendUTC = LocalDateTime.parse((String) selectedChatForHistoryTest.get("startedDate"), formatter);
-        return chatTimeFromBackendUTC.atZone(ZoneId.of("UTC"))
-                .withZoneSameInstant(zoneId).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"));
-    }
-
     private Customer360PersonalInfo getCustomer360Info(String clientFrom){
-        String clientId = "";
-        String integrationType = "";
+        String clientId;
+        String integrationType;
         switch (clientFrom){
             case "fb dm":
                 Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
@@ -671,7 +546,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                                                             ((Map) e).get("client")
                                                      ).get("type")
                                                 .equals("FACEBOOK"))
-                                        .findFirst().get();
+                                        .findFirst()
+                                        .orElseThrow(() -> new AssertionError("Cannot get active FACEBOOK type chat"));
                 clientId = (String) chatInfo.get("clientId");
                 integrationType = "FACEBOOK";
                 break;
@@ -698,41 +574,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             return phone.equalsIgnoreCase("unknown");
         else
             return !phone.equalsIgnoreCase("unknown");
-    }
-
-    @Then("^Agent add (.*) tag$")
-    public void agentAddSelectedTag(int iter) {
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
-        Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
-                "Not all tags was added \n");
-    }
-
-    @Then("^Agent delete all tags$")
-    public void agentDeleteAllTags() {
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().deleteTags();
-    }
-
-    @Then("^All tags for tenant is available in the dropdown$")
-    public void allTagsForTenantIsAvailableInTheDropdown() {
-        List<String> tags= ApiHelper.getAllTags();
-        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        Assert.assertEquals(tags, tagsInCRM, " CRM ticket 'Tags' does not match created on the backend \n");
-    }
-
-    @Then("^Agent can search tag and select tag, selected tag added in tags field$")
-    public void agentCanSearchTagAndSelectTag() {
-        SoftAssert soft = new SoftAssert();
-        List<String> tags= ApiHelper.getAllTags();
-        String randomTag= tags.get((int)(Math.random() * tags.size()));
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(randomTag);
-        List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
-        List<String> chosenTags = getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags();
-        soft.assertTrue(tagsInCRM.contains(randomTag),
-                "CRM ticket 'Tags' does not match in search \n");
-        soft.assertTrue(chosenTags.contains(randomTag),
-                "CRM ticket: selected 'Tag' does not match (or was not added) into the input field for Tags \n");
-        soft.assertAll();
     }
 
     @Given("^Create (.*) chat via API$")
@@ -769,15 +610,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
     public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {
         getAgentHomePage(agent).getPageHeader().clickHeadPhonesButton();
-        List<String> availableAgents = getAgentHomePage(agent).getPageHeader().getAvailableAgents();
-        Assert.assertEquals(
-                availableAgents.size(), availableAgent,
-                "Quantity of available agents not as expected");
+        Assert.assertTrue(
+                getAgentHomePage(agent).getPageHeader().isExpectedNumbersShown(availableAgent, 8),
+                "Quantity of available agents not as expected ("+ availableAgent+" expected)");
         if (availableAgent==1){
             getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
             String agentName =  getAgentHomePage(agent).getPageHeader().getAgentName();
             Assert.assertFalse(
-                    availableAgents.contains(agentName),
+                    getAgentHomePage(agent).getPageHeader().getAvailableAgents().contains(agentName),
                     "Unavailable agent in list of available agents");
         }
     }

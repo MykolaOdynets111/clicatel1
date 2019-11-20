@@ -1,6 +1,5 @@
 package portaluielem;
 
-import com.paulhammant.ngwebdriver.ByAngularBinding;
 import io.qameta.allure.Step;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.WebElement;
@@ -59,7 +58,8 @@ public class GetStartedWindow extends BasePortalWindow {
 
     private void clickNavButtonPrivate(String menuNavButton){
         WebElement button = integrationSteps.stream().filter(e -> e.getText().trim().equals(menuNavButton))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot click '"+menuNavButton+"' nav button in Get Started section"));
         clickElem(this.getCurrentDriver(), button, 3, menuNavButton + " nav button");
     }
 

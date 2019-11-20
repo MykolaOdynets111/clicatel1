@@ -42,7 +42,7 @@ public class ConfigureSMSSection extends AbstractWidget {
     private WebElement getTargetButton(String buttonName){
         try{
             return cardButtons.stream().filter(e -> e.getText().trim().equals(buttonName))
-                    .findFirst().get();
+                    .findFirst().orElseThrow(() -> new AssertionError("Button '" +buttonName+ "' is not visible"));
         }catch(NoSuchElementException e){
             return null;
         }

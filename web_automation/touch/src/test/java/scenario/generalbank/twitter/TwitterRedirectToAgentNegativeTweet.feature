@@ -4,6 +4,7 @@
 Feature: Redirection to the agent after negative tweet
 
   Background:
+    Given Login to twitter
     Given I login as agent of General Bank Demo
     Given Open twitter page of General Bank Demo
     Given Open new tweet window

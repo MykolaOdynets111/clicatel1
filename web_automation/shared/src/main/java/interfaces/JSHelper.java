@@ -81,23 +81,26 @@ public interface JSHelper {
         }
     }
 
+    default void scrollToElem(WebDriver driver, WebElement element, String elemName){
+        try {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        }catch(NoSuchElementException e){
+            Assert.fail(elemName +" is not found");
+        }
+    }
+
 
 
     default void executeAngularClick(WebDriver driver, WebElement elem){
         JavascriptExecutor jsExec = (JavascriptExecutor) driver;
-//        jsExec.executeScript("angular.element(arguments[0]).click();", elem);
         jsExec.executeScript("angular.element(arguments[0]).triggerHandler('click')", elem);
-//        try {
-//            Thread.sleep(200);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
     }
 
     default void executeClickInElemListWithWait(WebDriver driver, List<WebElement> list, String item){
         for(int i = 0; i<10; i++){
             if(list.stream().anyMatch(e1 -> e1.getText().equalsIgnoreCase(item))){
-                executeJSclick(list.stream().filter(e -> e.getText().equalsIgnoreCase(item)).findFirst().get(),
+                executeJSclick(list.stream().filter(e -> e.getText().equalsIgnoreCase(item)).findFirst()
+                                .orElseThrow(() -> new AssertionError("Cannot click '" + item +"'")),
                        driver);
                 break;
             }else {

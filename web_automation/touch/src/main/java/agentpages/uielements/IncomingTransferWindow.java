@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import apihelper.ApiHelperTie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -36,7 +37,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = "dl.dl-horizontal")
     private WebElement rejectedBy;
 
-    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    @FindBy(xpath = "//span[@class='profile-icon']")
     private WebElement transferPicture;
 
     @FindBy(xpath = "//div[@class='icons']/span/*")
@@ -79,27 +80,27 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public boolean isTransferWindowHeaderNotShown(){
-        return isElementRemoved(this.getCurrentDriver(), transferWindowHeader,2);
+        return isElementRemoved(this.getCurrentDriver(), transferWindowHeader,6);
     }
 
     public String getRejectedBy(){
         return getTextFromElem(this.getCurrentDriver(),rejectedBy, 2,"Transfer chat window header");
     }
 
-    public boolean isValidImgTransferPicture() {
-        waitFor(1500);//it should be. transfer window apeared but not all(animation);
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferPicture.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), transferPicture, image);
+    public boolean isValidImgTransferPicture(String userName) {
+        isElementShown(this.getCurrentDriver(), transferPicture, 5);
+        return transferPicture.getText().equalsIgnoreCase(String.valueOf(userName.charAt(0)));
     }
 
-    public boolean isValidImTransferChannel() {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferChannel.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), transferChannel, image);
+    public boolean isValidImTransferChannel(String channel) {
+        return getAttributeFromElem(this.getCurrentDriver(), transferChannel, 5, "Channel icon", "id")
+                .equals(channel);
     }
 
-    public boolean isValidImgTransferSentiment() {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/transferchatimg/transferSentiment.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), transferSentiment, image);
+    public boolean isValidImgTransferSentiment(String userMessage) {
+        String expSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
+        return getAttributeFromElem(this.getCurrentDriver(), transferSentiment, 5, "Channel icon", "class")
+                .contains(expSentiment.toLowerCase());
     }
 
     public boolean isRigthSideTransferChatWindow() {

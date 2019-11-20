@@ -1,5 +1,6 @@
 package steps;
 
+import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -11,6 +12,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import twitter.TwitterHomePage;
+import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.TweetsSection;
 import twitter.uielements.DMWindow;
@@ -28,6 +30,11 @@ public class TwitterSteps {
     private OpenedTweet openedTweet;
     private static int invocationCount = 0;
     private static String tweetMessage;
+
+    @Given("Login to twitter")
+    public void loginToTwitter(){
+        TwitterLoginPage.openTwitterLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
+    }
 
     @Given("^Open twitter page of (.*)$")
     public void openTwitterPage(String tenantOrgName){
@@ -142,14 +149,24 @@ public class TwitterSteps {
         return openedTweet.ifAgentReplyShown(expectedResponse, 1);
     }
 
+    private String getExpectedResp(String userMessage){
+        if (userMessage.contains("agent")||userMessage.contains("support")){
+            return getCurrentConnectToAgentTweetText();
+        }else {
+            return FacebookSteps.getCurrentUserMessageText();
+        }
+    }
+
+    /**
+     * Method to verify that response arrived right after the user's message
+     * @param expectedResponse
+     * @param userMessage
+     */
     @Then("^User have to receive correct response \"(.*)\" on his message \"(.*)\"$")
     public void verifyDMTwitterResponse(String expectedResponse, String userMessage){
         SoftAssert soft = new SoftAssert();
-        if (userMessage.contains("agent")||userMessage.contains("support")){
-            userMessage = getCurrentConnectToAgentTweetText();
-        }else {
-            userMessage = FacebookSteps.getCurrentUserMessageText();
-        }
+        userMessage = getExpectedResp(userMessage);
+
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
                 "There is no response on "+userMessage+" user message");
         soft.assertTrue(getDmWindow().getToUserResponse(userMessage).contains(expectedResponse),
@@ -157,6 +174,43 @@ public class TwitterSteps {
         "Actual message: " + getDmWindow().getToUserResponse(userMessage) + "\n" +
         "Expected message: " + expectedResponse);
         soft.assertAll();
+    }
+
+    /**
+     * Method to verify that response arrived regardless its position
+     * @param expectedResponse
+     * @param userMessage
+     */
+    @Then("^User have to receive response \"(.*)\" on his message \"(.*)\"$")
+    public void verifyDMTwitterResponseAmongOthers(String expectedResponse, String userMessage){
+        userMessage = getExpectedResp(userMessage);
+        Assert.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage, expectedResponse),
+                "There is no '" + expectedResponse + "' response on "+userMessage+" user message");
+    }
+
+    @Then("^User have to receive (.*) auto responder on his message \"(.*)\"$")
+    public void verifyAutoResponder(String autoResponder, String userMessage){
+        userMessage = getExpectedResp(userMessage);
+        String expectedResponse = ApiHelper.getTenantMessageText(autoResponder);
+
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),
+                "There is no response on "+userMessage+" user message");
+        soft.assertTrue(getDmWindow().getToUserResponse(userMessage).contains(expectedResponse),
+                "To user response is not as expected \n" +
+                        "Actual message: " + getDmWindow().getToUserResponse(userMessage) + "\n" +
+                        "Expected message: " + expectedResponse);
+        soft.assertAll();
+    }
+
+    @Then("^User should see (.*) response on his message \"(.*)\"$")
+    public void verifyTextResponseAmongOthers(String expectedMessage, String userMessage){
+        userMessage = getExpectedResp(userMessage);
+
+        Assert.assertTrue(getDmWindow().getToUserResponses(userMessage).contains(expectedMessage),
+                "To user response is not as expected \n" +
+                        "Actual message: " + getDmWindow().getToUserResponses(userMessage).toString() + "\n" +
+                        "Expected message: " + expectedMessage);
     }
 
     private static String createToAgentTweetText(){

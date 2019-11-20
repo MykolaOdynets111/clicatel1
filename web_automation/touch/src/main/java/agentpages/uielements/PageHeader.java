@@ -123,4 +123,12 @@ public class PageHeader extends AbstractUIElement {
     public List<String> getAvailableAgents(){
         return headPhonesList.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
     }
+
+    public boolean isExpectedNumbersShown(int expNumber, int wait){
+        for(int i = 0; i<wait; i++){
+            if(getAvailableAgents().size()==expNumber) return true;
+            else waitFor(500);
+        }
+        return false;
+    }
 }

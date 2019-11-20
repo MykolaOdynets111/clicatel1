@@ -73,13 +73,18 @@ public class ApiHelperPlatform {
     }
 
     public static void acceptInvitation(String tenantOrgName, String invitationID, String pass){
-        RestAssured.given()
+        Response resp = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"password\": \""+pass+"\"\n" +
                         "}")
                 .post(String.format(EndpointsPlatform.PLATFORM_ACCEPT_INVITATION, invitationID));
+        if(resp.statusCode()!=201){
+            Assert.fail("Accepting an invitation was not successful \n"+
+                    "Resp status code: " + resp.statusCode() + "\n" +
+                    "Resp body: " + resp.getBody().asString());
+        }
     }
 
     public static List<String> getIdsOfRoles(String tenantOrgName, String roleDescription){
@@ -88,7 +93,7 @@ public class ApiHelperPlatform {
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(EndpointsPlatform.PLATFORM_USER_ROLES);
         List<String> ids = new ArrayList<>();
-        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> ((Map) e))
+        resp.getBody().jsonPath().getList("roles", Map.class).stream().map(e -> e)
                         .filter(e -> e.get("description").equals(roleDescription)). //e.get("name")
                         forEach(e -> {ids.add(
                                 (String) e.get("id"));});

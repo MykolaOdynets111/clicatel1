@@ -14,7 +14,6 @@ import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
 import emailhelper.GmailConnector;
-import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
@@ -62,30 +61,11 @@ public class Hooks implements JSHelper {
             throw new cucumber.api.PendingException();
         }
 
-        if(scenario.getSourceTagNames().contains("@skip_for_demo1")& ConfigManager.getEnv().equalsIgnoreCase("demo1")){
-                    throw new cucumber.api.PendingException("Not valid for demo1 env because for agent creation" +
-                            " connection to DB is used and demo1 DB located in different network than other DBs");
-        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +
                     "On other envs the test may break the limit of sent activation emails and cause " +
                     "Clickatell to be billed for that");
-        }
-
-        if (scenario.getSourceTagNames().contains("@facebook")) {
-          //      ApiHelper.closeAllOvernightTickets("General Bank Demo");
-                FBLoginPage.openFacebookLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
-                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
-                    DriverFactory.getAgentDriverInstance();
-                }
-        }
-
-        if (scenario.getSourceTagNames().contains("@twitter")) {
-                TwitterLoginPage.openTwitterLoginPage(DriverFactory.getTouchDriverInstance()).loginUser();
-                if (scenario.getSourceTagNames().contains("@agent_to_user_conversation")){
-                    DriverFactory.getAgentDriverInstance();
-                }
         }
 
         if(scenario.getSourceTagNames().contains("@tie")){
@@ -104,6 +84,8 @@ public class Hooks implements JSHelper {
 
         makeScreenshotAndConsoleOutputFromChatdesk(scenario);
 
+        System.out.println("Scenario: \"" + scenario.getName() + "\" has finished with status: " + scenario.getStatus());
+
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
@@ -121,9 +103,21 @@ public class Hooks implements JSHelper {
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
             Response resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+            String agent;
+            if(DriverFactory.isSecondAgentDriverExists()) agent = "second agent";
+            else agent = "main";
+            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
             if(resp.statusCode()!=200) {
                 supportHoursUpdates(resp);
             }
+        }
+
+        if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "true");
+        }
+
+        if(scenario.getSourceTagNames().contains(("@remove_dep"))){
+            ApiHelper.deleteDepartmentsById(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@agent_session_capacity")){
@@ -155,6 +149,7 @@ public class Hooks implements JSHelper {
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow(scenario);
         }
+
         if(scenario.getSourceTagNames().contains("@newagent")){
             if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
         }
@@ -171,6 +166,9 @@ public class Hooks implements JSHelper {
         if(scenario.getSourceTagNames().contains("@dot_control")){
             DotControlSteps.cleanUPMessagesInfo();
             APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());
+        }
+
+        if(scenario.getSourceTagNames().contains("@start_server")){
             Server.stopServer();
             APIHelperDotControl.waitForServerToBeClosed();
         }

@@ -20,7 +20,8 @@ public class EditUserRolesWindow extends BasePortalWindow {
     public EditUserRolesWindow selectNewTouchRole(String roleName){
         waitForElementToBeVisible(this.getCurrentDriver(), this.getWrappedElement(), 5);
         WebElement solution = touchSolutions.stream().filter(e -> e.getText().contains(roleName))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Unable to get '"+roleName+"' touch role"));
         clickElem(this.getCurrentDriver(), solution, 2,roleName);
         return this;
     }
@@ -28,7 +29,8 @@ public class EditUserRolesWindow extends BasePortalWindow {
     public EditUserRolesWindow selectNewPlatformRole(String roleName){
         waitForElementToBeVisible(this.getCurrentDriver(), this.getWrappedElement(), 5);
         WebElement solution = platformSolutions.stream().filter(e -> e.getText().contains(roleName))
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Unable to get '"+roleName+"' touch role"));
         clickElem(this.getCurrentDriver(), solution, 2,roleName);
         return this;
     }

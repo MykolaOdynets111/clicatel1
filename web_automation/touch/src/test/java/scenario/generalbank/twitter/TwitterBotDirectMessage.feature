@@ -2,6 +2,7 @@
 Feature: Communication with bot via messages
 
   Background:
+    Given Login to twitter
     Given Open twitter page of General Bank Demo
     Given Last visit date is changed to minus 12 hours for twitter dm user
     Given Open direct message channel

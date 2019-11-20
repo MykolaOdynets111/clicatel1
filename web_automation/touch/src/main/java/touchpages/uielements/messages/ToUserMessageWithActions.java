@@ -22,6 +22,9 @@ public class ToUserMessageWithActions extends AbstractWidget {
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//button/span")
     private List<WebElement> buttons;
 
+    @FindBy(xpath = "(./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//button/span)[1]")
+    private WebElement firstButton;
+
     @FindBy(xpath = "./following-sibling::li[@class='ctl-chat-message-container message-to with-content']//div/input")
     private List<WebElement> inputs;
 
@@ -62,6 +65,7 @@ public class ToUserMessageWithActions extends AbstractWidget {
     }
 
     public boolean isButtonShown(String buttonText) {
+        waitForElementToBeVisible(this.getCurrentDriver(), firstButton, 5);
         return buttons.stream().anyMatch(e -> e.getAttribute("innerText").equalsIgnoreCase(buttonText));
     }
 

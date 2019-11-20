@@ -129,7 +129,7 @@ public class LocalAllureScenario implements AllureScenarioInterface {
 
     @JsonProperty("description")
     public String getDescription() {
-        if(((String) description.getValue()) == null){
+        if(description.getValue() == null){
             return "";
         }else {
             return (String) description.getValue();
