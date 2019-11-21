@@ -2,6 +2,7 @@ package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = "div.ctl-text-input-container ")
@@ -10,7 +11,10 @@ public class WidgetFooter extends AbstractUIElement {
     @FindBy(css = "textarea.ctl-text-input")
     private WebElement textInput;
 
-    @FindBy(css = "div.svg-bttn-click-area")
+    @FindAll({
+            @FindBy(css = "div.svg-bttn-click-area"),
+            @FindBy(css = "span.svg-bttn-container")
+    })
     private WebElement sendMesageButton;
 
     public WidgetFooter enterMessage(String text) {
