@@ -118,7 +118,6 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     public List<String> getUsersNames(){
         this.getCurrentDriver().switchTo().frame(iframeId);
-        waitForElementsToBeVisible(this.getCurrentDriver(), chatConsoleInboxRows, 3);
         List<String> list =  chatConsoleInboxRows.stream()
                 .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getUserName())
@@ -130,7 +129,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     public void clickLoadMore(){
         this.getCurrentDriver().switchTo().frame(iframeId);
         scrollToElem(this.getCurrentDriver(), loadMoreButton,  "'Load more'");
-        clickElem(this.getCurrentDriver(), loadMoreButton, 5, "'Load more'");
+        clickElem(this.getCurrentDriver(), loadMoreButton, 3, "'Load more'");
         waitForConnectingDisappear(2,3);
         exitChatConsoleInbox();
     }
@@ -150,6 +149,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     public String getNumberOfChats(){
         this.getCurrentDriver().switchTo().frame(iframeId);
+        scrollToElem(this.getCurrentDriver(), numberOfChats, "Numbers of chats");
         String info = getTextFromElem(this.getCurrentDriver(), numberOfChats, 3, "Number of chats");
         exitChatConsoleInbox();
         return info;

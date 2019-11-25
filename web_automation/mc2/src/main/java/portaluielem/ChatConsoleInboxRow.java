@@ -29,7 +29,7 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     @FindBy(xpath = ".//div[@class='modal-footer']//button[text()='Assign']")
     private WebElement assignButton;
 
-    @FindBy(xpath = ".//div[contains(@class, 'cl-table-cell--agent-profile')][preceding-sibling::div[contains(@class, 'cl-table-cell--agent-profile')]]/div")
+    @FindBy(xpath = ".//div[contains(@class, 'agent-profile')]//div[contains(@class, 'user-data__description')]//div")
     private WebElement currentAgent;
 
     @FindBy(css = "div.cl-table-user-description__name")
@@ -71,7 +71,7 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     }
 
     public String getUserName(){
-        return getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
+        return userName.getText();//getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
     }
 
 }
