@@ -80,7 +80,7 @@ public enum DriverType {
 
             ChromeOptions options = new ChromeOptions();
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-            options.addArguments("--window-size=1024,768");
+            options.addArguments("--window-size=1920,1080");
             options.addArguments("--disable-gpu");
             options.addArguments("--disable-extensions");
             options.setExperimentalOption("useAutomationExtension", false);
