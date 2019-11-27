@@ -47,7 +47,7 @@ public class DotControlInitRequest {
         this.clientId = clientId;
 //        this.initContext = new InitContext();
         this.departmentId = null;
-        this.history =  Arrays.asList(new History(messageId));
+//        this.history =  Arrays.asList(new History(messageId));
         this.referenceId = "string";  //"" + faker.number().randomNumber(6, false);
         this.tenantMode = "BOT";
     }

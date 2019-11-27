@@ -1,4 +1,5 @@
 @no_widget
+@dot_control
 Feature: Messages location and color
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1650")

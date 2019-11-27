@@ -1,5 +1,6 @@
 @no_widget
 @img
+@dot_control
 Feature: Default sentiment during conclusion
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4002")

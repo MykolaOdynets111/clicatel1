@@ -40,6 +40,8 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "div.button-container button.button.button-primary.ng-binding")
     private WebElement closeLandingPageConfirmation;
 
+
+
     private LeftMenu leftMenu;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
@@ -54,12 +56,15 @@ public class PortalMainPage extends PortalAbstractPage {
 
     public PortalMainPage(WebDriver driver) {
         super(driver);
+        closeUpdatePolicyPopup();
     }
     public PortalMainPage(String agent) {
         super(agent);
+        closeUpdatePolicyPopup();
     }
     public PortalMainPage() {
         super();
+        closeUpdatePolicyPopup();
     }
 
     public TopUpBalanceWindow getTopUpBalanceWindow(){
