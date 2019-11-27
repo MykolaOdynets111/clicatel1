@@ -243,7 +243,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
     @Step(value = "Make sure GDPR and Privacy modal window closed")
     public void closeUpdatePolicyPopup(){
-        if(isElementShown(this.getCurrentDriver(),gotItButton, 2)){
+        if(isElementShown(this.getCurrentDriver(),gotItButton, 7)){
             gotItButton.click();
             waitWhileProcessing(2, 3);
         }
