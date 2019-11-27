@@ -2,10 +2,12 @@ package interfaces;
 
 import com.paulhammant.ngwebdriver.NgWebDriver;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public interface WebWait {
 
@@ -127,6 +129,23 @@ public interface WebWait {
         initWait(driver, wait).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.invisibilityOf(element));
+    }
+
+    default void waitUntilElementNotDisplayed(WebDriver driver, WebElement webElement, int waitTime) {
+        WebDriverWait wait = new WebDriverWait(driver, waitTime);
+        ExpectedCondition elementIsDisplayed = (ExpectedCondition<Boolean>) arg0 -> {
+            try {
+                webElement.isDisplayed();
+                return false;
+            }
+            catch (NoSuchElementException e ) {
+                return true;
+            }
+            catch (StaleElementReferenceException f) {
+                return true;
+            }
+        };
+        wait.until(elementIsDisplayed);
     }
 
     default void waitForElementToBeInvisibleByXpath(WebDriver driver, String xpath, int wait){

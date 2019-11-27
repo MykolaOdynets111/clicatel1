@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import portaluielem.*;
 
+import java.time.LocalTime;
+
 public class PortalMainPage extends PortalAbstractPage {
 
     private String addedToCartAlertXPATH = "//div[@ng-bind-html='alert'][text()='Added to cart']";
@@ -243,10 +245,16 @@ public class PortalMainPage extends PortalAbstractPage {
 
     @Step(value = "Make sure GDPR and Privacy modal window closed")
     public void closeUpdatePolicyPopup(){
-        if(isElementShown(this.getCurrentDriver(),gotItButton, 7)){
-            gotItButton.click();
-            waitWhileProcessing(2, 3);
+        for (int i=0; i<2; i++) {
+            if (isElementShown(this.getCurrentDriver(), gotItButton, 2)) {
+                gotItButton.click();
+                try {
+                    waitUntilElementNotDisplayed(this.getCurrentDriver(), updatePolicyPopUp, 4);
+                } catch (TimeoutException e) {
+                }
+            }
         }
+        waitWhileProcessing(2, 3);
     }
 
     @Step(value = "Get user greeting from Portal Main page")
