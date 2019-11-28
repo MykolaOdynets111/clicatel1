@@ -6,7 +6,6 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import portaluielem.*;
 
-import java.time.LocalTime;
 
 public class PortalMainPage extends PortalAbstractPage {
 
