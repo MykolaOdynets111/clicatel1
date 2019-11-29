@@ -44,6 +44,7 @@ public enum DriverType {
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
             options.addArguments("disable-notifications");
+            options.addArguments("disable-dev-shm-usage");
             options.addArguments("incognito");
             return options;
 		}
