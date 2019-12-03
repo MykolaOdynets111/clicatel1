@@ -140,6 +140,7 @@ public class APIHelperDotControl {
             }
 
         }
+        if (resp.statusCode() == 401) System.out.println("sendMessageWithWait got 401 for user: " + requestMessage.getClientId() + " adn message is: " + resp.getBody().asString() );
         return resp;
     }
 

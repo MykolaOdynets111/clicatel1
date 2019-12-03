@@ -1,6 +1,7 @@
 @no_widget
 @agent_support_hours
 @auto_scheduler_disabled
+@dot_control
 Feature: Supervisor in box : assign ticket manually
 
    Background:

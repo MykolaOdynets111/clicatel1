@@ -49,6 +49,8 @@ public class PortalInboxSteps extends AbstractPortalSteps {
     public void verifyCurrentAgent(String agent){
         Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
         String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+        getChatConsoleInboxPage().getCurrentDriver().navigate().refresh();
+        getChatConsoleInboxPage().waitForConnectingDisappear(2,5);
         boolean result = false;
         for (int i = 0; i < 8; i++){
             if(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()))){

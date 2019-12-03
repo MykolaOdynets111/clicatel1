@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import portaluielem.*;
 
+
 public class PortalMainPage extends PortalAbstractPage {
 
     private String addedToCartAlertXPATH = "//div[@ng-bind-html='alert'][text()='Added to cart']";
@@ -40,6 +41,8 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(css = "div.button-container button.button.button-primary.ng-binding")
     private WebElement closeLandingPageConfirmation;
 
+
+
     private LeftMenu leftMenu;
     private UpgradeYourPlanWindow upgradeYourPlanWindow;
     private CartPage cartPage;
@@ -54,12 +57,15 @@ public class PortalMainPage extends PortalAbstractPage {
 
     public PortalMainPage(WebDriver driver) {
         super(driver);
+        closeUpdatePolicyPopup();
     }
     public PortalMainPage(String agent) {
         super(agent);
+        closeUpdatePolicyPopup();
     }
     public PortalMainPage() {
         super();
+        closeUpdatePolicyPopup();
     }
 
     public TopUpBalanceWindow getTopUpBalanceWindow(){
@@ -238,10 +244,16 @@ public class PortalMainPage extends PortalAbstractPage {
 
     @Step(value = "Make sure GDPR and Privacy modal window closed")
     public void closeUpdatePolicyPopup(){
-        if(isElementShown(this.getCurrentDriver(),gotItButton, 2)){
-            gotItButton.click();
-            waitWhileProcessing(2, 3);
+        for (int i=0; i<2; i++) {
+            if (isElementShown(this.getCurrentDriver(), gotItButton, 2)) {
+                gotItButton.click();
+                try {
+                    waitUntilElementNotDisplayed(this.getCurrentDriver(), updatePolicyPopUp, 4);
+                } catch (TimeoutException e) {
+                }
+            }
         }
+        waitWhileProcessing(2, 3);
     }
 
     @Step(value = "Get user greeting from Portal Main page")

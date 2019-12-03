@@ -1,4 +1,5 @@
 @no_widget
+@dot_control
 Feature: Default user profile icon
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1649")

@@ -11,7 +11,7 @@ Feature: Departments: Verify if possible to transfer overnight ticket to departm
     And Click chat icon
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14876")
-  Scenario: Transfer overnight ticket to department
+  Scenario: Departments: Verify if possible to transfer overnight ticket to department
     And User enter connect to agent2 into widget input field
     Then Agent has new conversation request
     Given I login as second agent of Standard Billing

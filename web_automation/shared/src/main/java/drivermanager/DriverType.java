@@ -44,6 +44,7 @@ public enum DriverType {
             options.addArguments("no-proxy-server");
             options.addArguments("no-sandbox");
             options.addArguments("disable-notifications");
+            options.addArguments("disable-dev-shm-usage");
             options.addArguments("incognito");
             return options;
 		}
@@ -80,7 +81,7 @@ public enum DriverType {
 
             ChromeOptions options = new ChromeOptions();
             options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-            options.addArguments("--window-size=1024,768");
+            options.addArguments("--window-size=1920,1080");
             options.addArguments("--disable-gpu");
             options.addArguments("--disable-extensions");
             options.setExperimentalOption("useAutomationExtension", false);

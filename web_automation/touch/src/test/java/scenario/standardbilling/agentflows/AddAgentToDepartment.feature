@@ -4,7 +4,7 @@
 Feature: Departments : Add an agent trough "Department management"
 
   @TestCaseId("https://jira.clickatell.com/browse/TPLAT-4560")
-  Scenario: Verify department agents adding functionality
+  Scenario: Departments : Add an agent trough "Department management"
     Given I open portal
     And Login into portal as an admin of Standard Billing account
     Given Brand New Standard Billing agent is created

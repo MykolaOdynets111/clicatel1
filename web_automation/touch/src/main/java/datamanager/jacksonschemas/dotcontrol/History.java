@@ -34,7 +34,7 @@ public class History {
 
 
     public History(String messageId){
-        this.message = "string";
+        this.message = "History Message";
         this.messageId = messageId;
         this.messageType = "PLAIN";
         this.timestamp = 0;
