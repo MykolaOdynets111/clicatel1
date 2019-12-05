@@ -74,4 +74,7 @@ public class ChatConsoleInboxRow extends AbstractWidget {
         return userName.getText();//getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
     }
 
+    public void clickOnUserName(){
+        clickElem(this.getCurrentDriver(), userName, 5, "User Name");
+    }
 }

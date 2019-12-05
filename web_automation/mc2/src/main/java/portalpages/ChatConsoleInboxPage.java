@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portaluielem.AssignChatWindow;
 import portaluielem.ChatConsoleInboxRow;
+import portaluielem.InboxChatBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,15 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//div[@class='cl-table']/div[@class='cl-table-row']")
     private List<WebElement> chatConsoleInboxRows;
+
+    @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
+    private WebElement conversationTypeDropdown;
+
+    @FindBy(xpath = "//div[@aria-label]")
+    private List<WebElement> conversationTypeOptions;
+
+    @FindBy(xpath = "//button[text() ='Apply filters']")
+    private WebElement applyFiltersButton;
 
     @FindBy(xpath = "//span[text() = 'Route to scheduler']")
     private WebElement routeToSchedulerButton;
@@ -38,6 +48,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     private String iframeId = "ticketing-iframe";
 
     private AssignChatWindow assignChatWindow;
+    private InboxChatBody inboxChatBody;
 
     // == Constructors == //
 
@@ -64,7 +75,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
                             "Default filter");
     }
 
-    private void exitChatConsoleInbox() {
+    public void exitChatConsoleInbox() {
         this.getCurrentDriver().switchTo().defaultContent();
     }
 
@@ -163,4 +174,19 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         return false;
     }
 
+    public ChatConsoleInboxPage selectConversationType(String option){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        clickElem(this.getCurrentDriver(), conversationTypeDropdown, 1, "Conversation type dropdown");
+        conversationTypeOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
+        clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
+        return this;
+    }
+
+
+    public InboxChatBody openInboxChatBody(String userName){
+        getChatConsoleInboxRow(userName).clickOnUserName();
+        inboxChatBody.setCurrentDriver(this.getCurrentDriver());
+        return inboxChatBody;
+    }
 }

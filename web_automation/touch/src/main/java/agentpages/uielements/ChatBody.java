@@ -9,6 +9,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import java.io.File;
@@ -35,8 +36,10 @@ public class ChatBody extends AbstractUIElement {
     public void setCurrentAgent(String agent){
         this.currentAgent = agent;
     }
-
-    @FindBy(css = "li.from span.profile-icon div.empty-icon")
+    @FindAll({
+            @FindBy(css = "li.from span.profile-icon div.empty-icon"),
+            @FindBy(css = ".from .avatar")
+            })
     private WebElement userProfileIcon;
 
     @FindBy(css = "li.from")
@@ -179,6 +182,11 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isValidDefaultUserProfileIcon() {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/profileicons/user_default.png");
-        return isWebElementEqualsImage(this.getCurrentDriver(), userProfileIcon, image);
+        Boolean isValidIcon =  isWebElementEqualsImage(this.getCurrentDriver(), userProfileIcon, image);
+        if (!isValidIcon){
+            File image2 = new File(System.getProperty("user.dir")+"/touch/src/test/resources/profileicons/user_default_with_line.png");
+            isValidIcon =  isWebElementEqualsImage(this.getCurrentDriver(), userProfileIcon, image2);
+        }
+        return isValidIcon;
     }
 }

@@ -26,6 +26,7 @@ Feature: Managing brand color
     Then Welcome message with correct text is shown
     When User enter chat to agent into widget input field
     Then Agent has new conversation request
+    When User enter hello into widget input field
     Then I check primary color for tenant in opened widget
     Then I check primary color for tenant in agent desk
     Then Check primary color for incoming chat and 360Container

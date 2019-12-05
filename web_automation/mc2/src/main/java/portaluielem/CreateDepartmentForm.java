@@ -1,16 +1,14 @@
 package portaluielem;
 
+import abstractclasses.AbstractUIElement;
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 
 import java.util.List;
 
 @FindBy(css =".modal-dialog .modal-content")
-public class CreateDepartmentForm extends BasePortalWindow{
+public class CreateDepartmentForm extends AbstractUIElement {
 
     @FindBy(css =".cl-input.cl-input--text")
     private WebElement nameField;

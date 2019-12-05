@@ -31,7 +31,6 @@ public class PortalInboxSteps extends AbstractPortalSteps {
     @Then("^Click three dots for dot control ticket$")
     public void clickThreeDotsButton(){
         getChatConsoleInboxPage().clickThreeDotsButton(DotControlSteps.getClient());
-
     }
 
     @When("Click 'Route to scheduler' button")
@@ -101,4 +100,16 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
         return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
     }
+
+    @When("User select (.*) conversation type")
+    public void selectConversationType(String type){
+        getChatConsoleInboxPage().selectConversationType(type);
+    }
+
+    @Then("Verify that live chat is displayed with (.*) message to agent")
+    public void verifyLiveChatPresent(String message){
+        Assert.assertEquals(getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient()).getClientMessageText(), message, "Messages is not the same");
+        getChatConsoleInboxPage().exitChatConsoleInbox();
+    }
+
 }
