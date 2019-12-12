@@ -8,6 +8,7 @@ import datamanager.Tenants;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.util.ArrayList;
@@ -111,5 +112,23 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         Assert.assertEquals(getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient()).getClientMessageText(), message, "Messages is not the same");
         getChatConsoleInboxPage().exitChatConsoleInbox();
     }
+
+    @Then("Verify that (.*) status is shown for inbox conversation")
+    public void verifyCustomerStatus(String status){
+        Assert.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getStatus().trim(), status, "Incorrect status was shown");
+        getChatConsoleInboxPage().exitChatConsoleInbox();
+    }
+
+    @Then ("Verify correct information is shown in Customer details and (.*) set as location")
+    public void verifyCorrectCustomerInfo(String location){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getLocation(), location, "Incorrect location was shown");
+        getChatConsoleInboxPage().exitChatConsoleInbox();
+        soft.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getPhone(), DotControlSteps.getInitContext().getPhone(), "Incorrect phone was shown");
+        getChatConsoleInboxPage().exitChatConsoleInbox();
+        soft.assertAll();
+    }
+
+
 
 }

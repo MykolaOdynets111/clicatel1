@@ -17,7 +17,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']")
     private WebElement filterByDefault;
 
-    @FindBy(xpath = "//div[@class='cl-table']/div[@class='cl-table-row']")
+    @FindBy(xpath = "//div[@class='cl-table']//div[@class='cl-table-row']")
     private List<WebElement> chatConsoleInboxRows;
 
     @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
@@ -80,6 +80,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     }
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
+        this.getCurrentDriver().switchTo().frame(iframeId);
         return chatConsoleInboxRows.stream()
                  .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
@@ -101,13 +102,11 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     }
 
     public void clickThreeDotsButton(String userName){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         getChatConsoleInboxRow(userName).clickThreeDots();
         exitChatConsoleInbox();
     }
 
     public String getCurrentAgentOfTheChat(String userName){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         String currentAgent = getChatConsoleInboxRow(userName).getCurrentAgent();
         exitChatConsoleInbox();
         return currentAgent;
@@ -180,6 +179,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         conversationTypeOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
                 .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
+        exitChatConsoleInbox();
         return this;
     }
 

@@ -1,9 +1,9 @@
 @no_widget
 @dot_control
-Feature: Chat console: Inbox tab
+Feature: Supervisor able to check live chats
 
   Background:
-    Given Create .Control integration for Automation Bot and adapter: fbmsg
+    Given Create .Control integration for Automation and adapter: fbmsg
     Given Prepare payload for sending chat to agent message for .Control
     Given Send parameterized init call with clientId context correct response is returned
     And Send message call
@@ -11,7 +11,7 @@ Feature: Chat console: Inbox tab
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
   Scenario: Supervisor inbox :: verify that supervisor able to check live chats
     Given I open portal
-    And Login into portal as an admin of Automation bot account
+    And Login into portal as an admin of Automation account
     When I select Touch in left menu and Chat console in submenu
     And Select Inbox in Chat console
     When User select Live chats conversation type

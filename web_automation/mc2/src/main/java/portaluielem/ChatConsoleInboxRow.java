@@ -35,6 +35,16 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     @FindBy(css = "div.cl-table-user-description__name")
     private WebElement userName;
 
+    @FindBy(css = ".cl-table-user-description__location")
+    private WebElement location;
+
+    @FindBy(css = ".cl-light-grey span")
+    private WebElement status;
+
+    @FindBy(xpath = "//div[@class = 'cl-table-user-data__description']/div[2]")
+    private WebElement phone;
+
+
     private String chatConsoleInboxRowNameXpath = "//div[@class='cl-table-user-data__description']//div[2]/../div[1]";
 
     public ChatConsoleInboxRow(WebElement element) {
@@ -77,4 +87,18 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     public void clickOnUserName(){
         clickElem(this.getCurrentDriver(), userName, 5, "User Name");
     }
+
+    public String getLocation(){
+        return  getTextFromElem(this.getCurrentDriver(), location, 2, "Location");
+    }
+
+    public String getStatus(){
+        return  getTextFromElem(this.getCurrentDriver(), status, 2, "Status");
+    }
+
+    public String getPhone(){
+        return  getTextFromElem(this.getCurrentDriver(), phone, 2, "Phone");
+    }
+
+
 }
