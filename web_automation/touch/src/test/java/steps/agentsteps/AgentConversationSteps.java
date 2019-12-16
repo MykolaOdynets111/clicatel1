@@ -3,6 +3,7 @@ package steps.agentsteps;
 import agentpages.uielements.Suggestion;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Intents;
@@ -24,9 +25,14 @@ import java.util.stream.Collectors;
 public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
+    private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
 
     public static String getSelectedEmoji() {
         return selectedEmoji;
+    }
+
+    public static ThreadLocal<List<String>> getMessagesFromChatBody() {
+        return messagesFromChatBody;
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
@@ -85,6 +91,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyIfNoAgentResponseAddedByDefault(String agent, String userMessage) {
         Assert.assertFalse(getChatBody(agent).isResponseOnUserMessageShown(userMessage),
                 "There is agent answer added without agent's intention (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
+    }
+
+    @And("Collect (.*) chat messages")
+    public void collectMassages(String agent){
+        messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
 
     @Then("^Sent emoji is displayed on chatdesk$")

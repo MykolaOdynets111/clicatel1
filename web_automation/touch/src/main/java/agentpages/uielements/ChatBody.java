@@ -25,7 +25,7 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[contains(@class, 'from')]//span[text()='%s']";
 
-    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[not(@class='empty')]";
+    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[(@class='to') or @class='from']";
 
     private String toUserMessagesCSS = "li.to";
 
@@ -122,7 +122,6 @@ public class ChatBody extends AbstractUIElement {
                     .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo().replace("\n", " "))
                     .collect(Collectors.toList());
-
     }
 
     public boolean isOTPDividerDisplayed(){
