@@ -128,7 +128,4 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         getChatConsoleInboxPage().exitChatConsoleInbox();
         soft.assertAll();
     }
-
-
-
 }
