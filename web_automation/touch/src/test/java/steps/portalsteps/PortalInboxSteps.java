@@ -110,6 +110,11 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         getChatConsoleInboxPage().selectConversationType(type);
     }
 
+    @Then("Verify (.*) ticket types available in dropdown on Inbox")
+    public void verifyTicketTypes(List<String> ticketTypes){
+        Assert.assertEquals(getChatConsoleInboxPage().getTicketTypes(), ticketTypes, "Ticket types are different");
+    }
+
     @Then("Verify that live chat is displayed with (.*) message to agent")
     public void verifyLiveChatPresent(String message){
         Assert.assertEquals(getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient()).getClientMessageText(), message, "Messages is not the same");

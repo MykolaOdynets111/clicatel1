@@ -23,8 +23,11 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
     private WebElement conversationTypeDropdown;
 
+    @FindBy(xpath = "//span[text() ='Ticket type:']/following-sibling::div")
+    private WebElement ticketTypeDropdown;
+
     @FindBy(xpath = "//div[@aria-label]")
-    private List<WebElement> conversationTypeOptions;
+    private List<WebElement> dropdownsTypesOptions;
 
     @FindBy(xpath = "//button[text() ='Apply filters']")
     private WebElement applyFiltersButton;
@@ -176,13 +179,30 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     public ChatConsoleInboxPage selectConversationType(String option){
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), conversationTypeDropdown, 1, "Conversation type dropdown");
-        conversationTypeOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
+        dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
                 .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
         exitChatConsoleInbox();
         return this;
     }
 
+    public ChatConsoleInboxPage selectTicketType(String option){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
+        dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
+                .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
+        clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
+        exitChatConsoleInbox();
+        return this;
+    }
+
+    public List<String> getTicketTypes(){
+        this.getCurrentDriver().switchTo().frame(iframeId);
+        clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
+        List<String> ticketTypes = dropdownsTypesOptions.stream().map(a-> a.getText().trim()).collect(Collectors.toList());
+        exitChatConsoleInbox();
+        return ticketTypes;
+    }
 
     public InboxChatBody openInboxChatBody(String userName){
         getChatConsoleInboxRow(userName).clickOnUserName();

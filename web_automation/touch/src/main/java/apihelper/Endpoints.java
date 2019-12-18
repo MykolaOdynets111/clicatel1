@@ -162,7 +162,7 @@ public class Endpoints {
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/actuator/health";
 
     public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 
