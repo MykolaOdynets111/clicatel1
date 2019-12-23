@@ -60,6 +60,8 @@ public class Endpoints {
 
     public static String TENANT_AVAILABLE_AGENTS = URLs.getTouchApiBaseURL() + "agent-availability/logged-in";
 
+    public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
@@ -160,7 +162,7 @@ public class Endpoints {
 
     // ====================  SOCIAL ================= //
 
-    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/health";
+    public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/actuator/health";
 
     public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 

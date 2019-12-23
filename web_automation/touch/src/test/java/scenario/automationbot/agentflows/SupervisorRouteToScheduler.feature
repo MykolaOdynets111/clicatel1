@@ -12,7 +12,6 @@ Feature: Supervisor in box : route ticket to scheduler
      Given Send parameterized init call with clientId context correct response is returned
      And Send message call
 
-  @Issue("https://jira.clickatell.com/browse/TPORT-17511")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
   Scenario: Supervisor inbox :: Route ticket to scheduler
     Given I open portal

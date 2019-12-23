@@ -667,6 +667,24 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 channelUsername, phone.replaceAll(" ", "") );
     }
 
+    public static void updateClientProfileAttribute(String attributeName, String attribute, String clientId){
+        Response resp = RestAssured.given().log().all()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{" +
+                        "  \"type\": \"HTTP\",\n" +
+                        "  \"clientId\": \""+ clientId +"\",\n" +
+                        "  \"attributes\": {\n" +
+                        "  \""+ attributeName +"\": \""+ attribute+"\"" +
+                        "  }"+
+                        "}")
+                .post(Endpoints.CLIENT_PROFILE_ATTRIBUTES);
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Attribute with " + attributeName + " was not updated with " + attribute + " status code = " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+    }
 
     public static JsonPath getCustomerView(String tenantOrgName, String clineId){
         String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");

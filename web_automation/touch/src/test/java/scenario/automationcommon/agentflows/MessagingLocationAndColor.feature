@@ -12,8 +12,5 @@ Feature: Messages location and color
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
     Then Conversation area becomes active with Chat to agent user's message
+    When Agent responds with hello to User
     Then Messages is correctly displayed and has correct color
-
-
-
-

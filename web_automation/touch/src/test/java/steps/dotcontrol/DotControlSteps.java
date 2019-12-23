@@ -121,6 +121,11 @@ public class DotControlSteps implements WebWait {
         return messageCallBody.get();
     }
 
+    @When ("Set (.*) as customer location with api")
+    public void updateLocation(String location){
+        ApiHelper.updateClientProfileAttribute("location", location, messageCallBody.get().getClientId());
+    }
+
     private ThreadLocal<MessageRequest> createRequestMessage(String apiKey, String message){
         messageCallBody.set(new MessageRequest(apiKey, message));
         return messageCallBody;

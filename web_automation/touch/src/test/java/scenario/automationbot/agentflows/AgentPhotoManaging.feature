@@ -13,4 +13,3 @@ Feature: Managing Agent's photo
     Then New image is saved on portal and backend
     When I launch chatdesk from portal
     Then Agent photo is updated on chatdesk
-
