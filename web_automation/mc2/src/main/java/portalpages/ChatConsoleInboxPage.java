@@ -92,6 +92,8 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
 
+
+
     public void clickRouteToSchedulerButton(){
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
@@ -190,7 +192,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
         dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
+                .orElseThrow(() -> new AssertionError("Cannot find " + option + " conversation type dropdown option")).click();
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
         exitChatConsoleInbox();
         return this;
@@ -200,6 +202,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
         List<String> ticketTypes = dropdownsTypesOptions.stream().map(a-> a.getText().trim()).collect(Collectors.toList());
+        clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
         exitChatConsoleInbox();
         return ticketTypes;
     }
@@ -209,4 +212,5 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         inboxChatBody.setCurrentDriver(this.getCurrentDriver());
         return inboxChatBody;
     }
+
 }

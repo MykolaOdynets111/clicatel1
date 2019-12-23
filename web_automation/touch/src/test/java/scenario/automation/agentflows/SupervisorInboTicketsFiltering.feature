@@ -1,11 +1,16 @@
+@agent_support_hours
+@auto_scheduler_disabled
+@dot_control
 @no_widget
 Feature: Supervisor able to filter Tickets
 
-#  Background:
-#    Given Create .Control integration for Automation and adapter: fbmsg
-#    Given Prepare payload for sending chat to agent message for .Control
-#    Given Send parameterized init call with clientId context correct response is returned
-#    And Send message call
+  Background:
+    Given Create .Control integration for Automation and adapter: fbmsg
+    Given Set agent support hours with day shift
+    Given autoSchedulingEnabled is set to false
+    Given Prepare payload for sending chat to agent message for .Control
+    Given Send parameterized init call with clientId context correct response is returned
+    And Send message call
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7394")
   Scenario: Supervisor inbox :: Verify if agent can see and apply each filter (All tickets, Unassigned, Assigned, Processed, Overdue)
@@ -15,3 +20,17 @@ Feature: Supervisor able to filter Tickets
     And Select Inbox in Chat console
     When User select Tickets conversation type
     Then Verify All tickets, Assigned, Unassigned, Overdue, Processed ticket types available in dropdown on Inbox
+    And User select Unassigned ticket type
+    Then Ticket is present and has Unassigned type
+    When autoSchedulingEnabled is set to true
+    And Click three dots for dot control ticket
+    When Click 'Assign manually' button
+    Then 'Assign chat' window is opened
+    When I assign chat on Agent
+    And User select Assigned ticket type
+    Then Ticket is present and has Assigned type
+#    Given Set agent support hours for all week
+#    Given Prepare payload for sending chat to agent message for .Control
+#    And Send message call
+#    And Save clientID value for dotcontrol user
+

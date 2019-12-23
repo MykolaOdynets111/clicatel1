@@ -9,10 +9,12 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portaluielem.InboxChatBody;
+import steps.DefaultTouchUserSteps;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentConversationSteps;
 import steps.agentsteps.DefaultAgentSteps;
 import steps.dotcontrol.DotControlSteps;
+import sun.management.resources.agent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,11 @@ public class PortalInboxSteps extends AbstractPortalSteps {
     @Given("^autoSchedulingEnabled is set to false$")
     public void turnOffAutoScheduling(){
         ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "false");
+    }
+
+    @Given("^autoSchedulingEnabled is set to true$")
+    public void turnOnAutoScheduling(){
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "true");
     }
 
     @Then("^Filter \"(.*)\" is selected by default$")
@@ -64,6 +71,25 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         }
         Assert.assertTrue(result, "Agent " +agentName+ " is not set up as 'Current agent'");
     }
+
+    @Then("Ticket is present and has (.*) type")
+    public void verifyUnassignedType(String status){
+        if (status.equalsIgnoreCase("Unassigned")) {
+            Assert.assertTrue(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()).equalsIgnoreCase("Unassigned"),
+                    "Unassigned ticket should be present");
+        } else if (status.equalsIgnoreCase("Assigned")){
+            Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent");
+            String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+            Assert.assertTrue(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
+                    "Assigned ticket should be present");
+        } else if (status.equalsIgnoreCase("Processed")){
+
+        }  else if (status.equalsIgnoreCase("Overdue")){
+
+        }
+
+    }
+
 
     @Then("^'Assign chat' window is opened$")
     public void assignChatWindowOpened(){
@@ -115,17 +141,24 @@ public class PortalInboxSteps extends AbstractPortalSteps {
         Assert.assertEquals(getChatConsoleInboxPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
+    @When("User select (.*) ticket type")
+    public void selectTicketType(String type){
+        getChatConsoleInboxPage().selectTicketType(type);
+    }
+
     @Then("Verify that live chat is displayed with (.*) message to agent")
     public void verifyLiveChatPresent(String message){
         Assert.assertEquals(getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient()).getClientMessageText(), message, "Messages is not the same");
         getChatConsoleInboxPage().exitChatConsoleInbox();
     }
 
+
     @When("Verify that (.*) chat status correct last message and timestamp is shown on Chat View")
     public void openChatView(String chatStatus){
         SoftAssert soft = new SoftAssert();
         List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
         InboxChatBody inboxChatBody = getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient());
+
         soft.assertEquals(inboxChatBody.getChatStatus().toLowerCase(), chatStatus.toLowerCase() + ":"
                 , "Incorrect Chat status was shown on Chat view");
         soft.assertEquals(inboxChatBody.getAgentMessageText() + " " + inboxChatBody.getAgentMessageTime(), messagesFromChatBody.get(messagesFromChatBody.size() -1)

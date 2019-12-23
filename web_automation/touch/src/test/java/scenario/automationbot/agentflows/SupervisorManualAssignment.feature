@@ -26,5 +26,3 @@ Feature: Supervisor in box : assign ticket manually
     And Second agent select "Tickets" filter option
     Then Second agent has new conversation request from dotcontrol user
     And Second agent is set as 'current agent' for dot control ticket
-
-

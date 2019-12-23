@@ -25,7 +25,7 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = "//li[contains(@class, 'from')]//span[text()='%s']";
 
-    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[(@class='to') or @class='from']";
+    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[not(@class='empty')]";
 
     private String toUserMessagesCSS = "li.to";
 

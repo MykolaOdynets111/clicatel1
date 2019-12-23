@@ -8,14 +8,14 @@ Feature: Managing Agent's Auto responders
     When I select Touch in left menu and Touch Preferences in submenu
     And Click "Auto responders" nav button
     When Wait for auto responders page to load
-    And Type new message: New message to  Welcome message message field
+    And Type new message: New message to Enable Web Chat message message field
     And Type new message: New Connecting Agent message to  Connecting Agent message field
     And Type new message: New Agent Busy message message to  Agent Busy message message field
     And Type new message: New Out of Support Hours message to  Out of Support Hours message field
     And Type new message: New End chat message to  End chat message field
     And Type new message: New Direct channel message to  Direct channel message field
     When Agent click 'Save changes' button
-    Then welcome_message on backend corresponds to Welcome message on frontend
+    Then welcome_message on backend corresponds to Enable Web Chat message on frontend
     And connect_agent on backend corresponds to Connecting Agent on frontend
     And agents_away on backend corresponds to Agent Busy message on frontend
     And out_of_support_hours on backend corresponds to Out of Support Hours on frontend

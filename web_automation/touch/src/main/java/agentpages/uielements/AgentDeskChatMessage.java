@@ -33,7 +33,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
     })
     private WebElement messageTime;
 
-    @FindBy(xpath = ".//div[@class='channel-separator-title']")
+    @FindBy(xpath = ".//div[contains(@class,'channel-separator-title')]")
     private WebElement channelSeparator;
 
     public AgentDeskChatMessage(WebElement element) {

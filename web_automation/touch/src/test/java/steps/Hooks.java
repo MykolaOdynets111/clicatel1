@@ -38,7 +38,6 @@ import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
-import twitter.TwitterLoginPage;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
@@ -176,7 +175,12 @@ public class Hooks implements JSHelper {
         if(scenario.getSourceTagNames().contains("@camunda")){
             takeScreenshot();
             endTouchFlow(scenario, true);
-            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+            try {
+                ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+            } catch (AssertionError e){
+                System.out.println(e);
+            }
+
         }
 
         if(scenario.getSourceTagNames().contains("@creating_intent")){
