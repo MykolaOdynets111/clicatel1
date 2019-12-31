@@ -1,10 +1,7 @@
 package apihelper;
 
 import com.github.javafaker.Faker;
-import datamanager.Customer360PersonalInfo;
-import datamanager.MC2Account;
-import datamanager.Tenants;
-import datamanager.Territories;
+import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
 import datamanager.jacksonschemas.departments.Department;
@@ -403,6 +400,30 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                         "  \"messageType\": \"TOUCH_STARTED\"" +
                         "}")
                 .put(Endpoints.INTERNAL_DECREASING_TOUCHGO_PLAN);
+    }
+
+    public static SurveyManagement getSurveyManagementAttributes(String channelId){
+        return RestAssured.given().log().all()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .get(String.format(Endpoints.SURVEY_MANAGEMENT, channelId))
+                .getBody().as(SurveyManagement.class);
+    }
+
+
+    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled){
+        String channelID = getChannelID(tenantOrgName, "webchat");
+        SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
+        if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)){
+            currentConfiguration.setRatingEnabled(ratingEnabled);
+            Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                    .accept(ContentType.ANY)
+                    .contentType(ContentType.JSON).body(currentConfiguration)
+                    .put(String.format(Endpoints.SURVEY_MANAGEMENT, channelID));
+            if(!(resp.statusCode()==200)) {
+                Assert.fail("Failed to update survey with  " + ratingEnabled + " status, status code = " + resp.statusCode()+
+                        "\n Body: " + resp.getBody().asString());
+            }
+        }
     }
 
     public static String getChannelID(String tenantOrgName, String integrationChanel){

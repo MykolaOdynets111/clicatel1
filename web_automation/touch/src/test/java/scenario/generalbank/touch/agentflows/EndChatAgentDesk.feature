@@ -1,10 +1,13 @@
 @agent_feedback
+@off_survey_management
 Feature: Closing chat and no empty CRM ticket creating
 
   Background:
-    Given User select General Bank Demo tenant
+    Given Off survey configuration for General Bank Demo
+    And User select General Bank Demo tenant
     Given I login as agent of General Bank Demo
     And Click chat icon
+
 
   Scenario: Verify if agent is able to close chat in chat desk and no Empty CRM ticket created
     Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo

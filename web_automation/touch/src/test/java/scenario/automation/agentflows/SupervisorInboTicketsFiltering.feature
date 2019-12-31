@@ -29,8 +29,9 @@ Feature: Supervisor able to filter Tickets
     When I assign chat on Agent
     And User select Assigned ticket type
     Then Ticket is present and has Assigned type
-#    Given Set agent support hours for all week
-#    Given Prepare payload for sending chat to agent message for .Control
-#    And Send message call
-#    And Save clientID value for dotcontrol user
-
+    And Update ticket with PROCESSED status
+    When User select PROCESSED ticket type
+    Then Ticket is present and has PROCESSED type
+    And Update ticket with OVERDUE status
+    When User select OVERDUE ticket type
+    Then Ticket is present and has OVERDUE type

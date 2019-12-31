@@ -62,6 +62,8 @@ public class Endpoints {
 
     public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
 
+    public static String SURVEY_MANAGEMENT= URLs.getTouchApiBaseIntegrationURL() + "tenants/channels/rating/config?channelId=%s";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";

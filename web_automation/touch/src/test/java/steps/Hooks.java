@@ -199,6 +199,11 @@ public class Hooks implements JSHelper {
             ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\"UNATTENDED_ONLY\"");
         }
 
+        if (scenario.getSourceTagNames().contains("@off_survey_management")){
+            String tenantOrgName = Tenants.getTenantUnderTestOrgName();
+            ApiHelper.ratingEnabling(tenantOrgName, true);
+        }
+
         closeMainBrowserIfOpened();
         clearAllSessionData();
     }

@@ -204,6 +204,17 @@ public class DBConnector {
         updateDataInDB(env, "touch", query);
     }
 
+    public static void updateAgentHistoryTicketStatus(String env, String status, String clientId){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "SELECT * FROM " + tableName + ".conversation where client_id = '" + clientId + "'";
+
+        String chatId = getDataFromDb(env, "touch", query, "conversation_id");
+
+        query = "UPDATE " + tableName + ".chat_agent_history_ticket SET state = '" + status + "' WHERE (chat_id = '" + chatId + "')";
+
+        updateDataInDB(env, "touch", query);
+    }
+
     public static Long getLastVisitForUserProfile(String env, String linkedClientProfileId){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         String query = "SELECT value FROM "+ tableName +".client_attribute where client_profile_id='"+linkedClientProfileId+"' and `key` = 'lastVisit';";

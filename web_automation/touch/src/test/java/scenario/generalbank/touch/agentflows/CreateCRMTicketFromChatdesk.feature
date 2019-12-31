@@ -1,7 +1,9 @@
 @agent_feedback
+@off_survey_management
 Feature: Creating CRM tickets
 
   Background:
+    Given Off survey configuration for General Bank Demo
     Given User select General Bank Demo tenant
     Given I login as agent of General Bank Demo
     And Click chat icon

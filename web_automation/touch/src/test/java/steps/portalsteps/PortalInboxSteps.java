@@ -5,6 +5,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import dbmanager.DBConnector;
+import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -82,14 +84,16 @@ public class PortalInboxSteps extends AbstractPortalSteps {
             String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
             Assert.assertTrue(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
                     "Assigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Processed")){
-
-        }  else if (status.equalsIgnoreCase("Overdue")){
-
+        } else if (status.equalsIgnoreCase("Processed") || status.equalsIgnoreCase("Overdue")){
+            getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient());
+            getChatConsoleInboxPage().exitChatConsoleInbox();
         }
-
     }
 
+    @Then("Update ticket with (.*) status")
+    public void updateTicketStatus(String status){
+        DBConnector.updateAgentHistoryTicketStatus(ConfigManager.getEnv(), status, DotControlSteps.getClientId());
+    }
 
     @Then("^'Assign chat' window is opened$")
     public void assignChatWindowOpened(){

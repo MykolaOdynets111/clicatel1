@@ -44,6 +44,9 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(css = "div.cl-actions-bar div")
     private WebElement numberOfChats;
 
+    @FindBy (css = ".fade.dialog.in.modal")
+    private WebElement assignWindowsDialog;
+
     private String spinner = "//div[@class='spinner']";
 
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
@@ -128,6 +131,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         this.getCurrentDriver().switchTo().frame(iframeId);
         getAssignChatWindow().selectDropDownAgent(agentName);
         getAssignChatWindow().clickAssignChatButton();
+        waitUntilElementNotDisplayed(this.getCurrentDriver(), assignWindowsDialog, 3);
         exitChatConsoleInbox();
     }
 

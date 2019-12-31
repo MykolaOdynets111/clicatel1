@@ -81,6 +81,15 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
     }
 
+    @Given("(.*) survey configuration for (.*)")
+    public static void switchSurveyConfiguration(String action, String tenantOrgName) {
+        if (action.equalsIgnoreCase("On")){
+            ApiHelper.ratingEnabling(tenantOrgName, true);
+        } else if (action.equalsIgnoreCase("Off")){
+            ApiHelper.ratingEnabling(tenantOrgName, false);
+        }
+    }
+
     @Given("^User with phone number (?:select|opens) (.*) (?:tenant|tenant page)$")
     public void openTenantPageAsUserWithPhone(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
