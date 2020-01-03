@@ -31,7 +31,7 @@ public class ProfileWindow extends AbstractUIElement {
     }
 
     public boolean isCloseProfileButtonShown(){
-        return closeProfileWindowButton.isDisplayed();
+        return isElementShown(this.getCurrentDriver(), closeProfileWindowButton, 3);
     }
 
     public void closeProfileWindow(){

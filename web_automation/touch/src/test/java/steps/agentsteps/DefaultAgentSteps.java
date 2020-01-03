@@ -233,9 +233,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
         try {
-            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().clickIcon();
             getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
-            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().clickIcon();
         } catch (WebDriverException e) {
             Assert.fail("Unable to change agent status. Please check the screenshot.");
         }
@@ -615,7 +615,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 getAgentHomePage(agent).getPageHeader().isExpectedNumbersShown(availableAgent, 8),
                 "Quantity of available agents not as expected ("+ availableAgent+" expected)");
         if (availableAgent==1){
-            getAgentHomePage(agent).getPageHeader().clickIconWithInitials();
+            getAgentHomePage(agent).getPageHeader().clickIcon();
             String agentName =  getAgentHomePage(agent).getPageHeader().getAgentName();
             Assert.assertFalse(
                     getAgentHomePage(agent).getPageHeader().getAvailableAgents().contains(agentName),

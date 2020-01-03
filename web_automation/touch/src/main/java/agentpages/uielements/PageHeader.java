@@ -5,14 +5,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.header")
+@FindBy(css = ".cl-app-header")
 public class PageHeader extends AbstractUIElement {
 
-    @FindBy(css = "button#top-menu-dropdown")
-    private WebElement iconWithAgentInitials;
+    @FindBy(css = ".cl-profile-info__icon-with-status")
+    private WebElement icon;
+
+    @FindBy(xpath = ".cl-profile-info__agent-name")
+    private WebElement iconAgentName;
 
     private String topMenuDropdownCSS = "button#top-menu-dropdown";
 
@@ -58,20 +62,20 @@ public class PageHeader extends AbstractUIElement {
     private String tenantNameXpath = "//div[contains(@class, 'logo')]//h1";
 
     public PageHeader logOut() {
-            waitForElementToBeVisible(this.getCurrentDriver(), iconWithAgentInitials, 5);
-            iconWithAgentInitials.click();
+            waitForElementToBeVisible(this.getCurrentDriver(), icon, 5);
+            icon.click();
             waitForElementToBeVisible(this.getCurrentDriver(), logOutButton, 6);
             logOutButton.click();
         return this;
     }
 
-    public String getTextFromIcon(){
-        return waitForElementToBeVisible(this.getCurrentDriver(), iconWithAgentInitials, 5).getText();
+    public String getAgentFirstNameFromIcon(){
+        return waitForElementToBeVisible(this.getCurrentDriver(), iconAgentName, 5).getText();
     }
 
-    public void clickIconWithInitials(){
-        waitForElementToBeClickable(this.getCurrentDriver(), iconWithAgentInitials, 10);
-        iconWithAgentInitials.click();
+    public void clickIcon(){
+        waitForElementToBeClickable(this.getCurrentDriver(), icon, 10);
+        icon.click();
     }
 
     public String getAgentName(){
@@ -92,7 +96,7 @@ public class PageHeader extends AbstractUIElement {
 
     public void selectStatus(String status){
         if(!isElementShown(this.getCurrentDriver(), agentName, 2)){
-            clickIconWithInitials();
+            clickIcon();
         }
         WebElement targetElem = statusElems.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
         targetElem.click();
@@ -130,5 +134,10 @@ public class PageHeader extends AbstractUIElement {
             else waitFor(500);
         }
         return false;
+    }
+
+    public boolean isValidIconDisplayedOnHeader() {
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/profileicons/user_default.png");
+        return  isWebElementEqualsImage(this.getCurrentDriver(), icon, image);
     }
 }

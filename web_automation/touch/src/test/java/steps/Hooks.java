@@ -265,9 +265,9 @@ public class Hooks implements JSHelper {
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                     AgentHomePage agentHomePage = new AgentHomePage("main agent");
-                    agentHomePage.getPageHeader().clickIconWithInitials();
+                    agentHomePage.getPageHeader().clickIcon();
                     agentHomePage.getPageHeader().selectStatus("available");
-                    agentHomePage.getPageHeader().clickIconWithInitials();
+                    agentHomePage.getPageHeader().clickIcon();
             }
             if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
 
@@ -314,9 +314,9 @@ public class Hooks implements JSHelper {
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                 AgentHomePage agentHomePage = new AgentHomePage("second agent");
-                agentHomePage.getPageHeader().clickIconWithInitials();
+                agentHomePage.getPageHeader().clickIcon();
                 agentHomePage.getPageHeader().selectStatus("available");
-                agentHomePage.getPageHeader().clickIconWithInitials();
+                agentHomePage.getPageHeader().clickIcon();
             }
             DriverFactory.getSecondAgentDriverInstance().manage().deleteAllCookies();
             DriverFactory.closeSecondAgentBrowser();

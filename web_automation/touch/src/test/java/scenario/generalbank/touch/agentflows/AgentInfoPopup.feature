@@ -3,7 +3,8 @@ Feature: Agent information should be present in the info popup
 
   Scenario: Viewing agent's details in information popup
     When I login as agent of General Bank Demo
-    Then Icon should contain agent initials of General Bank Demo
+#    Then Icon should contain agent initials of General Bank Demo
+    Then  Icon and agent first name of General Bank Demo should be present
     When I click icon with agent initials
     Then I see agent of General Bank Demo info
     When Agent clicks "Profile Settings" button

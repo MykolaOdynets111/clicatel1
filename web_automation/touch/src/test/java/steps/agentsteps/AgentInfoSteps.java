@@ -13,17 +13,17 @@ import java.util.Map;
 
 public class AgentInfoSteps extends AbstractAgentSteps{
 
-    @Then("^Icon should contain (.*) initials of (.*)$")
+    @Then("^Icon and (.*) first name of (.*) should be present$")
     public void verifyUserInitials(String agent, String tenantOrgName){
         Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
-        String expectedInitials = Character.toString(agentInfoResp.getBody().jsonPath().get("firstName").toString().charAt(0)) +
-                agentInfoResp.getBody().jsonPath().get("lastName").toString().charAt(0);
+        String agentName = agentInfoResp.getBody().jsonPath().get("firstName").toString();
 
-        Assert.assertEquals(getPageHeader(agent).getTextFromIcon(), expectedInitials, "Agent initials is not as expected");
+        Assert.assertEquals(getPageHeader(agent).getAgentFirstNameFromIcon(), agentName, "Agent first name is not as expected");
+//        getPageHeader(agent).isValidIconDisplayedOnHeader();
     }
 
     @When("^I click icon with (.*) initials$")
-    public void clickIconWithInitials(String agent){ getPageHeader(agent).clickIconWithInitials();
+    public void clickIconWithInitials(String agent){ getPageHeader(agent).clickIcon();
     }
 
     @Then("^I see (.*) of (.*) info$")

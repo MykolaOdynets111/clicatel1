@@ -8,6 +8,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -23,13 +24,22 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
     private List<WebElement> newConversationRequests;
 
-    @FindBy(css = "span.icon.icon-expand")
+    @FindAll( {
+        @FindBy(css = "span.icon.icon-expand"), // old locator
+        @FindBy(css = ".cl-r-icon.cl-r-icon-arrow-down.cl-r-icon--fill-blueberry-soda")
+    })
     private WebElement expandFilterButton;
 
-    @FindBy(css = "ul.dropdown-menu")
+    @FindAll( {
+    @FindBy(css = "ul.dropdown-menu"), // old locator
+    @FindBy(css = "ul.cl-r-filter-dropdown-menu.open")
+    })
     private WebElement filterDropdownMenu;
 
-    @FindBy(css = "ul.dropdown-menu a")
+    @FindAll( {
+    @FindBy(css = "ul.dropdown-menu a"),  // old locator
+    @FindBy(css = "li.cl-r-filter-dropdown-menu-item")
+    })
     private List<WebElement> filterOptions;
 
     @FindBy(xpath = "//div[@class='profile-info']/span[@class='msg-count']")
