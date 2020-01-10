@@ -11,16 +11,28 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
 
-    @FindBy(css = "div.profile-img")
+    @FindAll({
+    @FindBy(css = "div.profile-img"), //old locator
+    @FindBy(css = ".cl-r-avatar.cl-r-avatar--medium")
+    })
     private WebElement userIcon;
 
-    @FindBy(css = "div.profile-info>h2")
+    @FindAll({
+            @FindBy(css = "div.profile-info>h2"), //old locator
+            @FindBy(css = "h2.cl-r-roster-item-user-name")
+    })
     private WebElement userName;
 
-    @FindBy(css = "div.location")
+    @FindAll({
+            @FindBy(css = "div.location"), //old locator
+            @FindBy(css = ".cl-r-roster-item-location")
+    })
     private WebElement location;
 
-    @FindBy(css = "div.context-info div.icons>span")
+    @FindAll({
+            @FindBy(css = "div.context-info div.icons>span"), //old locator
+            @FindBy(css = "span svg.cl-r-icon.cl-r-icon-widget.cl-r-icon--undefined")
+    })
     private WebElement channelIcon;
 
     public WebElement getChannelIcon() {
@@ -42,13 +54,16 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(xpath = "//div[@class='profile-img']//div[@class='empty-icon no-border']")
     private WebElement usercImg;
 
-    @FindBy(xpath = "//div/div[@class='icons']/span[contains(@class,'icon icon')]")
+    @FindAll({
+            @FindBy(xpath = "//div/div[@class='icons']/span[contains(@class,'icon icon')]"), //old locator
+            @FindBy(css = ".cl-r-icon.cl-r-icon-emoji-happy.cl-r-icon--fill-green-caterpillar")
+    })
     private WebElement userSentiment;
 
     @FindBy(css = "span.text-parsed-by-emoji")
     private WebElement messageText;
 
-    private String overnightTicketIcon = "span.icon>svg.overnight";
+    private String overnightTicketIcon = ".cl-r-icon.cl-r-icon-tickets.cl-r-icon--fill-bright-orange"; //""span.icon>svg.overnight"; old locator
 
     public ChatInLeftMenu(WebElement element) {
         super(element);

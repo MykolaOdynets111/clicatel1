@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -15,29 +16,47 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = ".cl-profile-info__icon-with-status")
     private WebElement icon;
 
-    @FindBy(xpath = ".cl-profile-info__agent-name")
+    @FindBy(css = ".cl-profile-info__agent-name")
     private WebElement iconAgentName;
 
     private String topMenuDropdownCSS = "button#top-menu-dropdown";
 
-    @FindBy(xpath = ".//a[text()='Log out']")
+    @FindAll({
+         @FindBy(xpath = ".//a[text()='Log out']"), //old location
+         @FindBy(xpath = ".//button[text()='Log out']")
+    })
     private WebElement logOutButton;
 
-    @FindBy(xpath = ".//a[text()='Profile Settings']")
+    @FindAll({
+        @FindBy(xpath = ".//a[text()='Profile Settings']"), //old location
+        @FindBy(xpath = ".//button[text()='Profile settings']")
+    })
     private WebElement profileSettingsButton;
 
-    @FindBy(css = "li.user.dropdown-header>p>strong")
+    @FindAll({
+        @FindBy(css = "li.user.dropdown-header>p>strong"), //old locator
+        @FindBy(css = ".cl-profile-info__name")
+    })
     private WebElement agentName;
 
-    @FindBy(css = "li.user.dropdown-header>p>em")
+    @FindAll({
+        @FindBy(css = "li.user.dropdown-header>p>em"), //old locator
+        @FindBy(css = ".cl-profile-info__type")
+    })
     private WebElement agentRole;
 
-    @FindBy(xpath = "//li[@class= 'user dropdown-header']/p[not(child::*)]")
+    @FindAll({
+            @FindBy(xpath = "//li[@class= 'user dropdown-header']/p[not(child::*)]"), //old locator
+            @FindBy(css = ".cl-profile-info__email")
+    })
     private WebElement agentEmail;
 
-    private String statusElem = "div.header div.radio-group label";
+    private String statusElem = ".cl-label.cl-radio"; //""div.header div.radio-group label"; old locator
 
-    @FindBy(css = "div.header div.radio-group label")
+    @FindAll({
+            @FindBy(css = "div.header div.radio-group label"), //old locator
+            @FindBy(css = ".cl-label.cl-radio")
+    })
     private List<WebElement> statusElems;
 
     @FindBy(css = "button#top-menu-dropdown>img")
@@ -49,13 +68,22 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "div.logo img")
     private WebElement tenantLogoBorder;
 
-    @FindBy(xpath = "//div[@class='header']//img[@src]")
+    @FindAll({
+            @FindBy(xpath = "//div[@class='header']//img[@src]"), //old locator
+            @FindBy(css = "div.cl-company-info img")
+    })
     private WebElement tenantLogoImage;
 
-    @FindBy(xpath = "//button[@id='agents-list-dropdown']")
+    @FindAll({
+            @FindBy(xpath = "//button[@id='agents-list-dropdown']"), //old locator
+            @FindBy(css = ".cl-app-header__actions-box-item.cl-online-agents.cl-dropdown-box-h-trigger svg")
+    })
     private WebElement headPhones;
 
-    @FindBy(xpath = "//ul[@id='agents-list-menu']/li/div")
+    @FindAll({
+            @FindBy(xpath = "//ul[@id='agents-list-menu']/li/div"), //old locator
+            @FindBy(css = ".cl-dropdown-box__list-item.cl-dropdown-box__list-item--agents-list")
+    })
     private List<WebElement> headPhonesList;
 
     private String tenantLogoBorderXpath = "//div[contains(@class, 'logo')]//img";
@@ -69,6 +97,9 @@ public class PageHeader extends AbstractUIElement {
         return this;
     }
 
+    public boolean isIconPresent(){
+        return waitForElementToBeVisible(this.getCurrentDriver(), icon, 2).isDisplayed();
+    }
     public String getAgentFirstNameFromIcon(){
         return waitForElementToBeVisible(this.getCurrentDriver(), iconAgentName, 5).getText();
     }

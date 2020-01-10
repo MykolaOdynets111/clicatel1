@@ -18,8 +18,10 @@ public class AgentInfoSteps extends AbstractAgentSteps{
         Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(tenantOrgName);
         String agentName = agentInfoResp.getBody().jsonPath().get("firstName").toString();
 
-        Assert.assertEquals(getPageHeader(agent).getAgentFirstNameFromIcon(), agentName, "Agent first name is not as expected");
-//        getPageHeader(agent).isValidIconDisplayedOnHeader();
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getPageHeader(agent).getAgentFirstNameFromIcon(), agentName, "Agent first name is not as expected");
+        soft.assertTrue(getPageHeader(agent).isIconPresent(), "Icon is not displayed");
+        soft.assertAll();
     }
 
     @When("^I click icon with (.*) initials$")

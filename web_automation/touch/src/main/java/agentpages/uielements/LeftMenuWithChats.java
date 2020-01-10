@@ -45,10 +45,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = "//div[@class='profile-info']/span[@class='msg-count']")
     private WebElement newConversationIcon;
 
-    @FindBy(xpath = ".//li/div[@class='roster-item']")
+    @FindAll({
+            @FindBy(xpath = ".//li/div[@class='roster-item']"), // old locator
+            @FindBy(xpath = ".//li[@selenium-id='roster-item']")
+    })
     private List<WebElement> chatsList;
 
-    @FindBy(xpath = ".//ul[@class='chats-roster']/li[@class='active']")
+    @FindAll({
+    @FindBy(xpath = ".//ul[@class='chats-roster']/li[@class='active']"), // old locator
+    @FindBy(xpath = ".//li[@selenium-id='roster-item' and contains (@class,'selected')]")
+    })
     private WebElement activeCaht;
 
     @FindBy(css = "div.scrollable-content")
@@ -63,7 +69,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = "//span[@class='msg-count']")
     private WebElement userMsgCount;
 
-    private String targetProfile = "//div[@class='profile-info']/h2[text()='%s']";
+    private String targetProfile = "//div[contains(@class, 'info')]/h2[text()='%s']";
 
     private String loadingSpinner = "//*[text()='Connecting...']";
 
