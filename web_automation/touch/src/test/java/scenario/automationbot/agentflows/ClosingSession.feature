@@ -12,5 +12,5 @@ Feature: Closing session
     When Agent click on new conversation request from touch
     And Agent closes chat
     Then Agent should not see from user chat in agent desk
-    And Last visit date is saved to DB after 2 minutes
+#    And Last visit date is saved to DB after 2 minutes
     Then All session attributes are closed in DB

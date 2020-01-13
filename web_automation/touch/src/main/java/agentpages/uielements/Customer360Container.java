@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import datamanager.Customer360PersonalInfo;
 import drivermanager.ConfigManager;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -104,7 +105,8 @@ public class Customer360Container extends AbstractUIElement {
     }
 
     public void setPhoneNumber(String phoneNumber){
-        phoneInput.clear();
+        //phoneInput.clear(); does not clear the value
+        phoneInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         phoneInput.sendKeys(phoneNumber);
     }
 
