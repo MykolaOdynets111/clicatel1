@@ -47,6 +47,9 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy (css = ".fade.dialog.in.modal")
     private WebElement assignWindowsDialog;
 
+    @FindBy(id = "ticketing-iframe")
+    private WebElement iframeIdElement;
+
     private String spinner = "//div[@class='spinner']";
 
     private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
@@ -86,6 +89,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     }
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
+        waitForElementToBeVisible(this.getCurrentDriver(), iframeIdElement, 4);
         this.getCurrentDriver().switchTo().frame(iframeId);
         return chatConsoleInboxRows.stream()
                  .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))

@@ -59,7 +59,10 @@ public class PageHeader extends AbstractUIElement {
     })
     private List<WebElement> statusElems;
 
-    @FindBy(css = "button#top-menu-dropdown>img")
+    @FindAll({
+            @FindBy(css = "button#top-menu-dropdown>img"),
+            @FindBy(css = ".cl-company-info img")
+    })
     private WebElement agentIcon;
 
     @FindBy(css = "div.logo h1")
@@ -86,8 +89,8 @@ public class PageHeader extends AbstractUIElement {
     })
     private List<WebElement> headPhonesList;
 
-    private String tenantLogoBorderXpath = "//div[contains(@class, 'logo')]//img";
-    private String tenantNameXpath = "//div[contains(@class, 'logo')]//h1";
+    private String tenantLogoBorderXpath = "//div[@class = 'cl-company-info']/img"; //"//div[contains(@class, 'logo')]//img"; old locator
+    private String tenantNameXpath = "//div[@class = 'cl-company-info']" ;//"//div[contains(@class, 'logo')]//h1"; old locator
 
     public PageHeader logOut() {
             waitForElementToBeVisible(this.getCurrentDriver(), icon, 5);

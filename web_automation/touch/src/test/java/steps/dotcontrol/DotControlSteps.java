@@ -292,7 +292,7 @@ public class DotControlSteps implements WebWait {
                 "HTTP Integration status: " + ApiHelper.getIntegration(Tenants.getTenantUnderTestOrgName(), "HTTP").toString());
             }
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(initialMessage).get(0).getIntent();
-        String expectedMessage = "Hi. " + ApiHelperTie.getExpectedMessageOnIntent(intent);
+        String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(intent);
         try {
             Assert.assertTrue(isResponseComeToServer(expectedMessage, 10),
                     "Message is not as expected\n Found: "

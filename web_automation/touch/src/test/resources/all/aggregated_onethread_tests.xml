@@ -25,6 +25,7 @@
     <test name="Chatdesk and portal tests (Standard Billing tenant) ">
         <classes>
             <class name="runner.standardbilling.RunChatdeskTest" />
+            <class name="runner.standardbilling.RunDepartmentsTest" />
         </classes>
     </test>
 </suite>

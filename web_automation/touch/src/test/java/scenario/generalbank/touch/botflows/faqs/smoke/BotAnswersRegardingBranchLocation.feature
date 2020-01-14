@@ -13,4 +13,4 @@ Feature: Bot answers regarding branch location
     Examples:
       | user input                                       |expected response|
 #      |branch location                                   |Our branches are conveniently located nationwide near main commuter routes and in shopping malls. Use our branch locator to find your nearest branch. |
-      |Where can I find a branch?                        |Hi ${firstName}. Our branches are conveniently located nationwide near main commuter routes and in shopping malls. Use our branch locator to find your nearest branch. |
+      |Where can I find a branch?                        | Our branches are conveniently located nationwide near main commuter routes and in shopping malls. Use our branch locator to find your nearest branch. |
