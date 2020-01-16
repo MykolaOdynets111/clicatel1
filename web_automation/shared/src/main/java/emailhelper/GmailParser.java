@@ -49,7 +49,8 @@ public class GmailParser {
         List<String> chat = new ArrayList<>();
         String [] list = null;
         try {
-            emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
+            emailContent =  newEMail.getContent().toString();
+//            emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
@@ -69,7 +70,8 @@ public class GmailParser {
         String emailContent = null;
         String [] list = null;
         try {
-            emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
+            emailContent =  newEMail.getContent().toString();
+            //emailContent = (String) ((Multipart) newEMail.getContent()).getBodyPart(0).getContent();
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }

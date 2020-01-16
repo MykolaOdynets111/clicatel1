@@ -12,13 +12,12 @@ Feature: Welcome flow: changing lastVisit date in bot mode
     Then Agent has new conversation request
     When Agent click on new conversation
     When Agent closes chat
-    Then Last visit date is saved to DB after 2 minutes
-    When Last visit date is changed to minus 12 hours
+    And Update conversation and session dates to 24 hours
     When User refreshes the widget page
     And Click chat icon
     Then User should see 'welcome' text response for his 'chat to agent' input
 
-  Scenario: Welcome not appearing withing 12 hours twice in Bot mode
+  Scenario: Welcome not appearing withing 24 hours twice in Bot mode
     Given User select Automation Bot tenant
     Given Taf welcome_message is set to true for Automation Bot tenant
     And Click chat icon
@@ -28,7 +27,6 @@ Feature: Welcome flow: changing lastVisit date in bot mode
     Then Agent has new conversation request
     When Agent click on new conversation
     When Agent closes chat
-    Then Last visit date is saved to DB after 2 minutes
     When User refreshes the widget page
     And Click chat icon
     Then User should not receive 'welcome' message after his 'chat to agent' message in widget

@@ -16,6 +16,11 @@ import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Random;
 
 public class CamundaFlowsSteps implements JSHelper, WebActions {
@@ -52,25 +57,26 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
                 ((1 + r.nextInt(2)) * 1000000 + r.nextInt(1000000))+"');");
     }
 
-    @Then("^Last visit date is saved to DB after (.*) minutes$")
-    public void checkThanLastVisitDateIsSaved(int minutes){
-        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        Assert.assertTrue(DBConnector.isLastVisitSavedInDB(ConfigManager.getEnv(), linkedClientProfileId, minutes),
-                "It takes more than " + minutes +" minutes to save lastVisit after last response to user in widget");
+    @When("Update conversation and session dates to (.*) hours$")
+    public void updateDatesForConversationAndSession(int hoursShift){
+        Map<String, String> conversation = DBConnector.getDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "conversation");
+        conversation = updateDates(conversation, hoursShift);
+        DBConnector.updateDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "conversation", conversation);
 
+        Map<String, String> session = DBConnector.getDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "session");
+        session = updateDates(session, hoursShift);
+        DBConnector.updateDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "session", session);
     }
 
-    @Then("^Last visit date is changed to minus (.*) hours$")
-    public void changeLastVisitDate(int hoursShift){
-        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-//          String clientProfileID =ApiHelper.getClientProfileId(getUserNameFromLocalStorage());;
-//          Replace with API after the call is updated to return clientProfileId
-//          https://demo-touch.clickatelllabs.com/internal/client-profiles/generalbank/TOUCH/1/testing_User
-        long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), linkedClientProfileId);
-        if(lastVisit!=0) {
-            long lastVisitWithShift = lastVisit - (hoursShift * 60 * 60 * 1000) - (3 * 60 * 60 * 1000);
-            DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), linkedClientProfileId, lastVisitWithShift);
+    private Map<String, String> updateDates(Map<String, String> map, int hoursShift){
+        for (String key: map.keySet()) {
+            String date = map.get(key);
+            date = date.substring(0, 19) + ".111";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
+            map.put(key, formatter.format(dateTime.minusHours(hoursShift)));
         }
+        return map;
     }
 
 
@@ -92,6 +98,5 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     private String generateNewMessageText(String tafMessageId){
         return "randow "+tafMessageId+" message:" + faker.lorem().characters(8, 13, true);
     }
-
 
 }

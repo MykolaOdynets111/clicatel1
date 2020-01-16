@@ -46,10 +46,13 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(xpath = ".//div[@class='icons']/span[contains(@class,'icon')][child::*]/*")
     private WebElement adapterIcon;
 
-    @FindBy( css = "span.icon.svg-icon-flagged")
+    @FindAll({
+            @FindBy( css = "span.icon.svg-icon-flagged"), //old locator
+            @FindBy(name = "flag-indicator")
+    })
     private WebElement flagIcon;
 
-    private String flagIconCss =  "span.icon.svg-icon-flagged";
+    private String flagIconCss =  "svg[name=flag-indicator]"; //""span.icon.svg-icon-flagged";
 
     @FindBy(xpath = "//div[@class='profile-img']//div[@class='empty-icon no-border']")
     private WebElement usercImg;

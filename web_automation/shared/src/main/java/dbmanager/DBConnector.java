@@ -5,6 +5,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -49,6 +50,7 @@ public class DBConnector {
         }
         return result;
     }
+
 
     private static synchronized void updateDataInDB(String env, String platform, String query){
         try(Statement statement = getConnection(env, platform).createStatement()) {
@@ -159,6 +161,40 @@ public class DBConnector {
         }
         DBConnector.closeConnection();
         return isRecordExists;
+    }
+
+    public static Map<String, String> getDatesOfUserConversationOrSession(String env, String clientId, String table){
+        ResultSet results = null;
+        Map<String, String> conversationDates = new HashMap<>();
+        String tableName = DBProperties.getPropertiesFor(env, "touch").getDBName();
+        String query = "SELECT * FROM " + tableName + "."+table+" where client_id='"+clientId+"'";
+        try(Statement statement = getConnection(env, "touch").createStatement()) {
+            statement.executeQuery(query);
+            results = statement.getResultSet();
+            results.next();
+            conversationDates.put("started_date", getColumnValue(results, "started_date"));
+            if(table.equalsIgnoreCase("conversation")){
+                conversationDates.put("updated_date", getColumnValue(results, "updated_date"));
+            }else if (table.equalsIgnoreCase("session")){
+                conversationDates.put("last_activity", getColumnValue(results, "last_activity"));
+            }
+            conversationDates.put("ended_date", getColumnValue(results, "ended_date"));
+        } catch (SQLException e)  {
+            e.printStackTrace();
+        }
+        return conversationDates;
+    }
+
+    public static void updateDatesOfUserConversationOrSession(String env, String clientId, String table, Map<String, String> map) {
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "";
+        if (table.equalsIgnoreCase("session")) {
+            query = "UPDATE " + tableName + ".session SET " +
+                    "started_date ='"+map.get("started_date")+"', last_activity='"+map.get("last_activity")+"', ended_date='"+map.get("ended_date")+"' WHERE (client_id='"+clientId+"')";
+        } else if (table.equalsIgnoreCase("conversation")){
+            query= "UPDATE " + tableName + ".conversation SET started_date='"+map.get("started_date")+"', updated_date='"+map.get("updated_date")+"', ended_date='"+map.get("ended_date")+"' WHERE (client_id='"+clientId+"')";
+        }
+        updateDataInDB(env, "touch", query);
     }
 
     public static boolean isLastVisitSavedInDB(String env, String linkedClientProfileId, int secondsTimeout) {

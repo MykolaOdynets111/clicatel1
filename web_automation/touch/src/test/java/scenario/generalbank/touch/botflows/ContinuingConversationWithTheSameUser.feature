@@ -3,7 +3,7 @@ Feature: User should be able to continue previously started chat
 
   Background:
     Given User opens General Bank Demo tenant page for user testing_User1
-    Given Last visit date is changed to minus 13 hours
+    And Update conversation and session dates to 13 hours
     And Click chat icon
 
   Scenario: User should be able to continue previously started conversation

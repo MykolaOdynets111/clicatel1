@@ -100,8 +100,7 @@ public class Customer360Container extends AbstractUIElement {
         locationInput.sendKeys(valuesToSet.getLocation());
         mailInput.clear();
         mailInput.sendKeys(valuesToSet.getEmail());
-        phoneInput.clear();
-        phoneInput.sendKeys(valuesToSet.getPhone());
+        setPhoneNumber(valuesToSet.getPhone());
     }
 
     public void setPhoneNumber(String phoneNumber){
