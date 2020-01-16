@@ -9,4 +9,4 @@ Feature: General Bank FAQ: "How will I receive my prepaid electricity token?" in
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                      |expected response|
-      |How can I receive my prepaid electricity token?  |Hi ${firstName}. It'll be displayed on your cellphone screen and will also be sent to you by SMS.|
+      |How can I receive my prepaid electricity token?  | It'll be displayed on your cellphone screen and will also be sent to you by SMS.|

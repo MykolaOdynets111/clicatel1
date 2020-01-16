@@ -9,4 +9,4 @@ Feature: General Bank FAQ: "Why was my PIN blocked after I entered it incorrectl
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                                        |expected response|
-      |Why was my PIN blocked after I entered it incorrectly a few times? |Hi ${firstName}. This is a safety mechanism to protect your account from unauthorised access. You have a maximum of 5 attempts before your Mobile Banking PIN is blocked. If your Mobile Banking PIN is blocked by accident, visit your nearest branch to reset your Mobile Banking PIN.|
+      |Why was my PIN blocked after I entered it incorrectly a few times? | This is a safety mechanism to protect your account from unauthorised access. You have a maximum of 5 attempts before your Mobile Banking PIN is blocked. If your Mobile Banking PIN is blocked by accident, visit your nearest branch to reset your Mobile Banking PIN.|

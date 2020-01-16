@@ -9,4 +9,4 @@ Feature: General Bank FAQ: "I've forgotten my Mobile Banking PIN?" intent
     Then User have to receive '<expected response>' text response for his '<user input>' input
     Examples:
       | user input                                                        |expected response|
-      |I've forgotten my Mobile Banking PIN? |Hi ${firstName}. To reset your Mobile Banking PIN, visit your nearest branch with an identification document or Global One card .|
+      |I've forgotten my Mobile Banking PIN? | To reset your Mobile Banking PIN, visit your nearest branch with an identification document or Global One card .|
