@@ -31,7 +31,10 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "textarea[selenium-id=message-composer-textarea]")
     private WebElement messageInput;
 
-    @FindBy(css = "[selenium-id=message-composer-send-button]")
+    @FindAll({
+    @FindBy(css = "[selenium-id=message-composer-send-button]"),
+    @FindBy(css = ".cl-r-message-composer__send-button") // old locator
+    })
     private WebElement submitMessageButton;
 
     @FindBy(css = "[selenium-id=suggestion-clear]")
