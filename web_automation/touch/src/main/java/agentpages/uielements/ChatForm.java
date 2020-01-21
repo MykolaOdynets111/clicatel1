@@ -18,29 +18,26 @@ public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
 
-    private String suggestionInputFieldCSS = "div.suggestion-wrapper";
+    private String suggestionInputFieldCSS = "[selenium-id=suggestion-wrapper]";
     private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
     private SecureRandom random = new SecureRandom();
 
-    @FindBy(css = "div.suggestion-wrapper")
+    @FindBy(css = "[selenium-id=suggestion-wrapper]")
     private WebElement suggestionInputField;
 
-    @FindBy(css = "div.text-field")
+    @FindBy(css = "[selenium-id=message-composer-main]")
     private WebElement suggestionInputFieldContainer;
 
     @FindBy(css = "textarea[selenium-id=message-composer-textarea]")
     private WebElement messageInput;
 
-    @FindAll({
-            @FindBy(css = "button.btn.btn-primary.pull-right.btn.btn-default"), // old locator
-            @FindBy(css = "button.cl-r-button.cl-r-button--primary.cl-r-button--rounded.cl-r-message-composer__send-button")
-    })
+    @FindBy(css = "[selenium-id=message-composer-send-button]")
     private WebElement submitMessageButton;
 
-    @FindBy(xpath = "//button[text()='Clear']")
+    @FindBy(css = "[selenium-id=suggestion-clear]")
     private WebElement clearButton;
 
-    @FindBy(xpath = "//button[text()='Edit']")
+    @FindBy(css = "[selenium-id=suggestion-edit]")
     private WebElement editButton;
 
     @FindBy(xpath = "//div[contains(@class, 'overnight-chat-controls')]//a[text() = 'Send email']")
@@ -49,7 +46,7 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "div.overnight-chat-controls p")
     public WebElement overnightTicketLable;
 
-    @FindBy(css = "svg#emoticon")
+    @FindBy(css = "[selenium-id=message-composer-emoji-icon]")
     public WebElement emoticonButton;
 
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")

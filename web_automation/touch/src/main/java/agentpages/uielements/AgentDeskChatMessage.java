@@ -12,10 +12,10 @@ import java.util.List;
 
 public class AgentDeskChatMessage extends AbstractWidget {
 
-    @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
+    @FindBy(css = "[selenium-id=emojified-text]")
     private WebElement toUserTextResponse;
 
-    @FindBy(xpath = "./following-sibling::li[@class='to']//span[@class='text-parsed-by-emoji']")
+    @FindBy(css = "[selenium-id=emojified-text]")
     private List<WebElement> toUserTextResponses;
 
     @FindBy(xpath = "./following-sibling::li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
@@ -33,7 +33,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
     })
     private WebElement messageTime;
 
-    @FindBy(xpath = ".//div[contains(@class,'channel-separator-title')]")
+    @FindBy(css = "[selenium-id=channel-separator-title]")
     private WebElement channelSeparator;
 
     public AgentDeskChatMessage(WebElement element) {

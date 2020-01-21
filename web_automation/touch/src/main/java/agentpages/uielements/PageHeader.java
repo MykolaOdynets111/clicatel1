@@ -16,81 +16,41 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = ".cl-profile-info__icon-with-status")
     private WebElement icon;
 
-    @FindBy(css = ".cl-profile-info__agent-name")
+    @FindBy(css = "[selenium-id=agent-fullname]")
     private WebElement iconAgentName;
 
-    private String topMenuDropdownCSS = "button#top-menu-dropdown";
-
-    @FindAll({
-         @FindBy(xpath = ".//a[text()='Log out']"), //old location
-         @FindBy(xpath = ".//button[text()='Log out']")
-    })
+    @FindBy(css = "[selenium-id=logout-button]")
     private WebElement logOutButton;
 
-    @FindAll({
-        @FindBy(xpath = ".//a[text()='Profile Settings']"), //old location
-        @FindBy(xpath = ".//button[text()='Profile settings']")
-    })
+    @FindBy(css = "[selenium-id=profile-settings-button]")
     private WebElement profileSettingsButton;
 
-    @FindAll({
-        @FindBy(css = "li.user.dropdown-header>p>strong"), //old locator
-        @FindBy(css = ".cl-profile-info__name")
-    })
+    @FindBy(css = "[selenium-id=agent-fullname]")
     private WebElement agentName;
 
-    @FindAll({
-        @FindBy(css = "li.user.dropdown-header>p>em"), //old locator
-        @FindBy(css = ".cl-profile-info__type")
-    })
+    @FindBy(css = "[selenium-id=agent-role]")
     private WebElement agentRole;
 
-    @FindAll({
-            @FindBy(xpath = "//li[@class= 'user dropdown-header']/p[not(child::*)]"), //old locator
-            @FindBy(css = ".cl-profile-info__email")
-    })
+    @FindBy(css = "[selenium-id=agent-email]")
     private WebElement agentEmail;
 
-    private String statusElem = ".cl-label.cl-radio"; //""div.header div.radio-group label"; old locator
+    @FindBy(css = "[selenium-id=radio-chat]")
+    private WebElement statusActive;
 
-    @FindAll({
-            @FindBy(css = "div.header div.radio-group label"), //old locator
-            @FindBy(css = ".cl-label.cl-radio")
-    })
-    private List<WebElement> statusElems;
+    @FindBy(css = "[selenium-id=radio-away]")
+    private WebElement statusUnavailable;
 
-    @FindAll({
-            @FindBy(css = "button#top-menu-dropdown>img"),
-            @FindBy(css = ".cl-company-info img")
-    })
+    @FindBy(css = "[selenium-id=company-info-logo]")
     private WebElement agentIcon;
 
-    @FindBy(css = "div.logo h1")
+    @FindBy(css = "[selenium-id=company-info-text]")
     private WebElement tenantName;
 
-    @FindBy(css = "div.logo img")
-    private WebElement tenantLogoBorder;
-
-    @FindAll({
-            @FindBy(xpath = "//div[@class='header']//img[@src]"), //old locator
-            @FindBy(css = "div.cl-company-info img")
-    })
-    private WebElement tenantLogoImage;
-
-    @FindAll({
-            @FindBy(xpath = "//button[@id='agents-list-dropdown']"), //old locator
-            @FindBy(css = ".cl-app-header__actions-box-item.cl-online-agents.cl-dropdown-box-h-trigger svg")
-    })
+    @FindBy(css = "[selenium-id=agents-list-wrapper]")
     private WebElement headPhones;
 
-    @FindAll({
-            @FindBy(xpath = "//ul[@id='agents-list-menu']/li/div"), //old locator
-            @FindBy(css = ".cl-dropdown-box__list-item.cl-dropdown-box__list-item--agents-list")
-    })
+    @FindBy(css = "[selenium-id=agents-list]")
     private List<WebElement> headPhonesList;
-
-    private String tenantLogoBorderXpath = "//div[@class = 'cl-company-info']/img"; //"//div[contains(@class, 'logo')]//img"; old locator
-    private String tenantNameXpath = "//div[@class = 'cl-company-info']" ;//"//div[contains(@class, 'logo')]//h1"; old locator
 
     public PageHeader logOut() {
             waitForElementToBeVisible(this.getCurrentDriver(), icon, 5);
@@ -128,12 +88,18 @@ public class PageHeader extends AbstractUIElement {
         profileSettingsButton.click();
     }
 
-    public void selectStatus(String status){
-        if(!isElementShown(this.getCurrentDriver(), agentName, 2)){
+    public void selectStatus(String status) {
+        if (!isElementShown(this.getCurrentDriver(), agentName, 2)) {
             clickIcon();
         }
-        WebElement targetElem = statusElems.stream().filter(e -> e.getText().equalsIgnoreCase(status)).findFirst().get();
-        targetElem.click();
+        switch (status.toLowerCase()) {
+            case "available":
+                clickElem(this.getCurrentDriver(), statusActive, 2, "Active status checkbox");
+                break;
+            case "unavailable":
+                clickElem(this.getCurrentDriver(), statusUnavailable, 2, "Away status checkbox");
+                break;
+        }
     }
 
     public boolean isAgentImageShown(){
@@ -141,18 +107,16 @@ public class PageHeader extends AbstractUIElement {
     }
 
     public boolean isTenantImageShown(){
-        return isElementShown(this.getCurrentDriver(), tenantLogoImage, 10);
+        return isElementShown(this.getCurrentDriver(), agentIcon, 10);
     }
 
     public String getTenantNameColor() {
-        return Color.fromString(findElemByXPATH(this.getCurrentDriver(), tenantNameXpath)
-                .getCssValue("color")).asHex();
+        return Color.fromString(tenantName.getCssValue("color")).asHex();
     }
 
     public String getTenantLogoBorderColor() {
-        return Color.fromString(findElemByXPATH(this.getCurrentDriver(), tenantLogoBorderXpath)
-                .getCssValue("border-bottom-color")).asHex();
-    }
+        return Color.fromString(agentIcon.getCssValue("border-bottom-color")).asHex();
+     }
 
     public void clickHeadPhonesButton(){
         clickElem(this.getCurrentDriver(), headPhones,3, "Head Phones button");

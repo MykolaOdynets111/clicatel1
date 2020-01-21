@@ -36,10 +36,8 @@ public class ChatBody extends AbstractUIElement {
     public void setCurrentAgent(String agent){
         this.currentAgent = agent;
     }
-    @FindAll({
-            @FindBy(css = "li.from span.profile-icon div.empty-icon"),
-            @FindBy(css = ".from .avatar")
-            })
+
+    @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement userProfileIcon;
 
     @FindBy(css = "li.from")
@@ -48,7 +46,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.to")
     private List<WebElement> toUserMessages;
 
-    @FindBy(css = "li.to div.empty-icon")
+    @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement agentIconWIthInitials;
 
     @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
