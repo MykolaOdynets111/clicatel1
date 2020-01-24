@@ -4,22 +4,20 @@ import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-@FindBy(css = "div[selenium-id=message-composer]")
+@FindBy(css = "div.chat-form")
 public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
 
     private String suggestionInputFieldCSS = "div.suggestion-wrapper";
-    private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
+    private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
     private SecureRandom random = new SecureRandom();
 
     @FindBy(css = "div.suggestion-wrapper")
@@ -28,13 +26,10 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "div.text-field")
     private WebElement suggestionInputFieldContainer;
 
-    @FindBy(css = "textarea[selenium-id=message-composer-textarea]")
+    @FindBy(css = "textarea.text-input--example")
     private WebElement messageInput;
 
-    @FindAll({
-            @FindBy(css = "button.btn.btn-primary.pull-right.btn.btn-default"), // old locator
-            @FindBy(css = "button.cl-r-button.cl-r-button--primary.cl-r-button--rounded.cl-r-message-composer__send-button")
-    })
+    @FindBy(css = "button.btn.btn-primary.pull-right.btn.btn-default")
     private WebElement submitMessageButton;
 
     @FindBy(xpath = "//button[text()='Clear']")

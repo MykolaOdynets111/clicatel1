@@ -43,7 +43,7 @@ public class ChatInLeftMenu extends AbstractWidget {
         return adapterIcon;
     }
 
-    @FindBy(css = ".cl-r-roster-item__footer__left svg") //.//div[@class='icons']/span[contains(@class,'icon')][child::*]/*") old locator
+    @FindBy(xpath = ".//div[@class='icons']/span[contains(@class,'icon')][child::*]/*")
     private WebElement adapterIcon;
 
     @FindAll({

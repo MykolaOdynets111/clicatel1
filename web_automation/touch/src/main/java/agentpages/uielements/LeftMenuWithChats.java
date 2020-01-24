@@ -17,24 +17,24 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @FindBy(css = "div.scrollable-roster")
-    public class LeftMenuWithChats extends AbstractUIElement {
+public class LeftMenuWithChats extends AbstractUIElement {
 
-        private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
+    private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
 
-        @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
-        private List<WebElement> newConversationRequests;
+    @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
+    private List<WebElement> newConversationRequests;
 
-        @FindAll( {
-                @FindBy(css = "span.icon.icon-expand"), // old locator
-                @FindBy(css = ".cl-r-icon.cl-r-icon-arrow-down.cl-r-icon--fill-blueberry-soda")
-        })
-        private WebElement expandFilterButton;
+    @FindAll( {
+        @FindBy(css = "span.icon.icon-expand"), // old locator
+        @FindBy(css = ".cl-r-icon.cl-r-icon-arrow-down.cl-r-icon--fill-blueberry-soda")
+    })
+    private WebElement expandFilterButton;
 
-        @FindAll( {
-                @FindBy(css = "ul.dropdown-menu"), // old locator
-                @FindBy(css = "ul.cl-r-filter-dropdown-menu.open")
-        })
-        private WebElement filterDropdownMenu;
+    @FindAll( {
+    @FindBy(css = "ul.dropdown-menu"), // old locator
+    @FindBy(css = "ul.cl-r-filter-dropdown-menu.open")
+    })
+    private WebElement filterDropdownMenu;
 
     @FindAll( {
     @FindBy(css = "ul.dropdown-menu a"),  // old locator
