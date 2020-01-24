@@ -16,57 +16,42 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.scrollable-roster")
-    public class LeftMenuWithChats extends AbstractUIElement {
+@FindBy(css = "[selenium-id=scrollable-roster]")
+public class LeftMenuWithChats extends AbstractUIElement {
 
         private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
 
-        @FindBy(xpath = ".//ul[@class='chats-roster']/li[not(@class='active')]")
-        private List<WebElement> newConversationRequests;
+    @FindBy(css = "[selenium-id=roster-item]")
+    private List<WebElement> newConversationRequests;
 
-        @FindAll( {
-                @FindBy(css = "span.icon.icon-expand"), // old locator
-                @FindBy(css = ".cl-r-icon.cl-r-icon-arrow-down.cl-r-icon--fill-blueberry-soda")
-        })
-        private WebElement expandFilterButton;
+    @FindBy(css = "[selenium-id=icon-arrow-down]")
+    private WebElement expandFilterButton;
 
-        @FindAll( {
-                @FindBy(css = "ul.dropdown-menu"), // old locator
-                @FindBy(css = "ul.cl-r-filter-dropdown-menu.open")
-        })
-        private WebElement filterDropdownMenu;
+    @FindBy(css = "[selenium-id=filter-dropdown-menu]")
+    private WebElement filterDropdownMenu;
 
-    @FindAll( {
-    @FindBy(css = "ul.dropdown-menu a"),  // old locator
-    @FindBy(css = "li.cl-r-filter-dropdown-menu-item")
-    })
+    @FindBy(css = "[selenium-id=filter-dropdown-menu-item]")
     private List<WebElement> filterOptions;
 
-    @FindBy(xpath = "//div[@class='profile-info']/span[@class='msg-count']")
+    @FindBy(css = "[selenium-id=unread-msg-count]")
     private WebElement newConversationIcon;
 
-    @FindAll({
-            @FindBy(xpath = ".//li/div[@class='roster-item']"), // old locator
-            @FindBy(xpath = ".//li[@selenium-id='roster-item']")
-    })
+    @FindBy(css = "[selenium-id=roster-item]")
     private List<WebElement> chatsList;
 
-    @FindAll({
-    @FindBy(xpath = ".//ul[@class='chats-roster']/li[@class='active']"), // old locator
-    @FindBy(xpath = ".//li[@selenium-id='roster-item' and contains (@class,'selected')]")
-    })
+    @FindBy(css = "[selenium-id=roster-item-selected]")
     private WebElement activeCaht;
 
-    @FindBy(css = "div.scrollable-content")
+    @FindBy(css = "[selenium-id=roster-scroll-container]")
     private WebElement scrollableArea;
 
     @FindBy(xpath = "//div[@class='scrollable-roster']//input")
     private WebElement searchChatInput;
 
-    @FindBy(xpath = "//div[@class='empty-icon no-border']")
+    @FindBy(css = "[selenium-id=icon-user-single]")
     private WebElement userPicture;
 
-    @FindBy(xpath = "//span[@class='msg-count']")
+    @FindBy(css = "[selenium-id=unread-msg-count]")
     private WebElement userMsgCount;
 
     private String targetProfile = "//div[contains(@class, 'info')]/h2[text()='%s']";

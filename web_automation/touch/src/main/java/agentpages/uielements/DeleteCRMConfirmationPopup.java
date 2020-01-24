@@ -5,15 +5,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-@FindBy(xpath = "//h4[text()='Delete Note']/ancestor::div[@class='modal-dialog']")
+@FindBy(css = "[selenium-id=delete-note-conffirmation]")
 public class DeleteCRMConfirmationPopup extends AbstractUIElement {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    @FindBy(xpath = ".//button[text()='Cancel']")
+    @FindBy(css = "[selenium-id=delete-note-decline]")
     private WebElement cancelButton;
 
-    @FindBy(xpath = ".//button[@type='submit']")
+    @FindBy(css = "[selenium-id=delete-note-confirm]")
     private WebElement deleteButton;
 
     public void clickCancel() {

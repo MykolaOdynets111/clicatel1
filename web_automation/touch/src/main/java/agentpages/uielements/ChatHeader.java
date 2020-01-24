@@ -21,38 +21,38 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TimeZone;
 
-@FindBy(css = "div.chat-header")
+@FindBy(css = "[selenium-id=chat-header]")
 public class ChatHeader extends AbstractUIElement {
 
-    @FindBy(xpath = ".//button[text()='End chat']")
+    @FindBy(css = "[selenium-id=header-exit-chat]")
     private WebElement endChatButton;
 
-    @FindBy(xpath = ".//button[text()='Flag chat']")
+    @FindBy(css = "[selenium-id=header-flag-chat]")
     private WebElement pinChatButton;
 
-    @FindBy(xpath = ".//button[text()='Unflag chat']")
+    @FindBy(css = "[selenium-id=header-unflag-chat]")
     private WebElement unpinChatButton;
 
-    @FindBy(xpath = ".//button[text()='Transfer chat']")
+    @FindBy(css = "[selenium-id=header-transfer-chat]")
     private WebElement transferButton;
 
-    @FindBy(xpath = ".//button[text()='Send SMS']")
+    @FindBy(css = "[selenium-id=header-send-sms]")
     private WebElement sendSMSButton;
 
     //for future
-    @FindBy(xpath = ".//button[text()='Send WhatsApp']")
+    @FindBy(css = "[selenium-id=header-whats-app-button]")
     private WebElement sendWhatsAppButton;
 
-    @FindBy(css = "div.chat-header-title")
+    @FindBy(css = "[selenium-id=chat-header-title]")
     private WebElement chatHeaderTitle;
 
-    @FindBy(xpath = "//div[contains(@class,'chat-header')]//div[@class='icons']/span/*")
+    @FindBy(css = "[selenium-id=chat-header-channel-icon]")
     private WebElement channelImg;
 
-    @FindBy(xpath = "//div/span[@class='time']")
+    @FindBy(css = "[selenium-id=chat-header-timer]")
     private WebElement timeStamp;
 
-    @FindBy(xpath = ".//button[text()='Cancel transfer']")
+    @FindBy(css = "[selenium-id=header-cancel-transfer]")
     private WebElement cancelTransferButton;
 
 

@@ -7,13 +7,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class ChatInActiveChatHistory extends AbstractWidget {
 
-    @FindBy(xpath = "./div[@class='time']/span[not(@class)]")
+    @FindBy(css = "[selenium-id=history-item-time]")
     private WebElement timeContainer;
 
-    @FindBy(css = "div.history-item p")
+    @FindBy(css = "[selenium-id=history-item-message]")
     private WebElement userMessage;
 
-    @FindBy(css = "div.details a")
+    @FindBy(css = "[selenium-id=history-item-detail]")
     public WebElement viewDetailsButton;
 
     public ChatInActiveChatHistory(WebElement element) {

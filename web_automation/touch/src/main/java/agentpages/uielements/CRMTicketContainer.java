@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.user-tickets-container")
+@FindBy(css = "[selenium-id=notes-tab]")
 public class CRMTicketContainer extends AbstractUIElement {
 
-    @FindBy(css = "div.ticket-item-block")
+    @FindBy(css = "[selenium-id=note-card]")
     private List<WebElement> crmTickets;
 
     @FindBy(xpath = "//div[@class='user-tickets-container']/preceding-sibling::h2")

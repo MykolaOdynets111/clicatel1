@@ -12,10 +12,10 @@ import java.util.List;
 @FindBy(css = "div.modal-content")
 public class TransferChatWindow extends AbstractUIElement {
 
-    @FindBy(xpath = ".//button[text()='Cancel']")
+    @FindBy(css = "[selenium-id=transfer-chat-modal-cancel]")
     private WebElement cancelTransferButton;
 
-    @FindBy(xpath = ".//button[text()='Transfer chat']")
+    @FindBy(css = "[selenium-id=transfer-chat-modal-transfer]")
     private WebElement submitTransferChatButton;
 
     @FindBy(xpath = ".//label[@for='agentsList']/following-sibling::div//div[@class='Select-control']")
@@ -35,13 +35,13 @@ public class TransferChatWindow extends AbstractUIElement {
 
     private String openedMenu = "div.Select-menu-outer";
 
-    @FindBy(css = "textarea")
+    @FindBy(css = "[selenium-id=transfer-chat-notes-textarea]")
     private WebElement noteInput;
 
     @FindBy(xpath = "//label[@for='agentsList']/following-sibling::div//div[@class='Select-placeholder']")
     private WebElement selectAgentPlaceholder;
 
-    @FindBy(css = "div.error-text.error-text-al")
+    @FindBy(css = "[selenium-id=textarea-input-error]")
     private WebElement noteInputError;
 
     public TransferChatWindow (WebDriver current){

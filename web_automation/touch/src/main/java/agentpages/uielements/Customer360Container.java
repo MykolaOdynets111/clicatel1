@@ -11,62 +11,59 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-@FindBy(css = "div.user-info-container>div")
+@FindBy(css = "[selenium-id=user-profile-container]")
 public class Customer360Container extends AbstractUIElement {
 
 
-    @FindBy(css = "h2.context-profile-name")
+    @FindBy(css = "[selenium-id=user-profile-name]")
     private WebElement profileNameLabel;
-    @FindAll({
-            @FindBy(name = "firstName"),
-            @FindBy(css = "input.info-name-input")
-    })
+
+    @FindBy(css = "[selenium-id=user-profile-name]")
     private WebElement profileNameInput;
 
-    @FindBy(css = "span.icon.icon-location+span")
+    @FindBy(css = "[selenium-id=user-profile-location]")
     private WebElement locationLabel;
-    @FindBy(name = "location")
+    @FindBy(css = "[selenium-id=user-profile-location]")
     private WebElement locationInput;
 
-    @FindBy(css = "span.icon.icon-sending+span")
+    @FindBy(css = "[selenium-id=user-profile-since]")
     private WebElement customerSinceLabel;
 
-    @FindBy(css = "span.icon.icon-mail+span")
+    @FindBy(css = "[selenium-id=user-profile-email]")
     private WebElement mailLabel;
-    @FindBy(name = "email")
+    @FindBy(css = "[selenium-id=user-profile-email]")
     private WebElement mailInput;
 
-    @FindBy(css = "span.icon.icon-twitter+span")
+    @FindBy(css = "[selenium-id=user-profile-twitter]")
     private WebElement twitterLabel;
 
-    @FindBy(css = "span.icon.icon-facebook+span")
+    @FindBy(css = "[selenium-id=user-profile-facebook]")
     private WebElement fbLabel;
 
-    @FindBy(css = "span.icon.svg-icon-mobile+span")
+    @FindBy(css = "[selenium-id=user-profile-phone]")
     private WebElement phoneLabel;
-
-    @FindBy(name = "phone")
+    @FindBy(css = "[selenium-id=user-profile-phone]")
     private WebElement phoneInput;
 
-    @FindBy(xpath = "//div[@class='info-row']/button[text()='Send OTP']")
+    @FindBy(css = "[selenium-id=user-profile-send-otp]")
     private WebElement sendOTPButton;
 
-    @FindBy(xpath = "//div[@class='info-row']/button[text()='Verify']")
+    @FindBy(css = "[selenium-id=user-profile-verify]")
     private WebElement verifyPhoneButton;
 
-    @FindBy(xpath = "//div[@class='info-row']/button[text()='Re-send OTP']")
+    @FindBy(css = "[selenium-id=user-profile-send-otp]")
     private WebElement resendOTPButton;
 
-    @FindBy(css = ".status-text")
+    @FindBy(css = "[selenium-id=user-profile-phone-status]")
     private WebElement verifiedLabel;
 
-    @FindBy(css = "button.pull-right.disable-spacing-top.btn-default")
+    @FindBy(css = "[selenium-id=user-profile-edit]")
     private WebElement saveEditButton;
 
     @FindBy(xpath = "//div[@class='empty-icon no-border']")
     private WebElement userPicture;
 
-    @FindBy(xpath = "//div[contains(@class,'context-part')]//a")
+    @FindBy(css = "[selenium-id=user-profile-container]")
     private WebElement mailColor;
 
     private String phoneCSS = "span.icon.svg-icon-mobile+span";

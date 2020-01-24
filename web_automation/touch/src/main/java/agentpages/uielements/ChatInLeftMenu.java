@@ -11,28 +11,17 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
 
-    @FindAll({
-    @FindBy(css = "div.profile-img"), //old locator
     @FindBy(css = ".cl-r-avatar.cl-r-avatar--medium")
-    })
     private WebElement userIcon;
 
-    @FindAll({
-            @FindBy(css = "div.profile-info>h2"), //old locator
-            @FindBy(css = "h2.cl-r-roster-item-user-name")
-    })
+
+    @FindBy(css = "[selenium-id=roster-item-user-name]")
     private WebElement userName;
 
-    @FindAll({
-            @FindBy(css = "div.location"), //old locator
-            @FindBy(css = ".cl-r-roster-item-location")
-    })
+    @FindBy(css = "[selenium-id=roster-item-location]")
     private WebElement location;
 
-    @FindAll({
-            @FindBy(css = "div.context-info div.icons>span"), //old locator
-            @FindBy(css = "span svg.cl-r-icon.cl-r-icon-widget.cl-r-icon--undefined")
-    })
+    @FindBy(css = "[selenium-id=icon-widget]")
     private WebElement channelIcon;
 
     public WebElement getChannelIcon() {
@@ -46,21 +35,15 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(css = ".cl-r-roster-item__footer__left svg") //.//div[@class='icons']/span[contains(@class,'icon')][child::*]/*") old locator
     private WebElement adapterIcon;
 
-    @FindAll({
-            @FindBy( css = "span.icon.svg-icon-flagged"), //old locator
-            @FindBy(name = "flag-indicator")
-    })
+    @FindBy(css = "[selenium-icon-flag-indicator]")
     private WebElement flagIcon;
 
     private String flagIconCss =  "svg[name=flag-indicator]"; //""span.icon.svg-icon-flagged";
 
-    @FindBy(xpath = "//div[@class='profile-img']//div[@class='empty-icon no-border']")
+    @FindBy(css = "[selenium-icon-user-single]")
     private WebElement usercImg;
 
-    @FindAll({
-            @FindBy(xpath = "//div/div[@class='icons']/span[contains(@class,'icon icon')]"), //old locator
-            @FindBy(css = ".cl-r-icon.cl-r-icon-emoji-happy.cl-r-icon--fill-green-caterpillar")
-    })
+    @FindBy(css = "[selenium-icon-emoji-happy]")
     private WebElement userSentiment;
 
     @FindBy(css = "span.text-parsed-by-emoji")

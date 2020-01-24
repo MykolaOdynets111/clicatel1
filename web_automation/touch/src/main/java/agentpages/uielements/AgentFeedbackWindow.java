@@ -12,31 +12,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@FindBy(css = "div.modal-content")
+@FindBy(css = "div.cl-r-modal")
 public class AgentFeedbackWindow extends AbstractUIElement {
 
-    @FindBy(xpath = "//button[text()='Cancel']")
+    @FindBy(css = "[selenium-id=exit-chat-modal-cancel]")
     private WebElement cancelButton;
 
     @FindBy(xpath = "//button[text()='Skip']")
     private WebElement skipButton;
 
-    @FindBy(xpath = "//span[text()='Close Chat']")
+    @FindBy(css = "[selenium-id=exit-chat-modal-save]")
     private WebElement closeChatButton;
 
-    @FindBy(css = ".icon-negative")
+    @FindBy(css = "[selenium-id=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
 
-    @FindBy(css = ".icon-neutral")
+    @FindBy(css = "[selenium-id=sentiment-icon-neutral]")
     private WebElement sentimentNeutral;
 
-    @FindBy(css = ".icon-positive")
+    @FindBy(css = "[selenium-id=sentiment-icon-positive]")
     private WebElement sentimentHappy;
 
     @FindBy(css = "div.conclude-chat-sentiment>span.active")
     private WebElement selectedSentiment;
 
-    @FindBy(css = ".icons.conclude-chat-sentiment")
+    @FindBy(css = "[selenium-id=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
     @FindBy(xpath = "//div[@class='Select-menu-outer']/div[@role='listbox']")
@@ -65,13 +65,13 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String cleareAll = ".Select-clear";
 
-    @FindBy(id = "CRMNote")
+    @FindBy(css = "[selenium-id=exit-chat-note]")
     private WebElement crmNoteTextField;
 
-    @FindBy(id = "CRMLink")
+    @FindBy(css = "[selenium-id=exit-chat-link]")
     private WebElement crmLink;
 
-    @FindBy(id = "CRMTicketNumber")
+    @FindBy(css = "[selenium-id=exit-chat-ticket-number]")
     private WebElement crmTicketNumber;
 
     public void clickCancel() {
