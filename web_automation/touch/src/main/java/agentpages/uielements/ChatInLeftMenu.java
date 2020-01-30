@@ -35,7 +35,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(css = ".cl-r-roster-item__footer__left svg") //.//div[@class='icons']/span[contains(@class,'icon')][child::*]/*") old locator
     private WebElement adapterIcon;
 
-    @FindBy(css = "[selenium-icon-flag-indicator]")
+    @FindBy(css = ".cl-r-icon-flag-indicator")
     private WebElement flagIcon;
 
     private String flagIconCss =  "svg[name=flag-indicator]"; //""span.icon.svg-icon-flagged";
@@ -43,7 +43,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(css = "[selenium-icon-user-single]")
     private WebElement usercImg;
 
-    @FindBy(css = "[selenium-icon-emoji-happy]")
+    @FindBy(css = ".cl-r-roster-item__header__status .cl-r-icon")
     private WebElement userSentiment;
 
     @FindBy(css = "span.text-parsed-by-emoji")

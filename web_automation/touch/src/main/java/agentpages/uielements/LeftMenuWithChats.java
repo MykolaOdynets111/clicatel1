@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 @FindBy(css = "[selenium-id=scrollable-roster]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-        private String tenthChat = "(.//ul[@class='chats-roster']/li[not(@class='active')])[9]";
-
     @FindBy(css = "[selenium-id=roster-item]")
     private List<WebElement> newConversationRequests;
 
-    @FindBy(css = "[selenium-id=icon-arrow-down]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=icon-arrow-down]"),
+            @FindBy(css = ".cl-r-icon-arrow-down") //old locator
+    })
     private WebElement expandFilterButton;
 
     @FindBy(css = "[selenium-id=filter-dropdown-menu]")
@@ -63,11 +64,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .getUserName().equals(userName)).findFirst().get();
     }
 
-    private WebElement getActiveTargetChat(String userName){
-        return chatsList.stream().filter(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
-                .getUserName().equals(userName)).findFirst().get();
-    }
-
     public void openNewConversationRequestByAgent() {
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         try {
@@ -96,16 +92,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isOvernightTicketIconShown();
     }
 
-    public boolean isFlagIconShown(String userName){
-        return new ChatInLeftMenu(getActiveTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isFlagIconShown();
+    public boolean isFlagIconShown(){
+        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isFlagIconShown();
     }
 
-    public boolean isFlagIconRemoved(String userName){
-        return new ChatInLeftMenu(getActiveTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isFlagIconRemoved();
+    public boolean isFlagIconRemoved(){
+        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isFlagIconRemoved();
     }
 
-    public boolean isProfileIconNotShown(String userName){
-        return new ChatInLeftMenu(getActiveTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isProfileIconNotShown();
+    public boolean isProfileIconNotShown(){
+        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isProfileIconNotShown();
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){

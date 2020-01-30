@@ -22,5 +22,3 @@ Feature: Transferring chat rejection
     When Agent responds with hello to User
     Then User should see 'hello' text response for his 'connect to agent2' input
 
-
-

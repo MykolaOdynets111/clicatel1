@@ -19,7 +19,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
 
-    @FindBy(xpath = "//div[text()='Agent Assistant']")
+    @FindBy(xpath = "//li[text()='Assist']")
     private WebElement agentAssistantButton;
 
     private String pinErrorMessageXpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']";
@@ -45,7 +45,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div > div.active")
     private WebElement customer360Button;
 
-    @FindBy(css = "div.context-menu>div.active")
+    @FindBy(css = ".cl-r-tabs__tab.cl-r-tabs__tab--selected")
     private WebElement selectedTab;
 
     @FindBy(css = "div.tip-note")
@@ -186,7 +186,7 @@ public class AgentHomePage extends AgentAbstractPage {
     public void endChat(){
         if(getChatHeader().isEndChatShown()){
             getChatHeader().clickEndChatButton();
-            getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+            getAgentFeedbackWindow().clickSaveButtonInCloseChatPopup();
             try {
                 waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),chatContainer, 5);
             }catch (TimeoutException e){

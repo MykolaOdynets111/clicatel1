@@ -57,7 +57,7 @@ public class Customer360Container extends AbstractUIElement {
     @FindBy(css = "[selenium-id=user-profile-phone-status]")
     private WebElement verifiedLabel;
 
-    @FindBy(css = "[selenium-id=user-profile-edit]")
+    @FindBy(css = ".cl-r-tab-profile-header .cl-r-button")
     private WebElement saveEditButton;
 
     @FindBy(xpath = "//div[@class='empty-icon no-border']")
@@ -76,12 +76,24 @@ public class Customer360Container extends AbstractUIElement {
         }
 
         String channelUsername = "Unknown";
+        String location;
+        String phone;
         if(!twitterLabel.getText().equals("Unknown")) channelUsername = twitterLabel.getText();
         if(!fbLabel.getText().equals("Unknown")) channelUsername = fbLabel.getText();
         if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage(this.getCurrentDriver())!=null) channelUsername = getUserNameFromLocalStorage(this.getCurrentDriver());
-        return new Customer360PersonalInfo(profileNameLabel.getText().replace("\n", " "),
-                locationLabel.getText(), customerSinceLabel.getText(),
-                mailLabel.getText(), channelUsername, phoneLabel.getText().replaceAll(" ", ""));
+        if(channelUsername.equals("Unknown")) channelUsername = "@"+profileNameLabel.getAttribute("value");
+        if (phoneLabel.getAttribute("value").isEmpty()){
+            phone = "Unknown";
+        } else {
+            phone = phoneLabel.getAttribute("value");
+        }
+        if (locationLabel.getAttribute("value").isEmpty()){
+            location = "Unknown location";
+        } else {
+            location = locationLabel.getAttribute("value");
+        }
+        return new Customer360PersonalInfo(profileNameLabel.getAttribute("value").replace("\n", " "),
+                location, customerSinceLabel.getText(), mailLabel.getAttribute("value"), channelUsername, phone.replaceAll(" ", ""));
     }
 
     public void clickSaveEditButton(){

@@ -10,8 +10,8 @@ Feature: Canceling chat transfer
   Scenario: Transfer :: Chat Desk should cancel "transfer offer"
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
-    Given I login as second agent of General Bank Demo
     When First Agent click on new conversation
+    Given I login as second agent of General Bank Demo
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming transfer" header
     When First Agent click 'Cancel transfer' button

@@ -14,7 +14,7 @@ Feature: Interaction with 'Skip' button on Agent Feedback window
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
     Then End chat popup should be opened
-    When Agent click 'Skip' button
+    When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is not created
@@ -27,7 +27,7 @@ Feature: Interaction with 'Skip' button on Agent Feedback window
     When Agent click "End chat" button
     Then End chat popup should be opened
     Then Agent fills form
-    When Agent click 'Skip' button
+    When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is not created

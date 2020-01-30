@@ -270,12 +270,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) click 'Close chat' button$")
     public void clickCloseChatButton(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
-    }
-
-    @When("(.*) click 'Skip' button$")
-    public void agentClickSkipButton(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().clickSkip();
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickSaveButtonInCloseChatPopup();
     }
 
     @When("(.*) fills form$")

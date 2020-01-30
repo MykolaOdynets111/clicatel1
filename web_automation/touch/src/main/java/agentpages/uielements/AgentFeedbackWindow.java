@@ -18,11 +18,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=exit-chat-modal-cancel]")
     private WebElement cancelButton;
 
-    @FindBy(xpath = "//button[text()='Skip']")
-    private WebElement skipButton;
-
     @FindBy(css = "[selenium-id=exit-chat-modal-save]")
-    private WebElement closeChatButton;
+    private WebElement saveChatButton;
 
     @FindBy(css = "[selenium-id=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
@@ -51,8 +48,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(xpath = "//span[@class='Select-arrow-zone']/span")
     private WebElement openDropdownButton;
 
-    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
-
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
     private String inputTagField =  "div.Select-input > input";
@@ -80,24 +75,16 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void clickCloseChat() {
-        clickElem(this.getCurrentDriver(), closeChatButton, 5,"Close chat button" );
+        clickElem(this.getCurrentDriver(), saveChatButton, 5,"Close chat button" );
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
-    public void clickSkip() {
-        clickElem(this.getCurrentDriver(), skipButton, 5, "Skip button" );
-        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
-    }
-
-    public void clickCloseButtonInCloseChatPopup (){
-        if( isElementShownByXpath(this.getCurrentDriver(), closeChatButtonXPATH, 3)){
-            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), closeChatButtonXPATH, 5);
-            findElemByXPATH(this.getCurrentDriver(), closeChatButtonXPATH).click();
-        }
+    public void clickSaveButtonInCloseChatPopup(){
+        clickElem(this.getCurrentDriver(), saveChatButton, 5, "Save button");
     }
 
     public boolean isEndChatPopupShown (){
-        return isElementShown(this.getCurrentDriver(), closeChatButton,12);
+        return isElementShown(this.getCurrentDriver(), saveChatButton,12);
     }
 
     public AgentFeedbackWindow typeCRMNoteTextField(String msg) {

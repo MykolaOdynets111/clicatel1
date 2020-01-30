@@ -325,7 +325,7 @@ public class Hooks implements JSHelper {
 
     private void endTouchFlow(Scenario scenario, boolean typeEndInWidget) {
         if (DriverFactory.isTouchDriverExists()) {
-            userName();
+//            userName();
             if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
                 new MainPage().openWidget();
             }

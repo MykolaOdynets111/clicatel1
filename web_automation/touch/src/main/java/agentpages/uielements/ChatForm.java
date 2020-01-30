@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-@FindBy(css = "div[selenium-id=message-composer]")
+@FindBy(css = "div[selenium-id=chat-form]")
 public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
@@ -43,7 +43,7 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "[selenium-id=suggestion-edit]")
     private WebElement editButton;
 
-    @FindBy(xpath = "//div[contains(@class, 'overnight-chat-controls')]//a[text() = 'Send email']")
+    @FindBy(css = "[selenium-id=chat-form-send-email] button")
     public WebElement overnightTicketSendEmail;
 
     @FindBy(css = "div.overnight-chat-controls p")
@@ -172,7 +172,7 @@ public class ChatForm extends AbstractUIElement {
 
     public boolean isSendEmailForOvernightTicketMessageShown(){ return isElementEnabled(this.getCurrentDriver(), overnightTicketSendEmail, 3); }
 
-    public boolean isOvernightTicketMessageShown(){ return isElementShown(this.getCurrentDriver(), overnightTicketLable, 3); }
+    public String getOvernightTicketMessage(){ return getTextFromElem(this.getCurrentDriver(), overnightTicketLable, 3, "Overnight ticket message").trim(); }
 
     public String getPlaceholderFromInputLocator(){
         waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);

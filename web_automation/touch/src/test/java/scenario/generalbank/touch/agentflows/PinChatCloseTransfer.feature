@@ -25,7 +25,7 @@ Feature: Pinned chat is disabled to close and to transfer
     Then Agent do not see 'flag' icon in this chat
     Then Agent click "End chat" button
     Then End chat popup should be opened
-    When Agent click 'Skip' button
+    When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'connect to agent' input
 

@@ -35,7 +35,7 @@ public class InitContext {
         this.firstName = faker.name().firstName();
         this.lastName = "DotC_" + faker.name().lastName();
         this.email = faker.lorem().word() + "@mail.com";
-        this.phone = faker.phoneNumber().cellPhone();
+        this.phone = String.valueOf(faker.number().randomNumber(11, false));
     }
 
     @JsonProperty("firstName")
