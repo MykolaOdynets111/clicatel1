@@ -15,7 +15,3 @@ Feature: Suggestions in "Agent" tenant mode
     And The suggestion for user message "My staff want to bank with you. Can you help?" with the biggest confidence is added to the input field
     And Agent is able to delete the suggestion from input field and sends his own "thanks for asking" message
     Then User should see 'thanks for asking' text response for his 'My staff want to bank with you. Can you help?' input
-
-
-
-

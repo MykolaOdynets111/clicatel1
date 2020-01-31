@@ -14,7 +14,6 @@ Feature: Agent suggestions
     When User enter trading hours into widget input field
     Then There is correct suggestion shown on user message "trading hours"
     And The suggestion for user message "trading hours" with the biggest confidence is added to the input field
-    When Agent click Edit suggestions button
     And Agent click send button
     Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us' text response for his 'trading hours' input
     When User enter Do you have a job for me? into widget input field
@@ -35,8 +34,7 @@ Feature: Agent suggestions
     When User enter trading hours into widget input field
     Then There is correct suggestion shown on user message "trading hours"
     Then The suggestion for user message "trading hours" with the biggest confidence is added to the input field
-    And 'Clear' and 'Edit' buttons are shown
-    When Agent click Edit suggestions button
+    And 'Clear' button is shown
     Then Agent is able to add " Please visit us."
     Then User have to receive 'Selected branches in major shopping malls are open on Sundays (9am - 1pm or 10am - 2pm). You may visit to check the trading hours of your nearest branch. Use the cellphone banking app to do transactions 24/7. For more information on #TheBestWaytoBank you may visit us Please visit us.' text response for his 'trading hours' input
     When User enter i lost my card into widget input field

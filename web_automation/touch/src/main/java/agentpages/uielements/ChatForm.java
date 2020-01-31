@@ -18,15 +18,11 @@ public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
 
-    private String suggestionInputFieldCSS = "[selenium-id=suggestion-wrapper]";
     private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
     private SecureRandom random = new SecureRandom();
 
     @FindBy(css = "[selenium-id=suggestion-wrapper]")
     private WebElement suggestionInputField;
-
-    @FindBy(css = "[selenium-id=message-composer-main]")
-    private WebElement suggestionInputFieldContainer;
 
     @FindBy(css = "textarea[selenium-id=message-composer-textarea]")
     private WebElement messageInput;
@@ -37,11 +33,8 @@ public class ChatForm extends AbstractUIElement {
     })
     private WebElement submitMessageButton;
 
-    @FindBy(css = "[selenium-id=suggestion-clear]")
+    @FindBy(css = ".cl-r-suggestion-wrapper__icon")
     private WebElement clearButton;
-
-    @FindBy(css = "[selenium-id=suggestion-edit]")
-    private WebElement editButton;
 
     @FindBy(css = "[selenium-id=chat-form-send-email] button")
     public WebElement overnightTicketSendEmail;
@@ -59,7 +52,7 @@ public class ChatForm extends AbstractUIElement {
 
     public boolean isSuggestionFieldShown() {
         try {
-            return isElementShownByCSS(this.getCurrentDriver(), suggestionInputFieldCSS, 5);
+            return isElementShown(this.getCurrentDriver(), suggestionInputField, 5);
         } catch (NoSuchElementException e) {
             return false;
         }
@@ -92,8 +85,9 @@ public class ChatForm extends AbstractUIElement {
 
     public void addMoreInfo(String additionalMessage){
         try {
-            waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputFieldContainer,6);
-            suggestionInputFieldContainer.click();
+            if (isElementShown(this.getCurrentDriver(), suggestionInputField, 1)) {
+                clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
+            }
             messageInput.sendKeys(additionalMessage);
             inputMassage = messageInput.getText();
         } catch (StaleElementReferenceException e) {
@@ -124,6 +118,9 @@ public class ChatForm extends AbstractUIElement {
 
     public ChatForm sendResponseToUser(String responseToUser) {
         try {
+            if (isElementShown(this.getCurrentDriver(), suggestionInputField, 1)) {
+                clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
+            }
             waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 5);
             messageInput.sendKeys(responseToUser);
             clickSendButton();
@@ -160,14 +157,6 @@ public class ChatForm extends AbstractUIElement {
 
     public void clickClearButton(){
         clickElem(this.getCurrentDriver(), clearButton, 2, "Clear suggestion");
-    }
-
-    public boolean isEditButtonShown(){
-        return isElementShown(this.getCurrentDriver(), editButton,10);
-    }
-
-    public void clickEditButton(){
-        clickElem(this.getCurrentDriver(), editButton, 2,"Edit suggestion");
     }
 
     public boolean isSendEmailForOvernightTicketMessageShown(){ return isElementEnabled(this.getCurrentDriver(), overnightTicketSendEmail, 3); }
