@@ -72,7 +72,6 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-//        suggestionInputFieldContainer.click();
         clearAndSendResponseToUser(message);
     }
 
@@ -96,22 +95,8 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void clearAndSendResponseToUser(String response){
-        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
         if(isElementShown(this.getCurrentDriver(), suggestionInputField, 2)){
-            waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputField, 4);
-            moveAndClickByOffset(this.getCurrentDriver(), suggestionInputField, 10, 10);
-            waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
-            messageInput.click();
-            messageInput.clear();
-        }
-        int symbolsNumber = messageInput.getText().length();
-        if(symbolsNumber>0) {
-            findElemByXPATH(this.getCurrentDriver(), messageInputLocator).sendKeys(Keys.chord(Keys.CONTROL,"A", Keys.DELETE));
-        }
-        int symbolsNumber2 = messageInput.getText().length();
-        while (symbolsNumber2>0 && symbolsNumber2<10) {
-            findElemByXPATH(this.getCurrentDriver(), messageInputLocator).sendKeys(Keys.BACK_SPACE);
-            symbolsNumber2 = messageInput.getText().length();
+            clickClearButton();
         }
         sendResponseToUser(response);
     }
