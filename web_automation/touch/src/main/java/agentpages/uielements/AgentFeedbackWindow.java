@@ -12,31 +12,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@FindBy(css = "div.modal-content")
+@FindBy(css = "div.cl-r-modal")
 public class AgentFeedbackWindow extends AbstractUIElement {
 
-    @FindBy(xpath = "//button[text()='Cancel']")
+    @FindBy(css = "[selenium-id=exit-chat-modal-cancel]")
     private WebElement cancelButton;
 
-    @FindBy(xpath = "//button[text()='Skip']")
-    private WebElement skipButton;
+    @FindBy(css = "[selenium-id=exit-chat-modal-save]")
+    private WebElement saveChatButton;
 
-    @FindBy(xpath = "//span[text()='Close Chat']")
-    private WebElement closeChatButton;
-
-    @FindBy(css = ".icon-negative")
+    @FindBy(css = "[selenium-id=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
 
-    @FindBy(css = ".icon-neutral")
+    @FindBy(css = "[selenium-id=sentiment-icon-neutral]")
     private WebElement sentimentNeutral;
 
-    @FindBy(css = ".icon-positive")
+    @FindBy(css = "[selenium-id=sentiment-icon-positive]")
     private WebElement sentimentHappy;
 
     @FindBy(css = "div.conclude-chat-sentiment>span.active")
     private WebElement selectedSentiment;
 
-    @FindBy(css = ".icons.conclude-chat-sentiment")
+    @FindBy(css = "[selenium-id=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
     @FindBy(xpath = "//div[@class='Select-menu-outer']/div[@role='listbox']")
@@ -51,8 +48,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(xpath = "//span[@class='Select-arrow-zone']/span")
     private WebElement openDropdownButton;
 
-    private String closeChatButtonXPATH = "//span[text()='Close Chat']";
-
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
     private String inputTagField =  "div.Select-input > input";
@@ -65,13 +60,13 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String cleareAll = ".Select-clear";
 
-    @FindBy(id = "CRMNote")
+    @FindBy(css = "[selenium-id=exit-chat-note]")
     private WebElement crmNoteTextField;
 
-    @FindBy(id = "CRMLink")
+    @FindBy(css = "[selenium-id=exit-chat-link]")
     private WebElement crmLink;
 
-    @FindBy(id = "CRMTicketNumber")
+    @FindBy(css = "[selenium-id=exit-chat-ticket-number]")
     private WebElement crmTicketNumber;
 
     public void clickCancel() {
@@ -80,24 +75,16 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void clickCloseChat() {
-        clickElem(this.getCurrentDriver(), closeChatButton, 5,"Close chat button" );
+        clickElem(this.getCurrentDriver(), saveChatButton, 5,"Close chat button" );
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
-    public void clickSkip() {
-        clickElem(this.getCurrentDriver(), skipButton, 5, "Skip button" );
-        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
-    }
-
-    public void clickCloseButtonInCloseChatPopup (){
-        if( isElementShownByXpath(this.getCurrentDriver(), closeChatButtonXPATH, 3)){
-            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), closeChatButtonXPATH, 5);
-            findElemByXPATH(this.getCurrentDriver(), closeChatButtonXPATH).click();
-        }
+    public void clickSaveButtonInCloseChatPopup(){
+        clickElem(this.getCurrentDriver(), saveChatButton, 5, "Save button");
     }
 
     public boolean isEndChatPopupShown (){
-        return isElementShown(this.getCurrentDriver(), closeChatButton,12);
+        return isElementShown(this.getCurrentDriver(), saveChatButton,12);
     }
 
     public AgentFeedbackWindow typeCRMNoteTextField(String msg) {

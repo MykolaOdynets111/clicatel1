@@ -7,10 +7,10 @@ import org.testng.Assert;
 
 import java.util.List;
 
-@FindBy(css = "div.chat-history")
+@FindBy(css = "[selenium-id=chat-history]")
 public class ChatHistoryContainer extends AbstractUIElement {
 
-    @FindBy(css = "div.history-item")
+    @FindBy(css = "[selenium-id=history-item]")
     private List<WebElement> chatHistoryList;
 
     public ChatInActiveChatHistory getFirstChatHistoryItems(){

@@ -211,19 +211,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "'Clear' button is not shown for suggestion input field.");
     }
 
-    @Then("^'Clear' and 'Edit' buttons are shown$")
+    @Then("^'Clear' button is shown$")
     public void checkClearEditButtonsAreNotShown() {
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getAgentHomePage("main").getChatForm().isClearButtonShown(),
                 "'Clear' button is not shown for suggestion input field.");
-        soft.assertTrue(getAgentHomePage("main").getChatForm().isEditButtonShown(),
-                "'Edit' button is not shown for suggestion input field.");
         soft.assertAll();
-    }
-
-    @When("^(.*) click Edit suggestions button$")
-    public void clickEditButton(String agent) {
-        getAgentHomePage(agent).getChatForm().clickEditButton();
     }
 
     @When("^(.*) click Clear suggestions button$")
@@ -239,9 +232,6 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("Agent is able to add \"(.*)\"")
     public void enterAdditionTextForSuggestion(String textToAdd) {
-        if (!getAgentHomePage("main").getChatForm().isSuggestionContainerDisappears()) {
-            Assert.fail("Input field is not become cklickable");
-        }
         getAgentHomePage("main").getChatForm().sendResponseToUser(textToAdd);
     }
 
@@ -270,12 +260,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) click 'Close chat' button$")
     public void clickCloseChatButton(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
-    }
-
-    @When("(.*) click 'Skip' button$")
-    public void agentClickSkipButton(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().clickSkip();
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickSaveButtonInCloseChatPopup();
     }
 
     @When("(.*) fills form$")

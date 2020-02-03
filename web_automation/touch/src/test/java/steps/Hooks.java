@@ -325,7 +325,7 @@ public class Hooks implements JSHelper {
 
     private void endTouchFlow(Scenario scenario, boolean typeEndInWidget) {
         if (DriverFactory.isTouchDriverExists()) {
-            userName();
+//            userName();
             if(scenario.getSourceTagNames().equals(Arrays.asList("@collapsing"))) {
                 new MainPage().openWidget();
             }
@@ -354,7 +354,12 @@ public class Hooks implements JSHelper {
     }
 
     private void finishVisibilityFlow() {
-        ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        try {
+            ApiHelper.deleteUserProfile(Tenants.getTenantUnderTestName(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        } catch (AssertionError e) {
+            System.out.println(e + "maybe client was not created");
+            DriverFactory.getTouchDriverInstance().close();
+        }
         ApiHelper.setWidgetVisibilityDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
         ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }

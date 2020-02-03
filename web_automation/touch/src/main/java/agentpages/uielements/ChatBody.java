@@ -18,28 +18,24 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.chat-body")
+@FindBy(css = "section.chat-body")
 public class ChatBody extends AbstractUIElement {
 
-    private String scrollElement = "div.chat-body";
+    private String scrollElement = ".chat-body.chat-box__messages";
 
-    private String fromUserMessagesXPATH = "//li[contains(@class, 'from')]//span[text()='%s']";
+    private String fromUserMessagesXPATH = "//li[contains(@class, 'from')]//div[text()='%s']";
 
-    private String messagesInChatBodyXPATH = "//ul[@class='chat-container']//li[not(@class='empty')]";
+    private String messagesInChatBodyXPATH = "//ul[contains(@class, 'chat-container')]//li[not(@class='empty')]";
 
-    private String toUserMessagesCSS = "li.to";
-
-    private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
+      private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
 
     private String currentAgent;
 
     public void setCurrentAgent(String agent){
         this.currentAgent = agent;
     }
-    @FindAll({
-            @FindBy(css = "li.from span.profile-icon div.empty-icon"),
-            @FindBy(css = ".from .avatar")
-            })
+
+    @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement userProfileIcon;
 
     @FindBy(css = "li.from")
@@ -48,7 +44,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.to")
     private List<WebElement> toUserMessages;
 
-    @FindBy(css = "li.to div.empty-icon")
+    @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement agentIconWIthInitials;
 
     @FindBy(xpath = "//li[contains(@class, 'otp')]/div")
@@ -101,19 +97,10 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public boolean isToUserMessageShown(String userMessage){
-        boolean result = false;
-        for(int i = 0; i<3; i++){
-            try {
-                result =  findElemsByCSS(this.getCurrentDriver(), toUserMessagesCSS).
-                    stream().anyMatch(e -> e.getText().contains(userMessage));
-            }catch(StaleElementReferenceException ex){
-                waitFor(200);
-                result =  findElemsByCSS(this.getCurrentDriver(), toUserMessagesCSS).
-                    stream().anyMatch(e -> e.getText().contains(userMessage));
-            }
-            if (result) break;
+        for(WebElement message: toUserMessages){
+            if(message.getText().trim().contains(userMessage))return true;
         }
-        return result;
+        return false;
     }
 
     public List<String> getAllMessages(){

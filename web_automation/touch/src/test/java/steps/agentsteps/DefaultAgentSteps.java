@@ -146,7 +146,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("Message that it is overnight ticket is shown for (.*)")
     public void verifyMessageThatThisIsOvernightTicket(String agent){
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(getAgentHomePage(agent).getChatForm().isOvernightTicketMessageShown(),
+        softAssert.assertEquals(getAgentHomePage(agent).getChatForm().getOvernightTicketMessage(), "This is an unattended chat that has been assigned to you.",
                 "Message that this is Overnight ticket is not shown");
         softAssert.assertTrue(getAgentHomePage(agent).getChatForm().isSendEmailForOvernightTicketMessageShown(),
                 "'Send email' button is not enabled");
@@ -276,7 +276,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^Tab with user info has \"(.*)\" header$")
     public void verifyTabHeader(String headerName){
         Assert.assertEquals(getAgentHomeForMainAgent().getSelectedTabHeader(), headerName,
-                "Incorrect header of Customer 360 container");
+                "Incorrect header of customer selected tab, should be " + headerName);
     }
 
 
@@ -495,7 +495,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyEmptyImgNotShown(String customerFrom){
         String user = "";
         if(customerFrom.equalsIgnoreCase("facebook")) user = socialaccounts.FacebookUsers.getLoggedInUserName();
-        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(user),
+        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(),
                 "Image is not updated in left menu with chats. \n");
     }
 

@@ -10,49 +10,61 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.TimeZone;
 
-@FindBy(css = "div.chat-header")
+@FindBy(css = "[selenium-id=chat-header]")
 public class ChatHeader extends AbstractUIElement {
 
-    @FindBy(xpath = ".//button[text()='End chat']")
+    @FindAll({
+            @FindBy(css = "[selenium-id=header-exit-chat]"),
+            @FindBy(css = ".cl-r-end-chat") //old locator
+    })
     private WebElement endChatButton;
 
-    @FindBy(xpath = ".//button[text()='Flag chat']")
-    private WebElement pinChatButton;
+    @FindAll({
+            @FindBy(css = "[selenium-id=header-flag-chat]"),
+            @FindBy(css = ".cl-r-chat-unflagged")
+    })
+    private WebElement flagChatButton;
 
-    @FindBy(xpath = ".//button[text()='Unflag chat']")
-    private WebElement unpinChatButton;
+    @FindAll({
+            @FindBy(css = "[selenium-id=header-unflag-chat]"),
+            @FindBy(css = ".cl-r-chat-flagged")
+    })
+    private WebElement unflagChatButton;
 
-    @FindBy(xpath = ".//button[text()='Transfer chat']")
+    @FindAll({
+            @FindBy(css = "[selenium-id=header-transfer-chat]"),
+            @FindBy(css = ".cl-r-icon-transfer")
+    })
     private WebElement transferButton;
 
-    @FindBy(xpath = ".//button[text()='Send SMS']")
+    @FindBy(css = "[selenium-id=header-send-sms]")
     private WebElement sendSMSButton;
 
     //for future
-    @FindBy(xpath = ".//button[text()='Send WhatsApp']")
+    @FindBy(css = "[selenium-id=header-whats-app-button]")
     private WebElement sendWhatsAppButton;
 
-    @FindBy(css = "div.chat-header-title")
+    @FindBy(css = "[selenium-id=chat-header-title]")
     private WebElement chatHeaderTitle;
 
-    @FindBy(xpath = "//div[contains(@class,'chat-header')]//div[@class='icons']/span/*")
+    @FindBy(css = "[selenium-id=chat-header-channel-icon]")
     private WebElement channelImg;
 
-    @FindBy(xpath = "//div/span[@class='time']")
+    @FindBy(css = "[selenium-id=chat-header-timer]")
     private WebElement timeStamp;
 
-    @FindBy(xpath = ".//button[text()='Cancel transfer']")
+    @FindBy(css = "[selenium-id=header-cancel-transfer]")
     private WebElement cancelTransferButton;
 
 
@@ -82,8 +94,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public void clickTransferButton(){
-        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), transferChatButton, 5);
-        findElemByXPATH(this.getCurrentDriver(), transferChatButton).click();
+        clickElem(this.getCurrentDriver(), transferButton, 5, "Transfer button");
     }
 
     public boolean isButtonEnabled(String buttonTitle){
@@ -112,11 +123,11 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public void clickFlagChatButton(){
-        clickElem(this.getCurrentDriver(), pinChatButton, 2,"Flag chat");
+        clickElem(this.getCurrentDriver(), flagChatButton, 2,"Flag chat");
     }
 
     public void clickUnflagChatButton(){
-        clickElem(this.getCurrentDriver(), unpinChatButton, 2, "Unflag chat");
+        clickElem(this.getCurrentDriver(), unflagChatButton, 2, "Unflag chat");
     }
 
     public void clickCancelTransferButton(){
@@ -132,7 +143,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public String getPinChatButtonColor() {
-        return  Color.fromString(pinChatButton.getCssValue("color")).asHex();
+        return  Color.fromString(flagChatButton.getCssValue("color")).asHex();
     }
 
     public boolean isValidChannelImg() {

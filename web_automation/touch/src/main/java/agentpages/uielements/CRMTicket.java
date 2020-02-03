@@ -19,19 +19,19 @@ public class CRMTicket extends AbstractWidget {
         return this;
     }
 
-    @FindBy(xpath = ".//p[@class='date']")
+    @FindBy(css = "[selenium-id=note-card-date]")
     private WebElement crmCreatedDate;
 
-    @FindBy(xpath = ".//p[@class='note']")
+    @FindBy(css = "[selenium-id=note-card-text]")
     private WebElement crmNote;
 
-    @FindBy(xpath = ".//a[@class='number']")
+    @FindBy(css = "[selenium-id=note-card-ticket-number]")
     private WebElement crmNumber;
 
-    @FindBy(css = "button.edit")
+    @FindBy(css = "[selenium-id=note-card-edit-ticket]")
     private WebElement editButton;
 
-    @FindBy(css = "button.delete")
+    @FindBy(css = "[selenium-id=note-card-delete-ticket]")
     private WebElement deleteButton;
 
     public Map<String, String> getTicketInfo(){

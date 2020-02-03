@@ -52,7 +52,10 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     private String spinner = "//div[@class='spinner']";
 
-    private String filterByDefaultXpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']";
+    @FindBy(xpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']")
+    private WebElement filterByDefaultXpath;
+
+    //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
     private String iframeId = "ticketing-iframe";
 
@@ -78,10 +81,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     public String getFilterByDefault(){
         this.getCurrentDriver().switchTo().frame(iframeId);
-        waitForElementsToBeVisibleByXpath(this.getCurrentDriver(),filterByDefaultXpath,2);
-        return getTextFromElem(this.getCurrentDriver(),
-                                    findElemByXPATH(this.getCurrentDriver(), filterByDefaultXpath), 5,
-                            "Default filter");
+        return getTextFromElem(this.getCurrentDriver(),filterByDefaultXpath,5,"Default filter");
     }
 
     public void exitChatConsoleInbox() {

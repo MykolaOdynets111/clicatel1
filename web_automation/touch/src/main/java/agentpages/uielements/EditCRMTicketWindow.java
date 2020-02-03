@@ -7,24 +7,24 @@ import org.openqa.selenium.support.FindBy;
 import java.util.Map;
 
 
-@FindBy(xpath = "//h4[text()='Edit ticket']/ancestor::div[@class='modal-dialog']")
+@FindBy(css = "[selenium-id=edit-crm-ticket]")
 public class EditCRMTicketWindow extends AbstractUIElement {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    @FindBy(xpath = ".//button[text()='Cancel']")
+    @FindBy(css = "[selenium-id=edit-crm-ticket-cancel]")
     private WebElement cancelButton;
 
-    @FindBy(xpath = ".//button[@type='submit']")
+    @FindBy(css = "[selenium-id=edit-crm-ticket-save]")
     private WebElement edidTicketButton;
 
-    @FindBy(css = "textarea#CRMNote")
+    @FindBy(css = "[selenium-id=crm-note]")
     private WebElement noteInput;
 
-    @FindBy(css = "input#CRMLink")
+    @FindBy(css = "[selenium-id=crm-link]")
     private WebElement linkInput;
 
-    @FindBy(css = "input#CRMTicketNumber")
+    @FindBy(css = "[selenium-id=crm-ticket-number]")
     private WebElement ticketNumberInput;
 
     public void clickCancel() {

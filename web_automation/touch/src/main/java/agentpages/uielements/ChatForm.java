@@ -4,47 +4,45 @@ import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-@FindBy(css = "div.chat-form")
+@FindBy(css = "div[selenium-id=chat-form]")
 public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
 
-    private String suggestionInputFieldCSS = "div.suggestion-wrapper";
-    private String messageInputLocator = "//textarea[contains(@class, 'text-input--example')]";
+    private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
     private SecureRandom random = new SecureRandom();
 
-    @FindBy(css = "div.suggestion-wrapper")
+    @FindBy(css = "[selenium-id=suggestion-wrapper]")
     private WebElement suggestionInputField;
 
-    @FindBy(css = "div.text-field")
-    private WebElement suggestionInputFieldContainer;
-
-    @FindBy(css = "textarea.text-input--example")
+    @FindBy(css = "textarea[selenium-id=message-composer-textarea]")
     private WebElement messageInput;
 
-    @FindBy(css = "button.btn.btn-primary.pull-right.btn.btn-default")
+    @FindAll({
+    @FindBy(css = "[selenium-id=message-composer-send-button]"),
+    @FindBy(css = ".cl-r-message-composer__send-button") // old locator
+    })
     private WebElement submitMessageButton;
 
-    @FindBy(xpath = "//button[text()='Clear']")
+    @FindBy(css = ".cl-r-suggestion-wrapper__icon")
     private WebElement clearButton;
 
-    @FindBy(xpath = "//button[text()='Edit']")
-    private WebElement editButton;
-
-    @FindBy(xpath = "//div[contains(@class, 'overnight-chat-controls')]//a[text() = 'Send email']")
+    @FindBy(css = "[selenium-id=chat-form-send-email] button")
     public WebElement overnightTicketSendEmail;
 
     @FindBy(css = "div.overnight-chat-controls p")
     public WebElement overnightTicketLable;
 
-    @FindBy(css = "svg#emoticon")
+    @FindBy(css = "[selenium-id=message-composer-emoji-icon]")
     public WebElement emoticonButton;
 
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
@@ -54,7 +52,7 @@ public class ChatForm extends AbstractUIElement {
 
     public boolean isSuggestionFieldShown() {
         try {
-            return isElementShownByCSS(this.getCurrentDriver(), suggestionInputFieldCSS, 5);
+            return isElementShown(this.getCurrentDriver(), suggestionInputField, 5);
         } catch (NoSuchElementException e) {
             return false;
         }
@@ -74,7 +72,6 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void deleteSuggestionAndAddAnother(String message) {
-//        suggestionInputFieldContainer.click();
         clearAndSendResponseToUser(message);
     }
 
@@ -87,8 +84,9 @@ public class ChatForm extends AbstractUIElement {
 
     public void addMoreInfo(String additionalMessage){
         try {
-            waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputFieldContainer,6);
-            suggestionInputFieldContainer.click();
+            if (isElementShown(this.getCurrentDriver(), suggestionInputField, 1)) {
+                clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
+            }
             messageInput.sendKeys(additionalMessage);
             inputMassage = messageInput.getText();
         } catch (StaleElementReferenceException e) {
@@ -97,28 +95,17 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void clearAndSendResponseToUser(String response){
-        waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);
         if(isElementShown(this.getCurrentDriver(), suggestionInputField, 2)){
-            waitForElementToBeVisible(this.getCurrentDriver(), suggestionInputField, 4);
-            moveAndClickByOffset(this.getCurrentDriver(), suggestionInputField, 10, 10);
-            waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 4);
-            messageInput.click();
-            messageInput.clear();
-        }
-        int symbolsNumber = messageInput.getText().length();
-        if(symbolsNumber>0) {
-            findElemByXPATH(this.getCurrentDriver(), messageInputLocator).sendKeys(Keys.chord(Keys.CONTROL,"A", Keys.DELETE));
-        }
-        int symbolsNumber2 = messageInput.getText().length();
-        while (symbolsNumber2>0 && symbolsNumber2<10) {
-            findElemByXPATH(this.getCurrentDriver(), messageInputLocator).sendKeys(Keys.BACK_SPACE);
-            symbolsNumber2 = messageInput.getText().length();
+            clickClearButton();
         }
         sendResponseToUser(response);
     }
 
     public ChatForm sendResponseToUser(String responseToUser) {
         try {
+            if (isElementShown(this.getCurrentDriver(), suggestionInputField, 1)) {
+                clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
+            }
             waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 5);
             messageInput.sendKeys(responseToUser);
             clickSendButton();
@@ -157,17 +144,9 @@ public class ChatForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), clearButton, 2, "Clear suggestion");
     }
 
-    public boolean isEditButtonShown(){
-        return isElementShown(this.getCurrentDriver(), editButton,10);
-    }
-
-    public void clickEditButton(){
-        clickElem(this.getCurrentDriver(), editButton, 2,"Edit suggestion");
-    }
-
     public boolean isSendEmailForOvernightTicketMessageShown(){ return isElementEnabled(this.getCurrentDriver(), overnightTicketSendEmail, 3); }
 
-    public boolean isOvernightTicketMessageShown(){ return isElementShown(this.getCurrentDriver(), overnightTicketLable, 3); }
+    public String getOvernightTicketMessage(){ return getTextFromElem(this.getCurrentDriver(), overnightTicketLable, 3, "Overnight ticket message").trim(); }
 
     public String getPlaceholderFromInputLocator(){
         waitForElementToBeVisibleByXpath(this.getCurrentDriver(), messageInputLocator, 5);

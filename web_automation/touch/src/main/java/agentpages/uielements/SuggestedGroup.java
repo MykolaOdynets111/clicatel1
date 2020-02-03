@@ -7,13 +7,13 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.agent-assist")
+@FindBy(css = "[selenium-id=rp-agent-assist]")
 public class SuggestedGroup extends AbstractUIElement {
 
-    @FindBy(css = "div.suggestion")
+    @FindBy(css = "[selenium-id=agent-assist-suggestion]")
     private List<WebElement> listOfSuggestion;
 
-    @FindBy(css = "div.info-message__description")
+    @FindBy(css = "[selenium-id=agent-assist-disabled]")
     private WebElement suggestionsNotAvailableMessage;
 
     public boolean isSuggestionListEmpty() {

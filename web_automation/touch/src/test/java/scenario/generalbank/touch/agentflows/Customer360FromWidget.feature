@@ -1,4 +1,4 @@
-Feature: Customer 360 from widget
+Feature: Customer Profile from widget
 
   Scenario: User's info presence on chatdesk (touch user)
     Given I login as agent of General Bank Demo
@@ -8,9 +8,8 @@ Feature: Customer 360 from widget
     Then Agent has new conversation request
     When Agent click on new conversation
     Then Correct touch client details are shown
-    And Tab with user info has "Customer 360" header
+    And Tab with user info has "Profile" header
 
-  @Issue("https://jira.clickatell.com/browse/TPLAT-4379")
   Scenario: Editing Customer 360 info (touch user)
     Given I login as agent of General Bank Demo
     Given User select General Bank Demo tenant

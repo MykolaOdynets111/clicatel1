@@ -8,22 +8,20 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = "div.history-details")
+@FindBy(css = "[selenium-id=history-detail]")
 public class HistoryDetailsWindow extends AbstractUIElement {
 
-    @FindBy(css = "div.title h2")
+    @FindBy(css = "[selenium-id=history-detail-user-name]")
     public WebElement chatTitle;
 
-    @FindBy(css = "div.title span")
+    @FindBy(css = "[selenium-id=history-detail-time]")
     public WebElement chatStartDate;
 
     @FindBy(xpath = ".//ul[@class='chat-container']//li[not(@class='empty')]")
     private List<WebElement> messagesInChatBody;
 
-    @FindBy(css = "span.icon.icon-close")
+    @FindBy(css = "[selenium-id=history-detail-close]")
     public WebElement closeHistoryDetailsButton;
-
-    private String agentIconWIthInitials = ".//li[@class='to']//div[@class='empty-icon']";
 
     public String getUserName(){
         return chatTitle.getText();

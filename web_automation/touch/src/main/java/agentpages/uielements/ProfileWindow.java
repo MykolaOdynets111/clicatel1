@@ -8,13 +8,13 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(xpath = "//div[@class='profile-modal-header modal-header']/parent::div")
+@FindBy(css = "[selenium-id=profile-settings-modal-header]")
 public class ProfileWindow extends AbstractUIElement {
 
-    @FindBy(css = "ul.groups-list li.groups-item")
+    @FindBy(css = "[selenium-id=setting-group-item]")
     private List<WebElement> listOfElementsWithRoles;
 
-    @FindBy(css = "div.icon.icon-close")
+    @FindBy(css = "[selenium-id=close-modal-btn]")
     private WebElement closeProfileWindowButton;
 
     private String infoFieldCss = "span.profile-data-row>input[value='%s']";

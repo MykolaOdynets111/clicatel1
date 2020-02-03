@@ -11,7 +11,7 @@ public class Suggestion extends AbstractWidget {
         super(element);
     }
 
-    @FindBy(xpath = ".//p[not(@class='confidence-level')]")
+    @FindBy(css = "[selenium-id=suggested-message-text]")
     private WebElement suggestedMessage;
 
     public Suggestion setCurrentDriver(WebDriver currentDriver){
