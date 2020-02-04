@@ -36,6 +36,7 @@ import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
+import sun.management.resources.agent;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import twitter.TwitterTenantPage;
@@ -80,6 +81,8 @@ public class Hooks implements JSHelper {
 
     @After()
     public void afterScenario(Scenario scenario){
+
+        try {
 
         makeScreenshotAndConsoleOutputFromChatdesk(scenario);
 
@@ -206,6 +209,12 @@ public class Hooks implements JSHelper {
 
         closeMainBrowserIfOpened();
         clearAllSessionData();
+
+        }catch (Exception e) {
+            System.out.println(e);
+            closeBrowserInCaseOfException();
+        }
+
     }
 
 
@@ -383,6 +392,19 @@ public class Hooks implements JSHelper {
             DriverFactory.closeTouchBrowser();
         }
     }
+
+    private void closeBrowserInCaseOfException() {
+        if (DriverFactory.isTouchDriverExists()) {
+            DriverFactory.closeTouchBrowser();
+        }
+        if (DriverFactory.isAgentDriverExists()) {
+            DriverFactory.closeAgentBrowser();
+        }
+        if (DriverFactory.isSecondAgentDriverExists()) {
+            DriverFactory.closeSecondAgentBrowser();
+        }
+    }
+
 
     private void endTwitterFlow(Scenario scenario) {
         TwitterTenantPage twitterTenantPage = new TwitterTenantPage(DriverFactory.getTouchDriverInstance());
