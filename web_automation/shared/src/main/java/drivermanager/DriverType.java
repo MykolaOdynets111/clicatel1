@@ -33,7 +33,7 @@ public enum DriverType {
             options.setCapability("profile.block_third_party_cookies", false);
 
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
-            options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+            options.setCapability("goog:loggingPrefs", logPrefs);
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");
             options.addArguments("start-maximized");

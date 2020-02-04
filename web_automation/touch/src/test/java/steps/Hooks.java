@@ -245,11 +245,11 @@ public class Hooks implements JSHelper {
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
+                takeScreenshotFromThirdDriverIfExists();
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
                     secondAgentChatdeskWebSocketLogs();
                 }
-                takeScreenshotFromThirdDriverIfExists();
         }
     }
 
