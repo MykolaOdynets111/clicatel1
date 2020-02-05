@@ -175,7 +175,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     public boolean isConnectionErrorShown(String ordinalAgentNumber){
         try{
-            waitForElementToBeVisible(this.getCurrentDriver(), connectionErrorImage, 10);
+            waitForElementToBeVisible(this.getCurrentDriver(), connectionErrorImage, 15);
             return true;
         }
         catch (TimeoutException e){

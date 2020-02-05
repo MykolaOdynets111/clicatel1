@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
+import io.appium.java_client.pagefactory.WithTimeout;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
@@ -10,8 +11,13 @@ import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 
 import java.security.SecureRandom;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 @FindBy(css = "div[selenium-id=chat-form]")
 public class ChatForm extends AbstractUIElement {
@@ -20,6 +26,7 @@ public class ChatForm extends AbstractUIElement {
 
     private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
     private SecureRandom random = new SecureRandom();
+    private String suggestionCSSInput = "[selenium-id=suggestion-wrapper]";
 
     @FindBy(css = "[selenium-id=suggestion-wrapper]")
     private WebElement suggestionInputField;
@@ -51,11 +58,8 @@ public class ChatForm extends AbstractUIElement {
     private String emojiMartCss = "section.emoji-mart";
 
     public boolean isSuggestionFieldShown() {
-        try {
-            return isElementShown(this.getCurrentDriver(), suggestionInputField, 5);
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+        return  isElementShownByCSS(this.getCurrentDriver(), suggestionCSSInput, 1);
+         //   return isElementShown(this.getCurrentDriver(), suggestionInputField, 1);
     }
 
     public String getSuggestionFromInputFiled() {
@@ -95,19 +99,21 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public void clearAndSendResponseToUser(String response){
-        if(isElementShown(this.getCurrentDriver(), suggestionInputField, 2)){
+        if(isSuggestionFieldShown()){
             clickClearButton();
+        } else {
+            messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         }
+        System.out.println("2 " + LocalDateTime.now());
         sendResponseToUser(response);
     }
 
     public ChatForm sendResponseToUser(String responseToUser) {
         try {
-            if (isElementShown(this.getCurrentDriver(), suggestionInputField, 1)) {
+            if (isSuggestionFieldShown()) {
                 clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
             }
-            waitForElementToBeClickable(this.getCurrentDriver(), messageInput, 5);
-            messageInput.sendKeys(responseToUser);
+            inputText(this.getCurrentDriver(), messageInput, 1, "Input field", responseToUser);
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){
