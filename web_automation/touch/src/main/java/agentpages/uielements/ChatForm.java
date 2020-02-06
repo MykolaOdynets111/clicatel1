@@ -113,7 +113,7 @@ public class ChatForm extends AbstractUIElement {
             if (isSuggestionFieldShown()) {
                 clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
             }
-            inputText(this.getCurrentDriver(), messageInput, 1, "Input field", responseToUser);
+            messageInput.sendKeys(responseToUser);
             clickSendButton();
             return this;
         } catch (InvalidElementStateException e){

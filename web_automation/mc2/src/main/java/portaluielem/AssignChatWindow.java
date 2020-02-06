@@ -8,13 +8,13 @@ import java.util.List;
 @FindBy(css = "div.transfer-chat-modal.modal-dialog")
 public class AssignChatWindow extends BasePortalWindow {
 
-    @FindBy(xpath = ".//label[@for='agentsList']/following-sibling::div//div[@class='Select-control']")
+    @FindBy(xpath = ".//div[@class='cl-r-select__control css-yk16xz-control']//div[text()='Select agent:'] ")
     private WebElement openDropdownButton;
 
-    @FindBy(xpath = ".//div[@class='Select-menu-outer']")
+    @FindBy(css = ".cl-r-select__menu-list div")
     private WebElement availableAgent;
 
-    @FindBy(xpath = ".//div[@class='Select-menu-outer']//div[contains(@class,'Select-option')]")
+    @FindBy(css = ".cl-r-select__menu-list div")
     private List<WebElement> availableAgentList;
 
     @FindBy(css = "button[type='submit']")

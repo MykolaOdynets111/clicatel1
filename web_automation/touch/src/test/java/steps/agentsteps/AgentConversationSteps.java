@@ -153,7 +153,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         for (int i = 0; i < listOfIntentsFromTIE.size(); i++) {
             expectedResponse = ApiHelperTie.getExpectedMessageOnIntent(listOfIntentsFromTIE.get(i).getIntent());
             if (expectedResponse.contains("${firstName}")) {
-                String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[2];
+                String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[0];
                 expectedResponse = expectedResponse.replace("${firstName}", userName);
             }
 //            ToDo: remove this after tie fixes the issue
@@ -172,7 +172,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         String expectedMessage = ApiHelperTie.getExpectedMessageOnIntent(
                 Intents.getIntentWithMaxConfidence(userMessage).getIntent());
         if (expectedMessage.contains("${firstName}")) {
-            String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[2];
+            String userName = getAgentHomePage("main").getChatHeader().getChatHeaderText().split(" ")[0];
             expectedMessage = expectedMessage.replace("${firstName}", userName);
         }
         Assert.assertEquals(actualSuggestion, expectedMessage, "Suggestion in input field is not as expected");
