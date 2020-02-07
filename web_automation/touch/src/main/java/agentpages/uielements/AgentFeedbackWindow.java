@@ -30,7 +30,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=sentiment-icon-positive]")
     private WebElement sentimentHappy;
 
-    @FindBy(css = "div.conclude-chat-sentiment>span.active")
+    @FindBy(css = "[selenium-id^='sentiment']")
     private WebElement selectedSentiment;
 
     @FindBy(css = "[selenium-id=chat-sentiment-icons]")

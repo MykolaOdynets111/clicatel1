@@ -320,7 +320,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("^Correct (.*) sentiment selected$")
     public void verifyCorrectSentimentSelected(String sentiment){
         Assert.assertTrue(getAgentHomePage("main").getAgentFeedbackWindow().getSelectedSentiment()
-                .contains(sentiment), "Sentiment '" + sentiment + "' is not selecyed in Conclusion window");
+                .contains(sentiment), "Sentiment '" + sentiment + "' is not selected in Conclusion window");
     }
 
     private void formDataForCRMUpdating(){

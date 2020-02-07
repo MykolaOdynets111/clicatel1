@@ -21,16 +21,10 @@ public class AgentDeskChatMessage extends AbstractWidget {
     @FindBy(xpath = "./following-sibling::li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
     private WebElement sentEmoji;
 
-    @FindAll({
-            @FindBy(css = "span.text-parsed-by-emoji"),
-            @FindBy(xpath = ".//div[@data-name='card-container']//span[contains(@style, 'text-align')]")
-    })
+    @FindBy(css = "[selenium-id=chat-message-content-PlainMessage]")
     private WebElement messageText;
 
-    @FindAll({
-            @FindBy(xpath = "./span[not(@class)]"),
-            @FindBy(xpath = ".//div[@data-name='card-container']//span[contains(@style, 'align-self')]")
-    })
+    @FindBy(css = ".msg-time")
     private WebElement messageTime;
 
     @FindBy(css = "[selenium-id=channel-separator-title]")

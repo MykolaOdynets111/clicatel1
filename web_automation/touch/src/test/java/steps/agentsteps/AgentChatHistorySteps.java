@@ -30,29 +30,27 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
         String expectedChatHistoryTime = getExpectedTime(chatHistory.getChatStarted(),
-                DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"), false);
-        ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems();
+                DateTimeFormatter.ofPattern("d MMM yyyy h:mm a"), false);
+        ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getSecondChatHistoryItems();
 
 
-        soft.assertEquals(actualChatHistoryItem.getChatHistoryTime(), expectedChatHistoryTime,
+        soft.assertEquals(actualChatHistoryItem.getChatHistoryTime().toLowerCase(), expectedChatHistoryTime.toLowerCase(),
                 "Incorrect time for chat in chat history shown.");
         soft.assertEquals(actualChatHistoryItem.getChatHistoryUserMessage(),
                 chatHistory.getMessages().get(chatHistory.getMessages().size()-1).getMessage().getText(),
                 "Incorrect message in chat history shown.");
-        soft.assertTrue(actualChatHistoryItem.isViewButtonClickable(),
-                "'View chat' button is not enabled.");
         soft.assertAll();
     }
 
     @When("^(.*) click 'View chat' button$")
     public void clickViewChatButton(String agent){
-        getAgentHomePage(agent).getChatHistoryContainer().getFirstChatHistoryItems().clickViewButton();
+        getAgentHomePage(agent).getChatHistoryContainer().getSecondChatHistoryItems().clickViewButton();
     }
 
     @Then("^(.*) sees correct messages in history details window$")
     public void verifyHistoryInOpenedWindow(String agent){
         SoftAssert soft = new SoftAssert();
-        String expectedChatHistoryTime = getExpectedTime(chatHistory.getMessages().get(0).getDateTime(), DateTimeFormatter.ofPattern("d MMM yyyy | HH:mm"), false);
+        String expectedChatHistoryTime = getExpectedTime(chatHistory.getMessages().get(0).getDateTime(), DateTimeFormatter.ofPattern("d MMM yyyy, H:mm a"), false);
         List<String> messagesFromChatHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getAllMessages();
 
         List<String> expectedChatHistory = getExpectedChatHistoryItems(chatHistory);
@@ -60,7 +58,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getUserName(),
                                                     getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()),
                 "User name is not as expected in opened Chat ChatHistory Details window");
-        soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getChatStartDate(), expectedChatHistoryTime,
+        soft.assertEquals(getAgentHomePage(agent).getHistoryDetailsWindow().getChatStartDate().toLowerCase(), expectedChatHistoryTime.toLowerCase(),
                 "Chat started date is not as expected in opened Chat ChatHistory Details window");
         soft.assertEquals(messagesFromChatHistoryDetails, expectedChatHistory,
                 "Chat history is not as expected in chat history details (in active chat)");
@@ -94,7 +92,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
 
 
-        Message userMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.plusMinutes(3).atZone(zoneId).toInstant().toString(),
+        Message userMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.atZone(zoneId).toInstant().toString(),
                                                     clientProfileId, "USER", channelId,
                                         "webchat", "user_message " + faker.book().title());
         Message agentMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.plusMinutes(5).atZone(zoneId).toInstant().toString(),

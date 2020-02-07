@@ -22,6 +22,9 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//li[text()='Assist']")
     private WebElement agentAssistantButton;
 
+    @FindBy(xpath = "//li[text()='History']")
+    private WebElement agentHistoryButton;
+
     private String pinErrorMessageXpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']";
 
     @FindBy(xpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']")
@@ -107,6 +110,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatHistoryContainer getChatHistoryContainer() {
+        agentHistoryButton.click();
         chatHistoryContainer.setCurrentDriver(this.getCurrentDriver());
         return chatHistoryContainer;
     }

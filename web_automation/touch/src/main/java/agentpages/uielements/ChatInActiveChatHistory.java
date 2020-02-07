@@ -3,17 +3,32 @@ package agentpages.uielements;
 import abstractclasses.AbstractWidget;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+
 
 public class ChatInActiveChatHistory extends AbstractWidget {
 
-    @FindBy(css = "[selenium-id=history-item-time]")
+    @FindAll({
+            @FindBy(css = ".history-chat-info-time"),
+            @FindBy(css = "[selenium-id=history-item-time]")
+    })
     private WebElement timeContainer;
 
-    @FindBy(css = "[selenium-id=history-item-message]")
+    @FindBy(css =".chat-info-date")
+    private WebElement dateContainer;
+
+    @FindAll({
+            @FindBy(css = ".tab-history-chat-message"),
+            @FindBy(css = "[selenium-id=history-item-message]")
+    })
     private WebElement userMessage;
 
-    @FindBy(css = "[selenium-id=history-item-detail]")
+    @FindAll({
+            @FindBy(css = ".cl-r-icon.cl-r-icon-expand.cl-r-icon--fill"),
+            @FindBy(css = "[selenium-id=history-item-detail]")
+    })
     public WebElement viewDetailsButton;
 
     public ChatInActiveChatHistory(WebElement element) {
@@ -26,18 +41,16 @@ public class ChatInActiveChatHistory extends AbstractWidget {
     }
 
     public String getChatHistoryTime(){
-        return timeContainer.getText();
+        return  dateContainer.getText() + " " +timeContainer.getText();
     }
 
     public String getChatHistoryUserMessage(){
         return userMessage.getText();
     }
 
-    public boolean isViewButtonClickable(){
-        return isElementEnabled(this.getCurrentDriver(), viewDetailsButton, 4);
-    }
-
     public void clickViewButton(){
+        Actions action = new Actions(getCurrentDriver());
+        action.moveToElement(viewDetailsButton).perform();
         viewDetailsButton.click();
     }
 

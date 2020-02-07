@@ -1,5 +1,6 @@
 Feature: Agent should be able to see chat history in opened active chat
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-25288")
   Scenario: Verify agent can view chat history in opened active chat
     Given User select General Bank Demo tenant
     And Click chat icon

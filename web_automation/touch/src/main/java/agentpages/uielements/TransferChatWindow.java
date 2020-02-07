@@ -9,7 +9,7 @@ import org.testng.Assert;
 
 import java.util.List;
 
-@FindBy(css = "div.modal-content")
+@FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-r-modal")
 public class TransferChatWindow extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=transfer-chat-modal-cancel]")
@@ -18,10 +18,10 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=transfer-chat-modal-transfer]")
     private WebElement submitTransferChatButton;
 
-    @FindBy(xpath = ".//div[contains(@class,'cl-r-select-container')]//div[text() = 'Select agent:']")
+    @FindBy(xpath = "//div[text()='Select an agent...']")
     private WebElement openAgentDropdownButton;
 
-    @FindBy(xpath = ".//div[contains(@class,'cl-r-select-container')]//div[text() = 'All departments']")
+    @FindBy(xpath = ".//div[text()='Select a department...']")
     private WebElement openDepartmentDropdownButton;
 
     @FindBy(css = "[class^='cl-r-select__option']")

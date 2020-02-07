@@ -3,24 +3,38 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = "[selenium-id=history-detail]")
+
+//@FindAll({
+//        @FindBy(css = "[selenium-id=history-detail]"),
+        @FindBy(css = ".cl-r-history-chat-view-fly-out")
+//})
 public class HistoryDetailsWindow extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id=history-detail-user-name]")
+    @FindAll({
+            @FindBy(css = ".cl-r-header-user-info-name"),
+            @FindBy(css = "[selenium-id=history-detail-user-name]")
+    })
     public WebElement chatTitle;
 
-    @FindBy(css = "[selenium-id=history-detail-time]")
+    @FindAll({
+            @FindBy(css = ".cl-r-header-user-info-data"),
+            @FindBy(css = "[selenium-id=history-detail-time]")
+    })
     public WebElement chatStartDate;
 
-    @FindBy(xpath = ".//ul[@class='chat-container']//li[not(@class='empty')]")
+    @FindBy(css = "[selenium-id=chat-message]")
     private List<WebElement> messagesInChatBody;
 
-    @FindBy(css = "[selenium-id=history-detail-close]")
+    @FindAll({
+            @FindBy(css = ".cl-r-button.cl-r-button--reset-only"),
+            @FindBy(css = "[selenium-id=history-detail-close]")
+    })
     public WebElement closeHistoryDetailsButton;
 
     public String getUserName(){

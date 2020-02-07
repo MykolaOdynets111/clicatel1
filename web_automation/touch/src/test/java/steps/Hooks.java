@@ -211,7 +211,7 @@ public class Hooks implements JSHelper {
         clearAllSessionData();
 
         }catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             closeBrowserInCaseOfException();
         }
 
@@ -525,12 +525,13 @@ public class Hooks implements JSHelper {
 
     private String getWebSocketLogs(WebDriver driver){
         StringBuilder result = new StringBuilder();
+        try {
         LogEntries logEntries = driver.manage().logs().get(LogType.PERFORMANCE);
         for (LogEntry entry : logEntries) {
 
             JSONObject messageJSON = null;
             JSONObject msg = null;
-            try {
+
                 messageJSON = new JSONObject(entry.getMessage());
                 msg  = messageJSON.getJSONObject("message");
                 String method = msg.getString("method");
@@ -539,10 +540,10 @@ public class Hooks implements JSHelper {
                         result.append(msg.toString()).append(";  \n\n");
                     }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.append(e);
         }
         return  result.toString();
     }
