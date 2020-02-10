@@ -14,6 +14,7 @@ import datamanager.*;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -22,6 +23,8 @@ import socialaccounts.TwitterUsers;
 import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Collections;
 
@@ -596,17 +599,25 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @And("^Time stamp displayed in 24 hours format$")
     public void timeStampDisplayedInHoursFormat() {
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidTimeStamp(),
+        Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
+                ,getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        String startedDate = sessionDetails.get("startedDate");
+        int numberOfMillis = startedDate.split("\\.")[1].length();
+        String dateFormat = "yyyy-MM-dd HH:mm:ss." + StringUtils.repeat("S", numberOfMillis);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+        LocalDateTime formatDateTime = LocalDateTime.parse(startedDate, formatter).atZone(ZoneId.of("UTC")).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm|");
+        Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTimeStamp(), formatDateTime.format(formatter2),
                 "Time stamp in chat header as not expected");
     }
 
-    @And("^Header in chat box displayed \"chatting to \"customer name\"\"$")
+    @And("^Header in chat box displayed customer name$")
     public void headerInChatBoxDisplayedCustomerName() {
         Assert.assertEquals(getAgentHomeForMainAgent().getChatHeader().getTextHeader(),
-                "chatting to " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()),
-                "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
+                getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()),
+            "Header in chat header as not expected( do not contain \"chatting to \" or 'customer name'");
 
-    }
+}
 
     @When("^(.*) click on 'headphones' icon and see (\\d+) available agents$")
     public void firstAgentClickOnHeadphonesIconAndSeeAvailableAgents(String agent,int availableAgent) {

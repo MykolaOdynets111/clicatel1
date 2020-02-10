@@ -1,3 +1,4 @@
+@skip
 @agent_feedback
 Feature: Interaction with 'Skip' button on Agent Feedback window
 
@@ -19,6 +20,7 @@ Feature: Interaction with 'Skip' button on Agent Feedback window
     Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is not created
 
+
   Scenario: Agent is able fill form and to 'Skip' in end-chat pop-up in chat desk, no CRM ticket created
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
@@ -31,6 +33,5 @@ Feature: Interaction with 'Skip' button on Agent Feedback window
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is not created
-
 
 

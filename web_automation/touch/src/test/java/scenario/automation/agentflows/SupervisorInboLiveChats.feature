@@ -2,11 +2,11 @@
 @dot_control
 Feature: Supervisor able to check live chats
 
-#  Background:
-#    Given Create .Control integration for Automation and adapter: fbmsg
-#    Given Prepare payload for sending chat to agent message for .Control
-#    Given Send parameterized init call with clientId context correct response is returned
-#    And Send message call
+  Background:
+    Given Create .Control integration for Automation and adapter: fbmsg
+    Given Prepare payload for sending chat to agent message for .Control
+    Given Send parameterized init call with clientId context correct response is returned
+    And Send message call
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
   Scenario: Supervisor inbox :: verify that supervisor able to check live chats

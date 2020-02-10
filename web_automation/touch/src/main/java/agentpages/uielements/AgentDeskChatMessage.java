@@ -21,7 +21,10 @@ public class AgentDeskChatMessage extends AbstractWidget {
     @FindBy(xpath = "./following-sibling::li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
     private WebElement sentEmoji;
 
-    @FindBy(css = "[selenium-id=chat-message-content-PlainMessage]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=chat-message-content-PlainMessage]"),
+            @FindBy(css = "[selenium-id=chat-message-content-InputCardMessage]")
+    })
     private WebElement messageText;
 
     @FindBy(css = ".msg-time")

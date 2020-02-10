@@ -13,6 +13,7 @@ Feature: Supervisor in box : route ticket to scheduler
      And Send message call
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
+  @Issue("https://jira.clickatell.com/browse/TPLAT-4836")
   Scenario: Supervisor inbox :: Route ticket to scheduler
     Given I open portal
     And Login into portal as an admin of Automation Bot account

@@ -105,10 +105,10 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void verifyRequiredNotesField(){
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputErrorText(),
-                "Notes are required when specific agent is selected.",
+                "Notes are required when specific agent is selected",
                 "Error about required notes is not as expected");
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),
-                "rgb(242, 105, 33)", "Note input: expected Notes boarder color is not as expected" );
+                "rgb(194, 51, 19)", "Note input: expected Notes boarder color is not as expected" );
         soft.assertAll();
     }
 

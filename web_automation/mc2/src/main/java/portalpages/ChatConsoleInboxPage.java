@@ -26,7 +26,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     @FindBy(xpath = "//span[text() ='Ticket type:']/following-sibling::div")
     private WebElement ticketTypeDropdown;
 
-    @FindBy(xpath = "//div[@aria-label]")
+    @FindBy(css = ".cl-r-select__option")
     private List<WebElement> dropdownsTypesOptions;
 
     @FindBy(xpath = "//button[text() ='Apply filters']")

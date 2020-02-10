@@ -61,7 +61,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=chat-header-channel-icon]")
     private WebElement channelImg;
 
-    @FindBy(css = "[selenium-id=chat-header-timer]")
+    @FindBy(xpath = ".//span[@class= 'cl-r-chat-header-time'][1]")
     private WebElement timeStamp;
 
     @FindBy(css = "[selenium-id=header-cancel-transfer]")
@@ -151,16 +151,8 @@ public class ChatHeader extends AbstractUIElement {
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
         //Verify if tame stanp in 24 hours format
-    public boolean isValidTimeStamp() {
-        Map<String, String> sessionDetails = DBConnector.getSessionDetailsByClientID(ConfigManager.getEnv()
-                ,getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        String startedDate = sessionDetails.get("startedDate");
-        int numberOfMillis = startedDate.split("\\.")[1].length();
-        String dateFormat = "yyyy-MM-dd HH:mm:ss." + StringUtils.repeat("S", numberOfMillis);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
-        LocalDateTime formatDateTime = LocalDateTime.parse(startedDate, formatter).atZone(ZoneId.of("UTC")).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("'Started:' dd MMM, HH:mm|");
-        return timeStamp.getAttribute("textContent").equals(formatDateTime.format(formatter2));
+    public String getTimeStamp() {
+        return timeStamp.getAttribute("textContent").trim();
     }
 
     public String getTextHeader() {

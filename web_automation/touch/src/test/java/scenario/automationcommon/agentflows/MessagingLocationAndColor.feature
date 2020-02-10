@@ -1,3 +1,4 @@
+@skip
 @no_widget
 @dot_control
 Feature: Messages location and color
