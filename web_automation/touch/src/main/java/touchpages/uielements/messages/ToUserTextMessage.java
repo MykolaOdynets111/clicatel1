@@ -39,8 +39,8 @@ public class ToUserTextMessage extends AbstractWidget {
             else waitFor(500);
         }
         try{
-            if(toUserTextMessages.get(1).getText().isEmpty())  waitFor(1000);
-            return toUserTextMessages.get(1).getText();
+            if(toUserTextMessages.get(2).getText().isEmpty())  waitFor(1000);
+            return toUserTextMessages.get(2).getText();
         } catch (IndexOutOfBoundsException e) {
             return "no text response found";
         }
@@ -48,7 +48,7 @@ public class ToUserTextMessage extends AbstractWidget {
 
     public boolean isSecondResponseShown(int wait){
         for(int i = 0; i <= wait; i++ ){
-            if(toUserTextMessages.size()==2){
+            if(toUserTextMessages.size()==3){
                 return true;
             }else {
                 waitFor(1000);

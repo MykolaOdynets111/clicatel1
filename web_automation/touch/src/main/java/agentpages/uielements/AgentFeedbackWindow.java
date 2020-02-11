@@ -36,16 +36,16 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
-    @FindBy(xpath = "//div[@class='Select-menu-outer']/div[@role='listbox']")
+    @FindBy(css = ".cl-r-select__menu-list.cl-r-select__menu-list--is-multi.css-11unzgr")
     private WebElement availableTagsContainer;
 
     @FindBy(css = "div.Select-control")
     private WebElement tagsInput;
 
-    @FindBy(xpath = "//div[@class='Select-menu-outer']//div[@role='option']")
+    @FindBy(css = "div[id^='react-select-2-option']")
     private List<WebElement> availableTags;
 
-    @FindBy(xpath = "//span[@class='Select-arrow-zone']/span")
+    @FindBy(css = ".cl-r-select__indicators")
     private WebElement openDropdownButton;
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";

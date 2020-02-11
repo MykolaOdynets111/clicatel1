@@ -10,7 +10,6 @@ Feature: Managing brand color
     Then Agent of Automation Bot is logged in
     And User select Automation Bot tenant
     Then I check secondary color for tenant in widget
-    Then I check secondary color for tenant in agent desk
 
   Scenario: Check changing primary color
     Given I open portal
@@ -28,8 +27,6 @@ Feature: Managing brand color
     Then Agent has new conversation request
     When User enter hello into widget input field
     Then I check primary color for tenant in opened widget
-    Then I check primary color for tenant in agent desk
-    Then Check primary color for incoming chat and 360Container
 
 
 
