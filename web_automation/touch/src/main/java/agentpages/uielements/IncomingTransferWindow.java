@@ -7,31 +7,31 @@ import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 
-@FindBy(css = "div.touch-pop-up")
+@FindBy(css = "[selenium-id=touch-pop-up]")
 public class IncomingTransferWindow extends AbstractUIElement {
 
-    @FindBy(css = "div.touch-header h2")
+    @FindBy(css = "[selenium-id=touch-header-title]")
     private WebElement transferWindowHeader;
 
-    @FindBy(xpath = "//button[text()='Accept transfer']")
+    @FindBy(xpath = ".//button[text()='Accept']")
     private WebElement acceptTransferButton;
 
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptRejectedButton;
 
-    @FindBy(xpath = "//button[text()='Reject transfer']")
+    @FindBy(xpath = ".//button[text()='Reject']")
     private WebElement rejectTransfetButton;
 
-    @FindBy(xpath = "(//dt[text()='Transfer from:']/following-sibling::dd)[1]")
+    @FindBy(css = "[selenium-id=touch-transfer-from]")
     private WebElement fromAgentName;
 
-    @FindBy(xpath = "//dt[text()='Note:']/following-sibling::dd")
+    @FindBy(css = "[selenium-id=touch-transfer-note]")
     private WebElement transferNotes;
 
-    @FindBy(css = "div.client-name-text")
+    @FindBy(css = "[selenium-id=touch-client-name]")
     private WebElement clientName;
 
-    @FindBy(css = "div.chat-context")
+    @FindBy(css = ".cl-r-transfer-latest-msg")
     private WebElement clientMessage;
 
     @FindBy(css = "dl.dl-horizontal")
@@ -40,10 +40,10 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(xpath = "//span[@class='profile-icon']")
     private WebElement transferPicture;
 
-    @FindBy(xpath = "//div[@class='icons']/span/*")
+    @FindBy(css = ".cl-r-icon--undefined")
     private WebElement transferChannel;
 
-    @FindBy(xpath = "//div/div[@class='icons']/span[contains(@class,'icon icon-')]")
+    @FindBy(css = "[selenium-id=touch-icons-info] svg")
     private WebElement transferSentiment;
 
     public void acceptTransfer(){

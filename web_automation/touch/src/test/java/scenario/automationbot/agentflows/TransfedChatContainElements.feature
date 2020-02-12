@@ -19,7 +19,7 @@ Feature: Transferring chat, user info
     And Agent sees error message 'Notes are required when specific agent is selected.'
     When Complete 'Note' field
     And  Click on 'Transfer' button in pop-up
-    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
     Then Second Agent receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment
 
 

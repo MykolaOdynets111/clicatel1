@@ -13,7 +13,7 @@ Feature: Canceling chat transfer
     When First Agent click on new conversation
     Given I login as second agent of General Bank Demo
     And Agent transfers chat
-    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
     When First Agent click 'Cancel transfer' button
     Then Second agent has not see incoming transfer pop-up
     Then Conversation area becomes active with connect to agent user's message in it for first agent

@@ -23,17 +23,9 @@ public class ChatBody extends AbstractUIElement {
 
     private String scrollElement = ".chat-body.chat-box__messages";
 
-    private String fromUserMessagesXPATH = "//li[contains(@class, 'from')]//div[text()='%s']";
+    private String fromUserMessagesXPATH = ".//li[contains(@class, 'from')]//*[text()='%s']";
 
     private String messagesInChatBodyXPATH = "//ul[contains(@class, 'chat-container')]//li[not(@class='empty')]";
-
-      private String agentIconWIthInitialsCSS = "li.to div.empty-icon";
-
-    private String currentAgent;
-
-    public void setCurrentAgent(String agent){
-        this.currentAgent = agent;
-    }
 
     @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement userProfileIcon;

@@ -14,5 +14,5 @@ Feature: Transferring 2 chats
     When First Agent transfer a few chats
     Then Second Agent receives incoming transfer notification with "Transfer waiting" header and collapsed view
     When Second Agent click on "Transfer waiting" header
-    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
     And Second agent can see transferring agent name, user name from first chat and following user's message: 'connect to agent''

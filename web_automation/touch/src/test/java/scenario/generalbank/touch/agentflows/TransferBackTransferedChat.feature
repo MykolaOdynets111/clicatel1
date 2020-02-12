@@ -14,7 +14,7 @@ Feature: Chat transfer back
     Given I login as second agent of General Bank Demo
     When First Agent click on new conversation
     And Agent transfers chat
-    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
     And Second agent can see transferring agent name, user name and following user's message: 'connect to agent'
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request
@@ -22,7 +22,7 @@ Feature: Chat transfer back
     When Second agent click on new conversation
     Then Conversation area becomes active with connect to agent user's message in it for second agent
     Then Second agent transfers chat
-    Then First agent receives incoming transfer with "Incoming transfer" header
+    Then First agent receives incoming transfer with "Incoming Transfer" header
     When First agent click "Accept transfer" button
     Then First agent has new conversation request
     When First agent click on new conversation

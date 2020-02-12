@@ -18,10 +18,10 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=transfer-chat-modal-transfer]")
     private WebElement submitTransferChatButton;
 
-    @FindBy(xpath = "//div[text()='Select an agent...']")
+    @FindBy(xpath = ".//div[contains(text(),'agent')]/parent::div/following-sibling::div")
     private WebElement openAgentDropdownButton;
 
-    @FindBy(xpath = ".//div[text()='Select a department...']")
+    @FindBy(xpath = ".//div[contains(text(),'department')]/parent::div/following-sibling::div")
     private WebElement openDepartmentDropdownButton;
 
     @FindBy(css = "[class^='cl-r-select__option']")

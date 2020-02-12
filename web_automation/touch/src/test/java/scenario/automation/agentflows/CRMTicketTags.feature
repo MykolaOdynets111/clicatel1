@@ -72,7 +72,3 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information
-
-
-
-

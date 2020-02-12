@@ -36,7 +36,7 @@ Feature: Pinned chat is disabled to close and to transfer
     Then Agent click 'Unflag chat' button
     Given I login as second agent of General Bank Demo
     And Agent transfers chat
-    Then Second agent receives incoming transfer with "Incoming transfer" header
+    Then Second agent receives incoming transfer with "Incoming Transfer" header
     Then Second agent receives incoming transfer with "Please take care of this one" note from the another agent
     When Second agent click "Accept transfer" button
     Then Second agent has new conversation request

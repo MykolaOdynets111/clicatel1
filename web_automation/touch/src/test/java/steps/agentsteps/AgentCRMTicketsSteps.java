@@ -390,7 +390,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     public void allTagsForTenantIsAvailableInTheDropdown() {
         List<String> tags= ApiHelper.getAllTags();
         List<String> tagsInCRM = getAgentHomeForMainAgent().getAgentFeedbackWindow().getTags();
-        Assert.assertEquals(tags, tagsInCRM, " CRM ticket 'Tags' does not match created on the backend \n");
+        Assert.assertEquals(tagsInCRM, tags, " CRM ticket 'Tags' does not match created on the backend \n");
     }
 
     @Then("^Agent can search tag and select tag, selected tag added in tags field$")

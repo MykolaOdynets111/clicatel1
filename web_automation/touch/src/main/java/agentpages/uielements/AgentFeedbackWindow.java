@@ -30,7 +30,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=sentiment-icon-positive]")
     private WebElement sentimentHappy;
 
-    @FindBy(css = "[selenium-id^='sentiment']")
+    @FindBy(xpath = ".//div[contains(@selenium-id, 'sentiment-icon') and contains(@class, 'active')] ")
     private WebElement selectedSentiment;
 
     @FindBy(css = "[selenium-id=chat-sentiment-icons]")
@@ -39,10 +39,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-select__menu-list.cl-r-select__menu-list--is-multi.css-11unzgr")
     private WebElement availableTagsContainer;
 
-    @FindBy(css = "div.Select-control")
+    @FindBy(css = ".cl-r-select__value-container")
     private WebElement tagsInput;
 
-    @FindBy(css = "div[id^='react-select-2-option']")
+    @FindBy(css = "div[id^='react-select']")
     private List<WebElement> availableTags;
 
     @FindBy(css = ".cl-r-select__indicators")
@@ -50,13 +50,11 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
-    private String inputTagField =  "div.Select-input > input";
+    private String inputTagField =  ".cl-r-select__input input";
 
-    private String tagsOptionsCss = "div.Select-option";
+    private String tagsOptionsCss = "div[id^='react-select']";
 
-    private String selectedButtonTagsCss = "span.conclude-conversation-tag";
-
-    private String openDropdownButtonXpathClear = "//div[contains(@class,'Select-placeholder')]";
+    private String selectedButtonTagsCss = ".cl-r-select__multi-value__label";
 
     private String cleareAll = ".Select-clear";
 
@@ -166,15 +164,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public List<String> getChosenTags() {
-        waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
-        if (!isElementShownByXpath(this.getCurrentDriver(), openDropdownButtonXpathClear,2)){
-            waitForElementsToBeVisibleByCss(this.getCurrentDriver(), selectedButtonTagsCss, 3);
-            return findElemsByCSS(this.getCurrentDriver(), selectedButtonTagsCss).stream()
-                    .map(e -> e.getText().trim())
-                    .collect(Collectors.toList());
-        } else{
-            return new ArrayList<>();
-        }
+        waitForElementsToBeVisibleByCss(this.getCurrentDriver(), selectedButtonTagsCss, 3);
+        return findElemsByCSS(this.getCurrentDriver(), selectedButtonTagsCss).stream()
+                .map(e -> e.getText().trim())
+                .collect(Collectors.toList());
     }
 
     public void typeTags(String tag) {
@@ -204,7 +197,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public String getSelectedSentiment(){
-        return getAttributeFromElem(this.getCurrentDriver(), selectedSentiment, 3, "Selected sentiment", "class");
+        return getAttributeFromElem(this.getCurrentDriver(), selectedSentiment, 3, "Selected sentiment", "selenium-id");
     }
 
 }
