@@ -16,6 +16,7 @@ Feature: Pinned chat is disabled to close and to transfer
     Then Conversation area becomes active with connect to agent user's message
 
 
+  @Issue("https://jira.clickatell.com/browse/TPORT-26904")
   Scenario: Agent receives error message when tries to close the pined chat
     When Agent click 'Flag chat' button
     Then Agent sees 'flag' icon in this chat

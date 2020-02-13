@@ -16,9 +16,6 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='Accept']")
     private WebElement acceptTransferButton;
 
-    @FindBy(xpath = "//button[text()='Accept']")
-    private WebElement acceptRejectedButton;
-
     @FindBy(xpath = ".//button[text()='Reject']")
     private WebElement rejectTransfetButton;
 
@@ -34,10 +31,10 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-transfer-latest-msg")
     private WebElement clientMessage;
 
-    @FindBy(css = "dl.dl-horizontal")
+    @FindBy(css = ".cl-r-transfer-source")
     private WebElement rejectedBy;
 
-    @FindBy(xpath = "//span[@class='profile-icon']")
+    @FindBy(css = ".cl-r-avatar.cl-r-avatar--medium")
     private WebElement transferPicture;
 
     @FindBy(css = ".cl-r-icon--undefined")
@@ -55,7 +52,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public void acceptRejectTransfer(){
-        clickElem(this.getCurrentDriver(), acceptRejectedButton, 3, "'Accept' rejected transfer button");
+        clickElem(this.getCurrentDriver(), acceptTransferButton, 3, "'Accept' rejected transfer button");
     }
 
     public String getTransferNotes(){
@@ -99,7 +96,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public boolean isValidImgTransferSentiment(String userMessage) {
         String expSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-        return getAttributeFromElem(this.getCurrentDriver(), transferSentiment, 5, "Channel icon", "class")
+        return getAttributeFromElem(this.getCurrentDriver(), transferSentiment, 5, "Channel icon", "data-selenium-id")
                 .contains(expSentiment.toLowerCase());
     }
 

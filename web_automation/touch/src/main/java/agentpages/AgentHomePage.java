@@ -57,7 +57,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = ".cl-r-right-panel-no-context")
     private WebElement tipNoteInRightArea;
 
-    @FindBy(xpath = "//div[@class='touch-notification']//child::h2[text()='Transfer waiting']")
+    @FindBy(css = "[selenium-id = transfer-notification-waiting]")
     private List<WebElement> notificationsList;
 
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
