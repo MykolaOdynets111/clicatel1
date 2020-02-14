@@ -69,8 +69,8 @@ public class ChatHeader extends AbstractUIElement {
 
 
 
-    private String transferChatButton =  "//button[text()='Transfer chat']";
-    private String sendSMSXpath = ".//button[text()='Send SMS']";
+    private String transferChatButton =  ".//button[@selenium-id='header-transfer-chat']";
+    private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
 
     public ChatHeader (WebDriver current){

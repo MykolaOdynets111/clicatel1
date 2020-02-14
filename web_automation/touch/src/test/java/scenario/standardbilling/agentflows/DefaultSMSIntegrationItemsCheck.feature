@@ -38,6 +38,7 @@ Feature: Default SMS integration items visibility check
     When Click 'Edit' button in Customer 360 view
     And Change phone number for touch user
     And Click 'Save' button in Customer 360 view
-    When Wait for 3 seconds for Phone Number to be updated
+#    When Wait for 3 seconds for Phone Number to be updated
+    When Wait for 2 seconds for Phone Number update
     Then Send SMS button is enabled on Chat header
     And Send OTP button is displayed in Customer 360

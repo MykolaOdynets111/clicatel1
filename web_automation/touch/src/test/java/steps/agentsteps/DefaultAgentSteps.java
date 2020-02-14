@@ -330,6 +330,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
     }
 
+    @When("^Wait for (.d*) seconds for Phone Number update")
+    public void waitSomeTimeForBackendUpdatePhone(int waitFor){
+        int waitTimeInMillis = waitFor * 1000;
+        sleepFor(waitTimeInMillis);
+    }
+
     @When("Fill in the form with new (.*) customer 360 info")
     public void updateCustomer360Info(String customerFrom){
         Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
@@ -443,14 +449,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("SMS client-profile added into DB")
     public void checkSMSProfileCreating(){
         String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\+", "");
+        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\+", "").replaceAll(" ", "");
         Assert.assertTrue(DBConnector.isSMSClientProfileCreated(ConfigManager.getEnv(), phone, linkedClientProfileId, "MC2_SMS"),
                 "MC2_SMS client profile wasn't created");
     }
 
     @Then("Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed")
     public void chatSeparatorCheck(){
-        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber();
+        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll(" ", "");
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
         softAssert.assertTrue(getAgentHomeForMainAgent().getChatForm().getTextFromMessageInputField().replaceAll("\\s", "").contains(phone),
@@ -578,9 +584,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired){
         String phone = getAgentHomePage(agent).getCustomer360Container().getPhoneNumber();
         if (isPhoneNumberRequired.equalsIgnoreCase("no"))
-            return phone.equalsIgnoreCase("unknown");
+            return phone.equalsIgnoreCase("");
         else
-            return !phone.equalsIgnoreCase("unknown");
+            return !phone.equalsIgnoreCase("");
     }
 
     @Given("^Create (.*) chat via API$")

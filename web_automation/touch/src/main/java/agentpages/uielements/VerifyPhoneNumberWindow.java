@@ -5,21 +5,19 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(xpath = "//h4[text()='Verify phone number']/ancestor::div[@class='modal-dialog']")
+@FindBy(xpath = "//div[text()='Verify phone number']/ancestor::div[contains(@class,'ReactModal__Content')]")
 public class VerifyPhoneNumberWindow extends AbstractUIElement {
 
-    String overlappedPage = "//section[@id='app'][@aria-hidden='true']";
-
-    @FindBy(css = "h4")
+    @FindBy(css = "[seleniumid='send-otp-modal-title']")
     private WebElement popUpTitle;
 
-    @FindBy(css = "#otpcontactPhone")
+    @FindBy(css = "[selenium-id='send-otp-modal-phone']")
     private WebElement phoneNumberInputField;
 
-    @FindBy(xpath = ".//button[text()='Cancel']")
+    @FindBy(css = "[selenium-id='send-otp-modal-cancel']")
     private WebElement cancelButton;
 
-    @FindBy(xpath = "//span[text()='Send OTP']/parent::button")
+    @FindBy(css = "[selenium-id='send-otp-modal-send']")
     private WebElement sendOTPButton;
 
     public String getEnteredPhoneNumber(){

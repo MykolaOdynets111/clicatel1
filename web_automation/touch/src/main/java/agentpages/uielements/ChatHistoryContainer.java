@@ -8,7 +8,7 @@ import org.testng.Assert;
 
 import java.util.List;
 
-@FindBy(css = ".iscroll-main.iscroll-main-clRTabHistoryList ")
+@FindBy(css = ".iscroll-main.iscroll-main-clRTabHistoryList")
 public class ChatHistoryContainer extends AbstractUIElement {
 
     @FindAll({

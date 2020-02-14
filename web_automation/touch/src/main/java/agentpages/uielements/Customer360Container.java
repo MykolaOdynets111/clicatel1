@@ -7,7 +7,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -41,9 +40,7 @@ public class Customer360Container extends AbstractUIElement {
     private WebElement fbLabel;
 
     @FindBy(css = "[selenium-id=user-profile-phone]")
-    private WebElement phoneLabel;
-    @FindBy(css = "[selenium-id=user-profile-phone]")
-    private WebElement phoneInput;
+    private WebElement phoneLocator;
 
     @FindBy(css = "[selenium-id=user-profile-send-otp]")
     private WebElement sendOTPButton;
@@ -66,7 +63,7 @@ public class Customer360Container extends AbstractUIElement {
     @FindBy(css = "[selenium-id=user-profile-container]")
     private WebElement mailColor;
 
-    private String phoneCSS = "span.icon.svg-icon-mobile+span";
+    private String phoneCSS = "[selenium-id = 'user-profile-phone']";
 
     public Customer360PersonalInfo getActualPersonalInfo(){
         try {
@@ -82,10 +79,10 @@ public class Customer360Container extends AbstractUIElement {
         if(!fbLabel.getText().equals("Unknown")) channelUsername = fbLabel.getText();
         if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage(this.getCurrentDriver())!=null) channelUsername = getUserNameFromLocalStorage(this.getCurrentDriver());
         if(channelUsername.equals("Unknown")) channelUsername = "@"+profileNameLabel.getAttribute("value");
-        if (phoneLabel.getAttribute("value").isEmpty()){
+        if (phoneLocator.getAttribute("value").isEmpty()){
             phone = "Unknown";
         } else {
-            phone = phoneLabel.getAttribute("value");
+            phone = phoneLocator.getAttribute("value");
         }
         if (locationLabel.getAttribute("value").isEmpty()){
             location = "Unknown location";
@@ -114,8 +111,8 @@ public class Customer360Container extends AbstractUIElement {
 
     public void setPhoneNumber(String phoneNumber){
         //phoneInput.clear(); does not clear the value
-        phoneInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        phoneInput.sendKeys(phoneNumber);
+        phoneLocator.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+        phoneLocator.sendKeys(phoneNumber);
     }
 
     public String getUserFullName(){
@@ -136,7 +133,7 @@ public class Customer360Container extends AbstractUIElement {
 
     public String getPhoneNumber() {
         waitForElementToBeVisibleByCss(this.getCurrentDriver(),phoneCSS, 2);
-        return findElemByCSS(this.getCurrentDriver(),phoneCSS).getText(); // phoneLabel.getText();
+        return findElemByCSS(this.getCurrentDriver(),phoneCSS).getAttribute("value");//getText(); // phoneLabel.getText();
     }
 
     public boolean isCustomer360SMSButtonsDisplayed(String button){
@@ -156,9 +153,9 @@ public class Customer360Container extends AbstractUIElement {
 
     public boolean isPhoneNumberFieldUpdated(String requiredEndState){
         if (requiredEndState.equalsIgnoreCase("deleted"))
-            return getPhoneNumber().equalsIgnoreCase("Unknown");
+            return getPhoneNumber().equalsIgnoreCase("");
         else
-            return !getPhoneNumber().equalsIgnoreCase("Unknown");
+            return !getPhoneNumber().equalsIgnoreCase("");
     }
 
     public void clickPhoneNumberVerificationButton(String buttonName){

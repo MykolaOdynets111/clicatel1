@@ -1,6 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -8,6 +9,7 @@ import org.testng.Assert;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -164,7 +166,11 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public List<String> getChosenTags() {
-        waitForElementsToBeVisibleByCss(this.getCurrentDriver(), selectedButtonTagsCss, 3);
+        try {
+            waitForElementsToBeVisibleByCss(this.getCurrentDriver(), selectedButtonTagsCss, 3);
+        } catch (TimeoutException e){
+            return Collections.emptyList();
+        }
         return findElemsByCSS(this.getCurrentDriver(), selectedButtonTagsCss).stream()
                 .map(e -> e.getText().trim())
                 .collect(Collectors.toList());

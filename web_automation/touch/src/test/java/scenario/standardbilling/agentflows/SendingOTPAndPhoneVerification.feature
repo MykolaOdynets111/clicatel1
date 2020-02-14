@@ -20,7 +20,6 @@ Feature: OTP, Verify and Re-send OTP functionality
     And Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed
     And 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
 
-  @Issue("https://jira.clickatell.com/browse/TPORT-10789")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5971")
   Scenario: Verifying and Editing verified phone number
     Then 'Verify' and 'Re-send OTP' buttons are displayed in Customer 360
@@ -35,13 +34,13 @@ Feature: OTP, Verify and Re-send OTP functionality
     Then 'Verified' label become invisible
     And Send OTP button is displayed in Customer 360
 
-  @Issue("https://jira.clickatell.com/browse/TPORT-10789")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5970")
   Scenario: No data in 'Verify phone' pop-up window
     When Click 'Edit' button in Customer 360 view
     And Delete phone number for touch user
     And Click 'Save' button in Customer 360 view
-    When Wait for 3 seconds for Phone Number to be updated
+#    When Wait for 3 seconds for Phone Number to be updated
+    When Wait for 2 seconds for Phone Number update
     When Agent click on 'Send OTP' button in Customer 360
     Then 'Verify phone' window is opened
     And User's profile phone number not displayed in 'Verify phone' input field
