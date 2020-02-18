@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractWidget;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.HashMap;
@@ -25,7 +26,10 @@ public class CRMTicket extends AbstractWidget {
     @FindBy(css = "[selenium-id=note-card-text]")
     private WebElement crmNote;
 
-    @FindBy(css = "[selenium-id=note-card-ticket-number]")
+    @FindAll({
+            @FindBy(css = ".cl-r-note-card-ticket-number"),
+            @FindBy(css = "[selenium-id=note-card-ticket-number]")
+            })
     private WebElement crmNumber;
 
     @FindBy(css = "[selenium-id=note-card-edit-ticket]")
@@ -60,10 +64,12 @@ public class CRMTicket extends AbstractWidget {
 
 
     public void clickEditButton(){
+        moveToElement(this.getCurrentDriver(), editButton);
         clickElem(this.getCurrentDriver(), editButton, 3,"CRM ticket 'Edit' button");
-    }
+}
 
     public void clickDeleteButton(){
+        moveToElement(this.getCurrentDriver(), deleteButton);
         clickElem(this.getCurrentDriver(), deleteButton, 3,"CRM ticket 'Delete' button");
     }
 }

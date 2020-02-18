@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AgentHomePage extends AgentAbstractPage {
 
-    private String chatContainer = "//ul[@class='chat-container']";
+    private String chatMessageContainer = "[selenium-id=chat-messages-list]";
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String modalWindow = "div.modal-content";
 
@@ -22,8 +22,11 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//li[text()='Assist']")
     private WebElement agentAssistantButton;
 
-    @FindBy(xpath = "//li[text()='History']")
+    @FindBy(css = "[selenium-id='tab-right-panel-history']")
     private WebElement agentHistoryButton;
+
+    @FindBy(css = "[selenium-id='tab-right-panel-notes']")
+    private WebElement agentNotesButton;
 
     private String pinErrorMessageXpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']";
 
@@ -100,6 +103,9 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public CRMTicketContainer getCrmTicketContainer() {
+        if(!agentNotesButton.getAttribute("class").contains("selected")){
+            agentNotesButton.click();
+        }
         crmTicketContainer.setCurrentDriver(this.getCurrentDriver());
         return crmTicketContainer;
     }
@@ -110,7 +116,9 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatHistoryContainer getChatHistoryContainer() {
-        agentHistoryButton.click();
+        if(!agentHistoryButton.getAttribute("class").contains("selected")) {
+            agentHistoryButton.click();
+        }
         chatHistoryContainer.setCurrentDriver(this.getCurrentDriver());
         return chatHistoryContainer;
     }
@@ -166,6 +174,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatBody getChatBody() {
+        waitForElementToBeVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 5);
         chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
     }
@@ -190,9 +199,9 @@ public class AgentHomePage extends AgentAbstractPage {
     public void endChat(){
         if(getChatHeader().isEndChatShown()){
             getChatHeader().clickEndChatButton();
-            getAgentFeedbackWindow().clickSaveButtonInCloseChatPopup();
+            getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
             try {
-                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(),chatContainer, 5);
+                waitForElementToBeInVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 5);
             }catch (TimeoutException e){
                 Assert.fail("Chat container does not disappear after 5 second wait");
             }

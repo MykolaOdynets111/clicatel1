@@ -116,7 +116,7 @@ public class Customer360Container extends AbstractUIElement {
     }
 
     public String getUserFullName(){
-        return profileNameLabel.getText().replace("\n", " ");
+        return profileNameLabel.getAttribute("value");
     }
 
     public String getSaveEditButtonColor() {

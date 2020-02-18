@@ -127,8 +127,8 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("Container with new CRM (?:ticket|tickets) is shown")
     public void verifyCRMTicketIsShown(){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getContainerHeader(), "Notes",
-                "CRM tickets section header is not 'Notes'");
+//        soft.assertEquals(getAgentHomeForMainAgent().getCrmTicketContainer().getContainerHeader(), "Notes",
+//                "CRM tickets section header is not 'Notes'");
         soft.assertTrue(getAgentHomeForMainAgent().getCrmTicketContainer().isTicketContainerShown(),
                 "CRM ticket is not shown");
         soft.assertAll();
@@ -226,12 +226,11 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     public void verifyTicketInfoUpdatedInActiveChat(){
         SoftAssert soft = new SoftAssert();
         Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
-        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
-        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
+        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate()),
                 "Shown Ticket created date is not correct \n");
-        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + crmTicketInfoForUpdating.get().get("ticketNumber"),
+        soft.assertEquals(actualInfo.get("number"), "Ticket #: " + crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Shown Ticket Number is not correct \n");
-        soft.assertEquals(actualInfo.get("note"), "Note: " + crmTicketInfoForUpdating.get().get("agentNote"),
+        soft.assertEquals(actualInfo.get("note"), crmTicketInfoForUpdating.get().get("agentNote"),
                 "Shown Ticket note is not correct \n");
         soft.assertAll();
     }
@@ -241,10 +240,8 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         SoftAssert soft = new SoftAssert();
         CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").get(0);
         String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
-        String createdDateFromBackend = "Created: " + formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate());
 
-
-        soft.assertEquals(createdDateFromBackend.toLowerCase(), createdDate.toLowerCase(),
+        soft.assertEquals(formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate()), createdDate.toLowerCase(),
                 "Ticket created date is changed after ticket editing \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number is not changed after canceling ticket editing \n");
@@ -259,12 +256,11 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     public void verifyTicketInfoInActiveChat(){
         SoftAssert soft = new SoftAssert();
         Map<String, String> actualInfo = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getTicketInfo();
-        String expectedTicketCreated = "Created: " + formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate());
-        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), expectedTicketCreated.toLowerCase(),
+        soft.assertEquals(actualInfo.get("createdDate").toLowerCase(), formExpectedCRMTicketCreatedDate(createdCrmTicket.get().getCreatedDate()),
                 "Shown Ticket created date is not correct \n");
-        soft.assertEquals(actualInfo.get("number"), "Ticket Number: " + createdCrmTicket.get().getTicketNumber(),
+        soft.assertEquals(actualInfo.get("number"), "Ticket #: " + createdCrmTicket.get().getTicketNumber(),
                 "Shown Ticket Number is not correct \n");
-        soft.assertEquals(actualInfo.get("note"), "Note: " + createdCrmTicket.get().getAgentNote(),
+        soft.assertEquals(actualInfo.get("note"), createdCrmTicket.get().getAgentNote(),
                 "Shown Ticket note is not correct \n");
         soft.assertAll();
     }
@@ -414,45 +410,9 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(createdCrmTicket.get().getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
 
-        DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
-        Map<Long, String> newDaysMap = new HashMap<>();
-        newDaysMap.put(1L, "1st");
-        newDaysMap.put(2L, "2nd");
-        newDaysMap.put(3L, "3rd");
-        newDaysMap.put(4L, "4th");
-        newDaysMap.put(5L, "5th");
-        newDaysMap.put(6L, "6th");
-        newDaysMap.put(7L, "7th");
-        newDaysMap.put(8L, "8th");
-        newDaysMap.put(9L, "9th");
-        newDaysMap.put(10L, "10th");
-        newDaysMap.put(11L, "11th");
-        newDaysMap.put(12L, "12th");
-        newDaysMap.put(13L, "13th");
-        newDaysMap.put(14L, "14th");
-        newDaysMap.put(15L, "15th");
-        newDaysMap.put(16L, "16th");
-        newDaysMap.put(17L, "17th");
-        newDaysMap.put(18L, "18th");
-        newDaysMap.put(19L, "19th");
-        newDaysMap.put(20L, "20th");
-        newDaysMap.put(21L, "21st");
-        newDaysMap.put(22L, "22nd");
-        newDaysMap.put(23L, "23rd");
-        newDaysMap.put(24L, "24th");
-        newDaysMap.put(25L, "25th");
-        newDaysMap.put(26L, "26th");
-        newDaysMap.put(27L, "27th");
-        newDaysMap.put(28L, "28th");
-        newDaysMap.put(29L, "29th");
-        newDaysMap.put(30L, "30th");
-        newDaysMap.put(31L, "31st");
-
-        builder.appendText(ChronoField.DAY_OF_MONTH, newDaysMap );
-        builder.append(DateTimeFormatter.ofPattern(" yyyy, h:mm a"));
-        DateTimeFormatter formatter1 = builder.toFormatter();
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
 
-        return (dateTimeFromBackend.getMonth() + " " + dateTimeFromBackend.format(formatter1)).toLowerCase();
+        return dateTimeFromBackend.format(formatter1).toLowerCase();
     }
 }

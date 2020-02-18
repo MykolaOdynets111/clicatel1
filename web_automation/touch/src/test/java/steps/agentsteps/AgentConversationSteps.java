@@ -41,6 +41,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             userMessage = "Submitted data:\n" +
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
                     "health@test.com";
+
+            Assert.assertEquals(getChatBody("main agent").getPersonalInfoText(),
+                    userMessage, "Personal info message is not shown in conversation area");
+            return;
         }
         Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area");
@@ -260,7 +264,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) click 'Close chat' button$")
     public void clickCloseChatButton(String agent) {
-        getAgentHomePage(agent).getAgentFeedbackWindow().clickSaveButtonInCloseChatPopup();
+        getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
     @When("(.*) fills form$")

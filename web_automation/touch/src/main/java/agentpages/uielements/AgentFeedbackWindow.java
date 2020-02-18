@@ -1,13 +1,13 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +21,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     private WebElement cancelButton;
 
     @FindBy(css = "[selenium-id=exit-chat-modal-save]")
-    private WebElement saveChatButton;
+    private WebElement closeChatButton;
 
     @FindBy(css = "[selenium-id=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
@@ -41,7 +41,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-select__menu-list.cl-r-select__menu-list--is-multi.css-11unzgr")
     private WebElement availableTagsContainer;
 
-    @FindBy(css = ".cl-r-select__value-container")
+    @FindBy(css = ".cl-r-select__control")
     private WebElement tagsInput;
 
     @FindBy(css = "div[id^='react-select']")
@@ -56,7 +56,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String tagsOptionsCss = "div[id^='react-select']";
 
-    private String selectedButtonTagsCss = ".cl-r-select__multi-value__label";
+    private String selectedButtonTagsCss = ".cl-r-select__multi-value";
 
     private String cleareAll = ".Select-clear";
 
@@ -74,17 +74,12 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
     }
 
-    public void clickCloseChat() {
-        clickElem(this.getCurrentDriver(), saveChatButton, 5,"Close chat button" );
-        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
-    }
-
-    public void clickSaveButtonInCloseChatPopup(){
-        clickElem(this.getCurrentDriver(), saveChatButton, 5, "Save button");
+    public void clickCloseButtonInCloseChatPopup(){
+        clickElem(this.getCurrentDriver(), closeChatButton, 5, "Save button");
     }
 
     public boolean isEndChatPopupShown (){
-        return isElementShown(this.getCurrentDriver(), saveChatButton,12);
+        return isElementShown(this.getCurrentDriver(), closeChatButton,12);
     }
 
     public AgentFeedbackWindow typeCRMNoteTextField(String msg) {
@@ -134,8 +129,6 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void selectTag(int ordinalNumber){
-        waitForElementToBeVisible(this.getCurrentDriver(), tagsInput, 3);
-        tagsInput.click();
         if(!isElementShown(this.getCurrentDriver(), availableTagsContainer, 2)) {
             openDropdownButton.click();
         }
@@ -190,8 +183,11 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     public void deleteTags() {
         waitForElementToBeClickable(this.getCurrentDriver(), openDropdownButton, 6);
         tagsInput.click();
-        waitForElementToBeVisibleByCss(this.getCurrentDriver(), cleareAll, 6);
-        findElemByCSS(this.getCurrentDriver(), cleareAll).click();
+        for (WebElement tag : this.getCurrentDriver().findElements(By.cssSelector(selectedButtonTagsCss))){
+            tagsInput.findElement(By.cssSelector("svg")).click();
+        }
+//        waitForElementToBeVisibleByCss(this.getCurrentDriver(), cleareAll, 6);
+//        findElemByCSS(this.getCurrentDriver(), cleareAll).click();
     }
 
     public String getPlaceholder() {

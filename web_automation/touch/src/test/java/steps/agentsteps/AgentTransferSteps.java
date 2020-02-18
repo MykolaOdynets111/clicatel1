@@ -204,7 +204,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(
                 getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "User picture as not expected");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel("touch"),
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel("touchTransfer"),
                 "Channel picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment("connect to agent"),
                 "Sentiment picture as not expected");

@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 @FindBy(css = "[selenium-id=delete-note-conffirmation]")
 public class DeleteCRMConfirmationPopup extends AbstractUIElement {
 
-    private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
+    private String overlappedPage = "//div[contains(@class,'cl-r-modal-overlay')]";
 
     @FindBy(css = "[selenium-id=delete-note-decline]")
     private WebElement cancelButton;

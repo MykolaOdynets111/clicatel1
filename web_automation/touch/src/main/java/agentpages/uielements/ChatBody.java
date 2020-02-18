@@ -45,6 +45,9 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(xpath = "(//li[contains(@class, 'otp')]/div)[last()]")
     private WebElement lastOTPDividerBlock;
 
+    @FindBy(css = "[selenium-id=chat-message-content-InputCardMessage]")
+    private WebElement userInfoCard;
+
     private WebElement getFromUserWebElement(String messageText) {
         try {
             AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
@@ -55,6 +58,10 @@ public class ChatBody extends AbstractUIElement {
             Assert.fail("There is no such user message: "+messageText+"");
             return null;
         }
+    }
+
+    public String getPersonalInfoText(){
+        return getTextFromElem(this.getCurrentDriver(), userInfoCard, 2, "Personal Info Card");
     }
 
     public boolean isUserMessageShown(String usrMessage) {
