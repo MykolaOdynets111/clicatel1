@@ -2,25 +2,44 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = "[selenium-id=profile-settings-modal-header]")
+@FindBy(css = ".cl-r-modal")
 public class ProfileWindow extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=setting-group-item]")
     private List<WebElement> listOfElementsWithRoles;
 
-    @FindBy(css = "[selenium-id=close-modal-btn]")
+    @FindAll({
+            @FindBy(css = "[selenium-id=close-modal-btn]"),
+            @FindBy(css = ".cl-r-icon.cl-r-icon-close")
+    })
     private WebElement closeProfileWindowButton;
 
-    private String infoFieldCss = "span.profile-data-row>input[value='%s']";
+    @FindBy(id ="profile-first-name-input")
+    private WebElement firstName;
 
-    public boolean isAgentInfoShown(String info){
-        return isElementShownByCSS(this.getCurrentDriver(), (String.format(infoFieldCss, info)), 3);
+    @FindBy(id ="profile-last-name-input")
+    private WebElement lastName;
+
+    @FindBy(id ="profile-email-input")
+    private WebElement mail;
+
+    public String getFirstName() {
+        return firstName.getAttribute("value");
+    }
+
+    public String getLastName() {
+        return lastName.getAttribute("value");
+    }
+
+    public String getMail() {
+        return mail.getAttribute("value");
     }
 
     public List<String> getListOfRoles(){

@@ -55,11 +55,11 @@ public class AgentInfoSteps extends AbstractAgentSteps{
                 e.get("name").toString().toUpperCase() + " ("+
                         e.get("solution").toString().toUpperCase() +        ")"
         );});
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("firstName")),
+        soft.assertEquals(getProfileWindow("agent").getFirstName(), agentInfoResp.getBody().jsonPath().get("firstName"),
                 "Agent first name is not shown in profile window");
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("lastName")),
+        soft.assertEquals(getProfileWindow("agent").getLastName() ,agentInfoResp.getBody().jsonPath().get("lastName"),
                 "Agent last name is not shown in profile window");
-        soft.assertTrue(getProfileWindow("agent").isAgentInfoShown(agentInfoResp.getBody().jsonPath().get("email")),
+        soft.assertEquals(getProfileWindow("agent").getMail(), agentInfoResp.getBody().jsonPath().get("email"),
                 "Agent email is not shown in profile window");
         soft.assertEquals(getProfileWindow("agent").getListOfRoles(), expected,
                 "Agent roles listed in Profile window are not as expected");
