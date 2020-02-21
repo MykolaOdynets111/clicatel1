@@ -27,6 +27,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.testng.Assert;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
@@ -210,11 +211,10 @@ public class Hooks implements JSHelper {
         closeMainBrowserIfOpened();
         clearAllSessionData();
 
-        }catch (Exception e) {
+        }catch ( Exception | AssertionError e) {
             e.printStackTrace();
             closeBrowserInCaseOfException();
         }
-
     }
 
 
@@ -224,7 +224,8 @@ public class Hooks implements JSHelper {
             return ((TakesScreenshot) DriverFactory.getTouchDriverInstance()).getScreenshotAs(OutputType.BYTES);
         } else{
             return null;
-        }    }
+        }
+    }
 
     @Attachment(value = "Screenshot")
     private byte[] takeScreenshotFromSecondDriver() {

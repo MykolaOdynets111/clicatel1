@@ -59,7 +59,23 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
 
     @When("Update conversation and session dates to (.*) hours$")
     public void updateDatesForConversationAndSession(int hoursShift){
-        Map<String, String> conversation = DBConnector.getDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "conversation");
+
+        Map<String, String> conversation =  null;
+        //Wait 5 seconds if some date is not updated in table yet
+        for (int i=0; i<5; i++ ) {
+            conversation = DBConnector.getDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "conversation");
+            boolean hasNull = false;
+            for (String key: conversation.keySet()){
+                String date = conversation.get(key);
+                if (date == null && date.isEmpty()){
+                    waitFor(1000);
+                    hasNull = true;
+                    break;
+                }
+            }
+            if (!hasNull) break ;
+        }
+
         conversation = updateDates(conversation, hoursShift);
         DBConnector.updateDatesOfUserConversationOrSession(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "conversation", conversation);
 

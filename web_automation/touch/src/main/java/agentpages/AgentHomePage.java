@@ -5,6 +5,7 @@ import agentpages.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -22,10 +23,16 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//li[text()='Assist']")
     private WebElement agentAssistantButton;
 
-    @FindBy(css = "[selenium-id='tab-right-panel-history']")
+    @FindAll({
+            @FindBy(xpath = "//li[text()='History']"),
+            @FindBy(css = "[selenium-id='tab-right-panel-history']")
+    })
     private WebElement agentHistoryButton;
 
-    @FindBy(css = "[selenium-id='tab-right-panel-notes']")
+    @FindAll({
+            @FindBy(css = "[selenium-id='tab-right-panel-notes']"),
+            @FindBy(xpath = " //li[text()='Notes']")
+    })
     private WebElement agentNotesButton;
 
     private String pinErrorMessageXpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']";
