@@ -18,7 +18,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
     @FindBy(css = "[selenium-id=emojified-text]")
     private List<WebElement> toUserTextResponses;
 
-    @FindBy(xpath = "./following-sibling::li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
+    @FindBy(xpath = "//li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
     private WebElement sentEmoji;
 
     @FindAll({

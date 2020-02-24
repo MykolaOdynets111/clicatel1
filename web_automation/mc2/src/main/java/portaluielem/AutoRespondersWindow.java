@@ -15,7 +15,7 @@ public class AutoRespondersWindow extends BasePortalWindow {
 
     public AutoResponderItem getTargetAutoResponderItem(String autoresponder){
         return autoresponderItems.stream().map(e -> new AutoResponderItem(e).setCurrentDriver(getCurrentDriver()))
-                            .filter(e -> e.getTitle().contains(autoresponder))
+                            .filter(e -> e.getTitle().trim().equalsIgnoreCase(autoresponder))
                             .findFirst().get();
     }
 

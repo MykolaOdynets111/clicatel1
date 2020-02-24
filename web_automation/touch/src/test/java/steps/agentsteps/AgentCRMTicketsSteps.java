@@ -78,8 +78,8 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
         for (CRMTicket ticket : createdTickets){
             expectedTickets.add(new HashMap<String, String>(){{
-                put("note", "Note: " + ticket.getAgentNote());
-                put("number", "Ticket Number: " + ticket.getTicketNumber());
+                put("note", ticket.getAgentNote());
+                put("number", "Ticket #: " + ticket.getTicketNumber());
             }});
         }
         Assert.assertEquals(actualTickets, expectedTickets,

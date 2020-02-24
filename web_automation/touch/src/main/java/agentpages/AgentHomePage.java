@@ -40,7 +40,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']")
     private WebElement pinErrorMessage;
 
-    @FindBy(xpath = "//h4[text()='Profanity not allowed']")
+    @FindBy(xpath = "//div[text()='Profanity not allowed']")
     private WebElement profanityPopup;
 
     @FindBy(xpath = "//button[text()='Accept']")

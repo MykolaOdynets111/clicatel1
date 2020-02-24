@@ -14,7 +14,7 @@ public class InboxChatBody extends AbstractUIElement {
     @FindBy(css =".msg-agent_message.to .msg")
     private WebElement agentMessage;
 
-    @FindBy(xpath =" //li[@class ='msg-agent_message to']/span[text()]")
+    @FindBy(css =" .msg-agent_message.to span")
     private WebElement agentMessageTime;
 
     @FindBy(css =".supervisor-chat-history__state-and-type span b")

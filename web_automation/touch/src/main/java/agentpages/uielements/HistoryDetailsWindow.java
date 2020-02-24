@@ -28,7 +28,7 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     })
     public WebElement chatStartDate;
 
-    @FindBy(css = "[selenium-id=chat-message]")
+    @FindBy(xpath = ".//li[contains(@class, 'cl-r-message msg') or @class = 'channel-separator' ]")
     private List<WebElement> messagesInChatBody;
 
     @FindAll({
