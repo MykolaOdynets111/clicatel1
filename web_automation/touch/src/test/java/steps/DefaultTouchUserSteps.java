@@ -775,9 +775,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                 expectedTextResponse = fromFeatureText;
                 break;
         }
-        if (fromFeatureText.contains("${firstName}")) {
-            expectedTextResponse = expectedTextResponse.replace("${firstName}", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        }
         return expectedTextResponse;
     }
 

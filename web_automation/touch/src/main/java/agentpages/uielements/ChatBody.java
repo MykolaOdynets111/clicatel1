@@ -25,7 +25,7 @@ public class ChatBody extends AbstractUIElement {
 
     private String fromUserMessagesXPATH = ".//li[contains(@class, 'from')]//*[text()='%s']";
 
-    private String messagesInChatBodyXPATH = "//ul[contains(@class, 'chat-container')]//li[not(@class='empty')]";
+    private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]//li[not(@class='empty')]";
 
     @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement userProfileIcon;
@@ -73,10 +73,11 @@ public class ChatBody extends AbstractUIElement {
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         // ToDo: update timeout after it is provided in System timeouts confluence page
         // ToDo: If for social chatting timeout is bigger - introduce another method for social
-        if(!isElementShownByXpath(this.getCurrentDriver(), locator, 15)){
+        if(!isElementShownByXpath(this.getCurrentDriver(), locator, 10)){
             scrollToElem(this.getCurrentDriver(), locator,
                     "'" +usrMessage + "' user message on chatdesk");
         }
+
         return isElementShownByXpath(this.getCurrentDriver(), locator, 10);
     }
 
@@ -103,7 +104,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
-        waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 5);
+        waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 5);
         return findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
                     .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo().replace("\n", " "))
