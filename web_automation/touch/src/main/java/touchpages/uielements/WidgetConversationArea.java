@@ -160,7 +160,6 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public boolean isTextShown(String text, int wait){
-
         for (int i=0; i<wait*2; i++){
             try {
                 findElemByXPATH(this.getCurrentDriver(), String.format(targetTextInConversationArea, text));

@@ -204,13 +204,12 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferPicture(
                 getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())),
                 "User picture as not expected");
-        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel("touchTransfer"),
-                "Channel picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImgTransferSentiment("connect to agent"),
                 "Sentiment picture as not expected");
         softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isRigthSideTransferChatWindow(),
                 "Transfered chat window not on the right side of the screen");
-
+        softAssert.assertTrue(getAgentHomePage(agent).getIncomingTransferWindow().isValidImTransferChannel("touchTransfer"),
+                "Channel picture as not expected");
         softAssert.assertAll();
 
 
