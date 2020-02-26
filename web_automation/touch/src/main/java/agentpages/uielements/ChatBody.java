@@ -4,10 +4,7 @@ import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import org.apache.commons.lang3.Range;
-import org.openqa.selenium.Rectangle;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
@@ -33,7 +30,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
 
-    @FindBy(css = "li.to")
+    @FindBy(css = "li.to .msg")
     private List<WebElement> toUserMessages;
 
     @FindBy(css = "[selenium-id=empty-avatar]")
@@ -71,14 +68,10 @@ public class ChatBody extends AbstractUIElement {
             Assert.fail("Chat body is not visible");
         }
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
-        // ToDo: update timeout after it is provided in System timeouts confluence page
-        // ToDo: If for social chatting timeout is bigger - introduce another method for social
-        if(!isElementShownByXpath(this.getCurrentDriver(), locator, 10)){
-            scrollToElem(this.getCurrentDriver(), locator,
-                    "'" +usrMessage + "' user message on chatdesk");
-        }
+        waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 5);
+        WebElement message = this.getCurrentDriver().findElement(By.xpath(locator));
 
-        return isElementShownByXpath(this.getCurrentDriver(), locator, 10);
+        return wheelScrollUpAndIsDisplayed(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),  message);
     }
 
     public boolean isMoreThanOneUserMassageShown() {

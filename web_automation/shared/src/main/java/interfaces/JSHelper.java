@@ -5,7 +5,7 @@ import org.testng.Assert;
 
 import java.util.List;
 
-public interface JSHelper {
+public interface JSHelper extends WebActions{
 
     default void executeJSclick(WebDriver driver, WebElement elem) {
         JavascriptExecutor executor = (JavascriptExecutor) driver;
@@ -81,6 +81,40 @@ public interface JSHelper {
         }
     }
 
+    default boolean wheelScrollUpAndIsDisplayed(WebDriver driver, WebElement scrolArea, WebElement element){
+        for (int i=0; i<4; i++)  {
+            if(isElementShown(driver, element, 0)){
+                wheelScroll(driver, scrolArea, 500, 0,0);
+                return true;
+            }
+            wheelScroll(driver, scrolArea, -200, 0,0);
+        }
+        return false;
+    }
+
+    default void wheelScroll(WebDriver driver, WebElement element, int deltaY, int offsetX, int offsetY){
+        try{
+            String script = "var element = arguments[0];"
+                    +"var deltaY = arguments[1];"
+                    +"var box = element.getBoundingClientRect();"
+                    +"var clientX = box.left + (arguments[2] || box.width / 2);"
+                    +"var clientY = box.top + (arguments[3] || box.height / 2);"
+                    +"var target = element.ownerDocument.elementFromPoint(clientX, clientY);"
+                    +"for (var e = target; e; e = e.parentElement) {"
+                    +"if (e === element) {"
+                    +"target.dispatchEvent(new MouseEvent('mouseover', {view: window, bubbles: true, cancelable: true, clientX: clientX, clientY: clientY}));"
+                    +"target.dispatchEvent(new MouseEvent('mousemove', {view: window, bubbles: true, cancelable: true, clientX: clientX, clientY: clientY}));"
+                    +"target.dispatchEvent(new WheelEvent('wheel',     {view: window, bubbles: true, cancelable: true, clientX: clientX, clientY: clientY, deltaY: deltaY}));"
+                    +"return;"
+                    +"}"
+                    +"}";
+
+            ((JavascriptExecutor) driver).executeScript(script, element, deltaY, offsetX, offsetY);
+        }catch(WebDriverException e) {
+            e.printStackTrace();
+        }
+    }
+
     default void scrollToElem(WebDriver driver, WebElement element, String elemName){
         try {
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
@@ -88,8 +122,6 @@ public interface JSHelper {
             Assert.fail(elemName +" is not found");
         }
     }
-
-
 
     default void executeAngularClick(WebDriver driver, WebElement elem){
         JavascriptExecutor jsExec = (JavascriptExecutor) driver;
