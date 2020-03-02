@@ -410,7 +410,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(createdCrmTicket.get().getCreatedDate(), formatter).atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
 
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("d MMM yyyy");
 
 
         return dateTimeFromBackend.format(formatter1).toLowerCase();

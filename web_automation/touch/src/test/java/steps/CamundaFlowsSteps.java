@@ -67,7 +67,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
             boolean hasNull = false;
             for (String key: conversation.keySet()){
                 String date = conversation.get(key);
-                if (date == null && date.isEmpty()){
+                if (date == null || date.isEmpty()){
                     waitFor(1000);
                     hasNull = true;
                     break;

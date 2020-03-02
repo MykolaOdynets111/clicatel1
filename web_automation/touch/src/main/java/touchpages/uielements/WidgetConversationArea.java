@@ -52,9 +52,9 @@ public class WidgetConversationArea extends AbstractUIElement {
                     .setCurrentDriver(this.getCurrentDriver()).getMessageText();
     }
 
-    public String getSecondResponseTextOnUserInput(String userMessageText) {
+    public String getCertaiNumberResponseTextOnUserInput(String userMessageText, int place) {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText))
-                .setCurrentDriver(this.getCurrentDriver()).getSecondMessageText();
+                .setCurrentDriver(this.getCurrentDriver()).getMessageTextFromCertainPlace(place);
     }
 
 
@@ -63,9 +63,9 @@ public class WidgetConversationArea extends AbstractUIElement {
                 .setCurrentDriver(this.getCurrentDriver()).isTextResponseShown(wait);
     }
 
-    public boolean isSecondTextResponseShownFor(String userMessageText, int wait) {
+    public boolean isResponseTextShownOnCorrectPlace(String userMessageText, int wait, int place) {
         return new ToUserTextMessage(getFromUserWebElement(userMessageText))
-                .setCurrentDriver(this.getCurrentDriver()).isSecondResponseShown(wait);
+                .setCurrentDriver(this.getCurrentDriver()).isCorrectSizeOfRespondersShown(wait, place);
     }
 
     public boolean isSecondTextResponseNotShownFor(String userMessageText, int wait) {

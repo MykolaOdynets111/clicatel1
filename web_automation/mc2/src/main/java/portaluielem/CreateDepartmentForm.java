@@ -30,7 +30,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
 
     @Step(value = "Set text to the Name field")
     public CreateDepartmentForm setNameField(String name){
-        clickElem(this.getCurrentDriver(), nameField, 1, "name field");
+        clickElem(this.getCurrentDriver(), nameField, 3, "name field");
         nameField.clear();
         nameField.sendKeys(name);
         return this;

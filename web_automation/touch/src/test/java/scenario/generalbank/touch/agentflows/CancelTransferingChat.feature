@@ -1,6 +1,5 @@
 Feature: Canceling chat transfer
 
-
   Background:
     Given User select General Bank Demo tenant
     Given I login as agent of General Bank Demo

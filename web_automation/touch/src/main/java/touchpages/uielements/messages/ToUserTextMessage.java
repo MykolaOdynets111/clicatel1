@@ -33,22 +33,22 @@ public class ToUserTextMessage extends AbstractWidget {
         }
     }
 
-    public String getSecondMessageText() {
+    public String getMessageTextFromCertainPlace(int place) {
         for(int i=0; i<4; i++){
             if (toUserTextMessages.size()>1) break;
             else waitFor(500);
         }
         try{
-            if(toUserTextMessages.get(2).getText().isEmpty())  waitFor(1000);
-            return toUserTextMessages.get(2).getText();
+            if(toUserTextMessages.get(place).getText().isEmpty())  waitFor(1000);
+            return toUserTextMessages.get(place).getText();
         } catch (IndexOutOfBoundsException e) {
             return "no text response found";
         }
     }
 
-    public boolean isSecondResponseShown(int wait){
+    public boolean isCorrectSizeOfRespondersShown(int wait, int place){
         for(int i = 0; i <= wait; i++ ){
-            if(toUserTextMessages.size()==3){
+            if(toUserTextMessages.size()==place){
                 return true;
             }else {
                 waitFor(1000);

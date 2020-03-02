@@ -11,7 +11,6 @@ import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
@@ -390,17 +389,18 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     /**Method that strictly verifies is there expected response shown as an second response in the widget
      * @param textResponse expected text response
+     * @param place expected place for text response
      * @param userInput user input on which we are expecting response
      */
-    @Then("^User have to receive '(.*)' (?:text response|url) as a second response for his '(.*)' input$")
-    public void verifySecondTextResponse(String textResponse, String userInput) {
+    @Then("^User have to receive '(.*)' (?:text response|url) as a (.*) response for his '(.*)' input$")
+    public void verifySecondTextResponse(String textResponse, int place, String userInput) {
         int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
-        softAssert.assertTrue(widgetConversationArea.isSecondTextResponseShownFor(userInput, waitForResponse),
+        softAssert.assertTrue(widgetConversationArea.isResponseTextShownOnCorrectPlace(userInput, waitForResponse, place),
                 "No second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
-        softAssert.assertEquals(widgetConversationArea.getSecondResponseTextOnUserInput(userInput).replace("\n", "")
+        softAssert.assertEquals(widgetConversationArea.getCertaiNumberResponseTextOnUserInput(userInput, place-1).replace("\n", "")
                 , expectedTextResponse,
                 "Incorrect second text response is shown on '"+userInput+"' user's input (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
         softAssert.assertAll();

@@ -14,7 +14,7 @@ Feature: Agent should be able to filter flagged chats
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     When Agent responds with hello to User
-    Then User have to receive 'hello' text response as a second response for his 'to agent' input
+    Then User should see 'hello' text response for his 'to agent' input
     When Agent click 'Unflag chat' button
     Then Agent should not see from user chat in agent desk
 
