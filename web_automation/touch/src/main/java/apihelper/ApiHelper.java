@@ -415,14 +415,18 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)){
             currentConfiguration.setRatingEnabled(ratingEnabled);
-            Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                    .accept(ContentType.ANY)
-                    .contentType(ContentType.JSON).body(currentConfiguration)
-                    .put(String.format(Endpoints.SURVEY_MANAGEMENT, channelID));
-            if(!(resp.statusCode()==200)) {
-                Assert.fail("Failed to update survey with  " + ratingEnabled + " status, status code = " + resp.statusCode()+
-                        "\n Body: " + resp.getBody().asString());
-            }
+            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID);
+        }
+    }
+
+    public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID ){
+        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON).body(configuration)
+                .put(String.format(Endpoints.SURVEY_MANAGEMENT, channelID));
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Failed to update survey, status code = " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
         }
     }
 

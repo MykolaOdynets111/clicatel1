@@ -393,7 +393,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
      * @param userInput user input on which we are expecting response
      */
     @Then("^User have to receive '(.*)' (?:text response|url) as a (.*) response for his '(.*)' input$")
-    public void verifySecondTextResponse(String textResponse, int place, String userInput) {
+    public void verifyCertainTextResponse(String textResponse, int place, String userInput) {
         int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
         SoftAssert softAssert = new SoftAssert();
@@ -778,6 +778,14 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         return expectedTextResponse;
     }
 
+    @Then("^Tenant photo is shown on widget$")
+    public void verifyTenantImageIsShownOnChatdesk(){
+        clickChatIcon();
+        Assert.assertTrue(widget.isTenantImageShown(),"Tenant image is not shown on widget");
+    }
+
+
+
     // ======================= Private Getters ========================== //
 
     private WelcomeMessages getWelcomeMessages() {
@@ -825,16 +833,5 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                 "aqa_quoterequest"+System.currentTimeMillis()+"@aqa.com"                          // email
         ));
     }
-
-
-
-    @Then("^Tenant photo is shown on widget$")
-    public void verifyTenantImageIsShownOnChatdesk(){
-        clickChatIcon();
-        Assert.assertTrue(widget.isTenantImageShown(),"Tenant image is not shown on widget");
-    }
-
-
-
 
 }

@@ -132,4 +132,28 @@ public class SurveyManagement {
         this.additionalProperties.put(name, value);
     }
 
+    public void updateSomeValueByMethodName(String methodName, String value){
+        if(methodName.equals("setRatingEnabled")){
+          setRatingEnabled(Boolean.valueOf(value));
+        } else if (methodName.equals("setRatingTimeout")){
+            setRatingTimeout(value);
+        } else if (methodName.equals("setRatingThanksMessage")){
+            setRatingThanksMessage(value);
+        } else if(methodName.equals("setSurveyQuestionTitle")){
+            setSurveyQuestionTitle(value);
+        } else if (methodName.equals("setCustomerNoteTitle")){
+            setCustomerNoteTitle(value);
+        } else if (methodName.equals("setCommentEnabled")){
+            setCommentEnabled(Boolean.valueOf(value));
+        } else if (methodName.equals("setRatingScale")){
+            setRatingScale(value);
+        } else if (methodName.equals("setRatingIcon")){
+            setRatingIcon(value);
+        } else if (methodName.equals("setRatingType")){
+            setRatingType(value);
+        } else {
+            new AssertionError("Was provided incorrect update type :" + value);
+        }
+
+    }
 }
