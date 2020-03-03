@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 @FindBy(css = "div.ctl-conversation-area")
 public class WidgetConversationArea extends AbstractUIElement {
 
+    private SurveyForm surveyForm;
+
+    public SurveyForm getSurveyForm() {
+        surveyForm.setCurrentDriver(this.getCurrentDriver());
+        return surveyForm;
+    }
     @FindBy(css = "li.ctl-chat-message-container.message-to")
     private WebElement salutationElement;
 

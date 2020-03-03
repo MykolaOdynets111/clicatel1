@@ -23,6 +23,7 @@ import steps.agentsteps.AgentConversationSteps;
 import steps.portalsteps.BasePortalSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
+import touchpages.uielements.SurveyForm;
 import touchpages.uielements.TouchActionsMenu;
 import touchpages.uielements.WidgetConversationArea;
 import touchpages.uielements.WidgetHeader;
@@ -40,6 +41,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     private MainPage mainPage;
     private Widget widget;
     private WidgetConversationArea widgetConversationArea;
+    private SurveyForm surveyForm;
     private WidgetHeader widgetHeader;
     private TouchActionsMenu touchActionsMenu;
     private WelcomeMessages welcomeMessages;
@@ -784,6 +786,25 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Assert.assertTrue(widget.isTenantImageShown(),"Tenant image is not shown on widget");
     }
 
+    // ========================== Survey steps ========================= //
+
+    @Then("^User see (.*) survey form")
+    public void verifySurveyFormIsDisplayed(String surveyType){
+        surveyForm = widgetConversationArea.getSurveyForm();
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(surveyForm.isSurveyDisplayed(), "Survey form is not shown");
+        if(surveyType.equalsIgnoreCase("NPS")) {
+            soft.assertTrue(surveyForm.isNPCRatingScaleDisplayed(), surveyType + " rating form is not displayed");
+        } else if (surveyType.equalsIgnoreCase("CSAT")){
+            soft.assertTrue(surveyForm.isCSATRatingScaleDisplayed(), surveyType + "Survey Type rating form is not displayed");
+        }
+        soft.assertAll();
+    }
+
+    @When("^Submit survey form")
+    public void submitSurveyForm(){
+        surveyForm.selectRatingNumber("10").setComment("Automation Default Comment").clickSubmitReviewButton();
+    }
 
 
     // ======================= Private Getters ========================== //

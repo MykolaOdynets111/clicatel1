@@ -11,15 +11,15 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-@Test(groups = "Departments tests")
+@Test(groups = "Survey tests")
 @CucumberOptions(
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/standardbilling/departments",
+        features ="src/test/java/scenario/standardbilling/satisfactionsurvey",
         glue ="steps")
 
-public class RunDepartmentsTest {
+public class RunSurveyTest {
 
         @Factory
         public Object[] features() {
