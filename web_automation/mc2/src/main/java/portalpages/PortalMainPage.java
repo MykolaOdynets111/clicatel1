@@ -57,7 +57,7 @@ public class PortalMainPage extends PortalAbstractPage {
 
     public PortalMainPage(WebDriver driver) {
         super(driver);
-        closeUpdatePolicyPopup();
+//        closeUpdatePolicyPopup();
     }
     public PortalMainPage(String agent) {
         super(agent);

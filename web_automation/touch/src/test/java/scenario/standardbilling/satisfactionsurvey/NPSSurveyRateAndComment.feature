@@ -1,12 +1,13 @@
 
-Feature: Survey Management: Test Main Flow with NSP
+Feature: Satisfaction Survey: Test Main Flow with NSP
 
   Background:
     And User select Standard Billing tenant
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | setRatingEnabled | true             |
-      | setRatingType    | NPS              |
-      | setRatingScale   | ZERO_TO_TEN      |
+      | setRatingEnabled   | true             |
+      | setRatingType      | NPS              |
+      | setRatingScale     | ZERO_TO_TEN      |
+      | setCommentEnabled  | true             |
     Given I login as agent of Standard Billing
     And Click chat icon
 
@@ -17,5 +18,5 @@ Feature: Survey Management: Test Main Flow with NSP
     And Agent click on new conversation request from touch
     When Agent closes chat
     Then User see NPS survey form
-    When Submit survey form
+    When Submit survey form with Automation comment comment and 10 rate
     Then Text response that contains "Thank you. Chat soon!" is shown

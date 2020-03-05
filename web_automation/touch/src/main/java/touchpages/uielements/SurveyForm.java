@@ -21,10 +21,10 @@ public class SurveyForm extends AbstractUIElement {
     @FindBy(css = ".rate-input label")
     private List<WebElement> ratingNumbers;
 
-    @FindBy(css = ".rate-input.zero_to_ten")
+    @FindBy(css = "[class^='rate-input zero_to']")
     private WebElement npcRatingScale;
 
-    @FindBy(css = ".rate-input.one_to_ten")
+    @FindBy(css = "[class^='rate-input one_to']")
     private WebElement csatRatingScale;
 
     @FindBy(css = ".ctl-rate-button.ctl-button-primary")
@@ -51,6 +51,10 @@ public class SurveyForm extends AbstractUIElement {
 
     public void clickSubmitReviewButton() {
         clickElem(this.getCurrentDriver(), submitReviewButton, 1, "Submit Review button is not found");
+    }
+
+    public boolean isCommentFieldShown(){
+        return isElementShown(this.getCurrentDriver(), commentInput, 1);
     }
 
     public SurveyForm setComment(String comment){

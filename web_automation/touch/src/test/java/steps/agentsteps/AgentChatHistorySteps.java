@@ -126,8 +126,10 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @When("^(.*) searches and selects chat in chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
+        if (userId == null) userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         getLeftMenu(ordinalAgentNumber).searchUserChat(userId);
     }
+
 
     @When("Close chat to generate history record")
     public void closeChat() {
@@ -143,6 +145,22 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
                 "Shown on chatdesk messages are not as expected from API \n" +
                         "Expected list: " + expectedMessagesList + "\n" +
                         "Actual list: " + messagesFromChatBody);
+    }
+
+    @Then("^(.*) sees Rate Card in chat history with (.*) rate selected and (.*) comment$")
+    public void verifyRateCardPresent(String agent, String rate, String comment){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getChatBody(agent).isRateCardShown(), "No Rate card was shown");
+        soft.assertEquals(getChatBody(agent).getRate(), rate, "Selected rate not as expected");
+        if(!comment.equalsIgnoreCase("no")){
+            soft.assertEquals(getChatBody(agent).getRateCardComment(), comment, "User comment not as expected");
+        }
+        soft.assertAll();
+    }
+
+    @Then("^(.*) does not see Rate Card in chat history$")
+    public void verifyNoRateCardIsPresent(String agent){
+        Assert.assertFalse(getChatBody(agent).isRateCardShown(), "Unexpected Rate card was shown");
     }
 
     private List<String> getExpectedChatHistoryItems(ChatHistory chatHistory){

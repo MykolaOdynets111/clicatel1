@@ -45,6 +45,16 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "[selenium-id=chat-message-content-InputCardMessage]")
     private WebElement userInfoCard;
 
+    @FindBy(css = ".rate-card-submit-message")
+    private WebElement rateCard;
+
+    @FindBy(css = ".rate-input label.checked input")
+    private  WebElement selectedRate;
+
+    @FindBy(css = ".rate-card-feedback-text")
+    private  WebElement rateCardComment;
+
+
     private WebElement getFromUserWebElement(String messageText) {
         try {
             AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
@@ -168,4 +178,17 @@ public class ChatBody extends AbstractUIElement {
         }
         return isValidIcon;
     }
+
+    public boolean isRateCardShown(){
+        return isElementShown(this.getCurrentDriver(), rateCard, 3);
+    }
+
+    public String getRate(){
+        return selectedRate.getAttribute("value");
+    }
+
+    public String getRateCardComment(){
+       return getTextFromElem(this.getCurrentDriver(), rateCardComment, 1, "Comment is not present in rate Card");
+    }
+
 }

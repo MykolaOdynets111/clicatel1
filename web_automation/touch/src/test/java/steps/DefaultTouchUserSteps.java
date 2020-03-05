@@ -788,7 +788,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     // ========================== Survey steps ========================= //
 
-    @Then("^User see (.*) survey form")
+    @Then("^User see (.*) survey form$")
     public void verifySurveyFormIsDisplayed(String surveyType){
         surveyForm = widgetConversationArea.getSurveyForm();
         SoftAssert soft = new SoftAssert();
@@ -801,9 +801,23 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         soft.assertAll();
     }
 
-    @When("^Submit survey form")
-    public void submitSurveyForm(){
-        surveyForm.selectRatingNumber("10").setComment("Automation Default Comment").clickSubmitReviewButton();
+    @When("^Submit survey form with (.*) comment and (.*) rate$")
+    public void submitSurveyForm(String comment, String rate){
+        if(comment.equalsIgnoreCase("no")){
+            surveyForm.selectRatingNumber(rate).clickSubmitReviewButton();
+        } else {
+            surveyForm.selectRatingNumber(rate).setComment(comment).clickSubmitReviewButton();
+        }
+    }
+
+    @When("^Reject survey form submit$")
+    public void rejectSurveyForm(){
+        surveyForm.clickNoThanksButton();
+    }
+
+    @Then("^No comment field in Survey form is shown$")
+    public void noCommentFieldVerification(){
+        Assert.assertFalse(surveyForm.isCommentFieldShown(), "Unexpected comment field is shown");
     }
 
 

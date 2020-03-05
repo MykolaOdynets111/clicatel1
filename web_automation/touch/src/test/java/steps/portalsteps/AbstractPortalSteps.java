@@ -46,6 +46,9 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
 
+    private static ThreadLocal<SurveyManagementPage> surveyManagementPage = new ThreadLocal<>();
+
+
     public static Faker faker = new Faker();
 
     // -- Getters and Setters -- //
@@ -273,6 +276,16 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
             return departmentsManagementPage.get();
         }
     }
+
+    public static SurveyManagementPage getSurveyManagementPage(){
+        if (surveyManagementPage.get()==null) {
+            surveyManagementPage.set(new SurveyManagementPage(DriverFactory.getDriverForAgent("admin")));
+            return surveyManagementPage.get();
+        } else{
+            return surveyManagementPage.get();
+        }
+    }
+
     public static void setChatConsoleInboxPage(ChatConsoleInboxPage chatConsoleInbox) {
         chatConsoleInboxPage.set(chatConsoleInbox);
     }
