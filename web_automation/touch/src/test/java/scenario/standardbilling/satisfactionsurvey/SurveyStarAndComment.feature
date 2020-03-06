@@ -12,7 +12,7 @@ Feature: Satisfaction Survey: Star and Comment
     Given I login as agent of Standard Billing
     And Click chat icon
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19274")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19271")
   Scenario: Verify if user can "star rate and add comments" through web chat for CSAT survey type
     When User enter connect to Support into widget input field
     Then Agent has new conversation request

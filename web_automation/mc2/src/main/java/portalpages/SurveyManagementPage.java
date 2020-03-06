@@ -13,10 +13,12 @@ public class SurveyManagementPage extends PortalAbstractPage{
     @FindBy(xpath = "//a[contains(text(), 'Survey management')]")
     private WebElement pageTitle;
 
+    @FindBy(xpath = "//div[text()='You have successfully saved your survey']")
+    private WebElement saveMessage;
+
     private SurveyWebChatForm surveyWebChatForm;
 
     public SurveyWebChatForm getSurveyWebChatForm(){
-        switchToFrame();
         surveyWebChatForm.setCurrentDriver(this.getCurrentDriver());
         return surveyWebChatForm;
     }
@@ -46,4 +48,7 @@ public class SurveyManagementPage extends PortalAbstractPage{
         return isElementShown(this.getCurrentDriver(), pageTitle, 5);
     }
 
+    public void waitSaveMessage(){
+        waitForElementToBeVisible(this.getCurrentDriver(), saveMessage, 5);
+    }
 }
