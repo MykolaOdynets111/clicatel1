@@ -176,10 +176,15 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void updateTafMessage(TafMessage tafMessage){
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-        RestAssured.given().log().all()
+        Response resp = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
                     .body(Arrays.asList(tafMessage))
                     .put(url);
+        if (! (resp.getStatusCode() == 200)){
+            Assert.fail("Update Taf failed \n"
+                    +"Status code: " +resp.statusCode() + "\n"
+                    + "Error message: " + resp.getBody().asString());
+        }
     }
 
     public static String getTenantMessageText(String id) {

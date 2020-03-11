@@ -54,8 +54,23 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(css = ".ctl-rate-textarea-title")
     private WebElement commentFieldHeader;
 
+    @FindBy(name = "surveyQuestionTitle")
+    private WebElement questionInput;
+
+    @FindBy(css = ".ctl-rate-input-title")
+    private WebElement questionPreview;
+
+    @FindBy(xpath="//div[text()='Smiles and stars available only in CSAT mode']")
+    private WebElement ratingTypesUnavailableMessage;
+
+
     public SurveyWebChatForm clickCSATRadioButton(){
         clickElem(this.getCurrentDriver(), csatRadioButton, 2, "CSAT radio button is not found");
+        return this;
+    }
+
+    public SurveyWebChatForm clickNPSRadioButton(){
+        clickElem(this.getCurrentDriver(), npsRadioButton, 2, "NPS radio button is not found");
         return this;
     }
 
@@ -120,4 +135,22 @@ public class SurveyWebChatForm extends BasePortalWindow{
         return isElementShown(this.getCurrentDriver(), commentFieldHeader, 2);
     }
 
+    public void changeQuestion(String guestion){
+            questionInput.clear();
+            inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", guestion);
+    }
+
+    public String getPreviewQuestion(){
+        return getTextFromElem(this.getCurrentDriver(), questionPreview, 1, "Question Preview");
+    }
+
+    public boolean isSmileButtonDisabled(){
+        moveToElement(this.getCurrentDriver(), smileButton);
+        return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
+    }
+
+    public boolean isStarButtonDisabled(){
+        moveToElement(this.getCurrentDriver(), starButton);
+        return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
+    }
 }
