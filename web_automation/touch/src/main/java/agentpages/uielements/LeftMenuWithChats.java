@@ -59,9 +59,15 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=tab-navigation-panel-closed]")
     private WebElement closed;
 
+    @FindBy(css = "[selenium-id=open-filter-tab-btn]")
+    private WebElement filterButton;
+
+
     private String targetProfile = "//div[contains(@class, 'info')]/h2[text()='%s']";
 
     private String loadingSpinner = "//*[text()='Connecting...']";
+
+    private FilterMenu filterMenu;
 
     private WebElement getTargetChat(String userName){
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
@@ -223,5 +229,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
         catch (TimeoutException e){
             return false;
         }
+    }
+
+    public void applyLiveChatsFilters(String chanel, String sentiment, boolean flagged){
+        clickElem(this.getCurrentDriver(), filterButton, 1, "Filters Button");
+        filterMenu.setCurrentDriver(this.getCurrentDriver());
+        if (!chanel.equalsIgnoreCase("no")) {}
+        if (!sentiment.equalsIgnoreCase("no")) {}
+        if (flagged) {filterMenu.selectFlaggedCheckbox();}
+        filterMenu.clickApplyButton();
     }
 }

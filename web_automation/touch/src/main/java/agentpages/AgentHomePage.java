@@ -58,7 +58,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div > div.active")
     private WebElement customer360Button;
 
-    @FindBy(css = ".cl-r-tabs__tab.cl-r-tabs__tab--selected")
+    @FindBy(css = "#right-panel .cl-r-tabs__tab.cl-r-tabs__tab--selected")
     private WebElement selectedTab;
 
     @FindBy(css = ".cl-r-no-chats-found")

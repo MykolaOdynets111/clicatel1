@@ -173,6 +173,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getLeftMenu(agent).selectChatsMenu(option);
     }
 
+    @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
+    public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
+        getLeftMenu(agent).applyLiveChatsFilters(channel, sentiment, flagged);
+    }
+
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
         String userName=null;
