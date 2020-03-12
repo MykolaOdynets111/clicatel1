@@ -23,6 +23,6 @@ Feature: Supervisor in box : assign ticket manually
     And Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on second agent
-    And Second agent select "Tickets" filter option
+    And Second agent select "Tickets" left menu option
     Then Second agent has new conversation request from dotcontrol user
     And Second agent is set as 'current agent' for dot control ticket

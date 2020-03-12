@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Collections;
 
 public class DefaultAgentSteps extends AbstractAgentSteps {
 
@@ -169,17 +168,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Expected to user message '"+userMessage+"' is not shown in chatdesk");
     }
 
-    @Then("^(.*) select \"(.*)\" filter option$")
+    @Then("^(.*) select \"(.*)\" left menu option$")
     public void selectFilterOption(String agent,String option){
-        getLeftMenu(agent).selectFilterOption(option);
-    }
-
-    @Then("^Agent see \"(.*)\" filter options$")
-    public void seeFilterOptions(List<String> option){
-        List<String> displayedFilterOptions = getLeftMenu("main agent").getFilterOption();
-        Collections.sort(option);
-        Collections.sort(displayedFilterOptions);
-        Assert.assertEquals(displayedFilterOptions , option, "Wrong filter options \n ");
+        getLeftMenu(agent).selectChatsMenu(option);
     }
 
     @Then("^(.*) has new conversation request from (.*) user$")

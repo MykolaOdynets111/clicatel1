@@ -4,7 +4,7 @@ Feature: Chat handling in out of support hours for for Bot mode tenant
   Background:
     Given Taf out_of_support_hours is set to true for Automation Bot tenant
     Given I login as agent of Automation Bot
-    And Agent select "Tickets" filter option
+    And Agent select "Tickets" left menu option
     Given Set agent support hours with day shift
     Given User select Automation Bot tenant
     And Click chat icon
@@ -34,7 +34,7 @@ Feature: Chat handling in out of support hours for for Bot mode tenant
     When Set agent support hours for all week
     When User enter chat to support into widget input field
     And Overnight ticket is removed from agent chatdesk
-    And Agent select "Live Chats" filter option
+    And Agent select "Live Chats" left menu option
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     And Conversation area contains out_of_support_hours to user message

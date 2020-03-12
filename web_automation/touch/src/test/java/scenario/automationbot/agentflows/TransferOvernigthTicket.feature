@@ -3,7 +3,7 @@ Feature: Transfer overnight ticket
 
   Background:
     Given I login as agent of Automation Bot
-    And Agent select "Tickets" filter option
+    And Agent select "Tickets" left menu option
     Given Set agent support hours with day shift
     Given User select Automation Bot tenant
     And Click chat icon
@@ -17,7 +17,7 @@ Feature: Transfer overnight ticket
     And Message that it is overnight ticket is shown for Agent
     Given I login as second agent of Automation Bot
     And Agent transfers overnight ticket
-    And Second Agent select "Tickets" filter option
+    And Second Agent select "Tickets" left menu option
     Then Second Agent has new conversation request
     When Second agent click on new conversation
     And Message that it is overnight ticket is shown for Second Agent

@@ -4,7 +4,7 @@ Feature: Departments: Verify if possible to transfer overnight ticket to departm
 
   Background:
     Given I login as agent of Standard Billing
-    And Agent select "Tickets" filter option
+    And Agent select "Tickets" left menu option
     Given Set agent support hours with day shift
     And New departments with AutomationSecond name AutoDescriptionSecond description and second agent is created
     Given User select Standard Billing tenant
@@ -17,5 +17,5 @@ Feature: Departments: Verify if possible to transfer overnight ticket to departm
     Given I login as second agent of Standard Billing
     When First Agent click on new conversation
     And Agent transfers chat to AutomationSecond department
-    When Second agent select "Tickets" filter option
+    When Second agent select "Tickets" left menu option
     Then Second agent has new conversation request

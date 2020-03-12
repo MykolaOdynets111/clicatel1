@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import apihelper.ApiHelper;
 import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -21,12 +22,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=roster-item]")
     private List<WebElement> newConversationRequests;
-
-    @FindAll({
-            @FindBy(css = "[selenium-id=icon-arrow-down]"),
-            @FindBy(css = ".cl-r-icon-arrow-down") //old locator
-    })
-    private WebElement expandFilterButton;
 
     @FindBy(css = "[selenium-id=filter-dropdown-menu]")
     private WebElement filterDropdownMenu;
@@ -54,6 +49,15 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=unread-msg-count]")
     private WebElement userMsgCount;
+
+    @FindBy(css = "[selenium-id=tab-navigation-panel-live chats]")
+    private WebElement liveChats;
+
+    @FindBy(css = "[selenium-id=tab-navigation-panel-tickets]")
+    private WebElement tickets;
+
+    @FindBy(css = "[selenium-id=tab-navigation-panel-closed]")
+    private WebElement closed;
 
     private String targetProfile = "//div[contains(@class, 'info')]/h2[text()='%s']";
 
@@ -138,19 +142,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public void selectFilterOption(String option){
-        expandFilterButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), filterDropdownMenu, 4);
-        filterOptions.stream()
-                .filter(e -> e.getText().toLowerCase().contains(option.toLowerCase()))
-                .findFirst().get()
-                .click();
-    }
-
-    public List<String> getFilterOption(){
-        expandFilterButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), filterDropdownMenu, 10);
-        return filterOptions.stream().map(e -> e.getText()).collect(Collectors.toList());
+    public void selectChatsMenu(String option){
+       if (option.equalsIgnoreCase("Live Chats")){
+           clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu" );
+       } else if (option.equalsIgnoreCase("Tickets")){
+           clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu" );
+       }else if (option.equalsIgnoreCase("Closed")) {
+           clickElem(this.getCurrentDriver(), closed, 1, "Tickets menu");
+       } else {
+           new AssertionError("Incorrect menu option was provided");
+       }
     }
 
     public void searchUserChat(String userId){
@@ -181,9 +182,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
          return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isValidIconSentiment(message);
     }
 
-    public String getExpandFilterButtonColor() {
-        return Color.fromString(expandFilterButton.getCssValue("color")).asHex();
-    }
+//    public String getExpandFilterButtonColor() {
+//        return Color.fromString(expandFilterButton.getCssValue("color")).asHex();
+//    }
 
     public String getUserPictureColor() {
         return Color.fromString(userPicture.getCssValue("background-color")).asHex();

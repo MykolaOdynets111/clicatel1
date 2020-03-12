@@ -22,7 +22,7 @@ Feature: Supervisor in box : route ticket to scheduler
     When Click three dots for dot control ticket
     And Click 'Route to scheduler' button
     When I login as second agent of Automation Bot
-    And Second agent select "Tickets" filter option
+    And Second agent select "Tickets" left menu option
     Then Second agent has new conversation request from dotcontrol user
     And Second agent is set as 'current agent' for dot control ticket
 
