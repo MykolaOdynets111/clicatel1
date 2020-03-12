@@ -126,7 +126,6 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         soft.assertTrue(surveyWebChatForm.isStarButtonDisabled(), "Star button is enabled");
         soft.assertAll();
         getSurveyManagementPage().switchToDefaultFrame();
-
     }
 
 }

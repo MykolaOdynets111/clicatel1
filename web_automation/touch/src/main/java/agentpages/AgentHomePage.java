@@ -20,7 +20,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
 
-    @FindBy(xpath = "//li[text()='Assist']")
+    @FindBy(css = ".cl-r-suggestions-count")
     private WebElement agentAssistantButton;
 
     @FindAll({
