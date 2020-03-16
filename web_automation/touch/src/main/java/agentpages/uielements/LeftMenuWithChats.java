@@ -1,21 +1,17 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import apihelper.ApiHelper;
 import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @FindBy(css = "[selenium-id=scrollable-roster]")
 public class LeftMenuWithChats extends AbstractUIElement {
@@ -41,6 +37,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=roster-scroll-container]")
     private WebElement scrollableArea;
 
+    @FindBy(css = "[selenium-id='search-filter-btn']")
+    private WebElement searchButton;
+
     @FindBy(xpath = "//div[@class='scrollable-roster']//input")
     private WebElement searchChatInput;
 
@@ -62,6 +61,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=open-filter-tab-btn]")
     private WebElement filterButton;
 
+    @FindBy(xpath =".//span[@class='cl-r-filter-button__label']/following-sibling::button")
+    private WebElement filterRemove;
 
     private String targetProfile = "//div[contains(@class, 'info')]/h2[text()='%s']";
 
@@ -156,14 +157,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
        }else if (option.equalsIgnoreCase("Closed")) {
            clickElem(this.getCurrentDriver(), closed, 1, "Tickets menu");
        } else {
-           new AssertionError("Incorrect menu option was provided");
+           throw new AssertionError("Incorrect menu option was provided");
        }
     }
 
     public void searchUserChat(String userId){
-        waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 8);
+        clickElem(this.getCurrentDriver(), searchButton, 1, "Search Button");
+        waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
         searchChatInput.sendKeys(userId);
-        searchChatInput.sendKeys(Keys.ENTER);
         getTargetChat(userId).click();
     }
 
@@ -234,9 +235,14 @@ public class LeftMenuWithChats extends AbstractUIElement {
     public void applyLiveChatsFilters(String chanel, String sentiment, boolean flagged){
         clickElem(this.getCurrentDriver(), filterButton, 1, "Filters Button");
         filterMenu.setCurrentDriver(this.getCurrentDriver());
-        if (!chanel.equalsIgnoreCase("no")) {}
-        if (!sentiment.equalsIgnoreCase("no")) {}
+        if (!chanel.equalsIgnoreCase("no")) {filterMenu.fillChannelInputField(chanel);}
+        if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}
         if (flagged) {filterMenu.selectFlaggedCheckbox();}
         filterMenu.clickApplyButton();
     }
+
+    public void removeFilter(){
+        clickElem(this.getCurrentDriver(), filterRemove, 1, "Filter Remove button");
+    }
+
 }

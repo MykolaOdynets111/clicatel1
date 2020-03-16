@@ -171,11 +171,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) select \"(.*)\" left menu option$")
     public void selectFilterOption(String agent,String option){
         getLeftMenu(agent).selectChatsMenu(option);
+        getLeftMenu(agent).waitForConnectingDisappear(2,5);
     }
 
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
-        getLeftMenu(agent).applyLiveChatsFilters(channel, sentiment, flagged);
+        getLeftMenu(agent).applyLiveChatsFilters(channel.trim(), sentiment.trim(), flagged);
+    }
+
+    @When("(.*) remove Chat Filter$")
+    public void removeFilter(String agent){
+        getLeftMenu(agent).removeFilter();
     }
 
     @Then("^(.*) has new conversation request from (.*) user$")
