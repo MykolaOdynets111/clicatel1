@@ -79,7 +79,8 @@ public class ChatInLeftMenu extends AbstractWidget {
 
     public boolean isValidImg(String adapter) {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/" + adapter + ".png");
-          return isWebElementEqualsImage(this.getCurrentDriver(), adapterIcon,image);
+        waitForElementToBeVisible(this.getCurrentDriver(), adapterIcon,4);
+        return isWebElementEqualsImage(this.getCurrentDriver(), adapterIcon,image);
     }
 
 
