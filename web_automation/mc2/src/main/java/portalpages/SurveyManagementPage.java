@@ -45,7 +45,7 @@ public class SurveyManagementPage extends PortalAbstractPage{
     }
 
     public boolean isSurveyManagementPage() {
-        return isElementShown(this.getCurrentDriver(), pageTitle, 5);
+        return isElementShown(this.getCurrentDriver(), pageTitle, 40);
     }
 
     public void waitSaveMessage(){

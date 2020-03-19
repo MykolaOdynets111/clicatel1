@@ -1,14 +1,14 @@
 
-Feature: Satisfaction Survey: Star and Comment
+Feature: Satisfaction Survey: User select Star and Comment with CSAT
 
   Background:
     And User select Standard Billing tenant
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | setRatingEnabled   | true              |
-      | setRatingType      | CSAT              |
-      | setRatingScale     | ONE_TO_FIVE       |
-      | setRatingIcon      | STAR              |
-      | setCommentEnabled  | true              |
+      | ratingEnabled   | true              |
+      | ratingType      | CSAT              |
+      | ratingScale     | ONE_TO_FIVE       |
+      | ratingIcon      | STAR              |
+      | commentEnabled  | true              |
     Given I login as agent of Standard Billing
     And Click chat icon
 

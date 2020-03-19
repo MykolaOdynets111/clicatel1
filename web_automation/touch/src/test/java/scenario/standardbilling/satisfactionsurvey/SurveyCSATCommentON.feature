@@ -4,10 +4,10 @@ Feature: Satisfaction Survey: Comment enabling
 
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | setRatingEnabled   | true             |
-      | setRatingType      | CSAT             |
-      | setRatingScale     | ONE_TO_TEN       |
-      | setRatingIcon      | NUMBER           |
+      | ratingEnabled   | true             |
+      | ratingType      | CSAT             |
+      | ratingScale     | ONE_TO_TEN       |
+      | ratingIcon      | NUMBER           |
       | commentEnabled     | false            |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
@@ -21,4 +21,6 @@ Feature: Satisfaction Survey: Comment enabling
     And Agent switch "Allow customer to leave a note" in survey management
     When Agent click save survey configuration button
     Then Agent sees comment field in Survey management form
+    Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
+      | commentEnabled     | true       |
 

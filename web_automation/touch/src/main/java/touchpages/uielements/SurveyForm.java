@@ -37,6 +37,10 @@ public class SurveyForm extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), npcRatingScale, 2);
     }
 
+    public boolean isNPSCorrectScaleSHown(){
+        return ratingNumbers.size() == 11;
+    }
+
     public boolean isCSATRatingScaleDisplayed(){
         return isElementShown(this.getCurrentDriver(), csatRatingScale, 2);
     }

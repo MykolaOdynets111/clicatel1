@@ -1,6 +1,6 @@
 @no_widget
 @no_chatdesk
-Feature: Satisfaction Survey: Question configuration CSAT
+Feature: Satisfaction Survey: Comment enabling
 
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing
@@ -8,15 +8,19 @@ Feature: Satisfaction Survey: Question configuration CSAT
       | ratingType      | NPS              |
       | ratingScale     | ZERO_TO_TEN      |
       | ratingIcon      | NUMBER           |
+      | commentEnabled  | false            |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19243")
-  Scenario: Verify if tenant can customize his own survey questions for CSAT survey type
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-18587")
+  Scenario: verify if supervisor has an option to allow customer to leave a note for webchat NPS survey type
     When I select Touch in left menu and Touch Preferences in submenu
     And Click "Survey management" nav button
     Then Survey Management page should be shown
-    When Selects CSAT survey type
-    And Customize your survey question
+    When Selects NPS survey type
+    And Agent switch "Allow customer to leave a note" in survey management
     When Agent click save survey configuration button
-    Then Preview question is updated successfully
+    Then Agent sees comment field in Survey management form
+    Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
+       | commentEnabled     | true       |
+

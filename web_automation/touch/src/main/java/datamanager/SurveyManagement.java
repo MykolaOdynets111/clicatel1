@@ -132,28 +132,51 @@ public class SurveyManagement {
         this.additionalProperties.put(name, value);
     }
 
-    public void updateSomeValueByMethodName(String methodName, String value){
-        if(methodName.equals("setRatingEnabled")){
+    public void updateSomeValueByMethodName(String attribute, String value){
+        if(attribute.equals("ratingEnabled")){
           setRatingEnabled(Boolean.valueOf(value));
-        } else if (methodName.equals("setRatingTimeout")){
+        } else if (attribute.equals("ratingTimeout")){
             setRatingTimeout(value);
-        } else if (methodName.equals("setRatingThanksMessage")){
+        } else if (attribute.equals("ratingThanksMessage")){
             setRatingThanksMessage(value);
-        } else if(methodName.equals("setSurveyQuestionTitle")){
+        } else if(attribute.equals("surveyQuestionTitle")){
             setSurveyQuestionTitle(value);
-        } else if (methodName.equals("setCustomerNoteTitle")){
+        } else if (attribute.equals("customerNoteTitle")){
             setCustomerNoteTitle(value);
-        } else if (methodName.equals("setCommentEnabled")){
+        } else if (attribute.equals("commentEnabled")){
             setCommentEnabled(Boolean.valueOf(value));
-        } else if (methodName.equals("setRatingScale")){
+        } else if (attribute.equals("ratingScale")){
             setRatingScale(value);
-        } else if (methodName.equals("setRatingIcon")){
+        } else if (attribute.equals("ratingIcon")){
             setRatingIcon(value);
-        } else if (methodName.equals("setRatingType")){
+        } else if (attribute.equals("ratingType")){
             setRatingType(value);
         } else {
-            new AssertionError("Was provided incorrect update type :" + value);
+            throw new AssertionError("Was provided incorrect Api attribute :" + attribute);
         }
+    }
 
+    public String getSomeValueByMethodName(String attribute){
+        if(attribute.equals("ratingEnabled")){
+            return getRatingEnabled().toString();
+        } else if (attribute.equals("ratingTimeout")){
+            return getRatingTimeout();
+        } else if (attribute.equals("ratingThanksMessage")){
+            return getRatingThanksMessage();
+        } else if(attribute.equals("surveyQuestionTitle")){
+            return getSurveyQuestionTitle();
+        } else if (attribute.equals("customerNoteTitle")){
+            return getCustomerNoteTitle();
+        } else if (attribute.equals("commentEnabled")){
+            return getCommentEnabled().toString();
+        } else if (attribute.equals("ratingScale")){
+            return getRatingScale();
+        } else if (attribute.equals("ratingIcon")){
+            return getRatingIcon();
+        } else if (attribute.equals("ratingType")){
+            return getRatingType();
+        } else {
+            throw new AssertionError("Was provided incorrect Api attribute :" + attribute);
+        }
     }
 }

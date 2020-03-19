@@ -17,7 +17,9 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     private SurveyWebChatForm surveyWebChatForm;
     private static ThreadLocal<String> questionUpdate = new ThreadLocal<>();
+    private static ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
     Faker faker = new Faker();
+    public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
     @Then("^Update survey management chanel (.*) settings by ip for (.*)")
     public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map){
@@ -26,6 +28,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             for(String key : map.keySet()){
                 configuration.updateSomeValueByMethodName(key, map.get(key));
             }
+        surveyConfiguration.set(configuration);
         ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID);
     }
 
@@ -111,6 +114,30 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().switchToDefaultFrame();
     }
 
+    @When("^Customize your survey thank message$")
+    public void setSurveyThankMessage(){
+        getSurveyManagementPage().switchToFrame();
+        thankMessageUpdate.set("Thank you for taking the time to provide us with your feedback. " + faker.gameOfThrones().dragon());
+        surveyWebChatForm.setThankMessage(thankMessageUpdate.get());
+        getSurveyManagementPage().switchToDefaultFrame();
+    }
+
+    @Then ("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
+    public void verifyThankQuestionIsUpdated(String tenantOrgName, String chanel){
+        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
+        Assert.assertEquals(configuration.getRatingThanksMessage(), thankMessageUpdate.get(), "Thank survey message is not the same as was set");
+    }
+
+    @Then("^Survey backend was updated for (.*) and (.*) chanel with following attribute$")
+    public void verifyThatSurveyBackendWasUpdated(String tenantOrgName, String chanel, Map<String, String> map){
+        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
+        String attributeToCheck = map.keySet().stream().findFirst().get();
+        Assert.assertEquals(configuration.getSomeValueByMethodName(attributeToCheck), map.get(attributeToCheck), attributeToCheck + " is not updated on backend");
+
+    }
+
     @Then("^Preview question is updated successfully$")
     public void verifyQuestionPreview(){
         getSurveyManagementPage().switchToFrame();
@@ -127,5 +154,6 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         soft.assertAll();
         getSurveyManagementPage().switchToDefaultFrame();
     }
+
 
 }

@@ -438,6 +438,11 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                "Response to user is not shown");
     }
 
+    @Then("^User see correct Thanks message from Survey management$")
+    public void verifyThankSurveyResponse(){
+        quickVerifyIsResponseShown(SurveyManagementSteps.surveyConfiguration.get().getRatingThanksMessage());
+    }
+
     @Then("^Card with a (?:button|buttons) (.*) is shown (?:on|after) user (.*) (?:message|input)$")
     public void isCardWithButtonShown(String buttonNames, String userMessage){
         List<String> buttons = formListOfExpectedButtonNames(buttonNames);
@@ -795,6 +800,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         soft.assertTrue(surveyForm.isSurveyDisplayed(), "Survey form is not shown");
         if(surveyType.equalsIgnoreCase("NPS")) {
             soft.assertTrue(surveyForm.isNPCRatingScaleDisplayed(), surveyType + " rating form is not displayed");
+            soft.assertTrue(surveyForm.isNPSCorrectScaleSHown(),surveyType + " scale is not 0-10");
         } else if (surveyType.equalsIgnoreCase("CSAT")){
             soft.assertTrue(surveyForm.isCSATRatingScaleDisplayed(), surveyType + "Survey Type rating form is not displayed");
         }

@@ -63,6 +63,8 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(xpath="//div[text()='Smiles and stars available only in CSAT mode']")
     private WebElement ratingTypesUnavailableMessage;
 
+    @FindBy(name ="ratingThanksMessage")
+    private WebElement thankMessageForm;
 
     public SurveyWebChatForm clickCSATRadioButton(){
         clickElem(this.getCurrentDriver(), csatRadioButton, 2, "CSAT radio button is not found");
@@ -153,4 +155,9 @@ public class SurveyWebChatForm extends BasePortalWindow{
         moveToElement(this.getCurrentDriver(), starButton);
         return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
     }
+
+    public void setThankMessage(String message){
+        inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
+    }
+
 }

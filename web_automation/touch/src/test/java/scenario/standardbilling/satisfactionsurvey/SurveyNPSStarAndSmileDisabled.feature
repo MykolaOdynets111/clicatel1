@@ -4,10 +4,10 @@ Feature: Satisfaction Survey: NPS Star and Smile are disabled
 
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | setRatingEnabled   | true             |
-      | setRatingType      | CSAT              |
-      | setRatingScale     | ONE_TO_TEN      |
-      | setRatingIcon      | NUMBER           |
+      | ratingEnabled   | true             |
+      | ratingType      | CSAT              |
+      | ratingScale     | ONE_TO_TEN      |
+      | ratingIcon      | NUMBER           |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
 

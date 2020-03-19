@@ -4,10 +4,10 @@ Feature: Satisfaction Survey: Smile configuration
 
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | setRatingEnabled   | true             |
-      | setRatingType      | NPS              |
-      | setRatingScale     | ZERO_TO_TEN      |
-      | setRatingIcon      | NUMBER           |
+      | ratingEnabled   | true             |
+      | ratingType      | NPS              |
+      | ratingScale     | ZERO_TO_TEN      |
+      | ratingIcon      | NUMBER           |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
 
@@ -22,3 +22,12 @@ Feature: Satisfaction Survey: Smile configuration
     When Agent select 5 as number limit from dropdown
     And Agent click save survey configuration button
     Then Agent see survey range 5 in rating scale
+    Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
+      | ratingIcon     | SMILE      |
+    Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
+      | ratingScale     | ONE_TO_FIVE       |
+    When Agent select 3 as number limit from dropdown
+    And Agent click save survey configuration button
+    Then Agent see survey range 3 in rating scale
+    Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
+      | ratingScale     | ONE_TO_THREE      |
