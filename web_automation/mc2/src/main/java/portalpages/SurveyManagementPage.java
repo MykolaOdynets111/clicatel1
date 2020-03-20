@@ -16,6 +16,9 @@ public class SurveyManagementPage extends PortalAbstractPage{
     @FindBy(xpath = "//div[text()='You have successfully saved your survey']")
     private WebElement saveMessage;
 
+    @FindBy(css = ".svg-icon-whatsappwhite")
+    private WebElement whatsappTab;
+
     private SurveyWebChatForm surveyWebChatForm;
 
     public SurveyWebChatForm getSurveyWebChatForm(){
@@ -46,6 +49,10 @@ public class SurveyManagementPage extends PortalAbstractPage{
 
     public boolean isSurveyManagementPage() {
         return isElementShown(this.getCurrentDriver(), pageTitle, 40);
+    }
+
+    public void switchToWhatsappTab(){
+        clickElem(this.getCurrentDriver(), whatsappTab, 1, "Whatsapp tab");
     }
 
     public void waitSaveMessage(){

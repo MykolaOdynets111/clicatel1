@@ -313,5 +313,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         portalChatConsolePage.remove();
         chatConsoleInboxPage.remove();
         departmentsManagementPage.remove();
+        surveyManagementPage.remove();
     }
 }

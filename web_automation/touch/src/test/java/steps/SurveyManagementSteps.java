@@ -50,6 +50,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().switchToDefaultFrame();
     }
 
+    @When("^Switch to whatsapp survey configuration$")
+    public void switchToWhatsapp(){
+        getSurveyManagementPage().switchToFrame().switchToWhatsappTab();
+        getSurveyManagementPage().switchToDefaultFrame();
+    }
+
     @Then("^CSAT scale start form (.*) and has correct limit variants (.*) in dropdown and (.*) set as type$")
     public void verifyCSATNumbers(String startFrom, List<String> expRangeOfNumbers, String type){
         getSurveyManagementPage().switchToFrame();
@@ -106,10 +112,10 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().switchToDefaultFrame();
     }
 
-    @When("^Customize your survey question$")
-    public void setSurveyQuestion(){
+    @When("^Customize your survey \"(.*)\" question$")
+    public void setSurveyQuestion(String question){
         getSurveyManagementPage().switchToFrame();
-        questionUpdate.set("Please rate your experience with our agent " + faker.yoda().quote());
+        questionUpdate.set(question + " " + faker.yoda().quote());
         surveyWebChatForm.changeQuestion(questionUpdate.get());
         getSurveyManagementPage().switchToDefaultFrame();
     }
@@ -142,6 +148,15 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void verifyQuestionPreview(){
         getSurveyManagementPage().switchToFrame();
         Assert.assertEquals(surveyWebChatForm.getPreviewQuestion(), questionUpdate.get(), "Preview question is not the same as was set");
+        getSurveyManagementPage().switchToDefaultFrame();
+    }
+
+    @Then("^Preview question is updated successfully for (.*) and (.*) chanel")
+    public void verifyQuestionPreviewAPI(String tenantOrgName, String chanel){
+        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
+        getSurveyManagementPage().switchToFrame();
+        Assert.assertEquals(configuration.getSurveyQuestionTitle(), questionUpdate.get(), "Preview question is not the same as was set");
         getSurveyManagementPage().switchToDefaultFrame();
     }
 

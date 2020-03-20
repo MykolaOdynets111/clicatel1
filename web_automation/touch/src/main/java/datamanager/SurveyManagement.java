@@ -23,6 +23,8 @@ public class SurveyManagement {
     private String customerNoteTitle;
     @JsonProperty("commentEnabled")
     private Boolean commentEnabled;
+    @JsonProperty("thanksMessageEnabled")
+    private Boolean thanksMessageEnabled;
     @JsonProperty("ratingScale")
     private String ratingScale;
     @JsonProperty("ratingIcon")
@@ -31,7 +33,6 @@ public class SurveyManagement {
     private String ratingType;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
     @JsonProperty("ratingEnabled")
     public Boolean getRatingEnabled() {
         return ratingEnabled;
@@ -92,6 +93,16 @@ public class SurveyManagement {
         this.commentEnabled = commentEnabled;
     }
 
+    @JsonProperty("thanksMessageEnabled")
+    public Boolean getThanksMessageEnabled() {
+        return thanksMessageEnabled;
+    }
+
+    @JsonProperty("thanksMessageEnabled")
+    public void setThanksMessageEnabled(Boolean commentEnabled) {
+        this.thanksMessageEnabled = commentEnabled;
+    }
+
     @JsonProperty("ratingScale")
     public String getRatingScale() {
         return ratingScale;
@@ -145,6 +156,8 @@ public class SurveyManagement {
             setCustomerNoteTitle(value);
         } else if (attribute.equals("commentEnabled")){
             setCommentEnabled(Boolean.valueOf(value));
+        } else if (attribute.equals("thanksMessageEnabled")){
+            setThanksMessageEnabled(Boolean.valueOf(value));
         } else if (attribute.equals("ratingScale")){
             setRatingScale(value);
         } else if (attribute.equals("ratingIcon")){
@@ -169,6 +182,8 @@ public class SurveyManagement {
             return getCustomerNoteTitle();
         } else if (attribute.equals("commentEnabled")){
             return getCommentEnabled().toString();
+        } else if (attribute.equals("thanksMessageEnabled")){
+            return getThanksMessageEnabled().toString();
         } else if (attribute.equals("ratingScale")){
             return getRatingScale();
         } else if (attribute.equals("ratingIcon")){

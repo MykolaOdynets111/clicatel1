@@ -9,7 +9,7 @@ Feature: Satisfaction Survey: Star and Comment with NPS
       | ratingScale          | ZERO_TO_TEN       |
       | ratingIcon           | STAR              |
       | commentEnabled       | true              |
-      | setThanksMessageEnabled | true              |
+      | thanksMessageEnabled | true              |
     Given I login as agent of Standard Billing
     And Click chat icon
 

@@ -9,7 +9,7 @@ Feature: Satisfaction Survey: Customize customer thank you message
       | ratingScale          | ONE_TO_TEN       |
       | ratingIcon           | NUMBER           |
       | commentEnabled       | true             |
-      | setThanksMessageEnabled | true             |
+      | thanksMessageEnabled | true             |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
 

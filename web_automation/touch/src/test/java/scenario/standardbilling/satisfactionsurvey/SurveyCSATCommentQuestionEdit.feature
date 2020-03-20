@@ -17,6 +17,6 @@ Feature: Satisfaction Survey: Question configuration CSAT
     And Click "Survey management" nav button
     Then Survey Management page should be shown
     When Selects CSAT survey type
-    And Customize your survey question
+    And Customize your survey "Please rate your experience with our agent" question
     When Agent click save survey configuration button
     Then Preview question is updated successfully
