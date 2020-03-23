@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -49,7 +48,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=unread-msg-count]")
     private WebElement userMsgCount;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-live chats']")
+    @FindBy(css = "[selenium-id='tab-navigation-panel-live']")
     private WebElement liveChats;
 
     @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']")
