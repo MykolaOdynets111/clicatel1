@@ -44,6 +44,7 @@ import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
@@ -62,6 +63,9 @@ public class Hooks implements JSHelper {
             throw new cucumber.api.PendingException();
         }
 
+        if(scenario.getSourceTagNames().contains("@media_download")){
+             System.setProperty("mediaDownloadPath", "true");
+        }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
             throw new cucumber.api.PendingException("Designed to run only on testing env. " +

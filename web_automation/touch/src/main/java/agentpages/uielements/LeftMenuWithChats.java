@@ -154,7 +154,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
        } else if (option.equalsIgnoreCase("Tickets")){
            clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu" );
        }else if (option.equalsIgnoreCase("Closed")) {
-           clickElem(this.getCurrentDriver(), closed, 1, "Tickets menu");
+           clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
        } else {
            throw new AssertionError("Incorrect menu option was provided");
        }

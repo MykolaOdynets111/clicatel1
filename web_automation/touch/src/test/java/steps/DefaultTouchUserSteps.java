@@ -29,6 +29,7 @@ import touchpages.uielements.WidgetConversationArea;
 import touchpages.uielements.WidgetHeader;
 import touchpages.uielements.messages.WelcomeMessages;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -51,10 +52,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     public static VMQuoteRequestUserData getUserDataForQuoteRequest(long threadID){
         return userDataForQuoteRequest.get(threadID);
-    }
-
-    public static Map getSelectedClientForChatHistoryTest(){
-        return selectedClient;
     }
 
     @When("^User click close chat button$")
@@ -218,6 +215,18 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         widget.getWidgetFooter().enterMessage(text).sendMessage();
         widgetConversationArea.waitForMessageToAppearInWidget(text);
         return this;
+    }
+
+    @Then("^User attach (.*) file type$")
+    public void attachFile(String fileName) {
+        File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." +fileName);
+        widget.getWidgetFooter().attachTheFile(pathToFile.getPath());
+        Assert.assertTrue(widget.isFileUploaded(), "File was not uploaded to widget");
+    }
+
+    @When("^User send attached file$")
+    public void sendAttachedFile(){
+        widget.clickSendAttachmentButton();
     }
 
     @When("^User enters message regarding (.*) into widget input field$")

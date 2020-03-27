@@ -11,12 +11,14 @@ import datamanager.jacksonschemas.Intent;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
+import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,35 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         }
         Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area");
+    }
+
+    @Then ("^Attachment message is shown for (.*)$")
+    public void verifyAttachmentPresent(String agent){
+        Assert.assertTrue(getChatBody(agent).isAttachmentMessageShown(), "No Attachment message was shown");
+    }
+
+    @When("^(.*) download the file$")
+    public void downloadTheFile(String agent){
+        getChatBody(agent).downloadTheFile();
+    }
+
+    @Then("^(.*) file is not changed after uploading and downloading$")
+    public void verifyFilesEquality(String fileName){
+        File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." +fileName);
+        File downloadedFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupportdownloaded/" + fileName + "." +fileName);
+        for (int i=0; i < 5; i++){
+           if (downloadedFile.exists()){
+               break;
+           }
+           waitFor(2000);
+        }
+        boolean fileEquality = false;
+        try {
+            fileEquality =  FileUtils.contentEquals(fileForUpload, downloadedFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertTrue(fileEquality, "Files are not equal after uploading and downloading");
     }
 
     @When("^Agent click on emoji icon$")

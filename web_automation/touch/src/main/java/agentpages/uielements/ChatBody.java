@@ -6,7 +6,6 @@ import datamanager.Tenants;
 import org.apache.commons.lang3.Range;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import java.io.File;
@@ -54,6 +53,9 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".rate-card-feedback-text")
     private  WebElement rateCardComment;
 
+    @FindBy(css = ".from.file-msg")
+    private WebElement attachmentMessage;
+
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -65,6 +67,14 @@ public class ChatBody extends AbstractUIElement {
             Assert.fail("There is no such user message: "+messageText+"");
             return null;
         }
+    }
+
+    public boolean isAttachmentMessageShown(){
+        return isElementShown(this.getCurrentDriver(), attachmentMessage, 3);
+    }
+
+    public void downloadTheFile(){
+        new AgentDeskChatAttachment(attachmentMessage).setCurrentDriver(this.getCurrentDriver()).clickDownloadLink();
     }
 
     public String getPersonalInfoText(){

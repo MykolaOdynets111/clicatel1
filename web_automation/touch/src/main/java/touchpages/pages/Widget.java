@@ -43,6 +43,12 @@ public class Widget extends AbstractSocialPage {
     @FindBy(css = "div.ctl-chat-header-agent-image")
     private WebElement tenantLogoImage;
 
+    @FindBy(css = ".file-state.file-state--successful")
+    private WebElement uploadedStatus;
+
+    @FindBy(css = ".mr-3.ctl-stroke-path")
+    private WebElement sendAttachmentButton;
+
     public Widget(WebDriver driver) {
         super(driver);
         waitUntilOpenedAndConnected();
@@ -156,4 +162,11 @@ public class Widget extends AbstractSocialPage {
         return tenantLogoImage.getCssValue("background-image").contains("logo");
     }
 
+    public boolean isFileUploaded(){
+        return isElementShown(this.getCurrentDriver(), uploadedStatus, 15);
+    }
+
+    public void clickSendAttachmentButton(){
+        clickElem(this.getCurrentDriver(), sendAttachmentButton, 5, "Send attachment button");
+    }
 }

@@ -14,7 +14,9 @@ import org.openqa.selenium.remote.CapabilityType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public enum DriverType {
@@ -34,6 +36,13 @@ public enum DriverType {
 
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             if(ConfigManager.isRemote())options.addArguments("window-size=1360,1020");
+            if(ConfigManager.getMediaDownloadPath().isEmpty()){
+                Map<String, Object> chromePrefs = new Hashtable<String, Object>();
+                //chromePrefs.put("download.prompt_for_download", true);
+                chromePrefs.put("profile.default_content_settings.popups", 0);
+                chromePrefs.put("download.default_directory", ConfigManager.getMediaDownloadPath());
+                options.setExperimentalOption("prefs", chromePrefs);
+            }
             options.setCapability("goog:loggingPrefs", logPrefs);
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");

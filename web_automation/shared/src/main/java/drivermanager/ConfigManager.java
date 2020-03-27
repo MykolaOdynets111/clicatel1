@@ -3,6 +3,8 @@ package drivermanager;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
+import java.io.File;
+
 
 public class ConfigManager {
 
@@ -33,6 +35,8 @@ public class ConfigManager {
     private static final String SECOND_AGENT_CREATED = "agentCreationSuccessful";
     private static final String TENANT_UPGRADED = "tenantUpgradeSuccessful";
     private static final String PAYMENT_ADDED = "paymentAdded";
+
+    private static final String DOWNLOAD_MEDIA_LOCATION = "mediaDownloadPath";
 
     public static boolean isPaymentAdded(){
         String result = System.getProperty(PAYMENT_ADDED, "false");
@@ -136,6 +140,13 @@ public class ConfigManager {
         String remoteValue = System.getProperty(REMOTE_FLAG_VARIABLE);
 
         return remoteValue != null && Boolean.parseBoolean(remoteValue);
+    }
+
+    public static String getMediaDownloadPath(){
+        if (Boolean.parseBoolean(System.getProperty(DOWNLOAD_MEDIA_LOCATION))){
+            return new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupportdownloaded/").getPath();
+        }
+        return "";
     }
 
     public static DriverType getDriverType() {
