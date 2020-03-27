@@ -33,7 +33,7 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(css = "div.cl-header--controls")
     private WebElement headerControlsContainer;
 
-    @FindBy(xpath = "//button[text()='Save changes ']")
+    @FindBy(xpath = "//button[contains(text(),'Save changes')]")
     private WebElement saveChangesButton ;
 
     private static String notificationAlert = "div[ng-bind-html='alert']";
