@@ -14,6 +14,7 @@ import drivermanager.ConfigManager;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 
@@ -62,11 +63,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getChatBody(agent).downloadTheFile();
     }
 
-    @Then("^(.*) file is not changed after uploading and downloading$")
-    public void verifyFilesEquality(String fileName){
-        File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." +fileName);
-        File downloadedFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupportdownloaded/" + fileName + "." +fileName);
-        for (int i=0; i < 5; i++){
+    @Then("^File is not changed after uploading and downloading$")
+    public void verifyFilesEquality(){
+        File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + DefaultTouchUserSteps.mediaFileName.get());
+        File downloadedFile = new File("\\\\172.31.69.0\\selenium\\" +  DefaultTouchUserSteps.mediaFileName.get());
+
+        for (int i=0; i < 10; i++){
            if (downloadedFile.exists()){
                break;
            }

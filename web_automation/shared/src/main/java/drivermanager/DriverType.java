@@ -36,13 +36,6 @@ public enum DriverType {
 
             options.setCapability(CapabilityType.SUPPORTS_APPLICATION_CACHE, false);
             if(ConfigManager.isRemote())options.addArguments("window-size=1360,1020");
-            if(ConfigManager.getMediaDownloadPath().isEmpty()){
-                Map<String, Object> chromePrefs = new Hashtable<String, Object>();
-                //chromePrefs.put("download.prompt_for_download", true);
-                chromePrefs.put("profile.default_content_settings.popups", 0);
-                chromePrefs.put("download.default_directory", ConfigManager.getMediaDownloadPath());
-                options.setExperimentalOption("prefs", chromePrefs);
-            }
             options.setCapability("goog:loggingPrefs", logPrefs);
             options.addArguments("disable-site-isolation-trials");
             options.addArguments("test-type=browser");

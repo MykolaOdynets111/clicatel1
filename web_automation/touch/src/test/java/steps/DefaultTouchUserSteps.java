@@ -49,6 +49,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     private static Map<Long, VMQuoteRequestUserData> userDataForQuoteRequest = new ConcurrentHashMap<>();
     private static ThreadLocal<String> enteredUserMessageInTouchWidget = new ThreadLocal<>();
     private static Map selectedClient;
+    public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 
     public static VMQuoteRequestUserData getUserDataForQuoteRequest(long threadID){
         return userDataForQuoteRequest.get(threadID);
@@ -219,8 +220,12 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^User attach (.*) file type$")
     public void attachFile(String fileName) {
-        File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." +fileName);
-        widget.getWidgetFooter().attachTheFile(pathToFile.getPath());
+        File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
+        File renamed =  new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" +  newName);
+        pathToFile.renameTo(renamed);
+        mediaFileName.set(newName);
+        widget.getWidgetFooter().attachTheFile(renamed.getPath());
         Assert.assertTrue(widget.isFileUploaded(), "File was not uploaded to widget");
     }
 

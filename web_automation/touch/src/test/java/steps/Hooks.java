@@ -27,7 +27,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import org.testng.Assert;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
@@ -37,18 +36,16 @@ import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
-import sun.management.resources.agent;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import twitter.TwitterTenantPage;
 import twitter.uielements.DMWindow;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.*;
 
 import static io.restassured.RestAssured.given;
-import twitter4j.JSONException;
+
 import twitter4j.JSONObject;
 
 
@@ -61,10 +58,6 @@ public class Hooks implements JSHelper {
 
         if(scenario.getSourceTagNames().contains("@skip")){
             throw new cucumber.api.PendingException();
-        }
-
-        if(scenario.getSourceTagNames().contains("@media_download")){
-             System.setProperty("mediaDownloadPath", "true");
         }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
@@ -453,6 +446,7 @@ public class Hooks implements JSHelper {
         URLs.clearFinalAgentURL();
         AbstractAgentSteps.cleanAllPages();
         AbstractPortalSteps.cleanAllPortalPages();
+        DefaultTouchUserSteps.mediaFileName.remove();
     }
 
     @Attachment(value = "request")
