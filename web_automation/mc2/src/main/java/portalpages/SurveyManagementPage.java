@@ -57,6 +57,6 @@ public class SurveyManagementPage extends PortalAbstractPage{
 
     public void waitSaveMessage(){
         waitForElementToBeVisible(this.getCurrentDriver(), saveMessage, 5);
-        waitForElementToBeInvisible(this.getCurrentDriver(), saveMessage, 5);
+        waitUntilElementNotDisplayed(this.getCurrentDriver(), saveMessage, 5);
     }
 }
