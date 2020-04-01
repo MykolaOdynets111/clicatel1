@@ -1,6 +1,6 @@
 #Run only in remote mode. After run from remove files from /touch/src/test/resources/mediasupport/renamed/  folder
 
-Feature: Media Support: Send jpeg to agent
+Feature: Media Support: User send doc and pic files to agent
 
   Background:
     And User select Standard Billing tenant
@@ -25,3 +25,6 @@ Feature: Media Support: Send jpeg to agent
       | jpg                 |
       | png                 |
       | xls                 |
+      | doc                 |
+      | pdf                 |
+      | ppt                 |

@@ -65,7 +65,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^File is not changed after uploading and downloading$")
     public void verifyFilesEquality(){
-        File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + DefaultTouchUserSteps.mediaFileName.get());
+        File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
         File downloadedFile = new File("\\\\172.31.69.0\\selenium\\" +  DefaultTouchUserSteps.mediaFileName.get());
 
         for (int i=0; i < 10; i++){

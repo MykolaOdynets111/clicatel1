@@ -37,7 +37,9 @@ public class MainPage extends AbstractSocialPage {
     }
 
     public boolean isChatIconShown() {
-        waitUntilElementNotDisplayed(this.getCurrentDriver(), chatIcon, 3);
+        try{
+            waitForElementToBeInvisible(this.getCurrentDriver(), chatIcon, 3);}
+        catch (TimeoutException e){}
         return isElementShown(this.getCurrentDriver(), chatIcon, 3);
     }
 

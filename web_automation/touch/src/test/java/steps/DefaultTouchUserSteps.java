@@ -4,6 +4,7 @@ import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
+import com.google.common.io.Files;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -30,6 +31,7 @@ import touchpages.uielements.WidgetHeader;
 import touchpages.uielements.messages.WelcomeMessages;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -223,7 +225,11 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." + fileName);
         String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
         File renamed =  new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" +  newName);
-        pathToFile.renameTo(renamed);
+        try {
+            Files.copy(pathToFile, renamed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mediaFileName.set(newName);
         widget.getWidgetFooter().attachTheFile(renamed.getPath());
         Assert.assertTrue(widget.isFileUploaded(), "File was not uploaded to widget");
