@@ -57,6 +57,7 @@ public class ChatBody extends AbstractUIElement {
     private WebElement attachmentMessage;
 
 
+
     private WebElement getFromUserWebElement(String messageText) {
         try {
             AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
@@ -73,8 +74,8 @@ public class ChatBody extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), attachmentMessage, 3);
     }
 
-    public void downloadTheFile(){
-        new AgentDeskChatAttachment(attachmentMessage).setCurrentDriver(this.getCurrentDriver()).clickDownloadLink();
+    public AgentDeskChatAttachment getAttachmentFile(){
+        return  new AgentDeskChatAttachment(attachmentMessage).setCurrentDriver(this.getCurrentDriver());
     }
 
     public String getPersonalInfoText(){

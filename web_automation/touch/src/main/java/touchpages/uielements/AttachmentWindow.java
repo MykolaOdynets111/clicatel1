@@ -1,6 +1,7 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -23,7 +24,7 @@ public class AttachmentWindow extends AbstractUIElement {
     }
 
     public void setPathToFile(String pathToFile){
-        if(this.getCurrentDriver() instanceof RemoteWebDriver){
+        if(ConfigManager.isRemote()){
             ((RemoteWebDriver) this.getCurrentDriver()).setFileDetector(new LocalFileDetector());
         }
         ((JavascriptExecutor) this.getCurrentDriver()).executeScript("arguments[0].style.display = 'block';", inputFile);

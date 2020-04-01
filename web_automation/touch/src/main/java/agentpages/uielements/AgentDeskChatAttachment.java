@@ -27,6 +27,15 @@ public class AgentDeskChatAttachment extends AbstractWidget {
     @FindBy(css = ".download-file-link")
     private WebElement downloadLink;
 
+    @FindBy(css = "div[data-vjs-player = true]")
+    private WebElement mediaPlayer;
+
+    @FindBy(css ="button.vjs-play-control")
+    private WebElement playPauseButton;
+
+    @FindBy(css = "button.vjs-big-play-button")
+    private WebElement playMP4button;
+
     public String getFileName(){
         return getTextFromElem(this.getCurrentDriver(), fileName, 3, "File Name");
     }
@@ -40,6 +49,19 @@ public class AgentDeskChatAttachment extends AbstractWidget {
             ((RemoteWebDriver) this.getCurrentDriver()).setFileDetector(new LocalFileDetector());
         }
         clickElem(this.getCurrentDriver(), downloadLink, 6, "Download Link");
+    }
+
+    public AgentDeskChatAttachment clickPlayPauseButton(String fileType){
+        if (fileType.equalsIgnoreCase("mp4")){
+            clickElem(this.getCurrentDriver(), mediaPlayer, 30, "Play Button");
+        } else {
+            clickElem(this.getCurrentDriver(), playPauseButton, 20, "Play Button");
+        }
+        return this;
+    }
+
+    public boolean verifyIsFilePlaying(){
+        return mediaPlayer.getAttribute("class").contains("vjs-playing");
     }
 
 }

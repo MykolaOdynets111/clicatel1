@@ -1,6 +1,5 @@
-#Run only in remote mode. After run from remove files from /touch/src/test/resources/mediasupport/renamed/  folder
 
-Feature: Media Support: User send doc and pic files to agent
+Feature: Media Support: User send files and agent playing
 
   Background:
     And User select Standard Billing tenant
@@ -15,16 +14,13 @@ Feature: Media Support: User send doc and pic files to agent
     Then User attach <fileType> file type
     And User send attached file
     Then Attachment message is shown for Agent
-    When Agent download the file
-    Then File is not changed after uploading and downloading
+    Then Agent can play <fileType> file
     And Agent closes chat
 
     Examples:
       | fileType            |
-      | jpeg                |
-      | jpg                 |
-      | png                 |
-      | xls                 |
-      | doc                 |
-      | pdf                 |
-      | ppt                 |
+      | mp3                 |
+      | opus                |
+      | mp4                 |
+      | aac                 |
+      | amr                 |

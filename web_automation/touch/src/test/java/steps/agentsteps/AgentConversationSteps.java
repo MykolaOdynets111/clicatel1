@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import agentpages.uielements.AgentDeskChatAttachment;
 import agentpages.uielements.Suggestion;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
@@ -60,7 +61,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) download the file$")
     public void downloadTheFile(String agent){
-        getChatBody(agent).downloadTheFile();
+        getChatBody(agent).getAttachmentFile().clickDownloadLink();
     }
 
     @Then("^File is not changed after uploading and downloading$")
@@ -81,6 +82,16 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             e.printStackTrace();
         }
         Assert.assertTrue(fileEquality, "Files are not equal after uploading and downloading");
+    }
+
+    @Then("^(.*) can play (.*) file$")
+    public void verifyIsFilePlaying(String agent, String fileType){
+        AgentDeskChatAttachment agentDeskChatAttachment = getChatBody(agent).getAttachmentFile().clickPlayPauseButton(fileType);
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(agentDeskChatAttachment.getFileName(), DefaultTouchUserSteps.mediaFileName.get(),
+                "File name is not the same as the file which user sent");
+        soft.assertTrue(agentDeskChatAttachment.verifyIsFilePlaying(), "Media content is not playing");
+        soft.assertAll();
     }
 
     @When("^Agent click on emoji icon$")
