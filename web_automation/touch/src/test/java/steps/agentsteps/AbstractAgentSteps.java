@@ -136,8 +136,8 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getChatBody();
     }
 
-    public static ChatAttachmmentForm getChatAttachmmentForm(String agent){
-        return getAgentHomePage(agent).getChatAttachmmentForm();
+    public static ChatAttachmentForm getChatAttachmentForm(String agent){
+        return getAgentHomePage(agent).getChatAttachmentForm();
     }
 
     public static SuggestedGroup getSuggestedGroup(String agent) {

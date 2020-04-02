@@ -69,12 +69,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         DefaultTouchUserSteps.mediaFileName.set(newName);
 
         getAgentHomePage("agent").openAttachmentWindow().setPathToFile(renamed.getPath());
-        Assert.assertTrue(getChatAttachmmentForm("agent").isFileUploaded(), "File was not uploaded to widget");
+        Assert.assertTrue(getChatAttachmentForm("agent").isFileUploaded(), "File was not uploaded to widget");
     }
 
     @When("^Agent send attached file$")
     public void agentSendAttachment(){
-        getChatAttachmmentForm("agent").clickSendButton();
+        getChatAttachmentForm("agent").clickSendButton();
     }
 
     @Then ("^Attachment message is shown for (.*)$")

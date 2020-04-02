@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = ".cl-r-files-bar")
-public class ChatAttachmmentForm extends AbstractUIElement {
+public class ChatAttachmentForm extends AbstractUIElement {
 
     @FindBy(xpath = ".//div[text()='File successfully uploaded']")
     private WebElement successUploadedStatus;

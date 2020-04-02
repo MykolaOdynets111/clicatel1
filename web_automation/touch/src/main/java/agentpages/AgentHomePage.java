@@ -90,16 +90,16 @@ public class AgentHomePage extends AgentAbstractPage {
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
     private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
-    private ChatAttachmmentForm chatAttachmmentForm;
+    private ChatAttachmentForm chatAttachmentForm;
     private AttachmentWindow attachmentWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
     }
 
-    public ChatAttachmmentForm getChatAttachmmentForm() {
-        chatAttachmmentForm.setCurrentDriver(this.getCurrentDriver());
-        return chatAttachmmentForm;
+    public ChatAttachmentForm getChatAttachmentForm() {
+        chatAttachmentForm.setCurrentDriver(this.getCurrentDriver());
+        return chatAttachmentForm;
     }
 
     public ChatForm getChatForm() {
