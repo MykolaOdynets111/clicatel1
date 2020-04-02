@@ -1,9 +1,11 @@
 package steps.agentsteps;
 
-import agentpages.uielements.AgentDeskChatAttachment;
+import agentpages.uielements.ChatAttachment;
 import agentpages.uielements.Suggestion;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
+import com.github.javafaker.Faker;
+import com.google.common.io.Files;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -54,6 +56,27 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "'" + userMessage + "' User message is not shown in conversation area");
     }
 
+    @Then("^Agent attach (.*) file type$")
+    public void attachFile(String fileName) {
+        File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
+        File renamed =  new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" +  newName);
+        try {
+            Files.copy(pathToFile, renamed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DefaultTouchUserSteps.mediaFileName.set(newName);
+
+        getAgentHomePage("agent").openAttachmentWindow().setPathToFile(renamed.getPath());
+        Assert.assertTrue(getChatAttachmmentForm("agent").isFileUploaded(), "File was not uploaded to widget");
+    }
+
+    @When("^Agent send attached file$")
+    public void agentSendAttachment(){
+        getChatAttachmmentForm("agent").clickSendButton();
+    }
+
     @Then ("^Attachment message is shown for (.*)$")
     public void verifyAttachmentPresent(String agent){
         Assert.assertTrue(getChatBody(agent).isAttachmentMessageShown(), "No Attachment message was shown");
@@ -86,7 +109,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^(.*) can play (.*) file$")
     public void verifyIsFilePlaying(String agent, String fileType){
-        AgentDeskChatAttachment agentDeskChatAttachment = getChatBody(agent).getAttachmentFile().clickPlayPauseButton(fileType);
+        ChatAttachment agentDeskChatAttachment = getChatBody(agent).getAttachmentFile().clickPlayPauseButton(fileType);
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(agentDeskChatAttachment.getFileName(), DefaultTouchUserSteps.mediaFileName.get(),
                 "File name is not the same as the file which user sent");

@@ -1,6 +1,7 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import agentpages.uielements.ChatAttachment;
 import apihelper.ApiHelper;
 import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
@@ -31,6 +32,9 @@ public class WidgetConversationArea extends AbstractUIElement {
 
     @FindBy(css = "li.ctl-chat-message-container.message-from")
     private List<WebElement> fromUserMessages;
+
+    @FindBy(css =".file-message-container")
+    private WebElement attachmentForm;
 
     private String targetFromUserMessage = "//li[contains(@class, message-from)]//*[text()='%s']";
 
@@ -212,5 +216,13 @@ public class WidgetConversationArea extends AbstractUIElement {
                 .setCurrentDriver(this.getCurrentDriver())
                 .fillInInputFieldWithAPlaceholder("Name", userName)
                 .fillInInputFieldWithAPlaceholder("Email", userPass);
+    }
+
+    public boolean isAttachmentMessageShown(){
+        return isElementShown(this.getCurrentDriver(), attachmentForm, 3);
+    }
+
+    public ChatAttachment getAttachmentFile(){
+        return  new ChatAttachment(attachmentForm).setCurrentDriver(this.getCurrentDriver());
     }
 }

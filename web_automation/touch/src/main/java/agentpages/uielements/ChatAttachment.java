@@ -7,13 +7,13 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 
-public class AgentDeskChatAttachment extends AbstractWidget {
+public class ChatAttachment extends AbstractWidget {
 
-    public AgentDeskChatAttachment(WebElement element) {
+    public ChatAttachment(WebElement element) {
         super(element);
     }
 
-    public AgentDeskChatAttachment setCurrentDriver(WebDriver currentDriver){
+    public ChatAttachment setCurrentDriver(WebDriver currentDriver){
         this.currentDriver = currentDriver;
         return this;
     }
@@ -45,13 +45,10 @@ public class AgentDeskChatAttachment extends AbstractWidget {
     }
 
     public void clickDownloadLink(){
-        if(this.getCurrentDriver() instanceof RemoteWebDriver){
-            ((RemoteWebDriver) this.getCurrentDriver()).setFileDetector(new LocalFileDetector());
-        }
         clickElem(this.getCurrentDriver(), downloadLink, 6, "Download Link");
     }
 
-    public AgentDeskChatAttachment clickPlayPauseButton(String fileType){
+    public ChatAttachment clickPlayPauseButton(String fileType){
         if (fileType.equalsIgnoreCase("mp4")){
             clickElem(this.getCurrentDriver(), mediaPlayer, 30, "Play Button");
         } else {

@@ -8,6 +8,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import touchpages.uielements.AttachmentWindow;
 
 import java.util.List;
 
@@ -89,14 +90,27 @@ public class AgentHomePage extends AgentAbstractPage {
     private HistoryDetailsWindow historyDetailsWindow;
     private ChatForm chatForm;
     private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
+    private ChatAttachmmentForm chatAttachmmentForm;
+    private AttachmentWindow attachmentWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
     }
 
+    public ChatAttachmmentForm getChatAttachmmentForm() {
+        chatAttachmmentForm.setCurrentDriver(this.getCurrentDriver());
+        return chatAttachmmentForm;
+    }
+
     public ChatForm getChatForm() {
         chatForm.setCurrentDriver(this.getCurrentDriver());
         return chatForm;
+    }
+
+    public AttachmentWindow openAttachmentWindow(){
+        getChatForm().openAttachmentForm();
+        attachmentWindow.setCurrentDriver(this.getCurrentDriver());
+        return attachmentWindow;
     }
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){

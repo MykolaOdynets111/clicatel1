@@ -231,7 +231,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             e.printStackTrace();
         }
         mediaFileName.set(newName);
-        widget.getWidgetFooter().attachTheFile(renamed.getPath());
+        widget.getWidgetFooter().openAttachmentWindow().setPathToFile(renamed.getPath());
         Assert.assertTrue(widget.isFileUploaded(), "File was not uploaded to widget");
     }
 
@@ -846,6 +846,16 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Assert.assertFalse(surveyForm.isCommentFieldShown(), "Unexpected comment field is shown");
     }
 
+    @Then("^Widget contains attachment message$")
+    public void verifyAttachmentMessagePresent(){
+        Assert.assertTrue(widgetConversationArea.isAttachmentMessageShown(), "No attachment message is shown from agent on widget");
+    }
+
+
+    @When("User is downloading the file")
+    public void downloadAtachment(){
+        widgetConversationArea.getAttachmentFile().clickDownloadLink();
+    }
 
     // ======================= Private Getters ========================== //
 

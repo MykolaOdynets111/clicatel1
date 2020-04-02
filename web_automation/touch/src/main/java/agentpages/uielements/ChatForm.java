@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
+import touchpages.uielements.AttachmentWindow;
 
 import java.security.SecureRandom;
 import java.sql.Timestamp;
@@ -55,7 +56,12 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
+    @FindBy(css ="[selenium-id=message-composer-attachment-icon]")
+    private WebElement attachmentButton;
+
     private String emojiMartCss = "section.emoji-mart";
+
+    private AttachmentWindow attachmentWindow;
 
     public boolean isSuggestionFieldShown() {
         return  isElementShownByCSS(this.getCurrentDriver(), suggestionCSSInput, 1);
@@ -171,4 +177,9 @@ public class ChatForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), emoji, 2, emojiText + " emoji");
         return emojiText;
     }
+
+    public void openAttachmentForm(){
+        clickElem(this.getCurrentDriver(), attachmentButton, 2, "Attachment button");
+    }
+
 }

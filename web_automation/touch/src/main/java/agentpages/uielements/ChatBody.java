@@ -74,8 +74,8 @@ public class ChatBody extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), attachmentMessage, 3);
     }
 
-    public AgentDeskChatAttachment getAttachmentFile(){
-        return  new AgentDeskChatAttachment(attachmentMessage).setCurrentDriver(this.getCurrentDriver());
+    public ChatAttachment getAttachmentFile(){
+        return  new ChatAttachment(attachmentMessage).setCurrentDriver(this.getCurrentDriver());
     }
 
     public String getPersonalInfoText(){
@@ -89,7 +89,7 @@ public class ChatBody extends AbstractUIElement {
             Assert.fail("Chat body is not visible");
         }
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
-        waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 5);
+        waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 8);
         WebElement message = this.getCurrentDriver().findElement(By.xpath(locator));
 
         return wheelScrollUpAndIsDisplayed(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),  message);

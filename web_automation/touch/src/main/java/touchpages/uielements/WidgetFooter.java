@@ -41,8 +41,4 @@ public class WidgetFooter extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), attachButton, 3, "Attachment button");
         return attachmentWindow;
     }
-
-    public void attachTheFile(String filePath){
-        openAttachmentWindow().setPathToFile(filePath);
-    }
 }

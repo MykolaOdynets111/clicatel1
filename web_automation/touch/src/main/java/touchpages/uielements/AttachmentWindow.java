@@ -8,7 +8,7 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(css = ".drag-zone")
+@FindBy(css = "[class$=drag-zone]")
 public class AttachmentWindow extends AbstractUIElement {
 
     @FindBy(css =".cl-btn--browse-files")
