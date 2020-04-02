@@ -12,5 +12,5 @@ debug.log
 tests.log
 *.iml
 mc2/src/test/resources/*.properties
-/touch/src/test/resources/mediasupport/renamed
+/touch/src/test/resources/mediasupport/renamed/*
 
