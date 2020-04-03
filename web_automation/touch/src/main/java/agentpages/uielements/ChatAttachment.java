@@ -58,7 +58,15 @@ public class ChatAttachment extends AbstractWidget {
     }
 
     public boolean verifyIsFilePlaying(){
-        return mediaPlayer.getAttribute("class").contains("vjs-playing");
+        boolean isPlaying = false;
+        for (int i = 0; i<8; i++){
+            isPlaying = mediaPlayer.getAttribute("class").contains("vjs-playing");
+            if (isPlaying){
+                break;
+            }
+            waitFor(1000);
+        }
+        return isPlaying;
     }
 
 }

@@ -1,6 +1,6 @@
 @no_widget
 @dot_control
-Feature: .Control customer 360
+Feature: .Control Profile info
 
   @Issue("https://jira.clickatell.com/browse/TPLAT-4379")
   Scenario: Viewing .Control customer 360 info and editing it
@@ -12,9 +12,9 @@ Feature: .Control customer 360
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
     Then Correct dotcontrol client details are shown
-    And Click 'Edit' button in Customer 360 view
+    And Click 'Edit' button in Profile
     When Fill in the form with new dotcontrol customer 360 info
-    And Click 'Save' button in Customer 360 view
+    And Click 'Save' button in Profile
     Then dotcontrol customer info is updated on backend
     And Correct dotcontrol client details are shown
     And New info is shown in left menu with chats

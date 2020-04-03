@@ -17,9 +17,9 @@ Feature: Customer Profile from widget
     When User enter chat to support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation
-    And Click 'Edit' button in Customer 360 view
+    And Click 'Edit' button in Profile
     When Fill in the form with new touch customer 360 info
-    And Click 'Save' button in Customer 360 view
+    And Click 'Save' button in Profile
     Then Touch customer info is updated on backend
     And Correct touch client details are shown
     And New info is shown in left menu with chats

@@ -1,6 +1,6 @@
 @agent_to_user_conversation
 @twitter
-Feature: Customer 360 info for twitter user
+Feature: Profile info for twitter user
 
   Background:
     Given Login to twitter
@@ -13,9 +13,9 @@ Feature: Customer 360 info for twitter user
     Then Agent has new conversation request from twitter user
     When Agent click on new conversation request from twitter
     Then Correct twitter dm client details are shown
-    And Click 'Edit' button in Customer 360 view
+    And Click 'Edit' button in Profile
     When Fill in the form with new twitter dm customer 360 info
-    And Click 'Save' button in Customer 360 view
+    And Click 'Save' button in Profile
     Then twitter dm customer info is updated on backend
     And Correct twitter dm client details are shown
     And New info is shown in left menu with chats

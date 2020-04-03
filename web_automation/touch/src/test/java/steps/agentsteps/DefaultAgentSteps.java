@@ -313,7 +313,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
 
-    @When("Click (?:'Edit'|'Save') button in Customer 360 view")
+    @When("Click (?:'Edit'|'Save') button in Profile")
     public void clickEditCustomerView(){
         getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
     }

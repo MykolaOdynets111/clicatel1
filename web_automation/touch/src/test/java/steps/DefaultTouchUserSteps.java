@@ -1,6 +1,7 @@
 package steps;
 
 import agentpages.AgentHomePage;
+import agentpages.uielements.ChatAttachment;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
@@ -846,15 +847,27 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Assert.assertFalse(surveyForm.isCommentFieldShown(), "Unexpected comment field is shown");
     }
 
+    // ========================== Attachments steps ========================= //
+
     @Then("^Widget contains attachment message$")
     public void verifyAttachmentMessagePresent(){
-        Assert.assertTrue(widgetConversationArea.isAttachmentMessageShown(), "No attachment message is shown from agent on widget");
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(widgetConversationArea.isAttachmentMessageShown(), "No attachment message is shown from agent on widget");
+        soft.assertEquals(widgetConversationArea.getAttachmentFile().getFileName(), DefaultTouchUserSteps.mediaFileName.get(),
+                "File name is not the same as the file name which user sent");
+        soft.assertAll();
     }
 
 
     @When("User is downloading the file")
-    public void downloadAtachment(){
+    public void downloadAttachment(){
         widgetConversationArea.getAttachmentFile().clickDownloadLink();
+    }
+
+    @Then("^User can play (.*) file$")
+    public void verifyIsFilePlaying(String fileType){
+        ChatAttachment agentDeskChatAttachment = widgetConversationArea.getAttachmentFile().clickPlayPauseButton(fileType);
+        Assert.assertTrue(agentDeskChatAttachment.verifyIsFilePlaying(), "Media content is not playing");
     }
 
     // ======================= Private Getters ========================== //

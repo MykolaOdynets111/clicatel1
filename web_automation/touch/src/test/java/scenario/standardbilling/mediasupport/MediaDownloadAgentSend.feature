@@ -13,7 +13,7 @@ Feature: Media Support: Agent sends files and user downloads
     And Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     And Agent attach <fileType> file type
-    And Agent send attached file
+    When Agent send attached file
     Then Widget contains attachment message
     When User is downloading the file
     Then File is not changed after uploading and downloading

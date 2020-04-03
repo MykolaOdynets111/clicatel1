@@ -77,9 +77,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getChatAttachmentForm("agent").clickSendButton();
     }
 
-    @Then ("^Attachment message is shown for (.*)$")
-    public void verifyAttachmentPresent(String agent){
-        Assert.assertTrue(getChatBody(agent).isAttachmentMessageShown(), "No Attachment message was shown");
+    @Then ("^Attachment message is shown for Agent$")
+    public void verifyAttachmentPresent(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getChatBody("agent").isAttachmentMessageShown(), "No Attachment message was shown");
+        soft.assertEquals(getChatBody("agent").getAttachmentFile().getFileName(), DefaultTouchUserSteps.mediaFileName.get(),
+                "File name is not the same as the file name which user sent");
+        soft.assertAll();
     }
 
     @When("^(.*) download the file$")
@@ -113,14 +117,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(fileEquality, "Files are not equal after uploading and downloading");
     }
 
-    @Then("^(.*) can play (.*) file$")
-    public void verifyIsFilePlaying(String agent, String fileType){
-        ChatAttachment agentDeskChatAttachment = getChatBody(agent).getAttachmentFile().clickPlayPauseButton(fileType);
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(agentDeskChatAttachment.getFileName(), DefaultTouchUserSteps.mediaFileName.get(),
-                "File name is not the same as the file which user sent");
-        soft.assertTrue(agentDeskChatAttachment.verifyIsFilePlaying(), "Media content is not playing");
-        soft.assertAll();
+    @Then("^Agent can play (.*) file$")
+    public void verifyIsFilePlaying(String fileType){
+        ChatAttachment agentDeskChatAttachment = getChatBody("agent").getAttachmentFile().clickPlayPauseButton(fileType);
+        Assert.assertTrue(agentDeskChatAttachment.verifyIsFilePlaying(), "Media content is not playing");
     }
 
     @When("^Agent click on emoji icon$")
