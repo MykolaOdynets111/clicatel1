@@ -15,7 +15,6 @@ Feature: Media Support: User send files and agent playing
     And User send attached file
     Then Attachment message is shown for Agent
     Then Agent can play <fileType> file
-    And Agent closes chat
 
     Examples:
       | fileType            |

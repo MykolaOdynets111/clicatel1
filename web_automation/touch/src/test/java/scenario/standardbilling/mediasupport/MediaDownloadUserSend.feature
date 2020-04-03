@@ -17,7 +17,6 @@ Feature: Media Support: User send files and agent downloading
     Then Attachment message is shown for Agent
     When Agent download the file
     Then File is not changed after uploading and downloading
-    And Agent closes chat
 
     Examples:
       | fileType            |

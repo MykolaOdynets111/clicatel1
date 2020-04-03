@@ -91,12 +91,18 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyFilesEquality(){
         File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
         File downloadedFile = new File("\\\\172.31.69.0\\selenium\\" +  DefaultTouchUserSteps.mediaFileName.get());
-
+            if(ConfigManager.isRemote()){
+                downloadedFile = new File("/selenium/" +  DefaultTouchUserSteps.mediaFileName.get());
+            }
         for (int i=0; i < 10; i++){
            if (downloadedFile.exists()){
                break;
            }
            waitFor(2000);
+           if (i== 9){
+               throw new AssertionError("File " + DefaultTouchUserSteps.mediaFileName.get()
+                       + " was not downloaded to the shared folder");
+           }
         }
         boolean fileEquality = false;
         try {

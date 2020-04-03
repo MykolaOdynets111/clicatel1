@@ -17,7 +17,6 @@ Feature: Media Support: Agent sends files and user downloads
     Then Widget contains attachment message
     When User is downloading the file
     Then File is not changed after uploading and downloading
-    And Agent closes chat
 
     Examples:
       | fileType            |
