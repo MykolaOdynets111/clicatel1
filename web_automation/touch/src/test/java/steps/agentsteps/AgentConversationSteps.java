@@ -23,10 +23,13 @@ import steps.TwitterSteps;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AgentConversationSteps extends AbstractAgentSteps {
 
@@ -94,19 +97,26 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^File is not changed after uploading and downloading$")
     public void verifyFilesEquality(){
         File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
-        File downloadedFile = new File("\\\\172.31.69.0\\selenium\\" +  DefaultTouchUserSteps.mediaFileName.get());
-            if(ConfigManager.isRemote()){
-                downloadedFile = new File("/selenium/" +  DefaultTouchUserSteps.mediaFileName.get());
-            }
+//        Uncomment in case remote run from PC(\\\\172.31.69.0\\selenium\\ remote shared folder).
+//        Or change download location in case run locally from PC
+//        String sharedFolder =  = ("\\\\172.31.69.0\\selenium\\");
+        String sharedFolder = "/selenium/";
+        File downloadedFile = new File( sharedFolder +  DefaultTouchUserSteps.mediaFileName.get());
         for (int i=0; i < 10; i++){
-           if (downloadedFile.exists()){
-               break;
-           }
-           waitFor(2000);
-           if (i== 9){
-               throw new AssertionError("File " + DefaultTouchUserSteps.mediaFileName.get()
-                       + " was not downloaded to the shared folder");
-           }
+            try (Stream<Path> walk = java.nio.file.Files.walk(Paths.get(sharedFolder))) {
+                List<String> allFiles = walk.filter(java.nio.file.Files::isRegularFile)
+                        .map(x -> x.toString()).collect(Collectors.toList());
+                if (allFiles.contains(downloadedFile.getPath())){
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (i== 9){
+                throw new AssertionError("File " + downloadedFile.getPath()
+                        + " was not downloaded to the shared folder");
+            }
+            waitFor(2000);
         }
         boolean fileEquality = false;
         try {
