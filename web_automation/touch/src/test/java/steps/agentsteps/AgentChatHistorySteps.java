@@ -30,7 +30,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
         String expectedChatHistoryTime = getExpectedTime(chatHistory.getChatStarted(),
-                DateTimeFormatter.ofPattern("d MMM yyyy h:mm a"), false);
+                DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm"), false);
         ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getSecondChatHistoryItems();
 
 
