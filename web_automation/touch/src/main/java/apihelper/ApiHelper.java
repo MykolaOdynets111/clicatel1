@@ -731,7 +731,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         return LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(zoneId).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+                .format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
     }
 
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){

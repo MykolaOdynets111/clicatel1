@@ -78,7 +78,7 @@ public class Customer360Container extends AbstractUIElement {
         if(!twitterLabel.getText().equals("Unknown")) channelUsername = twitterLabel.getText();
         if(!fbLabel.getText().equals("Unknown")) channelUsername = fbLabel.getText();
         if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage(this.getCurrentDriver())!=null) channelUsername = getUserNameFromLocalStorage(this.getCurrentDriver());
-        if(channelUsername.equals("Unknown")) channelUsername = "@"+profileNameLabel.getAttribute("value");
+        if(channelUsername.equals("Unknown")) channelUsername = profileNameLabel.getAttribute("value");
         if (phoneLocator.getAttribute("value").isEmpty()){
             phone = "Unknown";
         } else {
