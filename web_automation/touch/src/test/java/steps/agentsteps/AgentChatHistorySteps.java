@@ -26,11 +26,12 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     private ChatHistory chatHistory;
     private String userId;
 
+
     @Then("^(.*) sees correct chat with basic info in chat history container$")
     public void verifyChatHistoryItemInActiveChatView(String agent){
         SoftAssert soft = new SoftAssert();
         String expectedChatHistoryTime = getExpectedTime(chatHistory.getChatStarted(),
-                DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm"), false);
+                DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"), false);
         ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getSecondChatHistoryItems();
 
 
@@ -50,7 +51,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @Then("^(.*) sees correct messages in history details window$")
     public void verifyHistoryInOpenedWindow(String agent){
         SoftAssert soft = new SoftAssert();
-        String expectedChatHistoryTime = getExpectedTime(chatHistory.getMessages().get(0).getDateTime(), DateTimeFormatter.ofPattern("d MMM yyyy, h:mm a"), false);
+        String expectedChatHistoryTime = getExpectedTime(chatHistory.getMessages().get(0).getDateTime(), DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm"), false);
         List<String> messagesFromChatHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getAllMessages();
 
         List<String> expectedChatHistory = getExpectedChatHistoryItems(chatHistory);
