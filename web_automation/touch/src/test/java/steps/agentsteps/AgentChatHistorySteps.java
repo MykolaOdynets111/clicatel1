@@ -164,10 +164,11 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         Assert.assertFalse(getChatBody(agent).isRateCardShown(), "Unexpected Rate card was shown");
     }
 
+
     private List<String> getExpectedChatHistoryItems(ChatHistory chatHistory){
         List<String> expectedMessagesList = new ArrayList<>();
         expectedMessagesList.add(0,
-                getExpectedTime(chatHistory.getChatStarted(), DateTimeFormatter.ofPattern("EEEE, MM d, yyyy"), true));
+                getExpectedTime(chatHistory.getChatStarted(), DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy"), true));
 
         for(int i=0; i< chatHistory.getMessages().size(); i++){
             String message = chatHistory.getMessages().get(i).getMessage().getText();

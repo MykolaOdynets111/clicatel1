@@ -165,7 +165,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             userMessage = ApiHelper.getTafMessages().stream().filter(e -> e.getId().equals(message)).findFirst().get().getText();
         }
         Assert.assertTrue(getAgentHomePage("main agent").getChatBody().isToUserMessageShown(userMessage),
-                "Expected to user message '"+userMessage+"' is not shown in chatdesk");
+                "Expected to user message '"+userMessage+"' should be shown in chatdesk");
     }
 
     @Then("^(.*) select \"(.*)\" left menu option$")
