@@ -3,6 +3,8 @@ package portaluielem;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 
 @FindBy(css = "div.automated-messages.chat-desk")
 public class ChatDeskWindow extends BasePortalWindow {
@@ -24,6 +26,15 @@ public class ChatDeskWindow extends BasePortalWindow {
 
     @FindBy(xpath = "//fieldset[contains(@ng-model,'autoScheduling')]//button")
     private WebElement toggleAutoScheduler;
+
+    @FindBy(css = "[ng-model=departmentPrimaryStatus] button")
+    private WebElement defaultDepartmentCheckbox;
+
+    @FindBy(xpath = "//span[@placeholder='Select default departments']/ancestor::div[@class='cl-multi-select-container']")
+    private WebElement defaultDepartmentsDropdown;
+
+    @FindBy(css =".option-text.ng-binding")
+    private List<WebElement> departments;
 
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
@@ -62,5 +73,18 @@ public class ChatDeskWindow extends BasePortalWindow {
 
     public void clickOnOffAutoScheduler(){
         clickElem(this.getCurrentDriver(), toggleAutoScheduler, 5,"Auto scheduler toggle");
+    }
+
+    public ChatDeskWindow activateDefaultDepartmentCheckbox(){
+        if(!defaultDepartmentCheckbox.getAttribute("class").contains("active")){
+            clickElem(this.getCurrentDriver(), defaultDepartmentCheckbox, 5,"Default Department Checkbox");
+        }
+        return this;
+    }
+
+    public void selectDefaultDepartment(String name){
+        clickElem(this.getCurrentDriver(), defaultDepartmentsDropdown, 5,"Default Department Dropdown");
+        departments.stream().filter(a -> a.getText().contains(name))
+                .findFirst().orElseThrow(() -> new AssertionError("Cannot find department: " + name)).click();
     }
 }

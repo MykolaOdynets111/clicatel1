@@ -6,7 +6,7 @@ Feature: Departments: Verify if possible to transfer chat to department
     And New departments with AutomationSecond name AutoDescriptionSecond description and second agent is created
     Given User select Standard Billing tenant
     And Click chat icon
-    And User enter connect to agent2 into widget input field
+    And User enter connect to agent into widget input field
 
   @TestCaseId("https://jira.clickatell.com/browse/TPLAT-4561")
   Scenario: Departments: Verify if possible to transfer chat to department

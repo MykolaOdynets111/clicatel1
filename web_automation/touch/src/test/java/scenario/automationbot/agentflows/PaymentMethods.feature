@@ -38,6 +38,7 @@ Feature: Admin should be able to manage payment methods
     When Admin clicks Manage -> Remove payment for John Stein
     Then Payment method for John Stein is not shown in Payment methods tab
 
+
   Scenario: Admin should not be able to add payment method without accepting all terms
     When I open portal
     And Login into portal as an admin of Automation Bot account
@@ -52,7 +53,3 @@ Feature: Admin should be able to manage payment methods
     When Admin selects 2 terms checkbox
     And Admin clicks 'Add payment method' button
     Then New card for John Brown is shown in Payment methods tab
-
-
-
-

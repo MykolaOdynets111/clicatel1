@@ -23,6 +23,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.portalsteps.BasePortalSteps;
+import steps.portalsteps.SurveyManagementSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import touchpages.uielements.SurveyForm;

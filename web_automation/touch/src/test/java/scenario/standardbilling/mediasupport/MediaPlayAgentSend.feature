@@ -22,4 +22,4 @@ Feature: Media Support: Agent send files and user playing
       | opus                |
       | mp4                 |
       | aac                 |
-      | amr                 |
+#      | amr                 |

@@ -1,4 +1,4 @@
-package steps;
+package steps.portalsteps;
 
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;

@@ -1,4 +1,4 @@
-package steps;
+package steps.portalsteps;
 
 import apihelper.ApiHelper;
 import cucumber.api.java.en.And;
@@ -105,5 +105,6 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         Assert.assertEquals(getDepartmentsManagementPage().switchToFrame().getDuplicationAlertText(), "Department already exist.", "Duplication message is not the same");
         getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
     }
+
 
 }
