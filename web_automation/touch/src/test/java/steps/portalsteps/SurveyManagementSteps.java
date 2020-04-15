@@ -115,7 +115,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @When("^Customize your survey \"(.*)\" question$")
     public void setSurveyQuestion(String question){
         getSurveyManagementPage().switchToFrame();
-        questionUpdate.set(question + " " + faker.chuckNorris().fact());
+        questionUpdate.set(question + " " + faker.rockBand().name());
         surveyWebChatForm.changeQuestion(questionUpdate.get());
         getSurveyManagementPage().switchToDefaultFrame();
     }

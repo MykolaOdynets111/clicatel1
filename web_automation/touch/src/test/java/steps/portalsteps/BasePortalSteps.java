@@ -1742,6 +1742,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().waitWhileProcessing(1,1);
     }
 
+    @When("^Select (.*) department By Default$")
+    public void selectDefaultDepartment(String name){
+        getPortalTouchPreferencesPage().getChatDeskWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
+    }
+
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
     public void verifyAutoSchedulingStatusOnBackend(String tenant){
         Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
@@ -1764,6 +1769,18 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
     public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
         Assert.assertTrue(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
+    }
+
+    @When("^Turn (.*) the Last Agent routing$")
+    public void changeLastAgentRoting(String status){
+        if (status.equalsIgnoreCase("on")){
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"lastAgentMode", "true");
+        } else if(status.equalsIgnoreCase("off")){
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"lastAgentMode", "false");
+        }else{
+            throw new AssertionError("Incorrect status was provided");
+        }
+
     }
 
     private MainPage getMainPage() {
