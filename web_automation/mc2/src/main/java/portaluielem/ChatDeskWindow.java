@@ -36,6 +36,9 @@ public class ChatDeskWindow extends BasePortalWindow {
     @FindBy(css =".option-text.ng-binding")
     private List<WebElement> departments;
 
+    @FindBy(css ="[ng-model=lastAgentMode] button")
+    private WebElement liveChatRoatingCheckbox;
+
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
         chatsAvailable.clear();
@@ -87,4 +90,12 @@ public class ChatDeskWindow extends BasePortalWindow {
         departments.stream().filter(a -> a.getText().contains(name))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find department: " + name)).click();
     }
+
+    public ChatDeskWindow activateLiveChatRoatingCheckbox(){
+        scrollToElem(this.getCurrentDriver(), liveChatRoatingCheckbox,"Live Chat Roating Checkbox");
+        clickElem(this.getCurrentDriver(), liveChatRoatingCheckbox, 5,"Live Chat Roating Checkbox");
+        return this;
+    }
+
+
 }

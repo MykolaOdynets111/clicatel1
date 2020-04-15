@@ -1747,6 +1747,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getChatDeskWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
     }
 
+    @When("^Activate Last Agent routing$")
+    public void activateLastAgent(){
+        getPortalTouchPreferencesPage().getChatDeskWindow().activateLiveChatRoatingCheckbox();
+    }
+
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")
     public void verifyAutoSchedulingStatusOnBackend(String tenant){
         Assert.assertNotEquals(ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled"),
@@ -1780,7 +1785,17 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
+    }
 
+    @When("^Turn (.*) the Default department$")
+    public void changeDepartmentPrimaryStatus(String status){
+        if (status.equalsIgnoreCase("on")){
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"departmentPrimaryStatus", "true");
+        } else if(status.equalsIgnoreCase("off")){
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"departmentPrimaryStatus", "false");
+        }else{
+            throw new AssertionError("Incorrect status was provided");
+        }
     }
 
     private MainPage getMainPage() {

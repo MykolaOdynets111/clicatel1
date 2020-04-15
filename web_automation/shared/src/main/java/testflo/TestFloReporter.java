@@ -125,11 +125,13 @@ public class TestFloReporter {
     }
 
     public static void addMissingScenarios(AllureScenarioInterface scenario, String testPlan){
-        Map<String, String> newTC = JiraApiHelper.createNewTestCase(scenario, testPlan);
-        try {
-            setTCStatus(newTC.get("key"), "open", scenario.getStatus(), scenario.getFailureMessage());
-        }catch (SocketTimeoutException e){
-            return;
+        if (!scenario.getStatus().equalsIgnoreCase("Skipped")) {
+            Map<String, String> newTC = JiraApiHelper.createNewTestCase(scenario, testPlan);
+            try {
+                setTCStatus(newTC.get("key"), "open", scenario.getStatus(), scenario.getFailureMessage());
+            } catch (SocketTimeoutException e) {
+                return;
+            }
         }
     }
 

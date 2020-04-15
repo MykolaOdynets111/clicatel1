@@ -28,6 +28,7 @@
             <class name="runner.standardbilling.RunDepartmentsTest" />
             <class name="runner.standardbilling.RunMediaSupportTest" />
             <class name="runner.standardbilling.RunSurveyTest" />
+            <class name="runner.standardbilling.RunSchedulerSchemasTest" />
         </classes>
     </test>
 </suite>
