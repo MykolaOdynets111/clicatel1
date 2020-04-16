@@ -52,7 +52,7 @@ public class Endpoints {
 
     public static String DELETE_CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/crm-tickets/";
 
-    public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseURL() + "tags";
+    public static String TAGS_FOR_CRM_TICKET = URLs.getTouchApiBaseIntegrationURL() + "api/tags";
 
     public static String TENANT_BRAND_LOGO = URLs.getTouchApiBaseURL() + "tenants/%s/resources/tenant_logo";
 
@@ -63,6 +63,8 @@ public class Endpoints {
     public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
 
     public static String SURVEY_MANAGEMENT= URLs.getTouchApiBaseIntegrationURL() + "tenants/channels/rating/config?channelId=%s";
+
+    public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 
     // ================== INTERNAL ============== //
 
@@ -95,8 +97,6 @@ public class Endpoints {
     public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
 
     public static String INTERNAL_CONFIG_ATTRIBUTES = URLs.getBaseInternalApiUrl() + "tenants/config-attributes/";
-
-    public static String INTERNAL_TAGS_FROM_CRM_TICKET = URLs.getBaseInternalApiUrl() + "sessions/%s/attributes/tags";
 
     public static String INTERNAL_GET_TICKETS = URLs.getBaseInternalApiUrl() + "chats/ticket?tenantId=%s&page=%s&size=10&state=UNASSIGNED&direction=ASC";
 

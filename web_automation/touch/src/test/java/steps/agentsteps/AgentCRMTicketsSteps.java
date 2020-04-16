@@ -107,7 +107,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 .atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
         long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
-        List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getSessionId());
+        List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getConversationId());
         Collections.sort(tags);
         String crmTicketTags = String.join(", ", tags);
         soft.assertTrue((actualMili-expectedMili)<=3000,
@@ -118,7 +118,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 "Ticket note does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getLink(), crmTicketInfoForUpdating.get().get("link"),
                 "Ticket link does not match created on the backend \n");
-        soft.assertTrue(crmTicketTags.equals(crmTicketInfoForUpdating.get().get("agentTags")),
+        soft.assertEquals(crmTicketTags, crmTicketInfoForUpdating.get().get("agentTags"),
                 "CRM ticket 'Tags' does not match created on the backend \n");
         soft.assertAll();
 

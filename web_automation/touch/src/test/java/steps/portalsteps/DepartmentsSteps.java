@@ -8,6 +8,7 @@ import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import portalpages.DepartmentsManagementPage;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.portalsteps.AbstractPortalSteps;
 
@@ -48,11 +49,13 @@ public class DepartmentsSteps extends AbstractPortalSteps {
 
     @And("^Edit department with (.*) name (.*) description")
     public void editDepartment(String name, String description){
-        getDepartmentsManagementPage().switchToFrame().openDepartmentManageForm(name, description).
+        DepartmentsManagementPage dep =getDepartmentsManagementPage().switchToFrame();
+        dep.isCardPresent(name, 5);
+        dep.openDepartmentManageForm(name, description).
                 setNameField(name + "Edited").setDescriptionForm(description + "Edited").clickSaveButton();
-        getDepartmentsManagementPage().isCardPresent(name+ "Edited", 2);
-        getDepartmentsManagementPage().findCardByNameAndDescription(name+ "Edited", description+ "Edited");
-        getDepartmentsManagementPage().getCurrentDriver().switchTo().defaultContent();
+        dep.isCardPresent(name+ "Edited", 2);
+        dep.findCardByNameAndDescription(name+ "Edited", description+ "Edited");
+        dep.getCurrentDriver().switchTo().defaultContent();
     }
 
     @Then ("^Verify that card has (.*) name and (.*) description")

@@ -806,15 +806,15 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
-    public static List<String> getTagsForCRMTicket(String sessionID){
-        return RestAssured.given()
-                .get(String.format(Endpoints.INTERNAL_TAGS_FROM_CRM_TICKET, sessionID)).getBody().jsonPath().getList("");
+    public static List<String> getTagsForCRMTicket(String chatId){
+        return RestAssured.given().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .get(String.format(Endpoints.CHATS_INFO, chatId)).getBody().jsonPath().getList("tags.value");
     }
 
     public static List<String> getAllTags(){
         return RestAssured.given()
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("");
+                .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("value");
     }
 
 
