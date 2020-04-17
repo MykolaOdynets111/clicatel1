@@ -9,8 +9,8 @@ Feature: Last agent activate
     And Turn off the Last Agent routing
     When Turn off the Default department
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-20921")
-  Scenario: verify if supervisor can switch the toggle on or off for the "Last agent"setting
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-20917")
+  Scenario: Verify if a returning customer can be assigned to the last agent that they spoke to
     And I select Touch in left menu and Touch preferences in submenu
     When Click "Chat Desk" nav button
     And Activate Last Agent routing
