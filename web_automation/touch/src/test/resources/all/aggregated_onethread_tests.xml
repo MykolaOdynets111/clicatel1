@@ -29,6 +29,7 @@
             <class name="runner.standardbilling.RunMediaSupportTest" />
             <class name="runner.standardbilling.RunSurveyTest" />
             <class name="runner.standardbilling.RunSchedulerSchemasTest" />
+            <class name="runner.standardbilling.RunEndStopTest" />
         </classes>
     </test>
 </suite>

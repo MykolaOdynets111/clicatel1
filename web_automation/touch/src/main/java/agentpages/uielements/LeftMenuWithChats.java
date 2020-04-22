@@ -137,8 +137,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(targetProfile, userName), wait);
     }
 
-    public boolean isConversationRequestIsRemoved(int wait) {
-        String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+    public boolean isConversationRequestIsRemoved(int wait, String userName) {
         try{
             waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), String.format(String.format(targetProfile,
                     userName), userName), wait);

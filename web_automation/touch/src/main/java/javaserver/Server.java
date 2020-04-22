@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,6 +28,7 @@ public class Server {
     public static volatile int SERVER_PORT = 5000;
     private static boolean running = true;
     public static volatile Map<String, MessageResponse> incomingRequests = new HashMap<>();
+    public static volatile List<String> messages = new ArrayList<String>();
 
     public static void stopServer(){
         running = false;
@@ -36,7 +39,7 @@ public class Server {
             return "http://" + Server.INTERNAL_CI_IP + ":" + Server.SERVER_PORT;
         }else{
             // to provide local ngrok url
-            return "https://9fb9cd51.ngrok.io";
+            return "https://595da9ac.ngrok.io";
         }
     }
 
@@ -112,6 +115,10 @@ public class Server {
                 incomingRequest = convertStringBotResponseBodyToObject(incomingBody);
                 Server.incomingRequests.clear();
                 Server.incomingRequests.put(incomingRequest.getClientId(), incomingRequest);
+                if (incomingRequest.getMessage() != null && !incomingRequest.getMessage().isEmpty()){
+                    messages.add(incomingRequest.getMessage());
+                }
+
             }
 
         }
