@@ -153,7 +153,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
     public void verifyUserMessageOnAgentDeskFromFB(String userMessage) {
         Assert.assertTrue(getChatBody("main agent").isUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
-                "'" + userMessage + "' User message is not shown in conversation area (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
+                "'" + FacebookSteps.getCurrentUserMessageText() + "' User message is not shown in conversation area (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
     }
 
     @Then("^Conversation area becomes active with (.*) user's message in it for (.*)$")

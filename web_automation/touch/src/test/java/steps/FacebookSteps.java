@@ -1,6 +1,7 @@
 package steps;
 
 import apihelper.ApiHelper;
+import com.github.javafaker.Faker;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -23,7 +24,6 @@ import java.util.Random;
 
 public class FacebookSteps {
 
-    private static SecureRandom random = new SecureRandom();
     private FBTenantPage fbTenantPage;
     private MessengerWindow messengerWindow;
     private FBYourPostPage FBYourPostPage;
@@ -56,7 +56,6 @@ public class FacebookSteps {
         messengerWindow.waitForWelcomeMessage(welcomeMessage, 10);
         messengerWindow.enterMessage(createUniqueUserMessage(message));
     }
-
 
     @Then("^User have to receive the following on his message regarding (.*): \"(.*)\"$")
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
@@ -126,10 +125,10 @@ public class FacebookSteps {
 
 
     public synchronized static String createUniqueUserMessage(String baseMessage){
-        if(baseMessage.contains("thanks")) fbMessage=baseMessage;
-        else {
-            char c = (char) (random.nextInt(26) + 'a');
-            fbMessage = baseMessage + c;
+        if(baseMessage.contains("thanks") || baseMessage.equalsIgnoreCase("//end") || baseMessage.equalsIgnoreCase("//stop") ) {
+            fbMessage=baseMessage;
+        } else {
+            fbMessage = baseMessage + new Faker().letterify("??");
         }
         return fbMessage;
     }

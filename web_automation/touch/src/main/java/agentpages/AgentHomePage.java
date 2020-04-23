@@ -18,6 +18,9 @@ public class AgentHomePage extends AgentAbstractPage {
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String modalWindow = "div.modal-content";
 
+    @FindBy(css = "[selenium-id=chat-messages-list]")
+    private List<WebElement> chatMessageContainers;
+
     @FindBy(css = "div.dashboard div.chat")
     private WebElement conversationAreaContainer;
 
@@ -195,7 +198,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatBody getChatBody() {
-        waitForElementToBeVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 5);
+        //waitForElementToBeVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 5);
+        waitForElementToBeVisible(this.getCurrentDriver(), chatMessageContainers.get(chatMessageContainers.size()-1), 5);
         chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
     }
