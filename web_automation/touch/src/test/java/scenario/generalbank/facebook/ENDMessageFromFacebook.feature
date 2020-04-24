@@ -15,5 +15,6 @@ Feature: END message for Facebook
     Then Agent has new conversation request from facebook user
     When Agent click on new conversation request from facebook
     Then Conversation area becomes active with chat to agent message from facebook user
-    When User sends message regarding //End
-    Then Agent should not see from user chat in agent desk
+    When User sends message regarding //EnD
+    Then Agent should not see from user chat in agent desk from facebook
+    Then User have to receive the following on his message regarding //EnD: "Thank you. Chat soon!"

@@ -213,10 +213,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         );
     }
 
-    @Then("^(.*) should not see from user chat in agent desk from .Control$")
-    public void verifyDotControllConversationRemovedFromChatDesk(String agent){
-        // ToDo: Update after clarifying timeout in System timeouts
-        String userName = DotControlSteps.getClientId();
+    @Then("^(.*) should not see from user chat in agent desk from (.*)$")
+    public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
+        String userName = "";
+        if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
+        if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
+        if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
+
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
                 "Conversation request is not removed from Agent Desk (Client ID: "+userName+")"
         );

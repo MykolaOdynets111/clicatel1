@@ -143,7 +143,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void verifyUserMessageOnAgentDeskFromTwitter(String userMessage) {
         if (userMessage.contains("agent") || userMessage.contains("support")) {
             userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-        } else {
+        } else if (! userMessage.equalsIgnoreCase("//end") ||
+                ! userMessage.equalsIgnoreCase("//stop")){
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         Assert.assertTrue(getChatBody("main").isUserMessageShown(userMessage),

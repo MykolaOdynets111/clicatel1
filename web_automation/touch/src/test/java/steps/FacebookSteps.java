@@ -125,7 +125,8 @@ public class FacebookSteps {
 
 
     public synchronized static String createUniqueUserMessage(String baseMessage){
-        if(baseMessage.contains("thanks") || baseMessage.equalsIgnoreCase("//end") || baseMessage.equalsIgnoreCase("//stop") ) {
+        if(baseMessage.contains("thanks") || baseMessage.equalsIgnoreCase("//end")
+                || baseMessage.equalsIgnoreCase("//stop") ) {
             fbMessage=baseMessage;
         } else {
             fbMessage = baseMessage + new Faker().letterify("??");

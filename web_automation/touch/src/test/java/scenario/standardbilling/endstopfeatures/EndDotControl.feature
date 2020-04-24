@@ -21,5 +21,5 @@ Feature: END message for .Control
     When Prepare payload for sending //end message for .Control
     And Send message call
     Then Verify dot .Control returns Thank you. Chat soon! response during 10 seconds
-    Then Agent should not see from user chat in agent desk from .Control
+    Then Agent should not see from user chat in agent desk from dotcontrol
 
