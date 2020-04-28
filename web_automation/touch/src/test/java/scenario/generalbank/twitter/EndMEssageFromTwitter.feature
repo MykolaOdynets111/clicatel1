@@ -15,6 +15,4 @@ Feature: END message for Twitter
     Then Conversation area becomes active with chat to support message from twitter user
     When User sends twitter direct message: //eNd
     Then Agent should not see from user chat in agent desk from twiter
-#    Then Chat Transcript email arrives
-#    And Email title contains twdm adapter, client ID/Name/Email, chat ID, session number values
-#    And Email content contains chat history from the terminated conversation
+    Then User have to receive correct response "Thank you. Chat soon!" on his message "//eND"

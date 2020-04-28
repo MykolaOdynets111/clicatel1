@@ -25,7 +25,7 @@ public class TwitterLoginPage extends AbstractSocialPage {
     @FindBy(xpath = "//div[@class='row user']/input")
     private WebElement emailInputFieldIntegration;
 
-    private String emailInputOnSeparatePageXPATH = "//form//fieldset//input[@type='text']";
+    private String emailInputOnSeparatePageXPATH = "//input[@name = 'session[username_or_email]' and @type='text']";
 
     @FindBy(xpath = "//form[@data-element='form']//input[@type='password']")
     private WebElement passInputField;
@@ -34,12 +34,12 @@ public class TwitterLoginPage extends AbstractSocialPage {
     @FindBy(xpath = "//div[@class='row password']/input")
     private WebElement passInputFieldIntegration;
 
-    private String passInputFieldOnSeparatePageXPATH = "//form//fieldset//input[@type='password']";
+    private String passInputFieldOnSeparatePageXPATH = "//input[@type='password']";
 
     @FindBy(xpath = "//form[@data-element='form']//input[@type='submit']")
     private WebElement loginButton;
 
-    private String loginButtonOnSeparatePageXPATH = "//button[@type='submit']";
+    private String loginButtonOnSeparatePageXPATH = "//div[@data-testid='LoginForm_Login_Button']/div";
 
     private String filedForTelefonVerification = "input#challenge_response";
 

@@ -39,6 +39,7 @@ public class TwitterSteps {
     @Given("^Open twitter page of (.*)$")
     public void openTwitterPage(String tenantOrgName){
         TwitterHomePage.openTenantPage(DriverFactory.getTouchDriverInstance(), URLs.getTwitterURL(tenantOrgName));
+        getTwitterTenantPage().refreshPageIfCookiesWereNotSet();
         Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 
@@ -217,13 +218,13 @@ public class TwitterSteps {
         Faker faker = new Faker();
         int day = LocalDateTime.now().getDayOfMonth();
         if (day % 2 == 0) {
-            if (invocationCount<1) tweetMessage = "chat to agent" +  faker.name().firstName().substring(0,1);
+            if (invocationCount<1) tweetMessage = "chat to agent" +  faker.letterify("??");
             else tweetMessage= "connect to agent" +  faker.lorem().character();
             invocationCount ++;
         }
         else {
-            if (invocationCount<1) tweetMessage = "chat to support" +  faker.name().firstName().substring(0,1);
-            else tweetMessage= "connect to support" + invocationCount +  faker.name().firstName().substring(0,1);
+            if (invocationCount<1) tweetMessage = "chat to support" +  faker.letterify("??");
+            else tweetMessage= "connect to support" + invocationCount +  faker.letterify("??");
             invocationCount ++;
         }
         return tweetMessage;

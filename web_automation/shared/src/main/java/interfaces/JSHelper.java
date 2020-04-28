@@ -89,7 +89,7 @@ public interface JSHelper extends WebActions{
             }
             wheelScroll(driver, scrolArea, -200, 0,0);
         }
-        return false;
+        return isElementShown(driver, element, 1);
     }
 
     default void wheelScroll(WebDriver driver, WebElement element, int deltaY, int offsetX, int offsetY){

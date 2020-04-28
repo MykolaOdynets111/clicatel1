@@ -37,6 +37,12 @@ public class TwitterTenantPage extends TwitterHomePage {
         return dmWindow;
     }
 
+    public void refreshPageIfCookiesWereNotSet(){
+        if(!isElementShownByXpath(this.getCurrentDriver(),newDMTweetButtonXpath,3)) {
+            this.getCurrentDriver().navigate().refresh();
+        }
+    }
+
     public void openDMWindow() {
         waitForElementToBeClickableByXpath(this.getCurrentDriver(),newDMTweetButtonXpath,5);
         findElemByXPATH(this.getCurrentDriver(),newDMTweetButtonXpath).click();
