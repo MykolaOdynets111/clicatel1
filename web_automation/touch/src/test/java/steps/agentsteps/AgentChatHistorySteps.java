@@ -15,6 +15,8 @@ import interfaces.JSHelper;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.dotcontrol.DotControlSteps;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -124,10 +126,13 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     }
 
 
-    @When("^(.*) searches and selects chat in chat history list$")
-    public void selectRandomChatFromHistory(String ordinalAgentNumber){
+    @When("^(.*) searches and selects chat from (.*) in chat history list$")
+    public void selectRandomChatFromHistory(String ordinalAgentNumber, String chanel){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
-        if (userId == null) userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+        if (chanel.equalsIgnoreCase("twitter")) userId = socialaccounts.TwitterUsers.getLoggedInUserName();
+        if(chanel.equalsIgnoreCase("facebook")) userId = socialaccounts.FacebookUsers.getLoggedInUserName();
+        if(chanel.equalsIgnoreCase("dotcontrol")) userId = DotControlSteps.getClient();
+        if(chanel.equalsIgnoreCase("touch") && userId == null) userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         getLeftMenu(ordinalAgentNumber).searchUserChat(userId);
     }
 
@@ -164,6 +169,13 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         Assert.assertFalse(getChatBody(agent).isRateCardShown(), "Unexpected Rate card was shown");
     }
 
+    @Then("^(.*) sees stop message notification in chat history$")
+    public void verifyIfStopNotificationPresent(String agent){
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(getChatBody(agent).isStopCardShown(), "Stop card is not shown");
+        soft.assertEquals(getChatBody(agent).getStopCardText(), "Customer has opted-out of communication. You can no longer send messages.", "Stop card text is not correct");
+        soft.assertAll();
+    }
 
     private List<String> getExpectedChatHistoryItems(ChatHistory chatHistory){
         List<String> expectedMessagesList = new ArrayList<>();

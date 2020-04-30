@@ -65,9 +65,15 @@ public class FacebookSteps {
         // ToDo: Update timeout when it is specified in System timeouts page on Confluence
         boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,60);
         Assert.assertTrue(isExpectedMessageIsShown,
-                "User does not receive response on the message \""+ getCurrentUserMessageText()+"\" in FB messenger after 30 seconds wait.");
+                "User does not receive response on the message \""+ getCurrentUserMessageText()+"\" in FB messenger after 60 seconds wait.");
     }
 
+
+    @Then("^Facebook user has not received (.*) responce$")
+    public void verifyMessengerAbsent(String expectedResponse) {
+        Assert.assertFalse(getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(),
+                expectedResponse,2),expectedResponse + " response should not be shown");
+    }
 
     @When("^User makes post message regarding (.*)$")
     public void makeAPost(String postMessage) {

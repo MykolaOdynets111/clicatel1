@@ -56,7 +56,11 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".from.file-msg")
     private WebElement attachmentMessage;
 
+    @FindBy(css = "[selenium-id='chat-message-content-opted-out']")
+    private WebElement stopCard;
 
+    @FindBy(css = "[selenium-id='chat-message-content-opted-out'] p")
+    private WebElement stopCardText;
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -199,7 +203,15 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public String getRateCardComment(){
-       return getTextFromElem(this.getCurrentDriver(), rateCardComment, 1, "Comment is not present in rate Card");
+       return getTextFromElem(this.getCurrentDriver(), rateCardComment, 1, "Comment in rate Card");
+    }
+
+    public boolean isStopCardShown(){
+        return isElementShown(this.getCurrentDriver(), stopCard, 3);
+    }
+
+    public String getStopCardText(){
+        return getTextFromElem(this.getCurrentDriver(), stopCardText, 1, "Stop Card text").trim();
     }
 
 }

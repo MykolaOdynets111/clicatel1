@@ -22,5 +22,5 @@ Feature: Satisfaction Survey: User select Star and Comment with CSAT
     When Submit survey form with Automation rate comment and 5 rate
     Then Text response that contains "Thank you. Chat soon!" is shown
     When Agent select "Closed" left menu option
-    And Agent searches and selects chat in chat history list
+    And Agent searches and selects chat from touch in chat history list
     Then Agent sees Rate Card in chat history with 5 rate selected and Automation rate comment

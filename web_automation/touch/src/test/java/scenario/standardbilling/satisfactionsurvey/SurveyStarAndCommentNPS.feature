@@ -23,5 +23,5 @@ Feature: Satisfaction Survey: Star and Comment with NPS
     When Submit survey form with Automation rate comment and 8 rate
     Then Text response that contains "Thank you. Chat soon!" is shown
     When Agent select "Closed" left menu option
-    And Agent searches and selects chat in chat history list
+    And Agent searches and selects chat from touch in chat history list
     Then Agent sees Rate Card in chat history with 8 rate selected and Automation rate comment

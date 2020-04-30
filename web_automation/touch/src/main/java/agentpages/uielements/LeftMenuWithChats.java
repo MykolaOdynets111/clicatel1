@@ -2,6 +2,7 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -71,7 +72,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private WebElement getTargetChat(String userName){
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
-                .getUserName().equals(userName)).findFirst().get();
+                .getUserName().equals(userName)).findFirst().orElseThrow(() -> new AssertionError(
+                "No chat was found from: " + userName ));
     }
 
     public void openNewConversationRequestByAgent() {

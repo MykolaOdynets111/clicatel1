@@ -20,5 +20,5 @@ Feature: Satisfaction Survey: Survey rejection
     When Reject survey form submit
     Then Text response that contains "Thank you. Chat soon!" is shown
     When Agent select "Closed" left menu option
-    And Agent searches and selects chat in chat history list
+    And Agent searches and selects chat from touch in chat history list
     Then Agent does not see Rate Card in chat history

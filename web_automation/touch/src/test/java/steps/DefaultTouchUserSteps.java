@@ -829,6 +829,11 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         soft.assertAll();
     }
 
+    @Then("^There is no survey form shown$")
+    public void verifySurveyAbsent(){
+        Assert.assertFalse(widgetConversationArea.getSurveyForm().isSurveyDisplayed(), "Survey form should not be shown");
+    }
+
     @When("^Submit survey form with (.*) comment and (.*) rate$")
     public void submitSurveyForm(String comment, String rate){
         if(comment.equalsIgnoreCase("no")){

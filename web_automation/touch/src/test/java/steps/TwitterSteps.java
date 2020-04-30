@@ -177,6 +177,12 @@ public class TwitterSteps {
         soft.assertAll();
     }
 
+    @Then("^User has not received \"(.*)\" response on his message \"(.*)\"$")
+    public void isResponseNotShown(String response, String userMessage){
+        Assert.assertFalse(getDmWindow().getToUserResponse(userMessage).contains(response),
+                response + " response should not be shown");
+    }
+
     /**
      * Method to verify that response arrived regardless its position
      * @param expectedResponse
