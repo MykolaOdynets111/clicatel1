@@ -59,6 +59,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Response resp = RestAssured.given().log().all()
                 .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName());
         Map<String, String> tenantInf = new HashMap<>();
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Get Tenant Info Map was not successful\n" +
+                        "resp body: " + resp.getBody().asString());
         try{
              tenantInf = resp.getBody().jsonPath().getMap("");
         } catch (JsonPathException e){
@@ -81,7 +84,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return resp;
     }
 
-    public static Response createUserProfile(String tenantName, String clientID) {
+    public static Response createUserProfile(String clientID) {
         Response resp;
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 

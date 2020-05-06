@@ -81,7 +81,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         Tenants.checkWidgetConnectionStatus();
         DriverFactory.openUrl(tenantOrgName);
         String clientID = getClientIdFromLocalStorage();
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+        ApiHelper.createUserProfile(clientID);
     }
 
     @Given("(.*) survey configuration for (.*)")
@@ -128,7 +128,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
    //     Tenants.checkWidgetConnectionStatus();
         DriverFactory.openUrl(tenantOrgName);
         String clientID = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);
+        ApiHelper.createUserProfile(clientID);
     }
 
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page) without creating profile$")
@@ -151,7 +151,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         if(clientID.equalsIgnoreCase("with history")) clientID = getClientWithHistory();
         DriverFactory.openTouchUrlWithPredifinedUserID(tenantOrgName, clientID);
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        ApiHelper.createUserProfile(Tenants.getTenantUnderTestName(), clientID);}
+        ApiHelper.createUserProfile(clientID);}
 
     private String getClientWithHistory(){
         int page = 1;
@@ -576,13 +576,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @When("^User click \"Start chat\" button in widget's header$")
     public void clickStartChatButtonInHeader() {
         getWidgetHeader().clickStartChatButton();
-    }
-
-    @Given("^User profile for (.*) is created$")
-    public void createUserProfile(String tenantName){
-        String clientID = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-        ApiHelper.createUserProfile(tenantName, clientID);
-//        ApiHelper.createUserProfile(tenantName, clientID, "email", "aqa_test@gmail.com");
     }
 
     @Then("^Widget is connected$")

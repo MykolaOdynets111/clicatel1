@@ -3,17 +3,20 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@FindBy(css = "[selenium-id=scrollable-roster]")
+
+@FindBy(xpath = "//div[@class = 'flex-dashboard agent-container']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=roster-item]")
@@ -40,7 +43,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id='search-filter-btn']")
     private WebElement searchButton;
 
-    @FindBy(xpath = "//div[@class='scrollable-roster']//input")
+    @FindAll({
+            @FindBy(xpath = "//div[@class='scrollable-roster']//input"),
+            @FindBy(id = "nameOrPhone"),
+    })
     private WebElement searchChatInput;
 
     @FindBy(css = "[selenium-id=icon-user-single]")
@@ -165,6 +171,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), searchButton, 1, "Search Button");
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
         searchChatInput.sendKeys(userId);
+        searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
         getTargetChat(userId).click();
     }
 

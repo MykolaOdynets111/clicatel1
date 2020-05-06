@@ -84,7 +84,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
             chatEnded = LocalDateTime.now(zoneId).minusDays(3);
         }else{
             userId = "testing_" + faker.number().digits(7);
-            clientProfileId = ApiHelper.createUserProfile(tenantOrgName, userId).jsonPath().getString("id");
+            clientProfileId = ApiHelper.createUserProfile(userId).jsonPath().getString("id");
             chatStarted = LocalDateTime.now(zoneId).minusMinutes(10);
             chatEnded = LocalDateTime.now(zoneId);
         }
