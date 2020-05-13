@@ -50,7 +50,7 @@ public class AllureReportParser {
        File folder;
        if(isRemoteAllureReport){
            folder = new File(System.getProperty("user.dir") + "/build/allure-report/data/test-cases");
-           allureTestCases= Arrays.asList(folder.listFiles());
+           allureTestCases = Arrays.asList(folder.listFiles());
        }else{
            folder = new File(ALLURE_REPORT_DATA_FOLDER);
            allureTestCases = Arrays.stream(folder.listFiles())

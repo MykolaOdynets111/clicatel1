@@ -20,7 +20,7 @@ public class TestFloReporter {
 //    System.setProperty("isAllure2Report", "true");
 //    System.setProperty("reportToTestFLO", "true");
 //    System.setProperty("isRerun", "true");
-//    System.setProperty("tplanKey", "TPORT-14920");
+//    System.setProperty("tplanKey", "TPORT-37612");
 //    System.setProperty("jirauser", "");
 //    System.setProperty("jirapass", "");
 
@@ -130,7 +130,7 @@ public class TestFloReporter {
         System.out.println("Scenario status: " + scenario.getStatus());
         System.out.println("Scenario description: " + scenario.getDescription());
         System.out.println("Scenario failure message: " + scenario.getFailureMessage());
-        if (!scenario.getStatus().equalsIgnoreCase("Skipped")) {
+        if (!scenario.getStatus().equalsIgnoreCase("canceled") || !scenario.getStatus().equalsIgnoreCase("skipped")) {
             System.out.println("Scenario name inside: " + scenario.getName());
             System.out.println("Scenario status inside: " + scenario.getStatus());
             Map<String, String> newTC = JiraApiHelper.createNewTestCase(scenario, testPlan);
