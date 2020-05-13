@@ -3,9 +3,9 @@
 Feature: Media Support: User send files and agent downloading
 
   Background:
-#    And User select Standard Billing tenant
+    And User select Standard Billing tenant
     Given I login as agent of Standard Billing
-#    And Click chat icon
+    And Click chat icon
 
   Scenario Outline: Verify if user is able to send to agent file in .<fileType> format
     When User enter connect to Support into widget input field
