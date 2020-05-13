@@ -87,6 +87,7 @@ public class ChatDeskWindow extends BasePortalWindow {
 
     public void selectDefaultDepartment(String name){
         clickElem(this.getCurrentDriver(), defaultDepartmentsDropdown, 5,"Default Department Dropdown");
+        waitForElementsToBeVisible(this.getCurrentDriver(), departments, 3);
         departments.stream().filter(a -> a.getText().contains(name))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find department: " + name)).click();
     }
