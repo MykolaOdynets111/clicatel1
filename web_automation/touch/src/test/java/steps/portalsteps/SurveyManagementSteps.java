@@ -164,8 +164,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void starAndSmileButtonsAreDisabled(){
         getSurveyManagementPage().switchToFrame();
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(surveyWebChatForm.isSmileButtonDisabled(), "Smile button is enabled");
-        soft.assertTrue(surveyWebChatForm.isStarButtonDisabled(), "Star button is enabled");
+        soft.assertTrue(surveyWebChatForm.isSmileButtonDisabled(), "Smile button should not be enabled");
+        soft.assertTrue(surveyWebChatForm.isStarButtonDisabled(), "Star button should not be enabled");
         soft.assertAll();
         getSurveyManagementPage().switchToDefaultFrame();
     }

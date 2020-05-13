@@ -103,6 +103,12 @@ public interface WebWait {
                 .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpath)));
     }
 
+    default List<WebElement> waitForElementsToBePresentByCss(WebDriver driver, String css, int wait){
+        return initWait(driver, wait).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(css)));
+    }
+
     default WebElement waitForElementToBePresentByCss(WebDriver driver, String css, int wait){
         return initWait(driver, wait).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)

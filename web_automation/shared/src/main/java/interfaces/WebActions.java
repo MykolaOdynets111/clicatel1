@@ -130,9 +130,18 @@ public interface WebActions extends WebWait {
         }
     }
 
-    default boolean isElementsExistsInDOMXpath(WebDriver driver, String xpath, int time){
+    default boolean areElementsExistsInDOMXpath(WebDriver driver, String xpath, int time){
         try {
             waitForElementsToBePresentByXpath(driver, xpath, time);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    default boolean areElementsExistsInDOMCss(WebDriver driver, String css, int time){
+        try {
+            waitForElementsToBePresentByCss(driver, css, time);
             return true;
         } catch (TimeoutException|NoSuchElementException e) {
             return false;

@@ -147,11 +147,13 @@ public class SurveyWebChatForm extends BasePortalWindow{
     }
 
     public boolean isSmileButtonDisabled(){
+        scrollToElem(this.getCurrentDriver(), smileButton, "Smile button");
         moveToElement(this.getCurrentDriver(), smileButton);
         return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
     }
 
     public boolean isStarButtonDisabled(){
+        scrollToElem(this.getCurrentDriver(), starButton, "Star button");
         moveToElement(this.getCurrentDriver(), starButton);
         return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
     }
