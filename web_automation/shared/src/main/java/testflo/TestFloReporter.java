@@ -130,7 +130,7 @@ public class TestFloReporter {
         System.out.println("Scenario status: " + scenario.getStatus());
         System.out.println("Scenario description: " + scenario.getDescription());
         System.out.println("Scenario failure message: " + scenario.getFailureMessage());
-        if (!scenario.getStatus().equalsIgnoreCase("canceled") || !scenario.getStatus().equalsIgnoreCase("skipped")) {
+        if (!scenario.getFailureMessage().trim().equalsIgnoreCase("Test skipped with unknown reason")) {
             System.out.println("Scenario name inside: " + scenario.getName());
             System.out.println("Scenario status inside: " + scenario.getStatus());
             Map<String, String> newTC = JiraApiHelper.createNewTestCase(scenario, testPlan);
