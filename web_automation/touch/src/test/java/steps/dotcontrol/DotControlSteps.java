@@ -347,6 +347,14 @@ public class DotControlSteps implements WebWait {
         }
     }
 
+    @Then("Verify .Control does not returns (.*) response during (.*) seconds")
+    public void verifyIfResponseIsNotCome(String expectedResponse, int wait){
+        Assert.assertFalse(isResponseComeToServer(expectedResponse, wait),
+                "Message should not come to .Control\n Messages which came from server are: "
+                        + Server.messages
+                        + "\nExpected: " + expectedResponse);
+    }
+
     @When("^Created .Control integration is correctly returned with GET response$")
     public void verifyDCIntegrationCorrectlyReturnedWithGet(){
         SoftAssert soft = new SoftAssert();
@@ -428,9 +436,10 @@ public class DotControlSteps implements WebWait {
             if (isExpectedResponseArrives(message)) return true;
             waitFor(1000);
         }
-        Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+ clientId.get()+"'");
+//        Assert.fail(".Control is not responding after "+ wait +" seconds wait. to client with id '"+ clientId.get()+"'");
         return false;
     }
+
 
     private boolean isExpectedResponseArrives(String message){
         boolean result = false;

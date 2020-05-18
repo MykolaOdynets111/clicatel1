@@ -11,9 +11,7 @@ Feature: END message for .Control
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-28813")
   Scenario: //END message for .Control
-    Given I open portal
-    And Login into portal as an admin of Standard Billing account
-    When I launch chatdesk from portal
+    Given I login as agent of Standard Billing
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
     And Agent responds with welcome to User
