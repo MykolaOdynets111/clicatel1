@@ -659,6 +659,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
+        if(submenu.equalsIgnoreCase("Supervisor Desk")){
+            DriverFactory.getDriverForAgent("main").get("https://demo-chatdesk.clickatelllabs.com/supervisor/live");
+            return;
+        }
         getAdminPortalMainPage().waitWhileProcessing(1,5);
         String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
         getAdminPortalMainPage().waitWhileProcessing(1,5);
@@ -743,13 +747,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
     public void clickNavButton(String navButton){
         getAdminPortalMainPage().clickPageNavButton(navButton);
-    }
-
-    @When("^Select Inbox in Chat console$")
-    public void openCCInbox(){
-        getAdminPortalMainPage().clickPageNavButton("Inbox");
-        getChatConsoleInboxPage().waitForConnectingDisappear(3,3);
-        getChatConsoleInboxPage().waitForConnectingDisappear(1,3);
     }
 
     @When("^I click \"(.*)\" page action button$")

@@ -14,7 +14,6 @@ Feature: Chat history displays right information of the user
     Given I open portal
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Chat console in submenu
-    And Select Inbox in Chat console
     Then Verify that New status is shown for inbox conversation
     And Verify correct information is shown in Customer details and Lviv set as location
     When I launch chatdesk from portal

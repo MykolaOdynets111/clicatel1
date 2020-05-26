@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class ChatConsoleInboxPage extends PortalAbstractPage {
+public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']")
     private WebElement filterByDefault;
 
-    @FindBy(xpath = "//div[@class='cl-table']//div[@class='cl-table-row']")
+    @FindBy(xpath = ".cl-table-body .cl-table-row")
     private List<WebElement> chatConsoleInboxRows;
 
     @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
@@ -64,13 +64,13 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
 
     // == Constructors == //
 
-    public ChatConsoleInboxPage() {
+    public SupervisorDeskPage() {
         super();
     }
-    public ChatConsoleInboxPage(String agent) {
+    public SupervisorDeskPage(String agent) {
         super(agent);
     }
-    public ChatConsoleInboxPage(WebDriver driver) {
+    public SupervisorDeskPage(WebDriver driver) {
         super(driver);
     }
 
@@ -89,8 +89,8 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
     }
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
-        waitForElementToBeVisible(this.getCurrentDriver(), iframeIdElement, 4);
-        this.getCurrentDriver().switchTo().frame(iframeId);
+//        waitForElementToBeVisible(this.getCurrentDriver(), iframeIdElement, 4);
+//        this.getCurrentDriver().switchTo().frame(iframeId);
         return chatConsoleInboxRows.stream()
                  .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
@@ -186,7 +186,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         return false;
     }
 
-    public ChatConsoleInboxPage selectConversationType(String option){
+    public SupervisorDeskPage selectConversationType(String option){
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), conversationTypeDropdown, 1, "Conversation type dropdown");
         dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
@@ -196,7 +196,7 @@ public class ChatConsoleInboxPage extends PortalAbstractPage {
         return this;
     }
 
-    public ChatConsoleInboxPage selectTicketType(String option){
+    public SupervisorDeskPage selectTicketType(String option){
         this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
         dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()

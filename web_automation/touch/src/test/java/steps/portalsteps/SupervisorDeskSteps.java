@@ -17,7 +17,7 @@ import steps.dotcontrol.DotControlSteps;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortalInboxSteps extends AbstractPortalSteps {
+public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     private List<String> shownUsers = new ArrayList<>();
 
