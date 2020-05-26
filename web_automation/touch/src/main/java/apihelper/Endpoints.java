@@ -104,6 +104,9 @@ public class Endpoints {
 
     public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() +  "chats/chat/history";
 
+    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getBaseInternalApiUrl() +  "api/autoresponders/%s";
+
+
     // ====================  tie ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";

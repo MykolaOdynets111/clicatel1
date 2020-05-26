@@ -153,20 +153,36 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tenantsInfo;
     }
 
-    public static List<TafMessage> getTafMessages() {
-        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-        Response resp = RestAssured.given()
+    public static String getAutoResponderMessageText(String messageId) {
+        return getAutoResponderMessage(messageId).getText();
+    }
+
+    public static AutoResponderMessage getAutoResponderMessage(String messageId) {
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String url = String.format(Endpoints.INTERNAL_AUTORESPONDER_CONTROLLER, messageId);
+        Response resp = RestAssured.given().header("tenantId", tenantId)
                 .contentType(ContentType.JSON)
                 .get(url);
-        try {
-            tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
-        }catch (JsonPathException e){
-            Assert.fail("Getting taf response was not successful \n" +
-                            "Resp code: " + resp.statusCode() + "\n" +
-                            "Resp body: " + resp.getBody().asString() + "\n");
-        }
-        return tenantMessages;
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Getting AutoResponder was not successful :" + resp.getBody().asString());
+        return resp.getBody().as(AutoResponderMessage.class);
     }
+
+    //ToDo remove after Ui change api to the new one
+//    public static List<TafMessage> getTafMessages() {
+//        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+//        Response resp = RestAssured.given()
+//                .contentType(ContentType.JSON)
+//                .get(url);
+//        try {
+//            tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
+//        }catch (JsonPathException e){
+//            Assert.fail("Getting taf response was not successful \n" +
+//                    "Resp code: " + resp.statusCode() + "\n" +
+//                    "Resp body: " + resp.getBody().asString() + "\n");
+//        }
+//        return tenantMessages;
+//    }
 
     public static List<TafMessage> getDefaultTafMessages() {
         String url = String.format(Endpoints.TAF_MESSAGES, "null");
@@ -177,7 +193,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tenantMessages;
     }
 
-    public static void updateTafMessage(TafMessage tafMessage){
+    public static void updateTafMessage(AutoResponderMessage tafMessage){
         String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
         Response resp = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
@@ -190,9 +206,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
-    public static String getTenantMessageText(String id) {
-        return getTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
-    }
+//    public static String getTenantMessageText(String id) {
+//        return getAutoResponderMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
+//    }
 
     public static String getDefaultTenantMessageText(String id) {
         return getDefaultTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();

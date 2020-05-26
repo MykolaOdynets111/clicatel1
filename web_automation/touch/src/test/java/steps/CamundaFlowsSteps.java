@@ -6,6 +6,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.AutoResponderMessage;
 import datamanager.jacksonschemas.TafMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -16,8 +17,6 @@ import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -30,7 +29,7 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String tafMessageId, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
+        AutoResponderMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
         tafMessageUpdates.setEnabled(status);
         ApiHelper.updateTafMessage(tafMessageUpdates);
 
@@ -39,11 +38,11 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String tafMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
+        AutoResponderMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
         String updatedMessage = generateNewMessageText(tafMessageId);
         tafMessageUpdates.setText(updatedMessage);
         ApiHelper.updateTafMessage(tafMessageUpdates);
-        TafMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
+        AutoResponderMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
         Assert.assertEquals(tafMessageBackend.getText(), tafMessageUpdates.getText(),
                 "Message text is not updated for tenant");
 
@@ -106,8 +105,8 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
         }
     }
 
-    private TafMessage getTafMessageToUpdate(String messageId){
-        return ApiHelper.getTafMessages().stream().filter(e -> e.getId().equals(messageId)).findFirst().get();
+    private AutoResponderMessage getTafMessageToUpdate(String messageId){
+        return ApiHelper.getAutoResponderMessage(messageId);
     }
 
 

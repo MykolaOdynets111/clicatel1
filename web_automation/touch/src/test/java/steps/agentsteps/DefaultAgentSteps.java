@@ -162,7 +162,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyOutOfSupportMessageShownOnChatdesk(String message){
         String userMessage = message;
         if(message.contains("out_of_support_hours")) {
-            userMessage = ApiHelper.getTafMessages().stream().filter(e -> e.getId().equals(message)).findFirst().get().getText();
+            userMessage = ApiHelper.getAutoResponderMessageText(message);
         }
         Assert.assertTrue(getAgentHomePage("main agent").getChatBody().isToUserMessageShown(userMessage),
                 "Expected to user message '"+userMessage+"' should be shown in chatdesk");
