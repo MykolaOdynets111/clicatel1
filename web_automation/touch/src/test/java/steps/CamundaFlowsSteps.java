@@ -7,7 +7,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AutoResponderMessage;
-import datamanager.jacksonschemas.TafMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
@@ -27,23 +26,23 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     private Faker faker = new Faker();
 
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
-    public void updateTafMessageStatus(String tafMessageId, boolean status, String tenantOrgName){
+    public void updateTafMessageStatus(String autoResponderId, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
-        tafMessageUpdates.setEnabled(status);
-        ApiHelper.updateTafMessage(tafMessageUpdates);
+        AutoResponderMessage autoResponderMessageUpdates = getTafMessageToUpdate(autoResponderId);
+        autoResponderMessageUpdates.setEnabled(status);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderId);
 
     }
 
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
     public void updateTafMessageText(String tafMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
+        AutoResponderMessage autoResponderMessageUpdates = getTafMessageToUpdate(tafMessageId);
         String updatedMessage = generateNewMessageText(tafMessageId);
-        tafMessageUpdates.setText(updatedMessage);
-        ApiHelper.updateTafMessage(tafMessageUpdates);
+        autoResponderMessageUpdates.setText(updatedMessage);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, tafMessageId);
         AutoResponderMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
-        Assert.assertEquals(tafMessageBackend.getText(), tafMessageUpdates.getText(),
+        Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");
 
     }

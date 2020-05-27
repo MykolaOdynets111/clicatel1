@@ -193,12 +193,15 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tenantMessages;
     }
 
-    public static void updateTafMessage(AutoResponderMessage tafMessage){
-        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+    public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId){
+        String url = String.format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
         Response resp = RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .body(Arrays.asList(tafMessage))
-                    .put(url);
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .contentType(ContentType.JSON)
+                .param("autoresponderId", tafMessage.getId())
+                .param("enabled", tafMessage.getEnabled())
+                .param("text", tafMessage.getText())
+                .put(url);
         if (! (resp.getStatusCode() == 200)){
             Assert.fail("Update Taf failed \n"
                     +"Status code: " +resp.statusCode() + "\n"

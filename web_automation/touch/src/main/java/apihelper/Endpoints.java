@@ -66,6 +66,9 @@ public class Endpoints {
 
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 
+    public static String AUTORESPONDER_CONTROLLER= URLs.getTouchApiBaseIntegrationURL() + "api/autoresponders/%s";
+
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
