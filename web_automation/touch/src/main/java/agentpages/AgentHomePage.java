@@ -36,9 +36,9 @@ public class AgentHomePage extends AgentAbstractPage {
     })
     private WebElement agentNotesButton;
 
-    private String pinErrorMessageXpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']";
+    private String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
 
-    @FindBy(xpath = "//div[text()='You do not have the ability to end the chat when it has been pinned']")
+    @FindBy(xpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']")
     private WebElement pinErrorMessage;
 
     @FindBy(xpath = "//div[text()='Profanity not allowed']")

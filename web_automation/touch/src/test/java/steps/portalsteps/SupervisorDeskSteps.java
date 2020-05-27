@@ -37,9 +37,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Filter name by default does not match expected");
     }
 
-    @Then("^Click three dots for dot control ticket$")
+    @Then("^Select dot control ticket checkbox$")
     public void clickThreeDotsButton(){
-        getChatConsoleInboxPage().clickThreeDotsButton(DotControlSteps.getClient());
+        getChatConsoleInboxPage().getSupervisorTicketsTable().selectTicketCheckbox(DotControlSteps.getClient());
     }
 
     @When("Click 'Route to scheduler' button")
@@ -49,7 +49,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("Click 'Assign manually' button")
     public void clickAssignManually(){
-        getChatConsoleInboxPage().clickAssignManuallyButton();
+        getChatConsoleInboxPage().getSupervisorTicketsTable().clickAssignManuallyButton();
     }
 
 
@@ -82,7 +82,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                     "Assigned ticket should be present");
         } else if (status.equalsIgnoreCase("Processed") || status.equalsIgnoreCase("Overdue")){
             getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient());
-            getChatConsoleInboxPage().exitChatConsoleInbox();
         }
     }
 
@@ -149,7 +148,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Verify that live chat is displayed with (.*) message to agent")
     public void verifyLiveChatPresent(String message){
         Assert.assertEquals(getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient()).getClientMessageText(), message, "Messages is not the same");
-        getChatConsoleInboxPage().exitChatConsoleInbox();
     }
 
 
@@ -163,7 +161,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 , "Incorrect Chat status was shown on Chat view");
         soft.assertEquals(inboxChatBody.getAgentMessageText() + " " + inboxChatBody.getAgentMessageTime(), messagesFromChatBody.get(messagesFromChatBody.size() -1)
                 , "Incorrect message with time was shown on Chat view");
-        getChatConsoleInboxPage().exitChatConsoleInbox();
         AgentConversationSteps.getMessagesFromChatBody().remove();
         soft.assertAll();
     }
@@ -171,16 +168,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Verify that (.*) status is shown for inbox conversation")
     public void verifyCustomerStatus(String status){
         Assert.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getStatus().trim(), status, "Incorrect status was shown");
-        getChatConsoleInboxPage().exitChatConsoleInbox();
     }
 
     @Then ("Verify correct information is shown in Customer details and (.*) set as location")
     public void verifyCorrectCustomerInfo(String location){
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getLocation(), location, "Incorrect location was shown");
-        getChatConsoleInboxPage().exitChatConsoleInbox();
         soft.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getPhone(), DotControlSteps.getInitContext().getPhone(), "Incorrect phone was shown");
-        getChatConsoleInboxPage().exitChatConsoleInbox();
         soft.assertAll();
     }
 }

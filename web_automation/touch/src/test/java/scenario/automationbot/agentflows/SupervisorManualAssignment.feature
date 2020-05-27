@@ -19,10 +19,10 @@ Feature: Supervisor in box : assign ticket manually
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     Given I login as second agent of Automation Bot
-    When Click three dots for dot control ticket
+    When Select dot control ticket checkbox
     And Click 'Assign manually' button
     Then 'Assign chat' window is opened
-#    When I assign chat on second agent
-#    And Second agent select "Tickets" left menu option
-#    Then Second agent has new conversation request from dotcontrol user
-#    And Second agent is set as 'current agent' for dot control ticket
+    When I assign chat on second agent
+    And Second agent select "Tickets" left menu option
+    Then Second agent has new conversation request from dotcontrol user
+    And Second agent is set as 'current agent' for dot control ticket

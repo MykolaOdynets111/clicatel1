@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import portaluielem.AssignChatWindow;
 import portaluielem.ChatConsoleInboxRow;
 import portaluielem.InboxChatBody;
+import portaluielem.SupervisorTicketsTable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,9 +36,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//span[text() = 'Route to scheduler']")
     private WebElement routeToSchedulerButton;
 
-    @FindBy(xpath = "//span[text() = 'Assign manually']")
-    private WebElement assignManuallyButton;
-
     @FindBy(css = "div.cl-actions-bar button")
     private WebElement loadMoreButton;
 
@@ -61,6 +59,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private AssignChatWindow assignChatWindow;
     private InboxChatBody inboxChatBody;
+    private SupervisorTicketsTable supervisorTicketsTable;
 
     // == Constructors == //
 
@@ -79,18 +78,19 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return assignChatWindow;
     }
 
+    public SupervisorTicketsTable getSupervisorTicketsTable(){
+        supervisorTicketsTable.setCurrentDriver(this.getCurrentDriver());
+        return supervisorTicketsTable;
+    }
+
+
+
     public String getFilterByDefault(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         return getTextFromElem(this.getCurrentDriver(),filterByDefaultXpath,5,"Default filter");
     }
 
-    public void exitChatConsoleInbox() {
-        this.getCurrentDriver().switchTo().defaultContent();
-    }
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
-//        waitForElementToBeVisible(this.getCurrentDriver(), iframeIdElement, 4);
-//        this.getCurrentDriver().switchTo().frame(iframeId);
         return chatConsoleInboxRows.stream()
                  .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
@@ -102,59 +102,41 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
 
     public void clickRouteToSchedulerButton(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
-        exitChatConsoleInbox();
     }
 
-    public void clickAssignManuallyButton(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
-        clickElem(this.getCurrentDriver(), assignManuallyButton, 5, "'Route to scheduler' button");
-        exitChatConsoleInbox();
-    }
-
-    public void clickThreeDotsButton(String userName){
-        getChatConsoleInboxRow(userName).clickThreeDots();
-        exitChatConsoleInbox();
-    }
+//    public void clickThreeDotsButton(String userName){
+//        getChatConsoleInboxRow(userName).clickThreeDots();
+//        exitChatConsoleInbox();
+//    }
 
     public String getCurrentAgentOfTheChat(String userName){
         String currentAgent = getChatConsoleInboxRow(userName).getCurrentAgent();
-        exitChatConsoleInbox();
         return currentAgent;
     }
 
     public boolean isAssignChatWindowOpened(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
-        boolean result = isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 4);
-        exitChatConsoleInbox();
-        return result;
+        return isElementShown(this.getCurrentDriver(), getAssignChatWindow().getWrappedElement(), 4);
     }
 
     public void assignChatOnAgent(String agentName){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         getAssignChatWindow().selectDropDownAgent(agentName);
         getAssignChatWindow().clickAssignChatButton();
         waitUntilElementNotDisplayed(this.getCurrentDriver(), assignWindowsDialog, 3);
-        exitChatConsoleInbox();
     }
 
     public List<String> getUsersNames(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         List<String> list =  chatConsoleInboxRows.stream()
                 .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getUserName())
                 .collect(Collectors.toList());
-        exitChatConsoleInbox();
         return list;
     }
 
     public void clickLoadMore(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         scrollToElem(this.getCurrentDriver(), loadMoreButton,  "'Load more'");
         clickElem(this.getCurrentDriver(), loadMoreButton, 3, "'Load more'");
         waitForConnectingDisappear(2,3);
-        exitChatConsoleInbox();
     }
 
     public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
@@ -171,10 +153,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public String getNumberOfChats(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         scrollToElem(this.getCurrentDriver(), numberOfChats, "Numbers of chats");
         String info = getTextFromElem(this.getCurrentDriver(), numberOfChats, 3, "Number of chats");
-        exitChatConsoleInbox();
         return info;
     }
 
@@ -187,31 +167,25 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public SupervisorDeskPage selectConversationType(String option){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), conversationTypeDropdown, 1, "Conversation type dropdown");
         dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
                 .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
-        exitChatConsoleInbox();
         return this;
     }
 
     public SupervisorDeskPage selectTicketType(String option){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
         dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
                 .orElseThrow(() -> new AssertionError("Cannot find " + option + " conversation type dropdown option")).click();
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
-        exitChatConsoleInbox();
         return this;
     }
 
     public List<String> getTicketTypes(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
         clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
         List<String> ticketTypes = dropdownsTypesOptions.stream().map(a-> a.getText().trim()).collect(Collectors.toList());
         clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
-        exitChatConsoleInbox();
         return ticketTypes;
     }
 
