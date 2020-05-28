@@ -4,10 +4,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portaluielem.AssignChatWindow;
-import portaluielem.ChatConsoleInboxRow;
-import portaluielem.InboxChatBody;
-import portaluielem.SupervisorTicketsTable;
+import portaluielem.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,9 +47,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private String spinner = "//div[@class='spinner']";
 
-    @FindBy(xpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']")
-    private WebElement filterByDefaultXpath;
-
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
     private String iframeId = "ticketing-iframe";
@@ -60,6 +54,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private AssignChatWindow assignChatWindow;
     private InboxChatBody inboxChatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
+    private SupervisorLeftPanel supervisorLeftPanel;
 
     // == Constructors == //
 
@@ -83,10 +78,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorTicketsTable;
     }
 
-
-
-    public String getFilterByDefault(){
-        return getTextFromElem(this.getCurrentDriver(),filterByDefaultXpath,5,"Default filter");
+    public SupervisorLeftPanel getSupervisorLeftPanel(){
+        supervisorLeftPanel.setCurrentDriver(this.getCurrentDriver());
+        return supervisorLeftPanel;
     }
 
 
@@ -98,7 +92,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
                         .contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
-
 
 
     public void clickRouteToSchedulerButton(){

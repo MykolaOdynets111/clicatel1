@@ -33,7 +33,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Filter \"(.*)\" is selected by default$")
     public void filterIsSelectedByDefault(String filterName) {
-        Assert.assertEquals(getChatConsoleInboxPage().getFilterByDefault(), filterName,
+        Assert.assertEquals(getChatConsoleInboxPage().getSupervisorLeftPanel().getFilterByDefaultName(), filterName,
                 "Filter name by default does not match expected");
     }
 
