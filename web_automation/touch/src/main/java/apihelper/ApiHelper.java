@@ -154,7 +154,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static String getAutoResponderMessageText(String messageId) {
-        return getAutoResponderMessage(messageId).getText();
+        return getAutoResponderMessage(messageId).getText().trim();
     }
 
     public static AutoResponderMessage getAutoResponderMessage(String messageId) {
