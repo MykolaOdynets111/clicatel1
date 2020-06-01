@@ -153,4 +153,22 @@ public class ChatHistoryItem {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+
+    @Override
+    public String toString() {
+        return "ChatHistoryItem{" +
+                "sessionId='" + sessionId + '\'' +
+                ", messageTime=" + messageTime +
+                ", messageId='" + messageId + '\'' +
+                ", messageText='" + messageText + '\'' +
+                ", displayMessage='" + displayMessage + '\'' +
+                ", messageType='" + messageType + '\'' +
+                ", tenantId='" + tenantId + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", roomJid=" + roomJid +
+                ", deliveryStatuses='" + deliveryStatuses + '\'' +
+                ", agent=" + agent +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }
