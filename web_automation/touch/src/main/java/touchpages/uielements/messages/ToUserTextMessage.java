@@ -73,7 +73,7 @@ public class ToUserTextMessage extends AbstractWidget {
 
     public boolean isTextResponseShown(int wait) {
         try{
-            waitForElementToBeVisible(this.getCurrentDriver(), toUserTextMessages.get(toUserTextMessages.size()-1), wait);
+            waitForLastElementToBeVisible(this.getCurrentDriver(), toUserTextMessages, wait);
             return true;
         } catch (TimeoutException e) {
             return false;

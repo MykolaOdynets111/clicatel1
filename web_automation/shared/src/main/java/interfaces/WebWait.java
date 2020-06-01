@@ -69,6 +69,19 @@ public interface WebWait {
                 .until(ExpectedConditions.visibilityOfAllElements(elements));
     }
 
+    default WebElement waitForLastElementToBeVisible(WebDriver driver, List<WebElement> elements, int wait){
+        for (int i=0; i<wait; i++){
+            try {
+                return initWait(driver, wait).ignoring(NoSuchElementException.class)
+                        .ignoring(StaleElementReferenceException.class)
+                        .until(ExpectedConditions.visibilityOf(elements.get(elements.size()-1)));
+            } catch (ArrayIndexOutOfBoundsException e){
+                waitFor(1000);
+            }
+        }
+        return null;
+    }
+
     default List<WebElement> waitForElementsToBeVisibleByXpath(WebDriver driver, String xpath, int wait){
         return initWait(driver, wait).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
