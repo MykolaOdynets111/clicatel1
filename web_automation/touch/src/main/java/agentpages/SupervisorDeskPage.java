@@ -1,9 +1,11 @@
-package portalpages;
+package agentpages;
 
+import agentpages.uielements.ChatBody;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portalpages.PortalAbstractPage;
 import portaluielem.*;
 
 import java.util.List;
@@ -15,8 +17,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']")
     private WebElement filterByDefault;
 
-    @FindBy(xpath = ".cl-table-body .cl-table-row")
-    private List<WebElement> chatConsoleInboxRows;
+    @FindBy(css = ".cl-r-chat-item")
+    private List<WebElement> chatsLiveAndTickets;
 
     @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
     private WebElement conversationTypeDropdown;
@@ -52,7 +54,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private String iframeId = "ticketing-iframe";
 
     private AssignChatWindow assignChatWindow;
-    private InboxChatBody inboxChatBody;
+    private ChatBody сhatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
     private SupervisorLeftPanel supervisorLeftPanel;
 
@@ -85,7 +87,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
 
     public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
-        return chatConsoleInboxRows.stream()
+        return chatsLiveAndTickets.stream()
                  .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
                  .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
@@ -119,7 +121,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public List<String> getUsersNames(){
-        List<String> list =  chatConsoleInboxRows.stream()
+        List<String> list =  chatsLiveAndTickets.stream()
                 .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getUserName())
                 .collect(Collectors.toList());
@@ -182,10 +184,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return ticketTypes;
     }
 
-    public InboxChatBody openInboxChatBody(String userName){
+    public ChatBody openInboxChatBody(String userName){
         getChatConsoleInboxRow(userName).clickOnUserName();
-        inboxChatBody.setCurrentDriver(this.getCurrentDriver());
-        return inboxChatBody;
+        сhatBody.setCurrentDriver(this.getCurrentDriver());
+        return сhatBody;
     }
 
 }

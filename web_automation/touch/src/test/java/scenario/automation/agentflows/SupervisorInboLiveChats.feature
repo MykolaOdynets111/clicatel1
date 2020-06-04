@@ -14,8 +14,8 @@ Feature: Supervisor able to check live chats
     Given I open portal
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Supervisor Desk in submenu
-    When User select Live chats conversation type
     Then Verify that live chat is displayed with chat to agent message to agent
-    And I launch chatdesk from portal
+    When Agent switches to opened Portal page
+    When I select Touch in left menu and Launch Chat Desk in submenu
     Then Agent has new conversation request from dotcontrol user
 

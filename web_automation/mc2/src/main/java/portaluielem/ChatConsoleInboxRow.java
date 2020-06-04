@@ -32,7 +32,7 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     @FindBy(xpath = ".//div[contains(@class, 'agent-profile')]//div[contains(@class, 'user-data__description')]//div")
     private WebElement currentAgent;
 
-    @FindBy(css = "div.cl-table-user-description__name")
+    @FindBy(css = ".cl-r-chat-item-user-name")
     private WebElement userName;
 
     @FindBy(css = ".cl-table-user-description__location")
@@ -45,7 +45,7 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     private WebElement phone;
 
 
-    private String chatConsoleInboxRowNameXpath = "//div[@class='cl-table-user-data__description']//div[2]/../div[1]";
+    private String chatConsoleInboxRowNameCss = ".cl-r-chat-item-user-name";
 
     public ChatConsoleInboxRow(WebElement element) {
         super(element);
@@ -73,7 +73,9 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     }
 
     public String getChatConsoleInboxRowName(){
-        return baseWebElem.findElement(By.xpath(chatConsoleInboxRowNameXpath)).getText();
+        WebElement name = baseWebElem.findElement(By.cssSelector(chatConsoleInboxRowNameCss));
+        scrollToElem(this.getCurrentDriver(), name, "Name of the chat");
+        return name.getText();
     }
 
     public String getCurrentAgent(){

@@ -23,6 +23,9 @@ import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import mc2api.endpoints.EndpointsPlatform;
 import mc2api.auth.PortalAuthToken;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
@@ -660,7 +663,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^(?:I|Admin) select (.*) in left menu and (.*) in submenu$")
     public void navigateInLeftMenu(String menuItem, String submenu){
         if(submenu.equalsIgnoreCase("Supervisor Desk")){
-            DriverFactory.getDriverForAgent("main").get("https://demo-chatdesk.clickatelllabs.com/supervisor/live");
+            ((JavascriptExecutor) DriverFactory.getDriverForAgent("main")).executeScript("window.open('https://demo-chatdesk.clickatelllabs.com/supervisor/live','_blank');");
+            String mainWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
+            switchDriver(DriverFactory.getDriverForAgent("main"), mainWindow);
             return;
         }
         getAdminPortalMainPage().waitWhileProcessing(1,5);
