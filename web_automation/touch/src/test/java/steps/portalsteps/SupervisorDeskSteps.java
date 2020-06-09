@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -154,15 +155,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @When("Verify that (.*) chat status correct last message and timestamp is shown on Chat View")
     public void openChatView(String chatStatus){
         SoftAssert soft = new SoftAssert();
-//        List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
-//        InboxChatBody inboxChatBody = getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient());
-//
-//        soft.assertEquals(inboxChatBody.getChatStatus().toLowerCase(), chatStatus.toLowerCase() + ":"
-//                , "Incorrect Chat status was shown on Chat view");
-//        soft.assertEquals(inboxChatBody.getAgentMessageText() + " " + inboxChatBody.getAgentMessageTime(), messagesFromChatBody.get(messagesFromChatBody.size() -1)
-//                , "Incorrect message with time was shown on Chat view");
-//        AgentConversationSteps.getMessagesFromChatBody().remove();
-//        soft.assertAll();
+        List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
+        ChatBody inboxChatBody = getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient());
+
+        soft.assertEquals(getChatConsoleInboxPage().getOpenedChatHeader().toLowerCase(), chatStatus.toLowerCase() + ":"
+                , "Incorrect Chat status was shown on Chat view");
+        soft.assertEquals(inboxChatBody.getAllMessages(), messagesFromChatBody
+                , "Incorrect message with time was shown on Chat view");
+        AgentConversationSteps.getMessagesFromChatBody().remove();
+        soft.assertAll();
     }
 
     @Then("Verify that (.*) status is shown for inbox conversation")

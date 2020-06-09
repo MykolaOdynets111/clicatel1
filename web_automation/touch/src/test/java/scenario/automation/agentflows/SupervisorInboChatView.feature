@@ -13,12 +13,11 @@ Feature: Supervisor see chat view with correct info
   Scenario: supervisor desk: : verify if correct chat type along with time stamp is shown in chat view
     Given I open portal
     And Login into portal as an admin of Automation account
-    And I select Touch in left menu and Supervisor Desk in submenu
     When I launch chatdesk from portal
     Then Agent has new conversation request from dotcontrol user
     When Agent click on new conversation request from dotcontrol
     And Agent responds with welcome to User
     When Collect Agent chat messages
     When Agent switches to opened Portal page
-    When Select Inbox in Chat console
+    And I select Touch in left menu and Supervisor Desk in submenu
     And Verify that New chat status correct last message and timestamp is shown on Chat View

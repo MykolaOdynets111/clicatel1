@@ -47,6 +47,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(id = "ticketing-iframe")
     private WebElement iframeIdElement;
 
+    @FindBy(css = ".chats-list-extended-view-header-text")
+    private WebElement openedChatHeader;
+
     private String spinner = "//div[@class='spinner']";
 
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
@@ -188,6 +191,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         getChatConsoleInboxRow(userName).clickOnUserName();
         сhatBody.setCurrentDriver(this.getCurrentDriver());
         return сhatBody;
+    }
+
+    public String getOpenedChatHeader(){
+        return getTextFromElem(this.getCurrentDriver(), openedChatHeader, 3, "Chat header text");
     }
 
 }
