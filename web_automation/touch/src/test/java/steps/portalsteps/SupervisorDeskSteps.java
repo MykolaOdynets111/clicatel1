@@ -16,6 +16,7 @@ import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
@@ -152,16 +153,14 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
 
 
-    @When("Verify that (.*) chat status correct last message and timestamp is shown on Chat View")
-    public void openChatView(String chatStatus){
+    @When("Verify that correct messages and timestamps are shown on Chat View")
+    public void openChatView(){
         SoftAssert soft = new SoftAssert();
         List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
         ChatBody inboxChatBody = getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient());
-
-        soft.assertEquals(getChatConsoleInboxPage().getOpenedChatHeader().toLowerCase(), chatStatus.toLowerCase() + ":"
-                , "Incorrect Chat status was shown on Chat view");
+        messagesFromChatBody.removeAll(Collections.singleton(""));
         soft.assertEquals(inboxChatBody.getAllMessages(), messagesFromChatBody
-                , "Incorrect message with time was shown on Chat view");
+                , "Incorrect messages with times were shown on Chat view");
         AgentConversationSteps.getMessagesFromChatBody().remove();
         soft.assertAll();
     }
