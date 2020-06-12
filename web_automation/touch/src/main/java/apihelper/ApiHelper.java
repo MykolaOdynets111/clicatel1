@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
+import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
@@ -466,6 +467,22 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             .findFirst()
             .orElseThrow(() -> new AssertionError("Integration channel '" +integrationChanel +"' is absent for " + tenantOrgName + " tenant"))
             .getId();
+    }
+
+    public static UserInfo getUserProfile(String integrationChanel, String clientId){
+        String tenantOrgName = Tenants.getTenantUnderTestOrgName();
+        String chanelId = getChannelID(tenantOrgName, integrationChanel);
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId);
+        return RestAssured.given().log().all()
+                        .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                        .get(String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId))
+                        .getBody().as(UserInfo.class);
+    }
+
+    public static void updateUserProfile(String clientId){
+        UserInfo userInfo = getUserProfile("webchat", clientId);
+        System.out.println(userInfo);
     }
 
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){

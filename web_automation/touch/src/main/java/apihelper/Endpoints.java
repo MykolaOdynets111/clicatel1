@@ -109,6 +109,7 @@ public class Endpoints {
 
     public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getBaseInternalApiUrl() +  "api/autoresponders/%s";
 
+    public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() +  "api/chat-users/by-external-user-id/%s/%s/%s";
 
     // ====================  tie ================= //
 

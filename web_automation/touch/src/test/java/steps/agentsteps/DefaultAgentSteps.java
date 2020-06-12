@@ -449,6 +449,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("Agent send OTP message with API")
     public void sendOTPWithAPI(){
+        // ToDo update to the new api
+//        ApiHelper.updateUserProfile(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         DBConnector.addPhoneAndOTPStatusIntoDB(ConfigManager.getEnv(), linkedClientProfileId);
     }

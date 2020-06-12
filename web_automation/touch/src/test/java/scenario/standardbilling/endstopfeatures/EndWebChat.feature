@@ -19,7 +19,7 @@ Feature: END message for Web Chat
     When User enter //END into widget input field
     Then User see NPS survey form
     When Reject survey form submit
-    Then Text response that contains "Thank you. Chat soon!" is shown
+    Then Text response that contains "start_new_conversation" is shown
     Then Agent should not see from user chat in agent desk
 
 

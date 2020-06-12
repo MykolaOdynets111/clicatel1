@@ -772,7 +772,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             case "welcome":
                 expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_message");
                 break;
-            case "start new conversation":
+            case "start_new_conversation":
                 expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
                 break;
             case "welcome back message":
@@ -792,6 +792,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                 break;
             case "connect_agent":
                 expectedTextResponse = ApiHelper.getAutoResponderMessageText("connect_agent");
+                break;
+            case "thanks_message":
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("thanks_message");
                 break;
             default:
                 expectedTextResponse = fromFeatureText;

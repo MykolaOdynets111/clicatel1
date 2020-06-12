@@ -18,7 +18,7 @@ Feature: Satisfaction Survey: Survey rejection
     When Agent closes chat
     Then User see CSAT survey form
     When Reject survey form submit
-    Then Text response that contains "Thank you. Chat soon!" is shown
+    Then Text response that contains "start_new_conversation" is shown
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from touch in chat history list
     Then Agent does not see Rate Card in chat history
