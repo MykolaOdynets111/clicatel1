@@ -210,14 +210,6 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
-//    public static String getTenantMessageText(String id) {
-//        return getAutoResponderMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
-//    }
-
-    public static String getDefaultTenantMessageText(String id) {
-        return getDefaultTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
-    }
-
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
         RestAssured.given().log().all()

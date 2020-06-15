@@ -377,6 +377,14 @@ public class DBConnector {
         return getDataFromDb(env, "touch", query, "verification_code");
     }
 
+    public static String getDefaultAutoResponder(String env, String autoresponderId){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "SELECT * FROM "+tableName+".autoresponders where id = '"+autoresponderId+"';";
+
+        return getDataFromDb(env, "touch", query, "default_message");
+    }
+
+
     private static void waitFor(int wait) {
         try {
             Thread.sleep(wait);

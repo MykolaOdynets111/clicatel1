@@ -28,20 +28,20 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
     public void updateTafMessageStatus(String autoResponderId, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = getTafMessageToUpdate(autoResponderId);
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderId);;
         autoResponderMessageUpdates.setEnabled(status);
         ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderId);
 
     }
 
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
-    public void updateTafMessageText(String tafMessageId, String tenantOrgName){
+    public void updateTafMessageText(String autoResponderMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = getTafMessageToUpdate(tafMessageId);
-        String updatedMessage = generateNewMessageText(tafMessageId);
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        String updatedMessage = generateNewMessageText(autoResponderMessageId);
         autoResponderMessageUpdates.setText(updatedMessage);
-        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, tafMessageId);
-        AutoResponderMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderMessageId);
+        AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
         Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");
 
@@ -103,11 +103,6 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
             DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), linkedClientProfileId, lastVisitWithShift);
         }
     }
-
-    private AutoResponderMessage getTafMessageToUpdate(String messageId){
-        return ApiHelper.getAutoResponderMessage(messageId);
-    }
-
 
     private String generateNewMessageText(String tafMessageId){
         return "randow "+tafMessageId+" message:" + faker.lorem().characters(8, 13, true);
