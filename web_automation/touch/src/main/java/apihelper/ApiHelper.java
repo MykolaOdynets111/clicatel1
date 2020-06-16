@@ -185,15 +185,6 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 //        return tenantMessages;
 //    }
 
-    public static List<TafMessage> getDefaultTafMessages() {
-        String url = String.format(Endpoints.TAF_MESSAGES, "null");
-        tenantMessages = RestAssured.given()
-                .contentType(ContentType.JSON)
-                .get(url)
-                .jsonPath().getList("tafResponses", TafMessage.class);
-        return tenantMessages;
-    }
-
     public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId){
         String url = String.format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
         Response resp = RestAssured.given().log().all()
@@ -719,8 +710,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }catch (NullPointerException e){
             channelUsername = respJSON.getString("personalDetails.channelUsername") == null ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
         }
-        if(channelUsername.contains("_")) channelUsername = "@" + channelUsername;
-        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : "+" + respJSON.getString("clientProfiles.attributes.phone[0]");
+        if(channelUsername.contains("_")) channelUsername = channelUsername;
+        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
         String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
         return new Customer360PersonalInfo(fullName.trim(), location,

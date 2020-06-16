@@ -175,9 +175,6 @@ public class Endpoints {
 
     public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 
-    // ====================  TAF ================= //
-
-    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "resources/taf-messages?tenant=%s";
 
     // ====================  .Control ================= //
 
