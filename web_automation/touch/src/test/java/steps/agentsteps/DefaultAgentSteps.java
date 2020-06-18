@@ -3,6 +3,7 @@ package steps.agentsteps;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import datamanager.jacksonschemas.SupportHoursItem;
+import datamanager.jacksonschemas.chatusers.UserInfo;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import mc2api.auth.PortalAuthToken;
@@ -450,9 +451,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("Agent send OTP message with API")
     public void sendOTPWithAPI(){
         // ToDo update to the new api
-//        ApiHelper.updateUserProfile(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
-        DBConnector.addPhoneAndOTPStatusIntoDB(ConfigManager.getEnv(), linkedClientProfileId);
+        UserInfo userInfo = ApiHelper.getUserProfile("webchat", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        userInfo.setOtpSent(true);
+        ApiHelper.updateUserProfile(userInfo);
+//        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+//        DBConnector.addPhoneAndOTPStatusIntoDB(ConfigManager.getEnv(), linkedClientProfileId);
     }
 
     @Then("'Verified' label become (.*)")

@@ -111,6 +111,7 @@ public class Endpoints {
 
     public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() +  "api/chat-users/by-external-user-id/%s/%s/%s";
 
+    public static String INTERNAL_CHAT_USERS = URLs.getBaseInternalApiUrl() +  "api/chat-users";
     // ====================  tie ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";

@@ -20,7 +20,7 @@ public class DBConnector {
     private static void createConnection(String env, String platform){
         DBProperties dbProperties = DBProperties.getPropertiesFor(env, platform);
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(dbProperties.getURL(), dbProperties.getUser(), dbProperties.getPass());
         } catch (Exception e) {
             System.out.println("Connection Failed! Check output console");

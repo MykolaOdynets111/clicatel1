@@ -75,7 +75,7 @@ public class UserInfo {
     @JsonProperty("modifiedDate")
     private Integer modifiedDate;
     @JsonProperty("otpSent")
-    private String otpSent;
+    private Boolean otpSent;
     @JsonProperty("phone")
     private String phone;
     @JsonProperty("phoneVerified")
@@ -262,12 +262,12 @@ public class UserInfo {
     }
 
     @JsonProperty("otpSent")
-    public String getOtpSent() {
+    public Boolean getOtpSent() {
         return otpSent;
     }
 
     @JsonProperty("otpSent")
-    public void setOtpSent(String otpSent) {
+    public void setOtpSent(Boolean otpSent) {
         this.otpSent = otpSent;
     }
 

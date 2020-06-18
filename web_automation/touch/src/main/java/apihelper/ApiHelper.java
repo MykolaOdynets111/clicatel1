@@ -463,9 +463,15 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                         .getBody().as(UserInfo.class);
     }
 
-    public static void updateUserProfile(String clientId){
-        UserInfo userInfo = getUserProfile("webchat", clientId);
-        System.out.println(userInfo);
+    public static void updateUserProfile(UserInfo userInfo){
+        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON).body(userInfo)
+                .put(Endpoints.INTERNAL_CHAT_USERS);
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Failed to update internal chat user info, status code = " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
     }
 
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
