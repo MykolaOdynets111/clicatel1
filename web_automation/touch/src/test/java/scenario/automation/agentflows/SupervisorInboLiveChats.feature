@@ -16,6 +16,6 @@ Feature: Supervisor able to check live chats
     When I select Touch in left menu and Supervisor Desk in submenu
     Then Verify that live chat is displayed with chat to agent message to agent
     When Agent switches to opened Portal page
-    When I select Touch in left menu and Launch Chat Desk in submenu
+    When I select Touch in left menu and Agent Desk in submenu
     Then Agent has new conversation request from dotcontrol user
 

@@ -288,11 +288,11 @@ public class PortalMainPage extends PortalAbstractPage {
 
    public void launchChatDesk(){
        String currentWindow = this.getCurrentDriver().getWindowHandle();
-       getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+       getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Agent Desk");
 
        for (int i = 0; i < 4; i++){
            if(this.getCurrentDriver().getWindowHandles().size() == 2) break;
-           else getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Launch Chat Desk");
+           else getLeftMenu().navigateINLeftMenuWithSubmenu("Touch", "Agent Desk");
        }
        if(this.getCurrentDriver().getWindowHandles().size()>1) {
            for (String winHandle : this.getCurrentDriver().getWindowHandles()) {
