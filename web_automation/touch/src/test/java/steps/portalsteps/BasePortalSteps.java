@@ -840,18 +840,18 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^(.*) on backend corresponds to (.*) on frontend$")
     public void messageWasUpdatedOnBackend(String tafMessageId, String messageName) {
         String messageOnfrontend = getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(messageName).getMessage();
-        String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
+        String actualMessage = ApiHelper.getAutoResponderMessageText(tafMessageId);
         Assert.assertEquals(actualMessage, messageOnfrontend,
                 messageName + " message is not updated on backend");
 
     }
 
     @Then("^(.*) is reset on backend$")
-    public void verifyTafMessageIsReset(String tafMessageId){
-        String actualMessage = ApiHelper.getTenantMessageText(tafMessageId);
-        String defaultMessage = ApiHelper.getDefaultTenantMessageText(tafMessageId);
+    public void verifyTafMessageIsReset(String autoresponderId){
+        String actualMessage = ApiHelper.getAutoResponderMessageText(autoresponderId);
+        String defaultMessage = DBConnector.getDefaultAutoResponder(ConfigManager.getEnv(), autoresponderId);
         Assert.assertEquals(actualMessage, defaultMessage,
-                tafMessageId + " message is not reset to default");
+                autoresponderId + " message is not reset to default");
     }
 
     @When("Admin click BACK button in left menu")

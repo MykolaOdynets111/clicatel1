@@ -25,6 +25,7 @@ import org.testng.asserts.SoftAssert;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DotControlSteps implements WebWait {
 
@@ -402,7 +403,7 @@ public class DotControlSteps implements WebWait {
                         .findFirst().get().getMessageId();
             }catch(java.util.NoSuchElementException e){
                 Assert.fail("Not found message by clientId\n"
-                        + String.join(", ", chatHistoryItemList.toString()));
+                        +  chatHistoryItemList.stream().map(s -> s.toString()).collect(Collectors.joining("\n")));
             }
 
             Assert.assertFalse(actualMessageId.equalsIgnoreCase("null"),

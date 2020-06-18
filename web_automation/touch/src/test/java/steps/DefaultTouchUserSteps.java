@@ -497,7 +497,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         String expectedCardText;
         switch (cardText){
             case "welcome":
-                expectedCardText = ApiHelper.getTenantMessageText("first_navigation_card_title");
+                expectedCardText = ApiHelper.getAutoResponderMessageText("first_navigation_card_title");
                 break;
             default:
                 expectedCardText = cardText;
@@ -680,7 +680,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^Welcome message with correct text is shown$")
     public void verifyWelcomeTextMessage() {
-        String welcomeMessage = ApiHelper.getTenantMessageText("welcome_message");
+        String welcomeMessage = ApiHelper.getAutoResponderMessageText("welcome_message");
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getWelcomeMessages().isWelcomeTextMessageShown(),
                 "Welcome text message is not shown");
@@ -698,7 +698,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^Welcome back message with correct text is shown after user's input '(.*)'$")
     public void verifyWelcomeBackTextMessage(String userMessage) {
-        String welcomeBackMessage = ApiHelper.getTenantMessageText("welcome_back_message");
+        String welcomeBackMessage = ApiHelper.getAutoResponderMessageText("welcome_back_message");
         Assert.assertTrue( widget.getWidgetConversationArea().isTextResponseShownAmongOtherForUserMessage(userMessage, welcomeBackMessage),
                 "'"+ welcomeBackMessage + "' welcome back message is not shown");
     }
@@ -714,7 +714,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Given("^Welcome card with correct text and button \"(.*)\" is shown$")
     public void verifyWelcomeCardWithCorrectTextAndButtonIsShown(String buttonName) {
-        String welcomeCardText = ApiHelper.getTenantMessageText("first_navigation_card_title");
+        String welcomeCardText = ApiHelper.getAutoResponderMessageText("first_navigation_card_title");
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getWelcomeMessages().isWelcomeCardContainerShown(), "Welcome card is not shown. Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+"");
         soft.assertEquals(getWelcomeMessages().getWelcomeCardText(), welcomeCardText,
@@ -770,28 +770,31 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         String expectedTextResponse;
         switch (fromFeatureText) {
             case "welcome":
-                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_message");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_message");
                 break;
-            case "start new conversation":
-                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+            case "start_new_conversation":
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
                 break;
             case "welcome back message":
-                expectedTextResponse = ApiHelper.getTenantMessageText("welcome_back_message");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_back_message");
                 break;
             case "dynamical branch address":
                 expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
                 break;
             case "exit":
-                expectedTextResponse = ApiHelper.getTenantMessageText("start_new_conversation");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
                 break;
             case "agents_away":
-                expectedTextResponse = ApiHelper.getTenantMessageText("agents_away");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("agents_away");
                 break;
             case "out_of_support_hours":
-                expectedTextResponse = ApiHelper.getTenantMessageText("out_of_support_hours");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("out_of_support_hours");
                 break;
             case "connect_agent":
-                expectedTextResponse = ApiHelper.getTenantMessageText("connect_agent");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("connect_agent");
+                break;
+            case "thanks_message":
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("thanks_message");
                 break;
             default:
                 expectedTextResponse = fromFeatureText;

@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
+import datamanager.jacksonschemas.chatusers.UserInfo;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
@@ -153,49 +154,51 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tenantsInfo;
     }
 
-    public static List<TafMessage> getTafMessages() {
-        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
-        Response resp = RestAssured.given()
+    public static String getAutoResponderMessageText(String messageId) {
+        return getAutoResponderMessage(messageId).getText().trim();
+    }
+
+    public static AutoResponderMessage getAutoResponderMessage(String messageId) {
+        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
+        String url = String.format(Endpoints.INTERNAL_AUTORESPONDER_CONTROLLER, messageId);
+        Response resp = RestAssured.given().header("tenantId", tenantId)
                 .contentType(ContentType.JSON)
                 .get(url);
-        try {
-            tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
-        }catch (JsonPathException e){
-            Assert.fail("Getting taf response was not successful \n" +
-                            "Resp code: " + resp.statusCode() + "\n" +
-                            "Resp body: " + resp.getBody().asString() + "\n");
-        }
-        return tenantMessages;
+        Assert.assertEquals(resp.statusCode(), 200,
+                "Getting AutoResponder was not successful :" + resp.getBody().asString());
+        return resp.getBody().as(AutoResponderMessage.class);
     }
 
-    public static List<TafMessage> getDefaultTafMessages() {
-        String url = String.format(Endpoints.TAF_MESSAGES, "null");
-        tenantMessages = RestAssured.given()
-                .contentType(ContentType.JSON)
-                .get(url)
-                .jsonPath().getList("tafResponses", TafMessage.class);
-        return tenantMessages;
-    }
+    //ToDo remove after Ui change api to the new one
+//    public static List<TafMessage> getTafMessages() {
+//        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+//        Response resp = RestAssured.given()
+//                .contentType(ContentType.JSON)
+//                .get(url);
+//        try {
+//            tenantMessages = resp.jsonPath().getList("tafResponses", TafMessage.class);
+//        }catch (JsonPathException e){
+//            Assert.fail("Getting taf response was not successful \n" +
+//                    "Resp code: " + resp.statusCode() + "\n" +
+//                    "Resp body: " + resp.getBody().asString() + "\n");
+//        }
+//        return tenantMessages;
+//    }
 
-    public static void updateTafMessage(TafMessage tafMessage){
-        String url = String.format(Endpoints.TAF_MESSAGES, Tenants.getTenantUnderTestName());
+    public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId){
+        String url = String.format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
         Response resp = RestAssured.given().log().all()
-                    .contentType(ContentType.JSON)
-                    .body(Arrays.asList(tafMessage))
-                    .put(url);
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .contentType(ContentType.JSON)
+                .param("autoresponderId", tafMessage.getId())
+                .param("enabled", tafMessage.getEnabled())
+                .param("text", tafMessage.getText())
+                .put(url);
         if (! (resp.getStatusCode() == 200)){
             Assert.fail("Update Taf failed \n"
                     +"Status code: " +resp.statusCode() + "\n"
                     + "Error message: " + resp.getBody().asString());
         }
-    }
-
-    public static String getTenantMessageText(String id) {
-        return getTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
-    }
-
-    public static String getDefaultTenantMessageText(String id) {
-        return getDefaultTafMessages().stream().filter(e -> e.getId().equals(id)).findFirst().get().getText();
     }
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
@@ -449,6 +452,28 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             .getId();
     }
 
+    public static UserInfo getUserProfile(String integrationChanel, String clientId){
+        String tenantOrgName = Tenants.getTenantUnderTestOrgName();
+        String chanelId = getChannelID(tenantOrgName, integrationChanel);
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId);
+        return RestAssured.given().log().all()
+                        .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                        .get(String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId))
+                        .getBody().as(UserInfo.class);
+    }
+
+    public static void updateUserProfile(UserInfo userInfo){
+        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON).body(userInfo)
+                .put(Endpoints.INTERNAL_CHAT_USERS);
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Failed to update internal chat user info, status code = " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+    }
+
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
         RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -691,8 +716,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }catch (NullPointerException e){
             channelUsername = respJSON.getString("personalDetails.channelUsername") == null ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
         }
-        if(channelUsername.contains("_")) channelUsername = "@" + channelUsername;
-        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : "+" + respJSON.getString("clientProfiles.attributes.phone[0]");
+        if(channelUsername.contains("_")) channelUsername = channelUsername;
+        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
         String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
         return new Customer360PersonalInfo(fullName.trim(), location,

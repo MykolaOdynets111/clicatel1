@@ -73,7 +73,7 @@ public class ToUserTextMessage extends AbstractWidget {
 
     public boolean isTextResponseShown(int wait) {
         try{
-            waitForElementsToBeVisible(this.getCurrentDriver(), toUserTextMessages, wait);
+            waitForLastElementToBeVisible(this.getCurrentDriver(), toUserTextMessages, wait);
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -83,7 +83,7 @@ public class ToUserTextMessage extends AbstractWidget {
     public boolean isTextResponseShownAmongOthers(String expectedMessage) {
         boolean result = false;
         for(int i = 0; i < 15; i++){
-            result = toUserTextMessages.stream().anyMatch(e -> e.getText().equals(expectedMessage));
+            result = toUserTextMessages.stream().anyMatch(e -> e.getText().trim().equals(expectedMessage));
             if (result) return true;
             waitFor(500);
         }

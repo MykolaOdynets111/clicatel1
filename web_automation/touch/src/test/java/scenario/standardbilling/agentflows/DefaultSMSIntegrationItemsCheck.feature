@@ -35,9 +35,9 @@ Feature: Default SMS integration items visibility check
     When Agent see no phone number added into customer's profile
     Then Send SMS button is disabled on Chat header
     And Send OTP button is displayed in Customer 360
-    When Click 'Edit' button in Customer 360 view
+    When Click 'Save' button in Profile
     And Change phone number for touch user
-    And Click 'Save' button in Customer 360 view
+    And Click 'Save' button in Profile
 #    When Wait for 3 seconds for Phone Number to be updated
     When Wait for 2 seconds for Phone Number update
     Then Send SMS button is enabled on Chat header

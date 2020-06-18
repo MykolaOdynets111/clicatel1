@@ -7,11 +7,12 @@ Feature: Satisfaction Survey: Star and Comment with NPS
       | ratingEnabled        | true              |
       | ratingType           | NPS               |
       | ratingScale          | ZERO_TO_TEN       |
-      | ratingIcon           | STAR              |
+      | ratingIcon           | NUMBER            |
       | commentEnabled       | true              |
       | thanksMessageEnabled | true              |
     Given I login as agent of Standard Billing
     And Click chat icon
+
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-18595")
   Scenario: verify if agent is able to see NPS rating from the survey that the customer completed on the chat view
@@ -21,7 +22,7 @@ Feature: Satisfaction Survey: Star and Comment with NPS
     When Agent closes chat
     Then User see NPS survey form
     When Submit survey form with Automation rate comment and 8 rate
-    Then Text response that contains "Thank you. Chat soon!" is shown
+    Then Text response that contains "start_new_conversation" is shown
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from touch in chat history list
     Then Agent sees Rate Card in chat history with 8 rate selected and Automation rate comment

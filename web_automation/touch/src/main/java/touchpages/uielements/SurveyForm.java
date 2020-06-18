@@ -46,7 +46,7 @@ public class SurveyForm extends AbstractUIElement {
     }
 
     public boolean isSurveyDisplayed(){
-        return isElementShown(this.getCurrentDriver(), SurveyForm.this, 2);
+        return isElementShown(this.getCurrentDriver(), SurveyForm.this, 5);
     }
 
     public void clickNoThanksButton() {

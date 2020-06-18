@@ -198,7 +198,7 @@ public class TwitterSteps {
     @Then("^User have to receive (.*) auto responder on his message \"(.*)\"$")
     public void verifyAutoResponder(String autoResponder, String userMessage){
         userMessage = getExpectedResp(userMessage);
-        String expectedResponse = ApiHelper.getTenantMessageText(autoResponder);
+        String expectedResponse = ApiHelper.getAutoResponderMessageText(autoResponder);
 
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getDmWindow().isTextResponseForUserMessageShown(userMessage),

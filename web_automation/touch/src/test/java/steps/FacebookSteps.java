@@ -51,7 +51,7 @@ public class FacebookSteps {
     public void openMessengerAndSendMessage(String message){
         messengerWindow = getFbTenantPage().openMessenger();
         messengerWindow.waitUntilLoaded();
-        String welcomeMessage = ApiHelper.getTenantMessageText("welcome_message");
+        String welcomeMessage = ApiHelper.getAutoResponderMessageText("welcome_message");
 
         messengerWindow.waitForWelcomeMessage(welcomeMessage, 10);
         messengerWindow.enterMessage(createUniqueUserMessage(message));
@@ -60,7 +60,7 @@ public class FacebookSteps {
     @Then("^User have to receive the following on his message regarding (.*): \"(.*)\"$")
     public void verifyMessengerResponse(String userMessage, String expectedResponse) {
         if (expectedResponse.equalsIgnoreCase("agents_away")){
-            expectedResponse = ApiHelper.getTenantMessageText("agents_away");
+            expectedResponse = ApiHelper.getAutoResponderMessageText("agents_away");
         }
         // ToDo: Update timeout when it is specified in System timeouts page on Confluence
         boolean isExpectedMessageIsShown = getMessengerWindow().isExpectedToUserMessageShown(getCurrentUserMessageText(), expectedResponse,60);

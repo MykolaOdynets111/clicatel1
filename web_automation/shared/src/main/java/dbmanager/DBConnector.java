@@ -20,7 +20,7 @@ public class DBConnector {
     private static void createConnection(String env, String platform){
         DBProperties dbProperties = DBProperties.getPropertiesFor(env, platform);
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(dbProperties.getURL(), dbProperties.getUser(), dbProperties.getPass());
         } catch (Exception e) {
             System.out.println("Connection Failed! Check output console");
@@ -376,6 +376,14 @@ public class DBConnector {
 
         return getDataFromDb(env, "touch", query, "verification_code");
     }
+
+    public static String getDefaultAutoResponder(String env, String autoresponderId){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "SELECT * FROM "+tableName+".autoresponders where id = '"+autoresponderId+"';";
+
+        return getDataFromDb(env, "touch", query, "default_message");
+    }
+
 
     private static void waitFor(int wait) {
         try {

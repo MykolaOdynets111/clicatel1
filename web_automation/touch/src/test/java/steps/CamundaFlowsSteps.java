@@ -6,7 +6,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
-import datamanager.jacksonschemas.TafMessage;
+import datamanager.jacksonschemas.AutoResponderMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
@@ -16,8 +16,6 @@ import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -28,23 +26,23 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     private Faker faker = new Faker();
 
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
-    public void updateTafMessageStatus(String tafMessageId, boolean status, String tenantOrgName){
+    public void updateTafMessageStatus(String autoResponderId, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
-        tafMessageUpdates.setEnabled(status);
-        ApiHelper.updateTafMessage(tafMessageUpdates);
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderId);;
+        autoResponderMessageUpdates.setEnabled(status);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderId);
 
     }
 
     @Given("^Taf (.*) message text is updated for (.*) tenant$")
-    public void updateTafMessageText(String tafMessageId, String tenantOrgName){
+    public void updateTafMessageText(String autoResponderMessageId, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        TafMessage tafMessageUpdates = getTafMessageToUpdate(tafMessageId);
-        String updatedMessage = generateNewMessageText(tafMessageId);
-        tafMessageUpdates.setText(updatedMessage);
-        ApiHelper.updateTafMessage(tafMessageUpdates);
-        TafMessage tafMessageBackend = getTafMessageToUpdate(tafMessageId);
-        Assert.assertEquals(tafMessageBackend.getText(), tafMessageUpdates.getText(),
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        String updatedMessage = generateNewMessageText(autoResponderMessageId);
+        autoResponderMessageUpdates.setText(updatedMessage);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderMessageId);
+        AutoResponderMessage tafMessageBackend = ApiHelper.getAutoResponderMessage(autoResponderMessageId);;
+        Assert.assertEquals(tafMessageBackend.getText(), autoResponderMessageUpdates.getText(),
                 "Message text is not updated for tenant");
 
     }
@@ -105,11 +103,6 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
             DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), linkedClientProfileId, lastVisitWithShift);
         }
     }
-
-    private TafMessage getTafMessageToUpdate(String messageId){
-        return ApiHelper.getTafMessages().stream().filter(e -> e.getId().equals(messageId)).findFirst().get();
-    }
-
 
     private String generateNewMessageText(String tafMessageId){
         return "randow "+tafMessageId+" message:" + faker.lorem().characters(8, 13, true);

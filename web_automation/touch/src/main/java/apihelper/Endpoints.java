@@ -66,6 +66,9 @@ public class Endpoints {
 
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 
+    public static String AUTORESPONDER_CONTROLLER= URLs.getTouchApiBaseIntegrationURL() + "api/autoresponders/%s";
+
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";
@@ -104,6 +107,11 @@ public class Endpoints {
 
     public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() +  "chats/chat/history";
 
+    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getBaseInternalApiUrl() +  "api/autoresponders/%s";
+
+    public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() +  "api/chat-users/by-external-user-id/%s/%s/%s";
+
+    public static String INTERNAL_CHAT_USERS = URLs.getBaseInternalApiUrl() +  "api/chat-users";
     // ====================  tie ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";
@@ -168,9 +176,6 @@ public class Endpoints {
 
     public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 
-    // ====================  TAF ================= //
-
-    public static String TAF_MESSAGES = URLs.getBaseTafUrl() + "resources/taf-messages?tenant=%s";
 
     // ====================  .Control ================= //
 
