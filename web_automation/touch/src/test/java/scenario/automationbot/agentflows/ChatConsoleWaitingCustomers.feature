@@ -5,7 +5,7 @@ Feature: Chat console: Waiting customers
     And Click chat icon
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Chat console in submenu
+    When I select Touch in left menu and Dashboard in submenu
     And Save Customers waiting for response pre-test widget value
 
   @agent_session_capacity

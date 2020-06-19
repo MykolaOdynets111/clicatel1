@@ -2,8 +2,6 @@ package steps.portalsteps;
 
 import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
-import cucumber.api.Scenario;
-import cucumber.runtime.ScenarioImpl;
 import datamanager.jacksonschemas.AvailableAgent;
 import datamanager.model.PaymentMethod;
 import driverfactory.DriverFactory;
@@ -23,9 +21,6 @@ import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import mc2api.endpoints.EndpointsPlatform;
 import mc2api.auth.PortalAuthToken;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
@@ -692,7 +687,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Save (.*) pre-test widget value$")
     public void savePreTestValue(String widgetName){
         try {
-            chatConsolePretestValue.put(widgetName, Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName)));
+            chatConsolePretestValue.put(widgetName, Integer.valueOf(getDashboardPage().getWidgetValue(widgetName)));
         } catch (NumberFormatException e){
             Assert.fail("Cannot read value from " +widgetName + "chat console widget");
         }
@@ -700,7 +695,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^(.*) widget shows correct number$")
     public void checkTotalAgentOnlineValue(String widgetName){
-        int actualActiveAgentsCount = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        int actualActiveAgentsCount = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
         chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
         int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
         Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,
@@ -727,19 +722,19 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Average chats per Agent is correct$")
     public void verifyAverageChatsPerAgent(){
-       int actualAverageChats = Integer.valueOf(getPortalChatConsolePage().getAverageChatsPerAgent());
+       int actualAverageChats = Integer.valueOf(getDashboardPage().getAverageChatsPerAgent());
        int expectedAverageChats = activeChatsFromChatdesk /  ApiHelper.getNumberOfLoggedInAgents();
        Assert.assertEquals(actualAverageChats, expectedAverageChats,
                "Number of Average chats per Agent is not as expected");
     }
 
     private boolean checkLiveCounterValue(String widgetName, int expectedValue){
-        int actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+        int actualValue = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
         boolean result = false;
         for (int i=0; i<45; i++){
             if(expectedValue!=actualValue){
-                getPortalChatConsolePage().waitFor(1000);
-                actualValue = Integer.valueOf(getPortalChatConsolePage().getWidgetValue(widgetName));
+                getDashboardPage().waitFor(1000);
+                actualValue = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
             } else {
                 result =true;
                 break;
@@ -1647,7 +1642,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("'No agents online' on Agents tab shown if there is no online agent")
     public void verifyNoAgentsOnline(){
         if(ApiHelper.getNumberOfLoggedInAgents()==0) {
-            Assert.assertTrue(getPortalChatConsolePage().isNoAgentsOnlineShown(),
+            Assert.assertTrue(getDashboardPage().isNoAgentsOnlineShown(),
                     "'No agents online' are not shown while there is no logged in agents");
         }
     }
@@ -1658,7 +1653,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 .filter(e -> e.getEmail().equalsIgnoreCase(
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get().getAgentFullName();
-        Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
+        Assert.assertTrue(getDashboardPage().getAgentsTableChatConsole()
                         .getTargetAgentRow(secondAgentNameForChatConsoleTests).isActiveChatsIconShown(40),
                 secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
     }
@@ -1669,7 +1664,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
                 .filter(e -> e.getEmail().equalsIgnoreCase(
                         Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
                 .findFirst().get().getAgentFullName();
-        Assert.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole()
+        Assert.assertTrue(getDashboardPage().getAgentsTableChatConsole()
                         .getTargetAgentRow(secondAgentNameForChatConsoleTests).isNoActiveChatsIconShown(40),
                 secondAgentNameForChatConsoleTests + " agent is not marked with yellow");
 
@@ -1678,7 +1673,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Correct number of active chats shown for (.*)$")
     public void verifyChatConsoleAgentsContainsChats(String agent){
         int activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertEquals(getPortalChatConsolePage().getAgentsTableChatConsole()
+        Assert.assertEquals(getDashboardPage().getAgentsTableChatConsole()
                         .getTargetAgentRow(secondAgentNameForChatConsoleTests).getActiveChatsNumber(),
                 activeChatsFromChatdesk,
                 secondAgentNameForChatConsoleTests + " icon has incorrect number of active chats");
@@ -1687,7 +1682,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Admin clicks expand dot for (.*)$")
     public void expandAgentsRowInChatConsole(String agent){
-        getPortalChatConsolePage().getAgentsTableChatConsole()
+        getDashboardPage().getAgentsTableChatConsole()
                 .getTargetAgentRow(secondAgentNameForChatConsoleTests)
                 .clickExpandButton();
     }
@@ -1697,7 +1692,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         SoftAssert soft = new SoftAssert();
         List<AvailableAgent> agents = ApiHelper.getAvailableAgents();
         for(AvailableAgent agent : agents){
-            soft.assertTrue(getPortalChatConsolePage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 35),
+            soft.assertTrue(getDashboardPage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 35),
                     agent.getAgentFullName() + " agent is not shown in online agents table on chat console");
         }
         soft.assertAll();
@@ -1712,7 +1707,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
         String intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0).getIntent();
 
-        AgentRowChatConsole agentUnderTest = getPortalChatConsolePage().getAgentsTableChatConsole()
+        AgentRowChatConsole agentUnderTest = getDashboardPage().getAgentsTableChatConsole()
                 .getTargetAgentRow(secondAgentNameForChatConsoleTests);
 
         if(!agentUnderTest.isChatShownFromUserShown(userId, 40)){
