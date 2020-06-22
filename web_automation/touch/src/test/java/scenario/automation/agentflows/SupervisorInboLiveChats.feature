@@ -8,14 +8,14 @@ Feature: Supervisor able to check live chats
     Given Send parameterized init call with clientId context correct response is returned
     And Send message call
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
+#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-38839")
   Scenario: Supervisor inbox :: verify that supervisor able to check live chats
     Given I open portal
     And Login into portal as an admin of Automation account
-    When I select Touch in left menu and Chat console in submenu
-    And Select Inbox in Chat console
-    When User select Live chats conversation type
+    When I select Touch in left menu and Supervisor Desk in submenu
     Then Verify that live chat is displayed with chat to agent message to agent
-    And I launch chatdesk from portal
+    When Agent switches to opened Portal page
+    When I select Touch in left menu and Agent Desk in submenu
     Then Agent has new conversation request from dotcontrol user
 

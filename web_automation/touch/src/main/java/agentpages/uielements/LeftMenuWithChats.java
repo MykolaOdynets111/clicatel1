@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 
-@FindBy(xpath = "//div[@class = 'flex-dashboard agent-container']/div[1]")
+@FindBy(xpath = "//div[@class = 'flex-dashboard agent-container' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=roster-item]")

@@ -5,11 +5,11 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 
-@FindBy(css = "div.transfer-chat-modal.modal-dialog")
+@FindBy(css = "div.cl-r-modal")
 public class AssignChatWindow extends BasePortalWindow {
 
-    @FindBy(xpath = ".//div[@class='cl-r-select__control css-yk16xz-control']//div[text()='Select agent:'] ")
-    private WebElement openDropdownButton;
+    @FindBy(xpath = ".//div[text()='Select an agent...']")
+    private WebElement openAgentDropdownButton;
 
     @FindBy(css = ".cl-r-select__menu-list div")
     private WebElement availableAgent;
@@ -22,7 +22,7 @@ public class AssignChatWindow extends BasePortalWindow {
 
 
     private void openDropDownAgent() {
-        clickElem(this.getCurrentDriver(), openDropdownButton,5,"Open drop down button");
+        clickElem(this.getCurrentDriver(), openAgentDropdownButton,5,"Open drop down button");
     }
 
     public void selectDropDownAgent(String agentName) {

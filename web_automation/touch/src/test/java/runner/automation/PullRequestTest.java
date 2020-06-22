@@ -18,7 +18,7 @@ import static runner.automation.Path.DOTCONTROL;
         },
         monochrome = true,
         features ={
-                PATH + "ChatConsoleInbox.feature",
+                PATH + "SupervisorDefaultTicketsFilter.feature",
                 PATH + "FilteringPinnedChat.feature",
                 PATH + "AgentFeedbackManagingAgentMode.feature",
                 PATH + "AgentMode.feature",

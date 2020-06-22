@@ -16,10 +16,10 @@ Feature: Supervisor in box : assign ticket manually
   Scenario: Supervisor inbox :: Assign ticket manually
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Chat console in submenu
-    And Select Inbox in Chat console
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
     Given I login as second agent of Automation Bot
-    When Click three dots for dot control ticket
+    When Select dot control ticket checkbox
     And Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on second agent

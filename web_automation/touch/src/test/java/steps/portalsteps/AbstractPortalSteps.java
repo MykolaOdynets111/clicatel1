@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.SupervisorDeskPage;
 import com.github.javafaker.Faker;
 import driverfactory.DriverFactory;
 import interfaces.DateTimeHelper;
@@ -42,7 +43,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
 
-    private static ThreadLocal<ChatConsoleInboxPage> chatConsoleInboxPage = new ThreadLocal<>();
+    private static ThreadLocal<SupervisorDeskPage> chatConsoleInboxPage = new ThreadLocal<>();
 
     private static ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
 
@@ -259,9 +260,11 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     }
 
 
-    public static ChatConsoleInboxPage getChatConsoleInboxPage() {
+    public static SupervisorDeskPage getChatConsoleInboxPage() {
         if (chatConsoleInboxPage.get()==null) {
-            chatConsoleInboxPage.set(new ChatConsoleInboxPage(DriverFactory.getDriverForAgent("admin")));
+            chatConsoleInboxPage.set(new SupervisorDeskPage(DriverFactory.getDriverForAgent("admin")));
+           // ToDo decrease time for spinner wait
+            chatConsoleInboxPage.get().waitForConnectingDisappear(15, 10);
             return chatConsoleInboxPage.get();
         } else{
             return chatConsoleInboxPage.get();
@@ -286,7 +289,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
-    public static void setChatConsoleInboxPage(ChatConsoleInboxPage chatConsoleInbox) {
+    public static void setChatConsoleInboxPage(SupervisorDeskPage chatConsoleInbox) {
         chatConsoleInboxPage.set(chatConsoleInbox);
     }
 
