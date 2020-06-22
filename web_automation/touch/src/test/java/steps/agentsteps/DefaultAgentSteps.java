@@ -357,7 +357,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
         customer360InfoForUpdating = currentCustomerInfo.setLocation("Lviv")
                             .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
-                            .setPhone(faker.numerify("+38093#######")); //"+380931576633");
+                            .setPhone(faker.numerify("38093#######")); //"+380931576633");
         if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) {
             customer360InfoForUpdating.setFullName("AQA Run");
             customer360InfoForUpdating.setChannelUsername(customer360InfoForUpdating.getFullName());
