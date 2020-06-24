@@ -41,7 +41,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<PortalUserManagementPage> portalUserManagementPage = new ThreadLocal<>();
 
-    private static ThreadLocal<PortalChatConsolePage> portalChatConsolePage = new ThreadLocal<>();
+    private static ThreadLocal<DashboardPage> dashboardPage = new ThreadLocal<>();
 
     private static ThreadLocal<SupervisorDeskPage> chatConsoleInboxPage = new ThreadLocal<>();
 
@@ -246,17 +246,17 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     }
 
 
-    public static PortalChatConsolePage getPortalChatConsolePage() {
-        if (portalChatConsolePage.get()==null) {
-            portalChatConsolePage.set(new PortalChatConsolePage(DriverFactory.getDriverForAgent("admin")));
-            return portalChatConsolePage.get();
+    public static DashboardPage getDashboardPage() {
+        if (dashboardPage.get()==null) {
+            dashboardPage.set(new DashboardPage(DriverFactory.getDriverForAgent("admin")));
+            return dashboardPage.get();
         } else{
-            return portalChatConsolePage.get();
+            return dashboardPage.get();
         }
     }
 
-    public static void setPortalChatConsolePage(PortalChatConsolePage chatConsolePage) {
-       portalChatConsolePage.set(chatConsolePage);
+    public static void setDashboardPage(DashboardPage chatConsolePage) {
+       dashboardPage.set(chatConsolePage);
     }
 
 
@@ -313,7 +313,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         portalUserProfileEditingPage.remove();
         portalTouchPreferencesPage.remove();
         portalUserManagementPage.remove();
-        portalChatConsolePage.remove();
+        dashboardPage.remove();
         chatConsoleInboxPage.remove();
         departmentsManagementPage.remove();
         surveyManagementPage.remove();

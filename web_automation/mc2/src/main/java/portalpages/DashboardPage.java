@@ -6,18 +6,22 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portaluielem.AgentsTableChatConsole;
 
-public class PortalChatConsolePage extends PortalAbstractPage {
 
-    @FindBy(xpath = "//p[text()='Chats waiting in your queue']/following-sibling::div[@class='average-number--blue ng-binding']")
+public class DashboardPage extends PortalAbstractPage {
+
+    @FindBy(css = ".welcome-dashboard")
+    private WebElement mainFrame;
+
+    @FindBy(xpath = "//div[text()='Chats waiting in queue']/parent::div/div[@class = 'cl-activity-overview-item-value']")
     private WebElement chatsWaitingCounter;
 
-    @FindBy(xpath = "//p[text()='Live chats active']/following-sibling::div[@class='average-number--blue ng-binding']")
+    @FindBy(xpath = "//div[text()='Active live chats']/parent::div/div[@class = 'cl-activity-overview-item-value']")
     private WebElement liveChatsCounter;
 
-    @FindBy(xpath = "//p[text()='Agents online']/following-sibling::div[@class='average-number--blue ng-binding']")
+    @FindBy(xpath = "//div[text()='Agents available']/parent::div/div[@class = 'cl-activity-overview-item-value']")
     private WebElement agentsOnlineCounter;
 
-    @FindBy(xpath = "//p[text()='Live chats active']//following-sibling::p/b")
+    @FindBy(xpath = "//div[text()='Active live chats']/parent::div//span[@class = 'cl-activity-overview-item-average-value']")
     private WebElement averageChatsPerAgent;
 
     @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
@@ -27,13 +31,13 @@ public class PortalChatConsolePage extends PortalAbstractPage {
 
     // == Constructors == //
 
-    public PortalChatConsolePage() {
+    public DashboardPage() {
         super();
     }
-    public PortalChatConsolePage(String agent) {
+    public DashboardPage(String agent) {
         super(agent);
     }
-    public PortalChatConsolePage(WebDriver driver) {
+    public DashboardPage(WebDriver driver) {
         super(driver);
     }
 
@@ -43,7 +47,7 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     }
 
     public String getWaitingChatsNumber(){
-        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 6,"Customers waiting for response");
+        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 0,"Customers waiting for response");
     }
 
     public String getLiveChatsNumber(){
@@ -55,6 +59,8 @@ public class PortalChatConsolePage extends PortalAbstractPage {
     }
 
     public String getWidgetValue(String value){
+        waitForElementToBeVisible(this.getCurrentDriver(), mainFrame, 10);
+        scrollToElem(this.getCurrentDriver(), chatsWaitingCounter, "How are your Agents performing right now?");
         switch (value) {
             case "Customers waiting for response":
                 return getWaitingChatsNumber();
