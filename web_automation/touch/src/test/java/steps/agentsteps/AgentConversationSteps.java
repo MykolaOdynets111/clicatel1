@@ -351,6 +351,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
     }
 
+    @When("^(.*) click happy sentiment button$")
+    public void clickUnsatisfiedSentiment(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().setSentimentHappy();
+    }
+
     @When("(.*) fills form$")
     public void agentFillsForm(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note text field");

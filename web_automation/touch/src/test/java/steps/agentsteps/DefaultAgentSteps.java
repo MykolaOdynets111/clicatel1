@@ -254,13 +254,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) changes status to: (.*)$")
     public void changeAgentStatus(String agent, String newStatus){
-        try {
+//        try {
             getAgentHomePage(agent).getPageHeader().clickIcon();
             getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
             getAgentHomePage(agent).getPageHeader().clickIcon();
-        } catch (WebDriverException e) {
-            Assert.fail("Unable to change agent status. Please check the screenshot.");
-        }
+//        } catch (WebDriverException e) {
+//            Assert.fail("Unable to change agent status. Please check the screenshot.");
+//        }
     }
 
     @When("^(.*) refreshes the page$")

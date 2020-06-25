@@ -18,7 +18,9 @@ Feature: User on his demand should be redirected on the agent
     Then User should see 'hello' text response for his 'Hate your banking' input
     When User enter how to check my balance? into widget input field
     Then Correct sentiment on how to check my balance? user's message is stored in DB
-    When Agent closes chat
+    When Agent click "End chat" button
+    And Agent click happy sentiment button
+    And Agent click 'Close chat' button
     Then Correct sentiment on how to check my balance? user's message is stored in DB
 
 

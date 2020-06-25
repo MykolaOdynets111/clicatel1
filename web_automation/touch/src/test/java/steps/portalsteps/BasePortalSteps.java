@@ -715,7 +715,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyChatConsoleActiveChats(String widgetName){
         activeChatsFromChatdesk = ApiHelper.getActiveChatsByAgent("Second agent")
                 .getBody().jsonPath().getList("content.id").size();
-                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
+//                new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
         Assert.assertTrue(checkLiveCounterValue(widgetName, activeChatsFromChatdesk),
                 "'"+widgetName+"' widget value is not updated to " + activeChatsFromChatdesk +" expected value \n");
     }

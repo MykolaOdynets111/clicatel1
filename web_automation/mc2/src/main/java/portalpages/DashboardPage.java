@@ -1,6 +1,7 @@
 package portalpages;
 
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,6 +28,8 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
     private WebElement noAgentsNotification;
 
+    private String spinner = "//div[@class='spinner']";
+
     private AgentsTableChatConsole agentsTableChatConsole;
 
     // == Constructors == //
@@ -39,6 +42,9 @@ public class DashboardPage extends PortalAbstractPage {
     }
     public DashboardPage(WebDriver driver) {
         super(driver);
+        if (isElementShown(this.getCurrentDriver(), mainFrame, 10)){
+            waitForConnectingDisappear(2,5);
+        }
     }
 
     public AgentsTableChatConsole getAgentsTableChatConsole(){
@@ -59,7 +65,6 @@ public class DashboardPage extends PortalAbstractPage {
     }
 
     public String getWidgetValue(String value){
-        waitForElementToBeVisible(this.getCurrentDriver(), mainFrame, 10);
         scrollToElem(this.getCurrentDriver(), chatsWaitingCounter, "How are your Agents performing right now?");
         switch (value) {
             case "Customers waiting for response":
@@ -78,5 +83,18 @@ public class DashboardPage extends PortalAbstractPage {
 
     public boolean isNoAgentsOnlineShown(){
         return isElementShown(this.getCurrentDriver(), noAgentsNotification, 8);
+    }
+
+    public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        try{
+            try {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToAppear);
+            }catch (TimeoutException e){ }
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToDisappear);
+            return true;
+        }
+        catch (TimeoutException e){
+            return false;
+        }
     }
 }
