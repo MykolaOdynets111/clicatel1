@@ -10,7 +10,7 @@ import java.util.List;
 @FindBy(css = ".cl-r-roster-filter.cl-r-roster-filter--form-opened")
 public class FilterMenu extends AbstractUIElement {
 
-    @FindBy (xpath = ".//span[text()='Flagged']")
+    @FindBy (xpath = ".//span[contains(text(), 'Flagged')]")
     private WebElement flaggedCheckbox;
 
     @FindBy(css ="[selenium-id=apply-filter-btn]")

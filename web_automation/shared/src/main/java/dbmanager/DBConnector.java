@@ -145,24 +145,6 @@ public class DBConnector {
         updateDataInDB(env, "touch", query);
     }
 
-    public static boolean isSMSClientProfileCreated(String env, String phoneNumber, String linkedProfileID, String type) {
-        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-
-        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+phoneNumber+"' " +
-                "and linked_profile_id='"+linkedProfileID+"' and type = '"+type+"';";
-        boolean isRecordExists = false;
-        for(int i = 0; i<5; i++) {
-                isRecordExists = isRecordExistsInDB(env, "touch", query);
-                if (isRecordExists) {
-                    break;
-                } else {
-                    waitFor(500);
-                }
-        }
-        DBConnector.closeConnection();
-        return isRecordExists;
-    }
-
     public static Map<String, String> getDatesOfUserConversationOrSession(String env, String clientId, String table){
         ResultSet results = null;
         Map<String, String> conversationDates = new HashMap<>();

@@ -9,7 +9,7 @@ Feature: Chat desk: Default placeholders and tips
     And Click chat icon
     Given I login as agent of General Bank Demo
     Then Agent sees "No live chats" tip in conversation area
-    And Agent sees "Context will be displayed when chat is selected" tip in context area
+    And Agent sees "Select a chat to converse with a customer" tip in context area
     When User enter to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch

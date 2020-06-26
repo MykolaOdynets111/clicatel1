@@ -450,7 +450,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("Agent send OTP message with API")
     public void sendOTPWithAPI(){
-        // ToDo update to the new api
         UserInfo userInfo = ApiHelper.getUserProfile("webchat", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         userInfo.setOtpSent(true);
         ApiHelper.updateUserProfile(userInfo);
@@ -468,10 +467,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("SMS client-profile added into DB")
     public void checkSMSProfileCreating(){
-        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\+", "").replaceAll(" ", "");
-        Assert.assertTrue(DBConnector.isSMSClientProfileCreated(ConfigManager.getEnv(), phone, linkedClientProfileId, "MC2_SMS"),
-                "MC2_SMS client profile wasn't created");
+        UserInfo userInfo = ApiHelper.getUserProfile("webchat", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
+        SoftAssert soft =new SoftAssert();
+        soft.assertTrue(!userInfo.getSms().getIntegrationId().isEmpty(), "Sms client integration was not added");
+        soft.assertEquals(userInfo.getSms().getPhoneNumber(), phone, "Incorrect phone is set into Sms integration");
+        soft.assertAll();
     }
 
     @Then("Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed")

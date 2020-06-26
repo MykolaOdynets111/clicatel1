@@ -62,10 +62,10 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "#right-panel .cl-r-tabs__tab.cl-r-tabs__tab--selected")
     private WebElement selectedTab;
 
-    @FindBy(css = ".cl-r-no-chats-found")
+    @FindBy(css = ".scrollable-roster .cl-empty-state")
     private WebElement tipNoteInConversationArea;
 
-    @FindBy(css = ".cl-r-right-panel-no-context")
+    @FindBy(css = ".dashboard .cl-empty-state")
     private WebElement tipNoteInRightArea;
 
     @FindBy(css = "[selenium-id = transfer-notification-waiting]")
