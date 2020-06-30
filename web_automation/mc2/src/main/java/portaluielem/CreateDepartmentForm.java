@@ -7,16 +7,16 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css =".modal-dialog .modal-content")
+@FindBy(css =".cl-r-modal-template.departments-modal")
 public class CreateDepartmentForm extends AbstractUIElement {
 
-    @FindBy(css =".cl-input.cl-input--text")
+    @FindBy(id ="department-name")
     private WebElement nameField;
 
-    @FindBy(css =".cl-input.cl-input--textarea")
+    @FindBy(css ="textarea#department-description")
     private WebElement descriptionForm;
 
-    @FindBy(css = ".checkbox-label")
+    @FindBy(css = ".cl-r-checkbox__label")
     private List<WebElement> departmentAgentsCheckbox;
 
     @FindBy(xpath = ".//button[text() = 'Cancel']")
@@ -50,6 +50,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
 
     @Step(value = "Select Department Agents checkbox")
     public CreateDepartmentForm selectSeveralDepartmentAgentsCheckbox(List<String> agentNames){
+        waitForElementsToBeVisible(this.getCurrentDriver(), departmentAgentsCheckbox,10);
         for (String agentName : agentNames) {
             selectDepartmentAgentsCheckbox(agentName);
         }

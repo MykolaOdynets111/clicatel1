@@ -12,16 +12,13 @@ import java.util.List;
 
 public class DepartmentsManagementPage extends PortalAbstractPage {
 
-    @FindBy(id = "departments-iframe")
-    private WebElement iframeId;
-
-    @FindBy(css = ".departments-grouping__card.departments-grouping__card--add-department")
+    @FindBy(css = ".departments-grouping-reused__card--add-department")
     private WebElement addNewDepartmentButton;
 
-    @FindBy(xpath = "//a[contains(text(), 'Departments Management')]")
+    @FindBy(xpath = "//span[contains(text(), 'Departments Management')]")
     private WebElement pageTitle;
 
-    @FindBy(xpath = "//div[@class = 'departments-grouping__card']")
+    @FindBy(xpath = "//div[@class = 'departments-grouping-reused__card']")
     private List<WebElement> departmentCards;
 
     @FindBy(xpath = "//div[@id = 'swal2-content']")
@@ -80,11 +77,6 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
         return false;
     }
 
-    public DepartmentsManagementPage switchToFrame(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
-        return this;
-    }
-
     @Step(value = "Click 'Create New Department' button")
     public CreateDepartmentForm clickAddNewDepartmentButton() {
         clickElem(this.getCurrentDriver(), addNewDepartmentButton, 10, "Add New Department button");
@@ -94,7 +86,7 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
 
     @Step(value = "Verify Departments page is opened")
     public boolean isDepartmentsPageOpened() {
-        return isElementShown(this.getCurrentDriver(), pageTitle, 5);
+        return isElementShown(this.getCurrentDriver(), pageTitle, 20);
     }
 
     public CreateDepartmentForm openDepartmentManageForm(String cardName, String cardDescription){
