@@ -52,6 +52,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private String spinner = "//div[@class='spinner']";
 
+    private String loadingMoreTickets = ".supervisor-tickets__loading-more";
+
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
     private String iframeId = "ticketing-iframe";
@@ -89,11 +91,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
 
-    public ChatConsoleInboxRow getChatConsoleInboxRow(String userName){
+    public SuperviserDeskTicketsRow getChatConsoleInboxRow(String userName){
         return chatsLiveAndTickets.stream()
-                 .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
+                 .map(e -> new SuperviserDeskTicketsRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
-                 .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
+                 .stream().filter(a -> a.getUserName().toLowerCase()
                         .contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
@@ -109,7 +111,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 //    }
 
     public String getCurrentAgentOfTheChat(String userName){
-        String currentAgent = getChatConsoleInboxRow(userName).getCurrentAgent();
+        String currentAgent = getSupervisorTicketsTable().getTicketByUserName(userName).getCurrentAgent();
         return currentAgent;
     }
 
@@ -123,18 +125,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         waitUntilElementNotDisplayed(this.getCurrentDriver(), assignWindowsDialog, 3);
     }
 
-    public List<String> getUsersNames(){
-        List<String> list =  chatsLiveAndTickets.stream()
-                .map(e -> new ChatConsoleInboxRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .map(e -> e.getUserName())
-                .collect(Collectors.toList());
-        return list;
-    }
-
-    public void clickLoadMore(){
-        scrollToElem(this.getCurrentDriver(), loadMoreButton,  "'Load more'");
-        clickElem(this.getCurrentDriver(), loadMoreButton, 3, "'Load more'");
-        waitForConnectingDisappear(2,3);
+    public void scrollTicketsDown(){
+        getSupervisorTicketsTable().scrollTicketsToTheButtom();
+        waitForMoreTicketsAreLoading(2,5);
     }
 
     public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
@@ -150,15 +143,30 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         }
     }
 
-    public String getNumberOfChats(){
-        scrollToElem(this.getCurrentDriver(), numberOfChats, "Numbers of chats");
-        String info = getTextFromElem(this.getCurrentDriver(), numberOfChats, 3, "Number of chats");
-        return info;
+    public boolean waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        try{
+            try {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear);
+            }catch (TimeoutException e){ }
+            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToDisappear);
+            return true;
+        }
+        catch (TimeoutException e){
+            return false;
+        }
     }
+
+
+
+//    public String getNumberOfChats(){
+//        scrollToElem(this.getCurrentDriver(), numberOfChats, "Numbers of chats");
+//        String info = getTextFromElem(this.getCurrentDriver(), numberOfChats, 3, "Number of chats");
+//        return info;
+//    }
 
     public boolean areNewChatsLoaded(int previousChats, int wait){
         for(int i = 0; i< wait*2; i++){
-            if(getUsersNames().size() > previousChats) return true;
+            if(getSupervisorTicketsTable().getUsersNames().size() > previousChats) return true;
             else waitFor(500);
         }
         return false;

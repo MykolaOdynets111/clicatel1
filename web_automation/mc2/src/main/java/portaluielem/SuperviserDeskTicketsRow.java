@@ -10,12 +10,12 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 
-public class ChatConsoleInboxRow extends AbstractWidget {
+public class SuperviserDeskTicketsRow extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(xpath = ".//div[@class='cl-actions-dropdown dropdown btn-group']/button")
-    private WebElement threeDots;
+    @FindBy(css = ".cl-r-checkbox__icon-container")
+    private WebElement checkbox;
 
     @FindBy(xpath = ".//li[@class='cl-actions-dropdown__menu-item']//span[text()='Assign manually']")
     private WebElement assing;
@@ -29,7 +29,7 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     @FindBy(xpath = ".//div[@class='modal-footer']//button[text()='Assign']")
     private WebElement assignButton;
 
-    @FindBy(xpath = ".//div[contains(@class, 'agent-profile')]//div[contains(@class, 'user-data__description')]//div")
+    @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
 
     @FindBy(css = ".cl-r-chat-item-user-name")
@@ -45,19 +45,19 @@ public class ChatConsoleInboxRow extends AbstractWidget {
     private WebElement phone;
 
 
-    private String chatConsoleInboxRowNameCss = ".cl-r-chat-item-user-name";
+    private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
-    public ChatConsoleInboxRow(WebElement element) {
+    public SuperviserDeskTicketsRow(WebElement element) {
         super(element);
     }
 
-    public ChatConsoleInboxRow setCurrentDriver(WebDriver currentDriver){
+    public SuperviserDeskTicketsRow setCurrentDriver(WebDriver currentDriver){
         this.currentDriver = currentDriver;
         return this;
     }
 
-    public void clickThreeDots(){
-       clickElem(this.getCurrentDriver(), threeDots,3, "Three dots button");
+    public void selectCheckbox(){
+       clickElem(this.getCurrentDriver(), checkbox,0, "Ticket checkbox");
     }
 
     public void clickAssignManually(){
@@ -74,7 +74,6 @@ public class ChatConsoleInboxRow extends AbstractWidget {
 
     public String getChatConsoleInboxRowName(){
         WebElement name = baseWebElem.findElement(By.cssSelector(chatConsoleInboxRowNameCss));
-        scrollToElem(this.getCurrentDriver(), name, "Name of the chat");
         return name.getText();
     }
 

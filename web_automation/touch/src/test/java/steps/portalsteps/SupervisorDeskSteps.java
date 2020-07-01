@@ -11,7 +11,6 @@ import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portaluielem.InboxChatBody;
 import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
@@ -104,26 +103,26 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getChatConsoleInboxPage().assignChatOnAgent(agentName);
     }
 
-    @Given("^Save shown chats$")
+    @Given("^Save shown tickets$")
     public void saveChats() {
-        shownUsers = getChatConsoleInboxPage().getUsersNames();
+        shownUsers = getChatConsoleInboxPage().getSupervisorTicketsTable().getUsersNames();
     }
 
-    @Given("^Click 'Load more' button$")
-    public void clickLoadMore(){
-        getChatConsoleInboxPage().clickLoadMore();
+    @Given("^Supervisor scroll page to the bottom$")
+    public void scrollTicketsDown(){
+        getChatConsoleInboxPage().scrollTicketsDown();
     }
 
-    @Given("^More records are loaded$")
+    @Given("^More tickets are loaded$")
     public void moreRecordsAreShown(){
         SoftAssert soft = new SoftAssert();
         boolean result = getChatConsoleInboxPage().areNewChatsLoaded(shownUsers.size(), 4);
-        List<String> newAllUsers = getChatConsoleInboxPage().getUsersNames();
+//        List<String> newAllUsers = getChatConsoleInboxPage().getSupervisorTicketsTable().getUsersNames();
 
         soft.assertTrue(result, "New chats are not loaded\n");
-        soft.assertEquals(getChatConsoleInboxPage().getNumberOfChats().split("of")[0].trim(),
-                "displaying " + newAllUsers.size(),
-                "Incorrect size of all chats after loading more\n");
+//        soft.assertEquals(getChatConsoleInboxPage().getNumberOfChats().split("of")[0].trim(),
+//                "displaying " + newAllUsers.size(),
+//                "Incorrect size of all chats after loading more\n");
         soft.assertAll();
     }
 

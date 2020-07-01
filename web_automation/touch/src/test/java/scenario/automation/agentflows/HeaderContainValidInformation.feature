@@ -13,8 +13,9 @@ Feature: Header contain valid information
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     And  Time stamp displayed in 24 hours format
-    And Header in chat box displayed the icon for channel from which the user is chatting
     And Header in chat box displayed customer name
+    And Header in chat box displayed the icon for channel from which the user is chatting
+
 
 
 

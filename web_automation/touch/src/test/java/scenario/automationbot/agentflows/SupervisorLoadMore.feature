@@ -5,7 +5,8 @@ Feature: Supervisor in box : verify Load more button
   Scenario: Supervisor inbox :: Verify if "Load more" button load chats
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Chat console in submenu
-    Given Save shown chats
-    When Click 'Load more' button
-    Then More records are loaded
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    Given Save shown tickets
+    When Supervisor scroll page to the bottom
+    Then More tickets are loaded

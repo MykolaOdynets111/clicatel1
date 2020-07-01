@@ -72,6 +72,11 @@ public interface JSHelper extends WebActions{
         js.executeScript("window.scrollBy(0,-250)", "");
     }
 
+    default void scrollPageToTheBottom(WebDriver driver){
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+    }
+
     default void scrollToElem(WebDriver driver, String xpath, String elemName){
         try {
             WebElement element = driver.findElement(By.xpath(xpath));

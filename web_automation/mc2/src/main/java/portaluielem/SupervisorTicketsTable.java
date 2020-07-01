@@ -1,11 +1,11 @@
 package portaluielem;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(css = ".supervisor-tickets")
 public class SupervisorTicketsTable extends AbstractUIElement {
@@ -16,18 +16,34 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Assign Manually']")
     private WebElement assignManuallyButton;
 
-    private WebElement getTicketByName(String name){
-        return tickets.stream().filter(e1 -> e1.getText().contains(name)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find '" + name + "' ticket"));
+    @FindBy(css = "[selenium-id=roster-scroll-container]")
+    private WebElement scrolArea;
+
+
+    public SuperviserDeskTicketsRow getTicketByUserName(String userName){
+        return tickets.stream().map(e -> new SuperviserDeskTicketsRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+                .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
+                        .contains(userName.toLowerCase()))
+                .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
 
     public void selectTicketCheckbox(String getTicketByName){
-        clickElem(this.getCurrentDriver(), getTicketByName(getTicketByName)
-                .findElement(By.cssSelector(".cl-r-checkbox__icon-container")), 0, "Ticket Checkbox");
+        getTicketByUserName(getTicketByName).selectCheckbox();
     }
 
     public void clickAssignManuallyButton(){
         clickElem(this.getCurrentDriver(), assignManuallyButton, 5, "'Route to scheduler' button");
     }
 
+    public List<String> getUsersNames(){
+        List<String> list =  tickets.stream()
+                .map(e -> new SuperviserDeskTicketsRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .map(e -> e.getChatConsoleInboxRowName())
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    public void scrollTicketsToTheButtom(){
+        wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
+    }
 }

@@ -6,6 +6,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.DepartmentsManagementPage;
@@ -35,7 +36,10 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     public void createDepartmentWithSeveralAgents(String name, String description, int agent){
         List<String> agents = new ArrayList<String>();
         agents.add(Tenants.getTenantUnderTestOrgName());
-        for (int i = agent-1; i > 0; i--){
+        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "second agent");
+        String secondAgentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+        agents.add(secondAgentName);
+        for (int i = agent-2; i > 0; i--){
             agents.add(AbstractAgentSteps.getListOfCreatedAgents().get((i-1)).get("name"));
         }
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agents).clickCreateButton();
