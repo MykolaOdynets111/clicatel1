@@ -34,6 +34,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     private static  List<HashMap> tenantsInfo=null;
     private static List<TafMessage> tenantMessages=null;
+    public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
 
     public static String getInternalTenantConfig(String tenantName, String config){
         String url = String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantName);
@@ -105,6 +106,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Assert.assertEquals(resp.statusCode(), 200,
                 "Creating of user profile was not successful\n" +
                 "resp body: " + resp.getBody().asString());
+        clientProfileId.set(resp.jsonPath().getString("id"));
         return resp;
     }
 
@@ -826,11 +828,10 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");
     }
 
-    public static List<CRMTicket> getCRMTickets(String clientID, String type){
-        String clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), clientID, type, 0);
-        return RestAssured.given()
+    public static List<CRMTicket> getCRMTickets(){
+             return RestAssured.given().log().all()
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(String.format(Endpoints.CRM_TICKET, clientProfileId))
+                .get(String.format(Endpoints.CRM_TICKET, clientProfileId.get()))
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 

@@ -121,28 +121,11 @@ public class DBConnector {
         return getDataFromDb(env, "mc2", query, "id");
     }
 
-
-    public static String getClientProfileID(String env, String clientID, String type, int isTenantProfile) {
-        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-        String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' " +
-                "and is_tenant_profile="+isTenantProfile+" and type = '"+type+"';";
-
-        return getDataFromDb(env, "touch", query, "id");
-    }
-
     public static String getLinkedClientProfileID(String env, String clientID) {
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         String query = "SELECT * FROM "+ tableName +".client_profile where client_id='"+clientID+"' ";
 
         return getDataFromDb(env, "touch", query, "linked_profile_id");
-    }
-
-    public static void addPhoneAndOTPStatusIntoDB(String env, String linkedClientProfileID){
-        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
-        String query = "INSERT INTO `" + tableName + "`.`client_attribute` (`client_profile_id`, `key`, `value`) " +
-                "VALUES ('" + linkedClientProfileID + "', 'otpSent', 'true') ON DUPLICATE KEY UPDATE `value` = 'true';";
-
-        updateDataInDB(env, "touch", query);
     }
 
     public static Map<String, String> getDatesOfUserConversationOrSession(String env, String clientId, String table){
@@ -177,24 +160,6 @@ public class DBConnector {
             query= "UPDATE " + tableName + ".conversation SET started_date='"+map.get("started_date")+"', updated_date='"+map.get("updated_date")+"', ended_date='"+map.get("ended_date")+"' WHERE (client_id='"+clientId+"')";
         }
         updateDataInDB(env, "touch", query);
-    }
-
-    public static boolean isLastVisitSavedInDB(String env, String linkedClientProfileId, int secondsTimeout) {
-        String tableName = DBProperties.getPropertiesFor(env, "touch").getDBName();
-        String query = "SELECT value FROM " + tableName + ".client_attribute where client_profile_id='" + linkedClientProfileId + "' and `key` = 'lastVisit';";
-        boolean isLastVisitSaved = false;
-        int exitLoop = (secondsTimeout*60)/15;
-        for (int i = 0; i < exitLoop+2; i++) {
-
-                isLastVisitSaved = isRecordExistsInDB(env, "touch", query);
-                if (isLastVisitSaved) {
-                    break;
-                } else {
-                    waitFor(15000);
-                }
-        }
-        DBConnector.closeConnection();
-        return isLastVisitSaved;
     }
 
     public static boolean isAgentCreatedInDB(String env, String agentEmail) {

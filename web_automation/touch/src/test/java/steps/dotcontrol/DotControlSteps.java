@@ -21,6 +21,7 @@ import io.restassured.response.Response;
 import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.DefaultTouchUserSteps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -341,6 +342,9 @@ public class DotControlSteps implements WebWait {
                 );
             }
         }else {
+            if (expectedResponse.equalsIgnoreCase("start_new_conversation")){
+                expectedResponse = DefaultTouchUserSteps.formExpectedTextResponseFromBotWidget(expectedResponse);
+            }
             Assert.assertTrue(isResponseComeToServer(expectedResponse, wait),
                     "Message is not as expected\n Messages which came from server are: "
                             + Server.messages

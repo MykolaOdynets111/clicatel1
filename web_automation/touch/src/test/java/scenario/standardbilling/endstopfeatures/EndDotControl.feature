@@ -18,6 +18,6 @@ Feature: END message for .Control
     Then Verify dot .Control returns welcome response during 10 seconds
     When Prepare payload for sending //end message for .Control
     And Send message call
-    Then Verify dot .Control returns Thank you. Chat soon! response during 10 seconds
+    Then Verify dot .Control returns start_new_conversation response during 10 seconds
     Then Agent should not see from user chat in agent desk from dotcontrol
 

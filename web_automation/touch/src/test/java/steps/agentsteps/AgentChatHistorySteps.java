@@ -73,18 +73,16 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         Tenants.setTenantUnderTestNames(tenantOrgName);
         String previousChatId = "aqa_" + faker.lorem().characters(15) + System.currentTimeMillis();
         String sessionId = "aqa_" + faker.lorem().characters(15) + System.currentTimeMillis();
-        String clientProfileId;
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         LocalDateTime chatStarted;
         LocalDateTime chatEnded;
         if(DriverFactory.isTouchDriverExists()){
             userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-            clientProfileId = DBConnector.getClientProfileID(ConfigManager.getEnv(), userId, "TOUCH", 0);
             chatStarted = LocalDateTime.now(zoneId).minusDays(3).minusHours(4);
             chatEnded = LocalDateTime.now(zoneId).minusDays(3);
         }else{
             userId = "testing_" + faker.number().digits(7);
-            clientProfileId = ApiHelper.createUserProfile(userId).jsonPath().getString("id");
+            ApiHelper.createUserProfile(userId).jsonPath().getString("id");
             chatStarted = LocalDateTime.now(zoneId).minusMinutes(10);
             chatEnded = LocalDateTime.now(zoneId);
         }
@@ -96,14 +94,14 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
 
         Message userMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.atZone(zoneId).toInstant().toString(),
-                                                    clientProfileId, "USER", channelId,
+                ApiHelper.clientProfileId.get(), "USER", channelId,
                                         "webchat", "user_message " + faker.book().title());
         Message agentMessage = createMessageInHistory(previousChatId, tenantId, sessionId, chatStarted.plusMinutes(5).atZone(zoneId).toInstant().toString(),
                 agentId, "AGENT", channelId,
                 "webchat", "agent_message " + faker.book().title());
         List<Message> messages = Arrays.asList(userMessage, agentMessage);
 
-        chatHistory  = new ChatHistory(previousChatId, tenantId, clientProfileId, agentId, channelId,
+        chatHistory  = new ChatHistory(previousChatId, tenantId, ApiHelper.clientProfileId.get(), agentId, channelId,
                                                 chatStarted.atZone(zoneId).toInstant().toString(),
                                                 chatEnded.atZone(zoneId).toInstant().toString())
                                .setMessages(messages);

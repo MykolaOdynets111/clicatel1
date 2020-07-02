@@ -766,7 +766,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                     .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4), "Error: Response is shown in widget");
     }
 
-    private String formExpectedTextResponseFromBotWidget(String fromFeatureText){
+    public static String formExpectedTextResponseFromBotWidget(String fromFeatureText){
         String expectedTextResponse;
         switch (fromFeatureText) {
             case "welcome":

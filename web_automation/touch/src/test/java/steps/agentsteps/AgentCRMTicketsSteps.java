@@ -60,10 +60,10 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
             Response resp = ApiHelper.createCRMTicket(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), dataForNewCRMTicket);
             createdCRMTicket.add(resp.getBody().as(CRMTicket.class));
-            getAgentHomeForMainAgent().waitFor(1100);
+            waitFor(1100);
         }
         createdCrmTicketsList.set(createdCRMTicket);
-        Assert.assertEquals(ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").size(), ticketsNumber,
+        Assert.assertEquals(ApiHelper.getCRMTickets().size(), ticketsNumber,
                 "Not all tickets where successfully created");
     }
 
@@ -91,7 +91,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("^CRM ticket is created on backend with correct information$")
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
         SoftAssert soft = new SoftAssert();
-        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").get(0);
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets().get(0);
 
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -238,7 +238,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("CRM ticket is updated on back end")
     public void verifyCRMTicketUpdated() {
         SoftAssert soft = new SoftAssert();
-        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").get(0);
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets().get(0);
         String createdDate = getAgentHomeForMainAgent().getCrmTicketContainer().getFirstTicket().getCreatedDate();
 
         soft.assertEquals(formExpectedCRMTicketCreatedDate(actualTicketInfoFromBackend.getCreatedDate()), createdDate.toLowerCase(),
@@ -273,7 +273,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
     @Then("CRM ticket is not updated on back end")
     public void verifyCRMTicketNotUpdated() {
         SoftAssert soft = new SoftAssert();
-        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").get(0);
+        CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets().get(0);
 
         soft.assertEquals(actualTicketInfoFromBackend.getCreatedDate().split(":")[0],
                 createdCrmTicket.get().getCreatedDate().split(":")[0],
@@ -289,7 +289,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^CRM ticket is not created$")
     public void crmTicketDidNotCreated() {
-        Assert.assertEquals( ApiHelper.getCRMTickets(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), "TOUCH").size(), 0,
+        Assert.assertEquals( ApiHelper.getCRMTickets().size(), 0,
                 "CRM ticket was created on back end");
     }
 
