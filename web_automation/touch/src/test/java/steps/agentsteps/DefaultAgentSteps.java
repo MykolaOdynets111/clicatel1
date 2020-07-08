@@ -16,7 +16,6 @@ import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebDriverException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
@@ -187,19 +186,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
-        String userName=null;
-        if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
-        if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
-        if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
+        String userName=getUserName(social);
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40),
                                 "There is no new conversation request on Agent Desk (Client name: "+userName+")");
     }
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social, String channel){
-        String userName=null;
-        if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
-        if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
+        String userName=getUserName(social);
         Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
     }
@@ -216,11 +210,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
     public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
-        String userName = "";
-        if (social.equalsIgnoreCase("twitter")) userName = socialaccounts.TwitterUsers.getLoggedInUserName();
-        if(social.equalsIgnoreCase("facebook")) userName = socialaccounts.FacebookUsers.getLoggedInUserName();
-        if(social.equalsIgnoreCase("dotcontrol")) userName = DotControlSteps.getClient();
-
+        String userName = getUserName(social);
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
                 "Conversation request is not removed from Agent Desk (Client ID: "+userName+")"
         );
@@ -228,24 +218,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
-        String userName=null;
-        switch (socialChannel.toLowerCase()){
-            case "touch":
-                userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-                break;
-            case "twitter":
-                userName = socialaccounts.TwitterUsers.getLoggedInUserName();
-                break;
-            case "facebook":
-                userName = socialaccounts.FacebookUsers.getLoggedInUserName();
-                break;
-            case "dotcontrol":
-               userName = DotControlSteps.getClient();
-
-        }
-        getLeftMenu(agent).openNewFromSocialConversationRequest(userName);
+        getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
     }
-
 
     @When("^(.*) click on new conversation$")
     public void acceptUserConversation(String ordinalAgentNumber) {
@@ -305,7 +279,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("Correct (.*) client details are shown")
     public void verifyClientDetails(String clientFrom){
         Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main")
-                .getCustomer360Container().getActualPersonalInfo();
+                .getProfile().getActualPersonalInfo();
 
         Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
                 "User info is not as expected \n");
@@ -329,18 +303,18 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("Click (?:'Edit'|'Save') button in Profile")
     public void clickEditCustomerView(){
-        getAgentHomePage("main").getCustomer360Container().clickSaveEditButton();
+        getAgentHomePage("main").getProfile().clickSaveEditButton();
     }
 
     @Then("^Wait for (.d*) seconds for Phone Number to be (.*)$")
     public void checkPhoneNumberFieldUpdate(int waitFor, String requiredState) throws InterruptedException{
-        Customer360Container customer360Container = new Customer360Container();
-        customer360Container.setCurrentDriver(DriverFactory.getDriverForAgent("agent"));
+        Profile profile = new Profile();
+        profile.setCurrentDriver(DriverFactory.getDriverForAgent("agent"));
 
         int waitTimeInMillis = waitFor * 1000;
         long endTime = System.currentTimeMillis() + waitTimeInMillis;
 
-        while (!customer360Container.isPhoneNumberFieldUpdated(requiredState)
+        while (!profile.isPhoneNumberFieldUpdated(requiredState)
                     && System.currentTimeMillis() < endTime) {
             Thread.sleep(200);
         }
@@ -363,7 +337,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             customer360InfoForUpdating.setChannelUsername(customer360InfoForUpdating.getFullName());
 
         }
-        getAgentHomePage("main").getCustomer360Container().fillFormWithNewDetails(customer360InfoForUpdating);
+        getAgentHomePage("main").getProfile().fillFormWithNewDetails(customer360InfoForUpdating);
 
     }
 
@@ -374,27 +348,27 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) button (.*) displayed in Customer 360$")
     public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
-        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
+        Profile profile = getAgentHomePage("main").getProfile();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
-            Assert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
+            Assert.assertFalse(profile.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
         else
-            Assert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
+            Assert.assertTrue(profile.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
     }
 
     @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in Customer 360$")
     public void checkCustomer360PhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
-        Customer360Container customer360Container = getAgentHomePage("main").getCustomer360Container();
+        Profile profile = getAgentHomePage("main").getProfile();
         SoftAssert softAssert = new SoftAssert();
         if (isOrNotDisplayed.contains("not")) {
-            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"),
+            softAssert.assertFalse(profile.isCustomer360SMSButtonsDisplayed("Verify"),
                     "'Verify' button is not displayed");
-            softAssert.assertFalse(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"),
+            softAssert.assertFalse(profile.isCustomer360SMSButtonsDisplayed("Re-send OTP"),
                     "'Re-send OTP' button is not displayed");
             softAssert.assertAll();
         }
         else {
-            softAssert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed("Verify"));
-            softAssert.assertTrue(customer360Container.isCustomer360SMSButtonsDisplayed("Re-send OTP"));
+            softAssert.assertTrue(profile.isCustomer360SMSButtonsDisplayed("Verify"));
+            softAssert.assertTrue(profile.isCustomer360SMSButtonsDisplayed("Re-send OTP"));
             softAssert.assertAll();
         }
     }
@@ -408,13 +382,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
 
-        getAgentHomePage("main").getCustomer360Container().setPhoneNumber(phoneNumber);
+        getAgentHomePage("main").getProfile().setPhoneNumber(phoneNumber);
         Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
     }
 
     @When("Agent click on '(.*)' button in Customer 360")
     public void clickPhoneActionsButtonsCustomer360(String buttonName){
-        getAgentHomeForMainAgent().getCustomer360Container().clickPhoneNumberVerificationButton(buttonName);
+        getAgentHomeForMainAgent().getProfile().clickPhoneNumberVerificationButton(buttonName);
     }
 
     @Then("^'Verify phone' window is (.*)$")
@@ -429,7 +403,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("User's profile phone number (.*) in 'Verify phone' input field")
     public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
-        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getCustomer360Container()
+        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getProfile()
                 .getPhoneNumber().replaceAll("\\s+", "");
         String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow()
                 .getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
@@ -460,14 +434,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("'Verified' label become (.*)")
     public void checkVerifiedLabel(String isVisible) {
         if (isVisible.equalsIgnoreCase("visible"))
-            Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelDisplayed(), "Verified label is not displayed");
+            Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isVerifiedLabelDisplayed(), "Verified label is not displayed");
         else
-            Assert.assertTrue(getAgentHomeForMainAgent().getCustomer360Container().isVerifiedLabelHidden(), "Verified label remains displayed");
+            Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isVerifiedLabelHidden(), "Verified label remains displayed");
     }
 
     @Then("SMS client-profile added into DB")
     public void checkSMSProfileCreating(){
-        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll("\\+", "").replaceAll(" ", "");
+        String phone = getAgentHomeForMainAgent().getProfile().getPhoneNumber().replaceAll("\\+", "").replaceAll(" ", "");
         UserInfo userInfo = ApiHelper.getUserProfile("webchat", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         SoftAssert soft =new SoftAssert();
         soft.assertTrue(!userInfo.getSms().getIntegrationId().isEmpty(), "Sms client integration was not added");
@@ -477,7 +451,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed")
     public void chatSeparatorCheck(){
-        String phone = getAgentHomeForMainAgent().getCustomer360Container().getPhoneNumber().replaceAll(" ", "");
+        String phone = getAgentHomeForMainAgent().getProfile().getPhoneNumber().replaceAll(" ", "");
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getAgentHomeForMainAgent().getChatBody().isOTPDividerDisplayed(), "No OTP divider displayed");
         softAssert.assertTrue(getAgentHomeForMainAgent().getChatForm().getTextFromMessageInputField().replaceAll("\\s", "").contains(phone),
@@ -603,7 +577,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     public boolean isRequiredPhoneNumberDisplayed(String agent, String isPhoneNumberRequired){
-        String phone = getAgentHomePage(agent).getCustomer360Container().getPhoneNumber();
+        String phone = getAgentHomePage(agent).getProfile().getPhoneNumber();
         if (isPhoneNumberRequired.equalsIgnoreCase("no"))
             return phone.equalsIgnoreCase("");
         else
@@ -623,7 +597,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @And("^Header in chat box displayed the icon for channel from which the user is chatting$")
     public void headerInChatBoxDisplayedTheIconForChannelFromWhichTheUserIsChatting() {
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg(),
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().isValidChannelImg("headerChannel"),
                 "Icon for channel in chat header as not expected");
     }
 

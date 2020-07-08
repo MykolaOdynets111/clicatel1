@@ -10,6 +10,7 @@ import interfaces.WebWait;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
+import steps.dotcontrol.DotControlSteps;
 
 public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
@@ -60,6 +61,26 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     public static PortalLoginPage getCurrentPortalLoginPage() {
         return currentPortalLoginPage.get();
+    }
+
+    public String getUserName(String channel){
+        String userName=null;
+        switch (channel.toLowerCase()){
+            case "touch":
+                userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+                break;
+            case "twitter":
+                userName = socialaccounts.TwitterUsers.getLoggedInUserName();
+                break;
+            case "facebook":
+                userName = socialaccounts.FacebookUsers.getLoggedInUserName();
+                break;
+            case "dotcontrol":
+                userName = DotControlSteps.getClient();
+                break;
+            default: new AssertionError("Incorrect channel name was provided: " + userName);
+        }
+        return userName;
     }
 
     public static PortalLoginPage getPortalLoginPage(String agent) {

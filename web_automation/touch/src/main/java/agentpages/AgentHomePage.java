@@ -83,7 +83,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private ProfileWindow profileWindow;
     private TransferChatWindow transferChatWindow;
     private IncomingTransferWindow incomingTransferWindow;
-    private Customer360Container customer360Container;
+    private Profile profile;
     private ChatHeader chatHeader;
     private AgentFeedbackWindow agentFeedbackWindow;
     private ChatHistoryContainer chatHistoryContainer;
@@ -154,9 +154,9 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatHeader;
     }
 
-    public Customer360Container getCustomer360Container() {
-        customer360Container.setCurrentDriver(this.getCurrentDriver());
-        return customer360Container;
+    public Profile getProfile() {
+        profile.setCurrentDriver(this.getCurrentDriver());
+        return profile;
     }
 
     public IncomingTransferWindow getIncomingTransferWindow() {

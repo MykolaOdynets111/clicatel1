@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 @FindBy(css = "[selenium-id=user-profile-container]")
-public class Customer360Container extends AbstractUIElement {
+public class Profile extends AbstractUIElement {
 
 
     @FindBy(css = "[selenium-id=user-profile-name]")
@@ -64,6 +64,10 @@ public class Customer360Container extends AbstractUIElement {
     private WebElement mailColor;
 
     private String phoneCSS = "[selenium-id = 'user-profile-phone']";
+
+    public boolean isProfilePageDisplayed(){
+        return isElementShown(this.getCurrentDriver(), getWrappedElement(), 2);
+    }
 
     public Customer360PersonalInfo getActualPersonalInfo(){
         try {

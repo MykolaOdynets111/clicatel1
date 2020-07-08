@@ -1,4 +1,4 @@
-package portaluielem;
+package portaluielem.supervisor;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;

@@ -1,12 +1,17 @@
 package agentpages;
 
 import agentpages.uielements.ChatBody;
+import agentpages.uielements.ChatHeader;
+import agentpages.uielements.Profile;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
+import portaluielem.supervisor.SupervisorDeskLiveRow;
+import portaluielem.supervisor.SupervisorLeftPanel;
+import portaluielem.supervisor.SupervisorTicketsTable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +23,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private WebElement filterByDefault;
 
     @FindBy(css = ".cl-r-chat-item")
-    private List<WebElement> chatsLiveAndTickets;
+    private List<WebElement> chatsLive;
 
     @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
     private WebElement conversationTypeDropdown;
@@ -54,6 +59,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     private String loadingMoreTickets = ".supervisor-tickets__loading-more";
 
+    private String chatName = "//h2[@selenium-id='roster-item-user-name' and text() ='%s']";
+
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 
     private String iframeId = "ticketing-iframe";
@@ -62,6 +69,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private ChatBody сhatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
     private SupervisorLeftPanel supervisorLeftPanel;
+    private ChatHeader chatHeader;
+    private Profile profile;
 
     // == Constructors == //
 
@@ -90,10 +99,23 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorLeftPanel;
     }
 
+    public ChatHeader getChatHeader() {
+        chatHeader.setCurrentDriver(this.getCurrentDriver());
+        return chatHeader;
+    }
 
-    public SuperviserDeskTicketsRow getChatConsoleInboxRow(String userName){
-        return chatsLiveAndTickets.stream()
-                 .map(e -> new SuperviserDeskTicketsRow(e).setCurrentDriver(this.getCurrentDriver()))
+    public Profile getProfile() {
+        profile.setCurrentDriver(this.getCurrentDriver());
+        return profile;
+    }
+
+    public boolean isLiveChatShownInSD(String userName, int wait) {
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(chatName, userName), wait);
+    }
+
+    public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
+        return chatsLive.stream()
+                 .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
                  .stream().filter(a -> a.getUserName().toLowerCase()
                         .contains(userName.toLowerCase()))
@@ -196,7 +218,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public ChatBody openInboxChatBody(String userName){
-        getChatConsoleInboxRow(userName).clickOnUserName();
+        getSupervisorDeskLiveRow(userName).clickOnUserName();
         сhatBody.setCurrentDriver(this.getCurrentDriver());
         return сhatBody;
     }

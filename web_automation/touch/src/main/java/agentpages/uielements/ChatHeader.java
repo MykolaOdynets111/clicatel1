@@ -18,10 +18,12 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-@FindBy(css = "[selenium-id=chat-header]")
+@FindBy(css = ".cl-r-chat-header")
 public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
@@ -67,6 +69,8 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=header-cancel-transfer]")
     private WebElement cancelTransferButton;
 
+    @FindBy(css = ".cl-r-avatar")
+    private WebElement userAvatar;
 
 
     private String transferChatButton =  ".//button[@selenium-id='header-transfer-chat']";
@@ -146,8 +150,8 @@ public class ChatHeader extends AbstractUIElement {
         return  Color.fromString(flagChatButton.getCssValue("color")).asHex();
     }
 
-    public boolean isValidChannelImg() {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/headerChannel.png");
+    public boolean isValidChannelImg(String channelPictureName) {
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/"+channelPictureName+".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
         //Verify if tame stanp in 24 hours format
@@ -159,4 +163,15 @@ public class ChatHeader extends AbstractUIElement {
         return  chatHeaderTitle.getText().toLowerCase();
     }
 
+    public boolean isAvatarContainUserNameFirstLetter(String userName){
+        String expectedInitials;
+        List<String> userNames = Arrays.asList(userName.split(" "));
+        if(userNames.size() == 2){
+            expectedInitials = userNames.get(0).substring(0,1) + userNames.get(1).substring(0,1);
+        } else {
+            expectedInitials = userNames.get(0).substring(0,1);
+        }
+        String letter = getTextFromElem(this.getCurrentDriver(), userAvatar, 1,"Avatar");
+        return letter.equalsIgnoreCase(expectedInitials);
+    }
 }

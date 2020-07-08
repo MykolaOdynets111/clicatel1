@@ -144,8 +144,8 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getSuggestedGroup();
     }
 
-    public static Customer360Container getCustomer360Container(String agent){
-        return getAgentHomePage(agent).getCustomer360Container();
+    public static Profile getCustomer360Container(String agent){
+        return getAgentHomePage(agent).getProfile();
     }
 
     public static PageHeader getPageHeader(String agent){
@@ -167,21 +167,21 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         secondAgentHomePage.remove();
     }
 
-    protected String getUserName(String userFrom){
+    public String getUserName(String userFrom){
         if(userFrom.contains("first chat")){
             return createdChatsViaDotControl.get(0).getInitContext().getFullName();
         }
         if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-            return socialaccounts.TwitterUsers.getLoggedInUserName();
+            return super.getUserName("twitter");
         }
         if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
-            return socialaccounts.FacebookUsers.getLoggedInUserName();
+            return super.getUserName("facebook");
         }
-        if (!ConfigManager.getSuite().equalsIgnoreCase("facebook") &&
-                !ConfigManager.getSuite().equalsIgnoreCase("twitter")){
-            return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
+        if(userFrom.equalsIgnoreCase("dotcontrol")) {
+            return super.getUserName("dotcontrol");
         }
-        return "";
+
+        return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
     }
 
     public synchronized void saveClientIDValue(String userFrom){
@@ -192,7 +192,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         else if (userFrom.equalsIgnoreCase("dotcontrol"))
             clientIDGlobal.set(DotControlSteps.getClientId());
         else
-            clientIDGlobal.set(getAgentHomePage("main").getCustomer360Container().getUserFullName());
+            clientIDGlobal.set(getAgentHomePage("main").getProfile().getUserFullName());
         DotControlSteps.setChatIDTranscript(ApiHelper
                 .getActiveSessionByClientId(clientIDGlobal.get()).get("conversationId").toString());
     }

@@ -1,4 +1,4 @@
-package portaluielem;
+package portaluielem.supervisor;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
@@ -20,8 +20,8 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     private WebElement scrolArea;
 
 
-    public SuperviserDeskTicketsRow getTicketByUserName(String userName){
-        return tickets.stream().map(e -> new SuperviserDeskTicketsRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+    public SupervisorDeskTicketRow getTicketByUserName(String userName){
+        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
                         .contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
@@ -37,7 +37,7 @@ public class SupervisorTicketsTable extends AbstractUIElement {
 
     public List<String> getUsersNames(){
         List<String> list =  tickets.stream()
-                .map(e -> new SuperviserDeskTicketsRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getChatConsoleInboxRowName())
                 .collect(Collectors.toList());
         return list;

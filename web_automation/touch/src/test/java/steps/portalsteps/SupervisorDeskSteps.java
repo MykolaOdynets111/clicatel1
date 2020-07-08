@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -53,6 +54,36 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getChatConsoleInboxPage().getSupervisorTicketsTable().clickAssignManuallyButton();
     }
 
+    @Then("^Supervisor Desk Live has new conversation (.*) request$")
+    public void verifySupervisorDeskHasRequestFormSocialUser(String channel){
+        String userName = getUserName(channel);
+        Assert.assertTrue(getChatConsoleInboxPage().isLiveChatShownInSD(userName, 5),
+                "There is no Live chat on Supervisor Desk Live (Client ID: "+userName+")");
+    }
+
+    @And("Agent click On Live Supervisor Desk chat from (.*) channel")
+    public void clickOnLiveChat(String channel){
+        getChatConsoleInboxPage().getSupervisorDeskLiveRow(getUserName(channel)).clickOnUserName();
+    }
+
+    @Then("Supervisor Desk Live chat container header has (.*) User photo, name and (.*) channel")
+    public void verifyCorrectHeaderInfo(String channel, String image){
+        String userName = getUserName(channel);
+        SoftAssert soft =new SoftAssert();
+        soft.assertTrue(getChatConsoleInboxPage().getChatHeader().isAvatarContainUserNameFirstLetter(userName),
+                "Header Avatar does not contain first letter of the user name: " + userName);
+        soft.assertEquals(getChatConsoleInboxPage().getChatHeader().getChatHeaderText(), userName,
+                "Incorrect Name was shown in chat header");
+        soft.assertTrue(getChatConsoleInboxPage().getChatHeader().isValidChannelImg(image),
+                "Icon for channel in chat header as not expected");
+        soft.assertAll();
+    }
+
+    @Then("Supervisor Desk Live chat Profile is displayed")
+    public void profileFormIsShown(){
+        Assert.assertTrue(getChatConsoleInboxPage().getProfile().isProfilePageDisplayed(),
+                "Profile form is not shown");
+    }
 
     @Then("^(.*) is set as 'current agent' for dot control ticket$")
     public void verifyCurrentAgent(String agent){
@@ -82,7 +113,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             Assert.assertTrue(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
                     "Assigned ticket should be present");
         } else if (status.equalsIgnoreCase("Processed") || status.equalsIgnoreCase("Overdue")){
-            getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient());
+            getChatConsoleInboxPage().getSupervisorDeskLiveRow(DotControlSteps.getClient());
         }
     }
 
@@ -117,12 +148,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void moreRecordsAreShown(){
         SoftAssert soft = new SoftAssert();
         boolean result = getChatConsoleInboxPage().areNewChatsLoaded(shownUsers.size(), 4);
-//        List<String> newAllUsers = getChatConsoleInboxPage().getSupervisorTicketsTable().getUsersNames();
-
         soft.assertTrue(result, "New chats are not loaded\n");
-//        soft.assertEquals(getChatConsoleInboxPage().getNumberOfChats().split("of")[0].trim(),
-//                "displaying " + newAllUsers.size(),
-//                "Incorrect size of all chats after loading more\n");
         soft.assertAll();
     }
 
@@ -164,16 +190,4 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    @Then("Verify that (.*) status is shown for inbox conversation")
-    public void verifyCustomerStatus(String status){
-        Assert.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getStatus().trim(), status, "Incorrect status was shown");
-    }
-
-    @Then ("Verify correct information is shown in Customer details and (.*) set as location")
-    public void verifyCorrectCustomerInfo(String location){
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getLocation(), location, "Incorrect location was shown");
-        soft.assertEquals(getChatConsoleInboxPage().getChatConsoleInboxRow(DotControlSteps.getClient()).getPhone(), DotControlSteps.getInitContext().getPhone(), "Incorrect phone was shown");
-        soft.assertAll();
-    }
 }
