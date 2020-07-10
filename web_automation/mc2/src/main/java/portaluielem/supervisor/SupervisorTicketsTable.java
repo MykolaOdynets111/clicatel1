@@ -19,6 +19,9 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(css = "[selenium-id=roster-scroll-container]")
     private WebElement scrolArea;
 
+    @FindBy(xpath = "//button[text() = 'Route to Scheduler']")
+    private WebElement routeToSchedulerButton;
+
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
@@ -41,6 +44,11 @@ public class SupervisorTicketsTable extends AbstractUIElement {
                 .map(e -> e.getChatConsoleInboxRowName())
                 .collect(Collectors.toList());
         return list;
+    }
+
+
+    public void clickRouteToSchedulerButton(){
+        clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
     }
 
     public void scrollTicketsToTheButtom(){

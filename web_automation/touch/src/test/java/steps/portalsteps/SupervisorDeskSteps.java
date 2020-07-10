@@ -18,6 +18,7 @@ import steps.dotcontrol.DotControlSteps;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
@@ -46,7 +47,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("Click 'Route to scheduler' button")
     public void clickRouteToScheduler(){
-        getChatConsoleInboxPage().clickRouteToSchedulerButton();
+        getChatConsoleInboxPage().getSupervisorTicketsTable().clickRouteToSchedulerButton();
     }
 
     @When("Click 'Assign manually' button")
@@ -102,24 +103,26 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(result, "Agent " +agentName+ " is not set up as 'Current agent'");
     }
 
-    @Then("Ticket is present and has (.*) type")
+    @Then("Ticket is present on (.*) filter page")
     public void verifyUnassignedType(String status){
         if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()).equalsIgnoreCase("Unassigned"),
+            Assert.assertTrue(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()).equalsIgnoreCase("No current Agent"),
                     "Unassigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Assigned")){
+        } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Overdue")){
             Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent");
             String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
             Assert.assertTrue(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
-                    "Assigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Processed") || status.equalsIgnoreCase("Overdue")){
-            getChatConsoleInboxPage().getSupervisorDeskLiveRow(DotControlSteps.getClient());
+                    "Ticket should be present on " + status + " filter page");
         }
     }
 
     @Then("Update ticket with (.*) status")
     public void updateTicketStatus(String status){
-        DBConnector.updateAgentHistoryTicketStatus(ConfigManager.getEnv(), status, DotControlSteps.getClientId());
+        String chatId = DBConnector.getchatId(ConfigManager.getEnv(), DotControlSteps.getClientId());
+        DBConnector.updateAgentHistoryTicketStatus(ConfigManager.getEnv(), status, chatId);
+        Map elasticSearchModel = ApiHelper.getElasticSearchModel(chatId);
+        elasticSearchModel.replace("ticketState", status);
+        ApiHelper.updateElasticSearchModel(elasticSearchModel);
     }
 
     @Then("^'Assign chat' window is opened$")
@@ -157,13 +160,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
     }
 
-    @When("User select (.*) conversation type")
-    public void selectConversationType(String type){
-        getChatConsoleInboxPage().selectConversationType(type);
-    }
-
     @Then("Verify (.*) ticket types available in dropdown on Inbox")
     public void verifyTicketTypes(List<String> ticketTypes){
+        //ToDo add numbers of tickets verification
         Assert.assertEquals(getChatConsoleInboxPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 

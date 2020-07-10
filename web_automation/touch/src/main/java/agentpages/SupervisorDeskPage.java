@@ -28,17 +28,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
     private WebElement conversationTypeDropdown;
 
-    @FindBy(xpath = "//span[text() ='Ticket type:']/following-sibling::div")
-    private WebElement ticketTypeDropdown;
-
     @FindBy(css = ".cl-r-select__option")
     private List<WebElement> dropdownsTypesOptions;
 
     @FindBy(xpath = "//button[text() ='Apply filters']")
     private WebElement applyFiltersButton;
-
-    @FindBy(xpath = "//span[text() = 'Route to scheduler']")
-    private WebElement routeToSchedulerButton;
 
     @FindBy(css = "div.cl-actions-bar button")
     private WebElement loadMoreButton;
@@ -122,16 +116,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
 
-
-    public void clickRouteToSchedulerButton(){
-        clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
-    }
-
-//    public void clickThreeDotsButton(String userName){
-//        getChatConsoleInboxRow(userName).clickThreeDots();
-//        exitChatConsoleInbox();
-//    }
-
     public String getCurrentAgentOfTheChat(String userName){
         String currentAgent = getSupervisorTicketsTable().getTicketByUserName(userName).getCurrentAgent();
         return currentAgent;
@@ -178,14 +162,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         }
     }
 
-
-
-//    public String getNumberOfChats(){
-//        scrollToElem(this.getCurrentDriver(), numberOfChats, "Numbers of chats");
-//        String info = getTextFromElem(this.getCurrentDriver(), numberOfChats, 3, "Number of chats");
-//        return info;
-//    }
-
     public boolean areNewChatsLoaded(int previousChats, int wait){
         for(int i = 0; i< wait*2; i++){
             if(getSupervisorTicketsTable().getUsersNames().size() > previousChats) return true;
@@ -194,27 +170,13 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return false;
     }
 
-    public SupervisorDeskPage selectConversationType(String option){
-        clickElem(this.getCurrentDriver(), conversationTypeDropdown, 1, "Conversation type dropdown");
-        dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find" + option + " conversation type dropdown option")).click();
-        clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
-        return this;
-    }
-
     public SupervisorDeskPage selectTicketType(String option){
-        clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
-        dropdownsTypesOptions.stream().filter(a-> a.getText().trim().equalsIgnoreCase(option)).findFirst()
-                .orElseThrow(() -> new AssertionError("Cannot find " + option + " conversation type dropdown option")).click();
-        clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters Button");
+        getSupervisorLeftPanel().selectTicketType(option);
         return this;
     }
 
     public List<String> getTicketTypes(){
-        clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
-        List<String> ticketTypes = dropdownsTypesOptions.stream().map(a-> a.getText().trim()).collect(Collectors.toList());
-        clickElem(this.getCurrentDriver(), ticketTypeDropdown, 1, "Conversation type dropdown");
-        return ticketTypes;
+        return getSupervisorLeftPanel().getFilterNames();
     }
 
     public ChatBody openInboxChatBody(String userName){

@@ -187,14 +187,16 @@ public class DBConnector {
         updateDataInDB(env, "touch", query);
     }
 
-    public static void updateAgentHistoryTicketStatus(String env, String status, String clientId){
+
+    public static String getchatId(String env, String clientId){
         String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
         String query = "SELECT * FROM " + tableName + ".conversation where client_id = '" + clientId + "'";
+        return getDataFromDb(env, "touch", query, "conversation_id");
+    }
 
-        String chatId = getDataFromDb(env, "touch", query, "conversation_id");
-
-        query = "UPDATE " + tableName + ".chat_agent_history_ticket SET state = '" + status + "' WHERE (chat_id = '" + chatId + "')";
-
+    public static void updateAgentHistoryTicketStatus(String env, String status, String chatId){
+        String tableName = DBProperties.getPropertiesFor(env,"touch").getDBName();
+        String query = "UPDATE " + tableName + ".chat_agent_history_ticket SET state = '" + status + "' WHERE (chat_id = '" + chatId + "')";
         updateDataInDB(env, "touch", query);
     }
 

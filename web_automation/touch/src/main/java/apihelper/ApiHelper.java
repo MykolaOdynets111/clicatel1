@@ -9,7 +9,6 @@ import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
-import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
 import interfaces.VerificationHelper;
@@ -33,7 +32,6 @@ import java.util.*;
 public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     private static  List<HashMap> tenantsInfo=null;
-    private static List<TafMessage> tenantMessages=null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
 
     public static String getInternalTenantConfig(String tenantName, String config){
@@ -823,6 +821,36 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                     .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
         }
     }
+
+    public static Map getElasticSearchModel(String chatId){
+        String tenantOrgName = Tenants.getTenantUnderTestOrgName();
+        String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
+        Response resp  = RestAssured.given().log().all()
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .contentType(ContentType.JSON)
+                .body("{\n" +
+                        "  \"page\": 0,\n" +
+                        "  \"size\": 1,\n" +
+                        "  \"searchModel\": {\n" +
+                        "    \"id\": \""+ chatId +"\",\n" +
+                        "    \"tenantId\": \"" + tenantID + "\"\n" +
+                        "  }\n" +
+                        "}")
+                .post(Endpoints.INTERNAL_ELASTIC_CHAT_SEARCH);
+        return (Map) resp.getBody().jsonPath().getList("model").get(0);
+    }
+
+    public static void updateElasticSearchModel(Map elasticSearchModel){
+        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.ANY)
+                .contentType(ContentType.JSON).body(elasticSearchModel)
+                .put(Endpoints.INTERNAL_ELASTIC_CHAT_INDEX);
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Failed to update internal chat elastic search model = " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+    }
+
 
     public static String getClientProfileId(String clientID){
         return getSessionDetails(clientID).getBody().jsonPath().getString("data.clientProfileId[0]");

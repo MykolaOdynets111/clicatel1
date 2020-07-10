@@ -2,7 +2,7 @@
 @agent_support_hours
 @auto_scheduler_disabled
 @dot_control
-Feature: Supervisor in box : route ticket to scheduler
+Feature: Supervisor desk:: Route ticket to scheduler
 
    Background:
      Given Create .Control integration for Automation Bot and adapter: fbmsg
@@ -14,15 +14,14 @@ Feature: Supervisor in box : route ticket to scheduler
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7391")
   @Issue("https://jira.clickatell.com/browse/TPLAT-4836")
-  Scenario: Supervisor inbox :: Route ticket to scheduler
+  Scenario: Supervisor desk:: Route ticket to scheduler
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Chat console in submenu
-    When Select dot control ticket checkbox
-    And Click 'Route to scheduler' button
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
     When I login as second agent of Automation Bot
+    And Select dot control ticket checkbox
+    When Click 'Route to scheduler' button
     And Second agent select "Tickets" left menu option
     Then Second agent has new conversation request from dotcontrol user
     And Second agent is set as 'current agent' for dot control ticket
-
-

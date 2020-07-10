@@ -13,24 +13,21 @@ Feature: Supervisor able to filter Tickets
     And Send message call
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7394")
-  Scenario: Supervisor inbox :: Verify if agent can see and apply each filter (All tickets, Unassigned, Assigned, Processed, Overdue)
+  Scenario: Supervisor Desk :: Verify if agent can see and apply each filter (All tickets, Unassigned, Assigned, Processed, Overdue)
     Given I open portal
     And Login into portal as an admin of Automation account
-    When I select Touch in left menu and Chat console in submenu
-    When User select Tickets conversation type
-    Then Verify All tickets, Assigned, Unassigned, Overdue, Processed ticket types available in dropdown on Inbox
+    When I select Touch in left menu and Supervisor Desk in submenu
+    And Agent select "Tickets" left menu option
+    Then Verify All tickets, Unassigned, Overdue, Assigned ticket types available in dropdown on Inbox
     And User select Unassigned ticket type
-    Then Ticket is present and has Unassigned type
+    Then Ticket is present on Unassigned filter page
     When autoSchedulingEnabled is set to true
     And Select dot control ticket checkbox
     When Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on Agent
     And User select Assigned ticket type
-    Then Ticket is present and has Assigned type
-    And Update ticket with PROCESSED status
-    When User select PROCESSED ticket type
-    Then Ticket is present and has PROCESSED type
+    Then Ticket is present on Assigned filter page
     And Update ticket with OVERDUE status
     When User select OVERDUE ticket type
-    Then Ticket is present and has OVERDUE type
+    Then Ticket is present on OVERDUE filter page

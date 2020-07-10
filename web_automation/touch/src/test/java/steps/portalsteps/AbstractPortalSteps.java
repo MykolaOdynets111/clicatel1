@@ -285,7 +285,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         if (chatConsoleInboxPage.get()==null) {
             chatConsoleInboxPage.set(new SupervisorDeskPage(DriverFactory.getDriverForAgent("admin")));
            // ToDo decrease time for spinner wait
-            chatConsoleInboxPage.get().waitForConnectingDisappear(15, 10);
+            chatConsoleInboxPage.get().waitForConnectingDisappear(3, 10);
             return chatConsoleInboxPage.get();
         } else{
             return chatConsoleInboxPage.get();
