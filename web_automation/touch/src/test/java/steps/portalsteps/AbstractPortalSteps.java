@@ -262,10 +262,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
-    public static void setPortalUserManagementPage(PortalUserManagementPage userManagementPage) {
-        portalUserManagementPage.set(userManagementPage);
-    }
-
 
     public static DashboardPage getDashboardPage() {
         if (dashboardPage.get()==null) {
@@ -274,10 +270,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         } else{
             return dashboardPage.get();
         }
-    }
-
-    public static void setDashboardPage(DashboardPage chatConsolePage) {
-       dashboardPage.set(chatConsolePage);
     }
 
 
@@ -308,10 +300,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         } else{
             return surveyManagementPage.get();
         }
-    }
-
-    public static void setChatConsoleInboxPage(SupervisorDeskPage chatConsoleInbox) {
-        chatConsoleInboxPage.set(chatConsoleInbox);
     }
 
     public static LeftMenu getLeftMenu() {

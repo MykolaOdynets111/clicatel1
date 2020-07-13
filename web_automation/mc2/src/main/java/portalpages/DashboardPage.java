@@ -28,6 +28,9 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
     private WebElement noAgentsNotification;
 
+    @FindBy(xpath ="//a[text()='Settings']")
+    private WebElement settingsButton;
+
     private String spinner = "//div[@class='spinner']";
 
     private AgentsTableChatConsole agentsTableChatConsole;
@@ -96,5 +99,10 @@ public class DashboardPage extends PortalAbstractPage {
         catch (TimeoutException e){
             return false;
         }
+    }
+
+    public SettingsPage openSettingsPage(){
+        clickElem(this.getCurrentDriver(), settingsButton, 4, "Settings button");
+        return new SettingsPage(this.getCurrentDriver());
     }
 }

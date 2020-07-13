@@ -736,9 +736,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
         return result;
     }
 
-    @When("^(?:Click|Select) \"(.*)\" (?:nav button|in nav menu)$")
-    public void clickNavButton(String navButton){
-        getAdminPortalMainPage().clickPageNavButton(navButton);
+    @When("^Navigate to (.*) page$")
+    public void open(String settingsName){
+        getDashboardPage().openSettingsPage().openSettingsPage(settingsName);
     }
 
     @When("^I click \"(.*)\" page action button$")

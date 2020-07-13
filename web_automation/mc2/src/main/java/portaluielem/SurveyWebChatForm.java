@@ -6,25 +6,25 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".tab-container")
+@FindBy(css = ".setting-group")
 public class SurveyWebChatForm extends BasePortalWindow{
 
-    @FindBy(xpath ="//span[contains(text(), 'CSAT')]")
+    @FindBy(xpath =".//label[contains(text(), 'CSAT')]/span[@class='cl-radio__checkmark']")
     private WebElement csatRadioButton;
 
-    @FindBy(xpath ="//span[contains(text(), 'NPS')]")
+    @FindBy(xpath =".//label[contains(text(), 'NPS')]/span[@class='cl-radio__checkmark']")
     private WebElement npsRadioButton;
 
     @FindBy(css =".count-from")
     private WebElement countFrom;
 
-    @FindBy(css =".cl-r-form-group.cl-r-form-group-primary")
+    @FindBy(css =".rating-type-container--content .cl-r-form-group")
     private WebElement ratingNumbersDropdown;
 
-    @FindBy(css = "[id^='react-select-2-option']")
+    @FindBy(css = "[id^='react-select-21-option']")
     private List<WebElement> ratingNumbersVariation;
 
-    @FindBy(css = ".save-btn")
+    @FindBy(xpath = "//button[text()='Save configuration']")
     private WebElement saveSurveyButton;
 
     @FindBy(css = ".rate-input label")
@@ -33,10 +33,10 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(css = ".number-block")
     private WebElement numberButton;
 
-    @FindBy(css = ".icon.svg-icon-smileicon")
+    @FindBy(name = "emoji-happy")
     private WebElement smileButton;
 
-    @FindBy(css = ".icon.svg-icon-staricon")
+    @FindBy(name = "star")
     private WebElement starButton;
 
     @FindBy(css = "label .icon.svg-icon-staricon")
@@ -48,7 +48,7 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(css = ".rate-input-label.number")
     private List<WebElement> numberRateRepresentation;
 
-    @FindBy(xpath = "//span[text()='Allow customer to leave a note']/following-sibling::div/div[@class='react-switch-handle']")
+    @FindBy(xpath = "//span[text()='Prompt customer to leave a note:']/following-sibling::label")
     private WebElement commentSwitcher;
 
     @FindBy(css = ".ctl-rate-textarea-title")
@@ -67,41 +67,41 @@ public class SurveyWebChatForm extends BasePortalWindow{
     private WebElement thankMessageForm;
 
     public SurveyWebChatForm clickCSATRadioButton(){
-        clickElem(this.getCurrentDriver(), csatRadioButton, 2, "CSAT radio button is not found");
+        clickElem(this.getCurrentDriver(), csatRadioButton, 2, "CSAT radio button");
         return this;
     }
 
     public SurveyWebChatForm clickNPSRadioButton(){
-        clickElem(this.getCurrentDriver(), npsRadioButton, 2, "NPS radio button is not found");
+        clickElem(this.getCurrentDriver(), npsRadioButton, 2, "NPS radio button");
         return this;
     }
 
     public String getFromCount(){
-        return getTextFromElem(this.getCurrentDriver(), countFrom, 2, "Count from number is not shown");
+        return getTextFromElem(this.getCurrentDriver(), countFrom, 2, "Count from number");
     }
 
     public List<String> getVariationOfRatingCSATScale(){
         List<String> ratingNums;
-        clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown is not found");
+        clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown");
         waitForElementsToBeVisible(this.getCurrentDriver(), ratingNumbersVariation, 2 );
         ratingNums = ratingNumbersVariation.stream().map(e->e.getText()).collect(Collectors.toList());
-        clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown is not found");
+        clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown");
         return ratingNums;
     }
 
     public void selectNumberFromDropdown(String number){
-        clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown is not found");
+        clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown");
         waitForElementsToBeVisible(this.getCurrentDriver(), ratingNumbersVariation, 2 );
         ratingNumbersVariation.stream().filter(e->e.getText().equals(number)).findFirst()
                 .orElseThrow(() -> new AssertionError(number + " number was not found in dropdown.")).click();
     }
 
     public void clickSaveButton(){
-        clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button is not found");
+        clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button");
     }
 
     public void clickCommentSwitcher(){
-        clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher is not found");
+        clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher");
     }
 
     public String getSizeOfRateInputNumbers(){
@@ -110,11 +110,11 @@ public class SurveyWebChatForm extends BasePortalWindow{
 
     public void selectRateIcon(String icon){
         if(icon.equals("number")){
-            clickElem(this.getCurrentDriver(), numberButton, 2, "Number Button is not found");
+            clickElem(this.getCurrentDriver(), numberButton, 2, "Number Button");
         } else if(icon.equals("star")){
-            clickElem(this.getCurrentDriver(), starButton, 2, "Star Button is not found");
+            clickElem(this.getCurrentDriver(), starButton, 2, "Star Button");
         } else if(icon.equals("smile")){
-            clickElem(this.getCurrentDriver(), smileButton, 2, "Smile Button is not found");
+            clickElem(this.getCurrentDriver(), smileButton, 2, "Smile Button");
         } else {
             new AssertionError("Incorrect Icon tipe was provided");
         }

@@ -348,7 +348,7 @@ public class DotControlSteps implements WebWait {
             Assert.assertTrue(isResponseComeToServer(expectedResponse, wait),
                     "Message is not as expected\n Messages which came from server are: "
                             + Server.messages
-                            + "\nExpected: " + expectedResponse);
+                            + "\nExpected: " + expectedResponse +"\"");
         }
     }
 

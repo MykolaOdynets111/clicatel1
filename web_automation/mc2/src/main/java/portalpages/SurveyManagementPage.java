@@ -7,10 +7,7 @@ import portaluielem.SurveyWebChatForm;
 
 public class SurveyManagementPage extends PortalAbstractPage{
 
-    @FindBy(id = "survey-configuration-iframe")
-    private WebElement iframeId;
-
-    @FindBy(xpath = "//a[contains(text(), 'Survey management')]")
+    @FindBy(xpath = "//h2[contains(text(), 'Customer Surveys Customization')]")
     private WebElement pageTitle;
 
     @FindBy(xpath = "//div[text()='You have successfully saved your survey']")
@@ -26,25 +23,8 @@ public class SurveyManagementPage extends PortalAbstractPage{
         return surveyWebChatForm;
     }
 
-    public SurveyManagementPage() {
-        super();
-    }
-
-    public SurveyManagementPage(String agent) {
-        super(agent);
-    }
-
     public SurveyManagementPage(WebDriver driver) {
         super(driver);
-    }
-
-    public SurveyManagementPage switchToFrame(){
-        this.getCurrentDriver().switchTo().frame(iframeId);
-        return this;
-    }
-
-    public void switchToDefaultFrame(){
-        this.getCurrentDriver().switchTo().defaultContent();
     }
 
     public boolean isSurveyManagementPage() {
