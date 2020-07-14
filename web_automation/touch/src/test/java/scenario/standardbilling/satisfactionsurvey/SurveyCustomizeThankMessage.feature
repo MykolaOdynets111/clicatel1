@@ -15,8 +15,8 @@ Feature: Satisfaction Survey: Customize customer thank you message
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-18591")
   Scenario: Verify if tenant can Customize customer thank you message text
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     When Selects NPS survey type
     And Customize your survey thank message

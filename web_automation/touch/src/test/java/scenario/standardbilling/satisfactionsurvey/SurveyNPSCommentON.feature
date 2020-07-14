@@ -14,8 +14,8 @@ Feature: Satisfaction Survey: Comment enabling
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-18587")
   Scenario: verify if supervisor has an option to allow customer to leave a note for webchat NPS survey type
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     When Selects NPS survey type
     And Agent switch "Allow customer to leave a note" in survey management

@@ -13,11 +13,11 @@ Feature: Satisfaction Survey: Numbers configuration
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19257")
   Scenario: verify if supervisor can select numbers as option for customers to choose in CSAT survey type
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     And Selects CSAT survey type
-    Then CSAT scale start form 1 and has correct limit variants 5, 7, 10 in dropdown and number set as type
+    Then CSAT scale has correct limit variants 1 to 5, 1 to 7, 1 to 10 in dropdown and star set as type
     When Agent select 5 as number limit from dropdown
     And Agent click save survey configuration button
     Then Agent see survey range 5 in rating scale

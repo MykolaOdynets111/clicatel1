@@ -7,7 +7,7 @@ Feature: Interaction with CRM tickets (agent mode)
     Given I login as agent of Automation
     And Click chat icon
 
-  Scenario: Agent is able fill only "Note" and create CRM ticket
+  Scenario: Agent is able to fill only "Note" and create CRM ticket
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch

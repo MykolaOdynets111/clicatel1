@@ -13,8 +13,8 @@ Feature: Satisfaction Survey: NPS Star and Smile are disabled
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19234")
   Scenario: Verify if smileys and stars are disabled for NPS web chat survey configuration
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     When Selects NPS survey type
     Then Star and Smile Buttons are Disabled

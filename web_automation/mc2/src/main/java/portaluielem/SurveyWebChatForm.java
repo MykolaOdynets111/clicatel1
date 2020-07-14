@@ -15,13 +15,10 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(xpath =".//label[contains(text(), 'NPS')]/span[@class='cl-radio__checkmark']")
     private WebElement npsRadioButton;
 
-    @FindBy(css =".count-from")
-    private WebElement countFrom;
-
     @FindBy(css =".rating-type-container--content .cl-r-form-group")
     private WebElement ratingNumbersDropdown;
 
-    @FindBy(css = "[id^='react-select-21-option']")
+    @FindBy(css = "div[id^='react-select']")
     private List<WebElement> ratingNumbersVariation;
 
     @FindBy(xpath = "//button[text()='Save configuration']")
@@ -76,10 +73,6 @@ public class SurveyWebChatForm extends BasePortalWindow{
         return this;
     }
 
-    public String getFromCount(){
-        return getTextFromElem(this.getCurrentDriver(), countFrom, 2, "Count from number");
-    }
-
     public List<String> getVariationOfRatingCSATScale(){
         List<String> ratingNums;
         clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown");
@@ -89,7 +82,7 @@ public class SurveyWebChatForm extends BasePortalWindow{
         return ratingNums;
     }
 
-    public void selectNumberFromDropdown(String number){
+    public void selectDropdownOption(String number){
         clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 2, "Rating number dropdown");
         waitForElementsToBeVisible(this.getCurrentDriver(), ratingNumbersVariation, 2 );
         ratingNumbersVariation.stream().filter(e->e.getText().equals(number)).findFirst()

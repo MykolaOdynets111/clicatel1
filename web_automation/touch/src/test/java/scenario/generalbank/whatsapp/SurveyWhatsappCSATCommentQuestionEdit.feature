@@ -14,7 +14,7 @@ Feature: Satisfaction Survey: Question configuration CSAT whatsapp
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19249")
   Scenario: verify if supervisor can customize survey question for whatsapp CSAT survey type
     When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     When Switch to whatsapp survey configuration
     And Selects CSAT survey type

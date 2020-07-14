@@ -8,7 +8,6 @@ import datamanager.SurveyManagement;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portaluielem.SurveyWebChatForm;
-import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.List;
 import java.util.Map;
@@ -53,19 +52,18 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().switchToWhatsappTab();
     }
 
-    @Then("^CSAT scale start form (.*) and has correct limit variants (.*) in dropdown and (.*) set as type$")
-    public void verifyCSATNumbers(String startFrom, List<String> expRangeOfNumbers, String type){
+    @Then("^CSAT scale has correct limit variants (.*) in dropdown and (.*) set as type$")
+    public void verifyCSATNumbers(List<String> expRangeOfNumbers, String type){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(surveyWebChatForm.getFromCount(), startFrom + " to", "From count is not as expected");
         soft.assertEquals(surveyWebChatForm.getVariationOfRatingCSATScale(),
                 expRangeOfNumbers, "CSAT range of numbers in dropdown is not as expected");
-        soft.assertTrue(surveyWebChatForm.isRateHasCorrectIcons(type), "Incorrect type of Icon is displayed in range row");
+        soft.assertTrue(surveyWebChatForm.isRateHasCorrectIcons(type), "No " + type + " type of Icons are displayed in Survey Preview");
         soft.assertAll();
     }
 
     @When("^Agent select (.*) as number limit from dropdown$")
-    public void selectNumberLimit(String limitNumber){
-        surveyWebChatForm.selectNumberFromDropdown(limitNumber);
+    public void selectLimitOption(String limitNumber){
+        surveyWebChatForm.selectDropdownOption(limitNumber);
     }
 
     @When("^Agent click save survey configuration button$")

@@ -13,8 +13,8 @@ Feature: Satisfaction Survey: Question configuration NPS
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19243")
   Scenario: Verify if tenant can customize his own survey question for NPS survey type
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     When Selects NPS survey type
     And Customize your survey "Please rate your experience with our agent" question

@@ -13,20 +13,20 @@ Feature: Satisfaction Survey: Smile configuration
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19255")
   Scenario: verify if supervisor can select smiley faces as option for customers to choose in CSAT survey type
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Survey management" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
     Then Survey Management page should be shown
     And Selects CSAT survey type
     When Agent select smile as and icon for rating range
-    Then CSAT scale start form 1 and has correct limit variants 3, 5 in dropdown and smile set as type
-    When Agent select 5 as number limit from dropdown
+    Then CSAT scale has correct limit variants 1 to 3, 1 to 5 in dropdown and smile set as type
+    When Agent select 1 to 5 as number limit from dropdown
     And Agent click save survey configuration button
     Then Agent see survey range 5 in rating scale
     Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
       | ratingIcon     | SMILE      |
     Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
       | ratingScale     | ONE_TO_FIVE       |
-    When Agent select 3 as number limit from dropdown
+    When Agent select 1 to 3 as number limit from dropdown
     And Agent click save survey configuration button
     Then Agent see survey range 3 in rating scale
     Then Survey backend was updated for Standard Billing and webchat chanel with following attribute
