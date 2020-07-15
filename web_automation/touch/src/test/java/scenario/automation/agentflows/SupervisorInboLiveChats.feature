@@ -8,9 +8,7 @@ Feature: Supervisor able to check live chats
     Given Send parameterized init call with clientId context correct response is returned
     And Send message call
 
-#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15691")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-38839")
-  Scenario: Supervisor inbox :: verify that supervisor able to check live chats
+  Scenario: Supervisor desk :: verify that supervisor able to check live chats
     Given I open portal
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Supervisor Desk in submenu

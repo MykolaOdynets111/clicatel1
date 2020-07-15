@@ -16,7 +16,7 @@ Feature: Turning on / off AGENT_FEEDBACK feature for Agent mode tenant
     And Agent should not see from user chat in agent desk
 
 
-  Scenario: Turning on AGENT_FEEDBACK feature (Agent mode tenant)
+  Scenario: Turning on 'Additional Agent Notes to Closed Chat' feature (Bot mode tenant)
     Given AGENT_FEEDBACK tenant feature is set to true for Automation
     And I login as agent of Automation
     When User enter Chat to Support into widget input field

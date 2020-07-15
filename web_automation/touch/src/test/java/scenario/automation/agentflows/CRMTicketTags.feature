@@ -7,7 +7,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Given I login as agent of Automation
     And Click chat icon
 
-  Scenario: All tie tags available for the test tenant in the drop down
+  Scenario: All tags available for the test tenant in the drop down
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
@@ -31,7 +31,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click 'Close chat' button
 
 
-  Scenario: Agent can search and selected tag, selected tag is added into the Tags field, save CRM ticket and tag is saved
+  Scenario: Agent can search and select tag, selected tag is added into the Tags field, save CRM ticket and tag is saved
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch

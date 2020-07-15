@@ -9,7 +9,7 @@ Feature: Chat console: Waiting customers
     And Save Customers waiting for response pre-test widget value
 
   @agent_session_capacity
-  Scenario: Waiting customers counter in case no session capacity
+  Scenario: Dashboard:: Chats waiting in a queue increases in case no session capacity
     Given Set session capacity to 0 for Automation Bot tenant
     Given I login as second agent of Automation Bot
     And User enter connect to agent into widget input field

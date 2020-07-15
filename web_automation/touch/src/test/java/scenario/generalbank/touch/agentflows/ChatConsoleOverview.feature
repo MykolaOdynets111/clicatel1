@@ -1,6 +1,6 @@
 Feature: Chat console: Overview tab
 
-  Scenario: Live chats counter
+  Scenario: Dashboard:: Active Live chats counter
     Given User select General Bank Demo tenant
     And Click chat icon
     Given I open portal
@@ -14,7 +14,7 @@ Feature: Chat console: Overview tab
     And Average chats per Agent is correct
 
   @no_widget
-  Scenario: Total Agents online counter
+  Scenario: Dashboard:: Total Agents online counter
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu

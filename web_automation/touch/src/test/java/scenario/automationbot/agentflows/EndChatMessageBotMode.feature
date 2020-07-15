@@ -20,7 +20,7 @@ Feature: End chat flow: bot mode
     Then Agent should not see from user chat in agent desk
     Then There is no exit response
 
-  Scenario: End chat message enabling and editing for Bot mode tenant
+  Scenario: Close chat message enabling and editing for Bot mode tenant
     Given Taf start_new_conversation is set to true for Automation Bot tenant
     Given Taf start_new_conversation message text is updated for Automation Bot tenant
     Given User select Automation Bot tenant

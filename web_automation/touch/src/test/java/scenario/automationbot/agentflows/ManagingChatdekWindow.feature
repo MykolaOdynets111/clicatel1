@@ -20,7 +20,7 @@ Feature: Managing Chat desk Window
 
 
 
-  Scenario: Check changing available agent by '+' and '-'
+  Scenario: Check changing available chats per agent
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Touch Preferences in submenu

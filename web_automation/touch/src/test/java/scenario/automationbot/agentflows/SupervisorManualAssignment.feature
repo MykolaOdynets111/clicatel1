@@ -13,7 +13,7 @@ Feature: Supervisor in box : assign ticket manually
      And Send message call
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7388")
-  Scenario: Supervisor inbox :: Assign ticket manually
+  Scenario: Supervisor desk :: Assign ticket manually
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Supervisor Desk in submenu

@@ -1,6 +1,6 @@
 @agent_mode
 @off_survey_management
-Feature: Pinned chat is disabled to close and to transfer
+Feature: Flagged chat is disabled to close and to transfer
 
   Verification of basic pin chat functionality
 
@@ -17,7 +17,7 @@ Feature: Pinned chat is disabled to close and to transfer
 
 
   @Issue("https://jira.clickatell.com/browse/TPORT-26904")
-  Scenario: Agent receives error message when tries to close the pined chat
+  Scenario: Agent receives error message when tries to close the flagged chat
     When Agent click 'Flag chat' button
     Then Agent sees 'flag' icon in this chat
     When Agent click "End chat" button
@@ -31,7 +31,7 @@ Feature: Pinned chat is disabled to close and to transfer
     Then User should see 'exit' text response for his 'connect to agent' input
 
 
-  Scenario: "Transfer chat" button disabled for pined chat
+  Scenario: "Transfer chat" button disabled for flagged chat
     When Agent click 'Flag chat' button
     Then Agent can not click 'Transfer chat' button
     Then Agent click 'Unflag chat' button

@@ -1,10 +1,10 @@
 @no_widget
 @img
 @dot_control
-Feature: Default sentiment during conclusion
+Feature: Default sentiment during chat close
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4002")
-  Scenario: Conclusion window :: Verify that neutral sentiment is set by default
+  Scenario: Additional Agent Notes to Closed Chat :: Verify that neutral sentiment is set by default
     Given Create .Control integration for General Bank Demo and adapter: fbmsg
     Given I login as agent of General Bank Demo
     When Prepare payload for sending Chat to agent message for .Control
