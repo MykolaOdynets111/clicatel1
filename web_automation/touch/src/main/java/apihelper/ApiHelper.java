@@ -88,7 +88,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Response resp;
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
 
-        resp = RestAssured.given()
+        resp = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
                     .accept(ContentType.JSON)
                     .body("{ " +
