@@ -25,8 +25,8 @@ Feature: Busy message auto responder Bot mode
     Given Set agent support hours for all week
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Touch preferences in submenu
-    And Click "Auto responders" nav button
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Auto Responders page
     When Wait for auto responders page to load
     And Agent click expand arrow for Enable Agent Busy message auto responder
     And Click "Reset to default" button for Enable Agent Busy message auto responder

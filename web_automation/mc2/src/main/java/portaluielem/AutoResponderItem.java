@@ -8,19 +8,19 @@ import lombok.NonNull;
 
 public class AutoResponderItem extends AbstractWidget {
 
-    @FindBy(css = "span.automated-message-title")
+    @FindBy(css = ".auto-responder-title__text")
     private WebElement messageTitle;
 
-    @FindBy(css = "span.cl-icon--collapse")
+    @FindBy(name = "arrow-down")
     private WebElement collapceIcon;
 
-    @FindBy(css = "textarea.go-textarea")
-    private WebElement textarea ;
+    @FindBy(name = "text")
+    private WebElement textArea;
 
-    @FindBy(css = "button.button.button-secondary")
+    @FindBy(xpath = "//button[text()='Reset to Default']")
     private WebElement resetToDefaultButton;
 
-    @FindBy(css = "bttn-toggle ng-valid ng-not-empty ng-dirty']")
+    @FindBy(css = ".cl-r-toggle-btn__label")
     private WebElement buttonOnOff;
 
     protected AutoResponderItem(WebElement element) {
@@ -46,18 +46,18 @@ public class AutoResponderItem extends AbstractWidget {
 
     public AutoResponderItem typeMessage(@NonNull String msg) {
         if (!msg.equals("")) {
-            textarea.clear();
-            inputText(this.getCurrentDriver(), textarea, 5, "Note number", msg);
+            textArea.clear();
+            inputText(this.getCurrentDriver(), textArea, 5, "Note number", msg);
         }
         return this;
     }
 
     public boolean isMessageShown() {
-        return textarea.isDisplayed();
+        return textArea.isDisplayed();
     }
 
     public String getMessage() {
-        return getAttributeFromElem(this.getCurrentDriver(), textarea, 10, "Test", "value");
+        return getAttributeFromElem(this.getCurrentDriver(), textArea, 10, "Test", "value");
     }
 
     public void clickOnOff(){

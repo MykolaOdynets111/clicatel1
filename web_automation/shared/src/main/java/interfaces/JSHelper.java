@@ -128,6 +128,16 @@ public interface JSHelper extends WebActions{
         }
     }
 
+    default void scrollAndClickElem(WebDriver driver, WebElement element, int wait, String elemName){
+        try {
+            waitForElementToBeVisible(driver, element, wait);
+            scrollToElem(driver, element,elemName);
+            waitForElementToBeClickable(driver, element, wait).click();
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.fail("Cannot click '" + elemName + "' because button is not clickable.");
+        }
+    }
+
     default void executeAngularClick(WebDriver driver, WebElement elem){
         JavascriptExecutor jsExec = (JavascriptExecutor) driver;
         jsExec.executeScript("angular.element(arguments[0]).triggerHandler('click')", elem);

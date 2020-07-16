@@ -6,7 +6,6 @@ Feature: Chat console: Overview tab
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
-#    And Save Customer engaging with an Agent pre-test widget value
     Given I login as second agent of General Bank Demo
     When User enter connect to agent into widget input field
     Then Second agent has new conversation request

@@ -7,10 +7,10 @@ import org.testng.Assert;
 
 import java.util.List;
 
-@FindBy(css = "div.automated-messages")
+@FindBy(css = ".page-wrapper")
 public class AutoRespondersWindow extends BasePortalWindow {
 
-    @FindBy(name = "clMessageForm")
+    @FindBy(name = ".auto-responder")
     private List<WebElement> autoresponderItems;
 
     public AutoResponderItem getTargetAutoResponderItem(String autoresponder){

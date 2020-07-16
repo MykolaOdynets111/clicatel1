@@ -208,4 +208,11 @@ public interface WebWait {
             waitForElementToBeInVisibleByCss(driver, processingAlert, toDisappear);
         } catch(NoSuchElementException|TimeoutException e){}
     }
+
+    default void waitForAppearAndDisappear(WebDriver driver, WebElement element,  int toAppears, int toDisappear){
+        try {
+            waitForElementToBeVisible(driver, element, toAppears);
+            waitUntilElementNotDisplayed(driver, element, toDisappear);
+        } catch(NoSuchElementException|TimeoutException e){}
+    }
 }

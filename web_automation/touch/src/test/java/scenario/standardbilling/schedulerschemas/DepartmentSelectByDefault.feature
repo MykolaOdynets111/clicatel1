@@ -6,13 +6,15 @@ Feature: Departments: Select department by default
     When Login into portal as an admin of Standard Billing account
     And New departments with AutomationDefault name AutomationDefaultDescription description and second agent is created
     When Turn off the Last Agent routing
+    And Turn off the Default department
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-20925")
   Scenario: Verify if supervisor can select departments for chats to be routed by default
-    And I select Touch in left menu and Touch preferences in submenu
-    When Click "Chat Desk" nav button
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Preferences page
     And Select AutomationDefault department By Default
-    When I launch chatdesk from portal
+    When Agent switches to opened Portal page
+    And I select Touch in left menu and Agent Desk in submenu
     Given User select Standard Billing tenant
     And Click chat icon
     And User enter connect to agent into widget input field

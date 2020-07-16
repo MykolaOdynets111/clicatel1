@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 
-@FindBy(css = "div.automated-messages.chat-desk")
+@FindBy(css = ".preferences-page")
 public class ChatDeskWindow extends BasePortalWindow {
 
     @FindBy(xpath = "//input[@ng-model='maxChatsPerAgent']")
@@ -24,20 +24,23 @@ public class ChatDeskWindow extends BasePortalWindow {
     @FindBy(xpath = "//fieldset[contains(@ng-model,'chatConclusion')]//button")
     private WebElement toggleChatConclusion;
 
-    @FindBy(xpath = "//fieldset[contains(@ng-model,'autoScheduling')]//button")
+    @FindBy(css = "[for='auto-scheduler'] .cl-r-toggle-btn__label")
     private WebElement toggleAutoScheduler;
 
-    @FindBy(css = "[ng-model=departmentPrimaryStatus] button")
+    @FindBy(css = "[for = 'department-primary-status'] .cl-r-toggle-btn__label")
     private WebElement defaultDepartmentCheckbox;
 
-    @FindBy(xpath = "//span[@placeholder='Select default departments']/ancestor::div[@class='cl-multi-select-container']")
+    @FindBy(xpath = "//div[text()='Select department']/ancestor::div[contains(@class,'cl-r-select__control')]")
     private WebElement defaultDepartmentsDropdown;
 
-    @FindBy(css =".option-text.ng-binding")
+    @FindBy(css =".cl-r-select__menu-list .cl-r-select__option")
     private List<WebElement> departments;
 
     @FindBy(css ="[ng-model=lastAgentMode] button[class$='toggle-off']")
     private WebElement liveChatRoatingCheckbox;
+
+    @FindBy(xpath = "//div[text()= 'Saved successfully']")
+    private WebElement saveMessage;
 
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
@@ -74,14 +77,13 @@ public class ChatDeskWindow extends BasePortalWindow {
         clickElem(this.getCurrentDriver(), toggleChatConclusion, 5, "Chat conclusion toggle");
     }
 
-    public void clickOnOffAutoScheduler(){
-        clickElem(this.getCurrentDriver(), toggleAutoScheduler, 5,"Auto scheduler toggle");
+    public ChatDeskWindow clickOnOffAutoScheduler(){
+        scrollAndClickElem(this.getCurrentDriver(), toggleAutoScheduler, 5,"Auto scheduler toggle");
+    return this;
     }
 
     public ChatDeskWindow activateDefaultDepartmentCheckbox(){
-        if(!defaultDepartmentCheckbox.getAttribute("class").contains("active")){
-            clickElem(this.getCurrentDriver(), defaultDepartmentCheckbox, 5,"Default Department Checkbox");
-        }
+        scrollAndClickElem(this.getCurrentDriver(), defaultDepartmentCheckbox, 5,"Default Department Checkbox");
         return this;
     }
 
@@ -97,5 +99,8 @@ public class ChatDeskWindow extends BasePortalWindow {
         return this;
     }
 
+    public void waitForSaveMessage(){
+        waitForElementToBeVisible(this.getCurrentDriver(), saveMessage ,3);
+    }
 
 }

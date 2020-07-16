@@ -81,7 +81,7 @@ public class DashboardPage extends PortalAbstractPage {
     }
 
     public String getAverageChatsPerAgent(){
-        return getTextFromElem(this.getCurrentDriver(), averageChatsPerAgent, 3,"Average chats per Agent");
+        return getTextFromElem(this.getCurrentDriver(), averageChatsPerAgent, 3,"Average chats per Agent").split(" ")[0];
     }
 
     public boolean isNoAgentsOnlineShown(){

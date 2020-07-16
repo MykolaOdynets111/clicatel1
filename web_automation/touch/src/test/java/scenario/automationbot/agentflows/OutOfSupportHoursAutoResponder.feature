@@ -29,8 +29,8 @@ Feature: out_of_support_hours auto responder (Bot mode)
     Given Set agent support hours with day shift
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Touch preferences in submenu
-    And Click "Auto responders" nav button
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Auto Responders page
     And Wait for auto responders page to load
     When Agent click expand arrow for Enable Out of Support Hours message auto responder
     And Click "Reset to default" button for Enable Out of Support Hours message auto responder

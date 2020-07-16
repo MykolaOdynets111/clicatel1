@@ -742,7 +742,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     @When("^Navigate to (.*) page$")
-    public void open(String settingsName){
+    public void openSettingPage(String settingsName){
         getDashboardPage().openSettingsPage().openSettingsPage(settingsName);
     }
 
@@ -1733,12 +1733,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void clickOnOffAutoScheduler(){
         autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
         getPortalTouchPreferencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
-        getPortalTouchPreferencesPage().waitWhileProcessing(1,1);
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().getChatDeskWindow().waitForSaveMessage();
     }
 
     @When("^Select (.*) department By Default$")
     public void selectDefaultDepartment(String name){
         getPortalTouchPreferencesPage().getChatDeskWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().getChatDeskWindow().waitForSaveMessage();
     }
 
     @When("^Activate Last Agent routing$")
