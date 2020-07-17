@@ -24,8 +24,8 @@ Feature: Welcome flow: agent mode
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Auto Responders page
     When Wait for auto responders page to load
-    And Agent click expand arrow for Enable Web Chat message auto responder
-    And Click "Reset to default" button for Enable Web Chat message auto responder
+    And Agent click expand arrow for Greeting message auto responder
+    And Click "Reset to default" button for Greeting message auto responder
     Then welcome_message is reset on backend
     Given User select Automation tenant
     And Click chat icon

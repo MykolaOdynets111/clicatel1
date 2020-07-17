@@ -819,14 +819,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
     }
 
-    @When("^Type new message: (.*) to (.*) message field$")
+    @When("^Type new message: (.*) to: (.*) message field$")
     public void typeNewMessage(String message, String autoresponder){
         getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();
         if (!getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).isMessageShown()) {
             getPortalTouchPreferencesPage().getAutoRespondersWindow()
                     .clickExpandArrowForMessage(autoresponder);
         }
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message);
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message).clickSaveButton();
+        getPortalTouchPreferencesPage().waitWhileProcessing(1, 4);
     }
 
     @Then("^(.*) on backend corresponds to (.*) on frontend$")
@@ -1747,6 +1748,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Activate Last Agent routing$")
     public void activateLastAgent(){
         getPortalTouchPreferencesPage().getChatDeskWindow().activateLiveChatRoatingCheckbox();
+        getPortalTouchPreferencesPage().clickSaveButton();
+        getPortalTouchPreferencesPage().getChatDeskWindow().waitForSaveMessage();
     }
 
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")

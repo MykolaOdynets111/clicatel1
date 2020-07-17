@@ -36,7 +36,7 @@ public class ChatDeskWindow extends BasePortalWindow {
     @FindBy(css =".cl-r-select__menu-list .cl-r-select__option")
     private List<WebElement> departments;
 
-    @FindBy(css ="[ng-model=lastAgentMode] button[class$='toggle-off']")
+    @FindBy(css ="[for=last-agent-mode] div[class='cl-r-toggle-btn__label']")
     private WebElement liveChatRoatingCheckbox;
 
     @FindBy(xpath = "//div[text()= 'Saved successfully']")
@@ -95,12 +95,12 @@ public class ChatDeskWindow extends BasePortalWindow {
     }
 
     public ChatDeskWindow activateLiveChatRoatingCheckbox(){
-        clickElem(this.getCurrentDriver(), liveChatRoatingCheckbox, 5,"Live Chat Roating Checkbox");
+        scrollAndClickElem(this.getCurrentDriver(), liveChatRoatingCheckbox, 5,"Live Chat Roating Checkbox");
         return this;
     }
 
     public void waitForSaveMessage(){
-        waitForElementToBeVisible(this.getCurrentDriver(), saveMessage ,3);
+        waitForAppearAndDisappear(this.getCurrentDriver(), saveMessage, 3, 4);
     }
 
 }

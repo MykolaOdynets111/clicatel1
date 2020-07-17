@@ -44,6 +44,6 @@ Feature: End chat flow: bot mode
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Auto Responders page
     When Wait for auto responders page to load
-    And Agent click expand arrow for Enable End chat message auto responder
-    And Click "Reset to default" button for Enable End chat message auto responder
+    And Agent click expand arrow for End chat message auto responder
+    And Click "Reset to default" button for End chat message auto responder
     Then start_new_conversation is reset on backend

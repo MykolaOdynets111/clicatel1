@@ -10,11 +10,11 @@ import java.util.List;
 @FindBy(css = ".page-wrapper")
 public class AutoRespondersWindow extends BasePortalWindow {
 
-    @FindBy(name = ".auto-responder")
-    private List<WebElement> autoresponderItems;
+    @FindBy(css = ".auto-responder")
+    private List<WebElement> autoResponderItems;
 
     public AutoResponderItem getTargetAutoResponderItem(String autoresponder){
-        return autoresponderItems.stream().map(e -> new AutoResponderItem(e).setCurrentDriver(getCurrentDriver()))
+        return autoResponderItems.stream().map(e -> new AutoResponderItem(e).setCurrentDriver(getCurrentDriver()))
                             .filter(e -> e.getTitle().trim().equalsIgnoreCase(autoresponder))
                             .findFirst().get();
     }
@@ -29,19 +29,19 @@ public class AutoRespondersWindow extends BasePortalWindow {
 
     public void waitForAutoRespondersToLoad(){
         try {
-            waitForElementsToBeVisible(this.getCurrentDriver(), autoresponderItems, 16);
+            waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 16);
         } catch (TimeoutException e){
             Assert.fail("Auto responders are not loaded after 16 seconds wait");
         }
     }
 
     public void clickResetToDefaultForMessage(String autoresponder){
-        waitForElementsToBeVisible(this.getCurrentDriver(), autoresponderItems, 5);
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
         getTargetAutoResponderItem(autoresponder).clickResetToDefaultButton();
     }
 
     public void clickOnOffForMessage(String autoresponder){
-        waitForElementsToBeVisible(this.getCurrentDriver(), autoresponderItems, 5);
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
         getTargetAutoResponderItem(autoresponder).clickOnOff();
     }
 }

@@ -11,10 +11,11 @@ Feature: Last agent activate
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-20917")
   Scenario: Verify if a returning customer can be assigned to the last agent that they spoke to
-    And I select Touch in left menu and Touch preferences in submenu
-    When Click "Agent Desk" nav button
+    And I select Touch in left menu and Dashboard in submenu
+    When Navigate to Preferences page
     And Activate Last Agent routing
-    When I launch chatdesk from portal
+    When Agent switches to opened Portal page
+    And I select Touch in left menu and Agent Desk in submenu
     Given User select Standard Billing tenant
     And Click chat icon
     And User enter connect to agent into widget input field

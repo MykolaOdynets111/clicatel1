@@ -32,8 +32,8 @@ Feature: out_of_support_hours auto responder (Bot mode)
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Auto Responders page
     And Wait for auto responders page to load
-    When Agent click expand arrow for Enable Out of Support Hours message auto responder
-    And Click "Reset to default" button for Enable Out of Support Hours message auto responder
+    When Agent click expand arrow for Out of Support Hours message auto responder
+    And Click "Reset to default" button for Out of Support Hours message auto responder
     Then out_of_support_hours is reset on backend
     Given User select Automation Bot tenant
     And Click chat icon

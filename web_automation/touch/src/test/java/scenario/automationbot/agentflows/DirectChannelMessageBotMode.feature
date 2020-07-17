@@ -8,6 +8,6 @@ Feature: Direct message auto responder
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Auto Responders page
     When Wait for auto responders page to load
-    And Agent click expand arrow for Enable Direct channel message auto responder
-    And Click "Reset to default" button for Enable Direct channel message auto responder
+    And Agent click expand arrow for Direct channel message auto responder
+    And Click "Reset to default" button for Direct channel message auto responder
     Then contact_us_message is reset on backend

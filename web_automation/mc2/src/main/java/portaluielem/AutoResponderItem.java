@@ -17,11 +17,15 @@ public class AutoResponderItem extends AbstractWidget {
     @FindBy(name = "text")
     private WebElement textArea;
 
-    @FindBy(xpath = "//button[text()='Reset to Default']")
+    @FindBy(xpath = ".//button[text()='Reset to Default']")
     private WebElement resetToDefaultButton;
 
     @FindBy(css = ".cl-r-toggle-btn__label")
     private WebElement buttonOnOff;
+
+    @FindBy(xpath = ".//*[contains(text(), 'Save')]")
+    private WebElement saveButton;
+
 
     protected AutoResponderItem(WebElement element) {
         super(element);
@@ -33,11 +37,11 @@ public class AutoResponderItem extends AbstractWidget {
     }
 
     public String getTitle(){
-        return messageTitle.getAttribute("innerText");
+        return messageTitle.getText();
     }
 
     public void clickCollapseIcon(){
-        clickElem(this.getCurrentDriver(), collapceIcon, 1,"Collapse icon");
+        scrollAndClickElem(this.getCurrentDriver(), collapceIcon, 1,"Collapse icon");
     }
 
     public void clickResetToDefaultButton(){
@@ -50,6 +54,10 @@ public class AutoResponderItem extends AbstractWidget {
             inputText(this.getCurrentDriver(), textArea, 5, "Note number", msg);
         }
         return this;
+    }
+
+    public void clickSaveButton(){
+        clickElem(this.getCurrentDriver(), resetToDefaultButton, 1,"Reset to default button");
     }
 
     public boolean isMessageShown() {
