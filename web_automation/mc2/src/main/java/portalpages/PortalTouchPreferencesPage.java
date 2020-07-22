@@ -1,21 +1,20 @@
 package portalpages;
 
 import org.openqa.selenium.WebDriver;
-import portaluielem.AboutYourBusinessWindow;
-import portaluielem.AutoRespondersWindow;
-import portaluielem.ChatDeskWindow;
-import portaluielem.ConfigureBrandWindow;
+import portaluielem.*;
 
 
 public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     private AutoRespondersWindow autoRespondersWindow;
 
-    private ConfigureBrandWindow configureBrandWindow;
+    private BusinessProfileWindow businessProfileWindow;
 
     private AboutYourBusinessWindow aboutYourBusinessWindow;
 
-    private ChatDeskWindow chatDeskWindow;
+    private PreferencesWindow preferencesWindow;
+
+    private EditCompanyLogoWindow editCompanyLogoWindow;
 
     // == Constructors == //
 
@@ -34,18 +33,23 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
         return autoRespondersWindow;
     }
 
-    public ChatDeskWindow getChatDeskWindow() {
-        chatDeskWindow.setCurrentDriver(this.getCurrentDriver());
-        return chatDeskWindow;
+    public PreferencesWindow getPreferencesWindow() {
+        preferencesWindow.setCurrentDriver(this.getCurrentDriver());
+        return preferencesWindow;
     }
 
-    public ConfigureBrandWindow getConfigureBrandWindow() {
-        configureBrandWindow.setCurrentDriver(this.getCurrentDriver());
-        return configureBrandWindow;
+    public BusinessProfileWindow getBusinessProfileWindow() {
+        businessProfileWindow.setCurrentDriver(this.getCurrentDriver());
+        return businessProfileWindow;
     }
 
     public AboutYourBusinessWindow getAboutYourBusinessWindow() {
         aboutYourBusinessWindow.setCurrentDriver(this.getCurrentDriver());
         return aboutYourBusinessWindow;
+    }
+
+    public EditCompanyLogoWindow getEditCompanyLogoWindow() {
+        editCompanyLogoWindow.setCurrentDriver(this.getCurrentDriver());
+        return editCompanyLogoWindow;
     }
 }

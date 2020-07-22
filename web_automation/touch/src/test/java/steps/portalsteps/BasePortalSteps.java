@@ -760,18 +760,18 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Change chats per agent:\"(.*)\"$")
     public void changeChatPerAgent(String chats){
-        getPortalTouchPreferencesPage().getChatDeskWindow().setChatsAvailable(chats);
+        getPortalTouchPreferencesPage().getPreferencesWindow().setChatsAvailable(chats);
     }
 
     @When("^Click \"(.*)\" button (.*) times chats per agent became:\"(.*)\"$")
     public void changeChatPerAgentPlusMinus(String sign, int add, String result){
         if (sign.equals("+")){
-            getPortalTouchPreferencesPage().getChatDeskWindow().clickChatsPlus(add);
-            Assert.assertEquals(getPortalTouchPreferencesPage().getChatDeskWindow().getChatsAvailable(),result,
+            getPortalTouchPreferencesPage().getPreferencesWindow().clickChatsPlus(add);
+            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(),result,
                     "Number of available chat was changed not correctly");
         } else if (sign.equals("-")) {
-            getPortalTouchPreferencesPage().getChatDeskWindow().clickChatsMinus(add);
-            Assert.assertEquals(getPortalTouchPreferencesPage().getChatDeskWindow().getChatsAvailable(),result,
+            getPortalTouchPreferencesPage().getPreferencesWindow().clickChatsMinus(add);
+            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(),result,
                     "Number of available chat was changed not correctly");
         } else {
             Assert.fail("Unexpected sign. Expected \"\\+\" or \"\\-\"");
@@ -781,22 +781,21 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Error message is shown$")
     public void errorIsShownInWindow(){
-        Assert.assertTrue(getPortalTouchPreferencesPage().getChatDeskWindow().isErrorMessageShown(),
+        Assert.assertTrue(getPortalTouchPreferencesPage().getPreferencesWindow().isErrorMessageShown(),
                 "Error message is not shown");
     }
 
     @When("^Click off/on Chat Conclusion$")
     public void clickOffOnChatConclusion(){
-        getPortalTouchPreferencesPage().getChatDeskWindow().clickOnOffChatConclusion();
-        getPortalTouchPreferencesPage().waitWhileProcessing(2,6);
+        getPortalTouchPreferencesPage().getPreferencesWindow().clickOnOffChatConclusion();
+        agentClickSaveChangesButton();
     }
 
 
     @When("^Agent click 'Save changes' button$")
     public void agentClickSaveChangesButton() {
         getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(5,5);
+        getPortalTouchPreferencesPage().waitForSaveMessage();
     }
 
 
@@ -1349,7 +1348,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Click 'Upload' button for tenant logo$")
     public void clickUploadButtonForTenantLogo(){
-        getPortalTouchPreferencesPage().getConfigureBrandWindow().clickUploadButton();
+        getPortalTouchPreferencesPage().getBusinessProfileWindow().clickUploadButton();
     }
 
     // page_action_to_remove
@@ -1423,13 +1422,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Upload: photo for tenant$")
     public void uploadPhotoForTenant() {
-        getPortalTouchPreferencesPage().getConfigureBrandWindow().uploadPhoto("touch/src/test/resources/agentphoto/tenant.png");
+        getPortalTouchPreferencesPage().getBusinessProfileWindow().uploadPhoto("touch/src/test/resources/agentphoto/tenant.png");
+        getPortalTouchPreferencesPage().getEditCompanyLogoWindow().clickSaveImageButton();
     }
 
     @Then("^Change secondary color for tenant$")
     public void changeSecondaryColorForTenant() {
-        tenantInfo.put("color", getPortalTouchPreferencesPage().getConfigureBrandWindow().getSecondaryColor());
-        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomSecondaryColor(tenantInfo.get("color")));
+        tenantInfo.put("color", getPortalTouchPreferencesPage().getBusinessProfileWindow().getSecondaryColor());
+        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getBusinessProfileWindow().setRandomSecondaryColor(tenantInfo.get("color")));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
@@ -1497,8 +1497,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Change primary color for tenant$")
     public void changePrimaryColorForTenant() {
-        tenantInfo.put("color", getPortalTouchPreferencesPage().getConfigureBrandWindow().getPrimaryColor());
-        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getConfigureBrandWindow().setRandomPrimaryColor(tenantInfo.get("color")));
+        tenantInfo.put("color", getPortalTouchPreferencesPage().getBusinessProfileWindow().getPrimaryColor());
+        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getBusinessProfileWindow().setRandomPrimaryColor(tenantInfo.get("color")));
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(5, 10);
@@ -1587,8 +1587,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Return secondary color for tenant$")
     public void returnSecondaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getConfigureBrandWindow().getSecondaryColor())) {
-            getPortalTouchPreferencesPage().getConfigureBrandWindow().setSecondaryColor(tenantInfo.get("color"));
+        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getBusinessProfileWindow().getSecondaryColor())) {
+            getPortalTouchPreferencesPage().getBusinessProfileWindow().setSecondaryColor(tenantInfo.get("color"));
             getPortalTouchPreferencesPage().clickSaveButton();
             getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         }
@@ -1597,8 +1597,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^Return primary color for tenant$")
     public void returnPrimaryColorForTenant() {
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getConfigureBrandWindow().getPrimaryColor())) {
-            getPortalTouchPreferencesPage().getConfigureBrandWindow().setPrimaryColor(tenantInfo.get("color"));
+        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getBusinessProfileWindow().getPrimaryColor())) {
+            getPortalTouchPreferencesPage().getBusinessProfileWindow().setPrimaryColor(tenantInfo.get("color"));
             getPortalTouchPreferencesPage().clickSaveButton();
             getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         }
@@ -1733,23 +1733,20 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^click off/on 'Automatic Scheduler'$")
     public void clickOnOffAutoScheduler(){
         autoSchedulerPreActionStatus =  ApiHelper.getInternalTenantConfig(Tenants.getTenantUnderTestName(), "autoSchedulingEnabled");
-        getPortalTouchPreferencesPage().getChatDeskWindow().clickOnOffAutoScheduler();
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().getChatDeskWindow().waitForSaveMessage();
+        getPortalTouchPreferencesPage().getPreferencesWindow().clickOnOffAutoScheduler();
+        agentClickSaveChangesButton();
     }
 
     @When("^Select (.*) department By Default$")
     public void selectDefaultDepartment(String name){
-        getPortalTouchPreferencesPage().getChatDeskWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().getChatDeskWindow().waitForSaveMessage();
+        getPortalTouchPreferencesPage().getPreferencesWindow().activateDefaultDepartmentCheckbox().selectDefaultDepartment(name);
+        agentClickSaveChangesButton();
     }
 
     @When("^Activate Last Agent routing$")
     public void activateLastAgent(){
-        getPortalTouchPreferencesPage().getChatDeskWindow().activateLiveChatRoatingCheckbox();
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().getChatDeskWindow().waitForSaveMessage();
+        getPortalTouchPreferencesPage().getPreferencesWindow().activateLiveChatRoatingCheckbox();
+        agentClickSaveChangesButton();
     }
 
     @Then("^On backend AUTOMATIC_SCHEDULER status is updated for (.*)$")

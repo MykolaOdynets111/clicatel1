@@ -7,12 +7,12 @@ import java.util.List;
 
 
 @FindBy(css = ".preferences-page")
-public class ChatDeskWindow extends BasePortalWindow {
+public class PreferencesWindow extends BasePortalWindow {
 
-    @FindBy(xpath = "//input[@ng-model='maxChatsPerAgent']")
+    @FindBy(css = "[selenium-id='sessionsCapacity']")
     private WebElement chatsAvailable;
 
-    @FindBy(xpath = "//span[contains(@class,'invalid-agent-seats')]")
+    @FindBy(xpath = ".//div[text() = 'You must specify a number']")
     private WebElement chatsErrorMessage;
 
     @FindBy(xpath = "//button[contains(@class,'plus')]")
@@ -21,7 +21,7 @@ public class ChatDeskWindow extends BasePortalWindow {
     @FindBy(xpath = "//button[contains(@class,'minus')]")
     private WebElement chatsMinus;
 
-    @FindBy(xpath = "//fieldset[contains(@ng-model,'chatConclusion')]//button")
+    @FindBy(css = "[for='agent-note'] .cl-r-toggle-btn__label")
     private WebElement toggleChatConclusion;
 
     @FindBy(css = "[for='auto-scheduler'] .cl-r-toggle-btn__label")
@@ -38,9 +38,6 @@ public class ChatDeskWindow extends BasePortalWindow {
 
     @FindBy(css ="[for=last-agent-mode] div[class='cl-r-toggle-btn__label']")
     private WebElement liveChatRoatingCheckbox;
-
-    @FindBy(xpath = "//div[text()= 'Saved successfully']")
-    private WebElement saveMessage;
 
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
@@ -74,15 +71,15 @@ public class ChatDeskWindow extends BasePortalWindow {
     }
 
     public void clickOnOffChatConclusion(){
-        clickElem(this.getCurrentDriver(), toggleChatConclusion, 5, "Chat conclusion toggle");
+        scrollAndClickElem(this.getCurrentDriver(), toggleChatConclusion, 5, "Chat conclusion toggle");
     }
 
-    public ChatDeskWindow clickOnOffAutoScheduler(){
+    public PreferencesWindow clickOnOffAutoScheduler(){
         scrollAndClickElem(this.getCurrentDriver(), toggleAutoScheduler, 5,"Auto scheduler toggle");
     return this;
     }
 
-    public ChatDeskWindow activateDefaultDepartmentCheckbox(){
+    public PreferencesWindow activateDefaultDepartmentCheckbox(){
         scrollAndClickElem(this.getCurrentDriver(), defaultDepartmentCheckbox, 5,"Default Department Checkbox");
         return this;
     }
@@ -94,13 +91,9 @@ public class ChatDeskWindow extends BasePortalWindow {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find department: " + name)).click();
     }
 
-    public ChatDeskWindow activateLiveChatRoatingCheckbox(){
+    public PreferencesWindow activateLiveChatRoatingCheckbox(){
         scrollAndClickElem(this.getCurrentDriver(), liveChatRoatingCheckbox, 5,"Live Chat Roating Checkbox");
         return this;
-    }
-
-    public void waitForSaveMessage(){
-        waitForAppearAndDisappear(this.getCurrentDriver(), saveMessage, 3, 4);
     }
 
 }

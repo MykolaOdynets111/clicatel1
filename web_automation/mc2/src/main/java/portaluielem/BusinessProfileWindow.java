@@ -1,9 +1,12 @@
 package portaluielem;
 
 import com.github.javafaker.Faker;
+import drivermanager.ConfigManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -12,8 +15,8 @@ import java.io.File;
 import java.util.List;
 
 
-@FindBy(css = "div.edit-brand-details-page")
-public class ConfigureBrandWindow extends BasePortalWindow {
+@FindBy(css = ".business-profile")
+public class BusinessProfileWindow extends BasePortalWindow {
 
     private Faker faker = new Faker();
 
@@ -27,9 +30,11 @@ public class ConfigureBrandWindow extends BasePortalWindow {
     @FindBy(xpath = "//span[contains(@cl-color-picker, 'second')]//span[contains(@class, 'color-picker')]")
     private WebElement secondaryColor;
 
-
-    @FindBy(xpath = "//button[text()=' Upload ']")
+    @FindBy(css = "[for='file-input-avatar']")
     private WebElement uploadButton ;
+
+    @FindBy(css = "[for='file-input-avatar'] input")
+    private WebElement inputFile;
 
     @FindBy(css = "ul.color-picker-scroll button.button-primary")
     private WebElement acceptButton ;
@@ -110,11 +115,9 @@ public class ConfigureBrandWindow extends BasePortalWindow {
 
     public void uploadPhoto(String photoPath){
         waitForElementToBeVisible(this.getCurrentDriver(), uploadButton, 8);
-        String selectPictureButtonNGModel = uploadButton.getAttribute("ng-model");
-        RemoteWebElement element = this.getCurrentDriver().findElement(By.cssSelector(
-                String.format(inputPhotoLocator, selectPictureButtonNGModel)
-        ));
-        element.setFileDetector(new LocalFileDetector());
-        element.sendKeys(new File(photoPath).getAbsolutePath());
+        if(ConfigManager.isRemote()){
+            ((RemoteWebDriver) this.getCurrentDriver()).setFileDetector(new LocalFileDetector());
+        }
+        inputFile.sendKeys(new File(photoPath).getAbsolutePath());
     }
 }

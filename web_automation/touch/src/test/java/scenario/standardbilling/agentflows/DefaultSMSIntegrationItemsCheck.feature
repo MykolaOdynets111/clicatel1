@@ -20,7 +20,7 @@ Feature: Default SMS integration items visibility check
     When Agent switches to opened ChatDesk page
     And Agent refresh current page
     Then Agent has old conversation shown
-    And Agent click on last opened conversation request from touch
+#    And Agent click on last opened conversation request from touch
     And Send SMS button hidden from the Chat header
     And Send OTP button not displayed in Customer 360
 

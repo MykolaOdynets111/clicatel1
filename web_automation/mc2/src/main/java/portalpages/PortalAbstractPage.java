@@ -36,6 +36,10 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     @FindBy(xpath = "//button[contains(text(),'Save')]")
     private WebElement saveChangesButton ;
 
+    @FindBy(xpath = "//div[text()= 'Saved successfully']")
+    private WebElement saveMessage;
+
+
     private static String notificationAlert = "div[ng-bind-html='alert']";
 
     private PageHeader pageHeader;
@@ -148,6 +152,10 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     public void waitWhileProcessing(int toAppears, int toDisappear) {
         waitWhileProcessing(this.getCurrentDriver(), toAppears, toDisappear);
+    }
+
+    public void waitForSaveMessage(){
+        waitForAppearAndDisappear(this.getCurrentDriver(), saveMessage, 3, 4);
     }
 
 }

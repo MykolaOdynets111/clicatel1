@@ -231,7 +231,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 //        try {
             getAgentHomePage(agent).getPageHeader().clickIcon();
             getAgentHomePage(agent).getPageHeader().selectStatus(newStatus);
-            getAgentHomePage(agent).getPageHeader().clickIcon();
 //        } catch (WebDriverException e) {
 //            Assert.fail("Unable to change agent status. Please check the screenshot.");
 //        }

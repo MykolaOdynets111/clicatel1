@@ -7,12 +7,13 @@ Feature: Managing Chat desk Window
     Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Chat Desk" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Preferences page
     When Change chats per agent:"0"
     Then Error message is shown
     When Change chats per agent:""
     Then Error message is shown
+    When Change chats per agent:"50"
     When Click off/on Chat Conclusion
     Then  On backand AGENT_FEEDBACK tenant feature status is set to false for Automation Bot
     When Click off/on Chat Conclusion
@@ -23,8 +24,8 @@ Feature: Managing Chat desk Window
   Scenario: Check changing available chats per agent
     Given I open portal
     And Login into portal as an admin of Automation Bot account
-    When I select Touch in left menu and Touch Preferences in submenu
-    And Click "Chat Desk" nav button
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Preferences page
     When Change chats per agent:"1"
     When Click "+" button 5 times chats per agent became:"6"
     When Click "-" button 3 times chats per agent became:"3"
