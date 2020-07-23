@@ -3,7 +3,7 @@ Feature: Chat console: Agents tab
   Scenario: Info about agent on Agent tab
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
-    When I select Touch in left menu and Chat console in submenu
+    When I select Touch in left menu and Dashboard in submenu
     And Select "Agents" nav button
     Then 'No agents online' on Agents tab shown if there is no online agent
     Given I login as second agent of General Bank Demo

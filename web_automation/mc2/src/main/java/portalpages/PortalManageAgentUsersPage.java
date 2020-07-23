@@ -42,8 +42,8 @@ public class PortalManageAgentUsersPage extends PortalAbstractPage {
         );
     }
 
-    public PortalUserEditingPage clickManageButtonForUser(String fullName){
-        getTargetUserRow(fullName).clickManageButton();
+    public PortalUserEditingPage openUserManagementPage(String fullName){
+        getTargetUserRow(fullName).clickOnUserName();
         return new PortalUserEditingPage(this.getCurrentDriver());
     }
 

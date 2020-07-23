@@ -849,6 +849,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("Admin click BACK button in left menu")
     public void clickBackButton(){
         if(getLeftMenu().isBackButtonShown()) getLeftMenu().clickBackButton();
+        getAdminPortalMainPage().waitWhileProcessing(2, 14);
     }
 
     @When("^(?:I|Admin) select (.*) in left menu$")
@@ -1320,7 +1321,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             fullName = ApiHelperPlatform.getAccountUserFullName(Tenants.getTenantUnderTestOrgName(), email);
         }
         setPortalUserProfileEditingPage(
-                getPortalManagingUsersPage().clickManageButtonForUser(fullName)
+                getPortalManagingUsersPage().openUserManagementPage(fullName)
         );
     }
     @When("^Click on (.*) user from the table$")
@@ -1413,7 +1414,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        getPortalUserProfileEditingPage().uploadPhoto("touch/src/test/resources/agentphoto/agent_photo.png");
+        getPortalUserProfileEditingPage().uploadPhoto("src/test/resources/agentphoto/agent_photo.png");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(2, 5);
         getPortalUserProfileEditingPage().clickPageActionButton("Save changes");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
@@ -1424,15 +1425,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void uploadPhotoForTenant() {
         getPortalTouchPreferencesPage().getBusinessProfileWindow().uploadPhoto("touch/src/test/resources/agentphoto/tenant.png");
         getPortalTouchPreferencesPage().getEditCompanyLogoWindow().clickSaveImageButton();
-    }
-
-    @Then("^Change secondary color for tenant$")
-    public void changeSecondaryColorForTenant() {
-        tenantInfo.put("color", getPortalTouchPreferencesPage().getBusinessProfileWindow().getSecondaryColor());
-        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getBusinessProfileWindow().setRandomSecondaryColor(tenantInfo.get("color")));
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);
     }
 
     @Then("^I check secondary color for tenant in widget$")
@@ -1493,15 +1485,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getChatForm().getSubmitMessageButton(),
                             tenantInfo.get("newColor"), "Color for Send button in agent desk window is not correct");
         soft.assertAll();
-    }
-
-    @Then("^Change primary color for tenant$")
-    public void changePrimaryColorForTenant() {
-        tenantInfo.put("color", getPortalTouchPreferencesPage().getBusinessProfileWindow().getPrimaryColor());
-        tenantInfo.put("newColor", getPortalTouchPreferencesPage().getBusinessProfileWindow().setRandomPrimaryColor(tenantInfo.get("color")));
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(5, 10);
     }
 
     @When("^Add new touch (.*) solution$")
@@ -1584,37 +1567,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    @Then("^Return secondary color for tenant$")
-    public void returnSecondaryColorForTenant() {
-        DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getBusinessProfileWindow().getSecondaryColor())) {
-            getPortalTouchPreferencesPage().getBusinessProfileWindow().setSecondaryColor(tenantInfo.get("color"));
-            getPortalTouchPreferencesPage().clickSaveButton();
-            getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        }
-    }
-
-    @Then("^Return primary color for tenant$")
-    public void returnPrimaryColorForTenant() {
-        DriverFactory.getDriverForAgent("main").navigate().refresh();
-        if (!tenantInfo.get("color").contains(getPortalTouchPreferencesPage().getBusinessProfileWindow().getPrimaryColor())) {
-            getPortalTouchPreferencesPage().getBusinessProfileWindow().setPrimaryColor(tenantInfo.get("color"));
-            getPortalTouchPreferencesPage().clickSaveButton();
-            getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        }
-    }
-
     @And("^Change business details$")
     public void changeBusinessDetails() {
         tenantInfo.put("companyName", "New company name "+faker.lorem().word());
         tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
-        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getAboutYourBusinessWindow().selectRandomIndastry());
-        tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getAboutYourBusinessWindow().selectRandomCountry());
-        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyName(tenantInfo.get("companyName"));
-        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyCity(tenantInfo.get("companyCity"));
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(2, 9);
+        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndastry());
+        tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomCountry());
+        getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName(tenantInfo.get("companyName"));
+        getPortalTouchPreferencesPage().getBusinessProfileWindow().setCompanyCity(tenantInfo.get("companyCity"));
+        agentClickSaveChangesButton();
     }
 
     @And("^Refresh page and verify business details was changed for (.*)$")
@@ -1623,15 +1584,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
         Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
         String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
-        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
         soft.assertEquals(resp.jsonPath().get("tenantOrgName"),tenantInfo.get("companyName"), "Company name was not changed on backend");
-        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
         soft.assertEquals(resp.jsonPath().getList("tenantAddresses.city").get(0).toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
-        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
         soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
-        soft.assertEquals(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
+        soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
         soft.assertEquals(country,tenantInfo.get("companyCountry"), "Company country was not changed on backend");
-        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().setCompanyName("Automation Bot");
+        getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
@@ -1727,7 +1688,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")
     public void selectSpecificAgentSupportHoursRadioButtonInAgentSupportedHoursSection() {
-        getPortalTouchPreferencesPage().getAboutYourBusinessWindow().openSpecificSupportHours();
+        getPortalTouchPreferencesPage().getBusinessProfileWindow().openSpecificSupportHours();
     }
 
     @When("^click off/on 'Automatic Scheduler'$")
@@ -1758,9 +1719,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @And("^Uncheck today day and apply changes$")
     public void uncheckTodayDayAndApplyChanges() {
-        nameOfUnchekedDay = getPortalTouchPreferencesPage().getAboutYourBusinessWindow().uncheckTodayDay();
-        getPortalTouchPreferencesPage().clickSaveButton();
-        getPortalTouchPreferencesPage().waitForNotificationAlertToBeProcessed(2,5);
+        nameOfUnchekedDay = getPortalTouchPreferencesPage().getBusinessProfileWindow().uncheckTodayDay();
+        agentClickSaveChangesButton();
     }
 
     @And("^'support hours' are updated in (.*) configs$")
@@ -1770,7 +1730,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
     public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
-        Assert.assertTrue(getPortalTouchPreferencesPage().getAboutYourBusinessWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
+        Assert.assertTrue(getPortalTouchPreferencesPage().getBusinessProfileWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
     }
 
     @When("^Turn (.*) the Last Agent routing$")

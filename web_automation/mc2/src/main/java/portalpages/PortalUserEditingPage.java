@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class PortalUserEditingPage extends PortalAbstractPage {
 
-    @FindBy(xpath = "//button[@cl-permission='update-agent']")
+    @FindBy(xpath = ".//button[contains(text(), 'Upload')]")
     private WebElement uploadPhoto;
 
     @FindBy(css = "div.create-integration-container")

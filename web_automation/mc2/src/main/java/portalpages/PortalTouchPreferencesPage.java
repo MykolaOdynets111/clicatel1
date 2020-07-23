@@ -10,8 +10,6 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     private BusinessProfileWindow businessProfileWindow;
 
-    private AboutYourBusinessWindow aboutYourBusinessWindow;
-
     private PreferencesWindow preferencesWindow;
 
     private EditCompanyLogoWindow editCompanyLogoWindow;
@@ -41,11 +39,6 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
     public BusinessProfileWindow getBusinessProfileWindow() {
         businessProfileWindow.setCurrentDriver(this.getCurrentDriver());
         return businessProfileWindow;
-    }
-
-    public AboutYourBusinessWindow getAboutYourBusinessWindow() {
-        aboutYourBusinessWindow.setCurrentDriver(this.getCurrentDriver());
-        return aboutYourBusinessWindow;
     }
 
     public EditCompanyLogoWindow getEditCompanyLogoWindow() {
