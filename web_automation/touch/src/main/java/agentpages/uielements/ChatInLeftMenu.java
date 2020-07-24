@@ -32,7 +32,7 @@ public class ChatInLeftMenu extends AbstractWidget {
         return adapterIcon;
     }
 
-    @FindBy(css = ".cl-r-roster-item__footer__left svg") //.//div[@class='icons']/span[contains(@class,'icon')][child::*]/*") old locator
+    @FindBy(css = "[selenium-id='chat-item-icons-holder']")
     private WebElement adapterIcon;
 
     @FindBy(css = ".cl-r-icon-flag-indicator")

@@ -763,20 +763,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getPreferencesWindow().setChatsAvailable(chats);
     }
 
-    @When("^Click \"(.*)\" button (.*) times chats per agent became:\"(.*)\"$")
-    public void changeChatPerAgentPlusMinus(String sign, int add, String result){
-        if (sign.equals("+")){
-            getPortalTouchPreferencesPage().getPreferencesWindow().clickChatsPlus(add);
-            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(),result,
-                    "Number of available chat was changed not correctly");
-        } else if (sign.equals("-")) {
-            getPortalTouchPreferencesPage().getPreferencesWindow().clickChatsMinus(add);
-            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(),result,
-                    "Number of available chat was changed not correctly");
-        } else {
-            Assert.fail("Unexpected sign. Expected \"\\+\" or \"\\-\"");
-        }
-
+    @When("^Chats per agent became:\"(.*)\"$")
+    public void changeChatPerAgentPlusMinus(String result){
+            Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(), result,"Chats per agent is not as expected");
     }
 
     @When("^Error message is shown$")
@@ -1414,7 +1403,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Upload (.*)")
     public void uploadPhoto(String photoStrategy){
-        getPortalUserProfileEditingPage().uploadPhoto("src/test/resources/agentphoto/agent_photo.png");
+        getPortalUserProfileEditingPage().uploadPhoto("touch/src/test/resources/agentphoto/agent_photo.png");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(2, 5);
         getPortalUserProfileEditingPage().clickPageActionButton("Save changes");
         getPortalUserProfileEditingPage().waitForNotificationAlertToBeProcessed(3,6);

@@ -34,7 +34,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=roster-item]")
     private List<WebElement> chatsList;
 
-    @FindBy(css = "[selenium-id=roster-item-selected]")
+    @FindBy(css = ".cl-r-chat-item--selected")
     private WebElement activeCaht;
 
     @FindBy(css = "[selenium-id=roster-scroll-container]")

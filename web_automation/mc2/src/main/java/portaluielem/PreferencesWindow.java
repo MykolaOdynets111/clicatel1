@@ -15,12 +15,6 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(xpath = ".//div[text() = 'You must specify a number']")
     private WebElement chatsErrorMessage;
 
-    @FindBy(xpath = "//button[contains(@class,'plus')]")
-    private WebElement chatsPlus;
-
-    @FindBy(xpath = "//button[contains(@class,'minus')]")
-    private WebElement chatsMinus;
-
     @FindBy(css = "[for='agent-note'] .cl-r-toggle-btn__label")
     private WebElement toggleChatConclusion;
 
@@ -41,12 +35,13 @@ public class PreferencesWindow extends BasePortalWindow {
 
     public void setChatsAvailable(String chats){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
-        chatsAvailable.clear();
-        chatsAvailable.sendKeys(chats);
+        scrollToElem(this.getCurrentDriver(), chatsAvailable,"Chat available");
+        inputText(this.getCurrentDriver(), chatsAvailable,1, "Chat available", chats);
     }
 
     public String getChatsAvailable(){
         waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
+        scrollToElem(this.getCurrentDriver(), chatsAvailable,"Chat available");
         return chatsAvailable.getAttribute("value");
     }
 
@@ -54,21 +49,6 @@ public class PreferencesWindow extends BasePortalWindow {
        return isElementShown(this.getCurrentDriver(), chatsErrorMessage,5);
     }
 
-    public void clickChatsPlus(int times){
-        waitForElementToBeVisible(this.getCurrentDriver(), chatsPlus, 5);
-        for (int i = 0; i<times;i++){
-        chatsPlus.click();
-        }
-        waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
-    }
-
-    public void clickChatsMinus(int times){
-        waitForElementToBeVisible(this.getCurrentDriver(), chatsMinus, 5);
-        for (int i = 0; i<times;i++){
-            chatsMinus.click();
-        }
-        waitForElementToBeVisible(this.getCurrentDriver(), chatsAvailable, 5);
-    }
 
     public void clickOnOffChatConclusion(){
         scrollAndClickElem(this.getCurrentDriver(), toggleChatConclusion, 5, "Chat conclusion toggle");

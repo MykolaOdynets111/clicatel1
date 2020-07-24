@@ -26,7 +26,7 @@ Feature: Managing Chat desk Window
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Preferences page
-    When Change chats per agent:"1"
-    When Click "+" button 5 times chats per agent became:"6"
-    When Click "-" button 3 times chats per agent became:"3"
-
+    When Change chats per agent:"6"
+    And Agent click 'Save changes' button
+    And Agent refreshes the page
+    Then Chats per agent became:"6"
