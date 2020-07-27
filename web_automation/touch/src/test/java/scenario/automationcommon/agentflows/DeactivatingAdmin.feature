@@ -1,3 +1,4 @@
+@skip
 @no_widget
 @no_chatdesk
 Feature: Deactivating agent user
