@@ -88,7 +88,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^On backand (.*) tenant feature status is set to (.*) for (.*)$")
     public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
         Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
-                "Agent feature is not expected");
+                feature + " feature is not expected");
     }
 
     @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
@@ -317,6 +317,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^Wait for (.d*) seconds for Phone Number update")
     public void waitSomeTimeForBackendUpdatePhone(int waitFor){
+        waitSomeTime(waitFor);
+    }
+
+    @And("^Wait for (.d*) second")
+    public void waitSomeTime(int waitFor){
         int waitTimeInMillis = waitFor * 1000;
         sleepFor(waitTimeInMillis);
     }

@@ -29,5 +29,6 @@ Feature: Supervisor able to filter Tickets
     And User select Assigned ticket type
     Then Ticket is present on Assigned filter page
     And Update ticket with OVERDUE status
+    And Wait for 2 second
     When User select OVERDUE ticket type
     Then Ticket is present on OVERDUE filter page

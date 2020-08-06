@@ -1,3 +1,4 @@
+@skip
 Feature: Chat console: Agents tab
 
   Scenario: Info about agent on Agent tab

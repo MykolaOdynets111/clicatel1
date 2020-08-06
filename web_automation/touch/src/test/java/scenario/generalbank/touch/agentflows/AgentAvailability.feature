@@ -20,6 +20,7 @@ Feature: Agent availability
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'chat to support' input
     When Agent changes status to: Unavailable
+    And Wait for 2 second
     And User enter connect to agent into widget input field
     Then User should see 'agents_away' text response for his 'connect to agent' input
     Then Agent should not see from user chat in agent desk
