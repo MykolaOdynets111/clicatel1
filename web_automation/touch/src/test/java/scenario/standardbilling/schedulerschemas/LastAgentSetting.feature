@@ -13,7 +13,7 @@ Feature: Last agent activate
   Scenario: Verify if a returning customer can be assigned to the last agent that they spoke to
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page
-    And Activate Last Agent routing
+    And Switch Last Agent routing
     When Agent switches to opened Portal page
     And I select Touch in left menu and Agent Desk in submenu
     Given User select Standard Billing tenant

@@ -71,7 +71,7 @@ public class PreferencesWindow extends BasePortalWindow {
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find department: " + name)).click();
     }
 
-    public PreferencesWindow activateLiveChatRoatingCheckbox(){
+    public PreferencesWindow clickOnLiveChatRoating(){
         scrollAndClickElem(this.getCurrentDriver(), liveChatRoatingCheckbox, 5,"Live Chat Roating Checkbox");
         return this;
     }

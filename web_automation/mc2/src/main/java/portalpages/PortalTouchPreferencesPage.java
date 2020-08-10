@@ -14,6 +14,8 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     private EditCompanyLogoWindow editCompanyLogoWindow;
 
+    private ChatTagsWindow chatTagsWindow;
+
     // == Constructors == //
 
     public PortalTouchPreferencesPage() {
@@ -45,4 +47,11 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
         editCompanyLogoWindow.setCurrentDriver(this.getCurrentDriver());
         return editCompanyLogoWindow;
     }
+
+    public ChatTagsWindow getChatTagsWindow(){
+        chatTagsWindow.setCurrentDriver(this.getCurrentDriver());
+        return chatTagsWindow;
+    }
+
+
 }

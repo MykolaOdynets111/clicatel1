@@ -11,6 +11,7 @@ import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import steps.portalsteps.BasePortalSteps;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -375,6 +376,12 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTags(iter);
         Assert.assertEquals(getAgentHomeForMainAgent().getAgentFeedbackWindow().getChosenTags().size(), iter,
                 "Not all tags was added \n");
+    }
+
+    @Then("^Agent select precreated tag$")
+    public void agentAddSelectedTag() {
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
+        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
     }
 
     @Then("^Agent delete all tags$")

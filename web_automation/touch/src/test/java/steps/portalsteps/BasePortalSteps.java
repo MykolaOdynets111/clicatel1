@@ -56,6 +56,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private String accountCurrency;
     private String autoSchedulerPreActionStatus;
     private String confirmationURL;
+    public static String tagname;
 
     public static Map<String, String> getTenantInfoMap(){
         return  tenantInfo;
@@ -1693,9 +1694,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
         agentClickSaveChangesButton();
     }
 
-    @When("^Activate Last Agent routing$")
+    @When("^Switch Last Agent routing$")
     public void activateLastAgent(){
-        getPortalTouchPreferencesPage().getPreferencesWindow().activateLiveChatRoatingCheckbox();
+        getPortalTouchPreferencesPage().getPreferencesWindow().clickOnLiveChatRoating();
         agentClickSaveChangesButton();
     }
 
@@ -1733,6 +1734,18 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
     }
 
+    @When("^Verify Last Agent routing is turned (.*) on backend$")
+    public void verifyLastAgentRoting(String status) {
+        boolean statusOnBackend = ApiHelper.getTenantConfig(Tenants.getTenantUnderTestOrgName()).getBody().jsonPath().get("lastAgentMode");
+        if (status.equalsIgnoreCase("on")){
+            Assert.assertTrue(statusOnBackend, "Last Agent Roting is not turned on");
+        } else if(status.equalsIgnoreCase("off")){
+            Assert.assertFalse(statusOnBackend, "Last Agent Roting is not turned off");
+        }else{
+            throw new AssertionError("Incorrect status was provided");
+        }
+    }
+
     @When("^Turn (.*) the Default department$")
     public void changeDepartmentPrimaryStatus(String status){
         if (status.equalsIgnoreCase("on")){
@@ -1742,6 +1755,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
+    }
+
+    @When("^Create chat tag$")
+    public void createChatTag(){
+        tagname = faker.artist().name() + faker.numerify("##");
+        getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
     }
 
     private MainPage getMainPage() {
