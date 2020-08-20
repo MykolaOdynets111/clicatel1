@@ -13,7 +13,7 @@ Feature: Canceling chat ending
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     When Agent click 'Cancel' button
     Then Conversation area contains connect to Support user's message
     Then CRM ticket is not created

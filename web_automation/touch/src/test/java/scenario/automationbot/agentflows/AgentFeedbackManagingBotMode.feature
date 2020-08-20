@@ -23,7 +23,7 @@ Feature: Turning on / off AGENT_FEEDBACK feature for Bot mode tenant
     Then Agent has new conversation request
     And Agent click on new conversation request from touch
     When Agent click "End chat" button
-    Then Agent Feedback popup should be opened
+    Then Agent Feedback popup for agent should be opened
     And Agent click 'Close chat' button
     And Agent should not see from user chat in agent desk
 

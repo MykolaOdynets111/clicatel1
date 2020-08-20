@@ -15,7 +15,7 @@ Feature: Creating CRM tickets
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then Agent add 1 tag
     Then Agent type Note:"Note from automation test)", Link:"Note text Link", Number:"12345" for CRM ticket
     When Agent click 'Close chat' button

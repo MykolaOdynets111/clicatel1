@@ -340,9 +340,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getChatHeader().clickEndChatButton();
     }
 
-    @Then("^(?:End chat|Agent Feedback) popup should be opened$")
-    public void verifyAgentFeedbackPopupOpened() {
-        Assert.assertTrue(getAgentHomePage("main").getAgentFeedbackWindow().isEndChatPopupShown(),
+    @Then("^(?:End chat|Agent Feedback) popup for (.*) should be opened$")
+    public void verifyAgentFeedbackPopupOpened(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isEndChatPopupShown(),
                 "End chat popup is not opened");
     }
 

@@ -1,5 +1,5 @@
 @agent_feedback
-Feature: Interaction with Tags in CRM tickets (agent mode)
+Feature: Create tag
 
   Background:
     Given AGENT_FEEDBACK tenant feature is set to true for Automation
@@ -20,7 +20,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then Agent select precreated tag
     Then Agent type Note:CheckTagsCreation, Link:TagsCreation, Number:23544 for CRM ticket
     When Agent click 'Close chat' button

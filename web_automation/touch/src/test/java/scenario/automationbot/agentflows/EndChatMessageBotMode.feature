@@ -15,7 +15,7 @@ Feature: End chat flow: bot mode
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then There is no exit response
@@ -31,7 +31,7 @@ Feature: End chat flow: bot mode
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then Text response that contains "exit" is shown

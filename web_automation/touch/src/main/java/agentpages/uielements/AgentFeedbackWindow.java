@@ -60,7 +60,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String cleareAll = ".Select-clear";
 
-    @FindBy(css = "[selenium-id=exit-chat-note]")
+    @FindBy(css = "[selenium-id='exit-chat-note']")
     private WebElement crmNoteTextField;
 
     @FindBy(css = "[selenium-id=exit-chat-link]")
@@ -75,7 +75,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void clickCloseButtonInCloseChatPopup(){
-        clickElem(this.getCurrentDriver(), closeChatButton, 5, "Save button");
+        clickElem(this.getCurrentDriver(), closeChatButton, 5, "Close button");
     }
 
     public boolean isEndChatPopupShown (){
@@ -84,7 +84,8 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public AgentFeedbackWindow typeCRMNoteTextField(String msg) {
         if (msg != null & !msg.equals("")) {
-            inputText(this.getCurrentDriver(), crmNoteTextField, 5,"Note", msg);
+            crmNoteTextField.sendKeys(msg);
+            //inputText(this.getCurrentDriver(), crmNoteTextField, 5,"Note", msg);
         }
         return this;
     }
@@ -175,9 +176,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         findElemByCSS(this.getCurrentDriver(), inputTagField).sendKeys(tag);
     }
 
-    public void selectTagInSearch() {
+    public AgentFeedbackWindow selectTagInSearch() {
         waitForElementToBeClickable(this.getCurrentDriver(), availableTagsContainer, 6);
         availableTagsContainer.click();
+        return this;
     }
 
     public void deleteTags() {
@@ -200,6 +202,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     public String getSelectedSentiment(){
         return getAttributeFromElem(this.getCurrentDriver(), selectedSentiment, 3, "Selected sentiment", "selenium-id");
+    }
+
+    public void closeDropdown(){
+        clickElem(this.getCurrentDriver(), openDropdownButton, 5,"Close dropdown button" );
     }
 
 }

@@ -171,7 +171,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void searchUserChat(String userId){
-        clickElem(this.getCurrentDriver(), searchButton, 1, "Search Button");
+        waitForElementToBeClickable(this.getCurrentDriver(), searchButton, 1);
+        executeJSclick(this.getCurrentDriver(), searchButton);
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
         searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);

@@ -29,6 +29,7 @@ import portaluielem.AgentRowChatConsole;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.agentsteps.AbstractAgentSteps;
+import steps.agentsteps.AgentCRMTicketsSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 
@@ -1761,6 +1762,14 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void createChatTag(){
         tagname = faker.artist().name() + faker.numerify("##");
         getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
+    }
+
+    @When("^Update chat tag")
+    public void updateTag(){
+        getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
+        tagname = faker.artist().name() + faker.numerify("##");
+        getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
+        AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
     }
 
     private MainPage getMainPage() {

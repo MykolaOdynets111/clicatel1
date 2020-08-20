@@ -20,6 +20,6 @@ Feature: Agent Assist and Feedback features for tenant with Starter plan
     When Agent responds with hello to User
     Then User have to receive 'hello' text response for his 'how to check account balance?' input
     When Agent click "End chat" button
-    Then Agent Feedback popup should be opened
+    Then Agent Feedback popup for agent should be opened
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk

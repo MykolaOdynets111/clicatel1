@@ -13,7 +13,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then All tags for tenant is available in the dropdown
 
    Scenario: All tie tags available for the test tenant in the drop down after reopen "End chat" window
@@ -22,11 +22,11 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     When Agent click 'Cancel' button
     Then Conversation area contains connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then All tags for tenant is available in the dropdown
     When Agent click 'Close chat' button
 
@@ -37,7 +37,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then Agent can search tag and select tag, selected tag added in tags field
     Then Agent type Note:CheckTags, Link:CheckTags, Number:12345 for CRM ticket
     When Agent click 'Close chat' button
@@ -51,7 +51,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then Agent add 2 tag
     Then Agent type Note:Note from automation test), Link:Note text Link, Number:12345 for CRM ticket
     When Agent click 'Close chat' button
@@ -65,7 +65,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with connect to Support user's message
     When Agent click "End chat" button
-    Then End chat popup should be opened
+    Then End chat popup for agent should be opened
     Then Agent add 2 tag
     Then Agent delete all tags
     Then Agent type Note:Note from automation test), Link:Note text Link, Number:12345 for CRM ticket

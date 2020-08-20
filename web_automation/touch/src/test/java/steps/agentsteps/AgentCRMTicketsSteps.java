@@ -26,7 +26,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     private static ThreadLocal<Map<String, String>> crmTicketInfoForCreatingViaAPI = new ThreadLocal<>();
 
-    private static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
+    public static ThreadLocal<Map<String, String>> crmTicketInfoForUpdating = new ThreadLocal<>();
 
     private static ThreadLocal<List<CRMTicket>> createdCrmTicketsList = new ThreadLocal<>();
 
@@ -294,7 +294,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 "CRM ticket was created on back end");
     }
 
-    @Then("(.*)type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
+    @Then("(.*) type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
         getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
         List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
@@ -378,11 +378,12 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 "Not all tags was added \n");
     }
 
-    @Then("^Agent select precreated tag$")
-    public void agentAddSelectedTag() {
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
-        getAgentHomeForMainAgent().getAgentFeedbackWindow().selectTagInSearch();
+    @Then("^(.*) select precreated tag$")
+    public void agentAddSelectedTag(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
+        getAgentHomePage(agent).getAgentFeedbackWindow().selectTagInSearch().closeDropdown();
     }
+
 
     @Then("^Agent delete all tags$")
     public void agentDeleteAllTags() {
