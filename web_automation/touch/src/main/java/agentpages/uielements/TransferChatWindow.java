@@ -15,7 +15,7 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=transfer-chat-modal-cancel]")
     private WebElement cancelTransferButton;
 
-    @FindBy(css = "[selenium-id=transfer-chat-modal-transfer]")
+    @FindBy(xpath = "//button[text()='Transfer']")
     private WebElement submitTransferChatButton;
 
     @FindBy(xpath = ".//div[contains(text(),'agent')]/parent::div/following-sibling::div")
@@ -115,13 +115,13 @@ public class TransferChatWindow extends AbstractUIElement {
             if(availableAgent.getAttribute("innerText").contains("AQA")) {
                 WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().toUpperCase().contains("AQA")).findFirst().get();
                 String agentName = currentAgent.getText();
-                currentAgent.click();
+                executeJSclick(this.getCurrentDriver(), currentAgent);
                 return agentName;
             }
             else waitFor(500);
         }
         String agentName = availableAgent.getAttribute("innerText");
-        availableAgent.click();
+        executeJSclick(this.getCurrentDriver(), availableAgent);
         return agentName;
     }
 

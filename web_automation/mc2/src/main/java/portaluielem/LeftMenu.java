@@ -43,7 +43,13 @@ public class LeftMenu extends AbstractUIElement {
                     .orElseThrow(() -> new AssertionError("Cannot find '" + menuItem + "' left menu item"));
 
         }
-        clickElem(this.getCurrentDriver(), elem, 10, menuItem + " left menu item");
+        try {
+            clickElem(this.getCurrentDriver(), elem, 15, menuItem + " left menu item");
+        }catch (StaleElementReferenceException e){
+            waitFor(1000);
+            clickElem(this.getCurrentDriver(), elem, 15, menuItem + " left menu item");
+        }
+
         try {
             waitForElementToBeVisible(this.getCurrentDriver(), leftSubMenu, 10);
             waitForElementsToBeVisible(this.getCurrentDriver(), submenuItems, 3);

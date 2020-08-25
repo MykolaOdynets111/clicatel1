@@ -73,7 +73,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public String getTransferWindowHeader(){
-        return getTextFromElem(this.getCurrentDriver(), transferWindowHeader, 2,"Transfer chat window header");
+        return getTextFromElem(this.getCurrentDriver(), transferWindowHeader, 6,"Transfer chat window header").trim();
     }
 
     public boolean isTransferWindowHeaderNotShown(){
