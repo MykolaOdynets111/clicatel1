@@ -112,17 +112,16 @@ public class TransferChatWindow extends AbstractUIElement {
         if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openAgentDropdownButton.click();
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
         for(int i=0; i<10; i++){
-            if(availableAgent.getAttribute("innerText").contains("AQA")) {
-                WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().toUpperCase().contains("AQA")).findFirst().get();
+            if(availableAgentList.size() >= 2) {
+                WebElement currentAgent = availableAgentList.stream().filter(e -> !(e.getText().toUpperCase().contains("current chat assignment"))).findFirst().get();
                 String agentName = currentAgent.getText();
                 executeJSclick(this.getCurrentDriver(), currentAgent);
                 return agentName;
             }
             else waitFor(500);
         }
-        String agentName = availableAgent.getAttribute("innerText");
-        executeJSclick(this.getCurrentDriver(), availableAgent);
-        return agentName;
+        new AssertionError("Agent for chat transferring is not shown");
+        return null;
     }
 
     public String getTextDropDownMessage() {

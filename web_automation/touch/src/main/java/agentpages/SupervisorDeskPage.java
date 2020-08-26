@@ -60,7 +60,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private String iframeId = "ticketing-iframe";
 
     private AssignChatWindow assignChatWindow;
-    private ChatBody сhatBody;
+    private ChatBody chatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
     private SupervisorLeftPanel supervisorLeftPanel;
     private ChatHeader chatHeader;
@@ -181,8 +181,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public ChatBody openInboxChatBody(String userName){
         getSupervisorDeskLiveRow(userName).clickOnUserName();
-        сhatBody.setCurrentDriver(this.getCurrentDriver());
-        return сhatBody;
+        chatBody.setCurrentDriver(this.getCurrentDriver());
+        return chatBody;
     }
 
     public String getOpenedChatHeader(){

@@ -45,7 +45,7 @@ public class LeftMenu extends AbstractUIElement {
         }
         try {
             clickElem(this.getCurrentDriver(), elem, 15, menuItem + " left menu item");
-        }catch (StaleElementReferenceException e){
+        }catch (StaleElementReferenceException | AssertionError  e){
             waitFor(1000);
             clickElem(this.getCurrentDriver(), elem, 15, menuItem + " left menu item");
         }

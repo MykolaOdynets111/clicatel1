@@ -237,6 +237,8 @@ public class PortalMainPage extends PortalAbstractPage {
 
 
     public boolean isPortalPageOpened(){
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+        waitForAngularToBeReady(this.getCurrentDriver());
         return getPageHeader().isAdminIconShown(3);
     }
 
