@@ -97,7 +97,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         int sessionCapacity = 0;
         if(!isConversationShown){
             sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
-            if (sessionCapacity==0) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
+            if (sessionCapacity < 50) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
         }
         List<SupportHoursItem> supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
         List<SupportHoursItem> supportHoursUpdated = null;
