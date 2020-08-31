@@ -96,6 +96,11 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
         List<ChatHistoryItem> chatItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), lastSessionID);
         List<String> historyFromDB = getBareChatHistory(chatItems);
 
+        //temporary, need clarification from BackEnd how Unsubscribe generates
+        String updatedUnsubscribe = historyFromEmail.get(historyFromEmail.size()-1);
+        historyFromEmail.remove(historyFromEmail.size()-1);
+        historyFromEmail.add(updatedUnsubscribe.split("If you would like")[0].trim());
+
         Assert.assertEquals(historyFromEmail, historyFromDB, "Histories in Email and in DB are different");
     }
 
