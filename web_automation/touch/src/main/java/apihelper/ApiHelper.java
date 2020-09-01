@@ -1,6 +1,7 @@
 package apihelper;
 
 import com.github.javafaker.Faker;
+import com.google.gson.JsonObject;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
@@ -20,9 +21,12 @@ import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import mc2api.auth.PortalAuthToken;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
+import datamanager.jacksonschemas.ClientProfileOld;
 
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -697,18 +701,35 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
         JsonPath respJSON = getCustomerView(tenantOrgName, clineId);
-
-        String fullName = "";
-        if(respJSON.getString("personalDetails.firstName") == null &&
-                respJSON.getString("personalDetails.lastName") == null){
-            fullName = respJSON.getString("clientProfiles.clientId[0]");
-        } else {
-            String lastName =respJSON.getString("personalDetails.lastName") == null ? "" : respJSON.getString("personalDetails.lastName");
-            fullName = respJSON.getString("personalDetails.firstName") + " " + lastName;
+        List<ClientProfileOld> clientProfiles = respJSON.getList("clientProfiles", ClientProfileOld.class);
+//        List<ClientProfileOld> clientProfilesList = new ArrayList<ClientProfileOld>();
+//        for (String object: objects){
+//            ClientProfileOld cp = null;
+//            try {
+//                cp = new ObjectMapper().readValue(object, ClientProfileOld.class);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            clientProfilesList.add(cp);
+//        }
+        ClientProfileOld clientProfile = null;
+        for(ClientProfileOld profile: clientProfiles){
+            if (profile.getType().equalsIgnoreCase("TENANT"))clientProfile = profile;
         }
-        String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
-        if(location.isEmpty()) location = "Unknown location";
-        String customerSince = getCustomerSince(respJSON);
+
+        String fullName = clientProfile.getAttributes().getFirstName() + " " + clientProfile.getAttributes().getLastName();
+        String location = clientProfile.getAttributes().getLocation();
+//        String fullName = "";
+//        if(respJSON.getString("personalDetails.firstName") == null &&
+//                respJSON.getString("personalDetails.lastName") == null){
+//            fullName = respJSON.getString("clientProfiles.clientId[0]");
+//        } else {
+//            String lastName =respJSON.getString("personalDetails.lastName") == null ? "" : respJSON.getString("personalDetails.lastName");
+//            fullName = respJSON.getString("personalDetails.firstName") + " " + lastName;
+//        }
+//        String location = respJSON.getString("personalDetails.location") == null ? "Unknown location" : respJSON.getString("personalDetails.location");
+        if(location==null ||location.isEmpty()) location = "Unknown location";
+        String customerSince = getCustomerSince(clientProfile.getCreatedDate());
 
         String channelUsername = "";
         try {
@@ -716,9 +737,11 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }catch (NullPointerException e){
             channelUsername = respJSON.getString("personalDetails.channelUsername") == null ? "Unknown" : respJSON.getString("personalDetails.channelUsername");
         }
-        if(channelUsername.contains("_")) channelUsername = channelUsername;
-        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
-        String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
+
+        String phone = clientProfile.getAttributes().getPhone();
+        String email = clientProfile.getAttributes().getEmail();
+//        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
+//        String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
         return new Customer360PersonalInfo(fullName.trim(), location,
                 "Customer since: " + customerSince, email,
@@ -753,8 +776,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     }
 
-    public static String getCustomerSince(JsonPath respJSON){
-        String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
+    public static String getCustomerSince(String customerSinceFullDate){
+        //String customerSinceFullDate  = respJSON.getString("personalDetails.customerSince");
         ZoneId zoneId =  TimeZone.getDefault().toZoneId();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         return LocalDateTime.parse(customerSinceFullDate, formatter).atZone(ZoneId.of("UTC"))
