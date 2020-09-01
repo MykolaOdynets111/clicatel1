@@ -1,5 +1,4 @@
 @agent_feedback
-@off_survey_management
 Feature: Creating CRM tickets
 
   Background:

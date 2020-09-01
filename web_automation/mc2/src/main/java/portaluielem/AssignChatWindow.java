@@ -8,7 +8,7 @@ import java.util.List;
 @FindBy(css = "div.cl-r-modal")
 public class AssignChatWindow extends BasePortalWindow {
 
-    @FindBy(xpath = ".//div[text()='Select an agent...']")
+    @FindBy(xpath = ".//div[contains(text(),'agent')]")
     private WebElement openAgentDropdownButton;
 
     @FindBy(css = ".cl-r-select__menu-list div")
@@ -22,7 +22,7 @@ public class AssignChatWindow extends BasePortalWindow {
 
 
     private void openDropDownAgent() {
-        clickElem(this.getCurrentDriver(), openAgentDropdownButton,5,"Open drop down button");
+        clickElem(this.getCurrentDriver(), openAgentDropdownButton,5,"Agent drop down");
     }
 
     public void selectDropDownAgent(String agentName) {

@@ -1,5 +1,4 @@
 @agent_mode
-@off_survey_management
 Feature: Flagged chat is disabled to close and to transfer
 
   Verification of basic pin chat functionality

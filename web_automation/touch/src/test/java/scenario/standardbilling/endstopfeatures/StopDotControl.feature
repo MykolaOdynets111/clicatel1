@@ -21,6 +21,7 @@ Feature: STOP message for .Control
     Then Verify .Control does not returns Thank you. Chat soon! response during 4 seconds
     Then Verify dot .Control returns You have blocked this contact and won’t receive any messages from it in future. Should you wish to unblock this contact, simply initiate an interaction by sending any message. response during 10 seconds
     Then Agent should not see from user chat in agent desk from dotcontrol
+    And All session attributes are closed in DB
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from dotcontrol in chat history list
     Then Agent sees stop message notification in chat history

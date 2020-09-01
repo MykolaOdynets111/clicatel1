@@ -96,9 +96,15 @@ public class AgentTransferSteps extends AbstractAgentSteps {
                 "'Note' input is not shown after selecting agent");
     }
 
-    @Then("^Agent sees '(.*)'$")
-    public void agentSeesCurrentlyThereSNoAgentsAvailable(String message) {
-        Assert.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), message, "message in drop down menu not as expected");
+    @Then("^Agent is shown as current chat assignment and disabled for selection$")
+    public void agentSeesCurrentlyThereSNoAgentsAvailable() {
+        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
+        String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
+                agentInfoResp.getBody().jsonPath().get("lastName");
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), expectedAgentNAme + " - current chat assignment", "message in drop down menu not as expected");
+        soft.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isAssignedAgentDisabledToSelect(), "Current chat assignment should be disabled for selection");
+        soft.assertAll();
     }
 
     @Then("Agent sees error message 'Notes are required when specific agent is selected.'")

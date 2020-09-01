@@ -64,6 +64,7 @@ public class BusinessProfileWindow extends BasePortalWindow {
     private WebElement acceptButton ;
 
     private String choiseSupportDay = "//span[@class='cl-r-checkbox__label'][text()='%s']/..";
+    private String uncheckedTDay = ".//input[@value='%s' and not(@checked)]";
 
     public void clickUploadButton(){
         clickElem(this.getCurrentDriver(), uploadButton, 1,"Upload button");
@@ -134,8 +135,7 @@ public class BusinessProfileWindow extends BasePortalWindow {
 
     public boolean isUncheckTodayDay(String nameOfDay){
         clickElem(this.getCurrentDriver(), arrowSupportHours,3,"Arrow to open support hours");
-        String isSelected = "/span[contains(@class, 'uncheck')]";
-        return isElementExistsInDOMXpath(this.getCurrentDriver(),String.format(choiseSupportDay,nameOfDay)+ isSelected,5);
+        return isElementExistsInDOMXpath(this.getCurrentDriver(),String.format(uncheckedTDay,nameOfDay),5);
     }
 
     public void openSpecificSupportHours(){

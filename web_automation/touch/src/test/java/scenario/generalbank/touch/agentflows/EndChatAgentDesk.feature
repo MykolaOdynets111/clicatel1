@@ -1,5 +1,4 @@
 @agent_feedback
-@off_survey_management
 Feature: Closing chat and no empty CRM ticket creating
 
   Background:

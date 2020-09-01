@@ -1,5 +1,4 @@
 @agent_availability
-@off_survey_management
 Feature: Agent availability
 
   Background:

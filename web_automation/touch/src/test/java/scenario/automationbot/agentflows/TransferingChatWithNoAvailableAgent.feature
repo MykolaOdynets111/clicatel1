@@ -9,14 +9,14 @@ Feature: Transfer chat with no Agents available
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-1676")
   @Issue("https://jira.clickatell.com/browse/TPORT-26668")
-  Scenario: Transfer chat :: If there is no Agents available, after user opened dropdown menu, - "There is no available online agents ."
+  Scenario: Transfer chat :: current chat assignment Agent
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When First Agent click on new conversation
     When Agent click on 'Transfer' chat
     Then Transfer chat pop up appears
     When Select 'Transfer to' drop down
-    Then Agent sees 'There is no available online agents .'
+    Then Agent is shown as current chat assignment and disabled for selection
     And Button 'Transfer chat' is not active
 
 

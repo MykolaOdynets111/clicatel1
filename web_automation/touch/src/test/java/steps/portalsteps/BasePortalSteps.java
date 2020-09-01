@@ -1721,7 +1721,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^Check that today day is unselected in 'Scheduled hours' pop up$")
     public void checkThatTodayDayIsUnselectedInScheduledHoursPopUp() {
-        Assert.assertTrue(getPortalTouchPreferencesPage().getBusinessProfileWindow().isUncheckTodayDay(nameOfUnchekedDay),"Today  day was not been unchecked");
+        Assert.assertTrue(getPortalTouchPreferencesPage().getBusinessProfileWindow().isUncheckTodayDay(nameOfUnchekedDay.toUpperCase()),"Today  day was not been unchecked");
     }
 
     @When("^Turn (.*) the Last Agent routing$")

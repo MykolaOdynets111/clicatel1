@@ -315,12 +315,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         }
     }
 
-    @When("^Wait for (.d*) seconds for Phone Number update")
+    @When("^Wait for (.d*) seconds for Phone Number update$")
     public void waitSomeTimeForBackendUpdatePhone(int waitFor){
         waitSomeTime(waitFor);
     }
 
-    @And("^Wait for (.d*) second")
+    @And("^Wait for (.d*) second$")
     public void waitSomeTime(int waitFor){
         int waitTimeInMillis = waitFor * 1000;
         sleepFor(waitTimeInMillis);

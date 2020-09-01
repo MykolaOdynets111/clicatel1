@@ -4,6 +4,7 @@
 Feature: Managing Chat desk Window
 
   Scenario: Check changing available agent and off/on  Chat Conclusion
+    Given Transfer timeout for Automation Bot tenant is set to 600 seconds
     Given AGENT_FEEDBACK tenant feature is set to true for Automation Bot
     Given I open portal
     And Login into portal as an admin of Automation Bot account
@@ -22,6 +23,7 @@ Feature: Managing Chat desk Window
 
 
   Scenario: Check changing available chats per agent
+    Given Transfer timeout for Automation Bot tenant is set to 600 seconds
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu

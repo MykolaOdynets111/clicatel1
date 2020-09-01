@@ -22,6 +22,7 @@ Feature: Satisfaction Survey: Comment field turning off
     And No comment field in Survey form is shown
     When Submit survey form with no comment and 4 rate
     Then Text response that contains "start_new_conversation" is shown
+    And All session attributes are closed in DB
     When Agent select "Closed" left menu option
     And Agent searches and selects chat from touch in chat history list
     Then Agent sees Rate Card in chat history with 4 rate selected and no comment

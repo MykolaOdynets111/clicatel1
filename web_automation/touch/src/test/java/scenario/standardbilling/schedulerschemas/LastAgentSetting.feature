@@ -1,5 +1,4 @@
 @remove_dep
-@off_survey_management
 Feature: Last agent activate
 
   Background:

@@ -128,6 +128,10 @@ public class TransferChatWindow extends AbstractUIElement {
         return getTextFromElem(this.getCurrentDriver(), availableAgent,6,"Drop down menu");
     }
 
+    public boolean isAssignedAgentDisabledToSelect(){
+        return availableAgent.getAttribute("class").contains("disabled");
+    }
+
     public void clickTransferChatButton() {
         waitForElementToBeVisible(this.getCurrentDriver(), submitTransferChatButton,5);
         executeJSclick(this.getCurrentDriver(), submitTransferChatButton);

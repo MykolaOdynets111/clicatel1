@@ -266,7 +266,7 @@ public class Hooks implements JSHelper {
                 new AgentHomePage("main").getProfileWindow().closeIfOpened();
             }
             if (scenario.getSourceTagNames().contains("@inactivity_timeout")) {
-                ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "agentInactivityTimeoutSec", "30");
+                ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "agentInactivityTimeoutSec", "600");
             }
 
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
