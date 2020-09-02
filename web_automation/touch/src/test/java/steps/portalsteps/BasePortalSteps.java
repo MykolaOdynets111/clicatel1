@@ -471,6 +471,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         setPortalMainPage(
                 getCurrentPortalLoginPage().login(portalAdmin.getAgentEmail(), portalAdmin.getAgentPass())
         );
+        waitForAngularToBeReady(getCurrentPortalLoginPage().getCurrentDriver());
         Tenants.setTenantUnderTestNames(tenantOrgName);
     }
 

@@ -44,6 +44,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
 
     @Step(value = "Select Department Agents checkbox")
     public CreateDepartmentForm selectDepartmentAgentsCheckbox(String agentName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), departmentAgentsCheckbox,7);
         departmentAgentsCheckbox.stream().filter(a -> a.getText().trim().equals(agentName)).findFirst().orElseThrow(() -> new AssertionError("Cannot find '" + agentName + "' checkbox")).click();
         return this;
     }

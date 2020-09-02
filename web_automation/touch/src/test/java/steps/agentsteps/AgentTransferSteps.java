@@ -45,6 +45,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @And("^(.*) transfers chat to (.*) department$")
     public void transferChatTodDepartment(String agent, String departmentName){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
         getAgentHomePage(agent).getTransferChatWindow().transferChatToDepartment(departmentName);
     }
 
@@ -111,7 +112,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void verifyRequiredNotesField(){
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputErrorText(),
-                "Notes are required when specific agent is selected",
+                "Agent notes can not be empty",
                 "Error about required notes is not as expected");
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getNoteInputColor(),
                 "rgb(194, 51, 19)", "Note input: expected Notes boarder color is not as expected" );

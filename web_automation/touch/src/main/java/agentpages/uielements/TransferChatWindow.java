@@ -25,10 +25,10 @@ public class TransferChatWindow extends AbstractUIElement {
     private WebElement openDepartmentDropdownButton;
 
     @FindBy(css = "[class^='cl-r-select__option']")
-    private WebElement availableAgent;
+    private WebElement availableAgentOrDepartment;
 
     @FindBy(css = ".cl-r-select__option")
-    private List<WebElement> availableAgentList;
+    private List<WebElement> availableAgenOrDepartmenttList;
 
     @FindBy(xpath = ".//div[@class='Select-control']")
     private WebElement dropDown;
@@ -41,7 +41,7 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = "//label[@for='agentsList']/following-sibling::div//div[@class='Select-placeholder']")
     private WebElement selectAgentPlaceholder;
 
-    @FindBy(css = "[selenium-id=textarea-input-error]")
+    @FindBy(css = ".cl-r-form-group__error-text")
     private WebElement noteInputError;
 
     public TransferChatWindow (WebDriver current){
@@ -85,7 +85,7 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public boolean isTransferChatShown() {
-        return isElementShown(this.getCurrentDriver(), submitTransferChatButton, 5);
+        return isElementShown(this.getCurrentDriver(), submitTransferChatButton, 8);
     }
 
     public boolean isTransferChatEnabled() {
@@ -101,19 +101,24 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public void selectDepartmentFromDropDown(String departmentName){
-        if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openDepartmentDropdownButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
-        WebElement currentAgent = availableAgentList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().
-                orElseThrow(() -> new AssertionError("Cannot find '" + departmentName + "' department from dropdown list"));
-        currentAgent.click();
+        if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 2)) openDepartmentDropdownButton.click();
+        waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
+        for (int i=0; i<15; i++){
+        availableAgenOrDepartmenttList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().
+                orElseThrow(() -> new AssertionError("Cannot find '" + departmentName + "' department from dropdown list")).click();
+        if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 1)){
+            break;
+        }
+        waitFor(500);
+        }
     }
 
     public String selectDropDownAgent() {
-        if(!isElementShown(this.getCurrentDriver(), availableAgent, 2)) openAgentDropdownButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), availableAgent,5);
-        for(int i=0; i<10; i++){
-            if(availableAgentList.size() >= 2) {
-                WebElement currentAgent = availableAgentList.stream().filter(e -> !(e.getText().toUpperCase().contains("current chat assignment"))).findFirst().get();
+        for(int i=0; i<15; i++){
+            if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 2)) openAgentDropdownButton.click();
+            waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
+            if(availableAgenOrDepartmenttList.size() >= 2) {
+                WebElement currentAgent = availableAgenOrDepartmenttList.stream().filter(e -> !(e.getText().toUpperCase().contains("current chat assignment"))).findFirst().get();
                 String agentName = currentAgent.getText();
                 executeJSclick(this.getCurrentDriver(), currentAgent);
                 return agentName;
@@ -125,11 +130,11 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public String getTextDropDownMessage() {
-        return getTextFromElem(this.getCurrentDriver(), availableAgent,6,"Drop down menu");
+        return getTextFromElem(this.getCurrentDriver(), availableAgentOrDepartment,6,"Drop down menu");
     }
 
     public boolean isAssignedAgentDisabledToSelect(){
-        return availableAgent.getAttribute("class").contains("disabled");
+        return availableAgentOrDepartment.getAttribute("class").contains("disabled");
     }
 
     public void clickTransferChatButton() {

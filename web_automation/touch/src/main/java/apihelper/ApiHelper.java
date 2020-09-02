@@ -717,7 +717,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             if (profile.getType().equalsIgnoreCase("TENANT"))clientProfile = profile;
         }
 
-        String fullName = clientProfile.getAttributes().getFirstName() + " " + clientProfile.getAttributes().getLastName();
+        String fullName = clientProfile.getAttributes().getFirstName();
+        String lastName = clientProfile.getAttributes().getLastName();
+        fullName = (lastName == null || lastName.isEmpty()) ? fullName : fullName + " " + lastName;
         String location = clientProfile.getAttributes().getLocation();
 //        String fullName = "";
 //        if(respJSON.getString("personalDetails.firstName") == null &&
@@ -739,7 +741,10 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
 
         String phone = clientProfile.getAttributes().getPhone();
+        phone = (phone==null || phone.isEmpty()) ? "Unknown" : phone;
         String email = clientProfile.getAttributes().getEmail();
+        email = (email==null || email.isEmpty()) ? "Unknown" : email;
+
 //        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
 //        String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
