@@ -99,6 +99,8 @@ public class ChatHeader extends AbstractUIElement {
 
     public void clickTransferButton(){
         clickElem(this.getCurrentDriver(), transferButton, 5, "Transfer button");
+        waitForAngularToBeReady(this.getCurrentDriver());
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
     }
 
     public boolean isButtonEnabled(String buttonTitle){

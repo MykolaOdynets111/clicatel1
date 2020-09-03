@@ -13,7 +13,7 @@ public class NewUserModel {
         this.faker = new Faker();
         this.firstName = faker.name().firstName();
         this.lastName = faker.name().lastName();
-        this.email = "aqamc277+" + System.currentTimeMillis() + "@gmail.com";
+        this.email = "aqamc2771+" + System.currentTimeMillis() + "@gmail.com";
     }
 
     public String getFirstName() {

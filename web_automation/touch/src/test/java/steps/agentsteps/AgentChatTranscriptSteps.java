@@ -96,7 +96,7 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
         List<ChatHistoryItem> chatItems = ApiHelper.getChatHistory(Tenants.getTenantUnderTestOrgName(), lastSessionID);
         List<String> historyFromDB = getBareChatHistory(chatItems);
 
-        //temporary, need clarification from BackEnd how Unsubscribe generates
+        //Unsubscribe link was added by DevOps because of spam notification from client, so it's need to be removed
         String updatedUnsubscribe = historyFromEmail.get(historyFromEmail.size()-1);
         historyFromEmail.remove(historyFromEmail.size()-1);
         historyFromEmail.add(updatedUnsubscribe.split("If you would like")[0].trim());
