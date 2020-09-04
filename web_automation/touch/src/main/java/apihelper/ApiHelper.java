@@ -207,11 +207,16 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
-        RestAssured.given().log().all()
+        Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body(body)
                 .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
+        if (! (resp.getStatusCode() == 200)){
+            Assert.fail("Update Widget Visibility failed \n"
+                    +"Status code: " +resp.statusCode() + "\n"
+                    + "Error message: " + resp.getBody().asString());
+        }
     }
 
     public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
@@ -792,9 +797,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){
         String agentId = getAgentInfo(tenantOrgName, "main").getBody().jsonPath().get("id");
-        RestAssured.given()
+        Response resp =  RestAssured.given()
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
+        if (!(resp.getStatusCode()==200)){
+            Assert.fail("Agent image was not successful" + " status code = " + resp.statusCode() +
+                     "\n Body: " + resp.getBody().asString());
+        }
     }
 
     public static void deleteTenantBrandImage(String tenantOrgName){

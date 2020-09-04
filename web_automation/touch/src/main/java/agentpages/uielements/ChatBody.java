@@ -26,6 +26,9 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement userProfileIcon;
 
+    @FindBy(css = ".cl-r-message.msg-agent_message.to .cl-r-avatar__image")
+    private WebElement agentImage;
+
     @FindBy(css = "li.from")
     private List<WebElement> fromUserMessages;
 
@@ -196,6 +199,14 @@ public class ChatBody extends AbstractUIElement {
         }
         return isValidIcon;
     }
+
+    public boolean isValidAgentAvatarIsShown() {
+        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/agentphoto/chatAgentIcon.png");
+        Boolean isValidIcon =  isWebElementEqualsImage(this.getCurrentDriver(), agentImage, image);
+        return isValidIcon;
+    }
+
+
 
     public boolean isRateCardShown(){
         return isElementShown(this.getCurrentDriver(), rateCard, 3);

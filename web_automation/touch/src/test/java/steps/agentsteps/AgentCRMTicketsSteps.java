@@ -111,7 +111,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getConversationId());
         Collections.sort(tags);
         String crmTicketTags = String.join(", ", tags);
-        soft.assertTrue((actualMili-expectedMili)<=3000,
+        soft.assertTrue((actualMili-expectedMili)<=6000,
                 "Ticket created date does not match created on the backend \n");
         soft.assertEquals(actualTicketInfoFromBackend.getTicketNumber(), crmTicketInfoForUpdating.get().get("ticketNumber"),
                 "Ticket Number does not match created on the backend  \n");
@@ -296,6 +296,8 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("(.*) type Note:(.*), Link:(.*), Number:(.*) for CRM ticket$")
     public void agentCreateCRMTicket(String agent,String note, String link, String number) {
+        // TODO: 9/4/2020 remove wait after spinner would be added
+        waitFor(2000);
         getAgentHomePage(agent).getAgentFeedbackWindow().fillForm(note, link, number);
         List <String> tags = getAgentHomePage(agent).getAgentFeedbackWindow().getChosenTags();
         prepareDataForCrmTicketChatdesk(note, link, number, tags);

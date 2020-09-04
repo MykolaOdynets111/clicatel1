@@ -102,10 +102,6 @@ public class PageHeader extends AbstractUIElement {
         }
     }
 
-    public boolean isAgentImageShown(){
-        return isElementShown(this.getCurrentDriver(), agentIcon, 10);
-    }
-
     public boolean isTenantImageShown(){
         return isElementShown(this.getCurrentDriver(), agentIcon, 10);
     }

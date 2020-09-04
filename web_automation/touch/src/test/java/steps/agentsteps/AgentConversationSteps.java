@@ -493,7 +493,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertEquals(getAgentHomePage(agent).getChatForm().getPlaceholderFromInputLocator(), placeholder,
                 "Placeholder in input field in opened chat is not as expected");
     }
-    @Then("Messages is correctly displayed and has correct color")
+    @Then("^Messages is correctly displayed and has correct color$")
     public void verifyMessages(){
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getChatBody("main agent").verifyAgentMessageColours(),
@@ -503,10 +503,17 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    @Then("Default user image is shown")
+    @Then("^Default user image is shown$")
     public void verifyDefaultUserImage() {
         Assert.assertTrue(getChatBody("main agent").isValidDefaultUserProfileIcon(),
                 "Incorrect default user picture shown");
     }
+
+    @Then("^Correct agent image is shown in conversation area$")
+    public void verifyAgentImage() {
+        Assert.assertTrue(getChatBody("main agent").isValidAgentAvatarIsShown(),
+                "Incorrect default user picture shown");
+    }
+
 
 }

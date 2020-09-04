@@ -532,12 +532,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Updated customer name is not shown in chat header");
     }
 
-    @Then("^Agent photo is updated on chatdesk$")
-    public void verifyPhotoLoadedOnChatdesk(){
-        Assert.assertTrue(getAgentHomePage("main").getPageHeader().isAgentImageShown(),
-                "Agent image is not shown on chatdesk");
-    }
-
     @Then("^Tenant photo is shown on chatdesk$")
     public void verifyTenantImageIsShownOnChatdesk(){
         Assert.assertTrue(getAgentHomePage("main").getPageHeader().isTenantImageShown(),
