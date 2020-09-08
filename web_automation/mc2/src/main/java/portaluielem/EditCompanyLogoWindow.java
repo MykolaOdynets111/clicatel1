@@ -11,7 +11,7 @@ public class EditCompanyLogoWindow extends BasePortalWindow {
 
 
     public void clickSaveImageButton(){
-        clickElem(this.getCurrentDriver(), saveImageButton, 1,"Upload button");
+        scrollAndClickElem(this.getCurrentDriver(), saveImageButton, 1,"Upload button");
     }
 
 

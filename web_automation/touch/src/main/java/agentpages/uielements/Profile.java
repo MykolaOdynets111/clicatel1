@@ -86,7 +86,7 @@ public class Profile extends AbstractUIElement {
         if (phoneLocator.getAttribute("value").isEmpty()){
             phone = "Unknown";
         } else {
-            phone = phoneLocator.getAttribute("value");
+            phone = phoneLocator.getAttribute("value").replace("+", "");
         }
         if (locationLabel.getAttribute("value").isEmpty()){
             location = "Unknown location";

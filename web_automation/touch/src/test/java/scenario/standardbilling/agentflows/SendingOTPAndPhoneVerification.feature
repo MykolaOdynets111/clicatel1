@@ -9,6 +9,7 @@ Feature: OTP, Verify and Re-send OTP functionality
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
+    And Conversation area becomes active with connect to agent user's message
     Then Agent see his phone number added into customer's profile
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5972")

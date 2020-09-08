@@ -30,7 +30,8 @@ Feature: Verification CRM ticket editing
     Then 'Edit ticket' window is opened
     When Agent fill in the form with new CRM ticket info
     And Save CRM ticket changings
-    Then Ticket info is updated on chatdesk
-    And CRM ticket is updated on back end
+    Then CRM ticket is updated on back end
+    And Ticket info is updated on chatdesk
+
 
 

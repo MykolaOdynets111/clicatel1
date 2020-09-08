@@ -10,6 +10,7 @@ Feature: General Send OTP flow
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
+    And Conversation area becomes active with connect to agent user's message
     Then Agent see his phone number added into customer's profile
     When Agent click on 'Send OTP' button in Customer 360
     Then 'Verify phone' window is opened

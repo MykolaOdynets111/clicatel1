@@ -102,7 +102,7 @@ public class DashboardPage extends PortalAbstractPage {
     }
 
     public SettingsPage openSettingsPage(){
-        clickElem(this.getCurrentDriver(), settingsButton, 4, "Settings button");
+        clickElem(this.getCurrentDriver(), settingsButton, 6, "Settings button");
         return new SettingsPage(this.getCurrentDriver());
     }
 }
