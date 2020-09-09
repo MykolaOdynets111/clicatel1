@@ -12,6 +12,7 @@ Feature: Welcome flow: changing lastVisit date in agent modePortalInboxSteps
     Then Agent has new conversation request
     When Agent click on new conversation
     When Agent closes chat
+    Then All session attributes are closed in DB
     And Update conversation and session dates to 24 hours
     When User refreshes the widget page
     And Click chat icon

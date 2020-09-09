@@ -73,9 +73,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath =".//span[@class='cl-r-filter-button__label']/following-sibling::button")
     private WebElement filterRemove;
 
-    private String targetProfile = "//div[contains(@class, 'info')]/h2[text()='%s']";
+    private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
-    private String loadingSpinner = "//*[text()='Connecting...']";
+    private String loadingSpinner = ".//*[text()='Connecting...']";
 
     private FilterMenu filterMenu;
 

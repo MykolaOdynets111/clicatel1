@@ -80,7 +80,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         boolean featureStatus = ApiHelper.getFeatureStatus(tenantOrgName, feature);
         savePreTestFeatureStatus(feature, featureStatus);
         saveTestFeatureStatusChanging(feature, Boolean.parseBoolean(status.toLowerCase()));
-        if(featureStatus!=Boolean.parseBoolean(status.toLowerCase())) {
+        if(featureStatus != Boolean.parseBoolean(status.toLowerCase())) {
             ApiHelper.updateFeatureStatus(tenantOrgName, feature, status);
         }
     }
