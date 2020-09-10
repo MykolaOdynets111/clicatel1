@@ -89,6 +89,13 @@ public class TwitterLoginPage extends AbstractSocialPage {
                     .sendKeys(TwitterUsers.THIRD_USER.getUserPhone());
             loginChallengeForm.submit();
         }
+        if(this.getCurrentDriver().getCurrentUrl().contains("redirect_after_login")){
+            findElemByXPATH(this.getCurrentDriver(),emailInputOnSeparatePageXPATH)
+                    .sendKeys(TwitterUsers.THIRD_USER.getScreenName());
+            findElemByXPATH(this.getCurrentDriver(), passInputFieldOnSeparatePageXPATH)
+                    .sendKeys(TwitterUsers.THIRD_USER.getTwitterUserPass());
+            findElemByXPATH(this.getCurrentDriver(), loginButtonOnSeparatePageXPATH).click();
+        }
         TwitterUsers.setLoggedInUser(TwitterUsers.THIRD_USER);
         waitForElementToBeVisible(this.getCurrentDriver(), profileButton, 10);
         return this;
