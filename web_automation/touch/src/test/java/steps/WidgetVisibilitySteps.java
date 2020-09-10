@@ -51,8 +51,9 @@ public class WidgetVisibilitySteps {
         return LocalDateTime.now(Tenants.getTenantZoneId(tenantOrgName));
     }
 
-    @Given("^(.*) territory availability is applied$")
-    public void setUpWidgetVisibilityByTerritory(List<String> territoryConfig){
+    @Given("^(.*) territory availability is applied for (.*)$")
+    public void setUpWidgetVisibilityByTerritory(List<String> territoryConfig, String tenant){
+        Tenants.setTenantUnderTestNames(tenant);
         List<String> territory = getCorrectTerritory(territoryConfig);
         if (territory.get(0).equalsIgnoreCase("all territories")){
             ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
@@ -85,8 +86,9 @@ public class WidgetVisibilitySteps {
         return territory;
     }
 
-    @Given("^Widget is turned off for my country only$")
-    public void turnOffWidgetForCountry(){
+    @Given("^Widget is turned off for my country only for (.*)$")
+    public void turnOffWidgetForCountry(String tenant){
+        Tenants.setTenantUnderTestNames(tenant);
         String territory, country;
         if(ConfigManager.isRemote()){
             territory="North America";
@@ -104,8 +106,9 @@ public class WidgetVisibilitySteps {
         }
     }
 
-    @Given("^Widget is disabled for (.*) territory but is enabled for (.*) User's country$")
-    public void turnOffWidgetForTerritory(String territory, String country){
+    @Given("^Widget is disabled for (.*) territory but is enabled for (.*) User's country for (.*)$")
+    public void turnOffWidgetForTerritory(String territory, String country, String tenant){
+        Tenants.setTenantUnderTestNames(tenant);
         if(ConfigManager.isRemote()){
             territory="North America";
             country="United States";
