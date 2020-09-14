@@ -24,10 +24,10 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = ".//div[contains(text(),'department')]/parent::div/following-sibling::div")
     private WebElement openDepartmentDropdownButton;
 
-    @FindBy(css = "[class^='cl-r-select__option']")
+    @FindBy(xpath = "//div[contains(@class, 'cl-r-select__option')]")
     private WebElement availableAgentOrDepartment;
 
-    @FindBy(css = ".cl-r-select__option")
+    @FindBy(xpath = "//div[contains(@class, 'cl-r-select__option')]")
     private List<WebElement> availableAgenOrDepartmenttList;
 
     @FindBy(xpath = ".//div[@class='Select-control']")

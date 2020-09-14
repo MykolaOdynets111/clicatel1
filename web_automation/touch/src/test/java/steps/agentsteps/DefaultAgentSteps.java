@@ -95,18 +95,21 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyIfAgentReceivesConversationRequest(String agent) {
         boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(15);
         int sessionCapacity = 0;
+        List<SupportHoursItem> supportHours = null;
+        List<SupportHoursItem> supportHoursUpdated = null;
         if(!isConversationShown){
             sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
             if (sessionCapacity < 50) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
-        }
-        List<SupportHoursItem> supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
-        List<SupportHoursItem> supportHoursUpdated = null;
-        if(supportHours.size()<7){
-            ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-            supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+
+            supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+            if(supportHours.size()<7){
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+            }
+
+            isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(10);
         }
 
-        isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(10);
         Assert.assertTrue(isConversationShown,
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
