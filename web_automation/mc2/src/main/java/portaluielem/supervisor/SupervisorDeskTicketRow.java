@@ -21,7 +21,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
 
-    @FindBy(css = ".cl-r-chat-item-user-name")
+    @FindBy(css = ".cl-user-name")
     private WebElement userName;
 
     @FindBy(css = ".cl-table-user-description__location")
@@ -34,7 +34,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     private WebElement phone;
 
 
-    private String chatConsoleInboxRowNameCss = ".cl-user-name";
+   // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
     public SupervisorDeskTicketRow(WebElement element) {
         super(element);
@@ -49,17 +49,13 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
        clickElem(this.getCurrentDriver(), checkbox,0, "Ticket checkbox");
     }
 
-    public String getChatConsoleInboxRowName(){
-        WebElement name = baseWebElem.findElement(By.cssSelector(chatConsoleInboxRowNameCss));
-        return name.getText();
+    public String getName(){
+        //WebElement name = baseWebElem.findElement(By.cssSelector(chatConsoleInboxRowNameCss));
+        return  userName.getText();
     }
 
     public String getCurrentAgent(){
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
-    }
-
-    public String getUserName(){
-        return userName.getText();//getTextFromElem(this.getCurrentDriver(), userName, 5, "User name");
     }
 
     public void clickOnUserName(){

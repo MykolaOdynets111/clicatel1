@@ -9,9 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
-import portaluielem.supervisor.SupervisorDeskLiveRow;
-import portaluielem.supervisor.SupervisorLeftPanel;
-import portaluielem.supervisor.SupervisorTicketsTable;
+import portaluielem.supervisor.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,6 +63,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorLeftPanel supervisorLeftPanel;
     private ChatHeader chatHeader;
     private Profile profile;
+    private SupervisorTicketChatView supervisorTicketChatView;
+    private MessageCustomerWindow messageCustomerWindow;
 
     // == Constructors == //
 
@@ -101,6 +101,16 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public Profile getProfile() {
         profile.setCurrentDriver(this.getCurrentDriver());
         return profile;
+    }
+
+    public SupervisorTicketChatView getSupervisorTicketChatView(){
+        supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
+        return supervisorTicketChatView;
+    }
+
+    public MessageCustomerWindow getMessageCustomerWindow(){
+        messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
+        return messageCustomerWindow;
     }
 
     public boolean isLiveChatShownInSD(String userName, int wait) {
@@ -187,6 +197,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public String getOpenedChatHeader(){
         return getTextFromElem(this.getCurrentDriver(), openedChatHeader, 3, "Chat header text");
+    }
+    public void clickOnMassageCustomerbutton(){
+        getSupervisorTicketChatView().clickOnMessageCustomerButton();
     }
 
 }

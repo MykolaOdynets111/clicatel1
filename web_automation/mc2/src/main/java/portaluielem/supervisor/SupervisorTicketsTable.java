@@ -25,7 +25,7 @@ public class SupervisorTicketsTable extends AbstractUIElement {
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().filter(a -> a.getChatConsoleInboxRowName().toLowerCase()
+                .stream().filter(a -> a.getName().toLowerCase()
                         .contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
     }
@@ -41,7 +41,7 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     public List<String> getUsersNames(){
         List<String> list =  tickets.stream()
                 .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))
-                .map(e -> e.getChatConsoleInboxRowName())
+                .map(e -> e.getName())
                 .collect(Collectors.toList());
         return list;
     }

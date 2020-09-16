@@ -89,7 +89,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                         "Expected list" + expectedTickets        );
     }
 
-    @Then("^CRM ticket is created on backend with correct information$")
+    @Then("^CRM ticket is (?:created|updated) on backend with correct information$")
     public void crmTicketIsCreatedOnBackendWithCorrectInformation() {
         SoftAssert soft = new SoftAssert();
         CRMTicket actualTicketInfoFromBackend = ApiHelper.getCRMTickets().get(0);

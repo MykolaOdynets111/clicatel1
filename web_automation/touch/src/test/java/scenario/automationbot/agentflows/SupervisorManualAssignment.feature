@@ -2,7 +2,7 @@
 @agent_support_hours
 @auto_scheduler_disabled
 @dot_control
-Feature: Supervisor in box : assign ticket manually
+Feature: Supervisor desk
 
    Background:
      Given Create .Control integration for Automation Bot and adapter: fbmsg

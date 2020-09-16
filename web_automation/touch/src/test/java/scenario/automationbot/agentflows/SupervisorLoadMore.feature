@@ -1,5 +1,5 @@
 @no_widget
-Feature: Supervisor in box : verify Load more
+Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7404")
   Scenario: Supervisor desk:: Verify if possible to load ticket chats by scrolling to the bottom

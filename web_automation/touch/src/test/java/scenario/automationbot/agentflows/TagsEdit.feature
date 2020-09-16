@@ -24,4 +24,4 @@ Feature: Edit tag name
     Then Second agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information
     When Update chat tag
-    Then CRM ticket is created on backend with correct information
+    Then CRM ticket is updated on backend with correct information

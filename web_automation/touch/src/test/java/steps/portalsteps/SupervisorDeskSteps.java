@@ -36,53 +36,73 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Filter \"(.*)\" is selected by default$")
     public void filterIsSelectedByDefault(String filterName) {
-        Assert.assertEquals(getChatConsoleInboxPage().getSupervisorLeftPanel().getFilterByDefaultName(), filterName,
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getFilterByDefaultName(), filterName,
                 "Filter name by default does not match expected");
     }
 
     @Then("^Select dot control ticket checkbox$")
     public void clickThreeDotsButton(){
-        getChatConsoleInboxPage().getSupervisorTicketsTable().selectTicketCheckbox(DotControlSteps.getClient());
+        getSupervisorDeskPage().getSupervisorTicketsTable().selectTicketCheckbox(DotControlSteps.getClient());
+    }
+
+    @When("^Agent select (.*) ticket$")
+    public void selectTicket(String chanel){
+        getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(getUserName(chanel)).clickOnUserName();
+    }
+
+    @When("^Click on Massage Customer button$")
+    public void clickOnMassageCustomer(){
+        getSupervisorDeskPage().clickOnMassageCustomerbutton();
+    }
+
+    @Then("^Message Customer Window is opened$")
+    public void verifyMessageCustomerWindowIsOpened(){
+        Assert.assertEquals(getSupervisorDeskPage().getMessageCustomerWindow().getHeader(), "Message Customer", "incorrect header Was shown for   Message Customer Window");
+    }
+
+    @When("^Supervisor send (.*) to agent trough (.*) chanel$")
+    public void sendTicketMessageToCustomer(String message, String chanel){
+        getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmiteButton();
     }
 
     @When("Click 'Route to scheduler' button")
     public void clickRouteToScheduler(){
-        getChatConsoleInboxPage().getSupervisorTicketsTable().clickRouteToSchedulerButton();
+        getSupervisorDeskPage().getSupervisorTicketsTable().clickRouteToSchedulerButton();
     }
 
     @When("Click 'Assign manually' button")
     public void clickAssignManually(){
-        getChatConsoleInboxPage().getSupervisorTicketsTable().clickAssignManuallyButton();
+        getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton();
     }
 
     @Then("^Supervisor Desk Live has new conversation (.*) request$")
     public void verifySupervisorDeskHasRequestFormSocialUser(String channel){
         String userName = getUserName(channel);
-        Assert.assertTrue(getChatConsoleInboxPage().isLiveChatShownInSD(userName, 5),
+        Assert.assertTrue(getSupervisorDeskPage().isLiveChatShownInSD(userName, 5),
                 "There is no Live chat on Supervisor Desk Live (Client ID: "+userName+")");
     }
 
     @And("Agent click On Live Supervisor Desk chat from (.*) channel")
     public void clickOnLiveChat(String channel){
-        getChatConsoleInboxPage().getSupervisorDeskLiveRow(getUserName(channel)).clickOnUserName();
+        getSupervisorDeskPage().getSupervisorDeskLiveRow(getUserName(channel)).clickOnUserName();
     }
 
     @Then("Supervisor Desk Live chat container header has (.*) User photo, name and (.*) channel")
     public void verifyCorrectHeaderInfo(String channel, String image){
         String userName = getUserName(channel);
         SoftAssert soft =new SoftAssert();
-        soft.assertTrue(getChatConsoleInboxPage().getChatHeader().isAvatarContainUserNameFirstLetter(userName),
+        soft.assertTrue(getSupervisorDeskPage().getChatHeader().isAvatarContainUserNameFirstLetter(userName),
                 "Header Avatar does not contain first letter of the user name: " + userName);
-        soft.assertEquals(getChatConsoleInboxPage().getChatHeader().getChatHeaderText(), userName,
+        soft.assertEquals(getSupervisorDeskPage().getChatHeader().getChatHeaderText(), userName,
                 "Incorrect Name was shown in chat header");
-        soft.assertTrue(getChatConsoleInboxPage().getChatHeader().isValidChannelImg(image),
+        soft.assertTrue(getSupervisorDeskPage().getChatHeader().isValidChannelImg(image),
                 "Icon for channel in chat header as not expected");
         soft.assertAll();
     }
 
     @Then("Supervisor Desk Live chat Profile is displayed")
     public void profileFormIsShown(){
-        Assert.assertTrue(getChatConsoleInboxPage().getProfile().isProfilePageDisplayed(),
+        Assert.assertTrue(getSupervisorDeskPage().getProfile().isProfilePageDisplayed(),
                 "Profile form is not shown");
     }
 
@@ -90,11 +110,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void verifyCurrentAgent(String agent){
         Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
         String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
-        getChatConsoleInboxPage().getCurrentDriver().navigate().refresh();
-        getChatConsoleInboxPage().waitForConnectingDisappear(2,5);
+        getSupervisorDeskPage().getCurrentDriver().navigate().refresh();
+        getSupervisorDeskPage().waitForConnectingDisappear(2,5);
         boolean result = false;
         for (int i = 0; i < 8; i++){
-            if(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()))){
+            if(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()))){
                 result = true;
                 break;
             }
@@ -106,12 +126,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Ticket is present on (.*) filter page")
     public void verifyUnassignedType(String status){
         if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()).equalsIgnoreCase("No current Agent"),
+            Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()).equalsIgnoreCase("No current Agent"),
                     "Unassigned ticket should be present");
         } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Overdue")){
             Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent");
             String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
-            Assert.assertTrue(agentName.equals(getChatConsoleInboxPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
+            Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
                     "Ticket should be present on " + status + " filter page");
         }
     }
@@ -127,30 +147,30 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^'Assign chat' window is opened$")
     public void assignChatWindowOpened(){
-        Assert.assertTrue(getChatConsoleInboxPage().isAssignChatWindowOpened()
+        Assert.assertTrue(getSupervisorDeskPage().isAssignChatWindowOpened()
                 , "'Assign chat' window is not opened");
     }
 
     @When("^I assign chat on (.*)$")
     public void assignChatManually(String agent){
         String agentName = getAgentName(agent);
-        getChatConsoleInboxPage().assignChatOnAgent(agentName);
+        getSupervisorDeskPage().assignChatOnAgent(agentName);
     }
 
     @Given("^Save shown tickets$")
     public void saveChats() {
-        shownUsers = getChatConsoleInboxPage().getSupervisorTicketsTable().getUsersNames();
+        shownUsers = getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames();
     }
 
     @Given("^Supervisor scroll page to the bottom$")
     public void scrollTicketsDown(){
-        getChatConsoleInboxPage().scrollTicketsDown();
+        getSupervisorDeskPage().scrollTicketsDown();
     }
 
     @Given("^More tickets are loaded$")
     public void moreRecordsAreShown(){
         SoftAssert soft = new SoftAssert();
-        boolean result = getChatConsoleInboxPage().areNewChatsLoaded(shownUsers.size(), 4);
+        boolean result = getSupervisorDeskPage().areNewChatsLoaded(shownUsers.size(), 4);
         soft.assertTrue(result, "New chats are not loaded\n");
         soft.assertAll();
     }
@@ -163,17 +183,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("Verify (.*) ticket types available in dropdown on Inbox")
     public void verifyTicketTypes(List<String> ticketTypes){
         //ToDo add numbers of tickets verification
-        Assert.assertEquals(getChatConsoleInboxPage().getTicketTypes(), ticketTypes, "Ticket types are different");
+        Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
     }
 
     @When("User select (.*) ticket type")
     public void selectTicketType(String type){
-        getChatConsoleInboxPage().selectTicketType(type);
+        getSupervisorDeskPage().selectTicketType(type);
     }
 
     @Then("Verify that live chat is displayed with (.*) message to agent")
     public void verifyLiveChatPresent(String message){
-        Assert.assertTrue(getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient()).isUserMessageShown(message), "Messages is not the same");
+        Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient()).isUserMessageShown(message), "Messages is not the same");
     }
 
 
@@ -181,7 +201,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     public void openChatView(){
         SoftAssert soft = new SoftAssert();
         List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
-        ChatBody inboxChatBody = getChatConsoleInboxPage().openInboxChatBody(DotControlSteps.getClient());
+        ChatBody inboxChatBody = getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient());
         messagesFromChatBody.removeAll(Collections.singleton(""));
         soft.assertEquals(inboxChatBody.getAllMessages(), messagesFromChatBody
                 , "Incorrect messages with times were shown on Chat view");
