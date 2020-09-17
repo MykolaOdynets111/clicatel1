@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.AgentHomePage;
 import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
 import cucumber.api.java.en.And;
@@ -196,7 +197,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient()).isUserMessageShown(message), "Messages is not the same");
     }
 
-
     @When("Verify that correct messages and timestamps are shown on Chat View")
     public void openChatView(){
         SoftAssert soft = new SoftAssert();
@@ -207,6 +207,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 , "Incorrect messages with times were shown on Chat view");
         AgentConversationSteps.getMessagesFromChatBody().remove();
         soft.assertAll();
+    }
+
+    @Then ("^Live chats (.*) filter has correct name and correct chats number$")
+    public void verifyAgentNameOnLiveChatFilter(String agent){
+        String agentName = getAgentName(agent);
+        int numberOfChats = ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content").size();
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats,"Number of chats on Supervisor desk is different from Agent desk chats");
     }
 
 }
