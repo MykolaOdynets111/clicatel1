@@ -1,15 +1,8 @@
 @agent_support_hours
 @no_widget
 @dot_control
+@start_server
 Feature: Supervisor desk
-
-#  Background:
-#    And User select Automation Bot tenant
-#    Given Set agent support hours with day shift
-#    Given I open portal
-#    And Login into portal as an admin of Automation Bot account
-#    When I select Touch in left menu and Supervisor Desk in submenu
-#    And Click chat icon
 
   Background:
     Given Create .Control integration for Automation Bot and adapter: fbmsg
@@ -20,8 +13,6 @@ Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7404")
   Scenario: Supervisor desk:: verify if Supervisor is able to send message to customer via message customer option
-#    When User enter connect to Support into widget input field
-#    Then User should see 'out_of_support_hours' text response for his 'connect to Support' input
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Supervisor Desk in submenu
@@ -30,4 +21,4 @@ Feature: Supervisor desk
     And Click on Massage Customer button
     Then Message Customer Window is opened
     When Supervisor send hello to agent trough adapter:fbmsg chanel
-#    Then User should see 'hello' text response for his 'connect to Support' input
+    Then Verify dot .Control returns hello response during 10 seconds

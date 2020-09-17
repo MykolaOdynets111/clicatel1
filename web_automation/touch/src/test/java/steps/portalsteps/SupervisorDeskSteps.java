@@ -52,7 +52,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("^Click on Massage Customer button$")
     public void clickOnMassageCustomer(){
-        getSupervisorDeskPage().clickOnMassageCustomerbutton();
+        getSupervisorDeskPage().getSupervisorTicketChatView().clickOnMessageCustomerButton();;
     }
 
     @Then("^Message Customer Window is opened$")
@@ -62,7 +62,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("^Supervisor send (.*) to agent trough (.*) chanel$")
     public void sendTicketMessageToCustomer(String message, String chanel){
-        getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmiteButton();
+        getSupervisorDeskPage().getMessageCustomerWindow().selectChanel(chanel).setMessageText(message).clickSubmitButton();
     }
 
     @When("Click 'Route to scheduler' button")

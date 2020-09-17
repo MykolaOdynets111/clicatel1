@@ -41,11 +41,13 @@ public class MessageCustomerWindow extends AbstractUIElement {
     }
 
     public MessageCustomerWindow setMessageText(String text){
+        //todo remove wait after spinner would be added
+        waitFor(3000);
         inputText(this.getCurrentDriver(), textInput, 1, "Message Input", text);
         return this;
     }
 
-    public MessageCustomerWindow clickSubmiteButton(){
+    public MessageCustomerWindow clickSubmitButton(){
         clickElem(this.getCurrentDriver(), sendButton, 1, "Send");
         return this;
     }

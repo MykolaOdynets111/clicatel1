@@ -198,8 +198,4 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public String getOpenedChatHeader(){
         return getTextFromElem(this.getCurrentDriver(), openedChatHeader, 3, "Chat header text");
     }
-    public void clickOnMassageCustomerbutton(){
-        getSupervisorTicketChatView().clickOnMessageCustomerButton();
-    }
-
 }
