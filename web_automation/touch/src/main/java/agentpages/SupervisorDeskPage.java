@@ -60,6 +60,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private AssignChatWindow assignChatWindow;
     private ChatBody chatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
+    private SupervisorClosedChatsTable supervisorClosedChatsTable;
     private SupervisorLeftPanel supervisorLeftPanel;
     private ChatHeader chatHeader;
     private Profile profile;
@@ -111,6 +112,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public MessageCustomerWindow getMessageCustomerWindow(){
         messageCustomerWindow.setCurrentDriver(this.getCurrentDriver());
         return messageCustomerWindow;
+    }
+
+    public SupervisorClosedChatsTable supervisorClosedChatsTable(){
+        supervisorClosedChatsTable.setCurrentDriver(this.getCurrentDriver());
+        return supervisorClosedChatsTable;
     }
 
     public boolean isLiveChatShownInSD(String userName, int wait) {

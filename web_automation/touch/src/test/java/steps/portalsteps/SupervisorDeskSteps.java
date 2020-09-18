@@ -16,10 +16,9 @@ import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SupervisorDeskSteps extends AbstractPortalSteps {
 
@@ -212,8 +211,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then ("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent){
         String agentName = getAgentName(agent);
-        int numberOfChats = ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content").size();
+        int numberOfChats = ApiHelper.getActiveChatsByAgent(agent).getBody().jsonPath().getList("content").size();
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats,"Number of chats on Supervisor desk is different from Agent desk chats");
+    }
+
+    @Then("^By default the Chat Ended is sorted in descending order")
+    public void verifySClosedChatsSorting(){
+        List<LocalDateTime> listOfDates = getSupervisorDeskPage().supervisorClosedChatsTable().getClosedChatsDates();
+        Assert.assertTrue(listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates)
+                , "Closed chats are not sorted in descending order");
     }
 
 }
