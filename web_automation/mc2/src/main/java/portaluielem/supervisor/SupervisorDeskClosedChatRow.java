@@ -23,7 +23,7 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     private WebElement date;
 
     public LocalDateTime getDate() {
-        String stringDate = getTextFromElem(this.getCurrentDriver(), date, 1, "Date cell").replace("\n", " ");
+        String stringDate = getTextFromElem(this.getCurrentDriver(), date, 5, "Date cell").replace("\n", " ");
          return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
     }
 }

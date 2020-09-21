@@ -215,11 +215,23 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats,"Number of chats on Supervisor desk is different from Agent desk chats");
     }
 
-    @Then("^By default the Chat Ended is sorted in descending order")
-    public void verifySClosedChatsSorting(){
+    @Then("^By default the Chat Ended is sorted in (.*) order$")
+    public void verifySClosedChatsSorting(String order){
         List<LocalDateTime> listOfDates = getSupervisorDeskPage().supervisorClosedChatsTable().getClosedChatsDates();
-        Assert.assertTrue(listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates)
-                , "Closed chats are not sorted in descending order");
+        boolean sortedStatus;
+        if (order.contains("desc")){
+            sortedStatus = listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates);
+        } else if(order.contains("asc")){
+            sortedStatus = listOfDates.stream().sorted().collect(Collectors.toList()).equals(listOfDates);
+        } else{
+            throw new AssertionError("Incorrect order type was provided");
+        }
+        Assert.assertTrue(sortedStatus, "Closed chats are not sorted in descending order");
+    }
+
+    @When("^Agent click on the arrow of Chat Ended$")
+    public void clickOnTheArrowOfChatEnded(){
+        getSupervisorDeskPage().supervisorClosedChatsTable().clickAscendingArrowOfChatEndedColumn();
     }
 
 }

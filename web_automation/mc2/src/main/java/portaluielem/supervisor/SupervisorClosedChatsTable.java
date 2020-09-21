@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 @FindBy(css = ".chats-list-wrapper")
 public class SupervisorClosedChatsTable extends AbstractUIElement {
 
+    @FindBy (xpath = "//span[text()='Chat Ended']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    private  WebElement ascendingArrowOfChatEndedColumn;
+
     @FindBy(css =".chats-list .cl-table-row")
     private List<WebElement> closedChats;
 
@@ -21,5 +24,8 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
                 .stream().map(a -> a.getDate()).collect(Collectors.toList());
     }
 
+    public void clickAscendingArrowOfChatEndedColumn(){
+        clickElem(this.getCurrentDriver(), ascendingArrowOfChatEndedColumn, 3, "Ascending Arrow Of Chat Ended Column");
+    }
 
 }
