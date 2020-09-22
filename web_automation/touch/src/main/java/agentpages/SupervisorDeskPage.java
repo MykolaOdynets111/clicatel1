@@ -17,39 +17,23 @@ import java.util.stream.Collectors;
 
 public class SupervisorDeskPage extends PortalAbstractPage {
 
-    @FindBy(xpath = "//div[@id='react-select-3--value']//span[@id='react-select-3--value-item']")
-    private WebElement filterByDefault;
-
     @FindBy(css = ".cl-r-chat-item")
     private List<WebElement> chatsLive;
-
-    @FindBy(xpath = "//span[text() ='Conversation type:']/following-sibling::div")
-    private WebElement conversationTypeDropdown;
-
-    @FindBy(css = ".cl-r-select__option")
-    private List<WebElement> dropdownsTypesOptions;
-
-    @FindBy(xpath = "//button[text() ='Apply filters']")
-    private WebElement applyFiltersButton;
-
-    @FindBy(css = "div.cl-actions-bar button")
-    private WebElement loadMoreButton;
-
-    @FindBy(css = "div.cl-actions-bar div")
-    private WebElement numberOfChats;
 
     @FindBy (css = ".fade.dialog.in.modal")
     private WebElement assignWindowsDialog;
 
-    @FindBy(id = "ticketing-iframe")
-    private WebElement iframeIdElement;
-
     @FindBy(css = ".chats-list-extended-view-header-text")
     private WebElement openedChatHeader;
 
-    private String spinner = "//div[@class='spinner']";
+    @FindBy(xpath = "//div[text()='Loading results']")
+    private WebElement loadingResults;
 
-    private String loadingMoreTickets = ".supervisor-tickets__loading-more";
+    @FindBy(css = ".supervisor-tickets__loading-more")
+    private WebElement loadingMoreTickets;
+
+    @FindBy(xpath = "//div[@class='spinner']")
+    private WebElement spinner;
 
     private String chatName = "//h2[@selenium-id='roster-item-user-name' and text() ='%s']";
 
@@ -66,6 +50,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private Profile profile;
     private SupervisorTicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
+    private SupervisorDeskHeader supervisorDeskHeader;
 
     // == Constructors == //
 
@@ -119,6 +104,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorClosedChatsTable;
     }
 
+    public SupervisorDeskHeader supervisorDeskHeader(){
+        supervisorDeskHeader.setCurrentDriver(this.getCurrentDriver());
+        return  supervisorDeskHeader;
+    }
+
     public boolean isLiveChatShownInSD(String userName, int wait) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(chatName, userName), wait);
     }
@@ -152,31 +142,17 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         waitForMoreTicketsAreLoading(2,5);
     }
 
-    public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
-        try{
-            try {
-                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToAppear);
-            }catch (TimeoutException e){ }
-            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToDisappear);
-            return true;
-        }
-        catch (TimeoutException e){
-            return false;
-        }
+    public void waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        waitForAppearAndDisappear(this.getCurrentDriver(), spinner, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
 
-    public boolean waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
-        try{
-            try {
-                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear);
-            }catch (TimeoutException e){ }
-            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToDisappear);
-            return true;
-        }
-        catch (TimeoutException e){
-            return false;
-        }
+    public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
+
+     public void waitForLoadingResultsDisappear(int timeToAppear, int timeToDisappear){
+         waitForAppearAndDisappear(this.getCurrentDriver(), loadingResults, timeToAppear, timeToDisappear);
+     }
 
     public boolean areNewChatsLoaded(int previousChats, int wait){
         for(int i = 0; i< wait*2; i++){

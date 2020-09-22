@@ -1,6 +1,6 @@
 @no_widget
 @dot_control
-Feature: Supervisor able to check live chats
+Feature: Supervisor desk
 
   Background:
     Given Create .Control integration for Automation and adapter: fbmsg

@@ -2,7 +2,7 @@
 @auto_scheduler_disabled
 @dot_control
 @no_widget
-Feature: Supervisor able to filter Tickets
+Feature: Supervisor Desk
 
   Background:
     Given Create .Control integration for Automation and adapter: fbmsg

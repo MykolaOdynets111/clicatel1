@@ -234,4 +234,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().supervisorClosedChatsTable().clickAscendingArrowOfChatEndedColumn();
     }
 
+    @And ("Supervisor put a check mark on \"Flagged Only\" and click \"Apply Filters\" button")
+    public void filterFlaggedChats(){
+        getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
 }
