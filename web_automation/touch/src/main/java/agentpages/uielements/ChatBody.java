@@ -23,6 +23,9 @@ public class ChatBody extends AbstractUIElement {
 
     private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]//li[not(@class='empty')]";
 
+    @FindBy(css = ".spinner")
+    private WebElement spinner;
+
     @FindBy(css = "[selenium-id=empty-avatar]")
     private WebElement userProfileIcon;
 
@@ -98,10 +101,13 @@ public class ChatBody extends AbstractUIElement {
         } catch(TimeoutException e){
             Assert.fail("Chat body is not visible");
         }
+        waitForAppearAndDisappear(this.getCurrentDriver(), spinner, 1, 5);
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 8);
         WebElement message = this.getCurrentDriver().findElement(By.xpath(locator));
-
+        if (isElementShownByXpath(this.getCurrentDriver(), locator, 3 )){
+            return true;
+        }
         return wheelScrollUpAndIsDisplayed(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),  message);
     }
 

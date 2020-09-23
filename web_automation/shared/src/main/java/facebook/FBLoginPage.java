@@ -9,8 +9,8 @@ import socialaccounts.FacebookUsers;
 
 public class FBLoginPage extends AbstractSocialPage {
 
-    @FindBy(css = "div#bluebarRoot")
-    private WebElement facebookHeader;
+    @FindBy(xpath = "//span[text()='Will']")
+    private WebElement facebookUserName;
 
     @FindBy(css = "form#login_form")
     private WebElement loginForm;
@@ -53,7 +53,7 @@ public class FBLoginPage extends AbstractSocialPage {
         FacebookUsers.setLoggedInUser(fbUser);
         if (isElementShown(this.getCurrentDriver(), loginForm, 2)) loginForm.submit();
         else logInButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), facebookHeader, 10);
+        waitForElementToBeVisible(this.getCurrentDriver(), facebookUserName, 10);
     }
 
     public void loginUserForFBIntegration(){

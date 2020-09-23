@@ -89,7 +89,7 @@ public interface JSHelper extends WebActions{
     default boolean wheelScrollUpAndIsDisplayed(WebDriver driver, WebElement scrolArea, WebElement element){
         for (int i=0; i<4; i++)  {
             if(isElementShown(driver, element, 0)){
-                wheelScroll(driver, scrolArea, 500, 0,0);
+                wheelScroll(driver, scrolArea, 2000, 0,0);
                 return true;
             }
             wheelScroll(driver, scrolArea, -200, 0,0);

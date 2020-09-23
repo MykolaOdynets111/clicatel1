@@ -6,26 +6,20 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-@FindBy(xpath = "//div[@class='fbNubFlyout fbDockChatTabFlyout uiContextualLayerParent']")
+@FindBy(css = "[data-testid='Keycommand_wrapper_ModalLayer']")
 public class MessengerWindow extends AbstractUIElement {
 
-    private String inputFieldXPATHLocator = "//div[@role='combobox']";
-    private String toUserMessage = "//span[text()='%s']//following::span[contains(text(), \"%s\")]";
+    private String inputFieldXPATHLocator = ".//div[@role='textbox']";
+    private String toUserMessage = ".//div[text()='%s']//following::div[contains(text(), \"%s\")]";
 
-    @FindBy(xpath = "//div[contains(@class,'clearfix titlebar')]/div/div/div[2]/div[2]/div[3]")
-    private WebElement headerGearButtonContainer;
+    @FindBy(xpath = ".//div[@aria-label='Chat Settings']")
+    private WebElement headerChatSettingsButton;
 
-    @FindBy(xpath = "//div[@data-testid='fanta_dropdown_menu_icon']/a")
-    private WebElement gearButton;
-
-    @FindBy(xpath = "//ul[@role='menu']")
-    private WebElement popupMenu;
-
-    @FindBy(xpath = "//div[@data-testid='fanta_dropdown_menu_delete_conversation']")
+    @FindBy(xpath = "//span[text()='Delete conversation']")
     private WebElement deleteConversationButton;
 
-    @FindBy(xpath = "//a[text()='Delete Conversation']")
-    private WebElement confirmDeletingConverstionButton;
+    @FindBy(xpath = "//div[@aria-label='Delete Conversation' and @tabindex='0']")
+    private WebElement confirmDeletingConversationButton;
 
     public void waitUntilLoaded() {
         waitForElementToBeVisible(this.getCurrentDriver(), this, 5);
@@ -41,13 +35,9 @@ public class MessengerWindow extends AbstractUIElement {
 
     public void deleteConversation(){
 //        enterMessage("end");
-        moveToElement(this.getCurrentDriver(), headerGearButtonContainer);
-        gearButton.click();
-        if(!isElementShown(this.getCurrentDriver(), popupMenu,2)) gearButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), popupMenu, 9);
-        deleteConversationButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), confirmDeletingConverstionButton, 9);
-        confirmDeletingConverstionButton.click();
+        clickElem(this.getCurrentDriver(), headerChatSettingsButton, 1 ,"Chat Setting");
+        clickElem(this.getCurrentDriver(), deleteConversationButton, 3 ,"Delete conversation");
+        clickElem(this.getCurrentDriver(), confirmDeletingConversationButton, 3 ,"Delete conversation");
     }
 
     public boolean isExpectedToUserMessageShown(String userMessage, String expectedResponse, int wait) {
@@ -62,7 +52,7 @@ public class MessengerWindow extends AbstractUIElement {
 
     public void waitForWelcomeMessage(String welcomeMessage, int wait){
         try{
-            waitForElementToBeVisibleByXpath(this.getCurrentDriver(),"//span[text()=\""+welcomeMessage+"\"]", wait);
+            waitForElementToBeVisibleByXpath(this.getCurrentDriver(),"//div[text()=\""+welcomeMessage+"\"]", wait);
         } catch (WebDriverException ignored){
 
         }

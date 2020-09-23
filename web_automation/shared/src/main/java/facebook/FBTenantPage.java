@@ -21,7 +21,7 @@ public class FBTenantPage extends AbstractSocialPage {
 
 
     @FindAll({
-            @FindBy(xpath = "//button[text()='Send Message']"),
+            @FindBy(xpath = "//span[contains(text(), 'Send Message')]"),
             @FindBy(xpath = "//button/*[contains(text(), 'Send Message')]")
     })
     private WebElement sendMessageButton;
