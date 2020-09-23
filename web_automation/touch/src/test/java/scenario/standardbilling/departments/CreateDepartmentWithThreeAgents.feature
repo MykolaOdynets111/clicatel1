@@ -1,7 +1,7 @@
 @no_widget
 @remove_dep
 @newagent
-Feature: Departments: Create a department with 3 agents
+Feature: Departments
 
   Background:
     Given Brand New Standard Billing agent is created

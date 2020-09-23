@@ -1,6 +1,6 @@
 @no_widget
 @remove_dep
-Feature: Departments : Edit department name/description
+Feature: Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14859")
   Scenario: Edit department name and description

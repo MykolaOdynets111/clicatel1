@@ -28,6 +28,10 @@ public class CreateDepartmentForm extends AbstractUIElement {
     @FindBy(xpath = ".//button[text() = 'Save']")
     private WebElement saveButton;
 
+    @FindBy(css =".cl-r-form-group__error-text")
+    private WebElement duplicateNameErrorMessage;
+
+
     @Step(value = "Set text to the Name field")
     public CreateDepartmentForm setNameField(String name){
         clickElem(this.getCurrentDriver(), nameField, 3, "name field");
@@ -73,4 +77,12 @@ public class CreateDepartmentForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), saveButton, 10, "Save button");
     }
 
+    @Step(value = "Click Create button")
+    public boolean isCreateButtonActive(){
+       return isElementEnabled(this.getCurrentDriver(), createButton, 2);
+    }
+
+    public String getDuplicateNameErrorMessage(){
+       return getTextFromElem(this.getCurrentDriver(), duplicateNameErrorMessage, 2, "Duplicate Name Error Message").trim();
+    }
 }

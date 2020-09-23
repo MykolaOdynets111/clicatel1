@@ -1,6 +1,6 @@
 @remove_dep
 @agent_support_hours
-Feature: Departments: Verify if possible to transfer overnight ticket to department
+Feature: Departments
 
   Background:
     Given I login as agent of Standard Billing

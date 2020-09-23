@@ -1,5 +1,5 @@
 @remove_dep
-Feature: Departments: Verify if possible to transfer chat to department
+Feature: Departments
 
   Background:
     Given I login as agent of Standard Billing

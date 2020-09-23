@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.DepartmentsManagementPage;
+import portaluielem.CreateDepartmentForm;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.portalsteps.AbstractPortalSteps;
 
@@ -22,15 +23,17 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     @Then("^Departments Management page should be shown$")
     public void verifyDepartmentsManagementPageShown(){
         Assert.assertTrue(getDepartmentsManagementPage().isDepartmentsPageOpened(),
-                "Departments Management page not shown");
+                "Departments Management should be shown");
     }
 
-    @Then("^Create Department with (.*) name (.*) description and (.*) Agent$")
+    @Then("^Agent create Department with (.*) name (.*) description and (.*) Agent$")
     public void createDepartment(String name, String description, String agent){
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectDepartmentAgentsCheckbox(agent).clickCreateButton();
         Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name, 5),
                 "Departments was not created");
     }
+
+
 
     @Then("^Create Department with (.*) name (.*) description and with (.*) Agents")
     public void createDepartmentWithSeveralAgents(String name, String description, int agent){
@@ -97,9 +100,13 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         ApiHelper.createDepartment(name, department, agent);
     }
 
-    @Then("Verify Department Duplication Alert message displayed")
-    public void verifyDuplicationAlert(){
-        Assert.assertEquals(getDepartmentsManagementPage().getDuplicationAlertText(), "Department already exist.", "Duplication message is not the same");
+    @Then("Verify Agent cannot create department with duplicate (.*) name")
+    public void verifyDuplicationAlert(String name){
+        SoftAssert softAssert = new SoftAssert();
+        CreateDepartmentForm createDepartmentForm = getDepartmentsManagementPage().clickAddNewDepartmentButton();
+        softAssert.assertEquals(createDepartmentForm.setNameField(name).getDuplicateNameErrorMessage(), "This department name is already in use.", "Duplication message is not the same");
+        softAssert.assertFalse(createDepartmentForm.isCreateButtonActive(), "Create button should be disabled");
+        softAssert.assertAll();
     }
 
 
