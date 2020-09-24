@@ -8,8 +8,6 @@ Feature: Supervisor see chat view with correct info
     Given Send parameterized init call with clientId context correct response is returned
     And Send message call
 
-#  @TestCaseId("https://jira.clickatell.com/browse/TPORT-15682")
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-42295")
   Scenario: Supervisor desk: : verify if correct chat type along with time stamp is shown in chat view
     Given I login as agent of Automation
     Then Agent has new conversation request from dotcontrol user

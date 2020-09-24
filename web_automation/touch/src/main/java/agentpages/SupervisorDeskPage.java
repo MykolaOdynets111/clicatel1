@@ -12,6 +12,7 @@ import portaluielem.*;
 import portaluielem.supervisor.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -120,6 +121,20 @@ public class SupervisorDeskPage extends PortalAbstractPage {
                  .stream().filter(a -> a.getUserName().toLowerCase()
                         .contains(userName.toLowerCase()))
                 .findFirst().orElseThrow(() -> new AssertionError("Cannot find chat with user " + userName));
+    }
+
+    public boolean verifyChanelFilter(){
+        Set<String> channels = chatsLive.stream()
+                .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .collect(Collectors.toList())
+                .stream().map(a -> a.getIconName()).collect(Collectors.toSet());
+        return channels.size() == 1;
+    }
+
+    public boolean verifyChanelOfTheChatIsPresent(String channelName){
+        return  chatsLive.stream()
+                .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .collect(Collectors.toList()).get(0).getIconName().equalsIgnoreCase(channelName);
     }
 
     public String getCurrentAgentOfTheChat(String userName){

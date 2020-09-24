@@ -7,6 +7,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.api.java.en_scouse.An;
 import datamanager.Tenants;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -80,6 +81,21 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         String userName = getUserName(channel);
         Assert.assertTrue(getSupervisorDeskPage().isLiveChatShownInSD(userName, 5),
                 "There is no Live chat on Supervisor Desk Live (Client ID: "+userName+")");
+    }
+
+    @Then("^Supervisor Desk Live dos not have conversation (.*) request$")
+    public void verifySupervisorDeskDoesNotNaveRequestFormSocialUser(String channel){
+        String userName = getUserName(channel);
+        Assert.assertFalse(getSupervisorDeskPage().isLiveChatShownInSD(userName, 5),
+                "There should not be chat on Supervisor Desk Live (Client ID: "+userName+")");
+    }
+
+    @Then("^Verify that only (.*) chats are shown$")
+    public void verifyChatsChannelsFilter(String channelName){
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getSupervisorDeskPage().verifyChanelOfTheChatIsPresent(channelName), channelName + " channel name should be shown.");
+        softAssert.assertTrue(getSupervisorDeskPage().verifyChanelFilter(),
+                "Should be only "+ channelName +" channel chats");
     }
 
     @And("Agent click On Live Supervisor Desk chat from (.*) channel")
@@ -234,9 +250,15 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().supervisorClosedChatsTable().clickAscendingArrowOfChatEndedColumn();
     }
 
-    @And ("Supervisor put a check mark on \"Flagged Only\" and click \"Apply Filters\" button")
+    @And ("^Supervisor put a check mark on \"Flagged Only\" and click \"Apply Filters\" button$")
     public void filterFlaggedChats(){
         getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @And("^Agent select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
+    public void selectChanelFilter(String name){
+        getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 }
