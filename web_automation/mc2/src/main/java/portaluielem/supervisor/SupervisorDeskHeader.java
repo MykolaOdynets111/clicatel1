@@ -22,6 +22,12 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     @FindBy(xpath=".//div[contains(@id, 'react-select')]")
     private List<WebElement> dropdownOptions;
 
+    @FindBy(css = "#channel .cl-r-select__placeholder")
+    private WebElement channelFilterValue;
+
+    @FindBy(css = "#sentiments .cl-r-select__placeholder")
+    private WebElement sentimentsFilterValue;
+
     public void clickApplyFilterButton(){
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
     }
@@ -38,4 +44,13 @@ public class SupervisorDeskHeader extends AbstractUIElement {
                         new AssertionError(chanelName + " user is not shown on Manage Agent User page")).click();
     return this;
     }
+
+    public String getChannelFilterValue(){
+        return getTextFromElem(this.getCurrentDriver(), channelFilterValue, 1, "Channels Filter Value");
+    }
+
+    public String getSentimentsFilterValue(){
+        return getTextFromElem(this.getCurrentDriver(), sentimentsFilterValue, 1, "Sentiments Filter Value");
+    }
+
 }

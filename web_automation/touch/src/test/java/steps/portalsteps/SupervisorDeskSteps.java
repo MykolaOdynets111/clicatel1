@@ -261,4 +261,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
+
+    @Then("^\"All Channels\" and \"All Sentiments\" selected as default$")
+    public void  defaultLiveChatsFilters(){
+        SoftAssert soft = new SoftAssert();
+        soft.assertEquals(getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().getChannelFilterValue() , "All Channels", "Incorrect default Channels filter is set by default");
+        soft.assertEquals(getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().getSentimentsFilterValue() , "All Sentiments", "Incorrect default Sentiments filter is set by default");
+        soft.assertAll();
+    }
 }
