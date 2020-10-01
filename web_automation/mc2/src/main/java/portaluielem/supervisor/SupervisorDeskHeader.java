@@ -19,6 +19,9 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     @FindBy(id = "channel")
     private WebElement channelsDropdown;
 
+    @FindBy(id = "sentiments")
+    private WebElement sentimentDropdown;
+
     @FindBy(xpath=".//div[contains(@id, 'react-select')]")
     private List<WebElement> dropdownOptions;
 
@@ -41,8 +44,16 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), channelsDropdown, 1, "Channels Dropdown");
         dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(chanelName))
                 .findFirst().orElseThrow(() ->
-                        new AssertionError(chanelName + " user is not shown on Manage Agent User page")).click();
+                        new AssertionError(chanelName + " chanel is not found")).click();
     return this;
+    }
+
+    public SupervisorDeskHeader selectSentiment(String sentimentName){
+        clickElem(this.getCurrentDriver(), sentimentDropdown, 1, "Sentiment Dropdown");
+        dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(sentimentName))
+                .findFirst().orElseThrow(() ->
+                new AssertionError(sentimentName + " sentiment is not found")).click();
+        return this;
     }
 
     public String getChannelFilterValue(){

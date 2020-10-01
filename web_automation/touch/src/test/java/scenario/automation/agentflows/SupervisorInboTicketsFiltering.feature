@@ -18,17 +18,17 @@ Feature: Supervisor Desk
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
-    Then Verify All tickets, Unassigned, Overdue, Assigned ticket types available in dropdown on Inbox
+    Then Verify All tickets, Unassigned, Overdue, Assigned ticket types are available
     And User select Unassigned ticket type
-    Then Ticket is present on Unassigned filter page
+    Then Ticket from dotcontrol is present on Unassigned filter page
     When autoSchedulingEnabled is set to true
     And Select dot control ticket checkbox
     When Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on Agent
     And User select Assigned ticket type
-    Then Ticket is present on Assigned filter page
+    Then Ticket from dotcontrol is present on Assigned filter page
     And Update ticket with OVERDUE status
     And Wait for 2 second
     When User select OVERDUE ticket type
-    Then Ticket is present on OVERDUE filter page
+    Then Ticket from dotcontrol is present on OVERDUE filter page

@@ -139,16 +139,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(result, "Agent " +agentName+ " is not set up as 'Current agent'");
     }
 
-    @Then("Ticket is present on (.*) filter page")
-    public void verifyUnassignedType(String status){
+    @Then("Ticket from (.*) is present on (.*) filter page")
+    public void verifyUnassignedType(String channel, String status){
+        String userName = getUserName(channel);
         if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(DotControlSteps.getClient()).equalsIgnoreCase("No current Agent"),
+            Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName).equalsIgnoreCase("No current Agent"),
                     "Unassigned ticket should be present");
         } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Overdue")){
             Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent");
             String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
-            Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(DotControlSteps.getClient())),
+            Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName)),
                     "Ticket should be present on " + status + " filter page");
+        } else if(status.equalsIgnoreCase("All tickets")){
+            getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
         }
     }
 
@@ -196,7 +199,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
     }
 
-    @Then("Verify (.*) ticket types available in dropdown on Inbox")
+    @Then("Verify (.*) ticket types are available")
     public void verifyTicketTypes(List<String> ticketTypes){
         //ToDo add numbers of tickets verification
         Assert.assertEquals(getSupervisorDeskPage().getTicketTypes(), ticketTypes, "Ticket types are different");
@@ -259,6 +262,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
     public void selectChanelFilter(String name){
         getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @And("^Agent filter by \"(.*)\" channel and \"(.*)\" sentiment$")
+    public void selectChanelAndSentimentFilter(String name, String sentiment){
+        getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 

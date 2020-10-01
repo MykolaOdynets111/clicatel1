@@ -1,4 +1,4 @@
-@egor
+
 Feature: Supervisor desk
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-38811")
