@@ -1,13 +1,11 @@
 package steps.portalsteps;
 
-import agentpages.AgentHomePage;
 import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import cucumber.api.java.en_scouse.An;
 import datamanager.Tenants;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -153,6 +151,18 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         } else if(status.equalsIgnoreCase("All tickets")){
             getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
         }
+    }
+
+    @Then("Ticket from (.*) is not present on Supervisor Desk")
+    public void verifyUnassignedType(String channel){
+        String userName = getUserName(channel);
+        boolean isTicketShown = true;
+        try {
+            getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
+        } catch ( AssertionError e){
+            isTicketShown = false;
+        }
+        Assert.assertFalse(isTicketShown, "Ticket should not be shown");
     }
 
     @Then("Update ticket with (.*) status")
