@@ -2,7 +2,7 @@
 @agent_support_hours
 @auto_scheduler_disabled
 @dot_control
-Feature: Supervisor desk:: Route ticket to scheduler
+Feature: Supervisor desk
 
    Background:
      Given Create .Control integration for Automation Bot and adapter: fbmsg

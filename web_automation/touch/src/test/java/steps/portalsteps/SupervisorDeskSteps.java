@@ -153,6 +153,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         }
     }
 
+
+    @Then("^Verify that only (.*) ticket is shown$")
+    public void verifyChatsChannelsFilter(int tickets){
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames().size(), tickets,
+                "Only "+tickets+" ticket(s) number should be present on Supervisor Tickets page");
+    }
+
     @Then("Ticket from (.*) is not present on Supervisor Desk")
     public void verifyUnassignedType(String channel){
         String userName = getUserName(channel);
@@ -278,6 +285,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent filter by \"(.*)\" channel and \"(.*)\" sentiment$")
     public void selectChanelAndSentimentFilter(String name, String sentiment){
         getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @And("^Agent filter by \"(.*)\" chat, by \"(.*)\" channel and \"(.*)\" sentiment")
+    public void filterBySetValues(String chatName, String chanellName, String sentimentName){
+        getSupervisorDeskPage().supervisorDeskHeader().filterByOptions(chatName, chanellName, sentimentName);
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @And("^Agent search chat from (.*) on Supervisor desk$")
+    public void filterByChatName(String chatName){
+        String userName = getUserName(chatName);
+        getSupervisorDeskPage().supervisorDeskHeader().setSearchInput(userName).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 

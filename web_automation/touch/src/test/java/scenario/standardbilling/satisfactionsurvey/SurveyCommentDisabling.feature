@@ -1,5 +1,5 @@
 
-Feature: Satisfaction Survey: Comment field turning off
+Feature: Satisfaction Survey
 
   Background:
     And User select Standard Billing tenant

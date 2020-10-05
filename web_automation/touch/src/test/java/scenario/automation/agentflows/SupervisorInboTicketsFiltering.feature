@@ -2,7 +2,7 @@
 @auto_scheduler_disabled
 @dot_control
 @no_widget
-Feature: Supervisor Desk
+Feature: Supervisor desk
 
   Background:
     Given Create .Control integration for Automation and adapter: fbmsg

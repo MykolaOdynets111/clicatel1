@@ -1,6 +1,6 @@
 @no_widget
 @no_chatdesk
-Feature: Satisfaction Survey: NPS Star and Smile are disabled
+Feature: Satisfaction Survey
 
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing

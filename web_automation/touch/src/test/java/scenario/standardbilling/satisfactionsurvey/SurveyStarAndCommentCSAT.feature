@@ -1,5 +1,5 @@
 
-Feature: Satisfaction Survey: User select Star and Comment with CSAT
+Feature: Satisfaction Survey
 
   Background:
     And User select Standard Billing tenant

@@ -1,6 +1,6 @@
 @no_widget
 @no_chatdesk
-Feature: Satisfaction Survey: Question configuration CSAT whatsapp
+Feature: Satisfaction Survey
 
   Background:
     Given Update survey management chanel whatsapp settings by ip for General Bank Demo

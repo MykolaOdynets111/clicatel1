@@ -12,7 +12,10 @@ Feature: Supervisor desk
     When User enter chat to agent into widget input field
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
+    And Agent search chat from touch on Supervisor desk
     Then Ticket from touch is present on All tickets filter page
+    And Verify that only 1 ticket is shown
+    When Agent refreshes the page
     When Agent filter by "Webchat" channel and "Positive" sentiment
     Then Ticket from touch is present on All tickets filter page
     And User enter dsdfsdf into widget input field
@@ -37,8 +40,11 @@ Feature: Supervisor desk
     When Send message call
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
+    And Agent search chat from dotcontrol on Supervisor desk
     Then Ticket from dotcontrol is present on All tickets filter page
-    When Agent filter by "<channelName>" channel and "Positive" sentiment
+    And Verify that only 1 ticket is shown
+    When Agent refreshes the page
+    And Agent filter by "<channelName>" channel and "Positive" sentiment
     Then Ticket from dotcontrol is present on All tickets filter page
     When Send dsdfsdf message for .Control
     And Send sfdsfsdfsd message for .Control
@@ -57,3 +63,4 @@ Feature: Supervisor desk
       |fbmsg                                               |Facebook|
       |whatsapp                                            |WhatsApp|
       |twdm                                                |Twitter|
+#      |orca                                                |Apple Business Chat|

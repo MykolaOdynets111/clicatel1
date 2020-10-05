@@ -1,5 +1,5 @@
 
-Feature: Satisfaction Survey: Star and Comment with NPS
+Feature: Satisfaction Survey
 
   Background:
     And User select Standard Billing tenant

@@ -1,6 +1,6 @@
 @no_widget
 @no_chatdesk
-Feature: Satisfaction Survey: Customize customer thank you message
+Feature: Satisfaction Survey
 
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing

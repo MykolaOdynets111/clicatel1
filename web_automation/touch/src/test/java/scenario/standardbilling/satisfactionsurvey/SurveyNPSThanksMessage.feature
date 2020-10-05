@@ -1,5 +1,5 @@
 
-Feature: Satisfaction Survey: User receives customized Thank You message
+Feature: Satisfaction Survey
 
   Background:
     And User select Standard Billing tenant

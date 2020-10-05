@@ -3,12 +3,14 @@ package portaluielem.supervisor;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portaluielem.PortalUserRow;
 
 import java.util.List;
 
 @FindBy(css = ".supervisor-view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
+
+    @FindBy(id = "nameOrPhone")
+    private WebElement searchInput;
 
     @FindBy(css = "[type='submit']")
     private WebElement applyFiltersButton;
@@ -33,6 +35,11 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     public void clickApplyFilterButton(){
         clickElem(this.getCurrentDriver(), applyFiltersButton, 1, "Apply Filters");
+    }
+
+    public SupervisorDeskHeader setSearchInput(String text){
+        inputText(this.getCurrentDriver(), searchInput, 1, "Search input", text);
+        return this;
     }
 
     public SupervisorDeskHeader clickFlaggedOnlyCheckbox(){
@@ -62,6 +69,18 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     public String getSentimentsFilterValue(){
         return getTextFromElem(this.getCurrentDriver(), sentimentsFilterValue, 1, "Sentiments Filter Value");
+    }
+
+    public void filterByOptions(String chatName, String chanellName, String sentimentName){
+        if(!chatName.equalsIgnoreCase("no")){
+            setSearchInput(chatName);
+        }
+        if(!chanellName.equalsIgnoreCase("no")){
+            selectChanel(chanellName);
+        }
+        if(!sentimentName.equalsIgnoreCase("no")){
+            selectSentiment(sentimentName);
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 
-Feature: Satisfaction Survey: Survey rejection
+Feature: Satisfaction Survey
 
   Background:
     And User select Standard Billing tenant
