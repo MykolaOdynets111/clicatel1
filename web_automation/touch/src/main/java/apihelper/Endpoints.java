@@ -193,5 +193,11 @@ public class Endpoints {
     // ====================  Departments ================= //
 
     public static String DEPARTMENTS = URLs.getTouchApiBaseURL() + "departments";
+
+    // ====================  ORCA ================= //
+
+    public static String CREATE_UPDATE_ORCA_INTEGRATION= URLs.getTouchApiBaseIntegrationURL() + "api/integrations/orca";
+
+    public static String ORCA_INTEGRATIONS_LIST= URLs.getTouchApiBaseIntegrationURL() + "/api/integrations/orca/all";
 }
 

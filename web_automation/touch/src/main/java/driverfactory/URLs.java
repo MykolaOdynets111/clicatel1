@@ -22,6 +22,8 @@ public class URLs {
 
     private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com/";
 
+    private static String ORCA_MESSAGE = "https://%s-touch-transport-orca.clickatelllabs.com/message";
+
     // ================== API BASE URLs ========================= //
 
     private static String BASE_TIE_URL = "https://%s-tie.clickatelllabs.com/tenants/";
@@ -139,6 +141,10 @@ public class URLs {
 
     public static  void clearFinalAgentURL(){
         CHATDESK_URL.remove();
+    }
+
+    public static String getORCAMessageURL(){
+        return String.format(ORCA_MESSAGE, ConfigManager.getEnv());
     }
 
 }

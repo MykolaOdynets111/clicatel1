@@ -10,6 +10,7 @@ import interfaces.WebWait;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
+import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
@@ -77,6 +78,9 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
                 break;
             case "dotcontrol":
                 userName = DotControlSteps.getClient();
+                break;
+            case "orca":
+                userName = ORCASteps.getClient();
                 break;
             default: new AssertionError("Incorrect channel name was provided: " + userName);
         }

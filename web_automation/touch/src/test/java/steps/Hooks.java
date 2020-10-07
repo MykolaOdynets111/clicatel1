@@ -205,6 +205,10 @@ public class Hooks implements JSHelper {
             ApiHelper.ratingEnabling(tenantOrgName, true);
         }
 
+        if (scenario.getSourceTagNames().contains("@orca_api")){
+            ORCASteps.cleanUPORCAData();
+        }
+
         closeMainBrowserIfOpened();
         clearAllSessionData();
 

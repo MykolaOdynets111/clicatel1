@@ -33,7 +33,7 @@ public class DotControlSteps implements WebWait {
     private static ThreadLocal<DotControlCreateIntegrationInfo> createIntegrationCallBody = new ThreadLocal<>();
     private static ThreadLocal<MessageRequest> messageCallBody = new ThreadLocal<>();
     private static ThreadLocal<String> apiToken = new ThreadLocal<>();
-    private static ThreadLocal<String> clientFullName = new ThreadLocal<>();
+   // private static ThreadLocal<String> clientFullName = new ThreadLocal<>();
     private static ThreadLocal<String> clientId = new ThreadLocal<>();
     private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
@@ -74,6 +74,11 @@ public class DotControlSteps implements WebWait {
         }
         apiToken.remove();
         apiToken.set(token);
+    }
+
+
+    public void createORCAIntegration(){
+
     }
 
     @Given("Create second .Control integration for (.*) tenant")
@@ -205,7 +210,6 @@ public class DotControlSteps implements WebWait {
         Assert.assertEquals(resp.getStatusCode(), 200,
                 "\nResponse status code is not as expected after sending INIT message\n" +
                         resp.getBody().asString() + "\n\n");
-
     }
 
     @When("^Send init call with provided messageId and empty clientId then correct response is returned$")
@@ -253,7 +257,6 @@ public class DotControlSteps implements WebWait {
         responseOnSentRequest.set(
                 APIHelperDotControl.sendMessageWithWait(messageCallBody.get())
         );
-        clientFullName.set(DotControlSteps.getClient());
         clientId.set(messageCallBody.get().getClientId());
     }
 
@@ -507,7 +510,6 @@ public class DotControlSteps implements WebWait {
         createIntegrationCallBody.remove();
         messageCallBody.remove();
         apiToken.remove();
-        clientFullName.remove();
         initCallBody.remove();
         clientId.remove();
     }
