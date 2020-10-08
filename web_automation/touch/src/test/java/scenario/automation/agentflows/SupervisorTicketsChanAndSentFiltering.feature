@@ -65,27 +65,26 @@ Feature: Supervisor desk
       |twdm                                                |Twitter|
 
 
-#  @no_widget
-#  @orca_api
-#  Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering ORCA tickets
-#    Given Setup ORCA integration for Automation tenant
-#    When Send to agent message by ORCA
-#    And I select Touch in left menu and Supervisor Desk in submenu
-#    When Agent select "Tickets" left menu option
-#    And Agent search chat from orca on Supervisor desk
-#    Then Ticket from orca is present on All tickets filter page
-#    And Verify that only 1 ticket is shown
-#    When Agent refreshes the page
-#    And Agent filter by "Apple Business Chat" channel and "Positive" sentiment
-#    Then Ticket from orca is present on All tickets filter page
-#    When Send to dsdfsdf message by ORCA
-#    And Send sfdsfsdfsd message by ORCA
-#    When Agent refreshes the page
-#    And Agent filter by "Apple Business Chat" channel and "Neutral" sentiment
-#    Then Ticket from orca is present on All tickets filter page
-#    When Send hate you message by ORCA
-#    When Agent refreshes the page
-#    And Agent filter by "Apple Business Chat" channel and "Negative" sentiment
-#    Then Ticket from orca is present on All tickets filter page
-#    When Agent filter by "Apple Business Chat" channel and "Positive" sentiment
-#    Then Ticket from orca is not present on Supervisor Desk
+  @no_widget
+  @orca_api
+  Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering ORCA tickets
+    Given Setup ORCA integration for Automation tenant
+    When Send to agent message by ORCA
+    And I select Touch in left menu and Supervisor Desk in submenu
+    When Agent select "Tickets" left menu option
+    And Agent search chat from orca on Supervisor desk
+    Then Ticket from orca is present on All tickets filter page
+    When Agent refreshes the page
+    And Agent filter by "Apple Business Chat" channel and "Positive" sentiment
+    Then Ticket from orca is present on All tickets filter page
+    When Send to dsdfsdf message by ORCA
+    And Send sfdsfsdfsd message by ORCA
+    When Agent refreshes the page
+    And Agent filter by "Apple Business Chat" channel and "Neutral" sentiment
+    Then Ticket from orca is present on All tickets filter page
+    When Send hate you message by ORCA
+    When Agent refreshes the page
+    And Agent filter by "Apple Business Chat" channel and "Negative" sentiment
+    Then Ticket from orca is present on All tickets filter page
+    When Agent filter by "Apple Business Chat" channel and "Positive" sentiment
+#    Then Ticket from orca is not present on Supervisor Desk commented till chat name would be available

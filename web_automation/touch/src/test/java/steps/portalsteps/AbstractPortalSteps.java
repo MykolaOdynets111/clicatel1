@@ -80,7 +80,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
                 userName = DotControlSteps.getClient();
                 break;
             case "orca":
-                userName = ORCASteps.getClient();
+                userName = "Apple User";
                 break;
             default: new AssertionError("Incorrect channel name was provided: " + userName);
         }

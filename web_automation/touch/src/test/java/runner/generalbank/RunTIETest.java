@@ -1,5 +1,6 @@
 package runner.generalbank;
 
+import apihelper.ApiHelper;
 import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.TestNGCucumberRunner;
@@ -19,8 +20,10 @@ import java.util.List;
         glue ="steps")
 public class RunTIETest {
 
+
         @Factory
         public Object[] features() {
+                ApiHelper.updateTenantConfig("General Bank Demo","tenantMode", "BOT");
                 List objects = new ArrayList<>();
                 TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
                 for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
