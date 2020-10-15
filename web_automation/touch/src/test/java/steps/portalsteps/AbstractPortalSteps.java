@@ -82,7 +82,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
             case "orca":
                 userName = "Apple User";
                 break;
-            default: new AssertionError("Incorrect channel name was provided: " + userName);
+            default: throw new AssertionError("Incorrect channel name was provided: " + userName);
         }
         return userName;
     }

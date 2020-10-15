@@ -294,11 +294,22 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
-    @And("^Agent search chat from (.*) on Supervisor desk$")
+    @And("^Agent search (?:chat|chat from) (.*) on Supervisor desk$")
     public void filterByChatName(String chatName){
-        String userName = getUserName(chatName);
+        String userName = null;
+        try {
+            userName = getUserName(chatName);
+        } catch (AssertionError e){
+            userName = chatName;
+        }
         getSupervisorDeskPage().supervisorDeskHeader().setSearchInput(userName).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @Then("Error \"(.*)\" message is displayed")
+    public void verifyNoChatsErrorMessage(String errorMessage){
+        Assert.assertEquals(getSupervisorDeskPage().getNoChatsErrorMessage(), errorMessage,
+                "incorrect erorr message is shown");
     }
 
     @Then("^\"All Channels\" and \"All Sentiments\" selected as default$")

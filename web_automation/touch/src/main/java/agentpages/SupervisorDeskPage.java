@@ -6,6 +6,7 @@ import agentpages.uielements.Profile;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
@@ -35,6 +36,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//div[@class='spinner']")
     private WebElement spinner;
+
+    @FindAll({
+            @FindBy(css = ".chats-list .cl-empty-state"),
+            @FindBy(css = ".cl-table-body .cl-empty-state")
+    })
+    private WebElement noChatsErrorMessage;
 
     private String chatName = "//h2[@selenium-id='roster-item-user-name' and text() ='%s']";
 
@@ -192,7 +199,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return chatBody;
     }
 
-    public String getOpenedChatHeader(){
-        return getTextFromElem(this.getCurrentDriver(), openedChatHeader, 3, "Chat header text");
+    public String getNoChatsErrorMessage(){
+        return getTextFromElem(this.getCurrentDriver(), noChatsErrorMessage, 3, "No Chats Error Message");
     }
+
+
 }
