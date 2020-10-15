@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,11 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         return list;
     }
 
+    public List<LocalDateTime> getTicketsStartDates(){
+        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+                .stream().map(a -> a.getStartDate()).collect(Collectors.toList());
+    }
+
 
     public void clickRouteToSchedulerButton(){
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
@@ -54,4 +60,6 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     public void scrollTicketsToTheButtom(){
         wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
     }
+
+
 }

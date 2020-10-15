@@ -7,6 +7,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 
 public class SupervisorDeskTicketRow extends AbstractWidget {
 
@@ -33,6 +37,9 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(xpath = "//div[@class = 'cl-table-user-data__description']/div[2]")
     private WebElement phone;
 
+    @FindBy(xpath = ".//span[@class ='time-cell-content'][1]")
+    private WebElement startDate;
+
 
    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
@@ -56,6 +63,12 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
 
     public String getCurrentAgent(){
         return getTextFromElem(this.getCurrentDriver(), currentAgent, 5, "Current agent");
+    }
+
+    public LocalDateTime getStartDate(){
+        scrollToElem(this.getCurrentDriver(), startDate, "Start date");
+        String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
+        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
     }
 
     public void clickOnUserName(){

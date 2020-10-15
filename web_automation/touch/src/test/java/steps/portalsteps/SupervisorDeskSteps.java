@@ -251,9 +251,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorLeftPanel().getLiveChatsNumberForAgent(agentName), numberOfChats,"Number of chats on Supervisor desk is different from Agent desk chats");
     }
 
-    @Then("^By default the Chat Ended is sorted in (.*) order$")
-    public void verifySClosedChatsSorting(String order){
+    @Then("^Chats Ended are sorted in (.*) order$")
+    public void verifyClosedChatsSorting(String order){
         List<LocalDateTime> listOfDates = getSupervisorDeskPage().supervisorClosedChatsTable().getClosedChatsDates();
+        Assert.assertTrue(isDateSorted(order, listOfDates), "Closed chats are not sorted in "+order +" order");
+    }
+
+    @Then("^Tickets are sorted in (.*) order$")
+    public void verifyTicketsSorting(String order){
+        List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsStartDates();
+        Assert.assertTrue(isDateSorted(order, listOfDates), "Tickets are not sorted in "+order +" order");
+    }
+
+    private boolean isDateSorted(String order, List<LocalDateTime> listOfDates){
         boolean sortedStatus;
         if (order.contains("desc")){
             sortedStatus = listOfDates.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()).equals(listOfDates);
@@ -262,7 +272,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         } else{
             throw new AssertionError("Incorrect order type was provided");
         }
-        Assert.assertTrue(sortedStatus, "Closed chats are not sorted in descending order");
+        return sortedStatus;
     }
 
     @When("^Agent click on the arrow of Chat Ended$")

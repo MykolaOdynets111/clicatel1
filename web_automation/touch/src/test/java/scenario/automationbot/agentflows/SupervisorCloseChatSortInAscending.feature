@@ -7,4 +7,4 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Closed" left menu option
     When Agent click on the arrow of Chat Ended
-    Then By default the Chat Ended is sorted in ascending order
+    Then Chats Ended are sorted in ascending order
