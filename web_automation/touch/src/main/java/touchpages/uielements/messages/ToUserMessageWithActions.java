@@ -44,7 +44,6 @@ public class ToUserMessageWithActions extends AbstractWidget {
 
     public boolean isTextInCardShown(int wait) {
         try{
-            scrollUp(this.getCurrentDriver(), widgetScroller, 182);
             waitForElementToBeVisible(this.getCurrentDriver(), toUserTextMessageInCardButton, wait);
             return true;
         } catch (TimeoutException e) {
