@@ -12,7 +12,7 @@ Feature: Supervisor desk
     When User enter chat to agent into widget input field
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
-    And Agent search chat from touch on Supervisor desk
+    And Agent search chat touch on Supervisor desk
     Then Ticket from touch is present on All tickets filter page
     And Verify that only 1 ticket is shown
     When Agent refreshes the page
@@ -40,7 +40,7 @@ Feature: Supervisor desk
     When Send message call
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
-    And Agent search chat from dotcontrol on Supervisor desk
+    And Agent search chat dotcontrol on Supervisor desk
     Then Ticket from dotcontrol is present on All tickets filter page
     And Verify that only 1 ticket is shown
     When Agent refreshes the page
@@ -72,7 +72,7 @@ Feature: Supervisor desk
     When Send to agent message by ORCA
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
-    And Agent search chat from orca on Supervisor desk
+    And Agent search chat orca on Supervisor desk
     Then Ticket from orca is present on All tickets filter page
     When Agent refreshes the page
     And Agent filter by "Apple Business Chat" channel and "Positive" sentiment

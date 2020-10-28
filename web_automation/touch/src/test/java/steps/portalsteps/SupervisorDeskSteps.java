@@ -304,7 +304,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
-    @And("^Agent search (?:chat|chat from) (.*) on Supervisor desk$")
+    @And("^Agent search chat (.*) on Supervisor desk$")
     public void filterByChatName(String chatName){
         String userName = null;
         try {
