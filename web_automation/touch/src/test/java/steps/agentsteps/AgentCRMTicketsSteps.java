@@ -201,9 +201,9 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 "CRM ticket is still shown");
     }
 
-    @When("^(.*) click 'Edit' button for CRM ticket$")
-    public void clickEditCRMTicketButton(String agent){
-        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickEditButton();
+    @When("^(.*) click on CRM ticket note$")
+    public void clickOnCRMTicket(String agent){
+        getAgentHomePage(agent).getCrmTicketContainer().getFirstTicket().clickTicketNote();
     }
 
     @Then("^'Edit ticket' window is opened$")

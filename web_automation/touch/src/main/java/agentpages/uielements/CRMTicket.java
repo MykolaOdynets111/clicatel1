@@ -32,9 +32,6 @@ public class CRMTicket extends AbstractWidget {
             })
     private WebElement crmNumber;
 
-    @FindBy(css = "[selenium-id=note-card-edit-ticket]")
-    private WebElement editButton;
-
     @FindBy(css = "[selenium-id=note-card-delete-ticket]")
     private WebElement deleteButton;
 
@@ -63,9 +60,8 @@ public class CRMTicket extends AbstractWidget {
     }
 
 
-    public void clickEditButton(){
-        moveToElement(this.getCurrentDriver(), editButton);
-        clickElem(this.getCurrentDriver(), editButton, 3,"CRM ticket 'Edit' button");
+    public void clickTicketNote(){
+        clickElem(this.getCurrentDriver(), crmNote, 3,"CRM ticket note");
 }
 
     public void clickDeleteButton(){

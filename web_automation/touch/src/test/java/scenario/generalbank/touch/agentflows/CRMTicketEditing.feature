@@ -10,7 +10,7 @@ Feature: Verification CRM ticket editing
     Then Agent has new conversation request
     And Agent click on new conversation
     Then Container with new CRM ticket is shown
-    When Agent click 'Edit' button for CRM ticket
+    When Agent click on CRM ticket note
     Then 'Edit ticket' window is opened
     When I fill in the form with new CRM ticket info
     And Cancel CRM editing
@@ -26,7 +26,7 @@ Feature: Verification CRM ticket editing
     Then Agent has new conversation request
     And Agent click on new conversation
     Then Container with new CRM ticket is shown
-    When Agent click 'Edit' button for CRM ticket
+    When Agent click on CRM ticket note
     Then 'Edit ticket' window is opened
     When Agent fill in the form with new CRM ticket info
     And Save CRM ticket changings
