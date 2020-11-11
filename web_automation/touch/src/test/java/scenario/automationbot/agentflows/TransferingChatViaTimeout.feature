@@ -4,7 +4,7 @@ Feature: Transferring chat after timeout
   Verification of automatic transfer chat functionality
 
   Background:
-    Given Transfer timeout for Automation Bot tenant is set to 5 seconds
+    Given Transfer timeout for Automation Bot tenant is set to 20 seconds
     Given User select Automation Bot tenant
     Given I login as agent of Automation Bot
     And Click chat icon
