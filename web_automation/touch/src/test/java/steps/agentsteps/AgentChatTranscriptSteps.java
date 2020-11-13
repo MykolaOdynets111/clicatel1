@@ -137,9 +137,10 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
         return expectedMessagesList;
     }
 
+//  Email title starts with [SENDWITHUS TEST]
     public String getAdapterFromEmailSubject(String chatTranscriptEmailTitle) {
-        String [] dataInString = chatTranscriptEmailTitle.split(",");
-        return dataInString[0].trim();
+        String [] dataInString = chatTranscriptEmailTitle.split(",")[0].split("]");
+        return dataInString[1].trim();
     }
 
     public String getSecondParameterPerAdapter(String adapter){

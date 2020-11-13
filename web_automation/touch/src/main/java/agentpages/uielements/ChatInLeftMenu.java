@@ -121,6 +121,6 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public boolean isOvernightTicketRemoved(){
-        return isElementRemovedByCSS(this.getCurrentDriver(), overnightTicketIcon, 9);
+        return isElementRemovedByCSS(this.getCurrentDriver(), overnightTicketIcon, 10);
     }
 }
