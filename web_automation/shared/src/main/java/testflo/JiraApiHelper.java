@@ -108,6 +108,16 @@ public class JiraApiHelper {
                 .put(JiraEndpoints.JIRA_ISSUE + "/" + tcKey);
     }
 
+    public static void setAutomationLabel(String tcKey, String label){
+        Response resp = RestAssured.given()
+                .auth().preemptive().basic(JiraUser.USER_EMAIL, JiraUser.USER_PASS)
+                .header("Content-Type", "application/json")
+                .body("{\"fields\":{\"labels\": [\n" +
+                        "\""+label+"\"\n" +
+                        "]}}")
+                .put(JiraEndpoints.JIRA_ISSUE + "/" + tcKey);
+    }
+
     public static int getNextTransitionId(String tcKey){
         Response resp = RestAssured.given()
                 .auth().preemptive().basic(JiraUser.USER_EMAIL, JiraUser.USER_PASS)

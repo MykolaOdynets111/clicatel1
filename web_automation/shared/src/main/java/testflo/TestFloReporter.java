@@ -141,6 +141,7 @@ public class TestFloReporter {
                 executionStatus.equalsIgnoreCase("skipped")){
             return;
         }
+        JiraApiHelper.setAutomationLabel(tcKey,"Automated");
         moveTicketToInProgress(tcKey, currentStatus);
         setStatusForTestCase(tcKey, executionStatus, failureMessage);
     }
