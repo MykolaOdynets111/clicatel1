@@ -244,6 +244,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
+    @When("Verify that closed chats have Send email button")
+    public void verifyButtonForClosedChats() {
+        getSupervisorDeskPage().supervisorClosedChatsTable().openFirstClosedChat();
+        Assert.assertTrue(getSupervisorDeskPage().supervisorOpenedClosedChatsList().isClosedChatsHaveSendEmailButton(),
+                "Closed chats doesn't have email button");
+    }
+
     @Then ("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent){
         String agentName = getAgentName(agent);

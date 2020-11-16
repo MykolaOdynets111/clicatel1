@@ -1,4 +1,4 @@
-package portaluielem.supervisor;
+package touchpages.uielements.supervisor;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css = ".supervisor-view-header")
+@FindBy(css = ".touchpages.uielements.supervisor-view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(id = "nameOrPhone")

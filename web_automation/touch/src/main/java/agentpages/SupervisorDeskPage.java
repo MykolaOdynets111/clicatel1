@@ -3,14 +3,13 @@ package agentpages;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
-import portaluielem.supervisor.*;
+import touchpages.uielements.supervisor.*;
 
 import java.util.List;
 import java.util.Set;
@@ -27,6 +26,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     @FindBy(css = ".chats-list-extended-view-header-text")
     private WebElement openedChatHeader;
+
+    @FindBy(css = "[selenium-id=chat-form-send-email]")
+    private WebElement openedClosedChatSendEmailButton;
+
+    @FindBy(xpath = "//span[contains(@class,'chats-list-extended-view-header-text')]/following-sibling::a[@href='/supervisor/closed']")
+    private WebElement closeOpenedClosedChatView;
 
     @FindBy(xpath = "//div[text()='Loading results']")
     private WebElement loadingResults;
@@ -53,6 +58,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private ChatBody chatBody;
     private SupervisorTicketsTable supervisorTicketsTable;
     private SupervisorClosedChatsTable supervisorClosedChatsTable;
+    private SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList;
     private SupervisorLeftPanel supervisorLeftPanel;
     private ChatHeader chatHeader;
     private Profile profile;
@@ -115,6 +121,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public SupervisorDeskHeader supervisorDeskHeader(){
         supervisorDeskHeader.setCurrentDriver(this.getCurrentDriver());
         return  supervisorDeskHeader;
+    }
+
+    public SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList(){
+        supervisorOpenedClosedChatsList.setCurrentDriver(this.getCurrentDriver());
+        return supervisorOpenedClosedChatsList;
     }
 
     public boolean isLiveChatShownInSD(String userName, int wait) {
@@ -203,5 +214,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return getTextFromElem(this.getCurrentDriver(), noChatsErrorMessage, 3, "No Chats Error Message");
     }
 
-
+    public boolean isSendEmailForOpenedClosedChatShown() {
+        return isElementShown(this.getCurrentDriver(), openedClosedChatSendEmailButton, 5);
+    }
 }

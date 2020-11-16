@@ -1,4 +1,4 @@
-package portaluielem.supervisor;
+package touchpages.uielements.supervisor;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.By;

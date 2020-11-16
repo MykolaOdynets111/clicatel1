@@ -1,4 +1,4 @@
-package portaluielem.supervisor;
+package touchpages.uielements.supervisor;
 
 
 import abstractclasses.AbstractUIElement;
@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,4 +27,9 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), ascendingArrowOfChatEndedColumn, 3, "Ascending Arrow Of Chat Ended Column");
     }
 
+    public void openFirstClosedChat() {
+        new SupervisorDeskClosedChatRow(closedChats.get(0))
+                .setCurrentDriver(this.getCurrentDriver())
+                .clickOnChat();
+    }
 }
