@@ -7,7 +7,7 @@ Feature: Supervisor can unflag live chat
     Given I login as second agent of General Bank Demo
     And Click chat icon
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3591")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-57013")
   Scenario: Supervisor desk :: Verify if supervisor can unflag chat
     When User enter chat to support into widget input field
     Then Second Agent has new conversation request
