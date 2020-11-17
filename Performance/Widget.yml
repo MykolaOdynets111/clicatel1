@@ -1,0 +1,17 @@
+execution:
+- executor: testng
+  testng-xml: ${BASE_DIR}\src\test\java\Widget.xml
+  scenario:
+    script: ${BASE_DIR}\src
+
+modules:
+  testng:
+    autodetect-xml: False
+  blazemeter:
+    token: b595754a88ec7b493a9e4e26:8cf7b3ed8e4bb192e7fdca94d777184d911006e1543f2eb9facb120c25b96e1abb81e85e
+    browser-open: false
+    report-name: Widget Report
+    send-interval: 30s
+
+reporting:
+  - module: blazemeter

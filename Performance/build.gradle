@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.testng:testng:6.14.3'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    compile group: 'io.rest-assured', name: 'rest-assured', version: '4.0.0'
+}
+
+test{
+    useTestNG() {
+        useDefaultListeners = true
+        suites 'src/test/java/Widget.xml'
+    }
+}
