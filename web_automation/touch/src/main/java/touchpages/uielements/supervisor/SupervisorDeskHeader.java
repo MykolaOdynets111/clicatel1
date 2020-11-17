@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css = ".touchpages.uielements.supervisor-view-header")
+@FindBy(css = ".supervisor-view-header")
 public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(id = "nameOrPhone")

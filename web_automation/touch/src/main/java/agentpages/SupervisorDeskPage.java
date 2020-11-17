@@ -48,6 +48,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     })
     private WebElement noChatsErrorMessage;
 
+    @FindBy(css = ".cl-agent-view-trigger-btn")
+    private WebElement supervisorButton;
+
+    @FindBy(css = ".cl-agent-view-launch-btn")
+    private WebElement launchAgentButton;
+
     private String chatName = "//h2[@selenium-id='roster-item-user-name' and text() ='%s']";
 
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
@@ -65,6 +71,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorTicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
     private SupervisorDeskHeader supervisorDeskHeader;
+    private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
     // == Constructors == //
 
@@ -126,6 +133,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList(){
         supervisorOpenedClosedChatsList.setCurrentDriver(this.getCurrentDriver());
         return supervisorOpenedClosedChatsList;
+    }
+
+    public SupervisorAvailableAsAgentDialog getSupervisorAvailableAsAgentDialog() {
+        supervisorAvailableAsAgentDialog.setCurrentDriver(this.getCurrentDriver());
+        return supervisorAvailableAsAgentDialog;
     }
 
     public boolean isLiveChatShownInSD(String userName, int wait) {
@@ -216,5 +228,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public boolean isSendEmailForOpenedClosedChatShown() {
         return isElementShown(this.getCurrentDriver(), openedClosedChatSendEmailButton, 5);
+    }
+
+    public void clickOnLaunchAgent() {
+        supervisorButton.click();
+        launchAgentButton.click();
     }
 }
