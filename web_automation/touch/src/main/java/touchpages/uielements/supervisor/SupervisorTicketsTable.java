@@ -1,4 +1,4 @@
-package portaluielem.supervisor;
+package touchpages.uielements.supervisor;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".supervisor-tickets")
+@FindBy(css = ".touchpages.uielements.supervisor-tickets")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
     @FindBy(css =".cl-table-body .cl-table-row")

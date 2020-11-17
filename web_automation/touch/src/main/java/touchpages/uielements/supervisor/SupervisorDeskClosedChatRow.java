@@ -1,4 +1,4 @@
-package portaluielem.supervisor;
+package touchpages.uielements.supervisor;
 
 import abstractclasses.AbstractWidget;
 import org.openqa.selenium.WebDriver;
@@ -10,21 +10,26 @@ import java.time.format.DateTimeFormatter;
 
 public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
+    @FindBy(xpath = ".//br/parent::div")
+    private WebElement date;
+    @FindBy(css = ".chats-list .cl-user-details")
+    private WebElement chatNameCell;
+
     protected SupervisorDeskClosedChatRow(WebElement element) {
         super(element);
     }
 
-    public SupervisorDeskClosedChatRow setCurrentDriver(WebDriver currentDriver){
+    public SupervisorDeskClosedChatRow setCurrentDriver(WebDriver currentDriver) {
         this.currentDriver = currentDriver;
         return this;
     }
 
-    @FindBy (xpath = ".//br/parent::div")
-    private WebElement date;
-
     public LocalDateTime getDate() {
-        scrollToElem(this.getCurrentDriver(), date, "Date cell");
         String stringDate = getTextFromElem(this.getCurrentDriver(), date, 5, "Date cell").replace("\n", " ");
-         return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
+        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
+    }
+
+    public void clickOnChat() {
+        chatNameCell.click();
     }
 }

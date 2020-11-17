@@ -12,6 +12,8 @@ import java.util.List;
 
 public class AgentDeskChatMessage extends AbstractWidget {
 
+    private final String messageTimeCssLocator = ".msg-time";
+
     @FindBy(css = "[selenium-id=emojified-text]")
     private WebElement toUserTextResponse;
 
@@ -27,7 +29,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
     })
     private WebElement messageText;
 
-    @FindBy(css = ".msg-time")
+    @FindBy(css = messageTimeCssLocator)
     private WebElement messageTime;
 
     @FindBy(css = "[selenium-id=channel-separator-title]")
@@ -66,7 +68,8 @@ public class AgentDeskChatMessage extends AbstractWidget {
             return messageTime.getAttribute("innerText").trim();
         }catch (NoSuchElementException|TimeoutException|NullPointerException e){
             waitFor(500);
-            return messageTime.getAttribute("innerText").trim();
+            //find element because when reuse messageTime there's StaleReferenceException
+            return findElemByCSS(this.getCurrentDriver(), messageTimeCssLocator).getAttribute("innerText").trim();
         }
     }
 
