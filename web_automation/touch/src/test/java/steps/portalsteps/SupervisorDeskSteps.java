@@ -336,4 +336,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         soft.assertEquals(getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().getSentimentsFilterValue() , "All Sentiments", "Incorrect default Sentiments filter is set by default");
         soft.assertAll();
     }
+
+    @Then("^Supervisor Desk Live chat have 'flag on' button$")
+    public void supervisorDeskLiveChatHaveFlagOnIcon() {
+        Assert.assertTrue(getSupervisorDeskPage().getChatHeader().isFlagOnButtonDisplayed(),
+                "Flag on button is not displayed");
+    }
+
+    @Then("^Supervisor Desk Live chat from (.*) channel is unflagged$")
+    public void supervisorDeskLiveChatFromTouchChannelIsUnflagged(String channel) {
+        String userName = getUserName(channel);
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
+                String.format("Chat with user %s is flagged", userName));
+    }
 }

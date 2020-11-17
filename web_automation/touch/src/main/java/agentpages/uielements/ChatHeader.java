@@ -72,6 +72,9 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = ".cl-r-avatar")
     private WebElement userAvatar;
 
+    @FindBy(css = "button>svg[name=flag-fill]")
+    private WebElement flagOnIcon;
+
 
     private String transferChatButton =  ".//button[@selenium-id='header-transfer-chat']";
     private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
@@ -175,5 +178,9 @@ public class ChatHeader extends AbstractUIElement {
         }
         String letter = getTextFromElem(this.getCurrentDriver(), userAvatar, 1,"Avatar");
         return letter.equalsIgnoreCase(expectedInitials);
+    }
+
+    public boolean isFlagOnButtonDisplayed() {
+        return isElementShown(getCurrentDriver(), flagOnIcon, 5);
     }
 }

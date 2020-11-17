@@ -17,6 +17,9 @@ public class SupervisorDeskLiveRow extends AbstractWidget {
     @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")
     private WebElement chanelIcon;
 
+    @FindBy(css = ".cl-r-chat-item__header>svg[name=flag-fill]")
+    private WebElement flaggedChatIcon;
+
     public SupervisorDeskLiveRow(WebElement element) {
         super(element);
     }
@@ -36,5 +39,13 @@ public class SupervisorDeskLiveRow extends AbstractWidget {
 
     public String getIconName(){
         return chanelIcon.getAttribute("name").trim();
+    }
+
+    public boolean isFlagIconShown(){
+        return isElementShown(this.getCurrentDriver(), flaggedChatIcon, 5);
+    }
+
+    public boolean isFlagIconRemoved(){
+        return isElementRemoved(this.getCurrentDriver(), flaggedChatIcon, 3);
     }
 }
