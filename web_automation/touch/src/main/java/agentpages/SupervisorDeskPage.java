@@ -224,8 +224,8 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public void clickOnLaunchAgent() {
-        supervisorButton.click();
-        launchAgentButton.click();
+        clickElem(this.getCurrentDriver(), supervisorButton, 3, "Supervisor Button Dropdown");
+        clickElem(this.getCurrentDriver(), launchAgentButton, 3, "Launch supervisor as agent button");
     }
 
     public void loadAllTickets() {

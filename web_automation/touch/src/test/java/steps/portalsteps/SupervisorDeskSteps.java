@@ -8,6 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import dbmanager.DBConnector;
+import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -365,6 +366,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Supervisor agent click launch in confirmation popup$")
     public void supervisorAgentClickLaunchInConfirmationPopup() {
         getSupervisorDeskPage().getSupervisorAvailableAsAgentDialog().clickLaunch();
+        List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
+        DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 
     @And("^Agent filter by (.) year (.) month and (.*) days ago start date and today's end date$")

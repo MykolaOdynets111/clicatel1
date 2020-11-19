@@ -6,8 +6,8 @@ Feature: Supervisor desk
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and supervisor desk in submenu
-    Then Agent is redirected to supervisor chatdesk page
+    Then Agent is redirected to supervisor page
     When Supervisor agent launch as agent
     Then Supervisor agent sees confirmation popup with "Launching agent view as a supervisor will make yourself available to chat to as an agent. Are you sure you want to do this?" message
     And Supervisor agent click launch in confirmation popup
-    Then Agent is redirected to agent chatdesk page
+    Then Agent is redirected to chatdesk page
