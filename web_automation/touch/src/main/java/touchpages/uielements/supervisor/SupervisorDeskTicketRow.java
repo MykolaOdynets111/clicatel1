@@ -39,6 +39,9 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(xpath = ".//span[@class ='time-cell-content'][1]")
     private WebElement startDate;
 
+    @FindBy(xpath = ".//span[@class ='time-cell-content'][2]")
+    private WebElement endDate;
+
 
    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
@@ -67,6 +70,12 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     public LocalDateTime getStartDate(){
         scrollToElem(this.getCurrentDriver(), startDate, "Start date");
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
+        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
+    }
+
+    public LocalDateTime getEndDate(){
+        scrollToElem(this.getCurrentDriver(), endDate, "End date");
+        String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
         return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
     }
 

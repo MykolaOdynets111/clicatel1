@@ -159,15 +159,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void selectChatsMenu(String option){
-       if (option.equalsIgnoreCase("Live Chats")){
-           clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu" );
-       } else if (option.equalsIgnoreCase("Tickets")){
-           clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu" );
-       }else if (option.equalsIgnoreCase("Closed")) {
-           clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
-       } else {
-           throw new AssertionError("Incorrect menu option was provided");
-       }
+        scrollToElem(this.getCurrentDriver(), this.getWrappedElement(), "Left Menu with chats");
+        if (option.equalsIgnoreCase("Live Chats")){
+            clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu" );
+        } else if (option.equalsIgnoreCase("Tickets")){
+            clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu" );
+        }else if (option.equalsIgnoreCase("Closed")) {
+            clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
+        } else {
+            throw new AssertionError("Incorrect menu option was provided");
+        }
     }
 
     public void searchUserChat(String userId){

@@ -171,9 +171,13 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         } else if(chatDeskPage.equalsIgnoreCase("supervisor")) {
             softAssert.assertTrue(pageUrl.contains("supervisor"),
                     "Agent is not redirected to supervisor chatdesk page");
+        } else if(chatDeskPage.equalsIgnoreCase("agent")) {
+            softAssert.assertFalse(pageUrl.contains("supervisor"),
+                    "Supervisor is not redirected to agent chatdesk page");
         }
         softAssert.assertTrue(pageUrl.contains("chatdesk"),
                 "Agent is not redirected to chatdesk page");
+        softAssert.assertAll();
     }
 
     @When("^(.*) click 'Delete' button for CRM ticket$")

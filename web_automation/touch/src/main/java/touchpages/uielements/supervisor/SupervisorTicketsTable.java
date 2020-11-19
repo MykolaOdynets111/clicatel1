@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".touchpages.uielements.supervisor-tickets")
+@FindBy(css = ".supervisor-tickets")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
     @FindBy(css =".cl-table-body .cl-table-row")
@@ -50,6 +50,10 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     public List<LocalDateTime> getTicketsStartDates(){
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().map(a -> a.getStartDate()).collect(Collectors.toList());
+    }
+    public List<LocalDateTime> getTicketsEndDates(){
+        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+                .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
     }
 
 

@@ -1,9 +1,11 @@
 package touchpages.uielements.supervisor;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @FindBy(css = ".supervisor-view-header")
@@ -23,6 +25,12 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(id = "sentiments")
     private WebElement sentimentDropdown;
+
+    @FindBy(id = "start_date")
+    private WebElement startDateInput;
+
+    @FindBy(id = "end_date")
+    private WebElement endDateInput;
 
     @FindBy(xpath=".//div[contains(@id, 'react-select')]")
     private List<WebElement> dropdownOptions;
@@ -63,6 +71,20 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         return this;
     }
 
+    public SupervisorDeskHeader selectStartDate(LocalDate startDate) {
+        clickElem(this.getCurrentDriver(), startDateInput, 1, "Start Date Input");
+        startDateInput.sendKeys(startDate.toString());
+        startDateInput.sendKeys(Keys.ENTER);
+        return this;
+    }
+
+    public SupervisorDeskHeader selectEndDate(LocalDate endDate) {
+        clickElem(this.getCurrentDriver(), endDateInput, 1, "Start Date Input");
+        endDateInput.sendKeys(endDate.toString());
+        endDateInput.sendKeys(Keys.ENTER);
+        return this;
+    }
+
     public String getChannelFilterValue(){
         return getTextFromElem(this.getCurrentDriver(), channelFilterValue, 1, "Channels Filter Value");
     }
@@ -83,4 +105,15 @@ public class SupervisorDeskHeader extends AbstractUIElement {
         }
     }
 
+    public LocalDate getStartDateFilterValue() {
+        String stringDate = getAttributeFromElem(getCurrentDriver(), startDateInput, 1,
+                "Filter start date", "value");
+        return LocalDate.parse(stringDate);
+    }
+
+    public LocalDate getEndDateFilterValue() {
+        String stringDate = getAttributeFromElem(getCurrentDriver(), endDateInput, 1,
+                "Filter start date", "value");
+        return LocalDate.parse(stringDate);
+    }
 }

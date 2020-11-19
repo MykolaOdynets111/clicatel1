@@ -25,6 +25,7 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     }
 
     public LocalDateTime getDate() {
+        scrollToElem(this.getCurrentDriver(), date, "Date cell");
         String stringDate = getTextFromElem(this.getCurrentDriver(), date, 5, "Date cell").replace("\n", " ");
         return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
     }
