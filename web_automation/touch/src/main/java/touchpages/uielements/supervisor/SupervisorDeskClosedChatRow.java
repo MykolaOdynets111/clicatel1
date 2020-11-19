@@ -15,6 +15,8 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     @FindBy(css = ".chats-list .cl-user-details")
     private WebElement chatNameCell;
 
+    private String scrollAreaCss = "[selenium-id='roster-scroll-container']";
+
     protected SupervisorDeskClosedChatRow(WebElement element) {
         super(element);
     }
@@ -25,7 +27,10 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     }
 
     public LocalDateTime getDate() {
-        String stringDate = getTextFromElem(this.getCurrentDriver(), date, 5, "Date cell").replace("\n", " ");
+        wheelScrollDownToElement(this.getCurrentDriver(),
+                findElemByCSS(this.getCurrentDriver(), scrollAreaCss), date, 3);
+        String stringDate = getTextFromElem(this.getCurrentDriver(),
+                date, 5, "Date cell").replace("\n", " ");
         return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
     }
 

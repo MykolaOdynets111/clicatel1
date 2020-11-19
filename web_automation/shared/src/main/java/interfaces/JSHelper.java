@@ -107,6 +107,16 @@ public interface JSHelper extends WebActions{
         return isElementShown(driver, element, waitTime);
     }
 
+    default boolean wheelScrollDownToElement(WebDriver driver, WebElement scrolArea, WebElement element, int waitTime){
+        for (int i=0; i<4; i++)  {
+            if(isElementShown(driver, element, waitTime)){
+                return true;
+            }
+            wheelScroll(driver, scrolArea, 200, 0,0);
+        }
+        return isElementShown(driver, element, waitTime);
+    }
+
     default boolean wheelScrollDownAndIsDisplayed(WebDriver driver, WebElement scrolArea, WebElement element, int waitTime){
         wheelScroll(driver, scrolArea, 500, 0,0);
         return isElementShown(driver, element, waitTime);

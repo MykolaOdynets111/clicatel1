@@ -36,9 +36,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[text()='Loading results']")
     private WebElement loadingResults;
 
-    @FindBy(css = ".supervisor-tickets__loading-more")
-    private WebElement loadingMoreTickets;
-
     @FindBy(xpath = "//div[@class='spinner']")
     private WebElement spinner;
 
@@ -47,6 +44,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
             @FindBy(css = ".cl-table-body .cl-empty-state")
     })
     private WebElement noChatsErrorMessage;
+
+    @FindBy(css = ".cl-agent-view-trigger-btn")
+    private WebElement supervisorButton;
+
+    @FindBy(css = ".cl-agent-view-launch-btn")
+    private WebElement launchAgentButton;
 
     private String chatName = "//h2[@selenium-id='roster-item-user-name' and text() ='%s']";
 
@@ -65,6 +68,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorTicketChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
     private SupervisorDeskHeader supervisorDeskHeader;
+    private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
     // == Constructors == //
 
@@ -128,6 +132,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return supervisorOpenedClosedChatsList;
     }
 
+    public SupervisorAvailableAsAgentDialog getSupervisorAvailableAsAgentDialog() {
+        supervisorAvailableAsAgentDialog.setCurrentDriver(this.getCurrentDriver());
+        return supervisorAvailableAsAgentDialog;
+    }
+
     public boolean isLiveChatShownInSD(String userName, int wait) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(chatName, userName), wait);
     }
@@ -172,15 +181,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void scrollTicketsDown(){
         getSupervisorTicketsTable().scrollTicketsToTheButtom();
-        waitForMoreTicketsAreLoading(2,5);
+        getSupervisorTicketsTable().waitForMoreTicketsAreLoading(2,5);
     }
 
     public void waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
         waitForAppearAndDisappear(this.getCurrentDriver(), spinner, waitForSpinnerToAppear, waitForSpinnerToDisappear);
-    }
-
-    public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
-        waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
 
      public void waitForLoadingResultsDisappear(int timeToAppear, int timeToDisappear){
@@ -216,5 +221,18 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public boolean isSendEmailForOpenedClosedChatShown() {
         return isElementShown(this.getCurrentDriver(), openedClosedChatSendEmailButton, 5);
+    }
+
+    public void clickOnLaunchAgent() {
+        clickElem(this.getCurrentDriver(), supervisorButton, 3, "Supervisor Button Dropdown");
+        clickElem(this.getCurrentDriver(), launchAgentButton, 3, "Launch supervisor as agent button");
+    }
+
+    public void loadAllTickets() {
+        getSupervisorTicketsTable().loadAllFoundTickets();
+    }
+
+    public void loadAllClosedChats() {
+        supervisorClosedChatsTable().loadAllFoundChats();
     }
 }

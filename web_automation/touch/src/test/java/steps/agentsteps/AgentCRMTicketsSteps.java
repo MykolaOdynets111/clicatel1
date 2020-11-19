@@ -161,17 +161,21 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
                 "Agent is not redirected by CRM tickets' url");
     }
 
-    @Then("^(.*) is redirected to empty chatdesk page$")
-    public void verifyUserRedirectedEmptyChatdeskPage(String agent){
+    @Then("^(.*) is redirected to (.*) page$")
+    public void verifyUserRedirectedEmptyChatdeskPage(String agent, String chatDeskPage) {
         String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
-        String currentWindow = DriverFactory.getDriverForAgent("main").getWindowHandle();
-        for (String winHandle : DriverFactory.getDriverForAgent("main").getWindowHandles()) {
-            if (!winHandle.equals(currentWindow)) {
-                DriverFactory.getDriverForAgent("main").switchTo().window(winHandle);
-            }
+        SoftAssert softAssert = new SoftAssert();
+        if(chatDeskPage.equalsIgnoreCase("empty chatdesk")) {
+            softAssert.assertTrue(pageUrl.contains("null"),
+                    "Agent is not redirected by CRM tickets' url");
+        } else if(chatDeskPage.equalsIgnoreCase("supervisor")) {
+            softAssert.assertTrue(pageUrl.contains("supervisor"),
+                    "Agent is not redirected to supervisor page");
+        } else if(chatDeskPage.equalsIgnoreCase("chatdesk")) {
+            softAssert.assertTrue(pageUrl.split("-")[1].equalsIgnoreCase("chatdesk.clickatelllabs.com/"),
+                    "Supervisor is not redirected to chatdesk page");
         }
-        Assert.assertTrue(pageUrl.contains("null")&pageUrl.contains("chatdesk"),
-                "Agent is not redirected by CRM tickets' url");
+        softAssert.assertAll();
     }
 
     @When("^(.*) click 'Delete' button for CRM ticket$")

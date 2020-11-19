@@ -8,6 +8,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import dbmanager.DBConnector;
+import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -15,6 +16,7 @@ import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -348,5 +350,110 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         String userName = getUserName(channel);
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorDeskLiveRow(userName).isFlagIconRemoved(),
                 String.format("Chat with user %s is flagged", userName));
+    }
+
+    @When("^Supervisor agent launch as agent$")
+    public void supervisorAgentLaunchAsAgent() {
+        getSupervisorDeskPage().clickOnLaunchAgent();
+    }
+
+    @Then("^Supervisor agent sees confirmation popup with \"(.*)\" message$")
+    public void supervisorAgentSeesConfirmationPopupWithAvailableAsAgentMessage(String message) {
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorAvailableAsAgentDialog().getFullMessage(),
+                message, "Message in supervisor agent confirmation popup is different");
+    }
+
+    @And("^Supervisor agent click launch in confirmation popup$")
+    public void supervisorAgentClickLaunchInConfirmationPopup() {
+        getSupervisorDeskPage().getSupervisorAvailableAsAgentDialog().clickLaunch();
+        List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
+        DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
+    }
+
+    @And("^Agent filter by (.) year (.) month and (.*) days ago start date and today's end date$")
+    public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day) {
+        LocalDate startDate = LocalDate.now().minusYears(year).minusDays(month).minusDays(day);
+        LocalDate endDate = LocalDate.now();
+
+        getSupervisorDeskPage().supervisorDeskHeader()
+                .selectStartDate(startDate)
+                .selectEndDate(endDate)
+                .clickApplyFilterButton();
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @Then("^Verify closed chats dates are fitted by filter$")
+    public void verifyClosedChatsDatesAreFittedByFilter() {
+        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        List<LocalDateTime> listOfDates = getSupervisorDeskPage().supervisorClosedChatsTable().getClosedChatsDates();
+
+        SoftAssert softAssert = new SoftAssert();
+        for (LocalDateTime localDateTime : listOfDates) {
+            verifyDateTimeIsInRangeOfTwoDates(localDateTime, startDate, endDate);
+        }
+        softAssert.assertAll();
+    }
+
+    @Then("^Verify tickets dates are fitted by filter$")
+    public void verifyTicketsDatesAreFittedByFilter() {
+        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        List<LocalDateTime> listOfStartedDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsStartDates();
+        List<LocalDateTime> listOfEndedDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsEndDates();
+
+        SoftAssert softAssert = new SoftAssert();
+        for (LocalDateTime localDateTime : listOfStartedDates) {
+            verifyDateTimeIsInRangeOfTwoDates(localDateTime, startDate, endDate);
+        }
+
+        for (LocalDateTime localDateTime : listOfEndedDates) {
+            verifyDateTimeIsInRangeOfTwoDates(localDateTime, startDate, endDate);
+        }
+        softAssert.assertAll();
+    }
+
+    @And("^Agent load all filtered tickets$")
+    public void agentLoadAllFilteredTickets() {
+        getSupervisorDeskPage().loadAllTickets();
+    }
+
+    @And("^Agent load all filtered closed chats$")
+    public void agentLoadAllFilteredChats() {
+        getSupervisorDeskPage().loadAllClosedChats();
+    }
+
+    @Then("^Verify first closed chat date are fitted by filter$")
+    public void verifyFirstClosedChatDateAreFittedByFilter() {
+        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        LocalDateTime firstClosedChatDate = getSupervisorDeskPage().supervisorClosedChatsTable().getFirstClosedChatDate();
+        verifyDateTimeIsInRangeOfTwoDates(firstClosedChatDate, startDate, endDate);
+    }
+
+    @Then("^Verify first closed ticket date are fitted by filter$")
+    public void verifyFirstClosedTicketDateAreFittedByFilter() {
+        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        LocalDateTime firstTicketStartDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketStartDates();
+        LocalDateTime firstTicketEndDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketEndDates();
+        verifyDateTimeIsInRangeOfTwoDates(firstTicketStartDate, startDate, endDate);
+        verifyDateTimeIsInRangeOfTwoDates(firstTicketEndDate, startDate, endDate);
+    }
+
+    private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
+                String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
+                        startDate, dateTime));
+        softAssert.assertTrue(endDate.compareTo(dateTime.toLocalDate()) >= 0,
+                String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
+                        endDate, dateTime));
+        softAssert.assertAll();
+    }
+
+    @And("^Agent click on the arrow of Ticket End Date$")
+    public void agentClickOnTheArrowOfTicketEndDate() {
+        getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
     }
 }

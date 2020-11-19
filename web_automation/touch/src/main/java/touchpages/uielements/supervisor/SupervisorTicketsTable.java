@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".touchpages.uielements.supervisor-tickets")
+@FindBy(css = ".supervisor-tickets")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
     @FindBy(css =".cl-table-body .cl-table-row")
@@ -23,6 +23,11 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Route to Scheduler']")
     private WebElement routeToSchedulerButton;
 
+    @FindBy(css = ".supervisor-tickets__loading-more")
+    private WebElement loadingMoreTickets;
+
+    @FindBy (xpath = "//span[text()='End Date']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    private  WebElement ascendingArrowOfEndDateColumn;
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
@@ -47,11 +52,19 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         return list;
     }
 
-    public List<LocalDateTime> getTicketsStartDates(){
-        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+    public List<LocalDateTime> getTicketsStartDates() {
+        List<LocalDateTime> startDates = tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().map(a -> a.getStartDate()).collect(Collectors.toList());
+        scrollTicketsToTheTop();
+        return startDates;
     }
 
+    public List<LocalDateTime> getTicketsEndDates(){
+        List<LocalDateTime> endDates = tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+                .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
+        scrollTicketsToTheTop();
+        return endDates;
+    }
 
     public void clickRouteToSchedulerButton(){
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
@@ -61,5 +74,34 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
     }
 
+    public void scrollTicketsToTheTop(){
+        wheelScroll(this.getCurrentDriver(), scrolArea, -2000, 0,0);
+    }
 
+    public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
+    }
+
+    public void loadAllFoundTickets() {
+        int ticketsSize;
+        do {
+            ticketsSize = tickets.size();
+            scrollTicketsToTheButtom();
+            waitForMoreTicketsAreLoading(2, 5);
+        } while (ticketsSize != tickets.size());
+        scrollTicketsToTheTop();
+    }
+
+    public LocalDateTime getFirstTicketStartDates() {
+        return new SupervisorDeskTicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+    }
+
+    public LocalDateTime getFirstTicketEndDates() {
+        return new SupervisorDeskTicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+    }
+
+    public void clickAscendingArrowOfEndDateColumn(){
+        clickElem(this.getCurrentDriver(), ascendingArrowOfEndDateColumn, 3,
+                "Ascending Arrow Of End Date Column");
+    }
 }
