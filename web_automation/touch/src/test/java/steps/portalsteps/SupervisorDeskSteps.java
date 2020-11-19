@@ -367,24 +367,21 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorAvailableAsAgentDialog().clickLaunch();
     }
 
-    @And("^Agent filter by (.*) start date and (.*) end date$")
+    @And("^Agent filter by (.*) ago start date and (.*) end date$")
     public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(String startDateStr, String endDateStr) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now();
         //TODO: add cases for other periods by analogy with months and years
         //TODO: add the same for end date. (For today's value should take default value LocalDateTime.now())
-        if(startDateStr.contains("ago")) {
-            startDateStr = startDateStr.replace("ago", "").trim();
-            if(startDateStr.contains("months")) {
-                startDateStr = startDateStr.replace("months", "").trim();
-                startDate = startDate.minusMonths(Integer.parseInt(startDateStr));
-            } else if(startDateStr.contains("years")) {
-                startDateStr = startDateStr.replace("years", "").trim();
-                startDate = startDate.minusYears(Integer.parseInt(startDateStr));
-            } else if(startDateStr.contains("days")) {
-                startDateStr = startDateStr.replace("days", "").trim();
-                startDate = startDate.minusDays(Integer.parseInt(startDateStr));
-            }
+        if(startDateStr.contains("months")) {
+            startDateStr = startDateStr.replace("months", "").trim();
+            startDate = startDate.minusMonths(Integer.parseInt(startDateStr));
+        } else if(startDateStr.contains("years")) {
+            startDateStr = startDateStr.replace("years", "").trim();
+            startDate = startDate.minusYears(Integer.parseInt(startDateStr));
+        } else if(startDateStr.contains("days")) {
+            startDateStr = startDateStr.replace("days", "").trim();
+            startDate = startDate.minusDays(Integer.parseInt(startDateStr));
         }
 
         getSupervisorDeskPage().supervisorDeskHeader()
