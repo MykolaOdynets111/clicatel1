@@ -47,15 +47,19 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         return list;
     }
 
-    public List<LocalDateTime> getTicketsStartDates(){
-        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+    public List<LocalDateTime> getTicketsStartDates() {
+        List<LocalDateTime> startDates = tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().map(a -> a.getStartDate()).collect(Collectors.toList());
-    }
-    public List<LocalDateTime> getTicketsEndDates(){
-        return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
-                .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
+        scrollTicketsToTheTop();
+        return startDates;
     }
 
+    public List<LocalDateTime> getTicketsEndDates(){
+        List<LocalDateTime> endDates = tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
+                .stream().map(a -> a.getEndDate()).collect(Collectors.toList());
+        scrollTicketsToTheTop();
+        return endDates;
+    }
 
     public void clickRouteToSchedulerButton(){
         clickElem(this.getCurrentDriver(), routeToSchedulerButton, 5, "'Route to scheduler' button");
@@ -63,6 +67,10 @@ public class SupervisorTicketsTable extends AbstractUIElement {
 
     public void scrollTicketsToTheButtom(){
         wheelScroll(this.getCurrentDriver(), scrolArea, 2000, 0,0);
+    }
+
+    public void scrollTicketsToTheTop(){
+        wheelScroll(this.getCurrentDriver(), scrolArea, -2000, 0,0);
     }
 
 

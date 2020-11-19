@@ -381,6 +381,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             } else if(startDateStr.contains("years")) {
                 startDateStr = startDateStr.replace("years", "").trim();
                 startDate = startDate.minusYears(Integer.parseInt(startDateStr));
+            } else if(startDateStr.contains("days")) {
+                startDateStr = startDateStr.replace("days", "").trim();
+                startDate = startDate.minusDays(Integer.parseInt(startDateStr));
             }
         }
 

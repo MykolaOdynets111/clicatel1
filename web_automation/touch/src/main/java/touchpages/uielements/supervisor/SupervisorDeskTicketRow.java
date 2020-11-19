@@ -42,7 +42,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(xpath = ".//span[@class ='time-cell-content'][2]")
     private WebElement endDate;
 
-
+    private String scrollAreaCss = "[selenium-id='roster-scroll-container']";
    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
     public SupervisorDeskTicketRow(WebElement element) {
@@ -68,13 +68,15 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     }
 
     public LocalDateTime getStartDate(){
-        scrollToElem(this.getCurrentDriver(), startDate, "Start date");
+        wheelScrollDownToElement(this.getCurrentDriver(),
+                findElemByCSS(this.getCurrentDriver(), scrollAreaCss), startDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
         return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
     }
 
     public LocalDateTime getEndDate(){
-        scrollToElem(this.getCurrentDriver(), endDate, "End date");
+        wheelScrollDownToElement(this.getCurrentDriver(),
+                findElemByCSS(this.getCurrentDriver(), scrollAreaCss), endDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), endDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
         return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
     }

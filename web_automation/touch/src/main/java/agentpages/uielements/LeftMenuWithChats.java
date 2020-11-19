@@ -159,7 +159,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void selectChatsMenu(String option){
-        scrollToElem(this.getCurrentDriver(), this.getWrappedElement(), "Left Menu with chats");
         if (option.equalsIgnoreCase("Live Chats")){
             clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu" );
         } else if (option.equalsIgnoreCase("Tickets")){
