@@ -23,6 +23,9 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Route to Scheduler']")
     private WebElement routeToSchedulerButton;
 
+    @FindBy(css = ".supervisor-tickets__loading-more")
+    private WebElement loadingMoreTickets;
+
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
@@ -73,5 +76,17 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         wheelScroll(this.getCurrentDriver(), scrolArea, -2000, 0,0);
     }
 
+    public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
+        waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
+    }
 
+    public void loadAllFoundTickets() {
+        int ticketsSize;
+        do {
+            ticketsSize = tickets.size();
+            scrollTicketsToTheButtom();
+            waitForMoreTicketsAreLoading(2, 5);
+        } while (ticketsSize != tickets.size());
+        scrollTicketsToTheTop();
+    }
 }

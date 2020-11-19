@@ -433,4 +433,14 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         }
         softAssert.assertAll();
     }
+
+    @And("^Agent load all filtered tickets$")
+    public void agentLoadAllFilteredTickets() {
+        getSupervisorDeskPage().loadAllTickets();
+    }
+
+    @And("^Agent load all filtered closed chats$")
+    public void agentLoadAllFilteredChats() {
+        getSupervisorDeskPage().loadAllClosedChats();
+    }
 }

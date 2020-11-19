@@ -36,9 +36,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[text()='Loading results']")
     private WebElement loadingResults;
 
-    @FindBy(css = ".supervisor-tickets__loading-more")
-    private WebElement loadingMoreTickets;
-
     @FindBy(xpath = "//div[@class='spinner']")
     private WebElement spinner;
 
@@ -184,15 +181,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public void scrollTicketsDown(){
         getSupervisorTicketsTable().scrollTicketsToTheButtom();
-        waitForMoreTicketsAreLoading(2,5);
+        getSupervisorTicketsTable().waitForMoreTicketsAreLoading(2,5);
     }
 
     public void waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
         waitForAppearAndDisappear(this.getCurrentDriver(), spinner, waitForSpinnerToAppear, waitForSpinnerToDisappear);
-    }
-
-    public void waitForMoreTicketsAreLoading(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
-        waitForAppearAndDisappear(this.getCurrentDriver(), loadingMoreTickets, waitForSpinnerToAppear, waitForSpinnerToDisappear);
     }
 
      public void waitForLoadingResultsDisappear(int timeToAppear, int timeToDisappear){
@@ -233,5 +226,13 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     public void clickOnLaunchAgent() {
         supervisorButton.click();
         launchAgentButton.click();
+    }
+
+    public void loadAllTickets() {
+        getSupervisorTicketsTable().loadAllFoundTickets();
+    }
+
+    public void loadAllClosedChats() {
+        supervisorClosedChatsTable().loadAllFoundChats();
     }
 }
