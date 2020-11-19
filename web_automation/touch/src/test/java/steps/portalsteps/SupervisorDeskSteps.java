@@ -402,12 +402,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
         SoftAssert softAssert = new SoftAssert();
         for (LocalDateTime localDateTime : listOfDates) {
-            softAssert.assertTrue(startDate.compareTo(localDateTime.toLocalDate()) <= 0,
-                    String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
-                            startDate, localDateTime));
-            softAssert.assertTrue(endDate.compareTo(localDateTime.toLocalDate()) >= 0,
-                    String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
-                            endDate, localDateTime));
+            verifyDateTimeIsInRangeOfTwoDates(localDateTime, startDate, endDate);
         }
         softAssert.assertAll();
     }
@@ -421,15 +416,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
         SoftAssert softAssert = new SoftAssert();
         for (LocalDateTime localDateTime : listOfStartedDates) {
-            softAssert.assertTrue(startDate.compareTo(localDateTime.toLocalDate()) <= 0,
-                    String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
-                            startDate, localDateTime));
+            verifyDateTimeIsInRangeOfTwoDates(localDateTime, startDate, endDate);
         }
 
         for (LocalDateTime localDateTime : listOfEndedDates) {
-            softAssert.assertTrue(endDate.compareTo(localDateTime.toLocalDate()) >= 0,
-                    String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
-                            endDate, localDateTime));
+            verifyDateTimeIsInRangeOfTwoDates(localDateTime, startDate, endDate);
         }
         softAssert.assertAll();
     }
@@ -442,5 +433,39 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent load all filtered closed chats$")
     public void agentLoadAllFilteredChats() {
         getSupervisorDeskPage().loadAllClosedChats();
+    }
+
+    @Then("^Verify first closed chat date are fitted by filter$")
+    public void verifyFirstClosedChatDateAreFittedByFilter() {
+        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        LocalDateTime firstClosedChatDate = getSupervisorDeskPage().supervisorClosedChatsTable().getFirstClosedChatDate();
+        verifyDateTimeIsInRangeOfTwoDates(firstClosedChatDate, startDate, endDate);
+    }
+
+    @Then("^Verify first closed ticket date are fitted by filter$")
+    public void verifyFirstClosedTicketDateAreFittedByFilter() {
+        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        LocalDateTime firstTicketStartDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketStartDates();
+        LocalDateTime firstTicketEndDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketEndDates();
+        verifyDateTimeIsInRangeOfTwoDates(firstTicketStartDate, startDate, endDate);
+        verifyDateTimeIsInRangeOfTwoDates(firstTicketEndDate, startDate, endDate);
+    }
+
+    private void verifyDateTimeIsInRangeOfTwoDates(LocalDateTime dateTime, LocalDate startDate, LocalDate endDate) {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(startDate.compareTo(dateTime.toLocalDate()) <= 0,
+                String.format("One of the chats was started before filtered value. Expected: after %s, Found: %s",
+                        startDate, dateTime));
+        softAssert.assertTrue(endDate.compareTo(dateTime.toLocalDate()) >= 0,
+                String.format("One of the chats was ended before filtered value. Expected: before %s, Found: %s",
+                        endDate, dateTime));
+        softAssert.assertAll();
+    }
+
+    @And("^Agent click on the arrow of Ticket End Date$")
+    public void agentClickOnTheArrowOfTicketEndDate() {
+        getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
     }
 }

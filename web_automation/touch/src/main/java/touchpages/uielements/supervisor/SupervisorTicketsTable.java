@@ -26,6 +26,8 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(css = ".supervisor-tickets__loading-more")
     private WebElement loadingMoreTickets;
 
+    @FindBy (xpath = "//span[text()='End Date']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    private  WebElement ascendingArrowOfEndDateColumn;
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
@@ -88,5 +90,18 @@ public class SupervisorTicketsTable extends AbstractUIElement {
             waitForMoreTicketsAreLoading(2, 5);
         } while (ticketsSize != tickets.size());
         scrollTicketsToTheTop();
+    }
+
+    public LocalDateTime getFirstTicketStartDates() {
+        return new SupervisorDeskTicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+    }
+
+    public LocalDateTime getFirstTicketEndDates() {
+        return new SupervisorDeskTicketRow(tickets.get(0)).setCurrentDriver(this.getCurrentDriver()).getStartDate();
+    }
+
+    public void clickAscendingArrowOfEndDateColumn(){
+        clickElem(this.getCurrentDriver(), ascendingArrowOfEndDateColumn, 3,
+                "Ascending Arrow Of End Date Column");
     }
 }

@@ -29,6 +29,12 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
                 .stream().map(a -> a.getDate()).collect(Collectors.toList());
     }
 
+    public LocalDateTime getFirstClosedChatDate(){
+        return new SupervisorDeskClosedChatRow(closedChats.get(0))
+                .setCurrentDriver(this.getCurrentDriver())
+                .getDate();
+    }
+
     public void clickAscendingArrowOfChatEndedColumn(){
         clickElem(this.getCurrentDriver(), ascendingArrowOfChatEndedColumn, 3, "Ascending Arrow Of Chat Ended Column");
     }
