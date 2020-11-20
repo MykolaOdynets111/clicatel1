@@ -1,7 +1,6 @@
 package apihelper;
 
 import com.github.javafaker.Faker;
-import com.google.gson.JsonObject;
 import datamanager.*;
 import datamanager.jacksonschemas.*;
 import datamanager.jacksonschemas.chathistory.ChatHistory;
@@ -21,12 +20,10 @@ import io.restassured.path.json.exception.JsonPathException;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import mc2api.auth.PortalAuthToken;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
 import datamanager.jacksonschemas.ClientProfileOld;
 
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -704,7 +701,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return activeSession;
     }
 
-    public static Customer360PersonalInfo getCustomer360PersonalInfo(String tenantOrgName, String clineId, String integrationType){
+    public static UserPersonalInfo getUserPersonalInfo(String tenantOrgName, String clineId, String integrationType){
         JsonPath respJSON = getCustomerView(tenantOrgName, clineId);
         List<ClientProfileOld> clientProfiles = respJSON.getList("clientProfiles", ClientProfileOld.class);
 //        List<ClientProfileOld> clientProfilesList = new ArrayList<ClientProfileOld>();
@@ -753,7 +750,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 //        String phone =  (respJSON.getString("clientProfiles.attributes.phone[0]")==null || respJSON.getString("clientProfiles.attributes.phone[0]").isEmpty()) ? "Unknown" : respJSON.getString("clientProfiles.attributes.phone[0]");
 //        String email = (respJSON.getString("personalDetails.email")==null || respJSON.getString("personalDetails.email").isEmpty()) ? "Unknown" : respJSON.getString("personalDetails.email");
 
-        return new Customer360PersonalInfo(fullName.trim(), location,
+        return new UserPersonalInfo(fullName.trim(), location,
                 "Customer since: " + customerSince, email,
                 channelUsername, phone.replaceAll(" ", "") );
     }

@@ -13,7 +13,7 @@ Feature: .Control Profile info
     When Agent click on new conversation request from dotcontrol
     Then Correct dotcontrol client details are shown
     And Click 'Edit' button in Profile
-    When Fill in the form with new dotcontrol customer 360 info
+    When Fill in the form with new dotcontrol user profile info
     And Click 'Save' button in Profile
     Then dotcontrol customer info is updated on backend
     And Correct dotcontrol client details are shown
