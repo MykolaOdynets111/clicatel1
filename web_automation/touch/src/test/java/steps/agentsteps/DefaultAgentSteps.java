@@ -345,13 +345,13 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     }
 
-    @When("^(.*) see (.*) phone number added into customer's profile$")
-    public void updatePhoneNumberCustomer360(String agent, String isPhoneNumberRequired){
+    @When("^(.*) see (.*) phone number added into User profile$")
+    public void updatePhoneNumberUserProfile(String agent, String isPhoneNumberRequired){
         Assert.assertTrue(isRequiredPhoneNumberDisplayed(agent, isPhoneNumberRequired));
     }
 
-    @Then("^(.*) button (.*) displayed in Customer 360$")
-    public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
+    @Then("^(.*) button (.*) displayed in User profile$")
+    public void checkUserProfilePhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
         Profile profile = getAgentHomePage("main").getProfile();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
             Assert.assertFalse(profile.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
@@ -359,8 +359,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             Assert.assertTrue(profile.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
     }
 
-    @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in Customer 360$")
-    public void checkCustomer360PhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
+    @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in User profile$")
+    public void checkUserProfilePhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
         Profile profile = getAgentHomePage("main").getProfile();
         SoftAssert softAssert = new SoftAssert();
         if (isOrNotDisplayed.contains("not")) {
@@ -390,8 +390,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
     }
 
-    @When("Agent click on '(.*)' button in Customer 360")
-    public void clickPhoneActionsButtonsCustomer360(String buttonName){
+    @When("Agent click on '(.*)' button in User profile")
+    public void clickPhoneActionsButtonsUserProfile(String buttonName){
         getAgentHomeForMainAgent().getProfile().clickPhoneNumberVerificationButton(buttonName);
     }
 
