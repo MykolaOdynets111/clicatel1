@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
 @FindBy(css = ".supervisor-tickets")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
-    @FindBy(css =".cl-table-body .cl-table-row")
+    private final String ticketsCss = ".cl-table-body .cl-table-row";
+
+    @FindBy(css = ticketsCss)
     private List<WebElement> tickets;
 
     @FindBy(xpath = "//button[text() = 'Assign Manually']")
@@ -30,6 +32,7 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     private  WebElement ascendingArrowOfEndDateColumn;
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
+        waitForNumberOfElementsBeGreaterThenZero(this.getCurrentDriver(), ticketsCss, 7);
         return tickets.stream().map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver())).collect(Collectors.toList())
                 .stream().filter(a -> a.getName().toLowerCase()
                         .contains(userName.toLowerCase()))
