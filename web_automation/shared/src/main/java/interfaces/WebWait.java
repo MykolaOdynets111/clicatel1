@@ -147,6 +147,12 @@ public interface WebWait {
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
     }
 
+    default List<WebElement> waitForNumberOfElementsBeGreaterThenZero(WebDriver driver, String css, int wait){
+        return initWait(driver, wait).ignoring(NoSuchElementException.class)
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector(css), 0));
+    }
+
     // ================================== Elements to be Invisible  ======================================== //
 
 

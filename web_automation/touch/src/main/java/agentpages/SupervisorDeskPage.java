@@ -142,6 +142,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
         return chatsLive.stream()
                  .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
@@ -159,6 +160,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public boolean verifyChanelOfTheChatIsPresent(String channelName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
         return  chatsLive.stream()
                 .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .collect(Collectors.toList()).get(0).getIconName().equalsIgnoreCase(channelName);
