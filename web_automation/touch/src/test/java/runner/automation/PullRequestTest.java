@@ -29,7 +29,7 @@ import static runner.automation.Path.DOTCONTROL;
                 PATH + "OutOfSupportHoursAgentMode.feature",
                 PATH + "RedirectionOnAgentAfterProvidingUserInfo.feature",
                 DOTCONTROL + "DotControlMessagesForAllAdapter.feature",
-                DOTCONTROL + "DotControlCustomer360.feature",
+                DOTCONTROL + "DotControlUserProfile.feature",
                 DOTCONTROL + "DotControlEditedSuggestionSending.feature",
                 DOTCONTROL + "DotControlWithContext.feature"
         },

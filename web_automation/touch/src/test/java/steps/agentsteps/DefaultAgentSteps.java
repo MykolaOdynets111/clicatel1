@@ -31,7 +31,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
     private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
-    private static Customer360PersonalInfo customer360InfoForUpdating;
+    private static UserPersonalInfo userPersonalInfoForUpdating;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -277,26 +277,26 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("Correct (.*) client details are shown")
     public void verifyClientDetails(String clientFrom){
-        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getAgentHomePage("main")
+        UserPersonalInfo userPersonalInfoFromChatdesk = getAgentHomePage("main")
                 .getProfile().getActualPersonalInfo();
 
-        Assert.assertEquals(customer360PersonalInfoFromChatdesk, getCustomer360Info(clientFrom),
+        Assert.assertEquals(userPersonalInfoFromChatdesk, getUserPersonalInfo(clientFrom),
                 "User info is not as expected \n");
     }
 
     @Then("Correct dotcontrol client details from Init context are shown")
     public void verifyInitContextClientDetails(){
-        Customer360PersonalInfo customer360PersonalInfoFromChatdesk = getCustomer360Container("main").getActualPersonalInfo();
+        UserPersonalInfo userPersonalInfoFromChatdesk = getUserProfileContainer("main").getActualPersonalInfo();
 
-        Customer360PersonalInfo expectedResult = getCustomer360Info("dotcontrol");
+        UserPersonalInfo expectedResult = getUserPersonalInfo("dotcontrol");
         InitContext initContext = DotControlSteps.getInitContext();
         expectedResult.setFullName(initContext.getFullName())
                         .setEmail(initContext.getEmail())
                         .setPhone(initContext.getPhone().replace(" ", ""))
         .setChannelUsername("");
 
-        Assert.assertEquals(customer360PersonalInfoFromChatdesk, expectedResult,
-                "User Customer360 info is not as in init context \n");
+        Assert.assertEquals(userPersonalInfoFromChatdesk, expectedResult,
+                "User info is not as in init context \n");
     }
 
 
@@ -330,68 +330,68 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         sleepFor(waitTimeInMillis);
     }
 
-    @When("Fill in the form with new (.*) customer 360 info")
-    public void updateCustomer360Info(String customerFrom){
-        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
-        customer360InfoForUpdating = currentCustomerInfo.setLocation("Lviv")
+    @When("Fill in the form with new (.*) user profile info")
+    public void updateUserInfo(String customerFrom){
+        UserPersonalInfo currentCustomerInfo = getUserPersonalInfo(customerFrom);
+        userPersonalInfoForUpdating = currentCustomerInfo.setLocation("Lviv")
                             .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
                             .setPhone(faker.numerify("38093#######")); //"+380931576633");
         if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) {
-            customer360InfoForUpdating.setFullName("AQA Run");
-            customer360InfoForUpdating.setChannelUsername(customer360InfoForUpdating.getFullName());
+            userPersonalInfoForUpdating.setFullName("AQA Run");
+            userPersonalInfoForUpdating.setChannelUsername(userPersonalInfoForUpdating.getFullName());
 
         }
-        getAgentHomePage("main").getProfile().fillFormWithNewDetails(customer360InfoForUpdating);
+        getAgentHomePage("main").getProfile().fillFormWithNewDetails(userPersonalInfoForUpdating);
 
     }
 
-    @When("^(.*) see (.*) phone number added into customer's profile$")
-    public void updatePhoneNumberCustomer360(String agent, String isPhoneNumberRequired){
+    @When("^(.*) see (.*) phone number added into User profile$")
+    public void updatePhoneNumberUserProfile(String agent, String isPhoneNumberRequired){
         Assert.assertTrue(isRequiredPhoneNumberDisplayed(agent, isPhoneNumberRequired));
     }
 
-    @Then("^(.*) button (.*) displayed in Customer 360$")
-    public void checkCustomer360PhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
+    @Then("^(.*) button (.*) displayed in User profile$")
+    public void checkUserProfilePhoneButtonsVisibility(String buttonName, String isOrNotDisplayed){
         Profile profile = getAgentHomePage("main").getProfile();
         if (isOrNotDisplayed.equalsIgnoreCase("not"))
-            Assert.assertFalse(profile.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
+            Assert.assertFalse(profile.isUserSMSButtonsDisplayed(buttonName), "'" + buttonName + "' button is not displayed");
         else
-            Assert.assertTrue(profile.isCustomer360SMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
+            Assert.assertTrue(profile.isUserSMSButtonsDisplayed(buttonName), "'" + buttonName + "' button still displayed");
     }
 
-    @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in Customer 360$")
-    public void checkCustomer360PhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
+    @Then("^'Verify' and 'Re-send OTP' buttons (.*) displayed in User profile$")
+    public void checkUserProfilePhoneVerifyAndReSendButtonsVisibility(String isOrNotDisplayed){
         Profile profile = getAgentHomePage("main").getProfile();
         SoftAssert softAssert = new SoftAssert();
         if (isOrNotDisplayed.contains("not")) {
-            softAssert.assertFalse(profile.isCustomer360SMSButtonsDisplayed("Verify"),
+            softAssert.assertFalse(profile.isUserSMSButtonsDisplayed("Verify"),
                     "'Verify' button is not displayed");
-            softAssert.assertFalse(profile.isCustomer360SMSButtonsDisplayed("Re-send OTP"),
+            softAssert.assertFalse(profile.isUserSMSButtonsDisplayed("Re-send OTP"),
                     "'Re-send OTP' button is not displayed");
             softAssert.assertAll();
         }
         else {
-            softAssert.assertTrue(profile.isCustomer360SMSButtonsDisplayed("Verify"));
-            softAssert.assertTrue(profile.isCustomer360SMSButtonsDisplayed("Re-send OTP"));
+            softAssert.assertTrue(profile.isUserSMSButtonsDisplayed("Verify"));
+            softAssert.assertTrue(profile.isUserSMSButtonsDisplayed("Re-send OTP"));
             softAssert.assertAll();
         }
     }
 
     @When("^(.*) phone number for (.*) user$")
-    public void changePhoneNumberCustomer360(String changeOrDelete, String customerFrom){
+    public void changePhoneNumberUserProfile(String changeOrDelete, String customerFrom){
         String phoneNumber = " "; //in case we need to delete phone number
-        Customer360PersonalInfo currentCustomerInfo = getCustomer360Info(customerFrom);
+        UserPersonalInfo currentCustomerInfo = getUserPersonalInfo(customerFrom);
         if (changeOrDelete.equalsIgnoreCase("change"))
             phoneNumber = generateUSCellPhoneNumber();
 
-        customer360InfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
+        userPersonalInfoForUpdating = currentCustomerInfo.setPhone(phoneNumber);
 
         getAgentHomePage("main").getProfile().setPhoneNumber(phoneNumber);
         Assert.assertEquals(currentCustomerInfo.getPhone(), phoneNumber, "Entered phone number is not equal to displayed one");
     }
 
-    @When("Agent click on '(.*)' button in Customer 360")
-    public void clickPhoneActionsButtonsCustomer360(String buttonName){
+    @When("Agent click on '(.*)' button in User profile")
+    public void clickPhoneActionsButtonsUserProfile(String buttonName){
         getAgentHomeForMainAgent().getProfile().clickPhoneNumberVerificationButton(buttonName);
     }
 
@@ -407,7 +407,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("User's profile phone number (.*) in 'Verify phone' input field")
     public void phoneNumberForVerifyCheck(String isRequiredToDisplay){
-        String phoneNumberInCustomer360 = getAgentHomeForMainAgent().getProfile()
+        String phoneNumberInUserProfile = getAgentHomeForMainAgent().getProfile()
                 .getPhoneNumber().replaceAll("\\s+", "");
         String phoneNumberInVerifyPopUp = getAgentHomeForMainAgent().getVerifyPhoneNumberWindow()
                 .getEnteredPhoneNumber().replaceAll("[\\s-.]", "");
@@ -416,8 +416,8 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                     "Some phone number displayed in the field");
         }
         else{
-            Assert.assertEquals(phoneNumberInCustomer360, phoneNumberInVerifyPopUp,
-                    "Phone number in Verify phone window is different from displayed in Customer 360");
+            Assert.assertEquals(phoneNumberInUserProfile, phoneNumberInVerifyPopUp,
+                    "Phone number in Verify phone window is different from displayed in Customer Profile");
         }
     }
 
@@ -488,17 +488,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) customer info is updated on backend$")
     public void verifyCustomerInfoChangesOnBackend(String customerFrom){
-        Assert.assertEquals(getCustomer360Info(customerFrom), customer360InfoForUpdating,
-                "Customer 360 info is not updated on backend after making changes on chatdesk. \n");
+        Assert.assertEquals(getUserPersonalInfo(customerFrom), userPersonalInfoForUpdating,
+                "User Personal info is not updated on backend after making changes on chatdesk. \n");
     }
 
     @Then("^New info is shown in left menu with chats$")
     public void checkUpdatingUserInfoInLeftMenu(){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), customer360InfoForUpdating.getFullName().trim(),
-                "Full user name is not updated in left menu with chats after updating Customer 360 info \n");
-        soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), customer360InfoForUpdating.getLocation(),
-                "Location is not updated in left menu with chats after updating Customer 360 info \n");
+        soft.assertEquals(getLeftMenu("main").getActiveChatUserName(), userPersonalInfoForUpdating.getFullName().trim(),
+                "Full user name is not updated in left menu with chats after updating User Personal info \n");
+        soft.assertEquals(getLeftMenu("main").getActiveChatLocation(), userPersonalInfoForUpdating.getLocation(),
+                "Location is not updated in left menu with chats after updating User Personal info \n");
         soft.assertAll();
     }
 
@@ -531,7 +531,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^Customer name is updated in active chat header$")
     public void verifyCustomerNameUpdated(){
-        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(customer360InfoForUpdating.getFullName().trim()),
+        Assert.assertTrue(getAgentHomeForMainAgent().getChatHeader().getChatHeaderText().contains(userPersonalInfoForUpdating.getFullName().trim()),
                 "Updated customer name is not shown in chat header");
     }
 
@@ -541,7 +541,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Tenant image is not shown on chatdesk");
     }
 
-    private Customer360PersonalInfo getCustomer360Info(String clientFrom){
+    private UserPersonalInfo getUserPersonalInfo(String clientFrom){
         String clientId;
         String integrationType;
         switch (clientFrom){
@@ -570,7 +570,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 integrationType = "TOUCH";
                 break;
         }
-        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
+        return  ApiHelper.getUserPersonalInfo(Tenants.getTenantUnderTestOrgName(),
                 clientId, integrationType);
     }
 

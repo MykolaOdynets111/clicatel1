@@ -21,7 +21,7 @@ import java.util.List;
                 Path.FB_TESTS + "AgentAnswersOnNegativePost.feature",
                 Path.FB_TESTS + "AgentAnswersOnPost.feature",
                 Path.FB_TESTS + "AgentAvailabilityFBDM.feature",
-                Path.FB_TESTS + "Customer360FromFB.feature",
+                Path.FB_TESTS + "UserFromFB.feature",
                 Path.FB_TESTS + "FacebookChatTranscript.feature",
                 Path.FB_TESTS + "FBTransferringChat.feature",
                 Path.FB_TESTS + "RedirectToAgentNegativeDMMessage.feature",

@@ -37,9 +37,6 @@ public enum TwitterUsers {
     private static TwitterUsers LOGGED_IN_USER = null;
 
     public static String getLoggedInUserName() {
-//        String clientId = TwitterUsers.getLoggedInUser().getDmUserId();
-//        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
-//    clientId, "TWITTER").getFullName();
         return LOGGED_IN_USER.getTwitterUserName() + " " + LOGGED_IN_USER.getTwitterUserSurname();
     }
     public static TwitterUsers getLoggedInUser() {

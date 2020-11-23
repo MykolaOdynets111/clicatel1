@@ -1,7 +1,7 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import datamanager.Customer360PersonalInfo;
+import datamanager.UserPersonalInfo;
 import drivermanager.ConfigManager;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
@@ -69,11 +69,11 @@ public class Profile extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), getWrappedElement(), 2);
     }
 
-    public Customer360PersonalInfo getActualPersonalInfo(){
+    public UserPersonalInfo getActualPersonalInfo(){
         try {
             waitForElementToBeVisible(this.getCurrentDriver(), profileNameLabel, 3);
         } catch (TimeoutException e){
-            Assert.fail("Customer 360 details is not visible.");
+            Assert.fail("User details is not visible.");
         }
 
         String channelUsername = "Unknown";
@@ -93,7 +93,7 @@ public class Profile extends AbstractUIElement {
         } else {
             location = locationLabel.getAttribute("value");
         }
-        return new Customer360PersonalInfo(profileNameLabel.getAttribute("value").replace("\n", " "),
+        return new UserPersonalInfo(profileNameLabel.getAttribute("value").replace("\n", " "),
                 location, customerSinceLabel.getText(), mailLabel.getAttribute("value"), channelUsername, phone.replaceAll(" ", ""));
     }
 
@@ -101,7 +101,7 @@ public class Profile extends AbstractUIElement {
         saveEditButton.click();
     }
 
-    public void fillFormWithNewDetails(Customer360PersonalInfo valuesToSet){
+    public void fillFormWithNewDetails(UserPersonalInfo valuesToSet){
         if(!ConfigManager.getSuite().contains("twitter")) { // for now, because there is an issue TPORT-3989
             profileNameInput.clear();
             profileNameInput.sendKeys(valuesToSet.getFullName());
@@ -140,7 +140,7 @@ public class Profile extends AbstractUIElement {
         return findElemByCSS(this.getCurrentDriver(),phoneCSS).getAttribute("value");//getText(); // phoneLabel.getText();
     }
 
-    public boolean isCustomer360SMSButtonsDisplayed(String button){
+    public boolean isUserSMSButtonsDisplayed(String button){
         switch (button.toLowerCase()) {
             case "send otp":
                 return isElementShown(this.getCurrentDriver(), sendOTPButton, 4);
