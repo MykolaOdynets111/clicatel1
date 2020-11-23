@@ -14,7 +14,7 @@ Feature: Profile info for twitter user
     When Agent click on new conversation request from twitter
     Then Correct twitter dm client details are shown
     And Click 'Edit' button in Profile
-    When Fill in the form with new twitter dm customer 360 info
+    When Fill in the form with new twitter dm user profile info
     And Click 'Save' button in Profile
     Then twitter dm customer info is updated on backend
     And Correct twitter dm client details are shown

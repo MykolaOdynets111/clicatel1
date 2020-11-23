@@ -144,7 +144,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getSuggestedGroup();
     }
 
-    public static Profile getCustomer360Container(String agent){
+    public static Profile getUserProfileContainer(String agent){
         return getAgentHomePage(agent).getProfile();
     }
 

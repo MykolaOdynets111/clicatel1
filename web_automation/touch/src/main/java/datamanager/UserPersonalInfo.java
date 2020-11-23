@@ -1,6 +1,6 @@
 package datamanager;
 
-public class Customer360PersonalInfo {
+public class UserPersonalInfo {
 
     private String fullName;
     private String location;
@@ -9,7 +9,7 @@ public class Customer360PersonalInfo {
     private String channelUsername;
     private String phone;
 
-    public Customer360PersonalInfo(String fullName, String location, String customerSince, String email, String channelUsername, String phone) {
+    public UserPersonalInfo(String fullName, String location, String customerSince, String email, String channelUsername, String phone) {
         this.fullName = fullName;
         this.location = location;
         this.customerSince = customerSince;
@@ -18,28 +18,28 @@ public class Customer360PersonalInfo {
         this.phone = phone;
     }
 
-    public Customer360PersonalInfo setFullName(String fullName) {
+    public UserPersonalInfo setFullName(String fullName) {
         this.fullName = fullName;
         return this;
     }
 
 
-    public Customer360PersonalInfo setLocation(String location) {
+    public UserPersonalInfo setLocation(String location) {
         this.location = location;
         return this;
     }
 
-    public Customer360PersonalInfo setEmail(String email) {
+    public UserPersonalInfo setEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public Customer360PersonalInfo setPhone(String phone) {
+    public UserPersonalInfo setPhone(String phone) {
         this.phone = phone;
         return this;
     }
 
-    public Customer360PersonalInfo setChannelUsername(String channelUsername) {
+    public UserPersonalInfo setChannelUsername(String channelUsername) {
         this.channelUsername = channelUsername;
         return this;
     }
@@ -73,7 +73,7 @@ public class Customer360PersonalInfo {
 
     @Override
     public boolean equals(Object object) {
-        Customer360PersonalInfo another =  (Customer360PersonalInfo) object;
+        UserPersonalInfo another =  (UserPersonalInfo) object;
         return this.fullName.trim().equals(another.getFullName().trim()) && this.location.equals(another.getLocation()) &&
                 this.customerSince.equals(another.getCustomerSince()) && this.email.equals(another.getEmail()) &&
 //                this.channelUsername.equals(another.getChannelUsername()) &&
@@ -82,7 +82,7 @@ public class Customer360PersonalInfo {
 
     @Override
     public String toString() {
-        return "Customer360PersonalInfo{" +
+        return "UserPersonalInfo{" +
                 "fullName='" + fullName + "'\n" +
                 ", location='" + location + "'\n" +
                 ", customerSince='" + customerSince + "'\n" +

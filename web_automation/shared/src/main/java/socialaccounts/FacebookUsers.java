@@ -113,9 +113,6 @@ public enum FacebookUsers {
     }
 
     public static String getLoggedInUserName(){
-//        String clientId = FacebookUsers.getLoggedInUser().getFBUserID();
-//        return  ApiHelper.getCustomer360PersonalInfo(Tenants.getTenantUnderTestOrgName(),
-//            clientId, "FACEBOOK").getFullName();
         return LOGGED_IN_USER.getFBUserName() + " " + LOGGED_IN_USER.getFBUserSurname();
     }
 

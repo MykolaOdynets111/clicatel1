@@ -12,7 +12,7 @@ Feature: Profile info from fb
     When Agent click on new conversation request from facebook
     Then Correct fb dm client details are shown
     And Click 'Edit' button in Profile
-    When Fill in the form with new fb dm customer 360 info
+    When Fill in the form with new fb dm user profile info
     And Click 'Save' button in Profile
     Then fb dm customer info is updated on backend
     And Correct fb dm client details are shown

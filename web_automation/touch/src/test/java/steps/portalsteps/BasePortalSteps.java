@@ -1437,7 +1437,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @Then("^I check primary color for tenant in agent desk$")
     public void iCheckPrimaryColorForTenantInAgentDesk() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getCustomer360ButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getAgentHomePage("agent").getUserProfileButtonColor(),
                 tenantInfo.get("newColor"), "Color for tenant 'Costomer' is not correct");
 //        soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getExpandFilterButtonColor(),
 //                tenantInfo.get("newColor"), "Color for tenant dropdown button is not correct");
@@ -1462,11 +1462,11 @@ public class BasePortalSteps extends AbstractPortalSteps {
                             tenantInfo.get("newColor"), "Color for tenant logo border in agent desk window is not correct");
         soft.assertEquals(AbstractAgentSteps.getLeftMenu("agent").getUserPictureColor(),
                             tenantInfo.get("newColor"), "Color for User Picture in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getUserPictureColor(),
+        soft.assertEquals(AbstractAgentSteps.getUserProfileContainer("agent").getUserPictureColor(),
                             tenantInfo.get("newColor"), "Color for User Picture in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getSaveEditButtonColor(),
+        soft.assertEquals(AbstractAgentSteps.getUserProfileContainer("agent").getSaveEditButtonColor(),
                             tenantInfo.get("newColor"), "Color for Edit button in 360container in agent desk window is not correct");
-        soft.assertEquals(AbstractAgentSteps.getCustomer360Container("agent").getMailColor(),
+        soft.assertEquals(AbstractAgentSteps.getUserProfileContainer("agent").getMailColor(),
                             tenantInfo.get("newColor"), "Color for Email in 360container in agent desk window is not correct");
         soft.assertEquals(AbstractAgentSteps.getChatHeader("agent").getPinChatButtonColor(),
                             tenantInfo.get("newColor"), "Color for Pin chat button in agent desk window is not correct");

@@ -25,7 +25,7 @@ import static runner.generalbank.Path.DOTCONTROL;
                 PATH + "AgentAvailability.feature", // +
                 PATH + "ChatConsoleAgentTab.feature", // +
                 PATH + "ChatConsoleOverview.feature", // +
-                PATH + "Customer360FromWidget.feature", // +
+                PATH + "UserProfileFromWidget.feature", // +
                 PATH + "PinChatCloseTransfer.feature", // +
                 PATH + "CancelTransferingChat.feature",
                 PATH + "TransferBackTransferedChat.feature", // +

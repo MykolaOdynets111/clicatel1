@@ -42,7 +42,9 @@ public class ApiORCA {
                 "    \"apiToken\": null,\n" +
                 "    \"type\": \"orca\",\n" +
                 "    \"callbackUrl\": \"" + callBackUrl + "\",\n" +
-                "    \"businessId\": \"cam_flow\"\n" +
+                "    \"businessId\": \"cam_flow\",\n" +
+                "    \"s3AttachmentBucketName\": \"stage-abc-adapter-media\",\n" +
+                "    \"s3AdditionalGrantee\": []" +
                 " }\n" +
                 "}";
     }

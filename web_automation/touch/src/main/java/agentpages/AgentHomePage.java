@@ -57,7 +57,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private WebElement historyDetails;
 
     @FindBy(css = "div > div.active")
-    private WebElement customer360Button;
+    private WebElement userProfileButton;
 
     @FindBy(css = "#right-panel .cl-r-tabs__tab.cl-r-tabs__tab--selected")
     private WebElement selectedTab;
@@ -260,8 +260,8 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
     }
 
-    public String getCustomer360ButtonColor() {
-        return Color.fromString(customer360Button.getCssValue("background-color")).asHex();
+    public String getUserProfileButtonColor() {
+        return Color.fromString(userProfileButton.getCssValue("background-color")).asHex();
     }
 
     public String getSelectedTabHeader(){

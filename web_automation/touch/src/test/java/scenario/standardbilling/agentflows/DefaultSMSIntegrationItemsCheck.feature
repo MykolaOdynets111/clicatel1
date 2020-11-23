@@ -13,7 +13,7 @@ Feature: Default SMS integration items visibility check
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Send SMS button is disabled on Chat header
-    And Send OTP button is displayed in Customer 360
+    And Send OTP button is displayed in User profile
     When Agent switches to opened Portal page
     And Disable the SMS integration
     Then Status of SMS integration is changed to "Not Active"
@@ -22,7 +22,7 @@ Feature: Default SMS integration items visibility check
     Then Agent has old conversation shown
 #    And Agent click on last opened conversation request from touch
     And Send SMS button hidden from the Chat header
-    And Send OTP button not displayed in Customer 360
+    And Send OTP button not displayed in User profile
 
   Scenario: Send SMS button change state depending on phone number availability
     Given sms integration status is set to enabled for Standard Billing tenant
@@ -32,13 +32,13 @@ Feature: Default SMS integration items visibility check
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
-    When Agent see no phone number added into customer's profile
+    When Agent see no phone number added into User profile
     Then Send SMS button is disabled on Chat header
-    And Send OTP button is displayed in Customer 360
+    And Send OTP button is displayed in User profile
     When Click 'Save' button in Profile
     And Change phone number for touch user
     And Click 'Save' button in Profile
 #    When Wait for 3 seconds for Phone Number to be updated
     When Wait for 2 seconds for Phone Number update
     Then Send SMS button is enabled on Chat header
-    And Send OTP button is displayed in Customer 360
+    And Send OTP button is displayed in User profile

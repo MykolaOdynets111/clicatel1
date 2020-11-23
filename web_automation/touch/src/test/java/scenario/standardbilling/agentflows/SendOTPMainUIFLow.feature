@@ -11,15 +11,15 @@ Feature: General Send OTP flow
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     And Conversation area becomes active with connect to agent user's message
-    Then Agent see his phone number added into customer's profile
-    When Agent click on 'Send OTP' button in Customer 360
+    Then Agent see his phone number added into User profile
+    When Agent click on 'Send OTP' button in User profile
     Then 'Verify phone' window is opened
     And User's profile phone number displayed in 'Verify phone' input field
     When Agent click on Send OTP button on 'Verify phone' window
     Then 'Verify phone' window is closed
     And Chat separator with OTP code and 'I have just sent...' message with user phone number are displayed
-    And Verify button is displayed in Customer 360
-    And Re-send OTP button is displayed in Customer 360
+    And Verify button is displayed in User profile
+    And Re-send OTP button is displayed in User profile
     When User refreshes the widget page
     And Click chat icon
     Then There is no OTP code response
