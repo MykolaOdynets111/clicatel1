@@ -9,13 +9,11 @@ import java.util.List;
 
 @FindBy(css = ".chats-list")
 public class SupervisorOpenedClosedChatsList extends AbstractUIElement {
-    private final String closedChatCss = ".cl-r-chat-item";
-
-    @FindBy(css = closedChatCss)
+    @FindBy(css = ".cl-r-chat-item")
     private List<WebElement> closedChats;
 
     public boolean isClosedChatsHaveSendEmailButton() {
-        waitForNumberOfElementsBeGreaterThenZero(getCurrentDriver(), closedChatCss, 5);
+        waitForFirstElementToBeVisible(getCurrentDriver(), closedChats, 5);
         for(WebElement closedChat : closedChats) {
             clickElem(getCurrentDriver(), closedChat, 2, "Closed Chat");
             SupervisorDeskPage supervisorDeskPage = new SupervisorDeskPage(this.getCurrentDriver());

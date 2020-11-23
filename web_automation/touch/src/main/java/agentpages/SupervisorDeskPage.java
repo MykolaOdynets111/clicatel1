@@ -18,9 +18,7 @@ import java.util.stream.Collectors;
 
 public class SupervisorDeskPage extends PortalAbstractPage {
 
-    private final String liveChatsCss = ".cl-r-chat-item";
-
-    @FindBy(css = liveChatsCss)
+    @FindBy(css = ".cl-r-chat-item")
     private List<WebElement> chatsLive;
 
     @FindBy (css = ".fade.dialog.in.modal")
@@ -144,7 +142,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
-        waitForNumberOfElementsBeGreaterThenZero(this.getCurrentDriver(), liveChatsCss, 7);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
         return chatsLive.stream()
                  .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
@@ -162,7 +160,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public boolean verifyChanelOfTheChatIsPresent(String channelName){
-        waitForNumberOfElementsBeGreaterThenZero(this.getCurrentDriver(), liveChatsCss, 7);
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
         return  chatsLive.stream()
                 .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .collect(Collectors.toList()).get(0).getIconName().equalsIgnoreCase(channelName);
