@@ -1,10 +1,11 @@
-package portalpages;
+package agentpages.dashboard;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portalpages.PortalAbstractPage;
 
-public class SettingsPage extends PortalAbstractPage{
+public class SettingsPage extends PortalAbstractPage {
 
     public SettingsPage(WebDriver driver) {
         super(driver);

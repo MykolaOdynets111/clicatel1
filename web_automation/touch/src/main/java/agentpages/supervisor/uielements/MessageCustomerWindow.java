@@ -1,4 +1,4 @@
-package touchpages.uielements.supervisor;
+package agentpages.supervisor.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;

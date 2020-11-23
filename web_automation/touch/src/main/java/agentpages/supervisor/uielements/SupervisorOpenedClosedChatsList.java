@@ -1,7 +1,7 @@
-package touchpages.uielements.supervisor;
+package agentpages.supervisor.uielements;
 
 import abstractclasses.AbstractUIElement;
-import agentpages.SupervisorDeskPage;
+import agentpages.supervisor.SupervisorDeskPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
