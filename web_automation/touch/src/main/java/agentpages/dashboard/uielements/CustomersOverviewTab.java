@@ -12,6 +12,9 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = "[selenium-id='tab-customers-overview-tabs-Customers History']")
     private WebElement customersHistoryButton;
 
+    @FindBy(css = "[selenium-id='tab-customers-overview-tabs-Live Customers']")
+    private WebElement liveCustomersButton;
+
     @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:first-child .cl-r-select__indicators")
     private WebElement channelFilterDropdown;
 
@@ -24,6 +27,11 @@ public class CustomersOverviewTab extends AbstractUIElement {
     public void clickOnCustomersHistory() {
         waitForElementToBeVisible(this.getCurrentDriver(), customersHistoryButton, 5);
         customersHistoryButton.click();
+    }
+
+    public void clickOnLiveCustomers() {
+        waitForElementToBeVisible(this.getCurrentDriver(), liveCustomersButton, 5);
+        liveCustomersButton.click();
     }
 
     public void selectChannelForReport(String channel) {

@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.util.List;
@@ -15,9 +16,14 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().clickOnCustomersOverviewTab();
     }
 
-    @And("^Admin click on Customers History on dashboard")
+    @And("^Admin click on Customers History on dashboard$")
     public void agentClickOnCustomersHistory() {
         getDashboardPage().getCustomersOverviewTab().clickOnCustomersHistory();
+    }
+
+    @And("^Admin click on Live Customers on dashboard$")
+    public void agentClickOnLiveCustomers() {
+        getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomers();
     }
 
     @Then("^Admin is able to see (.*) graphs$")
@@ -67,5 +73,17 @@ public class DashboardSteps extends AbstractPortalSteps {
                     String.format("Graph %s is not filtered by %s channel and %s period", graph, channel, period));
         }
         softAssert.assertAll();
+    }
+
+    @Then("^Admin should see no live chats message in Live Chats by Channel$")
+    public void adminShouldSeeNoLiveChatsMessageInLiveChatsByChannel() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNoLiveChatsDisplayed(),
+                "No live chats message is not displayed in Live Chats By Channel");
+    }
+
+    @Then("^Admin should see Web Chat chart in Live Chats by Channel$")
+    public void adminShouldSeeWebChatChartInLiveChatsByChannel() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isWebChatChartIsDisplayed(),
+                "Web Chat chart is not displayed in Live Chats By Channel");
     }
 }

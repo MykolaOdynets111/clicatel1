@@ -1,10 +1,7 @@
 package agentpages.dashboard;
 
 
-import agentpages.dashboard.uielements.CustomerSatisfactionSection;
-import agentpages.dashboard.uielements.CustomersHistory;
-import agentpages.dashboard.uielements.CustomersOverviewTab;
-import agentpages.dashboard.uielements.NetPromoterScoreSection;
+import agentpages.dashboard.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -46,6 +43,7 @@ public class DashboardPage extends PortalAbstractPage {
     private CustomersHistory customersHistory;
     private NetPromoterScoreSection netPromoterScoreSection;
     private CustomerSatisfactionSection customerSatisfactionSection;
+    private LiveChatsByChannel liveChatsByChannel;
     // == Constructors == //
 
     public DashboardPage() {
@@ -85,6 +83,11 @@ public class DashboardPage extends PortalAbstractPage {
     public CustomerSatisfactionSection getCustomerSatisfactionSection() {
         customerSatisfactionSection.setCurrentDriver(this.getCurrentDriver());
         return customerSatisfactionSection;
+    }
+
+    public LiveChatsByChannel getLiveChatsByChannel() {
+        liveChatsByChannel.setCurrentDriver(this.getCurrentDriver());
+        return liveChatsByChannel;
     }
 
     public String getWaitingChatsNumber(){

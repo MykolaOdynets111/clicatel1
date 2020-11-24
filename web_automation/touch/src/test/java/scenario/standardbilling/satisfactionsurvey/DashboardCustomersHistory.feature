@@ -69,3 +69,16 @@ Feature: Dashboard: Customer History
     Then Admin see all graphs filtered by WhatsApp channel and Past 3 weeks period
     And Admin filter Customers History by Apple Business Chat channel and Past 4 weeks period
     Then Admin see all graphs filtered by Apple Business Chat channel and Past 4 weeks period
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
+  Scenario: Dashboard:: Verify if Snapshot displays chats which are currently active
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Live Customers on dashboard
+    Then Admin should see no live chats message in Live Chats by Channel
+    And User select Standard Billing tenant
+    When Click chat icon
+    And User enter connect to agent into widget input field
+    Then Admin should see Web Chat chart in Live Chats by Channel
