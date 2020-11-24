@@ -50,3 +50,22 @@ Feature: Dashboard: Customer History
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
     Then Admin is able to see Customer Satisfaction, Live Chats by Channel, Past Sentiment graphs
+
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
+  Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Webchat channel and Past day period
+    Then Admin see all graphs filtered by Web Chat channel and Past day period
+    And Admin filter Customers History by Facebook channel and Past week period
+    Then Admin see all graphs filtered by Facebook channel and Past week period
+    And Admin filter Customers History by Twitter channel and Past 2 weeks period
+    Then Admin see all graphs filtered by Twitter channel and Past 2 weeks period
+    And Admin filter Customers History by WhatsApp channel and Past 3 weeks period
+    Then Admin see all graphs filtered by WhatsApp channel and Past 3 weeks period
+    And Admin filter Customers History by Apple Business Chat channel and Past 4 weeks period
+    Then Admin see all graphs filtered by Apple Business Chat channel and Past 4 weeks period
