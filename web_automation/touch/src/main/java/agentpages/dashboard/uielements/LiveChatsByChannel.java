@@ -9,14 +9,13 @@ public class LiveChatsByChannel extends AbstractUIElement {
     @FindBy(css = ".channel-stats__charts")
     private WebElement noLiveChatsMessage;
 
-    @FindBy(css = ".cl-bar-chart__bar bar-webchat")
+    @FindBy(css = ".bar-webchat")
     private WebElement webChatChart;
 
     public boolean isNoLiveChatsDisplayed() {
         return isElementShown(this.getCurrentDriver(), noLiveChatsMessage, 5);
     }
 
-    //TODO: need to investigate why web chat chart is not displayed
     public boolean isWebChatChartIsDisplayed() {
         return isElementShown(this.getCurrentDriver(), webChatChart, 5);
     }
