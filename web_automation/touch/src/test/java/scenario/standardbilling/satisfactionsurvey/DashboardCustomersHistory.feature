@@ -13,9 +13,7 @@ Feature: Dashboard: Customer History
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
     Then Agent see conversation area with connect to Support user's message
-    When Agent click "End chat" button
-    Then End chat popup for agent should be opened
-    When Agent click 'Close chat' button
+    When Agent closes chat
     Then User see NPS survey form
     When Submit survey form with Automation rate comment and 5 rate
     And I open portal
