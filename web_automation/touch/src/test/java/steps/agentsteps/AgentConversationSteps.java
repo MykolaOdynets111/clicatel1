@@ -66,7 +66,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
                     "health@test.com";
 
-            Assert.assertEquals(getChatBody("main agent").getPersonalInfoText(),
+            Assert.assertEquals(getChatBody(agent).getPersonalInfoText(),
                     userMessage, "Personal info message is not shown in conversation area");
             return;
         }
