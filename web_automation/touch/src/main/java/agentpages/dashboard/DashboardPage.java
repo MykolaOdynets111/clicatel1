@@ -139,7 +139,6 @@ public class DashboardPage extends PortalAbstractPage {
     }
 
     public void clickOnCustomersOverviewTab() {
-        waitForElementToBeVisible(this.getCurrentDriver(), customersOverviewTabButton, 5);
-        customersOverviewTabButton.click();
+        clickElem(this.getCurrentDriver(), customersOverviewTabButton, 5, "Customers Overview Tab");
     }
 }

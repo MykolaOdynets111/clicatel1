@@ -11,8 +11,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     private WebElement customersHistoryButton;
 
     public void clickOnCustomersHistory() {
-        waitForElementToBeVisible(this.getCurrentDriver(), customersHistoryButton, 5);
-        customersHistoryButton.click();
+        clickElem(this.getCurrentDriver(), customersHistoryButton, 5, "Customers History Tab");
     }
 
 }
