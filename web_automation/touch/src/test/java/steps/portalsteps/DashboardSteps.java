@@ -16,6 +16,11 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().clickOnCustomersOverviewTab();
     }
 
+    @And("^Admin click on Activity Overview dashboard tab$")
+    public void adminClickOnActivityOverviewDashboardTab() {
+        getDashboardPage().clickOnCustomersOverviewTab();
+    }
+
     @And("^Admin click on Customers History on dashboard$")
     public void agentClickOnCustomersHistory() {
         getDashboardPage().getCustomersOverviewTab().clickOnCustomersHistory();
