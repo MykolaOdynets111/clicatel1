@@ -16,7 +16,7 @@ Feature: Dashboard: Customer History
     When Agent closes chat
     Then User see NPS survey form
     When Submit survey form with Automation rate comment and 5 rate
-    And I open portal
+    And Agent switches to opened Portal page
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
