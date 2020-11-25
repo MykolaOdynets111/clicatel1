@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
-import agentpages.SupervisorDeskPage;
+import agentpages.supervisor.SupervisorDeskPage;
+import agentpages.dashboard.DashboardPage;
 import com.github.javafaker.Faker;
 import driverfactory.DriverFactory;
 import interfaces.DateTimeHelper;
@@ -10,7 +11,6 @@ import interfaces.WebWait;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
-import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {

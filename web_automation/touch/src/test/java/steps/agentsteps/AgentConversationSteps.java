@@ -59,6 +59,21 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "'" + userMessage + "' User message is not shown in conversation area");
     }
 
+    @Then("^(.*) see conversation area with (.*) user's message$")
+    public void verifyUserMessageOnAgentDeskForSpecificAgent(String agent, String userMessage) {
+        if (userMessage.contains("personal info")) {
+            userMessage = "Submitted data:\n" +
+                    "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
+                    "health@test.com";
+
+            Assert.assertEquals(getChatBody(agent).getPersonalInfoText(),
+                    userMessage, "Personal info message is not shown in conversation area");
+            return;
+        }
+        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage),
+                "'" + userMessage + "' User message is not shown in conversation area");
+    }
+
     @Then("^Agent attach (.*) file type$")
     public void attachFile(String fileName) {
         File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." + fileName);

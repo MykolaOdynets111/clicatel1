@@ -1,10 +1,15 @@
-package portalpages;
+package agentpages.dashboard;
 
 
+import agentpages.dashboard.uielements.CustomerSatisfactionSection;
+import agentpages.dashboard.uielements.CustomersHistory;
+import agentpages.dashboard.uielements.CustomersOverviewTab;
+import agentpages.dashboard.uielements.NetPromoterScoreSection;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import portalpages.PortalAbstractPage;
 import portaluielem.AgentsTableChatConsole;
 
 
@@ -31,10 +36,16 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath ="//a[text()='Settings']")
     private WebElement settingsButton;
 
+    @FindBy(css = "[selenium-id='tab-dashboard-tabs-Customers Overview']")
+    private WebElement customersOverviewTabButton;
+
     private String spinner = "//div[@class='spinner']";
 
     private AgentsTableChatConsole agentsTableChatConsole;
-
+    private CustomersOverviewTab customersOverviewTab;
+    private CustomersHistory customersHistory;
+    private NetPromoterScoreSection netPromoterScoreSection;
+    private CustomerSatisfactionSection customerSatisfactionSection;
     // == Constructors == //
 
     public DashboardPage() {
@@ -53,6 +64,27 @@ public class DashboardPage extends PortalAbstractPage {
     public AgentsTableChatConsole getAgentsTableChatConsole(){
         agentsTableChatConsole.setCurrentDriver(this.getCurrentDriver());
         return agentsTableChatConsole;
+    }
+
+    public CustomersOverviewTab getCustomersOverviewTab() {
+        customersOverviewTab.setCurrentDriver(this.getCurrentDriver());
+        return customersOverviewTab;
+    }
+
+    public CustomersHistory getCustomersHistory() {
+        customersHistory.setCurrentDriver(this.getCurrentDriver());
+        return customersHistory;
+    }
+
+
+    public NetPromoterScoreSection getNetPromoterScoreSection() {
+        netPromoterScoreSection.setCurrentDriver(this.getCurrentDriver());
+        return netPromoterScoreSection;
+    }
+
+    public CustomerSatisfactionSection getCustomerSatisfactionSection() {
+        customerSatisfactionSection.setCurrentDriver(this.getCurrentDriver());
+        return customerSatisfactionSection;
     }
 
     public String getWaitingChatsNumber(){
@@ -104,5 +136,9 @@ public class DashboardPage extends PortalAbstractPage {
     public SettingsPage openSettingsPage(){
         clickElem(this.getCurrentDriver(), settingsButton, 6, "Settings button");
         return new SettingsPage(this.getCurrentDriver());
+    }
+
+    public void clickOnCustomersOverviewTab() {
+        clickElem(this.getCurrentDriver(), customersOverviewTabButton, 5, "Customers Overview Tab");
     }
 }

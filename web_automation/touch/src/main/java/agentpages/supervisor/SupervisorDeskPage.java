@@ -1,5 +1,6 @@
-package agentpages;
+package agentpages.supervisor;
 
+import agentpages.supervisor.uielements.*;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.ChatHeader;
 import agentpages.uielements.Profile;
@@ -9,7 +10,6 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 import portaluielem.*;
-import touchpages.uielements.supervisor.*;
 
 import java.util.List;
 import java.util.Set;
