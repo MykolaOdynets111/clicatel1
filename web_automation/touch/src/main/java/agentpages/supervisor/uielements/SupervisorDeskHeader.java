@@ -73,8 +73,11 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     public SupervisorDeskHeader selectStartDate(LocalDate startDate) {
         clickElem(this.getCurrentDriver(), startDateInput, 1, "Start Date Input");
-        while (!getAttributeFromElem(getCurrentDriver(), startDateInput, 1,
-                "Filter start date", "value").isEmpty()) {
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(getCurrentDriver(), startDateInput, 1,
+                    "Filter start date", "value").isEmpty())
+                break;
             startDateInput.sendKeys("");
             startDateInput.sendKeys(Keys.BACK_SPACE);
         }
@@ -85,8 +88,11 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     public SupervisorDeskHeader selectEndDate(LocalDate endDate) {
         clickElem(this.getCurrentDriver(), endDateInput, 1, "Start Date Input");
-        while (!getAttributeFromElem(getCurrentDriver(), endDateInput, 1,
-                "Filter start date", "value").isEmpty()) {
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(getCurrentDriver(), endDateInput, 1,
+                    "Filter start date", "value").isEmpty())
+                break;
             endDateInput.sendKeys("");
             endDateInput.sendKeys(Keys.BACK_SPACE);
         }
