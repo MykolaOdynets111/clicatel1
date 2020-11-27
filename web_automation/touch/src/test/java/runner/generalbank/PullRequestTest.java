@@ -23,7 +23,6 @@ import static runner.generalbank.Path.DOTCONTROL;
                 PATH + "AgentDeskSuggestions.feature", //  +
                 PATH + "UserSentimentUpdating.feature", // +
                 PATH + "AgentAvailability.feature", // +
-                PATH + "ChatConsoleAgentTab.feature", // +
                 PATH + "ChatConsoleOverview.feature", // +
                 PATH + "UserProfileFromWidget.feature", // +
                 PATH + "PinChatCloseTransfer.feature", // +

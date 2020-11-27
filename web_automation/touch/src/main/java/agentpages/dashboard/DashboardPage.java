@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
-import portaluielem.AgentsTableChatConsole;
 
 
 public class DashboardPage extends PortalAbstractPage {
@@ -36,9 +35,13 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(css = "[selenium-id='tab-dashboard-tabs-Customers Overview']")
     private WebElement customersOverviewTabButton;
 
+    @FindBy(css = "[selenium-id='tab-dashboard-tabs-Agents Performance']")
+    private WebElement agentsPerformanceTabButton;
+
     private String spinner = "//div[@class='spinner']";
 
-    private AgentsTableChatConsole agentsTableChatConsole;
+    private AgentPerformanceTab agentPerformanceTab;
+    private LiveAgentsTableDashboard agentsTableDashboard;
     private CustomersOverviewTab customersOverviewTab;
     private CustomersHistory customersHistory;
     private NetPromoterScoreSection netPromoterScoreSection;
@@ -59,9 +62,14 @@ public class DashboardPage extends PortalAbstractPage {
         }
     }
 
-    public AgentsTableChatConsole getAgentsTableChatConsole(){
-        agentsTableChatConsole.setCurrentDriver(this.getCurrentDriver());
-        return agentsTableChatConsole;
+    public LiveAgentsTableDashboard getAgentsTableDashboard(){
+        agentsTableDashboard.setCurrentDriver(this.getCurrentDriver());
+        return agentsTableDashboard;
+    }
+
+    public AgentPerformanceTab getAgentPerformanceTab() {
+        agentPerformanceTab.setCurrentDriver(this.getCurrentDriver());
+        return agentPerformanceTab;
     }
 
     public CustomersOverviewTab getCustomersOverviewTab() {
@@ -143,5 +151,9 @@ public class DashboardPage extends PortalAbstractPage {
 
     public void clickOnCustomersOverviewTab() {
         clickElem(this.getCurrentDriver(), customersOverviewTabButton, 5, "Customers Overview Tab");
+    }
+
+    public void clickOnAgentsPerformanceTab() {
+        clickElem(this.getCurrentDriver(), agentsPerformanceTabButton, 5, "Agents Performance Tab");
     }
 }

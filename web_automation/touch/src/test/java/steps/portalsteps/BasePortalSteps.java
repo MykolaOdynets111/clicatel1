@@ -1,13 +1,10 @@
 package steps.portalsteps;
 
-import agentpages.AgentHomePage;
 import apihelper.ApiHelper;
-import datamanager.jacksonschemas.AvailableAgent;
 import datamanager.model.PaymentMethod;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import mc2api.ApiHelperPlatform;
-import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -25,7 +22,6 @@ import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
-import portaluielem.AgentRowChatConsole;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.agentsteps.AbstractAgentSteps;
@@ -51,7 +47,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private MainPage mainPage;
     private Widget widget;
     int activeChatsFromChatdesk;
-    private String secondAgentNameForChatConsoleTests = "";
     private Map<String, Double> topUpBalance = new HashMap<>();
     private String nameOfUnchekedDay = "";
     private String accountCurrency;
@@ -1587,94 +1582,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
-        soft.assertAll();
-    }
-
-    @Then("'No agents online' on Agents tab shown if there is no online agent")
-    public void verifyNoAgentsOnline(){
-        if(ApiHelper.getNumberOfLoggedInAgents()==0) {
-            Assert.assertTrue(getDashboardPage().isNoAgentsOnlineShown(),
-                    "'No agents online' are not shown while there is no logged in agents");
-        }
-    }
-
-    @Then("^(.*) is marked with a green dot in chat console$")
-    public void verifyAgentMarkedWithAGreenDot(String agent){
-        secondAgentNameForChatConsoleTests =  ApiHelper.getAvailableAgents().stream()
-                .filter(e -> e.getEmail().equalsIgnoreCase(
-                        Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
-                .findFirst().get().getAgentFullName();
-        Assert.assertTrue(getDashboardPage().getAgentsTableChatConsole()
-                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isActiveChatsIconShown(40),
-                secondAgentNameForChatConsoleTests + " agent is not marked with green dot after receiving new chat in chatdesk");
-    }
-
-    @Then("^(.*) is marked with a yellow dot in chat console$")
-    public void verifyAgentMarkedWithAYellowDot(String agent){
-        secondAgentNameForChatConsoleTests =  ApiHelper.getAvailableAgents().stream()
-                .filter(e -> e.getEmail().equalsIgnoreCase(
-                        Agents.getAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName(), agent).getAgentEmail()))
-                .findFirst().get().getAgentFullName();
-        Assert.assertTrue(getDashboardPage().getAgentsTableChatConsole()
-                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).isNoActiveChatsIconShown(40),
-                secondAgentNameForChatConsoleTests + " agent is not marked with yellow");
-
-    }
-
-    @Then("^Correct number of active chats shown for (.*)$")
-    public void verifyChatConsoleAgentsContainsChats(String agent){
-        int activeChatsFromChatdesk = new AgentHomePage("second agent").getLeftMenuWithChats().getNewChatsCount();
-        Assert.assertEquals(getDashboardPage().getAgentsTableChatConsole()
-                        .getTargetAgentRow(secondAgentNameForChatConsoleTests).getActiveChatsNumber(),
-                activeChatsFromChatdesk,
-                secondAgentNameForChatConsoleTests + " icon has incorrect number of active chats");
-
-    }
-
-    @When("^Admin clicks expand dot for (.*)$")
-    public void expandAgentsRowInChatConsole(String agent){
-        getDashboardPage().getAgentsTableChatConsole()
-                .getTargetAgentRow(secondAgentNameForChatConsoleTests)
-                .clickExpandButton();
-    }
-
-    @Then("Logged in agents shown in Agents chat console tab")
-    public void verifySecondAgentAppearsInAgentsTab(){
-        SoftAssert soft = new SoftAssert();
-        List<AvailableAgent> agents = ApiHelper.getAvailableAgents();
-        for(AvailableAgent agent : agents){
-            soft.assertTrue(getDashboardPage().getAgentsTableChatConsole().isAgentShown(agent.getAgentFullName(), 35),
-                    agent.getAgentFullName() + " agent is not shown in online agents table on chat console");
-        }
-        soft.assertAll();
-    }
-
-
-    @Then("^All chats info are shown for (.*) including intent on user message (.*)$")
-    public void verifyActiveChatInfoOnChatConsole(String agent, String userMessage){
-        SoftAssert soft = new SoftAssert();
-
-        String userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-        String sentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-        String intent = ApiHelperTie.getListOfIntentsOnUserMessage(userMessage).get(0).getIntent();
-
-        AgentRowChatConsole agentUnderTest = getDashboardPage().getAgentsTableChatConsole()
-                .getTargetAgentRow(secondAgentNameForChatConsoleTests);
-
-        if(!agentUnderTest.isChatShownFromUserShown(userId, 40)){
-            Assert.fail("Chat from '" + userId + "' user is not shown in chat console for " +
-                    secondAgentNameForChatConsoleTests + " agent");
-        }
-        List<String> clientIdsWithActiveChatsForTargetAgent = agentUnderTest.getChattingTo();
-
-        int ordinalChatNumber = clientIdsWithActiveChatsForTargetAgent.indexOf(userId);
-
-        soft.assertEquals(agentUnderTest.getChannels().get(ordinalChatNumber),
-                "Touch Web chat");
-        soft.assertEquals(agentUnderTest.getSentiments().get(ordinalChatNumber),
-                sentiment.toLowerCase(), "Sentiment is not correct for "+ userId +" chat ");
-        soft.assertEquals(agentUnderTest.getIntents().get(ordinalChatNumber),
-                intent, "CreatedIntent for "+ userId +" user chat is not correct");
         soft.assertAll();
     }
 

@@ -22,7 +22,8 @@ Feature: Chat console: Waiting customers
 
 
   @second_agent_availability
-  Scenario: Waiting customers counter in case agent not available
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-4579")
+  Scenario: Dashboard:: Chats waiting in a queue increase in case agent not available
     Given I login as second agent of Automation Bot
     Then Customers waiting for response widget value set to 0
     Given Save Customers waiting for response pre-test widget value
