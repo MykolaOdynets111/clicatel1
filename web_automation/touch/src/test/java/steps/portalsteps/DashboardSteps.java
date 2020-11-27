@@ -15,6 +15,7 @@ import driverfactory.DriverFactory;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -184,5 +185,18 @@ public class DashboardSteps extends AbstractPortalSteps {
 
         softAssert.assertAll();
 
+    }
+
+    @Then("^Admin can see 'Welcome to the Chat Desk Dashboard'$")
+    public void adminCanSeeWelcomeToTheChatDeskDashboard() {
+        Assert.assertTrue(getDashboardPage().isWelcomeToTheChatDeskDashboardDisplayed(),
+                "'Welcome to the Chat Desk Dashboard' is not displayed");
+    }
+
+    @When("^Admin click on Launch Supervisor Desk button$")
+    public void adminClickOnLaunchSupervisorDeskButton() {
+        getDashboardPage().clickLaunchSupervisor();
+        List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
+        DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 }
