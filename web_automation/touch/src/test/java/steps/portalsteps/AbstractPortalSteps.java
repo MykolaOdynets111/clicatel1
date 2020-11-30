@@ -1,5 +1,6 @@
 package steps.portalsteps;
 
+import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.supervisor.SupervisorDeskPage;
 import agentpages.dashboard.DashboardPage;
 import com.github.javafaker.Faker;
@@ -50,6 +51,8 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     private static ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
 
     private static ThreadLocal<SurveyManagementPage> surveyManagementPage = new ThreadLocal<>();
+
+    private static ThreadLocal<DashboardSettingsPage> dashboardSettingsPage = new ThreadLocal<>();
 
 
     public static Faker faker = new Faker();
@@ -306,6 +309,15 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
+    public static DashboardSettingsPage getDashboardSettingsPage(){
+        if (dashboardSettingsPage.get() == null) {
+            dashboardSettingsPage.set(new DashboardSettingsPage(DriverFactory.getDriverForAgent("admin")));
+            return dashboardSettingsPage.get();
+        } else {
+            return dashboardSettingsPage.get();
+        }
+    }
+
     public static LeftMenu getLeftMenu() {
         return getAdminPortalMainPage().getLeftMenu();
     }
@@ -330,5 +342,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         chatConsoleInboxPage.remove();
         departmentsManagementPage.remove();
         surveyManagementPage.remove();
+        dashboardSettingsPage.remove();
     }
 }
