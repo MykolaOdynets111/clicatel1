@@ -16,13 +16,15 @@ Feature: Chat console: Waiting customers
     Then Customers waiting for response widget value increased on 1
 
   @no_chatdesk
-  Scenario: Waiting customers counter in case no agents online
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-4475")
+  Scenario: Dashboards:: Chats waiting in a queue increase in case no agents online
     And User enter connect to agent into widget input field
     Then Customers waiting for response widget value increased on 1
 
 
   @second_agent_availability
-  Scenario: Waiting customers counter in case agent not available
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-4579")
+  Scenario: Dashboard:: Chats waiting in a queue increase in case agent not available
     Given I login as second agent of Automation Bot
     Then Customers waiting for response widget value set to 0
     Given Save Customers waiting for response pre-test widget value

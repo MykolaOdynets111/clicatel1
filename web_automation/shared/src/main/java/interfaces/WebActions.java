@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileWriter;
+import java.util.stream.Collectors;
+
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
 
 public interface WebActions extends WebWait {
@@ -107,6 +109,14 @@ public interface WebActions extends WebWait {
     default boolean isElementShown(WebDriver driver, WebElement element, int wait){
         try {
             return waitForElementToBeVisible(driver, element, wait).isDisplayed();
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    default boolean isElementHasAnyText(WebDriver driver, WebElement element, int wait){
+        try {
+            return !waitForElementToBeVisible(driver, element, wait).getText().isEmpty();
         } catch (TimeoutException|NoSuchElementException e) {
             return false;
         }
