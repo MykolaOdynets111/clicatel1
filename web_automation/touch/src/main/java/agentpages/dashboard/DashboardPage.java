@@ -32,6 +32,9 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath ="//a[text()='Settings']")
     private WebElement settingsButton;
 
+    @FindBy(xpath ="//a[text()='Launch Supervisor Desk']")
+    private WebElement launchSupervisorButton;
+
     @FindBy(css = "[selenium-id='tab-dashboard-tabs-Customers Overview']")
     private WebElement customersOverviewTabButton;
 
@@ -144,9 +147,9 @@ public class DashboardPage extends PortalAbstractPage {
         }
     }
 
-    public SettingsPage openSettingsPage(){
+    public DashboardSettingsPage openSettingsPage(){
         clickElem(this.getCurrentDriver(), settingsButton, 6, "Settings button");
-        return new SettingsPage(this.getCurrentDriver());
+        return new DashboardSettingsPage(this.getCurrentDriver());
     }
 
     public void clickOnCustomersOverviewTab() {
@@ -155,5 +158,13 @@ public class DashboardPage extends PortalAbstractPage {
 
     public void clickOnAgentsPerformanceTab() {
         clickElem(this.getCurrentDriver(), agentsPerformanceTabButton, 5, "Agents Performance Tab");
+    }
+
+    public boolean isWelcomeToTheChatDeskDashboardDisplayed() {
+        return isElementShown(this.getCurrentDriver(), mainFrame, 5);
+    }
+
+    public void clickLaunchSupervisor() {
+        clickElem(this.getCurrentDriver(), launchSupervisorButton, 5, "Launch Supervisor");
     }
 }

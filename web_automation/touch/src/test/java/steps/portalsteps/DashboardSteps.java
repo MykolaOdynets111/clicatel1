@@ -3,6 +3,7 @@ package steps.portalsteps;
 import agentpages.AgentHomePage;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
+import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import cucumber.api.java.en.And;
@@ -15,10 +16,14 @@ import driverfactory.DriverFactory;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class DashboardSteps extends AbstractPortalSteps {
+
+    private final ThreadLocal<String> channel = new ThreadLocal<>();
+    private final ThreadLocal<String> period = new ThreadLocal<>();
 
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
@@ -70,7 +75,21 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @And("^Admin filter Customers History by (.*) channel and (.*) period$")
     public void adminFilterCustomersHistoryByWebchatAndPastDay(String channel, String period) {
+        this.channel.set(channel);
+        this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
+        getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
+    }
+
+    @And("^Admin filter Customers History by (?!(.*)period)(.*) channel$")
+    public void adminFilterCustomersHistoryByChannel(String channel) {
+        this.channel.set(channel);
+        getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
+    }
+
+    @And("^Admin filter Customers History by (?!(.*)channel)(.*) period$")
+    public void adminFilterCustomersHistoryByPeriod(String period) {
+        this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
     }
 
@@ -184,5 +203,58 @@ public class DashboardSteps extends AbstractPortalSteps {
 
         softAssert.assertAll();
 
+    }
+
+    @Then("^Admin can see 'Welcome to the Chat Desk Dashboard'$")
+    public void adminCanSeeWelcomeToTheChatDeskDashboard() {
+        Assert.assertTrue(getDashboardPage().isWelcomeToTheChatDeskDashboardDisplayed(),
+                "'Welcome to the Chat Desk Dashboard' is not displayed");
+    }
+
+    @When("^Admin click on Launch Supervisor Desk button$")
+    public void adminClickOnLaunchSupervisorDeskButton() {
+        getDashboardPage().clickLaunchSupervisor();
+        List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
+        DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
+    }
+
+    @Then("^Admin see the message no data for Past Sentiment graph if there is no available data$")
+    public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
+        if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+            Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Past Sentiment"),
+                    "No data is displayed for Past Sentiment Graph");
+        }
+    }
+
+    @Then("^Admin see the message no data for Customer Satisfaction graph if there is no available data$")
+    public void adminSeeTheMessageNoDataForCustomerSatisfactionGraphIfThereIsNoAvailableData() {
+        if (ApiCustomerHistoryHelper.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+            Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction"),
+                    "No data is displayed for Past Sentiment Graph");
+        }
+    }
+
+    @Then("^Admin can see Settings page with options Business Profile, Chat tags, Auto Responders, Preferences, Surveys$")
+    public void adminCanSeeSettingsPageWithOptionsBusinessProfileChatTagsAutoRespondersPreferencesSurveys() {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getDashboardSettingsPage().isBusinessProfileTabShown(),
+                "Business Profile tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isChatTagsTabShown(),
+                "Chat Tags tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isAutoRespondersTabShown(),
+                "Auto Responders tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isPreferencesTabShown(),
+                "Preferences tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isSurveysTabShown(),
+                "Surveys tab is not displayed on Settings page");
+        softAssert.assertAll();
+    }
+
+    @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
+    public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
+        double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
+                .getCustomerSatisfactionScore();
+        Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
+        Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
     }
 }

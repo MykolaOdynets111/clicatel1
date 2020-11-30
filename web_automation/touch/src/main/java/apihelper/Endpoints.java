@@ -68,6 +68,9 @@ public class Endpoints {
 
     public static String AUTORESPONDER_CONTROLLER= URLs.getTouchApiBaseIntegrationURL() + "api/autoresponders/%s";
 
+    public static String PAST_SENTIMENT_REPORT = URLs.getTouchApiBaseIntegrationURL() + "api/dashboard/customer-history-report/past-sentiment-report";
+
+    public static String AVERAGE_CUSTOMER_SATISFACTION_REPORT = URLs.getTouchApiBaseIntegrationURL() + "api/dashboard/customer-history-report/average-customer-satisfaction-report";
 
     // ================== INTERNAL ============== //
 
