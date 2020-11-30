@@ -38,7 +38,6 @@ public class LiveAgentRowDashboard extends AbstractWidget {
 
     public LiveAgentRowDashboard(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
 
     public LiveAgentRowDashboard setCurrentDriver(WebDriver currentDriver){
