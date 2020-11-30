@@ -70,6 +70,8 @@ public class Endpoints {
 
     public static String PAST_SENTIMENT_REPORT = URLs.getTouchApiBaseIntegrationURL() + "api/dashboard/customer-history-report/past-sentiment-report";
 
+    public static String AVERAGE_CUSTOMER_SATISFACTION_REPORT = URLs.getTouchApiBaseIntegrationURL() + "api/dashboard/customer-history-report/average-customer-satisfaction-report";
+
     // ================== INTERNAL ============== //
 
     public static String INTERNAL_TENANT_ADDRESS = URLs.getBaseInternalApiUrl() + "tenants/%s/addresses";

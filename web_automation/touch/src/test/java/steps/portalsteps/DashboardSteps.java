@@ -73,13 +73,21 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
-    @And("^Admin filter Customers History by (.*) channel$")
+    @And("^Admin filter Customers History by (.*) channel and (.*) period$")
+    public void adminFilterCustomersHistoryByWebchatAndPastDay(String channel, String period) {
+        this.channel.set(channel);
+        this.period.set(period);
+        getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
+        getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
+    }
+
+    @And("^Admin filter Customers History by (?!(.*)period)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
         this.channel.set(channel);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
     }
 
-    @And("^Admin filter Customers History by (.*) period$")
+    @And("^Admin filter Customers History by (?!(.*)channel)(.*) period$")
     public void adminFilterCustomersHistoryByPeriod(String period) {
         this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
@@ -214,6 +222,14 @@ public class DashboardSteps extends AbstractPortalSteps {
     public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
         if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
             Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Past Sentiment"),
+                    "No data is displayed for Past Sentiment Graph");
+        }
+    }
+
+    @Then("^Admin see the message no data for Customer Satisfaction graph if there is no available data$")
+    public void adminSeeTheMessageNoDataForCustomerSatisfactionGraphIfThereIsNoAvailableData() {
+        if (ApiCustomerHistoryHelper.getCustomerSatisfactionReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+            Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Customer Satisfaction"),
                     "No data is displayed for Past Sentiment Graph");
         }
     }

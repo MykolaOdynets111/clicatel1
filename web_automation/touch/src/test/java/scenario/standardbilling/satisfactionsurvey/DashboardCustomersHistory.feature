@@ -94,3 +94,13 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Past 4 weeks period
     Then Admin is able to see Customer Satisfaction graphs
     Then Admin is able to see the average CSAT survey response converted to 0-10
+
+  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-50386")
+  Scenario:  Dashboard: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Apple Business Chat channel and Past day period
+    Then Admin see the message no data for Customer Satisfaction graph if there is no available data
