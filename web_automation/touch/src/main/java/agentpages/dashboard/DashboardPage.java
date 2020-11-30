@@ -147,9 +147,9 @@ public class DashboardPage extends PortalAbstractPage {
         }
     }
 
-    public SettingsPage openSettingsPage(){
+    public DashboardSettingsPage openSettingsPage(){
         clickElem(this.getCurrentDriver(), settingsButton, 6, "Settings button");
-        return new SettingsPage(this.getCurrentDriver());
+        return new DashboardSettingsPage(this.getCurrentDriver());
     }
 
     public void clickOnCustomersOverviewTab() {

@@ -1,12 +1,12 @@
 package steps.portalsteps;
 
 import agentpages.AgentHomePage;
+import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
 import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
-import apihelper.CustomerHistoryReportAPI;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,7 +14,6 @@ import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
 import driverfactory.DriverFactory;
-import gherkin.lexer.Th;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -214,5 +213,21 @@ public class DashboardSteps extends AbstractPortalSteps {
             Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Past Sentiment"),
                     "No data is displayed for Past Sentiment Graph");
         }
+    }
+
+    @Then("^Admin can see Settings page with options Business Profile, Chat tags, Auto Responders, Preferences, Surveys$")
+    public void adminCanSeeSettingsPageWithOptionsBusinessProfileChatTagsAutoRespondersPreferencesSurveys() {
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(getDashboardSettingsPage().isBusinessProfileTabShown(),
+                "Business Profile tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isChatTagsTabShown(),
+                "Chat Tags tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isAutoRespondersTabShown(),
+                "Auto Responders tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isPreferencesTabShown(),
+                "Preferences tab is not displayed on Settings page");
+        softAssert.assertTrue(getDashboardSettingsPage().isSurveysTabShown(),
+                "Surveys tab is not displayed on Settings page");
+        softAssert.assertAll();
     }
 }

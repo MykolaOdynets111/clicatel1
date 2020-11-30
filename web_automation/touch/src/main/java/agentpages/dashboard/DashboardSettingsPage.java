@@ -5,9 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
-public class SettingsPage extends PortalAbstractPage {
+public class DashboardSettingsPage extends PortalAbstractPage {
 
-    public SettingsPage(WebDriver driver) {
+    public DashboardSettingsPage(WebDriver driver) {
         super(driver);
     }
 
@@ -43,6 +43,26 @@ public class SettingsPage extends PortalAbstractPage {
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 2, "Surveys");
         }
+    }
+
+    public boolean isBusinessProfileTabShown() {
+        return isElementShown(this.getCurrentDriver(), businessProfile, 5);
+    }
+
+    public boolean isChatTagsTabShown() {
+        return isElementShown(this.getCurrentDriver(), chatTags, 5);
+    }
+
+    public boolean isAutoRespondersTabShown() {
+        return isElementShown(this.getCurrentDriver(), autoResponders, 5);
+    }
+
+    public boolean isPreferencesTabShown() {
+        return isElementShown(this.getCurrentDriver(), preferences, 5);
+    }
+
+    public boolean isSurveysTabShown() {
+        return isElementShown(this.getCurrentDriver(), surveysNavigation, 5);
     }
 
 }
