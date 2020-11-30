@@ -73,11 +73,15 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
-    @And("^Admin filter Customers History by (.*) channel and (.*) period$")
-    public void adminFilterCustomersHistoryByWebchatAndPastDay(String channel, String period) {
+    @And("^Admin filter Customers History by (.*) channel$")
+    public void adminFilterCustomersHistoryByChannel(String channel) {
         this.channel.set(channel);
-        this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
+    }
+
+    @And("^Admin filter Customers History by (.*) period$")
+    public void adminFilterCustomersHistoryByPeriod(String period) {
+        this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
     }
 

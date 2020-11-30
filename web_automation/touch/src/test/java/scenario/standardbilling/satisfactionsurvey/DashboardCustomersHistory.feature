@@ -68,7 +68,7 @@ Feature: Dashboard: Customer History
     Then Admin see the message no data for Past Sentiment graph if there is no available data
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
-  Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time
+  Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
     Given Update survey management chanel webchat settings by ip for Standard Billing
       | ratingEnabled | true       |
       | ratingType    | CSAT       |
@@ -88,6 +88,9 @@ Feature: Dashboard: Customer History
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Webchat channel and Past 4 weeks period
+    And Admin filter Customers History by Webchat channel
+    Then Admin is able to see Customer Satisfaction graphs
+    Then Admin is able to see the average CSAT survey response converted to 0-10
+    And Admin filter Customers History by Past 4 weeks period
     Then Admin is able to see Customer Satisfaction graphs
     Then Admin is able to see the average CSAT survey response converted to 0-10
