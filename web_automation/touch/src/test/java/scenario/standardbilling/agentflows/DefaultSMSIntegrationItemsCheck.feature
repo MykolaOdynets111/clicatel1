@@ -1,5 +1,6 @@
 Feature: Default SMS integration items visibility check
 
+  @skip
   Scenario: SMS integration related buttons are disappearing after disabling SMS integration
     Given I open portal
     Given Login into portal as an admin of Standard Billing account
