@@ -26,7 +26,7 @@ Feature: Dashboard: Customer History
       | NPS        | Net Promoter Score    | ZERO_TO_TEN |
       | CSAT       | Customer Satisfaction | ONE_TO_FIVE |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
+  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-50385")
   Scenario: Dashboard: Verify if admin can filter Customers History report by channel and period
     When I open portal
     And Login into portal as an admin of Standard Billing account
@@ -56,3 +56,13 @@ Feature: Dashboard: Customer History
     When Click chat icon
     And User enter connect to agent into widget input field
     Then Admin should see Web Chat chart in Live Chats by Channel
+
+  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
+  Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Apple Business Chat channel and Past day period
+    Then Admin see the message no data for Past Sentiment graph if there is no available data

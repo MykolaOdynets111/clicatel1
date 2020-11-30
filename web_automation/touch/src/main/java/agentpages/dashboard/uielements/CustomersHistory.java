@@ -58,6 +58,20 @@ public class CustomersHistory extends AbstractUIElement {
         }
     }
 
+    public boolean isNoDataDisplayedForGraph(String graphName) {
+        try {
+            WebElement noDataForGraphInDiv = findElemByXPATH(this.getCurrentDriver(), String.format(noDataForGraphInDivXpath, graphName));
+            return isElementShown(this.getCurrentDriver(), noDataForGraphInDiv, 5);
+        } catch (TimeoutException | NoSuchElementException e) {
+            try {
+                WebElement noDataForGraphInH3 = findElemByXPATH(this.getCurrentDriver(), String.format(noDataForGraphInH3Xpath, graphName));
+                return isElementShown(this.getCurrentDriver(), noDataForGraphInH3, 5);
+            } catch (TimeoutException | NoSuchElementException e2) {
+                return false;
+            }
+        }
+    }
+
     public List<String> getAllGraphs() {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), graphHeaders, 5);
         return graphHeaders.stream().map(WebElement::getText).collect(Collectors.toList());

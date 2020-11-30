@@ -3,8 +3,10 @@ package steps.portalsteps;
 import agentpages.AgentHomePage;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
+import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
+import apihelper.CustomerHistoryReportAPI;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -12,6 +14,7 @@ import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AvailableAgent;
 import driverfactory.DriverFactory;
+import gherkin.lexer.Th;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -20,6 +23,9 @@ import java.util.List;
 
 
 public class DashboardSteps extends AbstractPortalSteps {
+
+    private final ThreadLocal<String> channel = new ThreadLocal<>();
+    private final ThreadLocal<String> period = new ThreadLocal<>();
 
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
@@ -71,6 +77,8 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @And("^Admin filter Customers History by (.*) channel and (.*) period$")
     public void adminFilterCustomersHistoryByWebchatAndPastDay(String channel, String period) {
+        this.channel.set(channel);
+        this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
     }
@@ -198,5 +206,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().clickLaunchSupervisor();
         List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
         DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
+    }
+
+    @Then("^Admin see the message no data for Past Sentiment graph if there is no available data$")
+    public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
+        if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
+            Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Past Sentiment"),
+                    "No data is displayed for Past Sentiment Graph");
+        }
     }
 }
