@@ -1,7 +1,6 @@
 package steps.portalsteps;
 
 import agentpages.AgentHomePage;
-import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
 import apihelper.ApiCustomerHistoryHelper;
@@ -229,5 +228,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertTrue(getDashboardSettingsPage().isSurveysTabShown(),
                 "Surveys tab is not displayed on Settings page");
         softAssert.assertAll();
+    }
+
+    @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
+    public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
+        double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
+                .getCustomerSatisfactionScore();
+        Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
+        Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
     }
 }

@@ -14,7 +14,7 @@ Feature: Dashboard: Customer History
     When Agent click on new conversation request from touch
     Then Agent see conversation area with connect to Support user's message
     When Agent closes chat
-    Then User see NPS survey form
+    Then User see <ratingType> survey form
     When Submit survey form with Automation rate comment and 5 rate
     And Agent switches to opened Portal page
     And I select Touch in left menu and Dashboard in submenu
@@ -66,3 +66,28 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Apple Business Chat channel and Past day period
     Then Admin see the message no data for Past Sentiment graph if there is no available data
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
+  Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time
+    Given Update survey management chanel webchat settings by ip for Standard Billing
+      | ratingEnabled | true       |
+      | ratingType    | CSAT       |
+      | ratingScale   | ONE_TO_TEN |
+      | ratingIcon    | NUMBER     |
+    And User select Standard Billing tenant
+    And I login as admin of Standard Billing
+    When Click chat icon
+    And User enter connect to Support into widget input field
+    Then Agent has new conversation request
+    When Agent click on new conversation request from touch
+    Then Agent see conversation area with connect to Support user's message
+    When Agent closes chat
+    Then User see CSAT survey form
+    When Submit survey form with Automation rate comment and 8 rate
+    And Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Webchat channel and Past 4 weeks period
+    Then Admin is able to see Customer Satisfaction graphs
+    Then Admin is able to see the average CSAT survey response converted to 0-10
