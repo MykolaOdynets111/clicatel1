@@ -50,6 +50,7 @@ public class DashboardPage extends PortalAbstractPage {
     private LiveAgentsTableDashboard agentsTableDashboard;
     private CustomersOverviewTab customersOverviewTab;
     private CustomersHistory customersHistory;
+    private LiveCustomersTab liveCustomersTab;
     private NetPromoterScoreSection netPromoterScoreSection;
     private CustomerSatisfactionSection customerSatisfactionSection;
     private LiveChatsByChannel liveChatsByChannel;
@@ -89,6 +90,10 @@ public class DashboardPage extends PortalAbstractPage {
         return customersHistory;
     }
 
+    public LiveCustomersTab getLiveCustomersTab() {
+        liveCustomersTab.setCurrentDriver(this.getCurrentDriver());
+        return liveCustomersTab;
+    }
 
     public NetPromoterScoreSection getNetPromoterScoreSection() {
         netPromoterScoreSection.setCurrentDriver(this.getCurrentDriver());

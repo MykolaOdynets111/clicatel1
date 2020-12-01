@@ -278,4 +278,16 @@ public class DashboardSteps extends AbstractPortalSteps {
                         .isNumberOfSentimentsShownForAllSentimentsCharts(),
                 "Number of sentiments is not shown for all general sentiments charts");
     }
+
+    @Then("^Admin should see live customers section$")
+    public void adminShouldSeeLiveCustomersSection() {
+        Assert.assertTrue(getDashboardPage().getLiveCustomersTab().isLiveCustomersTabOpened(),
+                "Live Customers tab is not opened");
+    }
+
+    @Then("^Admin should see customer history section$")
+    public void adminShouldSeeCustomerHistorySection() {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory().isCustomerHistoryTabOpened(),
+                "Customer History tab is not opened");
+    }
 }

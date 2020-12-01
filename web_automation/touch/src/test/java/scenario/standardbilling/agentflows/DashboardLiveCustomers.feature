@@ -25,3 +25,14 @@ Feature: Dashboard: Live Customers
     And Admin click on Customers Overview dashboard tab
     And Admin click on Live Customers on dashboard
     Then Verify admin can see number of sentiments when hover over web chat under General sentiment per channel
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-36671")
+  Scenario: Verify if supervisor is able to switch between live customer and customer history
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Live Customers on dashboard
+    Then Admin should see live customers section
+    When Admin click on Customers History on dashboard
+    Then Admin should see customer history section

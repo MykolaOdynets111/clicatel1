@@ -28,6 +28,10 @@ public class CustomersHistory extends AbstractUIElement {
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
 
+    public boolean isCustomerHistoryTabOpened() {
+        return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 3);
+    }
+
     public boolean isGraphDisplayed(String graphName) {
         try {
             WebElement graphInDiv = findElemByXPATH(this.getCurrentDriver(), String.format(graphInDivXpath, graphName));
