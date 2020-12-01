@@ -257,4 +257,10 @@ public class DashboardSteps extends AbstractPortalSteps {
         Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
         Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
     }
+
+    @Then("^Admin see the Net Promoter Score as negative$")
+    public void adminSeeTheNetPromoterScoreAsNegative() {
+        Assert.assertTrue(getDashboardPage().getNetPromoterScoreSection().getNetPromoterScore() < 0,
+                "Net Promoter Score is positive");
+    }
 }
