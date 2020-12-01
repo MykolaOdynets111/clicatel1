@@ -35,6 +35,9 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath ="//a[text()='Launch Supervisor Desk']")
     private WebElement launchSupervisorButton;
 
+    @FindBy(xpath ="//a[text()='Launch Agent Desk']")
+    private WebElement launchAgentDeskButton;
+
     @FindBy(css = "[selenium-id='tab-dashboard-tabs-Customers Overview']")
     private WebElement customersOverviewTabButton;
 
@@ -166,5 +169,9 @@ public class DashboardPage extends PortalAbstractPage {
 
     public void clickLaunchSupervisor() {
         clickElem(this.getCurrentDriver(), launchSupervisorButton, 5, "Launch Supervisor");
+    }
+
+    public void clickLaunchAgentDesk() {
+        clickElem(this.getCurrentDriver(), launchAgentDeskButton, 5, "Launch Agent Desk");
     }
 }

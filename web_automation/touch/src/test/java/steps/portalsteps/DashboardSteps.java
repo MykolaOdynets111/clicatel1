@@ -218,6 +218,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 
+    @When("^Admin click on Launch Agent Desk button$")
+    public void adminClickOnLaunchAgentDeskButton() {
+        getDashboardPage().clickLaunchAgentDesk();
+        List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
+        DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
+    }
+
     @Then("^Admin see the message no data for Past Sentiment graph if there is no available data$")
     public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
         if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
