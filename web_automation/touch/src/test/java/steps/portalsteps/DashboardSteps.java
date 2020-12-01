@@ -270,4 +270,12 @@ public class DashboardSteps extends AbstractPortalSteps {
         Assert.assertTrue(getDashboardPage().getNetPromoterScoreSection().getNetPromoterScore() < 0,
                 "Net Promoter Score is positive");
     }
+
+    @Then("^Verify admin can see number of sentiments when hover over web chat under General sentiment per channel$")
+    public void verifyAdminCanSeeNumberOfSentimentsWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
+        Assert.assertTrue(getDashboardPage()
+                        .getGeneralSentimentPerChannel()
+                        .isNumberOfSentimentsShownForAllSentimentsCharts(),
+                "Number of sentiments is not shown for all general sentiments charts");
+    }
 }

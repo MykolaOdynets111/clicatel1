@@ -41,6 +41,16 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default void hoverElem(WebDriver driver, WebElement element, int wait, String elemName) {
+        try {
+            waitForElementToBeVisible(driver, element, wait);
+            Actions builder = new Actions(driver);
+            builder.moveToElement(element).perform();
+        } catch (TimeoutException | NoSuchElementException e) {
+            Assert.fail("Cannot hover '" + elemName + "' because of " + e.getMessage());
+        }
+    }
+
     default void pressEnterForWebElem(WebDriver driver, WebElement element, int wait, String elemName){
         try {
             waitForElementToBeClickable(driver, element, wait).sendKeys(Keys.ENTER);

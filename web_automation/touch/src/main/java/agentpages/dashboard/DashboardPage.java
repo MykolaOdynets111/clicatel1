@@ -53,6 +53,7 @@ public class DashboardPage extends PortalAbstractPage {
     private NetPromoterScoreSection netPromoterScoreSection;
     private CustomerSatisfactionSection customerSatisfactionSection;
     private LiveChatsByChannel liveChatsByChannel;
+    private GeneralSentimentPerChannel generalSentimentPerChannel;
     // == Constructors == //
 
     public DashboardPage() {
@@ -102,6 +103,11 @@ public class DashboardPage extends PortalAbstractPage {
     public LiveChatsByChannel getLiveChatsByChannel() {
         liveChatsByChannel.setCurrentDriver(this.getCurrentDriver());
         return liveChatsByChannel;
+    }
+
+    public GeneralSentimentPerChannel getGeneralSentimentPerChannel() {
+        generalSentimentPerChannel.setCurrentDriver(this.getCurrentDriver());
+        return generalSentimentPerChannel;
     }
 
     public String getWaitingChatsNumber(){
