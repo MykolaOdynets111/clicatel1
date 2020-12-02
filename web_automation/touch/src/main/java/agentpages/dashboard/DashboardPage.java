@@ -58,6 +58,7 @@ public class DashboardPage extends PortalAbstractPage {
     private CustomerSatisfactionSection customerSatisfactionSection;
     private LiveChatsByChannel liveChatsByChannel;
     private GeneralSentimentPerChannel generalSentimentPerChannel;
+    private AttendedVsUnattendedChats attendedVsUnattendedChats;
     // == Constructors == //
 
     public DashboardPage() {
@@ -118,6 +119,11 @@ public class DashboardPage extends PortalAbstractPage {
     public GeneralSentimentPerChannel getGeneralSentimentPerChannel() {
         generalSentimentPerChannel.setCurrentDriver(this.getCurrentDriver());
         return generalSentimentPerChannel;
+    }
+
+    public AttendedVsUnattendedChats getAttendedVsUnattendedChats() {
+        attendedVsUnattendedChats.setCurrentDriver(this.getCurrentDriver());
+        return attendedVsUnattendedChats;
     }
 
     public String getWaitingChatsNumber() {

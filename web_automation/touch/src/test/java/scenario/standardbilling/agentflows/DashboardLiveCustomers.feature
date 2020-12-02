@@ -36,3 +36,16 @@ Feature: Dashboard: Live Customers
     Then Admin should see live customers section
     When Admin click on Customers History on dashboard
     Then Admin should see customer history section
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-36674")
+  Scenario: Verify if supervisor can hover over on Attended Vs Unattended to see the number of chats that are attended by agent or not
+    Given User select Standard Billing tenant
+    When I login as admin of Standard Billing
+    And Click chat icon
+    And User enter connect to Support into widget input field
+    Then Agent has new conversation request
+    When Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Live Customers on dashboard
+    Then Verify admin can see number of attended vs unattended chats when hover over web chat

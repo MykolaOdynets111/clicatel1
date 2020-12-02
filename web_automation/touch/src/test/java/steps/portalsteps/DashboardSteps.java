@@ -310,4 +310,12 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "The percentage for passives from NPS is not increased");
         npsPassivesPercentage.remove();
     }
+
+    @Then("^Verify admin can see number of attended vs unattended chats when hover over web chat$")
+    public void verifyAdminCanSeeNumberOfAttendedVsUnattendedChatsWhenHoverOverWebChat() {
+        Assert.assertTrue(getDashboardPage()
+                        .getAttendedVsUnattendedChats()
+                        .isNumberOfAttendedVsUnattendedChatsDisplayed(),
+                "Number of attended vs Unattended chats is not shown after hovering on chart");
+    }
 }
