@@ -290,4 +290,9 @@ public class DashboardSteps extends AbstractPortalSteps {
         Assert.assertTrue(getDashboardPage().getCustomersHistory().isCustomerHistoryTabOpened(),
                 "Customer History tab is not opened");
     }
+
+    @When("^Admin click on Departments Management button$")
+    public void adminClickOnDepartmentsManagementButton() {
+        getDashboardPage().clickDepartmentsManagement();
+    }
 }
