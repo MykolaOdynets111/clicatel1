@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = ".live-box")
 public class LiveChatsByChannel extends AbstractUIElement {
+    private final String numberOfLiveChatsInTooltipCss = ".tippy-box b";
+
     @FindBy(css = ".channel-stats__charts")
     private WebElement noLiveChatsMessage;
 
@@ -18,5 +20,11 @@ public class LiveChatsByChannel extends AbstractUIElement {
 
     public boolean isWebChatChartIsDisplayed() {
         return isElementShown(this.getCurrentDriver(), webChatChart, 5);
+    }
+
+    public boolean isNumberOfLiveChatsShownForWebChatChart() {
+        hoverElem(this.getCurrentDriver(), webChatChart, 3, "Sentiment Chart tooltip");
+        return isElementShown(this.getCurrentDriver(),
+                findElemByCSS(this.getCurrentDriver(), numberOfLiveChatsInTooltipCss), 3);
     }
 }

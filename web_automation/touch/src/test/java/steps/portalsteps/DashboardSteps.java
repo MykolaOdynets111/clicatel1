@@ -318,4 +318,10 @@ public class DashboardSteps extends AbstractPortalSteps {
                         .isNumberOfAttendedVsUnattendedChatsDisplayed(),
                 "Number of attended vs Unattended chats is not shown after hovering on chart");
     }
+
+    @And("^Verify admin can see number of live chats per channel when hover over web chat$")
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWebChatChart(),
+                "Number of live chats per channel is not shown after hovering on web chat chart");
+    }
 }
