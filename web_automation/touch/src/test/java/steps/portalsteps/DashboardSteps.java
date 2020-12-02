@@ -25,6 +25,8 @@ public class DashboardSteps extends AbstractPortalSteps {
     private final ThreadLocal<String> channel = new ThreadLocal<>();
     private final ThreadLocal<String> period = new ThreadLocal<>();
 
+    private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
+
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
         getDashboardPage().clickOnCustomersOverviewTab();
@@ -294,5 +296,18 @@ public class DashboardSteps extends AbstractPortalSteps {
     @When("^Admin click on Departments Management button$")
     public void adminClickOnDepartmentsManagementButton() {
         getDashboardPage().clickDepartmentsManagement();
+    }
+
+    @And("^Admin save the percentage for passives from NPS$")
+    public void adminSaveThePercentageForPassivesFromNPS() {
+        npsPassivesPercentage.set(getDashboardPage().getNetPromoterScoreSection().getPassivePercentage());
+    }
+
+    @And("^Admin see the percentage for passives from NPS is increased$")
+    public void adminSeeThePercentageForPassivesFromNPSIsIncreased() {
+        int actualNpsPassivePercentage = getDashboardPage().getNetPromoterScoreSection().getPassivePercentage();
+        Assert.assertTrue(actualNpsPassivePercentage > npsPassivesPercentage.get(),
+                "The percentage for passives from NPS is not increased");
+        npsPassivesPercentage.remove();
     }
 }

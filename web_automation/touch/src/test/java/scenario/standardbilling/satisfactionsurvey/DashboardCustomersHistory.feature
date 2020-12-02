@@ -115,3 +115,33 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     Then Admin is able to see Net Promoter Score graphs
     Then Admin see the Net Promoter Score as negative
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45565")
+  Scenario: Dashboard:: Verify that if NPS surveys are categorize as Passives if webchat user chooses between 7 – 8
+    Given Update survey management chanel webchat settings by ip for Standard Billing
+      | ratingEnabled | true        |
+      | ratingType    | NPS         |
+      | ratingScale   | ZERO_TO_TEN |
+      | ratingIcon    | NUMBER      |
+    And User select Standard Billing tenant
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    Then Admin is able to see Net Promoter Score graphs
+    And Admin save the percentage for passives from NPS
+    When I login as second agent of Standard Billing
+    And Click chat icon
+    And User enter connect to Support into widget input field
+    Then Second agent has new conversation request
+    When Second agent click on new conversation request from touch
+    Then Second agent see conversation area with connect to Support user's message
+    When Second agent closes chat
+    Then User see NPS survey form
+    When Submit survey form with no comment and 7 rate
+    And Agent refresh current page
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    Then Admin is able to see Net Promoter Score graphs
+    And Admin see the percentage for passives from NPS is increased
