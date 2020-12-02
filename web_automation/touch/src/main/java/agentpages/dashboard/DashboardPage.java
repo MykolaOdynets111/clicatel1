@@ -29,11 +29,17 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(css = "div[ng-show='agentsChatsStats && !agentsChatsStats.length'] h3.empty-notification")
     private WebElement noAgentsNotification;
 
-    @FindBy(xpath ="//a[text()='Settings']")
+    @FindBy(xpath = "//a[text()='Settings']")
     private WebElement settingsButton;
 
-    @FindBy(xpath ="//a[text()='Launch Supervisor Desk']")
+    @FindBy(xpath = "//a[text()='Launch Supervisor Desk']")
     private WebElement launchSupervisorButton;
+
+    @FindBy(xpath = "//a[text()='Launch Agent Desk']")
+    private WebElement launchAgentDeskButton;
+
+    @FindBy(xpath = "//a[text()='Departments Management']")
+    private WebElement departmentsManagementButton;
 
     @FindBy(css = "[selenium-id='tab-dashboard-tabs-Customers Overview']")
     private WebElement customersOverviewTabButton;
@@ -41,31 +47,35 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(css = "[selenium-id='tab-dashboard-tabs-Agents Performance']")
     private WebElement agentsPerformanceTabButton;
 
-    private String spinner = "//div[@class='spinner']";
+    private final String spinner = "//div[@class='spinner']";
 
     private AgentPerformanceTab agentPerformanceTab;
     private LiveAgentsTableDashboard agentsTableDashboard;
     private CustomersOverviewTab customersOverviewTab;
     private CustomersHistory customersHistory;
+    private LiveCustomersTab liveCustomersTab;
     private NetPromoterScoreSection netPromoterScoreSection;
     private CustomerSatisfactionSection customerSatisfactionSection;
     private LiveChatsByChannel liveChatsByChannel;
+    private GeneralSentimentPerChannel generalSentimentPerChannel;
     // == Constructors == //
 
     public DashboardPage() {
         super();
     }
+
     public DashboardPage(String agent) {
         super(agent);
     }
+
     public DashboardPage(WebDriver driver) {
         super(driver);
-        if (isElementShown(this.getCurrentDriver(), mainFrame, 10)){
-            waitForConnectingDisappear(2,5);
+        if (isElementShown(this.getCurrentDriver(), mainFrame, 10)) {
+            waitForConnectingDisappear(2, 5);
         }
     }
 
-    public LiveAgentsTableDashboard getAgentsTableDashboard(){
+    public LiveAgentsTableDashboard getAgentsTableDashboard() {
         agentsTableDashboard.setCurrentDriver(this.getCurrentDriver());
         return agentsTableDashboard;
     }
@@ -85,6 +95,10 @@ public class DashboardPage extends PortalAbstractPage {
         return customersHistory;
     }
 
+    public LiveCustomersTab getLiveCustomersTab() {
+        liveCustomersTab.setCurrentDriver(this.getCurrentDriver());
+        return liveCustomersTab;
+    }
 
     public NetPromoterScoreSection getNetPromoterScoreSection() {
         netPromoterScoreSection.setCurrentDriver(this.getCurrentDriver());
@@ -101,19 +115,24 @@ public class DashboardPage extends PortalAbstractPage {
         return liveChatsByChannel;
     }
 
-    public String getWaitingChatsNumber(){
-        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 0,"Customers waiting for response");
+    public GeneralSentimentPerChannel getGeneralSentimentPerChannel() {
+        generalSentimentPerChannel.setCurrentDriver(this.getCurrentDriver());
+        return generalSentimentPerChannel;
     }
 
-    public String getLiveChatsNumber(){
-        return getTextFromElem(this.getCurrentDriver(), liveChatsCounter, 6,"Customer engaging with an Agent");
+    public String getWaitingChatsNumber() {
+        return getTextFromElem(this.getCurrentDriver(), chatsWaitingCounter, 0, "Customers waiting for response");
     }
 
-    public String getAgentsOnlineNumber(){
-        return getTextFromElem(this.getCurrentDriver(), agentsOnlineCounter, 6,"Total Agents online");
+    public String getLiveChatsNumber() {
+        return getTextFromElem(this.getCurrentDriver(), liveChatsCounter, 6, "Customer engaging with an Agent");
     }
 
-    public String getWidgetValue(String value){
+    public String getAgentsOnlineNumber() {
+        return getTextFromElem(this.getCurrentDriver(), agentsOnlineCounter, 6, "Total Agents online");
+    }
+
+    public String getWidgetValue(String value) {
         scrollToElem(this.getCurrentDriver(), chatsWaitingCounter, "How are your Agents performing right now?");
         switch (value) {
             case "Customers waiting for response":
@@ -126,28 +145,28 @@ public class DashboardPage extends PortalAbstractPage {
         return "invalid widget name";
     }
 
-    public String getAverageChatsPerAgent(){
-        return getTextFromElem(this.getCurrentDriver(), averageChatsPerAgent, 3,"Average chats per Agent").split(" ")[0];
+    public String getAverageChatsPerAgent() {
+        return getTextFromElem(this.getCurrentDriver(), averageChatsPerAgent, 3, "Average chats per Agent").split(" ")[0];
     }
 
-    public boolean isNoAgentsOnlineShown(){
+    public boolean isNoAgentsOnlineShown() {
         return isElementShown(this.getCurrentDriver(), noAgentsNotification, 8);
     }
 
-    public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear){
-        try{
+    public boolean waitForConnectingDisappear(int waitForSpinnerToAppear, int waitForSpinnerToDisappear) {
+        try {
             try {
                 waitForElementToBeVisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToAppear);
-            }catch (TimeoutException e){ }
+            } catch (TimeoutException e) {
+            }
             waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), spinner, waitForSpinnerToDisappear);
             return true;
-        }
-        catch (TimeoutException e){
+        } catch (TimeoutException e) {
             return false;
         }
     }
 
-    public DashboardSettingsPage openSettingsPage(){
+    public DashboardSettingsPage openSettingsPage() {
         clickElem(this.getCurrentDriver(), settingsButton, 6, "Settings button");
         return new DashboardSettingsPage(this.getCurrentDriver());
     }
@@ -166,5 +185,13 @@ public class DashboardPage extends PortalAbstractPage {
 
     public void clickLaunchSupervisor() {
         clickElem(this.getCurrentDriver(), launchSupervisorButton, 5, "Launch Supervisor");
+    }
+
+    public void clickLaunchAgentDesk() {
+        clickElem(this.getCurrentDriver(), launchAgentDeskButton, 5, "Launch Agent Desk");
+    }
+
+    public void clickDepartmentsManagement() {
+        clickElem(this.getCurrentDriver(), departmentsManagementButton, 5, "Departments Management");
     }
 }

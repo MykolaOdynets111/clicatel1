@@ -218,6 +218,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 
+    @When("^Admin click on Launch Agent Desk button$")
+    public void adminClickOnLaunchAgentDeskButton() {
+        getDashboardPage().clickLaunchAgentDesk();
+        List<String> windowHandles = new ArrayList<>(DriverFactory.getDriverForAgent("main").getWindowHandles());
+        DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
+    }
+
     @Then("^Admin see the message no data for Past Sentiment graph if there is no available data$")
     public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
         if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
@@ -256,5 +263,36 @@ public class DashboardSteps extends AbstractPortalSteps {
                 .getCustomerSatisfactionScore();
         Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
         Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
+    }
+
+    @Then("^Admin see the Net Promoter Score as negative$")
+    public void adminSeeTheNetPromoterScoreAsNegative() {
+        Assert.assertTrue(getDashboardPage().getNetPromoterScoreSection().getNetPromoterScore() < 0,
+                "Net Promoter Score is positive");
+    }
+
+    @Then("^Verify admin can see number of sentiments when hover over web chat under General sentiment per channel$")
+    public void verifyAdminCanSeeNumberOfSentimentsWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
+        Assert.assertTrue(getDashboardPage()
+                        .getGeneralSentimentPerChannel()
+                        .isNumberOfSentimentsShownForAllSentimentsCharts(),
+                "Number of sentiments is not shown for all general sentiments charts");
+    }
+
+    @Then("^Admin should see live customers section$")
+    public void adminShouldSeeLiveCustomersSection() {
+        Assert.assertTrue(getDashboardPage().getLiveCustomersTab().isLiveCustomersTabOpened(),
+                "Live Customers tab is not opened");
+    }
+
+    @Then("^Admin should see customer history section$")
+    public void adminShouldSeeCustomerHistorySection() {
+        Assert.assertTrue(getDashboardPage().getCustomersHistory().isCustomerHistoryTabOpened(),
+                "Customer History tab is not opened");
+    }
+
+    @When("^Admin click on Departments Management button$")
+    public void adminClickOnDepartmentsManagementButton() {
+        getDashboardPage().clickDepartmentsManagement();
     }
 }

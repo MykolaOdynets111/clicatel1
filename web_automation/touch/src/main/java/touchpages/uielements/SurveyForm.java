@@ -75,8 +75,13 @@ public class SurveyForm extends AbstractUIElement {
     }
 
     public SurveyForm selectRatingNumber(String number){
-        ratingNumbers.stream().filter(e -> e.getAttribute("for").contains(number))
-                .findFirst().orElseThrow(() -> new AssertionError(number +" rate number was not found")).click();
+        ratingNumbers.stream()
+                .filter(e -> e.getAttribute("for")
+                        .replace("rateInput-", "")
+                        .equalsIgnoreCase(number))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(number +" rate number was not found"))
+                .click();
         return this;
     }
 

@@ -15,7 +15,7 @@ Feature: Dashboard: Customer History
     Then Agent see conversation area with connect to Support user's message
     When Agent closes chat
     Then User see <ratingType> survey form
-    When Submit survey form with Automation rate comment and 5 rate
+    When Submit survey form with no comment and 5 rate
     And Agent switches to opened Portal page
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
@@ -44,19 +44,6 @@ Feature: Dashboard: Customer History
     And Admin filter Customers History by Apple Business Chat channel and Past 4 weeks period
     Then Admin see all graphs filtered by Apple Business Chat channel and Past 4 weeks period
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
-  Scenario: Dashboard:: Verify if Snapshot displays chats which are currently active
-    When I open portal
-    And Login into portal as an admin of Standard Billing account
-    And I select Touch in left menu and Dashboard in submenu
-    And Admin click on Customers Overview dashboard tab
-    And Admin click on Live Customers on dashboard
-    Then Admin should see no live chats message in Live Chats by Channel
-    And User select Standard Billing tenant
-    When Click chat icon
-    And User enter connect to agent into widget input field
-    Then Admin should see Web Chat chart in Live Chats by Channel
-
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
   Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available
     When I open portal
@@ -70,10 +57,10 @@ Feature: Dashboard: Customer History
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
   Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | ratingEnabled | true       |
-      | ratingType    | CSAT       |
-      | ratingScale   | ONE_TO_TEN |
-      | ratingIcon    | NUMBER     |
+      | ratingEnabled  | true       |
+      | ratingType     | CSAT       |
+      | ratingScale    | ONE_TO_TEN |
+      | ratingIcon     | NUMBER     |
     And User select Standard Billing tenant
     And I login as admin of Standard Billing
     When Click chat icon
@@ -83,7 +70,7 @@ Feature: Dashboard: Customer History
     Then Agent see conversation area with connect to Support user's message
     When Agent closes chat
     Then User see CSAT survey form
-    When Submit survey form with Automation rate comment and 8 rate
+    When Submit survey form with no comment and 8 rate
     And Agent switches to opened Portal page
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
@@ -104,3 +91,27 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Apple Business Chat channel and Past day period
     Then Admin see the message no data for Customer Satisfaction graph if there is no available data
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-50411")
+  Scenario: Customer History:: NPS Score:: Verify if Net Promoter Score can display a negative rating
+    Given Update survey management chanel webchat settings by ip for Standard Billing
+      | ratingEnabled | true        |
+      | ratingType    | NPS         |
+      | ratingScale   | ZERO_TO_TEN |
+      | ratingIcon    | NUMBER      |
+    And User select Standard Billing tenant
+    And I login as admin of Standard Billing
+    When Click chat icon
+    And User enter connect to Support into widget input field
+    Then Agent has new conversation request
+    When Agent click on new conversation request from touch
+    Then Agent see conversation area with connect to Support user's message
+    When Agent closes chat
+    Then User see NPS survey form
+    When Submit survey form with no comment and 0 rate
+    And Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    Then Admin is able to see Net Promoter Score graphs
+    Then Admin see the Net Promoter Score as negative
