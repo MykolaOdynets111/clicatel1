@@ -83,13 +83,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
     }
 
-    @And("^Admin filter Customers History by (.*)(?!period) channel$")
+    @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
         this.channel.set(channel);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
     }
 
-    @And("^Admin filter Customers History by (.*)(?!channel) period$")
+    @And("^Admin filter Customers History by (?!.*channel and)(.*) period$")
     public void adminFilterCustomersHistoryByPeriod(String period) {
         this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);

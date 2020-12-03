@@ -147,7 +147,7 @@ Feature: Dashboard: Customer History
     And Admin see the percentage for passives from NPS is increased
 
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-45595")
-  Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourlye data per period
+  Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourly
     When I open portal
     And Login into portal as an admin of Standard Billing account
     And I select Touch in left menu and Dashboard in submenu
