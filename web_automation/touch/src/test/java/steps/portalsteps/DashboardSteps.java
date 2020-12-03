@@ -83,13 +83,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
     }
 
-    @And("^Admin filter Customers History by (?!(.*)period)(.*) channel$")
+    @And("^Admin filter Customers History by (.*)(?!period) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
         this.channel.set(channel);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
     }
 
-    @And("^Admin filter Customers History by (?!(.*)channel)(.*) period$")
+    @And("^Admin filter Customers History by (.*)(?!channel) period$")
     public void adminFilterCustomersHistoryByPeriod(String period) {
         this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
@@ -323,5 +323,19 @@ public class DashboardSteps extends AbstractPortalSteps {
     public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
         Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWebChatChart(),
                 "Number of live chats per channel is not shown after hovering on web chat chart");
+    }
+
+    @Then("^All reports in graphs should be breakdown hourly$")
+    public void allReportsInGraphsShouldBeBreakdownHourly() {
+        SoftAssert softAssert = new SoftAssert();
+        for (List<String> graphTimelines : getDashboardPage().getCustomersHistory().getGraphsTimelines()) {
+            softAssert.assertTrue(isTimelinesShownInHours(graphTimelines),
+                    String.format("Timelines %s is not shown hourly", graphTimelines));
+        }
+        softAssert.assertAll();
+    }
+
+    private boolean isTimelinesShownInHours(List<String> timelines) {
+        return timelines.stream().allMatch(timeline -> timeline.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$"));
     }
 }

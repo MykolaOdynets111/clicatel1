@@ -57,10 +57,10 @@ Feature: Dashboard: Customer History
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45620")
   Scenario: Dashboard:: Verify that supervisor can check average CSAT surveys per selected duration of time and specific channel
     Given Update survey management chanel webchat settings by ip for Standard Billing
-      | ratingEnabled  | true       |
-      | ratingType     | CSAT       |
-      | ratingScale    | ONE_TO_TEN |
-      | ratingIcon     | NUMBER     |
+      | ratingEnabled | true       |
+      | ratingType    | CSAT       |
+      | ratingScale   | ONE_TO_TEN |
+      | ratingIcon    | NUMBER     |
     And User select Standard Billing tenant
     And I login as admin of Standard Billing
     When Click chat icon
@@ -83,7 +83,7 @@ Feature: Dashboard: Customer History
     Then Admin is able to see the average CSAT survey response converted to 0-10
 
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-50386")
-  Scenario:  Dashboard: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
+  Scenario: Dashboard: Verify if admin can see the message "No data to report at the moment" if there is no available CSAT Score data per period
     When I open portal
     And Login into portal as an admin of Standard Billing account
     And I select Touch in left menu and Dashboard in submenu
@@ -145,3 +145,13 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     Then Admin is able to see Net Promoter Score graphs
     And Admin see the percentage for passives from NPS is increased
+
+  @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-45595")
+  Scenario: Dashboard:: Verify that if supervisor selects 'past day' date filter, reports should be displayed hourlye data per period
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Past day period
+    Then All reports in graphs should be breakdown hourly

@@ -6,6 +6,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,15 @@ public class CustomersHistory extends AbstractUIElement {
 
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
+
+    @FindBy(css = ".chart-container")
+    private List<WebElement> graphs;
+
+    public List<List<String>> getGraphsTimelines() {
+        return graphs.stream()
+                .map(graph -> new CustomerHistoryGraph(graph).setCurrentDriver(this.getCurrentDriver()))
+                .map(CustomerHistoryGraph::getTimeLines).collect(Collectors.toList());
+    }
 
     public boolean isCustomerHistoryTabOpened() {
         return isElementShown(this.getCurrentDriver(), this.getWrappedElement(), 3);
