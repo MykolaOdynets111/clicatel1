@@ -17,6 +17,9 @@ public class NetPromoterScoreSection extends AbstractUIElement {
     @FindBy(css = ".cl-net-promoter-score-pie-section .cl-nps-doughnut-value")
     private WebElement promoterScore;
 
+    @FindBy(css = ".cl-net-promoter-legend-percentage.passives")
+    private WebElement passivesPercentage;
+
     @FindBy(css = ".cl-no-data-alert")
     private WebElement noDataAlert;
 
@@ -35,5 +38,10 @@ public class NetPromoterScoreSection extends AbstractUIElement {
     public int getNetPromoterScore() {
         return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), promoterScore, 5,
                 "Net Promoter Score"));
+    }
+
+    public int getPassivePercentage() {
+        return Integer.parseInt(getTextFromElem(this.getCurrentDriver(), passivesPercentage, 5,
+                "Passive Percentage").replace("%", ""));
     }
 }

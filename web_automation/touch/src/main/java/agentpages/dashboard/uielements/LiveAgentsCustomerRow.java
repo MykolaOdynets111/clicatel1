@@ -25,7 +25,6 @@ public class LiveAgentsCustomerRow extends AbstractWidget {
 
     public LiveAgentsCustomerRow(WebElement element) {
         super(element);
-        PageFactory.initElements(new AppiumFieldDecorator(element), this);
     }
 
     public LiveAgentsCustomerRow setCurrentDriver(WebDriver currentDriver){

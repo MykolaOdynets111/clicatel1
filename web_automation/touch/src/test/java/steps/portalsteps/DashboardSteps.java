@@ -25,6 +25,8 @@ public class DashboardSteps extends AbstractPortalSteps {
     private final ThreadLocal<String> channel = new ThreadLocal<>();
     private final ThreadLocal<String> period = new ThreadLocal<>();
 
+    private final ThreadLocal<Integer> npsPassivesPercentage = new ThreadLocal<>();
+
     @And("^Admin click on Customers Overview dashboard tab$")
     public void agentClickOnCustomersOverviewDashboardTab() {
         getDashboardPage().clickOnCustomersOverviewTab();
@@ -81,13 +83,13 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
     }
 
-    @And("^Admin filter Customers History by (?!(.*)period)(.*) channel$")
+    @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
         this.channel.set(channel);
         getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
     }
 
-    @And("^Admin filter Customers History by (?!(.*)channel)(.*) period$")
+    @And("^Admin filter Customers History by (?!.*channel and)(.*) period$")
     public void adminFilterCustomersHistoryByPeriod(String period) {
         this.period.set(period);
         getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
@@ -294,5 +296,46 @@ public class DashboardSteps extends AbstractPortalSteps {
     @When("^Admin click on Departments Management button$")
     public void adminClickOnDepartmentsManagementButton() {
         getDashboardPage().clickDepartmentsManagement();
+    }
+
+    @And("^Admin save the percentage for passives from NPS$")
+    public void adminSaveThePercentageForPassivesFromNPS() {
+        npsPassivesPercentage.set(getDashboardPage().getNetPromoterScoreSection().getPassivePercentage());
+    }
+
+    @And("^Admin see the percentage for passives from NPS is increased$")
+    public void adminSeeThePercentageForPassivesFromNPSIsIncreased() {
+        int actualNpsPassivePercentage = getDashboardPage().getNetPromoterScoreSection().getPassivePercentage();
+        Assert.assertTrue(actualNpsPassivePercentage > npsPassivesPercentage.get(),
+                "The percentage for passives from NPS is not increased");
+        npsPassivesPercentage.remove();
+    }
+
+    @Then("^Verify admin can see number of attended vs unattended chats when hover over web chat$")
+    public void verifyAdminCanSeeNumberOfAttendedVsUnattendedChatsWhenHoverOverWebChat() {
+        Assert.assertTrue(getDashboardPage()
+                        .getAttendedVsUnattendedChats()
+                        .isNumberOfAttendedVsUnattendedChatsDisplayed(),
+                "Number of attended vs Unattended chats is not shown after hovering on chart");
+    }
+
+    @And("^Verify admin can see number of live chats per channel when hover over web chat$")
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWebChatChart(),
+                "Number of live chats per channel is not shown after hovering on web chat chart");
+    }
+
+    @Then("^All reports in graphs should be breakdown hourly$")
+    public void allReportsInGraphsShouldBeBreakdownHourly() {
+        SoftAssert softAssert = new SoftAssert();
+        for (List<String> graphTimelines : getDashboardPage().getCustomersHistory().getGraphsTimelines()) {
+            softAssert.assertTrue(isTimelinesShownInHours(graphTimelines),
+                    String.format("Timelines %s is not shown hourly", graphTimelines));
+        }
+        softAssert.assertAll();
+    }
+
+    private boolean isTimelinesShownInHours(List<String> timelines) {
+        return timelines.stream().allMatch(timeline -> timeline.matches("^([0-1][0-9]|[2][0-3]):([0-5][0-9])$"));
     }
 }
