@@ -44,6 +44,8 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-form-group__error-text")
     private WebElement noteInputError;
 
+    private String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
+
     public TransferChatWindow (WebDriver current){
         this.currentDriver = current;
     }
@@ -165,5 +167,11 @@ public class TransferChatWindow extends AbstractUIElement {
 
     public String getNoteInputErrorText(){
         return getTextFromElem(this.getCurrentDriver(), noteInputError, 3, "Required notes error");
+    }
+
+    public boolean isNoAvailableAgentsDisplayed() {
+        return isElementShown(this.getCurrentDriver(),
+                findElemByXPATH(this.getCurrentDriver(), noAvailableAgentsMessageXpath),
+                5);
     }
 }

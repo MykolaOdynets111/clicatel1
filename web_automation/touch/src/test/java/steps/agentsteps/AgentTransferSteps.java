@@ -23,12 +23,17 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on 'Transfer' chat$")
     public void agentClickOnTransferChat(String agent) {
-        getAgentHomeForMainAgent().getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getChatHeader().clickTransferButton();
     }
 
     @Then("^Transfer chat pop up appears$")
     public void transferChatPopUpAppears() {
         Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
+    }
+
+    @Then("^Transfer chat pop up appears for (.*)$")
+    public void transferChatPopUpAppears(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
     }
 
     @When("^(.*) click 'Cancel transfer' button$")
@@ -84,6 +89,11 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @When("^Select 'Transfer to' drop down$")
     public void selectTransferToDropDown() {
         getAgentHomeForMainAgent().getTransferChatWindow().openDropDownAgent();
+    }
+
+    @When("^(.*) open 'Transfer to' drop down$")
+    public void clickTransferToDropDown(String agent) {
+        getAgentHomePage(agent).getTransferChatWindow().openDropDownAgent();
     }
 
     @When("^(.*) select an agent in 'Transfer to' drop down$")
@@ -162,7 +172,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         SoftAssert soft = new SoftAssert();
         DotControlSteps dotControlSteps = new DotControlSteps();
         dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName(), "fbmsg");
-        createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("connect to agent'"));
+        createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("connect to agent"));
         DotControlSteps.cleanUPDotControlRequestMessage();
         createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("chat to support"));
 
@@ -175,6 +185,18 @@ public class AgentTransferSteps extends AbstractAgentSteps {
                                 createdChatsViaDotControl.get(1).getInitContext().getFullName(),20),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
+    }
+
+    @Given("^(.*) receives one new conversation requests$")
+    public void createDotControlChats(String agent){
+        DotControlSteps dotControlSteps = new DotControlSteps();
+        dotControlSteps.createIntegration(Tenants.getTenantUnderTestOrgName(), "fbmsg");
+        DotControlSteps.cleanUPDotControlRequestMessage();
+        createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("connect to agent"));
+        Assert.assertTrue(getLeftMenu(agent)
+                        .isNewConversationRequestFromSocialIsShown(
+                                createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getInitContext().getFullName(),20),
+                "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getClientId()+")");
     }
 
 
@@ -262,5 +284,11 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         Assert.assertEquals(resp.statusCode(), 200,
                 "Changing agentInactivityTimeoutSec was not successful for '"+Tenants.getTenantUnderTestName()+"' tenant \n" +
                         "Response: " + resp.getBody().asString());
+    }
+
+    @Then("^(.*) should see 'no available agents' in a transfer pop-up agents dropdown$")
+    public void secondAgentShouldSeeNoAvailableAgentsInATransferPopUp(String agent) {
+        Assert.assertTrue(getAgentHomePage(agent).getTransferChatWindow().isNoAvailableAgentsDisplayed(),
+                "No available agents is not shown");
     }
 }
