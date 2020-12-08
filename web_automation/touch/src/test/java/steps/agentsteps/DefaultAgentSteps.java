@@ -2,6 +2,7 @@ package steps.agentsteps;
 
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
+import cucumber.api.PendingException;
 import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import driverfactory.DriverFactory;
@@ -634,5 +635,16 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                     getAgentHomePage(agent).getPageHeader().getAvailableAgents().contains(agentName),
                     "Unavailable agent in list of available agents");
         }
+    }
+
+    @And("^(.*) search ticket with a customer name \"([^\"]*)\"$")
+    public void agentTypesACustomerNameBlaBlaOnTheSearchField(String agent, String userName) {
+        getAgentHomePage(agent).getLeftMenuWithChats().searchTicket(userName);
+    }
+
+    @Then("^(.*) receives an error message \"([^\"]*)\"$")
+    public void agentReceivesAnErrorMessage(String agent, String errorMessage) {
+        Assert.assertEquals(getAgentHomePage(agent).getLeftMenuWithChats().getNoResultsFoundMessage(), errorMessage,
+                "Wrong no results found error message found");
     }
 }

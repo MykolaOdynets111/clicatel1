@@ -73,6 +73,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath =".//span[@class='cl-r-filter-button__label']/following-sibling::button")
     private WebElement filterRemove;
 
+    @FindBy(css = ".cl-empty-state>div")
+    private WebElement noResultsFoundText;
+
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
     private String loadingSpinner = ".//*[text()='Connecting...']";
@@ -177,6 +180,19 @@ public class LeftMenuWithChats extends AbstractUIElement {
         searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
         getTargetChat(userId).click();
+    }
+
+    public void searchTicket(String userId){
+        waitForElementToBeClickable(this.getCurrentDriver(), searchButton, 1);
+        executeJSclick(this.getCurrentDriver(), searchButton);
+        waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
+        searchChatInput.sendKeys(userId);
+        searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
+    }
+
+    public String getNoResultsFoundMessage() {
+        return getTextFromElem(this.getCurrentDriver(), this.noResultsFoundText, 5,
+                "No results found text").replace("\n", " ");
     }
 
     public String getActiveChatUserName(){
