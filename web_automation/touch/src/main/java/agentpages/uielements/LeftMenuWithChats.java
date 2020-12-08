@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -73,7 +72,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath =".//span[@class='cl-r-filter-button__label']/following-sibling::button")
     private WebElement filterRemove;
 
-    @FindBy(css = ".cl-empty-state>div")
+    @FindAll({
+            @FindBy(css = ".chats-list>.cl-empty-state"),
+            @FindBy(css = ".cl-empty-state>div")
+    })
     private WebElement noResultsFoundText;
 
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
@@ -174,17 +176,22 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void searchUserChat(String userId){
-        waitForElementToBeClickable(this.getCurrentDriver(), searchButton, 1);
-        executeJSclick(this.getCurrentDriver(), searchButton);
-        waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
-        searchChatInput.sendKeys(userId);
-        searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
+        clickOnSearchButton();
+        inputUserNameIntoSearch(userId);
         getTargetChat(userId).click();
     }
 
     public void searchTicket(String userId){
+        clickOnSearchButton();
+        inputUserNameIntoSearch(userId);
+    }
+
+    public void clickOnSearchButton(){
         waitForElementToBeClickable(this.getCurrentDriver(), searchButton, 1);
         executeJSclick(this.getCurrentDriver(), searchButton);
+    }
+
+    public void inputUserNameIntoSearch(String userId){
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
         searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
