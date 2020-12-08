@@ -1,10 +1,12 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import agentpages.supervisor.uielements.SupervisorDeskHeader;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @FindBy(css = ".cl-r-roster-filter.cl-r-roster-filter--form-opened")
@@ -30,6 +32,12 @@ public class FilterMenu extends AbstractUIElement {
 
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[@class='css-xb97g8 cl-r-select__multi-value__remove']/*")
     private List<WebElement> sentimentRemoveButtons;
+
+    @FindBy(name = "startDate")
+    private WebElement startDateInput;
+
+    @FindBy(name = "endDate")
+    private WebElement endDateInput;
 
     public FilterMenu selectFlaggedCheckbox(){
         clickElem(this.getCurrentDriver(), flaggedCheckbox, 1, "Flagged checkbox");
@@ -66,4 +74,31 @@ public class FilterMenu extends AbstractUIElement {
         sentimentsInput.sendKeys(Keys.ENTER);
     }
 
+    public void fillStartDate(LocalDate startDate) {
+        clickElem(this.getCurrentDriver(), startDateInput, 1, "Start Date Input");
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(getCurrentDriver(), startDateInput, 1,
+                    "Filter start date", "value").isEmpty())
+                break;
+            startDateInput.sendKeys("");
+            startDateInput.sendKeys(Keys.BACK_SPACE);
+        }
+        startDateInput.sendKeys(startDate.toString());
+        startDateInput.sendKeys(Keys.ENTER);
+    }
+
+    public void fillEndDate(LocalDate endDate) {
+        clickElem(this.getCurrentDriver(), endDateInput, 1, "Start Date Input");
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(getCurrentDriver(), endDateInput, 1,
+                    "Filter start date", "value").isEmpty())
+                break;
+            endDateInput.sendKeys("");
+            endDateInput.sendKeys(Keys.BACK_SPACE);
+        }
+        endDateInput.sendKeys(endDate.toString());
+        endDateInput.sendKeys(Keys.ENTER);
+    }
 }

@@ -18,10 +18,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 @FindBy(css = ".cl-r-chat-header")
 public class ChatHeader extends AbstractUIElement {
@@ -65,6 +62,9 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindBy(xpath = ".//span[@class= 'cl-r-chat-header-time'][1]")
     private WebElement timeStamp;
+
+    @FindBy(css = ".cl-r-chat-header-time")
+    private WebElement dateTime;
 
     @FindBy(css = "[selenium-id=header-cancel-transfer]")
     private WebElement cancelTransferButton;
@@ -166,6 +166,11 @@ public class ChatHeader extends AbstractUIElement {
 
     public String getTextHeader() {
         return  chatHeaderTitle.getText().toLowerCase();
+    }
+
+    public LocalDateTime getDateTime() {
+        String stringDate =  getTextFromElem(this.getCurrentDriver(), dateTime, 5, "Date time in header");
+        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm",  Locale.US));
     }
 
     public boolean isAvatarContainUserNameFirstLetter(String userName){
