@@ -1,5 +1,5 @@
 #Run only in remote mode.
-
+@skip
 Feature: Media Support: Agent sends files and user downloads
 
   Background:
