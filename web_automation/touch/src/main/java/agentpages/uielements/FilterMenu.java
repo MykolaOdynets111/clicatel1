@@ -1,10 +1,12 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import agentpages.supervisor.uielements.SupervisorDeskHeader;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @FindBy(css = ".cl-r-roster-filter.cl-r-roster-filter--form-opened")
@@ -30,6 +32,12 @@ public class FilterMenu extends AbstractUIElement {
 
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[@class='css-xb97g8 cl-r-select__multi-value__remove']/*")
     private List<WebElement> sentimentRemoveButtons;
+
+    @FindBy(name = "startDate")
+    private WebElement startDateInput;
+
+    @FindBy(name = "endDate")
+    private WebElement endDateInput;
 
     public FilterMenu selectFlaggedCheckbox(){
         clickElem(this.getCurrentDriver(), flaggedCheckbox, 1, "Flagged checkbox");
@@ -66,4 +74,11 @@ public class FilterMenu extends AbstractUIElement {
         sentimentsInput.sendKeys(Keys.ENTER);
     }
 
+    public void fillStartDate(LocalDate startDate) {
+        fillDateInput(this.getCurrentDriver(), startDateInput, startDate, 1, "Start date");
+    }
+
+    public void fillEndDate(LocalDate endDate) {
+        fillDateInput(this.getCurrentDriver(), endDateInput, endDate, 1, "End date");
+    }
 }

@@ -2,7 +2,6 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
@@ -12,8 +11,11 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 @FindBy(xpath = "//div[@class = 'flex-dashboard agent-container' or @class = 'supervisor-view-group-chats-by']/div[1]")
@@ -73,6 +75,12 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath =".//span[@class='cl-r-filter-button__label']/following-sibling::button")
     private WebElement filterRemove;
 
+    @FindAll({
+            @FindBy(css = ".chats-list>.cl-empty-state"),
+            @FindBy(css = ".cl-empty-state>div")
+    })
+    private WebElement noResultsFoundText;
+
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
     private String loadingSpinner = ".//*[text()='Connecting...']";
@@ -83,6 +91,15 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return newConversationRequests.stream().filter(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
                 .getUserName().equals(userName)).findFirst().orElseThrow(() -> new AssertionError(
                 "No chat was found from: " + userName ));
+    }
+
+    public List<String> getAllFoundChatsUserNames(){
+        return newConversationRequests
+                .stream()
+                .map(e-> new ChatInLeftMenu(e)
+                                .setCurrentDriver(this.getCurrentDriver())
+                                .getUserName())
+                .collect(Collectors.toList());
     }
 
     public void openNewConversationRequestByAgent() {
@@ -96,6 +113,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void openNewFromSocialConversationRequest(String userName) {
+        openChatByUserName(userName);
+    }
+
+    public void openChatByUserName(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }
 
@@ -171,12 +192,30 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public void searchUserChat(String userId){
+        clickOnSearchButton();
+        inputUserNameIntoSearch(userId);
+        getTargetChat(userId).click();
+    }
+
+    public void searchTicket(String userId){
+        clickOnSearchButton();
+        inputUserNameIntoSearch(userId);
+    }
+
+    public void clickOnSearchButton(){
         waitForElementToBeClickable(this.getCurrentDriver(), searchButton, 1);
         executeJSclick(this.getCurrentDriver(), searchButton);
+    }
+
+    public void inputUserNameIntoSearch(String userId){
         waitForElementToBeClickable(this.getCurrentDriver(), searchChatInput, 2);
         searchChatInput.sendKeys(userId);
         searchChatInput.sendKeys(Keys.CONTROL, Keys.ENTER);
-        getTargetChat(userId).click();
+    }
+
+    public String getNoResultsFoundMessage() {
+        return getTextFromElem(this.getCurrentDriver(), this.noResultsFoundText, 5,
+                "No results found text").replace("\n", " ");
     }
 
     public String getActiveChatUserName(){
@@ -249,6 +288,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
         if (!chanel.equalsIgnoreCase("no")) {filterMenu.fillChannelInputField(chanel);}
         if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}
         if (flagged) {filterMenu.selectFlaggedCheckbox();}
+        filterMenu.clickApplyButton();
+    }
+
+    public void applyTicketsChatsFilters(String channel, String sentiment, LocalDate startDate, LocalDate endDate) {
+        clickElem(this.getCurrentDriver(), filterButton, 1, "Filters Button");
+        filterMenu.setCurrentDriver(this.getCurrentDriver());
+        if (!channel.equalsIgnoreCase("no")) {filterMenu.fillChannelInputField(channel);}
+        if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}
+        filterMenu.fillStartDate(startDate);
+        filterMenu.fillEndDate(endDate);
         filterMenu.clickApplyButton();
     }
 

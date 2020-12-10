@@ -370,7 +370,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         DriverFactory.getDriverForAgent("main").switchTo().window(windowHandles.get(windowHandles.size() - 1));
     }
 
-    @And("^Agent filter by (.) year (.) month and (.*) days ago start date and today's end date$")
+    @And("^Admin filter by (.) year (.) month and (.*) days ago start date and today's end date$")
     public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day) {
         LocalDate startDate = LocalDate.now().minusYears(year).minusDays(month).minusDays(day);
         LocalDate endDate = LocalDate.now();
