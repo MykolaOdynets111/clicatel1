@@ -206,6 +206,8 @@ public class Hooks implements JSHelper {
         }
 
         if (scenario.getSourceTagNames().contains("@orca_api")){
+            //need since all chats from orca have names Apple User
+            new ORCASteps().sendOrcaMessage("//end");
             ORCASteps.cleanUPORCAData();
         }
 

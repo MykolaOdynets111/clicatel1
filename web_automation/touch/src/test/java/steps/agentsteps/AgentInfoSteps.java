@@ -67,8 +67,9 @@ public class AgentInfoSteps extends AbstractAgentSteps{
         soft.assertAll();
     }
 
-    @And("^(.*) should see apple chat icon in header$")
-    public void agentShouldSeeAppleChatIconInHeader(String agent) {
-//        getAgentHomePage(agent).getChatHeader().is
+    @And("^(.*) should see (.*) icon in active chat header$")
+    public void agentShouldSeeAppleChatIconInHeader(String agent, String adapter) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isValidChannelImg(adapter),
+                "Image in chat header for " + adapter + " adapter as not expected. \n");
     }
 }

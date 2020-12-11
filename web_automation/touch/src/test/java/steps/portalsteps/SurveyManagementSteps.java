@@ -5,9 +5,10 @@ import com.github.javafaker.Faker;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.SurveyManagement;
+import datamanager.Tenants;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import portaluielem.SurveyWebChatForm;
+import agentpages.survey.uielements.SurveyWebChatForm;
 
 import java.util.List;
 import java.util.Map;
@@ -38,12 +39,25 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @Then("^Selects (.*) survey type")
-    public void verifyCSATSurvey(String type){
+    public void selectSurvey(String type) {
         surveyWebChatForm = getSurveyManagementPage().getSurveyWebChatForm();
         if (type.equalsIgnoreCase("CSAT")) {
-            surveyWebChatForm.clickCSATRadioButton();
-        } else if (type.equalsIgnoreCase("NPS")){
-            surveyWebChatForm.clickNPSRadioButton();
+            surveyWebChatForm.getSurveysInner().clickCSATRadioButton();
+        } else if (type.equalsIgnoreCase("NPS")) {
+            surveyWebChatForm.getSurveysInner().clickNPSRadioButton();
+        }
+    }
+
+    @Then("^Admin selects (.*) survey type for (.*) survey form")
+    public void selectSurvey(String type, String surveyForm) {
+        if (surveyForm.equalsIgnoreCase("abc")) {
+            if (type.equalsIgnoreCase("CSAT")) {
+                getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().clickCSATRadioButton();
+            } else if (type.equalsIgnoreCase("NPS")) {
+                getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().clickNPSRadioButton();
+            }
+        } else {
+            this.selectSurvey(type);
         }
     }
 
@@ -55,7 +69,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @Then("^CSAT scale has correct limit variants (.*) in dropdown and (.*) set as type$")
     public void verifyCSATNumbers(List<String> expRangeOfNumbers, String type){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(surveyWebChatForm.getVariationOfRatingCSATScale(),
+        soft.assertEquals(surveyWebChatForm.getSurveysInner().getVariationOfRatingCSATScale(),
                 expRangeOfNumbers, "CSAT range of numbers in dropdown is not as expected");
         soft.assertTrue(surveyWebChatForm.isRateHasCorrectIcons(type), "No " + type + " type of Icons are displayed in Survey Preview");
         soft.assertAll();
@@ -63,7 +77,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @When("^Agent select (.*) as number limit from dropdown$")
     public void selectLimitOption(String limitNumber){
-        surveyWebChatForm.selectDropdownOption(limitNumber);
+        surveyWebChatForm.getSurveysInner().selectDropdownOption(limitNumber);
     }
 
     @When("^Agent click save survey configuration button$")
@@ -74,7 +88,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @When("^Agent switch \"Allow customer to leave a note\" in survey management$")
     public void enableComments(){
-        surveyWebChatForm.clickCommentSwitcher();
+        surveyWebChatForm.getSurveysInner().clickCommentSwitcher();
     }
 
     @Then("^Agent sees comment field in Survey management form$")
@@ -90,19 +104,19 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @When("^Agent select (.*) as and icon for rating range$")
     public void selectRangeIcon(String iconName){
-        surveyWebChatForm.selectRateIcon(iconName);
+        surveyWebChatForm.getSurveysInner().selectRateIcon(iconName);
     }
 
     @When("^Customize your survey \"(.*)\" question$")
     public void setSurveyQuestion(String question){
         questionUpdate.set(question + " " + faker.rockBand().name());
-        surveyWebChatForm.changeQuestion(questionUpdate.get());
+        surveyWebChatForm.getSurveysInner().changeQuestion(questionUpdate.get());
     }
 
     @When("^Customize your survey thank message$")
     public void setSurveyThankMessage(){
         thankMessageUpdate.set("Thank you for taking the time to provide us with your feedback. " + faker.gameOfThrones().dragon());
-        surveyWebChatForm.setThankMessage(thankMessageUpdate.get());
+        surveyWebChatForm.getSurveysInner().setThankMessage(thankMessageUpdate.get());
     }
 
     @Then ("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
@@ -136,10 +150,24 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     @Then("^Star and Smile Buttons are Disabled$")
     public void starAndSmileButtonsAreDisabled(){
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(surveyWebChatForm.isSmileButtonDisabled(), "Smile button should not be enabled");
-        soft.assertTrue(surveyWebChatForm.isStarButtonDisabled(), "Star button should not be enabled");
+        soft.assertTrue(surveyWebChatForm.getSurveysInner().isSmileButtonDisabled(), "Smile button should not be enabled");
+        soft.assertTrue(surveyWebChatForm.getSurveysInner().isStarButtonDisabled(), "Star button should not be enabled");
         soft.assertAll();
     }
 
 
+    @Then("^Survey Preview should be displayed with correct data for (.*) channel$")
+    public void surveyPreviewShouldBeDisplayedWithCorrectDataForAbcChannel(String chanel) {
+        String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), chanel);
+        SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
+        List<String> surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getRatingThanksMessage()),
+                "Rating thanks message is not displayed in survey preview");
+        softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getSurveyQuestionTitle()),
+                "Survey question title is not displayed in survey preview");
+        softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getCustomerNoteTitle()),
+                "Customer note title is not displayed in survey preview");
+        softAssert.assertAll();
+    }
 }
