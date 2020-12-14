@@ -6,12 +6,11 @@ import org.testng.Assert;
 
 import com.assertthat.selenium_shutterbug.utils.web.Browser;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileWriter;
-import java.util.stream.Collectors;
 
 import com.assertthat.selenium_shutterbug.core.Shutterbug;
 
@@ -306,5 +305,21 @@ public interface WebActions extends WebWait {
 
     default void createElementImage(WebDriver driver, WebElement element, String name, String path){
             Shutterbug.shootElement(driver ,element,true ).withName(name).save(path);
+    }
+
+    // ==================================== Specific Elements Actions ======================================= //
+
+    default void fillDateInput(WebDriver driver, WebElement element, LocalDate date, int wait, String elemName) {
+        clickElem(driver, element, wait, elemName);
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(driver, element, wait,
+                    elemName, "value").isEmpty())
+                break;
+            element.sendKeys("");
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+        element.sendKeys(date.toString());
+        element.sendKeys(Keys.ENTER);
     }
 }
