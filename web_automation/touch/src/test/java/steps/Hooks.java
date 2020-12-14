@@ -8,6 +8,7 @@ import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import datamanager.Agents;
 import datamanager.MC2Account;
+import datamanager.SurveyManagement;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
 import driverfactory.DriverFactory;
@@ -17,7 +18,8 @@ import emailhelper.GmailConnector;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import io.restassured.response.Response;
-import javaserver.Server;
+import javaserver.DotControlServer;
+import javaserver.OrcaServer;
 import mc2api.ApiHelperPlatform;
 import mc2api.auth.PortalAuthToken;
 import org.openqa.selenium.OutputType;
@@ -71,9 +73,14 @@ public class Hooks implements JSHelper {
                 BaseTieSteps.response = new ByteArrayOutputStream();
         }
 
-        if(scenario.getSourceTagNames().contains("@start_server")){
-            new Server().startServer();
-            APIHelperDotControl.waitForServerToBeReady();
+        if (scenario.getSourceTagNames().contains("@start_server")) {
+            new DotControlServer().startServer();
+            ApiHelper.waitForServerToBeReady();
+        }
+
+        if (scenario.getSourceTagNames().contains("@start_orca_server")) {
+            new OrcaServer().startServer();
+            ApiHelper.waitForServerToBeReady();
         }
     }
 
@@ -169,8 +176,13 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@start_server")){
-            Server.stopServer();
-            APIHelperDotControl.waitForServerToBeClosed();
+            DotControlServer.stopServer();
+            ApiHelper.waitForServerToBeClosed();
+        }
+
+        if (scenario.getSourceTagNames().contains("@start_orca_server")) {
+            OrcaServer.stopServer();
+            ApiHelper.waitForServerToBeClosed();
         }
 
         if(scenario.getSourceTagNames().contains("@camunda")){
@@ -203,6 +215,13 @@ public class Hooks implements JSHelper {
         if (scenario.getSourceTagNames().contains("@off_survey_management")){
             String tenantOrgName = Tenants.getTenantUnderTestOrgName();
             ApiHelper.ratingEnabling(tenantOrgName, true);
+        }
+
+        if(scenario.getSourceTagNames().contains("@rating_abc")) {
+            String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), "abc");
+            SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
+            configuration.updateSomeValueByMethodName("ratingEnabled", "false");
+            ApiHelper.updateSurveyManagement(Tenants.getTenantUnderTestOrgName(), configuration, channelID);
         }
 
         if (scenario.getSourceTagNames().contains("@orca_api")){

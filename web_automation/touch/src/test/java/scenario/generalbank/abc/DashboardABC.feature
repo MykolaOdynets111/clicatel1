@@ -1,6 +1,5 @@
 @no_widget
-@rating_abc
-Feature: Apple Business Chat :: Surveys
+Feature: Apple Business Chat :: Dashboard
 
   Background:
     Given Setup ORCA integration for General Bank Demo tenant
@@ -11,7 +10,7 @@ Feature: Apple Business Chat :: Surveys
       | ratingIcon    | NUMBER      |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
-  Scenario: ABC: : Surveys: Verify if the survey preview header for Apple shows as Apple Business Chat Preview
+  Scenario: Dashboard:: Verify that if NPS surveys are categorize as Detractors if Apple Business Chat user chooses between 0 – 6
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu

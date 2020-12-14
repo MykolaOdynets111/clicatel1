@@ -20,48 +20,6 @@ import java.util.TimeZone;
 
 public class APIHelperDotControl {
 
-    public static void waitForServerToBeReady(){
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        for(int i = 0; i<10; i++){
-                if (RestAssured.get(Server.getServerURL()).statusCode() == 200) {
-                    break;
-                } else {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-        }
-    }
-
-    public static void waitForServerToBeClosed() {
-        try {
-            for (int i = 0; i < 10; i++) {
-                if (callServer().statusCode() == 502) {
-                    break;
-                } else {
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }catch (ConnectException e){
-            // Server is not available
-        }
-    }
-
-
-    private static Response callServer() throws ConnectException{
-        return RestAssured.get(Server.getServerURL());
-    }
-
 
     public static Response updateIntegration(String tenantOrgName, DotControlCreateIntegrationInfo newIntegrationInfo, String apiToken){
         return RestAssured.given().log().all()

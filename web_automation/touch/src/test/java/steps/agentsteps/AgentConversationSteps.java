@@ -181,7 +181,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             userMessage = FacebookSteps.getCurrentUserMessageText();
         }
         Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage),
-                "'" + userMessage + "' User message is not shown in conversation area (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
+                "'" + userMessage + "' User message is not shown in conversation area");
     }
 
     @Then("^There is no more than one from user message$")
