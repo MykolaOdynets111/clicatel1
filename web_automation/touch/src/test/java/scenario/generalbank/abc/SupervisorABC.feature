@@ -1,4 +1,5 @@
 @no_widget
+@orca_api
 Feature: Apple Business Chat :: Supervisor Desk
 
   Background:
