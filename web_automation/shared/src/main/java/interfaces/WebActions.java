@@ -194,6 +194,15 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default boolean isElementRemovedByXPATH(WebDriver driver, String xpath, int wait){
+        try {
+            waitForElementToBeInvisibleByXpath(driver, xpath, wait);
+            return true;
+        } catch (TimeoutException|NoSuchElementException e) {
+            return false;
+        }
+    }
+
     default boolean isElementRemoved(WebDriver driver, WebElement element, int wait){
         for(int i = 0; i<wait; i++){
             if(!isElementShown(driver, element, 1)) return true;
