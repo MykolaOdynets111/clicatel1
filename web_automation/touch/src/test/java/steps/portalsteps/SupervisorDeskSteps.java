@@ -234,6 +234,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient()).isUserMessageShown(message), "Messages is not the same");
     }
 
+    @Then("Supervisor can see (.*) live chat with (.*) message to agent")
+    public void verifyLiveChatPresent(String channel, String message){
+        Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
+    }
+
     @When("Verify that correct messages and timestamps are shown on Chat View")
     public void openChatView(){
         SoftAssert soft = new SoftAssert();
