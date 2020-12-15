@@ -282,7 +282,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public void applyLiveChatsFilters(String chanel, String sentiment, boolean flagged){
+    public void applyChatsFilters(String chanel, String sentiment, boolean flagged){
         clickElem(this.getCurrentDriver(), filterButton, 1, "Filters Button");
         filterMenu.setCurrentDriver(this.getCurrentDriver());
         if (!chanel.equalsIgnoreCase("no")) {filterMenu.fillChannelInputField(chanel);}
@@ -305,4 +305,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), filterRemove, 1, "Filter Remove button");
     }
 
+    public boolean verifyChanelOfTheChatsIsPresent(String channelName) {
+        return chatsList.stream()
+                .map(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
+                .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
+    }
 }

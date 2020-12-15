@@ -2,6 +2,8 @@ package steps.agentsteps;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.time.LocalDate;
@@ -40,5 +42,17 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getLeftMenuWithChats().applyTicketsChatsFilters("no", "no", startDate, endDate);
         this.startDate.set(startDate);
         this.endDate.set(endDate);
+    }
+
+    @When("^(.*) filter chats with (.*) channel, (.*) sentiment and flagged is (.*)$")
+    public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
+        getLeftMenu(agent).applyChatsFilters(channel.trim(), sentiment.trim(), flagged);
+    }
+
+    @Then("^(.*) see only Apple Business Chat chats in left menu$")
+    public void agentSeeOnlyAppleBusinessChatChatsInLeftMenu(String agent, String channelName) {
+        Assert.assertTrue( getLeftMenu(agent).verifyChanelOfTheChatsIsPresent(channelName),
+                channelName + " channel name should be shown.");
+
     }
 }

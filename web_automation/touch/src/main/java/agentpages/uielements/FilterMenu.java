@@ -57,6 +57,7 @@ public class FilterMenu extends AbstractUIElement {
     }
 
     public void fillChannelInputField(String chanel){
+        //TODO: change as choosing checkbox, the same for sentiments
         inputText(this.getCurrentDriver(), channelInput, 1, "Chanel Input", chanel);
         channelInput.sendKeys(Keys.ENTER);
     }
