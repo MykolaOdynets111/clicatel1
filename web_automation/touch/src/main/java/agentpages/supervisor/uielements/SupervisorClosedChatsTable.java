@@ -66,4 +66,11 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
         } while (closedChats != this.closedChats.size());
         scrollClosedChatsToTheTop();
     }
+
+    public boolean verifyChanelOfTheChatsIsPresent(String channelName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), closedChats, 7);
+        return  closedChats.stream()
+                .map(e -> new SupervisorDeskClosedChatRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .allMatch(closedChat -> closedChat.getIconName().equalsIgnoreCase(channelName));
+    }
 }

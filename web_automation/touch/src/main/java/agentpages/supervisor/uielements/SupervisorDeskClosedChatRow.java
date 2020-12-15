@@ -14,6 +14,8 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     private WebElement date;
     @FindBy(css = ".chats-list .cl-user-details")
     private WebElement chatNameCell;
+    @FindBy(css = ".chats-list .cl-table-cell:nth-child(2)>svg")
+    private WebElement channelIcon;
 
     private String scrollAreaCss = "[selenium-id='roster-scroll-container']";
 
@@ -36,5 +38,9 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
     public void clickOnChat() {
         chatNameCell.click();
+    }
+
+    public String getIconName() {
+        return channelIcon.getAttribute("name").trim();
     }
 }

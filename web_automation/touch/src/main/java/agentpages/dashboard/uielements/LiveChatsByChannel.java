@@ -31,7 +31,6 @@ public class LiveChatsByChannel extends AbstractUIElement {
 
     public boolean isNumberOfLiveChatsShownForWebChatChart() {
         hoverElem(this.getCurrentDriver(), webChatChart, 3, "Sentiment Chart tooltip");
-        return isElementShown(this.getCurrentDriver(),
-                findElemByCSS(this.getCurrentDriver(), numberOfLiveChatsInTooltipCss), 3);
+        return isElementShownByCSS(this.getCurrentDriver(), numberOfLiveChatsInTooltipCss, 3);
     }
 }

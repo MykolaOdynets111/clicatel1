@@ -31,8 +31,6 @@ public class GeneralSentimentPerChannel extends AbstractUIElement {
     }
 
     public boolean isNumberOfSentimentShownInTooltip() {
-        return isElementShown(this.getCurrentDriver(),
-                //should be like that, because tooltip is float element and appears in body directly
-                findElemByCSS(this.getCurrentDriver(), numberOfSentimentInTooltipCss), 3);
+        return isElementShownByCSS(this.getCurrentDriver(), numberOfSentimentInTooltipCss, 3);
     }
 }

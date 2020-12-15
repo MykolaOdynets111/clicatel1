@@ -31,8 +31,6 @@ public class AttendedVsUnattendedChats extends AbstractUIElement {
     }
 
     private boolean isNumberOfAttendedVsUnattendedChatsInTooltipDisplayed() {
-        return isElementShown(this.getCurrentDriver(),
-                //should be like that, because tooltip is float element and appears in body directly
-                findElemByCSS(this.getCurrentDriver(), numberOfAttendedVsUnattendedChatsInTooltipCss), 3);
+        return isElementShownByCSS(this.getCurrentDriver(), numberOfAttendedVsUnattendedChatsInTooltipCss, 3);
     }
 }
