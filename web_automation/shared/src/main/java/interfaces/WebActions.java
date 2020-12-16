@@ -30,6 +30,14 @@ public interface WebActions extends WebWait {
         }
     }
 
+    default void clickElemByXpath(WebDriver driver, String xpath, int wait, String elemName){
+        try {
+            waitForElementToBeClickableByXpath(driver, xpath, wait).click();
+        } catch (TimeoutException|NoSuchElementException e){
+            Assert.fail("Cannot click '" + elemName + "' because button is not clickable.");
+        }
+    }
+
     default void clickHoldRelease(WebDriver driver, WebElement element, int wait, String elemName){
         try {
             waitForElementToBeClickable(driver, element, wait);

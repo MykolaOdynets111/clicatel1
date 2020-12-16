@@ -39,17 +39,17 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
     public void agentFilterByYearMonthAndDaysAgoStartDateAndTodaySEndDate(String agent, int year, int month, int day) {
         LocalDate startDate = LocalDate.now().minusYears(year).minusDays(month).minusDays(day);
         LocalDate endDate = LocalDate.now();
-        getAgentHomePage(agent).getLeftMenuWithChats().applyTicketsChatsFilters("no", "no", startDate, endDate);
+        getAgentHomePage(agent).getLeftMenuWithChats().applyChatsFilters("no", "no", startDate, endDate);
         this.startDate.set(startDate);
         this.endDate.set(endDate);
     }
 
-    @When("^(.*) filter chats with (.*) channel, (.*) sentiment and flagged is (.*)$")
+    @When("^(.*) filter closed chats with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
         getLeftMenu(agent).applyChatsFilters(channel.trim(), sentiment.trim(), flagged);
     }
 
-    @Then("^(.*) see only Apple Business Chat chats in left menu$")
+    @Then("^(.*) see only (.*) chats in left menu$")
     public void agentSeeOnlyAppleBusinessChatChatsInLeftMenu(String agent, String channelName) {
         Assert.assertTrue( getLeftMenu(agent).verifyChanelOfTheChatsIsPresent(channelName),
                 channelName + " channel name should be shown.");

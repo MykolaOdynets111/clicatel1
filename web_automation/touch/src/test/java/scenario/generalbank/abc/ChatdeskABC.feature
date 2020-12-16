@@ -50,5 +50,5 @@ Feature: Apple Business Chat :: Chatdesk
   Scenario: Chatdesk:: Verify if agent can filter closed chat using Apple business chat channel
     Given I login as agent of General Bank Demo
     When Agent select "Closed" left menu option
-    When Agent filter chats with Apple Business Chat channel, no sentiment and flagged is false
-    Then Agent see only Apple Business Chat chats in left menu
+    When Agent filter closed chats with Apple Business Chat channel, no sentiment and flagged is false
+    Then Agent see only apple_business_chat chats in left menu
