@@ -231,7 +231,7 @@ public class DashboardSteps extends AbstractPortalSteps {
     public void adminSeeTheMessageNoDataToReportAtTheMomentForPastSentimentGraphIfThereIsNoAvailableData() {
         if (ApiCustomerHistoryHelper.getPastSentimentReport(Tenants.getTenantUnderTestOrgName(), period.get(), channel.get()).isEmpty()) {
             Assert.assertTrue(getDashboardPage().getCustomersHistory().isNoDataDisplayedForGraph("Past Sentiment"),
-                    "No data is displayed for Past Sentiment Graph");
+                    "No data is not displayed for Past Sentiment Graph");
         }
     }
 

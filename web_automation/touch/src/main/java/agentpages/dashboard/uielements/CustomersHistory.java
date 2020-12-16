@@ -6,25 +6,16 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @FindBy(css = ".customers-history-tab")
 public class CustomersHistory extends AbstractUIElement {
-    private final String graphInDivXpath =
-            "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
-    private final String graphInH3Xpath =
-            "//h3[text()='%s']/following-sibling::div[contains(@class,'chart-container')]";
 
-    private final String noDataForGraphInDivXpath = graphInDivXpath + "//div[contains(@class,'no-data-overlay')]";
-    private final String noDataForGraphInH3Xpath = graphInH3Xpath + "//div[contains(@class,'no-data-overlay')]";
-
-    private final String filteredByInfoInDivXpath =
-            "//h3[text()='%s']/span[contains(@class, 'cl-default-text-muted')]";
-    private final String filteredByInfoInH3Xpath =
-            "//h3[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+    private final String graphByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
+    private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
+    private final String filteredByInfoXpath = "//h3[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
 
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
@@ -43,47 +34,15 @@ public class CustomersHistory extends AbstractUIElement {
     }
 
     public boolean isGraphDisplayed(String graphName) {
-        try {
-            WebElement graphInDiv = findElemByXPATH(this.getCurrentDriver(), String.format(graphInDivXpath, graphName));
-            wheelScrollDownToElement(this.getCurrentDriver(), this.getWrappedElement(), graphInDiv, 3);
-            return isElementShown(this.getCurrentDriver(), graphInDiv, 5);
-        } catch (TimeoutException | NoSuchElementException e) {
-            try {
-                WebElement graphInH3 = findElemByXPATH(this.getCurrentDriver(), String.format(graphInH3Xpath, graphName));
-                wheelScrollDownToElement(this.getCurrentDriver(), this.getWrappedElement(), graphInH3, 3);
-                return isElementShown(this.getCurrentDriver(), graphInH3, 5);
-            } catch (TimeoutException | NoSuchElementException e2) {
-                return false;
-            }
-        }
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(graphByNameXpath, graphName), 5);
     }
 
     public boolean isNoDataRemovedForGraph(String graphName) {
-        try {
-            WebElement noDataForGraphInDiv = findElemByXPATH(this.getCurrentDriver(), String.format(noDataForGraphInDivXpath, graphName));
-            return isElementRemoved(this.getCurrentDriver(), noDataForGraphInDiv, 3);
-        } catch (TimeoutException | NoSuchElementException e) {
-            try {
-                WebElement noDataForGraphInH3 = findElemByXPATH(this.getCurrentDriver(), String.format(noDataForGraphInH3Xpath, graphName));
-                return isElementRemoved(this.getCurrentDriver(), noDataForGraphInH3, 3);
-            } catch (TimeoutException | NoSuchElementException e2) {
-                return true;
-            }
-        }
+        return isElementRemovedByXPATH(this.getCurrentDriver(), String.format(noDataByGraphNameXpath, graphName), 3);
     }
 
     public boolean isNoDataDisplayedForGraph(String graphName) {
-        try {
-            WebElement noDataForGraphInDiv = findElemByXPATH(this.getCurrentDriver(), String.format(noDataForGraphInDivXpath, graphName));
-            return isElementShown(this.getCurrentDriver(), noDataForGraphInDiv, 5);
-        } catch (TimeoutException | NoSuchElementException e) {
-            try {
-                WebElement noDataForGraphInH3 = findElemByXPATH(this.getCurrentDriver(), String.format(noDataForGraphInH3Xpath, graphName));
-                return isElementShown(this.getCurrentDriver(), noDataForGraphInH3, 5);
-            } catch (TimeoutException | NoSuchElementException e2) {
-                return false;
-            }
-        }
+        return isElementShownByXpath(this.getCurrentDriver(), String.format(noDataByGraphNameXpath, graphName), 5);
     }
 
     public List<String> getAllGraphs() {
@@ -93,24 +52,13 @@ public class CustomersHistory extends AbstractUIElement {
 
     public boolean isGraphFilteredBy(String graphName, String... filters) {
         try {
-            List<WebElement> filteredByInfInDiv = findElemsByXPATH(this.getCurrentDriver(),
-                    String.format(filteredByInfoInDivXpath, graphName));
-            waitForFirstElementToBeVisible(getCurrentDriver(), filteredByInfInDiv, 3);
-            if(filteredByInfInDiv.size() == 0)
-                throw new NoSuchElementException("");
-            List<String> foundFilters = filteredByInfInDiv.stream().map(WebElement::getText).collect(Collectors.toList());
+            List<WebElement> filteredByInfInH3 = findElemsByXPATH(this.getCurrentDriver(),
+                    String.format(filteredByInfoXpath, graphName));
+            waitForFirstElementToBeVisible(getCurrentDriver(), filteredByInfInH3, 3);
+            List<String> foundFilters = filteredByInfInH3.stream().map(WebElement::getText).collect(Collectors.toList());
             return foundFilters.containsAll(Arrays.asList(filters));
-
-        } catch (TimeoutException | NoSuchElementException e) {
-            try {
-                List<WebElement> filteredByInfInH3 = findElemsByXPATH(this.getCurrentDriver(),
-                        String.format(filteredByInfoInH3Xpath, graphName));
-                waitForFirstElementToBeVisible(getCurrentDriver(), filteredByInfInH3, 3);
-                List<String> foundFilters = filteredByInfInH3.stream().map(WebElement::getText).collect(Collectors.toList());
-                return foundFilters.containsAll(Arrays.asList(filters));
-            } catch (TimeoutException | NoSuchElementException e2) {
-                return false;
-            }
+        } catch (TimeoutException | NoSuchElementException e2) {
+            return false;
         }
     }
 }
