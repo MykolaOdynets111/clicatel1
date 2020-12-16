@@ -180,6 +180,9 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         if(userFrom.equalsIgnoreCase("dotcontrol")) {
             return super.getUserName("dotcontrol");
         }
+        if(userFrom.equalsIgnoreCase("orca")) {
+            return super.getUserName("orca");
+        }
 
         return getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
     }

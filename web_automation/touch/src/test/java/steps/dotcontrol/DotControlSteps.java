@@ -18,6 +18,7 @@ import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.WebWait;
 import io.restassured.response.Response;
+import javaserver.DotControlServer;
 import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -301,13 +302,13 @@ public class DotControlSteps implements WebWait {
         try {
             Assert.assertTrue(isResponseComeToServer(expectedMessage, 10),
                     "Message is not as expected\n Found: "
-                            + Server.incomingRequests.get(clientId.get()).getMessage()
+                            + DotControlServer.dotControlIncomingRequests.get(clientId.get()).getMessage()
                             + "\nExpected: " + expectedMessage);
         }catch(NullPointerException e){
             Assert.fail("Nullpointer exception was faced\n " +
                     "The request: " + messageCallBody.get().toString() + "\n" +
                     "clientId from request:" + messageCallBody.get().getClientId() + "\n" +
-            "Received clientId from .Control response" + Server.incomingRequests.keySet());
+            "Received clientId from .Control response" + DotControlServer.dotControlIncomingRequests.keySet());
         }
     }
 
@@ -335,13 +336,13 @@ public class DotControlSteps implements WebWait {
             try {
                 Assert.assertTrue(isResponseComeToServer(expectedResponse, wait),
                         "Message is not as expected\n Found: "
-                                + Server.incomingRequests.get(clientId.get()).getMessage()
+                                + DotControlServer.dotControlIncomingRequests.get(clientId.get()).getMessage()
                                 + "\nExpected: " + expectedResponse);
             }catch(NullPointerException e){
                 Assert.fail("NullPointerException was faced\n" +
-                        "Key set from server: " + Server.incomingRequests.keySet() + "\n" +
+                        "Key set from server: " + DotControlServer.dotControlIncomingRequests.keySet() + "\n" +
                         "clientId from created integration" + clientId.get() + "\n" +
-                        "" + Server.incomingRequests.toString()
+                        "" + DotControlServer.dotControlIncomingRequests.toString()
                 );
             }
         }else {
@@ -350,7 +351,7 @@ public class DotControlSteps implements WebWait {
             }
             Assert.assertTrue(isResponseComeToServer(expectedResponse, wait),
                     "Message is not as expected\n Messages which came from server are: "
-                            + Server.messages
+                            + DotControlServer.dotControlMessages
                             + "\nExpected: " + expectedResponse +"\"");
         }
     }
@@ -359,7 +360,7 @@ public class DotControlSteps implements WebWait {
     public void verifyIfResponseIsNotCome(String expectedResponse, int wait){
         Assert.assertFalse(isResponseComeToServer(expectedResponse, wait),
                 "Message should not come to .Control\n Messages which came from server are: "
-                        + Server.messages
+                        + DotControlServer.dotControlMessages
                         + "\nExpected: " + expectedResponse);
     }
 
@@ -452,12 +453,12 @@ public class DotControlSteps implements WebWait {
     private boolean isExpectedResponseArrives(String message){
         boolean result = false;
         if (message.equalsIgnoreCase("agents_available")) {
-            result =  (!Server.incomingRequests.isEmpty()) &&
-                    Server.incomingRequests.keySet().contains(clientId.get()) &&
-                   Server.incomingRequests.get(clientId.get()).getMessageType().equals("AGENT_AVAILABLE");
+            result =  (!DotControlServer.dotControlIncomingRequests.isEmpty()) &&
+                    DotControlServer.dotControlIncomingRequests.keySet().contains(clientId.get()) &&
+                    DotControlServer.dotControlIncomingRequests.get(clientId.get()).getMessageType().equals("AGENT_AVAILABLE");
         } else {
-            result = Server.messages.contains(message);
-            if (result){ Server.messages.clear();}
+            result = DotControlServer.dotControlMessages.contains(message);
+            if (result){ DotControlServer.dotControlMessages.clear();}
         }
         return result;
     }
@@ -504,8 +505,8 @@ public class DotControlSteps implements WebWait {
     }
 
     public static void cleanUPMessagesInfo(){
-        Server.incomingRequests.clear();
-        Server.messages.clear();
+        DotControlServer.dotControlIncomingRequests.clear();
+        DotControlServer.dotControlMessages.clear();
         responseOnSentRequest.remove();
         createIntegrationCallBody.remove();
         messageCallBody.remove();

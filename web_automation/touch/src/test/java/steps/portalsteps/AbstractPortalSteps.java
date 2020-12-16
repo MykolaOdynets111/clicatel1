@@ -3,6 +3,7 @@ package steps.portalsteps;
 import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.supervisor.SupervisorDeskPage;
 import agentpages.dashboard.DashboardPage;
+import agentpages.survey.SurveyManagementPage;
 import com.github.javafaker.Faker;
 import driverfactory.DriverFactory;
 import interfaces.DateTimeHelper;

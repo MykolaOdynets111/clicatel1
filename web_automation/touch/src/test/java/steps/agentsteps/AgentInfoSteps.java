@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.Tenants;
@@ -64,5 +65,11 @@ public class AgentInfoSteps extends AbstractAgentSteps{
         soft.assertEquals(getProfileWindow("agent").getListOfRoles(), expected,
                 "Agent roles listed in Profile window are not as expected");
         soft.assertAll();
+    }
+
+    @And("^(.*) should see (.*) icon in active chat header$")
+    public void agentShouldSeeAppleChatIconInHeader(String agent, String adapter) {
+        Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isValidChannelImg(adapter),
+                "Image in chat header for " + adapter + " adapter as not expected. \n");
     }
 }
