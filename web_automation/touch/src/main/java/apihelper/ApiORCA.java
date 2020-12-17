@@ -1,6 +1,6 @@
 package apihelper;
 
-import datamanager.jacksonschemas.orca.OrcaMessage;
+import datamanager.jacksonschemas.orca.OrcaEvent;
 import driverfactory.URLs;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -66,7 +66,7 @@ public class ApiORCA {
         return resp;
     }
 
-    public static void sendMessageToAgent(OrcaMessage messageBody){
+    public static void sendMessageToAgent(OrcaEvent messageBody) {
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(messageBody).post(URLs.getORCAMessageURL());

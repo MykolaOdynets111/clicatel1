@@ -1,14 +1,14 @@
-package portaluielem;
+package agentpages.survey.uielements;
 
+import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".setting-group")
-public class SurveyWebChatForm extends BasePortalWindow{
-
+@FindBy(css = ".surveys-inner")
+public class SurveysInner extends AbstractUIElement {
     @FindBy(xpath =".//label[contains(text(), 'CSAT')]/span[@class='cl-radio__checkmark']")
     private WebElement csatRadioButton;
 
@@ -21,12 +21,6 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(css = "div[id^='react-select']")
     private List<WebElement> ratingNumbersVariation;
 
-    @FindBy(xpath = "//button[text()='Save configuration']")
-    private WebElement saveSurveyButton;
-
-    @FindBy(css = ".rate-input label")
-    private List<WebElement> rateInputNumbers;
-
     @FindBy(css = ".number-block")
     private WebElement numberButton;
 
@@ -36,41 +30,39 @@ public class SurveyWebChatForm extends BasePortalWindow{
     @FindBy(name = "star")
     private WebElement starButton;
 
-    @FindBy(css = "label .icon.svg-icon-staricon")
-    private List<WebElement> starRateRepresentation;
-
-    @FindBy(css = "label [class^='icon svg-icon-smile']")
-    private List<WebElement> smileRateRepresentation;
-
-    @FindBy(css = ".rate-input-label.number")
-    private List<WebElement> numberRateRepresentation;
-
-    @FindBy(xpath = "//span[text()='Prompt customer to leave a note:']/following-sibling::label")
-    private WebElement commentSwitcher;
-
-    @FindBy(css = ".ctl-rate-textarea-title")
-    private WebElement commentFieldHeader;
+    @FindBy(xpath="//div[text()='Smiles and stars available only in CSAT mode']")
+    private WebElement ratingTypesUnavailableMessage;
 
     @FindBy(name = "surveyQuestionTitle")
     private WebElement questionInput;
 
-    @FindBy(css = ".ctl-rate-input-title")
-    private WebElement questionPreview;
-
-    @FindBy(xpath="//div[text()='Smiles and stars available only in CSAT mode']")
-    private WebElement ratingTypesUnavailableMessage;
+    @FindBy(xpath = "//span[text()='Prompt customer to leave a note:']/following-sibling::label")
+    private WebElement commentSwitcher;
 
     @FindBy(name ="ratingThanksMessage")
     private WebElement thankMessageForm;
 
-    public SurveyWebChatForm clickCSATRadioButton(){
+    public SurveysInner clickCSATRadioButton(){
         clickElem(this.getCurrentDriver(), csatRadioButton, 2, "CSAT radio button");
         return this;
     }
 
-    public SurveyWebChatForm clickNPSRadioButton(){
+    public SurveysInner clickNPSRadioButton(){
         clickElem(this.getCurrentDriver(), npsRadioButton, 2, "NPS radio button");
         return this;
+    }
+
+    public void clickCommentSwitcher(){
+        clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher");
+    }
+
+    public void setThankMessage(String message){
+        inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
+    }
+
+    public void changeQuestion(String guestion){
+        questionInput.clear();
+        inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", guestion);
     }
 
     public List<String> getVariationOfRatingCSATScale(){
@@ -89,18 +81,6 @@ public class SurveyWebChatForm extends BasePortalWindow{
                 .orElseThrow(() -> new AssertionError(number + " number was not found in dropdown.")).click();
     }
 
-    public void clickSaveButton(){
-        clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button");
-    }
-
-    public void clickCommentSwitcher(){
-        clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher");
-    }
-
-    public String getSizeOfRateInputNumbers(){
-        return rateInputNumbers.size()+"";
-    }
-
     public void selectRateIcon(String icon){
         if(icon.equals("number")){
             clickElem(this.getCurrentDriver(), numberButton, 2, "Number Button");
@@ -111,32 +91,6 @@ public class SurveyWebChatForm extends BasePortalWindow{
         } else {
             new AssertionError("Incorrect Icon tipe was provided");
         }
-    }
-
-    public boolean isRateHasCorrectIcons(String icon){
-        if(icon.equals("number")){
-            return !numberRateRepresentation.isEmpty();
-        } else if(icon.equals("star")){
-            return !starRateRepresentation.isEmpty();
-        } else if(icon.equals("smile")){
-            return !smileRateRepresentation.isEmpty();
-        } else {
-            new AssertionError("Incorrect Icon tipe was provided");
-        }
-        return false;
-    }
-
-    public boolean isCommentFieldShown(){
-        return isElementShown(this.getCurrentDriver(), commentFieldHeader, 2);
-    }
-
-    public void changeQuestion(String guestion){
-            questionInput.clear();
-            inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", guestion);
-    }
-
-    public String getPreviewQuestion(){
-        return getTextFromElem(this.getCurrentDriver(), questionPreview, 1, "Question Preview");
     }
 
     public boolean isSmileButtonDisabled(){
@@ -150,9 +104,4 @@ public class SurveyWebChatForm extends BasePortalWindow{
         moveToElement(this.getCurrentDriver(), starButton);
         return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
     }
-
-    public void setThankMessage(String message){
-        inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
-    }
-
 }

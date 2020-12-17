@@ -16,7 +16,7 @@ import java.util.List;
         "externalReferenceId",
         "history"
 })
-public class OrcaMessage {
+public class OrcaEvent {
     @JsonProperty("eventId")
     private String eventId;
     @JsonProperty("providerId")
@@ -36,8 +36,10 @@ public class OrcaMessage {
     @JsonProperty("history")
     private List<History> history = null;
 
+    public OrcaEvent() {
+    }
 
-    public OrcaMessage(String routeId, String messageText){
+    public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
         this.setEventId(faker.letterify("AQA???"));
         this.setProviderId("touch");

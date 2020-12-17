@@ -1,11 +1,13 @@
-package portalpages;
+package agentpages.survey;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import portaluielem.SurveyWebChatForm;
+import portalpages.PortalAbstractPage;
+import agentpages.survey.uielements.SurveyAbcForm;
+import agentpages.survey.uielements.SurveyWebChatForm;
 
-public class SurveyManagementPage extends PortalAbstractPage{
+public class SurveyManagementPage extends PortalAbstractPage {
 
     @FindBy(xpath = "//h2[contains(text(), 'Customer Surveys Customization')]")
     private WebElement pageTitle;
@@ -17,10 +19,16 @@ public class SurveyManagementPage extends PortalAbstractPage{
     private WebElement whatsappTab;
 
     private SurveyWebChatForm surveyWebChatForm;
+    private SurveyAbcForm surveyAbcForm;
 
     public SurveyWebChatForm getSurveyWebChatForm(){
         surveyWebChatForm.setCurrentDriver(this.getCurrentDriver());
         return surveyWebChatForm;
+    }
+
+    public SurveyAbcForm getSurveyAbcForm() {
+        surveyAbcForm.setCurrentDriver(this.getCurrentDriver());
+        return surveyAbcForm;
     }
 
     public SurveyManagementPage(WebDriver driver) {
