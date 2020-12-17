@@ -14,12 +14,10 @@ public class SupervisorOpenedClosedChatsList extends AbstractUIElement {
 
     public boolean isClosedChatsHaveSendEmailButton() {
         waitForFirstElementToBeVisible(getCurrentDriver(), closedChats, 5);
-        for(WebElement closedChat : closedChats) {
+        return closedChats.stream().allMatch(closedChat -> {
+            wheelScrollDownToElement(this.getCurrentDriver(), this.getWrappedElement(), closedChat, 3);
             clickElem(getCurrentDriver(), closedChat, 2, "Closed Chat");
-            SupervisorDeskPage supervisorDeskPage = new SupervisorDeskPage(this.getCurrentDriver());
-            if(!supervisorDeskPage.isSendEmailForOpenedClosedChatShown())
-                return false;
-        }
-        return true;
+            return new SupervisorDeskPage(this.getCurrentDriver()).isSendEmailForOpenedClosedChatShown();
+        });
     }
 }
