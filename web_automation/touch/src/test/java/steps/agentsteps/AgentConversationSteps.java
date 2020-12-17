@@ -264,7 +264,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             answersFromTie.add(i, expectedResponse);
         }
         List<Suggestion> actualSuggestions = getSuggestedGroup("main").getSuggestionsList();
-        List<String> suggestionTextsActual = actualSuggestions.stream().map(e -> e.getSuggestionMessage()).collect(Collectors.toList());
+        List<String> suggestionTextsActual = actualSuggestions.stream().map(Suggestion::getSuggestionMessage).collect(Collectors.toList());
         Assert.assertEquals(suggestionTextsActual, answersFromTie, "Shown Suggestions is not as expected");
     }
 

@@ -685,7 +685,8 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^(.*) widget shows correct number$")
     public void checkTotalAgentOnlineValue(String widgetName){
-        int actualActiveAgentsCount = Integer.valueOf(getDashboardPage().getWidgetValue(widgetName));
+        getDashboardPage().waitForConnectingDisappear(1, 5);
+        int actualActiveAgentsCount = Integer.parseInt(getDashboardPage().getWidgetValue(widgetName));
         chatConsolePretestValue.put(widgetName, actualActiveAgentsCount);
         int loggedInAgentsCountFromBackend = ApiHelper.getNumberOfLoggedInAgents();
         Assert.assertEquals(actualActiveAgentsCount, loggedInAgentsCountFromBackend,

@@ -147,11 +147,12 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){
-        try {
-            return new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).isOvernightTicketRemoved();
-        } catch(NoSuchElementException e){
-            return true;
-        }
+          for (int i = 0; i < 20; i++) {
+              if(!getAllFoundChatsUserNames().contains(userName))
+                  return true;
+              waitFor(1000);
+          }
+          return false;
     }
 
     public boolean isNewConversationRequestFromSocialShownByChannel(String userName, String channel, int wait){
@@ -255,7 +256,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public int getNewChatsCount(){
-        return  newConversationRequests.size();
+        return newConversationRequests.size();
     }
 
     public void waitForAllChatsToDisappear(int secondsWait){

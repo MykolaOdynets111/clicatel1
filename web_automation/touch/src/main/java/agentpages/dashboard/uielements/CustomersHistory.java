@@ -24,6 +24,7 @@ public class CustomersHistory extends AbstractUIElement {
     private List<WebElement> graphs;
 
     public List<List<String>> getGraphsTimelines() {
+        waitFor(2000);
         return graphs.stream()
                 .map(graph -> new CustomerHistoryGraph(graph).setCurrentDriver(this.getCurrentDriver()))
                 .map(CustomerHistoryGraph::getTimeLines).collect(Collectors.toList());
