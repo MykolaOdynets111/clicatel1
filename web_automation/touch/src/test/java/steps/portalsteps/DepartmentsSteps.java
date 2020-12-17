@@ -12,7 +12,6 @@ import org.testng.asserts.SoftAssert;
 import portalpages.DepartmentsManagementPage;
 import portaluielem.CreateDepartmentForm;
 import steps.agentsteps.AbstractAgentSteps;
-import steps.portalsteps.AbstractPortalSteps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +71,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         }
 
         getDepartmentsManagementPage().findCardByNameAndDescription(name, description).clickDeleteDepartmentButton();
+        getDepartmentsManagementPage().confirmDeletingDepartment();
         Assert.assertTrue(getDepartmentsManagementPage().isCardDisappeared(name, 2),
                 "Departments was not removed");
     }

@@ -24,6 +24,8 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@id = 'swal2-content']")
     private WebElement duplicationAlert;
 
+    @FindBy(css = ".cl-r-confirmation button.cl-r-button--primary")
+    private WebElement confirmDeletingButton;
 
     private CreateDepartmentForm createDepartmentForm;
 
@@ -97,6 +99,10 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
 
     public String getDuplicationAlertText(){
         return getTextFromElem(this.getCurrentDriver(), duplicationAlert, 3, "Duplication Alert");
+    }
+
+    public void confirmDeletingDepartment() {
+        clickElem(this.getCurrentDriver(), confirmDeletingButton, 3, "Confirm deleting department button");
     }
 
 }

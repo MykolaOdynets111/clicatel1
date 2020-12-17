@@ -20,6 +20,6 @@ public class Suggestion extends AbstractWidget {
     }
 
     public String getSuggestionMessage() {
-        return suggestedMessage.getAttribute("innerText");
+        return getAttributeFromElem(this.getCurrentDriver(), suggestedMessage, 3, "Suggested Message", "innerText");
     }
 }

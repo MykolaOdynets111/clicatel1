@@ -90,7 +90,7 @@ public class TweetsSection extends TwitterHomePage {
 
     public OpenedTweet clickTimeLineTweetWithText(String expectedText){
         try{
-        waitForElementsToBeVisible(this.getCurrentDriver(), findElemntsByCSS(this.getCurrentDriver(), timelineElemementsCSS),5);
+        waitForElementsToBeVisible(this.getCurrentDriver(), findElemsByCSS(this.getCurrentDriver(), timelineElemementsCSS),5);
         }catch(TimeoutException e){}
         findElemByXPATH(this.getCurrentDriver(), String.format(targetTweetXPATH, expectedText)).click();
 //        findElemntsByCSS(timelineElemementsCSS).stream().map(e -> new TimelineTweet(e)).collect(Collectors.toList())

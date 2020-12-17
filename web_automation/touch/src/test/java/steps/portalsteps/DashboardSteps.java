@@ -127,7 +127,8 @@ public class DashboardSteps extends AbstractPortalSteps {
         if (ApiHelper.getNumberOfLoggedInAgents() == 0) {
             //need to be discussed why there's active agents which API doesn't see
             Assert.assertTrue(getDashboardPage().getAgentPerformanceTab().isNoActiveAgentsMessageDisplayed(),
-                    "'No active agents' are not shown while there is no logged in agents");
+                    "'No active agents' are not shown while there is no logged in agents. " +
+                            "Could be affected by TPLAT-5990");
         }
     }
 

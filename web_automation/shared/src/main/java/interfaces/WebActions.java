@@ -230,10 +230,6 @@ public interface WebActions extends WebWait {
         return driver.findElement(By.xpath(xpath));
     }
 
-    default List<WebElement> findElemntsByCSS(WebDriver driver, String css) {
-        return driver.findElements(By.cssSelector(css));
-    }
-
     default WebElement findElemByCSS(WebDriver driver, String css){
         return driver.findElement(By.cssSelector(css));
     }

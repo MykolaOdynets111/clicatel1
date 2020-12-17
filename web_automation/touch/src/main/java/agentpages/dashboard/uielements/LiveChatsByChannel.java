@@ -19,7 +19,7 @@ public class LiveChatsByChannel extends AbstractUIElement {
     }
 
     public boolean isWebChatChartIsDisplayed() {
-        return isElementShown(this.getCurrentDriver(), webChatChart, 5);
+        return isElementShown(this.getCurrentDriver(), webChatChart, 10);
     }
 
     public boolean isNumberOfLiveChatsShownForWebChatChart() {
