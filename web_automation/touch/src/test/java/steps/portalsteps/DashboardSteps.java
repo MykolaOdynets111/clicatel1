@@ -339,9 +339,15 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @And("^Verify admin can see number of live chats per channel when hover over web chat$")
-    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChat() {
         Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWebChatChart(),
                 "Number of live chats per channel is not shown after hovering on web chat chart");
+    }
+
+    @And("^Verify admin can see number of live chats per channel when hover over abc$")
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverABC() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForAbcChart(),
+                "Number of live chats per channel is not shown after hovering on abc chart");
     }
 
     @Then("^All reports in graphs should be breakdown hourly$")
