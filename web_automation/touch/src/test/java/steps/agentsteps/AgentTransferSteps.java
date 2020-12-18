@@ -24,6 +24,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @When("^(.*) click on 'Transfer' chat$")
     public void agentClickOnTransferChat(String agent) {
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
     }
 
     @Then("^Transfer chat pop up appears$")
@@ -44,12 +45,14 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @When("^(.*) transfers chat$")
     public void transferChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat();
     }
 
     @And("^(.*) transfers chat to (.*) department$")
     public void transferChatTodDepartment(String agent, String departmentName){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
         Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
         getAgentHomePage(agent).getTransferChatWindow().transferChatToDepartment(departmentName);
     }
@@ -57,6 +60,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     @And("^(.*) transfers overnight ticket$")
     public void agentTransfersOvernightTicket(String agent) {
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
+        getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
         secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket();
     }
 
