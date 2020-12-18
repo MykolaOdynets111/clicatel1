@@ -48,8 +48,8 @@ public interface WebWait {
                 .until(ExpectedConditions.elementToBeClickable(By.cssSelector(css)));
     }
 
-    default void waitForElementToBeClickableByXpath(WebDriver driver, String xpath, int time){
-        initWait(driver, time).ignoring(NoSuchElementException.class)
+    default WebElement waitForElementToBeClickableByXpath(WebDriver driver, String xpath, int time){
+        return initWait(driver, time).ignoring(NoSuchElementException.class)
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
     }

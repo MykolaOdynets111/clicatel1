@@ -21,4 +21,4 @@ Feature: Supervisor desk
     When Agent select "Webchat" in Chanel container and click "Apply filters" button
     Then Supervisor Desk Live dos not have conversation dotcontrol request
     And Agent has new conversation request
-    Then Verify that only widget chats are shown
+    Then Verify that only "widget" chats are shown

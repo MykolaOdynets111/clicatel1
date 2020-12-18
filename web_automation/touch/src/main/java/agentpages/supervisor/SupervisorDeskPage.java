@@ -117,17 +117,17 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return messageCustomerWindow;
     }
 
-    public SupervisorClosedChatsTable supervisorClosedChatsTable(){
+    public SupervisorClosedChatsTable getSupervisorClosedChatsTable(){
         supervisorClosedChatsTable.setCurrentDriver(this.getCurrentDriver());
         return supervisorClosedChatsTable;
     }
 
-    public SupervisorDeskHeader supervisorDeskHeader(){
+    public SupervisorDeskHeader getSupervisorDeskHeader(){
         supervisorDeskHeader.setCurrentDriver(this.getCurrentDriver());
         return  supervisorDeskHeader;
     }
 
-    public SupervisorOpenedClosedChatsList supervisorOpenedClosedChatsList(){
+    public SupervisorOpenedClosedChatsList getSupervisorOpenedClosedChatsList(){
         supervisorOpenedClosedChatsList.setCurrentDriver(this.getCurrentDriver());
         return supervisorOpenedClosedChatsList;
     }
@@ -235,6 +235,6 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public void loadAllClosedChats() {
-        supervisorClosedChatsTable().loadAllFoundChats();
+        getSupervisorClosedChatsTable().loadAllFoundChats();
     }
 }

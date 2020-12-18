@@ -4,7 +4,6 @@ import abstractclasses.AbstractWidget;
 import apihelper.ApiHelperTie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -28,11 +27,14 @@ public class ChatInLeftMenu extends AbstractWidget {
         return channelIcon;
     }
 
-    public WebElement getAdapterIcon() {
-        return adapterIcon;
+    public WebElement getAdapterWrappedIcon() {
+        return adapterWrappedIcon;
     }
 
     @FindBy(css = "[selenium-id='chat-item-icons-holder']")
+    private WebElement adapterWrappedIcon;
+
+    @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")
     private WebElement adapterIcon;
 
     @FindBy(css = ".cl-r-icon-flag-indicator")
@@ -79,8 +81,8 @@ public class ChatInLeftMenu extends AbstractWidget {
 
     public boolean isValidImg(String adapter) {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/" + adapter + ".png");
-        waitForElementToBeVisible(this.getCurrentDriver(), adapterIcon,4);
-        return isWebElementEqualsImage(this.getCurrentDriver(), adapterIcon,image);
+        waitForElementToBeVisible(this.getCurrentDriver(), adapterWrappedIcon,4);
+        return isWebElementEqualsImage(this.getCurrentDriver(), adapterWrappedIcon,image);
     }
 
 
@@ -102,6 +104,10 @@ public class ChatInLeftMenu extends AbstractWidget {
             default:
                 return "unknown icon with tag span[@class='"+iconClass+"']";
         }
+    }
+
+    public String getAdapterIconName(){
+        return adapterIcon.getAttribute("name").trim();
     }
 
     public boolean isOvernightTicketIconShown(){
