@@ -5,7 +5,6 @@
         <classes>
             <class name="runner.generalbank.RunGenBankAgentTest" />
             <class name="runner.generalbank.RunPortalTest" />
-            <class name="runner.generalbank.RunAbcTest" />
         </classes>
     </test>
     <test name="Chatdesk Automation (Agent mode) tenant ">
