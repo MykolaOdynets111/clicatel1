@@ -17,7 +17,7 @@ Feature: Apple Business Chat :: Dashboard
     And Admin should see Apple Business Chat charts in General sentiment per channel
     And Admin should see Apple Business Chat charts in Attended vs. Unattended Chats
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45501")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45506")
   Scenario: Dashboard: ABC support: Verify customer overview displays current number of Live Chats being engaged by agents for ABC.
     When Send chat to agent message by ORCA
     And I open portal

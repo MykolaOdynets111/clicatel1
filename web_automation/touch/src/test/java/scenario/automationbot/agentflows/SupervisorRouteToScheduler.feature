@@ -20,7 +20,7 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     When I login as second agent of Automation Bot
-    And Select dot control ticket checkbox
+    And Select dotcontrol ticket checkbox
     When Click 'Route to scheduler' button
     And Second agent select "Tickets" left menu option
     Then Second agent has new conversation request from dotcontrol user
