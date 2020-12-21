@@ -35,6 +35,6 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     }
 
     public void clickOnChat() {
-        chatNameCell.click();
+        clickElem(this.getCurrentDriver(), chatNameCell, 3, "Closed Chat name Cell");
     }
 }

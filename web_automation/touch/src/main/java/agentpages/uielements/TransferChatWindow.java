@@ -44,6 +44,9 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-form-group__error-text")
     private WebElement noteInputError;
 
+    @FindBy(css = ".cl-loading-overlay")
+    private WebElement loadingAvailableAgents;
+
     private String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
 
     public TransferChatWindow (WebDriver current){
@@ -60,6 +63,7 @@ public class TransferChatWindow extends AbstractUIElement {
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader(this.getCurrentDriver()).clickTransferButton();
+            waitForUpdatingAvailableAgents();
             agentName = selectDropDownAgent();
             sentNote();
         }
@@ -73,6 +77,7 @@ public class TransferChatWindow extends AbstractUIElement {
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader(this.getCurrentDriver()).clickTransferButton();
+            waitForUpdatingAvailableAgents();
             agentName = selectDropDownAgent();
             sentNote();
         }
@@ -173,5 +178,9 @@ public class TransferChatWindow extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(),
                 findElemByXPATH(this.getCurrentDriver(), noAvailableAgentsMessageXpath),
                 5);
+    }
+
+    public void waitForUpdatingAvailableAgents() {
+        waitForAppearAndDisappear(this.getCurrentDriver(), loadingAvailableAgents, 1, 5);
     }
 }
