@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static io.appium.java_client.pagefactory.utils.WebDriverUnpackUtility.unpackWebDriverFromSearchContext;
+
 @FindBy(css = ".sentiments-box")
 public class GeneralSentimentPerChannel extends AbstractUIElement {
     private final String numberOfSentimentInTooltipCss = ".sentiment-tooltip>b";
@@ -17,9 +19,8 @@ public class GeneralSentimentPerChannel extends AbstractUIElement {
     private List<WebElement> sentimentsCharts;
 
     public boolean isChartsForChannelShown(String channel) {
-        //get wrapped element for avoiding charts from other graphs on the page
-        return this.getWrappedElement()
-                .findElements(By.xpath(String.format(sentimentChartsByChannel, channel)))
+        return findElemsByXPATH(unpackWebDriverFromSearchContext(this.getWrappedElement()),
+                String.format(sentimentChartsByChannel, channel))
                 .stream().allMatch(sentimentChart -> isElementShown(this.getCurrentDriver(), sentimentChart, 3));
     }
 

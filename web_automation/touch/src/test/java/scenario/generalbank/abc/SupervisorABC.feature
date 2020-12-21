@@ -24,11 +24,11 @@ Feature: Apple Business Chat :: Supervisor Desk
   @agent_support_hours
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45507")
   Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and apple channel filter option
-    Given Setup ORCA integration for Automation tenant
+    Given Setup ORCA integration for General Bank Demo tenant
     And Set agent support hours with day shift
     When Send to agent message by ORCA
     Given I open portal
-    And Login into portal as an admin of Automation account
+    And Login into portal as an admin of General Bank Demo account
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option
     And Agent search chat orca on Supervisor desk
