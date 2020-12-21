@@ -45,3 +45,10 @@ Feature: Apple Business Chat :: Chatdesk
     Then Conversation area becomes active with connect to agent user's message in it for second agent
     When Second agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45510")
+  Scenario: Chatdesk:: Verify if agent can filter closed chat using Apple business chat channel
+    Given I login as agent of General Bank Demo
+    When Agent select "Closed" left menu option
+    When Agent filter closed chats with Apple Business Chat channel, no sentiment and flagged is false
+    Then Agent see only apple_business_chat chats in left menu

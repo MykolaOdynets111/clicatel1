@@ -122,6 +122,24 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "Web Chat chart is not displayed in Live Chats By Channel");
     }
 
+    @Then("^Admin should see Apple Business Chat chart in Live Chats by Channel$")
+    public void adminShouldSeeAbcChartInLiveChatsByChannel() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isAbcChartIsDisplayed(),
+                "ABC chart is not displayed in Live Chats By Channel");
+    }
+
+    @Then("^Admin should see (.*) charts in General sentiment per channel$")
+    public void adminShouldSeeAbcChartInGeneralSentimentPerChannel(String channel) {
+        Assert.assertTrue(getDashboardPage().getGeneralSentimentPerChannel().isChartsForChannelShown(channel),
+                String.format("%s chart is not displayed in General sentiment per channel", channel));
+    }
+
+    @Then("^Admin should see (.*) charts in Attended vs. Unattended Chats$")
+    public void adminShouldSeeAbcChartInAttendedVsUnattendedChats(String channel) {
+        Assert.assertTrue(getDashboardPage().getAttendedVsUnattendedChats().isChartsForChannelShown(channel),
+                String.format("%s chart is not displayed in Attended vs. Unattended Chats", channel));
+    }
+
     @Then("^'No Active agents' on Agents Performance tab shown if there is no online agent$")
     public void noActiveAgentsOnAgentsPerformanceTabShownIfThereIsNoOnlineAgent() {
         if (ApiHelper.getNumberOfLoggedInAgents() == 0) {
@@ -321,9 +339,15 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @And("^Verify admin can see number of live chats per channel when hover over web chat$")
-    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChatUnderGeneralSentimentPerChannel() {
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWebChat() {
         Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWebChatChart(),
                 "Number of live chats per channel is not shown after hovering on web chat chart");
+    }
+
+    @And("^Verify admin can see number of live chats per channel when hover over abc$")
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverABC() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForAbcChart(),
+                "Number of live chats per channel is not shown after hovering on abc chart");
     }
 
     @Then("^All reports in graphs should be breakdown hourly$")

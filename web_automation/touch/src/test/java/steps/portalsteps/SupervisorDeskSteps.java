@@ -90,12 +90,19 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "There should not be chat on Supervisor Desk Live (Client ID: "+userName+")");
     }
 
-    @Then("^Verify that only (.*) chats are shown$")
+    @Then("^Verify that only \"(.*)\" chats are shown$")
     public void verifyChatsChannelsFilter(String channelName){
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(getSupervisorDeskPage().verifyChanelOfTheChatIsPresent(channelName), channelName + " channel name should be shown.");
         softAssert.assertTrue(getSupervisorDeskPage().verifyChanelFilter(),
                 "Should be only "+ channelName +" channel chats");
+        softAssert.assertAll();
+    }
+
+    @Then("^Verify that only \"(.*)\" closed chats are shown$")
+    public void verifyClosedChatsChannelsFilter(String channelName) {
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorClosedChatsTable().verifyChanelOfTheChatsIsPresent(channelName),
+                channelName + " channel name should be shown.");
     }
 
     @And("Agent click On Live Supervisor Desk chat from (.*) channel")
@@ -235,6 +242,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient()).isUserMessageShown(message), "Messages is not the same");
     }
 
+    @Then("Supervisor can see (.*) live chat with (.*) message to agent")
+    public void verifyLiveChatPresent(String channel, String message){
+        Assert.assertTrue(getSupervisorDeskPage().openInboxChatBody(getUserName(channel)).isUserMessageShown(message), "Messages is not the same");
+    }
+
     @When("Verify that correct messages and timestamps are shown on Chat View")
     public void openChatView(){
         SoftAssert soft = new SoftAssert();
@@ -249,8 +261,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("Verify that closed chats have Send email button")
     public void verifyButtonForClosedChats() {
-        getSupervisorDeskPage().supervisorClosedChatsTable().openFirstClosedChat();
-        Assert.assertTrue(getSupervisorDeskPage().supervisorOpenedClosedChatsList().isClosedChatsHaveSendEmailButton(),
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorOpenedClosedChatsList().isClosedChatsHaveSendEmailButton(),
                 "Closed chats doesn't have email button");
     }
 
@@ -263,7 +275,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Chats Ended are sorted in (.*) order$")
     public void verifyClosedChatsSorting(String order){
-        List<LocalDateTime> listOfDates = getSupervisorDeskPage().supervisorClosedChatsTable().getClosedChatsDates();
+        List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorClosedChatsTable().getClosedChatsDates();
         Assert.assertTrue(isDateSorted(order, listOfDates), "Closed chats are not sorted in "+order +" order");
     }
 
@@ -287,30 +299,30 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @When("^Agent click on the arrow of Chat Ended$")
     public void clickOnTheArrowOfChatEnded(){
-        getSupervisorDeskPage().supervisorClosedChatsTable().clickAscendingArrowOfChatEndedColumn();
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().clickAscendingArrowOfChatEndedColumn();
     }
 
     @And ("^Supervisor put a check mark on \"Flagged Only\" and click \"Apply Filters\" button$")
     public void filterFlaggedChats(){
-        getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().clickApplyFilterButton();
+        getSupervisorDeskPage().getSupervisorDeskHeader().clickFlaggedOnlyCheckbox().clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
     @And("^Agent select \"(.*)\" in Chanel container and click \"Apply filters\" button$")
     public void selectChanelFilter(String name){
-        getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).clickApplyFilterButton();
+        getSupervisorDeskPage().getSupervisorDeskHeader().selectChanel(name).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
     @And("^Agent filter by \"(.*)\" channel and \"(.*)\" sentiment$")
     public void selectChanelAndSentimentFilter(String name, String sentiment){
-        getSupervisorDeskPage().supervisorDeskHeader().selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
+        getSupervisorDeskPage().getSupervisorDeskHeader().selectChanel(name).selectSentiment(sentiment).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
     @And("^Agent filter by \"(.*)\" chat, by \"(.*)\" channel and \"(.*)\" sentiment")
     public void filterBySetValues(String chatName, String chanellName, String sentimentName){
-        getSupervisorDeskPage().supervisorDeskHeader().filterByOptions(chatName, chanellName, sentimentName);
+        getSupervisorDeskPage().getSupervisorDeskHeader().filterByOptions(chatName, chanellName, sentimentName);
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
@@ -322,7 +334,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         } catch (AssertionError e){
             userName = chatName;
         }
-        getSupervisorDeskPage().supervisorDeskHeader().setSearchInput(userName).clickApplyFilterButton();
+        getSupervisorDeskPage().getSupervisorDeskHeader().setSearchInput(userName).clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
     }
 
@@ -335,8 +347,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^\"All Channels\" and \"All Sentiments\" selected as default$")
     public void  defaultLiveChatsFilters(){
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().getChannelFilterValue() , "All Channels", "Incorrect default Channels filter is set by default");
-        soft.assertEquals(getSupervisorDeskPage().supervisorDeskHeader().clickFlaggedOnlyCheckbox().getSentimentsFilterValue() , "All Sentiments", "Incorrect default Sentiments filter is set by default");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().clickFlaggedOnlyCheckbox().getChannelFilterValue() , "All Channels", "Incorrect default Channels filter is set by default");
+        soft.assertEquals(getSupervisorDeskPage().getSupervisorDeskHeader().clickFlaggedOnlyCheckbox().getSentimentsFilterValue() , "All Sentiments", "Incorrect default Sentiments filter is set by default");
         soft.assertAll();
     }
 
@@ -376,7 +388,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         LocalDate startDate = LocalDate.now().minusYears(year).minusDays(month).minusDays(day);
         LocalDate endDate = LocalDate.now();
 
-        getSupervisorDeskPage().supervisorDeskHeader()
+        getSupervisorDeskPage().getSupervisorDeskHeader()
                 .selectStartDate(startDate)
                 .selectEndDate(endDate)
                 .clickApplyFilterButton();
@@ -385,9 +397,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Verify closed chats dates are fitted by filter$")
     public void verifyClosedChatsDatesAreFittedByFilter() {
-        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
-        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
-        List<LocalDateTime> listOfDates = getSupervisorDeskPage().supervisorClosedChatsTable().getClosedChatsDates();
+        LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().getSupervisorDeskHeader().getEndDateFilterValue();
+        List<LocalDateTime> listOfDates = getSupervisorDeskPage().getSupervisorClosedChatsTable().getClosedChatsDates();
 
         SoftAssert softAssert = new SoftAssert();
         for (LocalDateTime localDateTime : listOfDates) {
@@ -398,8 +410,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Verify tickets dates are fitted by filter$")
     public void verifyTicketsDatesAreFittedByFilter() {
-        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
-        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().getSupervisorDeskHeader().getEndDateFilterValue();
         List<LocalDateTime> listOfStartedDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsStartDates();
         List<LocalDateTime> listOfEndedDates = getSupervisorDeskPage().getSupervisorTicketsTable().getTicketsEndDates();
 
@@ -426,16 +438,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Verify first closed chat date are fitted by filter$")
     public void verifyFirstClosedChatDateAreFittedByFilter() {
-        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
-        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
-        LocalDateTime firstClosedChatDate = getSupervisorDeskPage().supervisorClosedChatsTable().getFirstClosedChatDate();
+        LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().getSupervisorDeskHeader().getEndDateFilterValue();
+        LocalDateTime firstClosedChatDate = getSupervisorDeskPage().getSupervisorClosedChatsTable().getFirstClosedChatDate();
         verifyDateTimeIsInRangeOfTwoDates(firstClosedChatDate, startDate, endDate);
     }
 
     @Then("^Verify first closed ticket date are fitted by filter$")
     public void verifyFirstClosedTicketDateAreFittedByFilter() {
-        LocalDate startDate = getSupervisorDeskPage().supervisorDeskHeader().getStartDateFilterValue();
-        LocalDate endDate = getSupervisorDeskPage().supervisorDeskHeader().getEndDateFilterValue();
+        LocalDate startDate = getSupervisorDeskPage().getSupervisorDeskHeader().getStartDateFilterValue();
+        LocalDate endDate = getSupervisorDeskPage().getSupervisorDeskHeader().getEndDateFilterValue();
         LocalDateTime firstTicketStartDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketStartDates();
         LocalDateTime firstTicketEndDate = getSupervisorDeskPage().getSupervisorTicketsTable().getFirstTicketEndDates();
         verifyDateTimeIsInRangeOfTwoDates(firstTicketStartDate, startDate, endDate);

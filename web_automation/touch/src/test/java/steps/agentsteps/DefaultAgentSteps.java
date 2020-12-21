@@ -180,7 +180,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
-        getLeftMenu(agent).applyLiveChatsFilters(channel.trim(), sentiment.trim(), flagged);
+        getLeftMenu(agent).applyChatsFilters(channel.trim(), sentiment.trim(), flagged);
     }
 
     @When("(.*) remove Chat Filter$")
