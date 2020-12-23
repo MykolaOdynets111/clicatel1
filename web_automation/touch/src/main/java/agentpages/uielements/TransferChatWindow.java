@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-r-modal")
 public class TransferChatWindow extends AbstractUIElement {
@@ -134,6 +135,16 @@ public class TransferChatWindow extends AbstractUIElement {
         }
         new AssertionError("Agent for chat transferring is not shown");
         return null;
+    }
+
+    public List<String> getAvailableAgentsFromDropdown() {
+        if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
+            clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
+        waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
+        return availableAgenOrDepartmenttList.stream()
+                        .map(e -> getTextFromElem(this.getCurrentDriver(), e, 3, "Agent in dropdown"))
+                        .filter(e -> !(e.contains("current chat assignment")))
+                        .collect(Collectors.toList());
     }
 
     public String getTextDropDownMessage() {

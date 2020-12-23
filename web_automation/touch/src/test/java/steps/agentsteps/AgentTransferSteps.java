@@ -17,6 +17,8 @@ import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
 
+import java.util.List;
+
 public class AgentTransferSteps extends AbstractAgentSteps {
 
     private String secondAgentName;
@@ -294,5 +296,13 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void secondAgentShouldSeeNoAvailableAgentsInATransferPopUp(String agent) {
         Assert.assertTrue(getAgentHomePage(agent).getTransferChatWindow().isNoAvailableAgentsDisplayed(),
                 "No available agents is not shown");
+    }
+
+    @Then("^(.*) should not see (.*) in a transfer pop-up agents dropdown$")
+    public void secondAgentShouldSeeNoAvailableAgentsInATransferPopUp(String agent, String missingAgent) {
+        String missingAgentName = getAgentName(missingAgent);
+        List<String> availableAgents = getAgentHomePage(agent).getTransferChatWindow().getAvailableAgentsFromDropdown();
+        Assert.assertFalse(availableAgents.contains(missingAgentName),
+                String.format("Agent %s is displayed in a transfer pop-up agents dropdown", missingAgentName));
     }
 }
