@@ -80,10 +80,28 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         surveyWebChatForm.getSurveysInner().selectDropdownOption(limitNumber);
     }
 
+    @When("^Agent select (.*) as number limit from dropdown for (.*) survey form$")
+    public void selectLimitOption(String limitNumber, String surveyForm) {
+        if (surveyForm.equalsIgnoreCase("abc")) {
+            getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().selectDropdownOption(limitNumber);
+        } else {
+            this.selectLimitOption(limitNumber);
+        }
+    }
+
     @When("^Agent click save survey configuration button$")
     public void clickSaveButton(){
         surveyWebChatForm.clickSaveButton();
 //        getSurveyManagementPage().waitSaveMessage();
+    }
+
+    @When("^Agent click save survey configuration button for (.*) survey form$")
+    public void clickSaveButton(String surveyForm) {
+        if (surveyForm.equalsIgnoreCase("abc")) {
+            getSurveyManagementPage().getSurveyAbcForm().clickSaveButton();
+        } else {
+            this.clickSaveButton();
+        }
     }
 
     @When("^Agent switch \"Allow customer to leave a note\" in survey management$")
