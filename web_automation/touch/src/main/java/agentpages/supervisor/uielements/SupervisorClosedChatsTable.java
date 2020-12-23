@@ -30,6 +30,8 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
     }
 
     public LocalDateTime getFirstClosedChatDate(){
+        if(closedChats.size() == 0)
+            throw new AssertionError("There's no any found closed chats");
         return new SupervisorDeskClosedChatRow(closedChats.get(0))
                 .setCurrentDriver(this.getCurrentDriver())
                 .getDate();

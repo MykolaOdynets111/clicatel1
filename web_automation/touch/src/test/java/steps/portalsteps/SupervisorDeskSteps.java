@@ -172,7 +172,8 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Verify that only (.*) ticket is shown$")
     public void verifyChatsChannelsFilter(int tickets){
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames().size(), tickets,
-                "Only "+tickets+" ticket(s) number should be present on Supervisor Tickets page");
+                "Only "+tickets+" ticket(s) number should be present on Supervisor Tickets page" +
+                        "Could be because of TPLAT-5959");
     }
 
     @Then("Ticket from (.*) is not present on Supervisor Desk")
