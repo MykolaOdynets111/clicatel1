@@ -14,6 +14,9 @@ public class LiveChatsByChannel extends AbstractUIElement {
     @FindBy(css = ".bar-webchat")
     private WebElement webChatChart;
 
+    @FindBy(css = ".bar-abc")
+    private WebElement abcChart;
+
     public boolean isNoLiveChatsDisplayed() {
         return isElementShown(this.getCurrentDriver(), noLiveChatsMessage, 5);
     }
@@ -22,9 +25,17 @@ public class LiveChatsByChannel extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), webChatChart, 10);
     }
 
+    public boolean isAbcChartIsDisplayed() {
+        return isElementShown(this.getCurrentDriver(), abcChart, 5);
+    }
+
     public boolean isNumberOfLiveChatsShownForWebChatChart() {
-        hoverElem(this.getCurrentDriver(), webChatChart, 3, "Sentiment Chart tooltip");
-        return isElementShown(this.getCurrentDriver(),
-                findElemByCSS(this.getCurrentDriver(), numberOfLiveChatsInTooltipCss), 3);
+        hoverElem(this.getCurrentDriver(), webChatChart, 3, "Live Web Chat Chart");
+        return isElementShownByCSS(this.getCurrentDriver(), numberOfLiveChatsInTooltipCss, 3);
+    }
+
+    public boolean isNumberOfLiveChatsShownForAbcChart() {
+        hoverElem(this.getCurrentDriver(), abcChart, 3, "Live ABC Chart");
+        return isElementShownByCSS(this.getCurrentDriver(), numberOfLiveChatsInTooltipCss, 3);
     }
 }

@@ -1,7 +1,6 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import agentpages.supervisor.uielements.SupervisorDeskHeader;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,19 +8,24 @@ import org.openqa.selenium.support.FindBy;
 import java.time.LocalDate;
 import java.util.List;
 
-@FindBy(css = ".cl-r-roster-filter.cl-r-roster-filter--form-opened")
+@FindBy(xpath = "//*[contains(@class, 'cl-r-roster-filter--form-opened') or contains(@class, 'search-filter-bar-agent')]")
 public class FilterMenu extends AbstractUIElement {
 
-    @FindBy (xpath = ".//span[contains(text(), 'Flagged')]")
+    private final String channelInputByName = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__menu-list')]/div[text()='%s']";
+
+    @FindBy(xpath = ".//span[contains(text(), 'Flagged')]")
     private WebElement flaggedCheckbox;
 
-    @FindBy(css ="[selenium-id=apply-filter-btn]")
+    @FindBy(xpath = ".//button[contains(text(),'Apply Filters')]")
     private WebElement applyFiltersButton;
 
-    @FindBy (xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
+    @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
     private WebElement channelInput;
 
-    @FindBy (xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
+    @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__indicators')]")
+    private WebElement channelDeploy;
+
+    @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
     private WebElement sentimentsInput;
 
     @FindBy(xpath = ".//label[text()='Channel']/parent::div//*[contains(@class, 'cl-r-icon-arrow-up')]")
@@ -39,37 +43,41 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(name = "endDate")
     private WebElement endDateInput;
 
-    public FilterMenu selectFlaggedCheckbox(){
+    public FilterMenu selectFlaggedCheckbox() {
         clickElem(this.getCurrentDriver(), flaggedCheckbox, 1, "Flagged checkbox");
         return this;
     }
 
-    public void clickApplyButton(){
+    public void clickApplyButton() {
         clickElem(this.getCurrentDriver(), applyFiltersButton, 3, "Apply Filters Button");
     }
 
-    public void removeChannelsIfWereSelected(){
-        if(!chanelRemoveButtons.isEmpty()){
-            for (WebElement remove : chanelRemoveButtons){
-                    clickElem(this.getCurrentDriver(), remove, 1, "Chanel Remove Button");
+    public void removeChannelsIfWereSelected() {
+        if (!chanelRemoveButtons.isEmpty()) {
+            for (WebElement remove : chanelRemoveButtons) {
+                clickElem(this.getCurrentDriver(), remove, 1, "Chanel Remove Button");
             }
         }
     }
 
-    public void fillChannelInputField(String chanel){
-        inputText(this.getCurrentDriver(), channelInput, 1, "Chanel Input", chanel);
-        channelInput.sendKeys(Keys.ENTER);
+    public void deployChannels() {
+        clickElem(this.getCurrentDriver(), channelDeploy, 3, "Channels deploy button");
     }
 
-    public void removeSentimentsIfWereSelected(){
-        if(!sentimentRemoveButtons.isEmpty()){
-            for (WebElement remove : sentimentRemoveButtons){
+    public void chooseChannel(String channel) {
+        deployChannels();
+        clickElemByXpath(this.currentDriver, String.format(channelInputByName, channel), 2, "Channel input");
+    }
+
+    public void removeSentimentsIfWereSelected() {
+        if (!sentimentRemoveButtons.isEmpty()) {
+            for (WebElement remove : sentimentRemoveButtons) {
                 clickElem(this.getCurrentDriver(), remove, 1, "Sentiment Remove Button");
             }
         }
     }
 
-    public void fillSentimentsInputField(String sentiment){
+    public void fillSentimentsInputField(String sentiment) {
         inputText(this.getCurrentDriver(), sentimentsInput, 1, "Sentiments Input", sentiment);
         sentimentsInput.sendKeys(Keys.ENTER);
     }

@@ -283,19 +283,22 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public void applyLiveChatsFilters(String chanel, String sentiment, boolean flagged){
+    public void openFilterMenu() {
         clickElem(this.getCurrentDriver(), filterButton, 1, "Filters Button");
         filterMenu.setCurrentDriver(this.getCurrentDriver());
-        if (!chanel.equalsIgnoreCase("no")) {filterMenu.fillChannelInputField(chanel);}
+    }
+
+    public void applyChatsFilters(String chanel, String sentiment, boolean flagged){
+        openFilterMenu();
+        if (!chanel.equalsIgnoreCase("no")) {filterMenu.chooseChannel(chanel);}
         if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}
         if (flagged) {filterMenu.selectFlaggedCheckbox();}
         filterMenu.clickApplyButton();
     }
 
-    public void applyTicketsChatsFilters(String channel, String sentiment, LocalDate startDate, LocalDate endDate) {
-        clickElem(this.getCurrentDriver(), filterButton, 1, "Filters Button");
-        filterMenu.setCurrentDriver(this.getCurrentDriver());
-        if (!channel.equalsIgnoreCase("no")) {filterMenu.fillChannelInputField(channel);}
+    public void applyChatsFilters(String channel, String sentiment, LocalDate startDate, LocalDate endDate) {
+        openFilterMenu();
+        if (!channel.equalsIgnoreCase("no")) {filterMenu.chooseChannel(channel);}
         if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}
         filterMenu.fillStartDate(startDate);
         filterMenu.fillEndDate(endDate);
@@ -306,4 +309,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), filterRemove, 1, "Filter Remove button");
     }
 
+    public boolean verifyChanelOfTheChatsIsPresent(String channelName) {
+        return chatsList.stream()
+                .map(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
+                .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
+    }
 }
