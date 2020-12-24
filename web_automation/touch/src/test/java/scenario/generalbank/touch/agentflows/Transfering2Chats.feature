@@ -29,4 +29,4 @@ Feature: Transferring 2 chats
     When Second agent click on 'Transfer' chat
     Then Transfer chat pop up appears for Second agent
     When Second agent open 'Transfer to' drop down
-    Then Second agent should see 'no available agents' in a transfer pop-up agents dropdown
+    Then Second agent should not see first agent in a transfer pop-up agents dropdown

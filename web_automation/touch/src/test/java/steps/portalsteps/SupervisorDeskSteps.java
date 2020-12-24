@@ -221,11 +221,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-    private String getAgentName(String agent){
-        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
-        return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
-    }
-
     @Then("Verify (.*) ticket types are available")
     public void verifyTicketTypes(List<String> ticketTypes){
         //ToDo add numbers of tickets verification

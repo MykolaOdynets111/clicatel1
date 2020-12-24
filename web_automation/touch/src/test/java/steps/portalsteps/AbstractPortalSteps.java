@@ -4,12 +4,15 @@ import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.supervisor.SupervisorDeskPage;
 import agentpages.dashboard.DashboardPage;
 import agentpages.survey.SurveyManagementPage;
+import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
+import datamanager.Tenants;
 import driverfactory.DriverFactory;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
+import io.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
@@ -89,6 +92,11 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
             default: throw new AssertionError("Incorrect channel name was provided: " + userName);
         }
         return userName;
+    }
+
+    public String getAgentName(String agent){
+        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
+        return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
     }
 
     public static PortalLoginPage getPortalLoginPage(String agent) {
