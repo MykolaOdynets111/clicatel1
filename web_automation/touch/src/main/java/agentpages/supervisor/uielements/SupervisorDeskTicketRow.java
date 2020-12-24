@@ -42,7 +42,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(xpath = ".//span[@class ='time-cell-content'][2]")
     private WebElement endDate;
 
-    @FindBy(css = ".supervisor-tickets .cl-table-body .cl-table-row .cl-user-details-cell__top-section svg")
+    @FindBy(css = ".cl-user-details-cell__top-section svg")
     private WebElement channelIcon;
 
     private String scrollAreaCss = "[selenium-id='roster-scroll-container']";

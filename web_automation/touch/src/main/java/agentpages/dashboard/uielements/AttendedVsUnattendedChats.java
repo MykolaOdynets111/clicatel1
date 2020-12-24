@@ -14,7 +14,7 @@ public class AttendedVsUnattendedChats extends AbstractUIElement {
     private final String attendedVsUnattendedChatsCharts =
             ".//span[text()='%s']/../following-sibling::div//div[contains(concat(' ', @class, ' '), ' cl-bar-chart__bar ')]";
     private final String attendedChatChartXpath =
-            ".//span[text()='%s']/../following-sibling::div//div[contains(concat(' ', @class, ' '), ' bar-successfulChats ')]";
+            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'bar-successfulChats')]";
 
     @FindBy(css = ".channel-stats .cl-bar-chart__bar")
     private List<WebElement> attendedVsUnattendedCharts;

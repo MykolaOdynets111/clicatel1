@@ -11,9 +11,11 @@ import static io.appium.java_client.pagefactory.utils.WebDriverUnpackUtility.unp
 @FindBy(css = ".sentiments-box")
 public class GeneralSentimentPerChannel extends AbstractUIElement {
     private final String numberOfSentimentInTooltipCss = ".sentiment-tooltip>b";
-    private final String sentimentChartsByChannelXpath = ".//span[text()='%s']/../following-sibling::div//div[contains(concat(' ', @class, ' '), ' cl-bar-chart__bar ')]";
+
+    private final String sentimentChartsByChannelXpath =
+            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'cl-bar-chart__bar ')]";
     private final String positiveSentimentChartByChannelXpath =
-            ".//span[text()='%s']/../following-sibling::div//div[contains(concat(' ', @class, ' '), ' bar-positiveSentiments ')]";
+            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'bar-positiveSentiments')]";
 
     @FindBy(css = ".channel-stats .cl-bar-chart__bar")
     private List<WebElement> sentimentsCharts;
