@@ -70,6 +70,13 @@ task runTwitterTests(type:Test) {
     }
 }
 
+task runAbcTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/abc.xml"
+    }
+}
+
 task runBaseTests(type:Test) {
     useTestNG() {
         useDefaultListeners = true
@@ -231,6 +238,10 @@ task runTests(type: Test) {
 
     if(suite == "twitter") {
         runTests.dependsOn(runTwitterTests)
+    }
+
+    if(suite == "abc") {
+        runTests.dependsOn(runAbcTests)
     }
 
     if(suite == "basecheck") {

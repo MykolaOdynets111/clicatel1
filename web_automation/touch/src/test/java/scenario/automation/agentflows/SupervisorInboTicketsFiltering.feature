@@ -22,7 +22,7 @@ Feature: Supervisor desk
     And User select Unassigned ticket type
     Then Ticket from dotcontrol is present on Unassigned filter page
     When autoSchedulingEnabled is set to true
-    And Select dot control ticket checkbox
+    And Select dotcontrol ticket checkbox
     When Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on Agent

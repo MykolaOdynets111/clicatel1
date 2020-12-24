@@ -88,8 +88,12 @@ public class Hooks implements JSHelper {
     public void afterScenario(Scenario scenario){
 
         try {
-
-        makeScreenshotAndConsoleOutputFromChatdesk(scenario);
+            makeScreenshotAndConsoleOutputFromChatdesk(scenario);
+            // add this catch since a lot of time while making screenshot there's an exception
+            // and other important hooks are skipped
+        } catch (Exception | AssertionError e) {
+            e.printStackTrace();
+        } try {
 
         System.out.println("Scenario: \"" + scenario.getName() + "\" has finished with status: " + scenario.getStatus());
 
@@ -220,7 +224,7 @@ public class Hooks implements JSHelper {
         if(scenario.getSourceTagNames().contains("@rating_abc")) {
             String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), "abc");
             SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-            configuration.updateSomeValueByMethodName("ratingEnabled", "false");
+            configuration.setRatingEnabled(false);
             ApiHelper.updateSurveyManagement(Tenants.getTenantUnderTestOrgName(), configuration, channelID);
         }
 

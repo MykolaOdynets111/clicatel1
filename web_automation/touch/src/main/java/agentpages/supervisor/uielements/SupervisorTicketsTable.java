@@ -105,4 +105,11 @@ public class SupervisorTicketsTable extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), ascendingArrowOfEndDateColumn, 3,
                 "Ascending Arrow Of End Date Column");
     }
+
+    public boolean verifyChanelOfTheTicketsIsPresent(String channelName){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
+        return  tickets.stream()
+                .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))
+                .allMatch(closedChat -> closedChat.getIconName().equalsIgnoreCase(channelName));
+    }
 }
