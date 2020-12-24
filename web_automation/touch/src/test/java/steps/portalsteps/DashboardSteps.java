@@ -56,16 +56,11 @@ public class DashboardSteps extends AbstractPortalSteps {
                         String.format("Promoter Score Bars is not displayed for section %s", graph));
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScorePieDisplayed(),
                         String.format("Promoter Score Pie is not displayed for section %s", graph));
-                softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isNoDataAlertRemoved(),
-                        String.format("No data alert is displayed for section %s", graph));
             }
             if (graph.equalsIgnoreCase("Customer Satisfaction")) {
                 softAssert.assertTrue(getDashboardPage().getCustomerSatisfactionSection()
                                 .isCustomerSatisfactionScoreDisplayed(),
                         String.format("Customer Satisfaction Score is not displayed for section %s", graph));
-                softAssert.assertTrue(getDashboardPage().getCustomerSatisfactionSection()
-                                .isNoDataAlertRemoved(),
-                        String.format("No data alert is displayed for section %s", graph));
             }
             softAssert.assertTrue(getDashboardPage().getCustomersHistory().isGraphDisplayed(graph),
                     String.format("%s Graph is not Displayed", graph));
