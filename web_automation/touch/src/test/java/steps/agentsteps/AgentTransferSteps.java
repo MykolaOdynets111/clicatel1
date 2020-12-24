@@ -88,7 +88,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @Then("^(.*) can not click '(.*)' button$")
     public void agentCanNotClickTransferChatButton(String agent, String transferButton) {
-        Assert.assertFalse(getAgentHomePage(agent).getChatHeader().isButtonEnabled(transferButton),
+        Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isButtonDisabled(transferButton),
                 "Transfer chat button is enabled ");
     }
 

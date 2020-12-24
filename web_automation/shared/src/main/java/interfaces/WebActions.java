@@ -219,9 +219,25 @@ public interface WebActions extends WebWait {
         return false;
     }
 
+    default boolean isElementDisabledByXpath(WebDriver driver, String xpath, int wait){
+        for(int i = 0; i<wait; i++){
+            if(!isElementEnabledByXpath(driver, xpath, 1)) return true;
+            waitFor(1000);
+        }
+        return false;
+    }
+
     default boolean isElementEnabled(WebDriver driver, WebElement element, int wait){
         try {
             return waitForElementToBeClickable(driver, element, wait).isEnabled();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    default boolean isElementEnabledByXpath(WebDriver driver, String xpath, int wait){
+        try {
+            return waitForElementToBeClickableByXpath(driver, xpath, wait).isEnabled();
         } catch (TimeoutException e) {
             return false;
         }

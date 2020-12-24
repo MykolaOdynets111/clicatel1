@@ -1,10 +1,6 @@
 package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import dbmanager.DBConnector;
-import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +12,6 @@ import org.testng.Assert;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -76,7 +71,7 @@ public class ChatHeader extends AbstractUIElement {
     private WebElement flagOnIcon;
 
 
-    private String transferChatButton =  ".//button[@selenium-id='header-transfer-chat']";
+    private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
     private String sendWhatsAppXpath = ".//button[text()='Send WhatsApp']";
 
@@ -110,8 +105,8 @@ public class ChatHeader extends AbstractUIElement {
         try {
             switch (buttonTitle) {
                 case "Transfer chat":
-                    waitForElementToBeVisibleByXpath(this.getCurrentDriver(), transferChatButton, 5);
-                    return findElemByXPATH(this.getCurrentDriver(), transferChatButton).isEnabled();
+                    waitForElementToBeVisibleByXpath(this.getCurrentDriver(), transferChatButtonXpath, 5);
+                    return findElemByXPATH(this.getCurrentDriver(), transferChatButtonXpath).isEnabled();
                 case "Send SMS":
                     waitForElementToBeVisibleByXpath(this.getCurrentDriver(), sendSMSXpath, 5);
                     return findElemByXPATH(this.getCurrentDriver(), sendSMSXpath).isEnabled();
@@ -119,6 +114,23 @@ public class ChatHeader extends AbstractUIElement {
                     waitForElementToBeVisibleByXpath(this.getCurrentDriver(), sendWhatsAppXpath, 5);
                     return findElemByXPATH(this.getCurrentDriver(), sendWhatsAppXpath).isEnabled();
 
+                default:
+                    throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
+            }
+        }catch (TimeoutException e){
+            return false;
+        }
+    }
+
+    public boolean isButtonDisabled(String buttonTitle){
+        try {
+            switch (buttonTitle) {
+                case "Transfer chat":
+                    return isElementDisabledByXpath(this.getCurrentDriver(), transferChatButtonXpath, 5);
+                case "Send SMS":
+                    return isElementDisabledByXpath(this.getCurrentDriver(), sendSMSXpath, 5);
+                case "Send WhatsApp":
+                    return isElementDisabledByXpath(this.getCurrentDriver(), sendWhatsAppXpath, 5);
                 default:
                     throw new NoSuchElementException("Button '" + buttonTitle + "' wasn't found");
             }

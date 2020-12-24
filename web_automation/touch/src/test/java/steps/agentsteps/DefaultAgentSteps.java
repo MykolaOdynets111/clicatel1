@@ -122,14 +122,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) button is (.+) on Chat header$")
     public void isButtonEnabled(String button, String state){
         if (state.equalsIgnoreCase("disabled"))
-            Assert.assertFalse(getAgentHomePage("main").getChatHeader().isButtonEnabled(button));
+            Assert.assertTrue(getAgentHomePage("main").getChatHeader().isButtonDisabled(button));
         else if (state.equalsIgnoreCase("enabled"))
             Assert.assertTrue(getAgentHomePage("main").getChatHeader().isButtonEnabled(button));
     }
 
     @Then("^(.*) button hidden from the Chat header$")
     public void checkIfButtonHidden(String button){
-            Assert.assertFalse( getAgentHomePage("main").getChatHeader().isButtonEnabled(button),
+            Assert.assertTrue( getAgentHomePage("main").getChatHeader().isButtonDisabled(button),
                     "'" + button + "' button is displayed");
     }
 
