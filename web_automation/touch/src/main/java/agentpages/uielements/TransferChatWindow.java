@@ -48,7 +48,11 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(css = ".cl-loading-overlay")
     private WebElement loadingAvailableAgents;
 
+    @FindBy(css = ".cl-r-icon-refresh")
+    private WebElement refreshButton;
+
     private String noAvailableAgentsMessageXpath = "//*[@id='portal-placeholder']//div[text()='No available agents']";
+    private String availableDepartmentsNamesCss = ".department-name";
 
     public TransferChatWindow (WebDriver current){
         this.currentDriver = current;
@@ -108,17 +112,30 @@ public class TransferChatWindow extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), openDepartmentDropdownButton,5,"Open Departments drop down button");
     }
 
-    public void selectDepartmentFromDropDown(String departmentName){
-        if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 2)) openDepartmentDropdownButton.click();
-        waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
-        for (int i=0; i<15; i++){
-        availableAgenOrDepartmenttList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().
-                orElseThrow(() -> new AssertionError("Cannot find '" + departmentName + "' department from dropdown list")).click();
-        if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 1)){
-            break;
+    public void selectDepartmentFromDropDown(String departmentName) {
+        for (int i=0; i < 10; i++) {
+            if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
+                openDropDownDepartment();
+            try {
+                waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
+            } catch (TimeoutException ignored){
+            }
+
+            List<WebElement> availableDepartments = findElemsByCSS(this.getCurrentDriver(), availableDepartmentsNamesCss).stream()
+                    .filter(e -> getTextFromElem(getCurrentDriver(), e, 5, "Department from dropdown")
+                            .contains(departmentName))
+                    .collect(Collectors.toList());
+
+            if(availableDepartments.size() > 0) {
+                clickElem(this.getCurrentDriver(), availableDepartments.get(0), 5,
+                        "Department from dropdown");
+                return;
+            } else {
+                clickElem(this.getCurrentDriver(), refreshButton, 3, "Refresh transfer pop-up");
+                waitForUpdatingAvailableAgents();
+            }
         }
-        waitFor(500);
-        }
+        throw new AssertionError("Cannot find '" + departmentName + "' department from dropdown list");
     }
 
     public String selectDropDownAgent() {
