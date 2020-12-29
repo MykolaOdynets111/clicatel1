@@ -31,7 +31,7 @@ public class AssignChatWindow extends BasePortalWindow {
             if (isElementRemoved(this.getCurrentDriver(), availableAgent, 2))
                 openDropDownAgent();
             waitForFirstElementToBeVisible(this.getCurrentDriver(), availableAgentList, 5);
-            if (availableAgentList.size() >= 2) {
+            if (availableAgentList.size() > 0) {
                 WebElement agent = availableAgentList.stream()
                         .filter(e -> e.getText().toLowerCase().equals(agentName.toLowerCase()))
                         .findFirst().get();
