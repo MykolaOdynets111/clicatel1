@@ -19,3 +19,25 @@ Feature: Apple Business Chat :: Supervisor Desk
     When Agent select "Closed" left menu option
     And Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
     Then Verify that only "apple_business_chat" closed chats are shown
+
+  @orca_api
+  @agent_support_hours
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45507")
+  Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and apple channel filter option
+    Given Setup ORCA integration for General Bank Demo tenant
+    And Set agent support hours with day shift
+    When Send to agent message by ORCA
+    Given I open portal
+    And Login into portal as an admin of General Bank Demo account
+    And I select Touch in left menu and Supervisor Desk in submenu
+    When Agent select "Tickets" left menu option
+    And Agent search chat orca on Supervisor desk
+    Then Ticket from orca is present on All tickets filter page
+    And Select orca ticket checkbox
+    When Click 'Assign manually' button
+    Then 'Assign chat' window is opened
+    When I assign chat on Agent
+    And User select Assigned ticket type
+    Then Ticket from orca is present on Assigned filter page
+    When Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
+    Then Verify that only "apple_business_chat" tickets chats are shown

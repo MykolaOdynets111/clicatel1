@@ -42,6 +42,9 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(xpath = ".//span[@class ='time-cell-content'][2]")
     private WebElement endDate;
 
+    @FindBy(css = ".cl-user-details-cell__top-section svg")
+    private WebElement channelIcon;
+
     private String scrollAreaCss = "[selenium-id='roster-scroll-container']";
    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
@@ -97,4 +100,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
         return  getTextFromElem(this.getCurrentDriver(), phone, 2, "Phone");
     }
 
+    public String getIconName() {
+        return channelIcon.getAttribute("name").trim();
+    }
 }

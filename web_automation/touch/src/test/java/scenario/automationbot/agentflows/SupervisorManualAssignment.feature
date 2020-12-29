@@ -19,7 +19,7 @@ Feature: Supervisor desk
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
     Given I login as second agent of Automation Bot
-    When Select dot control ticket checkbox
+    When Select dotcontrol ticket checkbox
     And Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on second agent

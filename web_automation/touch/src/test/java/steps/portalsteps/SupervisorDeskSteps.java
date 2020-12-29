@@ -41,9 +41,9 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Filter name by default does not match expected");
     }
 
-    @Then("^Select dot control ticket checkbox$")
-    public void clickThreeDotsButton(){
-        getSupervisorDeskPage().getSupervisorTicketsTable().selectTicketCheckbox(DotControlSteps.getClient());
+    @Then("^Select (.*) ticket checkbox$")
+    public void clickThreeDotsButton(String channel){
+        getSupervisorDeskPage().getSupervisorTicketsTable().selectTicketCheckbox(getUserName(channel));
     }
 
     @When("^Agent select (.*) ticket$")
@@ -102,6 +102,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @Then("^Verify that only \"(.*)\" closed chats are shown$")
     public void verifyClosedChatsChannelsFilter(String channelName) {
         Assert.assertTrue(getSupervisorDeskPage().getSupervisorClosedChatsTable().verifyChanelOfTheChatsIsPresent(channelName),
+                channelName + " channel name should be shown.");
+    }
+
+    @Then("^Verify that only \"(.*)\" tickets chats are shown$")
+    public void verifyTicketsChatsChannelsFilter(String channelName) {
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
                 channelName + " channel name should be shown.");
     }
 

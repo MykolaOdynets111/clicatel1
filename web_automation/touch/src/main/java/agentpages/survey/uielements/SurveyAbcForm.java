@@ -16,6 +16,9 @@ public class SurveyAbcForm extends AbstractUIElement {
     @FindBy(css = ".preview-message")
     private List<WebElement> previewMessage;
 
+    @FindBy(xpath = ".//button[text()='Save configuration']")
+    private WebElement saveSurveyButton;
+
     private SurveysInner surveysInner;
 
     public SurveysInner getSurveysInner() {
@@ -31,5 +34,9 @@ public class SurveyAbcForm extends AbstractUIElement {
         return previewMessage.stream()
                 .map(message -> getTextFromElem(this.getCurrentDriver(), message, 3, "Survey preview message"))
                 .collect(Collectors.toList());
+    }
+
+    public void clickSaveButton() {
+        clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button");
     }
 }

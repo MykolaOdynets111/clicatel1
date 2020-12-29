@@ -295,6 +295,14 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "Number of sentiments is not shown for all general sentiments charts");
     }
 
+    @Then("^Verify admin can see number of positive sentiment chats when hover over (.*) channel$")
+    public void verifyAdminCanSeeNumberOfPositiveSentimentChatsWhenHoverOverChannel(String channel) {
+        Assert.assertTrue(getDashboardPage()
+                        .getGeneralSentimentPerChannel()
+                        .isNumberOfSentimentsShownForAllSentimentsCharts(channel),
+                String.format("Number of positive sentiment chats is not shown after hovering on %s chart", channel));
+    }
+
     @Then("^Admin should see live customers section$")
     public void adminShouldSeeLiveCustomersSection() {
         Assert.assertTrue(getDashboardPage().getLiveCustomersTab().isLiveCustomersTabOpened(),
@@ -331,6 +339,14 @@ public class DashboardSteps extends AbstractPortalSteps {
                         .getAttendedVsUnattendedChats()
                         .isNumberOfAttendedVsUnattendedChatsDisplayed(),
                 "Number of attended vs Unattended chats is not shown after hovering on chart");
+    }
+
+    @Then("^Verify admin can see number of attended chats when hover over (.*) channel$")
+    public void verifyAdminCanSeeNumberOfAttendedVChatsWhenHoverOverChannel(String channel) {
+        Assert.assertTrue(getDashboardPage()
+                        .getAttendedVsUnattendedChats()
+                        .isNumberOfAttendedChatsDisplayedForChannel(channel),
+                String.format("Number of attended chats is not shown after hovering on %s chart", channel));
     }
 
     @And("^Verify admin can see number of live chats per channel when hover over web chat$")
