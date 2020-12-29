@@ -27,8 +27,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".chats-list-extended-view-header-text")
     private WebElement openedChatHeader;
 
-    @FindBy(css = "[selenium-id=chat-form-send-email]")
-    private WebElement openedClosedChatSendEmailButton;
+    @FindAll({
+            @FindBy(css = ".bottom-action-bar--send-notification>button"),
+            @FindBy(css = "[selenium-id=chat-form-send-email]")
+    })
+    private WebElement openedClosedChatMessageUserButton;
 
     @FindBy(xpath = "//span[contains(@class,'chats-list-extended-view-header-text')]/following-sibling::a[@href='/supervisor/closed']")
     private WebElement closeOpenedClosedChatView;
@@ -222,7 +225,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
 
     public boolean isSendEmailForOpenedClosedChatShown() {
-        return isElementShown(this.getCurrentDriver(), openedClosedChatSendEmailButton, 5);
+        return isElementShown(this.getCurrentDriver(), openedClosedChatMessageUserButton, 5);
     }
 
     public void clickOnLaunchAgent() {
