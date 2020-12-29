@@ -30,6 +30,8 @@ public class CRMTicketContainer extends AbstractUIElement {
     }
 
     public CRMTicket getFirstTicket(){
+        if(crmTickets.size() == 0)
+            throw new AssertionError("There's no any crm tickets displayed");
         return new CRMTicket(crmTickets.get(0)).setCurrentDriver(this.getCurrentDriver());
     }
 
