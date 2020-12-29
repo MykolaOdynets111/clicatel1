@@ -135,9 +135,7 @@ public class TransferChatWindow extends AbstractUIElement {
                     clickElem(this.getCurrentDriver(), refreshButton, 1, "Refresh transfer pop-up");
                 } else {
                     clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
-
                     new ChatHeader(this.getCurrentDriver()).clickTransferButtonByXpath();
-                    waitForUpdatingAvailableAgents();
                 }
                 waitForUpdatingAvailableAgents();
             }
