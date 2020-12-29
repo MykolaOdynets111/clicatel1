@@ -3,7 +3,7 @@
 Feature: Apple Business Chat :: Dashboard
 
   Background:
-    Given Setup ORCA integration for Automation tenant
+    Given Setup ORCA integration for General Bank Demo tenant
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45501")
   Scenario: Dashboard:: Verify if Apple channel is displayed on live customer charts
@@ -44,7 +44,7 @@ Feature: Apple Business Chat :: Dashboard
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45503")
   Scenario: Dashboard: ABC support: Verify Customer overview displays correct general sentiment for Apple business Chat
-    Given I login as agent of Automation
+    Given I login as agent of General Bank Demo
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
