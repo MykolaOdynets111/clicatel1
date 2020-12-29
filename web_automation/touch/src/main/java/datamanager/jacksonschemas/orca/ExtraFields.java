@@ -141,4 +141,20 @@ public class ExtraFields {
     public void setOauth2Token(String oauth2Token) {
         this.oauth2Token = oauth2Token;
     }
+
+    @Override
+    public String toString() {
+        return "ExtraFields{" +
+                "locale='" + locale + '\'' +
+                ", agent='" + agent + '\'' +
+                ", intent='" + intent + '\'' +
+                ", group='" + group + '\'' +
+                ", abc=" + abc +
+                ", merchantSession='" + merchantSession + '\'' +
+                ", endpoints='" + endpoints + '\'' +
+                ", addressInfo='" + addressInfo + '\'' +
+                ", token='" + token + '\'' +
+                ", oauth2Token='" + oauth2Token + '\'' +
+                '}';
+    }
 }

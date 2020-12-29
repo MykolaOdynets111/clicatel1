@@ -113,7 +113,7 @@ public class TransferChatWindow extends AbstractUIElement {
     }
 
     public void selectDepartmentFromDropDown(String departmentName) {
-        for (int i=0; i < 10; i++) {
+        for (int i=0; i < 3; i++) {
             if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
                 openDropDownDepartment();
             try {
@@ -131,7 +131,12 @@ public class TransferChatWindow extends AbstractUIElement {
                         "Department from dropdown");
                 return;
             } else {
-                clickElem(this.getCurrentDriver(), refreshButton, 3, "Refresh transfer pop-up");
+                if(isElementShown(this.getCurrentDriver(), refreshButton, 2)) {
+                    clickElem(this.getCurrentDriver(), refreshButton, 1, "Refresh transfer pop-up");
+                } else {
+                    clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
+                    new ChatHeader(this.getCurrentDriver()).clickTransferButtonByXpath();
+                }
                 waitForUpdatingAvailableAgents();
             }
         }

@@ -215,7 +215,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public String getNoResultsFoundMessage() {
-        return getTextFromElem(this.getCurrentDriver(), this.noResultsFoundText, 5,
+        return getTextFromElem(this.getCurrentDriver(), this.noResultsFoundText, 8,
                 "No results found text").replace("\n", " ");
     }
 

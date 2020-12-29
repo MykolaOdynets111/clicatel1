@@ -79,4 +79,15 @@ public class TextEvent {
     public void setStructuredText(String structuredText) {
         this.structuredText = structuredText;
     }
+
+    @Override
+    public String toString() {
+        return "TextEvent{" +
+                "eventType=" + eventType +
+                ", text='" + text + '\'' +
+                ", initial='" + initial + '\'' +
+                ", release='" + release + '\'' +
+                ", structuredText='" + structuredText + '\'' +
+                '}';
+    }
 }

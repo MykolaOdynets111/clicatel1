@@ -71,8 +71,8 @@ public class ApiORCA {
                 .contentType(ContentType.JSON)
                 .body(messageBody).post(URLs.getORCAMessageURL());
         if(!(resp.statusCode()==200)) {
-            Assert.fail("ORCA message was not send\n" + "Status code " + resp.statusCode()+
-                    "\n Body: " + resp.getBody().asString());
+            Assert.fail(String.format("ORCA message was not send\nStatus code %s\n Body: %s\nOrcaEvent: %s",
+                    resp.statusCode(), resp.getBody().asString(), messageBody));
         }
     }
 

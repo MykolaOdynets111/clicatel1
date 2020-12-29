@@ -386,7 +386,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^All session attributes are closed in DB$")
     public void verifySessionClosed() {
         SoftAssert soft = new SoftAssert();
-        boolean result = waitForSessionToBeClosed(5);
+        boolean result = waitForSessionToBeClosed(10);
         Map<String, String> sessionDetails = DBConnector
                 .getSessionDetailsByClientID(ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
 

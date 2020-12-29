@@ -79,6 +79,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
 
     @Then("^Verify that card with (.*) name and (.*) description has (.*) total (.*) offline and (.*) active agents$")
     public void verifyAgentsQuantity(String cardName, String description, int total, int offline, int online){
+        waitFor(1000);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(getDepartmentsManagementPage().findCardByNameAndDescription(cardName, description).getNumberOfAgents(), total,
                 "Number of agents should be " + total);
