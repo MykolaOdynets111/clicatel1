@@ -131,7 +131,14 @@ public class TransferChatWindow extends AbstractUIElement {
                         "Department from dropdown");
                 return;
             } else {
-                clickElem(this.getCurrentDriver(), refreshButton, 3, "Refresh transfer pop-up");
+                if(isElementShown(this.getCurrentDriver(), refreshButton, 2)) {
+                    clickElem(this.getCurrentDriver(), refreshButton, 1, "Refresh transfer pop-up");
+                } else {
+                    clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
+
+                    new ChatHeader(this.getCurrentDriver()).clickTransferButtonByXpath();
+                    waitForUpdatingAvailableAgents();
+                }
                 waitForUpdatingAvailableAgents();
             }
         }

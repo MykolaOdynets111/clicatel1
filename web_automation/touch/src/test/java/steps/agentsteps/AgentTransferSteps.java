@@ -55,7 +55,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void transferChatTodDepartment(String agent, String departmentName){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
         getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
-        Assert.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
+        Assert.assertTrue(getAgentHomePage(agent).getTransferChatWindow().isTransferChatShown(),"Transfer chat pop up is not appears");
         getAgentHomePage(agent).getTransferChatWindow().transferChatToDepartment(departmentName);
     }
 

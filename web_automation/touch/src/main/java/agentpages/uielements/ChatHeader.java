@@ -101,6 +101,14 @@ public class ChatHeader extends AbstractUIElement {
         waitForAngularRequestsToFinish(this.getCurrentDriver());
     }
 
+    //when create this object by constuctor then elements is not initialized and appears NullPointerException
+    //that's why we should this method
+    public void clickTransferButtonByXpath(){
+        clickElemByXpath(this.getCurrentDriver(), transferChatButtonXpath, 5, "Transfer button");
+        waitForAngularToBeReady(this.getCurrentDriver());
+        waitForAngularRequestsToFinish(this.getCurrentDriver());
+    }
+
     public boolean isButtonEnabled(String buttonTitle){
         try {
             switch (buttonTitle) {
