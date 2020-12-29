@@ -33,6 +33,7 @@ public class AttendedVsUnattendedChats extends AbstractUIElement {
     }
 
     public boolean isNumberOfAttendedChatsDisplayedForChannel(String channel) {
+        scrollToElem(this.getCurrentDriver(), this.getWrappedElement(), "Attended Vs Unattended Chats");
         hoverElemByXpath(unpackWebDriverFromSearchContext(this.getWrappedElement()),
                 String.format(attendedChatChartXpath, channel), 5,
                 "Attended chart");
