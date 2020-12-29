@@ -140,4 +140,19 @@ public class OrcaEvent {
     public void setHistory(List<History> history) {
         this.history = history;
     }
+
+    @Override
+    public String toString() {
+        return "OrcaEvent{" +
+                "eventId='" + eventId + '\'' +
+                ", providerId='" + providerId + '\'' +
+                ", routeId='" + routeId + '\'' +
+                ", sourceId='" + sourceId + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", content=" + content +
+                ", userInfo=" + userInfo +
+                ", externalReferenceId='" + externalReferenceId + '\'' +
+                ", history=" + history +
+                '}';
+    }
 }

@@ -41,4 +41,12 @@ public class Content {
     public void setEvent(TextEvent event) {
         this.event = event;
     }
+
+    @Override
+    public String toString() {
+        return "Content{" +
+                "extraFields=" + extraFields +
+                ", event=" + event +
+                '}';
+    }
 }
