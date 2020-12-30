@@ -507,7 +507,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             expectedCardText = cardText.replace("${firstName}", getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         }
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 10),
+        soft.assertTrue(widgetConversationArea.isCardShownFor(userMessage, 15),
                 "Card is not show after '"+userMessage+"' user message (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
         soft.assertEquals(widgetConversationArea.getCardTextForUserMessage(userMessage), expectedCardText,
                 "Incorrect card text is shown. (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
