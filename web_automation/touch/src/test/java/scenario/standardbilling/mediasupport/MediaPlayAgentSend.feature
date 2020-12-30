@@ -19,7 +19,7 @@ Feature: Media Support: Agent send files and user playing
     Examples:
       | fileType            |
       | mp3                 |
-      | opus                |
+#      | opus                |
       | mp4                 |
       | aac                 |
 #      | amr                 |

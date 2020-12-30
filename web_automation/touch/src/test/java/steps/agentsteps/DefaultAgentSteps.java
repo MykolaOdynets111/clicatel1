@@ -107,7 +107,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
             }
 
-            isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(10);
+            isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(15);
         }
 
         Assert.assertTrue(isConversationShown,

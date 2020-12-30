@@ -45,7 +45,7 @@ public class MainPage extends AbstractSocialPage {
 
     public Widget openWidget() {
     try {
-        waitForElementToBeVisible(this.getCurrentDriver(), chatIcon, 5);
+        waitForElementToBeVisible(this.getCurrentDriver(), chatIcon, 7);
         moveToElemAndClick(this.getCurrentDriver(), chatIcon);
         return new Widget();
     } catch (TimeoutException e) {
