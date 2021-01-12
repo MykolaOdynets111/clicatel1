@@ -29,18 +29,23 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
+        System.out.println("Orca artifacts were removed");
     }
 
     @Given("^Send (.*) message by ORCA$")
     public void sendOrcaMessage(String message) {
         if (orcaMessageCallBody.get() == null) {
+            System.out.println("creating new OrcaEvent for message: " + message);
             createRequestMessage(apiToken.get(), message);
             clientId.set(orcaMessageCallBody.get().getSourceId());
+            System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         } else {
+            System.out.println("Updating new OrcaEvent for message: " + message);
+            System.out.println("Message body before update is: " + orcaMessageCallBody.get().toString());
             orcaMessageCallBody.get().getContent().getEvent().setText(message);
+            System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         }
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
-
     }
 
     @Given("^Setup ORCA integration for (.*) tenant$")
@@ -50,6 +55,7 @@ public class ORCASteps implements WebWait {
             apiToken.set(ApiORCA.createIntegration(tenantName, Server.getServerURL()));
         } else if (action.equalsIgnoreCase("update")) {
             apiToken.set(ApiORCA.updateIntegration(tenantName, Server.getServerURL()));
+            System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
 

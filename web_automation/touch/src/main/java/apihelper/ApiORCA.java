@@ -11,7 +11,6 @@ import org.testng.Assert;
 public class ApiORCA {
 
      public static String createIntegration(String tenantOrgName, String callBackUrl){
-        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
@@ -21,7 +20,6 @@ public class ApiORCA {
     }
 
     public static String updateIntegration(String tenantOrgName, String callBackUrl){
-        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
