@@ -1,7 +1,8 @@
 @no_widget
-@orca_api
+
 Feature: Apple Business Chat :: Chatdesk
 
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45496")
   Scenario: Chatdesk:: The header should have apple icon when user is chatting using apple chat
     Given I login as agent of General Bank Demo
@@ -13,7 +14,7 @@ Feature: Apple Business Chat :: Chatdesk
     Then Valid image for abc integration are shown in left menu with chat
     And Agent should see abc icon in active chat header
 
-
+  @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
   Scenario: Chat desk: ABC: Verify if //END message works for apple business chat
     Given I login as agent of General Bank Demo
@@ -25,6 +26,7 @@ Feature: Apple Business Chat :: Chatdesk
     When Send //end message by ORCA
     Then Agent should not see from user chat in agent desk from orca
 
+  @orca_api
   @start_orca_server
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45512")
   Scenario: Chatdesk:: Verify if agent is able to transfer Apple business chat via "Transfer chat" button
