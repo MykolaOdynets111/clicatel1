@@ -563,7 +563,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static Response updateSessionCapacity(String tenantOrgName, int availableChats){
         PortalAuthToken.clearAccessTokenForPortalUser();
-        return RestAssured.given()
+        return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);

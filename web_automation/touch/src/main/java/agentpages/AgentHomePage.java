@@ -202,7 +202,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
 
     public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
-        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,30)) {
+        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,40)) {
             return waitForLoadingInLeftMenuToDisappear(10, 20);
         } else { return false;}
     }
@@ -222,9 +222,9 @@ public class AgentHomePage extends AgentAbstractPage {
             getChatHeader().clickEndChatButton();
             getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
             try {
-                waitForElementToBeInVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 5);
+                waitForElementToBeInVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 10);
             }catch (TimeoutException e){
-                Assert.fail("Chat container does not disappear after 5 second wait");
+                Assert.fail("Chat container does not disappear after 10 second wait");
             }
         }
     }

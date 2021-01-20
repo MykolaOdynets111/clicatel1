@@ -120,14 +120,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
         new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }
 
-    public boolean isNewConversationRequestIsShown(int wait) {
-        String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-        try{
-            waitForElementToBeVisibleByXpath(this.getCurrentDriver(), String.format(targetProfile, userName), wait);
-            return true;
-        } catch(TimeoutException e) {
-            return false;
-        }
+    public boolean isNewWebWidgetRequestIsShown(int wait) {
+        return isNewConversationIsShown(getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()), wait);
     }
 
     public boolean isOvernightTicketIconShown(String userName){
@@ -166,7 +160,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         }
     }
 
-    public boolean isNewConversationRequestFromSocialIsShown(String userName, int wait) {
+    public boolean isNewConversationIsShown(String userName, int wait) {
         return isElementShownByXpath(this.getCurrentDriver(), String.format(targetProfile, userName), wait);
     }
 

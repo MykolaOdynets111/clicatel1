@@ -13,9 +13,9 @@ Feature: Departments
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14876")
   Scenario: Departments: Verify if possible to transfer overnight ticket to department
     And User enter connect to agent2 into widget input field
-    Then Agent has new conversation request
+    Then Agent has new ticket request
     Given I login as second agent of Standard Billing
     When First Agent click on new conversation
     And Agent transfers chat to AutomationSecond department
     When Second agent select "Tickets" left menu option
-    Then Second agent has new conversation request
+    Then Second agent has new ticket request

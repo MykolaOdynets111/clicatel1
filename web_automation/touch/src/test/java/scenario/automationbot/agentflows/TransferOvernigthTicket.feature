@@ -11,14 +11,14 @@ Feature: Transfer overnight ticket
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-7385)
   Scenario: Verify transfer overnight ticket(Chat desk)
     When User enter chat to agent into widget input field
-    Then Agent has new conversation request
+    Then Agent has new ticket request
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with chat to agent user's message
     And Message that it is overnight ticket is shown for Agent
     Given I login as second agent of Automation Bot
     And Agent transfers overnight ticket
     And Second Agent select "Tickets" left menu option
-    Then Second Agent has new conversation request
+    Then Second Agent has new ticket request
     When Second agent click on new conversation
     And Message that it is overnight ticket is shown for Second Agent
     And First Agent of General Bank Demo is logged in

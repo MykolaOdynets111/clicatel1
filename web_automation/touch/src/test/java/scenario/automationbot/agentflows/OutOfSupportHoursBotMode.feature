@@ -13,7 +13,7 @@ Feature: Chat handling in out of support hours for for Bot mode tenant
   @agent_support_hours
   Scenario: Verify overnight ticket is created on chatdesk for Bot mode tenant
     When User enter chat to agent into widget input field
-    Then Agent has new conversation request
+    Then Agent has new ticket request
     And Agent sees 'overnight' icon in this chat
     When Agent click on new conversation request from touch
     Then Conversation area becomes active with chat to agent user's message
@@ -23,13 +23,13 @@ Feature: Chat handling in out of support hours for for Bot mode tenant
   @agent_support_hours
   Scenario: Verify out_of_support_hours message shown for Bot mode tenant user
     When User enter chat to agent into widget input field
-    Then Agent has new conversation request
+    Then Agent has new ticket request
     Then User should see 'out_of_support_hours' text response for his 'chat to agent' input
 
   @agent_support_hours
   Scenario: Overnight ticket is replaced by active chat when support ours is valid (Bot mode tenant)
     When User enter chat to agent into widget input field
-    Then Agent has new conversation request
+    Then Agent has new ticket request
     Then User should see 'out_of_support_hours' text response for his 'chat to agent' input
     When Set agent support hours for all week
     When User enter chat to support into widget input field

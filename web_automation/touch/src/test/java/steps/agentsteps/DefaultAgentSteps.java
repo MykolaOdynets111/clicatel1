@@ -93,7 +93,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has (?:new|old) conversation (?:request|shown)$")
     public void verifyIfAgentReceivesConversationRequest(String agent) {
-        boolean isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(15);
+        boolean isConversationShown = getLeftMenu(agent).isNewWebWidgetRequestIsShown(15);
         int sessionCapacity = 0;
         List<SupportHoursItem> supportHours = null;
         List<SupportHoursItem> supportHoursUpdated = null;
@@ -107,7 +107,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
             }
 
-            isConversationShown = getLeftMenu(agent).isNewConversationRequestIsShown(15);
+            isConversationShown = getLeftMenu(agent).isNewWebWidgetRequestIsShown(15);
         }
 
         Assert.assertTrue(isConversationShown,
@@ -116,6 +116,28 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                         "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + " and was: "+ sessionCapacity +"before updating \n" +
                         "Support hours: " + supportHoursUpdated + "\n" +
                         "and was:" +supportHours +" before changing\n"
+        );
+    }
+
+    @Then("^(.*) has new ticket request$")
+    public void verifyIfAgentReceivesTicketRequest(String agent) {
+        boolean isConversationShown = getLeftMenu(agent).isNewWebWidgetRequestIsShown(15);
+        int sessionCapacity = 0;
+        List<SupportHoursItem> supportHours = null;
+        if(!isConversationShown){
+            sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
+            if (sessionCapacity < 50) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
+
+            supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+
+            isConversationShown = getLeftMenu(agent).isNewWebWidgetRequestIsShown(15);
+        }
+
+        Assert.assertTrue(isConversationShown,
+                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + " and was: "+ sessionCapacity +"before updating \n" +
+                        "Support hours: " + supportHours + "\n"
         );
     }
 
@@ -135,7 +157,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has new conversation request within (.*) seconds$")
     public void verifyIfAgentReceivesConversationRequest(String agent, int timeout) {
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestIsShown(timeout),
+        Assert.assertTrue(getLeftMenu(agent).isNewWebWidgetRequestIsShown(timeout),
                 "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")\n" +
                         "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n");
     }
@@ -191,8 +213,31 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) has new conversation request from (.*) user$")
     public void verifyAgentHasRequestFormSocialUser(String agent, String social){
         String userName=getUserName(social);
-        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialIsShown(userName,40),
-                                "There is no new conversation request on Agent Desk (Client name: "+userName+")");
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,25);
+
+        int sessionCapacity = 0;
+        List<SupportHoursItem> supportHours = null;
+        List<SupportHoursItem> supportHoursUpdated = null;
+        if(!isConversationShown){
+            sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
+            if (sessionCapacity < 50) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
+
+            supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+            if(supportHours.size()<7){
+                ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
+                supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+            }
+
+            isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,25);
+        }
+
+        Assert.assertTrue(isConversationShown,
+                "There is no new conversation request on Agent Desk (Client ID: "+userName+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + " and was: "+ sessionCapacity +"before updating \n" +
+                        "Support hours: " + supportHoursUpdated + "\n" +
+                        "and was:" +supportHours +" before changing\n"
+        );
     }
 
     @Then("^(.*) has new conversation request from (.*) user through (.*) channel$")

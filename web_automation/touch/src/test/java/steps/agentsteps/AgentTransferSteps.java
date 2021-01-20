@@ -183,12 +183,12 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("chat to support"));
 
         soft.assertTrue(getLeftMenu(agent)
-                        .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(0).getInitContext().getFullName(),20),
+                        .isNewConversationIsShown(
+                                createdChatsViaDotControl.get(0).getInitContext().getFullName(),30),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
         soft.assertTrue(getLeftMenu(agent)
-                        .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(1).getInitContext().getFullName(),20),
+                        .isNewConversationIsShown(
+                                createdChatsViaDotControl.get(1).getInitContext().getFullName(),30),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }
@@ -200,8 +200,8 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         DotControlSteps.cleanUPDotControlRequestMessage();
         createdChatsViaDotControl.add(dotControlSteps.createOfferToDotControl("connect to agent"));
         Assert.assertTrue(getLeftMenu(agent)
-                        .isNewConversationRequestFromSocialIsShown(
-                                createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getInitContext().getFullName(),20),
+                        .isNewConversationIsShown(
+                                createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getInitContext().getFullName(),30),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(createdChatsViaDotControl.size()-1).getClientId()+")");
     }
 
