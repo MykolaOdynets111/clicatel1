@@ -67,7 +67,8 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         Assert.assertTrue(mainPage.isPortalPageOpened(),
                 "User is not logged in to portal");
         mainPage.launchChatDesk();
-
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn("second agent"),
+                "Agent is not logged in.");
     }
 
     @When("I open browser to log in in chat desk as an agent of (.*)")
@@ -77,8 +78,10 @@ public class AgentLoginSteps extends AbstractAgentSteps {
 
     @Then("^In the first browser Connection Error should be shown$")
     public void verifyAgentIsDisconnected(){
-        Assert.assertTrue(getAgentHomePage("first agent").isConnectionErrorShown("first agent"),
-                "Agent in the first browser is not disconnected");
+        Assert.assertEquals("Chat Desk supports only one " +
+                        "active tab with the app. The data or changes might be lost. Please reload this page to continue using " +
+                        "this tab or close it and switch to the active tab.", getAgentHomePage("first agent").isConnectionErrorShown(),
+                "Error message text is not the same");
     }
 
 

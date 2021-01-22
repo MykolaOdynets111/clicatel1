@@ -28,5 +28,3 @@ Feature: Agent availability
     When Agent click on new conversation
     When Agent responds with How can I help you to User
     Then User should see 'How can I help you' text response for his 'connect to agent' input
-
-

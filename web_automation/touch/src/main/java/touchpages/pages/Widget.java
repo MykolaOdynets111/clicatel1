@@ -110,10 +110,10 @@ public class Widget extends AbstractSocialPage {
 
     private void waitConnectingMessageToDisappear() {
         try{
-            waitForElementToBeInvisible(this.getCurrentDriver(), conectingMassage, 17);
+            waitForElementToBeInvisible(this.getCurrentDriver(), conectingMassage, 20);
         } catch (TimeoutException e){
             Assert.fail(
-                    "Widget is not connected after 17 seconds wait. Client ID: "+getUserNameFromLocalStorage(this.getCurrentDriver())+"");
+                    "Widget is not connected after 20 seconds wait. Client ID: "+getUserNameFromLocalStorage(this.getCurrentDriver())+"");
         }
     }
 

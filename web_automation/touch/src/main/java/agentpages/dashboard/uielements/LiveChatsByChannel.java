@@ -27,7 +27,7 @@ public class LiveChatsByChannel extends AbstractUIElement {
 
     public boolean isAbcChartIsDisplayed() {
         scrollToElem(this.getCurrentDriver(), this.getWrappedElement(), "Live Chats By Channel");
-        return isElementShown(this.getCurrentDriver(), abcChart, 5);
+        return isElementShown(this.getCurrentDriver(), abcChart, 15);
     }
 
     public boolean isNumberOfLiveChatsShownForWebChatChart() {

@@ -47,7 +47,7 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(xpath = "//button[text()='Accept']")
     private WebElement acceptProfanityPopupButton;
 
-    @FindBy(css = "span.connection-error-img")
+    @FindBy(css = ".toast-content-message")
     private WebElement connectionErrorImage;
 
     @FindBy(xpath = "//h4[text()='Agent limit reached']")
@@ -207,14 +207,8 @@ public class AgentHomePage extends AgentAbstractPage {
         } else { return false;}
     }
 
-    public boolean isConnectionErrorShown(String ordinalAgentNumber){
-        try{
-            waitForElementToBeVisible(this.getCurrentDriver(), connectionErrorImage, 15);
-            return true;
-        }
-        catch (TimeoutException e){
-            return false;
-        }
+    public String isConnectionErrorShown(){
+             return getTextFromElem(this.getCurrentDriver(), connectionErrorImage, 15, "Connection error");
     }
 
     public void endChat(){
