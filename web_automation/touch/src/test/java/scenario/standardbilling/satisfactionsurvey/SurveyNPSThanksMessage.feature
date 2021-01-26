@@ -1,4 +1,4 @@
-
+@off_survey_management
 Feature: Satisfaction Survey
 
   Background:

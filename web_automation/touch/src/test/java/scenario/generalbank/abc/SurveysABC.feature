@@ -1,5 +1,5 @@
 @no_widget
-@rating_abc
+@off_rating_abc
 Feature: Apple Business Chat :: Surveys
 
   Background:

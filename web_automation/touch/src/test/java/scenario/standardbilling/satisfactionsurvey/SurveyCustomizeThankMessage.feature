@@ -1,5 +1,6 @@
 @no_widget
 @no_chatdesk
+@off_survey_management
 Feature: Satisfaction Survey
 
   Background:

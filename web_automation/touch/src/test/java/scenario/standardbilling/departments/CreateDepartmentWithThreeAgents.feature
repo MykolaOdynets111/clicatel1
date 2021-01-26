@@ -16,4 +16,6 @@ Feature: Departments
     Then Verify that card with AutoDepartmentName name and Auto Description description has 3 total 3 offline and 0 active agents
     Given I login as second agent of Standard Billing
     And Agent refresh current page
+    And Departments Management page should be shown
+    And Wait for 3 second
     Then Verify that card with AutoDepartmentName name and Auto Description description has 3 total 2 offline and 1 active agents

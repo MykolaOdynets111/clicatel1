@@ -23,5 +23,5 @@ Feature: Supervisor desk
     And Select dotcontrol ticket checkbox
     When Click 'Route to scheduler' button
     And Second agent select "Tickets" left menu option
-    Then Second agent has new conversation request from dotcontrol user
+    Then Second agent has new ticket request from dotcontrol user
     And Second agent is set as 'current agent' for dot control ticket

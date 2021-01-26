@@ -217,16 +217,13 @@ public class Hooks implements JSHelper {
         }
 
         if (scenario.getSourceTagNames().contains("@off_survey_management")){
-            String tenantOrgName = Tenants.getTenantUnderTestOrgName();
-            ApiHelper.ratingEnabling(tenantOrgName, true);
+            ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"webchat");
         }
 
-        if(scenario.getSourceTagNames().contains("@rating_abc")) {
-            String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), "abc");
-            SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-            configuration.setRatingEnabled(false);
-            ApiHelper.updateSurveyManagement(Tenants.getTenantUnderTestOrgName(), configuration, channelID);
+        if(scenario.getSourceTagNames().contains("@off_rating_abc")) {
+            ApiHelper.ratingEnabling(Tenants.getTenantUnderTestOrgName(), false,"abc");
         }
+
 
         if (scenario.getSourceTagNames().contains("@orca_api")){
             //need since all chats from orca have names Apple User

@@ -107,7 +107,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 supportHoursUpdated = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
             }
 
-            isConversationShown = getLeftMenu(agent).isNewWebWidgetRequestIsShown(15);
+            isConversationShown = getLeftMenu(agent).isNewWebWidgetRequestIsShown(20);
         }
 
         Assert.assertTrue(isConversationShown,
@@ -237,6 +237,29 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                         "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + " and was: "+ sessionCapacity +"before updating \n" +
                         "Support hours: " + supportHoursUpdated + "\n" +
                         "and was:" +supportHours +" before changing\n"
+        );
+    }
+
+    @Then("^(.*) has new ticket request from (.*) user$")
+    public void verifyIfAgentReceivesTicketRequestFromSocialUser(String agent, String social) {
+        String userName=getUserName(social);
+        boolean isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,15);
+        int sessionCapacity = 0;
+        List<SupportHoursItem> supportHours = null;
+        if(!isConversationShown){
+            sessionCapacity = ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity");
+            if (sessionCapacity < 50) ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50);
+
+            supportHours = ApiHelper.getAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName());
+
+            isConversationShown = getLeftMenu(agent).isNewConversationIsShown(userName,35);
+        }
+
+        Assert.assertTrue(isConversationShown,
+                "There is no new conversation request on Agent Desk (Client ID: "+userName+")\n" +
+                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
+                        "sessionsCapacity: " + ApiHelper.getTenantInfo(Tenants.getTenantUnderTestOrgName()).jsonPath().get("sessionsCapacity") + " and was: "+ sessionCapacity +"before updating \n" +
+                        "Support hours: " + supportHours + "\n"
         );
     }
 

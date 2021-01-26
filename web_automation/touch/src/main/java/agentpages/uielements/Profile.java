@@ -183,6 +183,6 @@ public class Profile extends AbstractUIElement {
     }
 
     public boolean isVerifiedLabelHidden(){
-        return isElementRemoved(this.getCurrentDriver(), verifiedLabel, 3);
+        return isElementRemoved(this.getCurrentDriver(), verifiedLabel, 5);
     }
 }

@@ -18,7 +18,7 @@ Feature: Supervisor desk
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Supervisor Desk in submenu
     And Agent select "Tickets" left menu option
-    Then Verify All tickets, Unassigned, Overdue, Assigned ticket types are available
+    Then Verify All tickets, Unassigned, Expired, Assigned ticket types are available
     And User select Unassigned ticket type
     Then Ticket from dotcontrol is present on Unassigned filter page
     When autoSchedulingEnabled is set to true
@@ -30,5 +30,5 @@ Feature: Supervisor desk
     Then Ticket from dotcontrol is present on Assigned filter page
     And Update ticket with OVERDUE status
     And Wait for 2 second
-    When User select OVERDUE ticket type
-    Then Ticket from dotcontrol is present on OVERDUE filter page
+    When User select Expired ticket type
+    Then Ticket from dotcontrol is present on Expired filter page

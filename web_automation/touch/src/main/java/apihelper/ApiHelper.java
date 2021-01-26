@@ -429,7 +429,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
 
-    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled){
+    public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanell){
         String channelID = getChannelID(tenantOrgName, "webchat");
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)){
@@ -667,7 +667,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).getBody().jsonPath().get("id");
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         Response resp;
-        resp = RestAssured.given()
+        resp = RestAssured.given().log().all()
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)

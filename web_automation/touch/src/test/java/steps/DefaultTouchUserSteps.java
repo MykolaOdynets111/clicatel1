@@ -87,9 +87,9 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Given("(.*) survey configuration for (.*)")
     public static void switchSurveyConfiguration(String action, String tenantOrgName) {
         if (action.equalsIgnoreCase("On")){
-            ApiHelper.ratingEnabling(tenantOrgName, true);
+            ApiHelper.ratingEnabling(tenantOrgName, true,"webchat");
         } else if (action.equalsIgnoreCase("Off")){
-            ApiHelper.ratingEnabling(tenantOrgName, false);
+            ApiHelper.ratingEnabling(tenantOrgName, false,"webchat");
         }
     }
 
@@ -817,10 +817,10 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(surveyForm.isSurveyDisplayed(), "Survey form is not shown");
         if(surveyType.equalsIgnoreCase("NPS")) {
-            soft.assertTrue(surveyForm.isNPCRatingScaleDisplayed(), surveyType + " rating form is not displayed");
+            soft.assertTrue(surveyForm.isNPCRatingScaleDisplayed(), surveyType + " survey Type rating form should be displayed");
             soft.assertTrue(surveyForm.isNPSCorrectScaleSHown(),surveyType + " scale is not 0-10");
         } else if (surveyType.equalsIgnoreCase("CSAT")){
-            soft.assertTrue(surveyForm.isCSATRatingScaleDisplayed(), surveyType + "Survey Type rating form is not displayed");
+            soft.assertTrue(surveyForm.isCSATRatingScaleDisplayed(), surveyType + " survey Type rating form should be displayed");
         }
         soft.assertAll();
     }

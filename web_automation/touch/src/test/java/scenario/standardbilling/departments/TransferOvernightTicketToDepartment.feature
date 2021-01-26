@@ -4,9 +4,9 @@ Feature: Departments
 
   Background:
     Given I login as agent of Standard Billing
-    And Agent select "Tickets" left menu option
-    Given Set agent support hours with day shift
     And New departments with AutomationSecond name AutoDescriptionSecond description and second agent is created
+    Given Agent select "Tickets" left menu option
+    And Set agent support hours with day shift
     Given User select Standard Billing tenant
     And Click chat icon
 
