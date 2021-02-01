@@ -113,6 +113,7 @@ public class DashboardPage extends PortalAbstractPage {
 
     public LiveChatsByChannel getLiveChatsByChannel() {
         liveChatsByChannel.setCurrentDriver(this.getCurrentDriver());
+        scrollToElem(this.getCurrentDriver(), liveChatsByChannel.getWrappedElement(), "Live Chats By Chanel");
         return liveChatsByChannel;
     }
 

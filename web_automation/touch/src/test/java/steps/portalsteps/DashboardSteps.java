@@ -107,8 +107,8 @@ public class DashboardSteps extends AbstractPortalSteps {
 
     @Then("^Admin should see no live chats message in Live Chats by Channel$")
     public void adminShouldSeeNoLiveChatsMessageInLiveChatsByChannel() {
-        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNoLiveChatsDisplayed(),
-                "No live chats message is not displayed in Live Chats By Channel");
+        Assert.assertEquals(getDashboardPage().getLiveChatsByChannel().getNoLiveChatsDisplayedText(), "There is no recent live chat engagements",
+                "No live chats message is not displayed in Live Chats By Channel or has other text");
     }
 
     @Then("^Admin should see Web Chat chart in Live Chats by Channel$")

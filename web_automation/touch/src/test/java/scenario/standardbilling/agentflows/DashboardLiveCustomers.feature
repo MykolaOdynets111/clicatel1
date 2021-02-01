@@ -2,8 +2,9 @@ Feature: Dashboard: Live Customers
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-36675")
   Scenario: Verify if supervisor can hover over on Live chats per channel to see the number of live chats per channel
-    When I open portal
-    And Login into portal as an admin of Standard Billing account
+    When I login as admin of Standard Billing
+    And Agent has no active chats
+    When Agent switches to opened Portal page
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Live Customers on dashboard

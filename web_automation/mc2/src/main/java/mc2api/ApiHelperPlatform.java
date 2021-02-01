@@ -43,7 +43,7 @@ public class ApiHelperPlatform {
             idsArray[i] = "\""+ids.get(i)+"\"";
         }
 
-       return   RestAssured.given()
+       return   RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .body("{\n" +

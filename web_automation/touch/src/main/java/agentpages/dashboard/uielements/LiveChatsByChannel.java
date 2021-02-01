@@ -17,12 +17,12 @@ public class LiveChatsByChannel extends AbstractUIElement {
     @FindBy(css = ".bar-abc")
     private WebElement abcChart;
 
-    public boolean isNoLiveChatsDisplayed() {
-        return isElementShown(this.getCurrentDriver(), noLiveChatsMessage, 5);
+    public String getNoLiveChatsDisplayedText() {
+        return getTextFromElem(this.getCurrentDriver(), noLiveChatsMessage, 5, "No Live Chats");
     }
 
     public boolean isWebChatChartIsDisplayed() {
-        return isElementShown(this.getCurrentDriver(), webChatChart, 10);
+        return isElementShown(this.getCurrentDriver(), webChatChart, 25);
     }
 
     public boolean isAbcChartIsDisplayed() {
