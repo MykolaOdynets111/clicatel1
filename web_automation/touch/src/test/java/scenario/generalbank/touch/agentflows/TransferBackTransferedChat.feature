@@ -11,8 +11,8 @@ Feature: Chat transfer back
   Scenario: Chat transfer: Agent should be able transfer back transferred chat
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
-    Given I login as second agent of General Bank Demo
     When First Agent click on new conversation
+    Given I login as second agent of General Bank Demo
     And Agent transfers chat
     Then Second agent receives incoming transfer with "Incoming Transfer" header
     And Second agent can see transferring agent name, user name and following user's message: 'connect to agent'

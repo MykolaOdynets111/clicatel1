@@ -38,6 +38,7 @@ import steps.portalsteps.AbstractPortalSteps;
 import steps.portalsteps.BasePortalSteps;
 import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
+import sun.management.resources.agent;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
 import twitter.TwitterTenantPage;
@@ -226,8 +227,6 @@ public class Hooks implements JSHelper {
 
 
         if (scenario.getSourceTagNames().contains("@orca_api")){
-            //need since all chats from orca have names Apple User
-            new ORCASteps().sendOrcaMessage("//end");
             ORCASteps.cleanUPORCAData();
         }
 
@@ -302,7 +301,8 @@ public class Hooks implements JSHelper {
                     agentHomePage.getPageHeader().selectStatus("available");
                     agentHomePage.getPageHeader().clickIcon();
             }
-            if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("main agent");
+            if(!scenario.getSourceTagNames().contains("@no_chatdesk") || scenario.getSourceTagNames().contains("@orca_api")){
+                closePopupsIfOpenedEndChatAndlogoutAgent("main agent");}
 
             if(scenario.getSourceTagNames().contains("@sign_up")) newAccountInfo();
 
@@ -343,7 +343,8 @@ public class Hooks implements JSHelper {
 
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
-            if(!scenario.getSourceTagNames().contains("@no_chatdesk")) closePopupsIfOpenedEndChatAndlogoutAgent("second agent");
+            if(!scenario.getSourceTagNames().contains("@no_chatdesk") || scenario.getSourceTagNames().contains("@orca_api"))
+            {closePopupsIfOpenedEndChatAndlogoutAgent("second agent");}
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){
                 //ToDo: replace with API call if appropriate exists
                 AgentHomePage agentHomePage = new AgentHomePage("second agent");

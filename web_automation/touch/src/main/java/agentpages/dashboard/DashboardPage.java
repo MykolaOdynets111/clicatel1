@@ -83,6 +83,7 @@ public class DashboardPage extends PortalAbstractPage {
 
     public AgentPerformanceTab getAgentPerformanceTab() {
         agentPerformanceTab.setCurrentDriver(this.getCurrentDriver());
+        scrollToElem(this.getCurrentDriver(), agentPerformanceTab.getWrappedElement(), "Live Chats By Chanel");
         return agentPerformanceTab;
     }
 

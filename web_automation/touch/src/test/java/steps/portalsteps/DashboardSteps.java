@@ -18,6 +18,7 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class DashboardSteps extends AbstractPortalSteps {
@@ -211,7 +212,7 @@ public class DashboardSteps extends AbstractPortalSteps {
 
         LiveAgentsCustomerRow customerRow = getDashboardPage().getAgentsTableDashboard().getOpenCustomersRow(userId);
 
-        softAssert.assertTrue(sentiment.equalsIgnoreCase(customerRow.getSentiment()),
+        softAssert.assertEquals(sentiment, customerRow.getSentiment().toUpperCase(),
                 String.format("Sentiment is wrong for %s user", userId));
         //need to be investigated
         softAssert.assertEquals(customerRow.getIntent(), intent,
