@@ -229,13 +229,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
 
-    public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
+    public static SupportHoursItem getAgentSupportDaysAndHours(String tenantOrgName) {
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         try {
-            return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
+            return resp.getBody().as(SupportHoursItem.class);
         } catch(ClassCastException e){
             Assert.fail("Incorrect body on updating support hours \n"
             +"Status code: " +resp.statusCode() + "\n"

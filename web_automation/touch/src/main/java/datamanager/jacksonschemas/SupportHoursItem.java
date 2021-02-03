@@ -1,82 +1,62 @@
 package datamanager.jacksonschemas;
 
-
+import lombok.NonNull;
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({
-        "startWorkTime",
-        "endWorkTime",
-        "dayOfWeek"
+        "departmentMapping",
+        "agentMapping",
+        "department"
 })
 public class SupportHoursItem {
 
-    @JsonProperty("startWorkTime")
-    private String startWorkTime;
-    @JsonProperty("endWorkTime")
-    private String endWorkTime;
-    @JsonProperty("dayOfWeek")
-    private String dayOfWeek;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonProperty("departmentMapping")
+    private List<DepartmentMapping> departmentMapping = null;
+    @JsonProperty("agentMapping")
+    private List<AgentMapping> agentMapping = null;
+    @JsonProperty("department")
+    private Boolean department;
 
-    @JsonProperty("startWorkTime")
-    public String getStartWorkTime() {
-        return startWorkTime;
+    @JsonProperty("departmentMapping")
+    public List<DepartmentMapping> getDepartmentMapping() {
+        return departmentMapping;
     }
 
-    @JsonProperty("startWorkTime")
-    public void setStartWorkTime(String startWorkTime) {
-        this.startWorkTime = startWorkTime;
+    @JsonProperty("departmentMapping")
+    public void setDepartmentMapping(List<DepartmentMapping> departmentMapping) {
+        this.departmentMapping = departmentMapping;
     }
 
-    @JsonProperty("endWorkTime")
-    public String getEndWorkTime() {
-        return endWorkTime;
+    @JsonProperty("agentMapping")
+    public List<AgentMapping> getAgentMapping() {
+        return agentMapping;
     }
 
-    @JsonProperty("endWorkTime")
-    public void setEndWorkTime(String endWorkTime) {
-        this.endWorkTime = endWorkTime;
+    @JsonProperty("agentMapping")
+    public void setAgentMapping(List<AgentMapping> agentMapping) {
+        this.agentMapping = agentMapping;
     }
 
-    @JsonProperty("dayOfWeek")
-    public String getDayOfWeek() {
-        return dayOfWeek;
+    @JsonProperty("department")
+    public Boolean getDepartment() {
+        return department;
     }
 
-    @JsonProperty("dayOfWeek")
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public boolean equals(Object o){
-        SupportHoursItem other = (SupportHoursItem) o;
-        return this.dayOfWeek.equals(other.dayOfWeek) &&
-                this.endWorkTime.equals(other.endWorkTime) &&
-                this.startWorkTime.equals(other.startWorkTime);
+    @JsonProperty("department")
+    public void setDepartment(Boolean department) {
+        this.department = department;
     }
 
     @Override
     public String toString() {
-        return "{" +
-                "startWorkTime='" + startWorkTime + '\'' +
-                ", endWorkTime='" + endWorkTime + '\'' +
-                ", dayOfWeek='" + dayOfWeek + '\'' +
-                "}\n";
+        return "SupportHoursItem{" +
+                "departmentMapping=" + departmentMapping +
+                ", agentMapping=" + agentMapping +
+                ", department=" + department +
+                '}';
     }
 }

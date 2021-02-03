@@ -14,7 +14,7 @@ Feature: Supervisor can unflag live chat
     When Second Agent click on new conversation
     When Second Agent click 'Flag chat' button
     And I select Touch in left menu and Supervisor Desk in submenu
-    Then Supervisor Desk Live has new conversation request
+    Then Supervisor Desk Live has new conversation touch request
     When Agent click On Live Supervisor Desk chat from touch channel
     Then Supervisor Desk Live chat have 'flag on' button
     When Agent click 'Unflag chat' button
