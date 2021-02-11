@@ -24,7 +24,7 @@ Feature: Chat transfer back
     Then Second agent transfers chat
     Then First agent receives incoming transfer with "Incoming Transfer" header
     When First agent click "Accept transfer" button
-    Then First agent has new conversation request
+    Then Agent has new conversation request
     When First agent click on new conversation
     And First agent responds with hello to User
     Then User should see 'hello' text response for his 'connect to agent' input

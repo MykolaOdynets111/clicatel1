@@ -71,7 +71,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Given("^Widget for (.*) is turned on$")
     public void turnOnWidget(String tenantOrgName){
-        ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
+//        ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
         ApiHelper.setAvailableForAllTerritories(tenantOrgName);
     }
 

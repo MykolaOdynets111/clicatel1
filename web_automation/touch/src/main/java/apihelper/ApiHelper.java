@@ -204,19 +204,21 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
-    public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
-        String body = createPutBodyForHours(day, startTime, endTime);
-        Response resp = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .body(body)
-                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
-        if (! (resp.getStatusCode() == 200)){
-            Assert.fail("Update Widget Visibility failed \n"
-                    +"Status code: " +resp.statusCode() + "\n"
-                    + "Error message: " + resp.getBody().asString());
-        }
-    }
+
+    //** commented everywhere because widget visibility hours doe not present anymore
+//    public static void setWidgetVisibilityDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
+//        String body = createPutBodyForHours(day, startTime, endTime);
+//        Response resp = RestAssured.given().log().all()
+//                .contentType(ContentType.JSON)
+//                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+//                .body(body)
+//                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
+//        if (! (resp.getStatusCode() == 200)){
+//            Assert.fail("Update Widget Visibility failed \n"
+//                    +"Status code: " +resp.statusCode() + "\n"
+//                    + "Error message: " + resp.getBody().asString());
+//        }
+//    }
 
     public static Response setAgentSupportDaysAndHours(String tenantOrgName, String day, String startTime,  String endTime) {
         String body = createPutBodyForHours(day, startTime, endTime);
@@ -227,13 +229,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
 
-    public static List<SupportHoursItem> getAgentSupportDaysAndHours(String tenantOrgName) {
+    public static SupportHoursItem getAgentSupportDaysAndHours(String tenantOrgName) {
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
         try {
-            return resp.getBody().jsonPath().getList("", SupportHoursItem.class);
+            return resp.getBody().as(SupportHoursItem.class);
         } catch(ClassCastException e){
             Assert.fail("Incorrect body on updating support hours \n"
             +"Status code: " +resp.statusCode() + "\n"
@@ -247,49 +249,59 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     private static String createPutBodyForHours(String day, String startTime, String endTime) {
         String body;
         if (day.equalsIgnoreCase("all week")) {
-            body = "[\n" +
-                    "  {\n" +
-                    "    \"dayOfWeek\": \"MONDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  },\n" +
-                    "{\n" +
-                    "    \"dayOfWeek\": \"TUESDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  },\n" +
-                    "{\n" +
-                    "    \"dayOfWeek\": \"WEDNESDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  },\n" +
-                    "{\n" +
-                    "    \"dayOfWeek\": \"THURSDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  },\n" +
-                    "{\n" +
-                    "    \"dayOfWeek\": \"FRIDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  },\n" +
-                    "{\n" +
-                    "    \"dayOfWeek\": \"SATURDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  },\n" +
-                    "{\n" +
-                    "    \"dayOfWeek\": \"SUNDAY\",\n" +
-                    "    \"startWorkTime\": \"00:00\",\n" +
-                    "    \"endWorkTime\": \"23:59\"\n" +
-                    "  }\n" +
-                    "]";
+            body = "{\n" +
+                    "  \"departmentMapping\": null,\n" +
+                    "  \"agentMapping\": [\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"MONDAY\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"TUESDAY\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"WEDNESDAY\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"THURSDAY\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"FRIDAY\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"SATURDAY\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"00:00\",\n" +
+                    "      \"endWorkTime\": \"23:59\",\n" +
+                    "      \"dayOfWeek\": \"SUNDAY\"\n" +
+                    "    }\n" +
+                    "  ],\n" +
+                    "  \"department\": false\n" +
+                    "}";
         } else{
-            body = "[{\n" +
-                    "  \"dayOfWeek\": \"" + day.toUpperCase() + "\",\n" +
-                    "  \"startWorkTime\": \"" + startTime + "\",\n" +
-                    "  \"endWorkTime\": \"" + endTime + "\"\n" +
-                    "}]";
+            body ="{\n" +
+                    "  \"departmentMapping\": null,\n" +
+                    "  \"agentMapping\": [\n" +
+                    "    {\n" +
+                    "      \"startWorkTime\": \"" + startTime + "\",\n" +
+                    "      \"endWorkTime\": \"" + endTime + "\",\n" +
+                    "      \"dayOfWeek\": \"" + day.toUpperCase() + "\"\n" +
+                    "    }\n" +
+                    "  ],\n" +
+                    "  \"department\": false\n" +
+                    "}";
         }
         return body;
     }

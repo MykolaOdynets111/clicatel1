@@ -155,7 +155,7 @@ public class DotControlSteps implements WebWait {
 
     @When("^Send init call with (.*) messageId correct (.*)response is returned$")
     public void sendInitCall(String messageIdStrategy, String expMessage){
-        List<SupportHoursItem> expectedBusinessHours = new ArrayList<>();
+        SupportHoursItem expectedBusinessHours = null;
         if(expMessage.isEmpty()) expMessage = "OK";
         if(expMessage.trim().equals("OUT_OF_BUSINESS_HOURS")){
             expectedBusinessHours =
@@ -175,7 +175,7 @@ public class DotControlSteps implements WebWait {
                 "\nResponse on INIT call contains incorrect conversationId\n");
         soft.assertEquals(resp.getBody().jsonPath().get("agentStatus"), expMessage.trim(),
                 "\nResponse on INIT call contains incorrect agentStatus\n");
-        soft.assertEquals(resp.getBody().jsonPath().getList("businessHours", SupportHoursItem.class), expectedBusinessHours,
+        soft.assertEquals(resp.getBody().as(SupportHoursItem.class), expectedBusinessHours,
                 "\nResponse on INIT call contains incorrect businessHours\n");
         soft.assertAll();
     }

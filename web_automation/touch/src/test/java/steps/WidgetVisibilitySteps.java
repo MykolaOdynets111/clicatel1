@@ -13,39 +13,39 @@ import java.util.List;
 
 public class WidgetVisibilitySteps {
 
-    @Given("^Following widget time availability for (.*) is selected: (.*)$")
-    public void setUpWidgetVisibilityByTime(String tenantOrgName, List<String> dayTimeVisibility) {
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        String day = dayTimeVisibility.get(0);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:ss");
-        if (day.equalsIgnoreCase("all week")) {
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
-            return;
-        }
-        if (dayTimeVisibility.size() > 1){
-            List<String> startEndTime = Arrays.asList(dayTimeVisibility.get(1).replace("from", "").trim().split(" to "));
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, day, startEndTime.get(0), startEndTime.get(1));
-        }
-        if (day.equalsIgnoreCase("this day")) {
-            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
-            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(3);
-            LocalDateTime endTime = currentTimeIntenantTimeZone.plusHours(3);
-
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.toString(),
-                    startTime.format(formatter),
-                    endTime.format(formatter));
-        }
-        if (day.equalsIgnoreCase("wrong hours")) {
-            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
-
-            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(6);
-            LocalDateTime endTime = currentTimeIntenantTimeZone.minusHours(5);
-
-            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.getDayOfWeek().toString(),
-                    startTime.format(formatter),
-                    endTime.format(formatter));
-        }
-    }
+//    @Given("^Following widget time availability for (.*) is selected: (.*)$")
+//    public void setUpWidgetVisibilityByTime(String tenantOrgName, List<String> dayTimeVisibility) {
+//        Tenants.setTenantUnderTestNames(tenantOrgName);
+//        String day = dayTimeVisibility.get(0);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:ss");
+//        if (day.equalsIgnoreCase("all week")) {
+//            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, "all week", "00:00", "23:59");
+//            return;
+//        }
+//        if (dayTimeVisibility.size() > 1){
+//            List<String> startEndTime = Arrays.asList(dayTimeVisibility.get(1).replace("from", "").trim().split(" to "));
+//            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, day, startEndTime.get(0), startEndTime.get(1));
+//        }
+//        if (day.equalsIgnoreCase("this day")) {
+//            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
+//            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(3);
+//            LocalDateTime endTime = currentTimeIntenantTimeZone.plusHours(3);
+//
+//            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.toString(),
+//                    startTime.format(formatter),
+//                    endTime.format(formatter));
+//        }
+//        if (day.equalsIgnoreCase("wrong hours")) {
+//            LocalDateTime currentTimeIntenantTimeZone = getCurrentTimeInTenantTimeZone(tenantOrgName);
+//
+//            LocalDateTime startTime =currentTimeIntenantTimeZone.minusHours(6);
+//            LocalDateTime endTime = currentTimeIntenantTimeZone.minusHours(5);
+//
+//            ApiHelper.setWidgetVisibilityDaysAndHours(tenantOrgName, currentTimeIntenantTimeZone.getDayOfWeek().toString(),
+//                    startTime.format(formatter),
+//                    endTime.format(formatter));
+//        }
+//    }
 
     private LocalDateTime getCurrentTimeInTenantTimeZone(String tenantOrgName){
         return LocalDateTime.now(Tenants.getTenantZoneId(tenantOrgName));
