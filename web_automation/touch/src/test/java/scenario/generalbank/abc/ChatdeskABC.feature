@@ -1,5 +1,4 @@
 @no_widget
-
 Feature: Apple Business Chat :: Chatdesk
 
   @orca_api

@@ -22,4 +22,4 @@ Feature: Creating .Control integration and sending messages for different adapte
       |whatsapp                                            |Chat to agent from whatsapp        |
       |fbpost                                              |Chat to agent from fbpost          |
       |twdm                                                |Chat to agent from twdm            |
-      |twmention                                           |Chat to agent from twmention |
+      |twmention                                           |Chat to agent from twmention       |
