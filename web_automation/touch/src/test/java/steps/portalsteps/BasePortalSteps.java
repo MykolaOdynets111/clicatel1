@@ -813,7 +813,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             getPortalTouchPreferencesPage().getAutoRespondersWindow()
                     .clickExpandArrowForMessage(autoresponder);
         }
-        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message).clickSaveButton();
+        getPortalTouchPreferencesPage().getAutoRespondersWindow().getTargetAutoResponderItem(autoresponder).typeMessage(message + faker.letterify("????")).clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(1, 4);
     }
 

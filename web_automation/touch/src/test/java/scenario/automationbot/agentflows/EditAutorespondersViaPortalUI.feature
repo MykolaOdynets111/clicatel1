@@ -17,7 +17,7 @@ Feature: Managing Agent's Auto responders
     And Type new message: New Direct channel message to: Direct channel message message field
     And Type new message: New Directing to Agent (Social Channels) to: Directing to Agent (Social Channels) message field
     And Type new message: New Connecting Agent message (Social Channels) to: Connecting Agent message (Social Channels) message field
-    And Type new message: New End Chat and Opt-Out Keywords message to: End Chat and Opt-Out Keywords message message field
+    And Type new message: New //stop and //end message to: End Chat and Opt-Out Keywords message message field
     And Type new message: New Session Timeout message (Web Chat) to: Session Timeout message (Web Chat) message field
     Then welcome_message on backend corresponds to Greeting message on frontend
     And connect_agent on backend corresponds to Connecting Agent message on frontend

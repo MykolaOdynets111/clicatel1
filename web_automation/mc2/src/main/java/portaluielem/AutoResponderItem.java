@@ -57,7 +57,7 @@ public class AutoResponderItem extends AbstractWidget {
     }
 
     public void clickSaveButton(){
-        clickElem(this.getCurrentDriver(), resetToDefaultButton, 1,"Reset to default button");
+        clickElem(this.getCurrentDriver(), saveButton, 2,"Save button");
     }
 
     public boolean isMessageShown() {
