@@ -442,7 +442,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
 
     public static void ratingEnabling(String tenantOrgName, Boolean ratingEnabled, String chanell){
-        String channelID = getChannelID(tenantOrgName, "webchat");
+        String channelID = getChannelID(tenantOrgName, chanell);
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)){
             currentConfiguration.setRatingEnabled(ratingEnabled);

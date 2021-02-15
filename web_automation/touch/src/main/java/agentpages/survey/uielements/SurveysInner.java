@@ -24,7 +24,7 @@ public class SurveysInner extends AbstractUIElement {
     @FindBy(css = ".number-block")
     private WebElement numberButton;
 
-    @FindBy(name = "emoji-happy")
+    @FindBy(css = "[data-selenium-id='sentiment-positive']")
     private WebElement smileButton;
 
     @FindBy(name = "star")
@@ -89,7 +89,7 @@ public class SurveysInner extends AbstractUIElement {
         } else if(icon.equals("smile")){
             clickElem(this.getCurrentDriver(), smileButton, 2, "Smile Button");
         } else {
-            new AssertionError("Incorrect Icon tipe was provided");
+            throw new AssertionError("Incorrect Icon tipe was provided");
         }
     }
 

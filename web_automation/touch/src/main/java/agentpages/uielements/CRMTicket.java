@@ -20,16 +20,13 @@ public class CRMTicket extends AbstractWidget {
         return this;
     }
 
-    @FindBy(css = "[selenium-id=note-card-date]")
+    @FindBy(css = ".cl-note-card-header__date")
     private WebElement crmCreatedDate;
 
     @FindBy(css = "[selenium-id=note-card-text]")
     private WebElement crmNote;
 
-    @FindAll({
-            @FindBy(css = ".cl-r-note-card-ticket-number"),
-            @FindBy(css = "[selenium-id=note-card-ticket-number]")
-            })
+    @FindBy(css = "[selenium-id=note-card-ticket-number]")
     private WebElement crmNumber;
 
     @FindBy(css = "[selenium-id=note-card-delete-ticket]")

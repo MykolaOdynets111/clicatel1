@@ -42,7 +42,7 @@ public class BusinessProfileWindow extends BasePortalWindow {
     @FindBy(xpath = ".//label[text()='Country:']/parent::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']")
     private WebElement selectCompanyCountry ;
 
-    @FindBy(xpath = ".//*[contains(text(), 'Specific agent support hours')]")
+    @FindBy(xpath = ".//*[contains(text(), 'Specific support hours for all agents')]")
     private WebElement specificSupportHours ;
 
     @FindBy(css = ".support-hours-select-wrapper .cl-r-select__indicators")

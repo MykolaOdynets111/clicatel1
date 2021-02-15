@@ -1,3 +1,4 @@
+@skip
 @agent_feedback
 Feature: Verification CRM ticket editing
 
