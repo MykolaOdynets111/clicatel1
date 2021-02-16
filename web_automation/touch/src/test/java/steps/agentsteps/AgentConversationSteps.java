@@ -353,6 +353,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) click \"End chat\" button$")
     public void clickEndChatButton(String agent) {
         getAgentHomePage(agent).getChatHeader().clickEndChatButton();
+        getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData();
     }
 
     @Then("^(?:End chat|Agent Feedback) popup for (.*) should be opened$")

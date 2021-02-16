@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface WebWait {
@@ -172,8 +173,7 @@ public interface WebWait {
         WebDriverWait wait = new WebDriverWait(driver, waitTime);
         ExpectedCondition elementIsDisplayed = (ExpectedCondition<Boolean>) arg0 -> {
             try {
-                webElement.isDisplayed();
-                return false;
+                return !webElement.isDisplayed();
             }
             catch (NoSuchElementException e ) {
                 return true;

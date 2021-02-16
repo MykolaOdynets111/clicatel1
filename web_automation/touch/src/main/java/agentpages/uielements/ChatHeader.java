@@ -84,7 +84,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public void clickEndChatButton() {
-        if (!isElementShown(this.getCurrentDriver(), endChatButton, 4)) {
+        if (!isEndChatShown()) {
             Assert.fail("'End chat' button is not shown.");
         } else {
             clickElem(this.getCurrentDriver(), endChatButton, 6, "End chat button");
@@ -93,6 +93,7 @@ public class ChatHeader extends AbstractUIElement {
 
     public boolean isEndChatShown(){
         return isElementShown(this.getCurrentDriver(), endChatButton,4);
+
     }
 
     public void clickTransferButton(){

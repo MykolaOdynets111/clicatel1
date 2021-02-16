@@ -69,6 +69,14 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=exit-chat-ticket-number]")
     private WebElement crmTicketNumber;
 
+    @FindBy(css =".cl-loading-overlay")
+    private WebElement loadingState;
+
+    public AgentFeedbackWindow waitForLoadingData(){
+        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), ".cl-loading-overlay",  3);
+        return this;
+    }
+
     public void clickCancel() {
         clickElem(this.getCurrentDriver(), cancelButton, 5, "Cancel button" );
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), overlappedPage, 7);
@@ -79,7 +87,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public boolean isEndChatPopupShown (){
-        return isElementShown(this.getCurrentDriver(), closeChatButton,12);
+        return isElementShown(this.getCurrentDriver(), closeChatButton,5);
     }
 
     public AgentFeedbackWindow typeCRMNoteTextField(String msg) {

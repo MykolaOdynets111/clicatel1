@@ -214,7 +214,7 @@ public class AgentHomePage extends AgentAbstractPage {
     public void endChat(){
         if(getChatHeader().isEndChatShown()){
             getChatHeader().clickEndChatButton();
-            getAgentFeedbackWindow().clickCloseButtonInCloseChatPopup();
+            getAgentFeedbackWindow().waitForLoadingData().clickCloseButtonInCloseChatPopup();
             try {
                 waitForElementToBeInVisibleByCss(this.getCurrentDriver(), chatMessageContainer, 10);
             }catch (TimeoutException e){
