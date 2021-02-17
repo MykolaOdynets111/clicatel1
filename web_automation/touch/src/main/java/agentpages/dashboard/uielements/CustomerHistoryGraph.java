@@ -22,6 +22,11 @@ public class CustomerHistoryGraph extends AbstractWidget {
         return this;
     }
 
+    public CustomerHistoryGraph scrollToCustomerHistoryGraph(){
+        scrollToElem(this.getCurrentDriver(), this.getWrappedElement(), "Customer History Graph");
+        return this;
+    }
+
     public List<String> getTimeLines() {
         return timelines.stream()
                 .map(timeline -> getTextFromElem(this.getCurrentDriver(), timeline, 5, "Graph timeline"))

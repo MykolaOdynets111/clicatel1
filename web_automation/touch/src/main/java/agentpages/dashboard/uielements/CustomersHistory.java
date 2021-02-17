@@ -26,7 +26,7 @@ public class CustomersHistory extends AbstractUIElement {
     public List<List<String>> getGraphsTimelines() {
         waitFor(2000);
         return graphs.stream()
-                .map(graph -> new CustomerHistoryGraph(graph).setCurrentDriver(this.getCurrentDriver()))
+                .map(graph -> new CustomerHistoryGraph(graph).setCurrentDriver(this.getCurrentDriver()).scrollToCustomerHistoryGraph())
                 .map(CustomerHistoryGraph::getTimeLines).collect(Collectors.toList());
     }
 
@@ -35,7 +35,11 @@ public class CustomersHistory extends AbstractUIElement {
     }
 
     public boolean isGraphDisplayed(String graphName) {
-        return isElementShownByXpath(this.getCurrentDriver(), String.format(graphByNameXpath, graphName), 5);
+        String graphXpath= String.format(graphByNameXpath, graphName);
+        if (isElementExistsInDOMXpath(this.getCurrentDriver(), graphXpath, 5)){
+         scrollToElem(this.getCurrentDriver(), graphXpath, graphName);
+        }
+        return isElementShownByXpath(this.getCurrentDriver(), graphXpath, 1);
     }
 
     public boolean isNoDataRemovedForGraph(String graphName) {

@@ -39,7 +39,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click "End chat" button
     Then End chat popup for agent should be opened
     Then Agent can search tag and select tag, selected tag added in tags field
-    Then Agent type Note:CheckTags, Link:CheckTags, Number:12345 for CRM ticket
+    Then Agent type Note:CheckTags, Link:http://CheckTags.com, Number:12345 for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information
@@ -53,7 +53,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     When Agent click "End chat" button
     Then End chat popup for agent should be opened
     Then Agent add 2 tag
-    Then Agent type Note:Note from automation test), Link:Note text Link, Number:12345 for CRM ticket
+    Then Agent type Note:Note from automation test), Link:http://NoteTextLink.com, Number:12345 for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information
@@ -68,7 +68,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then End chat popup for agent should be opened
     Then Agent add 2 tag
     Then Agent delete all tags
-    Then Agent type Note:Note from automation test), Link:Note text Link, Number:12345 for CRM ticket
+    Then Agent type Note:Note from automation test), Link:http://NoteTextLink.com, Number:12345 for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information

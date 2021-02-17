@@ -19,7 +19,7 @@ Feature: Edit tag name
     When Second agent click "End chat" button
     Then End chat popup for second agent should be opened
     Then Second agent select precreated tag
-    Then Second agent type Note:CheckTTagEdit, Link:TagEdit, Number:14544 for CRM ticket
+    Then Second agent type Note:CheckTTagEdit, Link:http://TagEdit.com, Number:14544 for CRM ticket
     When Second agent click 'Close chat' button
     Then Second agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information

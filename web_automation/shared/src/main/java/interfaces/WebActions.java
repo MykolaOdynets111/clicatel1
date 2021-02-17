@@ -207,7 +207,7 @@ public interface WebActions extends WebWait {
         try {
             waitForElementToBeInVisibleByCss(driver, css, wait);
             return true;
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (TimeoutException e) {
             return false;
         }
     }
@@ -216,7 +216,7 @@ public interface WebActions extends WebWait {
         try {
             waitForElementToBeInvisibleByXpath(driver, xpath, wait);
             return true;
-        } catch (TimeoutException|NoSuchElementException e) {
+        } catch (TimeoutException e) {
             return false;
         }
     }

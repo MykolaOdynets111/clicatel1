@@ -16,9 +16,9 @@ Feature: Supervisor desk
     Then Agent has new conversation request from dotcontrol user
     When Agent switches to opened Portal page
     And I select Touch in left menu and Supervisor Desk in submenu
-    Then Supervisor Desk Live has new conversation dotcontrol request
-    Then Agent has new conversation request
+    Then dotcontrol request is shown on Supervisor Desk Live page
+    Then touch request is shown on Supervisor Desk Live page
     When Agent select "Webchat" in Chanel container and click "Apply filters" button
     Then Supervisor Desk Live dos not have conversation dotcontrol request
-    And Agent has new conversation request
+    And touch request is shown on Supervisor Desk Live page
     Then Verify that only "widget" chats are shown

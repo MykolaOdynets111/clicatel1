@@ -22,7 +22,7 @@ Feature: Create tag
     When Agent click "End chat" button
     Then End chat popup for agent should be opened
     Then Agent select precreated tag
-    Then Agent type Note:CheckTagsCreation, Link:TagsCreation, Number:23544 for CRM ticket
+    Then Agent type Note:CheckTagsCreation, Link:http://TagsCreation.com, Number:23544 for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then CRM ticket is created on backend with correct information

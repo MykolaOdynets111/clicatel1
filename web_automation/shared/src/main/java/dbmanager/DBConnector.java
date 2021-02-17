@@ -34,7 +34,7 @@ public class DBConnector {
             createConnection(env, platform);
         }
            return connection;
-        }
+    }
 
     private static synchronized String getDataFromDb(String env, String platform, String query, String column){
         ResultSet results = null;

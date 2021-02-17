@@ -375,7 +375,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("(.*) fills form$")
     public void agentFillsForm(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMNoteTextField("Note text field");
-        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("Note text Link");
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMLink("http://NoteTextLink.com");
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
     }
 

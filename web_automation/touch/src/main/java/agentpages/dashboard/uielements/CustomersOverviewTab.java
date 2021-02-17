@@ -41,6 +41,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     }
 
     public void selectPeriodForReport(String period) {
+        scrollToElem(this.getCurrentDriver(), periodFilterDropdown,  "Period Dropdown");
         clickElem(this.getCurrentDriver(), periodFilterDropdown, 1, "Period Dropdown");
         dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(period))
                 .findFirst().orElseThrow(() ->

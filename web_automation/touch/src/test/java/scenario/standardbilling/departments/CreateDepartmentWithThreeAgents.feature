@@ -17,5 +17,5 @@ Feature: Departments
     Given I login as second agent of Standard Billing
     And Agent refresh current page
     And Departments Management page should be shown
-    And Wait for 3 second
+    And Wait for 5 second
     Then Verify that card with AutoDepartmentName name and Auto Description description has 3 total 2 offline and 1 active agents

@@ -17,5 +17,5 @@ Feature: Supervisor desk
     When Second agent click on new conversation request from dotcontrol
     And Second agent responds with hello to User
     When I select Touch in left menu and Supervisor Desk in submenu
-    Then Supervisor Desk Live has new conversation dotcontrol request
+    Then dotcontrol request is shown on Supervisor Desk Live page
     And Live chats Second agent filter has correct name and correct chats number

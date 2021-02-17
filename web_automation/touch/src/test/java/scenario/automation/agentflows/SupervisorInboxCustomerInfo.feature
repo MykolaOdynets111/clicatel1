@@ -16,7 +16,7 @@ Feature: Supervisor desk
     And Agent responds with welcome to User
     When Agent switches to opened Portal page
     When I select Touch in left menu and Supervisor Desk in submenu
-    Then Supervisor Desk Live has new conversation dotcontrol request
+    Then dotcontrol request is shown on Supervisor Desk Live page
     And Agent click On Live Supervisor Desk chat from dotcontrol channel
     Then Supervisor Desk Live chat container header has dotcontrol User photo, name and fbmsg channel
     And Supervisor Desk Live chat Profile is displayed

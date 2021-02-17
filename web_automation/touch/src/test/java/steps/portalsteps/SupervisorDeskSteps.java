@@ -76,7 +76,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAssignManuallyButton();
     }
 
-    @Then("^Supervisor Desk Live has new conversation (.*) request$")
+    @Then("^(.*) request is shown on Supervisor Desk Live page$")
     public void verifySupervisorDeskHasRequestFormSocialUser(String channel){
         String userName = getUserName(channel);
         Assert.assertTrue(getSupervisorDeskPage().isLiveChatShownInSD(userName, 5),

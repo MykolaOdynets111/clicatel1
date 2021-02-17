@@ -17,6 +17,7 @@ Feature: Supervisor desk
     When Agent switches to opened Portal page
     When I select Touch in left menu and Supervisor Desk in submenu
     And Supervisor put a check mark on "Flagged Only" and click "Apply Filters" button
-    Then Supervisor Desk Live has new conversation dotcontrol request
+    Then dotcontrol request is shown on Supervisor Desk Live page
+
 
 

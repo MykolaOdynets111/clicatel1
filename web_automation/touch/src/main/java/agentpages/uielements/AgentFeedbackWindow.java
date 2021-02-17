@@ -38,7 +38,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
-    @FindBy(css = ".cl-r-select__menu-list.cl-r-select__menu-list--is-multi.css-11unzgr")
+    @FindBy(css = ".cl-r-select__option.cl-r-multi-option")
     private WebElement availableTagsContainer;
 
     @FindBy(css = ".cl-r-select__control")
@@ -47,7 +47,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = "div[id^='react-select']")
     private List<WebElement> availableTags;
 
-    @FindBy(css = ".cl-r-select__indicators")
+    @FindBy(css = ".cl-r-select__indicators svg[name^='arrow']")
     private WebElement openDropdownButton;
 
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
@@ -60,20 +60,20 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String cleareAll = ".Select-clear";
 
-    @FindBy(css = "[selenium-id='exit-chat-note']")
+    @FindBy(css = "[selenium-id='crm-note']")
     private WebElement crmNoteTextField;
 
-    @FindBy(css = "[selenium-id=exit-chat-link]")
+    @FindBy(css = "[selenium-id='crm-link']")
     private WebElement crmLink;
 
-    @FindBy(css = "[selenium-id=exit-chat-ticket-number]")
+    @FindBy(css = "[selenium-id='crm-ticket-number']")
     private WebElement crmTicketNumber;
 
     @FindBy(css =".cl-loading-overlay")
     private WebElement loadingState;
 
     public AgentFeedbackWindow waitForLoadingData(){
-        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), ".cl-loading-overlay",  3);
+        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), ".cl-animated-ellipsis",  5);
         return this;
     }
 

@@ -94,6 +94,7 @@ public class DashboardPage extends PortalAbstractPage {
 
     public CustomersHistory getCustomersHistory() {
         customersHistory.setCurrentDriver(this.getCurrentDriver());
+        scrollToElem(this.getCurrentDriver(), customersHistory, "Customers History");
         return customersHistory;
     }
 
@@ -104,11 +105,13 @@ public class DashboardPage extends PortalAbstractPage {
 
     public NetPromoterScoreSection getNetPromoterScoreSection() {
         netPromoterScoreSection.setCurrentDriver(this.getCurrentDriver());
+        scrollToElem(this.getCurrentDriver(), netPromoterScoreSection.getWrappedElement(), "Net Promoter Score Section");
         return netPromoterScoreSection;
     }
 
     public CustomerSatisfactionSection getCustomerSatisfactionSection() {
         customerSatisfactionSection.setCurrentDriver(this.getCurrentDriver());
+        scrollToElem(this.getCurrentDriver(), customerSatisfactionSection.getWrappedElement(), "Customer Satisfaction Section");
         return customerSatisfactionSection;
     }
 

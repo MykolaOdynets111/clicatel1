@@ -16,7 +16,7 @@ Feature: Creating CRM tickets
     When Agent click "End chat" button
     Then End chat popup for agent should be opened
     Then Agent add 1 tag
-    Then Agent type Note:"Note from automation test)", Link:"Note text Link", Number:"12345" for CRM ticket
+    Then Agent type Note:"Note from automation test)", Link:http://NoteTextLink.com, Number:"12345" for CRM ticket
     When Agent click 'Close chat' button
     Then Agent should not see from user chat in agent desk
     Then User should see 'exit' text response for his 'connect to Support' input
