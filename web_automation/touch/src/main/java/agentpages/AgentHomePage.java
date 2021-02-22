@@ -195,7 +195,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public ChatBody getChatBody() {
-        waitForElementToBePresentByCss(this.getCurrentDriver(), chatMessageContainer, 5);
+        waitForElementToBePresentByCss(this.getCurrentDriver(), chatMessageContainer, 10);
         chatBody.setCurrentDriver(this.getCurrentDriver());
         return chatBody;
     }

@@ -25,10 +25,10 @@ public class OrcaServer extends Server {
 
         @Override
         public void handle(HttpExchange t) throws IOException {
-            System.out.println("\n Inside handler \n");
+            System.out.println("\n Inside Orca handler \n");
             BufferedReader in = new BufferedReader(new InputStreamReader(t.getRequestBody()));
             String incomingBody = in.lines().map(e -> e + "\n").collect(Collectors.toList()).toString();
-            System.out.println("\n Inside handler  incomingBody \n " + incomingBody);
+            System.out.println("\n Inside Orca handler  incomingBody \n " + incomingBody);
 
             String encoding = "UTF-8";
             String response = "{\"responseMessage\": \"This is the response\"}";
@@ -70,7 +70,7 @@ public class OrcaServer extends Server {
                 body = body.replace("[", "");
                 body = body.replace("]", "");
             }
-            System.out.println("Incomming body :" + body);
+            System.out.println("Orca Incoming body :" + body);
             OrcaEvent orcaEvent = null;
             ObjectMapper mapper = new ObjectMapper();
             try {
