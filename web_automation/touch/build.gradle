@@ -127,7 +127,7 @@ task runTouchPullRequestTests(type:Test) {
 
 task runAllTests(type:Test){
     doFirst {
-//        runTieTests.execute()
+        runTieTests.execute()
         runBaseTests.execute()
     }
     doLast {
