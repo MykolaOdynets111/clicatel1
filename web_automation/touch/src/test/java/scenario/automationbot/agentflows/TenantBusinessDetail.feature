@@ -3,7 +3,7 @@
 Feature: Managing business details
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-4563")
-  Scenario: Touch preferences :: Check changing business details
+  Scenario: Settings :: Check changing business details
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu

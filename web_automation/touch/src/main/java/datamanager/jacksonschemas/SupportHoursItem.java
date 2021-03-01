@@ -1,6 +1,5 @@
 package datamanager.jacksonschemas;
 
-import lombok.NonNull;
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

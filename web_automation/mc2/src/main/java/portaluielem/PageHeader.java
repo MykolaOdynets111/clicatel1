@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.CartPage;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 

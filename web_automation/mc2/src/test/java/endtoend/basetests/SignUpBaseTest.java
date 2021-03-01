@@ -2,8 +2,6 @@ package endtoend.basetests;
 
 
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
-import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import java.io.FileInputStream;

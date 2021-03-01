@@ -17,9 +17,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 public enum DriverType {

@@ -1,11 +1,8 @@
 package endtoend.acceptance.touch;
 
-import drivermanager.ConfigManager;
 import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
-import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;

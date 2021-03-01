@@ -3,7 +3,7 @@
 Feature: .Control Profile info
 
   @Issue("https://jira.clickatell.com/browse/TPLAT-4379")
-  Scenario: Viewing .Control customer 360 info and editing it
+  Scenario: Viewing .Control User Profile info and editing it
     Given Create .Control integration for Automation tenant
     Given I login as agent of Automation
     And Prepare payload for sending chat to agent message for .Control

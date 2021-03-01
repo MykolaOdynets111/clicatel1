@@ -2,23 +2,16 @@ package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import driverfactory.DriverFactory;
-import io.appium.java_client.pagefactory.WithTimeout;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.FindBys;
 import org.testng.Assert;
 import touchpages.uielements.AttachmentWindow;
 
 import java.security.SecureRandom;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 @FindBy(css = "div[selenium-id=chat-form]")
 public class ChatForm extends AbstractUIElement {

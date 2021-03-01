@@ -2,7 +2,6 @@ package steps.agentsteps;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import driverfactory.DriverFactory;
 import org.testng.Assert;
 
 public class AgentFlagChatSteps extends AbstractAgentSteps {

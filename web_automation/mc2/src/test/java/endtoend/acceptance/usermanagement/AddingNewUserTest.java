@@ -6,12 +6,9 @@ import endtoend.basetests.BaseTest;
 import interfaces.VerificationHelper;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import mc2api.ApiHelperPlatform;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import portalpages.*;
 
 

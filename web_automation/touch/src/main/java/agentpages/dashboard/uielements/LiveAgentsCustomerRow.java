@@ -2,11 +2,9 @@ package agentpages.dashboard.uielements;
 
 
 import abstractclasses.AbstractWidget;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 
 public class LiveAgentsCustomerRow extends AbstractWidget {

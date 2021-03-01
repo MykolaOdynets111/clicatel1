@@ -1,7 +1,6 @@
 package twitter.uielements;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

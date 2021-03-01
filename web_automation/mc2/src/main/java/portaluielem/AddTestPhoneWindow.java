@@ -3,7 +3,6 @@ package portaluielem;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;

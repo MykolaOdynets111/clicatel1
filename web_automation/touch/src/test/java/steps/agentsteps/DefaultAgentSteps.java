@@ -3,7 +3,6 @@ package steps.agentsteps;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import datamanager.jacksonschemas.AgentMapping;
-import datamanager.jacksonschemas.SupportHoursItem;
 import datamanager.jacksonschemas.chatusers.UserInfo;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -23,7 +22,6 @@ import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
-import sun.management.resources.agent;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

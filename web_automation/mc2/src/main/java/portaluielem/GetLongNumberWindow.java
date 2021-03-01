@@ -1,6 +1,5 @@
 package portaluielem;
 
-import com.sun.tools.xjc.reader.xmlschema.BindYellow;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;

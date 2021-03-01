@@ -3,7 +3,6 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;

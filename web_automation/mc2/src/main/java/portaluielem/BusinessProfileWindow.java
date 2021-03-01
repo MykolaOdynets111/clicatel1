@@ -2,13 +2,9 @@ package portaluielem;
 
 import com.github.javafaker.Faker;
 import drivermanager.ConfigManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;

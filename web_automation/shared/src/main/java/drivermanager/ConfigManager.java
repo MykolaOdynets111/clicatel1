@@ -3,8 +3,6 @@ package drivermanager;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
-import java.io.File;
-
 
 public class ConfigManager {
 

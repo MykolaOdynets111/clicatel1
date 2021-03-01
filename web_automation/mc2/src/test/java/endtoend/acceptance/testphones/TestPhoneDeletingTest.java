@@ -4,11 +4,9 @@ import endtoend.basetests.APICreatedAccountTest;
 import interfaces.VerificationHelper;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import portalpages.*;
 
 //DRAFT (Test Case clarification needed)

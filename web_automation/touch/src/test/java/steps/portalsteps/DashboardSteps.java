@@ -18,7 +18,6 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class DashboardSteps extends AbstractPortalSteps {

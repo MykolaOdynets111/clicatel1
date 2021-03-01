@@ -24,7 +24,6 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

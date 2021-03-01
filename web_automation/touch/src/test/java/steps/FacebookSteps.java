@@ -13,14 +13,10 @@ import facebook.FBLoginPage;
 import facebook.FBTenantPage;
 import facebook.uielements.MessengerWindow;
 import facebook.FBYourPostPage;
-import io.restassured.RestAssured;
-import javaserver.Server;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import javax.annotation.concurrent.GuardedBy;
-import java.security.SecureRandom;
-import java.util.Random;
 
 public class FacebookSteps {
 

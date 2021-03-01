@@ -3,7 +3,6 @@ package endtoend.acceptance.billingandpayments;
 import endtoend.basetests.APICreatedAccountTest;
 import io.qameta.allure.*;
 import listeners.TestAllureListener;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;

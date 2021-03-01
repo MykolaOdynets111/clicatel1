@@ -5,7 +5,6 @@ import cucubmerrunner.TestNgCucumberFeatureRunner;
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.TestNGCucumberRunner;
 import cucumber.runtime.model.CucumberFeature;
-import datamanager.Tenants;
 import org.testng.annotations.*;
 
 import java.util.ArrayList;
