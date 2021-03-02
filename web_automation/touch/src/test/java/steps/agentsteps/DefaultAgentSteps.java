@@ -213,7 +213,29 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
-        getLeftMenu(agent).applyChatsFilters(channel.trim(), sentiment.trim(), flagged);
+        getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
+    }
+
+    @When("^(.*) click on filter button$")
+    public void setLiveChatsFilter(String agent){
+        getLeftMenu(agent).openFilterMenu();
+    }
+
+    @Then ("^(.*) see channel, sentiment(?: and flagged|, flagged and dates) as filter options for (.*)$")
+    public void verifyFilterOptions(String agent, String chatType){
+        FilterMenu filterMenu = getLeftMenu(agent).getFilterMenu();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("Webchat", "Facebook", "Twitter", "WhatsApp", "Apple Business Chat"),
+                "Channel dropdown has incorrect options");
+        filterMenu.expandChannels();
+        softAssert.assertEquals(filterMenu.expandSentiment().getDropdownOptions(), Arrays.asList("Positive", "Neutral", "Negative"),
+                "Sentiment dropdown has incorrect options");
+        filterMenu.expandSentiment();
+        if(!chatType.contains("live")){
+            softAssert.assertTrue(filterMenu.isStartDateIsPresent(),"Start day option should be present in " + chatType +" filters");
+            softAssert.assertTrue(filterMenu.isEndDateIsPresent(),"End day option should be present in " + chatType +" filters");
+        }
+        softAssert.assertAll();
     }
 
     @When("(.*) remove Chat Filter$")

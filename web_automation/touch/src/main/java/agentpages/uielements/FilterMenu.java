@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @FindBy(xpath = "//*[contains(@class, 'cl-r-roster-filter--form-opened') or contains(@class, 'search-filter-bar-agent')]")
 public class FilterMenu extends AbstractUIElement {
@@ -23,7 +24,13 @@ public class FilterMenu extends AbstractUIElement {
     private WebElement channelInput;
 
     @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__indicators')]")
-    private WebElement channelDeploy;
+    private WebElement channelExpandColapsButton;
+
+    @FindBy(css="div[class^='cl-r-select__menu'] div[id^='react-select']")
+    private List<WebElement> dropdownValues;
+
+    @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__indicators')]")
+    private WebElement sentimentsExpandColapsButton;
 
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
     private WebElement sentimentsInput;
@@ -52,34 +59,37 @@ public class FilterMenu extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), applyFiltersButton, 3, "Apply Filters Button");
     }
 
-    public void removeChannelsIfWereSelected() {
-        if (!chanelRemoveButtons.isEmpty()) {
-            for (WebElement remove : chanelRemoveButtons) {
-                clickElem(this.getCurrentDriver(), remove, 1, "Chanel Remove Button");
-            }
-        }
+    public FilterMenu expandChannels() {
+        clickElem(this.getCurrentDriver(), channelExpandColapsButton, 3, "Channels expand button");
+        return this;
     }
 
-    public void deployChannels() {
-        clickElem(this.getCurrentDriver(), channelDeploy, 3, "Channels deploy button");
+    public FilterMenu expandSentiment() {
+        clickElem(this.getCurrentDriver(), sentimentsExpandColapsButton, 3, "Sentiment expand button");
+        return this;
+    }
+
+
+    public List<String> getDropdownOptions(){
+        return dropdownValues.stream().map(e -> e.getText().trim()).collect(Collectors.toList());
     }
 
     public void chooseChannel(String channel) {
-        deployChannels();
+        expandChannels();
         clickElemByXpath(this.currentDriver, String.format(channelInputByName, channel), 2, "Channel input");
-    }
-
-    public void removeSentimentsIfWereSelected() {
-        if (!sentimentRemoveButtons.isEmpty()) {
-            for (WebElement remove : sentimentRemoveButtons) {
-                clickElem(this.getCurrentDriver(), remove, 1, "Sentiment Remove Button");
-            }
-        }
     }
 
     public void fillSentimentsInputField(String sentiment) {
         inputText(this.getCurrentDriver(), sentimentsInput, 1, "Sentiments Input", sentiment);
         sentimentsInput.sendKeys(Keys.ENTER);
+    }
+
+    public boolean isStartDateIsPresent(){
+        return isElementShown(this.getCurrentDriver(), startDateInput, 1);
+    }
+
+    public boolean isEndDateIsPresent(){
+        return isElementShown(this.getCurrentDriver(), endDateInput, 1);
     }
 
     public void fillStartDate(LocalDate startDate) {

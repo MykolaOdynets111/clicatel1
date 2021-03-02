@@ -281,7 +281,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
         filterMenu.setCurrentDriver(this.getCurrentDriver());
     }
 
-    public void applyChatsFilters(String chanel, String sentiment, boolean flagged){
+    public  FilterMenu getFilterMenu(){
+        return filterMenu;
+    }
+
+    public void applyTicketsFilters(String chanel, String sentiment, boolean flagged){
         openFilterMenu();
         if (!chanel.equalsIgnoreCase("no")) {filterMenu.chooseChannel(chanel);}
         if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}
@@ -289,7 +293,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
         filterMenu.clickApplyButton();
     }
 
-    public void applyChatsFilters(String channel, String sentiment, LocalDate startDate, LocalDate endDate) {
+    public void applyTicketsFilters(String channel, String sentiment, LocalDate startDate, LocalDate endDate) {
         openFilterMenu();
         if (!channel.equalsIgnoreCase("no")) {filterMenu.chooseChannel(channel);}
         if (!sentiment.equalsIgnoreCase("no")) {filterMenu.fillSentimentsInputField(sentiment);}

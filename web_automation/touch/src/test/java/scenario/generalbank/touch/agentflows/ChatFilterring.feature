@@ -1,4 +1,4 @@
-Feature: Agent should be able to filter chats
+Feature: Chat Filtering
 
   Background:
     Given User select General Bank Demo tenant
