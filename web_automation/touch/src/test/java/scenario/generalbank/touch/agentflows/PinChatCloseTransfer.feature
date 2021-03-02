@@ -30,7 +30,7 @@ Feature: Flagged chat is disabled to close and to transfer
     Then User should see 'exit' text response for his 'connect to agent' input
 
 
-  Scenario: "Transfer chat" button disabled for flagged chat
+  Scenario: "Transfer chat" button is not shown on chat desk for flagged chat
     When Agent click 'Flag chat' button
     Then Agent can not click 'Transfer chat' button
     Then Agent click 'Unflag chat' button
