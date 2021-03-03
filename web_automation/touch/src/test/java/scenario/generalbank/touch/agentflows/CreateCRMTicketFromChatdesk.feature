@@ -8,7 +8,7 @@ Feature: Creating CRM tickets
     And Click chat icon
     Given AGENT_FEEDBACK tenant feature is set to true for General Bank Demo
 
-  Scenario: Agent is able fill form and create CRM ticket
+  Scenario: Agent is able to fill form and create CRM ticket
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch

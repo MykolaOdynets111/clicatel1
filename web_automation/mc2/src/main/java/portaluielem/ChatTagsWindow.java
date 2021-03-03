@@ -49,5 +49,12 @@ public class ChatTagsWindow extends BasePortalWindow{
         return this;
     }
 
+    public ChatTagsWindow enableDisableTag(String tagName){
+        WebElement row = getRowByName(tagName);
+        moveToElement(this.getCurrentDriver(), row);
+        row.findElement(By.cssSelector(".cl-r-toggle-btn")).click();
+        return this;
+    }
+
 
 }

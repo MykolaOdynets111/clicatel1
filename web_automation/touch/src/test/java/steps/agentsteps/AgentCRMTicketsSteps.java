@@ -388,6 +388,12 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().selectTagInSearch().closeDropdown();
     }
 
+    @Then("^(.*) does not see the disabled tag$")
+    public void disabledTagIsNotAvailable(String agent) {
+        getAgentHomePage(agent).getAgentFeedbackWindow().typeTags(BasePortalSteps.tagname);
+        Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().noOptionMessageIsShown(),
+                "Tag should not be shown");
+    }
 
     @Then("^Agent delete all tags$")
     public void agentDeleteAllTags() {

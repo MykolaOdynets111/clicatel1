@@ -140,7 +140,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){
-          for (int i = 0; i < 20; i++) {
+          for (int i = 0; i < 25; i++) {
               if(!getAllFoundChatsUserNames().contains(userName))
                   return true;
               waitFor(1000);

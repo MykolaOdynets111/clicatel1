@@ -16,7 +16,7 @@ Feature: Interaction with Tags in CRM tickets (agent mode)
     Then End chat popup for agent should be opened
     Then All tags for tenant is available in the dropdown
 
-   Scenario: All tie tags available for the test tenant in the drop down after reopen "End chat" window
+   Scenario: All tags available for the test tenant in the drop down after reopen "Close chat" window
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch

@@ -1669,16 +1669,21 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Create chat tag$")
     public void createChatTag(){
-        tagname = faker.artist().name() + faker.numerify("##");
+        tagname = faker.artist().name() + faker.numerify("#####");
         getPortalTouchPreferencesPage().getChatTagsWindow().clickAddChatTagButton().setTagName(tagname).clickSaveButton();
     }
 
     @When("^Update chat tag")
     public void updateTag(){
         getPortalTouchPreferencesPage().getChatTagsWindow().clickEditTagButton(tagname);
-        tagname = faker.artist().name() + faker.numerify("##");
+        tagname = faker.artist().name() + faker.numerify("#####");
         getPortalTouchPreferencesPage().getChatTagsWindow().setTagName(tagname).clickSaveButton();
         AgentCRMTicketsSteps.crmTicketInfoForUpdating.get().put("agentTags",  tagname);
+    }
+
+    @When("^(?:Enable|Disable) tag$")
+    public void disableTag(){
+        getPortalTouchPreferencesPage().getChatTagsWindow().enableDisableTag(tagname);
     }
 
     private MainPage getMainPage() {

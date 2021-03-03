@@ -50,6 +50,9 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-select__indicators svg[name^='arrow']")
     private WebElement openDropdownButton;
 
+    @FindBy(xpath = ".//div[text() = 'No options']")
+    private WebElement noOptionsMessage;
+
     private String overlappedPage = "//div[@id='app'][@aria-hidden='true']";
 
     private String inputTagField =  ".cl-r-select__input input";
@@ -188,6 +191,10 @@ public class AgentFeedbackWindow extends AbstractUIElement {
         waitForElementToBeClickable(this.getCurrentDriver(), availableTagsContainer, 6);
         availableTagsContainer.click();
         return this;
+    }
+
+    public boolean noOptionMessageIsShown(){
+        return isElementShown(this.getCurrentDriver(), noOptionsMessage, 2);
     }
 
     public void deleteTags() {

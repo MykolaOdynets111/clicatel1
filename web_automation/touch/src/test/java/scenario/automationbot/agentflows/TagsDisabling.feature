@@ -9,19 +9,16 @@ Feature: Tags
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Chat Tags page
 
-  Scenario: verify when a supervisor edits a tag that the chats/tickets associated with the tag also be edited and has the new name.
+  Scenario: Verify if agent is not able to select tags that are disabled
     And Create chat tag
-    And I login as second agent of Automation bot
-    When Click chat icon
+    And Wait for 1 second
+    #wait added because save tags take time and no spinner was added
+    And Disable tag
+    When I login as second agent of Automation bot
+    And Click chat icon
     And User enter connect to Support into widget input field
     Then Second agent has new conversation request
     When Second agent click on new conversation request from touch
     When Second agent click "End chat" button
     Then End chat popup for second agent should be opened
-    Then Second agent select precreated tag
-    Then Second agent type Note:CheckTTagEdit, Link:http://TagEdit.com, Number:14544 for CRM ticket
-    When Second agent click 'Close chat' button
-    Then Second agent should not see from user chat in agent desk
-    Then CRM ticket is created on backend with correct information
-    When Update chat tag
-    Then CRM ticket is updated on backend with correct information
+    Then Second agent does not see the disabled tag
