@@ -20,6 +20,7 @@ import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
+import sun.management.resources.agent;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,6 +59,19 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         }
         Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area");
+    }
+
+    @Then ("^Visual indicator (.*) with (.*) text, (.*) name and time is shown$")
+    public void verifyVisualIndicators(String indicator, String message, String agent){
+        String agentName = getAgentName(agent);
+        String messageWithName = message + " " + agentName;
+        String indicatorFromUI = getChatBody(agent).getIndicatorsText(indicator);
+        String time = indicatorFromUI.substring(indicatorFromUI.length()-8);
+        String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length()-8).trim();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(messageWithName.trim(), massageWithNameUI, indicator + " has incorrect text");
+        softAssert.assertTrue(time.matches("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])(:[0-5][0-9])?$"), indicator + " time is not shown");
+        softAssert.assertAll();
     }
 
     @Then("^(.*) see conversation area with (.*) user's message$")

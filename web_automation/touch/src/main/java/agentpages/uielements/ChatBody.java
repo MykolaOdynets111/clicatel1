@@ -72,6 +72,19 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "[selenium-id='chat-message-content-opted-out'] p")
     private WebElement stopCardText;
 
+    @FindBy(css ="div[title='AGENT_RECEIVE_CHAT']")
+    private WebElement agentReceiveIndicator;
+
+    @FindBy(css = "div[title='FLAG_CHAT']")
+    private WebElement agentFlagIndicator;
+
+    @FindBy(css = "div[title='UNFLAG_CHAT']")
+    private WebElement agentUnflagIndicator;
+
+    @FindBy(css = "div[title='CLOSE_CHAT']")
+    private WebElement agentCloseChatIndicator;
+
+
     private WebElement getFromUserWebElement(String messageText) {
         try {
             AgentDeskChatMessage theMessage = fromUserMessages.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
@@ -243,6 +256,20 @@ public class ChatBody extends AbstractUIElement {
 
     public String getStopCardText() {
         return getTextFromElem(this.getCurrentDriver(), stopCardText, 1, "Stop Card text").trim();
+    }
+
+    public String getIndicatorsText(String indicator) {
+        switch (indicator) {
+            case "AGENT_RECEIVE_CHAT":
+                return getTextFromElem(this.getCurrentDriver(), agentReceiveIndicator, 1, indicator);
+            case "FLAG_CHAT":
+                return getTextFromElem(this.getCurrentDriver(), agentFlagIndicator, 1, indicator);
+            case "UNFLAG_CHAT":
+                return getTextFromElem(this.getCurrentDriver(), agentUnflagIndicator, 1, indicator);
+            case "CLOSE_CHAT":
+                return getTextFromElem(this.getCurrentDriver(), agentCloseChatIndicator, 1, indicator);
+        }
+        return "Incorrect indicator was provided in steps";
     }
 
 }
