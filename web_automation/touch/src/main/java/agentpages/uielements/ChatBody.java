@@ -84,6 +84,13 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "div[title='CLOSE_CHAT']")
     private WebElement agentCloseChatIndicator;
 
+    @FindBy(css = "div[title='INVITE_AGENT']")
+    private WebElement transferIndicator;
+
+    @FindBy(css = "div[title='AGENT_REJECT_CHAT']")
+    private WebElement rejectTransferIndicator;
+
+
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -268,6 +275,10 @@ public class ChatBody extends AbstractUIElement {
                 return getTextFromElem(this.getCurrentDriver(), agentUnflagIndicator, 1, indicator);
             case "CLOSE_CHAT":
                 return getTextFromElem(this.getCurrentDriver(), agentCloseChatIndicator, 1, indicator);
+            case "INVITE_AGENT":
+                return  getTextFromElem(this.getCurrentDriver(), transferIndicator, 1, indicator);
+            case "AGENT_REJECT_CHAT":
+                return  getTextFromElem(this.getCurrentDriver(), rejectTransferIndicator, 1, indicator);
         }
         return "Incorrect indicator was provided in steps";
     }

@@ -273,9 +273,9 @@ public class AgentTransferSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getIncomingTransferWindow().acceptTransfer();
     }
 
-    @Then("^Second agent click \"Reject transfer\" button$")
-    public void rejectIncomingTransfer(){
-        getAgentHomeForSecondAgent().getIncomingTransferWindow().rejectTransfer();
+    @Then("^(.*) click \"Reject transfer\" button$")
+    public void rejectIncomingTransfer(String agent){
+        getAgentHomePage(agent).getIncomingTransferWindow().rejectTransfer();
     }
 
     @Then("^(.*) click \"Accept\" button$")

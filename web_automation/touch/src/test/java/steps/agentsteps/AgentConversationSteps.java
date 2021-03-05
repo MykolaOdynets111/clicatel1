@@ -61,15 +61,31 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "'" + userMessage + "' User message is not shown in conversation area");
     }
 
-    @Then ("^Visual indicator (.*) with (.*) text, (.*) name and time is shown$")
+    @Then ("^Visual indicator (.*) with \"(.*)\" text, (.*) name and time is shown$")
     public void verifyVisualIndicators(String indicator, String message, String agent){
-        String agentName = getAgentName(agent);
-        String messageWithName = message + " " + agentName;
+        String  generatedMessage = message + " " + getAgentName(agent);
+        validateIndicators(indicator, generatedMessage, agent);
+    }
+
+    @Then ("^Transfer indicator (.*) with \"(.*)\" text, (.*) name \" to \" (.*) name and time is shown$")
+    public void verifyTransferIndicators(String indicator, String message, String firstAgent, String secondAgent){
+        String generatedMessage = message + " " + getAgentName(firstAgent) + " to " + getAgentName(secondAgent);
+        validateIndicators(indicator, generatedMessage, secondAgent);
+    }
+
+    @Then ("^Transfer reject indicator (.*) with First agent name and \"(.*)\" text")
+    public void verifyRejectedIndicator(String indicator, String message) {
+        String generatedMessage = getAgentName("First agent") + " " + message;
+        String indicatorFromUI = getChatBody("Second agent").getIndicatorsText(indicator);
+        Assert.assertEquals(indicatorFromUI, generatedMessage.trim(), indicator + " has incorrect text");
+    }
+
+    private void validateIndicators(String indicator, String generatedMessage, String agent){
         String indicatorFromUI = getChatBody(agent).getIndicatorsText(indicator);
         String time = indicatorFromUI.substring(indicatorFromUI.length()-8);
         String massageWithNameUI = indicatorFromUI.substring(0, indicatorFromUI.length()-8).trim();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(messageWithName.trim(), massageWithNameUI, indicator + " has incorrect text");
+        softAssert.assertEquals(massageWithNameUI, generatedMessage.trim(), indicator + " has incorrect text");
         softAssert.assertTrue(time.matches("^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])(:[0-5][0-9])?$"), indicator + " time is not shown");
         softAssert.assertAll();
     }
