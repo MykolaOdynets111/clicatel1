@@ -9,7 +9,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
         "release",
         "structuredText"
 })
-public class TextEvent {
+public class TextEvent implements OrcaEventType {
 
     @JsonProperty("eventType")
     protected EventType eventType;

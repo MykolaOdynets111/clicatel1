@@ -19,7 +19,7 @@ public class MessageRequest extends MessageBase{
     @JsonProperty("messageId")
     private String messageId;
     @JsonProperty("context")
-    private DotControlRequestMessageContext context;
+    private DotControlRequestContextInterface context;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -33,7 +33,7 @@ public class MessageRequest extends MessageBase{
         this.setMessage(message);
 
         this.messageId = faker.code().ean8();
-        this.context = new DotControlRequestMessageContext();
+//        this.context = new DotControlRequestMessageContext();
     }
 
     @JsonProperty("messageId")
@@ -47,12 +47,12 @@ public class MessageRequest extends MessageBase{
     }
 
     @JsonProperty("context")
-    public DotControlRequestMessageContext getContext() {
+    public DotControlRequestContextInterface getContext() {
         return context;
     }
 
     @JsonProperty("context")
-    public void setContext(DotControlRequestMessageContext context) {
+    public void setContext(DotControlRequestContextInterface context) {
         this.context = context;
     }
 

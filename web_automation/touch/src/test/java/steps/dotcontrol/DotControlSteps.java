@@ -5,6 +5,7 @@ import apihelper.APIHelperDotControl;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
+import com.google.common.io.Files;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -24,6 +25,8 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +41,7 @@ public class DotControlSteps implements WebWait {
     private static ThreadLocal<DotControlInitRequest> initCallBody = new ThreadLocal<>();
     private static ThreadLocal<Response> responseOnSentRequest = new ThreadLocal<>();
     private static ThreadLocal<String> chatIDTranscript = new ThreadLocal<>();
+    public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
     Faker faker = new Faker();
 
     public static void setChatIDTranscript(String chatId){
@@ -77,11 +81,32 @@ public class DotControlSteps implements WebWait {
     }
 
 
-    public void createORCAIntegration(){
+    @Given ("^User send (.*) attachment with .Control$")
+    public void sendAttachment(String fileName){
+        File pathToFile = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
+        File renamed =  new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" +  newName);
+        try {
+            Files.copy(pathToFile, renamed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaFileName.set(newName);
+        String fileID = APIHelperDotControl.uploadTheFile(renamed, apiToken.get());
 
+        updateMCBForAttachmentMessage(fileID);
+
+        sendMessageCall();
     }
 
-    @Given("Create second .Control integration for (.*) tenant")
+    private void updateMCBForAttachmentMessage(String fileId){
+        messageCallBody.get().setMessageType("ATTACHMENT");
+        messageCallBody.get().setContext(new DotControlRequestAttachmentContext(fileId));
+        messageCallBody.get().setMessage(null);
+        messageCallBody.get().setMessageId(""+faker.number().randomNumber(7, false));
+    }
+
+    @Given("^Create second .Control integration for (.*) tenant$")
     public void createSecondIntegration(String tenantOrgName){
             createIntegration(tenantOrgName, "fbmsg");
     }
@@ -94,7 +119,7 @@ public class DotControlSteps implements WebWait {
                 "Wrong status code after trying to create second integration");
     }
 
-    @Given("Update .Control integration for (.*) tenant")
+    @Given("^Update .Control integration for (.*) tenant$")
     public void updateIntegration(String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
 

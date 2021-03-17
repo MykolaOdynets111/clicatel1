@@ -8,6 +8,8 @@ Feature: Profile info for twitter user
     Given Open twitter page of General Bank Demo
     Given Open direct message channel
 
+@skip
+#commented according to Amrit
   Scenario: Twitter: Customer 360 info for twitter user
     When User sends twitter direct message regarding to support
     Then Agent has new conversation request from twitter user

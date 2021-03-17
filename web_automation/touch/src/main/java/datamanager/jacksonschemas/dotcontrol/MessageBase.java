@@ -14,7 +14,8 @@ import java.util.Map;
         "referenceId",
         "conversationId",
         "messageType",
-        "message"
+        "message",
+        "timestamp"
 })
 public class MessageBase {
 
@@ -30,6 +31,9 @@ public class MessageBase {
     private String messageType;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("timestamp")
+    private long timestamp;
+
 
     @JsonProperty("apiToken")
     public String getApiToken() {
@@ -91,5 +95,13 @@ public class MessageBase {
         this.message = message;
     }
 
+    @JsonProperty("timestamp")
+    public long getTimestamp() {
+        return timestamp;
+    }
+    @JsonProperty("timestamp")
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 
 }

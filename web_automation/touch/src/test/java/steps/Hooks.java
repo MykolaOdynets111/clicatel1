@@ -6,6 +6,7 @@ import apihelper.*;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import cucumber.api.java.eo.Do;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
@@ -472,6 +473,7 @@ public class Hooks implements JSHelper {
         AbstractAgentSteps.cleanAllPages();
         AbstractPortalSteps.cleanAllPortalPages();
         DefaultTouchUserSteps.mediaFileName.remove();
+        DotControlSteps.mediaFileName.remove();
         ApiHelper.clientProfileId.remove();
     }
 

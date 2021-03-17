@@ -188,7 +188,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(0).getClientId()+")");
         soft.assertTrue(getLeftMenu(agent)
                         .isNewConversationIsShown(
-                                createdChatsViaDotControl.get(1).getInitContext().getFullName(),30),
+                                createdChatsViaDotControl.get(1).getInitContext().getFullName(),40),
                 "There is no new conversation request on Agent Desk (Client name: "+createdChatsViaDotControl.get(1).getClientId()+")");
         soft.assertAll();
     }

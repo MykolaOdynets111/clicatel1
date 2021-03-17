@@ -1,4 +1,5 @@
 @skip
+#  edit feature was removed from the app
 @agent_feedback
 Feature: Verification CRM ticket editing
 

@@ -1,4 +1,5 @@
 package datamanager.jacksonschemas.orca;
+import datamanager.jacksonschemas.orca.event.OrcaEventType;
 import datamanager.jacksonschemas.orca.event.TextEvent;
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
 
@@ -12,7 +13,7 @@ public class Content {
     @JsonProperty("extraFields")
     private ExtraFields extraFields;
     @JsonProperty("event")
-    private TextEvent event;
+    private OrcaEventType event;
 
     public Content() {
     }
@@ -33,12 +34,12 @@ public class Content {
     }
 
     @JsonProperty("event")
-    public TextEvent getEvent() {
+    public OrcaEventType getEvent() {
         return event;
     }
 
     @JsonProperty("event")
-    public void setEvent(TextEvent event) {
+    public void setEvent(OrcaEventType event) {
         this.event = event;
     }
 

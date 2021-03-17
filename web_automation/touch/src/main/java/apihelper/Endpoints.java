@@ -193,6 +193,8 @@ public class Endpoints {
 
     public static String DOT_CONTROL_INIT_MESSAGE = URLs.getBaseSocialUrl() + "http/1.0/init";
 
+    public static String DOT_CONTROL_ATTACHMENTS = URLs.getBaseSocialUrl() + "http/1.0/attachments";
+
     // ====================  Departments ================= //
 
     public static String DEPARTMENTS = URLs.getTouchApiBaseURL() + "departments";

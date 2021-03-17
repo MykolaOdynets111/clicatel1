@@ -10,7 +10,9 @@ import io.restassured.response.Response;
 import mc2api.auth.PortalAuthToken;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testng.Assert;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -61,26 +63,46 @@ public class APIHelperDotControl {
 
 
 
+//    public static Response sendMessage(MessageRequest requestMessage){
+//        ZoneId zoneId = TimeZone.getDefault().toZoneId();
+//        LocalDateTime ldt = LocalDateTime.now(zoneId);
+//        ZonedDateTime zdt = ldt.atZone(zoneId);
+//        long timestamp = zdt.toInstant().toEpochMilli();
+//        return RestAssured.given().log().all()
+//                    .contentType(ContentType.JSON)
+//                    .body("{\n" +
+//                            "  \"apiToken\": \""+ requestMessage.getApiToken() +"\",\n" +
+//                            "  \"clientId\": \"" +requestMessage.getClientId()+ "\",\n" +
+//                            "  \"context\": {},\n" +
+//                            "  \"message\": \""+ requestMessage.getMessage() +"\",\n" +
+//                            "  \"messageId\": null,\n" +
+//                            "  \"messageType\": \"PLAIN\",\n" +
+//                            "  \"referenceId\": \"string\",\n" +
+//                            "  \"subscriptionSpecificId\": \"string\",\n" +
+//                            "  \"timestamp\": " + timestamp +  "\n" +
+//                            "}")
+//                    .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
+//    }
+
     public static Response sendMessage(MessageRequest requestMessage){
+        ObjectMapper mapper = new ObjectMapper();
         ZoneId zoneId = TimeZone.getDefault().toZoneId();
         LocalDateTime ldt = LocalDateTime.now(zoneId);
         ZonedDateTime zdt = ldt.atZone(zoneId);
         long timestamp = zdt.toInstant().toEpochMilli();
-        return RestAssured.given().log().all()
+        requestMessage.setTimestamp(timestamp);
+        Response resp = null;;
+        try {
+            resp = RestAssured.given().log().all()
                     .contentType(ContentType.JSON)
-                    .body("{\n" +
-                            "  \"apiToken\": \""+ requestMessage.getApiToken() +"\",\n" +
-                            "  \"clientId\": \"" +requestMessage.getClientId()+ "\",\n" +
-                            "  \"context\": {},\n" +
-                            "  \"message\": \""+ requestMessage.getMessage() +"\",\n" +
-                            "  \"messageId\": null,\n" +
-                            "  \"messageType\": \"PLAIN\",\n" +
-                            "  \"referenceId\": \"string\",\n" +
-                            "  \"subscriptionSpecificId\": \"string\",\n" +
-                            "  \"timestamp\": " + timestamp +  "\n" +
-                            "}")
+                    .body(mapper.writeValueAsString(requestMessage))
                     .post(Endpoints.DOT_CONTROL_TO_BOT_MESSAGE);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return resp;
     }
+
 
     public static Response sendMessageWithWait(MessageRequest requestMessage){
         Response resp = sendMessage(requestMessage);
@@ -139,6 +161,21 @@ public class APIHelperDotControl {
             e.printStackTrace();
         }
         return resp;
+    }
+
+    public static String uploadTheFile(File fileToUpload, String apiToken){
+        Response resp = RestAssured
+                .given().log().all()
+                .multiPart("apiToken", apiToken)
+                .multiPart("file", fileToUpload)
+                .post(Endpoints.DOT_CONTROL_ATTACHMENTS)
+                .thenReturn();
+        if (! (resp.statusCode() == 200)) {
+            Assert.fail("Attachment upload was not successful \n" +
+                    "Status code: " +  resp.statusCode() + "\n" +
+                    "Body: " + resp.getBody().asString());
+        }
+        return resp.getBody().jsonPath().getString("id");
     }
 
 }

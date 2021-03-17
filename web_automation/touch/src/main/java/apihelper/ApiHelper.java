@@ -234,6 +234,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .contentType(ContentType.JSON)
                 .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
+
         try {
             return resp.getBody().as(SupportHoursItem.class);
         } catch(ClassCastException e){

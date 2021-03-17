@@ -35,7 +35,7 @@ public class ChatAttachment extends AbstractWidget {
     private WebElement playMP4button;
 
     public String getFileName(){
-        return getTextFromElem(this.getCurrentDriver(), fileName, 3, "File Name");
+        return getTextFromElem(this.getCurrentDriver(), fileName, 25, "File Name");
     }
 
     public String getFileSize(){

@@ -107,7 +107,7 @@ public class ChatBody extends AbstractUIElement {
     public boolean isAttachmentMessageShown() {
         return wheelScrollDownAndIsDisplayed(this.getCurrentDriver(),
                 this.getCurrentDriver().findElement(By.cssSelector(scrollElement)),
-                attachmentMessage, 3);
+                attachmentMessage, 10);
         // return isElementShown(this.getCurrentDriver(), attachmentMessage, 3);
     }
 

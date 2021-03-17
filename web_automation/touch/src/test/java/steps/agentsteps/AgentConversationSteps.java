@@ -20,6 +20,7 @@ import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
+import steps.dotcontrol.DotControlSteps;
 import sun.management.resources.agent;
 
 import java.io.File;
@@ -126,11 +127,15 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getChatAttachmentForm("agent").clickSendButton();
     }
 
-    @Then ("^Attachment message is shown for Agent$")
-    public void verifyAttachmentPresent(){
+    @Then ("^Attachment message (?:from (.*) is|is) shown for Agent$")
+    public void verifyAttachmentPresent(String channel){
+        String nameOfFile = DefaultTouchUserSteps.mediaFileName.get();
+        if(!(channel == null)){
+            nameOfFile = DotControlSteps.mediaFileName.get();
+        }
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(getChatBody("agent").isAttachmentMessageShown(), "No Attachment message was shown");
-        soft.assertEquals(getChatBody("agent").getAttachmentFile().getFileName(), DefaultTouchUserSteps.mediaFileName.get(),
+        soft.assertEquals(getChatBody("agent").getAttachmentFile().getFileName(), nameOfFile,
                 "File name is not the same as the file name which user sent");
         soft.assertAll();
     }

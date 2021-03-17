@@ -9,30 +9,17 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "timestamp",
         "source",
         "context"
 })
 public class MessageResponse extends MessageBase{
 
-    @JsonProperty("timestamp")
-    private Long timestamp;
     @JsonProperty("source")
     private Object source;
     @JsonProperty("context")
     private BotMessageResponseContext context;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("timestamp")
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    @JsonProperty("timestamp")
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
 
     @JsonProperty("source")
     public Object getSource() {
@@ -73,7 +60,7 @@ public class MessageResponse extends MessageBase{
                 ", conversationId='" + this.getConversationId() + '\'' +
                 ", messageType='" + this.getMessageType() + '\'' +
                 ", message='" + this.getMessage() + '\'' +
-                ", timestamp=" + timestamp +
+                ", timestamp=" + this.getTimestamp() +
                 ", source=" + source +
                 ", context=" + context +
                 ", additionalProperties=" + additionalProperties +

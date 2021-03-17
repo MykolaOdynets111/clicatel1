@@ -81,7 +81,7 @@ public interface WebActions extends WebWait {
             waitForElementToBeVisible(driver, element, wait);
             return element.getText().trim();
         } catch (TimeoutException|NoSuchElementException e){
-            Assert.fail("Cannot get text from  '" + elemName + "' because element is not visible.");
+            Assert.fail("Cannot get text from '" + elemName + "' because element is not visible.");
             return "no text elem";
         }
     }

@@ -13,7 +13,7 @@ import java.util.Map;
         "phone",
         "ticket"
 })
-public class DotControlRequestMessageContext {
+public class DotControlRequestMessageContext implements DotControlRequestContextInterface{
 
     @JsonProperty("email")
     private String email;

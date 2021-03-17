@@ -1,15 +1,24 @@
 package steps;
 
+import apihelper.APIHelperDotControl;
 import apihelper.ApiORCA;
+import com.github.javafaker.Faker;
+import com.google.common.io.Files;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import datamanager.jacksonschemas.orca.OrcaEvent;
+import datamanager.jacksonschemas.orca.event.MediaEvent;
 import interfaces.WebWait;
 import io.restassured.response.Response;
 import javaserver.OrcaServer;
 import javaserver.Server;
+import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 
+import java.io.*;
+import java.net.URLConnection;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +27,7 @@ public class ORCASteps implements WebWait {
     private static final ThreadLocal<OrcaEvent> orcaMessageCallBody = new ThreadLocal<>();
     private static final ThreadLocal<String> apiToken = new ThreadLocal<>();
     private static final ThreadLocal<String> clientId = new ThreadLocal<>();
+    public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 
     public static String getClient() {
         return clientId.get();
@@ -72,7 +82,7 @@ public class ORCASteps implements WebWait {
         return "create";
     }
 
-    @Then("Verify Orca returns (.*) response during (.*) seconds")
+    @Then("^Verify Orca returns (.*) response during (.*) seconds$")
     public void verifyOrcaReturnedCorrectResponse(String expectedResponse, int wait) {
 
         if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
@@ -82,7 +92,33 @@ public class ORCASteps implements WebWait {
                 String.format("Message is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
                         "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
+    }
 
+    @When("^User send (.*) attachment with orca$")
+    public void sendAttachment(String fileName){
+        File pathToFile = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
+        File renamed =  new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" +  newName);
+        try {
+            Files.copy(pathToFile, renamed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaFileName.set(newName);
+        orcaMessageCallBody.get().getContent().setEvent(createMediaEvent(renamed));
+
+        ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+    }
+
+    private MediaEvent createMediaEvent(File file){
+        Path path= file.toPath();
+        String mimeType = "";
+        try {
+            mimeType = java.nio.file.Files.probeContentType(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new MediaEvent(file);
     }
 
     private boolean isResponseComeToServerForClient(String message, String clientId, int wait) {
