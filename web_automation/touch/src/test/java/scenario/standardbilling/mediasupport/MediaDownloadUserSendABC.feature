@@ -1,6 +1,6 @@
 #Run only in remote mode.
-@skip
 #  skipp till shared folder will be ready
+@skip
 @orca_api
 Feature: Media Support: User send files and agent downloading ABC
 

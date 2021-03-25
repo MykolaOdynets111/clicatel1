@@ -20,8 +20,8 @@ Feature: Interaction with CRM tickets (agent mode)
     Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is created on backend with correct information
 
-@skip
 #commented according to Amrit
+@skip
   Scenario: Agent is able to fill only "Link" and create CRM ticket
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
@@ -35,8 +35,8 @@ Feature: Interaction with CRM tickets (agent mode)
     Then User should see 'exit' text response for his 'connect to Support' input
     Then CRM ticket is created on backend with correct information
 
-@skip
 #commented according to Amrit
+@skip
   Scenario: Agent is able fill only "Number" and create CRM ticket
     When User enter connect to Support into widget input field
     Then Agent has new conversation request

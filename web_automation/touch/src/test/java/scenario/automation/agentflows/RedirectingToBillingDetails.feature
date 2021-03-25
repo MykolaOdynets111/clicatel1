@@ -16,8 +16,8 @@ Feature: Admin of tenant with Starter plan should be redirected on the billing d
     When Admin clicks 'Setup Billing' button
     Then Billing Details page is opened
 
-@skip
 #commented according to Amrit
+@skip
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5969")
   Scenario: Billing Details modal window should be displayed for Twitter integration if there is no billing info added
     When Admin select Touch in left menu and Configure Touch in submenu
