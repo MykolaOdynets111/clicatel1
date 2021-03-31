@@ -45,7 +45,9 @@ public enum MC2Account {
     TESTING_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", TESTING, "", "ff8080816b545c7c016b561eb8530040"),
     TESTING_ADMIN("", "admin@clickatell.com", "j39(84%jUyct#27H", "Clickatell", "", TESTING, "", "10833173608889581573"),
 
-    TOUCH_GO_NEW_ACCOUNT("", "", "p@$$w0rd4te$t","", "", TESTING, "","")
+    TOUCH_GO_NEW_ACCOUNT("", "", "p@$$w0rd4te$t","", "", TESTING, "",""),
+
+    STAGE_PERFOMANCE_ACCOUNT("starter", "touchperform@gmail.com", "p@$$w0rd4te$t", "perfomance", "Perfomance", STAGE, "", "")
     ;
 
     String touchGoPlan;

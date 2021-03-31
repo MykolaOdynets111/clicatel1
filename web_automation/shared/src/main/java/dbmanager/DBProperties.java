@@ -24,7 +24,7 @@ public enum DBProperties {
     DEMO_MC2(DEMO, "mc2", "mc2", "mc2_platform", "demo_mc2_platform", "jdbc:mysql://db-primary-01.mc2-dev.eu-west-1.aws.clickatell.com:4001/demo_mc2_platform?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
 //    STAGE_MC2_LOCAL(STAGE, "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://db-primary-01a.platform.stage.eu-west-1.aws.clickatell.com:3308"), //For debug only
-    STAGE_MC2_REMOTE(STAGE, "mc2", "t.qa.automation", "T2ytm2t78bx2", "mc2_prod", "jdbc:mysql://172.26.3.4:3308"),
+    STAGE_MC2_REMOTE(STAGE, "mc2", "dev", "iamgroot", "mc2_prod", "jdbc:mysql://db-primary-01-nlb-7464f67ab3a4f79b.elb.eu-west-1.amazonaws.com:4001/mc2_prod?characterEncoding=UTF-8&useUnicode=yes&autoReconnect=true"),
 
     ;
 

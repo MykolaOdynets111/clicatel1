@@ -81,7 +81,8 @@ public enum Agents {
     QA_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", QA),
     TESTING_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", TESTING),
 
-
+    // ======= Stage tenant used for performance
+    STAGE_AGENT_GEN_BANK("touchperform@gmail.com", "p@$$w0rd4te$t", "Perfomance", STAGE),
 
     // ======= User of newly created tenant for touch go tests =========== //
     TOUCH_GO_ADMIN("", "p@$$w0rd4te$t", "", TESTING),

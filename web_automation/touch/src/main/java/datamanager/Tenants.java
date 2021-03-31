@@ -106,6 +106,9 @@ public class Tenants {
             case "Standard Billing":
                 setTenantInfo("standardbilling", "Standard Billing");
                 break;
+            case "Perfomance":
+                setTenantInfo("perfomance", "Performance");
+                break;
             default:
                 Tenants.setTenantUnderTestOrgName(tenantOrgName);
                 Tenants.setTenantUnderTestName(
