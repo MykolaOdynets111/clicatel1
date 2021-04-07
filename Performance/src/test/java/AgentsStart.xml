@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Pull request" data-provider-thread-count="20" >
+    <test name="Agent Logins" >
+        <classes>
+            <class name="StartManyAgents" />
+        </classes>
+    </test>
+</suite>

@@ -1,6 +1,6 @@
 public class URL {
 
-    private static String env = "demo";
+    private static String env = "stage";
     public static String tenantId = "ff8080815fc3fa12015fcaa09d25000b";
 
     public static String agentLoginPage = "https://" + env + "-portal.clickatelllabs.com/#/login";

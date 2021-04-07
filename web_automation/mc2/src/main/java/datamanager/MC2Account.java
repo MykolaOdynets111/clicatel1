@@ -47,8 +47,7 @@ public enum MC2Account {
 
     TOUCH_GO_NEW_ACCOUNT("", "", "p@$$w0rd4te$t","", "", TESTING, "",""),
 
-    STAGE_PERFOMANCE_ACCOUNT("starter", "touchperform@gmail.com", "p@$$w0rd4te$t", "perfomance", "Perfomance", STAGE, "", "")
-    ;
+    STAGE_PERFORMANCE_ACCOUNT("starter", "touchperformance1@gmail.com", "p@$$w0rd4te$t", "performance", "Performance", STAGE, "", "");
 
     String touchGoPlan;
     String email;

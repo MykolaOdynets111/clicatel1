@@ -1,9 +1,11 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -88,6 +90,31 @@ public class AgentSteps implements Waits {
         waitForElementToBeClickable(driver, adminIcon, 60);
         return this;
     }
+
+    public AgentSteps loginWithAgents(Agents agent){
+        waitForElementToBeClickable(driver, emailInput, 30);
+        emailInput.clear();
+        emailInput.sendKeys(agent.getEmail());
+        passInput.clear();
+        passInput.sendKeys(agent.getUserPass());
+        waitForElementToBeClickable(driver, loginButton, 20);
+        loginButton.click();
+//        waitForElementToBeClickable(driver, adminIcon, 60);
+        return this;
+    }
+
+    public void takeScreenshot(Agents agent){
+        System.out.println(agent.name() + " take screenshot " + agent.getEmail());
+        WebDriver augmentedDriver = new Augmenter().augment(driver);
+        String pathForSave = System.getProperty("user.dir") +"\\src\\test\\screenshots\\" + agent.name() +".png";
+        File scrFile = ((TakesScreenshot)augmentedDriver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(scrFile, new File(pathForSave));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public AgentSteps openAgentDesk(){
        driver.get(URL.agentDesk);

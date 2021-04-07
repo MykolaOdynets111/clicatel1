@@ -10,14 +10,14 @@ import java.util.concurrent.TimeUnit;
 public class BrowserImplementation {
 
     public static final int WAIT= 222;
-    private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4445/wd/hub";
+    private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
 
     public WebDriver browserImplementation() {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"\\chromedriver.exe");
 //        WebDriver driver = new ChromeDriver(); //uncomment in case of local run
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--window-size=1920,1080");
-//        options.addArguments("--headless");
+        options.addArguments("--headless");
         RemoteWebDriver driver = new RemoteWebDriver(getUrl(), options);
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
