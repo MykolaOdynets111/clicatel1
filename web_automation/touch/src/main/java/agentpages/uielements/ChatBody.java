@@ -30,7 +30,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".spinner")
     private WebElement spinner;
 
-    @FindBy(css = "[selenium-id=empty-avatar]")
+    @FindBy(xpath = ".//li[contains(@class, 'from')]/div[contains(@class, 'avatar')]")
     private WebElement userProfileIcon;
 
     @FindBy(css = ".cl-r-message.msg-agent_message.to .cl-r-avatar__image")
@@ -228,14 +228,9 @@ public class ChatBody extends AbstractUIElement {
                 .map(String::trim).mapToInt(Integer::parseInt).sum();
     }
 
-    public boolean isValidDefaultUserProfileIcon() {
-        File image = new File(System.getProperty("user.dir") + "/touch/src/test/resources/profileicons/user_default.png");
-        Boolean isValidIcon = isWebElementEqualsImage(this.getCurrentDriver(), userProfileIcon, image);
-        if (!isValidIcon) {
-            File image2 = new File(System.getProperty("user.dir") + "/touch/src/test/resources/profileicons/user_default_with_line.png");
-            isValidIcon = isWebElementEqualsImage(this.getCurrentDriver(), userProfileIcon, image2);
-        }
-        return isValidIcon;
+    public String isValidDefaultUserProfileIcon() {
+        wheelScrollUpToElement(this.getCurrentDriver(), this.getWrappedElement(), userProfileIcon, 0);
+        return getTextFromElem(this.getCurrentDriver(), userProfileIcon, 1,"User Initial Icon").toUpperCase();
     }
 
     public boolean isValidAgentAvatarIsShown() {

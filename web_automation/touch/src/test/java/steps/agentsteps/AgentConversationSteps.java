@@ -555,9 +555,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
-    @Then("^Default user image is shown$")
-    public void verifyDefaultUserImage() {
-        Assert.assertTrue(getChatBody("main agent").isValidDefaultUserProfileIcon(),
+    @Then("^(.*) user initials is shown$")
+    public void verifyDefaultUserImage(String integration) {
+        String userName = getUserName(integration);
+        String initials = userName.substring(0,1);
+        if(userName.contains(" ")){
+            initials += userName.split(" ")[1].substring(0,1);
+        }
+        Assert.assertEquals(getChatBody("main agent").isValidDefaultUserProfileIcon(), initials.toUpperCase(),
                 "Incorrect default user picture shown");
     }
 
@@ -566,6 +571,5 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(getChatBody("main agent").isValidAgentAvatarIsShown(),
                 "Incorrect default user picture shown");
     }
-
 
 }
