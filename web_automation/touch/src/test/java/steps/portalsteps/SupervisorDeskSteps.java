@@ -249,15 +249,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
 
     @When("Verify that correct messages and timestamps are shown on Chat View")
-    public void openChatView(){
-        SoftAssert soft = new SoftAssert();
+    public void openChatViewAndVerifyMessages(){
         List<String> messagesFromChatBody = AgentConversationSteps.getMessagesFromChatBody().get();
         ChatBody inboxChatBody = getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient());
         messagesFromChatBody.removeAll(Collections.singleton(""));
-        soft.assertEquals(inboxChatBody.getAllMessages(), messagesFromChatBody
+        Assert.assertEquals(inboxChatBody.getAllMessages(), messagesFromChatBody
                 , "Incorrect messages with times were shown on Chat view");
         AgentConversationSteps.getMessagesFromChatBody().remove();
-        soft.assertAll();
+    }
+
+    @When("Verify Agent Icon is shown on Supervisor Desk Chat View")
+    public void openChatViewAndCheckIcon(){
+        ChatBody inboxChatBody = getSupervisorDeskPage().openInboxChatBody(DotControlSteps.getClient());
+        Assert.assertTrue(inboxChatBody.isValidAgentAvatarIsShown(),
+                "Incorrect agent picture shown");
     }
 
     @When("Verify that closed chats have Send email button")

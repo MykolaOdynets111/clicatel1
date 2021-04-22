@@ -569,7 +569,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^Correct agent image is shown in conversation area$")
     public void verifyAgentImage() {
         Assert.assertTrue(getChatBody("main agent").isValidAgentAvatarIsShown(),
-                "Incorrect default user picture shown");
+                "Incorrect agent picture shown");
     }
 
 }

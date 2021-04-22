@@ -1,7 +1,7 @@
 Feature: Supervisor desk
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-38811")
-  Scenario: Supervisor desk:: Default live chats Filters
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-7406")
+  Scenario: Supervisor desk:: Verify that channel status "All Channels" and sentiment "All Sentiments" selected by default when a supervisor open supervisor desk
     Given I open portal
     And Login into portal as an admin of Automation account
     When I select Touch in left menu and Supervisor Desk in submenu

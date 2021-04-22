@@ -667,7 +667,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
         }
     }
 
-    @When("^I launch chatdesk from portal$")
+    @When("^Agent launch agent desk from portal$")
     public void launchChatdeskFromPortal(){
         getAdminPortalMainPage().launchChatDesk();
         AbstractAgentSteps.getAgentHomeForMainAgent().waitForLoadingInLeftMenuToDisappear(6, 10);

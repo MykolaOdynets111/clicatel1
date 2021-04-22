@@ -14,7 +14,7 @@ Feature: Managing Agent's photo
     When Upload new photo
     Then New image is saved on portal and backend
     When Admin click BACK button in left menu
-    When I launch chatdesk from portal
+    When Agent launch agent desk from portal
     When User enter connect to Support into widget input field
     Then Agent has new conversation request
     When Agent click on new conversation request from touch
