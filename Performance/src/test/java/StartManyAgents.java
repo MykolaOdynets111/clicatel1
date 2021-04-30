@@ -16,7 +16,7 @@ public class StartManyAgents {
     }
 
     private Agents[][] getAgents(){
-        Agents[][] agents= new Agents[8][1];
+        Agents[][] agents= new Agents[20][1];
         int i =0;
         for (Agents agent: Agents.values()){
             agents[i][0] = agent;
