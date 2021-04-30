@@ -1,6 +1,5 @@
 package steps;
 
-import apihelper.APIHelperDotControl;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
@@ -8,16 +7,15 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import datamanager.jacksonschemas.orca.OrcaEvent;
-import datamanager.jacksonschemas.orca.event.MediaEvent;
+import datamanager.jacksonschemas.orca.event.Event;
 import interfaces.WebWait;
 import io.restassured.response.Response;
 import javaserver.OrcaServer;
 import javaserver.Server;
-import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 
-import java.io.*;
-import java.net.URLConnection;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -110,7 +108,7 @@ public class ORCASteps implements WebWait {
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
-    private MediaEvent createMediaEvent(File file){
+    private Event createMediaEvent(File file){
         Path path= file.toPath();
         String mimeType = "";
         try {
@@ -118,7 +116,7 @@ public class ORCASteps implements WebWait {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new MediaEvent(file);
+        return new Event(file);
     }
 
     private boolean isResponseComeToServerForClient(String message, String clientId, int wait) {

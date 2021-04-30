@@ -1,5 +1,6 @@
 #Run only in remote mode.
 #  skipp till shared folder will be ready
+# Test is not ready stuck on sending media files
 @skip
 @orca_api
 Feature: Media Support: User send files and agent downloading ABC
