@@ -71,7 +71,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=open-filter-tab-btn]")
     private WebElement filterButton;
 
-    @FindBy(xpath =".//span[@class='cl-r-filter-button__label']/following-sibling::button")
+    @FindBy(css ="button .cl-r-button--reset-only")
     private WebElement filterRemove;
 
     @FindAll({

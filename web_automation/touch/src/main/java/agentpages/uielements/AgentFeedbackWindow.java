@@ -76,7 +76,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     private WebElement loadingState;
 
     public AgentFeedbackWindow waitForLoadingData(){
-        waitForElementToBeInVisibleByCss(this.getCurrentDriver(), ".cl-animated-ellipsis",  5);
+        waitForAppearAndDisappearByCss(this.getCurrentDriver(), ".cl-animated-ellipsis",  3, 5);
         return this;
     }
 
