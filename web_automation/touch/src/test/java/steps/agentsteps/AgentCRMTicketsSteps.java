@@ -336,6 +336,8 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
         Map<String, String>  sessionDetails = DBConnector.getActiveSessionDetailsByClientProfileID
                 (ConfigManager.getEnv(), getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()));
         Map<String, String> dataForNewCRMTicket = new HashMap<>();
+        if (link.isEmpty())link=null;
+        if (ticketNumber.isEmpty())ticketNumber=null;
         Collections.sort(tags);
         dataForNewCRMTicket.put("clientProfileId", sessionDetails.get("clientProfileId"));
         dataForNewCRMTicket.put("conversationId", sessionDetails.get("conversationId"));

@@ -392,7 +392,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         waitSomeTime(waitFor);
     }
 
-    @And("^Wait for (.d*) second$")
+    @And("^Wait for (\\d*) second$")
     public void waitSomeTime(int waitFor){
         int waitTimeInMillis = waitFor * 1000;
         sleepFor(waitTimeInMillis);

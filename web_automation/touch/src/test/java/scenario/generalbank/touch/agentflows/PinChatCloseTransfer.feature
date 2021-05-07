@@ -19,7 +19,7 @@ Feature: Flagged chat is disabled to close and to transfer
   Scenario: Agent receives error message when tries to close the flagged chat
     When Agent click 'Flag chat' button
     Then Agent sees 'flag' icon in this chat
-    When Agent click "End chat" button
+    When Agent click "End chat" button without window loading
     Then Agent receives 'pin' error message
     When Agent click 'Unflag chat' button
     Then Agent do not see 'flag' icon in this chat

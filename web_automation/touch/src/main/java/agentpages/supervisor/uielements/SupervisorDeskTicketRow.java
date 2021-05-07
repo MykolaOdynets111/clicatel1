@@ -74,7 +74,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
         wheelScrollDownToElement(this.getCurrentDriver(),
                 findElemByCSS(this.getCurrentDriver(), scrollAreaCss), startDate, 3);
         String stringDate = getTextFromElem(this.getCurrentDriver(), startDate, 5, "Date cell").trim() + " " + LocalDateTime.now().getYear();
-        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("dd, MMM, HH:mm yyyy", Locale.US));
+        return LocalDateTime.parse(stringDate, DateTimeFormatter.ofPattern("d, MMM, HH:mm yyyy", Locale.US));
     }
 
     public LocalDateTime getEndDate(){

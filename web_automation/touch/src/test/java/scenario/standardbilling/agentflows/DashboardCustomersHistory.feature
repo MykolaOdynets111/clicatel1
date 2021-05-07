@@ -140,6 +140,7 @@ Feature: Dashboard: Customer History
     When Second agent closes chat
     Then User see NPS survey form
     When Submit survey form with no comment and 7 rate
+    And Wait for 60 second
     And Agent refresh current page
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard

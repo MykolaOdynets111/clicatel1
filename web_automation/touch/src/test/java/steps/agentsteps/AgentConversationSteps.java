@@ -392,6 +392,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().waitForLoadingData();
     }
 
+    @When("^(.*) click \"End chat\" button without window loading$")
+    public void clickEndChatButtonWWL(String agent) {
+        getAgentHomePage(agent).getChatHeader().clickEndChatButton();
+    }
+
     @Then("^(?:End chat|Agent Feedback) popup for (.*) should be opened$")
     public void verifyAgentFeedbackPopupOpened(String agent) {
         Assert.assertTrue(getAgentHomePage(agent).getAgentFeedbackWindow().isEndChatPopupShown(),

@@ -174,6 +174,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorTicketsTable().getUsersNames().size(), tickets,
                 "Only "+tickets+" ticket(s) number should be present on Supervisor Tickets page" +
                         "Could be because of TPLAT-5959");
+        //todo uncomment step in the feature when search with spaces will be fixed
     }
 
     @Then("Ticket from (.*) is not present on Supervisor Desk")

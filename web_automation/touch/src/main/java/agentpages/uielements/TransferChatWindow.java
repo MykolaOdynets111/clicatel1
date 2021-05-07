@@ -29,7 +29,7 @@ public class TransferChatWindow extends AbstractUIElement {
     private WebElement availableAgentOrDepartment;
 
     @FindBy(xpath = "//div[contains(@class, 'cl-r-select__option')]")
-    private List<WebElement> availableAgenOrDepartmenttList;
+    private List<WebElement> availableAgentsOrDepartmentsList;
 
     @FindBy(xpath = ".//div[@class='Select-control']")
     private WebElement dropDown;
@@ -121,14 +121,8 @@ public class TransferChatWindow extends AbstractUIElement {
             } catch (TimeoutException ignored){
             }
 
-            List<WebElement> availableDepartments = findElemsByCSS(this.getCurrentDriver(), availableDepartmentsNamesCss).stream()
-                    .filter(e -> getTextFromElem(getCurrentDriver(), e, 5, "Department from dropdown")
-                            .contains(departmentName))
-                    .collect(Collectors.toList());
-
-            if(availableDepartments.size() > 0) {
-                clickElem(this.getCurrentDriver(), availableDepartments.get(0), 5,
-                        "Department from dropdown");
+            if(availableAgentsOrDepartmentsList.size() > 0) {
+                availableAgentsOrDepartmentsList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().get().click();
                 return;
             } else {
                 if(isElementShown(this.getCurrentDriver(), refreshButton, 2)) {
@@ -147,8 +141,8 @@ public class TransferChatWindow extends AbstractUIElement {
         for(int i=0; i<15; i++){
             if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 2)) openAgentDropdownButton.click();
             waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
-            if(availableAgenOrDepartmenttList.size() >= 2) {
-                WebElement currentAgent = availableAgenOrDepartmenttList.stream().filter(e -> !(e.getText().contains("current chat assignment"))).findFirst().get();
+            if(availableAgentsOrDepartmentsList.size() >= 2) {
+                WebElement currentAgent = availableAgentsOrDepartmentsList.stream().filter(e -> !(e.getText().contains("current chat assignment"))).findFirst().get();
                 String agentName = currentAgent.getText();
                 executeJSclick(this.getCurrentDriver(), currentAgent);
                 return agentName;
@@ -163,7 +157,7 @@ public class TransferChatWindow extends AbstractUIElement {
         if(isElementRemoved(this.getCurrentDriver(), availableAgentOrDepartment, 2))
             clickElem(this.getCurrentDriver(), openAgentDropdownButton, 2, "Open agent dropdown");
         waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
-        return availableAgenOrDepartmenttList.stream()
+        return availableAgentsOrDepartmentsList.stream()
                         .map(e -> getTextFromElem(this.getCurrentDriver(), e, 3, "Agent in dropdown"))
                         .filter(e -> !(e.contains("current chat assignment")))
                         .collect(Collectors.toList());

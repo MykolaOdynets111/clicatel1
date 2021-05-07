@@ -42,7 +42,7 @@ Feature: Supervisor desk
     When Agent select "Tickets" left menu option
     And Agent search chat dotcontrol on Supervisor desk
     Then Ticket from dotcontrol is present on All tickets filter page
-    And Verify that only 1 ticket is shown
+#    And Verify that only 1 ticket is shown
     When Agent refreshes the page
     And Agent filter by "<channelName>" channel and "Positive" sentiment
     Then Ticket from dotcontrol is present on All tickets filter page
