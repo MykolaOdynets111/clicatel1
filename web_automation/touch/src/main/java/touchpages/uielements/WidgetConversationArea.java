@@ -219,7 +219,7 @@ public class WidgetConversationArea extends AbstractUIElement {
     }
 
     public boolean isAttachmentMessageShown(){
-        return isElementShown(this.getCurrentDriver(), attachmentForm, 3);
+        return isElementShown(this.getCurrentDriver(), attachmentForm, 6);
     }
 
     public ChatAttachment getAttachmentFile(){

@@ -15,6 +15,10 @@ import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
@@ -27,10 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -148,10 +149,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @Then("^File is not changed after uploading and downloading$")
     public void verifyFilesEquality(){
         File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
-//        Uncomment in case remote run from PC(\\\\172.31.69.0\\selenium\\ remote shared folder).
-//        Or change download location in case run locally from PC
-//        String sharedFolder =  = ("\\\\172.31.69.0\\selenium\\");
-        String sharedFolder = "/selenium/";
+        String sharedFolder = File.separator + File.separator+ "172.31.76.251"+File.separator + "Share" + File.separator
+                + "chrome" + File.separator;
         File downloadedFile = new File( sharedFolder +  DefaultTouchUserSteps.mediaFileName.get());
         for (int i=0; i < 10; i++){
             try (Stream<Path> walk = java.nio.file.Files.walk(Paths.get(sharedFolder))) {
@@ -164,8 +163,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 e.printStackTrace();
             }
             if (i== 9){
-                throw new AssertionError("File " + downloadedFile.getPath()
-                        + " was not downloaded to the shared folder");
+                Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder");
             }
             waitFor(2000);
         }

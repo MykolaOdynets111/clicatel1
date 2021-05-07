@@ -1,6 +1,4 @@
 #Run only in remote mode.
-#  skipp till shared folder will be ready
-@skip
 Feature: Media Support: Agent sends files and user downloads
 
   Background:
