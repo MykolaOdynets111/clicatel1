@@ -83,9 +83,9 @@ public class DotControlSteps implements WebWait {
 
     @Given ("^User send (.*) attachment with .Control$")
     public void sendAttachment(String fileName){
-        File pathToFile = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." + fileName);
         String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
-        File renamed =  new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" +  newName);
+        File renamed =  new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" +  newName);
         try {
             Files.copy(pathToFile, renamed);
         } catch (IOException e) {
