@@ -41,6 +41,10 @@ public enum MC2Account {
     DEMO_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", DEMO, "", ""),
     QA_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", QA, "", ""),
 
+    DEV_ATTACHMENTS_ADMIN("standard","touchattachments@gmail.com", "p@$$w0rd4te$t", "attachments","Attachments", DEV, "", ""),
+    DEMO_ATTACHMENTS_ADMIN("standard","touchattachments@gmail.com", "p@$$w0rd4te$t", "attachments", "Attachments", DEMO, "", ""),
+    QA_ATTACHMENTS_ADMIN("standard","touchattachments@gmail.com", "p@$$w0rd4te$t", "attachments", "Attachments", QA, "", ""),
+
     TESTING_USER_WITH_WA("", "click.testing.dev.user+wa@gmail.com", "12345678", "user_with_with_wa_account", "", TESTING, "", ""),
     TESTING_BILLING_ADMIN("standard", "standardbilling@mailinator.com", "p@$$w0rd4te$t", "standardbilling", "Standard Billing", TESTING, "", "ff8080816b545c7c016b561eb8530040"),
     TESTING_ADMIN("", "admin@clickatell.com", "j39(84%jUyct#27H", "Clickatell", "", TESTING, "", "10833173608889581573"),

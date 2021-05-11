@@ -81,6 +81,12 @@ public enum Agents {
     QA_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", QA),
     TESTING_BILLING_ADMIN_SECOND("standardbillingsecondagent@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", TESTING),
 
+    // ======= Test tenant for attachment
+    DEV_ATTACHMENTS_ADMIN("touchattachments@gmail.com", "p@$$w0rd4te$t", "Attachments", DEV),
+    DEMO_ATTACHMENTS_ADMIN("touchattachments@gmail.com", "p@$$w0rd4te$t", "Attachments", DEMO),
+    QA_ATTACHMENTS_ADMIN("touchattachments@gmail.com", "p@$$w0rd4te$t", "Attachments", QA),
+//    TESTING_BILLING_ADMIN("standardbilling@mailinator.com", "p@$$w0rd4te$t", "Standard Billing", TESTING),
+
     // ======= Stage tenant used for performance
     STAGE_AGENT_GEN_BANK("touchperformance1@gmail.com", "p@$$w0rd4te$t", "Performance", STAGE),
 

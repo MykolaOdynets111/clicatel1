@@ -27,10 +27,14 @@
         <classes>
             <class name="runner.standardbilling.RunChatdeskTest" />
             <class name="runner.standardbilling.RunDepartmentsTest" />
-            <class name="runner.standardbilling.RunMediaSupportTest" />
             <class name="runner.standardbilling.RunSurveyTest" />
             <class name="runner.standardbilling.RunSchedulerSchemasTest" />
             <class name="runner.standardbilling.RunEndStopTest" />
+        </classes>
+    </test>
+    <test name="Attachments tests">
+        <classes>
+            <class name="runner.attachments.RunMediaSupportTest" />
         </classes>
     </test>
 </suite>

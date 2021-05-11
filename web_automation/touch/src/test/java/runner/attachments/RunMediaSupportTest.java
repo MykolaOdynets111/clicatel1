@@ -1,4 +1,4 @@
-package runner.standardbilling;
+package runner.attachments;
 
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
@@ -16,7 +16,7 @@ import java.util.List;
         plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
         },
         monochrome = true,
-        features ="src/test/java/scenario/standardbilling/mediasupport",
+        features ="src/test/java/scenario/attachments/mediasupport",
         glue ="steps")
 
 public class RunMediaSupportTest {

@@ -6,8 +6,8 @@
 Feature: Media Support: User send files and agent downloading ABC
 
   Background:
-    Given I login as agent of Standard Billing
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given I login as agent of Attachments
+    Given Setup ORCA integration for Attachments tenant
     When Send connect to Support message by ORCA
 
   Scenario Outline: Verify if user is able to send to agent file in .<fileType> format ABC

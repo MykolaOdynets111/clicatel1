@@ -2,8 +2,8 @@
 Feature: Media Support: Agent send files and user playing
 
   Background:
-    And User select Standard Billing tenant
-    Given I login as agent of Standard Billing
+    And User select Attachments tenant
+    Given I login as agent of Attachments
     And Click chat icon
 
   Scenario Outline: Verify if agent is able to send to user a file in .<fileType> format

@@ -1,10 +1,9 @@
-#Run only in remote mode.
 @dot_control
-Feature: Media Support: User send files and agent downloading .Control
+Feature: Media Support: User send files and agent playing .Control
 
   Background:
-    Given I login as agent of Standard Billing
-    Given Create .Control integration for Standard Billing and adapter: whatsapp
+    Given I login as agent of Attachments
+    Given Create .Control integration for Attachments and adapter: whatsapp
     Given Prepare payload for sending chat to agent message for .Control
     Given Send parameterized init call with clientId context correct response is returned
     And Send message call
@@ -15,15 +14,12 @@ Feature: Media Support: User send files and agent downloading .Control
     And Agent responds with How may I help to User
     When User send <fileType> attachment with .Control
     Then Attachment message from dotcontrol is shown for Agent
-    When Agent download the file
-    Then File is not changed after uploading and downloading
+    Then Agent can play <fileType> file
 
     Examples:
       | fileType            |
-      | jpeg                |
-      | jpg                 |
-      | png                 |
-      | xls                 |
-      | doc                 |
-      | pdf                 |
-      | ppt                 |
+      | mp3                 |
+      | opus                |
+      | mp4                 |
+      | aac                 |
+      | amr                 |

@@ -106,6 +106,9 @@ public class Tenants {
             case "Standard Billing":
                 setTenantInfo("standardbilling", "Standard Billing");
                 break;
+            case "Attachments":
+                setTenantInfo("attachments", "Attachments");
+                break;
             case "Performance":
                 setTenantInfo("performance", "Performance");
                 break;
