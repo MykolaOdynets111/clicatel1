@@ -17,9 +17,6 @@ public class AgentDeskChatMessage extends AbstractWidget {
     @FindBy(css = "[selenium-id=emojified-text]")
     private WebElement toUserTextResponse;
 
-    @FindBy(css = "[selenium-id=emojified-text]")
-    private List<WebElement> toUserTextResponses;
-
     @FindBy(xpath = "//li[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")
     private WebElement sentEmoji;
 
@@ -88,16 +85,6 @@ public class AgentDeskChatMessage extends AbstractWidget {
         } catch (TimeoutException e) {
             return false;
         }
-    }
-
-    public boolean isToUserTextResponseShownAmongOthers(String expectedMessage) {
-        boolean result = false;
-        for(int i = 0; i < 15; i++){
-            result = toUserTextResponses.stream().anyMatch(e -> e.getText().equals(expectedMessage));
-            if (result) return true;
-            waitFor(500);
-        }
-        return result;
     }
 
     public String getAgentResponseEmoji() {

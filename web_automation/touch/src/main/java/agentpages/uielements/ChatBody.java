@@ -23,9 +23,9 @@ public class ChatBody extends AbstractUIElement {
 
     private String scrollElement = ".chat-body.chat-box__messages";
 
-    private String fromUserMessagesXPATH = ".//li[contains(@class, 'from')]//*[text()='%s']";
+    private String fromUserMessagesXPATH = ".//div[contains(@class, 'from')]//*[text()='%s']";
 
-    private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]//li[not(@class='empty')]";
+    private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
 
     @FindBy(css = ".spinner")
     private WebElement spinner;
