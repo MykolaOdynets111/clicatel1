@@ -18,7 +18,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String modalWindow = "div.modal-content";
 
-    @FindBy(css = "div.dashboard div.chat")
+    @FindBy(css = "div.dashboard")
     private WebElement conversationAreaContainer;
 
     @FindBy(css = ".cl-r-suggestions-count")
