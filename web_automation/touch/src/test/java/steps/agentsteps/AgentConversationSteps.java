@@ -153,9 +153,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 //                + "chrome" + File.separator;
         String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";
         File downloadedFile = new File( sharedFolder +  DefaultTouchUserSteps.mediaFileName.get());
+        List<String> allFiles = new ArrayList<>();
         for (int i=0; i < 10; i++){
             try (Stream<Path> walk = java.nio.file.Files.walk(Paths.get(sharedFolder))) {
-                List<String> allFiles = walk.filter(java.nio.file.Files::isRegularFile)
+                allFiles = walk.filter(java.nio.file.Files::isRegularFile)
                         .map(x -> x.toString()).collect(Collectors.toList());
                 if (allFiles.contains(downloadedFile.getPath())){
                     break;
@@ -164,7 +165,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 e.printStackTrace();
             }
             if (i== 9){
-                Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder");
+                Assert.fail("File " + downloadedFile.getPath() + " was not downloaded to the shared folder\n"+
+                            "the following files are found only: " + allFiles);
             }
             waitFor(2000);
         }

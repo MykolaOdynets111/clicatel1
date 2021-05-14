@@ -37,7 +37,7 @@ public class StartManyAgents {
         agentSteps.set(new AgentSteps(agentDriver.get()));
         agentSteps.get().openManePage().loginWithAgents(agent);
         try {
-            Thread.sleep(120000);
+            Thread.sleep(1200000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
