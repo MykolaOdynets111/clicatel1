@@ -28,7 +28,7 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     })
     public WebElement chatStartDate;
 
-    @FindBy(xpath = ".//li[contains(@class, 'cl-r-message msg') or @class = 'channel-separator' ]")
+    @FindBy(css = ".cl-r-message-wrapper")
     private List<WebElement> messagesInChatBody;
 
     @FindAll({
@@ -46,7 +46,7 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     }
 
     public List<String> getAllMessages(){
-        waitForElementToBeVisible(this.getCurrentDriver(), messagesInChatBody.get(1), 5);
+        waitForElementsToBeVisible(this.getCurrentDriver(), messagesInChatBody, 5);
         try {
             return messagesInChatBody.stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                     .map(e -> e.getMessageInfo())

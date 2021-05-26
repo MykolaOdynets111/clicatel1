@@ -36,10 +36,10 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".cl-r-message.msg-agent_message.to .cl-r-avatar__image")
     private WebElement agentImage;
 
-    @FindBy(css = "li.from")
+    @FindBy(css = "div.from")
     private List<WebElement> fromUserMessages;
 
-    @FindBy(css = "li.to .msg")
+    @FindBy(css = "div.to .msg")
     private List<WebElement> toUserMessages;
 
     @FindBy(css = "[selenium-id=empty-avatar]")

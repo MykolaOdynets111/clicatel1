@@ -175,15 +175,15 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
     private List<String> getExpectedChatHistoryItems(ChatHistory chatHistory){
         List<String> expectedMessagesList = new ArrayList<>();
-        expectedMessagesList.add(0,
-                getExpectedTime(chatHistory.getChatStarted(), DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy"), true));
+//        expectedMessagesList.add(0,
+//                getExpectedTime(chatHistory.getChatStarted(), DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy"), true));
 
         for(int i=0; i< chatHistory.getMessages().size(); i++){
             String message = chatHistory.getMessages().get(i).getMessage().getText();
             String chatTime = getExpectedTime(chatHistory.getMessages().get(i).getDateTime(), DateTimeFormatter.ofPattern("HH:mm"), false);
             String expectedChatItem = message + " " + chatTime;
 
-            expectedMessagesList.add(i+1, expectedChatItem);
+            expectedMessagesList.add(i, expectedChatItem);
         }
         return expectedMessagesList;
     }
