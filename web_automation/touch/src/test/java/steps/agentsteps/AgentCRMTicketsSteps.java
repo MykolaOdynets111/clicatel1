@@ -170,7 +170,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
             softAssert.assertTrue(pageUrl.contains("supervisor"),
                     "Agent is not redirected to supervisor page");
         } else if(chatDeskPage.equalsIgnoreCase("chatdesk")) {
-            softAssert.assertTrue(pageUrl.split("-")[1].equalsIgnoreCase("chatdesk.clickatelllabs.com/"),
+            softAssert.assertTrue(pageUrl.split("-")[1].equalsIgnoreCase("chatdesk.clickatelllabs.com/live"),
                     "Supervisor is not redirected to chatdesk page");
         }
         softAssert.assertAll();
