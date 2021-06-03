@@ -31,7 +31,7 @@ public class ChatInLeftMenu extends AbstractWidget {
         return adapterWrappedIcon;
     }
 
-    @FindBy(css = "[selenium-id='chat-item-icons-holder']")
+    @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")
     private WebElement adapterWrappedIcon;
 
     @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")

@@ -1,5 +1,6 @@
 Feature: Default SMS integration items visibility check
 
+  #enabling sms moved to unity needs a lot of changes for emulate this flow
   @skip
   Scenario: SMS integration related buttons are disappearing after disabling SMS integration
     Given I open portal

@@ -1063,7 +1063,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
-    private static Response callServer() throws ConnectException{
+    private static Response callServer() throws ConnectException {
         return RestAssured.get(Server.getServerURL());
     }
 

@@ -21,6 +21,9 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-r-chat-item")
     private List<WebElement> chatsLive;
 
+    @FindBy(xpath = "//h2[text() ='Loading...']")
+    private WebElement loading;
+
     @FindBy (css = ".fade.dialog.in.modal")
     private WebElement assignWindowsDialog;
 
@@ -146,6 +149,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
         waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
+        waitForElementToBeInvisible(this.getCurrentDriver(), loading, 6);
         return chatsLive.stream()
                  .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())
