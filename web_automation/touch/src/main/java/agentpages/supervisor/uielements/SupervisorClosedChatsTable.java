@@ -75,4 +75,9 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
                 .map(e -> new SupervisorDeskClosedChatRow(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(closedChat -> closedChat.getIconName().equalsIgnoreCase(channelName));
     }
+
+    public String getUserName(){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(), closedChats, 7);
+        return new SupervisorDeskClosedChatRow(closedChats.get(0)).setCurrentDriver(this.getCurrentDriver()).getUserName();
+    }
 }

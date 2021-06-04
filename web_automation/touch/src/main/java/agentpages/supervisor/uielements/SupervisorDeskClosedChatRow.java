@@ -16,6 +16,8 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     private WebElement chatNameCell;
     @FindBy(css = ".chats-list .cl-table-cell:nth-child(2)>svg")
     private WebElement channelIcon;
+    @FindBy(css = "h6.user-details__name")
+    private WebElement userName;
 
     private String scrollAreaCss = "[selenium-id='roster-scroll-container']";
 
@@ -42,5 +44,9 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
 
     public String getIconName() {
         return channelIcon.getAttribute("name").trim();
+    }
+
+    public String getUserName(){
+        return getTextFromElem(this.getCurrentDriver(), userName, 2, "User Name");
     }
 }

@@ -273,6 +273,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Closed chats doesn't have email button");
     }
 
+    @Then("WA chat show the name of the user")
+    public void verifyUserName(){
+        Assert.assertEquals(getSupervisorDeskPage().getSupervisorClosedChatsTable().getUserName(), DotControlSteps.getClient(),
+                "User name is not correct");
+    }
+
     @Then ("^Live chats (.*) filter has correct name and correct chats number$")
     public void verifyAgentNameOnLiveChatFilter(String agent){
         String agentName = getAgentName(agent);
