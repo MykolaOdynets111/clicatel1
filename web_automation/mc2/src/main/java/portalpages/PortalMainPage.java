@@ -23,7 +23,7 @@ public class PortalMainPage extends PortalAbstractPage {
     @FindBy(xpath = "//button[contains(@class, 'close-discard-modal')]")
     private WebElement closeSetUpBillingPopUp;
 
-    @FindBy(xpath = "//h3[text()='We’ve updated our privacy policy']")
+    @FindBy(xpath = "//h3[contains(text(),'updated our privacy policy')]")
     private WebElement updatePolicyPopUp;
 
     @FindBy(xpath = "//button[text()='Got it']")

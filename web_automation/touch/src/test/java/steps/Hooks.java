@@ -229,6 +229,10 @@ public class Hooks implements JSHelper {
             ORCASteps.cleanUPORCAData();
         }
 
+        if (scenario.getSourceTagNames().contains("@close_account")){
+            ApiHelperPlatform.closeMC2Account(Tenants.getTenantUnderTestOrgName());
+        }
+
         closeMainBrowserIfOpened();
         clearAllSessionData();
 

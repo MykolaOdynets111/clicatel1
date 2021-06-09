@@ -22,6 +22,7 @@ import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.asserts.SoftAssert;
 import portalpages.*;
+import portaluielem.PreferencesWindow;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
 import steps.agentsteps.AbstractAgentSteps;
@@ -760,6 +761,26 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @When("^Change chats per agent:\"(.*)\"$")
     public void changeChatPerAgent(String chats){
         getPortalTouchPreferencesPage().getPreferencesWindow().setChatsAvailable(chats);
+    }
+
+    @When("^Agent set (\\d*) hours and (\\d*) minutes in Agent Chat Timeout section$")
+    public void setInactivityTimeout(int hours, int minutes){
+        getPortalTouchPreferencesPage().getPreferencesWindow().setAgentInactivityTimeout(hours, minutes);
+    }
+
+    @Then("^\"(.*)\" error message is shown in Agent Chat Timeout section$")
+    public void verifyInactivityTimeoutError(String expectedError){
+        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAgentInactivityTimeoutLimitError(), expectedError, "Incorrect limits message was shown in Agent Chat Timeout section");
+    }
+
+    @When("^Agent set (\\d*) days in Media Files Expiration section$")
+    public void setMediaFilesExpiration(int days){
+        getPortalTouchPreferencesPage().getPreferencesWindow().setAttachmentLifeTimeDays(days);
+    }
+
+    @Then("^\"(.*)\" error message is shown in Media Files Expiration section$")
+    public void verifyAttachmentLifeTimeDaysLimitError(String expectedError){
+        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAttachmentLifeTimeDaysLimitError(), expectedError, "Incorrect limits message was shown in Media Files Expiration section");
     }
 
     @When("^Chats per agent became:\"(.*)\"$")
@@ -1584,6 +1605,26 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getPortalTouchPreferencesPage().clickSaveButton();
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
+    }
+
+    @Then("^All default values on Preferences page are correct$")
+    public void verifyAllDefaultPreferences(Map<String, String> pref){
+        SoftAssert soft = new SoftAssert();
+        PreferencesWindow preferencesWindow = getPortalTouchPreferencesPage().getPreferencesWindow();
+        soft.assertEquals(preferencesWindow.getChatsAvailable(), pref.get("maximumChatsPerAgent"),
+                "Default Max Chats per agent preferences are not correct");
+        soft.assertEquals(preferencesWindow.getTicketExpirationHours(), pref.get("ticketExpiration"),
+                "Default Ticket Expiration hours are not correct");
+        soft.assertEquals(preferencesWindow.getAgentChatTimeout(), pref.get("agentChatTimeout"),
+                "Default Agent Chat Timeout are not correct");
+        soft.assertEquals(preferencesWindow.getAttachmentLifeTimeDays(), pref.get("mediaFilesExpiration"),
+                "Default Media Files Expiration days are not correct");
+        soft.assertEquals(preferencesWindow.getInactivityTimeoutHours(), pref.get("InactivityTimeoutHours"),
+                "Default Inactivity Timeout Hours hours are not correct");
+        soft.assertEquals(preferencesWindow.getPendingChatAutoClosureHours(), pref.get("pendingChatsAuto_closureTime"),
+                "Default Pending Chats Auto-closure Time hours are not correct");
+        soft.assertAll();
+
     }
 
     @When("^Select 'Specific Agent Support hours' radio button in Agent Supported Hours section$")

@@ -37,4 +37,9 @@
             <class name="runner.attachments.RunMediaSupportTest" />
         </classes>
     </test>
+    <test name="Default Tenant Preferences">
+        <classes>
+            <class name="runner.touchgo.RunDefaultTenantPreferences" />
+        </classes>
+    </test>
 </suite>

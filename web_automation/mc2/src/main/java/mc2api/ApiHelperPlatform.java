@@ -1,5 +1,6 @@
 package mc2api;
 
+import datamanager.MC2Account;
 import datamanager.model.*;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
@@ -32,6 +33,19 @@ public class ApiHelperPlatform {
                         "  \"accountId\": \"" + accountId + "\"\n" +
                         "}")
                 .post(EndpointsPlatform.PLATFORM_SIGN_IN);
+    }
+
+    public static void closeMC2Account(String tenantOrgName){
+        Response resp = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .body("{" +
+                        "\"email\": \""+ MC2Account.TOUCH_GO_NEW_ACCOUNT.getEmail()+"\", " +
+                        "\"password\": \""+MC2Account.TOUCH_GO_NEW_ACCOUNT.getPass()+"\", " +
+                        "\"reason\": \"Closed by owner\"" +
+                        "}")
+                .post(EndpointsPlatform.PLATFORM_CLOSE_ACCOUNT);
+        System.out.println("closing account result: " + resp.getBody().asString() + resp.getStatusCode());
     }
 
     public static Response sendNewAgentInvitation(String tenantOrgName, String agentEmail, String name, String lastName){

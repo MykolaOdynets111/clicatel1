@@ -38,8 +38,11 @@ public class ConfigureTouchWindow extends BasePortalWindow {
     @FindBy(name = "transcriptsEmail")
     private WebElement transcriptsEmailInput;
 
+    @FindBy(css = ".alert-container")
+    private WebElement successOrErrorMessage;
+
     @Step(value = "Create touch configuration")
-    public void createNewTenant(String tenantOrgName, String transcriptsEmail){
+    public void createNewTenant(String tenantOrgName, String transcriptsEmail) {
         waitForElementToBeVisible(this.getCurrentDriver(), businessNameInput, 3).sendKeys(tenantOrgName);
         selectIndustryField.click();
         waitForElementToBeVisible(this.getCurrentDriver(), industriesChoices, 3);
@@ -47,7 +50,7 @@ public class ConfigureTouchWindow extends BasePortalWindow {
         int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, sublist.size() - 1);
         sublist.get(randomIndustryNumber).click();
 //        waitForElementToBeVisibleAgent(selectCountryField, 5,"main");
-        waitFor(1000);
+        waitFor(2000);
         clickElem(this.getCurrentDriver(), selectCountryField, 4, "Select country dropdown");
         waitForElementToBeVisible(this.getCurrentDriver(), countryChoices, 8);
         int randomCountryNumber = ThreadLocalRandom.current().nextInt(0, countryChoicesList.size() - 1);
@@ -55,7 +58,18 @@ public class ConfigureTouchWindow extends BasePortalWindow {
         nextButton.click();
         nextButton.click();
         transcriptsEmailInput.sendKeys(transcriptsEmail);
-        clickElem(this.getCurrentDriver(), nextButton, 5,"Finish button");
-        waitWhileProcessing(this.getCurrentDriver(), 3, 5);
+        clickElem(this.getCurrentDriver(), nextButton, 5, "Finish button");
+//        waitWhileProcessing(this.getCurrentDriver(), 3, 5);
+        handleCreateTenantError();
+    }
+
+    private void handleCreateTenantError() {
+        for (int i = 0; i < 3; i++) {
+            if (!isElementRemoved(this.getCurrentDriver(), this.getWrappedElement(), 10)) {
+                clickElem(this.getCurrentDriver(), nextButton, 5, "Finish button");
+            } else {
+                return;
+            }
+        }
     }
 }

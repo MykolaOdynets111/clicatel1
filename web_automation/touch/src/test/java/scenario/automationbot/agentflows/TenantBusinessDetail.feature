@@ -14,7 +14,7 @@ Feature: Managing business details
 
   @agent_support_hours
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-5317")
-  Scenario: Touch preferences :: Verify if agent can change support hours
+  Scenario: Verify if agent can change support hours
     Given I open portal
     And Login into portal as an admin of Automation Bot account
     When I select Touch in left menu and Dashboard in submenu
