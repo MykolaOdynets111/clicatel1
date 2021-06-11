@@ -770,8 +770,16 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @Then("^\"(.*)\" error message is shown in Agent Chat Timeout section$")
     public void verifyInactivityTimeoutError(String expectedError){
-        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAgentInactivityTimeoutLimitError(), expectedError, "Incorrect limits message was shown in Agent Chat Timeout section");
+        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAgentInactivityTimeoutLimitError(), expectedError,
+                "Incorrect limits message was shown in Agent Chat Timeout section");
     }
+
+    @Then("^Error message is not shown in Agent Chat Timeout section$")
+    public void verifyInactivityTimeoutErrorNotShowing(){
+        Assert.assertFalse(getPortalTouchPreferencesPage().getPreferencesWindow().isAgentInactivityTimeoutLimitErrorShown(),
+                "Error message for Agent Chat Timeout limit should not be shown");
+    }
+
 
     @When("^Agent set (\\d*) days in Media Files Expiration section$")
     public void setMediaFilesExpiration(int days){
@@ -782,6 +790,30 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void verifyAttachmentLifeTimeDaysLimitError(String expectedError){
         Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getAttachmentLifeTimeDaysLimitError(), expectedError, "Incorrect limits message was shown in Media Files Expiration section");
     }
+
+    @Then("^Error message is not shown in Media Files Expiration section$")
+    public void verifyAttachmentLifeTimeDaysErrorNotShowing(){
+        Assert.assertFalse(getPortalTouchPreferencesPage().getPreferencesWindow().isAttachmentLifeTimeDaysLimitErrorShown(),
+                "Error message for Agent Chat Timeout limit should not be shown");
+    }
+
+
+    @When("^Agent set (\\d*) hours in Ticket Expiration section$")
+    public void setTicketsExpiration(int hours){
+        getPortalTouchPreferencesPage().getPreferencesWindow().setTicketExpirationHours(hours);
+    }
+
+    @Then("^\"(.*)\" error message is shown in Ticket Expiration section$")
+    public void verifyTicketsExpirationLimitError(String expectedError){
+        Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getTicketExpirationLimitError(),
+                expectedError, "Incorrect limits message was shown in Tickets Expiration section");
+    }
+
+    @Then("^Error message is not shown in Ticket Expiration section$")
+    public void verifyTicketsExpirationLimitErrorNotShowing(){
+        Assert.assertFalse(getPortalTouchPreferencesPage().getPreferencesWindow().isTicketExpirationLimitErrorShown(), "Error message for Tickets Expiration limit should not be shown");
+    }
+
 
     @When("^Chats per agent became:\"(.*)\"$")
     public void changeChatPerAgentPlusMinus(String result){

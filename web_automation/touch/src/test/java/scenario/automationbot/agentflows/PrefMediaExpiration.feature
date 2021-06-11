@@ -11,3 +11,7 @@ Feature: Preferences
     Then "Exceeds minimum limit. Duration must be between 7 days and 90 days." error message is shown in Media Files Expiration section
     When Agent set 91 days in Media Files Expiration section
     Then "Exceeds maximum limit. Duration must be between 7 days and 90 days." error message is shown in Media Files Expiration section
+    When Agent set 7 days in Media Files Expiration section
+    Then Error message is not shown in Media Files Expiration section
+    When Agent set 90 days in Media Files Expiration section
+    Then Error message is not shown in Media Files Expiration section

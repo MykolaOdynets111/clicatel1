@@ -51,6 +51,9 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css = "[name='ticketTimeoutHours']")
     private WebElement ticketExpirationHours;
 
+    @FindBy(xpath=".//input[@name='ticketTimeoutHours']/following-sibling::div/div")
+    private WebElement ticketExpirationHoursLimitError;
+
     @FindBy(css = "[name='globalInactivityTimeoutHours']")
     private WebElement globalInactivityTimeoutHours;
 
@@ -118,6 +121,10 @@ public class PreferencesWindow extends BasePortalWindow {
         return getTextFromElem(this.getCurrentDriver(), inactivityTimeoutLimitError,1, "Inactivity timeout limit message").trim();
     }
 
+    public boolean isAgentInactivityTimeoutLimitErrorShown(){
+        return isElementShown(this.getCurrentDriver(), inactivityTimeoutLimitError,1);
+    }
+
 
     public void setAttachmentLifeTimeDays(int days){
         waitForElementToBeVisible(this.getCurrentDriver(), attachmentLifeTimeDays, 5);
@@ -128,6 +135,25 @@ public class PreferencesWindow extends BasePortalWindow {
 
     public String getAttachmentLifeTimeDaysLimitError(){
         return getTextFromElem(this.getCurrentDriver(), attachmentLifeTimeDaysLimitError,1, "Attachment Life Time Days Limit Error").trim();
+    }
+
+    public boolean isAttachmentLifeTimeDaysLimitErrorShown(){
+        return isElementShown(this.getCurrentDriver(), attachmentLifeTimeDaysLimitError,1);
+    }
+
+    public PreferencesWindow setTicketExpirationHours(int hours) {
+        waitForElementToBeVisible(this.getCurrentDriver(), ticketExpirationHours, 1);
+        scrollToElem(this.getCurrentDriver(), ticketExpirationHours, "Ticket Expiration Hours");
+        inputText(this.getCurrentDriver(), ticketExpirationHours, 1,"Ticket Expiration Hours",String.valueOf(hours));
+        return this;
+    }
+
+    public String getTicketExpirationLimitError(){
+        return getTextFromElem(this.getCurrentDriver(), ticketExpirationHoursLimitError,1, "Ticket Expiration Hours Limit Error").trim();
+    }
+
+    public boolean isTicketExpirationLimitErrorShown(){
+        return isElementShown(this.getCurrentDriver(), ticketExpirationHoursLimitError,1);
     }
 
     public String getTicketExpirationHours() {
