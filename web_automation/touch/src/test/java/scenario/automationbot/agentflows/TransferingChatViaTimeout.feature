@@ -9,7 +9,7 @@ Feature: Transferring chat after timeout
     Given I login as agent of Automation Bot
     And Click chat icon
 
-  Scenario: Verify if chat is automatically transferred after agentIncativity timeout
+  Scenario: Touch preferences :: verify if chat routed to another agent due to inactivity of agent
     When User enter connect to agent into widget input field
     Then Agent has new conversation request
     Given I login as second agent of Automation Bot
