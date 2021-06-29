@@ -55,6 +55,7 @@ public class PortalLoginPage extends PortalAbstractPage {
 
     @Step(value = "Log in to portal")
     public PortalMainPage login(String email, String pass){
+        waitFor(1000);
         try{
             getAccountForm().enterAdminCreds(email, pass);
             getAccountForm().clickLogin();

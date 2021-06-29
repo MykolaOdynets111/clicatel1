@@ -224,7 +224,7 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
     public void clickAgentAssistantButton(){
-        agentAssistantButton.click();
+        clickElem(this.getCurrentDriver(), agentAssistantButton,3,"Agent Assistant Button" );
     }
 
     public boolean isProfanityPopupShown(){

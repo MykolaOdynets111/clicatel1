@@ -15,17 +15,12 @@ import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
-import sun.management.resources.agent;
 
 import java.io.File;
 import java.io.IOException;
@@ -372,7 +367,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("Agent is able to add \"(.*)\"")
     public void enterAdditionTextForSuggestion(String textToAdd) {
-        getAgentHomePage("main").getChatForm().sendResponseToUser(textToAdd);
+        getAgentHomePage("main").getChatForm().sendResponseInSuggestionWrapperToUser(textToAdd);
     }
 
     @Then("^'Profanity not allowed' pop up is shown$")

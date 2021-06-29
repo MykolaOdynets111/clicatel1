@@ -6,7 +6,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import touchpages.uielements.AttachmentWindow;
 
 import java.security.SecureRandom;
@@ -101,25 +100,17 @@ public class ChatForm extends AbstractUIElement {
         if(isSuggestionFieldShown()){
             clickClearButton();
         } else {
-            messageInput.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+            messageInput.clear();
         }
         System.out.println("2 " + LocalDateTime.now());
-        sendResponseToUser(response);
+        messageInput.sendKeys(response);
+        clickSendButton();
     }
 
-    public ChatForm sendResponseToUser(String responseToUser) {
-        try {
-            if (isSuggestionFieldShown()) {
-                clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
-            }
-            messageInput.sendKeys(responseToUser);
-            clickSendButton();
-            return this;
-        } catch (InvalidElementStateException e){
-            Assert.fail("There is a problem with agent desk page." +
-                    " Check if there is no blinking connection error.");
-            return this;
-        }
+    public ChatForm sendResponseInSuggestionWrapperToUser(String responseToUser) {
+        suggestionInputField.sendKeys(responseToUser);
+        clickSendButton();
+        return this;
     }
 
     public void clickSendButton() {
