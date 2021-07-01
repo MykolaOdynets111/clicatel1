@@ -19,6 +19,5 @@ Feature: Sending edited suggestion via Direct Messages
       When User sends twitter direct message regarding Do you have a job for me?
       Then There is correct suggestion shown on user message "Do you have a job for me?"
       And The suggestion for user message "Do you have a job for me?" with the biggest confidence is added to the input field
-      When Agent add additional info "_Edited suggestion" to suggested message
-      When Agent click send button
+      When Agent is able to add "_Edited suggestion"
       Then User have to receive correct response "For information regarding vacancies and posts at General Bank you may visit us_Edited suggestion" on his message "Do you have a job for me?"

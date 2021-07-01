@@ -89,8 +89,8 @@ public class ChatForm extends AbstractUIElement {
             if (isElementShown(this.getCurrentDriver(), suggestionInputField, 1)) {
                 clickElem(this.getCurrentDriver(), suggestionInputField, 1, "Suggestion cover");
             }
-            messageInput.sendKeys(additionalMessage);
-            inputMassage = messageInput.getText();
+            suggestionInputField.sendKeys(additionalMessage);
+            inputMassage = suggestionInputField.getText();
         } catch (StaleElementReferenceException e) {
             DriverFactory.getAgentDriverInstance().findElement(By.xpath(messageInputLocator)).sendKeys(additionalMessage);
         }
@@ -108,6 +108,9 @@ public class ChatForm extends AbstractUIElement {
     }
 
     public ChatForm sendResponseInSuggestionWrapperToUser(String responseToUser) {
+        suggestionInputField.click();
+        suggestionInputField.sendKeys(Keys.chord(Keys.CONTROL,Keys.END));
+//        suggestionInputField.sendKeys(Keys.ENTER);
         suggestionInputField.sendKeys(responseToUser);
         clickSendButton();
         return this;

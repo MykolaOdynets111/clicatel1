@@ -20,6 +20,5 @@ Feature: Sending edited suggestion back to Facebook user
     Then Conversation area contains can i open saving accounts? message from facebook user
     Then There is correct suggestion shown on user message "Do you have a job for me?"
     And The suggestion for user message "Do you have a job for me?" with the biggest confidence is added to the input field
-    When Agent add additional info "_Edited suggestion" to suggested message
-    When Agent click send button
+    When Agent is able to add "_Edited suggestion"
     Then User have to receive the following on his message regarding Do you have a job for me?: "For information regarding vacancies and posts at General Bank you may visit us_Edited suggestion"

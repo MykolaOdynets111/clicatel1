@@ -337,7 +337,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @When("^(.*) add additional info \"(.*)\" to suggested message$")
     public void addMoreInfo(String agent, String additional) {
-        getAgentHomePage(agent).getChatForm().addMoreInfo(additional);
+        getAgentHomePage(agent).getChatForm().sendResponseInSuggestionWrapperToUser(additional);
     }
 
     @Then("^'Clear' buttons are not shown$")

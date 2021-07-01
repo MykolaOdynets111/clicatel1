@@ -17,6 +17,5 @@
       When Send Do you have a job for me? message for .Control
       Then There is correct suggestion shown on user message "Do you have a job for me?"
       And The suggestion for user message "Do you have a job for me?" with the biggest confidence is added to the input field
-      When Agent add additional info "_Edited suggestion" to suggested message
-      When Agent click send button
+      When Agent is able to add "_Edited suggestion"
       Then Verify dot .Control returns edited response in 13 seconds
