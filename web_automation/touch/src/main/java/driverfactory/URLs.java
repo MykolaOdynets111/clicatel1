@@ -40,6 +40,8 @@ public class URLs {
 
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
+    private static String BASE_WS_INTERNAL_URL="https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com";
+
     public static String getWidgetURL(String tenantOrgName){
         String tenantID = "";
         try {
@@ -93,6 +95,10 @@ public class URLs {
 
     public static String getBaseInternalApiUrl(){
         return String.format(BASE_INTERNAL_API_URL, ConfigManager.getEnv());
+    }
+
+    public static String getBaseWSInternalURL(){
+        return String.format(BASE_WS_INTERNAL_URL, ConfigManager.getEnv());
     }
 
     public static String getBasePlatformUrl(){

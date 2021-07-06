@@ -204,5 +204,10 @@ public class Endpoints {
     public static String CREATE_UPDATE_ORCA_INTEGRATION= URLs.getTouchApiBaseIntegrationURL() + "api/integrations/orca";
 
     public static String ORCA_INTEGRATIONS_LIST= URLs.getTouchApiBaseIntegrationURL() + "/api/integrations/orca/all";
+
+    // ====================  WS  ================= //
+
+    public static String CREATE_TENANT_WS = URLs.getBaseWSInternalURL() + "/internal/tenants/";
+    public static String CREATE_AGENT_WS = URLs.getBaseWSInternalURL() + "/internal/agents/%s";
 }
 

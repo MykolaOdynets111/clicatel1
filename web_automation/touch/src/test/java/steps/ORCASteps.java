@@ -67,7 +67,7 @@ public class ORCASteps implements WebWait {
         }
     }
 
-    public String getIntegrationCreationMethod(String tenantName) {
+    private String getIntegrationCreationMethod(String tenantName) {
         Response response = ApiORCA.getORCAIntegrationsList(tenantName);
         if (!(response.getBody().jsonPath().getList("").size() == 0)) {
             List<String> types = response.getBody().jsonPath().getList("transport.type");

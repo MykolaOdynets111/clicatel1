@@ -149,7 +149,7 @@ public class ConfigManager {
     }
 
     public static String getEnv() {
-        String env = System.getProperty(ENV, "demo");
+        String env = System.getProperty(ENV, "dev");
         String deployTo = System.getProperty(DEPLOY_TO);
         if(deployTo==null) return env;
         else{
