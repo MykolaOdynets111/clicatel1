@@ -96,7 +96,7 @@ public class Tenant {
         setCategory("Automotive");
         setMaxOnlineAgentLimit(100);
         setMc2AccountId(fake.numerify("aqaId##########"));
-        setTenantMode("BOT");
+        setTenantMode("AGENT");
         setRoutingType("RANDOM");
         setPendingChatAutoClosureTimeSec(3600);
         setAttachmentLifeTimeDays(1);

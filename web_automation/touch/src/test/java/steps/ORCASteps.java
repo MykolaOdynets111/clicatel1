@@ -6,6 +6,7 @@ import com.google.common.io.Files;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import datamanager.Tenants;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
 import interfaces.WebWait;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ORCASteps implements WebWait {
@@ -58,26 +60,28 @@ public class ORCASteps implements WebWait {
 
     @Given("^Setup ORCA integration for (.*) tenant$")
     public void createOrUpdateOrcaIntegration(String tenantName) {
-        String action = getIntegrationCreationMethod(tenantName);
-        if (action.equalsIgnoreCase("create")) {
-            apiToken.set(ApiORCA.createIntegration(tenantName, Server.getServerURL()));
-        } else if (action.equalsIgnoreCase("update")) {
-            apiToken.set(ApiORCA.updateIntegration(tenantName, Server.getServerURL()));
+        Tenants.setTenantUnderTestOrgName(tenantName);
+        String id = getIntegrationId();
+        if (id == null) {
+            apiToken.set(ApiORCA.createIntegration(Server.getServerURL()));
+        } else {
+            apiToken.set(ApiORCA.updateIntegration(Server.getServerURL(),id));
             System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
 
-    private String getIntegrationCreationMethod(String tenantName) {
-        Response response = ApiORCA.getORCAIntegrationsList(tenantName);
-        if (!(response.getBody().jsonPath().getList("").size() == 0)) {
-            List<String> types = response.getBody().jsonPath().getList("transport.type");
-            for (String integrationType : types) {
-                if (integrationType.equalsIgnoreCase("orca")) {
-                    return "update";
+
+    private String getIntegrationId() {
+        Response response = ApiORCA.getORCAIntegrationsList();
+        List<Map> types = response.getBody().jsonPath().getList("");
+        if (!(types.size() == 0)) {
+            for (Map integrationType : types) {
+                if (integrationType.get("channelType").equals("ABC")) {
+                    return integrationType.get("id").toString();
                 }
             }
         }
-        return "create";
+        return null;
     }
 
     @Then("^Verify Orca returns (.*) response during (.*) seconds$")

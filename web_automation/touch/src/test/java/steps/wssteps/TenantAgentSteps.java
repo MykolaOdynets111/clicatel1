@@ -9,7 +9,7 @@ import datamanager.jacksonschemas.tenantagentsws.Agent;
 import datamanager.jacksonschemas.tenantagentsws.Tenant;
 
 
-public class TenantAgentStepsWS {
+public class TenantAgentSteps {
 
     @When("^(.*) tenant is created$")
     public void createTenantWS(String tenantOrgName) {

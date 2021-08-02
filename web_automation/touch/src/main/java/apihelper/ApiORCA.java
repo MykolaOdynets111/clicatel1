@@ -1,5 +1,6 @@
 package apihelper;
 
+import datamanager.Tenants;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import driverfactory.URLs;
 import io.restassured.RestAssured;
@@ -10,40 +11,31 @@ import org.testng.Assert;
 
 public class ApiORCA {
 
-     public static String createIntegration(String tenantOrgName, String callBackUrl){
+     public static String createIntegration(String callBackUrl){
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .body(prepareIntegrationCAllData(tenantOrgName, callBackUrl))
-                .post(Endpoints.CREATE_UPDATE_ORCA_INTEGRATION);
+                .body(prepareIntegrationCAllData(callBackUrl))
+                .post(String.format(Endpoints.CREATE_ORCA_INTEGRATION, Tenants.getTenantId()));
         return validateIntegrationResponse(resp, "Create");
     }
 
-    public static String updateIntegration(String tenantOrgName, String callBackUrl){
+    public static String updateIntegration(String callBackUrl, String orcaId){
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .body(prepareIntegrationCAllData(tenantOrgName, callBackUrl))
-                .put(Endpoints.CREATE_UPDATE_ORCA_INTEGRATION);
+                .body(prepareIntegrationCAllData(callBackUrl))
+                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, Tenants.getTenantId(),orcaId));
         return validateIntegrationResponse(resp, "Update");
     }
 
-    private static String prepareIntegrationCAllData(String tenantOrgName, String callBackUrl){
-        String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
-        return "{\n" +
-                "  \"channel\": {\n" +
-                "    \"type\":\"abc\"\n" +
-                "  },\n" +
+    private static String prepareIntegrationCAllData(String callBackUrl){
+        return  "{\n" +
                 "  \"enabled\": true,\n" +
-                " \"tenantId\":\"" + tenantId + "\",\n" +
-                " \"transport\": {\n" +
-                "    \"apiToken\": null,\n" +
-                "    \"type\": \"orca\",\n" +
-                "    \"callbackUrl\": \"" + callBackUrl + "\",\n" +
+                "  \"config\": {\n" +
                 "    \"businessId\": \"cam_flow\",\n" +
-                "    \"s3AttachmentBucketName\": \"stage-abc-adapter-media\",\n" +
-                "    \"s3AdditionalGrantee\": []" +
-                " }\n" +
+                "    \"callbackUrl\": \""+ callBackUrl +"\",\n" +
+                "    \"location\": true,\n" +
+                "    \"media\": true\n" +
+                "  }\n" +
                 "}";
     }
 
@@ -52,19 +44,19 @@ public class ApiORCA {
             Assert.fail("ORCA integration "+method+" was not successful\n" + "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
-        String token = resp.getBody().jsonPath().get("transport.apiToken");
+        String token = resp.getBody().jsonPath().get("id");
         System.out.println("!! Api token from "+method+" ORCA integration: " + token);
         return token;
     }
 
-    public static Response getORCAIntegrationsList(String tenantOrgName){
+    public static Response getORCAIntegrationsList(){
         Response resp =  RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main")).get(Endpoints.ORCA_INTEGRATIONS_LIST);
+                .get(String.format(Endpoints.ORCA_INTEGRATIONS_LIST, Tenants.getTenantId()));
         return resp;
     }
 
-    public static void sendMessageToAgent(OrcaEvent messageBody) {
+     public static void sendMessageToAgent(OrcaEvent messageBody) {
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(messageBody).post(URLs.getORCAMessageURL());

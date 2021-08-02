@@ -71,11 +71,6 @@ public class AgentLoginSteps extends AbstractAgentSteps {
                 "Agent is not logged in.");
     }
 
-    @When("I open browser to log in in chat desk as an agent of (.*)")
-    public void openBrowserToLogin(String tenantOrgName){
-        setCurrentLoginPage(AgentLoginPage.openAgentLoginPage("second agent", tenantOrgName));
-    }
-
     @Then("^In the first browser Connection Error should be shown$")
     public void verifyAgentIsDisconnected(){
         Assert.assertEquals("Chat Desk supports only one " +

@@ -22,7 +22,7 @@ public class URLs {
 
     private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com/";
 
-    private static String ORCA_MESSAGE = "https://%s-touch-transport-orca.clickatelllabs.com/message";
+    private static String ORCA_MESSAGE = "https://%s-touch-social-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/orca/message";
 
     // ================== API BASE URLs ========================= //
 
@@ -35,6 +35,7 @@ public class URLs {
     private static String BASE_TOUCH_API_URL = "https://%s-touch.clickatelllabs.com/v6/";
 
     private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
+
 
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
 

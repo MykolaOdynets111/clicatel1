@@ -1,8 +1,12 @@
 package datamanager.jacksonschemas.orca;
-import com.github.javafaker.Faker;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+
 
 import java.util.List;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.javafaker.Faker;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -16,7 +20,9 @@ import java.util.List;
         "externalReferenceId",
         "history"
 })
+@Generated("jsonschema2pojo")
 public class OrcaEvent {
+
     @JsonProperty("eventId")
     private String eventId;
     @JsonProperty("providerId")
@@ -42,12 +48,12 @@ public class OrcaEvent {
     public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
         this.setEventId(faker.letterify("AQA???"));
-        this.setProviderId("touch");
+        this.setProviderId("TOUCH");
         this.setRouteId(routeId);
         this.setSourceId("AQA ORCA" +  faker.number().randomNumber(7, false));
         this.setSessionId(faker.letterify("1?????"));
         this.setContent(new Content(messageText));
-        this.setUserInfo(new UserInfo());
+        this.setUserInfo(null);
         this.setExternalReferenceId(faker.letterify("RefId???"));
     }
 
@@ -141,18 +147,4 @@ public class OrcaEvent {
         this.history = history;
     }
 
-    @Override
-    public String toString() {
-        return "OrcaEvent{" +
-                "eventId='" + eventId + '\'' +
-                ", providerId='" + providerId + '\'' +
-                ", routeId='" + routeId + '\'' +
-                ", sourceId='" + sourceId + '\'' +
-                ", sessionId='" + sessionId + '\'' +
-                ", content=" + content +
-                ", userInfo=" + userInfo +
-                ", externalReferenceId='" + externalReferenceId + '\'' +
-                ", history=" + history +
-                '}';
-    }
 }

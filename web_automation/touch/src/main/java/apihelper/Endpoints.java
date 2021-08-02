@@ -96,7 +96,7 @@ public class Endpoints {
 
     public static String INTERNAL_SESSION_DETAILS = URLs.getBaseInternalApiUrl() + "sessions?tenantName=%s&clientId=%s&page=1&count=50&dateFrom=0&dateTo=0";
 
-    public static String INTERNAL_TENANTS = URLs.getBaseInternalApiUrl() + "tenants/";
+    public static String INTERNAL_TENANTS = URLs.getBaseWSInternalURL() + "/internal/tenants";
 
     public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
 
@@ -201,9 +201,11 @@ public class Endpoints {
 
     // ====================  ORCA ================= //
 
-    public static String CREATE_UPDATE_ORCA_INTEGRATION= URLs.getTouchApiBaseIntegrationURL() + "api/integrations/orca";
+    public static String CREATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "/internal/api/channel/abc-orca/%s";
 
-    public static String ORCA_INTEGRATIONS_LIST= URLs.getTouchApiBaseIntegrationURL() + "/api/integrations/orca/all";
+    public static String UPDATE_ORCA_INTEGRATION= URLs.getBaseWSInternalURL() + "/internal/api/channel/abc-orca/%s/%s";
+
+    public static String ORCA_INTEGRATIONS_LIST= URLs.getBaseWSInternalURL() + "/internal/api/channel/abc-orca?tenantId=%s";
 
     // ====================  WS  ================= //
 

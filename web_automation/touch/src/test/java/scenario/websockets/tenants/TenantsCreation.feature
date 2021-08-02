@@ -7,9 +7,9 @@ Feature: Precondition on Agents creation
 
     Examples:
       | tenant            | firstAgentName   | secondAgentName    |
-      | General Bank Demo | GBD Main         | GBD Second         |
-      | Starter AQA       | SAQA Main        | SAQA Second        |
-      | Automation        | Auto Main        | Auto Second        |
-      | Automation Bot    | Autobot Main     | Autobot Second     |
+#      | General Bank Demo | GBD Main         | GBD Second         |
+#      | Starter AQA       | SAQA Main        | SAQA Second        |
+#      | Automation        | Auto Main        | Auto Second        |
+#      | Automation Bot    | Autobot Main     | Autobot Second     |
       | Standard Billing  | SB Main          | SB Second          |
-      | Attachments       | Attachments Main | Attachments Second |
+#      | Attachments       | Attachments Main | Attachments Second |

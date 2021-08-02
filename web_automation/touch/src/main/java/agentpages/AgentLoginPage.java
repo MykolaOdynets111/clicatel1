@@ -4,68 +4,44 @@ import abstractclasses.AgentAbstractPage;
 import datamanager.Agents;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 
 public class AgentLoginPage extends AgentAbstractPage {
 
-    private String loginFormXPATH = "//div[@class='login-form']";
+    @FindBy(css = "[id='tenants']")
+    private WebElement tenantsDropdown;
 
-    @FindBy(css = "div.login-form")
-    private WebElement loginForm;
+    @FindBy(css = "[id='agents']")
+    private WebElement agentsDropdown;
 
-    @FindBy(css = "input[type='email']")
-    private WebElement userNameInput;
-
-    @FindBy(css = "input[type='password']")
-    private WebElement userPassInput;
-
-    @FindBy(css = "button[type='submit']")
-    private WebElement loginButton;
-
-    @FindBy(css = "div.text-center > a")
-    private WebElement stringForgotPassword;
+    @FindBy(css = "[id='auth-button']")
+    private WebElement authenticateButton;
 
     public AgentLoginPage(String ordinalAgentNumber) {
         super(ordinalAgentNumber);
     }
 
-    public static AgentLoginPage openAgentLoginPage(String ordinalAgentNumber, String tenantOrgName) {
-       DriverFactory.getDriverForAgent(ordinalAgentNumber).get(URLs.getAgentURL(tenantOrgName, true));
-       return new AgentLoginPage(ordinalAgentNumber);
-   }
 
-   public AgentLoginPage loginAsAgentOf(String tenantOrgName, String ordinalAgentNumber) {
-       Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
-       try{
-           logIn(agent, ordinalAgentNumber);
-       }catch(NoSuchElementException|TimeoutException e){
-           new AgentHomePage(ordinalAgentNumber).getPageHeader().logOut();
-           logIn(agent, ordinalAgentNumber);
-       }
-       return this;
-   }
+    private Select dropdownSelect;
 
-   private void logIn(Agents agent, String ordinalAgentNumber){
-       waitForElementToBeVisible(this.getCurrentDriver(),userNameInput, 5);
-       userNameInput.sendKeys(agent.getAgentEmail());
-       userPassInput.sendKeys(agent.getAgentPass());
-       loginButton.click();
-   }
-
-   public void waitForLoginPageToOpen(String agent) {
-        waitForElementToBeVisible(this.getCurrentDriver(), loginForm, 6);
-   }
-
-    public String getLoginButtonColor() {
-        waitForElementToBeVisible(this.getCurrentDriver(), loginButton, 6);
-        return Color.fromString(loginButton.getCssValue("color")).asHex();
+    public void selectTenant(String tenantName){
+        waitForElementToBeVisible(this.getCurrentDriver(), tenantsDropdown, 3);
+        dropdownSelect = new Select(tenantsDropdown);
+        dropdownSelect.selectByValue(tenantName);
     }
 
-    public String getStringForgotColor() {
-        return Color.fromString(stringForgotPassword.getCssValue("color")).asHex();
+    public void selectAgent(String tenantName){
+        dropdownSelect = new Select(agentsDropdown);
+        dropdownSelect.selectByValue(tenantName);
+    }
+
+    public void clickAuthenticateButton(){
+        clickElem(this.getCurrentDriver(), authenticateButton, 2, "Authenticate");
     }
 }

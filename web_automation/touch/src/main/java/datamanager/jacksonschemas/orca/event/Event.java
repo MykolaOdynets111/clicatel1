@@ -1,8 +1,9 @@
 package datamanager.jacksonschemas.orca.event;
-import lombok.Builder;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.io.FileUtils;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import java.io.File;
 import java.net.URLConnection;
@@ -19,10 +20,11 @@ import java.net.URLConnection;
         "size",
         "ref"
 })
+@Generated("jsonschema2pojo")
 public class Event {
 
     @JsonProperty("eventType")
-    protected EventType eventType;
+    private String eventType;
     @JsonProperty("text")
     private String text;
     @JsonProperty("initial")
@@ -35,31 +37,32 @@ public class Event {
     private String caption;
     @JsonProperty("contentType")
     private String contentType;
-    @JsonProperty("size")
-    private long size;
+//    @JsonProperty("size")
+//    private long size;
     @JsonProperty("ref")
     private String ref;
 
+
     public Event(String messageText){
-        this.setEventType(EventType.TEXT);
+        this.setEventType(EventType.TEXT.toString());
         this.setText(messageText);
     }
 
     public Event(File file){
-        this.setEventType(EventType.MEDIA);
+        this.setEventType(EventType.MEDIA.toString());
         this.setCaption(file.getName());
         this.setContentType(URLConnection.guessContentTypeFromName(file.getName()));
-        this.setSize(FileUtils.sizeOf(file));
+//        this.setSize(FileUtils.sizeOf(file));
         this.setRef(file.getAbsolutePath());
     }
 
     @JsonProperty("eventType")
-    public EventType getEventType() {
+    public String getEventType() {
         return eventType;
     }
 
     @JsonProperty("eventType")
-    public void setEventType(EventType eventType) {
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 
@@ -133,27 +136,12 @@ public class Event {
         this.ref = ref;
     }
 
-    @JsonProperty("size")
-    public long getSize() {
-        return size;
-    }
-    @JsonProperty("size")
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    @Override
-    public String toString() {
-        return "TextEvent{" +
-                "eventType=" + eventType +
-                ", text='" + text + '\'' +
-                ", initial='" + initial + '\'' +
-                ", release='" + release + '\'' +
-                ", structuredText='" + structuredText + '\'' +
-                ", caption='" + caption + '\'' +
-                ", contentType='" + contentType + '\'' +
-                ", size=" + size +
-                ", ref='" + ref + '\'' +
-                '}';
-    }
+//    @JsonProperty("size")
+//    public long getSize() {
+//        return size;
+//    }
+//    @JsonProperty("size")
+//    public void setSize(long size) {
+//        this.size = size;
+//    }
 }

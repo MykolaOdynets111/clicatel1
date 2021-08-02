@@ -22,6 +22,7 @@ public class Tenants {
     private static ThreadLocal<String> TENANT_UNDER_TEST_NAME = new ThreadLocal<>();
     private static ThreadLocal<String> TENANT_UNDER_TEST_ORG_NAME =  new ThreadLocal<>();
     private static ThreadLocal<Map<String,String>> TENANT_UNDER_TEST =  new ThreadLocal<>();
+    private static ThreadLocal<String> TENANT_ID = new ThreadLocal<>();
 
     public static void setTenantUnderTestOrgName(String orgName){
         TENANT_UNDER_TEST_ORG_NAME.set(orgName);
@@ -29,6 +30,13 @@ public class Tenants {
 
     public static void setTenantUnderTestName(String tenantName){
         TENANT_UNDER_TEST_NAME.set(tenantName);
+    }
+
+    public static String getTenantId() {
+        if(TENANT_ID.get() == null){
+            TENANT_ID.set(ApiHelper.getTenantInfoMap(TENANT_UNDER_TEST_ORG_NAME.get()).get("id"));
+        };
+        return TENANT_ID.get();
     }
 
     public static void setTenantInfo(String tenantName, String tenantOrgName){
@@ -123,6 +131,7 @@ public class Tenants {
         TENANT_UNDER_TEST.remove();
         TENANT_UNDER_TEST_ORG_NAME.remove();
         TENANT_UNDER_TEST_NAME.remove();
+        TENANT_ID.remove();
     }
 
     public static String getTenantNameByTenantOrgName(String tenantOrgName){

@@ -55,16 +55,14 @@ public enum DriverType {
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
             String hostName = getHostName();
-            if (!hostName.contains("FANB0604") & !ConfigManager.isRemote()) {
+            if (!ConfigManager.isRemote()) {
                 ChromeDriverManager.getInstance().version("90").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
-            }
-            if (hostName.equals("FANB0604")) {
-                ChromeDriverManager.getInstance().version("75").setup();
+            }else{
+                ChromeDriverManager.getInstance().version("89.0.4389.82").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
-            ChromeDriverManager.getInstance().setup();
-            return new ChromeDriver((ChromeOptions) capabilities);
+
         }
 
         @Override

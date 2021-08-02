@@ -65,16 +65,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getLeftMenuWithChats().waitForAllChatsToDisappear(4);
     }
 
-    @When("I check primary color for tenant in login page")
-    public void checkPrimaryColorLoginPage(){
-        SoftAssert soft = new SoftAssert();
-        soft.assertEquals(getCurrentLoginPage().getLoginButtonColor(), BasePortalSteps.getTenantInfoMap().get("newColor"),
-                "Color for tenant 'Login button' is not correct");
-        soft.assertEquals(getCurrentLoginPage().getStringForgotColor(), BasePortalSteps.getTenantInfoMap().get("newColor"),
-                "Color for tenant 'Forgot password?' string is not correct");
-        soft.assertAll();
-    }
-
     @Given("^(.*) tenant feature is set to (.*) for (.*)$")
     public void setFeatureStatus(String feature, String status, String tenantOrgName){
         PortalAuthToken.clearAccessTokenForPortalUser();

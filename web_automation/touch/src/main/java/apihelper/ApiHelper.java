@@ -60,20 +60,23 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static Map<String, String> getTenantInfoMap(String tenantOrgName) {
         Tenants.setTenantUnderTestNames(tenantOrgName);
         Response resp = RestAssured.given().log().all()
-                .get(Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName());
-        Map<String, String> tenantInf = new HashMap<>();
+                .get(Endpoints.INTERNAL_TENANTS);
+        List<Map> tenants = new ArrayList<>();
         Assert.assertEquals(resp.statusCode(), 200,
                 "Get Tenant Info Map was not successful\n" +
                         "resp body: " + resp.getBody().asString());
         try{
-             tenantInf = resp.getBody().jsonPath().getMap("");
+             tenants = resp.getBody().jsonPath().getList("");
         } catch (JsonPathException e){
             Assert.fail( "Failed to get tenant info\n"+
-            "URL: " + Endpoints.INTERNAL_TENANTS + Tenants.getTenantUnderTestName() + "\n" +
+            "URL: " + Endpoints.INTERNAL_TENANTS + "\n" +
             "resp status code:" + resp.statusCode() + "\n"+
             "resp body: " + resp.getBody().asString());
         }
-        return tenantInf;
+        Map<String, String> tenantInfo = tenants.stream().filter(e -> e.get("orgName").equals(tenantOrgName)).findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "No Tenants with " + tenantOrgName + " tenantOrgName, env: " + ConfigManager.getEnv()));
+        return tenantInfo;
     }
 
     public static Response getTenantInfo(String tenantOrgName) {
