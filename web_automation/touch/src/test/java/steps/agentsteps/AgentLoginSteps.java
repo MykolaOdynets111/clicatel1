@@ -31,8 +31,8 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
         Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
         List<Permission> permissions = new ArrayList<>();
-        ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber)
-                .getBody().jsonPath().getList("roles", UserRole.class).stream().forEach(e -> permissions.addAll(e.getPermissions()));
+//        ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber)
+//                .getBody().jsonPath().getList("roles", UserRole.class).stream().forEach(e -> permissions.addAll(e.getPermissions()));
         getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
         getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
 

@@ -18,6 +18,8 @@ import portalpages.*;
 import portaluielem.LeftMenu;
 import steps.dotcontrol.DotControlSteps;
 
+import java.util.Map;
+
 public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
 
     private static ThreadLocal<PortalLoginPage> currentPortalLoginPage = new ThreadLocal<>();
@@ -95,8 +97,8 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     }
 
     public String getAgentName(String agent){
-        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
-        return rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+        Map<String, String> agentInfo = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
+        return agentInfo.get("fullName");
     }
 
     public static PortalLoginPage getPortalLoginPage(String agent) {

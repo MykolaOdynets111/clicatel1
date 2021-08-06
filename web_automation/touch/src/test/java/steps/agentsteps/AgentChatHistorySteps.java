@@ -86,7 +86,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         }
 
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
-        String agentId = ApiHelper.getAgentInfo(tenantOrgName, agent).getBody().jsonPath().get("id");
+        String agentId = ApiHelper.getAgentInfo(tenantOrgName, agent).get("id");
         String channelId = ApiHelper.getChannelID(tenantOrgName, "webchat");
 
 

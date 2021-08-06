@@ -60,14 +60,14 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         }
     }
 
-    private static AgentLoginPage getLoginForSecondAgent() {
+    public static AgentLoginPage getLoginForSecondAgent() {
         if (secondAgentLoginPage.get()==null) {
             secondAgentLoginPage.set(new AgentLoginPage("second agent"));
         }
         return secondAgentLoginPage.get();
     }
 
-    private static AgentLoginPage getLoginForMainAgent() {
+    public static AgentLoginPage getLoginForMainAgent() {
         if (mainAgentLoginPage.get()==null) {
             mainAgentLoginPage.set(new AgentLoginPage("main"));
         }

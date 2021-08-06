@@ -114,10 +114,11 @@ public class Hooks implements JSHelper {
 
         if(scenario.getSourceTagNames().contains("@agent_support_hours")){
             Response resp = ApiHelper.setAgentSupportDaysAndHours(Tenants.getTenantUnderTestOrgName(), "all week", "00:00", "23:59");
-            String agent;
-            if(DriverFactory.isSecondAgentDriverExists()) agent = "second agent";
-            else agent = "main";
-            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
+//ToDo Update API after it will be ready
+//            String agent;
+//            if(DriverFactory.isSecondAgentDriverExists()) agent = "second agent";
+//            else agent = "main";
+//            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
             if(resp.statusCode()!=200) {
                 supportHoursUpdates(resp);
             }
@@ -472,6 +473,7 @@ public class Hooks implements JSHelper {
     private void clearAllSessionData(){
         Tenants.clearTenantUnderTest();
         PortalAuthToken.clearAccessTokenForPortalUser();
+        TouchAuthToken.clearAccessTokenForPortalUser();
         URLs.clearFinalAgentURL();
         AbstractAgentSteps.cleanAllPages();
         AbstractPortalSteps.cleanAllPortalPages();

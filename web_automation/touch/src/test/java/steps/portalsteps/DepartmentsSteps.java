@@ -38,8 +38,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     public void createDepartmentWithSeveralAgents(String name, String description, int agent){
         List<String> agents = new ArrayList<String>();
         agents.add(Tenants.getTenantUnderTestOrgName());
-        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "second agent");
-        String secondAgentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+        String secondAgentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "second agent").get("fullName");
         agents.add(secondAgentName);
         for (int i = agent-2; i > 0; i--){
             agents.add(AbstractAgentSteps.getListOfCreatedAgents().get((i-1)).get("name"));

@@ -104,9 +104,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^Agent attach (.*) file type$")
     public void attachFile(String fileName) {
-        File pathToFile = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/" + fileName + "." + fileName);
+        File pathToFile = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/" + fileName + "." + fileName);
         String newName = new Faker().letterify(fileName + "?????") + "." + fileName;
-        File renamed =  new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" +  newName);
+        File renamed =  new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" +  newName);
         try {
             Files.copy(pathToFile, renamed);
         } catch (IOException e) {
@@ -143,7 +143,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^File is not changed after uploading and downloading$")
     public void verifyFilesEquality(){
-        File fileForUpload = new File(System.getProperty("user.dir")+"/touch/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
+        File fileForUpload = new File(System.getProperty("user.dir")+"/src/test/resources/mediasupport/renamed/" + DefaultTouchUserSteps.mediaFileName.get());
 //        String sharedFolder = File.separator + File.separator+ "172.31.76.251"+File.separator + "Share" + File.separator
 //                + "chrome" + File.separator;
         String sharedFolder = "\\\\172.31.76.251\\Share\\chrome\\";

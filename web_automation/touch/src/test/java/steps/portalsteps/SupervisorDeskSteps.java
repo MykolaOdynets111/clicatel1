@@ -137,8 +137,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^(.*) is set as 'current agent' for dot control ticket$")
     public void verifyCurrentAgent(String agent){
-        Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent);
-        String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+        String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("fullName");
         getSupervisorDeskPage().getCurrentDriver().navigate().refresh();
         getSupervisorDeskPage().waitForConnectingDisappear(2,5);
         boolean result = false;
@@ -159,8 +158,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
             Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName).equalsIgnoreCase("No current Agent"),
                     "Unassigned ticket should be present");
         } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Overdue")){
-            Response rest = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent");
-            String agentName = rest.jsonPath().get("firstName") + " " + rest.jsonPath().get("lastName");
+            String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent").get("fullName");
             Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName)),
                     "Ticket should be present on " + status + " filter page");
         } else if(status.equalsIgnoreCase("All tickets")){

@@ -20,13 +20,13 @@ Feature: Apple Business Chat :: Supervisor Desk
     And Agent select "Apple Business Chat" in Chanel container and click "Apply filters" button
     Then Verify that only "apple_business_chat" closed chats are shown
 
-#  @agent_support_hours
+  @agent_support_hours
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45507")
   Scenario: Supervisor desk:: Verify if supervisor can filter tickets by ticket status and apple channel filter option
     Given Setup ORCA integration for Standard Billing tenant
-#    And Set agent support hours with day shift
-    When Send to agent message by ORCA
+    And Set agent support hours with day shift
+#    When Send to agent message by ORCA
 #    Given I open portal
 #    And Login into portal as an admin of General Bank Demo account
 #    And I select Touch in left menu and Supervisor Desk in submenu

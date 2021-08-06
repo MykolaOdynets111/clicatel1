@@ -12,7 +12,7 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_HOURS = URLs.getTouchApiBaseURL() + "tenants/%s/hours/webchat";
 
-    public static String AGENT_SUPPORT_HOURS = URLs.getTouchApiBaseURL() + "tenants/%s/hours/agent-support";
+    public static String AGENT_SUPPORT_HOURS = URLs.getTouchApiBaseURL() + "support-hours";
 
     public static String WIDGET_VISIBILITY_TERRITORIES = URLs.getTouchApiBaseURL() + "territories/availability";
 
@@ -20,7 +20,7 @@ public class Endpoints {
 
     public static String TWITTER_INTEGRATION =  URLs.getTouchApiBaseURL() + "twitter-registration/integration";
 
-    public static String AGENT_INFO_ME = URLs.getTouchApiBaseURL() + "agents/infoMe";
+    public static String AGENT_INFO_ME = URLs.getBaseWSInternalURL() + "agents/%s";
 
     public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
 
@@ -96,7 +96,7 @@ public class Endpoints {
 
     public static String INTERNAL_SESSION_DETAILS = URLs.getBaseInternalApiUrl() + "sessions?tenantName=%s&clientId=%s&page=1&count=50&dateFrom=0&dateTo=0";
 
-    public static String INTERNAL_TENANTS = URLs.getBaseWSInternalURL() + "/internal/tenants";
+    public static String INTERNAL_TENANTS = URLs.getBaseWSInternalURL() + "tenants";
 
     public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
 
@@ -201,15 +201,16 @@ public class Endpoints {
 
     // ====================  ORCA ================= //
 
-    public static String CREATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "/internal/api/channel/abc-orca/%s";
+    public static String CREATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "api/channel/abc-orca/%s";
 
-    public static String UPDATE_ORCA_INTEGRATION= URLs.getBaseWSInternalURL() + "/internal/api/channel/abc-orca/%s/%s";
+    public static String UPDATE_ORCA_INTEGRATION= URLs.getBaseWSInternalURL() + "api/channel/abc-orca/%s/%s";
 
-    public static String ORCA_INTEGRATIONS_LIST= URLs.getBaseWSInternalURL() + "/internal/api/channel/abc-orca?tenantId=%s";
+    public static String ORCA_INTEGRATIONS_LIST= URLs.getBaseWSInternalURL() + "api/channel/abc-orca?tenantId=%s";
 
     // ====================  WS  ================= //
 
-    public static String CREATE_TENANT_WS = URLs.getBaseWSInternalURL() + "/internal/tenants/";
-    public static String CREATE_AGENT_WS = URLs.getBaseWSInternalURL() + "/internal/agents/%s";
+    public static String CREATE_TENANT_WS = URLs.getBaseWSInternalURL() + "tenants/";
+    public static String CREATE_AGENT_WS = URLs.getBaseWSInternalURL() + "agents/%s";
+    public static String TOUCH_AUTH = URLs.getBaseWSInternalURL() + "auth/auth-token";
 }
 

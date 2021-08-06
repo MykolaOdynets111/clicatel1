@@ -45,7 +45,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static Response getTenantConfig(String tenantOrgName){
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_CONFIG, tenantId));
     }
 
@@ -81,7 +81,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static Response getTenantInfo(String tenantOrgName) {
         Response resp =  RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.TENANT_INFO);
         Assert.assertEquals(resp.statusCode(),200, "Failed to get tenant info\n"+
                 "URL: " + Endpoints.TENANT_INFO + "\n" +
@@ -194,7 +194,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static void updateAutoresponderMessage(AutoResponderMessage tafMessage, String autoResponderId){
         String url = String.format(Endpoints.AUTORESPONDER_CONTROLLER, autoResponderId);
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .param("autoresponderId", tafMessage.getId())
                 .param("enabled", tafMessage.getEnabled())
@@ -213,7 +213,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 //        String body = createPutBodyForHours(day, startTime, endTime);
 //        Response resp = RestAssured.given().log().all()
 //                .contentType(ContentType.JSON)
-//                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+//                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
 //                .body(body)
 //                .put(String.format(Endpoints.WIDGET_VISIBILITY_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
 //        if (! (resp.getStatusCode() == 200)){
@@ -227,16 +227,16 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String body = createPutBodyForHours(day, startTime, endTime);
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .body(body)
-                .put(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
+                .post(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
     }
 
     public static SupportHoursItem getAgentSupportDaysAndHours(String tenantOrgName) {
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
-                .get(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
+                .post(String.format(Endpoints.AGENT_SUPPORT_HOURS, ApiHelper.getTenantInfoMap(tenantOrgName).get("id")));
 
         try {
             return resp.getBody().as(SupportHoursItem.class);
@@ -244,7 +244,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             Assert.fail("Incorrect body on updating support hours \n"
             +"Status code: " +resp.statusCode() + "\n"
                     +"tenantOrgName: "+ tenantOrgName
-                    + "Authorization :"  + PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main") + "\n"
+                    + "Authorization :"  + TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main") + "\n"
           + resp.getBody().asString()  );
             return null;
         }
@@ -254,57 +254,35 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String body;
         if (day.equalsIgnoreCase("all week")) {
             body = "{\n" +
-                    "  \"departmentMapping\": null,\n" +
-                    "  \"agentMapping\": [\n" +
+                    "  \"agentSupportHours\": [\n" +
                     "    {\n" +
                     "      \"startWorkTime\": \"00:00\",\n" +
                     "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"MONDAY\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"TUESDAY\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"WEDNESDAY\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"THURSDAY\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"FRIDAY\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"SATURDAY\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"startWorkTime\": \"00:00\",\n" +
-                    "      \"endWorkTime\": \"23:59\",\n" +
-                    "      \"dayOfWeek\": \"SUNDAY\"\n" +
+                    "      \"days\": [\n" +
+                    "        \"FRIDAY\",\n" +
+                    "        \"MONDAY\",\n" +
+                    "        \"SATURDAY\",\n" +
+                    "        \"SUNDAY\",\n" +
+                    "        \"THURSDAY\",\n" +
+                    "        \"TUESDAY\",\n" +
+                    "        \"WEDNESDAY\"\n" +
+                    "      ]\n" +
                     "    }\n" +
                     "  ],\n" +
-                    "  \"department\": false\n" +
+                    "  \"supportHoursByDepartment\": []\n" +
                     "}";
         } else{
             body ="{\n" +
-                    "  \"departmentMapping\": null,\n" +
-                    "  \"agentMapping\": [\n" +
+                    "  \"agentSupportHours\": [\n" +
                     "    {\n" +
                     "      \"startWorkTime\": \"" + startTime + "\",\n" +
                     "      \"endWorkTime\": \"" + endTime + "\",\n" +
-                    "      \"dayOfWeek\": \"" + day.toUpperCase() + "\"\n" +
+                    "      \"days\": [\n" +
+                    "        \"" + day.toUpperCase() + "\"\n" +
+                    "      ]\n" +
                     "    }\n" +
                     "  ],\n" +
-                    "  \"department\": false\n" +
+                    "  \"supportHoursByDepartment\": []\n" +
                     "}";
         }
         return body;
@@ -313,7 +291,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static void setAvailableForAllTerritories(String tenantOrgName){
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"AVAILABLE\"\n" +
                         "\n" +
@@ -331,7 +309,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String countryID = targetCountry.getCountryId();
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
                         "  \"territory\": [\n" +
@@ -355,7 +333,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String territoryID = targetTerr.getTerritoryId();
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"availability\": \"LIMITED\",\n" +
                         "  \"territory\": [\n" +
@@ -394,7 +372,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static boolean getFeatureStatus(String tenantOrgName, String FEATURE){
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.FEATURE);
         boolean featureStatus = false;
         try{
@@ -412,12 +390,30 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return (int) RestAssured.get(url).getBody().jsonPath().get("loggedInAgentsCount");
     }
 
-    public static Response getAgentInfo(String tenantOrgName, String agent) {
-        String token = PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, agent);
-        return RestAssured.given()
+    public static Map<String, String> getAgentInfo(String tenantOrgName, String agent) {
+        Agents user = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName.toLowerCase(), agent);
+        Response resp = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", token)
-                .get(Endpoints.AGENT_INFO_ME);
+                .get(String.format(Endpoints.AGENT_INFO_ME, Tenants.getTenantId()));
+        Assert.assertEquals(resp.getStatusCode(), 200 ,String.format("Agent is not return status code is : %s and Body is: %s", resp.getStatusCode(), resp.getBody().asString()));
+        List<Map> agents = resp.getBody().jsonPath().getList("");
+
+        Map<String, String> agentInfoMap = agents.stream().filter(e -> e.get("email").equals(user.getAgentEmail())).findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "No Agents with " + user.getAgentEmail() + " email, env: " + ConfigManager.getEnv()));
+        return agentInfoMap;
+    }
+
+    public static String getAgentId(String tenantOrgName, String agent){
+        return getAgentInfo(tenantOrgName, agent).get("id");
+    }
+
+    public static String getTouchToken(String tenantOrgName, String agent){
+        Response resp = RestAssured.given().log().all()
+                .param("agentId", getAgentId(tenantOrgName, agent))
+                .param("tenantId", Tenants.getTenantId())
+                .get(String.format(Endpoints.TOUCH_AUTH, Tenants.getTenantId()));
+        return resp.getBody().jsonPath().get("jwt");
     }
 
     public static void logoutTheAgent(String tenantOrgName) {
@@ -439,7 +435,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static SurveyManagement getSurveyManagementAttributes(String channelId){
         return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.SURVEY_MANAGEMENT, channelId))
                 .getBody().as(SurveyManagement.class);
     }
@@ -455,7 +451,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID ){
-        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(configuration)
                 .put(String.format(Endpoints.SURVEY_MANAGEMENT, channelID));
@@ -467,7 +463,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static String getChannelID(String tenantOrgName, String integrationChanel){
         List<IntegrationChannel> existedChannels = RestAssured.given()
-                                                            .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                                                            .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                                                             .get(Endpoints.INTEGRATION_EXISTING_CHANNELS)
                                                             .getBody().jsonPath().getList("", IntegrationChannel.class);
     return  existedChannels.stream().filter(e -> e.getChannelType().equalsIgnoreCase(integrationChanel))
@@ -482,13 +478,13 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId);
         return RestAssured.given().log().all()
-                        .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                        .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                         .get(String.format(Endpoints.INTERNAL_CHAT_USER_BY_ID, tenantID, clientId, chanelId))
                         .getBody().as(UserInfo.class);
     }
 
     public static void updateUserProfile(UserInfo userInfo){
-        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(userInfo)
                 .put(Endpoints.INTERNAL_CHAT_USERS);
@@ -501,7 +497,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static void setIntegrationStatus(String tenantOrgName, String integration, boolean integrationStatus){
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .body("{\n" +
                         "  \"channelId\": \""+getChannelID(tenantOrgName, integration)+"\",\n" +
                         "  \"enable\": "+ integrationStatus + "\n" +
@@ -511,35 +507,35 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static ResponseBody getInfoAboutFBIntegration(String tenantOrgName){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
 
     public static ResponseBody getInfoAboutTwitterIntegration(String tenantOrgName){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.TWITTER_INTEGRATION)
                 .getBody();
     }
 
     public static String getInfoAboutTwitterIntegration(String tenantOrgName,String parametr){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.TWITTER_INTEGRATION)
                 .getBody().jsonPath().getString(parametr);
     }
 
     public static ResponseBody delinkTwitterIntegration(String tenantOrgName){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .delete(Endpoints.TWITTER_INTEGRATION)
                 .getBody();
     }
 
     public static void delinkFBIntegration(String tenantOrgName){
         RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .delete(Endpoints.FACEBOOK_INTEGRATION)
                 .getBody();
     }
@@ -562,7 +558,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static Integration getIntegration(String tenantOrgName, String integrationType){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.INTEGRATIONS)
                 .getBody().jsonPath().getList("", Integration.class)
                 .stream()
@@ -572,7 +568,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static List<ChatHistoryItem> getChatHistory(String tenantOrgName, String sessionId){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.CHAT_HISTORY, sessionId))
                 .getBody().jsonPath().getList("records", ChatHistoryItem.class);
     }
@@ -581,7 +577,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         PortalAuthToken.clearAccessTokenForPortalUser();
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .put(Endpoints.SESSION_CAPACITY + availableChats);
     }
 
@@ -601,7 +597,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void closeAllOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
         try {
-            String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).getBody().jsonPath().get("id");
+            String agentId = ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber).get("id");
             List<OvernightTicket> allAssignedTickets = getAssignedOvernightTickets(tenantOrgName, ordinalAgentNumber);
             List<OvernightTicket> allUnassignedTickets = getUnassignedOvernightTickets(tenantOrgName);
 
@@ -618,7 +614,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static List<OvernightTicket> getAssignedOvernightTickets(String tenantOrgName, String ordinalAgentNumber){
         List<OvernightTicket> tickets = new ArrayList<>();
         Response resp =  RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, ordinalAgentNumber))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, ordinalAgentNumber))
                 .get(Endpoints.AGENT_ASSIGNED_TICKETS);
         try {
             tickets = resp.getBody().jsonPath().getList("", OvernightTicket.class);
@@ -660,7 +656,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static List<Department> getDepartments(String tenantOrgName){
-        Response resp =  RestAssured.given().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "")).get(Endpoints.DEPARTMENTS);
+        Response resp =  RestAssured.given().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "")).get(Endpoints.DEPARTMENTS);
         List<Department> departments = resp.jsonPath().getList("", Department.class);
         return departments;
     }
@@ -672,7 +668,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             if (department.getName().contains("Auto")) {
                 String departmentId = department.getId();
                  RestAssured.given()
-                        .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, ""))
+                        .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, ""))
                         .delete(Endpoints.DEPARTMENTS + "/" + department.getId());
             }
         }
@@ -680,11 +676,11 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
 
     public static void createDepartment(String name, String description, String agent ){
-        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).getBody().jsonPath().get("id");
+        String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("id");
         String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         Response resp;
         resp = RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{ " +
@@ -775,7 +771,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void updateClientProfileAttribute(String attributeName, String attribute, String clientId){
         Response resp = RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{" +
@@ -795,7 +791,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static JsonPath getCustomerView(String tenantOrgName, String clineId){
         String sessionId = (String) getActiveSessionByClientId(clineId).get("sessionId");
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(Endpoints.CUSTOMER_VIEW + sessionId)
                 .getBody().jsonPath();
 
@@ -811,9 +807,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void deleteAgentPhotoForMainAQAAgent(String tenantOrgName){
-        String agentId = getAgentInfo(tenantOrgName, "main").getBody().jsonPath().get("id");
+        String agentId = getAgentInfo(tenantOrgName, "main").get("id");
         Response resp =  RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.DELETE_AGENT_IMAGE, agentId));
         if (!(resp.getStatusCode()==200)){
             Assert.fail("Agent image was not successful" + " status code = " + resp.statusCode() +
@@ -824,25 +820,25 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static void deleteTenantBrandImage(String tenantOrgName){
         String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
 
         RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .delete(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
     public static Response getTenantBrandImage(String tenantOrgName){
         String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_BRAND_LOGO, tenantID));
     }
 
     public static Response getTenantBrandImageTrans(String tenantOrgName){
         String tenantID  = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .get(String.format(Endpoints.TENANT_BRAND_LOGO_TRANS, tenantID));
     }
 
@@ -851,7 +847,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static Response getFinishedChatsByLoggedInAgentAgent(String tenantOrgName, int page, int size){
-        String agentId = getAgentInfo(tenantOrgName, "main").getBody().jsonPath().get("id");
+        String agentId = getAgentInfo(tenantOrgName, "main").get("id");
         String url = String.format(Endpoints.INTERNAL_GET_CHATS_FINISHED_BY_AGENT, agentId, page, size);
         return RestAssured.get(url);
     }
@@ -859,7 +855,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static Response getActiveChatsByAgent(String agent){
         return RestAssured.given()
                 .header("Authorization",
-                        PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
+                        TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
                 .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
@@ -869,7 +865,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             RestAssured.given()
                     .accept(ContentType.JSON)
                     .header("Authorization",
-                            PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), agent))
+                            TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
                     .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
         }
     }
@@ -878,7 +874,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String tenantOrgName = Tenants.getTenantUnderTestOrgName();
         String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         Response resp  = RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(tenantOrgName, "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
                 .contentType(ContentType.JSON)
                 .body("{\n" +
                         "  \"page\": 0,\n" +
@@ -893,7 +889,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void updateElasticSearchModel(Map elasticSearchModel){
-        Response resp = RestAssured.given().log().all().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(elasticSearchModel)
                 .put(Endpoints.INTERNAL_ELASTIC_CHAT_INDEX);
@@ -910,19 +906,19 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static List<CRMTicket> getCRMTickets(){
              return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.CRM_TICKET, clientProfileId.get()))
                 .getBody().jsonPath().getList("", CRMTicket.class);
     }
 
     public static List<String> getTagsForCRMTicket(String chatId){
-        return RestAssured.given().header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+        return RestAssured.given().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.CHATS_INFO, chatId)).getBody().jsonPath().getList("tags.value");
     }
 
     public static List<String> getAllTags(){
         return RestAssured.given()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.TAGS_FOR_CRM_TICKET).getBody().jsonPath().getList("value");
     }
 
@@ -931,7 +927,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static Response createCRMTicket(String clientID, Map<String, String> ticketInfo){
         return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{" +
@@ -946,7 +942,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void deleteCRMTicket(String crmTicketId){
         RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .delete(Endpoints.DELETE_CRM_TICKET + crmTicketId);
     }
@@ -955,7 +951,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     public static Response updateTenantConfig(String tenantOrgName, String config, String configValue){
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .body("{ \"configAttributes\": " +
@@ -1009,14 +1005,14 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static List<AvailableAgent> getAvailableAgents(){
         return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(Endpoints.TENANT_AVAILABLE_AGENTS)
                 .getBody().jsonPath().getList("agents", AvailableAgent.class);
     }
 
     public static ClientProfile getClientAttributes(String clientProfileID){
         return RestAssured.given().log().all()
-                .header("Authorization", PortalAuthToken.getAccessTokenForPortalUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .get(String.format(Endpoints.INTERNAL_CLIENT_PROFILE_ATTRIBUTES_ENDPOINT, clientProfileID))
                 .getBody().as(ClientProfile.class);
     }

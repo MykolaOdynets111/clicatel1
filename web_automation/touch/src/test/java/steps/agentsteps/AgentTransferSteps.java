@@ -115,9 +115,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @Then("^Agent is shown as current chat assignment and disabled for selection$")
     public void agentSeesCurrentlyThereSNoAgentsAvailable() {
-        Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
-        String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
-                agentInfoResp.getBody().jsonPath().get("lastName");
+        String expectedAgentNAme = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName()).get("fullName");
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(getAgentHomeForMainAgent().getTransferChatWindow().getTextDropDownMessage(), expectedAgentNAme + " - current chat assignment", "message in drop down menu not as expected");
         soft.assertTrue(getAgentHomeForMainAgent().getTransferChatWindow().isAssignedAgentDisabledToSelect(), "Current chat assignment should be disabled for selection");
@@ -217,9 +215,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
             if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
                 userMessage = FacebookSteps.getCurrentUserMessageText();
             }
-            Response agentInfoResp = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName());
-            String expectedAgentNAme = agentInfoResp.getBody().jsonPath().get("firstName") + " " +
-                    agentInfoResp.getBody().jsonPath().get("lastName");
+            String expectedAgentNAme = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName()).get("fullName");
 
             soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientName(), expectedUserName,
                     "User name in Incoming transfer window is not as expected");

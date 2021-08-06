@@ -149,7 +149,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public SupervisorDeskLiveRow getSupervisorDeskLiveRow(String userName){
         waitForFirstElementToBeVisible(this.getCurrentDriver(), chatsLive, 7);
-        waitForElementToBeInvisible(this.getCurrentDriver(), loading, 6);
+        waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), "//h2[text() ='Loading...']", 6);
         return chatsLive.stream()
                  .map(e -> new SupervisorDeskLiveRow(e).setCurrentDriver(this.getCurrentDriver()))
                  .collect(Collectors.toList())

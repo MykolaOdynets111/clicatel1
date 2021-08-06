@@ -32,7 +32,7 @@ public class URLs {
 
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
-    private static String BASE_TOUCH_API_URL = "https://%s-touch.clickatelllabs.com/v6/";
+    private static String BASE_TOUCH_API_URL = "https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
     private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
 
@@ -41,7 +41,13 @@ public class URLs {
 
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
-    private static String BASE_WS_INTERNAL_URL="https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com";
+    private static String BASE_WS_INTERNAL_URL="https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/";
+
+    private static String TOUCH_LOGIN_FORM = "https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool";
+
+    private static String TOUCH_MAIN_URL = "https://%s-chatdesk-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com";
+
+
 
     public static String getWidgetURL(String tenantOrgName){
         String tenantID = "";
@@ -102,6 +108,22 @@ public class URLs {
         return String.format(BASE_WS_INTERNAL_URL, ConfigManager.getEnv());
     }
 
+    public static String getTouchLoginForm(){
+        return String.format(TOUCH_LOGIN_FORM, ConfigManager.getEnv());
+    }
+
+    public static String getAgentDeskURL(){
+        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv());
+    }
+
+    public static String getDashboardURL(){
+        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"/dashboard";
+    }
+
+    public static String getSupervisorURL(){
+        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"/supervisor";
+    }
+
     public static String getBasePlatformUrl(){
         return MC2URLs.getBasePlatformUrl();
     }
@@ -154,4 +176,13 @@ public class URLs {
         return String.format(ORCA_MESSAGE, ConfigManager.getEnv());
     }
 
+    public static String getUrlByNameOfPage(String name){
+        switch (name) {
+            case "Dashboard":
+                return getDashboardURL();
+            case "Supervisor Desk":
+                return getSupervisorURL();
+        }
+        return "Incorrect page name was provided";
+    }
 }

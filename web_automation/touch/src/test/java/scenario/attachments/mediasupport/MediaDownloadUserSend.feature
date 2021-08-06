@@ -20,9 +20,9 @@ Feature: Media Support: User send files and agent downloading
     Examples:
       | fileType            |
       | jpeg                |
-#      | jpg                 |
-#      | png                 |
-#      | xls                 |
-#      | doc                 |
-#      | pdf                 |
-#      | ppt                 |
+      | jpg                 |
+      | png                 |
+      | xls                 |
+      | doc                 |
+      | pdf                 |
+      | ppt                 |

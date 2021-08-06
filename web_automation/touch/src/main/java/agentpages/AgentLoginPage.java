@@ -4,13 +4,15 @@ import abstractclasses.AgentAbstractPage;
 import datamanager.Agents;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import mc2api.endpoints.EndpointsPlatform;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
+import portalpages.PortalLoginPage;
+import sun.management.resources.agent;
+
+import java.util.List;
 
 public class AgentLoginPage extends AgentAbstractPage {
 
@@ -27,18 +29,38 @@ public class AgentLoginPage extends AgentAbstractPage {
         super(ordinalAgentNumber);
     }
 
+    public AgentLoginPage openPortalLoginPage() {
+        getCurrentDriver().get(URLs.getTouchLoginForm());
+        return this;
+    }
 
     private Select dropdownSelect;
 
-    public void selectTenant(String tenantName){
+    public AgentLoginPage selectTenant(String tenantName){
         waitForElementToBeVisible(this.getCurrentDriver(), tenantsDropdown, 3);
         dropdownSelect = new Select(tenantsDropdown);
-        dropdownSelect.selectByValue(tenantName);
+        waitForOptionsIsDownloaded(dropdownSelect);
+        dropdownSelect.selectByVisibleText(tenantName);
+        return this;
     }
 
-    public void selectAgent(String tenantName){
+    private List<WebElement> waitForOptionsIsDownloaded(Select dropdownSelect){
+        for(int i=0; i<10; i++) {
+            if (dropdownSelect.getOptions().size() > 1){
+                break;
+            }
+            waitFor(1000);
+        }
+        return dropdownSelect.getOptions();
+    }
+
+    public AgentLoginPage selectAgent(String agent){
+        clickElem(this.getCurrentDriver(), agentsDropdown, 2, "Agents Dropdown");
         dropdownSelect = new Select(agentsDropdown);
-        dropdownSelect.selectByValue(tenantName);
+        List<WebElement> options = waitForOptionsIsDownloaded(dropdownSelect);
+        String agentName = options.stream().filter(a -> a.getText().contains(agent)).findFirst().get().getText();
+        dropdownSelect.selectByVisibleText(agentName);
+        return this;
     }
 
     public void clickAuthenticateButton(){
