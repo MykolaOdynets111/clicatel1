@@ -84,7 +84,10 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
     public void verifyIfAgentReceivesConversationRequest(String agent, String chatType, String integration) {
-        if(integration == null) integration = "touch";
+        if(integration == null) {
+            if(ConfigManager.isWebWidget()) {integration = "touch";
+            }else {integration = "ORCA";}
+        }
 
         String userName=getUserName(integration);
 
@@ -280,6 +283,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
     public void acceptUserFromSocialConversation(String agent, String socialChannel) {
+        if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
         getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
     }
 

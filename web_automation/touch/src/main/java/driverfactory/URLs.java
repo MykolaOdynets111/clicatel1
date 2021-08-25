@@ -22,7 +22,7 @@ public class URLs {
 
     private static String BASE_SOCIAL_URL = "https://%s-touch-social.clickatelllabs.com/";
 
-    private static String ORCA_MESSAGE = "https://%s-touch-social-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/orca/message";
+    private static String ORCA_MESSAGE = "https://%s-chatdesk-channels-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/orca/message";
 
     // ================== API BASE URLs ========================= //
 
@@ -32,7 +32,7 @@ public class URLs {
 
     private static String FACEBOOK_URL = "https://www.facebook.com/%s/";
 
-    private static String BASE_TOUCH_API_URL = "https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
+    private static String BASE_TOUCH_API_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
     private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
 
@@ -41,9 +41,9 @@ public class URLs {
 
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
-    private static String BASE_WS_INTERNAL_URL="https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/";
+    private static String BASE_WS_INTERNAL_URL="https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/";
 
-    private static String TOUCH_LOGIN_FORM = "https://%s-touch-platform-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool";
+    private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool";
 
     private static String TOUCH_MAIN_URL = "https://%s-chatdesk-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com";
 
@@ -182,6 +182,8 @@ public class URLs {
                 return getDashboardURL();
             case "Supervisor Desk":
                 return getSupervisorURL();
+            case "Agent Desk":
+                return getAgentDeskURL();
         }
         return "Incorrect page name was provided";
     }

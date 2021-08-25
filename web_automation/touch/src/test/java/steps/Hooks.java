@@ -118,7 +118,7 @@ public class Hooks implements JSHelper {
 //            String agent;
 //            if(DriverFactory.isSecondAgentDriverExists()) agent = "second agent";
 //            else agent = "main";
-//            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
+            ApiHelper.closeAllOvernightTickets(Tenants.getTenantUnderTestOrgName(), agent);
             if(resp.statusCode()!=200) {
                 supportHoursUpdates(resp);
             }

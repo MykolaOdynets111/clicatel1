@@ -17,10 +17,10 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
-@FindBy(xpath = "//div[@class = 'flex-dashboard agent-container' or @class = 'supervisor-view-group-chats-by']/div[1]")
+@FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id=roster-item]")
+    @FindBy(css = "a.cl-r-chat-item")
     private List<WebElement> newConversationRequests;
 
     @FindBy(css = "[selenium-id=filter-dropdown-menu]")

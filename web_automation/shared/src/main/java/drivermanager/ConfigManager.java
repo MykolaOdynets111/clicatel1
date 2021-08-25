@@ -15,7 +15,8 @@ public class ConfigManager {
     private static final String TENANT_ID = "tenantid";
     private static final String FACEBOOK_PASS = "fbuserpass";
     private static final String SUITE = "suite";
-    private static final String IS_MC2 = "is_mc2";
+    private static final String IS_MC2 = "ismc2";
+    private static final String IS_WEB_WIDGET = "iswebwidget";
 
     // TestFLO reporter configs
     private static final String REPORT_TESTFLO = "reportToTestFLO";
@@ -166,6 +167,14 @@ public class ConfigManager {
         String isMc2 = System.getProperty(IS_MC2);
         return isMc2 != null && Boolean.parseBoolean(isMc2);
     }
+
+    public static Boolean isWebWidget() {
+        String isWebWidget = System.getProperty(IS_WEB_WIDGET);
+        return isWebWidget != null && Boolean.parseBoolean(isWebWidget);
+    }
+
+
+
 
      public static String getTenantOrgName(){
         String tenantOrgName = System.getProperty(TENANT_ORG_NAME);

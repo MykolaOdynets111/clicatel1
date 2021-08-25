@@ -11,5 +11,5 @@ Feature: Precondition on Agents creation
 #      | Starter AQA       | SAQA Main        | SAQA Second        |
 #      | Automation        | Auto Main        | Auto Second        |
 #      | Automation Bot    | Autobot Main     | Autobot Second     |
-      | Standard Billing  | SB Main          | SB Second          |
+#      | Standard Billing  | SB Main          | SB Second          |
 #      | Attachments       | Attachments Main | Attachments Second |

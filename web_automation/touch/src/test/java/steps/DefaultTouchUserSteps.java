@@ -13,6 +13,7 @@ import datamanager.Tenants;
 import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
 import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
@@ -77,11 +78,16 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Given("^User (?:select|opens) (.*) (?:tenant|tenant page)$")
     public void openTenantPage(String tenantOrgName) {
-        Tenants.setTenantUnderTestNames(tenantOrgName);
-        Tenants.checkWidgetConnectionStatus();
-        DriverFactory.openUrl(tenantOrgName);
-        String clientID = getClientIdFromLocalStorage();
-        ApiHelper.createUserProfile(clientID);
+        if(ConfigManager.isWebWidget()) {
+            Tenants.setTenantUnderTestNames(tenantOrgName);
+            Tenants.checkWidgetConnectionStatus();
+            DriverFactory.openUrl(tenantOrgName);
+            String clientID = getClientIdFromLocalStorage();
+            ApiHelper.createUserProfile(clientID);
+        } else{
+            ORCASteps orca = new ORCASteps();
+            orca.createOrUpdateOrcaIntegration(tenantOrgName);
+        }
     }
 
     @Given("(.*) survey configuration for (.*)")
@@ -217,8 +223,13 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @When("^User enter (.*) into widget input field$")
     public DefaultTouchUserSteps enterText(String text) {
-        widget.getWidgetFooter().enterMessage(text).sendMessage();
-        widgetConversationArea.waitForMessageToAppearInWidget(text);
+        if(ConfigManager.isWebWidget()) {
+            widget.getWidgetFooter().enterMessage(text).sendMessage();
+            widgetConversationArea.waitForMessageToAppearInWidget(text);
+        } else {
+            ORCASteps orcaSteps = new ORCASteps();
+            orcaSteps.sendOrcaMessage(text);
+        }
         return this;
     }
 

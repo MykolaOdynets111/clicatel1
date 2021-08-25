@@ -10,8 +10,10 @@ import datamanager.Tenants;
 import datamanager.model.user.Permission;
 import datamanager.model.user.UserRole;
 import driverfactory.DriverFactory;
+import driverfactory.URLs;
 import drivermanager.ConfigManager;
 import org.testng.Assert;
+import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
 import java.util.ArrayList;
@@ -22,7 +24,14 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
+        if (ConfigManager.isMc2()) {
+            loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
+        }else {
+            AbstractAgentSteps.getLoginForMainAgent().openPortalLoginPage();
+            AbstractAgentSteps.getLoginForMainAgent().selectTenant(Tenants.getTenantUnderTestName())
+                    .selectAgent(ordinalAgentNumber).clickAuthenticateButton();
+            AbstractAgentSteps.getLoginForMainAgent().getCurrentDriver().get(URLs.getUrlByNameOfPage("Agent Desk"));
+        }
 
         Assert.assertTrue(getAgentHomePage(ordinalAgentNumber).isAgentSuccessfullyLoggedIn(ordinalAgentNumber),
                 "Agent is not logged in.");

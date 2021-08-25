@@ -13,6 +13,7 @@ import portalpages.PortalLoginPage;
 import sun.management.resources.agent;
 
 import java.util.List;
+import java.util.Locale;
 
 public class AgentLoginPage extends AgentAbstractPage {
 
@@ -55,10 +56,16 @@ public class AgentLoginPage extends AgentAbstractPage {
     }
 
     public AgentLoginPage selectAgent(String agent){
+        if (agent.equalsIgnoreCase("agent")) {
+            agent = "main";
+        } else{
+            agent = "second";
+        }
         clickElem(this.getCurrentDriver(), agentsDropdown, 2, "Agents Dropdown");
         dropdownSelect = new Select(agentsDropdown);
         List<WebElement> options = waitForOptionsIsDownloaded(dropdownSelect);
-        String agentName = options.stream().filter(a -> a.getText().contains(agent)).findFirst().get().getText();
+        String finalAgent = agent;
+        String agentName = options.stream().filter(a -> a.getText().toLowerCase().contains(finalAgent)).findFirst().get().getText();
         dropdownSelect.selectByVisibleText(agentName);
         return this;
     }

@@ -10,11 +10,11 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
 
-    @FindBy(css = ".cl-r-avatar.cl-r-avatar--medium")
+    @FindBy(css = ".cl-r-avatar.cl-r-avatar")
     private WebElement userIcon;
 
 
-    @FindBy(css = "[selenium-id=roster-item-user-name]")
+    @FindBy(css = ".cl-r-chat-item-user-name")
     private WebElement userName;
 
     @FindBy(css = "[selenium-id=roster-item-location]")
@@ -68,7 +68,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public String getUserName() {
-        return userName.getAttribute("innerText");
+        return getTextFromElem(this.getCurrentDriver(), userName, 1, "User Name");
     }
 
     public String getLocation() {

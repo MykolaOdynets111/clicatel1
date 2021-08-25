@@ -479,7 +479,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
             waitForAngularToBeReady(getCurrentPortalLoginPage().getCurrentDriver());
         }else {
             AbstractAgentSteps.getLoginForMainAgent().selectTenant(Tenants.getTenantUnderTestName())
-                    .selectAgent("Main").clickAuthenticateButton();
+                    .selectAgent("agent").clickAuthenticateButton();
         }
     }
 
