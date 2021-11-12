@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BrowserImplementation {
 
-    public static final int WAIT= 222;
+    public static final int WAIT=10;
     private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
 
     public WebDriver browserImplementation() {

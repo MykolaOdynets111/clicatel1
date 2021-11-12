@@ -98,10 +98,11 @@ public class Tenant {
         setMc2AccountId(fake.numerify("aqaId##########"));
         setTenantMode("AGENT");
         setRoutingType("RANDOM");
-        setPendingChatAutoClosureTimeSec(3600);
+        setPendingChatAutoClosureTimeSec(28800);
         setAttachmentLifeTimeDays(1);
-        setAgentInactivityTimeoutSec(3600);
+        setAgentInactivityTimeoutSec(1200);
         setGlobalInactivityTimeoutSec(3600);
+        setMaxChatsPerAgent(15);
     }
 
     @JsonProperty("agentFeedback")

@@ -3,7 +3,7 @@
 <suite name="Pull request" data-provider-thread-count="20" >
     <test name="Agent Logins" >
         <classes>
-            <class name="StartManyAgents" />
+            <class name="StartsAgentsWebSocket" />
         </classes>
     </test>
 </suite>
