@@ -33,7 +33,7 @@ public class AgentLoginPage implements Waits{
     private Select dropdownSelect;
 
     public AgentLoginPage selectTenant(String tenantName){
-        waitForElementToBeClickable(driver, tenantsDropdown, 3);
+        waitForElementToBeClickable(driver, tenantsDropdown, 6);
         dropdownSelect = new Select(tenantsDropdown);
         waitForOptionsIsDownloaded(dropdownSelect);
         dropdownSelect.selectByVisibleText(tenantName);

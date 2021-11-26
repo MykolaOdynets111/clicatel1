@@ -39,7 +39,6 @@ public class StartsAgentsWebSocket {
         agentLoginPage.set(new AgentLoginPage(agentDriver.get()));
         agentLoginPage.get().selectTenant("Performance")
                 .selectAgent(agent.getName()).clickAuthenticateButton();
-
         agentDriver.get().get(URL.webSocketAgentDesk);
         try {
             Thread.sleep(20000);

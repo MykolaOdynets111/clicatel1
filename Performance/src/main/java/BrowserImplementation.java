@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class BrowserImplementation {
 
     public static final int WAIT=10;
-    private static String LINUX_SELENIUM_DOCKERS_URL = "http://selenium.clickatelllabs.com:4444/wd/hub";
+    private static String LINUX_SELENIUM_DOCKERS_URL = "https://dev-shared-selenium-hub.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/wd/hub";
 
     public WebDriver browserImplementation() {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"\\chromedriver.exe");
