@@ -1,5 +1,5 @@
 package dbmanager;
-import org.jetbrains.annotations.NotNull;
+import com.sun.istack.NotNull;
 import org.testng.Assert;
 import java.sql.*;
 import java.time.LocalDateTime;

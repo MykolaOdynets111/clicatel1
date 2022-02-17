@@ -3,10 +3,14 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ClosingChats {
 
-    private static String authURL = "https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/internal/auth/fake-auth-token?agentId=017d5277ffb4e8b3b2b5f13d80fcd9c9&tenantId=017d2870899b1a5c6c9ed8f85e9771e3&domain=.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com&createFakeMc2Token=true";
+    private static String tenantId = "017e7d4dad7ff39e8f756a7a1098c60c";
+    private static String agentId = "017e7d4daf1ad5de8e2a817e2b2aaea4";
+    private static String authURL = "https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/internal/auth/fake-auth-token?agentId="+agentId+"&tenantId="+tenantId+"&domain=.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com&createFakeMc2Token=true";
 
     public static void main(String[] args) {
         int idsQuantity = 0;
@@ -15,8 +19,7 @@ public class ClosingChats {
             List<String> conversationIds = getChats();
             System.out.println(conversationIds);
             idsQuantity = conversationIds.size();
-            System.out.println(conversationIds.size());
-            System.out.println(conversationIds);
+            System.out.println("New chats quantity: " + conversationIds.size());
 
             int i =1;
             String jwt = getJWT();

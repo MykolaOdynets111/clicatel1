@@ -4,6 +4,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+
 public class StartsAgentsWebSocket {
 
     private ThreadLocal<WebDriver> agentDriver = new ThreadLocal<>();
@@ -17,7 +19,7 @@ public class StartsAgentsWebSocket {
     }
 
     private Agents[][] getAgents(){
-        Agents[][] agents= new Agents[20][1];
+        Agents[][] agents= new Agents[1][1];
         int i =0;
         for (Agents agent: Agents.values()){
             agents[i][0] = agent;
@@ -40,13 +42,16 @@ public class StartsAgentsWebSocket {
         agentLoginPage.get().selectTenant("Performance")
                 .selectAgent(agent.getName()).clickAuthenticateButton();
         agentDriver.get().get(URL.webSocketAgentDesk);
+        System.out.println("Agent "+agent.getName()+" is logged in " + LocalDateTime.now());
         try {
-            Thread.sleep(20000);
+            Thread.sleep(9000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         agentLoginPage.get().takeScreenshot(agent);
     }
+
+
 
     @AfterMethod(alwaysRun = true)
     public void closeBrowsers(){
