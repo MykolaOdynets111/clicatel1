@@ -1,7 +1,7 @@
 package drivermanager;
 
-import io.github.bonigarcia.wdm.ChromeDriverManager;
-import io.github.bonigarcia.wdm.FirefoxDriverManager;
+import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
+import io.github.bonigarcia.wdm.managers.FirefoxDriverManager;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
@@ -54,12 +54,11 @@ public enum DriverType {
 
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
-            String hostName = getHostName();
             if (!ConfigManager.isRemote()) {
-                ChromeDriverManager.getInstance().version("95.0.4638.69").setup();
+                ChromeDriverManager.getInstance().setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }else{
-                ChromeDriverManager.getInstance().version("89.0.4389.82").setup();
+                ChromeDriverManager.getInstance().driverVersion("89.0.4389.82").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
 

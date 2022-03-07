@@ -6,9 +6,7 @@ import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+
 import datamanager.Tenants;
 import datamanager.dotcontrol.DotControlCreateIntegrationInfo;
 import datamanager.jacksonschemas.ChatHistoryItem;
@@ -18,6 +16,9 @@ import datamanager.jacksonschemas.dotcontrol.*;
 import dbmanager.DBConnector;
 import drivermanager.ConfigManager;
 import interfaces.WebWait;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import javaserver.DotControlServer;
 import javaserver.Server;
@@ -153,7 +154,7 @@ public class DotControlSteps implements WebWait {
         return messageCallBody.get();
     }
 
-    @When ("Set (.*) as customer location with api")
+    @When("Set (.*) as customer location with api")
     public void updateLocation(String location){
         ApiHelper.updateClientProfileAttribute("location", location, messageCallBody.get().getClientId());
     }

@@ -1,8 +1,8 @@
 package steps.wssteps;
 
 import apihelper.ApiHelperTenantsWS;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
 import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.tenantagentsws.Agent;

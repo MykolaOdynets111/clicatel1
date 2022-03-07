@@ -1,10 +1,13 @@
 package steps;
 
 import apihelper.Endpoints;
-import cucumber.api.java.en.When;
+
+import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
+
+
 
 public class BaseSocialSteps {
 

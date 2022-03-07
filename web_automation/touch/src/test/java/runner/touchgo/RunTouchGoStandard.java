@@ -1,33 +1,23 @@
 package runner.touchgo;
 
-import cucubmerrunner.TestNgCucumberFeatureRunner;
-import cucumber.api.CucumberOptions;
-import cucumber.api.testng.TestNGCucumberRunner;
-import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.Factory;
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Test(groups = {"touchgo"})
 @CucumberOptions(
-        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
+         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true,
         features ="src/test/java/scenario/touchgo/newtenant/standardplan",
         glue ="steps")
-public class RunTouchGoStandard {
+public class RunTouchGoStandard extends AbstractTestNGCucumberTests {
 
-
-    @Factory
-    public Object[] features() {
-        List objects = new ArrayList<>();
-        TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
-        for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
-            objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
-        }
-        return objects.toArray();
+    @Override
+    @DataProvider(parallel = true)
+    public Object[][] scenarios() {
+        return super.scenarios();
     }
 
-    }
+}

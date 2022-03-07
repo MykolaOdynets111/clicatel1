@@ -1,6 +1,8 @@
 package datamanager.jacksonschemas;
 
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;

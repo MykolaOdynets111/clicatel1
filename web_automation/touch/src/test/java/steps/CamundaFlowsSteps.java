@@ -2,15 +2,15 @@ package steps;
 
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.AutoResponderMessage;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import interfaces.JSHelper;
 import interfaces.WebActions;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import socialaccounts.TwitterUsers;
 import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;

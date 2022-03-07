@@ -2,9 +2,10 @@ package runner.automationbot;
 
 
 import cucubmerrunner.TestNgCucumberFeatureRunner;
-import cucumber.api.CucumberOptions;
-import cucumber.api.testng.TestNGCucumberRunner;
-import cucumber.runtime.model.CucumberFeature;
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+import io.cucumber.testng.TestNGCucumberRunner;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
@@ -16,8 +17,7 @@ import static runner.automationbot.Path.DOTCONTROL;
 
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
-        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
-        },
+        plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features ={
                 PATH + "DisconnectingAgent.feature",
@@ -36,16 +36,13 @@ import static runner.automationbot.Path.DOTCONTROL;
                 DOTCONTROL + "DotControlInitCallInvalidAgent.feature"
         },
         glue ="steps")
-public class PullRequestTest {
+public class PullRequestTest extends AbstractTestNGCucumberTests {
 
-        @Factory
-        public Object[] features() {
-                List objects = new ArrayList<>();
-                TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
-                for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
-                        objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
-                }
-                return objects.toArray();
+        @Override
+        @DataProvider(parallel = true)
+        public Object[][] scenarios() {
+                return super.scenarios();
         }
+
 
 }

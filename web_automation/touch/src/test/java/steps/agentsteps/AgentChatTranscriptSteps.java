@@ -1,8 +1,6 @@
 package steps.agentsteps;
 
 import apihelper.ApiHelper;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import datamanager.Tenants;
 import datamanager.TranscriptEmail;
 import datamanager.jacksonschemas.ChatHistoryItem;
@@ -12,6 +10,8 @@ import drivermanager.ConfigManager;
 import emailhelper.CheckEmail;
 import emailhelper.GmailConnector;
 import emailhelper.GmailParser;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.dotcontrol.DotControlSteps;

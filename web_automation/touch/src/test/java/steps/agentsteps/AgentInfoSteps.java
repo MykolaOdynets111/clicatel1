@@ -1,10 +1,10 @@
 package steps.agentsteps;
 
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+
 import datamanager.Tenants;
-import io.restassured.response.Response;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 

@@ -2,34 +2,26 @@ package runner.generalbank;
 
 
 import apihelper.ApiHelper;
-import cucubmerrunner.TestNgCucumberFeatureRunner;
-import cucumber.api.CucumberOptions;
-import cucumber.api.testng.TestNGCucumberRunner;
-import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.Factory;
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Test(groups = "cucumber")
 @CucumberOptions(
-        format={"com.github.kirlionik.cucumberallure.AllureReporter"
-        },
+        plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features ="src/test/java/scenario/generalbank/touch/botflows/faqs/smoke",
         glue ="steps")
-public class RunGenBankSmokeFAQsTest {
+public class RunGenBankSmokeFAQsTest extends AbstractTestNGCucumberTests {
 
-        @Factory
-        public Object[] features() {
+        @Override
+        @DataProvider(parallel = true)
+        public Object[][] scenarios() {
                 ApiHelper.updateTenantConfig("General Bank Demo","tenantMode", "BOT");
-                List objects = new ArrayList<>();
-                TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
-                for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
-                        objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
-                }
-                return objects.toArray();
+                return super.scenarios();
         }
+
+
 
 }

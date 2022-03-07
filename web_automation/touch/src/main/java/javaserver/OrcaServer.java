@@ -1,9 +1,10 @@
 package javaserver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import datamanager.jacksonschemas.orca.OrcaEvent;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.testng.Assert;
 
 import java.io.BufferedReader;

@@ -1,12 +1,8 @@
 package steps;
 
 import agentpages.AgentHomePage;
-import agentpages.AgentLoginPage;
 import apihelper.*;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.eo.Do;
+import com.google.gson.JsonObject;
 import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
@@ -17,6 +13,11 @@ import drivermanager.ConfigManager;
 import emailhelper.GmailConnector;
 import facebook.FBTenantPage;
 import interfaces.JSHelper;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.Scenario;
+import io.qameta.allure.Attachment;
 import io.restassured.response.Response;
 import javaserver.DotControlServer;
 import javaserver.OrcaServer;
@@ -29,7 +30,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import ru.yandex.qatools.allure.annotations.Attachment;
 import steps.agentsteps.AbstractAgentSteps;
 import steps.agentsteps.AgentCRMTicketsSteps;
 import steps.agentsteps.DefaultAgentSteps;
@@ -48,9 +48,6 @@ import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
-import twitter4j.JSONObject;
-
-
 public class Hooks implements JSHelper {
 
     @Before
@@ -59,11 +56,11 @@ public class Hooks implements JSHelper {
         clearAllSessionData();
 
         if(scenario.getSourceTagNames().contains("@skip")){
-            throw new cucumber.api.PendingException();
+            throw new PendingException();
         }
 
         if(scenario.getSourceTagNames().contains("@testing_env_only")&!ConfigManager.getEnv().equalsIgnoreCase("testing")){
-            throw new cucumber.api.PendingException("Designed to run only on testing env. " +
+            throw new PendingException("Designed to run only on testing env. " +
                     "On other envs the test may break the limit of sent activation emails and cause " +
                     "Clickatell to be billed for that");
         }
@@ -561,12 +558,12 @@ public class Hooks implements JSHelper {
         LogEntries logEntries = driver.manage().logs().get(LogType.PERFORMANCE);
         for (LogEntry entry : logEntries) {
 
-            JSONObject messageJSON = null;
-            JSONObject msg = null;
+            JsonObject messageJSON = null;
+            JsonObject msg = null;
 
-                messageJSON = new JSONObject(entry.getMessage());
-                msg  = messageJSON.getJSONObject("message");
-                String method = msg.getString("method");
+                messageJSON = new JsonObject().getAsJsonObject(entry.getMessage());
+                msg  = messageJSON.getAsJsonObject("message");
+                String method = msg.getAsString();
                 if(method.contains("Network.webSocket") ){
                     if(!msg.get("params").toString().contains("ping")) {
                         result.append(msg.toString()).append(";  \n\n");

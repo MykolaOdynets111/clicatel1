@@ -1,9 +1,8 @@
 package datamanager.jacksonschemas;
 
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonAnyGetter;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonAnySetter;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnore;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonProperty;
+
+
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;

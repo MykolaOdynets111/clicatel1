@@ -1,7 +1,7 @@
 
 package testflo.jacksonschemas.localallurereport;
 
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.*;
 import testflo.jacksonschemas.AllureScenarioInterface;
 
 import java.util.ArrayList;

@@ -2,8 +2,8 @@ package steps.portalsteps;
 
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import datamanager.SurveyManagement;
 import datamanager.Tenants;
 import org.testng.Assert;

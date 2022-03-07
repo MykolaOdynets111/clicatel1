@@ -1,10 +1,12 @@
 
 package testflo.jacksonschemas.allurescenario;
 
+import com.fasterxml.jackson.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

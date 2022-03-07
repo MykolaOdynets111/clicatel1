@@ -1,7 +1,7 @@
 package datamanager.jacksonschemas.dotcontrol;
 
 import com.github.javafaker.Faker;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;

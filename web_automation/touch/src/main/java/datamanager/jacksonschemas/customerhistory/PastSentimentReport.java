@@ -1,8 +1,9 @@
 package datamanager.jacksonschemas.customerhistory;
 
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonInclude;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonProperty;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

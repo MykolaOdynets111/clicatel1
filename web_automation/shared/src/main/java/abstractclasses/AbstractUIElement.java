@@ -9,7 +9,7 @@ import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
 public class AbstractUIElement extends HtmlElement implements WebActions, JSHelper, ActionsHelper {
 
-    protected WebDriver currentDriver;
+    public WebDriver currentDriver;
 
     public void setCurrentDriver(WebDriver currentDriver){
         this.currentDriver = currentDriver;

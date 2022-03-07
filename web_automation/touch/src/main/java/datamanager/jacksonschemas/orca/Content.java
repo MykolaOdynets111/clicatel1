@@ -1,6 +1,6 @@
 package datamanager.jacksonschemas.orca;
 import datamanager.jacksonschemas.orca.event.Event;
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

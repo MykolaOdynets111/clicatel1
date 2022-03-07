@@ -1,10 +1,9 @@
 package datamanager;
 
 import apihelper.ApiHelper;
-import cucumber.runtime.CucumberException;
 import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import drivermanager.ConfigManager;
-import io.restassured.response.Response;
+import io.cucumber.core.exception.CucumberException;
 import org.apache.commons.io.FileUtils;
 import org.testng.SkipException;
 

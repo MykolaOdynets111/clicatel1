@@ -1,19 +1,12 @@
 package agentpages;
 
 import abstractclasses.AgentAbstractPage;
-import datamanager.Agents;
-import driverfactory.DriverFactory;
 import driverfactory.URLs;
-import mc2api.endpoints.EndpointsPlatform;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
-import portalpages.PortalLoginPage;
-import sun.management.resources.agent;
 
 import java.util.List;
-import java.util.Locale;
 
 public class AgentLoginPage extends AgentAbstractPage {
 

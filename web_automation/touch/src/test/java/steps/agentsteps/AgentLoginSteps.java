@@ -1,19 +1,16 @@
 package steps.agentsteps;
 
-import agentpages.AgentLoginPage;
-import apihelper.ApiHelper;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+
 import datamanager.Agents;
 import datamanager.Tenants;
 import datamanager.model.user.Permission;
-import datamanager.model.user.UserRole;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.testng.Assert;
-import portalpages.PortalLoginPage;
 import portalpages.PortalMainPage;
 
 import java.util.ArrayList;

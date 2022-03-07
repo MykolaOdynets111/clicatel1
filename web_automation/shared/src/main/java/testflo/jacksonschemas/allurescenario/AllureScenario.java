@@ -2,8 +2,7 @@
 package testflo.jacksonschemas.allurescenario;
 
 import java.util.*;
-
-import org.testcontainers.shaded.com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.*;
 import testflo.jacksonschemas.AllureScenarioInterface;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

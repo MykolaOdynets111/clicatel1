@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     dependencies {
-        classpath "ru.d10xa:gradle-allure-plugin:0.5.5"
+        classpath "io.qameta.allure:allure-gradle:2.8.1"
     }
 }
 
@@ -15,14 +15,15 @@ sourceSets {
     }
 }
 
-apply plugin: 'ru.d10xa.allure'
+apply plugin: 'io.qameta.allure'
 
-
+def allureVersion = '2.17.3'
 allure{
+    configuration = 'compile'
     aspectjweaver = true
-    testNG = false
-    allureResultsDir = "${rootProject.buildDir}${File.separator}allure-results"
-    allureReportDir = "${rootProject.buildDir}${File.separator}allure-report"
+    version = allureVersion
+    resultsDir = file("${rootProject.buildDir}${File.separator}allure-results")
+    reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
 }
 
 dependencies {
@@ -31,15 +32,15 @@ dependencies {
             exclude group: 'io.github.sskorol', module: 'test-data-supplier'
             exclude group: 'io.qameta.allure'
         }
-        compile group: 'ru.yandex.qatools.allure', name:'allure-cucumber-jvm-adaptor', version:'1.6.4'
-        compile group: 'info.cukes', name: 'cucumber-java8', version: '1.2.5'
-        compile group: 'info.cukes', name: 'cucumber-testng', version: '1.2.4'
-        compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'
+        compile group: 'io.qameta.allure', name: 'allure-cucumber7-jvm', version: '2.17.3'
+        compile group: 'io.cucumber', name: 'cucumber-java', version: '7.2.3'
+        compile group: 'io.cucumber', name: 'cucumber-testng', version: '7.2.3'
+//        compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
+        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.1'
 
-        compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
-        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.28'
-        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+        compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
+        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.34'
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
 }
 
 
@@ -296,7 +297,7 @@ task runTests(type: Test) {
         runTests.dependsOn(runChatdeskTests)
     }
 
-    reportToTesFLO.dependsOn(allureReport)
+    reportToTesFLO.dependsOn('allureReport')
     
     runTests.finalizedBy(reportToTesFLO)
     

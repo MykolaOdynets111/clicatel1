@@ -1,22 +1,17 @@
 package runner.generalbank;
 
 
-import cucubmerrunner.TestNgCucumberFeatureRunner;
-import cucumber.api.CucumberOptions;
-import cucumber.api.testng.TestNGCucumberRunner;
-import cucumber.runtime.model.CucumberFeature;
-import org.testng.annotations.Factory;
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static runner.generalbank.Path.PATH;
 import static runner.generalbank.Path.DOTCONTROL;
+import static runner.generalbank.Path.PATH;
 
 @Test(groups = "General Bank agent UI tests")
 @CucumberOptions(
-        plugin={"com.github.kirlionik.cucumberallure.AllureReporter"
+         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true,
         features = {
@@ -34,16 +29,12 @@ import static runner.generalbank.Path.DOTCONTROL;
                 DOTCONTROL + "DotControlMessagingWithAgent.feature", // +
         },
         glue ="steps")
-public class PullRequestTest {
+public class PullRequestTest extends AbstractTestNGCucumberTests {
 
-        @Factory
-        public Object[] features() {
-                List objects = new ArrayList<>();
-                TestNGCucumberRunner testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
-                for (CucumberFeature testDatum : testNGCucumberRunner.getFeatures()) {
-                        objects.add(new TestNgCucumberFeatureRunner(testDatum, this));
-                }
-                return objects.toArray();
-        }
+    @Override
+    @DataProvider(parallel = true)
+    public Object[][] scenarios() {
+        return super.scenarios();
+    }
 
 }
