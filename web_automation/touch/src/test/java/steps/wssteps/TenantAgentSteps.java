@@ -25,12 +25,12 @@ public class TenantAgentSteps {
         Agents agents;
         if (!agent.toLowerCase().contains("second")){
             agents = Agents.getMainAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName());
+            agentBody = new Agent(agentName, agents.getAgentEmail(), "SUPERVISOR");
         } else {
             agents = Agents.getSecondAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName());
+            agentBody = new Agent(agentName, agents.getAgentEmail(), "AGENT");
         }
-        agentBody = new Agent(agentName, agents.getAgentEmail());
+
         ApiHelperTenantsWS.createAgentWS(agentBody);
     }
-
-
 }

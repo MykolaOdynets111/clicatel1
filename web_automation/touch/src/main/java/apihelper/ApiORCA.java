@@ -1,5 +1,6 @@
 package apihelper;
 
+import com.github.javafaker.Faker;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import driverfactory.URLs;
@@ -8,6 +9,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
+
+import java.time.Instant;
 
 public class ApiORCA {
 
@@ -32,6 +35,7 @@ public class ApiORCA {
                 "  \"enabled\": true,\n" +
                 "  \"config\": {\n" +
                 "    \"businessId\": \"cam_flow\",\n" +
+                "    \"apiToken\": \"AQAApiToken"+ Instant.now().getEpochSecond() +"\",\n" +
                 "    \"callbackUrl\": \""+ callBackUrl +"\",\n" +
                 "    \"location\": true,\n" +
                 "    \"media\": true\n" +
@@ -44,7 +48,7 @@ public class ApiORCA {
             Assert.fail("ORCA integration "+method+" was not successful\n" + "Status code " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
         }
-        String token = resp.getBody().jsonPath().get("id");
+        String token = resp.getBody().jsonPath().get("config.apiToken");
         System.out.println("!! Api token from "+method+" ORCA integration: " + token);
         return token;
     }

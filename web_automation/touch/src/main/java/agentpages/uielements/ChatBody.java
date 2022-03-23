@@ -129,7 +129,7 @@ public class ChatBody extends AbstractUIElement {
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
         waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 8);
         WebElement message = this.getCurrentDriver().findElement(By.xpath(locator));
-        if (isElementShownByXpath(this.getCurrentDriver(), locator, 3)) {
+        if (isElementExistsInDOMXpath(this.getCurrentDriver(), locator, 3)) {
             return true;
         }
         return wheelScrollUpAndIsDisplayed(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.cssSelector(scrollElement)), message);

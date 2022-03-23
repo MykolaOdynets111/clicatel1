@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@FindBy(css = ".cl-r-chat-header")
+@FindBy(css = ".cl-app-chat-header")
 public class ChatHeader extends AbstractUIElement {
 
     @FindAll({

@@ -144,4 +144,19 @@ public class Event {
 //    public void setSize(long size) {
 //        this.size = size;
 //    }
+
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventType='" + eventType + '\'' +
+                ", text='" + text + '\'' +
+                ", initial='" + initial + '\'' +
+                ", release='" + release + '\'' +
+                ", structuredText='" + structuredText + '\'' +
+                ", caption='" + caption + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", ref='" + ref + '\'' +
+                '}';
+    }
 }

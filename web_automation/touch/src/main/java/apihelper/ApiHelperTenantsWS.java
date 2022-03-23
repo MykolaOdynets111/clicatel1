@@ -33,7 +33,7 @@ public class ApiHelperTenantsWS {
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(agentBody)
-                .post(String.format(Endpoints.CREATE_AGENT_WS, getTenantId()) );
+                .post(String.format(Endpoints.CREATE_AGENT_WS," getTenantId()") );
         Assert.assertEquals(resp.getStatusCode(), 200,"Status code is not 200 and the response is: "
                 + resp.getBody().asString());
     }

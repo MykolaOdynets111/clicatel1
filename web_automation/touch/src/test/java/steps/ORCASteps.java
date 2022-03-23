@@ -29,7 +29,7 @@ public class ORCASteps implements WebWait {
     private static final ThreadLocal<String> clientId = new ThreadLocal<>();
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 
-    public static String getClient() {
+    public static String getClientId() {
         return clientId.get();
     }
 
@@ -41,6 +41,7 @@ public class ORCASteps implements WebWait {
         clientId.remove();
         System.out.println("Orca artifacts were removed");
     }
+
 
     @Given("^Send (.*) message by ORCA$")
     public void sendOrcaMessage(String message) {
@@ -90,7 +91,7 @@ public class ORCASteps implements WebWait {
         if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
             expectedResponse = DefaultTouchUserSteps.formExpectedTextResponseFromBotWidget(expectedResponse);
         }
-        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, clientId.get(), wait),
+        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, getClientId(), wait),
                 String.format("Message is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
                         "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
@@ -142,5 +143,4 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
         return orcaMessageCallBody;
     }
-
 }

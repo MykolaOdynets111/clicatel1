@@ -11,7 +11,7 @@ Feature: Apple Business Chat :: Chatdesk
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
     Then Valid image for abc integration are shown in left menu with chat
-    And Agent should see abc icon in active chat header
+    And Agent should see abcHeader icon in active chat header
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")

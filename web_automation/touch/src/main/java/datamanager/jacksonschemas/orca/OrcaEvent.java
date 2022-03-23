@@ -47,13 +47,14 @@ public class OrcaEvent {
 
     public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
+        String name = "AQA ORCA" +  faker.number().randomNumber(7, false);
         this.setEventId(faker.letterify("AQA???"));
         this.setProviderId("TOUCH");
         this.setRouteId(routeId);
-        this.setSourceId("AQA ORCA" +  faker.number().randomNumber(7, false));
+        this.setSourceId(name);
         this.setSessionId(faker.letterify("1?????"));
         this.setContent(new Content(messageText));
-        this.setUserInfo(null);
+        this.setUserInfo(new UserInfo(name));
         this.setExternalReferenceId(faker.letterify("RefId???"));
     }
 
@@ -147,4 +148,18 @@ public class OrcaEvent {
         this.history = history;
     }
 
+    @Override
+    public String toString() {
+        return "OrcaEvent{" +
+                "eventId='" + eventId + '\'' +
+                ", providerId='" + providerId + '\'' +
+                ", routeId='" + routeId + '\'' +
+                ", sourceId='" + sourceId + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", content=" + content +
+                ", userInfo=" + userInfo +
+                ", externalReferenceId='" + externalReferenceId + '\'' +
+                ", history=" + history +
+                '}';
+    }
 }

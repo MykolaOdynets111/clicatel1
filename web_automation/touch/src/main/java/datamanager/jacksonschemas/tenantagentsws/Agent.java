@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.javafaker.Faker;
 import datamanager.Agents;
 import datamanager.Tenants;
+import lombok.Builder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -36,19 +37,18 @@ public class Agent {
     @JsonProperty("state")
     private String state;
 
-    public Agent(String name, String email ){
+    public Agent(String name, String email, String agentType ){
         Faker fake = new Faker();
         Agents agent = Agents.getMainAgentFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName());
-        setAgentType("AGENT");
+        setAgentType(agentType);
         setEmail(email);
         setEnable2DaysExpirePopUp(true);
         setEnable30DaysExpirePopUp(true);
         setFullName(name);
         setMc2UserId(fake.numerify("aqaId############"));
         setState("ACTIVE");
-
-
     }
+
     @JsonProperty("agentType")
     public String getAgentType() {
         return agentType;

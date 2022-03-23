@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AgentHomePage extends AgentAbstractPage {
 
-    private String chatMessageContainer = "[selenium-id=chat-messages-list]";
+    private String chatMessageContainer = ".cl-chat-messages";
     private String cancelCloseChatButtonXPATH = "//span[text()='Cancel']";
     private String modalWindow = "div.modal-content";
 

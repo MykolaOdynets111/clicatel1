@@ -16,6 +16,7 @@ import io.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
+import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.util.Map;
@@ -89,7 +90,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
                 userName = DotControlSteps.getClient();
                 break;
             case "orca":
-                userName = "Apple User";
+                userName = ORCASteps.getClientId();
                 break;
             default: throw new AssertionError("Incorrect channel name was provided: " + userName);
         }

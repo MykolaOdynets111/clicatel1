@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-    @FindBy(css = "a.cl-r-chat-item")
+    @FindBy(css = "a[selenium-id^=chat-list-item]")
     private List<WebElement> newConversationRequests;
 
     @FindBy(css = "[selenium-id=filter-dropdown-menu]")
@@ -35,11 +35,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[selenium-id=roster-item]")
     private List<WebElement> chatsList;
 
-    @FindAll({
-            @FindBy(css = ".cl-r-chat-item--selected"),
-            @FindBy(css = "[selenium-id='roster-item-selected']")
-    })
-    private WebElement activeCaht;
+    @FindBy(css = ".cl-chat-item--selected")
+    private WebElement activeChat;
 
     @FindBy(css = "[selenium-id=roster-scroll-container]")
     private WebElement scrollableArea;
@@ -128,15 +125,15 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public boolean isFlagIconShown(){
-        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isFlagIconShown();
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isFlagIconShown();
     }
 
     public boolean isFlagIconRemoved(){
-        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isFlagIconRemoved();
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isFlagIconRemoved();
     }
 
     public boolean isProfileIconNotShown(){
-        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isProfileIconNotShown();
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isProfileIconNotShown();
     }
 
     public boolean isOvernightTicketIconRemoved(String userName){
@@ -213,24 +210,24 @@ public class LeftMenuWithChats extends AbstractUIElement {
     }
 
     public String getActiveChatUserName(){
-        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).getUserName();
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).getUserName();
     }
 
     public String getActiveChatLocation(){
-        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).getLocation();
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).getLocation();
     }
 
     public String getActiveChatLastMessage(){
-        return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).getLastMessageText();
+        return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).getLastMessageText();
     }
 
 
     public boolean isValidImgForActiveChat(String adapter) {
-      return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isValidImg(adapter);
+      return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isValidImg(adapter);
     }
 
     public boolean isValidIconSentimentForActiveChat(String message) {
-         return new ChatInLeftMenu(activeCaht).setCurrentDriver(this.getCurrentDriver()).isValidIconSentiment(message);
+         return new ChatInLeftMenu(activeChat).setCurrentDriver(this.getCurrentDriver()).isValidIconSentiment(message);
     }
 
 //    public String getExpandFilterButtonColor() {
