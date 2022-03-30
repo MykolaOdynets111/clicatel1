@@ -28,7 +28,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = "[selenium-id=touch-client-name]")
     private WebElement clientName;
 
-    @FindBy(css = ".cl-r-transfer-latest-msg")
+    @FindBy(css = ".cl-transfer-chat-info__latest-message")
     private WebElement clientMessage;
 
     @FindBy(css = ".cl-r-transfer-source")
@@ -37,7 +37,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-avatar.cl-r-avatar--medium")
     private WebElement transferPicture;
 
-    @FindBy(css = ".cl-r-icon--undefined")
+    @FindBy(css = ".cl-transfer-chat-info__context svg")
     private WebElement transferChannel;
 
     @FindBy(css = "[selenium-id=touch-icons-info] svg")

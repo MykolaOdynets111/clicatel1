@@ -41,7 +41,9 @@ public class URLs {
 
     private static String BASE_TAF_URL = "http://%s-taf.clickatelllabs.com/";
 
-    private static String BASE_WS_INTERNAL_URL="https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/";
+    private static String BASE_WS_INTERNAL_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/";
+
+    private static String BASE_WS_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/api/";
 
     private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool";
 
@@ -106,6 +108,10 @@ public class URLs {
 
     public static String getBaseWSInternalURL(){
         return String.format(BASE_WS_INTERNAL_URL, ConfigManager.getEnv());
+    }
+
+    public static String getBaseWSApiURL(){
+        return String.format(BASE_WS_URL, ConfigManager.getEnv());
     }
 
     public static String getTouchLoginForm(){

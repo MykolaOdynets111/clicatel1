@@ -21,6 +21,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import javaserver.Server;
 import mc2api.auth.PortalAuthToken;
+import org.apiguardian.api.API;
 import org.testng.Assert;
 import datamanager.jacksonschemas.ClientProfileOld;
 
@@ -408,7 +409,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return getAgentInfo(tenantOrgName, agent).get("id");
     }
 
-    public static String getTouchToken(String tenantOrgName, String agent){
+    public static String getJWTToken(String tenantOrgName, String agent){
         Response resp = RestAssured.given().log().all()
                 .param("agentId", getAgentId(tenantOrgName, agent))
                 .param("tenantId", Tenants.getTenantId())
@@ -852,23 +853,39 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return RestAssured.get(url);
     }
 
-    public static Response getActiveChatsByAgent(String agent){
-        return RestAssured.given()
+    public static Response getActiveChatsByAgent(String agent) {
+        return RestAssured.given().contentType(ContentType.JSON)
                 .header("Authorization",
                         TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
-                .get(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
+                .body("{\n" +
+                        "  \"chatStates\": [\n" +
+                        "    \"LIVE_IN_SCHEDULER_QUEUE\",\n" +
+                        "    \"LIVE_ASSIGNED_TO_AGENT\"\n" +
+                        "  ],\n" +
+                        "\"agentSearchModel\": {\n" +
+                        "    \"id\": \"" + getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\"\n" +
+                        "  }\n" +
+                        "}")
+                .post(String.format(Endpoints.ACTIVE_CHATS_BY_AGENT, ConfigManager.getEnv()));
     }
 
     public static void closeActiveChats(String agent){
-        List<String> conversationIds = getActiveChatsByAgent(agent).getBody().jsonPath().getList("content.id");
+        List<String> conversationIds = getActiveChatsByAgent(agent).getBody().jsonPath().getList("content.chatId");
         for(String conversationId : conversationIds){
-            RestAssured.given()
-                    .accept(ContentType.JSON)
+            Response r = RestAssured.given()
+                    .accept(ContentType.JSON).log().all()
                     .header("Authorization",
                             TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
-                    .put(String.format(Endpoints.CLOSE_ACTIVE_CHAT, ConfigManager.getEnv(), conversationId));
+                    .get(String.format(Endpoints.CLOSE_ACTIVE_CHAT, conversationId));
+            System.out.println(r.getBody().asString());
         }
     }
+
+    public static void main(String[] args) {
+        Tenants.setTenantUnderTestNames("General Bank Demo");
+        ApiHelper.closeActiveChats("main");
+    }
+
 
     public static Map getElasticSearchModel(String chatId){
         String tenantOrgName = Tenants.getTenantUnderTestOrgName();

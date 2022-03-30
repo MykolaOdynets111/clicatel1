@@ -44,9 +44,9 @@ public class Endpoints {
 
     public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
 
-    public static String ACTIVE_CHATS_BY_AGENT = "https://%s-touch.clickatelllabs.com/chats/active-by-agent?page=0&size=10";
+    public static String ACTIVE_CHATS_BY_AGENT = URLs.getBaseWSApiURL() +  "chats/search?page=0&size=200";
 
-    public static String CLOSE_ACTIVE_CHAT = "https://%s-touch.clickatelllabs.com/chats/%s/end";
+    public static String CLOSE_ACTIVE_CHAT = URLs.getBaseWSApiURL() +  "chats/close-chat-by-id?chatId=%s";
 
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
@@ -211,6 +211,6 @@ public class Endpoints {
 
     public static String CREATE_TENANT_WS = URLs.getBaseWSInternalURL() + "tenants/";
     public static String CREATE_AGENT_WS = URLs.getBaseWSInternalURL() + "agents/%s";
-    public static String TOUCH_AUTH = URLs.getBaseWSInternalURL() + "auth/auth-token";
+    public static String TOUCH_AUTH = URLs.getBaseWSInternalURL() + "auth/fake-auth-token";
 }
 

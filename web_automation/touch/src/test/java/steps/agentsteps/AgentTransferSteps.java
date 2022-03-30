@@ -48,7 +48,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void transferChat(String agent){
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
         getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
-        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat();
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferChat(agent);
     }
 
     @And("^(.*) transfers chat to (.*) department$")
@@ -63,7 +63,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void agentTransfersOvernightTicket(String agent) {
         getAgentHomePage(agent).getChatHeader().clickTransferButton();
         getAgentHomePage(agent).getTransferChatWindow().waitForUpdatingAvailableAgents();
-        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket();
+        secondAgentName = getAgentHomePage(agent).getTransferChatWindow().transferOvernightTicket(agent);
     }
 
     @When("^(.*) transfer a few chats$")
@@ -104,7 +104,7 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     @When("^(.*) select an agent in 'Transfer to' drop down$")
     public void selectAgentTransferToDropDown(String agent) {
-        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent();
+        getAgentHomePage(agent).getTransferChatWindow().selectDropDownAgent(agent);
     }
 
     @Then("^Agent notes field is appeared$")
@@ -158,14 +158,14 @@ public class AgentTransferSteps extends AbstractAgentSteps {
 
     }
 
-    @Then("(.*) receives incoming transfer with \"(.*)\" header")
+    @Then("^(.*) receives incoming transfer with \"(.*)\" header$")
     public void verifyIncomingTransferHeader(String agent, String expectedHeader){
         Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferWindowHeader(),
                 expectedHeader,
                 "Header in incoming transfer window is not as expected");
     }
 
-    @Then("(.*) receives incoming transfer with \"(.*)\" note from the another agent")
+    @Then("^(.*) receives incoming transfer with \"(.*)\" note from the another agent$")
     public void verifyIncomingTransferReceived(String agent, String notes){
         Assert.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getTransferNotes(), notes,
                 "Notes in incoming transfer window is not as added by the first agent");
@@ -204,9 +204,8 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     }
 
 
-    @Then("(.*) can see transferring agent name, (.*) and following user's message: '(.*)'")
+    @Then("^(.*) can see transferring agent name, (.*) and following user's message: '(.*)'$")
     public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
-        try {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = getUserName(user);
             if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
@@ -224,9 +223,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
             soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getFromAgentName(), expectedAgentNAme,
                     "Transferring agent name in Incoming transfer window is not as expected");
             soft.assertAll();
-        } catch (NoSuchElementException e){
-            Assert.fail("Incoming transfer window is not shown.\n Please see the screenshot");
-        }
     }
 
     @Then("^(.*) receives incoming transfer on the right side of the screen with user's profile picture, channel and sentiment$")

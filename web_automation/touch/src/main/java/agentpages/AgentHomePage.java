@@ -201,8 +201,8 @@ public class AgentHomePage extends AgentAbstractPage {
     }
 
 
-    public boolean isAgentSuccessfullyLoggedIn(String ordinalAgentNumber) {
-        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,40)) {
+    public boolean isAgentSuccessfullyLoggedIn() {
+        if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,50)) {
             return waitForLoadingInLeftMenuToDisappear(10, 20);
         } else { return false;}
     }

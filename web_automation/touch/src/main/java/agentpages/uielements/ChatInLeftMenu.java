@@ -10,17 +10,17 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
 
-    @FindBy(css = ".cl-avatar")
+    @FindBy(css = ".cl-r-avatar")
     private WebElement userIcon;
 
 
-    @FindBy(css = ".cl-chat-item-user-name")
+    @FindBy(css = ".cl-r-chat-item-user-name")
     private WebElement userName;
 
     @FindBy(css = "[selenium-id=roster-item-location]")
     private WebElement location;
 
-    @FindBy(css = "[selenium-id=icon-widget]")
+    @FindBy(css = "[selenium-id=chat-item-icons-holder]")
     private WebElement channelIcon;
 
     public WebElement getChannelIcon() {

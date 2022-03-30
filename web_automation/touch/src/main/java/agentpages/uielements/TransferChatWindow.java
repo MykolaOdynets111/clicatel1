@@ -61,33 +61,42 @@ public class TransferChatWindow extends AbstractUIElement {
         super();
     }
 
-    public String transferChat() {
+    public String transferChat(String agent) {
         openDropDownAgent();
-        String agentName = selectDropDownAgent();
+        String agentSurname= getUserSurname(agent);
+        String agentName = selectDropDownAgent(agentSurname);
         sentNote();
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader(this.getCurrentDriver()).clickTransferButton();
             waitForUpdatingAvailableAgents();
-            agentName = selectDropDownAgent();
+            agentName = selectDropDownAgent(agentSurname);
             sentNote();
         }
         clickTransferChatButton();
         return agentName;
     }
 
-    public String transferOvernightTicket() {
+    public String transferOvernightTicket(String agent) {
         openDropDownAgent();
-        String agentName = selectDropDownAgent();
+        String agentSurname= getUserSurname(agent);
+        String agentName = selectDropDownAgent(agentSurname);
         if(isElementShown(this.getCurrentDriver(), selectAgentPlaceholder, 1)){
             clickElem(this.getCurrentDriver(), cancelTransferButton, 1,"Cancel transfer button");
             new ChatHeader(this.getCurrentDriver()).clickTransferButton();
             waitForUpdatingAvailableAgents();
-            agentName = selectDropDownAgent();
+            agentName = selectDropDownAgent(agentSurname);
             sentNote();
         }
         clickTransferChatButton();
         return agentName;
+    }
+
+    private String getUserSurname(String agent){
+        if(agent.contains("Second")){
+            return "Main";
+        }
+        return "Second";
     }
 
     public void transferChatToDepartment(String departmentName){
@@ -137,12 +146,12 @@ public class TransferChatWindow extends AbstractUIElement {
         throw new AssertionError("Cannot find '" + departmentName + "' department from dropdown list");
     }
 
-    public String selectDropDownAgent() {
+    public String selectDropDownAgent(String agentSurname) {
         for(int i=0; i<15; i++){
             if(!isElementShown(this.getCurrentDriver(), availableAgentOrDepartment, 2)) openAgentDropdownButton.click();
             waitForElementToBeVisible(this.getCurrentDriver(), availableAgentOrDepartment,5);
             if(availableAgentsOrDepartmentsList.size() >= 2) {
-                WebElement currentAgent = availableAgentsOrDepartmentsList.stream().filter(e -> !(e.getText().contains("current chat assignment"))).findFirst().get();
+                WebElement currentAgent = availableAgentsOrDepartmentsList.stream().filter(e -> (e.getText().contains(agentSurname))).findFirst().get();
                 String agentName = currentAgent.getText();
                 executeJSclick(this.getCurrentDriver(), currentAgent);
                 return agentName;

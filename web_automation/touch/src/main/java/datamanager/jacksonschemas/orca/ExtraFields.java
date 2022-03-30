@@ -34,6 +34,8 @@ public class ExtraFields {
     private String addressInfo;
     @JsonProperty("token")
     private String token;
+    @JsonProperty("department")
+    private String department;
     @JsonProperty("oauth2Token")
     private String oauth2Token;
 
@@ -130,6 +132,16 @@ public class ExtraFields {
     @JsonProperty("token")
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @JsonProperty("department")
+    public String getDepartment() {
+        return department;
+    }
+
+    @JsonProperty("department")
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     @JsonProperty("oauth2Token")

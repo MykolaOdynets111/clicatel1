@@ -12,7 +12,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@FindBy(css = "div[selenium-id=chat-form]")
+@FindBy(css = ".cl-message-sender")
 public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
@@ -24,13 +24,11 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "[selenium-id=suggestion-wrapper]")
     private WebElement suggestionInputField;
 
-    @FindBy(css = "textarea[selenium-id=message-composer-textarea]")
+    @FindBy(css = ".cl-message-composer__textarea")
     private WebElement messageInput;
 
-    @FindAll({
-    @FindBy(css = "[selenium-id=message-composer-send-button]"),
-    @FindBy(css = ".cl-r-message-composer__send-button") // old locator
-    })
+
+    @FindBy(css = "[selenium-id=message-composer-send-button]")
     private WebElement submitMessageButton;
 
     @FindBy(css = ".cl-r-suggestion-wrapper__icon")
@@ -42,13 +40,13 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css = "div.overnight-chat-controls p")
     public WebElement overnightTicketLable;
 
-    @FindBy(css = "[selenium-id=message-composer-emoji-icon]")
+    @FindBy(css = "[id='Sentiment / Happy']")
     public WebElement emoticonButton;
 
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
-    @FindBy(css ="[selenium-id=message-composer-attachment-icon]")
+    @FindBy(css ="[id=Attachment]")
     private WebElement attachmentButton;
 
     private String emojiMartCss = "section.emoji-mart";
