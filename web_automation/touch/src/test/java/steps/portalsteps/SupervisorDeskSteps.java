@@ -151,7 +151,28 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         Assert.assertTrue(result, "Agent " +agentName+ " is not set up as 'Current agent'");
     }
 
-    @Then("Ticket from (.*) is present on (.*) filter page")
+    @Then("^Ticket from (.*) is present on \"(.*)\" filter page$")
+    public void ticket_from_orca_is_present_on_all_tickets_filter_page(String channel, String status) {
+        // Write code here that turns the phrase above into concrete actions
+        String userName = getUserName(channel);
+        switch (status) {
+            case "Unassigned":
+                Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName).equalsIgnoreCase("No current Agent"),
+                        "Unassigned ticket should be present");
+                break;
+
+            case "Assigned" : //|| "Overdue"
+                String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent").get("fullName");
+                Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName)),
+                        "Ticket should be present on " + status + " filter page");
+                break;
+
+            case "All tickets":
+                getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
+                break;
+        }
+    }
+   /* @Then("Ticket from (.*) is present on (.*) filter page")
     public void verifyUnassignedType(String channel, String status){
         String userName = getUserName(channel);
         if (status.equalsIgnoreCase("Unassigned")) {
@@ -164,7 +185,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         } else if(status.equalsIgnoreCase("All tickets")){
             getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
         }
-    }
+    }*/
 
 
     @Then("^Verify that only (.*) ticket is shown$")
