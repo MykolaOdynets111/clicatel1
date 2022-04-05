@@ -172,21 +172,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 break;
         }
     }
-   /* @Then("Ticket from (.*) is present on (.*) filter page")
-    public void verifyUnassignedType(String channel, String status){
-        String userName = getUserName(channel);
-        if (status.equalsIgnoreCase("Unassigned")) {
-            Assert.assertTrue(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName).equalsIgnoreCase("No current Agent"),
-                    "Unassigned ticket should be present");
-        } else if (status.equalsIgnoreCase("Assigned") || status.equalsIgnoreCase("Overdue")){
-            String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent").get("fullName");
-            Assert.assertTrue(agentName.equals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName)),
-                    "Ticket should be present on " + status + " filter page");
-        } else if(status.equalsIgnoreCase("All tickets")){
-            getSupervisorDeskPage().getSupervisorTicketsTable().getTicketByUserName(userName);
-        }
-    }*/
-
 
     @Then("^Verify that only (.*) ticket is shown$")
     public void verifyChatsChannelsFilter(int tickets){
