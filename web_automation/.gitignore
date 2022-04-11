@@ -8,6 +8,8 @@ target/
 **/.gradle/
 ../touch-rest-api-tests/
 ../Web_touch_automation/
+../touch-rest-api-tests/target/
+../touch-rest-api-tests/touch-rest-api-tests.iml
 debug.log
 tests.log
 *.iml
