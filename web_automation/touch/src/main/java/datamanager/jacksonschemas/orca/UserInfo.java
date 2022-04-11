@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 })
 public class UserInfo {
 
+    public UserInfo(){};
     public UserInfo(String userName) {
         this.userName = userName;
     }

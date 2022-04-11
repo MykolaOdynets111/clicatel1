@@ -1,38 +1,40 @@
 package datamanager.jacksonschemas.orca.event;
-import javax.annotation.Generated;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.io.FileUtils;
+import datamanager.jacksonschemas.orca.event.EventType;
 
+import javax.annotation.Generated;
 import java.io.File;
 import java.net.URLConnection;
 
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "eventType",
         "text",
+        "eventType",
         "initial",
         "release",
         "structuredText",
         "caption",
         "contentType",
-        "size",
+//        "size",
         "ref"
 })
 @Generated("jsonschema2pojo")
 public class Event {
 
-    @JsonProperty("eventType")
-    private String eventType;
     @JsonProperty("text")
     private String text;
+    @JsonProperty("eventType")
+    private String eventType;
     @JsonProperty("initial")
-    private String initial;
+    private Object initial;
     @JsonProperty("release")
-    private String release;
+    private Object release;
     @JsonProperty("structuredText")
-    private String structuredText;
+    private Object structuredText;
     @JsonProperty("caption")
     private String caption;
     @JsonProperty("contentType")
@@ -42,6 +44,8 @@ public class Event {
     @JsonProperty("ref")
     private String ref;
 
+    public Event(){
+    }
 
     public Event(String messageText){
         this.setEventType(EventType.TEXT.toString());
@@ -56,16 +60,6 @@ public class Event {
         this.setRef(file.getAbsolutePath());
     }
 
-    @JsonProperty("eventType")
-    public String getEventType() {
-        return eventType;
-    }
-
-    @JsonProperty("eventType")
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
     @JsonProperty("text")
     public String getText() {
         return text;
@@ -76,33 +70,43 @@ public class Event {
         this.text = text;
     }
 
+    @JsonProperty("eventType")
+    public String getEventType() {
+        return eventType;
+    }
+
+    @JsonProperty("eventType")
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
     @JsonProperty("initial")
-    public String getInitial() {
+    public Object getInitial() {
         return initial;
     }
 
     @JsonProperty("initial")
-    public void setInitial(String initial) {
+    public void setInitial(Object initial) {
         this.initial = initial;
     }
 
     @JsonProperty("release")
-    public String getRelease() {
+    public Object getRelease() {
         return release;
     }
 
     @JsonProperty("release")
-    public void setRelease(String release) {
+    public void setRelease(Object release) {
         this.release = release;
     }
 
     @JsonProperty("structuredText")
-    public String getStructuredText() {
+    public Object getStructuredText() {
         return structuredText;
     }
 
     @JsonProperty("structuredText")
-    public void setStructuredText(String structuredText) {
+    public void setStructuredText(Object structuredText) {
         this.structuredText = structuredText;
     }
 
@@ -148,7 +152,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "{" +
                 "eventType='" + eventType + '\'' +
                 ", text='" + text + '\'' +
                 ", initial='" + initial + '\'' +

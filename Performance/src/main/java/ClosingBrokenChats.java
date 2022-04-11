@@ -41,7 +41,8 @@ public class ClosingBrokenChats {
 
     public static Response closeChats(String tenantId, String conversationId){
         return RestAssured.given()
-                .get(String.format("https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/internal/chats/resend-chat-end-response/%s/%s", tenantId, conversationId));}
+                .get(String.format("https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/internal/chats/resend-chat-end-response/%s/%s", tenantId, conversationId));
+    }
 
     public static List<String> getChatsFromDB(String tenantId){
        List<String> ids = DBConnector.getListOfUnclosedChats("select * from chat where chat_status_id = 10  and tenant_id = '"+tenantId+"'", "id");
@@ -52,7 +53,7 @@ public class ClosingBrokenChats {
         Response response = RestAssured.given()
                 .get("https://stage-chatdesk-platform-app-bravo.int-eks-stage.shared-stage.eu-west-1.aws.clickatell.com/internal/tenants");
         List<Map<String,String>> tenants = response.getBody().jsonPath().getList("");
-        return tenants.stream().filter(e -> e.get("orgName").contains("PerformanceIhor")).collect(Collectors.toList())
+        return tenants.stream().filter(e -> e.get("orgName").contains("Performance")).collect(Collectors.toList())
                 .stream().map(s->s.get("id")).collect(Collectors.toList());
     }
 

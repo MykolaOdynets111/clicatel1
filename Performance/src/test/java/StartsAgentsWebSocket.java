@@ -19,7 +19,7 @@ public class StartsAgentsWebSocket {
     }
 
     private Agents[][] getAgents(){
-        Agents[][] agents= new Agents[1][1];
+        Agents[][] agents= new Agents[20][1];
         int i =0;
         for (Agents agent: Agents.values()){
             agents[i][0] = agent;
@@ -44,14 +44,12 @@ public class StartsAgentsWebSocket {
         agentDriver.get().get(URL.webSocketAgentDesk);
         System.out.println("Agent "+agent.getName()+" is logged in " + LocalDateTime.now());
         try {
-            Thread.sleep(9000);
+            Thread.sleep(600000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         agentLoginPage.get().takeScreenshot(agent);
     }
-
-
 
     @AfterMethod(alwaysRun = true)
     public void closeBrowsers(){

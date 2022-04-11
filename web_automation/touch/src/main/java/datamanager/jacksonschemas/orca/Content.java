@@ -1,6 +1,6 @@
 package datamanager.jacksonschemas.orca;
-import datamanager.jacksonschemas.orca.event.Event;
 import com.fasterxml.jackson.annotation.*;
+import datamanager.jacksonschemas.orca.event.Event;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -44,7 +44,7 @@ public class Content {
 
     @Override
     public String toString() {
-        return "Content{" +
+        return "{" +
                 "extraFields=" + extraFields +
                 ", event=" + event +
                 '}';

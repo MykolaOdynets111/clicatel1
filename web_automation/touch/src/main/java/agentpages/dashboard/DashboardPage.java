@@ -183,7 +183,7 @@ public class DashboardPage extends PortalAbstractPage {
     }
 
     public void clickOnCustomersOverviewTab() {
-        clickElem(this.getCurrentDriver(), customersOverviewTabButton, 5, "Customers Overview Tab");
+        scrollAndClickElem(this.getCurrentDriver(), customersOverviewTabButton, 5, "Customers Overview Tab");
     }
 
     public void clickOnAgentsPerformanceTab() {

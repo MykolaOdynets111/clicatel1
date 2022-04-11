@@ -39,17 +39,22 @@ public class OrcaEvent {
     private UserInfo userInfo;
     @JsonProperty("externalReferenceId")
     private String externalReferenceId;
+    @JsonProperty("channelId")
+    private Integer channelId;
     @JsonProperty("history")
     private List<History> history = null;
 
     public OrcaEvent() {
     }
 
+    public static void main(String[] args) {
+        System.out.println(new OrcaEvent("dsds","connect to agent"));
+    }
     public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
         String name = "AQA ORCA" +  faker.number().randomNumber(7, false);
         this.setEventId(faker.letterify("AQA???"));
-        this.setProviderId("TOUCH");
+        this.setProviderId("touch");
         this.setRouteId(routeId);
         this.setSourceId(name);
         this.setSessionId(faker.letterify("1?????"));
@@ -138,6 +143,16 @@ public class OrcaEvent {
         this.externalReferenceId = externalReferenceId;
     }
 
+    @JsonProperty("channelId")
+    public Integer getChannelId() {
+        return channelId;
+    }
+
+    @JsonProperty("channelId")
+    public void setChannelId(Integer channelId) {
+        this.channelId = channelId;
+    }
+
     @JsonProperty("history")
     public List<History> getHistory() {
         return history;
@@ -150,7 +165,7 @@ public class OrcaEvent {
 
     @Override
     public String toString() {
-        return "OrcaEvent{" +
+        return "{" +
                 "eventId='" + eventId + '\'' +
                 ", providerId='" + providerId + '\'' +
                 ", routeId='" + routeId + '\'' +
