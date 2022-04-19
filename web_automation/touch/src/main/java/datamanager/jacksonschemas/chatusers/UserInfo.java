@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "createdDate",
         "ctxSummary",
         "email",
-        "facebook",
         "firstName",
         "id",
         "language",
@@ -56,8 +55,6 @@ public class UserInfo {
     private String ctxSummary;
     @JsonProperty("email")
     private String email;
-    @JsonProperty("facebook")
-    private Facebook facebook;
     @JsonProperty("firstName")
     private String firstName;
     @JsonProperty("id")
@@ -86,8 +83,6 @@ public class UserInfo {
     private String tenantId;
     @JsonProperty("timeZone")
     private String timeZone;
-    @JsonProperty("twitter")
-    private Twitter twitter;
     @JsonProperty("useragent")
     private String useragent;
     @JsonProperty("verified")
@@ -169,16 +164,6 @@ public class UserInfo {
     @JsonProperty("email")
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @JsonProperty("facebook")
-    public Facebook getFacebook() {
-        return facebook;
-    }
-
-    @JsonProperty("facebook")
-    public void setFacebook(Facebook facebook) {
-        this.facebook = facebook;
     }
 
     @JsonProperty("firstName")
@@ -321,15 +306,6 @@ public class UserInfo {
         this.timeZone = timeZone;
     }
 
-    @JsonProperty("twitter")
-    public Twitter getTwitter() {
-        return twitter;
-    }
-
-    @JsonProperty("twitter")
-    public void setTwitter(Twitter twitter) {
-        this.twitter = twitter;
-    }
 
     @JsonProperty("useragent")
     public String getUseragent() {
@@ -401,7 +377,6 @@ public class UserInfo {
                 ", createdDate=" + createdDate +
                 ", ctxSummary='" + ctxSummary + '\'' +
                 ", email='" + email + '\'' +
-                ", facebook=" + facebook +
                 ", firstName='" + firstName + '\'' +
                 ", id='" + id + '\'' +
                 ", language='" + language + '\'' +
@@ -416,7 +391,6 @@ public class UserInfo {
                 ", sms=" + sms +
                 ", tenantId='" + tenantId + '\'' +
                 ", timeZone='" + timeZone + '\'' +
-                ", twitter=" + twitter +
                 ", useragent='" + useragent + '\'' +
                 ", verified=" + verified +
                 ", waPhone='" + waPhone + '\'' +

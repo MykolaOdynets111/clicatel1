@@ -22,8 +22,6 @@ public class ApiCustomerHistoryHelper {
 
     private static final Map<String, String> channelTypes = new HashMap<String, String>() {{
         put("Web Chat", "webchat");
-        put("Facebook", "facebook");
-        put("Twitter", "twitter");
         put("WhatsApp", "whatsapp");
         put("Apple Business Chat", "abc");
     }};

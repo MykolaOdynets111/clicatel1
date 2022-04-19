@@ -11,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import portaluielem.PageHeader;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 import java.util.List;
@@ -42,8 +41,6 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
 
     private static String notificationAlert = "div[ng-bind-html='alert']";
 
-    private PageHeader pageHeader;
-
     private WebDriver currentDriver;
 
     // == Constructors == //
@@ -66,18 +63,10 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         return processingAlert;
     }
 
-    public static String getNotificationAlertLocator(){
-        return notificationAlert;
-    }
-
-    public WebDriver getCurrentDriver(){
+     public WebDriver getCurrentDriver(){
         return this.currentDriver;
     }
 
-    public PageHeader getPageHeader() {
-        pageHeader.setCurrentDriver(this.getCurrentDriver());
-        return pageHeader;
-    }
 
     @Step(value = "Get notification alert text")
     public String getNotificationAlertText(){
@@ -90,11 +79,6 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
         }
     }
 
-    public void waitForNotificationAlertToDisappear(){
-        try {
-            waitForElementToBeInVisibleByCss(this.getCurrentDriver(), notificationAlert, 25);
-        } catch(NoSuchElementException e){}
-    }
 
     public void waitForNotificationAlertToBeProcessed(int toAppear, int toDisappear){
         try {
@@ -104,28 +88,6 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
     }
 
 
-    @Step(value = "Click '{userManagementPage}' page navigation button")
-    public void clickPageNavButton(String buttonName){
-        waitForAngularRequestsToFinish(this.getCurrentDriver());
-        waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
-        WebElement targetButton = pageNavButtons.stream()
-                                        .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
-                                        .findFirst().orElseThrow(() ->
-                        new AssertionError(buttonName + " navigation button is not available to click"));
-        clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
-    }
-
-    @Step(value = "Get opened tab title")
-    public String getOpenedTabTitle(){
-        waitForAngularRequestsToFinish(this.getCurrentDriver());
-        try {
-            waitForElementToBeVisible(this.getCurrentDriver(), selectionNavBar, 8);
-        }catch(TimeoutException e){
-            Assert.fail("Selection nav bar Billing Details page is not visible");
-        }
-        return focusedNavButton.getText().trim();
-    }
-
     @Step(value = "Click '{buttonName}' page action button")
     public void clickPageActionButton(String buttonName){
         waitForElementToBeVisible(this.getCurrentDriver(), headerControlsContainer, 8);
@@ -134,15 +96,6 @@ public class PortalAbstractPage implements WebActions, ActionsHelper, JSHelper {
                 .findFirst().orElseThrow(() ->
                         new AssertionError(buttonName + " navigation button is not available to click") );
         clickElem(this.getCurrentDriver(), targetButton,1, buttonName);
-    }
-
-    public boolean isPageActionButton(String buttonName){
-        waitForElementToBeVisible(this.getCurrentDriver(), headerControlsContainer, 8);
-        WebElement targetButton = pageActionButtons.stream()
-                .filter(e -> e.getText().trim().equalsIgnoreCase(buttonName))
-                .findFirst().orElseThrow(() ->
-                        new AssertionError(buttonName + " action button is not available to click") );
-        return targetButton != null;
     }
 
 

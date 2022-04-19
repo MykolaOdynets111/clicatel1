@@ -18,8 +18,6 @@ import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.DefaultTouchUserSteps;
-import steps.FacebookSteps;
-import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.io.File;
@@ -186,49 +184,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         selectedEmoji = getAgentHomePage("main").getChatForm().selectRandomFrequentlyUsedEmoji();
     }
 
-    @Then("^Conversation area (?:becomes active with||contains) (.*) message from twitter user$")
-    public void verifyUserMessageOnAgentDeskFromTwitter(String userMessage) {
-        if (userMessage.contains("agent") || userMessage.contains("support")) {
-            userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-        } else if (! userMessage.equalsIgnoreCase("//end") ||
-                ! userMessage.equalsIgnoreCase("//stop")){
-            userMessage = FacebookSteps.getCurrentUserMessageText();
-        }
-        Assert.assertTrue(getChatBody("main").isUserMessageShown(userMessage),
-                "'" + userMessage + "' User message is not shown in conversation area");
-    }
 
-    @Then("^Conversation area (?:becomes active with||contains) (.*) message from facebook user$")
-    public void verifyUserMessageOnAgentDeskFromFB(String userMessage) {
-        Assert.assertTrue(getChatBody("main agent").isUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
-                "'" + FacebookSteps.getCurrentUserMessageText() + "' User message is not shown in conversation area (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
-    }
-
-    @Then("^Conversation area becomes active with (.*) user's message in it for (.*)$")
-    public void verifyUserMessageOnAgentDesk(String userMessage, String agent) {
-        if (ConfigManager.getSuite().equalsIgnoreCase("twitter") & userMessage.contains("support")) {
-            userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-        }
-        if (ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
-            userMessage = FacebookSteps.getCurrentUserMessageText();
-        }
-        Assert.assertTrue(getChatBody(agent).isUserMessageShown(userMessage),
-                "'" + userMessage + "' User message is not shown in conversation area");
-    }
-
-    @Then("^There is no more than one from user message$")
-    public void checkThereIsNoMoreThanOneUserMessage() {
-        Assert.assertFalse(getChatBody("main").isMoreThanOneUserMassageShown(),
-                "More than one user message is shown (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
-    }
-
-    @Then("^There is no from (.*) response added by default for (.*) user message$")
-    public void verifyIfNoAgentResponseAddedByDefault(String agent, String userMessage) {
-        Assert.assertFalse(getChatBody(agent).isResponseOnUserMessageShown(userMessage),
-                "There is agent answer added without agent's intention (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
-    }
-
-    @And("Collect (.*) chat messages")
+    @And("^Collect (.*) chat messages$")
     public void collectMassages(String agent){
         messagesFromChatBody.set(getChatBody(agent).getAllMessages());
     }
@@ -243,25 +200,9 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "Expected to user emoji '" + selectedEmoji + "' is not shown in chatdesk");
     }
 
-    @Then("^There is no from (.*) response added by default for (.*) message from fb user$")
-    public void verifyIfNoAgentResponseAddedByDefaultToFBMessage(String agent, String userMessage) {
-        Assert.assertFalse(getChatBody(agent).isResponseOnUserMessageShown(FacebookSteps.getCurrentUserMessageText()),
-                "There is agent answer added without agent's intention (Client ID: " + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + ")");
-    }
-
     @When("^(.*) (?:responds with|sends a new message) (.*) to User$")
     public void sendAnswerToUser(String agent, String responseToUser) {
         getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
-    }
-
-
-    @When("^(.*) replays with (.*) message$")
-    public void respondToUserWithCheck(String agent, String agentMessage) {
-        if (getAgentHomePage(agent).getChatForm().isSuggestionFieldShown()) {
-            deleteSuggestionAndSendOwn(agent, agentMessage);
-        } else {
-            sendAnswerToUser("main agent", agentMessage);
-        }
     }
 
     @When("^(.*) clear input and send a new message (.*)$")
@@ -313,17 +254,6 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertEquals(actualSuggestion, expectedMessage, "Suggestion in input field is not as expected");
     }
 
-
-    @Then("There is no suggestions on '(.*)' user input")
-    public void verifySuggestionIsNotShown(String userInput) {
-        getAgentHomePage("main").clickAgentAssistantButton();
-        SoftAssert softAssert = new SoftAssert();
-        String actualSuggestion = getAgentHomePage("main").getChatForm().getSuggestionFromInputFiled();
-        softAssert.assertTrue(actualSuggestion.isEmpty(), "Input field is not empty\n");
-        softAssert.assertTrue(getSuggestedGroup("main").isSuggestionListEmpty(), "Suggestions list is not empty");
-        softAssert.assertAll();
-    }
-
     @When("^(.*) click send button$")
     public void clickSendButton(String agent) {
         getAgentHomePage(agent).getChatForm().clickSendButton();
@@ -332,18 +262,6 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     @When("^(.*) is able to delete the suggestion from input field and sends his own \"(.*)\" message$")
     public void deleteSuggestionAndSendOwn(String agent, String agentMessage) {
         getAgentHomePage(agent).getChatForm().deleteSuggestionAndAddAnother(agentMessage);
-    }
-
-
-    @When("^(.*) add additional info \"(.*)\" to suggested message$")
-    public void addMoreInfo(String agent, String additional) {
-        getAgentHomePage(agent).getChatForm().sendResponseInSuggestionWrapperToUser(additional);
-    }
-
-    @Then("^'Clear' buttons are not shown$")
-    public void checkClearEditButtonsAreShown() {
-        Assert.assertTrue(getAgentHomePage("main").getChatForm().isClearButtonShown(),
-                "'Clear' button is not shown for suggestion input field.");
     }
 
     @Then("^'Clear' button is shown$")
@@ -365,7 +283,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "Message input field is not empty");
     }
 
-    @Then("Agent is able to add \"(.*)\"")
+    @Then("^Agent is able to add \"(.*)\"$")
     public void enterAdditionTextForSuggestion(String textToAdd) {
         getAgentHomePage("main").getChatForm().sendResponseInSuggestionWrapperToUser(textToAdd);
     }
@@ -416,7 +334,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
     }
 
-    @When("(.*) closes chat")
+    @When("^(.*) closes chat$")
     public void closeChat(String agent) {
         getAgentHomePage(agent).endChat();
     }
@@ -455,24 +373,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         return false;
     }
 
-    @When("(.*) click 'Cancel' button$")
+    @When("^(.*) click 'Cancel' button$")
     public void agentClickCancelButton(String agent) {
         getAgentHomePage(agent).getAgentFeedbackWindow().clickCancel();
     }
 
-    @Then("^Suggestions are not shown$")
-    public void verifySuggestionNotShown() {
-        getAgentHomePage("main").clickAgentAssistantButton();
-        Assert.assertTrue(getSuggestedGroup("main").isSuggestionListEmpty(),
-                "Suggestions list is not empty.");
-    }
-
-    @Then("And message that feature is not available is shown")
-    public void verifySuggestionFeatureNotAvailable() {
-        String expectedMessage = "Agent assist is not available on your current touch package";
-        Assert.assertEquals(getSuggestedGroup("main").getSuggestionsNotAvailableMessage(), expectedMessage,
-                "Error message that Agent Assist feature is not available is not as expected");
-    }
 
     @Then("^(?:End chat|Agent Feedback) popup is not shown$")
     public void verifyAgentFeedbackPopupNotOpened() {
@@ -567,10 +472,5 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "Incorrect default user picture shown");
     }
 
-    @Then("^Correct agent image is shown in conversation area$")
-    public void verifyAgentImage() {
-        Assert.assertTrue(getChatBody("main agent").isValidAgentAvatarIsShown(),
-                "Incorrect agent picture shown");
-    }
 
 }

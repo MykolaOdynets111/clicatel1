@@ -171,12 +171,6 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         if(userFrom.contains("first chat")){
             return createdChatsViaDotControl.get(0).getInitContext().getFullName();
         }
-        if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-            return super.getUserName("twitter");
-        }
-        if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
-            return super.getUserName("facebook");
-        }
         if(userFrom.equalsIgnoreCase("dotcontrol")) {
             return super.getUserName("dotcontrol");
         }
@@ -188,11 +182,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     }
 
     public synchronized void saveClientIDValue(String userFrom){
-        if (userFrom.equalsIgnoreCase("facebook"))
-            clientIDGlobal.set(socialaccounts.FacebookUsers.getFBTestUserFromCurrentEnv().getFBUserIDMsg().toString());
-        else if (userFrom.equalsIgnoreCase("twitter"))
-            clientIDGlobal.set(socialaccounts.TwitterUsers.getLoggedInUser().getDmUserId());
-        else if (userFrom.equalsIgnoreCase("dotcontrol"))
+        if (userFrom.equalsIgnoreCase("dotcontrol"))
             clientIDGlobal.set(DotControlSteps.getClientId());
         else
             clientIDGlobal.set(getAgentHomePage("main").getProfile().getUserFullName());

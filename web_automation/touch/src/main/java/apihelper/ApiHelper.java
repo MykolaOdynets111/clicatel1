@@ -506,41 +506,6 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                 .put(Endpoints.INTEGRATIONS_ENABLING_DISABLING);
     }
 
-    public static ResponseBody getInfoAboutFBIntegration(String tenantOrgName){
-        return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .get(Endpoints.FACEBOOK_INTEGRATION)
-                .getBody();
-    }
-
-    public static ResponseBody getInfoAboutTwitterIntegration(String tenantOrgName){
-        return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .get(Endpoints.TWITTER_INTEGRATION)
-                .getBody();
-    }
-
-    public static String getInfoAboutTwitterIntegration(String tenantOrgName,String parametr){
-        return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .get(Endpoints.TWITTER_INTEGRATION)
-                .getBody().jsonPath().getString(parametr);
-    }
-
-    public static ResponseBody delinkTwitterIntegration(String tenantOrgName){
-        return RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .delete(Endpoints.TWITTER_INTEGRATION)
-                .getBody();
-    }
-
-    public static void delinkFBIntegration(String tenantOrgName){
-        RestAssured.given()
-                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .delete(Endpoints.FACEBOOK_INTEGRATION)
-                .getBody();
-    }
-
     public static void setStatusForWelcomeMesage(String tenantName, String messageStatus){
         RestAssured.given()
                 .contentType(ContentType.JSON)
@@ -976,48 +941,6 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
                       "}")
                 .put(Endpoints.INTERNAL_CONFIG_ATTRIBUTES + tenantId);
     }
-
-//    Response resp = ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName).getFBPageId(), 1912835872122481l, "to agent the last");
-    public static Response createFBChat(long linkedFBPageId, long fbUserId, String message){
-        Faker faker = new Faker();
-        String mid = faker.code().isbn13(true) + "-" + faker.lorem().characters(3,6, true);
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zdt = LocalDateTime.now().atZone(zoneId);
-        long timestamp =  zdt.toInstant().toEpochMilli();
-        String requestBody1 = "{\n" +
-                "  \"entry\": [\n" +
-                "    {\n" +
-                "      \"changes\": [],\n" +
-                "      \"id\": \""+linkedFBPageId+"\",\n" +
-                "      \"messaging\": [\n" +
-                "        {\n" +
-                "          \"message\": {\n" +
-                "            \"mid\": \""+mid+"\",\n" +
-                "            \"seq\": 31478,\n" +
-                "            \"text\": \""+message+"\"\n" +
-                "          },\n" +
-                "          \"recipient\": {\n" +
-                "            \"id\": \""+linkedFBPageId+"\"\n" +
-                "          },\n" +
-                "          \"sender\": {\n" +
-                "            \"id\": \""+fbUserId+"\"\n" +
-                "          },\n" +
-                "          \"timestamp\": "+timestamp+"\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"time\": "+timestamp+"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"object\": \"page\",\n" +
-                "  \"tenant\": null\n" +
-                "}";
-        return RestAssured.given().log().all()
-                .accept(ContentType.ANY)
-                .contentType(ContentType.JSON)
-                .config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
-                .body(requestBody1)
-                .post(Endpoints.SOCIAL_FACEBOOK_HOOKS);
-        }
 
 
     public static List<AvailableAgent> getAvailableAgents(){

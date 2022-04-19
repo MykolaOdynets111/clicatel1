@@ -12,10 +12,8 @@ import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
-import io.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
-import portaluielem.LeftMenu;
 import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
@@ -33,23 +31,9 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<PortalMainPage> secondPortalMainPage = new ThreadLocal<>();
 
-    private static ThreadLocal<PortalTouchIntegrationsPage> portalIntegrationsPage = new ThreadLocal<>();
-
-    private static ThreadLocal<PortalBillingDetailsPage> portalBillingDetailsPage = new ThreadLocal<>();
-
-    private static ThreadLocal<PortalSignUpPage> portalSignUpPage = new ThreadLocal<>();
-
-    private static ThreadLocal<PortalAccountDetailsPage> portalAccountDetailsPage = new ThreadLocal<>();
-
-    private static ThreadLocal<PortalFBIntegrationPage> portalFBIntegrationPage = new ThreadLocal<>();
-
-    private static ThreadLocal<PortalManageAgentUsersPage> portalManagingUsersPage = new ThreadLocal<>();
-
-    private static ThreadLocal<PortalUserEditingPage> portalUserProfileEditingPage = new ThreadLocal<>();
 
     private static ThreadLocal<PortalTouchPreferencesPage> portalTouchPreferencesPage = new ThreadLocal<>();
 
-    private static ThreadLocal<PortalUserManagementPage> portalUserManagementPage = new ThreadLocal<>();
 
     private static ThreadLocal<DashboardPage> dashboardPage = new ThreadLocal<>();
 
@@ -79,12 +63,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         switch (channel.toLowerCase()){
             case "touch":
                 userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-                break;
-            case "twitter":
-                userName = socialaccounts.TwitterUsers.getLoggedInUserName();
-                break;
-            case "facebook":
-                userName = socialaccounts.FacebookUsers.getLoggedInUserName();
                 break;
             case "dotcontrol":
                 userName = DotControlSteps.getClient();
@@ -160,104 +138,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
     }
 
 
-    public static PortalTouchIntegrationsPage getPortalIntegrationsPage() {
-        if (portalIntegrationsPage.get()==null) {
-            portalIntegrationsPage.set(new PortalTouchIntegrationsPage(DriverFactory.getDriverForAgent("admin")));
-            return portalIntegrationsPage.get();
-        } else{
-            return portalIntegrationsPage.get();
-        }
-    }
-
-    public static void setPortalIntegrationsPage(PortalTouchIntegrationsPage integrationsPage) {
-        portalIntegrationsPage.set(integrationsPage);
-    }
-
-
-    public static PortalBillingDetailsPage getPortalBillingDetailsPage() {
-        if (portalBillingDetailsPage.get()==null) {
-            portalBillingDetailsPage.set(new PortalBillingDetailsPage(DriverFactory.getDriverForAgent("admin")));
-            return portalBillingDetailsPage.get();
-        } else{
-            return portalBillingDetailsPage.get();
-        }
-    }
-
-    public static void setPortalBillingDetailsPage(PortalBillingDetailsPage billingDetailsPage) {
-        portalBillingDetailsPage.set(billingDetailsPage);
-    }
-
-
-    public static PortalSignUpPage getPortalSignUpPage() {
-        if (portalSignUpPage.get()==null) {
-            portalSignUpPage.set(new PortalSignUpPage(DriverFactory.getDriverForAgent("admin")));
-            return portalSignUpPage.get();
-        } else{
-            return portalSignUpPage.get();
-        }
-    }
-
-    public static void setPortalSignUpPage(PortalSignUpPage signUpPage) {
-        portalSignUpPage.set(signUpPage);
-    }
-
-
-    public PortalAccountDetailsPage getPortalAccountDetailsPage() {
-        if (portalAccountDetailsPage.get()==null) {
-            portalAccountDetailsPage.set(new PortalAccountDetailsPage(DriverFactory.getDriverForAgent("admin")));
-            return portalAccountDetailsPage.get();
-        } else{
-            return portalAccountDetailsPage.get();
-        }
-    }
-
-    public void setPortalAccountDetailsPage(PortalAccountDetailsPage accountDetailsPageThreadLocal) {
-        portalAccountDetailsPage.set(accountDetailsPageThreadLocal);
-    }
-
-
-    public static PortalFBIntegrationPage getPortalFBIntegrationPage() {
-        if (portalFBIntegrationPage.get()==null) {
-            portalFBIntegrationPage.set(new PortalFBIntegrationPage(DriverFactory.getDriverForAgent("admin")));
-            return portalFBIntegrationPage.get();
-        } else{
-            return portalFBIntegrationPage.get();
-        }
-    }
-
-    public static void setPortalFBIntegrationPage(PortalFBIntegrationPage FBIntegrationPage) {
-        portalFBIntegrationPage.set(FBIntegrationPage);
-    }
-
-
-    public static PortalManageAgentUsersPage getPortalManagingUsersPage() {
-        if (portalManagingUsersPage.get()==null) {
-            portalManagingUsersPage.set(new PortalManageAgentUsersPage(DriverFactory.getDriverForAgent("admin")));
-            return portalManagingUsersPage.get();
-        } else{
-            return portalManagingUsersPage.get();
-        }
-    }
-
-    public static void setPortalManagingUsersPage(PortalManageAgentUsersPage managingUsers) {
-        portalManagingUsersPage.set(managingUsers);
-    }
-
-
-    public static PortalUserEditingPage getPortalUserProfileEditingPage() {
-        if (portalUserProfileEditingPage.get()==null) {
-            portalUserProfileEditingPage.set(new PortalUserEditingPage(DriverFactory.getDriverForAgent("admin")));
-            return portalUserProfileEditingPage.get();
-        } else{
-            return portalUserProfileEditingPage.get();
-        }
-    }
-
-    public static void setPortalUserProfileEditingPage(PortalUserEditingPage userProfileEditingPage) {
-        portalUserProfileEditingPage.set(userProfileEditingPage);
-    }
-
-
     public static PortalTouchPreferencesPage getPortalTouchPreferencesPage() {
         if (portalTouchPreferencesPage.get()==null) {
             portalTouchPreferencesPage.set(new PortalTouchPreferencesPage(DriverFactory.getDriverForAgent("admin")));
@@ -269,16 +149,6 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     public static void setPortalTouchPreferencesPage(PortalTouchPreferencesPage touchPreferencesPage) {
         portalTouchPreferencesPage.set(touchPreferencesPage);
-    }
-
-
-    public static PortalUserManagementPage getPortalUserManagementPage() {
-        if (portalUserManagementPage.get()==null) {
-            portalUserManagementPage.set(new PortalUserManagementPage(DriverFactory.getDriverForAgent("admin")));
-            return portalUserManagementPage.get();
-        } else{
-            return portalUserManagementPage.get();
-        }
     }
 
 
@@ -330,26 +200,13 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
-    public static LeftMenu getLeftMenu() {
-        return getAdminPortalMainPage().getLeftMenu();
-    }
-
-
     public static void cleanAllPortalPages(){
         currentPortalLoginPage.remove();
         portalLoginPage.remove();
         secondAgentPortalLoginPage.remove();
         portalMainPage.remove();
         secondPortalMainPage.remove();
-        portalIntegrationsPage.remove();
-        portalBillingDetailsPage.remove();
-        portalSignUpPage.remove();
-        portalAccountDetailsPage.remove();
-        portalFBIntegrationPage.remove();
-        portalManagingUsersPage.remove();
-        portalUserProfileEditingPage.remove();
         portalTouchPreferencesPage.remove();
-        portalUserManagementPage.remove();
         dashboardPage.remove();
         chatConsoleInboxPage.remove();
         departmentsManagementPage.remove();

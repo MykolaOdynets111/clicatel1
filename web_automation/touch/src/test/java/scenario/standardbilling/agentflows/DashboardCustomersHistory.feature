@@ -35,10 +35,6 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Webchat channel and Past day period
     Then Admin see all graphs filtered by Web Chat channel and Past day period
-    And Admin filter Customers History by Facebook channel and Past week period
-    Then Admin see all graphs filtered by Facebook channel and Past week period
-    And Admin filter Customers History by Twitter channel and Past 2 weeks period
-    Then Admin see all graphs filtered by Twitter channel and Past 2 weeks period
     And Admin filter Customers History by WhatsApp channel and Past 3 weeks period
     Then Admin see all graphs filtered by WhatsApp channel and Past 3 weeks period
     And Admin filter Customers History by Apple Business Chat channel and Past 4 weeks period

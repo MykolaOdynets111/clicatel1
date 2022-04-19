@@ -180,9 +180,4 @@ public class PreferencesWindow extends BasePortalWindow {
         return pendingChatAutoClosureHours.getAttribute("value");
     }
 
-
-
-
-
-
 }

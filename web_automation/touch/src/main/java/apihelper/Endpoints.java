@@ -16,10 +16,6 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_TERRITORIES = URLs.getTouchApiBaseURL() + "territories/availability";
 
-    public static String FACEBOOK_INTEGRATION =  URLs.getTouchApiBaseURL() + "facebook-registration/integration";
-
-    public static String TWITTER_INTEGRATION =  URLs.getTouchApiBaseURL() + "twitter-registration/integration";
-
     public static String AGENT_INFO_ME = URLs.getBaseWSInternalURL() + "agents/%s";
 
     public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
@@ -181,8 +177,6 @@ public class Endpoints {
     // ====================  SOCIAL ================= //
 
     public static String SOCIAL_HEALTH_CHECK = URLs.getBaseSocialUrl() + "internal/actuator/health";
-
-    public static String SOCIAL_FACEBOOK_HOOKS = URLs.getBaseSocialUrl() + "facebook/hooks";
 
 
     // ====================  .Control ================= //

@@ -10,11 +10,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import steps.FacebookSteps;
-import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.util.List;
@@ -208,12 +205,6 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     public void verifyIncomingTransferDetails(String agent, String user, String userMessage) {
             SoftAssert soft = new SoftAssert();
             String expectedUserName = getUserName(user);
-            if (ConfigManager.getSuite().equalsIgnoreCase("twitter")) {
-                userMessage = TwitterSteps.getCurrentConnectToAgentTweetText();
-            }
-            if(ConfigManager.getSuite().equalsIgnoreCase("facebook")) {
-                userMessage = FacebookSteps.getCurrentUserMessageText();
-            }
             String expectedAgentNAme = Tenants.getPrimaryAgentInfoForTenant(Tenants.getTenantUnderTestOrgName()).get("fullName");
 
             soft.assertEquals(getAgentHomePage(agent).getIncomingTransferWindow().getClientName(), expectedUserName,

@@ -60,6 +60,4 @@ Feature: Supervisor desk
 
     Examples:
       |adapter                                             |channelName|
-      |fbmsg                                               |Facebook|
       |whatsapp                                            |WhatsApp|
-      |twdm                                                |Twitter|

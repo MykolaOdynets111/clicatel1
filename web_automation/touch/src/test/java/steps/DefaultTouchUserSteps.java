@@ -257,8 +257,20 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     public void enterUniqueText(String text) {
         widgetConversationArea = widget.getWidgetConversationArea();
         widgetConversationArea.waitForSalutation();
-        widget.getWidgetFooter().enterMessage(FacebookSteps.createUniqueUserMessage(text)).sendMessage();
-        widgetConversationArea.waitForMessageToAppearInWidget(FacebookSteps.getCurrentUserMessageText());
+        widget.getWidgetFooter().enterMessage(createUniqueUserMessage(text)).sendMessage();
+        widgetConversationArea.waitForMessageToAppearInWidget(getCurrentUserMessageText());
+    }
+
+    private static String message;
+    public synchronized static String createUniqueUserMessage(String baseMessage){
+        Faker faker = new Faker();
+        if(baseMessage.contains("thanks")) message =baseMessage;
+        else message = baseMessage + faker.lorem().character();
+        return message;
+    }
+
+    public synchronized static String getCurrentUserMessageText(){
+        return message;
     }
 
     @Then("^User should not receive '(.*)' message after his '(.*)' message in widget$")
@@ -324,7 +336,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     public void verifyResponseOnUniqueMessage(String textResponse, String userInput) {
         int waitForResponse=10;
         String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
-        verifyTextResponse(FacebookSteps.getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
+        verifyTextResponse(getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
     }
 
     /**Method for verifying tie response in widget on user's message

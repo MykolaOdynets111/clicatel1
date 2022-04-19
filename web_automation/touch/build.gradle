@@ -57,20 +57,6 @@ tasks.withType(Test) {
 
 // ========= !! TASKS FOR SUITES !! ============== //
 
-task runFacebookTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + tenantName + "/facebook.xml"
-    }
-}
-
-task runTwitterTests(type:Test) {
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + tenantName + "/twitter.xml"
-    }
-}
-
 task runAbcTests(type:Test) {
     useTestNG() {
         ignoreFailures = true
@@ -179,15 +165,6 @@ task runTestsAgainstNewlyCreatedAccount(type:Test){
 }
 
 
-task runTouchGoTests(type:Test){
-    useTestNG() {
-        ignoreFailures = true
-        suites baseXmlPath + "touchgo/touchgosignup.xml"
-        suites baseXmlPath + "touchgo/touchgonewtenant.xml"
-        suites baseXmlPath + "touchgo/tocuhgocloseaccount.xml"
-    }
-}
-
 task runHealthCheckTests(type:Test) {
     useTestNG() {
         useDefaultListeners = true
@@ -232,15 +209,6 @@ task runTests(type: Test) {
         suite = System.properties.getProperty("suite")
     }
 
-
-    if(suite == "facebook") {
-        runTests.dependsOn(runFacebookTests)
-    }
-
-    if(suite == "twitter") {
-        runTests.dependsOn(runTwitterTests)
-    }
-
     if(suite == "abc") {
         runTests.dependsOn(runAbcTests)
     }
@@ -275,10 +243,6 @@ task runTests(type: Test) {
 
     if(suite=="tiepullrequest"){
         runTests.dependsOn(runTiePullRequestTests)
-    }
-
-    if(suite=="touchgo"){
-        runTests.dependsOn(runTouchGoTests)
     }
 
     if(suite == "healthcheck") {
