@@ -201,11 +201,11 @@ public class Endpoints {
 
     // ====================  ORCA ================= //
 
-    public static String CREATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "api/channel/abc-orca/%s";
+    public static String CREATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "api/channel/%s-orca/%s";
 
-    public static String UPDATE_ORCA_INTEGRATION= URLs.getBaseWSInternalURL() + "api/channel/abc-orca/%s/%s";
+    public static String UPDATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "api/channel/%s-orca/%s/%s";
 
-    public static String ORCA_INTEGRATIONS_LIST= URLs.getBaseWSInternalURL() + "api/channel/abc-orca?tenantId=%s";
+    public static String ORCA_INTEGRATIONS_LIST= URLs.getBaseWSInternalURL() + "api/channel/%s-orca?tenantId=%s";
 
     // ====================  WS  ================= //
 

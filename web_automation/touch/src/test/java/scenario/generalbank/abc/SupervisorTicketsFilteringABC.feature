@@ -9,7 +9,7 @@ Feature: Apple Business Chat :: Supervisor Desk
   @no_widget
   @orca_api
   Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering ORCA tickets
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given Setup ORCA abc integration for General Bank Demo tenant
     When Send to agent message by ORCA
     And I select Touch in left menu and Supervisor Desk in submenu
     When Agent select "Tickets" left menu option

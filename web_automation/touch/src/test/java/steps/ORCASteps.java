@@ -59,21 +59,21 @@ public class ORCASteps implements WebWait {
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
-    @Given("^Setup ORCA integration for (.*) tenant$")
-    public void createOrUpdateOrcaIntegration(String tenantName) {
+    @Given("^Setup ORCA (.*) integration for (.*) tenant$")
+    public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
-        String id = getIntegrationId();
+        String id = getIntegrationId(channel);
         if (id == null) {
-            apiToken.set(ApiORCA.createIntegration(Server.getServerURL()));
+            apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
         } else {
-            apiToken.set(ApiORCA.updateIntegration(Server.getServerURL(),id));
+            apiToken.set(ApiORCA.updateIntegration(channel, Server.getServerURL(),id));
             System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
 
 
-    private String getIntegrationId() {
-        Response response = ApiORCA.getORCAIntegrationsList();
+    private String getIntegrationId(String channel) {
+        Response response = ApiORCA.getORCAIntegrationsList(channel);
         List<Map> types = response.getBody().jsonPath().getList("");
         if (!(types.size() == 0)) {
             for (Map integrationType : types) {

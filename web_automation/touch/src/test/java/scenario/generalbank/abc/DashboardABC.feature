@@ -3,7 +3,7 @@
 Feature: Apple Business Chat :: Dashboard
 
   Background:
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given Setup ORCA abc integration for General Bank Demo tenant
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45501")
   Scenario: Dashboard:: Verify if Apple channel is displayed on live customer charts

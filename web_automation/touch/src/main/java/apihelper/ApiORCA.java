@@ -1,32 +1,30 @@
 package apihelper;
 
-import com.github.javafaker.Faker;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import driverfactory.URLs;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
 
 import java.time.Instant;
 
 public class ApiORCA {
 
-     public static String createIntegration(String callBackUrl){
+     public static String createIntegration(String channel, String callBackUrl){
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(prepareIntegrationCAllData(callBackUrl))
-                .post(String.format(Endpoints.CREATE_ORCA_INTEGRATION, Tenants.getTenantId()));
+                .post(String.format(Endpoints.CREATE_ORCA_INTEGRATION, channel, Tenants.getTenantId()));
         return validateIntegrationResponse(resp, "Create");
     }
 
-    public static String updateIntegration(String callBackUrl, String orcaId){
+    public static String updateIntegration(String channel, String callBackUrl, String orcaId){
         Response resp = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(prepareIntegrationCAllData(callBackUrl))
-                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, Tenants.getTenantId(),orcaId));
+                .put(String.format(Endpoints.UPDATE_ORCA_INTEGRATION, channel, Tenants.getTenantId(),orcaId));
         return validateIntegrationResponse(resp, "Update");
     }
 
@@ -53,10 +51,10 @@ public class ApiORCA {
         return token;
     }
 
-    public static Response getORCAIntegrationsList(){
+    public static Response getORCAIntegrationsList(String channel){
         Response resp =  RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .get(String.format(Endpoints.ORCA_INTEGRATIONS_LIST, Tenants.getTenantId()));
+                .get(String.format(Endpoints.ORCA_INTEGRATIONS_LIST, channel, Tenants.getTenantId()));
         return resp;
     }
 

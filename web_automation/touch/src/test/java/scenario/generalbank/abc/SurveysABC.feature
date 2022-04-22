@@ -3,7 +3,7 @@
 Feature: Apple Business Chat :: Surveys
 
   Background:
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given Setup ORCA abc integration for General Bank Demo tenant
     And Update survey management chanel abc settings by ip for General Bank Demo
       | ratingEnabled | true        |
       | ratingType    | NPS         |

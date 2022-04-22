@@ -5,7 +5,7 @@ Feature: Apple Business Chat :: Chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45496")
   Scenario: Chatdesk:: The header should have apple icon when user is chatting using apple chat
     Given I login as agent of General Bank Demo
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given Setup ORCA abc integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
@@ -17,7 +17,7 @@ Feature: Apple Business Chat :: Chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
   Scenario: Chat desk: ABC: Verify if //END message works for apple business chat
     Given I login as agent of General Bank Demo
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given Setup ORCA abc integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
@@ -30,7 +30,7 @@ Feature: Apple Business Chat :: Chatdesk
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45512")
   Scenario: Chatdesk:: Verify if agent is able to transfer Apple business chat via "Transfer chat" button
     Given I login as agent of General Bank Demo
-    Given Setup ORCA integration for General Bank Demo tenant
+    Given Setup ORCA abc integration for General Bank Demo tenant
     When Send connect to agent message by ORCA
     Then Agent has new conversation request from orca user
     When I login as second agent of General Bank Demo
