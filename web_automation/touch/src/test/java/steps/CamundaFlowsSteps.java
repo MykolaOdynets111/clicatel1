@@ -9,7 +9,9 @@ import drivermanager.ConfigManager;
 import interfaces.JSHelper;
 import interfaces.WebActions;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import socialaccounts.TwitterUsers;
 import dbmanager.DBConnector;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
@@ -89,6 +91,17 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
             map.put(key, formatter.format(dateTime.minusHours(hoursShift)));
         }
         return map;
+    }
+
+
+    @Then("Last visit date is changed to minus (.*) hours for twitter dm user")
+    public void changeLastVisitDateForSocial(int hoursShift){
+        String linkedClientProfileId = DBConnector.getLinkedClientProfileID(ConfigManager.getEnv(), TwitterUsers.getLoggedInUser().getDmUserId());
+        long lastVisit = DBConnector.getLastVisitForUserProfile(ConfigManager.getEnv(), linkedClientProfileId);
+        if(lastVisit!=0) {
+            long lastVisitWithShift = lastVisit - (hoursShift * 60 * 60 * 1000) - (3 * 60 * 60 * 1000);
+            DBConnector.updateClientLastVisitDate(ConfigManager.getEnv(), linkedClientProfileId, lastVisitWithShift);
+        }
     }
 
     private String generateNewMessageText(String tafMessageId){

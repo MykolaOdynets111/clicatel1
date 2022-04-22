@@ -33,6 +33,12 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[selenium-id=user-profile-email]")
     private WebElement mailInput;
 
+    @FindBy(css = "[selenium-id=user-profile-twitter]")
+    private WebElement twitterLabel;
+
+    @FindBy(css = "[selenium-id=user-profile-facebook]")
+    private WebElement fbLabel;
+
     @FindBy(css = "[selenium-id=user-profile-phone]")
     private WebElement phoneLocator;
 
@@ -73,6 +79,8 @@ public class Profile extends AbstractUIElement {
         String channelUsername = "Unknown";
         String location;
         String phone;
+        if(!twitterLabel.getText().equals("Unknown")) channelUsername = twitterLabel.getText();
+        if(!fbLabel.getText().equals("Unknown")) channelUsername = fbLabel.getText();
         if(channelUsername.equals("Unknown")&getUserNameFromLocalStorage(this.getCurrentDriver())!=null) channelUsername = getUserNameFromLocalStorage(this.getCurrentDriver());
         if(channelUsername.equals("Unknown")) channelUsername = profileNameLabel.getAttribute("value");
         if (phoneLocator.getAttribute("value").isEmpty()){
@@ -94,6 +102,10 @@ public class Profile extends AbstractUIElement {
     }
 
     public void fillFormWithNewDetails(UserPersonalInfo valuesToSet){
+        if(!ConfigManager.getSuite().contains("twitter")) { // for now, because there is an issue TPORT-3989
+            profileNameInput.clear();
+            profileNameInput.sendKeys(valuesToSet.getFullName());
+        }
         locationInput.clear();
         locationInput.sendKeys(valuesToSet.getLocation());
         mailInput.clear();

@@ -125,6 +125,8 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @When("^(.*) searches and selects chat from (.*) in chat history list$")
     public void selectRandomChatFromHistory(String ordinalAgentNumber, String chanel){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
+        if (chanel.equalsIgnoreCase("twitter")) userId = socialaccounts.TwitterUsers.getLoggedInUserName();
+        if(chanel.equalsIgnoreCase("facebook")) userId = socialaccounts.FacebookUsers.getLoggedInUserName();
         if(chanel.equalsIgnoreCase("dotcontrol")) userId = DotControlSteps.getClient();
         if(chanel.equalsIgnoreCase("touch") && userId == null) userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         getLeftMenu(ordinalAgentNumber).searchUserChat(userId);

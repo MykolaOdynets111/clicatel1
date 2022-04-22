@@ -57,7 +57,7 @@ public class DotControlSteps implements WebWait {
         return initCallBody.get();
     }
 
-    @Given("^Create .Control integration for (.*)(?: tenant| and adapter: )(.*)$")
+    @Given("Create .Control integration for (.*)(?: tenant| and adapter: )(.*)")
     public void createIntegration(String tenantOrgName, String adaptor){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         APIHelperDotControl.deleteHTTPIntegrations(Tenants.getTenantUnderTestOrgName());

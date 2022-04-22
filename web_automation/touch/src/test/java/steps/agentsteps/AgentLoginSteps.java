@@ -3,6 +3,7 @@ package steps.agentsteps;
 
 import datamanager.Agents;
 import datamanager.Tenants;
+import datamanager.model.user.Permission;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
@@ -12,6 +13,8 @@ import io.cucumber.java.en.When;
 import org.testng.Assert;
 import portalpages.PortalMainPage;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgentLoginSteps extends AbstractAgentSteps {
 
@@ -19,7 +22,7 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
         if (ConfigManager.isMc2()) {
-            //ToDo Unity login should be added
+            loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
         }else {
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).openPortalLoginPage();
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
@@ -31,6 +34,26 @@ public class AgentLoginSteps extends AbstractAgentSteps {
                 "Agent is not logged in.");
     }
 
+    private void loginToPortalAndOpenChatdesk(String ordinalAgentNumber, String tenantOrgName){
+        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, ordinalAgentNumber);
+        List<Permission> permissions = new ArrayList<>();
+//        ApiHelper.getAgentInfo(tenantOrgName, ordinalAgentNumber)
+//                .getBody().jsonPath().getList("roles", UserRole.class).stream().forEach(e -> permissions.addAll(e.getPermissions()));
+        getPortalLoginPage(ordinalAgentNumber).openLoginPage(DriverFactory.getDriverForAgent(ordinalAgentNumber));
+        getPortalLoginPage(ordinalAgentNumber).login(agent.getAgentEmail(), agent.getAgentPass());
+
+        if(permissions.stream().anyMatch(e -> e.getSolution().equalsIgnoreCase("PLATFORM"))){
+            Assert.assertTrue(getPortalMainPage(ordinalAgentNumber).isPortalPageOpened(),
+                    "User is not logged in to portal");
+            getPortalMainPage(ordinalAgentNumber).launchChatDesk();
+        }
+    }
+
+    @Given("^Try to login as (.*) of (.*)")
+    public void tryToLoginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
+        Tenants.setTenantUnderTestNames(tenantOrgName);
+        loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
+    }
 
 
     @Then("^(.*) of (.*) is logged in")
@@ -41,6 +64,18 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     }
 
 
+    @When("I login with the same credentials in another browser as an agent of (.*)")
+    public void loginWithTheSameCreds(String tenantOrgName){
+        Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, "main");
+
+        getPortalLoginPage("second agent").openLoginPage(DriverFactory.getDriverForAgent("second agent"));
+        PortalMainPage mainPage = getPortalLoginPage("second agent").login(agent.getAgentEmail(), agent.getAgentPass());
+        Assert.assertTrue(mainPage.isPortalPageOpened(),
+                "User is not logged in to portal");
+        mainPage.launchChatDesk();
+        Assert.assertTrue(getAgentHomePage("second agent").isAgentSuccessfullyLoggedIn(),
+                "Agent is not logged in.");
+    }
 
     @Then("^In the first browser Connection Error should be shown$")
     public void verifyAgentIsDisconnected(){

@@ -20,14 +20,17 @@ import static runner.automationbot.Path.DOTCONTROL;
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
         features ={
+                PATH + "DisconnectingAgent.feature",
                 PATH + "RejectTransferingChat.feature",
                 PATH + "TransfedChatContainElements.feature",
                 PATH + "ClosingSession.feature",
                 PATH + "TransferingChatWithNoAvailableAgent.feature",
+                PATH + "AgentPhotoManaging.feature",
                 PATH + "AvailableAgentsHeadphones.feature",
                 PATH + "ChatConsoleWaitingCustomers.feature",
                 PATH + "EditAutorespondersViaPortalUI.feature",
                 PATH + "OutOfSupportHoursBotMode.feature",
+                PATH + "TenantBrandImageManaging.feature",
 //                PATH + "TransferingChatViaTimeout.feature", - not stable one
                 PATH + "TransferOvernigthTicket.feature",
                 DOTCONTROL + "DotControlInitCallInvalidAgent.feature"

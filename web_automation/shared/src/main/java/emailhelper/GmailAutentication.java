@@ -1,5 +1,6 @@
 package emailhelper;
 
+//import datamanager.TwitterUsers;
 
 import javax.mail.*;
 
@@ -11,6 +12,8 @@ public class GmailAutentication {
         GMailAuthenticator gMailAuthenticator = null;
         if(mail.length == 0){
             //ToDO:R EFACTOR TO PASS HERE ONLY CREDS
+//            gMailAuthenticator = new GMailAuthenticator(TwitterUsers.getLoggedInUser().getTwitterUserEmail(),
+//                    TwitterUsers.getLoggedInUser().getTwitterUserPass(), host);
         }else{
             gMailAuthenticator = new GMailAuthenticator(mail[0], mail[1], host);
         }

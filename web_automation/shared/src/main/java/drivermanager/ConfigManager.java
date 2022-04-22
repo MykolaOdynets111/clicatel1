@@ -13,6 +13,7 @@ public class ConfigManager {
     private static final String DEPLOY_TO = "deploy_to";
     private static final String TENANT_ORG_NAME = "tenantorgname";
     private static final String TENANT_ID = "tenantid";
+    private static final String FACEBOOK_PASS = "fbuserpass";
     private static final String SUITE = "suite";
     private static final String IS_MC2 = "ismc2";
     private static final String IS_WEB_WIDGET = "iswebwidget";
@@ -189,6 +190,10 @@ public class ConfigManager {
             Assert.fail("Tenant ID was not provided");
         }
         return tenantID;
+    }
+
+    public static  String getFBUserPass(){
+        return System.getProperty(FACEBOOK_PASS);
     }
 
     public static String getSuite(){

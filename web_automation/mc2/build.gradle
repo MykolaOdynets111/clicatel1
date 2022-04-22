@@ -49,6 +49,12 @@ task runAcceptanceTests(type:Test) {
     }
 }
 
+task runApiTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/api/api.xml"
+    }
+}
 
 task rundbTests(type:Test) {
     useTestNG() {
@@ -63,14 +69,21 @@ task runTests(type:Test) {
 
     suite = System.properties.getProperty("suite", "all")
 
-    if (suite == "all") {
+    if(suite == "all") {
         runTests.dependsOn(runAcceptanceTests)
-
-
-        if (suite == "db") {
-            runTests.dependsOn(rundbTests)
-        }
-
-        runTests.finalizedBy(copyConfig)
     }
+
+    if(suite == "api") {
+        runTests.dependsOn(runApiTests)
+    }
+
+    if(suite == "db") {
+        runTests.dependsOn(rundbTests)
+    }
+
+    runTests.finalizedBy(copyConfig)
 }
+
+
+
+

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Automation test" >
+    <test name="Integration testcases" >
+        <classes>
+            <class name="com.touch.tests.ChatToSupportFlowTests"/>
+        </classes>
+    </test>
+</suite>

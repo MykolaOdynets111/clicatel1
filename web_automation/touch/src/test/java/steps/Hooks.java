@@ -10,7 +10,8 @@ import datamanager.jacksonschemas.CRMTicket;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
-import emailhelper.GmailConnector;;
+import emailhelper.GmailConnector;
+import facebook.FBTenantPage;
 import interfaces.JSHelper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -39,6 +40,8 @@ import steps.tiesteps.BaseTieSteps;
 import steps.tiesteps.TIEApiSteps;
 import touchpages.pages.MainPage;
 import touchpages.pages.Widget;
+import twitter.TwitterTenantPage;
+import twitter.uielements.DMWindow;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
@@ -94,6 +97,8 @@ public class Hooks implements JSHelper {
         if(!scenario.getSourceTagNames().equals(Arrays.asList("@tie")) &&
                 !scenario.getSourceTagNames().equals(Arrays.asList("@widget_visibility")) &&
                 !scenario.getSourceTagNames().contains("@no_widget") &&
+                !scenario.getSourceTagNames().contains("@facebook") &&
+                !scenario.getSourceTagNames().contains("@twitter") &&
                 !scenario.getSourceTagNames().contains("@healthcheck") &&
                 !scenario.getSourceTagNames().contains("@camunda")){
 
@@ -140,18 +145,31 @@ public class Hooks implements JSHelper {
             finishVisibilityFlow();
         }
 
+        if(scenario.getSourceTagNames().contains("@facebook")){
+            takeScreenshot();
+            endFacebookFlow(scenario);
+        }
+
+        if(scenario.getSourceTagNames().contains("@twitter")){
+            takeScreenshot();
+            endTwitterFlow(scenario);
+        }
+
         if(scenario.getSourceTagNames().contains("@tie")){
             endTieFlow(scenario);
         }
 
         if(scenario.getSourceTagNames().contains("@newagent")){
-            //todo add the agent removing function
-//            if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
+            if(BasePortalSteps.isNewUserWasCreated()) BasePortalSteps.deleteAgent();
         }
 
         if(scenario.getSourceTagNames().contains("@healthcheck")){
             takeScreenshot();
             endTouchFlow(scenario, true);
+        }
+
+        if(scenario.getSourceTagNames().contains("@dilinking_account")&&scenario.isFailed()){
+            ApiHelper.delinkFBIntegration(Tenants.getTenantUnderTestOrgName());
         }
 
         if(scenario.getSourceTagNames().contains("@dot_control")){
@@ -209,6 +227,10 @@ public class Hooks implements JSHelper {
             ORCASteps.cleanUPORCAData();
         }
 
+        if (scenario.getSourceTagNames().contains("@close_account")){
+            ApiHelperPlatform.closeMC2Account(Tenants.getTenantUnderTestOrgName());
+        }
+
         closeMainBrowserIfOpened();
         clearAllSessionData();
 
@@ -257,6 +279,13 @@ public class Hooks implements JSHelper {
 
 
     private void finishAgentFlowIfExists(Scenario scenario) {
+
+        if (scenario.getSourceTagNames().contains("@delete_agent_on_failure")&&scenario.isFailed()){
+            String userID = ApiHelperPlatform.getUserID(Tenants.getTenantUnderTestOrgName(),
+                    Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
+            ApiHelperPlatform.deleteUser(Tenants.getTenantUnderTestOrgName(), userID);
+            ConfigManager.setIsSecondCreated("false");
+        }
 
         if (DriverFactory.isAgentDriverExists()) {
             if (scenario.getSourceTagNames().contains("@agent_info")) {
@@ -369,6 +398,20 @@ public class Hooks implements JSHelper {
         ApiHelper.setAvailableForAllTerritories(Tenants.getTenantUnderTestOrgName());
     }
 
+    private void endFacebookFlow(Scenario scenario) {
+        FBTenantPage fbTenantPage = new FBTenantPage(DriverFactory.getTouchDriverInstance());
+            try {
+                if(scenario.getSourceTagNames().contains("@fb_dm")) {
+                    fbTenantPage.getMessengerWindow().deleteConversation();
+                }
+                if(scenario.getSourceTagNames().contains("@fb_post")){
+                    fbTenantPage.getPostFeed().endSessionIfPostFeedIsShown();
+                    fbTenantPage.getFBYourPostPage().deletePost();
+                }
+
+            } catch (WebDriverException e) { }
+        }
+
     private void closeMainBrowserIfOpened() {
         if (DriverFactory.isTouchDriverExists()) {
             DriverFactory.closeTouchBrowser();
@@ -388,6 +431,26 @@ public class Hooks implements JSHelper {
     }
 
 
+    private void endTwitterFlow(Scenario scenario) {
+        TwitterTenantPage twitterTenantPage = new TwitterTenantPage(DriverFactory.getTouchDriverInstance());
+//        Commented out because for now tweets are not working stable
+//        try {
+//            if(scenario.isFailed()){
+//                TweetsSection tweetsSection =  new TweetsSection();
+//                if(tweetsSection.getOpenedTweet().isDisplayed()){
+//                    tweetsSection.getOpenedTweet().clickSendReplyButton();
+//                }
+//            }
+//        } catch (WebDriverException e) {}
+//        TwitterAPI.deleteToTestUserTweets();
+//        TwitterAPI.deleteTweetsFromTestUser();
+        try {
+            if(twitterTenantPage.isDMWindowOpened()) {
+                DMWindow dmWindow = twitterTenantPage.getDmWindow();
+                dmWindow.deleteConversation();
+            }
+        } catch (WebDriverException e) {}
+    }
 
     private void endTieFlow(Scenario scenario) {
             if (!TIEApiSteps.getNewTenantNames().isEmpty()) {

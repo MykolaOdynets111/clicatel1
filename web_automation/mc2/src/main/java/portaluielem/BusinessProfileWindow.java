@@ -50,6 +50,8 @@ public class BusinessProfileWindow extends BasePortalWindow {
     @FindBy(xpath = ".//button[contains(text(), 'Add')]")
     private WebElement addSupportHoursButton ;
 
+    @FindBy(css = "[for='file-input-avatar']")
+    private WebElement uploadButton ;
 
     @FindBy(css = "[for='file-input-avatar'] input")
     private WebElement inputFile;
@@ -59,6 +61,23 @@ public class BusinessProfileWindow extends BasePortalWindow {
 
     private String choiseSupportDay = "//span[@class='cl-r-checkbox__label'][text()='%s']/..";
     private String uncheckedTDay = ".//input[@value='%s' and not(@checked)]";
+
+    public void clickUploadButton(){
+        clickElem(this.getCurrentDriver(), uploadButton, 1,"Upload button");
+    }
+
+    public void clickacceptButton(){
+        waitForElementToBeVisible(this.getCurrentDriver(), acceptButton, 5);
+        acceptButton.click();
+    }
+
+    public void uploadPhoto(String photoPath){
+        waitForElementToBeVisible(this.getCurrentDriver(), uploadButton, 8);
+        if(ConfigManager.isRemote()){
+            ((RemoteWebDriver) this.getCurrentDriver()).setFileDetector(new LocalFileDetector());
+        }
+        inputFile.sendKeys(new File(photoPath).getAbsolutePath());
+    }
 
     public String  getCompanyName(){
         return businessName.getAttribute("value");

@@ -39,4 +39,9 @@ public class AutoRespondersWindow extends BasePortalWindow {
         waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
         getTargetAutoResponderItem(autoresponder).clickResetToDefaultButton();
     }
+
+    public void clickOnOffForMessage(String autoresponder){
+        waitForElementsToBeVisible(this.getCurrentDriver(), autoResponderItems, 5);
+        getTargetAutoResponderItem(autoresponder).clickOnOff();
+    }
 }

@@ -1,0 +1,142 @@
+package com.touch.actions;
+
+import com.clickatell.actions.AuthActions;
+import com.clickatell.engines.RequestEngine;
+import com.clickatell.models.EndPointsClass;
+import com.clickatell.models.MessageResponse;
+import com.clickatell.models.accounts.Account;
+import com.clickatell.models.user_profiles.UserProfile;
+import com.clickatell.models.users.request.newuser.UserSignupRequest;
+import com.clickatell.models.users.request.sign_in.UserSignInRequest;
+import com.clickatell.models.users.response.getallusers.User;
+import com.clickatell.models.users.response.newuser.UserSignupResponse;
+import com.touch.models.mc2.AccountInfoResponse;
+import com.touch.utils.MySQLConnector;
+import com.touch.utils.StringUtils;
+import com.touch.utils.TestingEnvProperties;
+import io.restassured.http.Header;
+import io.restassured.response.Response;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by kmakohoniuk on 10/20/2016.
+ */
+public class UserMC2Actions extends com.clickatell.actions.UserActions {
+    private RequestEngine requestEngine;
+    public UserMC2Actions(RequestEngine requestEngine) {
+        super(requestEngine);
+        this.requestEngine =requestEngine;
+    }
+    public Response getUserProfile(String token) {
+        return requestEngine.getRequest(EndPointsClass.USERS_PROFILE, new Header("Authorization", token));
+    }
+
+    public UserProfile createNewUser(){
+        String accountName = "accountname_" + StringUtils.generateRandomString(10);
+        String email = "email" + StringUtils.generateRandomString(10) + "@sink.sendgrid.net";
+        String firstName = "FirstName_" + StringUtils.generateRandomString(8);
+        String lastName = "LastName_" + StringUtils.generateRandomString(8);
+        String password = "12345678";
+        List<String> solutions = new ArrayList();
+        solutions.add("TOUCH");
+
+        UserSignupRequest userSignupRequest = new UserSignupRequest(accountName, email, firstName, lastName, password, solutions);
+        userSignupRequest.setRegistrationCountry("UKR");
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupResponse userSignupResponse = authActions.createNewUser(userSignupRequest);
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(userSignupResponse.getAccountId()), MessageResponse.class);
+        User user = new User(userSignupRequest);
+        user.setId(userSignupResponse.getUserId());
+        user.setMainAccount(new Account(userSignupResponse.getAccountId(), userSignupRequest.getAccountName(), Boolean.valueOf(true)));
+        return authActions.getListOfAccountsWithToken(user);
+    }
+    public UserProfile createNewUser(String accountName,String email,String firstName, String lastName,String password){
+
+        List<String> solutions = new ArrayList();
+        solutions.add("TOUCH");
+
+        UserSignupRequest userSignupRequest = new UserSignupRequest(accountName, email, firstName, lastName, password, solutions);
+        userSignupRequest.setRegistrationCountry("UKR");
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupResponse userSignupResponse = authActions.createNewUser(userSignupRequest);
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(userSignupResponse.getAccountId()), MessageResponse.class);
+        User user = new User(userSignupRequest);
+        user.setId(userSignupResponse.getUserId());
+        user.setMainAccount(new Account(userSignupResponse.getAccountId(), userSignupRequest.getAccountName(), Boolean.valueOf(true)));
+        return authActions.getListOfAccountsWithToken(user);
+    }
+
+    public String loginWithNewUserAndReturnToken(UserProfile userProfile){
+
+        String accountId = userProfile.getAccounts().get(0).getId();
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), accountId)).jsonPath().getString("token");
+    }
+    public String loginAsAdminUserAndReturnToken(){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.email"), null, null, TestingEnvProperties.getPropertyByName("touch.tenant.mc2.user.password"), null);
+        User user = new User(userSignupRequest);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        int accountIndex =0;
+        List<Account> accounts = userProfile.getAccounts();
+        for(int i=0; i<accounts.size();i++){
+            if(accounts.get(i).getName().equals("Clickatell")){
+                accountIndex=i;
+                break;
+            }
+        }
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
+    public String loginUserToMC2AndReturnToken(String login,String password){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", login, null, null, password, null);
+        User user = new User(userSignupRequest);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        int accountIndex =0;
+        List<Account> accounts = userProfile.getAccounts();
+        for(int i=0; i<accounts.size();i++){
+            if(accounts.get(i).getName().equals("Clickatell")){
+                accountIndex=i;
+                break;
+            }
+        }
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
+    public UserProfile getUserProfileInMC2(String login,String password){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", login, null, null, password, null);
+        User user = new User(userSignupRequest);
+        return authActions.getListOfAccountsWithToken(user);
+    }
+    public String loginAsMC2AdminUserAndReturnToken(){
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        UserSignupRequest userSignupRequest = new UserSignupRequest("Clickatell", TestingEnvProperties.getPropertyByName("mc2.user.admin.login"), null, null, TestingEnvProperties.getPropertyByName("mc2.user.admin.password"), null);
+        User user = new User(userSignupRequest);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        int accountIndex =0;
+        List<Account> accounts = userProfile.getAccounts();
+        for(int i=0; i<accounts.size();i++){
+            if(accounts.get(i).getName().equals("Clickatell")){
+                accountIndex=i;
+                break;
+            }
+        }
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), userProfile.getAccounts().get(accountIndex).getId())).jsonPath().getString("token");
+    }
+    public String signUpAndLoginWithNewUser(String accountId, String accountName, String email, String firstName, String lastName, String password){
+        UserSignupRequest userSignedUp = new UserSignupRequest(accountName, email, firstName, lastName, password, null);
+        AuthActions authActions = new AuthActions(this.requestEngine);
+        new AuthActions(this.requestEngine).activateAccount(
+                MySQLConnector.getDbConnection()
+                        .getAccountActivationId(accountId), MessageResponse.class);
+        User user = new User(userSignedUp);
+        UserProfile userProfile = authActions.getListOfAccountsWithToken(user);
+        return authActions.signInUser(new UserSignInRequest(userProfile.getToken(), accountId)).jsonPath().getString("token");
+    }
+}

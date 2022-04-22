@@ -33,6 +33,9 @@ public class BasePortalWindow extends AbstractUIElement {
         waitWhileProcessing(this.getCurrentDriver(), 2, 5);
     }
 
+    public void clickPrimaryBindingButton(String buttonName){
+        clickElem(getCurrentDriver(), primaryBindingButton, 5, buttonName);
+    }
 
     @Step(value = "Click 'Next' button")
     public void clickNextButton(){

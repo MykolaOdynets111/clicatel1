@@ -1,25 +1,26 @@
 package steps.agentsteps;
 
-import agentpages.uielements.FilterMenu;
-import agentpages.uielements.Profile;
+import agentpages.uielements.*;
 import apihelper.ApiHelper;
-import datamanager.Tenants;
-import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.AgentMapping;
 import datamanager.jacksonschemas.chatusers.UserInfo;
-import datamanager.jacksonschemas.dotcontrol.InitContext;
-import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import mc2api.auth.PortalAuthToken;
+import datamanager.*;
+import datamanager.jacksonschemas.dotcontrol.InitContext;
+import dbmanager.DBConnector;
+import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
+import socialaccounts.FacebookUsers;
+import socialaccounts.TwitterUsers;
+import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
@@ -138,6 +139,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         return results;
     }
 
+    public static void main(String[] args) {
+        Tenants.setTenantUnderTestNames("Automation");
+        int r = ApiHelper.updateSessionCapacity(Tenants.getTenantUnderTestOrgName(), 50).jsonPath().get("sessionsCapacity");
+        System.out.println(r);
+    }
+
     @Then("^(.*) button is (.+) on Chat header$")
     public void isButtonEnabled(String button, String state){
         if (state.equalsIgnoreCase("disabled"))
@@ -211,7 +218,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void verifyFilterOptions(String agent, String chatType){
         FilterMenu filterMenu = getLeftMenu(agent).getFilterMenu();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("Webchat", "WhatsApp", "Apple Business Chat"),
+        softAssert.assertEquals(filterMenu.expandChannels().getDropdownOptions(),  Arrays.asList("Webchat", "Facebook", "Twitter", "WhatsApp", "Apple Business Chat"),
                 "Channel dropdown has incorrect options");
         filterMenu.expandChannels();
         softAssert.assertEquals(filterMenu.expandSentiment().getDropdownOptions(), Arrays.asList("Positive", "Neutral", "Negative"),
@@ -259,6 +266,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
+        // ToDo: Update after clarifying timeout in System timeouts
         String userName = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
         Assert.assertTrue(getLeftMenu(agent).isConversationRequestIsRemoved(20, userName),
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
@@ -390,6 +398,11 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         userPersonalInfoForUpdating = currentCustomerInfo.setLocation("Lviv")
                             .setEmail("udated_" + faker.lorem().word()+"@gmail.com")
                             .setPhone(faker.numerify("38093#######")); //"+380931576633");
+        if(!(customerFrom.contains("fb")||customerFrom.contains("twitter"))) {
+            userPersonalInfoForUpdating.setFullName("AQA Run");
+            userPersonalInfoForUpdating.setChannelUsername(userPersonalInfoForUpdating.getFullName());
+
+        }
         getAgentHomePage("main").getProfile().fillFormWithNewDetails(userPersonalInfoForUpdating);
 
     }
@@ -551,6 +564,14 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         soft.assertAll();
     }
 
+    @And("^Empty image is not shown for chat with (.*) user$")
+    public void verifyEmptyImgNotShown(String customerFrom){
+        String user = "";
+        if(customerFrom.equalsIgnoreCase("facebook")) user = socialaccounts.FacebookUsers.getLoggedInUserName();
+        Assert.assertTrue(getLeftMenu("main").isProfileIconNotShown(),
+                "Image is not updated in left menu with chats. \n");
+    }
+
     @Then("^Message (.*) shown like last message in left menu with chat$")
     public void verifyLastMessageInLeftMenu(String customerMsg){
         Assert.assertEquals(getLeftMenu("main").getActiveChatLastMessage(), customerMsg,
@@ -586,6 +607,22 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         String clientId;
         String integrationType;
         switch (clientFrom){
+            case "fb dm":
+                Map chatInfo = (Map) ApiHelper.getActiveChatsByAgent("main").getBody().jsonPath().getList("content")
+                                        .stream()
+                                        .filter(e -> ((Map)
+                                                            ((Map) e).get("client")
+                                                     ).get("type")
+                                                .equals("FACEBOOK"))
+                                        .findFirst()
+                                        .orElseThrow(() -> new AssertionError("Cannot get active FACEBOOK type chat"));
+                clientId = (String) chatInfo.get("clientId");
+                integrationType = "FACEBOOK";
+                break;
+            case "twitter dm":
+                clientId = TwitterUsers.getLoggedInUser().getDmUserId();
+                integrationType = "TWITTER";
+                break;
             case "dotcontrol":
                 clientId = DotControlSteps.getFromClientRequestMessage().getClientId();
                 integrationType = "HTTP";
@@ -605,6 +642,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
             return phone.equalsIgnoreCase("");
         else
             return !phone.equalsIgnoreCase("");
+    }
+
+    @Given("^Create (.*) chat via API$")
+    public void createChatViaAPI(String chatOrigin){
+        switch (chatOrigin){
+            case "fb dm message":
+                ApiHelper.createFBChat(socialaccounts.FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(Tenants.getTenantUnderTestOrgName()).getFBPageId(),
+                        socialaccounts.FacebookUsers.TOM_SMITH.getFBUserIDMsg(), "to agent message");
+                socialaccounts.FacebookUsers.setLoggedInUser(FacebookUsers.TOM_SMITH);
+
+        }
     }
 
     @And("^Header in chat box displayed the icon for channel from which the user is chatting$")

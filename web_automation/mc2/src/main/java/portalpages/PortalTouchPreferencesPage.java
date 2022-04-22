@@ -12,9 +12,10 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
 
     private PreferencesWindow preferencesWindow;
 
+    private EditCompanyLogoWindow editCompanyLogoWindow;
+
     private ChatTagsWindow chatTagsWindow;
 
-    private EditCompanyLogoWindow editCompanyLogoWindow;
     // == Constructors == //
 
     public PortalTouchPreferencesPage() {
@@ -51,4 +52,6 @@ public class PortalTouchPreferencesPage extends PortalAbstractPage {
         chatTagsWindow.setCurrentDriver(this.getCurrentDriver());
         return chatTagsWindow;
     }
+
+
 }

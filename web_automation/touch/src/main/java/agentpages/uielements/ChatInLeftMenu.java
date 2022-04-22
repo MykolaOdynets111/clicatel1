@@ -97,6 +97,10 @@ public class ChatInLeftMenu extends AbstractWidget {
         switch (iconClass){
             case "icon svg-icon-webchat":
                 return "touch";
+            case "icon svg-icon-fbmsg":
+                return "fb messenger";
+            case "icon icon-fbpost":
+                return "fb post";
             default:
                 return "unknown icon with tag span[@class='"+iconClass+"']";
         }
