@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,7 +49,7 @@ public class ORCASteps implements WebWait {
         if (orcaMessageCallBody.get() == null) {
             System.out.println("creating new OrcaEvent for message: " + message);
             createRequestMessage(apiToken.get(), message);
-            clientId.set(orcaMessageCallBody.get().getSourceId());
+            clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
             System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         } else {
             System.out.println("Updating new OrcaEvent for message: " + message);
@@ -77,7 +78,7 @@ public class ORCASteps implements WebWait {
         List<Map> types = response.getBody().jsonPath().getList("");
         if (!(types.size() == 0)) {
             for (Map integrationType : types) {
-                if (integrationType.get("channelType").equals("ABC")) {
+                if (integrationType.get("channelType").equals(channel.toUpperCase())) {
                     return integrationType.get("id").toString();
                 }
             }
@@ -139,8 +140,8 @@ public class ORCASteps implements WebWait {
         return OrcaServer.orcaMessagesMap.get(clientId).contains(message);
     }
 
-    private ThreadLocal<OrcaEvent> createRequestMessage(String apiKey, String message) {
+    private void createRequestMessage(String apiKey, String message) {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
-        return orcaMessageCallBody;
     }
+
 }

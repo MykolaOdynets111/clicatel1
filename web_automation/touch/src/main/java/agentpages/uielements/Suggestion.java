@@ -11,7 +11,7 @@ public class Suggestion extends AbstractWidget {
         super(element);
     }
 
-    @FindBy(css = "[selenium-id=suggested-message-text]")
+    @FindBy(css = "[data-testid=suggested-message-text]")
     private WebElement suggestedMessage;
 
     public Suggestion setCurrentDriver(WebDriver currentDriver){

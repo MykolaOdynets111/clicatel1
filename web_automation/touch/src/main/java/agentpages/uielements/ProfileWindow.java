@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 @FindBy(css = ".cl-r-modal")
 public class ProfileWindow extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id=setting-group-item]")
+    @FindBy(css = "[data-testid=setting-group-item]")
     private List<WebElement> listOfElementsWithRoles;
 
     @FindAll({
-            @FindBy(css = "[selenium-id=close-modal-btn]"),
+            @FindBy(css = "[data-testid=close-modal-btn]"),
             @FindBy(css = ".cl-r-icon.cl-r-icon-close")
     })
     private WebElement closeProfileWindowButton;

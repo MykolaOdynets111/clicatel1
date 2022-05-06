@@ -11,20 +11,20 @@ import java.util.stream.Collectors;
 
 
 //@FindAll({
-//        @FindBy(css = "[selenium-id=history-detail]"),
+//        @FindBy(css = "[data-testid=history-detail]"),
         @FindBy(css = ".cl-r-history-chat-view-fly-out")
 //})
 public class HistoryDetailsWindow extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = ".cl-r-header-user-info-name"),
-            @FindBy(css = "[selenium-id=history-detail-user-name]")
+            @FindBy(css = "[data-testid=history-detail-user-name]")
     })
     public WebElement chatTitle;
 
     @FindAll({
             @FindBy(css = ".cl-r-header-user-info-data"),
-            @FindBy(css = "[selenium-id=history-detail-time]")
+            @FindBy(css = "[data-testid=history-detail-time]")
     })
     public WebElement chatStartDate;
 
@@ -33,7 +33,7 @@ public class HistoryDetailsWindow extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = ".cl-r-button.cl-r-button--reset-only"),
-            @FindBy(css = "[selenium-id=history-detail-close]")
+            @FindBy(css = "[data-testid=history-detail-close]")
     })
     public WebElement closeHistoryDetailsButton;
 

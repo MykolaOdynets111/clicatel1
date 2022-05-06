@@ -102,7 +102,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 
         Assert.assertTrue(isConversationShown,
                 "There is no new conversation request on Agent Desk (Client ID: "+userName+")\n" +
-                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
+//                        "Number of logged in agents: " + ApiHelper.getNumberOfLoggedInAgents() +"\n" +
                         "sessionsCapacity: " + settingResults.get("sessionCapacityUpdate") + " and was: "+ settingResults.get("sessionCapacity") +" before updating \n" +
                         "Support hours: " + settingResults.get("supportHoursUpdated") + "\n" +
                         "and was:" +settingResults.get("supportHours") +" before changing\n"
@@ -362,7 +362,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
 
-    @When("Click (?:'Edit'|'Save') button in Profile")
+    @When("^Click (?:'Edit'|'Save') button in Profile$")
     public void clickEditCustomerView(){
         getAgentHomePage("main").getProfile().clickSaveEditButton();
     }

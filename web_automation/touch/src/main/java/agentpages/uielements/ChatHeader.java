@@ -19,40 +19,40 @@ import java.util.*;
 public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
-            @FindBy(css = "[selenium-id=header-exit-chat]"),
+            @FindBy(css = "[data-testid=header-exit-chat]"),
             @FindBy(css = ".cl-r-end-chat") //old locator
     })
     private WebElement endChatButton;
 
     @FindAll({
-            @FindBy(css = "[selenium-id=header-flag-chat]"),
+            @FindBy(css = "[data-testid=header-flag-chat]"),
             @FindBy(css = ".cl-r-chat-unflagged")
     })
     private WebElement flagChatButton;
 
     @FindAll({
-            @FindBy(css = "[selenium-id=header-unflag-chat]"),
+            @FindBy(css = "[data-testid=header-unflag-chat]"),
             @FindBy(css = ".cl-r-chat-flagged")
     })
     private WebElement unflagChatButton;
 
     @FindAll({
-            @FindBy(css = "[selenium-id=header-transfer-chat]"),
+            @FindBy(css = "[data-testid=header-transfer-chat]"),
             @FindBy(css = ".cl-r-icon-transfer")
     })
     private WebElement transferButton;
 
-    @FindBy(css = "[selenium-id=header-send-sms]")
+    @FindBy(css = "[data-testid=header-send-sms]")
     private WebElement sendSMSButton;
 
     //for future
-    @FindBy(css = "[selenium-id=header-whats-app-button]")
+    @FindBy(css = "[data-testid=header-whats-app-button]")
     private WebElement sendWhatsAppButton;
 
-    @FindBy(css = "[selenium-id=chat-header-title]")
+    @FindBy(css = "[data-testid=chat-header-title]")
     private WebElement chatHeaderTitle;
 
-    @FindBy(css = "[selenium-id=chat-header-channel-icon]")
+    @FindBy(css = "[data-testid=chat-header-channel-icon]")
     private WebElement channelImg;
 
     @FindBy(xpath = ".//span[@class= 'cl-r-chat-header-time'][1]")

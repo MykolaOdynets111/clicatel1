@@ -35,7 +35,7 @@ public class LiveAgentsCustomerRow extends AbstractWidget {
     }
 
     public String getSentiment() {
-        return getAttributeFromElem(this.getCurrentDriver(), sentiment, 5, "Sentiment", "data-selenium-id").replace("sentiment-", "");
+        return getAttributeFromElem(this.getCurrentDriver(), sentiment, 5, "Sentiment", "data-data-testid").replace("sentiment-", "");
     }
 
     public String getIntent(){

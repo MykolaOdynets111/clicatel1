@@ -227,8 +227,8 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
             widget.getWidgetFooter().enterMessage(text).sendMessage();
             widgetConversationArea.waitForMessageToAppearInWidget(text);
         } else {
-            ORCASteps orcaSteps = new ORCASteps();
-            orcaSteps.sendOrcaMessage(text);
+//            ORCASteps orcaSteps = new ORCASteps();
+//            orcaSteps.sendOrcaMessage(text);
         }
         return this;
     }

@@ -11,19 +11,19 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         super(driver);
     }
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-business-profile']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-business-profile']")
     private WebElement businessProfile;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-chat-tags']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-chat-tags']")
     private WebElement chatTags;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-auto-responders']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-auto-responders']")
     private WebElement autoResponders;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-preferences']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
     private WebElement preferences;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-surveys']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-surveys']")
     private WebElement surveysNavigation;
 
     public void openSettingsPage(String settingsName){

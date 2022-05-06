@@ -20,28 +20,28 @@ import java.util.stream.Collectors;
 @FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-    @FindBy(css = "a[selenium-id^=chat-list-item]")
+    @FindBy(css = "a[data-testid^=chat-list-item]")
     private List<WebElement> newConversationRequests;
 
-    @FindBy(css = "[selenium-id=filter-dropdown-menu]")
+    @FindBy(css = "[data-testid=filter-dropdown-menu]")
     private WebElement filterDropdownMenu;
 
-    @FindBy(css = "[selenium-id=filter-dropdown-menu-item]")
+    @FindBy(css = "[data-testid=filter-dropdown-menu-item]")
     private List<WebElement> filterOptions;
 
-    @FindBy(css = "[selenium-id=unread-msg-count]")
+    @FindBy(css = "[data-testid=unread-msg-count]")
     private WebElement newConversationIcon;
 
-    @FindBy(css = "[selenium-id=roster-item]")
+    @FindBy(css = "[data-testid=roster-item]")
     private List<WebElement> chatsList;
 
     @FindBy(css = ".cl-chat-item--selected")
     private WebElement activeChat;
 
-    @FindBy(css = "[selenium-id=roster-scroll-container]")
+    @FindBy(css = "[data-testid=roster-scroll-container]")
     private WebElement scrollableArea;
 
-    @FindBy(css = "[selenium-id='search-filter-btn']")
+    @FindBy(css = "[data-testid='search-filter-btn']")
     private WebElement searchButton;
 
     @FindAll({
@@ -50,22 +50,22 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement searchChatInput;
 
-    @FindBy(css = "[selenium-id=icon-user-single]")
+    @FindBy(css = "[data-testid=icon-user-single]")
     private WebElement userPicture;
 
-    @FindBy(css = "[selenium-id=unread-msg-count]")
+    @FindBy(css = "[data-testid=unread-msg-count]")
     private WebElement userMsgCount;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-live']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-live']")
     private WebElement liveChats;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-tickets']")
     private WebElement tickets;
 
-    @FindBy(css = "[selenium-id='tab-navigation-panel-closed']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-closed']")
     private WebElement closed;
 
-    @FindBy(css = "[selenium-id=open-filter-tab-btn]")
+    @FindBy(css = "[data-testid=open-filter-tab-btn]")
     private WebElement filterButton;
 
     @FindBy(css ="button .cl-r-button--reset-only")

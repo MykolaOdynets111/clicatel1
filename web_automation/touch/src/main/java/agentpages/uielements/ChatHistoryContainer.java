@@ -12,7 +12,7 @@ import java.util.List;
 public class ChatHistoryContainer extends AbstractUIElement {
 
     @FindAll({
-            @FindBy(css = "[selenium-id=history-item]"),
+            @FindBy(css = "[data-testid=history-item]"),
             @FindBy(css = ".cl-r-tab-history-chat")
     })
     private List<WebElement> chatHistoryList;

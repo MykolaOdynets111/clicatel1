@@ -10,37 +10,26 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
 
-    @FindBy(css = ".cl-r-avatar")
+    @FindBy(css = "[data-testid='avatar']")
     private WebElement userIcon;
 
 
-    @FindBy(css = ".cl-r-chat-item-user-name")
+    @FindBy(css = ".cl-chat-item-user-name")
     private WebElement userName;
 
-    @FindBy(css = "[selenium-id=roster-item-location]")
+    @FindBy(css = "[data-testid=roster-item-location]")
     private WebElement location;
 
-    @FindBy(css = "[selenium-id=chat-item-icons-holder]")
+    @FindBy(css = "[data-testid=chat-item-icons-holder]")
     private WebElement channelIcon;
 
-    public WebElement getChannelIcon() {
-        return channelIcon;
-    }
-
-    public WebElement getAdapterWrappedIcon() {
-        return adapterWrappedIcon;
-    }
-
-    @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")
+    @FindBy(css = "[data-testid='chat-item-icons-holder'] svg")
     private WebElement adapterWrappedIcon;
 
-    @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")
-    private WebElement adapterIcon;
-
-    @FindBy(css = ".cl-r-icon-flag-indicator")
+    @FindBy(css = "[data-testid='icon-flag-filled'] g")
     private WebElement flagIcon;
 
-    private String flagIconCss =  "svg[name=flag-indicator]"; //""span.icon.svg-icon-flagged";
+    private String flagIconCss =  "[data-testid='icon-flag-filled'] g"; //""span.icon.svg-icon-flagged";
 
     @FindBy(css = "[selenium-icon-user-single]")
     private WebElement usercImg;
@@ -107,7 +96,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public String getAdapterIconName(){
-        return adapterIcon.getAttribute("name").trim();
+        return adapterWrappedIcon.getAttribute("name").trim();
     }
 
     public boolean isOvernightTicketIconShown(){

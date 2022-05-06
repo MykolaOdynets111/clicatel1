@@ -17,25 +17,25 @@ import java.util.stream.Collectors;
 @FindBy(css = "div.cl-r-modal")
 public class AgentFeedbackWindow extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id=exit-chat-modal-cancel]")
+    @FindBy(css = "[data-testid=exit-chat-modal-cancel]")
     private WebElement cancelButton;
 
-    @FindBy(css = "[selenium-id=exit-chat-modal-save]")
+    @FindBy(css = "[data-testid=exit-chat-modal-save]")
     private WebElement closeChatButton;
 
-    @FindBy(css = "[selenium-id=sentiment-icon-negative]")
+    @FindBy(css = "[data-testid=sentiment-icon-negative]")
     private WebElement sentimentUnsatisfied ;
 
-    @FindBy(css = "[selenium-id=sentiment-icon-neutral]")
+    @FindBy(css = "[data-testid=sentiment-icon-neutral]")
     private WebElement sentimentNeutral;
 
-    @FindBy(css = "[selenium-id=sentiment-icon-positive]")
+    @FindBy(css = "[data-testid=sentiment-icon-positive]")
     private WebElement sentimentHappy;
 
-    @FindBy(xpath = ".//label[contains(@selenium-id, 'sentiment-icon') and contains(@class, 'active')]")
+    @FindBy(xpath = ".//label[contains(@data-testid, 'sentiment-icon') and contains(@class, 'active')]")
     private WebElement selectedSentiment;
 
-    @FindBy(css = "[selenium-id=chat-sentiment-icons]")
+    @FindBy(css = "[data-testid=chat-sentiment-icons]")
     private WebElement sentimentsAll;
 
     @FindBy(css = ".cl-r-select__option.cl-r-multi-option")
@@ -63,13 +63,13 @@ public class AgentFeedbackWindow extends AbstractUIElement {
 
     private String cleareAll = ".Select-clear";
 
-    @FindBy(css = "[selenium-id='crm-note']")
+    @FindBy(css = "[data-testid='crm-note']")
     private WebElement crmNoteTextField;
 
-    @FindBy(css = "[selenium-id='crm-link']")
+    @FindBy(css = "[data-testid='crm-link']")
     private WebElement crmLink;
 
-    @FindBy(css = "[selenium-id='crm-ticket-number']")
+    @FindBy(css = "[data-testid='crm-ticket-number']")
     private WebElement crmTicketNumber;
 
     @FindBy(css =".cl-loading-overlay")
@@ -216,7 +216,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public String getSelectedSentiment(){
-        return getAttributeFromElem(this.getCurrentDriver(), selectedSentiment, 3, "Selected sentiment", "selenium-id");
+        return getAttributeFromElem(this.getCurrentDriver(), selectedSentiment, 3, "Selected sentiment", "data-testid");
     }
 
     public void closeDropdown(){

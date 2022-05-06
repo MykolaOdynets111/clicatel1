@@ -9,7 +9,7 @@ import java.util.List;
 @FindBy(css = ".preferences-page")
 public class PreferencesWindow extends BasePortalWindow {
 
-    @FindBy(css = "[selenium-id='sessionsCapacity']")
+    @FindBy(css = "[data-testid='sessionsCapacity']")
     private WebElement chatsAvailable;
 
     @FindBy(xpath = ".//div[text() = 'You must specify a number']")

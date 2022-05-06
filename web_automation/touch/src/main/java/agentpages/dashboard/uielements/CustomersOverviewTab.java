@@ -9,10 +9,10 @@ import java.util.List;
 @FindBy(css = ".customers-overview")
 public class CustomersOverviewTab extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id='tab-customers-overview-tabs-Customers History']")
+    @FindBy(css = "[data-testid='tab-customers-overview-tabs-1']")
     private WebElement customersHistoryButton;
 
-    @FindBy(css = "[selenium-id='tab-customers-overview-tabs-Live Customers']")
+    @FindBy(css = "[data-testid='tab-customers-overview-tabs-0']")
     private WebElement liveCustomersButton;
 
     @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:first-child .cl-r-select__indicators")

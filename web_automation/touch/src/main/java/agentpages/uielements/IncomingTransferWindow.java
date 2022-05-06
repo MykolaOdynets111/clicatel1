@@ -7,10 +7,10 @@ import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 
-@FindBy(css = "[selenium-id=touch-pop-up]")
+@FindBy(css = "[data-testid='transfer-flyout']")
 public class IncomingTransferWindow extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id=touch-header-title]")
+    @FindBy(css = "[data-testid='transfer-header-title']")
     private WebElement transferWindowHeader;
 
     @FindBy(xpath = ".//button[text()='Accept']")
@@ -19,13 +19,13 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='Reject']")
     private WebElement rejectTransfetButton;
 
-    @FindBy(css = "[selenium-id=touch-transfer-from]")
+    @FindBy(css = "[data-testid=touch-transfer-from]")
     private WebElement fromAgentName;
 
-    @FindBy(css = "[selenium-id=touch-transfer-note]")
+    @FindBy(css = "[data-testid=touch-transfer-note]")
     private WebElement transferNotes;
 
-    @FindBy(css = "[selenium-id=touch-client-name]")
+    @FindBy(css = "[data-testid=touch-client-name]")
     private WebElement clientName;
 
     @FindBy(css = ".cl-transfer-chat-info__latest-message")
@@ -34,13 +34,13 @@ public class IncomingTransferWindow extends AbstractUIElement {
     @FindBy(css = ".cl-r-transfer-source")
     private WebElement rejectedBy;
 
-    @FindBy(css = ".cl-r-avatar.cl-r-avatar--medium")
+    @FindBy(css = "[data-testid='avatar']")
     private WebElement transferPicture;
 
     @FindBy(css = ".cl-transfer-chat-info__context svg")
     private WebElement transferChannel;
 
-    @FindBy(css = "[selenium-id=touch-icons-info] svg")
+    @FindBy(css = "[data-testid=touch-icons-info] svg")
     private WebElement transferSentiment;
 
     public void acceptTransfer(){
@@ -56,7 +56,6 @@ public class IncomingTransferWindow extends AbstractUIElement {
     }
 
     public String getTransferNotes(){
-        // ToDo: update timeout after it is provided in System timeouts confluence page
         return getTextFromElem(this.getCurrentDriver(), transferNotes, 10,"Transfer notes");
     }
 
@@ -96,7 +95,7 @@ public class IncomingTransferWindow extends AbstractUIElement {
 
     public boolean isValidImgTransferSentiment(String userMessage) {
         String expSentiment = ApiHelperTie.getTIESentimentOnMessage(userMessage);
-        return getAttributeFromElem(this.getCurrentDriver(), transferSentiment, 5, "Channel icon", "data-selenium-id")
+        return getAttributeFromElem(this.getCurrentDriver(), transferSentiment, 5, "Channel icon", "data-data-testid")
                 .contains(expSentiment.toLowerCase());
     }
 

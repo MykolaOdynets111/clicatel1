@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @FindBy(xpath = "//*[contains(@class, 'cl-r-roster-filter--form-opened') or contains(@class, 'search-filter-bar-agent')]")
 public class FilterMenu extends AbstractUIElement {
 
-    private final String channelInputByName = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__menu-list')]/div[text()='%s']";
+    private final String channelInputByName = ".//div[text()='%s']";
 
     @FindBy(xpath = ".//span[contains(text(), 'Flagged')]")
     private WebElement flaggedCheckbox;
@@ -23,13 +23,13 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
     private WebElement channelInput;
 
-    @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__indicators')]")
+    @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-select__indicators')]")
     private WebElement channelExpandColapsButton;
 
-    @FindBy(css="div[class^='cl-r-select__menu'] div[id^='react-select']")
+    @FindBy(css="div[class^='cl-select__menu-list'] div[id^='react-select']")
     private List<WebElement> dropdownValues;
 
-    @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__indicators')]")
+    @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-select__indicators')]")
     private WebElement sentimentsExpandColapsButton;
 
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")

@@ -67,7 +67,7 @@ public class LiveAgentRowDashboard extends AbstractWidget {
     }
 
     public List<String> getSentiments(){
-        return sentiments.stream().map(e -> e.getAttribute("data-selenium-id")).collect(Collectors.toList());
+        return sentiments.stream().map(e -> e.getAttribute("data-data-testid")).collect(Collectors.toList());
     }
 
     public boolean isLiveChatsNumberShown() {

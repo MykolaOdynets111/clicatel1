@@ -10,10 +10,10 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-r-modal")
+@FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
 public class TransferChatWindow extends AbstractUIElement {
 
-    @FindBy(css = "[selenium-id=transfer-chat-modal-cancel]")
+    @FindBy(css = "[data-testid=transfer-chat-modal-cancel]")
     private WebElement cancelTransferButton;
 
     @FindBy(xpath = "//button[text()='Transfer']")
@@ -25,18 +25,16 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = ".//div[contains(text(),'department')]/parent::div/following-sibling::div")
     private WebElement openDepartmentDropdownButton;
 
-    @FindBy(xpath = "//div[contains(@class, 'cl-r-select__option')]")
+    @FindBy(xpath = "//div[contains(@class, 'cl-select__option')]")
     private WebElement availableAgentOrDepartment;
 
-    @FindBy(xpath = "//div[contains(@class, 'cl-r-select__option')]")
+    @FindBy(xpath = "//div[contains(@class, 'cl-select__option')]")
     private List<WebElement> availableAgentsOrDepartmentsList;
 
     @FindBy(xpath = ".//div[@class='Select-control']")
     private WebElement dropDown;
 
-    private String openedMenu = "div.Select-menu-outer";
-
-    @FindBy(css = "[selenium-id=transfer-chat-notes-textarea]")
+    @FindBy(css = "[data-testid=transfer-chat-notes-textarea]")
     private WebElement noteInput;
 
     @FindBy(xpath = "//label[@for='agentsList']/following-sibling::div//div[@class='Select-placeholder']")

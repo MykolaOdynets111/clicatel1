@@ -14,7 +14,7 @@ public class AgentDeskChatMessage extends AbstractWidget {
 
     private final String messageTimeCssLocator = ".msg-time";
 
-    @FindBy(css = "[selenium-id=emojified-text]")
+    @FindBy(css = "[data-testid=emojified-text]")
     private WebElement toUserTextResponse;
 
     @FindBy(xpath = "//div[contains(@class, 'to')]//span[@class='emoji-mart-emoji']")

@@ -6,16 +6,16 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 
-@FindBy(css = "div.cl-r-modal")
+@FindBy(css = ".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
 public class AssignChatWindow extends BasePortalWindow {
 
-    @FindBy(xpath = ".//div[contains(text(),'agent')]")
+    @FindBy(xpath = ".//label[contains(text(), 'Agents:')]/following-sibling::div//div[contains(@class, 'cl-select__indicators')]")
     private WebElement openAgentDropdownButton;
 
-    @FindBy(xpath = "//div[contains(@class, 'cl-r-select__menu-list')]/div")
+    @FindBy(xpath = "//div[contains(@class, 'cl-select__option')]")
     private WebElement availableAgent;
 
-    @FindBy(xpath = "//div[contains(@class, 'cl-r-select__menu-list')]/div")
+    @FindBy(xpath = "//div[contains(@class, 'cl-select__option')]")
     private List<WebElement> availableAgentList;
 
     @FindBy(css = "button[type='submit']")

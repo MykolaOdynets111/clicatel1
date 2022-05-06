@@ -17,7 +17,7 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(xpath = "//button[text() = 'Assign Manually']")
     private WebElement assignManuallyButton;
 
-    @FindBy(css = "[selenium-id=roster-scroll-container]")
+    @FindBy(css = "[data-testid=roster-scroll-container]")
     private WebElement scrolArea;
 
     @FindBy(xpath = "//button[text() = 'Route to Scheduler']")

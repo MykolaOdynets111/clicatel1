@@ -30,7 +30,7 @@ public class SupervisorLeftPanel extends AbstractUIElement {
 
      public void selectTicketType(String type) {
          ticketsFilterNames.stream().filter(a -> a.getText().trim().equalsIgnoreCase(type)).findFirst()
-                 .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type dropdown option")).click();
+                 .orElseThrow(() -> new AssertionError("Cannot find " + type + " conversation type filter")).click();
      }
 
     private WebElement getLiveFilterType(String agentName) {

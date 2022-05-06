@@ -11,10 +11,10 @@ public class SupervisorDeskLiveRow extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(css = ".cl-r-chat-item-user-name")
+    @FindBy(css = ".cl-chat-item-user-name")
     private WebElement userName;
 
-    @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg")
+    @FindBy(css = "[data-testid='chat-item-icons-holder'] svg")
     private WebElement chanelIcon;
 
     @FindBy(css = ".cl-r-chat-item__header>svg[name=flag-fill]")

@@ -10,48 +10,48 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-@FindBy(css = "[selenium-id=user-profile-container]")
+@FindBy(css = "[data-testid=user-profile-container]")
 public class Profile extends AbstractUIElement {
 
 
-    @FindBy(css = "[selenium-id=user-profile-name]")
+    @FindBy(css = "[data-testid=user-profile-name]")
     private WebElement profileNameLabel;
 
-    @FindBy(css = "[selenium-id=user-profile-name]")
+    @FindBy(css = "[data-testid=user-profile-name]")
     private WebElement profileNameInput;
 
-    @FindBy(css = "[selenium-id=user-profile-location]")
+    @FindBy(css = "[data-testid=user-profile-location]")
     private WebElement locationLabel;
-    @FindBy(css = "[selenium-id=user-profile-location]")
+    @FindBy(css = "[data-testid=user-profile-location]")
     private WebElement locationInput;
 
-    @FindBy(css = "[selenium-id=user-profile-since]")
+    @FindBy(css = "[data-testid=user-profile-since]")
     private WebElement customerSinceLabel;
 
-    @FindBy(css = "[selenium-id=user-profile-email]")
+    @FindBy(css = "[data-testid=user-profile-email]")
     private WebElement mailLabel;
-    @FindBy(css = "[selenium-id=user-profile-email]")
+    @FindBy(css = "[data-testid=user-profile-email]")
     private WebElement mailInput;
 
-    @FindBy(css = "[selenium-id=user-profile-twitter]")
+    @FindBy(css = "[data-testid=user-profile-twitter]")
     private WebElement twitterLabel;
 
-    @FindBy(css = "[selenium-id=user-profile-facebook]")
+    @FindBy(css = "[data-testid=user-profile-facebook]")
     private WebElement fbLabel;
 
-    @FindBy(css = "[selenium-id=user-profile-phone]")
+    @FindBy(css = "[data-testid=user-profile-phone]")
     private WebElement phoneLocator;
 
-    @FindBy(css = "[selenium-id=user-profile-send-otp]")
+    @FindBy(css = "[data-testid=user-profile-send-otp]")
     private WebElement sendOTPButton;
 
-    @FindBy(css = "[selenium-id=user-profile-verify]")
+    @FindBy(css = "[data-testid=user-profile-verify]")
     private WebElement verifyPhoneButton;
 
-    @FindBy(css = "[selenium-id=user-profile-send-otp]")
+    @FindBy(css = "[data-testid=user-profile-send-otp]")
     private WebElement resendOTPButton;
 
-    @FindBy(css = "[selenium-id=user-profile-phone-status]")
+    @FindBy(css = "[data-testid=user-profile-phone-status]")
     private WebElement verifiedLabel;
 
     @FindBy(css = ".cl-r-tab-profile-header .cl-r-button")
@@ -60,10 +60,10 @@ public class Profile extends AbstractUIElement {
     @FindBy(xpath = "//div[@class='empty-icon no-border']")
     private WebElement userPicture;
 
-    @FindBy(css = "[selenium-id=user-profile-container]")
+    @FindBy(css = "[data-testid=user-profile-container]")
     private WebElement mailColor;
 
-    private String phoneCSS = "[selenium-id = 'user-profile-phone']";
+    private String phoneCSS = "[data-testid = 'user-profile-phone']";
 
     public boolean isProfilePageDisplayed(){
         return isElementShown(this.getCurrentDriver(), getWrappedElement(), 2);

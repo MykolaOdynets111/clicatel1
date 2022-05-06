@@ -11,13 +11,13 @@ public class VerifyPhoneNumberWindow extends AbstractUIElement {
     @FindBy(css = "[seleniumid='send-otp-modal-title']")
     private WebElement popUpTitle;
 
-    @FindBy(css = "[selenium-id='send-otp-modal-phone']")
+    @FindBy(css = "[data-testid='send-otp-modal-phone']")
     private WebElement phoneNumberInputField;
 
-    @FindBy(css = "[selenium-id='send-otp-modal-cancel']")
+    @FindBy(css = "[data-testid='send-otp-modal-cancel']")
     private WebElement cancelButton;
 
-    @FindBy(css = "[selenium-id='send-otp-modal-send']")
+    @FindBy(css = "[data-testid='send-otp-modal-send']")
     private WebElement sendOTPButton;
 
     public String getEnteredPhoneNumber(){

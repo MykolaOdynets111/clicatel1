@@ -123,6 +123,13 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "ABC chart is not displayed in Live Chats By Channel");
     }
 
+    @Then("^Admin should see WhatsApp chart in Live Chats by Channel$")
+    public void adminShouldSeeWhatsAppChartInLiveChatsByChannel() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isWhatsAppChartIsDisplayed(),
+                "WhatsApp chart is not displayed in Live Chats By Channel");
+    }
+
+
     @Then("^Admin should see (.*) charts in General sentiment per channel$")
     public void adminShouldSeeAbcChartInGeneralSentimentPerChannel(String channel) {
         Assert.assertTrue(getDashboardPage().getGeneralSentimentPerChannel().isChartsForChannelShown(channel),
@@ -358,6 +365,12 @@ public class DashboardSteps extends AbstractPortalSteps {
     @And("^Verify admin can see number of live chats per channel when hover over abc$")
     public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverABC() {
         Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForAbcChart(),
+                "Number of live chats per channel is not shown after hovering on abc chart");
+    }
+
+    @And("^Verify admin can see number of live chats per channel when hover over WhatsApp$")
+    public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWA() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWAChart(),
                 "Number of live chats per channel is not shown after hovering on abc chart");
     }
 

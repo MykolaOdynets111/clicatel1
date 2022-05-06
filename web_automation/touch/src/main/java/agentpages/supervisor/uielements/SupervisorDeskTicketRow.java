@@ -15,11 +15,8 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
 
     private WebElement baseWebElem = this.getWrappedElement();
 
-    @FindBy(css = ".cl-r-checkbox__icon-container")
+    @FindBy(css = ".cl-checkbox")
     private WebElement checkbox;
-
-    @FindBy(xpath = ".//div[@class='Select-placeholder']")
-    private WebElement select;
 
     @FindBy(css = ".cl-agent-name")
     private WebElement currentAgent;
@@ -45,7 +42,7 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(css = ".cl-user-details-cell__top-section svg")
     private WebElement channelIcon;
 
-    private String scrollAreaCss = "[selenium-id='roster-scroll-container']";
+    private String scrollAreaCss = "[data-testid='roster-scroll-container']";
    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
     public SupervisorDeskTicketRow(WebElement element) {

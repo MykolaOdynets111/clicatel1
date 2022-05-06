@@ -17,24 +17,24 @@ public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
 
-    private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
+    private String messageInputLocator = "//textarea[@data-testid='message-composer-textarea']";
     private SecureRandom random = new SecureRandom();
-    private String suggestionCSSInput = "[selenium-id=suggestion-wrapper]";
+    private String suggestionCSSInput = "[data-testid=suggestion-wrapper]";
 
-    @FindBy(css = "[selenium-id=suggestion-wrapper]")
+    @FindBy(css = "[data-testid=suggestion-wrapper]")
     private WebElement suggestionInputField;
 
     @FindBy(css = ".cl-message-composer__textarea")
     private WebElement messageInput;
 
 
-    @FindBy(css = "[selenium-id=message-composer-send-button]")
+    @FindBy(css = "[data-testid=message-composer-send-button]")
     private WebElement submitMessageButton;
 
     @FindBy(css = ".cl-r-suggestion-wrapper__icon")
     private WebElement clearButton;
 
-    @FindBy(css = "[selenium-id=chat-form-send-email] button")
+    @FindBy(css = "[data-testid=chat-form-send-email] button")
     public WebElement overnightTicketSendEmail;
 
     @FindBy(css = "div.overnight-chat-controls p")

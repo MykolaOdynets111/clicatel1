@@ -41,10 +41,10 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
 
-    @FindBy(css = "[selenium-id='tab-dashboard-tabs-Customers Overview']")
+    @FindBy(css = "[data-testid='tab-dashboard-tabs-2']")
     private WebElement customersOverviewTabButton;
 
-    @FindBy(css = "[selenium-id='tab-dashboard-tabs-Agents Performance']")
+    @FindBy(css = "[data-testid='tab-dashboard-tabs-1']")
     private WebElement agentsPerformanceTabButton;
 
     private final String spinner = "//div[@class='spinner']";

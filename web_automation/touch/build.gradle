@@ -78,6 +78,13 @@ task runAbcTests(type:Test) {
     }
 }
 
+task runWhatsAppOrcaTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/whatapp_orca.xml"
+    }
+}
+
 task runBaseTests(type:Test) {
     useTestNG() {
         useDefaultListeners = true
@@ -115,6 +122,13 @@ task runTouchTests(type:Test) {
         suites baseXmlPath+tenantName+"/uitests.xml"
         suites baseXmlPath+tenantName+"/aggregated_onethread_tests.xml"
         suites baseXmlPath+tenantName+"/aggregated_compatible_tests.xml"
+    }
+}
+
+task runWebsocketsReqression(type:Test){
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + tenantName + "/websockets_reqression.xml"
     }
 }
 
@@ -232,6 +246,9 @@ task runTests(type: Test) {
         suite = System.properties.getProperty("suite")
     }
 
+    if(suite == "websocets") {
+        runTests.dependsOn(runWebsocketsReqression)
+    }
 
     if(suite == "facebook") {
         runTests.dependsOn(runFacebookTests)
@@ -244,6 +261,12 @@ task runTests(type: Test) {
     if(suite == "abc") {
         runTests.dependsOn(runAbcTests)
     }
+
+
+    if(suite == "whatsapporca") {
+        runTests.dependsOn(runWhatsAppOrcaTests)
+    }
+
 
     if(suite == "basecheck") {
         runTests.dependsOn(runBaseTests)
