@@ -7,14 +7,14 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-@Test(groups = {"whatapporca"})
+@Test(groups = {"whatsapporca"})
 @CucumberOptions(
          plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true,
         features ="src/test/java/scenario/generalbank/whatsapporca",
         glue ="steps")
-public class RunWhatAppORCATest extends AbstractTestNGCucumberTests {
+public class RunWhatsAppORCATest extends AbstractTestNGCucumberTests {
 
     @Override
     @DataProvider(parallel = true)

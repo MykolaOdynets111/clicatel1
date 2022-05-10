@@ -3,7 +3,7 @@
 <suite name="Apple Business Chat">
     <test name="ABC tests">
         <classes>
-            <class name="runner.generalbank.RunWhatAppORCATest" />
+            <class name="runner.generalbank.RunWhatsAppORCATest" />
         </classes>
     </test>
 </suite>
