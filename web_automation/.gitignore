@@ -3,7 +3,6 @@ out/
 target/
 .idea/
 *.impl
-.*
 .gradle/
 **/.gradle/
 ../touch-rest-api-tests/

@@ -1,0 +1,14 @@
+image: gradle:alpine
+
+test:
+  stage: test
+  script: gradle -Dremote=true --info -Denv=demo -Dtenant=all -Dsuite=websocets
+
+deploy:
+  stage: deploy
+  script: gradle io.qameta.allure:allure-gradle::report
+
+#  artifacts:
+#    when: always
+#    paths:
+#      - /builds/antikillaa/java-cucumber-allure-gitlab/target/site/allure-maven-plugin
