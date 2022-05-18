@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 public class SurveyManagement {
 
     @JsonProperty("ratingEnabled")
@@ -30,10 +29,11 @@ public class SurveyManagement {
     private String ratingScale;
     @JsonProperty("ratingIcon")
     private String ratingIcon;
-    @JsonProperty("ratingType")
-    private String ratingType;
+    @JsonProperty("surveyType")
+    private String surveyType;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
     @JsonProperty("ratingEnabled")
     public Boolean getRatingEnabled() {
         return ratingEnabled;
@@ -124,14 +124,14 @@ public class SurveyManagement {
         this.ratingIcon = ratingIcon;
     }
 
-    @JsonProperty("ratingType")
-    public String getRatingType() {
-        return ratingType;
+    @JsonProperty("surveyType")
+    public String getSurveyType() {
+        return surveyType;
     }
 
-    @JsonProperty("ratingType")
-    public void setRatingType(String ratingType) {
-        this.ratingType = ratingType;
+    @JsonProperty("surveyType")
+    public void setSurveyType(String surveyType) {
+        this.surveyType = surveyType;
     }
 
     @JsonAnyGetter
@@ -144,53 +144,53 @@ public class SurveyManagement {
         this.additionalProperties.put(name, value);
     }
 
-    public void updateSomeValueByMethodName(String attribute, String value){
-        if(attribute.equals("ratingEnabled")){
-          setRatingEnabled(Boolean.valueOf(value));
-        } else if (attribute.equals("ratingTimeout")){
+    public void updateSomeValueByMethodName(String attribute, String value) {
+        if (attribute.equals("ratingEnabled")) {
+            setRatingEnabled(Boolean.valueOf(value));
+        } else if (attribute.equals("ratingTimeout")) {
             setRatingTimeout(value);
-        } else if (attribute.equals("ratingThanksMessage")){
+        } else if (attribute.equals("ratingThanksMessage")) {
             setRatingThanksMessage(value);
-        } else if(attribute.equals("surveyQuestionTitle")){
+        } else if (attribute.equals("surveyQuestionTitle")) {
             setSurveyQuestionTitle(value);
-        } else if (attribute.equals("customerNoteTitle")){
+        } else if (attribute.equals("customerNoteTitle")) {
             setCustomerNoteTitle(value);
-        } else if (attribute.equals("commentEnabled")){
+        } else if (attribute.equals("commentEnabled")) {
             setCommentEnabled(Boolean.valueOf(value));
-        } else if (attribute.equals("thanksMessageEnabled")){
+        } else if (attribute.equals("thanksMessageEnabled")) {
             setThanksMessageEnabled(Boolean.valueOf(value));
-        } else if (attribute.equals("ratingScale")){
+        } else if (attribute.equals("ratingScale")) {
             setRatingScale(value);
-        } else if (attribute.equals("ratingIcon")){
+        } else if (attribute.equals("ratingIcon")) {
             setRatingIcon(value);
-        } else if (attribute.equals("ratingType")){
-            setRatingType(value);
+        } else if (attribute.equals("surveyType")) {
+            setSurveyType(value);
         } else {
             throw new AssertionError("Was provided incorrect Api attribute :" + attribute);
         }
     }
 
-    public String getSomeValueByMethodName(String attribute){
-        if(attribute.equals("ratingEnabled")){
+    public String getSomeValueByMethodName(String attribute) {
+        if (attribute.equals("ratingEnabled")) {
             return getRatingEnabled().toString();
-        } else if (attribute.equals("ratingTimeout")){
+        } else if (attribute.equals("ratingTimeout")) {
             return getRatingTimeout();
-        } else if (attribute.equals("ratingThanksMessage")){
+        } else if (attribute.equals("ratingThanksMessage")) {
             return getRatingThanksMessage();
-        } else if(attribute.equals("surveyQuestionTitle")){
+        } else if (attribute.equals("surveyQuestionTitle")) {
             return getSurveyQuestionTitle();
-        } else if (attribute.equals("customerNoteTitle")){
+        } else if (attribute.equals("customerNoteTitle")) {
             return getCustomerNoteTitle();
-        } else if (attribute.equals("commentEnabled")){
+        } else if (attribute.equals("commentEnabled")) {
             return getCommentEnabled().toString();
-        } else if (attribute.equals("thanksMessageEnabled")){
+        } else if (attribute.equals("thanksMessageEnabled")) {
             return getThanksMessageEnabled().toString();
-        } else if (attribute.equals("ratingScale")){
+        } else if (attribute.equals("ratingScale")) {
             return getRatingScale();
-        } else if (attribute.equals("ratingIcon")){
+        } else if (attribute.equals("ratingIcon")) {
             return getRatingIcon();
-        } else if (attribute.equals("ratingType")){
-            return getRatingType();
+        } else if (attribute.equals("surveyType")) {
+            return getSurveyType();
         } else {
             throw new AssertionError("Was provided incorrect Api attribute :" + attribute);
         }

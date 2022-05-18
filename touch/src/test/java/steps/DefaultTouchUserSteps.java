@@ -793,7 +793,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                 expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
                 break;
             case "exit":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
+                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation1");
                 break;
             case "agents_away":
                 expectedTextResponse = ApiHelper.getAutoResponderMessageText("agents_away");

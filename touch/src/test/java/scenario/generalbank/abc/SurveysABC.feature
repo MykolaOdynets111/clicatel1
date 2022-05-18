@@ -5,10 +5,15 @@ Feature: Apple Business Chat :: Surveys
   Background:
     Given Setup ORCA abc integration for General Bank Demo tenant
     And Update survey management chanel abc settings by ip for General Bank Demo
-      | ratingEnabled | true        |
-      | ratingType    | NPS         |
-      | ratingScale   | ZERO_TO_TEN |
-      | ratingIcon    | NUMBER      |
+      | ratingEnabled        | true        |
+      | surveyType           | NPS         |
+      | ratingScale          | ZERO_TO_TEN |
+      | ratingIcon           | NUMBER      |
+      | ratingThanksMessage  | string      |
+      | surveyQuestionTitle  | string      |
+      | customerNoteTitle    | string      |
+      | commentEnabled       | true        |
+      | thanksMessageEnabled | true        |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
   Scenario: ABC: : Surveys: Verify if the survey preview header for Apple shows as Apple Business Chat Preview
@@ -33,12 +38,12 @@ Feature: Apple Business Chat :: Surveys
     When Agent select 1 to 5 as number limit from dropdown for abc survey form
     And Agent click save survey configuration button for abc survey form
     Then Survey backend was updated for General Bank Demo and abc chanel with following attribute
-      | ratingScale     |     ONE_TO_FIVE   |
+      | ratingScale | ONE_TO_FIVE |
     When Agent select 1 to 7 as number limit from dropdown for abc survey form
     And Agent click save survey configuration button for abc survey form
     Then Survey backend was updated for General Bank Demo and abc chanel with following attribute
-      | ratingScale     |     ONE_TO_SEVEN   |
+      | ratingScale | ONE_TO_SEVEN |
     When Agent select 1 to 10 as number limit from dropdown for abc survey form
     And Agent click save survey configuration button for abc survey form
     Then Survey backend was updated for General Bank Demo and abc chanel with following attribute
-      | ratingScale     |     ONE_TO_TEN   |
+      | ratingScale | ONE_TO_TEN |

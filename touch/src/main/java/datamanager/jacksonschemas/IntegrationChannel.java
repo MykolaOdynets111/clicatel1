@@ -19,7 +19,7 @@ public class IntegrationChannel {
     @JsonProperty("enabled")
     private Boolean enabled;
     @JsonProperty("createdDate")
-    private Long createdDate;
+    private String createdDate;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -74,12 +74,12 @@ public class IntegrationChannel {
     }
 
     @JsonProperty("createdDate")
-    public Long getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
     @JsonProperty("createdDate")
-    public void setCreatedDate(Long createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 

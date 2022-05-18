@@ -41,7 +41,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
                 clickElem(this.getCurrentDriver(), preferences, 2, "Preferences");
                 break;
             case "Surveys":
-                clickElem(this.getCurrentDriver(), surveysNavigation, 2, "Surveys");
+                clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
         }
     }
 

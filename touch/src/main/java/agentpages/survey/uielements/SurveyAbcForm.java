@@ -1,6 +1,8 @@
 package agentpages.survey.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -13,7 +15,7 @@ public class SurveyAbcForm extends AbstractUIElement {
     @FindBy(css = ".cl-preview-box .survey-form-title")
     private WebElement surveyPreviewTitle;
 
-    @FindBy(css = ".preview-message")
+    @FindBy(css = ".surveys-preview surveys-apple-preview")
     private List<WebElement> previewMessage;
 
     @FindBy(xpath = ".//button[text()='Save configuration']")
@@ -36,7 +38,28 @@ public class SurveyAbcForm extends AbstractUIElement {
                 .collect(Collectors.toList());
     }
 
+    public String getRatingThanksMessagefromUI(String channelid)
+    {
+        String RatingThanksMessage = findElement(By.id("textarea-"+channelid+"-thanksMessageEnabled")).getText();
+        return RatingThanksMessage;
+    }
+
+    public String getSurveyQuestionTitlefromUI(String channelid)
+    {
+        String SurveyQuestionTitle = findElement(By.id(channelid+"-surveyQuestionTitle")).getText();
+        return SurveyQuestionTitle;
+    }
+    public String getCustomerNoteTitlefromUI(String channelid)
+    {
+        String SurveyQuestionTitle = findElement(By.id(channelid+"-customerNoteTitle")).getText();
+        return SurveyQuestionTitle;
+    }
+
     public void clickSaveButton() {
-        clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button");
+        if (isElementEnabled(this.getCurrentDriver(), saveSurveyButton, 2) == true) {
+            clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button");
+        } else {
+            System.out.println("Value is already saved");
+        }
     }
 }
