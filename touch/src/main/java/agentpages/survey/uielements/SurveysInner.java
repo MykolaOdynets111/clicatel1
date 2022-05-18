@@ -15,11 +15,7 @@ public class SurveysInner extends AbstractUIElement {
     @FindBy(xpath =".//label[contains(text(), 'NPS')]/span[@class='cl-radio__checkmark']")
     private WebElement npsRadioButton;
 
-    //@FindBy(css =".rating-type-container--content .cl-r-form-group")
-
-    //@FindBy(css ="div.cl-fetch-states:nth-child(2) div.full-height.show div.cl-settings-view div.cl-settings-view__tabs-container div.cl-routed-tabs div.cl-routed-tabs__tab-panel div.page-wrapper div.cl-fetch-states div.setting-group:nth-child(21) div.setting-group__collapse-wrapper div.ReactCollapse--collapse div.ReactCollapse--content div.setting-group__collapse form.mt-7 fieldset.surveys-fieldset div.surveys div.surveys-inner div.survey-form-row.rating-type-container.mt-7 div.rating-type-container--content div.form-content.ml-auto:nth-child(2) div.form-content__select.cl-form-group.cl-form-group-primary div.cl-select-container.cl-select-container--primary.css-b62m3t-container > div.cl-select__control.css-1s2u09g-control:nth-child(3)")
     @FindBy(css ="div.cl-select__indicators.css-1wy0on6")
-    //@FindBy(id ="react-select-165-input")
     private WebElement ratingNumbersDropdown;
 
     @FindBy(css = "div[id^='react-select']")
