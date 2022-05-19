@@ -177,7 +177,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isValidChannelImg(String channelPictureName) {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/"+channelPictureName+".png");
+        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
         //Verify if tame stanp in 24 hours format

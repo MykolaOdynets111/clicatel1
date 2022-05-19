@@ -246,7 +246,7 @@ task runTests(type: Test) {
         suite = System.properties.getProperty("suite")
     }
 
-    if(suite == "websocets") {
+    if(suite == "websockets") {
         runTests.dependsOn(runWebsocketsReqression)
     }
 
