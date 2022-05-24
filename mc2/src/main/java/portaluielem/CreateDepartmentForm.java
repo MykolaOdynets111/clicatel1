@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css =".cl-r-modal-template.departments-modal")
+@FindBy(css =".ReactModal__Content.ReactModal__Content--after-open.cl-modal")
 public class CreateDepartmentForm extends AbstractUIElement {
 
     @FindBy(id ="department-name")
@@ -16,7 +16,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
     @FindBy(css ="textarea#department-description")
     private WebElement descriptionForm;
 
-    @FindBy(css = ".cl-r-checkbox__label")
+    @FindBy(css = ".cl-checkbox__label")
     private List<WebElement> departmentAgentsCheckbox;
 
     @FindBy(xpath = ".//button[text() = 'Cancel']")
@@ -34,7 +34,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
 
     @Step(value = "Set text to the Name field")
     public CreateDepartmentForm setNameField(String name){
-        clickElem(this.getCurrentDriver(), nameField, 3, "name field");
+        clickElem(this.getCurrentDriver(), nameField, 10, "name field");
         nameField.clear();
         nameField.sendKeys(name);
         return this;
