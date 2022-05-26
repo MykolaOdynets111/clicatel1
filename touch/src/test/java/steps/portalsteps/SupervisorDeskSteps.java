@@ -106,7 +106,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @Then("^Verify that only \"(.*)\" tickets chats are shown$")
     public void verifyTicketsChatsChannelsFilter(String channelName) {
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
+        Assert.assertFalse(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
                 channelName + " channel name should be shown.");
     }
 

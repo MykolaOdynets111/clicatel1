@@ -201,7 +201,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) select \"(.*)\" left menu option$")
     public void selectFilterOption(String agent,String option){
         getLeftMenu(agent).selectChatsMenu(option);
-        getLeftMenu(agent).waitForConnectingDisappear(2,5);
+        getLeftMenu(agent).waitForConnectingDisappear(5,10);
     }
 
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")

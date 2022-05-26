@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 @FindBy(css = ".supervisor-tickets")
 public class SupervisorTicketsTable extends AbstractUIElement {
 
-    @FindBy(css = ".cl-table-body .cl-table-row")
+    //@FindBy(css = ".cl-table-body cl-table-row")
+    @FindBy(css=".cl-table-body .cl-table-row")
     private List<WebElement> tickets;
 
     @FindBy(xpath = "//button[text() = 'Assign Manually']")
@@ -106,7 +107,8 @@ public class SupervisorTicketsTable extends AbstractUIElement {
                 "Ascending Arrow Of End Date Column");
     }
 
-    public boolean verifyChanelOfTheTicketsIsPresent(String channelName){
+    public boolean verifyChanelOfTheTicketsIsPresent(String channelName)
+    {
         waitForFirstElementToBeVisible(this.getCurrentDriver(), tickets, 7);
         return  tickets.stream()
                 .map(e -> new SupervisorDeskTicketRow(e).setCurrentDriver(this.getCurrentDriver()))

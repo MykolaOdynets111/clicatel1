@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
+
     @FindBy(css = "a[data-testid^=chat-list-item]")
     private List<WebElement> newConversationRequests;
 
@@ -59,10 +60,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[data-testid='tab-navigation-panel-live']")
     private WebElement liveChats;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-tickets']")
+    @FindAll({
+            @FindBy(xpath="//a[contains(text(),'Tickets')]"),
+            @FindBy(css = "[data-testid='tab-navigation-panel-tickets']")
+    })
     private WebElement tickets;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-closed']")
+    @FindAll({
+            @FindBy(xpath="//a[contains(text(),'Closed')]"),
+            @FindBy(css = "[data-testid='tab-navigation-panel-closed']")
+    })
     private WebElement closed;
 
     @FindBy(css = "[data-testid=open-filter-tab-btn]")
@@ -172,11 +179,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     public void selectChatsMenu(String option){
         if (option.equalsIgnoreCase("Live Chats")){
-            clickElem(this.getCurrentDriver(), liveChats, 1, "Live chats menu" );
+            clickElem(this.getCurrentDriver(), liveChats, 5, "Live chats menu" );
         } else if (option.equalsIgnoreCase("Tickets")){
-            clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu" );
+            clickElem(this.getCurrentDriver(), tickets, 5, "Tickets menu" );
         }else if (option.equalsIgnoreCase("Closed")) {
-            clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
+            clickElem(this.getCurrentDriver(), closed, 5, "Closed menu");
         } else {
             throw new AssertionError("Incorrect menu option was provided");
         }

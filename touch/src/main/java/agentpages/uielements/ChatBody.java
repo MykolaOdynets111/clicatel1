@@ -23,7 +23,7 @@ public class ChatBody extends AbstractUIElement {
 
     private String scrollElement = ".chat-body.chat-box__messages";
 
-    private String fromUserMessagesXPATH = ".//div[contains(@class, 'from')]//*[text()='%s']";
+    private String fromUserMessagesXPATH = ".//div[contains(@class,'from')]//*[text()='%s']";
 
     private String messagesInChatBodyXPATH = ".//ul[contains(@class, 'chat-container')]/div";
 
@@ -121,13 +121,13 @@ public class ChatBody extends AbstractUIElement {
 
     public boolean isUserMessageShown(String usrMessage) {
         try {
-            waitForElementToBeVisibleByCss(this.getCurrentDriver(), scrollElement, 5);
+            waitForElementToBeVisibleByCss(this.getCurrentDriver(), scrollElement, 10);
         } catch (TimeoutException e) {
             Assert.fail("Chat body is not visible");
         }
-        waitForAppearAndDisappear(this.getCurrentDriver(), spinner, 1, 5);
+        waitForAppearAndDisappear(this.getCurrentDriver(), spinner, 1, 10);
         String locator = String.format(fromUserMessagesXPATH, usrMessage);
-        waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 8);
+        waitForElementToBePresentByXpath(this.getCurrentDriver(), locator, 10);
         WebElement message = this.getCurrentDriver().findElement(By.xpath(locator));
         if (isElementExistsInDOMXpath(this.getCurrentDriver(), locator, 3)) {
             return true;
@@ -167,7 +167,7 @@ public class ChatBody extends AbstractUIElement {
     }
 
     public List<String> getAllMessages() {
-        waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 5);
+        waitForElementsToBePresentByXpath(this.getCurrentDriver(), messagesInChatBodyXPATH, 10);
         return findElemsByXPATH(this.getCurrentDriver(), messagesInChatBodyXPATH)
                 .stream().map(e -> new AgentDeskChatMessage(e).setCurrentDriver(this.getCurrentDriver()))
                 .map(e -> e.getMessageInfo().replace("\n", " "))
