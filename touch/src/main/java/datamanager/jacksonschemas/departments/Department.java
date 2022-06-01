@@ -11,7 +11,8 @@ import java.util.Map;
         "tenantId",
         "name",
         "description",
-        "agentIds"
+        "agentIds",
+        "primary"
 })
 public class Department {
 
@@ -23,6 +24,8 @@ public class Department {
     private String name;
     @JsonProperty("description")
     private String description;
+    @JsonProperty("primary")
+    private String primary;
     @JsonProperty("agents")
     private List<Object> agents = null;
     @JsonIgnore
@@ -66,6 +69,16 @@ public class Department {
     @JsonProperty("description")
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JsonProperty("primary")
+    public String getPrimary() {
+        return primary;
+    }
+
+    @JsonProperty("primary")
+    public void setPrimary(String primary) {
+        this.primary = primary;
     }
 
     @JsonProperty("agents")

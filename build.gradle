@@ -26,17 +26,17 @@ subprojects {
     
 
     dependencies {
-        compile group: 'org.testcontainers', name: 'selenium', version: '1.16.3'
-        compile group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
-        compile group: 'io.rest-assured', name: 'rest-assured', version: '4.5.1'
-        compile group: 'io.appium', name: 'java-client', version: '7.3.0'
-        compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.1.0'
-        compile group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.20.0'
-        compile 'com.assertthat:selenium-shutterbug:1.5'
+        implementation  group: 'org.testcontainers', name: 'selenium', version: '1.16.3'
+        implementation  group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+        implementation  group: 'io.rest-assured', name: 'rest-assured', version: '4.5.1'
+        implementation  group: 'io.appium', name: 'java-client', version: '7.3.0'
+        implementation  group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.1.0'
+        implementation  group: 'ru.yandex.qatools.htmlelements', name: 'htmlelements-java', version: '1.20.0'
+        implementation  'com.assertthat:selenium-shutterbug:1.5'
 
         compileOnly 'org.projectlombok:lombok:1.18.22'
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
-        compile group: 'org.jetbrains', name: 'annotations', version: '23.0.0'
+        implementation  group: 'org.jetbrains', name: 'annotations', version: '23.0.0'
     }
     
 

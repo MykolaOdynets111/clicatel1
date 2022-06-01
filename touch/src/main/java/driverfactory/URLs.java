@@ -45,7 +45,7 @@ public class URLs {
 
     private static String BASE_WS_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/api/";
 
-    private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool";
+    private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool/";
 
     private static String TOUCH_MAIN_URL = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com";
 

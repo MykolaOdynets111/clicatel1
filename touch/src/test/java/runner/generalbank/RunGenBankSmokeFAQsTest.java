@@ -18,7 +18,6 @@ public class RunGenBankSmokeFAQsTest extends AbstractTestNGCucumberTests {
         @Override
         @DataProvider(parallel = true)
         public Object[][] scenarios() {
-                ApiHelper.updateTenantConfig("General Bank Demo","tenantMode", "BOT");
                 return super.scenarios();
         }
 

@@ -7,6 +7,7 @@ import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.CRMTicket;
+import datamanager.jacksonschemas.TenantChatPreferences;
 import driverfactory.DriverFactory;
 import driverfactory.URLs;
 import drivermanager.ConfigManager;
@@ -122,7 +123,9 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@auto_scheduler_disabled")){
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "true");
+            TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
+            tenantChatPreferences.setAutoTicketScheduling(true);
+            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
         }
 
         if(scenario.getSourceTagNames().contains(("@remove_dep"))){
@@ -207,11 +210,12 @@ public class Hooks implements JSHelper {
         }
 
         if(scenario.getSourceTagNames().contains("@chat_transcript")){
+            //toDo update with scenarios
             GmailConnector.cleanMailObjects();
             String tenantOrgName = Tenants.getTenantUnderTestOrgName();
             String contactEmail = ApiHelper.getTenantInfoMap(tenantOrgName).get("contactEmail");
-            ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + contactEmail + "\"");
-            ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\"UNATTENDED_ONLY\"");
+//            ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + contactEmail + "\"");
+//            ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\"UNATTENDED_ONLY\"");
         }
 
         if (scenario.getSourceTagNames().contains("@off_survey_management")){
@@ -292,7 +296,9 @@ public class Hooks implements JSHelper {
                 new AgentHomePage("main").getProfileWindow().closeIfOpened();
             }
             if (scenario.getSourceTagNames().contains("@inactivity_timeout")) {
-                ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "agentInactivityTimeoutSec", "600");
+                TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
+                tenantChatPreferences.setAgentInactivityTimeoutSec(600);
+                ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
             }
 
             if (scenario.getSourceTagNames().contains("@agent_availability")&&scenario.isFailed()){

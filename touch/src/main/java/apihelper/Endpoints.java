@@ -102,7 +102,7 @@ public class Endpoints {
 
     public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
 
-    public static String INTERNAL_CONFIG_ATTRIBUTES = URLs.getBaseInternalApiUrl() + "tenants/config-attributes/";
+    public static String TENANT_CHAT_PREFERENCES = URLs.getBaseWSApiURL() + "tenants/chat-preferences";
 
     public static String INTERNAL_GET_TICKETS = URLs.getBaseInternalApiUrl() + "chats/ticket?tenantId=%s&page=%s&size=10&state=UNASSIGNED&direction=ASC";
 
@@ -110,7 +110,7 @@ public class Endpoints {
 
     public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() +  "chats/chat/history";
 
-    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getBaseInternalApiUrl() +  "api/autoresponders/%s";
+    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getAgentDeskURL() +  "/api/platform/autoresponders";
 
     public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() +  "api/chat-users/by-external-user-id/%s/%s/%s";
 
@@ -197,7 +197,7 @@ public class Endpoints {
 
     // ====================  Departments ================= //
 
-    public static String DEPARTMENTS = URLs.getTouchApiBaseURL() + "departments";
+    public static String DEPARTMENTS = URLs.getAgentDeskURL() + "/api/platform/departments";
 
     // ====================  ORCA ================= //
 

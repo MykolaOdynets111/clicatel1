@@ -264,7 +264,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User should not receive '(.*)' message after his '(.*)' message in widget$")
     public void verifyMessageIsNotShownAfterUserMessage(String messageShouldNotBeShown, String userInput){
         widgetConversationArea = widget.getWidgetConversationArea();
-        String expectedTextResponse = formExpectedTextResponseFromBotWidget(messageShouldNotBeShown);
+        String expectedTextResponse = formExpectedAutoresponder(messageShouldNotBeShown);
 
         Assert.assertFalse(widgetConversationArea.isTextResponseNotShownAmongOther(userInput, expectedTextResponse, 3),
                 "Unexpected text response is shown on '"+userInput+"' user's input " +
@@ -274,7 +274,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User have to receive '(.*)' text response for his '(.*)' input$")
     public void verifyResponse(String textResponse, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
+        String expectedTextResponse = formExpectedAutoresponder(textResponse);
         if(!expectedTextResponse.equals("")) verifyTextResponse(userInput, expectedTextResponse, waitForResponse);
     }
 
@@ -323,7 +323,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User have to receive '(.*)' text response for his question regarding (.*)$")
     public void verifyResponseOnUniqueMessage(String textResponse, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
+        String expectedTextResponse = formExpectedAutoresponder(textResponse);
         verifyTextResponse(FacebookSteps.getCurrentUserMessageText(), expectedTextResponse, waitForResponse);
     }
 
@@ -338,7 +338,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User have to receive '(.*)' text response with (.*) intent for his '(.*)' input$")
     public void verifyTextResponseWithIntent(String textResponse, String intent, String userInput){
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
+        String expectedTextResponse = formExpectedAutoresponder(textResponse);
         boolean isTextResponseShown= widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse);
 
 //      ToDo: As soon as there is an API to check the tie mode implement the following logic
@@ -430,7 +430,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
     @Then("^User have to receive '(.*)' (?:text response|url) as a (.*) response for his '(.*)' input$")
     public void verifyCertainTextResponse(String textResponse, int place, String userInput) {
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
+        String expectedTextResponse = formExpectedAutoresponder(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isResponseTextShownOnCorrectPlace(userInput, waitForResponse, place),
@@ -455,7 +455,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                     "health@test.com";
         }
         int waitForResponse=10;
-        String expectedTextResponse = formExpectedTextResponseFromBotWidget(textResponse);
+        String expectedTextResponse = formExpectedAutoresponder(textResponse);
         SoftAssert softAssert = new SoftAssert();
         widgetConversationArea = widget.getWidgetConversationArea();
         softAssert.assertTrue(widgetConversationArea.isTextResponseShownFor(userInput, waitForResponse),
@@ -467,7 +467,7 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
 
     @Then("^Text response that contains \"(.*)\" is shown$")
     public void quickVerifyIsResponseShown(String text){
-       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(formExpectedTextResponseFromBotWidget(text), 10),
+       Assert.assertTrue(widget.getWidgetConversationArea().isTextShown(formExpectedAutoresponder(text), 10),
                "Response to user is not shown");
     }
 
@@ -770,48 +770,15 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
         if (expectedText.equalsIgnoreCase("otp code")) {
             AgentHomePage agentHomePage = new AgentHomePage("main");
             Assert.assertFalse(widget.getWidgetConversationArea()
-                    .isTextShown(formExpectedTextResponseFromBotWidget(agentHomePage.getChatBody().getLastOTPCode()), 10), "Error: OTP code displayed in the widget");
+                    .isTextShown(formExpectedAutoresponder(agentHomePage.getChatBody().getLastOTPCode()), 10), "Error: OTP code displayed in the widget");
         }
         else
             Assert.assertFalse(widget.getWidgetConversationArea()
-                    .isTextShown(formExpectedTextResponseFromBotWidget(expectedText), 4), "Error: Response is shown in widget");
+                    .isTextShown(formExpectedAutoresponder(expectedText), 4), "Error: Response is shown in widget");
     }
 
-    public static String formExpectedTextResponseFromBotWidget(String fromFeatureText){
-        String expectedTextResponse;
-        switch (fromFeatureText) {
-            case "welcome":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_message");
-                break;
-            case "start_new_conversation":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
-                break;
-            case "welcome back message":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_back_message");
-                break;
-            case "dynamical branch address":
-                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
-                break;
-            case "exit":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
-                break;
-            case "agents_away":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("agents_away");
-                break;
-            case "out_of_support_hours":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("out_of_support_hours");
-                break;
-            case "connect_agent":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("connect_agent");
-                break;
-            case "thanks_message":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("thanks_message");
-                break;
-            default:
-                expectedTextResponse = fromFeatureText;
-                break;
-        }
-        return expectedTextResponse;
+    public static String formExpectedAutoresponder(String fromFeatureText){
+      return ApiHelper.getAutoResponderMessageText(fromFeatureText);
     }
 
     @Then("^Tenant photo is shown on widget$")

@@ -2,6 +2,7 @@ package steps.agentsteps;
 
 import apihelper.ApiHelper;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.jacksonschemas.dotcontrol.DotControlInitRequest;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
@@ -276,9 +277,11 @@ public class AgentTransferSteps extends AbstractAgentSteps {
     }
 
     @Given("Transfer timeout for (.*) tenant is set to (.*) seconds")
-    public void updateAgentInactivityTimeout(String tenantOrgName, String timeout){
+    public void updateAgentInactivityTimeout(String tenantOrgName, Integer timeout){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        Response resp = ApiHelper.updateTenantConfig(tenantOrgName, "agentInactivityTimeoutSec", timeout);
+        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
+        tenantChatPreferences.setAgentInactivityTimeoutSec(timeout);
+        Response resp = ApiHelper.updateTenantConfig(tenantOrgName, tenantChatPreferences);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Changing agentInactivityTimeoutSec was not successful for '"+Tenants.getTenantUnderTestName()+"' tenant \n" +
                         "Response: " + resp.getBody().asString());

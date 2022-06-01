@@ -32,15 +32,15 @@ dependencies {
             exclude group: 'io.github.sskorol', module: 'test-data-supplier'
             exclude group: 'io.qameta.allure'
         }
-        compile group: 'io.qameta.allure', name: 'allure-cucumber7-jvm', version: '2.17.3'
-        compile group: 'io.cucumber', name: 'cucumber-java', version: '7.2.3'
-        compile group: 'io.cucumber', name: 'cucumber-testng', version: '7.2.3'
+    implementation  group: 'io.qameta.allure', name: 'allure-cucumber7-jvm', version: '2.17.3'
+    implementation  group: 'io.cucumber', name: 'cucumber-java', version: '7.2.3'
+    implementation  group: 'io.cucumber', name: 'cucumber-testng', version: '7.2.3'
 //        compile group: 'com.github.kirlionik', name: 'allure-cucumber-plugin', version: '1.0.2'
-        compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.1'
+    implementation  group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.1'
 
-        compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
-        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.34'
-        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
+    implementation  group: 'ch.qos.logback', name: 'logback-core', version: '1.2.10'
+    implementation  group: 'org.slf4j', name: 'slf4j-api', version: '1.7.34'
+    implementation  group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.10'
 }
 
 

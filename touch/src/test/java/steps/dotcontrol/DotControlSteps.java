@@ -372,7 +372,7 @@ public class DotControlSteps implements WebWait {
             }
         }else {
             if (expectedResponse.equalsIgnoreCase("start_new_conversation")){
-                expectedResponse = DefaultTouchUserSteps.formExpectedTextResponseFromBotWidget(expectedResponse);
+                expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
             }
             Assert.assertTrue(isResponseComeToServer(expectedResponse, wait),
                     "Message is not as expected\n Messages which came from server are: "

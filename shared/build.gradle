@@ -3,8 +3,8 @@ version '1.0-SNAPSHOT'
 
 
 dependencies {
-    compile group: 'javax.mail', name: 'mail', version: '1.4.7'
-    compile group: 'org.testng', name: 'testng', version: '7.5'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
-    compile group: 'com.paulhammant', name: 'ngwebdriver', version: '1.1.5'
+    compile  group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+    implementation  group: 'org.testng', name: 'testng', version: '7.5'
+    implementation  group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+    implementation  group: 'com.paulhammant', name: 'ngwebdriver', version: '1.1.5'
 }
