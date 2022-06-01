@@ -2,16 +2,13 @@ plugins {
     id("io.qameta.allure") version "2.8.1"
 }
 
-group 'mc2'
-version '1.0-SNAPSHOT'
-
 def allureVersion = "2.12.1"
 def suite = "all"
 def baseXmlPath = "/src/test/resources/xmls"
 
 
 allure {
-    configuration = 'compile'
+    configuration = 'implementation'
     aspectjweaver = true
     version = allureVersion
     useTestNG {
@@ -22,9 +19,9 @@ allure {
 }
 
 dependencies {
-    compile project(':shared')
-    implementation  group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
-    implementation  group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    api project (':shared')
+    api  group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
+    api  group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 
 }
 

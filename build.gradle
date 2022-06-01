@@ -2,12 +2,14 @@ plugins {
     id "base"
 }
 
+
 group 'mc2-touch-tests'
 version '1.0-SNAPSHOT'
 
 subprojects {
 
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'idea'
 
     repositories {
@@ -23,7 +25,7 @@ subprojects {
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-    
+
 
     dependencies {
         implementation  group: 'org.testcontainers', name: 'selenium', version: '1.16.3'
@@ -47,6 +49,8 @@ subprojects {
         classpath = sourceSets.main.runtimeClasspath
     }
 }
+
+
 
 defaultTasks 'clean', ':touch:runTests'
 
