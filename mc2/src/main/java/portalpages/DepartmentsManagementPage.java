@@ -24,7 +24,8 @@ public class DepartmentsManagementPage extends PortalAbstractPage {
     @FindBy(xpath = "//div[@id = 'swal2-content']")
     private WebElement duplicationAlert;
 
-    @FindBy(css = ".cl-r-confirmation button.cl-r-button--primary")
+    //@FindBy(css = ".cl-r-confirmation button.cl-r-button--primary")
+    @FindBy(css=".cl-button.cl-button--primary")
     private WebElement confirmDeletingButton;
 
     private CreateDepartmentForm createDepartmentForm;
