@@ -26,7 +26,6 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
-
     dependencies {
         implementation  group: 'org.testcontainers', name: 'selenium', version: '1.16.3'
         implementation  group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
@@ -49,8 +48,6 @@ subprojects {
         classpath = sourceSets.main.runtimeClasspath
     }
 }
-
-
 
 defaultTasks 'clean', ':touch:runTests'
 
