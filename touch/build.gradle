@@ -48,13 +48,6 @@ def tenantName
 def suite="all"
 def env = 'testing'
 
-
-tasks.withType(JavaCompile).configureEach {
-    javaCompiler = javaToolchains.compilerFor {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
-}
-
 tasks.withType(Test) {
     systemProperties = System.getProperties()
     tenantName = System.getProperty("tenant", "all")
