@@ -6,4 +6,4 @@ test:
   artifacts:
     when: always
     paths:
-      - /home/gitlab-runner/builds/gP2MwC-7/0/touch/mc2-touch-tests/.allure/allure-2.17.3/bin/allure
+      - /home/gitlab-runner/builds/*
