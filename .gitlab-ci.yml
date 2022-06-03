@@ -1,5 +1,5 @@
-image: gradle:7.4.2-jdk8
-
+image:
+  name: gradle:7.4.2-jdk8
 test:
   stage: test
   script: gradle -Dremote=true --info -Denv=demo -Dtenant=all -Dsuite=websockets -DreportToTestFLO=false -DisRerun=false -DtplanKey=g -DcreateTPlan=false -Djirauser=dd -Djirapass=dd
