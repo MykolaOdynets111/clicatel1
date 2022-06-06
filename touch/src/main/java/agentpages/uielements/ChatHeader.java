@@ -70,6 +70,8 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = "button>svg[name=flag-fill]")
     private WebElement flagOnIcon;
 
+    @FindBy(css =".cl-transfer-history__agent-name")
+    private WebElement agentName;
 
     private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
@@ -177,7 +179,7 @@ public class ChatHeader extends AbstractUIElement {
     }
 
     public boolean isValidChannelImg(String channelPictureName) {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/"+channelPictureName+".png");
+        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/"+channelPictureName+".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), channelImg, image);
     }
         //Verify if tame stanp in 24 hours format
@@ -208,5 +210,9 @@ public class ChatHeader extends AbstractUIElement {
 
     public boolean isFlagOnButtonDisplayed() {
         return isElementShown(getCurrentDriver(), flagOnIcon, 5);
+    }
+
+    public String getAgentName(){
+        return getTextFromElem(getCurrentDriver(),agentName,2,"Agent Name");
     }
 }

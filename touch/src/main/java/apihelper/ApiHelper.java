@@ -21,7 +21,6 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import javaserver.Server;
 import mc2api.auth.PortalAuthToken;
-import org.apiguardian.api.API;
 import org.testng.Assert;
 import datamanager.jacksonschemas.ClientProfileOld;
 
@@ -161,19 +160,22 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         return tenantsInfo;
     }
 
-    public static String getAutoResponderMessageText(String messageId) {
-        return getAutoResponderMessage(messageId).getText().trim();
+    public static String getAutoResponderMessageText(String title) {
+        return getAutoResponderMessage(title).getText().trim();
     }
 
-    public static AutoResponderMessage getAutoResponderMessage(String messageId) {
-        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
-        String url = String.format(Endpoints.INTERNAL_AUTORESPONDER_CONTROLLER, messageId);
-        Response resp = RestAssured.given().header("tenantId", tenantId)
+   public static AutoResponderMessage getAutoResponderMessage(String title){
+        return getAutoRespondersList(title).stream().filter(e->e.getTitle().equalsIgnoreCase(title)).findFirst().get();
+    }
+
+    public static List<AutoResponderMessage> getAutoRespondersList(String title) {
+        Response resp = RestAssured.given().log().all()
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
-                .get(url);
+                .get(Endpoints.INTERNAL_AUTORESPONDER_CONTROLLER);
         Assert.assertEquals(resp.statusCode(), 200,
                 "Getting AutoResponder was not successful :" + resp.getBody().asString());
-        return resp.getBody().as(AutoResponderMessage.class);
+        return resp.jsonPath().getList("",AutoResponderMessage.class);
     }
 
     //ToDo remove after Ui change api to the new one
@@ -657,17 +659,15 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static List<Department> getDepartments(String tenantOrgName){
-        Response resp =  RestAssured.given().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "")).get(Endpoints.DEPARTMENTS);
+        Response resp =  RestAssured.given().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main")).get(Endpoints.DEPARTMENTS);
         List<Department> departments = resp.jsonPath().getList("", Department.class);
         return departments;
     }
 
     public static void deleteDepartmentsById(String tenantOrgName) {
-
         List<Department> departments = getDepartments(tenantOrgName);
         for (Department department : departments) {
             if (department.getName().contains("Auto")) {
-                String departmentId = department.getId();
                  RestAssured.given()
                         .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, ""))
                         .delete(Endpoints.DEPARTMENTS + "/" + department.getId());
@@ -678,21 +678,19 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
 
     public static void createDepartment(String name, String description, String agent ){
         String agentId = getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("id");
-        String tenantId = ApiHelper.getTenantInfoMap(Tenants.getTenantUnderTestOrgName()).get("id");
         Response resp;
         resp = RestAssured.given().log().all()
                 .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{ " +
-                        "\"tenantId\": \"" + tenantId + "\"," +
                         "\"name\": \"" + name + "\"," +
                         "\"description\": \"" + description + "\"," +
                         "\"agentIds\": [\"" + agentId +
                         "\"]" +
                         "}")
                 .post(Endpoints.DEPARTMENTS);
-        Assert.assertEquals(resp.statusCode(), 201,
+        Assert.assertEquals(resp.statusCode(), 200,
                 "Creating of department was not successful\n" +
                         "resp body: " + resp.getBody().asString());
     }
@@ -965,16 +963,21 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
 
-    public static Response updateTenantConfig(String tenantOrgName, String config, String configValue){
+    public static Response updateTenantConfig(String tenantOrgName, TenantChatPreferences body){
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given().log().all()
                 .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
-                .body("{ \"configAttributes\": " +
-                        "{\""+config+"\": "+configValue+" }" +
-                      "}")
-                .put(Endpoints.INTERNAL_CONFIG_ATTRIBUTES + tenantId);
+                .body(TenantChatPreferences.class)
+                .put(Endpoints.TENANT_CHAT_PREFERENCES);
+    }
+
+    public static TenantChatPreferences getTenantChatPreferences(){
+        return RestAssured.given().log().all()
+                .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON).get(Endpoints.TENANT_CHAT_PREFERENCES).getBody().as(TenantChatPreferences.class);
     }
 
 //    Response resp = ApiHelper.createFBChat(FacebookPages.getFBPageFromCurrentEnvByTenantOrgName(tenantOrgName).getFBPageId(), 1912835872122481l, "to agent the last");

@@ -57,7 +57,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-agent-view-launch-btn")
     private WebElement launchAgentButton;
 
-    private String chatName = "//h2[@data-testid='roster-item-user-name' and text() ='%s']";
+    private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
 
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
 

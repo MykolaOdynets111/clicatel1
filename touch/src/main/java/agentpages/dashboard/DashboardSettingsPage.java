@@ -2,6 +2,7 @@ package agentpages.dashboard;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
@@ -11,16 +12,26 @@ public class DashboardSettingsPage extends PortalAbstractPage {
         super(driver);
     }
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-business-profile']")
+    @FindAll({
+        @FindBy(css = "[selenium-id='tab-navigation-panel-business-profile']"), //toDo old locator
+        @FindBy(css = "[data-testid='tab-navigation-panel-business-profile']")
+    })
     private WebElement businessProfile;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-chat-tags']")
+    @FindAll({
+        @FindBy(css = "[selenium-id='tab-navigation-panel-chat-tags']"), //toDo old locator
+        @FindBy(css = "[data-testid='tab-navigation-panel-chat-tags']")})
     private WebElement chatTags;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-auto-responders']")
+    @FindAll({
+        @FindBy(css = "[selenium-id='tab-navigation-panel-auto-responders']"), //toDo old locator
+        @FindBy(css = "[data-testid='tab-navigation-panel-auto-responders']")})
     private WebElement autoResponders;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
+    @FindAll({
+        @FindBy(css = "[selenium-id='tab-navigation-panel-preferences']"), //toDo old locator
+        @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
+    })
     private WebElement preferences;
 
     @FindBy(css = "[data-testid='tab-navigation-panel-surveys']")
@@ -38,7 +49,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
                 clickElem(this.getCurrentDriver(), autoResponders, 2, "Auto Responders");
                 break;
             case "Preferences":
-                clickElem(this.getCurrentDriver(), preferences, 2, "Preferences");
+                clickElem(this.getCurrentDriver(), preferences, 4, "Preferences");
                 break;
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 2, "Surveys");

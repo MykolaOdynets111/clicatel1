@@ -2,6 +2,7 @@ package steps.portalsteps;
 
 import agentpages.uielements.ChatBody;
 import apihelper.ApiHelper;
+import datamanager.jacksonschemas.TenantChatPreferences;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -24,14 +25,17 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     private List<String> shownUsers = new ArrayList<>();
 
-    @Given("^autoSchedulingEnabled is set to false$")
-    public void turnOffAutoScheduling(){
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "false");
-    }
-
-    @Given("^autoSchedulingEnabled is set to true$")
-    public void turnOnAutoScheduling(){
-        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), "autoSchedulingEnabled", "true");
+    @Given("^Turn (.*) tickets autoScheduling$")
+    public void changeTicketsAutoScheduling(String status){
+        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
+        if (status.equalsIgnoreCase("on")){
+            tenantChatPreferences.setAutoTicketScheduling(true);
+        } else if(status.equalsIgnoreCase("off")){
+            tenantChatPreferences.setAutoTicketScheduling(false);
+        }else{
+            throw new AssertionError("Incorrect status was provided");
+        }
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
 
     @Then("^Filter \"(.*)\" is selected by default$")
@@ -126,6 +130,12 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         soft.assertTrue(getSupervisorDeskPage().getChatHeader().isValidChannelImg(image),
                 "Icon for channel in chat header as not expected");
         soft.assertAll();
+    }
+
+    @Then("^Supervisor Desk Live chat container header display \"(.*)\" instead of agent name$")
+    public void verifyNoAgentHeaderInfo(String agentName){;
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,
+                "Agent should not be assigned");
     }
 
     @Then("^Supervisor Desk Live chat Profile is displayed$")

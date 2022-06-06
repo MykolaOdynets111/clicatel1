@@ -7,6 +7,7 @@ import datamanager.Agents;
 import datamanager.MC2Account;
 import datamanager.Tenants;
 import datamanager.TopUpBalanceLimits;
+import datamanager.jacksonschemas.TenantChatPreferences;
 import datamanager.model.PaymentMethod;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -1733,13 +1734,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Turn (.*) the Last Agent routing$")
     public void changeLastAgentRoting(String status){
+        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
         if (status.equalsIgnoreCase("on")){
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"lastAgentMode", "true");
+            tenantChatPreferences.setLastAgentMode(true);
         } else if(status.equalsIgnoreCase("off")){
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"lastAgentMode", "false");
+            tenantChatPreferences.setLastAgentMode(false);
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(), tenantChatPreferences);
     }
 
     @When("^Verify Last Agent routing is turned (.*) on backend$")
@@ -1756,13 +1759,15 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
     @When("^Turn (.*) the Default department$")
     public void changeDepartmentPrimaryStatus(String status){
+        TenantChatPreferences tenantChatPreferences = ApiHelper.getTenantChatPreferences();
         if (status.equalsIgnoreCase("on")){
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"departmentPrimaryStatus", "true");
+            tenantChatPreferences.setDepartmentPrimaryStatus(true);
         } else if(status.equalsIgnoreCase("off")){
-            ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),"departmentPrimaryStatus", "false");
+            tenantChatPreferences.setDepartmentPrimaryStatus(false);
         }else{
             throw new AssertionError("Incorrect status was provided");
         }
+        ApiHelper.updateTenantConfig(Tenants.getTenantUnderTestOrgName(),tenantChatPreferences);
     }
 
     @When("^Create chat tag$")

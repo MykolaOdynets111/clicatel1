@@ -36,8 +36,9 @@ public class AgentChatTranscriptSteps extends AbstractAgentSteps{
         if (Tenants.getTenantUnderTestOrgName() == null)  // should it be applied?
             Tenants.setTenantUnderTestOrgName(tenantOrgName);
         TranscriptEmail email = TranscriptEmail.getMailByEnv();
-        ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + email.getEmail() + "\"");
-        ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\""+value+"\"");
+        //toDo update with scenarios
+//        ApiHelper.updateTenantConfig(tenantOrgName, "supportEmail", "\"" + email.getEmail() + "\"");
+//        ApiHelper.updateTenantConfig(tenantOrgName, "chatTranscript", "\""+value+"\"");
 
     }
 
