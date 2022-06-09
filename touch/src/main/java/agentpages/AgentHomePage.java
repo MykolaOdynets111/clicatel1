@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touchpages.uielements.AttachmentWindow;
+import touchpages.uielements.LocationWindow;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class AgentHomePage extends AgentAbstractPage {
 
     @FindAll({
             @FindBy(xpath = "//li[text()='History']"),
-            @FindBy(css = "[selenium-id='tab-right-panel-history']")
+            @FindBy(css = "[selenium-id='tab-right-panel-2']")
     })
     private WebElement agentHistoryButton;
 
@@ -92,6 +93,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private VerifyPhoneNumberWindow verifyPhoneNumberWindow;
     private ChatAttachmentForm chatAttachmentForm;
     private AttachmentWindow attachmentWindow;
+    private LocationWindow locationWindow;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -112,6 +114,13 @@ public class AgentHomePage extends AgentAbstractPage {
         attachmentWindow.setCurrentDriver(this.getCurrentDriver());
         return attachmentWindow;
     }
+
+    public LocationWindow openLocationWindow(){
+        getChatForm().openLocationForm();
+        locationWindow.setCurrentDriver(this.getCurrentDriver());
+        return locationWindow;
+    }
+
 
     public DeleteCRMConfirmationPopup getDeleteCRMConfirmationPopup(){
         deleteCRMConfirmationPopup.setCurrentDriver(this.getCurrentDriver());

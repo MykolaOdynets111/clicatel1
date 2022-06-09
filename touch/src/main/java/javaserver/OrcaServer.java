@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class OrcaServer extends Server {
     public static volatile Map<String, Set<String>> orcaMessagesMap = new HashMap<>();
     public static volatile List<String> orcaMessages = new ArrayList<>();
+    public static volatile List<OrcaEvent> orcaEvents = new ArrayList<>();
 
     public void startServer() {
         startServer(new OrcaHandler());
@@ -45,6 +46,7 @@ public class OrcaServer extends Server {
                 orcaEvent = convertStringResponseBodyToObject(incomingBody);
                 OrcaServer.orcaMessagesMap.clear();
                 //for avoiding NullPointerException in the future
+                orcaEvents.add(orcaEvent);
                 if (orcaEvent.getContent() != null &&
                         orcaEvent.getContent().getEvent() != null &&
                         orcaEvent.getContent().getEvent().getText() != null &&

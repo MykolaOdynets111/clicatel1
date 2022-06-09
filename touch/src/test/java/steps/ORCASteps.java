@@ -4,14 +4,14 @@ import apihelper.ApiHelper;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
-import datamanager.jacksonschemas.departments.Department;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
 import interfaces.WebWait;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import javaserver.OrcaServer;
 import javaserver.Server;
@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ORCASteps implements WebWait {
 
@@ -104,10 +105,7 @@ public class ORCASteps implements WebWait {
         if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
             expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
         }
-        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, getClientId(), wait),
-                String.format("Message is not as expected\n" +
-                        " Messages which came from server for clientId %s are: %s \n" +
-                        "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
+        verifyAutoresponder(expectedResponse, wait);
     }
 
     @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
@@ -115,11 +113,23 @@ public class ORCASteps implements WebWait {
 
         expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
 
-        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, getClientId(), wait),
+        verifyAutoresponder(expectedResponse, wait);
+    }
+
+    private void verifyAutoresponder(String expectedResponse, int wait){
+        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, wait),
                 String.format("Autoresponder is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
                         "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
     }
+
+    @Then("^Verify Orca returns (.*) Location sent by Agent during (.*) seconds$")
+    public void verifyOrcaReturnedCorrectLocation(String locationName, int wait) {
+        Assert.assertTrue(isLocationCameToUser(locationName, wait),
+                String.format("Location '%s' didn't come to user",locationName ));;
+    }
+
+
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
@@ -148,13 +158,27 @@ public class ORCASteps implements WebWait {
         return new Event(file);
     }
 
-    private boolean isResponseComeToServerForClient(String message, String clientId, int wait) {
+    private boolean isResponseComeToServerForClient(String message, int wait) {
         for (int i = 0; i < wait; i++) {
             if (isExpectedResponseArrives(message)) return true;
             waitFor(1000);
         }
         return false;
     }
+
+    private boolean isLocationCameToUser(String location, int wait){
+        for (int i = 0; i < wait; i++) {
+            if (isCorrectLocationCameToUser(location)) return true;
+            waitFor(1000);
+        }
+        return false;
+    }
+
+    private boolean isCorrectLocationCameToUser(String location){
+        return OrcaServer.orcaEvents.stream().anyMatch(e->
+                Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
+    }
+
 
     private boolean isExpectedResponseArrives(String message) {
         if(Objects.isNull(OrcaServer.orcaMessages)) {

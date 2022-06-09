@@ -13,13 +13,13 @@ public class ChatHistoryContainer extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[data-testid=history-item]"),
-            @FindBy(css = ".cl-r-tab-history-chat")
+            @FindBy(css = "[selenium-id='chat-history']") //todo old locator
     })
     private List<WebElement> chatHistoryList;
 
-    public ChatInActiveChatHistory getSecondChatHistoryItems(){
+    public ChatInActiveChatHistory getChatHistoryItemsByIndex(int i){
         try{
-            return new ChatInActiveChatHistory(chatHistoryList.get(1)).setCurrentDriver(this.getCurrentDriver());
+            return new ChatInActiveChatHistory(chatHistoryList.get(i)).setCurrentDriver(this.getCurrentDriver());
         } catch (IndexOutOfBoundsException e){
             Assert.fail("Chat history container in active chat is empty");
             return null;

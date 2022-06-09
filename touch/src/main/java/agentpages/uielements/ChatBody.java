@@ -90,7 +90,12 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = "div[title='AGENT_REJECT_CHAT']")
     private WebElement rejectTransferIndicator;
 
+    @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']")
+    private WebElement locationHREF;
 
+    public String getLocationURL() {
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREF,3, "Location href", "href");
+    }
 
     private WebElement getFromUserWebElement(String messageText) {
         try {
@@ -238,7 +243,6 @@ public class ChatBody extends AbstractUIElement {
         Boolean isValidIcon = isWebElementEqualsImage(this.getCurrentDriver(), agentImage, image);
         return isValidIcon;
     }
-
 
     public boolean isRateCardShown() {
         return isElementShown(this.getCurrentDriver(), rateCard, 3);
