@@ -26,7 +26,7 @@ public class ChatInActiveChatHistory extends AbstractWidget {
     private WebElement userMessage;
 
     @FindAll({
-            @FindBy(css = ".cl-r-icon.cl-r-icon-expand.cl-r-icon--fill"),
+            @FindBy(css = ".cl-icon.cl-icon-open-in-new-window.cl-icon--fill"),
             @FindBy(css = "[selenium-id=history-item-detail]")
     })
     public WebElement viewDetailsButton;

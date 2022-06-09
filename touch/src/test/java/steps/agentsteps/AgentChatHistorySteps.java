@@ -13,12 +13,14 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TimeZone;
 
 public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelper {
 
@@ -32,7 +34,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         SoftAssert soft = new SoftAssert();
         String expectedChatHistoryTime = getExpectedTime(chatHistory.getChatStarted(),
                 DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"), false);
-        ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getSecondChatHistoryItems();
+        ChatInActiveChatHistory actualChatHistoryItem = getAgentHomePage(agent).getChatHistoryContainer().getChatHistoryItemsByIndex(1);
 
 
         soft.assertEquals(actualChatHistoryItem.getChatHistoryTime().toLowerCase(), expectedChatHistoryTime.toLowerCase(),
@@ -43,9 +45,28 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         soft.assertAll();
     }
 
+
+
     @When("^(.*) click 'View chat' button$")
     public void clickViewChatButton(String agent){
-        getAgentHomePage(agent).getChatHistoryContainer().getSecondChatHistoryItems().clickViewButton();
+        getAgentHomePage(agent).getChatHistoryContainer().getChatHistoryItemsByIndex(1).clickViewButton();
+    }
+
+    @When("^(.*) open first 'History view'$")
+    public void openFirstHistory(String agent){
+        getAgentHomePage(agent).getChatHistoryContainer().getChatHistoryItemsByIndex(0).clickViewButton();
+    }
+
+    @When("^(.*) sees (.*) location in history preview$")
+    public void verifyLocationInHistory(String agent, String expectedLocation){
+        String locationInPreview = getAgentHomePage(agent).getChatHistoryContainer().getChatHistoryItemsByIndex(0).getChatHistoryUserMessage();
+        Assert.assertTrue(locationInPreview.contains(expectedLocation), "Location is different: " + locationInPreview);
+    }
+
+    @Then("^(.*) sees correct location URL in History Details window$")
+    public void compareLocationInHistoryDetailsWindows(String agent){
+        String locationInHistoryDetailes = getAgentHomePage(agent).getHistoryDetailsWindow().getLocationURL();
+        Assert.assertEquals(locationInHistoryDetailes, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
     }
 
     @Then("^(.*) sees correct messages in history details window$")
@@ -123,15 +144,10 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
 
 
     @When("^(.*) searches and selects chat from (.*) in chat history list$")
-    public void selectRandomChatFromHistory(String ordinalAgentNumber, String chanel){
+    public void selectRandomChatFromHistory(String ordinalAgentNumber, String channel){
         getAgentHomePage(ordinalAgentNumber).waitForLoadingInLeftMenuToDisappear(3,7);
-        if (chanel.equalsIgnoreCase("twitter")) userId = socialaccounts.TwitterUsers.getLoggedInUserName();
-        if(chanel.equalsIgnoreCase("facebook")) userId = socialaccounts.FacebookUsers.getLoggedInUserName();
-        if(chanel.equalsIgnoreCase("dotcontrol")) userId = DotControlSteps.getClient();
-        if(chanel.equalsIgnoreCase("touch") && userId == null) userId = getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance());
-        getLeftMenu(ordinalAgentNumber).searchUserChat(userId);
+        getLeftMenu(ordinalAgentNumber).searchUserChat(getUserName(channel));
     }
-
 
     @When("Close chat to generate history record")
     public void closeChat() {
@@ -172,6 +188,15 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         soft.assertEquals(getChatBody(agent).getStopCardText(), "Customer has opted-out of communication. You can no longer send messages.", "Stop card text is not correct");
         soft.assertAll();
     }
+
+    @Then("^(.*) sees correct Location Url in closed chat body$")
+    public void verifyLocationURLInClosedChat(String agent){
+        waitFor(2000);//wait till URL will be fully loaded
+        String url = getAgentHomePage(agent).getChatBody().getLocationURL();
+        Assert.assertEquals(url, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
+    }
+
+
 
     private List<String> getExpectedChatHistoryItems(ChatHistory chatHistory){
         List<String> expectedMessagesList = new ArrayList<>();

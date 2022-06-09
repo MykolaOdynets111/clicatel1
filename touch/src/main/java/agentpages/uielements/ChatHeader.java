@@ -20,7 +20,7 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[data-testid=header-exit-chat]"),
-            @FindBy(css = ".cl-r-end-chat") //old locator
+            @FindBy(css = "[selenium-id='header-exit-chat']") //old locator
     })
     private WebElement endChatButton;
 

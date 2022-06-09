@@ -4,29 +4,44 @@ import abstractclasses.AbstractWidget;
 import apihelper.ApiHelperTie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
 
-    @FindBy(css = "[data-testid='avatar']")
+    @FindAll({
+        @FindBy(css = "[data-testid='avatar']"),
+        @FindBy(css = "[selenium-id='Avatar']"), //toDo old locator
+    })
     private WebElement userIcon;
-
 
     @FindBy(css = ".cl-chat-item-user-name")
     private WebElement userName;
 
-    @FindBy(css = "[data-testid=roster-item-location]")
+    @FindAll({
+        @FindBy(css = "[data-testid=roster-item-location]"),
+        @FindBy(css = "[selenium-id=roster-item-location]"), //toDo old locator
+    })
     private WebElement location;
 
-    @FindBy(css = "[data-testid=chat-item-icons-holder]")
+    @FindAll({
+            @FindBy(css = "[data-testid=chat-item-icons-holder]"),
+            @FindBy(css = "[selenium-id=chat-item-icons-holder]") //toDo old locator
+    })
     private WebElement channelIcon;
 
-    @FindBy(css = "[data-testid='chat-item-icons-holder'] svg")
+    @FindAll({
+            @FindBy(css = "[data-testid='chat-item-icons-holder'] svg"),
+            @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg") //toDo old locator
+    })
     private WebElement adapterWrappedIcon;
 
-    @FindBy(css = "[data-testid='icon-flag-filled'] g")
+    @FindAll({
+            @FindBy(css = "[data-testid='icon-flag-filled'] g"),
+            @FindBy(css = "[selenium-id='icon-flag-filled'] g") //toDo old locator
+    })
     private WebElement flagIcon;
 
     private String flagIconCss =  "[data-testid='icon-flag-filled'] g"; //""span.icon.svg-icon-flagged";
