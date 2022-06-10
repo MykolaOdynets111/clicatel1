@@ -7,7 +7,7 @@ Feature: Supervisor desk
    Background:
      Given Create .Control integration for Automation Bot and adapter: fbmsg
      Given Set agent support hours with day shift
-     Given autoSchedulingEnabled is set to false
+     Given Turn off tickets autoScheduling
      Given Prepare payload for sending chat to agent message for .Control
      Given Send parameterized init call with clientId context correct response is returned
      And Send message call

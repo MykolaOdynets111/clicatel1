@@ -95,7 +95,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         getDepartmentsManagementPage().openDepartmentManageForm(name, description).selectDepartmentAgentsCheckbox(newAgent).clickSaveButton();
     }
 
-    @Given("^New departments with (.*) name (.*) description and (.*) agent is created$")
+    @Given("^New departments with (.*) name (.*) description and (.*) is created$")
     public void createNewDepartment(String name, String department, String agent){
         ApiHelper.createDepartment(name, department, agent);
     }

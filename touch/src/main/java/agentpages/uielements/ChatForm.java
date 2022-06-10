@@ -17,11 +17,14 @@ public class ChatForm extends AbstractUIElement {
 
     public static String inputMassage;
 
-    private String messageInputLocator = "//textarea[@data-testid='message-composer-textarea']";
+    private String messageInputLocator = "//textarea[@selenium-id='message-composer-textarea']";
     private SecureRandom random = new SecureRandom();
-    private String suggestionCSSInput = "[data-testid=suggestion-wrapper]";
+    private String suggestionCSSInput = "[selenium-id=suggestion-wrapper]";
 
-    @FindBy(css = "[data-testid=suggestion-wrapper]")
+    @FindAll({
+            @FindBy(css = "[data-testid=chat-item-icons-holder]"),
+            @FindBy(css = "[selenium-id=suggestion-wrapper]") //toDo old locator
+    })
     private WebElement suggestionInputField;
 
     @FindBy(css = ".cl-message-composer__textarea")
@@ -29,14 +32,17 @@ public class ChatForm extends AbstractUIElement {
 
     @FindAll({
     @FindBy(css = "[data-testid=message-composer-send-button]"),
-    @FindBy(css = "[selenium-id=message-composer-send-button]")
+    @FindBy(css = "[selenium-id=message-composer-send-button]") //toDo old locator
     })
     private WebElement submitMessageButton;
 
     @FindBy(css = ".cl-r-suggestion-wrapper__icon")
     private WebElement clearButton;
 
-    @FindBy(css = "[data-testid=chat-form-send-email] button")
+    @FindAll({
+            @FindBy(css = "[data-testid=chat-form-send-email] button"),
+            @FindBy(css = "[selenium-id=chat-form-send-email] button") //toDo old locator
+    })
     public WebElement overnightTicketSendEmail;
 
     @FindBy(css = "div.overnight-chat-controls p")
@@ -48,8 +54,11 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(xpath = "//div[@data-name='Recent']/following-sibling::ul[@class='emoji-mart-category-list']//button")
     public List<WebElement> frequetlyUsedEmojis;
 
-    @FindBy(css ="[id=Attachment]")
+    @FindBy(id ="Attachment")
     private WebElement attachmentButton;
+
+    @FindBy(css ="svg[name='map-pin']")
+    private WebElement location;
 
     private String emojiMartCss = "section.emoji-mart";
 
@@ -168,5 +177,11 @@ public class ChatForm extends AbstractUIElement {
     public void openAttachmentForm(){
         clickElem(this.getCurrentDriver(), attachmentButton, 2, "Attachment button");
     }
+
+    public void openLocationForm(){
+        clickElem(this.getCurrentDriver(), location, 2, "Location button");
+    }
+
+
 
 }

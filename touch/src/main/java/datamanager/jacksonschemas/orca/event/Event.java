@@ -3,7 +3,8 @@ package datamanager.jacksonschemas.orca.event;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import datamanager.jacksonschemas.orca.event.EventType;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.Generated;
 import java.io.File;
@@ -19,9 +20,15 @@ import java.net.URLConnection;
         "structuredText",
         "caption",
         "contentType",
+        "latitude",
+        "longitude",
+        "address",
+        "name",
+        "eventType",
 //        "size",
         "ref"
 })
+@Setter @Getter
 @Generated("jsonschema2pojo")
 public class Event {
 
@@ -39,6 +46,14 @@ public class Event {
     private String caption;
     @JsonProperty("contentType")
     private String contentType;
+    @JsonProperty("latitude")
+    private String latitude;
+    @JsonProperty("longitude")
+    private String longitude;
+    @JsonProperty("address")
+    private String address;
+    @JsonProperty("name")
+    private String name;
 //    @JsonProperty("size")
 //    private long size;
     @JsonProperty("ref")

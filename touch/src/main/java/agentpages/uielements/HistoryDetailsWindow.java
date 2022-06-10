@@ -9,11 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-//@FindAll({
-//        @FindBy(css = "[data-testid=history-detail]"),
-        @FindBy(css = ".cl-r-history-chat-view-fly-out")
-//})
+@FindBy(css = ".chat.chat--in-flyout")
 public class HistoryDetailsWindow extends AbstractUIElement {
 
     @FindAll({
@@ -37,6 +33,9 @@ public class HistoryDetailsWindow extends AbstractUIElement {
     })
     public WebElement closeHistoryDetailsButton;
 
+    @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']")
+    private WebElement locationHREF;
+
     public String getUserName(){
         return chatTitle.getText();
     }
@@ -58,6 +57,10 @@ public class HistoryDetailsWindow extends AbstractUIElement {
                     .collect(Collectors.toList());
         }
 
+    }
+
+    public String getLocationURL() {
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREF,3, "Location href", "href");
     }
 
     public void closeChatHistoryDetailsPopup(){

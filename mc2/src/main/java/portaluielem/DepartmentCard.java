@@ -14,10 +14,12 @@ public class DepartmentCard extends AbstractWidget {
     @FindBy(css = ".grouping-card__description")
     private WebElement description;
 
-    @FindBy(css = ".cl-actions-dropdown__icon")
+    // @FindBy(css = ".cl-actions-dropdown__icon")
+    @FindBy(css=".card-title__action-button")
     private WebElement threeDotsMenu;
 
-    @FindBy(xpath = ".//span[text() = 'Delete department']")
+    //@FindBy(xpath = ".//span[text() = 'Delete department']")
+    @FindBy(xpath =".//button[text()='Delete department']")
     private WebElement deleteDepartmentButton;
 
     @FindBy(xpath = ".//span[text() = 'Manage department']")

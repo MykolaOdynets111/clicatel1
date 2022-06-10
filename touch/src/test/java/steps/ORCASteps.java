@@ -1,15 +1,17 @@
 package steps;
 
+import apihelper.ApiHelper;
 import apihelper.ApiORCA;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import datamanager.Tenants;
+import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
 import interfaces.WebWait;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import javaserver.OrcaServer;
 import javaserver.Server;
@@ -19,9 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ORCASteps implements WebWait {
 
@@ -60,6 +62,17 @@ public class ORCASteps implements WebWait {
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
+    @When("^Send (.*) message by ORCA to (.*) department$")
+    public void sendChatToSpecificDepartment(String message, String departmentName){
+        createRequestMessage(apiToken.get(), message);
+        clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
+        List<Department> departments = ApiHelper.getDepartments(Tenants.getTenantUnderTestOrgName());
+        String departmentId = departments.stream().filter(e->e.getName().equalsIgnoreCase(departmentName)).findFirst().get().getId();
+        orcaMessageCallBody.get().getContent().getExtraFields().setDepartment(departmentId);
+        System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
+        ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+    }
+
     @Given("^Setup ORCA (.*) integration for (.*) tenant$")
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
@@ -90,13 +103,33 @@ public class ORCASteps implements WebWait {
     public void verifyOrcaReturnedCorrectResponse(String expectedResponse, int wait) {
 
         if (expectedResponse.equalsIgnoreCase("start_new_conversation")) {
-            expectedResponse = DefaultTouchUserSteps.formExpectedTextResponseFromBotWidget(expectedResponse);
+            expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
         }
-        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, getClientId(), wait),
-                String.format("Message is not as expected\n" +
+        verifyAutoresponder(expectedResponse, wait);
+    }
+
+    @Then("^Verify Orca returns (.*) autoresponder during (.*) seconds$")
+    public void verifyOrcaReturnedCorrectAutoresponder(String expectedResponse, int wait) {
+
+        expectedResponse = DefaultTouchUserSteps.formExpectedAutoresponder(expectedResponse);
+
+        verifyAutoresponder(expectedResponse, wait);
+    }
+
+    private void verifyAutoresponder(String expectedResponse, int wait){
+        Assert.assertTrue(isResponseComeToServerForClient(expectedResponse, wait),
+                String.format("Autoresponder is not as expected\n" +
                         " Messages which came from server for clientId %s are: %s \n" +
                         "Expected: %s", clientId.get(), OrcaServer.orcaMessages, expectedResponse));
     }
+
+    @Then("^Verify Orca returns (.*) Location sent by Agent during (.*) seconds$")
+    public void verifyOrcaReturnedCorrectLocation(String locationName, int wait) {
+        Assert.assertTrue(isLocationCameToUser(locationName, wait),
+                String.format("Location '%s' didn't come to user",locationName ));;
+    }
+
+
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
@@ -125,19 +158,33 @@ public class ORCASteps implements WebWait {
         return new Event(file);
     }
 
-    private boolean isResponseComeToServerForClient(String message, String clientId, int wait) {
+    private boolean isResponseComeToServerForClient(String message, int wait) {
         for (int i = 0; i < wait; i++) {
-            if (isExpectedResponseArrives(message, clientId)) return true;
+            if (isExpectedResponseArrives(message)) return true;
             waitFor(1000);
         }
         return false;
     }
 
-    private boolean isExpectedResponseArrives(String message, String clientId) {
-        if(Objects.isNull(OrcaServer.orcaMessagesMap.get(clientId))) {
+    private boolean isLocationCameToUser(String location, int wait){
+        for (int i = 0; i < wait; i++) {
+            if (isCorrectLocationCameToUser(location)) return true;
+            waitFor(1000);
+        }
+        return false;
+    }
+
+    private boolean isCorrectLocationCameToUser(String location){
+        return OrcaServer.orcaEvents.stream().anyMatch(e->
+                Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
+    }
+
+
+    private boolean isExpectedResponseArrives(String message) {
+        if(Objects.isNull(OrcaServer.orcaMessages)) {
             return false;
         }
-        return OrcaServer.orcaMessagesMap.get(clientId).contains(message);
+        return OrcaServer.orcaMessages.contains(message);
     }
 
     private void createRequestMessage(String apiKey, String message) {

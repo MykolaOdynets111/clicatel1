@@ -26,11 +26,11 @@ public class CamundaFlowsSteps implements JSHelper, WebActions {
     private Faker faker = new Faker();
 
     @Given("^Taf (.*) is set to (.*) for (.*) tenant$")
-    public void updateTafMessageStatus(String autoResponderId, boolean status, String tenantOrgName){
+    public void updateTafMessageStatus(String autoResponderTitle, boolean status, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderId);;
+        AutoResponderMessage autoResponderMessageUpdates = ApiHelper.getAutoResponderMessage(autoResponderTitle);;
         autoResponderMessageUpdates.setEnabled(status);
-        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderId);
+        ApiHelper.updateAutoresponderMessage(autoResponderMessageUpdates, autoResponderTitle);
 
     }
 

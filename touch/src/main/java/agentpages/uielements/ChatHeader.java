@@ -20,7 +20,7 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[data-testid=header-exit-chat]"),
-            @FindBy(css = ".cl-r-end-chat") //old locator
+            @FindBy(css = "[selenium-id='header-exit-chat']") //old locator
     })
     private WebElement endChatButton;
 
@@ -70,6 +70,8 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = "button>svg[name=flag-fill]")
     private WebElement flagOnIcon;
 
+    @FindBy(css =".cl-transfer-history__agent-name")
+    private WebElement agentName;
 
     private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
@@ -208,5 +210,9 @@ public class ChatHeader extends AbstractUIElement {
 
     public boolean isFlagOnButtonDisplayed() {
         return isElementShown(getCurrentDriver(), flagOnIcon, 5);
+    }
+
+    public String getAgentName(){
+        return getTextFromElem(getCurrentDriver(),agentName,2,"Agent Name");
     }
 }

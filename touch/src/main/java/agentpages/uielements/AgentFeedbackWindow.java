@@ -4,6 +4,7 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -14,13 +15,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@FindBy(css = "div.cl-r-modal")
+@FindBy(css = "div.cl-modal")
 public class AgentFeedbackWindow extends AbstractUIElement {
 
     @FindBy(css = "[data-testid=exit-chat-modal-cancel]")
     private WebElement cancelButton;
 
-    @FindBy(css = "[data-testid=exit-chat-modal-save]")
+    @FindAll({
+        @FindBy(css = "[data-testid=exit-chat-modal-save]"),
+        @FindBy(css = "[selenium-id='exit-chat-modal-save']") //todo old locator
+    })
     private WebElement closeChatButton;
 
     @FindBy(css = "[data-testid=sentiment-icon-negative]")
@@ -86,7 +90,7 @@ public class AgentFeedbackWindow extends AbstractUIElement {
     }
 
     public void clickCloseButtonInCloseChatPopup(){
-        clickElem(this.getCurrentDriver(), closeChatButton, 5, "Close button");
+        scrollAndClickElem(this.getCurrentDriver(), closeChatButton, 5, "Close button");
     }
 
     public boolean isEndChatPopupShown (){

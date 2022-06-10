@@ -34,6 +34,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     private static String selectedEmoji;
     private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
+    public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
 
     public static String getSelectedEmoji() {
         return selectedEmoji;
@@ -41,6 +42,10 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     public static ThreadLocal<List<String>> getMessagesFromChatBody() {
         return messagesFromChatBody;
+    }
+
+    public static String getLocationURL(){
+        return locationURL.get();
     }
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
@@ -254,6 +259,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
     }
 
+    @When("^(.*) sends (.*) Location to User$")
+    public void sendLocationToUser(String agent, String locationName) {
+        getAgentHomePage(agent).openLocationWindow().searchLocation(locationName).selectLocation(locationName).clickSendLocationsButton();
+        waitFor(2000);// URL needs time for full creation
+        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURL());
+    }
 
     @When("^(.*) replays with (.*) message$")
     public void respondToUserWithCheck(String agent, String agentMessage) {
@@ -416,7 +427,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getAgentFeedbackWindow().typeCRMTicketNumber("12345");
     }
 
-    @When("(.*) closes chat")
+    @When("^(.*) closes chat$")
     public void closeChat(String agent) {
         getAgentHomePage(agent).endChat();
     }

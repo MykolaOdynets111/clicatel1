@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 
-@FindBy(css = ".preferences-page")
+@FindBy(css = ".cl-preferences-page")
 public class PreferencesWindow extends BasePortalWindow {
 
     @FindBy(css = "[data-testid='sessionsCapacity']")
@@ -21,13 +21,13 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css = "[for='auto-scheduler'] .cl-r-toggle-btn__label")
     private WebElement toggleAutoScheduler;
 
-    @FindBy(css = "[for = 'department-primary-status'] .cl-r-toggle-btn__label")
+    @FindBy(xpath = ".//h3[text()='Route to Specific Departments']/ancestor::div[@class='setting-group-control__header']//div[@class='cl-toggle__label']")
     private WebElement defaultDepartmentCheckbox;
 
-    @FindBy(xpath = "//div[text()='Select department']/ancestor::div[contains(@class,'cl-r-select__control')]")
+    @FindBy(xpath = ".//div[text()='Select department']/ancestor::div[contains(@class,'cl-select__control')]")
     private WebElement defaultDepartmentsDropdown;
 
-    @FindBy(css =".cl-r-select__menu-list .cl-r-select__option")
+    @FindBy(css =".cl-select__menu-list .cl-select__option")
     private List<WebElement> departments;
 
     @FindBy(css ="[for=last-agent-mode] div[class='cl-r-toggle-btn__label']")

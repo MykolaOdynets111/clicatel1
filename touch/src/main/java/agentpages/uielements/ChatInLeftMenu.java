@@ -11,25 +11,36 @@ import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
     @FindAll({
-            @FindBy(css = "[data-testid='avatar']"),
-            @FindBy(css = "[selenium-id='Avatar']")
+        @FindBy(css = "[data-testid='avatar']"),
+        @FindBy(css = "[selenium-id='Avatar']"), //toDo old locator
     })
     private WebElement userIcon;
-
 
     @FindBy(css = ".cl-chat-item-user-name")
     private WebElement userName;
 
-    @FindBy(css = "[data-testid=roster-item-location]")
+    @FindAll({
+        @FindBy(css = "[data-testid=roster-item-location]"),
+        @FindBy(css = "[selenium-id=roster-item-location]"), //toDo old locator
+    })
     private WebElement location;
 
-    @FindBy(css = "[data-testid=chat-item-icons-holder]")
+    @FindAll({
+            @FindBy(css = "[data-testid=chat-item-icons-holder]"),
+            @FindBy(css = "[selenium-id=chat-item-icons-holder]") //toDo old locator
+    })
     private WebElement channelIcon;
 
-    @FindBy(css = "[data-testid='chat-item-icons-holder'] svg")
+    @FindAll({
+            @FindBy(css = "[data-testid='chat-item-icons-holder'] svg"),
+            @FindBy(css = "[selenium-id='chat-item-icons-holder'] svg") //toDo old locator
+    })
     private WebElement adapterWrappedIcon;
 
-    @FindBy(css = "[data-testid='icon-flag-filled'] g")
+    @FindAll({
+            @FindBy(css = "[data-testid='icon-flag-filled'] g"),
+            @FindBy(css = "[selenium-id='icon-flag-filled'] g") //toDo old locator
+    })
     private WebElement flagIcon;
 
     private String flagIconCss = "[data-testid='icon-flag-filled'] g"; //""span.icon.svg-icon-flagged";
@@ -72,9 +83,9 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public boolean isValidImg(String adapter) {
-        File image = new File(System.getProperty("user.dir") + "/touch/src/test/resources/adaptericons/" + adapter + ".png");
-        waitForElementToBeVisible(this.getCurrentDriver(), adapterWrappedIcon, 4);
-        return isWebElementEqualsImage(this.getCurrentDriver(), adapterWrappedIcon, image);
+        File image = new File(System.getProperty("user.dir")+"/src/test/resources/adaptericons/" + adapter + ".png");
+        waitForElementToBeVisible(this.getCurrentDriver(), adapterWrappedIcon,4);
+        return isWebElementEqualsImage(this.getCurrentDriver(), adapterWrappedIcon,image);
     }
 
 

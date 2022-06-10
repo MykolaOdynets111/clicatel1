@@ -7,7 +7,7 @@ Feature: Supervisor desk
   Background:
     Given Create .Control integration for Automation and adapter: fbmsg
     Given Set agent support hours with day shift
-    Given autoSchedulingEnabled is set to false
+    Given Turn off tickets autoScheduling
     Given Prepare payload for sending chat to agent message for .Control
     Given Send parameterized init call with clientId context correct response is returned
     And Send message call
@@ -21,7 +21,7 @@ Feature: Supervisor desk
     Then Verify All tickets, Unassigned, Expired, Assigned ticket types are available
     And User select Unassigned ticket type
     Then Ticket from dotcontrol is present on Unassigned filter page
-    When autoSchedulingEnabled is set to true
+    When Turn on tickets autoScheduling
     And Select dotcontrol ticket checkbox
     When Click 'Assign manually' button
     Then 'Assign chat' window is opened
