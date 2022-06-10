@@ -91,10 +91,17 @@ public class ChatBody extends AbstractUIElement {
     private WebElement rejectTransferIndicator;
 
     @FindBy(css = "[selenium-id='map-chat-message-content-LocationMessage']")
-    private WebElement locationHREF;
+    private WebElement locationHREFFromAgent;
 
-    public String getLocationURL() {
-        return getAttributeFromElem(this.getCurrentDriver(), locationHREF,3, "Location href", "href");
+    @FindBy(css = ".from [selenium-id='map-chat-message-content-LocationMessage']")
+    private WebElement locationHREFFormUser;
+
+    public String getLocationURLFromAgent() {
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,5, "Location href", "href");
+    }
+
+    public String getLocationURLFromUser() {
+        return getAttributeFromElem(this.getCurrentDriver(), locationHREFFormUser,5, "Location href", "href");
     }
 
     private WebElement getFromUserWebElement(String messageText) {

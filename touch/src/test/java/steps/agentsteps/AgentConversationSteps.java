@@ -263,7 +263,13 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     public void sendLocationToUser(String agent, String locationName) {
         getAgentHomePage(agent).openLocationWindow().searchLocation(locationName).selectLocation(locationName).clickSendLocationsButton();
         waitFor(2000);// URL needs time for full creation
-        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURL());
+        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromAgent());
+    }
+
+    @When("^(.*) sees Lviv Location from User$")
+    public void verifyLocationFromUser(String agent){
+        locationURL.set(getAgentHomePage(agent).getChatBody().getLocationURLFromUser());
+        Assert.assertTrue(locationURL.get().contains("Lviv"),  agent+ " didn't get Lviv location");
     }
 
     @When("^(.*) replays with (.*) message$")

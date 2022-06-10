@@ -45,7 +45,6 @@ public class ORCASteps implements WebWait {
         System.out.println("Orca artifacts were removed");
     }
 
-
     @Given("^Send (.*) message by ORCA$")
     public void sendOrcaMessage(String message) {
         if (orcaMessageCallBody.get() == null) {
@@ -59,6 +58,14 @@ public class ORCASteps implements WebWait {
             orcaMessageCallBody.get().getContent().getEvent().setText(message);
             System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         }
+        ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+    }
+
+    @When("^User send Lviv location message to agent by ORCA$")
+    public void sendLocationMessage(){
+        Event locationEvent = Event.builder().address("Lviv, Lviv Oblast, Ukraine, 79000").
+                name("Lviv").eventType("LOCATION").latitude("49.839683").longitude("24.029717").build();
+        orcaMessageCallBody.get().getContent().setEvent(locationEvent);
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 

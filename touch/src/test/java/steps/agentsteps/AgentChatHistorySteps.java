@@ -192,7 +192,7 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
     @Then("^(.*) sees correct Location Url in closed chat body$")
     public void verifyLocationURLInClosedChat(String agent){
         waitFor(2000);//wait till URL will be fully loaded
-        String url = getAgentHomePage(agent).getChatBody().getLocationURL();
+        String url = getAgentHomePage(agent).getChatBody().getLocationURLFromAgent();
         Assert.assertEquals(url, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
     }
 
