@@ -718,4 +718,22 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
+
+    @When("^(.*) click on location button")
+    public void agentClickOnTheLocationButton(String agent) {
+        getAgentHomePage(agent).getLeftMenuWithChats().clickonLocationButton();
+
+    }
+
+    @Then("Agent type on search location field")
+    public void agentTypeOnSearchLocationField() {
+    }
+
+    @When("Agent click cross button")
+    public void agentClickCrossButton() {
+    }
+
+    @Then("location field becomes empty")
+    public void locationFieldBecomesEmpty() {
+    }
 }

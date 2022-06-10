@@ -455,7 +455,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON).body(configuration)
-                .put(String.format(Endpoints.UpdateSURVEY_MANAGEMENT, channelID));
+                .put(String.format(Endpoints.UPDATE_SURVEY_MANAGEMENT, channelID));
         if (!(resp.statusCode() == 200)) {
             Assert.fail("Failed to update survey, status code = " + resp.statusCode() +
                     "\n Body: " + resp.getBody().asString());

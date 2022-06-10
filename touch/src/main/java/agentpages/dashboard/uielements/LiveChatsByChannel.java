@@ -15,7 +15,6 @@ public class LiveChatsByChannel extends AbstractUIElement {
     private WebElement webChatChart;
 
     @FindBy(css = ".cl-bar-chart__bar.bar-ABC")
-    //@FindBy(css = "div.cl-fetch-states:nth-child(2) div.full-height.show div.dashboard-container div.cl-routed-tabs div.cl-routed-tabs__tab-panel div.customers-overview div.cl-tabs.cl-tabs--rounded-buttons div.cl-tabs__tab-panel.px-0.react-tabs__tab-panel--selected:nth-child(2) div.live-customers div.stats-box.live-box:nth-child(3) div.channel-stats:nth-child(4) div.channel-stats__channel-info > span.channel-info__text")
     private WebElement abcChart;
 
     @FindBy(css = ".bar-WHATSAPP")

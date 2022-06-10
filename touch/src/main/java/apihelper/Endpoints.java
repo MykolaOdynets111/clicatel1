@@ -26,7 +26,7 @@ public class Endpoints {
 
     public static String INTEGRATIONS_ENABLING_DISABLING = URLs.getTouchApiBaseURL() + "integrations/channel/enable";
 
-    public static String INTEGRATION_EXISTING_CHANNELS = URLs.getTouchApiBaseURL() + "api/channel";
+    public static String INTEGRATION_EXISTING_CHANNELS = URLs.getBaseWSApiURL() + "channel";
 
     public static String INTEGRATIONS = URLs.getTouchApiBaseURL() + "integrations";
 
@@ -62,9 +62,9 @@ public class Endpoints {
 
     public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
 
-    public static String SURVEY_MANAGEMENT = URLs.getTouchApiBaseIntegrationURL() + "api/channel/%s";
+    public static String SURVEY_MANAGEMENT = URLs. getBaseWSApiURL() + "channel/%s";
 
-    public static String UpdateSURVEY_MANAGEMENT = URLs.getTouchApiBaseIntegrationURLUpdate() + "api/platform/channel/abc-orca/%s/survey-config";
+    public static String UPDATE_SURVEY_MANAGEMENT = URLs.getAgentDeskURL() + "api/platform/channel/abc-orca/%s/survey-config";
 
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 

@@ -20,7 +20,10 @@ import java.util.stream.Collectors;
 @FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-    @FindBy(css = "a[data-testid^=chat-list-item]")
+    @FindAll({
+    @FindBy(css = "a[data-testid^=chat-list-item]"),
+    @FindBy(css = "a[selenium-id^=chat-list-item]")
+    })
     private List<WebElement> newConversationRequests;
 
     @FindBy(css = "[data-testid=filter-dropdown-menu]")
@@ -70,6 +73,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(css ="button .cl-r-button--reset-only")
     private WebElement filterRemove;
+
+    //@FindBy (css = ".cl-message-sender .cl-message-composer .cl-message-composer__inner .cl-message-composer__tools-bar .cl-button cl-button--reset-only[selenium-id~=message-composer-location]" )
+    @FindBy (css = "#Union")
+    private WebElement locationButton;
 
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
@@ -307,5 +314,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
         return chatsList.stream()
                 .map(e-> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
+    }
+    public void clickonLocationButton(){
+        clickElem(this.getCurrentDriver(), locationButton, 2,"LocationButton");
     }
 }

@@ -14,9 +14,13 @@ public class GeneralSentimentPerChannel extends AbstractUIElement {
 
     private final String sentimentChartsByChannelXpath =
             ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'cl-bar-chart__bar ')]";
+
     private final String positiveSentimentChartByChannelXpath =
             ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'bar-positiveSentiments')]";
-    private final String NerutralSentimaentByChannel = "cl-bar-chart__bar bar-neutralSentiments";
+
+    private final String NerutralSentimaentChartByChannelXpath =
+            ".//span[text()='%s']/ancestor::div[@class='channel-stats']//div[contains(@class, 'channel-stats__charts channel-stats__charts--sentiments')]";
+
     @FindBy(css = ".channel-stats .cl-bar-chart__bar")
     private List<WebElement> sentimentsCharts;
 
@@ -35,7 +39,7 @@ public class GeneralSentimentPerChannel extends AbstractUIElement {
 
     public boolean isNumberOfSentimentsShownForAllSentimentsCharts(String channel) {
         hoverElemByXpath(unpackWebDriverFromSearchContext(this.getWrappedElement()),
-                String.format(NerutralSentimaentByChannel, channel), 5,
+                String.format(NerutralSentimaentChartByChannelXpath, channel), 5,
                 "Neutral sentiment chart");
         return isNumberOfSentimentShownInTooltip();
     }

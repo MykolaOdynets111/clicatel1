@@ -78,12 +78,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @When("^Agent select (.*) as number limit from dropdown$")
-    public void selectLimitOption(String limitNumber) throws InterruptedException {
+    public void selectLimitOption(String limitNumber) {
         surveyWebChatForm.getSurveysInner().selectDropdownOption(limitNumber);
     }
 
     @When("^Agent select (.*) as number limit from dropdown for (.*) survey form$")
-    public void selectLimitOption(String limitNumber, String surveyForm) throws InterruptedException {
+    public void selectLimitOption(String limitNumber, String surveyForm) {
         if (surveyForm.equalsIgnoreCase("abc")) {
             getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().selectDropdownOption(limitNumber);
         } else {

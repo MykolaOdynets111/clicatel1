@@ -15,7 +15,7 @@ Feature: Apple Business Chat :: Surveys
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118516")
   Scenario: ABC: : Surveys: Verify if the survey preview header for Apple shows as Apple Business Chat Preview
     And I open portal
     Given Login into portal as an admin of General Bank Demo account

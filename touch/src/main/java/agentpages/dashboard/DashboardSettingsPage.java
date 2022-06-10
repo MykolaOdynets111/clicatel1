@@ -2,6 +2,7 @@ package agentpages.dashboard;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
@@ -23,10 +24,13 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
     private WebElement preferences;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-surveys']")
+    @FindAll({
+            @FindBy(css = "[data-testid='tab-navigation-panel-surveys']"),
+            @FindBy(css = "[selenium-id='tab-navigation-panel-surveys']")
+    })
     private WebElement surveysNavigation;
 
-    public void openSettingsPage(String settingsName){
+    public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
                 clickElem(this.getCurrentDriver(), businessProfile, 2, "Business Profile");

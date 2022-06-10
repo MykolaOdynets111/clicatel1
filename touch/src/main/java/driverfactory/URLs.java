@@ -34,10 +34,9 @@ public class URLs {
 
     private static String BASE_TOUCH_API_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
-    //private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
-    private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
-    private static String BASE_TOUCH_API_INTEGRATION_URLUpdate = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
+    private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
 
+    private static String BASE_TOUCH_API_INTEGRATION_URLUpdate = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
 
@@ -102,10 +101,6 @@ public class URLs {
 
     public static String getTouchApiBaseIntegrationURL(){
         return String.format(BASE_TOUCH_API_INTEGRATION_URL, ConfigManager.getEnv());
-    }
-
-    public static String getTouchApiBaseIntegrationURLUpdate(){
-        return String.format(BASE_TOUCH_API_INTEGRATION_URLUpdate, ConfigManager.getEnv());
     }
 
     public static String getBaseInternalApiUrl(){

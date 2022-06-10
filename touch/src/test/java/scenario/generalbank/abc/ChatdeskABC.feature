@@ -12,8 +12,7 @@ Feature: Apple Business Chat :: Chatdesk
     Then Conversation area becomes active with connect to Support user's message
     Then Valid image for abc integration are shown in left menu with chat
     And Agent should see abcHeader icon in active chat header
-    When Send //end message by ORCA
-    Then Agent should not see from user chat in agent desk from orca
+
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
@@ -24,8 +23,7 @@ Feature: Apple Business Chat :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
-    When Send //end message by ORCA
-    Then Agent should not see from user chat in agent desk from orca
+
 
   @orca_api
   @start_orca_server
@@ -48,8 +46,6 @@ Feature: Apple Business Chat :: Chatdesk
     Then Conversation area becomes active with connect to agent user's message in it for second agent
     When Second agent responds with hello to User
     #Then Verify Orca returns hello response during 40 seconds
-    When Send //end message by ORCA
-    Then Agent should not see from user chat in agent desk from orca
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45510")
   Scenario: Chatdesk:: Verify if agent can filter closed chat using Apple business chat channel

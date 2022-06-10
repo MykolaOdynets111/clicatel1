@@ -4,13 +4,16 @@ import abstractclasses.AbstractWidget;
 import apihelper.ApiHelperTie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 
 public class ChatInLeftMenu extends AbstractWidget {
-
-    @FindBy(css = "[data-testid='avatar']")
+    @FindAll({
+            @FindBy(css = "[data-testid='avatar']"),
+            @FindBy(css = "[selenium-id='Avatar']")
+    })
     private WebElement userIcon;
 
 
@@ -29,7 +32,7 @@ public class ChatInLeftMenu extends AbstractWidget {
     @FindBy(css = "[data-testid='icon-flag-filled'] g")
     private WebElement flagIcon;
 
-    private String flagIconCss =  "[data-testid='icon-flag-filled'] g"; //""span.icon.svg-icon-flagged";
+    private String flagIconCss = "[data-testid='icon-flag-filled'] g"; //""span.icon.svg-icon-flagged";
 
     @FindBy(css = "[selenium-icon-user-single]")
     private WebElement usercImg;
@@ -46,7 +49,7 @@ public class ChatInLeftMenu extends AbstractWidget {
         super(element);
     }
 
-    public ChatInLeftMenu setCurrentDriver(WebDriver currentDriver){
+    public ChatInLeftMenu setCurrentDriver(WebDriver currentDriver) {
         this.currentDriver = currentDriver;
         return this;
     }
@@ -65,25 +68,25 @@ public class ChatInLeftMenu extends AbstractWidget {
     }
 
     public String getLastMessageText() {
-            return messageText.getAttribute("innerText").trim();
+        return messageText.getAttribute("innerText").trim();
     }
 
     public boolean isValidImg(String adapter) {
-        File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/adaptericons/" + adapter + ".png");
-        waitForElementToBeVisible(this.getCurrentDriver(), adapterWrappedIcon,4);
-        return isWebElementEqualsImage(this.getCurrentDriver(), adapterWrappedIcon,image);
+        File image = new File(System.getProperty("user.dir") + "/touch/src/test/resources/adaptericons/" + adapter + ".png");
+        waitForElementToBeVisible(this.getCurrentDriver(), adapterWrappedIcon, 4);
+        return isWebElementEqualsImage(this.getCurrentDriver(), adapterWrappedIcon, image);
     }
 
 
-    public boolean isValidIconSentiment(String message){
+    public boolean isValidIconSentiment(String message) {
         String sentiment = ApiHelperTie.getTIESentimentOnMessage(message).toLowerCase();
-        File image =new File(System.getProperty("user.dir")+"/touch/src/test/resources/sentimenticons/"+sentiment+".png");
+        File image = new File(System.getProperty("user.dir") + "/touch/src/test/resources/sentimenticons/" + sentiment + ".png");
         return isWebElementEqualsImage(this.getCurrentDriver(), userSentiment, image);
     }
 
-    public String getChatsChannel(){
+    public String getChatsChannel() {
         String iconClass = channelIcon.getAttribute("class");
-        switch (iconClass){
+        switch (iconClass) {
             case "icon svg-icon-webchat":
                 return "touch";
             case "icon svg-icon-fbmsg":
@@ -91,31 +94,31 @@ public class ChatInLeftMenu extends AbstractWidget {
             case "icon icon-fbpost":
                 return "fb post";
             default:
-                return "unknown icon with tag span[@class='"+iconClass+"']";
+                return "unknown icon with tag span[@class='" + iconClass + "']";
         }
     }
 
-    public String getAdapterIconName(){
+    public String getAdapterIconName() {
         return adapterWrappedIcon.getAttribute("name").trim();
     }
 
-    public boolean isOvernightTicketIconShown(){
-        return  isElementExistsInDOMCss(this.getCurrentDriver(), overnightTicketIcon, 10);
+    public boolean isOvernightTicketIconShown() {
+        return isElementExistsInDOMCss(this.getCurrentDriver(), overnightTicketIcon, 10);
     }
 
-    public boolean isFlagIconShown(){
+    public boolean isFlagIconShown() {
         return isElementShown(this.getCurrentDriver(), flagIcon, 10);
     }
 
-    public boolean isFlagIconRemoved(){
+    public boolean isFlagIconRemoved() {
         return isElementRemoved(this.getCurrentDriver(), findElemByCSS(this.getCurrentDriver(), flagIconCss), 3);
     }
 
-    public boolean isProfileIconNotShown(){
+    public boolean isProfileIconNotShown() {
         return isElementRemoved(this.getCurrentDriver(), usercImg, 3);
     }
 
-    public boolean isOvernightTicketRemoved(){
+    public boolean isOvernightTicketRemoved() {
         return isElementRemovedByCSS(this.getCurrentDriver(), overnightTicketIcon, 10);
     }
 }

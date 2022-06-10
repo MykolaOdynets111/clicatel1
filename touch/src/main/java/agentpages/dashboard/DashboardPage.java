@@ -5,6 +5,7 @@ import agentpages.dashboard.uielements.*;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
 
@@ -41,7 +42,10 @@ public class DashboardPage extends PortalAbstractPage {
     @FindBy(xpath = "//a[text()='Departments Management']")
     private WebElement departmentsManagementButton;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-customers']")
+    @FindAll({
+            @FindBy(css = "[data-testid='tab-navigation-panel-customers']"),
+            @FindBy(css = "[selenium-id='tab-dashboard-tabs-2']")
+    })
     private WebElement customersOverviewTabButton;
 
     @FindBy(css = "[data-testid='tab-dashboard-tabs-1']")
