@@ -56,7 +56,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(css = "[data-testid=unread-msg-count]")
     private WebElement userMsgCount;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-live']")
+    @FindAll({
+        @FindBy(css = "[data-testid='tab-navigation-panel-live']"),
+        @FindBy(xpath = "//a[contains(text(),'Tickets')]")
+    })
     private WebElement liveChats;
 
     @FindBy(css = "[data-testid='tab-navigation-panel-tickets']")

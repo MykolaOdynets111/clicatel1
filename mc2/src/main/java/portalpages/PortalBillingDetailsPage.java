@@ -26,6 +26,15 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(xpath = "//header//button[@ng-click='topUpBalance()']")
     private WebElement topUpBalanceButton;
 
+    @FindBy(xpath="//input[@name='orderNumber']")
+    private WebElement orderNub;
+
+    @FindBy(xpath = "//input[@name='price']")
+    private WebElement OrderPrice;
+
+    @FindBy()
+    private WebElement SendButton;
+
     private BillingContactsDetails billingContactsDetails;
 
     private AddPaymentMethodWindow addPaymentMethodWindow;
@@ -77,6 +86,26 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
         clickElem(this.getCurrentDriver(), addPaymentMethodButton, 3, "Add Payment Method");
     }
 
+    @Step(value="Click 'order number' field")
+    public PortalBillingDetailsPage setOrderNumberField(String order)
+    {
+        clickElem(this.getCurrentDriver(), orderNub, 10, "order");
+        orderNub.clear();
+        orderNub.sendKeys(order);
+        return this;
+    }
+    @Step(value="Click 'order number' field")
+    public PortalBillingDetailsPage setPriceForOrder(String price)
+    {
+        clickElem(this.getCurrentDriver(), OrderPrice, 10, "price");
+        OrderPrice.clear();
+        OrderPrice.sendKeys(price);
+        return this;
+    }
+    @Step(value = "Click Create button")
+    public void clickSendButton(){
+        clickElem(this.getCurrentDriver(), SendButton, 10, "Send button");
+    }
 
     public PaymentMethod getTargetPaymentMethod(String cartHolder){
         try{

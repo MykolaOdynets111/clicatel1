@@ -47,6 +47,11 @@ public class DashboardSteps extends AbstractPortalSteps {
         getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomers();
     }
 
+    @And("^Agent click on Live Customers on dashboard$")
+    public void agentClickOnLiveCustomer() {
+        getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();
+    }
+
     @Then("^Admin is able to see (.*) graphs$")
     public void adminIsAbleToSeeNPSLiveChatsByChannelPastSentimentGraphs(List<String> graphs) {
         SoftAssert softAssert = new SoftAssert();

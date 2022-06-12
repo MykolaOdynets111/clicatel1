@@ -262,8 +262,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 //        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
 //                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
 //    }
-
-
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         // ToDo: Update after clarifying timeout in System timeouts
@@ -272,7 +270,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
         );
     }
-
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
     public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
         String userName = getUserName(social);
@@ -280,9 +277,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Conversation request is not removed from Agent Desk (Client ID: "+userName+")"
         );
     }
-
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
-    public void acceptUserFromSocialConversation(String agent, String socialChannel) {
+    public void acceptUserFromSocialConversation(String agent, String socialChannel)
+    {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
         getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
     }
@@ -717,5 +714,95 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^(.*) types a customer name \"([^\"]*)\" on the search field$")
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
+    }
+    @When("Agent click on the Extension icon from live chat")
+    public void agent_click_on_the_extension_icon_from_live_chat()
+    {
+
+
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("Card with a chat2Pay option should be click by Agent")
+    public void card_with_a_chat2pay_option_should_be_click_by_agent() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("Agent fill the price and order number in payment modal")
+    public void agent_fill_the_price_and_order_number_in_payment_modal() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("click on submit for payment request")
+    public void click_on_submit_for_payment_request() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("wait for the Payment confirmation request should")
+    public void wait_for_the_payment_confirmation_request_should() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Given("C2P is integrated with Chat Desk for the tenant.")
+    public void c2p_is_integrated_with_chat_desk_for_the_tenant()
+    {
+        getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();
+        throw new io.cucumber.java.PendingException();
+    }
+    @And("click on C2P Payment Option")
+    public void clickOnPaymentExtension()
+    {
+        getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
+        throw new io.cucumber.java.PendingException();
+    }
+    @And("Click on Chat to Pay popup option button chat section")
+    public void clickOnChatToPayOption()
+    {
+        getDashboardPage().getCustomersOverviewTab().clickOnChatToPayOption();
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("Click on Send Chat to Pay Link OrderNumber")
+    public void SendChatToPayLink(String order, String price)
+    {
+        getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Given("user initiates a chat from WhatsApp channel")
+    public void user_initiates_a_chat_from_whats_app_channel() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @When("agent logs into agent desk")
+    public void agent_logs_into_agent_desk() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("Agent fill the price and order number in the payment modal")
+    public void agent_fill_the_price_and_order_number_in_the_payment_modal() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("send the payment request")
+    public void send_the_payment_request() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("payment confirmation \\(payment received, failed, expired or canceled) is not received")
+    public void payment_confirmation_payment_received_failed_expired_or_canceled_is_not_received() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("the chat is closed")
+    public void the_chat_is_closed() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 }

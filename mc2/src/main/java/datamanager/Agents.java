@@ -131,7 +131,7 @@ public enum Agents {
         return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
-                        && !e.getAgentEmail().contains("second"))
+                       && !e.getAgentEmail().contains("second"))
                 .findFirst().orElseThrow(() -> new AssertionError(
                         "No admin user found for " + tenantOrgName + ", env: " + ConfigManager.getEnv()));
     }
@@ -140,7 +140,8 @@ public enum Agents {
         return Arrays.stream(Agents.values())
                 .filter(e -> e.getAgentEnv().equalsIgnoreCase(ConfigManager.getEnv())
                         && e.getAgentTenant().equalsIgnoreCase(tenantOrgName)
-                        && e.toString().toLowerCase().contains("second"))
+                       && e.toString().toLowerCase().contains("second"))
+
                 .findFirst().orElseThrow(() -> new AssertionError(
                         "No second agent found for " + tenantOrgName + ", env: " + ConfigManager.getEnv()));
     }

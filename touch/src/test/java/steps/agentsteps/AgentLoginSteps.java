@@ -21,9 +21,11 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        if (ConfigManager.isMc2()) {
+        if (ConfigManager.isMc2())
+        {
             loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
-        }else {
+        }else
+        {
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).openPortalLoginPage();
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
                     .selectAgent(ordinalAgentNumber).clickAuthenticateButton();
