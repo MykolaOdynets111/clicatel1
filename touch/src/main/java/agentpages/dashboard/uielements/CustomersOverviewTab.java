@@ -25,6 +25,9 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = "cl-card--c2p cl-card--c2p-extension xh-highlight")
     private WebElement ChatToPay;
 
+    @FindBy(xpath = "//button[@type='button']/text()='Cancel Payment'")
+    private WebElement cancelPaymentButton;
+
     @FindBy(xpath="//*[@selenium-id='message-composer-extensions']")
     private WebElement PaymentExtensionButton;
     @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:first-child .cl-r-select__indicators")
@@ -53,6 +56,12 @@ public class CustomersOverviewTab extends AbstractUIElement {
     public void clickOnPaymentExtension() {
         waitForElementToBeVisible(this.getCurrentDriver(), AgentLiveCustomer, 5);
         AgentLiveCustomer.click();
+    }
+
+    public void clickCancelPaymentButton(String CancelPaymentButton)
+    {
+        waitForElementToBeVisible(this.getCurrentDriver(), cancelPaymentButton, 5);
+        cancelPaymentButton.click();
     }
 
     public void clickOnChatToPayOption()

@@ -756,6 +756,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
         throw new io.cucumber.java.PendingException();
     }
+
     @And("Click on Chat to Pay popup option button chat section")
     public void clickOnChatToPayOption()
     {
@@ -763,15 +764,17 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         throw new io.cucumber.java.PendingException();
     }
 
-    @Then("Click on Send Chat to Pay Link OrderNumber")
-    public void SendChatToPayLink(String order, String price)
+    @Then("Click on Send Chat to Pay {int} and Link {int} OrderNumber")
+    public void SendChatToPayLink(int order, int price)
     {
         getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
         throw new io.cucumber.java.PendingException();
     }
 
-    @Given("user initiates a chat from WhatsApp channel")
-    public void user_initiates_a_chat_from_whats_app_channel() {
+    @Given("Agent click on \"Cancel Payment\" request")
+    public void agentClickOnCancelPaymentButton(String CancelPaymentButton)
+    {
+        getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton(CancelPaymentButton);
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }

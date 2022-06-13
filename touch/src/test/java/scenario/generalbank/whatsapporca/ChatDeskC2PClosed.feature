@@ -14,7 +14,9 @@ Feature: CD :: Agent Desk :: Closed Chat :: Chat2Pay :: Verify that the customer
     Then C2P is integrated with Chat Desk for the tenant.
     And click on C2P Payment Option
     And  Click on Chat to Pay popup option button chat section
-    Then Click on Send Chat to Pay Link OrderNumber
-    And user initiates a chat from WhatsApp channel
+    Then Click on Send Chat to Pay 1000 and Link 1223 OrderNumber
+    And Wait for 20 second
+    Then Agent click on "Cancel Payment" request
+    Then Verify Orca returns PAYMENT_LINK_CANCELLED response during 40 seconds
     When Send //end message by ORCA
     Then the chat is closed
