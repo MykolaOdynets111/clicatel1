@@ -87,19 +87,13 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     }
 
     @Step(value="Click 'order number' field")
-    public PortalBillingDetailsPage setOrderNumberField(int order)
-    {
-        clickElem(this.getCurrentDriver(), orderNub, 10, "order");
-        orderNub.clear();
-        orderNub.sendKeys("order");
+    public PortalBillingDetailsPage setOrderNumberField(String order) {
+        inputText(this.getCurrentDriver(), orderNub, 5, "order", order);
         return this;
     }
     @Step(value="Click 'order number' field")
-    public PortalBillingDetailsPage setPriceForOrder(int price)
-    {
-        clickElem(this.getCurrentDriver(), OrderPrice, 10, "price");
-        OrderPrice.clear();
-        OrderPrice.sendKeys("price");
+    public PortalBillingDetailsPage setPriceForOrder(String price) {
+        inputText(this.getCurrentDriver(), OrderPrice, 3, "Widget input", price);
         return this;
     }
     @Step(value = "Click Create button")

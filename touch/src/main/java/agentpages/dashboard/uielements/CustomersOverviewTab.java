@@ -49,7 +49,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     }
 
     public void clickOnLiveCustomer() {
-        waitForElementToBeVisible(this.getCurrentDriver(), LiveCustomer, 5);
+        clickElem(this.getCurrentDriver(),LiveCustomer,5,"Live Customer" );
         LiveCustomer.click();
     }
 

@@ -1,8 +1,8 @@
 @no_widget
-Feature : ChatDeskC2PClosed
+Feature: Chat2Pay ::Chat2PayPaymentConfirmation
+
   @orca_api
-  @adding_payment_method
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118471")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118473")
   Scenario: ChatDesk:: Agent Initiate to Live Chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant

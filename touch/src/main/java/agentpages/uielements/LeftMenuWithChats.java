@@ -20,7 +20,10 @@ import java.util.stream.Collectors;
 @FindBy(xpath = "//div[@class = 'agent-view--left-sidebar' or @class = 'supervisor-view-group-chats-by']/div[1]")
 public class LeftMenuWithChats extends AbstractUIElement {
 
-    @FindBy(css = "a[data-testid^=chat-list-item]")
+    @FindAll({
+            @FindBy(css = "a[data-testid^=chat-list-item]"),
+            @FindBy(css = "a[selenium-id^=chat-list-item]") //toDo old locator
+            })
     private List<WebElement> newConversationRequests;
 
     @FindBy(css = "[data-testid=filter-dropdown-menu]")

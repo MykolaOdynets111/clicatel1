@@ -765,7 +765,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Then("Click on Send Chat to Pay {int} and Link {int} OrderNumber")
-    public void SendChatToPayLink(int order, int price)
+    public void SendChatToPayLink(String order, String price)
     {
         getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
         throw new io.cucumber.java.PendingException();
