@@ -783,9 +783,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("Verify Move to pending chat can be seen in the pending tab")
     public void verifyMoveToPendingChatDisplayInPendingTab(){
         getDashboardPage().getCustomersOverviewTab().clickOnPendingTab();
-        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
-                channelName + " channel name should be shown.");
-
     }
     @And("Agent click on option \"Move to Pending\" from notification")
     public void agentClickOnMoveToPendingOption() {
