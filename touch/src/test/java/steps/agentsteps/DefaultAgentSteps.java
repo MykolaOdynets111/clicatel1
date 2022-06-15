@@ -745,29 +745,51 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     }
 
     @Given("C2P is integrated with Chat Desk for the tenant.")
-    public void c2p_is_integrated_with_chat_desk_for_the_tenant()
-    {
+    public void c2p_is_integrated_with_chat_desk_for_the_tenant() {
         getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();
         throw new io.cucumber.java.PendingException();
     }
     @And("click on C2P Payment Option")
-    public void clickOnPaymentExtension()
-    {
+    public void clickOnPaymentExtension() {
         getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
         throw new io.cucumber.java.PendingException();
     }
 
-    @And("Click on Chat to Pay popup option button chat section")
-    public void clickOnChatToPayOption()
-    {
+    @And("Agent Click on Chat to Pay popup option button chat section")
+    public void clickOnChatToPayOption() {
         getDashboardPage().getCustomersOverviewTab().clickOnChatToPayOption();
         throw new io.cucumber.java.PendingException();
     }
 
-    @Then("Click on Send Chat to Pay {int} and Link {int} OrderNumber")
-    public void SendChatToPayLink(String order, String price)
-    {
+    @And("Agent closes the chat from agent desk")
+    public void AgentClickClosedChat() {
+        getDashboardPage().getCustomersOverviewTab().clickClosedChatButton();
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("Agent Click on Send Chat to Pay {int} and Link {int} OrderNumber")
+    public void SendChatToPayLink(String order, String price) {
         getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @And("Agent notify \"Cannot close chat\" notification modal open")
+    public void notifyCannotCloseChat(String agent) {
+        String ExpectedClosedChatWindowHeader = "Cannot close chat";
+        String ActualClosedChatWindowHeader = getChatHeader(agent).getCloseChatHeaderText();
+        Assert.assertEquals(ExpectedClosedChatWindowHeader,ActualClosedChatWindowHeader);
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @Then("Verify Move to pending chat can be seen in the pending tab")
+    public void verifyMoveToPendingChatDisplayInPendingTab(){
+        getDashboardPage().getCustomersOverviewTab().clickOnPendingTab();
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorTicketsTable().verifyChanelOfTheTicketsIsPresent(channelName),
+                channelName + " channel name should be shown.");
+
+    }
+    @And("Agent click on option \"Move to Pending\" from notification")
+    public void agentClickOnMoveToPendingOption() {
+        getDashboardPage().getCustomersOverviewTab().clickMoveToPendingButton();
         throw new io.cucumber.java.PendingException();
     }
 
@@ -775,30 +797,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentClickOnCancelPaymentButton(String CancelPaymentButton)
     {
         getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton(CancelPaymentButton);
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @When("agent logs into agent desk")
-    public void agent_logs_into_agent_desk() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("Agent fill the price and order number in the payment modal")
-    public void agent_fill_the_price_and_order_number_in_the_payment_modal() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("send the payment request")
-    public void send_the_payment_request() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("payment confirmation \\(payment received, failed, expired or canceled) is not received")
-    public void payment_confirmation_payment_received_failed_expired_or_canceled_is_not_received() {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }

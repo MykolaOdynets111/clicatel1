@@ -32,7 +32,7 @@ public class PortalBillingDetailsPage extends PortalAbstractPage {
     @FindBy(xpath = "//input[@name='price']")
     private WebElement OrderPrice;
 
-    @FindBy()
+    @FindBy(css="[div.cl-chat-to-pay-modal-footer-buttons > button.cl-button.cl-button--primary]")
     private WebElement SendButton;
 
     private BillingContactsDetails billingContactsDetails;

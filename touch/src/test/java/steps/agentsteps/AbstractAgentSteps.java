@@ -146,15 +146,13 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getProfile();
     }
 
-    public static PageHeader getPageHeader(String agent){
+    public static PageHeader getPageHeader(String agent) {
         return getAgentHomePage(agent).getPageHeader();
     }
-
 
     public static ChatHeader getChatHeader(String agent){
         return getAgentHomePage(agent).getChatHeader();
     }
-
     public static void cleanAllPages(){
         currentAgentLoginPage.remove();
         secondAgentLoginPage.remove();

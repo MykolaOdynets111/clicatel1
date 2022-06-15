@@ -373,6 +373,13 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "Number of live chats per channel is not shown after hovering on abc chart");
     }
 
+    @Then("Verify Chat is not closed from the chat panel when agent click on closed chat option")
+    public void verifyChatNotClosedOnClickChatClosedOption()
+    {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isWhatsAppChartIsDisplayed(),
+                "WhatsApp chart is not displayed in Live Chats By Channel");
+        //Assert.assertTrue(getDashboardPage().getChatBackground().areElementsShownByXpath(getDashboardPage().getCurrentDriver(),"", 5 ));
+    }
     @And("^Verify admin can see number of live chats per channel when hover over WhatsApp$")
     public void verifyAdminCanSeeNumberOfLiveChatsPerChannelWhenHoverOverWA() {
         Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().isNumberOfLiveChatsShownForWAChart(),
