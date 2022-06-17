@@ -134,7 +134,6 @@ public class DashboardSteps extends AbstractPortalSteps {
                 "WhatsApp chart is not displayed in Live Chats By Channel");
     }
 
-
     @Then("^Admin should see (.*) charts in General sentiment per channel$")
     public void adminShouldSeeAbcChartInGeneralSentimentPerChannel(String channel) {
         Assert.assertTrue(getDashboardPage().getGeneralSentimentPerChannel().isChartsForChannelShown(channel),

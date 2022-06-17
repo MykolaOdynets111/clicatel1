@@ -10,6 +10,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en_scouse.An;
 import mc2api.auth.PortalAuthToken;
 import datamanager.*;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
@@ -80,6 +81,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
         Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
                 feature + " feature is not expected");
+    }
+
+    @And("agent click Whatsapp message icon button on the top bar")
+    public void clickWhatsappIcon()
+    {
+        getDashboardPage().getCustomersOverviewTab().clickOnWhatsapp();
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -715,61 +722,29 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
-    @When("Agent click on the Extension icon from live chat")
-    public void agent_click_on_the_extension_icon_from_live_chat()
-    {
-
-
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("Card with a chat2Pay option should be click by Agent")
-    public void card_with_a_chat2pay_option_should_be_click_by_agent() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("Agent fill the price and order number in payment modal")
-    public void agent_fill_the_price_and_order_number_in_payment_modal() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("click on submit for payment request")
-    public void click_on_submit_for_payment_request() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-    @Then("wait for the Payment confirmation request should")
-    public void wait_for_the_payment_confirmation_request_should() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
 
     @Given("C2P is integrated with Chat Desk for the tenant.")
     public void c2p_is_integrated_with_chat_desk_for_the_tenant() {
         getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();
-        throw new io.cucumber.java.PendingException();
-    }
-    @And("click on C2P Payment Option")
-    public void clickOnPaymentExtension() {
-        getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
-        throw new io.cucumber.java.PendingException();
     }
 
-    @And("Agent Click on Chat to Pay popup option button chat section")
+    @And("click on C2P Payment extension Option")
+    public void clickOnPaymentExtension() {
+        getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
+    }
+
+    @And("Agent Click on Chat to Pay popup option button from chat section")
     public void clickOnChatToPayOption() {
         getDashboardPage().getCustomersOverviewTab().clickOnChatToPayOption();
-        throw new io.cucumber.java.PendingException();
     }
 
     @And("Agent closes the chat from agent desk")
     public void AgentClickClosedChat() {
         getDashboardPage().getCustomersOverviewTab().clickClosedChatButton();
-        throw new io.cucumber.java.PendingException();
     }
     @Then("Agent Click on Send Chat to Pay {int} and Link {int} OrderNumber")
     public void SendChatToPayLink(String order, String price) {
         getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
-        throw new io.cucumber.java.PendingException();
     }
 
     @And("Agent notify \"Cannot close chat\" notification modal open")
@@ -777,7 +752,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         String ExpectedClosedChatWindowHeader = "Cannot close chat";
         String ActualClosedChatWindowHeader = getChatHeader(agent).getCloseChatHeaderText();
         Assert.assertEquals(ExpectedClosedChatWindowHeader,ActualClosedChatWindowHeader);
-        throw new io.cucumber.java.PendingException();
     }
 
     @Then("Verify Move to pending chat can be seen in the pending tab")
@@ -787,20 +761,10 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("Agent click on option \"Move to Pending\" from notification")
     public void agentClickOnMoveToPendingOption() {
         getDashboardPage().getCustomersOverviewTab().clickMoveToPendingButton();
-        throw new io.cucumber.java.PendingException();
     }
 
     @Given("Agent click on \"Cancel Payment\" request")
-    public void agentClickOnCancelPaymentButton(String CancelPaymentButton)
-    {
-        getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton(CancelPaymentButton);
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("the chat is closed")
-    public void the_chat_is_closed() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void agentClickOnCancelPaymentButton() {
+        getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton();
     }
 }

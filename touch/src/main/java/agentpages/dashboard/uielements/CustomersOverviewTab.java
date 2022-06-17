@@ -13,6 +13,9 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = "[data-testid='tab-customers-overview-tabs-1']")
     private WebElement customersHistoryButton;
 
+    @FindBy(css="[button.cl-button.cl-button--reset-only.cl-button--full-width.cl-button--ac-left.cl-send-external-message__item]")
+    private WebElement whatsappIcon;
+
     @FindBy(css = "[data-testid='tab-customers-overview-tabs-0']")
     private WebElement liveCustomersButton;
 
@@ -57,6 +60,11 @@ public class CustomersOverviewTab extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), liveCustomersButton, 5,"Click on Live Customer");
     }
 
+    public void clickOnWhatsapp()
+    {
+        scrollAndClickElem(this.getCurrentDriver(), whatsappIcon, 5,"Click on Whatsapp Icon");
+    }
+
     public void clickOnLiveCustomer() {
         clickElem(this.getCurrentDriver(),LiveCustomer,5,"Live Customer" );
     }
@@ -70,7 +78,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), AgentLiveCustomer, 5, "Click on Payment Extension");
     }
 
-    public void clickCancelPaymentButton(String CancelPaymentButton) {
+    public void clickCancelPaymentButton() {
         clickElem(this.getCurrentDriver(),cancelPaymentButton,5,"cancel Payment");
     }
     public void clickClosedChatButton() {
