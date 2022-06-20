@@ -26,25 +26,43 @@ public class LeftMenuWithChats extends AbstractUIElement {
             })
     private List<WebElement> newConversationRequests;
 
-    @FindBy(css = "[data-testid=filter-dropdown-menu]")
+    @FindAll({
+            @FindBy(css = "[data-testid=filter-dropdown-menu]"),
+            @FindBy(css = "[selenium-id=filter-dropdown-menu]") //toDo old locator
+    })
     private WebElement filterDropdownMenu;
 
-    @FindBy(css = "[data-testid=filter-dropdown-menu-item]")
+    @FindAll({
+            @FindBy(css = "[data-testid=filter-dropdown-menu-item]"),
+            @FindBy(css = "[selenium-id=filter-dropdown-menu-item]") //toDo old locator
+    })
     private List<WebElement> filterOptions;
 
-    @FindBy(css = "[data-testid=unread-msg-count]")
+    @FindAll({
+            @FindBy(css = "[data-testid=unread-msg-count]"),
+            @FindBy(css = "[selenium-id=unread-msg-count]")    //toDo old locator
+    })
     private WebElement newConversationIcon;
 
-    @FindBy(css = "[data-testid=roster-item]")
+    @FindAll({
+            @FindBy(css = "[data-testid=roster-item]"),
+            @FindBy(css = "[selenium-id=roster-item]") //toDo old locator
+    })
     private List<WebElement> chatsList;
 
     @FindBy(css = ".cl-chat-item--selected")
     private WebElement activeChat;
 
-    @FindBy(css = "[data-testid=roster-scroll-container]")
+    @FindAll({
+            @FindBy(css = "[data-testid=roster-scroll-container]"),
+            @FindBy(css = "[selenium-id=roster-scroll-container]")  //toDo old locator
+    })
     private WebElement scrollableArea;
 
-    @FindBy(css = "[data-testid='search-filter-btn']")
+    @FindAll({
+            @FindBy(css = "[data-testid='search-filter-btn']"),
+            @FindBy(css = "[selenium-id='search-filter-btn']") //toDo old locator
+    })
     private WebElement searchButton;
 
     @FindAll({
@@ -53,10 +71,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement searchChatInput;
 
-    @FindBy(css = "[data-testid=icon-user-single]")
+    @FindAll({
+            @FindBy(css = "[data-testid=icon-user-single]"),
+            @FindBy(css = "[selenium-id=icon-user-single]") //toDo old locator
+    })
     private WebElement userPicture;
 
-    @FindBy(css = "[data-testid=unread-msg-count]")
+    @FindAll({
+            @FindBy(css = "[data-testid=unread-msg-count]"),
+            @FindBy(css = "[selenium-id=unread-msg-count]") //toDo old locator
+    })
     private WebElement userMsgCount;
 
     @FindAll({
@@ -65,14 +89,24 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement liveChats;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-tickets']")
+    @FindAll({
+            @FindBy(css = "[data-testid=unread-msg-count]"),
+            @FindBy(css = "[selenium-id=unread-msg-count]") //toDo old locator
+    })
     private WebElement tickets;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-closed']")
+    @FindAll({
+            @FindBy(css = "[data-testid='tab-navigation-panel-closed']"),
+            @FindBy(css = "[selenium-id='tab-navigation-panel-closed']") //toDo old locator
+    })
     private WebElement closed;
 
-    @FindBy(css = "[data-testid=open-filter-tab-btn]")
+    @FindAll({
+            @FindBy(css = "[data-testid=open-filter-tab-btn]"),
+            @FindBy(css = "[selenium-id=open-filter-tab-btn]") //toDo old locator
+    })
     private WebElement filterButton;
+
 
     @FindBy(css ="button .cl-r-button--reset-only")
     private WebElement filterRemove;
