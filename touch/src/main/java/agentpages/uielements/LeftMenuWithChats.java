@@ -40,7 +40,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[data-testid=unread-msg-count]"),
-            @FindBy(css = "[selenium-id=unread-msg-count]")    //toDo old locator
+            @FindBy(css = "[selenium-id=unread-msg-count]") //toDo old locator
     })
     private WebElement newConversationIcon;
 
@@ -66,8 +66,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private WebElement searchButton;
 
     @FindAll({
-            @FindBy(xpath = "//div[@class='scrollable-roster']//input"),
-            @FindBy(id = "nameOrPhone")
+            @FindBy(css = "[data-testid='search-filter-input']"),
+            @FindBy(css = "[selenium-id='search-filter-input']")//toDo old locator
     })
     private WebElement searchChatInput;
 
@@ -90,8 +90,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
     private WebElement liveChats;
 
     @FindAll({
-            @FindBy(css = "[data-testid=unread-msg-count]"),
-            @FindBy(css = "[selenium-id=unread-msg-count]") //toDo old locator
+            @FindBy(css = "[data-testid='tab-navigation-panel-tickets']"),
+            @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']")
     })
     private WebElement tickets;
 
