@@ -119,6 +119,9 @@ public class Tenants {
             case "Performance":
                 setTenantInfo("performance", "Performance");
                 break;
+            case "ORCA Demo":
+                setTenantInfo("orca1demo1632920503", "ORCA Demo");
+                break;
             default:
                 Tenants.setTenantUnderTestOrgName(tenantOrgName);
                 Tenants.setTenantUnderTestName(

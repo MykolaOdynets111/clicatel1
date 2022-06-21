@@ -50,7 +50,8 @@ public class AgentConversationSteps extends AbstractAgentSteps {
 
     @Then("^Conversation area (?:becomes active with||contains) (.*) user's message$")
     public void verifyUserMessageOnAgentDesk(String userMessage) {
-        if (userMessage.contains("personal info")) {
+        if (userMessage.contains("personal info"))
+        {
             userMessage = "Submitted data:\n" +
                     "" + getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance()) + "\n" +
                     "health@test.com";
