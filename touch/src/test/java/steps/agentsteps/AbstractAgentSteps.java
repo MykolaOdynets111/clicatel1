@@ -55,13 +55,14 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     public static AgentLoginPage getAgentLoginPage(String ordinalAgentNumber) {
         if (ordinalAgentNumber.equalsIgnoreCase("second agent")){
             return getLoginForSecondAgent();
-        } else {
+        } else
+        {
             return getLoginForMainAgent();
         }
     }
-
     public static AgentLoginPage getLoginForSecondAgent() {
-        if (secondAgentLoginPage.get()==null) {
+        if (secondAgentLoginPage.get()==null)
+        {
             secondAgentLoginPage.set(new AgentLoginPage("second agent"));
         }
         return secondAgentLoginPage.get();
@@ -73,9 +74,6 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         }
         return mainAgentLoginPage.get();
     }
-
-
-
 
     public static void setCurrentLoginPage(AgentLoginPage loginPage) {
         currentAgentLoginPage.set(loginPage);
@@ -148,15 +146,13 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getProfile();
     }
 
-    public static PageHeader getPageHeader(String agent){
+    public static PageHeader getPageHeader(String agent) {
         return getAgentHomePage(agent).getPageHeader();
     }
-
 
     public static ChatHeader getChatHeader(String agent){
         return getAgentHomePage(agent).getChatHeader();
     }
-
     public static void cleanAllPages(){
         currentAgentLoginPage.remove();
         secondAgentLoginPage.remove();

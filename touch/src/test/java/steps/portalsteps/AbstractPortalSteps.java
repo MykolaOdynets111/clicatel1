@@ -55,6 +55,7 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
 
     private static ThreadLocal<SupervisorDeskPage> chatConsoleInboxPage = new ThreadLocal<>();
 
+    private static ThreadLocal<PortalBillingDetailsPage> sendChatToPayLinkPage= new ThreadLocal<>();
     private static ThreadLocal<DepartmentsManagementPage> departmentsManagementPage = new ThreadLocal<>();
 
     private static ThreadLocal<SurveyManagementPage> surveyManagementPage = new ThreadLocal<>();
@@ -303,12 +304,25 @@ public class AbstractPortalSteps implements JSHelper, DateTimeHelper, Verificati
         }
     }
 
-    public static DepartmentsManagementPage getDepartmentsManagementPage(){
+    public static DepartmentsManagementPage getDepartmentsManagementPage()
+    {
         if (departmentsManagementPage.get()==null) {
             departmentsManagementPage.set(new DepartmentsManagementPage(DriverFactory.getDriverForAgent("admin")));
             return departmentsManagementPage.get();
         } else{
             return departmentsManagementPage.get();
+        }
+    }
+    public static PortalBillingDetailsPage getSendChatToPayLinkPage()
+    {
+        if (sendChatToPayLinkPage.get()==null)
+        {
+            sendChatToPayLinkPage.set(new PortalBillingDetailsPage(DriverFactory.getDriverForAgent("admin")));
+            return sendChatToPayLinkPage.get();
+        }
+        else
+        {
+            return sendChatToPayLinkPage.get();
         }
     }
 

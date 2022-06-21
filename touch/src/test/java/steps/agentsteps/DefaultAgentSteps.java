@@ -10,6 +10,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en_scouse.An;
 import mc2api.auth.PortalAuthToken;
 import datamanager.*;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
@@ -80,6 +81,12 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void isFeatureStatusSet(String feature, boolean status, String tenantOrgName){
         Assert.assertEquals(ApiHelper.getFeatureStatus(tenantOrgName, feature),status,
                 feature + " feature is not expected");
+    }
+
+    @And("agent click Whatsapp message icon button on the top bar")
+    public void clickWhatsappIcon()
+    {
+        getDashboardPage().getCustomersOverviewTab().clickOnWhatsapp();
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -201,7 +208,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Then("^(.*) select \"(.*)\" left menu option$")
     public void selectFilterOption(String agent,String option){
         getLeftMenu(agent).selectChatsMenu(option);
-        getLeftMenu(agent).waitForConnectingDisappear(2,5);
+        getLeftMenu(agent).waitForConnectingDisappear(5,10);
     }
 
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
@@ -262,8 +269,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
 //        Assert.assertTrue(getLeftMenu(agent).isNewConversationRequestFromSocialShownByChannel(userName, channel,20),
 //                "There is no new conversation request on Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")");
 //    }
-
-
     @Then("^(.*) should not see from user chat in agent desk$")
     public void verifyConversationRemovedFromChatDesk(String agent){
         // ToDo: Update after clarifying timeout in System timeouts
@@ -272,7 +277,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Conversation request is not removed from Agent Desk (Client ID: "+getUserNameFromLocalStorage(DriverFactory.getTouchDriverInstance())+")"
         );
     }
-
     @Then("^(.*) should not see from user chat in agent desk from (.*)$")
     public void verifyDotControllConversationRemovedFromChatDesk(String agent, String social ){
         String userName = getUserName(social);
@@ -280,9 +284,9 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "Conversation request is not removed from Agent Desk (Client ID: "+userName+")"
         );
     }
-
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
-    public void acceptUserFromSocialConversation(String agent, String socialChannel) {
+    public void acceptUserFromSocialConversation(String agent, String socialChannel)
+    {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
         getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
     }
@@ -717,5 +721,50 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("^(.*) types a customer name \"([^\"]*)\" on the search field$")
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
+    }
+
+    @Given("C2P is integrated with Chat Desk for the tenant.")
+    public void c2p_is_integrated_with_chat_desk_for_the_tenant() {
+        getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();
+    }
+
+    @And("click on C2P Payment extension Option")
+    public void clickOnPaymentExtension() {
+        getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
+    }
+
+    @And("Agent Click on Chat to Pay popup option button from chat section")
+    public void clickOnChatToPayOption() {
+        getDashboardPage().getCustomersOverviewTab().clickOnChatToPayOption();
+    }
+
+    @And("Agent closes the chat from agent desk")
+    public void AgentClickClosedChat() {
+        getDashboardPage().getCustomersOverviewTab().clickClosedChatButton();
+    }
+    @Then("Agent Click on Send Chat to Pay {int} and Link {int} OrderNumber")
+    public void SendChatToPayLink(String order, String price) {
+        getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
+    }
+
+    @And("Agent notify \"Cannot close chat\" notification modal open")
+    public void notifyCannotCloseChat(String agent) {
+        String ExpectedClosedChatWindowHeader = "Cannot close chat";
+        String ActualClosedChatWindowHeader = getChatHeader(agent).getCloseChatHeaderText();
+        Assert.assertEquals(ExpectedClosedChatWindowHeader,ActualClosedChatWindowHeader);
+    }
+
+    @Then("Verify Move to pending chat can be seen in the pending tab")
+    public void verifyMoveToPendingChatDisplayInPendingTab(){
+        getDashboardPage().getCustomersOverviewTab().clickOnPendingTab();
+    }
+    @And("Agent click on option \"Move to Pending\" from notification")
+    public void agentClickOnMoveToPendingOption() {
+        getDashboardPage().getCustomersOverviewTab().clickMoveToPendingButton();
+    }
+
+    @Given("Agent click on \"Cancel Payment\" request")
+    public void agentClickOnCancelPaymentButton() {
+        getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton();
     }
 }

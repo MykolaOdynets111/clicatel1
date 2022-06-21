@@ -51,7 +51,8 @@ public class AgentLoginPage extends AgentAbstractPage {
     public AgentLoginPage selectAgent(String agent){
         if (agent.equalsIgnoreCase("agent")) {
             agent = "main";
-        } else{
+        } else
+        {
             agent = "second";
         }
         clickElem(this.getCurrentDriver(), agentsDropdown, 2, "Agents Dropdown");

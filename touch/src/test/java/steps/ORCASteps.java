@@ -47,13 +47,17 @@ public class ORCASteps implements WebWait {
 
 
     @Given("^Send (.*) message by ORCA$")
-    public void sendOrcaMessage(String message) {
-        if (orcaMessageCallBody.get() == null) {
+    public void sendOrcaMessage(String message)
+    {
+        if (orcaMessageCallBody.get() == null)
+        {
             System.out.println("creating new OrcaEvent for message: " + message);
             createRequestMessage(apiToken.get(), message);
             clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
             System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
-        } else {
+        }
+        else
+        {
             System.out.println("Updating new OrcaEvent for message: " + message);
             System.out.println("Message body before update is: " + orcaMessageCallBody.get().toString());
             orcaMessageCallBody.get().getContent().getEvent().setText(message);

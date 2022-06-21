@@ -3,7 +3,7 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @TestCaseId("ShouldBeCreated")
-  Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
+  Scenario: ChatDesk::The header should have whatsapp icon when user is chatting using orca whatsapp
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
