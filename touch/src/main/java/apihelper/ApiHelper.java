@@ -852,7 +852,7 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static Response getActiveChatsByAgent(String agent) {
-        return RestAssured.given().contentType(ContentType.JSON)
+        return RestAssured.given().contentType(ContentType.JSON).log().all()
                 .header("Authorization",
                         TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), agent))
                 .body("{\n" +
@@ -868,7 +868,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
     }
 
     public static void closeActiveChats(String agent){
-        List<String> conversationIds = getActiveChatsByAgent(agent).getBody().jsonPath().getList("content.chatId");
+        Response resp = getActiveChatsByAgent(agent);
+        List<String> conversationIds = resp.getBody().jsonPath().getList("content.chatId");
         for(String conversationId : conversationIds){
             Response r = RestAssured.given()
                     .accept(ContentType.JSON).log().all()

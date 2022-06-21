@@ -96,6 +96,13 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(css = ".from [selenium-id='map-chat-message-content-LocationMessage']")
     private WebElement locationHREFFormUser;
 
+    @FindBy(xpath = ".//div[@class='channel-separator-title mb-2 mt-2']")
+    private List<WebElement> channelSeparators;
+
+    public List<String> getChanelSeparatorsText() {
+        return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
+    }
+
     public String getLocationURLFromAgent() {
         return getAttributeFromElem(this.getCurrentDriver(), locationHREFFromAgent,5, "Location href", "href");
     }

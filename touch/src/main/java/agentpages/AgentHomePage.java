@@ -37,6 +37,9 @@ public class AgentHomePage extends AgentAbstractPage {
     })
     private WebElement agentNotesButton;
 
+    @FindBy(xpath = "//p[@class='cl-pending-chat-mark-toast-content']")
+    private WebElement pendingAlertMessage;
+
     private String pinErrorMessageXpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']";
 
     @FindBy(xpath = "//div[text()='You do not have the ability to close the chat when it has been flagged']")
@@ -261,6 +264,10 @@ public class AgentHomePage extends AgentAbstractPage {
             Assert.fail("There is no Error message for pin chat");
         }
         waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), pinErrorMessageXpath, 10);
+    }
+
+    public String getPendingMessage(){
+        return getTextFromElem(this.getCurrentDriver(), pendingAlertMessage,2,"Pending message");
     }
 
     public String getUserProfileButtonColor() {

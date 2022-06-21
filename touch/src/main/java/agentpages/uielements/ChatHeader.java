@@ -13,7 +13,9 @@ import org.testng.Assert;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 @FindBy(css = ".cl-app-chat-header")
 public class ChatHeader extends AbstractUIElement {
@@ -74,6 +76,9 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindBy(css =".cl-transfer-history__agent-name")
     private WebElement agentName;
+
+    @FindBy(css = "[selenium-id='header-toggle-pending']")
+    private WebElement pendingButton;
 
     private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
     private String sendSMSXpath = ".//button[@selenium-id='header-send-sms']";
@@ -163,6 +168,10 @@ public class ChatHeader extends AbstractUIElement {
 
     public void clickFlagChatButton(){
         clickElem(this.getCurrentDriver(), flagChatButton, 2,"Flag chat");
+    }
+
+    public void clickPendingChatButton(){
+        clickElem(this.getCurrentDriver(), pendingButton, 2,"Pending chat");
     }
 
     public void clickUnflagChatButton(){

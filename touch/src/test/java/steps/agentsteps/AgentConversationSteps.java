@@ -7,6 +7,7 @@ import apihelper.ApiHelperTie;
 import com.github.javafaker.Faker;
 import com.google.common.io.Files;
 import datamanager.Intents;
+import datamanager.Tenants;
 import datamanager.jacksonschemas.Intent;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
@@ -26,7 +27,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,6 +67,27 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         }
         Assert.assertTrue(getChatBody("main agent").isUserMessageShown(userMessage),
                 "'" + userMessage + "' User message is not shown in conversation area");
+    }
+
+    @Then("^(.*) view the visual indicator \"(.*)\" agent name and timestamp in the conversation area$")
+    public void verifyCorrectPendingMessage(String agent, String expectedMessage) {
+        String agentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), agent).get("fullName");
+        String expectedMessageWithAgent = expectedMessage + agentName;
+        List<String> allSeparatorsText = getChatBody(agent).getChanelSeparatorsText();
+        String actualMessage = allSeparatorsText.stream().filter(e -> e.contains(expectedMessageWithAgent)).findFirst()
+                .orElseThrow(() -> new AssertionError("Pending message is not present: " + expectedMessage));
+        String time = actualMessage.replace(expectedMessageWithAgent, "").trim();
+        Assert.assertTrue(isTimeStampValid(time), "Time is not meet the pattern");
+    }
+
+    private boolean isTimeStampValid(String inputString) {
+        SimpleDateFormat format = new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        try {
+            format.parse(inputString);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
     @Then ("^Visual indicator (.*) with \"(.*)\" text, (.*) name and time is shown$")
