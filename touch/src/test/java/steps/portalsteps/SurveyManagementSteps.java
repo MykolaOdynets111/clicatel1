@@ -175,22 +175,19 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         soft.assertAll();
     }
 
-
     @Then("^Survey Preview should be displayed with correct data for (.*) channel$")
     public void surveyPreviewShouldBeDisplayedWithCorrectDataForAbcChannel(String chanel) {
         String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), chanel);
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-        // List<String> surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
-        String RatingThanksMessage = getSurveyManagementPage().getSurveyAbcForm().getRatingThanksMessagefromUI(channelID);
-        String SurveyQuestionTitle = getSurveyManagementPage().getSurveyAbcForm().getSurveyQuestionTitlefromUI(channelID);
-        String CustomerNoteTitle = getSurveyManagementPage().getSurveyAbcForm().getCustomerNoteTitlefromUI(channelID);
+        List<String> surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(RatingThanksMessage.contains(configuration.getRatingThanksMessage()),
+        softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getRatingThanksMessage()),
                 "Rating thanks message is not displayed in survey preview");
-        softAssert.assertTrue(SurveyQuestionTitle.contains(configuration.getSurveyQuestionTitle()),
+        softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getSurveyQuestionTitle()),
                 "Survey question title is not displayed in survey preview");
-        softAssert.assertTrue(CustomerNoteTitle.contains(configuration.getCustomerNoteTitle()),
+        softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getCustomerNoteTitle()),
                 "Customer note title is not displayed in survey preview");
+
         softAssert.assertAll();
     }
 }

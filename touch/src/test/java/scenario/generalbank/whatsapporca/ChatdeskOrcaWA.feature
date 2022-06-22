@@ -62,7 +62,5 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message
-    When Agent click on location button
-#    Then Agent type on search location field
-#    When Agent click cross button
-#    Then location field becomes empty
+    When Agent open chat location form and set Toronto Location and click cancel button
+    Then Location field becomes empty

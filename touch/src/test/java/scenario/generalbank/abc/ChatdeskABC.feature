@@ -45,7 +45,7 @@ Feature: Apple Business Chat :: Chatdesk
     When Second agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message in it for second agent
     When Second agent responds with hello to User
-    #Then Verify Orca returns hello response during 40 seconds
+    Then Verify Orca returns hello response during 40 seconds
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45510")
   Scenario: Chatdesk:: Verify if agent can filter closed chat using Apple business chat channel

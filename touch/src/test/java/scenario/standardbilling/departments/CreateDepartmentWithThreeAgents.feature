@@ -6,7 +6,7 @@ Feature: Departments
   Background:
     Given Brand New Standard Billing agent is created
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-14856")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-119188")
   Scenario: Verify correct agents numbers in created department
     Given I open portal
     And Login into portal as an admin of Standard Billing account

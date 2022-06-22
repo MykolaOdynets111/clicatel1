@@ -786,44 +786,6 @@ public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, Verifica
                     .isTextShown(formExpectedAutoresponder(expectedText), 4), "Error: Response is shown in widget");
     }
 
-    public static String formExpectedTextResponseFromBotWidget(String fromFeatureText) {
-        String expectedTextResponse;
-        switch (fromFeatureText) {
-            case "welcome":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_message");
-                break;
-            case "start_new_conversation":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("start_new_conversation");
-                break;
-            case "welcome back message":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("welcome_back_message");
-                break;
-            case "dynamical branch address":
-                expectedTextResponse = Tenants.getTenantBranchLocationAddress(Tenants.getTenantUnderTestName());
-                break;
-            case "exit":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("exit_new_conversation");
-                break;
-            case "agents_away":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("agents_away");
-                break;
-            case "out_of_support_hours":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("out_of_support_hours");
-                break;
-            case "connect_agent":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("connect_agent");
-                break;
-            case "thanks_message":
-                expectedTextResponse = ApiHelper.getAutoResponderMessageText("thanks_message");
-                break;
-            default:
-                expectedTextResponse = fromFeatureText;
-                break;
-        }
-        return expectedTextResponse;
-
-    }
-
     public static String formExpectedAutoresponder(String fromFeatureText) {
         return ApiHelper.getAutoResponderMessageText(fromFeatureText);
     }

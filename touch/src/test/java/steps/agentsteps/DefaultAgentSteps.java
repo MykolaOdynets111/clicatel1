@@ -726,7 +726,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @When("^(.*) click on location button")
     public void agentClickOnTheLocationButton(String agent) {
         getAgentHomePage(agent).getLeftMenuWithChats().clickonLocationButton();
-
     }
 
     @Then("Agent type on search location field")

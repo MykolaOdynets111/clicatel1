@@ -15,7 +15,7 @@ public class SurveyAbcForm extends AbstractUIElement {
     @FindBy(css = ".cl-preview-box .survey-form-title")
     private WebElement surveyPreviewTitle;
 
-    @FindBy(css = ".surveys-preview surveys-apple-preview")
+    @FindBy(css = ".preview-message.preview-message--agent-message")
     private List<WebElement> previewMessage;
 
     @FindBy(xpath = ".//button[text()='Save configuration']")
@@ -36,23 +36,6 @@ public class SurveyAbcForm extends AbstractUIElement {
         return previewMessage.stream()
                 .map(message -> getTextFromElem(this.getCurrentDriver(), message, 3, "Survey preview message"))
                 .collect(Collectors.toList());
-    }
-
-    public String getRatingThanksMessagefromUI(String channelid)
-    {
-        String RatingThanksMessage = findElement(By.id("textarea-"+channelid+"-thanksMessageEnabled")).getText();
-        return RatingThanksMessage;
-    }
-
-    public String getSurveyQuestionTitlefromUI(String channelid)
-    {
-        String SurveyQuestionTitle = findElement(By.id(channelid+"-surveyQuestionTitle")).getText();
-        return SurveyQuestionTitle;
-    }
-    public String getCustomerNoteTitlefromUI(String channelid)
-    {
-        String SurveyQuestionTitle = findElement(By.id(channelid+"-customerNoteTitle")).getText();
-        return SurveyQuestionTitle;
     }
 
     public void clickSaveButton() {
