@@ -723,23 +723,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
 
-    @When("^(.*) click on location button")
-    public void agentClickOnTheLocationButton(String agent) {
-        getAgentHomePage(agent).getLeftMenuWithChats().clickonLocationButton();
-    }
-
-    @Then("Agent type on search location field")
-    public void agentTypeOnSearchLocationField() {
-    }
-
-    @When("Agent click cross button")
-    public void agentClickCrossButton() {
-    }
-
-    @Then("location field becomes empty")
-    public void locationFieldBecomesEmpty() {
-    }
-
     @Given("C2P is integrated with Chat Desk for the tenant.")
     public void c2p_is_integrated_with_chat_desk_for_the_tenant() {
         getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();

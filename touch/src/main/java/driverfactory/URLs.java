@@ -128,7 +128,7 @@ public class URLs {
     }
 
     public static String getSupervisorURL(){
-        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"/supervisor";
+        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"supervisor";
     }
 
     public static String getBasePlatformUrl(){
