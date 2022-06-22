@@ -54,7 +54,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
     Then Agent see only whatsapp chats in left menu
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118468")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90120")
   Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
