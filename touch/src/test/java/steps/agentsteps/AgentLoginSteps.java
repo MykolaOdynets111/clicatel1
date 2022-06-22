@@ -21,9 +21,11 @@ public class AgentLoginSteps extends AbstractAgentSteps {
     @Given("^I login as (.*) of (.*)")
     public void loginAsAgentForTenant(String ordinalAgentNumber, String tenantOrgName){
         Tenants.setTenantUnderTestNames(tenantOrgName);
-        if (ConfigManager.isMc2()) {
+        if (ConfigManager.isMc2())
+        {
             loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
-        }else {
+        } else
+        {
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).openPortalLoginPage();
             AbstractAgentSteps.getAgentLoginPage(ordinalAgentNumber).selectTenant(Tenants.getTenantUnderTestName())
                     .selectAgent(ordinalAgentNumber).clickAuthenticateButton();
@@ -55,7 +57,6 @@ public class AgentLoginSteps extends AbstractAgentSteps {
         loginToPortalAndOpenChatdesk(ordinalAgentNumber, tenantOrgName);
     }
 
-
     @Then("^(.*) of (.*) is logged in")
     public void verifyAgentLoggedIn(String ordinalAgentNumber, String tenantOrgName){
 
@@ -63,11 +64,9 @@ public class AgentLoginSteps extends AbstractAgentSteps {
                 "Agent is not logged in.");
     }
 
-
     @When("I login with the same credentials in another browser as an agent of (.*)")
     public void loginWithTheSameCreds(String tenantOrgName){
         Agents agent = Agents.getAgentFromCurrentEnvByTenantOrgName(tenantOrgName, "main");
-
         getPortalLoginPage("second agent").openLoginPage(DriverFactory.getDriverForAgent("second agent"));
         PortalMainPage mainPage = getPortalLoginPage("second agent").login(agent.getAgentEmail(), agent.getAgentPass());
         Assert.assertTrue(mainPage.isPortalPageOpened(),

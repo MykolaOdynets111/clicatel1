@@ -28,6 +28,8 @@ public class AgentInfoSteps extends AbstractAgentSteps{
     public void clickIconWithInitials(String agent){ getPageHeader(agent).clickIcon();
     }
 
+
+
     @Then("^I see (.*) of (.*) info$")
     public void verifyAgentInfoInInfoPopup(String agent, String tenantOrgName){
         SoftAssert soft = new SoftAssert();

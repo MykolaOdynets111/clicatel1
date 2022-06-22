@@ -24,7 +24,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
             @FindBy(css = "a[data-testid^=chat-list-item]"),
             @FindBy(css = "a[selenium-id^=chat-list-item]") //toDo old locator
-    })
+            })
     private List<WebElement> newConversationRequests;
 
     @FindAll({
@@ -92,7 +92,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[data-testid='tab-navigation-panel-tickets']"),
-            @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']") //toDo old locator
+            @FindBy(css = "[selenium-id='tab-navigation-panel-tickets']")
     })
     private WebElement tickets;
 
@@ -107,8 +107,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
             @FindBy(css = "[selenium-id=open-filter-tab-btn]") //toDo old locator
     })
     private WebElement filterButton;
-
-    @FindBy(css = "button .cl-r-button--reset-only")
+    @FindBy(css ="button .cl-r-button--reset-only")
     private WebElement filterRemove;
 
     //@FindBy (css = ".cl-message-sender .cl-message-composer .cl-message-composer__inner .cl-message-composer__tools-bar .cl-button cl-button--reset-only[selenium-id~=message-composer-location]" )
@@ -362,8 +361,8 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .map(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
     }
-
     public void clickonLocationButton() {
         clickElem(this.getCurrentDriver(), locationButton, 2, "LocationButton");
     }
 }
+

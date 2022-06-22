@@ -61,6 +61,7 @@ public class DashboardPage extends PortalAbstractPage {
     private NetPromoterScoreSection netPromoterScoreSection;
     private CustomerSatisfactionSection customerSatisfactionSection;
     private LiveChatsByChannel liveChatsByChannel;
+    private LiveChatsByChannel verifyChatBackground;
     private GeneralSentimentPerChannel generalSentimentPerChannel;
     private AttendedVsUnattendedChats attendedVsUnattendedChats;
     // == Constructors == //
@@ -123,6 +124,11 @@ public class DashboardPage extends PortalAbstractPage {
         liveChatsByChannel.setCurrentDriver(this.getCurrentDriver());
         scrollToElem(this.getCurrentDriver(), liveChatsByChannel.getWrappedElement(), "Live Chats By Chanel");
         return liveChatsByChannel;
+    }
+
+    public LiveChatsByChannel getChatBackground(){
+        verifyChatBackground.setCurrentDriver(this.getCurrentDriver());
+        return verifyChatBackground;
     }
 
     public GeneralSentimentPerChannel getGeneralSentimentPerChannel() {

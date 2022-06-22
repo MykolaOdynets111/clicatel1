@@ -31,9 +31,9 @@ public class CreateDepartmentForm extends AbstractUIElement {
     @FindBy(css =".cl-r-form-group__error-text")
     private WebElement duplicateNameErrorMessage;
 
-
     @Step(value = "Set text to the Name field")
-    public CreateDepartmentForm setNameField(String name){
+    public CreateDepartmentForm setNameField(String name)
+    {
         clickElem(this.getCurrentDriver(), nameField, 10, "name field");
         nameField.clear();
         nameField.sendKeys(name);
@@ -61,6 +61,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
         }
         return this;
     }
+
 
     @Step(value = "Click Create button")
     public void clickCreateButton(){

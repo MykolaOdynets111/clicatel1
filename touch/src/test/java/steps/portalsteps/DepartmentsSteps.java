@@ -32,8 +32,6 @@ public class DepartmentsSteps extends AbstractPortalSteps {
                 "Departments was not created");
     }
 
-
-
     @Then("^Create Department with (.*) name (.*) description and with (.*) Agents")
     public void createDepartmentWithSeveralAgents(String name, String description, int agent){
         List<String> agents = new ArrayList<String>();
@@ -101,10 +99,11 @@ public class DepartmentsSteps extends AbstractPortalSteps {
     }
 
     @Then("Verify Agent cannot create department with duplicate (.*) name")
-    public void verifyDuplicationAlert(String name){
+    public void verifyDuplicationAlert(String name)
+    {
         SoftAssert softAssert = new SoftAssert();
         CreateDepartmentForm createDepartmentForm = getDepartmentsManagementPage().clickAddNewDepartmentButton();
-        softAssert.assertEquals(createDepartmentForm.setNameField(name).getDuplicateNameErrorMessage(), "This department name is already in use.", "Duplication message is not the same");
+        softAssert.assertEquals(createDepartmentForm.setNameField(name).getDuplicateNameErrorMessage(), "Department name already exists and cannot be duplicated.", "Duplication message is not the same");
         softAssert.assertFalse(createDepartmentForm.isCreateButtonActive(), "Create button should be disabled");
         softAssert.assertAll();
     }
