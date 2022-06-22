@@ -64,3 +64,13 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Conversation area becomes active with connect to agent user's message
     When Agent open chat location form and set Toronto Location and click cancel button
     Then Location field becomes empty
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-104472")
+  Scenario: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
+    When Agent send Hello message

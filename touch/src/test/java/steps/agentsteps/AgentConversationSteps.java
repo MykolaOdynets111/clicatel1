@@ -278,6 +278,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         }
     }
 
+    @When("^(.*) send (.*) message$")
+    public void sendMessageOnCurrentChat(String agent, String agentMessage) {
+        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
+        }
+
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
         getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(responseToUser);
