@@ -74,3 +74,16 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
     When Agent send Hello message
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-101060")
+  Scenario: Agent Desk :: Live Chat :: Profile :: Verify the text in the "not verified" label is in grey color in customer profile phone number field
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    When Agent click on Edit button in User profile
+    And Enter 12345678901 in the phone number field
+    And Agent click Save button in User profile
+    Then Not verified label is displayed
+
