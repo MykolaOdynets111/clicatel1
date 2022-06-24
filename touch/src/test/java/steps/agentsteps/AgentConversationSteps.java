@@ -21,6 +21,7 @@ import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
+import touchpages.uielements.LocationWindow;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     private static String selectedEmoji;
     private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
+    private LocationWindow locationWindow ;
 
     public static String getSelectedEmoji() {
         return selectedEmoji;
@@ -275,6 +277,11 @@ public class AgentConversationSteps extends AbstractAgentSteps {
             sendAnswerToUser("main agent", agentMessage);
         }
     }
+
+    @When("^(.*) send (.*) message$")
+    public void sendMessageOnCurrentChat(String agent, String agentMessage) {
+        getAgentHomePage(agent).getChatForm().clearAndSendResponseToUser(agentMessage);
+        }
 
     @When("^(.*) clear input and send a new message (.*)$")
     public void clearAndSendAnswerToUser(String agent, String responseToUser) {
@@ -585,4 +592,15 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "Incorrect agent picture shown");
     }
 
+    @When("^(.*) open chat location form and set (.*) Location and click cancel button")
+    public void openLocationToUserAndSetSomeText(String agent, String locationName ) {
+        locationWindow =  getAgentHomePage(agent).openLocationWindow();
+        locationWindow.searchLocation(locationName).clickCancelLocationButton();
+    }
+
+    @Then("Location field becomes empty")
+    public void locationFieldBecomesEmpty() {
+        Assert.assertFalse(locationWindow.checkSearchFieldisEmpty(), "Location Field in not empty");
+    }
 }
+

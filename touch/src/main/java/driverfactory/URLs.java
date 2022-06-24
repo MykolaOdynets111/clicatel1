@@ -36,6 +36,7 @@ public class URLs {
 
     private static String BASE_TOUCH_API_INTEGRATION_URL = "https://%s-touch.clickatelllabs.com/";
 
+    private static String BASE_TOUCH_API_INTEGRATION_URLUpdate = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
     private static String BASE_INTERNAL_API_URL = "https://%s-touch.clickatelllabs.com/internal/";
 
@@ -47,7 +48,7 @@ public class URLs {
 
     private static String TOUCH_LOGIN_FORM = "https://%s-chatdesk-platform-app-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/internal/static/auth-tool/";
 
-    private static String TOUCH_MAIN_URL = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com";
+    private static String TOUCH_MAIN_URL = "https://%s-chatdesk-portal-bravo.int-eks-dev.shared-dev.eu-west-1.aws.clickatell.com/";
 
 
 
@@ -123,11 +124,11 @@ public class URLs {
     }
 
     public static String getDashboardURL(){
-        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"/dashboard";
+        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"dashboard";
     }
 
     public static String getSupervisorURL(){
-        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"/supervisor";
+        return String.format(TOUCH_MAIN_URL, ConfigManager.getEnv())+"supervisor";
     }
 
     public static String getBasePlatformUrl(){

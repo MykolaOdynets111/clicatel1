@@ -14,7 +14,7 @@ public class LiveChatsByChannel extends AbstractUIElement {
     @FindBy(css = ".bar-webchat")
     private WebElement webChatChart;
 
-    @FindBy(css = ".bar-abc")
+    @FindBy(css = ".cl-bar-chart__bar.bar-ABC")
     private WebElement abcChart;
 
     @FindBy(css = ".bar-WHATSAPP")

@@ -2,6 +2,7 @@ package agentpages.dashboard.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import javax.xml.xpath.XPath;
@@ -13,6 +14,11 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = "[data-testid='tab-customers-overview-tabs-1']")
     private WebElement customersHistoryButton;
 
+    @FindAll
+            ({
+                    @FindBy(css = "[data-testid= 'tab-customers-overview-tabs-0']"),
+                    @FindBy(css = "[selenium-id= 'tab-customers-overview-tabs-0']")
+            })
     @FindBy(css="[button.cl-button.cl-button--reset-only.cl-button--full-width.cl-button--ac-left.cl-send-external-message__item]")
     private WebElement whatsappIcon;
 
@@ -49,7 +55,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:nth-child(2) .cl-r-select__indicators")
     private WebElement periodFilterDropdown;
 
-    @FindBy(xpath=".//div[contains(@id, 'react-select')]")
+    @FindBy(xpath = ".//div[contains(@id, 'react-select')]")
     private List<WebElement> dropdownOptions;
 
     public void clickOnCustomersHistory() {
@@ -101,7 +107,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     }
 
     public void selectPeriodForReport(String period) {
-        scrollToElem(this.getCurrentDriver(), periodFilterDropdown,  "Period Dropdown");
+        scrollToElem(this.getCurrentDriver(), periodFilterDropdown, "Period Dropdown");
         clickElem(this.getCurrentDriver(), periodFilterDropdown, 1, "Period Dropdown");
         dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(period))
                 .findFirst().orElseThrow(() ->

@@ -34,10 +34,13 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     })
     private WebElement preferences;
 
-    @FindBy(css = "[data-testid='tab-navigation-panel-surveys']")
+    @FindAll({
+            @FindBy(css = "[data-testid='tab-navigation-panel-surveys']"),
+            @FindBy(css = "[selenium-id='tab-navigation-panel-surveys']")
+    })
     private WebElement surveysNavigation;
 
-    public void openSettingsPage(String settingsName){
+    public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
                 clickElem(this.getCurrentDriver(), businessProfile, 2, "Business Profile");
@@ -52,7 +55,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
                 clickElem(this.getCurrentDriver(), preferences, 4, "Preferences");
                 break;
             case "Surveys":
-                clickElem(this.getCurrentDriver(), surveysNavigation, 2, "Surveys");
+                clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
         }
     }
 

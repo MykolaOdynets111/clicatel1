@@ -1,9 +1,11 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
+import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import javax.xml.stream.Location;
 import java.util.List;
 
 @FindBy(css=".cl-share-location")
@@ -17,6 +19,9 @@ public class LocationWindow extends AbstractUIElement {
 
     @FindBy(css=".cl-location-search__send")
     private WebElement sendLocationsButton;
+
+    @FindBy(css=".cl-button.cl-button--reset-only")
+    private WebElement cancelLocationButton;
 
 
     public LocationWindow selectLocation(String locationName){
@@ -33,5 +38,13 @@ public class LocationWindow extends AbstractUIElement {
     }
     public void clickSendLocationsButton(){
         clickElem(this.getCurrentDriver(), sendLocationsButton, 3,"Send Locations Button");
+    }
+
+    public void clickCancelLocationButton(){
+        clickElem(this.getCurrentDriver(), cancelLocationButton,3,"Location cancel button");
+    }
+
+    public boolean checkSearchFieldisEmpty() {
+       return isElementHasAnyText(this.getCurrentDriver(), searchField, 4);
     }
 }

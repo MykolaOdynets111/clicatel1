@@ -2,8 +2,8 @@
 Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
-  @TestCaseId("ShouldBeCreated")
-  Scenario: ChatDesk::The header should have whatsapp icon when user is chatting using orca whatsapp
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118502")
+  Scenario: ChatDesk:: The header should have whatsapp icon when user is chatting using orca whatsapp
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
@@ -14,7 +14,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent should see whatsappHeader icon in active chat header
 
   @orca_api
-  @TestCaseId("ShouldBeCreated")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118503")
   Scenario: ChatDesk: ORCA WhatsApp: Verify if //END message works for whatsapp chat
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -27,7 +27,7 @@ Feature: Whatsapp ORCA :: Chatdesk
 
   @orca_api
   @start_orca_server
-  @TestCaseId("ShouldBeCreated")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118504")
   Scenario: ChatDesk:: Verify if agent is able to transfer Orca WhatsApp chat via "Transfer chat" button
     Given I login as agent of General Bank Demo
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
@@ -47,9 +47,30 @@ Feature: Whatsapp ORCA :: Chatdesk
     When Second agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
 
-  @TestCaseId("ShouldBeCreated")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118505")
   Scenario: ChatDesk:: Verify if agent can filter closed chat using WhatsApp chat channel
     Given I login as agent of General Bank Demo
     When Agent select "Closed" left menu option
     When Agent filter closed chats with WhatsApp channel, no sentiment and flagged is false
     Then Agent see only whatsapp chats in left menu
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90120")
+  Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to agent user's message
+    When Agent open chat location form and set Toronto Location and click cancel button
+    Then Location field becomes empty
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-104472")
+  Scenario: Agent Desk :: Live Chat :: Verify if agent can send plain text message to a user over WhatsApp Channel
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
+    When Agent send Hello message
