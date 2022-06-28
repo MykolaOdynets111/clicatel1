@@ -62,7 +62,9 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message
-    When Agent open chat location form and set Toronto Location and click cancel button
+    When Agent open chat location form
+    And Agent search for Paris Location
+    And Agent click on reset button
     Then Location field becomes empty
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-104472")
@@ -87,3 +89,18 @@ Feature: Whatsapp ORCA :: Chatdesk
     And Agent click Save button in User profile
     Then Not verified label is displayed
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114765")
+  Scenario: CD :: Agent Desk :: Live Chat :: Verify that location should auto-populate after agent try to search for second location without selecting the first one.
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to agent user's message
+    When Agent open chat location form
+    And Agent search for Paris Location
+    And Agent click on Paris Location
+    And Agent click on reset button
+    Then Location field becomes empty
+    And Agent search for Canada Location
+    And Agent click on Canada Location
