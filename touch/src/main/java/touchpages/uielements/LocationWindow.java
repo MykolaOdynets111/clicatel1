@@ -1,11 +1,9 @@
 package touchpages.uielements;
 
 import abstractclasses.AbstractUIElement;
-import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import javax.xml.stream.Location;
 import java.util.List;
 
 @FindBy(css=".cl-share-location")
@@ -13,6 +11,9 @@ public class LocationWindow extends AbstractUIElement {
 
     @FindBy(css="input[placeholder='Search location']")
     private WebElement searchField;
+
+    @FindBy(xpath= "//div[@class='cl-address__name']")
+    private WebElement searchedAddress;
 
     @FindBy(xpath="//div[@class='pac-item']")
     private List<WebElement> locations;
@@ -31,6 +32,11 @@ public class LocationWindow extends AbstractUIElement {
         return this;
     }
 
+    public String getTextFromSearch(){
+        waitForFirstElementToBeVisible(this.getCurrentDriver(),locations,3);
+        String location = getTextFromElem(this.getCurrentDriver(), searchedAddress, 2,"Location Search Field");
+        return location;
+    }
     public LocationWindow searchLocation(String locationName){
         waitFor(1000);
         inputText(this.getCurrentDriver(), searchField, 2, "Location Search Field", locationName);

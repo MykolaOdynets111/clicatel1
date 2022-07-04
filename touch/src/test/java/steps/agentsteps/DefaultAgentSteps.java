@@ -10,18 +10,18 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en_scouse.An;
 import mc2api.auth.PortalAuthToken;
 import datamanager.*;
 import datamanager.jacksonschemas.dotcontrol.InitContext;
 import dbmanager.DBConnector;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
-import steps.portalsteps.BasePortalSteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
@@ -34,6 +34,10 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     private static ThreadLocal<Map<String, Boolean>> PRE_TEST_FEATURE_STATUS = new ThreadLocal<>();
     private static ThreadLocal<Map<String, Boolean>> TEST_FEATURE_STATUS_CHANGES = new ThreadLocal<>();
     private static UserPersonalInfo userPersonalInfoForUpdating;
+    public Profile profile;
+
+    @FindBy(css = "Selenium-id= user-profile-edit")
+    private WebElement editButton;
 
     private static void savePreTestFeatureStatus(String featureName, boolean status){
         Map<String, Boolean> map = new HashMap<>();
@@ -766,5 +770,25 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @Given("Agent click on \"Cancel Payment\" request")
     public void agentClickOnCancelPaymentButton() {
         getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton();
+    }
+
+    @When("^Agent click on Edit button in User profile$")
+    public void agentClickOnEditButtonInUserProfile() {
+        getAgentHomeForMainAgent().getProfile().clickEditButton();
+    }
+
+    @And("^Enter (.*) in the phone number field$")
+    public void enterInThePhoneNumberField(String number) {
+        getAgentHomeForMainAgent().getProfile().setPhoneNumber(number);
+    }
+
+    @And("Agent click Save button in User profile")
+    public void agentClickSaveButtonInUserProfile() {
+        getAgentHomeForMainAgent().getProfile().clickSaveEditButton();
+    }
+
+    @Then("Not verified label is displayed")
+    public void notVerifiedLabelIsDisplayed() {
+        Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
     }
 }
