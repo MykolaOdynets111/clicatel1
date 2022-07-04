@@ -31,11 +31,8 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css="[a.cl-routed-tabs__tab.cl-routed-tabs__tab--selected]")
     private WebElement PendingTab;
 
-    @FindBy(xpath = "//*[@selenium-id='chat-list-item-018147f695c441cf58eb55a422d6150f']")
-    private WebElement AgentLiveCustomer;
-
     @FindBy(css = "cl-card--c2p cl-card--c2p-extension xh-highlight")
-    private WebElement ChatToPay;
+    private WebElement chatToPay;
 
     @FindBy(xpath = "//button[@type='button']/text()='Cancel Payment'")
     private WebElement cancelPaymentButton;
@@ -58,17 +55,14 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(xpath = ".//div[contains(@id, 'react-select')]")
     private List<WebElement> dropdownOptions;
 
+
+
     public void clickOnCustomersHistory() {
         clickElem(this.getCurrentDriver(), customersHistoryButton, 5, "Customers History Tab");
     }
 
     public void clickOnLiveCustomers() {
         clickElem(this.getCurrentDriver(), liveCustomersButton, 5,"Click on Live Customer");
-    }
-
-    public void clickOnWhatsapp()
-    {
-        scrollAndClickElem(this.getCurrentDriver(), whatsappIcon, 5,"Click on Whatsapp Icon");
     }
 
     public void clickOnLiveCustomer() {
@@ -80,9 +74,6 @@ public class CustomersOverviewTab extends AbstractUIElement {
         clickElem(this.getCurrentDriver(),PendingTab,5,"Pending Tab");
     }
 
-    public void clickOnPaymentExtension() {
-        clickElem(this.getCurrentDriver(), AgentLiveCustomer, 5, "Click on Payment Extension");
-    }
 
     public void clickCancelPaymentButton() {
         clickElem(this.getCurrentDriver(),cancelPaymentButton,5,"cancel Payment");
@@ -96,7 +87,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     }
     public void clickOnChatToPayOption()
     {
-        clickElem(this.getCurrentDriver(), ChatToPay, 5,"Chat to Pay option");
+        clickElem(this.getCurrentDriver(), chatToPay, 5,"Chat to Pay option");
     }
 
     public void selectChannelForReport(String channel) {

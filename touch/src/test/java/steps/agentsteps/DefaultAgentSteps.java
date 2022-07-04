@@ -1,5 +1,6 @@
 package steps.agentsteps;
 
+import agentpages.AgentHomePage;
 import agentpages.uielements.*;
 import apihelper.ApiHelper;
 import datamanager.jacksonschemas.AgentMapping;
@@ -86,7 +87,28 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("agent click Whatsapp message icon button on the top bar")
     public void clickWhatsappIcon()
     {
-        getDashboardPage().getCustomersOverviewTab().clickOnWhatsapp();
+        getDashboardPage().getForwardMessageIcon().clickOnWhatsapp();
+    }
+
+    @And("^Agent select \"(.*)\" in Chanel Template")
+    public void selectChanelFilter(String name){
+        getSupervisorDeskPage().getSupervisorDeskHeader().selectTemplate(name);
+        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @And("^insert the Variable type \"(.*)\" for template")
+    public void insertVarible(String variable)
+    {
+        getSupervisorDeskPage().getSupervisorDeskHeader().insertVaribleForWhatsapp(variable);
+    }
+    @And("click \"send\" chat button$")
+    public void clickSendButton()
+    {
+        getSupervisorDeskPage().getSupervisorDeskHeader().clickSendButton();
+    }
+    @And("agent fill the customer contact number {int}")
+    public void sendWhatsApp(String contactNumber) {
+        getSupervisorDeskPage().getSupervisorDeskHeader().InsertContactNumber(contactNumber);
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -722,26 +744,38 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
-
-    @Given("C2P is integrated with Chat Desk for the tenant.")
-    public void c2p_is_integrated_with_chat_desk_for_the_tenant() {
-        getDashboardPage().getCustomersOverviewTab().clickOnLiveCustomer();
-    }
-
-    @And("click on C2P Payment extension Option")
-    public void clickOnPaymentExtension() {
-        getDashboardPage().getCustomersOverviewTab().clickOnPaymentExtension();
+    @And("click on C2P Payment extension Option of Live Customer from left side menu")
+    public void clickOnPaymentExtension(String agent) {
+        getAgentHomePage(agent).getLeftMenuWithChats().clickOnPaymentExtensionOption();
     }
 
     @And("Agent Click on Chat to Pay popup option button from chat section")
     public void clickOnChatToPayOption() {
-        getDashboardPage().getCustomersOverviewTab().clickOnChatToPayOption();
+        getDashboardPage().getCustomerPaytoExtension().clickOnChatToPayOption();
     }
-
     @And("Agent closes the chat from agent desk")
     public void AgentClickClosedChat() {
+
         getDashboardPage().getCustomersOverviewTab().clickClosedChatButton();
     }
+    @And("Agent select \"Closed\" tab from left menu")
+    public void AgentClickClosedTabMenuButton(String agent)
+    {
+        getAgentHomePage(agent).getLeftMenuWithChats().ClickonCloseTabMenuButton();
+    }
+
+    @And("Agent click on 'start chat' button")
+    public void AgentClickOnStartChartButton(String agent)
+    {
+        getAgentHomePage(agent).getLeftMenuWithChats().ClickonStartChatButton();
+    }
+
+    @And("^Agent should select the chat that was ended 24hrs ago$")
+    public void agentShouldSelect24hrsClosedChats() {
+        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().is24HrsDisplayed(),
+                "WhatsApp 24 HRS closed chart is not displayed in Live Chats By Channel");
+    }
+
     @Then("Agent Click on Send Chat to Pay {int} and Link {int} OrderNumber")
     public void SendChatToPayLink(String order, String price) {
         getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();

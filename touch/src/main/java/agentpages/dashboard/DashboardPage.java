@@ -2,6 +2,9 @@ package agentpages.dashboard;
 
 
 import agentpages.dashboard.uielements.*;
+import agentpages.supervisor.uielements.SupervisorDeskHeader;
+import agentpages.uielements.AgentMessageComposer;
+import agentpages.uielements.PageHeader;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -56,6 +59,10 @@ public class DashboardPage extends PortalAbstractPage {
     private AgentPerformanceTab agentPerformanceTab;
     private LiveAgentsTableDashboard agentsTableDashboard;
     private CustomersOverviewTab customersOverviewTab;
+
+    private AgentMessageComposer customerPaytoExtension;
+
+    private  PageHeader forwardMessageIcon;
     private CustomersHistory customersHistory;
     private LiveCustomersTab liveCustomersTab;
     private NetPromoterScoreSection netPromoterScoreSection;
@@ -95,6 +102,17 @@ public class DashboardPage extends PortalAbstractPage {
     public CustomersOverviewTab getCustomersOverviewTab() {
         customersOverviewTab.setCurrentDriver(this.getCurrentDriver());
         return customersOverviewTab;
+    }
+
+    public AgentMessageComposer getCustomerPaytoExtension()
+    {
+        customerPaytoExtension.setCurrentDriver(this.getCurrentDriver());
+        return customerPaytoExtension;
+    }
+
+    public PageHeader getForwardMessageIcon() {
+        forwardMessageIcon.setCurrentDriver(this.getCurrentDriver());
+        return forwardMessageIcon;
     }
 
     public CustomersHistory getCustomersHistory() {
