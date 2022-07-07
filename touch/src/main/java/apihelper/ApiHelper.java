@@ -880,12 +880,6 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         }
     }
 
-    public static void main(String[] args) {
-        Tenants.setTenantUnderTestNames("General Bank Demo");
-        ApiHelper.closeActiveChats("main");
-    }
-
-
     public static Map getElasticSearchModel(String chatId){
         String tenantOrgName = Tenants.getTenantUnderTestOrgName();
         String tenantID = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");

@@ -4,7 +4,6 @@ import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import javax.xml.xpath.XPath;
 import java.util.List;
 
 @FindBy(css = ".customers-overview")
@@ -20,16 +19,16 @@ public class CustomersOverviewTab extends AbstractUIElement {
     private WebElement liveCustomersButton;
 
     @FindBy(css ="[.cl-chat-item cl-chat-item--selected]")
-    private WebElement LiveCustomer;
+    private WebElement liveCustomer;
 
     @FindBy(css="[a.cl-routed-tabs__tab.cl-routed-tabs__tab--selected]")
-    private WebElement PendingTab;
+    private WebElement pendingTab;
 
     @FindBy(xpath = "//*[@selenium-id='chat-list-item-018147f695c441cf58eb55a422d6150f']")
-    private WebElement AgentLiveCustomer;
+    private WebElement agentLiveCustomer;
 
     @FindBy(css = "cl-card--c2p cl-card--c2p-extension xh-highlight")
-    private WebElement ChatToPay;
+    private WebElement chatToPay;
 
     @FindBy(xpath = "//button[@type='button']/text()='Cancel Payment'")
     private WebElement cancelPaymentButton;
@@ -38,7 +37,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     private WebElement closedChatButton;
 
     @FindBy(css="button.cl-button.cl-button--primary.cl-c2p-close-modal-button")
-    private WebElement MoveToPending;
+    private WebElement moveToPending;
 
     @FindBy(xpath="//*[@selenium-id='message-composer-extensions']")
     private WebElement PaymentExtensionButton;
@@ -66,16 +65,16 @@ public class CustomersOverviewTab extends AbstractUIElement {
     }
 
     public void clickOnLiveCustomer() {
-        clickElem(this.getCurrentDriver(),LiveCustomer,5,"Live Customer" );
+        clickElem(this.getCurrentDriver(), liveCustomer,5,"Live Customer" );
     }
 
     public void clickOnPendingTab()
     {
-        clickElem(this.getCurrentDriver(),PendingTab,5,"Pending Tab");
+        clickElem(this.getCurrentDriver(), pendingTab,5,"Pending Tab");
     }
 
     public void clickOnPaymentExtension() {
-        clickElem(this.getCurrentDriver(), AgentLiveCustomer, 5, "Click on Payment Extension");
+        clickElem(this.getCurrentDriver(), agentLiveCustomer, 5, "Click on Payment Extension");
     }
 
     public void clickCancelPaymentButton() {
@@ -86,11 +85,11 @@ public class CustomersOverviewTab extends AbstractUIElement {
     }
 
     public void clickMoveToPendingButton(){
-        clickElem(this.getCurrentDriver(),MoveToPending,5,"Move to Pending");
+        clickElem(this.getCurrentDriver(), moveToPending,5,"Move to Pending");
     }
     public void clickOnChatToPayOption()
     {
-        clickElem(this.getCurrentDriver(), ChatToPay, 5,"Chat to Pay option");
+        clickElem(this.getCurrentDriver(), chatToPay, 5,"Chat to Pay option");
     }
 
     public void selectChannelForReport(String channel) {

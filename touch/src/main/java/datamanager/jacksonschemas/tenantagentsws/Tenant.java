@@ -1,10 +1,11 @@
 package datamanager.jacksonschemas.tenantagentsws;
 
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.javafaker.Faker;
+
+import javax.annotation.Generated;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -93,7 +94,7 @@ public class Tenant {
         setContactEmail(mail);
         setCategory("Automotive");
         setMaxOnlineAgentLimit(100);
-        setMc2AccountId(fake.numerify("aqaId##########"));
+        setMc2AccountId(fake.numerify("ff#######fba###d###fc##fe3a#####"));
         setTenantMode("AGENT");
         setRoutingType("RANDOM");
         setPendingChatAutoClosureTimeSec(28800);
