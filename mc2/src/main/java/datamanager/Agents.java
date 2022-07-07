@@ -3,9 +3,9 @@ package datamanager;
 import drivermanager.ConfigManager;
 import drivermanager.Environment;
 
-import static drivermanager.Environment.*;
-
 import java.util.Arrays;
+
+import static drivermanager.Environment.*;
 
 public enum Agents {
 
@@ -18,6 +18,7 @@ public enum Agents {
     TESTING_AGENT("generalbankaqa@gmail.com", "p@$$w0rd4te$t", "general bank demo", TESTING),
     DEMO_AGENT_GEN_BANK("touchdemotenant2@gmail.com", "p@$$w0rd4te$t", "general bank demo", DEMO),
     INTEGRATION_AGENT_GEN_BANK("touchdemotenant@gmail.com", "12345qwer", "general bank demo", INTEGRATION),
+
 
     // email credentials: devgeneralbankdemo@gmail.com, pass p@$$w0rd4te$t
     SECOND_AGENT_QA("generabanksecondagent@gmail.com", "p@$$w0rd4te$t", "general bank demo", QA),

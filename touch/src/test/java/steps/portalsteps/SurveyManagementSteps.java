@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import datamanager.SurveyManagement;
 import datamanager.Tenants;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import agentpages.survey.uielements.SurveyWebChatForm;
@@ -22,18 +23,19 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
     @Then("^Update survey management chanel (.*) settings by ip for (.*)")
-    public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map){
+    public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map) {
         String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-            for(String key : map.keySet()){
-                configuration.updateSomeValueByMethodName(key, map.get(key));
-            }
+        for (String key : map.keySet()) {
+            configuration.updateSomeValueByMethodName(key, map.get(key));
+        }
         surveyConfiguration.set(configuration);
         ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID);
+
     }
 
     @Then("^Survey Management page should be shown$")
-    public void verifyDepartmentsManagementPageShown(){
+    public void verifyDepartmentsManagementPageShown() {
         Assert.assertTrue(getSurveyManagementPage().isSurveyManagementPage(),
                 "Survey Management page not shown");
     }
@@ -62,12 +64,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @When("^Switch to whatsapp survey configuration$")
-    public void switchToWhatsapp(){
+    public void switchToWhatsapp() {
         getSurveyManagementPage().switchToWhatsappTab();
     }
 
     @Then("^CSAT scale has correct limit variants (.*) in dropdown and (.*) set as type$")
-    public void verifyCSATNumbers(List<String> expRangeOfNumbers, String type){
+    public void verifyCSATNumbers(List<String> expRangeOfNumbers, String type) {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(surveyWebChatForm.getSurveysInner().getVariationOfRatingCSATScale(),
                 expRangeOfNumbers, "CSAT range of numbers in dropdown is not as expected");
@@ -76,7 +78,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @When("^Agent select (.*) as number limit from dropdown$")
-    public void selectLimitOption(String limitNumber){
+    public void selectLimitOption(String limitNumber) {
         surveyWebChatForm.getSurveysInner().selectDropdownOption(limitNumber);
     }
 
@@ -90,7 +92,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @When("^Agent click save survey configuration button$")
-    public void clickSaveButton(){
+    public void clickSaveButton() {
         surveyWebChatForm.clickSaveButton();
 //        getSurveyManagementPage().waitSaveMessage();
     }
@@ -105,47 +107,47 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @When("^Agent switch \"Allow customer to leave a note\" in survey management$")
-    public void enableComments(){
+    public void enableComments() {
         surveyWebChatForm.getSurveysInner().clickCommentSwitcher();
     }
 
     @Then("^Agent sees comment field in Survey management form$")
-    public void isCommenfFormShown(){
+    public void isCommenfFormShown() {
         Assert.assertTrue(surveyWebChatForm.isCommentFieldShown(), "Comment Form is not shown");
     }
 
 
     @Then("^Agent see survey range (.*) in rating scale$")
-    public void verifyCorectNumbersDisplayed(String numbers){
+    public void verifyCorectNumbersDisplayed(String numbers) {
         Assert.assertEquals(surveyWebChatForm.getSizeOfRateInputNumbers(), numbers, "Quantity of numbers is not the same");
     }
 
     @When("^Agent select (.*) as and icon for rating range$")
-    public void selectRangeIcon(String iconName){
+    public void selectRangeIcon(String iconName) {
         surveyWebChatForm.getSurveysInner().selectRateIcon(iconName);
     }
 
     @When("^Customize your survey \"(.*)\" question$")
-    public void setSurveyQuestion(String question){
+    public void setSurveyQuestion(String question) {
         questionUpdate.set(question + " " + faker.rockBand().name());
         surveyWebChatForm.getSurveysInner().changeQuestion(questionUpdate.get());
     }
 
     @When("^Customize your survey thank message$")
-    public void setSurveyThankMessage(){
+    public void setSurveyThankMessage() {
         thankMessageUpdate.set("Thank you for taking the time to provide us with your feedback. " + faker.gameOfThrones().dragon());
         surveyWebChatForm.getSurveysInner().setThankMessage(thankMessageUpdate.get());
     }
 
-    @Then ("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
-    public void verifyThankQuestionIsUpdated(String tenantOrgName, String chanel){
+    @Then("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
+    public void verifyThankQuestionIsUpdated(String tenantOrgName, String chanel) {
         String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         Assert.assertEquals(configuration.getRatingThanksMessage(), thankMessageUpdate.get(), "Thank survey message is not the same as was set");
     }
 
     @Then("^Survey backend was updated for (.*) and (.*) chanel with following attribute$")
-    public void verifyThatSurveyBackendWasUpdated(String tenantOrgName, String chanel, Map<String, String> map){
+    public void verifyThatSurveyBackendWasUpdated(String tenantOrgName, String chanel, Map<String, String> map) {
         String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         String attributeToCheck = map.keySet().stream().findFirst().get();
@@ -154,25 +156,24 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @Then("^Preview question is updated successfully$")
-    public void verifyQuestionPreview(){
+    public void verifyQuestionPreview() {
         Assert.assertEquals(surveyWebChatForm.getPreviewQuestion(), questionUpdate.get(), "Preview question is not the same as was set");
     }
 
     @Then("^Preview question is updated successfully for (.*) and (.*) chanel")
-    public void verifyQuestionPreviewAPI(String tenantOrgName, String chanel){
+    public void verifyQuestionPreviewAPI(String tenantOrgName, String chanel) {
         String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         Assert.assertEquals(configuration.getSurveyQuestionTitle(), questionUpdate.get(), "Preview question is not the same as was set");
     }
 
     @Then("^Star and Smile Buttons are Disabled$")
-    public void starAndSmileButtonsAreDisabled(){
+    public void starAndSmileButtonsAreDisabled() {
         SoftAssert soft = new SoftAssert();
         soft.assertTrue(surveyWebChatForm.getSurveysInner().isSmileButtonDisabled(), "Smile button should not be enabled");
         soft.assertTrue(surveyWebChatForm.getSurveysInner().isStarButtonDisabled(), "Star button should not be enabled");
         soft.assertAll();
     }
-
 
     @Then("^Survey Preview should be displayed with correct data for (.*) channel$")
     public void surveyPreviewShouldBeDisplayedWithCorrectDataForAbcChannel(String chanel) {
@@ -186,6 +187,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
                 "Survey question title is not displayed in survey preview");
         softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getCustomerNoteTitle()),
                 "Customer note title is not displayed in survey preview");
+
         softAssert.assertAll();
     }
 }

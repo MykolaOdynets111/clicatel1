@@ -3,15 +3,16 @@ Feature: Chat2Pay ::Chat2PayCustomerClosedChat
 
   @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118471")
-  Scenario: CD :: Agent Desk :: Closed Chat :: Chat2Pay :: Verify that the customer can close a chat using //end or //stop keywords, when payment is not concluded
-    Given I login as agent of General Bank Demo
-    Then Agent has new conversation request
-    When Agent click on new conversation
-    Then Conversation area becomes active with Chat to Support user's message
-    Then C2P is integrated with Chat Desk for the tenant.
-    And click on C2P Payment extension Option
+  Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
+    And click on C2P Payment extension Option of Live Customer from left side menu
     And Agent Click on Chat to Pay popup option button from chat section
     And Agent Click on Send Chat to Pay 1321 and Link 122323 OrderNumber
     Then Agent click on "Cancel Payment" request
     Then Verify Orca returns PAYMENT_LINK_CANCELLED response during 40 seconds
-    And Send //end message by ORCA
+    When Send //end message by ORCA
+    Then Agent should not see from user chat in agent desk from orca

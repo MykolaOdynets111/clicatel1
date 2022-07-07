@@ -306,4 +306,6 @@ public class AgentHomePage extends AgentAbstractPage {
     public void waitForModalWindowToDisappear(){
         waitForElementToBeInVisibleByCss(this.getCurrentDriver(), modalWindow, 6);
     }
+
+
 }

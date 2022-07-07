@@ -3,6 +3,7 @@ package agentpages.uielements;
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -50,6 +51,16 @@ public class PageHeader extends AbstractUIElement {
 
     @FindBy(css = "[selenium-id=agents-list]")
     private List<WebElement> headPhonesList;
+
+    @FindBy(css= "//*[local-name()='svg'][@name='message-forward']")
+    private WebElement forwadIcon;
+
+    @FindAll({
+            @FindBy(css = "[selenium-id=header-whats-app-button]"),
+            @FindBy(css = "[data-testid=header-whats-app-button]")
+
+    })
+    private WebElement sendWhatsAppButton;
 
     public PageHeader logOut() {
             waitForElementToBeVisible(this.getCurrentDriver(), icon, 5);
@@ -133,4 +144,11 @@ public class PageHeader extends AbstractUIElement {
         File image = new File(System.getProperty("user.dir")+"/touch/src/test/resources/profileicons/user_default.png");
         return  isWebElementEqualsImage(this.getCurrentDriver(), icon, image);
     }
+
+    public void clickOnWhatsapp()
+    {
+        scrollToElem(this.getCurrentDriver(),forwadIcon,"forward Icon");
+        scrollAndClickElem(this.getCurrentDriver(), sendWhatsAppButton, 5,"Click on Whatsapp Icon");
+    }
+
 }

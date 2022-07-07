@@ -10,7 +10,7 @@ Feature: WhatsApp ORCA :: Surveys
       | ratingScale   | ZERO_TO_TEN |
       | ratingIcon    | NUMBER      |
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45561")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118514")
   Scenario: ABC: : Surveys: Verify if the survey preview header for Apple shows as Apple Business Chat Preview
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
@@ -22,7 +22,7 @@ Feature: WhatsApp ORCA :: Surveys
     When Admin selects CSAT survey type for whatsapp survey form
     Then Survey Preview should be displayed with correct data for whatsapp channel
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-45559")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118517")
   Scenario: ABC: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in whatsapp apple business chat CSAT suvery
     And I open portal
     Given Login into portal as an admin of General Bank Demo account

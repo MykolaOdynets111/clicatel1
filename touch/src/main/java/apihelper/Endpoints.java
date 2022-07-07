@@ -16,17 +16,17 @@ public class Endpoints {
 
     public static String WIDGET_VISIBILITY_TERRITORIES = URLs.getTouchApiBaseURL() + "territories/availability";
 
-    public static String FACEBOOK_INTEGRATION =  URLs.getTouchApiBaseURL() + "facebook-registration/integration";
+    public static String FACEBOOK_INTEGRATION = URLs.getTouchApiBaseURL() + "facebook-registration/integration";
 
-    public static String TWITTER_INTEGRATION =  URLs.getTouchApiBaseURL() + "twitter-registration/integration";
+    public static String TWITTER_INTEGRATION = URLs.getTouchApiBaseURL() + "twitter-registration/integration";
 
     public static String AGENT_INFO_ME = URLs.getBaseWSInternalURL() + "agents/%s";
 
-    public static String FEATURE =  URLs.getTouchApiBaseURL() + "features/tenant";
+    public static String FEATURE = URLs.getTouchApiBaseURL() + "features/tenant";
 
     public static String INTEGRATIONS_ENABLING_DISABLING = URLs.getTouchApiBaseURL() + "integrations/channel/enable";
 
-    public static String INTEGRATION_EXISTING_CHANNELS = URLs.getTouchApiBaseURL() + "integrations/channels";
+    public static String INTEGRATION_EXISTING_CHANNELS = URLs.getBaseWSApiURL() + "channel";
 
     public static String INTEGRATIONS = URLs.getTouchApiBaseURL() + "integrations";
 
@@ -44,9 +44,9 @@ public class Endpoints {
 
     public static String TENANT_INFO = URLs.getTouchApiBaseURL() + "tenant";
 
-    public static String ACTIVE_CHATS_BY_AGENT = URLs.getBaseWSApiURL() +  "chats/search?page=0&size=200";
+    public static String ACTIVE_CHATS_BY_AGENT = URLs.getBaseWSApiURL() + "chats/search?page=0&size=200";
 
-    public static String CLOSE_ACTIVE_CHAT = URLs.getBaseWSApiURL() +  "chats/close-chat-by-id?chatId=%s";
+    public static String CLOSE_ACTIVE_CHAT = URLs.getBaseWSApiURL() + "chats/close-chat-by-id?chatId=%s";
 
     public static String CRM_TICKET = URLs.getTouchApiBaseURL() + "client-profiles/%s/crm-tickets";
 
@@ -62,11 +62,13 @@ public class Endpoints {
 
     public static String CLIENT_PROFILE_ATTRIBUTES = URLs.getTouchApiBaseURL() + "client-profiles/attributes";
 
-    public static String SURVEY_MANAGEMENT= URLs.getTouchApiBaseIntegrationURL() + "tenants/channels/rating/config?channelId=%s";
+    public static String SURVEY_MANAGEMENT = URLs. getBaseWSApiURL() + "channel/%s";
+
+    public static String UPDATE_SURVEY_MANAGEMENT = URLs.getAgentDeskURL() + "api/platform/channel/abc-orca/%s/survey-config";
 
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 
-    public static String AUTORESPONDER_CONTROLLER= URLs.getTouchApiBaseIntegrationURL() + "api/autoresponders/%s";
+    public static String AUTORESPONDER_CONTROLLER = URLs.getTouchApiBaseIntegrationURL() + "api/autoresponders/%s";
 
     public static String PAST_SENTIMENT_REPORT = URLs.getTouchApiBaseIntegrationURL() + "api/dashboard/customer-history-report/past-sentiment-report";
 
@@ -98,7 +100,7 @@ public class Endpoints {
 
     public static String INTERNAL_TENANTS = URLs.getBaseWSInternalURL() + "tenants";
 
-    public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT =  URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
+    public static String INTERNAL_GET_CHATS_FINISHED_BY_AGENT = URLs.getBaseInternalApiUrl() + "chats/finished-by-agent?agentId=%s&page=%s&size=%s";
 
     public static String INTERNAL_CHAT_BY_CLIENT = URLs.getBaseInternalApiUrl() + "chats/by-client/paging?tenantId=%s&clientId=%s&page=0&size=10";
 
@@ -108,19 +110,19 @@ public class Endpoints {
 
     public static String INTERNAL_PROCESS_TICKET = URLs.getBaseInternalApiUrl() + "chats/ticket/process";
 
-    public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() +  "chats/chat/history";
+    public static String INTERNAL_CREATE_HISTORY = URLs.getBaseInternalApiUrl() + "chats/chat/history";
 
-    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getAgentDeskURL() +  "/api/platform/autoresponders";
+    public static String INTERNAL_AUTORESPONDER_CONTROLLER = URLs.getAgentDeskURL() +  "api/platform/autoresponders";
 
-    public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() +  "api/chat-users/by-external-user-id/%s/%s/%s";
+    public static String INTERNAL_CHAT_USER_BY_ID = URLs.getBaseInternalApiUrl() + "api/chat-users/by-external-user-id/%s/%s/%s";
 
-    public static String INTERNAL_CHAT_USERS = URLs.getBaseInternalApiUrl() +  "api/chat-users";
+    public static String INTERNAL_CHAT_USERS = URLs.getBaseInternalApiUrl() + "api/chat-users";
 
-    public static String INTERNAL_ELASTIC_CHAT_SEARCH = URLs.getBaseInternalApiUrl() +  "api/search/chats";
+    public static String INTERNAL_ELASTIC_CHAT_SEARCH = URLs.getBaseInternalApiUrl() + "api/search/chats";
 
-    public static String INTERNAL_ELASTIC_CHAT_INDEX = URLs.getBaseInternalApiUrl() +  "api/search/chats/index";
+    public static String INTERNAL_ELASTIC_CHAT_INDEX = URLs.getBaseInternalApiUrl() + "api/search/chats/index";
 
-        // ====================  tie ================= //
+    // ====================  tie ================= //
 
     public static String TIE_CHAT_URL = URLs.getBaseTieURL() + "%s/chats/?q=";
 
@@ -146,7 +148,7 @@ public class Endpoints {
 
     public static String TIE_CONFIG = URLs.getBaseTieURL() + "%s/config";
 
-    public static String TIE_TRAININGS =  URLs.getBaseTieURL() + "%s/train";
+    public static String TIE_TRAININGS = URLs.getBaseTieURL() + "%s/train";
 
     public static String TIE_ADDING_INTENT_SAMPLE_TEXT_TO_TRAINING = URLs.getBaseTieURL() + "%s/intents/%s/train/%s";
 
@@ -156,9 +158,9 @@ public class Endpoints {
 
     public static String TIE_GET_TRAINSET = URLs.getBaseTieURL() + "%s/trainset";
 
-    public  static String TIE_NER = URLs.getBaseTieURL() + "%s/ner-trainset/";
+    public static String TIE_NER = URLs.getBaseTieURL() + "%s/ner-trainset/";
 
-    public  static String TIE_NER_DELETE = URLs.getBaseTieURL() + "%s/ner-trainset/%s";
+    public static String TIE_NER_DELETE = URLs.getBaseTieURL() + "%s/ner-trainset/%s";
 
     public static String TIE_BASE_INTENT_ANSWER_CREATING = URLs.getBaseTieURL() + "%s/answers/?intent=%s";
 
@@ -170,13 +172,13 @@ public class Endpoints {
 
     public static String TIE_SAMPLES = URLs.getBaseTieURL() + "%s/train-data-management/";
 
-    public static String TIE_TRAINING =  URLs.getBaseTieURL() + "%s/training";
+    public static String TIE_TRAINING = URLs.getBaseTieURL() + "%s/training";
 
-    public static String TIE_MODELS =  URLs.getBaseTieURL() + "%s/models";
+    public static String TIE_MODELS = URLs.getBaseTieURL() + "%s/models";
 
-    public static String TIE_ALL_INTENTS =  URLs.getBaseTieURL() + "%s/intents";
+    public static String TIE_ALL_INTENTS = URLs.getBaseTieURL() + "%s/intents";
 
-    public static String TIE_SLOTS_MANAGEMENT =  URLs.getBaseTieURL() + "%s/slots-management";
+    public static String TIE_SLOTS_MANAGEMENT = URLs.getBaseTieURL() + "%s/slots-management";
 
     // ====================  SOCIAL ================= //
 
@@ -205,7 +207,7 @@ public class Endpoints {
 
     public static String UPDATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "api/channel/%s-orca/%s/%s";
 
-    public static String ORCA_INTEGRATIONS_LIST= URLs.getBaseWSInternalURL() + "api/channel/%s-orca?tenantId=%s";
+    public static String ORCA_INTEGRATIONS_LIST = URLs.getBaseWSInternalURL() + "api/channel/%s-orca?tenantId=%s";
 
     // ====================  WS  ================= //
 

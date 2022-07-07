@@ -130,6 +130,8 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
         return getAgentHomePage(agent).getLeftMenuWithChats();
     }
 
+
+
     public static ChatBody getChatBody(String agent) {
         return getAgentHomePage(agent).getChatBody();
     }

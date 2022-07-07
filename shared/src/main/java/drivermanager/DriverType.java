@@ -58,7 +58,7 @@ public enum DriverType {
                 ChromeDriverManager.getInstance().driverVersion("102").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }else{
-                ChromeDriverManager.getInstance().driverVersion("89.0.4389.82").setup();
+                ChromeDriverManager.getInstance().driverVersion("102.0.5005.63").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }
 

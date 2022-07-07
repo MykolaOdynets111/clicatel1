@@ -8,6 +8,8 @@ Feature: Apple Business Chat :: Supervisor Desk
 
   @no_widget
   @orca_api
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-85711")
   Scenario: Supervisor desk: Verify if supervisor can use different filter options for filtering ORCA tickets
     Given Setup ORCA abc integration for General Bank Demo tenant
     When Send to agent message by ORCA

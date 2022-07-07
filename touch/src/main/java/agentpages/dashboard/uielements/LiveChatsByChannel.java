@@ -14,11 +14,14 @@ public class LiveChatsByChannel extends AbstractUIElement {
     @FindBy(css = ".bar-webchat")
     private WebElement webChatChart;
 
-    @FindBy(css = ".bar-abc")
+    @FindBy(css = ".cl-bar-chart__bar.bar-ABC")
     private WebElement abcChart;
 
     @FindBy(css = ".bar-WHATSAPP")
     private WebElement whatsAppChart;
+
+    @FindBy(css="cl-chat-item__footer__date")
+    private WebElement is24Hrs;
 
     public String getNoLiveChatsDisplayedText() {
         return getTextFromElem(this.getCurrentDriver(), noLiveChatsMessage, 5, "No Live Chats");
@@ -38,6 +41,11 @@ public class LiveChatsByChannel extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), whatsAppChart, 15);
     }
 
+    public boolean is24HrsDisplayed()
+    {
+        scrollToElem(this.getCurrentDriver(), this.getWrappedElement(), "Live 24 Hrs Displayed on Ticket");
+        return isElementShown(this.getCurrentDriver(), is24Hrs, 15);
+    }
 
     public boolean isNumberOfLiveChatsShownForWebChatChart() {
         hoverElem(this.getCurrentDriver(), webChatChart, 3, "Live Web Chat Chart");
