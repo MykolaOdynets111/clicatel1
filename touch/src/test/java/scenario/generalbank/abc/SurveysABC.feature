@@ -9,9 +9,9 @@ Feature: Apple Business Chat :: Surveys
       | surveyType           | NPS         |
       | ratingScale          | ZERO_TO_TEN |
       | ratingIcon           | NUMBER      |
-      | ratingThanksMessage  | string      |
-      | surveyQuestionTitle  | string      |
-      | customerNoteTitle    | string      |
+      | ratingThanksMessage  | HelloWorld  |
+      | surveyQuestionTitle  | Question    |
+      | customerNoteTitle    | Note        |
       | commentEnabled       | true        |
       | thanksMessageEnabled | true        |
 

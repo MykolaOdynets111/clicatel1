@@ -592,15 +592,30 @@ public class AgentConversationSteps extends AbstractAgentSteps {
                 "Incorrect agent picture shown");
     }
 
-    @When("^(.*) open chat location form and set (.*) Location and click cancel button")
-    public void openLocationToUserAndSetSomeText(String agent, String locationName ) {
+    @When("^(.*) open chat location form$")
+    public void openLocationToUserAndSetSomeText(String agent) {
         locationWindow =  getAgentHomePage(agent).openLocationWindow();
-        locationWindow.searchLocation(locationName).clickCancelLocationButton();
+    }
+
+    @And("^Agent search for (.*) Location$")
+    public void agentSearchForParisLocation(String locationName) {
+        locationWindow.searchLocation(locationName);
+    }
+
+    @And("Agent click on reset button")
+    public void agentClickOnResetButton() {
+        locationWindow.clickCancelLocationButton();
     }
 
     @Then("Location field becomes empty")
     public void locationFieldBecomesEmpty() {
         Assert.assertFalse(locationWindow.checkSearchFieldisEmpty(), "Location Field in not empty");
+    }
+
+    @And("^Agent click on (.*) Location$")
+    public void agentClickOnParisLocation(String locationName) {
+        locationWindow.selectLocation(locationName);
+        Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
     }
 }
 
