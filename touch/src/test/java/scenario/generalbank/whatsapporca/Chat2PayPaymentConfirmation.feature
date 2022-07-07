@@ -5,11 +5,12 @@ Feature: Chat2Pay ::Chat2PayPaymentConfirmation
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118473")
   Scenario: CD :: Agent Desk :: Live Chat :: Chat2Pay :: Verify that the agent gets an options to mark the chat as pending when agent tries to close a chat where payment is not conluded
     Given I login as agent of General Bank Demo
-    Then Agent has new conversation request
-    When Agent click on new conversation
-    Then Conversation area becomes active with Chat to Support user's message
-    Then C2P is integrated with Chat Desk for the tenant.
-    And click on C2P Payment extension Option
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to Support message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to Support user's message
+    And click on C2P Payment extension Option of Live Customer from left side menu
     And Agent Click on Chat to Pay popup option button from chat section
     And Agent Click on Send Chat to Pay 1321 and Link 122323 OrderNumber
     And Agent closes the chat from agent desk
