@@ -11,10 +11,8 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
-    Then C2P is integrated with Chat Desk for the tenant.
-    And click on C2P Payment extension Option
-    And Agent Click on Chat to Pay popup option button from chat section
-    And Agent Click on Send Chat to Pay 1321 and Link 122323 OrderNumber
-    Then Agent click on "Cancel Payment" request
-    Then Verify Orca returns PAYMENT_LINK_CANCELLED response during 40 seconds
-    And Send //end message by ORCA
+    When When Agent open c2p form
+    And Agent fill c2p form with orderNumber 45545, price 10 and send
+    When Wait for 360 second
+    Then Agent get 'payment link expired' update is sent to agent desk by C2P
+

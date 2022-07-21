@@ -1,12 +1,13 @@
 package datamanager.jacksonschemas.orca;
 
 
-import java.util.List;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.javafaker.Faker;
+import lombok.Data;
+
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -20,7 +21,7 @@ import com.github.javafaker.Faker;
         "externalReferenceId",
         "history"
 })
-@Generated("jsonschema2pojo")
+@Data
 public class OrcaEvent {
 
     @JsonProperty("eventId")
@@ -58,123 +59,9 @@ public class OrcaEvent {
         this.setRouteId(routeId);
         this.setSourceId(faker.numerify("############"));
         this.setSessionId(faker.letterify("1?????"));
-        this.setContent(new Content(messageText));
+        this.setContent(new Content(messageText, name));
         this.setUserInfo(new UserInfo(name));
         this.setExternalReferenceId(faker.letterify("RefId???"));
     }
 
-    @JsonProperty("eventId")
-    public String getEventId() {
-        return eventId;
-    }
-
-    @JsonProperty("eventId")
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
-
-    @JsonProperty("providerId")
-    public String getProviderId() {
-        return providerId;
-    }
-
-    @JsonProperty("providerId")
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
-    }
-
-    @JsonProperty("routeId")
-    public String getRouteId() {
-        return routeId;
-    }
-
-    @JsonProperty("routeId")
-    public void setRouteId(String routeId) {
-        this.routeId = routeId;
-    }
-
-    @JsonProperty("sourceId")
-    public String getSourceId() {
-        return sourceId;
-    }
-
-    @JsonProperty("sourceId")
-    public void setSourceId(String sourceId) {
-        this.sourceId = sourceId;
-    }
-
-    @JsonProperty("sessionId")
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    @JsonProperty("sessionId")
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    @JsonProperty("content")
-    public Content getContent() {
-        return content;
-    }
-
-    @JsonProperty("content")
-    public void setContent(Content content) {
-        this.content = content;
-    }
-
-    @JsonProperty("userInfo")
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    @JsonProperty("userInfo")
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    @JsonProperty("externalReferenceId")
-    public String getExternalReferenceId() {
-        return externalReferenceId;
-    }
-
-    @JsonProperty("externalReferenceId")
-    public void setExternalReferenceId(String externalReferenceId) {
-        this.externalReferenceId = externalReferenceId;
-    }
-
-    @JsonProperty("channelId")
-    public Integer getChannelId() {
-        return channelId;
-    }
-
-    @JsonProperty("channelId")
-    public void setChannelId(Integer channelId) {
-        this.channelId = channelId;
-    }
-
-    @JsonProperty("history")
-    public List<History> getHistory() {
-        return history;
-    }
-
-    @JsonProperty("history")
-    public void setHistory(List<History> history) {
-        this.history = history;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "eventId='" + eventId + '\'' +
-                ", providerId='" + providerId + '\'' +
-                ", routeId='" + routeId + '\'' +
-                ", sourceId='" + sourceId + '\'' +
-                ", sessionId='" + sessionId + '\'' +
-                ", content=" + content +
-                ", userInfo=" + userInfo +
-                ", externalReferenceId='" + externalReferenceId + '\'' +
-                ", history=" + history +
-                '}';
-    }
 }

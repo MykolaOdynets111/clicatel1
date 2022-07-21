@@ -99,6 +99,12 @@ public class ChatBody extends AbstractUIElement {
     @FindBy(xpath = ".//div[@class='channel-separator-title mb-2 mt-2']")
     private List<WebElement> channelSeparators;
 
+    @FindBy(css=".cl-c2p-event-message-title")
+    private WebElement expire_c2p_text;
+
+    @FindBy (css = "[data-testid='card']")
+    private WebElement c2pCard;
+
     public List<String> getChanelSeparatorsText() {
         return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
     }
@@ -109,6 +115,14 @@ public class ChatBody extends AbstractUIElement {
 
     public String getLocationURLFromUser() {
         return getAttributeFromElem(this.getCurrentDriver(), locationHREFFormUser,5, "Location href", "href");
+    }
+
+    public String getC2pExpiresCardsText(){
+        return getTextFromElem(this.getCurrentDriver(), expire_c2p_text, 5,"Expire c2p text");
+    }
+
+    public String getC2pCardsText(){
+        return getTextFromElem(this.getCurrentDriver(), c2pCard, 5,"c2p text");
     }
 
     private WebElement getFromUserWebElement(String messageText) {

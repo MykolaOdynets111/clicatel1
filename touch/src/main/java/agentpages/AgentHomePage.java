@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import touchpages.uielements.AttachmentWindow;
-import touchpages.uielements.LocationWindow;
+import agentpages.uielements.LocationWindow;
 
 import java.util.List;
 
@@ -75,6 +75,12 @@ public class AgentHomePage extends AgentAbstractPage {
     @FindBy(css = "[selenium-id = transfer-notification-waiting]")
     private List<WebElement> notificationsList;
 
+    @FindBy(css =".cl-c2p-close-modal-note")
+    private WebElement c2pMoveToPendingMessage;
+
+    @FindBy(xpath ="//button[text()='Move to Pending']")
+    private WebElement moveToPendingButton;
+
     private String openedProfileWindow = "//div[@class='profile-modal-pageHeader modal-pageHeader']/parent::div";
 
     private DeleteCRMConfirmationPopup deleteCRMConfirmationPopup;
@@ -97,6 +103,8 @@ public class AgentHomePage extends AgentAbstractPage {
     private ChatAttachmentForm chatAttachmentForm;
     private AttachmentWindow attachmentWindow;
     private LocationWindow locationWindow;
+    private C2pSendForm c2pSendForm;
+    private Extensions extensions;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -112,6 +120,11 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatForm;
     }
 
+    public Extensions getExtensionsForm(){
+        extensions.setCurrentDriver(this.getCurrentDriver());
+        return extensions;
+    }
+
     public AttachmentWindow openAttachmentWindow(){
         getChatForm().openAttachmentForm();
         attachmentWindow.setCurrentDriver(this.getCurrentDriver());
@@ -122,6 +135,13 @@ public class AgentHomePage extends AgentAbstractPage {
         getChatForm().openLocationForm();
         locationWindow.setCurrentDriver(this.getCurrentDriver());
         return locationWindow;
+    }
+
+    public C2pSendForm openc2pSendForm(){
+        getChatForm().openExtensionsForm();
+        getExtensionsForm().openC2pForm();
+        c2pSendForm.setCurrentDriver(this.getCurrentDriver());
+        return c2pSendForm;
     }
 
 
@@ -290,6 +310,14 @@ public class AgentHomePage extends AgentAbstractPage {
     public List<WebElement> getCollapsedTransfers(){
         waitForElementsToBeVisible(this.getCurrentDriver(), notificationsList, 6);
         return notificationsList;
+    }
+
+    public String getC2pMoveToPendingMessage(){
+        return getTextFromElem(this.getCurrentDriver(),c2pMoveToPendingMessage, 2, "c2p Move To Pending Message").trim();
+    }
+
+    public void clickMoveToPendingButton(){
+        clickElem(this.getCurrentDriver(), moveToPendingButton, 1, "Move To Pending Button");
     }
 
     public void acceptAllTransfers(){

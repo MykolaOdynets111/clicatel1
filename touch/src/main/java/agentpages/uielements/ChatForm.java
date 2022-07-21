@@ -60,6 +60,9 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css ="svg[name='map-pin']")
     private WebElement location;
 
+    @FindBy(css="svg[name='puzzle']")
+    private WebElement c2pButton;
+
     private String emojiMartCss = "section.emoji-mart";
 
     private AttachmentWindow attachmentWindow;
@@ -182,6 +185,7 @@ public class ChatForm extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), location, 2, "Location button");
     }
 
-
-
+    public void openExtensionsForm(){
+        clickElem(this.getCurrentDriver(), c2pButton, 2, "c2p button");
+    }
 }

@@ -1,6 +1,8 @@
 package steps.agentsteps;
 
+import agentpages.uielements.C2pSendForm;
 import agentpages.uielements.ChatAttachment;
+import agentpages.uielements.LocationWindow;
 import agentpages.uielements.Suggestion;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
@@ -22,7 +24,6 @@ import steps.DefaultTouchUserSteps;
 import steps.FacebookSteps;
 import steps.TwitterSteps;
 import steps.dotcontrol.DotControlSteps;
-import touchpages.uielements.LocationWindow;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     private static ThreadLocal<List<String>> messagesFromChatBody = new ThreadLocal<List<String>>();
     public static ThreadLocal<String> locationURL = new ThreadLocal<String>();
     private LocationWindow locationWindow ;
+    private C2pSendForm c2pSendForm;
 
     public static String getSelectedEmoji() {
         return selectedEmoji;
@@ -649,5 +651,25 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         locationWindow.selectLocation(locationName);
         Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
     }
-}
 
+    @When("^When (.*) open c2p form$")
+    public void agentOpenC2PForm(String agent){
+        c2pSendForm = getAgentHomePage(agent).openc2pSendForm();
+    }
+
+    @And("^Agent fill c2p form with orderNumber (.*), price (.*) and send$")
+    public void sendChatToPayLink(String order, String price) {
+        c2pSendForm.setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
+    }
+
+    @Then("^(.*) get 'payment link expired' update is sent to agent desk by C2P$")
+    public void verifyExpirationC2p(String agent){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pExpiresCardsText().contains("Payment link expired"), "Expire card didn't come from c2p");
+    }
+
+    @Then("^(.*) sees C2P link with (.*) number in chat body$")
+    public void verifyExpirationC2p(String agent, String number){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().getC2pCardsText().contains(number), "C2P link with number: "+ number +"is not shown in chat body");
+    }
+
+}

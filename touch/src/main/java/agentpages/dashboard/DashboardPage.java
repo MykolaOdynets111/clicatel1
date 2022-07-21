@@ -2,8 +2,7 @@ package agentpages.dashboard;
 
 
 import agentpages.dashboard.uielements.*;
-import agentpages.supervisor.uielements.SupervisorDeskHeader;
-import agentpages.uielements.AgentMessageComposer;
+import agentpages.uielements.C2pSendForm;
 import agentpages.uielements.PageHeader;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -60,7 +59,7 @@ public class DashboardPage extends PortalAbstractPage {
     private LiveAgentsTableDashboard agentsTableDashboard;
     private CustomersOverviewTab customersOverviewTab;
 
-    private AgentMessageComposer customerPaytoExtension;
+    private C2pSendForm customerPaytoExtension;
 
     private  PageHeader forwardMessageIcon;
     private CustomersHistory customersHistory;
@@ -104,7 +103,7 @@ public class DashboardPage extends PortalAbstractPage {
         return customersOverviewTab;
     }
 
-    public AgentMessageComposer getCustomerPaytoExtension()
+    public C2pSendForm getCustomerPaytoExtension()
     {
         customerPaytoExtension.setCurrentDriver(this.getCurrentDriver());
         return customerPaytoExtension;

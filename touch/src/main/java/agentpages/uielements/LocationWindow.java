@@ -1,4 +1,4 @@
-package touchpages.uielements;
+package agentpages.uielements;
 
 import abstractclasses.AbstractUIElement;
 import org.openqa.selenium.WebElement;
@@ -23,7 +23,6 @@ public class LocationWindow extends AbstractUIElement {
 
     @FindBy(css=".cl-button.cl-button--reset-only")
     private WebElement cancelLocationButton;
-
 
     public LocationWindow selectLocation(String locationName){
         waitForFirstElementToBeVisible(this.getCurrentDriver(),locations,3);

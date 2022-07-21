@@ -1,21 +1,22 @@
 package steps.agentsteps;
 
-import agentpages.AgentHomePage;
-import agentpages.uielements.*;
+import agentpages.uielements.FilterMenu;
+import agentpages.uielements.Profile;
 import apihelper.ApiHelper;
+import datamanager.Tenants;
+import datamanager.UserPersonalInfo;
 import datamanager.jacksonschemas.AgentMapping;
 import datamanager.jacksonschemas.chatusers.UserInfo;
+import datamanager.jacksonschemas.dotcontrol.InitContext;
+import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import mc2api.auth.PortalAuthToken;
-import datamanager.*;
-import datamanager.jacksonschemas.dotcontrol.InitContext;
-import dbmanager.DBConnector;
 import io.restassured.response.Response;
+import mc2api.auth.PortalAuthToken;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -311,8 +312,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         );
     }
     @When("^(.*) click on (?:new|last opened) conversation request from (.*)$")
-    public void acceptUserFromSocialConversation(String agent, String socialChannel)
-    {
+    public void acceptUserFromSocialConversation(String agent, String socialChannel) {
         if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
         getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));
     }
@@ -748,20 +748,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
-    @And("click on C2P Payment extension Option of Live Customer from left side menu")
-    public void clickOnPaymentExtension(String agent) {
-        getAgentHomePage(agent).getLeftMenuWithChats().clickOnPaymentExtensionOption();
-    }
 
-    @And("Agent Click on Chat to Pay popup option button from chat section")
-    public void clickOnChatToPayOption() {
-        getDashboardPage().getCustomerPaytoExtension().clickOnChatToPayOption();
-    }
-    @And("Agent closes the chat from agent desk")
-    public void AgentClickClosedChat() {
-
-        getDashboardPage().getCustomersOverviewTab().clickClosedChatButton();
-    }
     @And("Agent select \"Closed\" tab from left menu")
     public void AgentClickClosedTabMenuButton(String agent)
     {
@@ -780,30 +767,16 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 "WhatsApp 24 HRS closed chart is not displayed in Live Chats By Channel");
     }
 
-    @Then("Agent Click on Send Chat to Pay {int} and Link {int} OrderNumber")
-    public void SendChatToPayLink(String order, String price) {
-        getSendChatToPayLinkPage().setOrderNumberField(order).setPriceForOrder(price).clickSendButton();
-    }
-
-    @And("Agent notify \"Cannot close chat\" notification modal open")
+    @And("^(.*) get \"Cannot close chat\" notification modal open$")
     public void notifyCannotCloseChat(String agent) {
-        String ExpectedClosedChatWindowHeader = "Cannot close chat";
-        String ActualClosedChatWindowHeader = getChatHeader(agent).getCloseChatHeaderText();
-        Assert.assertEquals(ExpectedClosedChatWindowHeader,ActualClosedChatWindowHeader);
+        String ActualClosedChatWindowHeader = getAgentHomePage(agent).getC2pMoveToPendingMessage();
+        Assert.assertEquals(ActualClosedChatWindowHeader,"Sorry, this chat can't be closed as it has 1 or more active payment(s). " +
+                "Would you like to move it to the pending tab where it will close automatically?");
     }
 
-    @Then("Verify Move to pending chat can be seen in the pending tab")
-    public void verifyMoveToPendingChatDisplayInPendingTab(){
-        getDashboardPage().getCustomersOverviewTab().clickOnPendingTab();
-    }
-    @And("Agent click on option \"Move to Pending\" from notification")
-    public void agentClickOnMoveToPendingOption() {
-        getDashboardPage().getCustomersOverviewTab().clickMoveToPendingButton();
-    }
-
-    @Given("Agent click on \"Cancel Payment\" request")
-    public void agentClickOnCancelPaymentButton() {
-        getDashboardPage().getCustomersOverviewTab().clickCancelPaymentButton();
+    @And("^(.*) click on option \"Move to Pending\" from notification$")
+    public void agentClickOnMoveToPendingOption(String agent) {
+        getAgentHomePage(agent).clickMoveToPendingButton();
     }
 
     @When("^Agent click on Edit button in User profile$")

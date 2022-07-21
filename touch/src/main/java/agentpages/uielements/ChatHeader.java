@@ -54,8 +54,6 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css = "[data-testid=chat-header-title]")
     private WebElement chatHeaderTitle;
 
-    @FindBy(css="[cl-c2p-close-modal-header-title]")
-    private WebElement closeChatHeader;
     @FindBy(css = "[data-testid=chat-header-channel-icon]")
     private WebElement channelImg;
 
@@ -159,11 +157,6 @@ public class ChatHeader extends AbstractUIElement {
 
     public String getChatHeaderText(){
         return chatHeaderTitle.getText();
-    }
-
-    public String getCloseChatHeaderText()
-    {
-        return closeChatHeader.getText();
     }
 
     public void clickFlagChatButton(){

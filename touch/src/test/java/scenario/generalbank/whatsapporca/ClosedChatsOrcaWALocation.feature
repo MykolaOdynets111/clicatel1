@@ -11,8 +11,8 @@ Feature: Whatsapp ORCA :: ChatDesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message
-    When Agent sends Live Location to User
-    Then Verify Orca returns Live Location sent by Agent during 40 seconds
+    When Agent sends Lviv Location to User
+    Then Verify Orca returns Lviv Location sent by Agent during 40 seconds
     When Agent closes chat
     And Agent select "Closed" left menu option
     And Agent searches and selects chat from orca in chat history list

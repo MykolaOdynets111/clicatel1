@@ -8,8 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.List;
-
 public class AgentDeskChatMessage extends AbstractWidget {
 
     private final String messageTimeCssLocator = ".msg-time";
@@ -40,7 +38,6 @@ public class AgentDeskChatMessage extends AbstractWidget {
         this.currentDriver = currentDriver;
         return this;
     }
-
 
     public String getMessageText() {
         try {
