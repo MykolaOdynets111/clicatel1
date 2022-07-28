@@ -48,9 +48,6 @@ public class OrcaEvent {
     public OrcaEvent() {
     }
 
-    public static void main(String[] args) {
-        System.out.println(new OrcaEvent("dsds","connect to agent"));
-    }
     public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
         String name = "AQA ORCA" +  faker.number().randomNumber(7, false);

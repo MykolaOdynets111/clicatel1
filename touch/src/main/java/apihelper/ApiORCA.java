@@ -51,10 +51,10 @@ public class ApiORCA {
         return token;
     }
 
-    public static Response getORCAIntegrationsList(String channel){
+    public static Response getORCAIntegrationsList(){
         Response resp =  RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .get(String.format(Endpoints.ORCA_INTEGRATIONS_LIST, channel, Tenants.getTenantId()));
+                .get(String.format(Endpoints.ORCA_INTEGRATIONS_LIST, Tenants.getTenantId()));
         return resp;
     }
 

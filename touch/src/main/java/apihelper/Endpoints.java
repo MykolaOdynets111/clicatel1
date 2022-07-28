@@ -207,7 +207,7 @@ public class Endpoints {
 
     public static String UPDATE_ORCA_INTEGRATION = URLs.getBaseWSInternalURL() + "api/channel/%s-orca/%s/%s";
 
-    public static String ORCA_INTEGRATIONS_LIST = URLs.getBaseWSInternalURL() + "api/channel/%s-orca?tenantId=%s";
+    public static String ORCA_INTEGRATIONS_LIST = URLs.getBaseWSInternalURL() + "api/channel/%s";
 
     // ====================  WS  ================= //
 

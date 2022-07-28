@@ -46,17 +46,14 @@ public class ORCASteps implements WebWait {
     }
 
     @Given("^Send (.*) message by ORCA$")
-    public void sendOrcaMessage(String message)
-    {
-        if (orcaMessageCallBody.get() == null)
-        {
+    public void sendOrcaMessage(String message){
+
+        if (orcaMessageCallBody.get() == null){
             System.out.println("creating new OrcaEvent for message: " + message);
             createRequestMessage(apiToken.get(), message);
             clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
             System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
-        }
-        else
-        {
+        }else{
             System.out.println("Updating new OrcaEvent for message: " + message);
             System.out.println("Message body before update is: " + orcaMessageCallBody.get().toString());
             orcaMessageCallBody.get().getContent().getEvent().setText(message);
@@ -87,7 +84,7 @@ public class ORCASteps implements WebWait {
     @Given("^Setup ORCA (.*) integration for (.*) tenant$")
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
-        String id = getIntegrationId(channel);
+        String id = getIntegrationId(channel, "ORCA");
         if (id == null) {
             apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
         } else {
@@ -97,12 +94,15 @@ public class ORCASteps implements WebWait {
     }
 
 
-    private String getIntegrationId(String channel) {
-        Response response = ApiORCA.getORCAIntegrationsList(channel);
-        List<Map> types = response.getBody().jsonPath().getList("");
-        if (!(types.size() == 0)) {
-            for (Map integrationType : types) {
-                if (integrationType.get("channelType").equals(channel.toUpperCase())) {
+    private String getIntegrationId(String channel, String transportType) {
+        Response response = ApiORCA.getORCAIntegrationsList();
+        List<Map> channels = response.getBody().jsonPath().getList("");
+        if (!(channels.size() == 0)) {
+            for (Map integrationType : channels) {
+                if ((Boolean)integrationType.get("enabled")
+                        && integrationType.get("channelType").toString().equalsIgnoreCase(channel)
+                        && integrationType.get("transportType").toString().equalsIgnoreCase(transportType)){
+
                     return integrationType.get("id").toString();
                 }
             }
@@ -139,8 +139,6 @@ public class ORCASteps implements WebWait {
         Assert.assertTrue(isLocationCameToUser(locationName, wait),
                 String.format("Location '%s' didn't come to user",locationName ));;
     }
-
-
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
