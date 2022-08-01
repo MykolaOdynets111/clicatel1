@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-@FindBy(css = "[selenium-id='tab-profile']")
+@FindBy(css = "[data-testid=tab-right-panel-0]")
 public class Profile extends AbstractUIElement {
 
 
@@ -44,10 +44,7 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[data-testid=user-profile-facebook]")
     private WebElement fbLabel;
 
-    @FindAll({
-            @FindBy(css = "[selenium-id=user-profile-phone]"),
-            @FindBy(css = "[data-testid=user-profile-phone]")
-    })
+    @FindBy(xpath = "//input[@name=\"phoneNumber\"]")
     private WebElement phoneLocator;
 
     @FindBy(css = "[data-testid=user-profile-send-otp]")
@@ -62,12 +59,9 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[data-testid=user-profile-phone-status]")
     private WebElement verifiedLabel;
 
-    @FindBy(css="[data-testid=user-profile-phone-status]")
+    @FindBy(xpath="//div[@data-testid=\"user-profile-phone-status\"]")
     private WebElement notVerifiedLabel;
-    @FindAll({
-            @FindBy(css = ".cl-r-tab-profile-header .cl-r-button"),
-            @FindBy(css = "[selenium-id=user-profile-save]")
-    })
+    @FindBy(xpath = "//button[@name=\"user-profile-save\"]")
     private WebElement saveEditButton;
 
     @FindBy(xpath = "//div[@class='empty-icon no-border']")
@@ -76,7 +70,7 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[data-testid=user-profile-container]")
     private WebElement mailColor;
 
-    @FindBy(css = "[Selenium-id= user-profile-edit]")
+    @FindBy(xpath = "//button[text()=\"Edit\"]")
     private WebElement editButton;
 
     private String phoneCSS = "[data-testid = 'user-profile-phone']";

@@ -748,13 +748,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
-
-    @And("Agent select \"Closed\" tab from left menu")
-    public void AgentClickClosedTabMenuButton(String agent)
-    {
-        getAgentHomePage(agent).getLeftMenuWithChats().ClickonCloseTabMenuButton();
-    }
-
     @And("Agent click on 'start chat' button")
     public void AgentClickOnStartChartButton(String agent)
     {
