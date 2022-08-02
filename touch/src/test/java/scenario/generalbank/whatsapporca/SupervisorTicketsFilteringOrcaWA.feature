@@ -23,8 +23,8 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     When Send to dsdfsdf message by ORCA
     And Send sfdsfsdfsd message by ORCA
 #    When Agent refreshes the page
-     And Agent filter by "Apple Business Chat" channel and "Neutral" sentiment
-     Then Ticket from orca is present on All tickets filter page
+    And Agent filter by "Apple Business Chat" channel and "Neutral" sentiment
+    Then Ticket from orca is not present on Supervisor Desk
 #    When Send hate you message by ORCA
 #    When Agent refreshes the page
 #    And Agent filter by "Apple Business Chat" channel and "Negative" sentiment
