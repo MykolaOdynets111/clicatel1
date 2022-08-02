@@ -799,3 +799,4 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
     }
 }
+

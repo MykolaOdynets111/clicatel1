@@ -8,7 +8,9 @@ import datamanager.Tenants;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
+import drivermanager.ConfigManager;
 import interfaces.WebWait;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -200,4 +202,23 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
     }
 
+    @When("^Send (.*) message by another user using ORCA$")
+    public void userSendConnectToAgentMessageByORCA(String message) {
+        {
+                System.out.println("creating new OrcaEvent for message: " + message);
+                createRequestMessage(apiToken.get(), message);
+                clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
+                System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
+            ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
+        }
+    }
+
+
+    @Then("current active chat remains open in conversation area")
+    public void currentActiveChatRemainsOpenInConversationArea() {
+        {
+      /*      if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
+            getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));*/
+        }
+    }
 }
