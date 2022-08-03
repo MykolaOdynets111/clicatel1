@@ -10,7 +10,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to Support user's message
-    When Agent click 'Pending chat' button
+    When When Agent click 'Pending' chat button
     Then Agent receives pending message with orca user name
     When Agent select "Pending" left menu option
     Then Agent has new conversation request from orca user

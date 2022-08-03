@@ -75,7 +75,10 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(css =".cl-transfer-history__agent-name")
     private WebElement agentName;
 
-    @FindBy(css = "[selenium-id='header-toggle-pending']")
+    @FindAll({
+            @FindBy(css = "[selenium-id='header-toggle-pending']"),
+            @FindBy(css = "button[data-testid=\"header-toggle-pending\"]")
+    })
     private WebElement pendingButton;
 
     private String transferChatButtonXpath =  ".//button[@selenium-id='header-transfer-chat']";
