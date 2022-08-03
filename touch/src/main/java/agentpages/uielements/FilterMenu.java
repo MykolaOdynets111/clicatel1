@@ -58,6 +58,10 @@ public class FilterMenu extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), applyFiltersButton, 3, "Apply Filters Button");
     }
 
+    public void clickCloseFiltersButton() {
+        clickElem(this.getCurrentDriver(), closeFilterButton, 3, "Close Filters Button");
+    }
+
     public FilterMenu expandChannels() {
         clickElem(this.getCurrentDriver(), channelExpandColapsButton, 3, "Channels expand button");
         return this;
@@ -96,7 +100,7 @@ public class FilterMenu extends AbstractUIElement {
     public String isStartDateIsEmpty(){
         List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
         String value = getAttributeFromElem(this.getCurrentDriver(), dateInputs.get(0), 2, "Start Date Element", "value");
-        clickElem(this.getCurrentDriver(), closeFilterButton, 3, "Close Filters Button");
+        clickCloseFiltersButton();
         return value;
     }
 

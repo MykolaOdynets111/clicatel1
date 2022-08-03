@@ -258,6 +258,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
         getTargetChat(userId).click();
     }
 
+    public void clickCloseButton() {
+        filterMenu.clickCloseFiltersButton();
+    }
+
     public void searchTicket(String userId) {
         clickOnSearchButton();
         inputUserNameIntoSearch(userId);
@@ -387,12 +391,16 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 "The date filter is not empty" + actualValueForDateFilter);
     }
 
-    public boolean checkBackButtonNotVisibleThreeMonthsBack() {
+    public boolean checkBackButtonNotVisibleThreeMonthsBack(String filterType) {
         openFilterMenu();
 
         List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
 
-        clickElem(this.getCurrentDriver(), dateInputs.get(0), 5, "Start date element");
+        if (filterType.equalsIgnoreCase("start date")) {
+            clickElem(this.getCurrentDriver(), dateInputs.get(0), 5, "Start date element");
+        } else if (filterType.equalsIgnoreCase("end date")) {
+            clickElem(this.getCurrentDriver(), dateInputs.get(1), 5, "End date element");
+        }
 
         //Clicking back button 3 times for back button invisibility check
         clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
@@ -400,10 +408,18 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
 
         try {
-            waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            if (filterType.equalsIgnoreCase("start date")) {
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            } else if (filterType.equalsIgnoreCase("end date")) {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            }
             return true;
         } catch (Exception e) {
-            Assert.fail("Back button is still visible");
+            if (filterType.equalsIgnoreCase("start date")) {
+                Assert.fail("Back button is still visible for start date filter");
+            } else if (filterType.equalsIgnoreCase("end date")) {
+                Assert.fail("Back button is not visible for end date filter");
+            }
             return false;
         }
     }

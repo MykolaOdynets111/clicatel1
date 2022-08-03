@@ -28,3 +28,6 @@ Feature: Filtering : Chat Desk
     And  Agent filter by 0 year 3 month and 0 days ago start date and today's end date
     Then Check value of date filter for Agent should be empty for start date filter 0 year 3 month and 0 days ago
     And Check for Agent that back button is not visible in calendar for start date filter 3 months ago
+    When Agent select "Closed" left menu option
+    And Agent clicks close filter button
+    Then Check for Agent that back button is visible in calendar for end date filter 3 months ago
