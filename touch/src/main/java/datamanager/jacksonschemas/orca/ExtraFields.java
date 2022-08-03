@@ -15,11 +15,12 @@ import lombok.*;
         "merchantSession",
         "endpoints",
         "addressInfo",
+        "department",
         "token",
         "oauth2Token",
         "channelProfileName"
 })
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 public class ExtraFields {
 
     @JsonProperty("locale")
@@ -31,17 +32,17 @@ public class ExtraFields {
     @JsonProperty("group")
     private String group;
     @JsonProperty("abc")
-    private ExtraFieldsAbc abc = null;
+    private ExtraFieldsAbc abc;
     @JsonProperty("merchantSession")
     private String merchantSession;
     @JsonProperty("endpoints")
     private String endpoints;
     @JsonProperty("addressInfo")
     private String addressInfo;
-    @JsonProperty("token")
-    private String token;
     @JsonProperty("department")
     private String department;
+    @JsonProperty("token")
+    private String token;
     @JsonProperty("oauth2Token")
     private String oauth2Token;
     @JsonProperty("channelProfileName")

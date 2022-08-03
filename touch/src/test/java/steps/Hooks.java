@@ -104,7 +104,7 @@ public class Hooks implements JSHelper {
                 !scenario.getSourceTagNames().contains("@camunda")){
 
             if(DriverFactory.isTouchDriverExists()) {
-                if (scenario.isFailed()) widgetWebSocketLogs();
+//                if (scenario.isFailed()) widgetWebSocketLogs();
                 takeScreenshot();
                 endTouchFlow(scenario, true);
             }
@@ -269,14 +269,14 @@ public class Hooks implements JSHelper {
             takeScreenshotFromSecondDriver();
             if (scenario.isFailed()) {
                 chatDeskConsoleOutput();
-                chatdeskWebSocketLogs();
+//                chatdeskWebSocketLogs();
             }
         }
         if (DriverFactory.isSecondAgentDriverExists()) {
                 takeScreenshotFromThirdDriverIfExists();
                 if (scenario.isFailed()) {
                     secondAgentChatDeskConsoleOutput();
-                    secondAgentChatdeskWebSocketLogs();
+//                    secondAgentChatdeskWebSocketLogs();
                 }
         }
     }

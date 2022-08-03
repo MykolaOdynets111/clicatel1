@@ -98,12 +98,12 @@ public class ORCASteps implements WebWait {
         Response response = ApiORCA.getORCAIntegrationsList();
         List<Map> channels = response.getBody().jsonPath().getList("");
         if (!(channels.size() == 0)) {
-            for (Map integrationType : channels) {
-                if ((Boolean)integrationType.get("enabled")
-                        && integrationType.get("channelType").toString().equalsIgnoreCase(channel)
-                        && integrationType.get("transportType").toString().equalsIgnoreCase(transportType)){
+            for (Map channelMap : channels) {
+                if ((Boolean)channelMap.get("enabled")
+                        && channelMap.get("channelType").toString().equalsIgnoreCase(channel)
+                        && channelMap.get("transportType").toString().equalsIgnoreCase(transportType)){
 
-                    return integrationType.get("id").toString();
+                    return channelMap.get("id").toString();
                 }
             }
         }
