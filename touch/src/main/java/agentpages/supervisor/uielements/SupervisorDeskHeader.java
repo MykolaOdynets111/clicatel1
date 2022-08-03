@@ -107,7 +107,7 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     }
 
     public SupervisorDeskHeader selectSentiment(String sentimentName){
-        clickElem(this.getCurrentDriver(), sentimentDropdown, 1, "Sentiment Dropdown");
+        clickElem(this.getCurrentDriver(), sentimentDropdown, 4, "Sentiment Dropdown");
         dropdownOptions.stream().filter(e -> e.getText().equalsIgnoreCase(sentimentName))
                 .findFirst().orElseThrow(() ->
                 new AssertionError(sentimentName + " sentiment is not found")).click();
