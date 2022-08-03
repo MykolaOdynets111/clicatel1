@@ -6,7 +6,7 @@ Feature: WhatsApp ORCA :: Surveys
     Given Setup ORCA whatsapp integration for General Bank Demo tenant
     And Update survey management chanel whatsapp settings by ip for General Bank Demo
       | ratingEnabled | true        |
-      | ratingType    | NPS         |
+      | surveyType    | NPS         |
       | ratingScale   | ZERO_TO_TEN |
       | ratingIcon    | NUMBER      |
 

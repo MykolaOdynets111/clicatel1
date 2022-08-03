@@ -11,16 +11,13 @@ import lombok.*;
         "extraFields",
         "event"
 })
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 public class Content {
 
     @JsonProperty("extraFields")
     private ExtraFields extraFields;
     @JsonProperty("event")
     private Event event;
-
-    public Content() {
-    }
 
     public Content(String messageText, String name){
         this.setExtraFields(new ExtraFields(name));
