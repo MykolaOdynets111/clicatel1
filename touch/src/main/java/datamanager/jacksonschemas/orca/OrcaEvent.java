@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.javafaker.Faker;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -15,13 +16,14 @@ import java.util.List;
         "providerId",
         "routeId",
         "sourceId",
+        "replyToEventId",
         "sessionId",
         "content",
         "userInfo",
         "externalReferenceId",
         "history"
 })
-@Data
+@Data @NoArgsConstructor
 public class OrcaEvent {
 
     @JsonProperty("eventId")
@@ -32,6 +34,8 @@ public class OrcaEvent {
     private String routeId;
     @JsonProperty("sourceId")
     private String sourceId;
+    @JsonProperty("replyToEventId")
+    private String replyToEventId;
     @JsonProperty("sessionId")
     private String sessionId;
     @JsonProperty("content")
@@ -44,9 +48,6 @@ public class OrcaEvent {
     private Integer channelId;
     @JsonProperty("history")
     private List<History> history = null;
-
-    public OrcaEvent() {
-    }
 
     public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
