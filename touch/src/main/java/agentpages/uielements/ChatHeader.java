@@ -77,7 +77,7 @@ public class ChatHeader extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "[selenium-id='header-toggle-pending']"),
-            @FindBy(css = "button[data-testid=\"header-toggle-pending\"]")
+            @FindBy(css = "button[data-testid=\'header-toggle-pending\']")
     })
     private WebElement pendingButton;
 
