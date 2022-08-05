@@ -22,7 +22,7 @@ public class DepartmentCard extends AbstractWidget {
     @FindBy(xpath =".//button[text()='Delete department']")
     private WebElement deleteDepartmentButton;
 
-    @FindBy(xpath = ".//span[text() = 'Manage department']")
+    @FindBy(xpath = ".//button[text() = 'Manage department']")
     private WebElement manageDepartmentButton;
 
     @FindBy(xpath = ".//*[@class ='cl-icon total']/parent::span")
