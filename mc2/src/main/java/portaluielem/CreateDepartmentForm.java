@@ -28,7 +28,7 @@ public class CreateDepartmentForm extends AbstractUIElement {
     @FindBy(xpath = ".//button[text() = 'Save']")
     private WebElement saveButton;
 
-    @FindBy(css =".cl-r-form-group__error-text")
+    @FindBy(css =".cl-form-group__error-text")
     private WebElement duplicateNameErrorMessage;
 
     @Step(value = "Set text to the Name field")
