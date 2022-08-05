@@ -44,13 +44,13 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
         this.endDate.set(endDate);
     }
 
-    @And("^Check value of date filter for (.*) should be empty for start date filter (\\d+) year (\\d+) month and (\\d+) days ago$")
+    @And("^(.*) checks value of date filter is empty for start date filter (\\d+) year (\\d+) month and (\\d+) days ago$")
     public void agentStartDateFilterEmptyCheck(String agent, int year, int month, int day) {
         Assert.assertTrue(getAgentHomePage(agent).getLeftMenuWithChats().checkStartDateFilterEmpty().isEmpty(),
                 "The date filter is not empty" + getAgentHomePage(agent).getLeftMenuWithChats().checkStartDateFilterEmpty());
     }
 
-    @And("^Check for (.*) that back button is (.*) in calendar for (.*) filter 3 months ago$")
+    @And("^(.*) checks back button is (.*) in calendar for (.*) filter 3 months ago$")
     public void backButtonDisability(String agent, String visibility, String filterType) {
         getAgentHomePage(agent).getLeftMenuWithChats().checkBackButtonVisibilityThreeMonthsBack(filterType);
     }
