@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
          plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true,
-        features ="touch/src/test/java/scenario/generalbank/whatsapporca/ChatdeskOrcaWA.feature",
+        features ="src/test/java/scenario/generalbank/touch/agentflows",
         glue ="steps")
 public class RunWhatsAppORCATest extends AbstractTestNGCucumberTests {
 

@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 @CucumberOptions(
         plugin={"pretty", "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"},
         monochrome = true,
-        features ="src/test/java/scenario/TenantHealthCheck.feature",
+       // features ="src/test/java/scenario/TenantHealthCheck.feature",
+        features = "src/test/java/scenario/generalbank/whatsapporca//ChatdeskOrcaWA.feature",
         glue ="steps")
 public class RunHealthCheckTest extends AbstractTestNGCucumberTests {
 
