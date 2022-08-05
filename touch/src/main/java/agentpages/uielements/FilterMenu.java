@@ -47,7 +47,13 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[@class='css-xb97g8 cl-r-select__multi-value__remove']/*")
     private List<WebElement> sentimentRemoveButtons;
 
-    private String dateInput = "//input[@placeholder='Select date']";
+    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
+    private WebElement startDateInput;
+
+    @FindBy(css = "[class='cl-form-control cl-form-control--input react-datepicker-ignore-onclickoutside']")
+    private WebElement startDateInputCalendar;
+    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
+    private WebElement endDateInput;
 
     public FilterMenu selectFlaggedCheckbox() {
         clickElem(this.getCurrentDriver(), flaggedCheckbox, 1, "Flagged checkbox");
@@ -88,31 +94,24 @@ public class FilterMenu extends AbstractUIElement {
     }
 
     public boolean isStartDateIsPresent(){
-        List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
-        return isElementShown(this.getCurrentDriver(), dateInputs.get(0), 1);
+        return isElementShown(this.getCurrentDriver(), startDateInput, 1);
     }
 
     public boolean isEndDateIsPresent(){
-        List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
-        return isElementShown(this.getCurrentDriver(), dateInputs.get(1), 1);
+        return isElementShown(this.getCurrentDriver(), endDateInput, 1);
     }
 
     public String isStartDateIsEmpty(){
-        List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
-        String value = getAttributeFromElem(this.getCurrentDriver(), dateInputs.get(0), 2, "Start Date Element", "value");
+        String value = getAttributeFromElem(this.getCurrentDriver(), startDateInput, 2, "Start Date Element", "value");
         clickCloseFiltersButton();
         return value;
     }
 
     public void fillStartDate(LocalDate startDate) {
-        List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
-
-        fillDateInput(this.getCurrentDriver(), dateInputs.get(0), startDate, 1, "Start date");
+        fillDateInput(this.getCurrentDriver(), startDateInput, startDateInputCalendar, startDate, 1, "Start date");
     }
 
     public void fillEndDate(LocalDate endDate) {
-        List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
-
-        fillDateInput(this.getCurrentDriver(), dateInputs.get(1), endDate, 1, "End date");
+        fillDateInput(this.getCurrentDriver(), endDateInput, endDate, 1, "End date");
     }
 }

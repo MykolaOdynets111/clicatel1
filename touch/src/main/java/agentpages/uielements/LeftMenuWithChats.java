@@ -129,7 +129,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
     @FindBy(xpath = "//button[@aria-label='Previous Month']")
     private WebElement backButton;
 
-    private String dateInput = "//input[@placeholder='Select date']";
+    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
+    private WebElement startDateInput;
+
+    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
+    private WebElement endDateInput;
     private String backButtonString = "//button[@aria-label='Previous Month']";
 
     @FindAll({
@@ -383,23 +387,20 @@ public class LeftMenuWithChats extends AbstractUIElement {
         filterMenu.clickApplyButton();
     }
 
-    public void checkStartDateFilterEmpty() {
+    public String checkStartDateFilterEmpty() {
         openFilterMenu();
         String actualValueForDateFilter = filterMenu.isStartDateIsEmpty();
 
-        Assert.assertTrue(actualValueForDateFilter.isEmpty(),
-                "The date filter is not empty" + actualValueForDateFilter);
+        return actualValueForDateFilter;
     }
 
-    public boolean checkBackButtonNotVisibleThreeMonthsBack(String filterType) {
+    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
         openFilterMenu();
 
-        List<WebElement> dateInputs = waitForElementsToBeVisibleByXpath(this.getCurrentDriver(), dateInput, 5);
-
         if (filterType.equalsIgnoreCase("start date")) {
-            clickElem(this.getCurrentDriver(), dateInputs.get(0), 5, "Start date element");
+            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
         } else if (filterType.equalsIgnoreCase("end date")) {
-            clickElem(this.getCurrentDriver(), dateInputs.get(1), 5, "End date element");
+            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
         }
 
         //Clicking back button 3 times for back button invisibility check
@@ -415,12 +416,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
             }
             return true;
         } catch (Exception e) {
-            if (filterType.equalsIgnoreCase("start date")) {
-                Assert.fail("Back button is still visible for start date filter");
-            } else if (filterType.equalsIgnoreCase("end date")) {
-                Assert.fail("Back button is not visible for end date filter");
-            }
-            return false;
+            throw new AssertionError("There is issue with Back button visibility for selected filter");
         }
     }
 
