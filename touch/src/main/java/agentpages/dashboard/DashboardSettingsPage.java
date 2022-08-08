@@ -43,16 +43,16 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
-                clickElem(this.getCurrentDriver(), businessProfile, 2, "Business Profile");
+                clickElem(this.getCurrentDriver(), businessProfile, 5, "Business Profile");
                 break;
             case "Chat Tags":
-                clickElem(this.getCurrentDriver(), chatTags, 2, "Chat Tags");
+                clickElem(this.getCurrentDriver(), chatTags, 5, "Chat Tags");
                 break;
             case "Auto Responders":
-                clickElem(this.getCurrentDriver(), autoResponders, 2, "Auto Responders");
+                clickElem(this.getCurrentDriver(), autoResponders, 5, "Auto Responders");
                 break;
             case "Preferences":
-                clickElem(this.getCurrentDriver(), preferences, 4, "Preferences");
+                clickElem(this.getCurrentDriver(), preferences, 5, "Preferences");
                 break;
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");

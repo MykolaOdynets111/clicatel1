@@ -19,7 +19,7 @@ Feature: HSMTemplate
     When Agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118469")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105012")
   Scenario: CD:: Agent Desk :: Closed Chat :: HSM :: Verify if agent can initiate a chat with WhatsApp via orca user by sending HSM template from Closed tab
     Given I login as agent of General Bank Demo
     And Agent select "Closed" tab from left menu
@@ -37,7 +37,7 @@ Feature: HSMTemplate
       And Agent click on new conversation request
       Then Conversation area becomes active with user's message
 
-      @TestCaseId("https://jira.clickatell.com/browse/TPORT-118472")
+      @TestCaseId("https://jira.clickatell.com/browse/TPORT-105016")
       Scenario: CD :: Supervisor Desk :: HSM :: Verify if supervisor can login as agent and send a direct WhatsApp via orca message via message icon on the top bar
         Given user logs in to supervisor desk
         And opens agent desk by clicking launch agent desk
