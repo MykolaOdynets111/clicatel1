@@ -98,7 +98,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         ApiHelper.createDepartment(name, department, agent);
     }
 
-    @Then("^Verify Agent cannot create department with duplicate (.*) name")
+    @Then("^Verify Agent cannot create department with duplicate (.*) name$")
     public void verifyDuplicationAlert(String name)
     {
         SoftAssert softAssert = new SoftAssert();
