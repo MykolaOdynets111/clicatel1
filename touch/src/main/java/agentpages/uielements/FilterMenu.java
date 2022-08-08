@@ -20,6 +20,9 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(xpath = ".//button[contains(text(),'Apply Filters')]")
     private WebElement applyFiltersButton;
 
+    @FindBy(xpath = "//button[contains(@data-testid, 'close-filter-tab-btn')]")
+    private WebElement closeFilterButton;
+
     @FindBy(xpath = ".//label[text()='Channel']/parent::div//div[contains(@class, 'cl-r-select__control')]//input")
     private WebElement channelInput;
 
@@ -44,10 +47,12 @@ public class FilterMenu extends AbstractUIElement {
     @FindBy(xpath = ".//label[text()='Sentiment']/parent::div//div[@class='css-xb97g8 cl-r-select__multi-value__remove']/*")
     private List<WebElement> sentimentRemoveButtons;
 
-    @FindBy(name = "startDate")
+    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
     private WebElement startDateInput;
 
-    @FindBy(name = "endDate")
+    @FindBy(css = "[class='cl-form-control cl-form-control--input react-datepicker-ignore-onclickoutside']")
+    private WebElement startDateInputCalendar;
+    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
     private WebElement endDateInput;
 
     public FilterMenu selectFlaggedCheckbox() {
@@ -57,6 +62,10 @@ public class FilterMenu extends AbstractUIElement {
 
     public void clickApplyButton() {
         clickElem(this.getCurrentDriver(), applyFiltersButton, 3, "Apply Filters Button");
+    }
+
+    public void clickCloseFiltersButton() {
+        clickElem(this.getCurrentDriver(), closeFilterButton, 3, "Close Filters Button");
     }
 
     public FilterMenu expandChannels() {
@@ -92,8 +101,14 @@ public class FilterMenu extends AbstractUIElement {
         return isElementShown(this.getCurrentDriver(), endDateInput, 1);
     }
 
+    public String isStartDateIsEmpty(){
+        String value = getAttributeFromElem(this.getCurrentDriver(), startDateInput, 2, "Start Date Element", "value");
+        clickCloseFiltersButton();
+        return value;
+    }
+
     public void fillStartDate(LocalDate startDate) {
-        fillDateInput(this.getCurrentDriver(), startDateInput, startDate, 1, "Start date");
+        fillDateInput(this.getCurrentDriver(), startDateInput, startDateInputCalendar, startDate, 1, "Start date");
     }
 
     public void fillEndDate(LocalDate endDate) {
