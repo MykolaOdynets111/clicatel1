@@ -44,7 +44,7 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[data-testid=user-profile-facebook]")
     private WebElement fbLabel;
 
-    @FindBy(xpath = "//input[@name=\'phoneNumber\']")
+    @FindBy(xpath = "//input[@name='phoneNumber']")
     private WebElement phoneLocator;
 
     @FindBy(css = "[data-testid=user-profile-send-otp]")
@@ -59,9 +59,9 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[data-testid=user-profile-phone-status]")
     private WebElement verifiedLabel;
 
-    @FindBy(xpath="//div[@data-testid=\'user-profile-phone-status\']")
+    @FindBy(xpath="//div[@data-testid='user-profile-phone-status']")
     private WebElement notVerifiedLabel;
-    @FindBy(xpath = "//button[@name=\'user-profile-save\']")
+    @FindBy(xpath = "//button[@name='user-profile-save']")
     private WebElement saveEditButton;
 
     @FindBy(xpath = "//div[@class='empty-icon no-border']")
@@ -70,7 +70,7 @@ public class Profile extends AbstractUIElement {
     @FindBy(css = "[data-testid=user-profile-container]")
     private WebElement mailColor;
 
-    @FindBy(xpath = "//button[text()=\'Edit\']")
+    @FindBy(xpath = "//button[text()='Edit']")
     private WebElement editButton;
 
     private String phoneCSS = "[data-testid = 'user-profile-phone']";
