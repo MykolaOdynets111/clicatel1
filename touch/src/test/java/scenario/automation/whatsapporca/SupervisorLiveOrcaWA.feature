@@ -17,3 +17,4 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     And Agent click On Live Supervisor Desk chat from ORCA channel
     Then Supervisor Desk Live chat container header display "No current Agent" instead of agent name
     Then Verify Orca returns Agent Busy message autoresponder during 40 seconds
+

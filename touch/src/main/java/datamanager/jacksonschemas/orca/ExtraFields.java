@@ -18,7 +18,9 @@ import lombok.*;
         "department",
         "token",
         "oauth2Token",
-        "channelProfileName"
+        "channelProfileName",
+        "displayType",
+        "messageId"
 })
 @Data @AllArgsConstructor @NoArgsConstructor
 public class ExtraFields {
@@ -47,7 +49,10 @@ public class ExtraFields {
     private String oauth2Token;
     @JsonProperty("channelProfileName")
     private String channelProfileName;
-
+    @JsonProperty("displayType")
+    private String displayType;
+    @JsonProperty("messageId")
+    private String messageId;
 
     public ExtraFields(String name){
         this.setLocale("en_uk");
