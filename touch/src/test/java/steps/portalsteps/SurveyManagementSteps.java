@@ -181,7 +181,6 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         List<String> surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
         SoftAssert softAssert = new SoftAssert();
-       // softAssert.assertEquals(surveyPreviewMessages,configuration.getRatingThanksMessage());
         softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getRatingThanksMessage()),
                 "Rating thanks message is not displayed in survey preview");
         softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getSurveyQuestionTitle()),
