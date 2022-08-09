@@ -17,10 +17,13 @@ Feature: WhatsApp ORCA :: Surveys
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    When Admin selects NPS survey type for whatsapp survey form
+    When Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel expand button for survey form
+    And Admin selects NPS survey type for whatsapp survey form
     Then Survey Preview should be displayed with correct data for whatsapp channel
     When Admin selects CSAT survey type for whatsapp survey form
     Then Survey Preview should be displayed with correct data for whatsapp channel
+    And Admin clicks on channel toggle button for survey form
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118517")
   Scenario: WA: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in whatsapp chat CSAT suvery
@@ -29,6 +32,8 @@ Feature: WhatsApp ORCA :: Surveys
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
+    When Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel expand button for survey form
     And Admin selects CSAT survey type for whatsapp survey form
     When Agent select 1 to 5 as number limit from dropdown for whatsapp survey form
     And Agent click save survey configuration button for whatsapp survey form
@@ -42,3 +47,4 @@ Feature: WhatsApp ORCA :: Surveys
     And Agent click save survey configuration button for whatsapp survey form
     Then Survey backend was updated for General Bank Demo and whatsapp chanel with following attribute
       | ratingScale     |     ONE_TO_TEN   |
+    And Admin clicks on channel toggle button for survey form

@@ -28,7 +28,7 @@ Feature: Apple Business Chat :: Surveys
     Then Survey Preview should be displayed with correct data for abc channel
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-45559")
-  Scenario: ABC: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in whatsapp apple business chat CSAT suvery
+  Scenario: ABC: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in apple business chat CSAT suvery
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
