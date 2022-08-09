@@ -1,15 +1,14 @@
 package steps.portalsteps;
 
+import agentpages.survey.uielements.SurveyWebChatForm;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import datamanager.SurveyManagement;
 import datamanager.Tenants;
-import org.openqa.selenium.WebElement;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import agentpages.survey.uielements.SurveyWebChatForm;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +57,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             } else if (type.equalsIgnoreCase("NPS")) {
                 getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().clickNPSRadioButton();
             }
+        } else if (surveyForm.equalsIgnoreCase("whatsapp")) {
+            if (type.equalsIgnoreCase("CSAT")) {
+                getSurveyManagementPage().getSurveyWAForm().getSurveysInner().clickCSATRadioButton();
+            } else if (type.equalsIgnoreCase("NPS")) {
+                getSurveyManagementPage().getSurveyWAForm().getSurveysInner().clickNPSRadioButton();
+            }
         } else {
             this.selectSurvey(type);
         }
@@ -86,6 +91,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void selectLimitOption(String limitNumber, String surveyForm) {
         if (surveyForm.equalsIgnoreCase("abc")) {
             getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().selectDropdownOption(limitNumber);
+        } else if (surveyForm.equalsIgnoreCase("whatsapp")) {
+            getSurveyManagementPage().getSurveyWAForm().getSurveysInner().selectDropdownOption(limitNumber);
         } else {
             this.selectLimitOption(limitNumber);
         }
@@ -101,6 +108,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void clickSaveButton(String surveyForm) {
         if (surveyForm.equalsIgnoreCase("abc")) {
             getSurveyManagementPage().getSurveyAbcForm().clickSaveButton();
+        } else if (surveyForm.equalsIgnoreCase("whatsapp")) {
+            getSurveyManagementPage().getSurveyWAForm().clickSaveButton();
         } else {
             this.clickSaveButton();
         }
@@ -179,7 +188,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void surveyPreviewShouldBeDisplayedWithCorrectDataForAbcChannel(String chanel) {
         String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), chanel);
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-        List<String> surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
+        List<String> surveyPreviewMessages;
+        if (chanel.equalsIgnoreCase("whatsapp")) {
+            surveyPreviewMessages = getSurveyManagementPage().getSurveyWAForm().getAllMessagesInSurveyPreview();
+        } else {
+            surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
+        }
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getRatingThanksMessage()),
                 "Rating thanks message is not displayed in survey preview");

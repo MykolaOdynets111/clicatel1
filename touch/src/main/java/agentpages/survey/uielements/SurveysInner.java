@@ -48,7 +48,7 @@ public class SurveysInner extends AbstractUIElement {
     }
 
     public SurveysInner clickNPSRadioButton() {
-        clickElem(this.getCurrentDriver(), npsRadioButton, 2, "NPS radio button");
+        clickElem(this.getCurrentDriver(), npsRadioButton, 15, "NPS radio button");
         return this;
     }
 

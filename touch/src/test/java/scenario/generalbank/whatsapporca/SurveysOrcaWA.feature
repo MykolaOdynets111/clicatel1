@@ -11,7 +11,7 @@ Feature: WhatsApp ORCA :: Surveys
       | ratingIcon    | NUMBER      |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118514")
-  Scenario: ABC: : Surveys: Verify if the survey preview header for Apple shows as Apple Business Chat Preview
+  Scenario: WA: : Surveys: Verify if the survey preview header for Whatsapp shows as Whatsapp Chat Preview
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
@@ -23,13 +23,13 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Preview should be displayed with correct data for whatsapp channel
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118517")
-  Scenario: ABC: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in whatsapp apple business chat CSAT suvery
+  Scenario: WA: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in whatsapp chat CSAT suvery
     And I open portal
     Given Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    When Admin selects CSAT survey type for whatsapp survey form
+    And Admin selects CSAT survey type for whatsapp survey form
     When Agent select 1 to 5 as number limit from dropdown for whatsapp survey form
     And Agent click save survey configuration button for whatsapp survey form
     Then Survey backend was updated for General Bank Demo and whatsapp chanel with following attribute

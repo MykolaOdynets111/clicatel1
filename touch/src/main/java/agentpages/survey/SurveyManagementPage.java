@@ -1,5 +1,6 @@
 package agentpages.survey;
 
+import agentpages.survey.uielements.SurveyWAForm;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,6 +21,7 @@ public class SurveyManagementPage extends PortalAbstractPage {
 
     private SurveyWebChatForm surveyWebChatForm;
     private SurveyAbcForm surveyAbcForm;
+    private SurveyWAForm surveyWAForm;
 
     public SurveyWebChatForm getSurveyWebChatForm(){
         surveyWebChatForm.setCurrentDriver(this.getCurrentDriver());
@@ -29,6 +31,11 @@ public class SurveyManagementPage extends PortalAbstractPage {
     public SurveyAbcForm getSurveyAbcForm() {
         surveyAbcForm.setCurrentDriver(this.getCurrentDriver());
         return surveyAbcForm;
+    }
+
+    public SurveyWAForm getSurveyWAForm() {
+        surveyWAForm.setCurrentDriver(this.getCurrentDriver());
+        return surveyWAForm;
     }
 
     public SurveyManagementPage(WebDriver driver) {
