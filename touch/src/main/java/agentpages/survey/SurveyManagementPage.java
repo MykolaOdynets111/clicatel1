@@ -21,12 +21,12 @@ public class SurveyManagementPage extends PortalAbstractPage {
     private SurveyWebChatForm surveyWebChatForm;
     private SurveyForm surveyForm;
 
-    public SurveyWebChatForm getSurveyWebChatForm(){
+    public SurveyWebChatForm getSurveyWebChatForm() {
         surveyWebChatForm.setCurrentDriver(this.getCurrentDriver());
         return surveyWebChatForm;
     }
 
-    public SurveyForm getSurveyAbcForm() {
+    public SurveyForm getSurveyForm() {
         surveyForm.setCurrentDriver(this.getCurrentDriver());
         return surveyForm;
     }
@@ -39,11 +39,11 @@ public class SurveyManagementPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), pageTitle, 40);
     }
 
-    public void switchToWhatsappTab(){
+    public void switchToWhatsappTab() {
         clickElem(this.getCurrentDriver(), whatsappTab, 1, "Whatsapp tab");
     }
 
-    public void waitSaveMessage(){
+    public void waitSaveMessage() {
         waitForElementToBeVisible(this.getCurrentDriver(), saveMessage, 5);
         waitUntilElementNotDisplayed(this.getCurrentDriver(), saveMessage, 5);
     }

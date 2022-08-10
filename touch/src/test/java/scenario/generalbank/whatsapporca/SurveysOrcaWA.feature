@@ -23,7 +23,6 @@ Feature: WhatsApp ORCA :: Surveys
     Then Survey Preview should be displayed with correct data for whatsapp channel
     When Admin selects CSAT survey type for whatsapp survey form
     Then Survey Preview should be displayed with correct data for whatsapp channel
-    And Admin clicks on channel toggle button for survey form
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118517")
   Scenario: WA: Survey: verify if supervisor can set rating option 1-10, 1-5,1-7 in whatsapp chat CSAT suvery
@@ -47,4 +46,3 @@ Feature: WhatsApp ORCA :: Surveys
     And Agent click save survey configuration button for whatsapp survey form
     Then Survey backend was updated for General Bank Demo and whatsapp chanel with following attribute
       | ratingScale     |     ONE_TO_TEN   |
-    And Admin clicks on channel toggle button for survey form

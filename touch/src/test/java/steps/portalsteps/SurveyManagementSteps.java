@@ -54,22 +54,22 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void selectSurvey(String type, String surveyForm) {
         String id = ORCASteps.getChannelId();
         if (type.equalsIgnoreCase("CSAT")) {
-            getSurveyManagementPage().getSurveyAbcForm().clickCSATRadioButton(id);
+            getSurveyManagementPage().getSurveyForm().clickCSATRadioButton(id);
         } else if (type.equalsIgnoreCase("NPS")) {
-            getSurveyManagementPage().getSurveyAbcForm().clickNPSRadioButton(id);
+            getSurveyManagementPage().getSurveyForm().clickNPSRadioButton(id);
         }
     }
 
     @When("^Admin clicks on channel toggle button for survey form")
     public void selectToggleButton() {
         String id = ORCASteps.getChannelId();
-        getSurveyManagementPage().getSurveyAbcForm().clickToggleButton(id);
+        getSurveyManagementPage().getSurveyForm().clickToggleButton(id);
     }
 
     @When("^Admin clicks on channel expand button for survey form")
     public void selectExpandButton() {
         String id = ORCASteps.getChannelId();
-        getSurveyManagementPage().getSurveyAbcForm().clickExpandButton(id);
+        getSurveyManagementPage().getSurveyForm().clickExpandButton(id);
     }
 
     @When("^Switch to whatsapp survey configuration$")
@@ -95,9 +95,9 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void selectLimitOption(String limitNumber, String surveyForm) {
         String id = ORCASteps.getChannelId();
         if (surveyForm.equalsIgnoreCase("abc")) {
-            getSurveyManagementPage().getSurveyAbcForm().selectDropdownOption(limitNumber, id);
+            getSurveyManagementPage().getSurveyForm().selectDropdownOption(limitNumber, id);
         } else if (surveyForm.equalsIgnoreCase("whatsapp")) {
-            getSurveyManagementPage().getSurveyAbcForm().selectDropdownOption(limitNumber, id);
+            getSurveyManagementPage().getSurveyForm().selectDropdownOption(limitNumber, id);
         } else {
             this.selectLimitOption(limitNumber);
         }
@@ -113,9 +113,9 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void clickSaveButton(String surveyForm) {
         String id = ORCASteps.getChannelId();
         if (surveyForm.equalsIgnoreCase("abc")) {
-            getSurveyManagementPage().getSurveyAbcForm().clickSaveButton(id);
+            getSurveyManagementPage().getSurveyForm().clickSaveButton(id);
         } else if (surveyForm.equalsIgnoreCase("whatsapp")) {
-            getSurveyManagementPage().getSurveyAbcForm().clickSaveButton(id);
+            getSurveyManagementPage().getSurveyForm().clickSaveButton(id);
         } else {
             this.clickSaveButton();
         }
@@ -191,11 +191,11 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     }
 
     @Then("^Survey Preview should be displayed with correct data for (.*) channel$")
-    public void surveyPreviewShouldBeDisplayedWithCorrectDataForAbcChannel(String chanel) {
+    public void surveyPreviewShouldBeDisplayedWithCorrectDataForChannel(String channel) {
         String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         List<String> surveyPreviewMessages;
-        surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview(channelID);
+        surveyPreviewMessages = getSurveyManagementPage().getSurveyForm().getAllMessagesInSurveyPreview(channelID);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getRatingThanksMessage()),
                 "Rating thanks message is not displayed in survey preview");

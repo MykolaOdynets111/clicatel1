@@ -5,13 +5,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@FindBy(xpath = "//div[@class='page-wrapper']//div[contains(@class, 'cl-fetch-states')]")
 public class SurveyForm extends AbstractUIElement {
 
-    @FindBy(css = ".cl-toggle")
-    private List<WebElement> formElement;
+    @FindBy(xpath = "//div[@class='setting-group']//div[contains(@class, 'setting-group__secondary-control--toggle')]//label")
+    private List<WebElement> toggleButtons;
+
+    /*@FindBy(xpath = "//div[@class='setting-group__collapse-wrapper']//div[@class='survey-form-row survey-type-container']//label")
+    private List<WebElement> collapseChannelHeaders;*/
 
     @FindBy(css = ".cl-preview-box .survey-form-title")
     private WebElement surveyPreviewTitle;
@@ -22,41 +27,49 @@ public class SurveyForm extends AbstractUIElement {
     @FindBy(xpath = ".//button[text()='Save configuration']")
     private WebElement saveSurveyButton;
 
-    @FindBy(xpath = ".//div[@aria-hidden='false']//label[contains(text(), 'CSAT')]//span")
-    private WebElement csatRadioButton;
+    @FindBy(xpath = "//div[@class='setting-group__collapse-wrapper']//div[@class='survey-form-row survey-type-container']//label[contains(text(), 'CSAT')]")
+    private List<WebElement> csatRadioButton;
 
-    @FindBy(xpath = ".//div[@aria-hidden='false']//label[contains(text(), 'NPS')]//span")
-    private WebElement npsRadioButton;
-    private SurveysInner surveysInner;
+    @FindBy(xpath = "//div[@class='setting-group__collapse-wrapper']//div[@class='survey-form-row survey-type-container']//label[contains(text(), 'NPS')]")
+    private List<WebElement> npsRadioButton;
 
-    @FindBy(css = "div.cl-select__indicators.css-1wy0on6")
+    @FindBy(xpath = "//div[@aria-hidden='false']//div[@class='cl-select__indicators css-1wy0on6']")
     private WebElement ratingNumbersDropdown;
 
     @FindBy(xpath = ".//div[contains(@id, 'react-select')]")
     private List<WebElement> ratingNumbersVariation;
 
+    @FindBy(xpath = "//div[@aria-hidden='false']//button[text()='Save configuration']")
+    private WebElement saveButtonElement;
+
+    private String collapseChannelHeaders = "//label[contains(@for, '%s')]//ancestor::div[@class='ReactCollapse--collapse']";
+    private String expandButtonElement = "//label[contains(@for, '%s')]//following::button";
+
     public SurveyForm clickToggleButton(String channelId) {
         waitFor(2500);
-        try {
-            if (isElementShown(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '" + channelId + "')]//ancestor::div[contains(@class,'setting-group__header')]//label[contains(text(), 'CSAT')]")), 5)) {
-                System.out.println("Toggle button is already clicked");
-            }
-        }
-        catch (Exception e) {
-            WebElement toggleButton = this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '" + channelId + "')]//div"));
+        if (npsRadioButton.stream().filter(nps -> nps.getAttribute("for").contains(channelId)).findFirst().get().isEnabled()) {
+            System.out.println("Toggle button is already clicked");
+        } else {
+            WebElement toggleButton = toggleButtons.stream().filter(toggle -> toggle.getAttribute("for").contains(channelId)).findFirst().get();
             moveToElemAndClick(this.getCurrentDriver(), toggleButton);
         }
         return this;
     }
 
     public SurveyForm clickExpandButton(String channelId) {
-        try {
-            if (isElementShown(this.getCurrentDriver(), this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '" + channelId + "')]//ancestor::div[contains(@class,'setting-group__header')]//label[contains(text(), 'CSAT')]")), 5)) {
-                System.out.println("Channel is already expanded");
-            }
-        }
-        catch (Exception e) {
-            WebElement expandButton = this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '" + channelId + "')]//ancestor::div[contains(@class,'setting-group__header')]"));
+        /*WebElement element = collapseChannelHeaders.stream().filter(nps -> nps.getAttribute("for").contains(channelId)).findFirst().get();
+        if (element.findElement(By.xpath("//ancestor::div[@class='ReactCollapse--collapse']")).getAttribute("aria-hidden").trim().contains("false")) {
+            System.out.println("Channel is already expanded");
+        } else {
+            WebElement expandButton = toggleButtons.stream().filter(nps -> nps.getAttribute("for").contains(channelId)).findFirst()
+                    .get().findElement(By.xpath("//following::button"));
+            moveToElemAndClick(this.getCurrentDriver(), expandButton);
+        }*/
+        WebElement element = findElemByXPATH(this.getCurrentDriver(), String.format(collapseChannelHeaders, channelId));
+        if (element.getAttribute("aria-hidden").trim().contains("false")) {
+            System.out.println("Channel is already expanded");
+        } else {
+            WebElement expandButton = findElemByXPATH(this.getCurrentDriver(), String.format(expandButtonElement, channelId));
             moveToElemAndClick(this.getCurrentDriver(), expandButton);
         }
         return this;
@@ -64,21 +77,16 @@ public class SurveyForm extends AbstractUIElement {
 
     public SurveyForm clickCSATRadioButton(String channelId) {
         waitFor(2500);
-        WebElement csatRadio = this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '" + channelId + "')]//ancestor::div[contains(@class,'setting-group')]//label[contains(text(), 'CSAT')]"));
+        WebElement csatRadio = csatRadioButton.stream().filter(e -> e.getAttribute("for").contains(channelId)).findFirst().get();
         executeJSclick(this.getCurrentDriver(), csatRadio);
         return this;
     }
 
     public SurveyForm clickNPSRadioButton(String channelId) {
         waitFor(3500);
-        WebElement npsRadio = this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '" + channelId + "')]//ancestor::div[contains(@class,'setting-group')]//label[contains(text(), 'NPS')]"));
+        WebElement npsRadio = npsRadioButton.stream().filter(e -> e.getAttribute("for").contains(channelId)).findFirst().get();
         executeJSclick(this.getCurrentDriver(), npsRadio);
         return this;
-    }
-
-    public SurveysInner getSurveysInner() {
-        surveysInner.setCurrentDriver(this.getCurrentDriver());
-        return surveysInner;
     }
 
     public String getSurveyPreviewTitle() {
@@ -86,16 +94,16 @@ public class SurveyForm extends AbstractUIElement {
     }
 
     public List<String> getAllMessagesInSurveyPreview(String channelId) {
-        List<WebElement> previewMessage = this.getCurrentDriver().findElements(By.xpath("//label[contains(@for, '" + channelId + "')]//ancestor::div[contains(@class,'setting-group__collapse')]//div[contains(@class,'preview-message preview-message--agent-message')]"));
-        return previewMessage.stream()
-                .map(message -> getTextFromElem(this.getCurrentDriver(), message, 3, "Survey preview message"))
-                .collect(Collectors.toList());
+        List<String> messages = new ArrayList<>();
+        for (WebElement elem : previewMessage) {
+            messages.add(elem.getText());
+        }
+        return messages;
     }
 
     public void clickSaveButton(String channelId) {
-        WebElement saveSurveyButton = this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '"+ channelId +"')]//ancestor::div[contains(@class,'setting-group__collapse-wrapper')]//button[text()='Save configuration']"));
-        if (isElementEnabled(this.getCurrentDriver(), saveSurveyButton, 2) == true) {
-            clickElem(this.getCurrentDriver(), saveSurveyButton, 2, "Save Survey Button");
+        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2) == true) {
+            clickElem(this.getCurrentDriver(), saveButtonElement, 2, "Save Survey Button");
         } else {
             System.out.println("Value is already saved");
         }
@@ -111,11 +119,10 @@ public class SurveyForm extends AbstractUIElement {
     }
 
     public void selectDropdownOption(String number, String channelId) {
-        WebElement ratingNumbersDropdown = this.getCurrentDriver().findElement(By.xpath("//label[contains(@for, '"+ channelId +"')]//ancestor::div[contains(@class,'setting-group__collapse-wrapper')]//div[contains(@class,'cl-select__indicators css-1wy0on6')]"));
         clickElem(this.getCurrentDriver(), ratingNumbersDropdown, 20, "Rating number dropdown");
 
         waitFor(5000);
-        getCurrentDriver().findElements(By.xpath(".//div[contains(@id, 'react-select')]")).stream().filter(e -> e.getText().trim().equals(number)).findFirst()
+        ratingNumbersVariation.stream().filter(e -> e.getText().trim().equals(number)).findFirst()
                 .orElseThrow(() -> new AssertionError(number + " number was not found in dropdown.")).click();
     }
 
