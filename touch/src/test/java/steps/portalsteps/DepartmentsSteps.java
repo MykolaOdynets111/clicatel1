@@ -32,15 +32,13 @@ public class DepartmentsSteps extends AbstractPortalSteps {
                 "Departments was not created");
     }
 
-    @Then("^Create Department with (.*) name (.*) description and with (.*) Agents")
-    public void createDepartmentWithSeveralAgents(String name, String description, int agent){
+    @Then("^Create Department with (.*) name (.*) description and with two agents$")
+    public void createDepartmentWithSeveralAgents(String name, String description){
         List<String> agents = new ArrayList<String>();
-        agents.add(Tenants.getTenantUnderTestOrgName());
+        String firstAgentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "agent").get("fullName");
+        agents.add(firstAgentName);
         String secondAgentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "second agent").get("fullName");
         agents.add(secondAgentName);
-        for (int i = agent-2; i > 0; i--){
-            agents.add(AbstractAgentSteps.getListOfCreatedAgents().get((i-1)).get("name"));
-        }
         getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agents).clickCreateButton();
         Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name, 5),
                 "Departments was not created");
@@ -98,7 +96,7 @@ public class DepartmentsSteps extends AbstractPortalSteps {
         ApiHelper.createDepartment(name, department, agent);
     }
 
-    @Then("^Verify Agent cannot create department with duplicate (.*) name$")
+    @Then("Verify Agent cannot create department with duplicate (.*) name")
     public void verifyDuplicationAlert(String name)
     {
         SoftAssert softAssert = new SoftAssert();
