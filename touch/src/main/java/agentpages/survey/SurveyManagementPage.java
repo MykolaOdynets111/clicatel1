@@ -1,11 +1,12 @@
 package agentpages.survey;
 
+import agentpages.survey.uielements.SurveyForm;
+import agentpages.survey.uielements.SurveyWebChatForm;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
-import agentpages.survey.uielements.SurveyForm;
-import agentpages.survey.uielements.SurveyWebChatForm;
 
 public class SurveyManagementPage extends PortalAbstractPage {
 
@@ -18,6 +19,8 @@ public class SurveyManagementPage extends PortalAbstractPage {
     @FindBy(css = ".svg-icon-whatsappwhite")
     private WebElement whatsappTab;
 
+    private String surveyFormMainElement = "//label[contains(@for, '%s')]//ancestor::div[@class='setting-group']";
+
     private SurveyWebChatForm surveyWebChatForm;
     private SurveyForm surveyForm;
 
@@ -26,9 +29,10 @@ public class SurveyManagementPage extends PortalAbstractPage {
         return surveyWebChatForm;
     }
 
-    public SurveyForm getSurveyForm() {
-        surveyForm.setCurrentDriver(this.getCurrentDriver());
-        return surveyForm;
+    public SurveyForm getSurveyForm(String channelId) {
+        waitFor(3000);
+        return new SurveyForm(this.getCurrentDriver().findElement(By.xpath(String.format(surveyFormMainElement, channelId))))
+                .setCurrentDriver(this.getCurrentDriver());
     }
 
     public SurveyManagementPage(WebDriver driver) {

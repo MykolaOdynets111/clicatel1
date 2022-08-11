@@ -1,12 +1,8 @@
 package agentpages.survey.uielements;
 
 import abstractclasses.AbstractUIElement;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SurveysInner extends AbstractUIElement {
 
@@ -23,9 +19,6 @@ public class SurveysInner extends AbstractUIElement {
     @FindBy(xpath = "//div[text()='Smiles and stars available only in CSAT mode']")
     private WebElement ratingTypesUnavailableMessage;
 
-    @FindBy(name = "surveyQuestionTitle")
-    private WebElement questionInput;
-
     @FindBy(xpath = "//span[text()='Prompt customer to leave a note:']/following-sibling::label")
     private WebElement commentSwitcher;
 
@@ -38,11 +31,6 @@ public class SurveysInner extends AbstractUIElement {
 
     public void setThankMessage(String message) {
         inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
-    }
-
-    public void changeQuestion(String guestion) {
-        questionInput.clear();
-        inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", guestion);
     }
 
     public void selectRateIcon(String icon) {

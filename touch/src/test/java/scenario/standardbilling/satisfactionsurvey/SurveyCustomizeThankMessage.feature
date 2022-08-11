@@ -6,7 +6,7 @@ Feature: Satisfaction Survey
   Background:
     Given Update survey management chanel webchat settings by ip for Standard Billing
       | ratingEnabled        | true             |
-      | ratingType           | CSAT             |
+      | surveyType           | CSAT             |
       | ratingScale          | ONE_TO_TEN       |
       | ratingIcon           | NUMBER           |
       | commentEnabled       | true             |
@@ -21,5 +21,5 @@ Feature: Satisfaction Survey
     Then Survey Management page should be shown
     When Selects NPS survey type
     And Customize your survey thank message
-    When Agent click save survey configuration button
+    And Agent click save survey configuration button for webchat survey form
     Then Thank Survey thank message was updated on backend for Standard Billing and webchat chanel
