@@ -25,13 +25,13 @@ public class DepartmentCard extends AbstractWidget {
     @FindBy(xpath = ".//button[text() = 'Manage department']")
     private WebElement manageDepartmentButton;
 
-    @FindBy(xpath = "//span[@class='cl-icon-holder']")
+    @FindBy(xpath = ".//span[@class='cl-icon-holder']")
     private WebElement agentsQuantity;
 
-    @FindBy(xpath = "//span[@class='cl-icon-holder cl-icon-holder--offline']")
+    @FindBy(xpath = ".//span[@class='cl-icon-holder cl-icon-holder--offline']")
     private WebElement offlineAgentsNumber;
 
-    @FindBy(xpath = "//span[@class='cl-icon-holder cl-icon-holder--online']")
+    @FindBy(xpath = ".//span[@class='cl-icon-holder cl-icon-holder--online']")
     private WebElement onlineAgentsNumber;
 
     public DepartmentCard(WebElement element) {
