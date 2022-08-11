@@ -50,6 +50,9 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(name = "surveyQuestionTitle")
     private WebElement questionInput;
 
+    @FindBy(name = "ratingThanksMessage")
+    private WebElement thankMessageForm;
+
     public SurveyForm(WebElement element) {
         super(element);
     }
@@ -82,6 +85,10 @@ public class SurveyForm extends AbstractWidget {
     public void changeQuestion(String question) {
         questionInput.clear();
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
+    }
+
+    public void setThankMessage(String message) {
+        inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
     }
 
     public SurveyForm clickCSATRadioButton() {

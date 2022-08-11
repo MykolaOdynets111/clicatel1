@@ -22,15 +22,8 @@ public class SurveysInner extends AbstractUIElement {
     @FindBy(xpath = "//span[text()='Prompt customer to leave a note:']/following-sibling::label")
     private WebElement commentSwitcher;
 
-    @FindBy(name = "ratingThanksMessage")
-    private WebElement thankMessageForm;
-
     public void clickCommentSwitcher() {
         clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher");
-    }
-
-    public void setThankMessage(String message) {
-        inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
     }
 
     public void selectRateIcon(String icon) {

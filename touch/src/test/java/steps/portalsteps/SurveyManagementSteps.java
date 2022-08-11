@@ -138,15 +138,18 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @When("^Customize your survey thank message$")
     public void setSurveyThankMessage() {
+        String channelID = ORCASteps.getChannelId();
         thankMessageUpdate.set("Thank you for taking the time to provide us with your feedback. " + faker.gameOfThrones().dragon());
-        surveyWebChatForm.getSurveysInner().setThankMessage(thankMessageUpdate.get());
+        getSurveyManagementPage().getSurveyForm(channelID).setThankMessage(thankMessageUpdate.get());
     }
 
     @Then("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
     public void verifyThankQuestionIsUpdated(String tenantOrgName, String chanel) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
-        SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-        Assert.assertEquals(configuration.getRatingThanksMessage(), thankMessageUpdate.get(), "Thank survey message is not the same as was set");
+        String channelID = ORCASteps.getChannelId();
+        List<String> surveyPreviewMessages;
+        surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(surveyPreviewMessages.contains(thankMessageUpdate.get()));
     }
 
     @Then("^Survey backend was updated for (.*) and (.*) chanel with following attribute$")
