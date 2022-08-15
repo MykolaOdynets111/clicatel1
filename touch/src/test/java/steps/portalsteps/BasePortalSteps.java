@@ -777,12 +777,6 @@ public class BasePortalSteps extends AbstractPortalSteps {
         getAdminPortalMainPage().clickPageActionButton(actionButton);
     }
 
-    @When("^I click toggle button on settings page")
-    public void clickToggleButton() {
-        getDashboardSettingsPage().clickToggle();
-        getDashboardSettingsPage().clickExpandSurvey();
-    }
-
     @When("^Wait for auto responders page to load$")
     public void waitForAutoRespondersToLoad() {
         getPortalTouchPreferencesPage().getAutoRespondersWindow().waitToBeLoaded();

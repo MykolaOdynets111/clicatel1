@@ -17,7 +17,9 @@ Feature: Satisfaction Survey
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Surveys page
     Then Survey Management page should be shown
-    When Admin selects CSAT survey type for abc survey form
+    When Admin clicks on channel toggle button for survey form
+    And Admin clicks on channel expand button for survey form
+    And Admin selects CSAT survey type for whatsapp survey form
     And Customize your survey "Please rate your experience with our agent" question
     And Agent click save survey configuration button for whatsapp survey form
     Then Preview question is updated successfully

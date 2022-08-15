@@ -1,6 +1,5 @@
 package steps.portalsteps;
 
-import agentpages.survey.uielements.SurveyWebChatForm;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.SurveyManagement;
@@ -14,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SurveyManagementSteps extends AbstractPortalSteps {
-
-    private SurveyWebChatForm surveyWebChatForm;
     private static ThreadLocal<String> questionUpdate = new ThreadLocal<>();
     private static ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
     Faker faker = new Faker();
@@ -41,11 +38,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Selects (.*) survey type")
     public void selectSurvey(String type) {
-        surveyWebChatForm = getSurveyManagementPage().getSurveyWebChatForm();
+        String id = ORCASteps.getChannelId();
+
         if (type.equalsIgnoreCase("CSAT")) {
-            //surveyWebChatForm.getSurveysInner().clickCSATRadioButton();
+            getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();
         } else if (type.equalsIgnoreCase("NPS")) {
-            //surveyWebChatForm.getSurveysInner().clickNPSRadioButton();
+            getSurveyManagementPage().getSurveyForm(id).clickNPSRadioButton();
         }
     }
 
@@ -78,10 +76,11 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^CSAT scale has correct limit variants (.*) in dropdown and (.*) set as type$")
     public void verifyCSATNumbers(List<String> expRangeOfNumbers, String type) {
+        String id = ORCASteps.getChannelId();
         SoftAssert soft = new SoftAssert();
-        //soft.assertEquals(surveyWebChatForm.getSurveysInner().getVariationOfRatingCSATScale(),
-        //        expRangeOfNumbers, "CSAT range of numbers in dropdown is not as expected");
-        soft.assertTrue(surveyWebChatForm.isRateHasCorrectIcons(type), "No " + type + " type of Icons are displayed in Survey Preview");
+        soft.assertEquals(getSurveyManagementPage().getSurveyForm(id).getVariationOfRatingCSATScale(),
+                expRangeOfNumbers, "CSAT range of numbers in dropdown is not as expected");
+        soft.assertTrue(getSurveyManagementPage().getSurveyForm(id).isRateHasCorrectIcons(type), "No " + type + " type of Icons are displayed in Survey Preview");
         soft.assertAll();
     }
 
@@ -110,23 +109,27 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @When("^Agent switch \"Allow customer to leave a note\" in survey management$")
     public void enableComments() {
-        surveyWebChatForm.getSurveysInner().clickCommentSwitcher();
+        String channelID = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(channelID).clickCommentSwitcher();
     }
 
     @Then("^Agent sees comment field in Survey management form$")
     public void isCommenfFormShown() {
-        Assert.assertTrue(surveyWebChatForm.isCommentFieldShown(), "Comment Form is not shown");
+        String channelID = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(channelID).isCommentFieldShown(), "Comment Form is not shown");
     }
 
 
     @Then("^Agent see survey range (.*) in rating scale$")
     public void verifyCorectNumbersDisplayed(String numbers) {
-        Assert.assertEquals(surveyWebChatForm.getSizeOfRateInputNumbers(), numbers, "Quantity of numbers is not the same");
+        String id = ORCASteps.getChannelId();
+        Assert.assertEquals(getSurveyManagementPage().getSurveyForm(id).getSizeOfRateInputNumbers(), numbers, "Quantity of numbers is not the same");
     }
 
     @When("^Agent select (.*) as and icon for rating range$")
     public void selectRangeIcon(String iconName) {
-        surveyWebChatForm.getSurveysInner().selectRateIcon(iconName);
+        String channelID = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(channelID).selectRateIcon(iconName);
     }
 
     @When("^Customize your survey \"(.*)\" question$")
@@ -179,9 +182,10 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Star and Smile Buttons are Disabled$")
     public void starAndSmileButtonsAreDisabled() {
+        String channelID = ORCASteps.getChannelId();
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(surveyWebChatForm.getSurveysInner().isSmileButtonDisabled(), "Smile button should not be enabled");
-        soft.assertTrue(surveyWebChatForm.getSurveysInner().isStarButtonDisabled(), "Star button should not be enabled");
+        soft.assertTrue(getSurveyManagementPage().getSurveyForm(channelID).isSmileButtonDisabled(), "Smile button should not be enabled");
+        soft.assertTrue(getSurveyManagementPage().getSurveyForm(channelID).isStarButtonDisabled(), "Star button should not be enabled");
         soft.assertAll();
     }
 

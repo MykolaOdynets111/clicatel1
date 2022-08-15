@@ -1,7 +1,6 @@
 package agentpages.survey;
 
 import agentpages.survey.uielements.SurveyForm;
-import agentpages.survey.uielements.SurveyWebChatForm;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,14 +20,6 @@ public class SurveyManagementPage extends PortalAbstractPage {
 
     private String surveyFormMainElement = "//label[contains(@for, '%s')]//ancestor::div[@class='setting-group']";
 
-    private SurveyWebChatForm surveyWebChatForm;
-    private SurveyForm surveyForm;
-
-    public SurveyWebChatForm getSurveyWebChatForm() {
-        surveyWebChatForm.setCurrentDriver(this.getCurrentDriver());
-        return surveyWebChatForm;
-    }
-
     public SurveyForm getSurveyForm(String channelId) {
         waitFor(3000);
         return new SurveyForm(this.getCurrentDriver().findElement(By.xpath(String.format(surveyFormMainElement, channelId))))
@@ -47,8 +38,4 @@ public class SurveyManagementPage extends PortalAbstractPage {
         clickElem(this.getCurrentDriver(), whatsappTab, 1, "Whatsapp tab");
     }
 
-    public void waitSaveMessage() {
-        waitForElementToBeVisible(this.getCurrentDriver(), saveMessage, 5);
-        waitUntilElementNotDisplayed(this.getCurrentDriver(), saveMessage, 5);
-    }
 }

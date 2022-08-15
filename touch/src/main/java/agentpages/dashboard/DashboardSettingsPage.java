@@ -40,12 +40,6 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     })
     private WebElement surveysNavigation;
 
-    @FindBy(css = ".cl-toggle")
-    private WebElement toggle;
-
-    @FindBy(css = "[class='cl-button cl-button--reset-only cl-expand-btn']")
-    private WebElement expandSurvey;
-
     public void openSettingsPage(String settingsName) {
         switch (settingsName) {
             case "Business Profile":
@@ -63,14 +57,6 @@ public class DashboardSettingsPage extends PortalAbstractPage {
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
         }
-    }
-
-    public void clickToggle() {
-        clickElem(this.getCurrentDriver(), toggle, 6, "Toggle Button");
-    }
-
-    public void clickExpandSurvey() {
-        clickElem(this.getCurrentDriver(), expandSurvey, 6, "Expand Survey Button");
     }
 
     public boolean isBusinessProfileTabShown() {

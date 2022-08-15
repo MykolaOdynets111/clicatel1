@@ -53,6 +53,39 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(name = "ratingThanksMessage")
     private WebElement thankMessageForm;
 
+    @FindBy(css = ".number-block")
+    private WebElement numberButton;
+
+    @FindBy(css = "[data-selenium-id='sentiment-positive']")
+    private WebElement smileButton;
+
+    @FindBy(name = "star")
+    private WebElement starButton;
+
+    @FindBy(xpath = "//div[text()='Smiles and stars available only in CSAT mode']")
+    private WebElement ratingTypesUnavailableMessage;
+
+    @FindBy(xpath = ".//span[text()='Prompt customer to leave a note:']/following-sibling::label")
+    private WebElement commentSwitcher;
+
+    @FindBy(xpath = ".//div[@class='surveys-inner']/div[contains(@class, 'form-content')]")
+    private WebElement noteFormEnabled;
+
+    @FindBy(xpath = ".//textarea[@name='customerNoteTitle']")
+    private WebElement commentFieldHeader;
+
+    @FindBy(css = ".rate-input label")
+    private List<WebElement> rateInputNumbers;
+
+    @FindBy(css = "label .icon.svg-icon-staricon")
+    private List<WebElement> starRateRepresentation;
+
+    @FindBy(css = "label [class^='icon svg-icon-smile']")
+    private List<WebElement> smileRateRepresentation;
+
+    @FindBy(css = ".rate-input-label.number")
+    private List<WebElement> numberRateRepresentation;
+
     public SurveyForm(WebElement element) {
         super(element);
     }
@@ -83,7 +116,6 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void changeQuestion(String question) {
-        questionInput.clear();
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
@@ -99,10 +131,6 @@ public class SurveyForm extends AbstractWidget {
     public SurveyForm clickNPSRadioButton() {
         clickElem(this.getCurrentDriver(), npsRadioButton, 5, "CSAT Radio");
         return this;
-    }
-
-    public String getSurveyPreviewTitle() {
-        return getTextFromElem(this.getCurrentDriver(), surveyPreviewTitle, 3, "Survey preview title");
     }
 
     public List<String> getAllMessagesInSurveyPreview() {
@@ -138,4 +166,56 @@ public class SurveyForm extends AbstractWidget {
                 .orElseThrow(() -> new AssertionError(number + " number was not found in dropdown.")).click();
     }
 
+    public void clickCommentSwitcher() {
+        if (noteFormEnabled.getAttribute("class").contains("disabled")) {
+            clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher");
+        } else {
+            System.out.println("Comment switcher toggle is already clicked");
+        }
+    }
+
+    public void selectRateIcon(String icon) {
+        if (icon.equals("number")) {
+            clickElem(this.getCurrentDriver(), numberButton, 2, "Number Button");
+        } else if (icon.equals("star")) {
+            clickElem(this.getCurrentDriver(), starButton, 2, "Star Button");
+        } else if (icon.equals("smile")) {
+            clickElem(this.getCurrentDriver(), smileButton, 2, "Smile Button");
+        } else {
+            throw new AssertionError("Incorrect Icon tipe was provided");
+        }
+    }
+
+    public boolean isSmileButtonDisabled() {
+        scrollToElem(this.getCurrentDriver(), smileButton, "Smile button");
+        moveToElement(this.getCurrentDriver(), smileButton);
+        return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
+    }
+
+    public boolean isStarButtonDisabled() {
+        scrollToElem(this.getCurrentDriver(), starButton, "Star button");
+        moveToElement(this.getCurrentDriver(), starButton);
+        return isElementShown(this.getCurrentDriver(), ratingTypesUnavailableMessage, 1);
+    }
+
+    public boolean isCommentFieldShown() {
+        return isElementShown(this.getCurrentDriver(), commentFieldHeader, 2);
+    }
+
+    public String getSizeOfRateInputNumbers() {
+        return rateInputNumbers.size() + "";
+    }
+
+    public boolean isRateHasCorrectIcons(String icon) {
+        if (icon.equals("number")) {
+            return !numberRateRepresentation.isEmpty();
+        } else if (icon.equals("star")) {
+            return !starRateRepresentation.isEmpty();
+        } else if (icon.equals("smile")) {
+            return !smileRateRepresentation.isEmpty();
+        } else {
+            new AssertionError("Incorrect Icon tipe was provided");
+        }
+        return false;
+    }
 }
