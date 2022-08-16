@@ -404,6 +404,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     public void ClickonStartChatButton() {
         clickElem(this.getCurrentDriver(), startChatButton, 5, "Click On Start Chat Button on Menu");
     }
+
     public void clickSortingButton(){
         clickElem(this.getCurrentDriver(),sortingButton,2,"SortingButton");
     }
