@@ -404,7 +404,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @And("^Admin filter by (.) year (.) month and (.*) days ago start date and today's end date$")
     public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day) {
-        LocalDate startDate = LocalDate.now().minusYears(year).minusDays(month).minusDays(day);
+        LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
         LocalDate endDate = LocalDate.now();
 
         getSupervisorDeskPage().getSupervisorDeskHeader()
@@ -412,6 +412,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 .selectEndDate(endDate)
                 .clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    }
+
+    @And("^Admin checks back button is (.*) in calendar for (.*) filter 3 months ago in supervisor$")
+    public void backButtonDisability(String visibility, String filterType) {
+        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType);
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")

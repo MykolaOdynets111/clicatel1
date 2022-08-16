@@ -11,6 +11,7 @@ Feature: WhatsApp ORCA :: Surveys
       | ratingIcon    | NUMBER      |
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118514")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19235")
   Scenario: WA: : Surveys: Verify if the survey preview header for Whatsapp shows as Whatsapp Chat Preview
     And I open portal
     Given Login into portal as an admin of General Bank Demo account

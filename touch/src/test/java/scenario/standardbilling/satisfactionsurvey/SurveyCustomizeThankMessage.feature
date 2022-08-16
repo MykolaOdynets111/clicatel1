@@ -4,6 +4,7 @@
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-18591")
+    @TestCaseId("https://jira.clickatell.com/browse/TPORT-121098")
   Scenario Outline: Verify if tenant can Customize customer thank you message text
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing

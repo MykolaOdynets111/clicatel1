@@ -26,7 +26,7 @@ public class SupervisorTicketsTable extends AbstractUIElement {
     @FindBy(css = ".supervisor-tickets__loading-more")
     private WebElement loadingMoreTickets;
 
-    @FindBy (xpath = "//span[text()='End Date']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
+    @FindBy (xpath = "//span[text()='Ticket Creation Date']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
     private  WebElement ascendingArrowOfEndDateColumn;
 
     public SupervisorDeskTicketRow getTicketByUserName(String userName){
