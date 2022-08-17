@@ -86,7 +86,8 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @When("^Agent select (.*) as number limit from dropdown$")
     public void selectLimitOption(String limitNumber) {
-        //surveyWebChatForm.getSurveysInner().selectDropdownOption(limitNumber);
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).selectDropdownOption(limitNumber);
     }
 
     @When("^Agent select (.*) as number limit from dropdown for (.*) survey form$")
