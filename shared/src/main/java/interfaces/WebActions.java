@@ -1,18 +1,17 @@
 package interfaces;
 
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.Browser;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
-import com.assertthat.selenium_shutterbug.utils.web.Browser;
-import java.io.File;
-import java.time.LocalDate;
-import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface WebActions extends WebWait {
 
@@ -347,6 +346,7 @@ public interface WebActions extends WebWait {
     }
 
     // ==================================== Specific Elements Actions ======================================= //
+    //In case input date element is same as clicked date element
 
     default void fillDateInput(WebDriver driver, WebElement element, LocalDate date, int wait, String elemName) {
         clickElem(driver, element, wait, elemName);
@@ -360,5 +360,20 @@ public interface WebActions extends WebWait {
         }
         element.sendKeys(date.toString());
         element.sendKeys(Keys.ENTER);
+    }
+
+    //In case input date element is different from clicked date element
+    default void fillDateInput(WebDriver driver, WebElement element,WebElement element1, LocalDate date, int wait, String elemName) {
+        clickElem(driver, element, wait, elemName);
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(driver, element1, wait,
+                    elemName, "value").isEmpty())
+                break;
+            element.sendKeys("");
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+        element1.sendKeys(date.toString());
+        element1.sendKeys(Keys.ENTER);
     }
 }

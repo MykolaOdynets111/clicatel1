@@ -24,7 +24,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
             @FindBy(css = "a[data-testid^=chat-list-item]"),
             @FindBy(css = "a[selenium-id^=chat-list-item]") //toDo old locator
-            })
+    })
     private List<WebElement> newConversationRequests;
 
     @FindAll({
@@ -114,21 +114,32 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement filterButton;
 
-    @FindBy(css ="button .cl-r-button--reset-only")
+    @FindBy(css = "button .cl-r-button--reset-only")
     private WebElement filterRemove;
 
     //@FindBy (css = ".cl-message-sender .cl-message-composer .cl-message-composer__inner .cl-message-composer__tools-bar .cl-button cl-button--reset-only[selenium-id~=message-composer-location]" )
     @FindBy(css = "#Union")
     private WebElement locationButton;
 
-    @FindBy(css="[cl-chat-item cl-chat-item--selected]")
+    @FindBy(css = "[cl-chat-item cl-chat-item--selected]")
     private WebElement agentLiveCustomer;
+
+    @FindBy(xpath = "//button[@aria-label='Previous Month']")
+    private WebElement backButton;
+
+    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
+    private WebElement startDateInput;
+
+    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
+    private WebElement endDateInput;
+    private String backButtonString = "//button[@aria-label='Previous Month']";
 
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
             @FindBy(css = ".cl-empty-state>div")
     })
     private WebElement noResultsFoundText;
+
 
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
@@ -168,7 +179,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     public void openChatByUserName(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }
-
 
 
     public boolean isNewWebWidgetRequestIsShown(int wait) {
@@ -232,7 +242,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
             clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu");
         } else if (option.equalsIgnoreCase("Closed")) {
             clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
-        }else if (option.equalsIgnoreCase("Pending")) {
+        } else if (option.equalsIgnoreCase("Pending")) {
             clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
         } else {
             throw new AssertionError("Incorrect menu option was provided");
@@ -243,6 +253,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickOnSearchButton();
         inputUserNameIntoSearch(userId);
         getTargetChat(userId).click();
+    }
+
+    public void clickCloseButton() {
+        filterMenu.clickCloseFiltersButton();
     }
 
     public void searchTicket(String userId) {
@@ -364,6 +378,39 @@ public class LeftMenuWithChats extends AbstractUIElement {
         filterMenu.fillStartDate(startDate);
         filterMenu.fillEndDate(endDate);
         filterMenu.clickApplyButton();
+    }
+
+    public String checkStartDateFilterEmpty() {
+        openFilterMenu();
+        String actualValueForDateFilter = filterMenu.isStartDateIsEmpty();
+
+        return actualValueForDateFilter;
+    }
+
+    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
+        openFilterMenu();
+
+        if (filterType.equalsIgnoreCase("start date")) {
+            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
+        } else if (filterType.equalsIgnoreCase("end date")) {
+            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
+        }
+
+        //Clicking back button 3 times for back button invisibility check
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+
+        try {
+            if (filterType.equalsIgnoreCase("start date")) {
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            } else if (filterType.equalsIgnoreCase("end date")) {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            }
+            return true;
+        } catch (Exception e) {
+            throw new AssertionError("There is issue with Back button visibility for selected filter");
+        }
     }
 
     public void removeFilter() {

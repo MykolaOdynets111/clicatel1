@@ -30,7 +30,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             configuration.updateSomeValueByMethodName(key, map.get(key));
         }
         surveyConfiguration.set(configuration);
-        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID);
+        ApiHelper.updateSurveyManagement(tenantOrgName, configuration, channelID, chanel);
 
     }
 

@@ -64,7 +64,7 @@ public class Endpoints {
 
     public static String SURVEY_MANAGEMENT = URLs. getBaseWSApiURL() + "channel/%s";
 
-    public static String UPDATE_SURVEY_MANAGEMENT = URLs.getAgentDeskURL() + "api/platform/channel/abc-orca/%s/survey-config";
+    public static String UPDATE_SURVEY_MANAGEMENT = URLs.getAgentDeskURL() + "api/platform/channel/%s-orca/%s/survey-config";
 
     public static String CHATS_INFO = URLs.getTouchApiBaseIntegrationURL() + "chats/%s";
 

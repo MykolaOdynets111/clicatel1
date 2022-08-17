@@ -433,10 +433,15 @@ public class ApiHelper implements VerificationHelper {
     }
 
     public static SurveyManagement getSurveyManagementAttributes(String channelId){
-        return RestAssured.given().log().all()
+        Response resp  =  RestAssured.given().log().all()
                 .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
-                .get(String.format(Endpoints.SURVEY_MANAGEMENT, channelId))
-                .getBody().as(SurveyManagement.class);
+                .get(String.format(Endpoints.SURVEY_MANAGEMENT, channelId));
+        if(!(resp.statusCode()==200)) {
+            Assert.fail("Failed to get survey configuration ifo, status code = " + resp.statusCode()+
+                    "\n Body: " + resp.getBody().asString());
+        }
+        return   resp.getBody().jsonPath().getObject("chatSurveyConfig",SurveyManagement.class);
+
     }
 
 
@@ -445,15 +450,15 @@ public class ApiHelper implements VerificationHelper {
         SurveyManagement currentConfiguration = getSurveyManagementAttributes(channelID);
         if (!currentConfiguration.getRatingEnabled().equals(ratingEnabled)){
             currentConfiguration.setRatingEnabled(ratingEnabled);
-            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID);
+            updateSurveyManagement(tenantOrgName, currentConfiguration, channelID, chanell);
         }
     }
 
-    public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID ){
+    public static void updateSurveyManagement(String tenantOrgName, SurveyManagement configuration, String channelID, String channelName ){
         Response resp = RestAssured.given().log().all().header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(Tenants.getTenantUnderTestOrgName(), "main"))
                 .accept(ContentType.ANY)
                 .contentType(ContentType.JSON).body(configuration)
-                .put(String.format(Endpoints.SURVEY_MANAGEMENT, channelID));
+                .put(String.format(Endpoints.UPDATE_SURVEY_MANAGEMENT, channelName, channelID));
         if(!(resp.statusCode()==200)) {
             Assert.fail("Failed to update survey, status code = " + resp.statusCode()+
                     "\n Body: " + resp.getBody().asString());
