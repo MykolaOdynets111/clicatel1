@@ -2,10 +2,11 @@
 Feature: HSMTemplate
 
   @orca_api
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118464")
-  Scenario: Chatdesk::HSM::Verify if an agent can initiate a chat by sending an HSM template to a WhatsApp via ORCA user
+  @start_orca_server
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105014")
+  Scenario: CD :: Agent Desk :: HSM :: Verify if an agent can initiate a chat by sending an HSM template to a WhatsApp via ORCA user
     Given I login as agent of General Bank Demo
-    Given Setup ORCA abc integration for General Bank Demo tenant
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
     When Send connect to Support message by ORCA
     And agent click Whatsapp message icon button on the top bar
     And agent fill the customer contact number 919762628065
@@ -15,10 +16,10 @@ Feature: HSMTemplate
     And Agent has new conversation request from orca user
     Then Agent click on new conversation
     Then Conversation area becomes active with connect to agent user's message in it for agent
-    When agent responds with hello to User
+    When Agent responds with hello to User
     Then Verify Orca returns hello response during 40 seconds
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118469")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105012")
   Scenario: CD:: Agent Desk :: Closed Chat :: HSM :: Verify if agent can initiate a chat with WhatsApp via orca user by sending HSM template from Closed tab
     Given I login as agent of General Bank Demo
     And Agent select "Closed" tab from left menu
@@ -36,7 +37,7 @@ Feature: HSMTemplate
       And Agent click on new conversation request
       Then Conversation area becomes active with user's message
 
-      @TestCaseId("https://jira.clickatell.com/browse/TPORT-118472")
+      @TestCaseId("https://jira.clickatell.com/browse/TPORT-105016")
       Scenario: CD :: Supervisor Desk :: HSM :: Verify if supervisor can login as agent and send a direct WhatsApp via orca message via message icon on the top bar
         Given user logs in to supervisor desk
         And opens agent desk by clicking launch agent desk
@@ -59,33 +60,4 @@ Feature: HSMTemplate
           And Agent click on new conversation request
           And Conversation area becomes active with user's message
           Then Agent can see message with HSM label in Conversation area
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

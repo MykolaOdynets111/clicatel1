@@ -347,6 +347,7 @@ public interface WebActions extends WebWait {
     }
 
     // ==================================== Specific Elements Actions ======================================= //
+    //In case input date element is same as clicked date element
 
     default void fillDateInput(WebDriver driver, WebElement element, LocalDate date, int wait, String elemName) {
         clickElem(driver, element, wait, elemName);
@@ -360,5 +361,20 @@ public interface WebActions extends WebWait {
         }
         element.sendKeys(date.toString());
         element.sendKeys(Keys.ENTER);
+    }
+
+    //In case input date element is different from clicked date element
+    default void fillDateInput(WebDriver driver, WebElement element,WebElement element1, LocalDate date, int wait, String elemName) {
+        clickElem(driver, element, wait, elemName);
+        //10 is the length of date in format yyyy-mm-dd
+        for (int i = 0; i < 10; i++) {
+            if(getAttributeFromElem(driver, element1, wait,
+                    elemName, "value").isEmpty())
+                break;
+            element.sendKeys("");
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+        element1.sendKeys(date.toString());
+        element1.sendKeys(Keys.ENTER);
     }
 }

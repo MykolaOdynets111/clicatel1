@@ -15,11 +15,14 @@ import lombok.*;
         "merchantSession",
         "endpoints",
         "addressInfo",
+        "department",
         "token",
         "oauth2Token",
-        "channelProfileName"
+        "channelProfileName",
+        "displayType",
+        "messageId"
 })
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 public class ExtraFields {
 
     @JsonProperty("locale")
@@ -31,28 +34,26 @@ public class ExtraFields {
     @JsonProperty("group")
     private String group;
     @JsonProperty("abc")
-    private ExtraFieldsAbc abc = null;
+    private ExtraFieldsAbc abc;
     @JsonProperty("merchantSession")
     private String merchantSession;
     @JsonProperty("endpoints")
     private String endpoints;
     @JsonProperty("addressInfo")
     private String addressInfo;
-    @JsonProperty("token")
-    private String token;
     @JsonProperty("department")
     private String department;
+    @JsonProperty("token")
+    private String token;
     @JsonProperty("oauth2Token")
     private String oauth2Token;
     @JsonProperty("channelProfileName")
     private String channelProfileName;
 
-    public ExtraFields(String name){
-        this.setLocale("en_uk");
-        this.setAgent("iOs");
-        this.setChannelProfileName(name);
-    }
-
+    @JsonProperty("displayType")
+    private String displayType;
+    @JsonProperty("messageId")
+    private String messageId;
 
     @JsonProperty("locale")
     public String getLocale() {
@@ -173,6 +174,12 @@ public class ExtraFields {
     public void setChannelProfileName(String channelProfileName) {
         this.channelProfileName = channelProfileName;
     }
+    public ExtraFields(String name){
+        this.setLocale("en_uk");
+        this.setAgent("iOs");
+        this.setChannelProfileName(name);
+    }
+
 
     @Override
     public String toString() {
@@ -189,5 +196,4 @@ public class ExtraFields {
                 ", oauth2Token='" + oauth2Token + '\'' +
                 '}';
     }
-
 }

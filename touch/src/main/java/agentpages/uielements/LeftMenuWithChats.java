@@ -24,7 +24,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
             @FindBy(css = "a[data-testid^=chat-list-item]"),
             @FindBy(css = "a[selenium-id^=chat-list-item]") //toDo old locator
-            })
+    })
     private List<WebElement> newConversationRequests;
 
     @FindAll({
@@ -116,15 +116,25 @@ public class LeftMenuWithChats extends AbstractUIElement {
             @FindBy(css = "[selenium-id=open-filter-tab-btn]") //toDo old locator
     })
     private WebElement filterButton;
-    @FindBy(css ="button .cl-r-button--reset-only")
+    @FindBy(css = "button .cl-r-button--reset-only")
     private WebElement filterRemove;
 
     //@FindBy (css = ".cl-message-sender .cl-message-composer .cl-message-composer__inner .cl-message-composer__tools-bar .cl-button cl-button--reset-only[selenium-id~=message-composer-location]" )
     @FindBy(css = "#Union")
     private WebElement locationButton;
 
-    @FindBy(css="[cl-chat-item cl-chat-item--selected]")
+    @FindBy(css = "[cl-chat-item cl-chat-item--selected]")
     private WebElement agentLiveCustomer;
+
+    @FindBy(xpath = "//button[@aria-label='Previous Month']")
+    private WebElement backButton;
+
+    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
+    private WebElement startDateInput;
+
+    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
+    private WebElement endDateInput;
+    private String backButtonString = "//button[@aria-label='Previous Month']";
 
     @FindAll({
             @FindBy(css = ".chats-list>.cl-empty-state"),
@@ -134,9 +144,9 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindAll({
             @FindBy(css = "cl-routed-tabs__tab cl-routed-tabs__tab--selected"),
-            @FindBy(css="[selenium-id=tab-navigation-panel-closed]")
+            @FindBy(css = "[selenium-id=tab-navigation-panel-closed]")
     })
-            private WebElement closedTabMenu;
+    private WebElement closedTabMenu;
 
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
@@ -182,7 +192,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     public void openChatByUserName(String userName) {
         new ChatInLeftMenu(getTargetChat(userName)).setCurrentDriver(this.getCurrentDriver()).openConversation();
     }
-
 
 
     public boolean isNewWebWidgetRequestIsShown(int wait) {
@@ -246,7 +255,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
             clickElem(this.getCurrentDriver(), tickets, 1, "Tickets menu");
         } else if (option.equalsIgnoreCase("Closed")) {
             clickElem(this.getCurrentDriver(), closed, 1, "Closed menu");
-        }else if (option.equalsIgnoreCase("Pending")) {
+        } else if (option.equalsIgnoreCase("Pending")) {
             clickElem(this.getCurrentDriver(), pending, 1, "Closed menu");
         } else {
             throw new AssertionError("Incorrect menu option was provided");
@@ -257,6 +266,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickOnSearchButton();
         inputUserNameIntoSearch(userId);
         getTargetChat(userId).click();
+    }
+
+    public void clickCloseButton() {
+        filterMenu.clickCloseFiltersButton();
     }
 
     public void searchTicket(String userId) {
@@ -380,6 +393,39 @@ public class LeftMenuWithChats extends AbstractUIElement {
         filterMenu.clickApplyButton();
     }
 
+    public String checkStartDateFilterEmpty() {
+        openFilterMenu();
+        String actualValueForDateFilter = filterMenu.isStartDateIsEmpty();
+
+        return actualValueForDateFilter;
+    }
+
+    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
+        openFilterMenu();
+
+        if (filterType.equalsIgnoreCase("start date")) {
+            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
+        } else if (filterType.equalsIgnoreCase("end date")) {
+            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
+        }
+
+        //Clicking back button 3 times for back button invisibility check
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+
+        try {
+            if (filterType.equalsIgnoreCase("start date")) {
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            } else if (filterType.equalsIgnoreCase("end date")) {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            }
+            return true;
+        } catch (Exception e) {
+            throw new AssertionError("There is issue with Back button visibility for selected filter");
+        }
+    }
+
     public void removeFilter() {
         clickElem(this.getCurrentDriver(), filterRemove, 1, "Filter Remove button");
     }
@@ -389,29 +435,29 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .map(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
     }
+
     public void clickonLocationButton() {
         clickElem(this.getCurrentDriver(), locationButton, 2, "LocationButton");
     }
 
-    public void clickOnPaymentExtensionOption()
-    {
-        clickElem(this.getCurrentDriver(),agentLiveCustomer,5,"Click On Live Customer");
+    public void clickOnPaymentExtensionOption() {
+        clickElem(this.getCurrentDriver(), agentLiveCustomer, 5, "Click On Live Customer");
     }
-    public void ClickonCloseTabMenuButton()
-    {
-        clickElem(this.getCurrentDriver(),closedTabMenu,5,"Click On Live Closed Tab on Menu");
-    }
-    public void ClickonStartChatButton() {
-        clickElem(this.getCurrentDriver(), startChatButton, 5, "Click On Start Chat Button on Menu");
+
+    public void ClickonCloseTabMenuButton() {
+        clickElem(this.getCurrentDriver(), closedTabMenu, 5, "Click On Live Closed Tab on Menu");
     }
 
     public void clickSortingButton(){
         clickElem(this.getCurrentDriver(),sortingButton,2,"SortingButton");
     }
 
-    public void selectNewChats(){
-        clickElem(this.getCurrentDriver(),newChats,2,"NewChats");
+    public void selectNewChats() {
+        clickElem(this.getCurrentDriver(), newChats, 2, "NewChats");
         System.out.println("Select Elememt");
+    }
+    public void clickStartChatButton() {
+        clickElem(this.getCurrentDriver(), startChatButton, 5, "Click On Start Chat Button on Menu");
     }
 }
 

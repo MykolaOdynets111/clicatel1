@@ -238,6 +238,10 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
         getLeftMenu(agent).waitForConnectingDisappear(5,10);
     }
 
+    @Then("^(.*) clicks close filter button$")
+    public void clickCloseFilterButton(String agent){
+        getLeftMenu(agent).clickCloseButton();
+    }
     @When("^(.*) filter Live Chants with (.*) channel, (.*) sentiment and flagged is (.*)$")
     public void setLiveChatsFilter(String agent, String channel, String sentiment, boolean flagged){
         getLeftMenu(agent).applyTicketsFilters(channel.trim(), sentiment.trim(), flagged);
@@ -748,17 +752,10 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
-
-    @And("Agent select \"Closed\" tab from left menu")
-    public void AgentClickClosedTabMenuButton(String agent)
-    {
-        getAgentHomePage(agent).getLeftMenuWithChats().ClickonCloseTabMenuButton();
-    }
-
     @And("Agent click on 'start chat' button")
     public void AgentClickOnStartChartButton(String agent)
     {
-        getAgentHomePage(agent).getLeftMenuWithChats().ClickonStartChatButton();
+        getAgentHomePage(agent).getLeftMenuWithChats().clickStartChatButton();
     }
 
     @And("^Agent should select the chat that was ended 24hrs ago$")
