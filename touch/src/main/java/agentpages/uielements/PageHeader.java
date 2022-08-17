@@ -52,7 +52,7 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=agents-list]")
     private List<WebElement> headPhonesList;
 
-    @FindBy(css= "//*[local-name()='svg'][@name='message-forward']")
+    @FindBy(css= "[name='message-forward']")
     private WebElement forwadIcon;
 
     @FindAll({
@@ -145,9 +145,8 @@ public class PageHeader extends AbstractUIElement {
         return  isWebElementEqualsImage(this.getCurrentDriver(), icon, image);
     }
 
-    public void clickOnWhatsapp()
-    {
-        scrollToElem(this.getCurrentDriver(),forwadIcon,"forward Icon");
+    public void clickOnWhatsapp(){
+        clickElem(this.getCurrentDriver(),forwadIcon,1,"forward Icon");
         scrollAndClickElem(this.getCurrentDriver(), sendWhatsAppButton, 5,"Click on Whatsapp Icon");
     }
 

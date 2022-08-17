@@ -11,7 +11,6 @@ import datamanager.VMQuoteRequestUserData;
 import datamanager.jacksonschemas.tie.TIEIntentPerCategory;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
-import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
@@ -42,7 +41,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class DefaultTouchUserSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
+public class DefaultTouchUserSteps implements JSHelper, VerificationHelper, WebWait {
 
     private MainPage mainPage;
     private Widget widget;

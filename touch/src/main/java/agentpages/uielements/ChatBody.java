@@ -105,6 +105,7 @@ public class ChatBody extends AbstractUIElement {
     @FindBy (css = "[data-testid='card']")
     private WebElement c2pCard;
 
+
     public List<String> getChanelSeparatorsText() {
         return channelSeparators.stream().map(e->e.getText()).collect(Collectors.toList());
     }
@@ -123,6 +124,10 @@ public class ChatBody extends AbstractUIElement {
 
     public String getC2pCardsText(){
         return getTextFromElem(this.getCurrentDriver(), c2pCard, 5,"c2p text");
+    }
+
+    public boolean isHSMShownForAgent(){
+        return isElementExistsInDOMCss(this.getCurrentDriver(),"[data-testid='chat-message-content-HsmMessage']",4);
     }
 
     private WebElement getFromUserWebElement(String messageText) {

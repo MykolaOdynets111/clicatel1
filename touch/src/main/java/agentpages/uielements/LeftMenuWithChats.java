@@ -60,9 +60,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement scrollableArea;
 
-    @FindBy()
-    private WebElement startChatButton;
-
     @FindAll({
             @FindBy(css = "[data-testid='search-filter-btn']"),
             @FindBy(css = "[selenium-id='search-filter-btn']") //toDo old locator
@@ -116,6 +113,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
             @FindBy(css = "[selenium-id=open-filter-tab-btn]") //toDo old locator
     })
     private WebElement filterButton;
+
     @FindBy(css ="button .cl-r-button--reset-only")
     private WebElement filterRemove;
 
@@ -131,12 +129,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
             @FindBy(css = ".cl-empty-state>div")
     })
     private WebElement noResultsFoundText;
-
-    @FindAll({
-            @FindBy(css = "cl-routed-tabs__tab cl-routed-tabs__tab--selected"),
-            @FindBy(css="[selenium-id=tab-navigation-panel-closed]")
-    })
-            private WebElement closedTabMenu;
 
     private String targetProfile = ".//div[contains(@class, 'info')]/h2[text()='%s']";
 
@@ -383,21 +375,4 @@ public class LeftMenuWithChats extends AbstractUIElement {
                 .map(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver()))
                 .allMatch(chat -> chat.getAdapterIconName().equalsIgnoreCase(channelName));
     }
-    public void clickonLocationButton() {
-        clickElem(this.getCurrentDriver(), locationButton, 2, "LocationButton");
-    }
-
-    public void clickOnPaymentExtensionOption()
-    {
-        clickElem(this.getCurrentDriver(),agentLiveCustomer,5,"Click On Live Customer");
-    }
-    public void ClickonCloseTabMenuButton()
-    {
-        clickElem(this.getCurrentDriver(),closedTabMenu,5,"Click On Live Closed Tab on Menu");
-    }
-    public void ClickonStartChatButton()
-    {
-        clickElem(this.getCurrentDriver(),startChatButton,5,"Click On Start Chat Button on Menu");
-    }
 }
-

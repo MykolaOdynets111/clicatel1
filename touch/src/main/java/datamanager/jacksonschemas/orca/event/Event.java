@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
-import javax.annotation.Generated;
 import java.io.File;
 import java.net.URLConnection;
 
@@ -24,11 +23,11 @@ import java.net.URLConnection;
         "address",
         "name",
         "eventType",
+        "nestedEvent",
 //        "size",
         "ref"
 })
-@Setter @Getter @ToString @Builder @AllArgsConstructor
-@Generated("jsonschema2pojo")
+@Setter @Getter @ToString @Builder @AllArgsConstructor @NoArgsConstructor
 public class Event {
 
     @JsonProperty("text")
@@ -53,13 +52,12 @@ public class Event {
     private String address;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("nestedEvent")
+    private NestedEvent nestedEvent;
 //    @JsonProperty("size")
 //    private long size;
     @JsonProperty("ref")
     private String ref;
-
-    public Event(){
-    }
 
     public Event(String messageText){
         this.setEventType(EventType.TEXT.toString());

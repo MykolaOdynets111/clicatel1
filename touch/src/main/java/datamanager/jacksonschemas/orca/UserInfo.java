@@ -1,34 +1,23 @@
 package datamanager.jacksonschemas.orca;
-import com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 "userName"
 })
+@Data
+@NoArgsConstructor
 public class UserInfo {
-
-    public UserInfo(){};
-    public UserInfo(String userName) {
-        this.userName = userName;
-    }
 
     @JsonProperty("userName")
     private String userName;
 
-    @JsonProperty("userName")
-    public String getUserName() {
-        return userName;
-    }
-
-    @JsonProperty("userName")
-    public void setUserName(String userName) {
+    public UserInfo(String userName) {
         this.userName = userName;
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "userName='" + userName + '\'' +
-                '}';
     }
 }

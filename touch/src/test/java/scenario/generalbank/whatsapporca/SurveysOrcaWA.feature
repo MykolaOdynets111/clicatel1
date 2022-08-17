@@ -1,5 +1,5 @@
 @no_widget
-@off_rating_abc
+@off_rating_whatsapp
 Feature: WhatsApp ORCA :: Surveys
 
   Background:
@@ -33,7 +33,7 @@ Feature: WhatsApp ORCA :: Surveys
     When Agent select 1 to 5 as number limit from dropdown for whatsapp survey form
     And Agent click save survey configuration button for whatsapp survey form
     Then Survey backend was updated for General Bank Demo and whatsapp chanel with following attribute
-      | ratingScale     |     ONE_TO_FIVE   |
+      | ratingScale | ONE_TO_FIVE |
     When Agent select 1 to 7 as number limit from dropdown for whatsapp survey form
     And Agent click save survey configuration button for whatsapp survey form
     Then Survey backend was updated for General Bank Demo and whatsapp chanel with following attribute

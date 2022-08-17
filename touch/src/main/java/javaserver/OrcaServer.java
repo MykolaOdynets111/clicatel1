@@ -64,7 +64,7 @@ public class OrcaServer extends Server {
         private OrcaEvent convertStringResponseBodyToObject(String body) {
             for (String otherEvent : Arrays.asList("MEDIA", "NOTIFICATION", "TERMINATE", "OPT_OUT", "AUTH",
                     "AUTH_STATUS", "TIMESLOT_PICKER", "PAYMENT_REQUEST", "PAYMENT_STATUS", "RICHLINK", "LIST_PICKER")) {
-                if (body.contains(otherEvent)) {
+                if (body.contains(otherEvent) && !body.contains("STRUCTURED_TEXT_NOTIFICATION")) {
                     return new OrcaEvent();
                 }
             }

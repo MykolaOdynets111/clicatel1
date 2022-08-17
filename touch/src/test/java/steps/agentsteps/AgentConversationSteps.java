@@ -303,6 +303,12 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertTrue(locationURL.get().contains("Lviv"),  agent+ " didn't get Lviv location");
     }
 
+    @Then("^(.*) can see message with HSM label in Conversation area$")
+    public void isHSMPresentInChatBody(String agent){
+        Assert.assertTrue(getAgentHomePage(agent).getChatBody().isHSMShownForAgent(),
+                "HSM message is not present in Conversation area");
+    }
+
     @When("^(.*) replays with (.*) message$")
     public void respondToUserWithCheck(String agent, String agentMessage) {
         if (getAgentHomePage(agent).getChatForm().isSuggestionFieldShown()) {
@@ -652,9 +658,14 @@ public class AgentConversationSteps extends AbstractAgentSteps {
         Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
     }
 
-    @When("^When (.*) open c2p form$")
+    @When("^(.*) open c2p form$")
     public void agentOpenC2PForm(String agent){
         c2pSendForm = getAgentHomePage(agent).openc2pSendForm();
+    }
+
+    @When("^(.*) click start chat button$")
+    public void agentClickStartChatButton(String agent){
+        getAgentHomePage(agent).getChatForm().openHSMForm();
     }
 
     @And("^Agent fill c2p form with orderNumber (.*), price (.*) and send$")
