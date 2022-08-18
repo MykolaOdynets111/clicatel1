@@ -20,4 +20,13 @@ public class SupervisorOpenedClosedChatsList extends AbstractUIElement {
             return new SupervisorDeskPage(this.getCurrentDriver()).isSendEmailForOpenedClosedChatShown();
         });
     }
+
+    public boolean isClosedChatsHaveMessageCustomerButton() {
+        waitForFirstElementToBeVisible(getCurrentDriver(), closedChats, 5);
+        return closedChats.stream().allMatch(closedChat -> {
+            wheelScrollDownToElement(this.getCurrentDriver(), this.getWrappedElement(), closedChat, 3);
+            clickElem(getCurrentDriver(), closedChat, 2, "Closed Chat");
+            return new SupervisorDeskPage(this.getCurrentDriver()).isMessageCustomerButtonForClosedChatShown();
+        });
+    }
 }
