@@ -128,7 +128,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(xpath = "//button[@aria-label='Previous Month']")
     private WebElement backButton;
-
     @FindBy(css = "[class='cl-form-control cl-form-control--input']")
     private WebElement startDateInput;
 
