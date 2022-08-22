@@ -19,7 +19,7 @@ Feature: Supervisor desk
     Given I open portal
     And Login into portal as an admin of General Bank Demo account
     When I select Touch in left menu and Supervisor Desk in submenu
-    Then Verify that Chat is displayed first
+    Then Verify that Chats tab is displayed first
 
 
 
