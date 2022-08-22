@@ -161,6 +161,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) is redirected to (.*) page$")
     public void verifyUserRedirectedEmptyChatdeskPage(String agent, String chatDeskPage) {
+        getAgentHomePage(agent).waitForAgentPageToBeLoaded();
         String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
         SoftAssert softAssert = new SoftAssert();
         if(chatDeskPage.equalsIgnoreCase("empty chatdesk")) {
@@ -170,7 +171,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
             softAssert.assertTrue(pageUrl.contains("supervisor"),
                     "Agent is not redirected to supervisor page");
         } else if(chatDeskPage.equalsIgnoreCase("chatdesk")) {
-            softAssert.assertTrue(pageUrl.split("-")[1].equalsIgnoreCase("chatdesk.clickatelllabs.com/live"),
+            softAssert.assertTrue(pageUrl.contains("agent"),
                     "Supervisor is not redirected to chatdesk page");
         }
         softAssert.assertAll();
