@@ -492,7 +492,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     }
 
     @Then("Verify that Chat is displayed first")
-    public void verify_that_chat_is_displayed_first() {
+    public void verifyThatChatIsDisplayedFirst() {
         getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
     }
 
