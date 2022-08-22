@@ -60,7 +60,7 @@ public class LeftMenuWithChats extends AbstractUIElement {
     })
     private WebElement scrollableArea;
 
-    @FindBy(xpath = ".//button[text()='Start Chat']")
+    @FindBy()
     private WebElement startChatButton;
 
     @FindAll({
