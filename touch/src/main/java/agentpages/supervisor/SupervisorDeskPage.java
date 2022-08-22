@@ -57,6 +57,12 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-agent-view-launch-btn")
     private WebElement launchAgentButton;
 
+    @FindBy(xpath = ".//button[text()='Start Chat']")
+    private WebElement startChatButton;
+
+    @FindBy(xpath = ".//button[text()='Message Customer']")
+    private WebElement messageCustomerButton;
+
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
 
     //private String filterByDefaultXpath = "//span[text()='Conversation status:']//following-sibling::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']";
@@ -75,6 +81,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private MessageCustomerWindow messageCustomerWindow;
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
+
 
     // == Constructors == //
 
@@ -230,6 +237,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public boolean isSendEmailForOpenedClosedChatShown() {
         return isElementShown(this.getCurrentDriver(), openedClosedChatMessageUserButton, 5);
+    }
+
+    public boolean isMessageCustomerButtonForClosedChatShown() {
+        return isElementShown(this.getCurrentDriver(), messageCustomerButton, 5);
     }
 
     public void clickOnLaunchAgent() {

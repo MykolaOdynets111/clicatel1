@@ -66,4 +66,10 @@ public class AgentFilteringSteps extends AbstractAgentSteps {
                 channelName + " channel name should be shown.");
 
     }
+
+    @And("^(.*) change chat sorting option to New Chats$")
+    public void agentChangeChatSortingOptionToNewChats(String agent) {
+        getLeftMenu(agent).clickSortingButton();
+        getLeftMenu(agent).selectNewChats();
+    }
 }

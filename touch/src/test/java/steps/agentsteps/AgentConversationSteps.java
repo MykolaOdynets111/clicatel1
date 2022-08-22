@@ -632,7 +632,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @And("^Agent search for (.*) Location$")
-    public void agentSearchForParisLocation(String locationName) {
+    public void agentSearchForLocation(String locationName) {
         locationWindow.searchLocation(locationName);
     }
 
@@ -647,7 +647,7 @@ public class AgentConversationSteps extends AbstractAgentSteps {
     }
 
     @And("^Agent click on (.*) Location$")
-    public void agentClickOnParisLocation(String locationName) {
+    public void agentClickOnLocation(String locationName) {
         locationWindow.selectLocation(locationName);
         Assert.assertEquals(locationWindow.getTextFromSearch(),locationName, "Location did not match");
     }

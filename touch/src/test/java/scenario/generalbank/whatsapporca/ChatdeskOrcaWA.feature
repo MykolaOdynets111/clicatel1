@@ -104,3 +104,35 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Location field becomes empty
     And Agent search for Canada Location
     And Agent click on Canada Location
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90109")
+  Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to agent user's message
+    When Agent open chat location form
+    And Agent search for Paris Location
+    And Agent click on Paris Location
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-105148")
+  Scenario: CD:: Agent Desk: Verify that current active chat remains open in conversation area when Agent change chat sorting option to "New Chats"
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    When Send Test message message by another user using ORCA
+    When Agent click on new conversation request from orca
+    And Agent change chat sorting option to New Chats
+    Then current active chat remains open in conversation area
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114789")
+  Scenario: CD :: Agent Desk :: Live Chat :: Verify the agent name and date are displayed in the visual indicator in agent chat window
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Visual indicator (.*) with "(.*)" text, (.*) name and time is shown
+#    Conversation area becomes active with AgentName and Date user's message
