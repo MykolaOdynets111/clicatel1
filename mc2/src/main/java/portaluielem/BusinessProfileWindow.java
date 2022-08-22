@@ -15,27 +15,27 @@ import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 
-@FindBy(css = ".business-profile")
+@FindBy(css = ".cl-business-profile")
 public class BusinessProfileWindow extends BasePortalWindow {
 
     private Faker faker = new Faker();
 
-    @FindBy(name = "tenantOrgName")
+    @FindBy(name = "orgName")
     private WebElement businessName;
 
     @FindBy(name = "city")
     private WebElement companyCity;
 
     @FindBy(xpath = "//label[text()='Industry:']/parent::div//div[contains(@id,'react-select')]")
-    private List<WebElement> companyIndastry ;
+    private List<WebElement> companyIndustry ;
 
     @FindBy(xpath = "//label[text()='Country:']/parent::div//div[contains(@id,'react-select')]")
     private List<WebElement> companyCountry ;
 
-    @FindBy(xpath = ".//label[text()='Industry:']/parent::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']")
+    @FindBy(xpath = ".//label[text()='Industry:']/parent::div//div[@class='cl-select-container cl-select-container--primary css-b62m3t-container']")
     private WebElement selectCompanyIndustry ;
 
-    @FindBy(xpath = ".//label[text()='Country:']/parent::div//div[@class='cl-r-select__single-value css-1uccc91-singleValue']")
+    @FindBy(xpath = ".//label[text()='Country:']/parent::div//div[@class='cl-select-container cl-select-container--primary css-b62m3t-container']")
     private WebElement selectCompanyCountry ;
 
     @FindBy(xpath = ".//*[contains(text(), 'Specific support hours for all agents')]")
@@ -105,10 +105,10 @@ public class BusinessProfileWindow extends BasePortalWindow {
         inputText(this.getCurrentDriver(), companyCity, 2, "City", name);
     }
 
-    public String selectRandomIndastry(){
+    public String selectRandomIndustry(){
         selectCompanyIndustry.click();
-        int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, companyIndastry.size() - 1);
-        companyIndastry.get(randomIndustryNumber).click();
+        int randomIndustryNumber = ThreadLocalRandom.current().nextInt(0, companyIndustry.size() - 1);
+        companyIndustry.get(randomIndustryNumber).click();
         return selectCompanyIndustry.getText();
     }
 

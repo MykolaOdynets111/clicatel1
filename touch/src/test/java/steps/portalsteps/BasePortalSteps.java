@@ -768,7 +768,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     @When("^Navigate to (.*) page$")
-    public void openSettingPage(String settingsName){
+    public void openSettingPage(String settingsName) {
         getDashboardPage().openSettingsPage().openSettingsPage(settingsName);
     }
 
@@ -1638,7 +1638,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void changeBusinessDetails() {
         tenantInfo.put("companyName", "New company name "+faker.lorem().word());
         tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
-        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndastry());
+        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndustry());
         tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomCountry());
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName(tenantInfo.get("companyName"));
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setCompanyCity(tenantInfo.get("companyCity"));
@@ -1648,19 +1648,18 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @And("^Refresh page and verify business details was changed for (.*)$")
     public void refreshPageAndVerifyItWasChanged(String tenantOrgName) {
         SoftAssert soft = new SoftAssert();
-        Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
-        soft.assertEquals(resp.jsonPath().get("tenantOrgName"),tenantInfo.get("companyName"), "Company name was not changed on backend");
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
-        soft.assertEquals(resp.jsonPath().getList("tenantAddresses.city").get(0).toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
-        soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
-        soft.assertEquals(country,tenantInfo.get("companyCountry"), "Company country was not changed on backend");
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
+        Response resp = ApiHelper.getTenantConfig(tenantOrgName);
+        String country = resp.jsonPath().get("country").toString();
+        soft.assertEquals(resp.jsonPath().get("orgName"),tenantOrgName, "Company name was not changed on backend");
+        soft.assertEquals(resp.jsonPath().get("city").toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
+        soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
     }

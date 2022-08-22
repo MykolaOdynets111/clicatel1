@@ -57,6 +57,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
         }
+        this.getCurrentDriver().navigate().refresh();
     }
 
     public boolean isBusinessProfileTabShown() {
