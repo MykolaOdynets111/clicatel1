@@ -20,7 +20,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Update survey management chanel (.*) settings by ip for (.*)")
     public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         for (String key : map.keySet()) {
             configuration.updateSomeValueByMethodName(key, map.get(key));
@@ -99,6 +99,16 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
             getSurveyManagementPage().getSurveyForm(id).selectDropdownOption(limitNumber);
         } else {
             this.selectLimitOption(limitNumber);
+        }
+    }
+
+    @When("^Agent checks rating dropdown visibility for (.*) survey form$")
+    public void checkDropdownDisability(String surveyForm) {
+        String id = ORCASteps.getChannelId();
+        if (getSurveyManagementPage().getSurveyForm(id).checkRatingDropdownVisibility()) {
+            System.out.println("Numbers dropdown is not visible");
+        } else {
+            Assert.fail("Numbers dropdown is visible");
         }
     }
 

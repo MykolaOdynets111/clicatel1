@@ -10,7 +10,7 @@ Feature: Satisfaction Survey
     And Update survey management chanel <channelType> settings by ip for Standard Billing
       | ratingEnabled        | true             |
       | surveyType           | CSAT             |
-      | ratingScale          | ONE_TO_TEN       |
+      | ratingScale          | ONE_TO_FIVE       |
       | ratingIcon           | NUMBER           |
       | commentEnabled       | true             |
       | thanksMessageEnabled | true             |

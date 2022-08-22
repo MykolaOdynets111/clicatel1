@@ -3,15 +3,14 @@
 @off_survey_management
 Feature: Satisfaction Survey
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19243")
-    @TestCaseId("https://jira.clickatell.com/browse/TPORT-121097")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-19236")
   Scenario Outline: Verify if tenant can customize his own survey question for NPS survey type
     Given Setup ORCA <channelType> integration for Standard Billing tenant
     And Update survey management chanel <channelType> settings by ip for Standard Billing
-      | ratingEnabled   | true             |
-      | surveyType      | CSAT             |
-      | ratingScale     | ONE_TO_TEN       |
-      | ratingIcon      | NUMBER           |
+      | ratingEnabled | true       |
+      | surveyType    | CSAT       |
+      | ratingScale   | ONE_TO_FIVE |
+      | ratingIcon    | NUMBER     |
     And I open portal
     Given Login into portal as an admin of Standard Billing account
     When I select Touch in left menu and Dashboard in submenu
@@ -24,7 +23,7 @@ Feature: Satisfaction Survey
     And Agent click save survey configuration button for <channelType> survey form
     Then Preview question is updated successfully
     Examples:
-      | channelType         |
-      | whatsapp            |
-      | abc                 |
-      | webchat             |
+      | channelType |
+      | whatsapp    |
+      | abc         |
+      | webchat     |

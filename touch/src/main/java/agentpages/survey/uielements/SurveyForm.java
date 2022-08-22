@@ -1,6 +1,7 @@
 package agentpages.survey.uielements;
 
 import abstractclasses.AbstractWidget;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -164,6 +165,18 @@ public class SurveyForm extends AbstractWidget {
         waitFor(5000);
         ratingNumbersVariation.stream().filter(e -> e.getText().trim().equals(number)).findFirst()
                 .orElseThrow(() -> new AssertionError(number + " number was not found in dropdown.")).click();
+    }
+
+    public boolean checkRatingDropdownVisibility() {
+        boolean flag = false;
+        try {
+            if (waitForElementToBeVisible(this.getCurrentDriver(), ratingNumbersDropdown, 5).isDisplayed()) {
+                flag = false;
+            }
+        } catch (TimeoutException e) {
+            flag = true;
+        }
+        return flag;
     }
 
     public void clickCommentSwitcher() {
