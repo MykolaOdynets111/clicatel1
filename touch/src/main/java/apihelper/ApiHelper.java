@@ -46,7 +46,8 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
                 .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .get(String.format(Endpoints.TENANT_CONFIG, tenantId));
+                .log().all()
+                .get(String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
