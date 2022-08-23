@@ -21,6 +21,7 @@ public class SurveyManagementPage extends PortalAbstractPage {
     private String surveyFormMainElement = "//label[contains(@for, '%s')]//ancestor::div[@class='setting-group']";
 
     public SurveyForm getSurveyForm(String channelId) {
+        //ToDo: Waiting for bug to be fixed
         waitFor(3000);
         return new SurveyForm(this.getCurrentDriver().findElement(By.xpath(String.format(surveyFormMainElement, channelId))))
                 .setCurrentDriver(this.getCurrentDriver());
