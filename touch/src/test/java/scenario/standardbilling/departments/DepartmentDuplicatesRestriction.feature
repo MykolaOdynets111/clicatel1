@@ -3,7 +3,7 @@
 Feature: Departments
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14884")
-  Scenario: Departmens: Verify if not possible to create two departments with the same name
+  Scenario: Departments: Verify if not possible to create two departments with the same name
     Given I open portal
     And Login into portal as an admin of Standard Billing account
     Given Admin select TOUCH in left menu and Dashboard in submenu

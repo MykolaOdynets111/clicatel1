@@ -10,7 +10,7 @@ Feature: WhatsApp ORCA :: Supervisor Desk
     Given I open portal
     And Login into portal as an admin of Automation account
     And I select Touch in left menu and Supervisor Desk in submenu
-#    ToDo added wait till issue with filter will be resolved
+#    ToDo added wait till issue with filter will be resolved.
     And Wait for 10 second
     And Agent search chat ORCA on Supervisor desk
     Then ORCA request is shown on Supervisor Desk Live page
