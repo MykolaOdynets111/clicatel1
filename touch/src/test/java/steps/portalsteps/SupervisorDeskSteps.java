@@ -498,15 +498,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
     }
 
-<<<<<<< HEAD
     @Then("Verify that Chat is displayed first")
     public void verifyThatChatIsDisplayedFirst() {
         getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
     }
 
-}
-
-=======
     @Then("Verify that Chats tab is displayed first")
     public void verifyThatChatsTabIsDisplayedFirst() {
         getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
@@ -522,4 +518,3 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
     }
 }
->>>>>>> 34f8225b358e7efc08a2b6d5ef6bd79d15c2bbca

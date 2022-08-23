@@ -61,10 +61,6 @@ public class SupervisorLeftPanel extends AbstractUIElement {
             }
         }
     }
-<<<<<<< HEAD
-}
-=======
-
     public void verifyChatgroup(String liveChats){
         Assert.assertEquals(allChats.getText(),liveChats,"all chats text is not selected default");
     }
@@ -73,4 +69,3 @@ public class SupervisorLeftPanel extends AbstractUIElement {
         Assert.assertTrue(livechatsinfo.isDisplayed(),"Live chat not displayed ");
     }
 }
->>>>>>> 34f8225b358e7efc08a2b6d5ef6bd79d15c2bbca
