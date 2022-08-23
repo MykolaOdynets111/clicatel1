@@ -205,23 +205,4 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
     }
 
-    @When("^Send (.*) message by another user using ORCA$")
-    public void userSendConnectToAgentMessageByORCA(String message) {
-        {
-                System.out.println("creating new OrcaEvent for message: " + message);
-                createRequestMessage(apiToken.get(), message);
-                clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
-                System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
-            ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
-        }
-    }
-
-
-    @Then("current active chat remains open in conversation area")
-    public void currentActiveChatRemainsOpenInConversationArea() {
-        {
-      /*      if(!ConfigManager.isWebWidget() && socialChannel.equalsIgnoreCase("touch")){socialChannel="orca";}
-            getLeftMenu(agent).openNewFromSocialConversationRequest(getUserName(socialChannel));*/
-        }
-    }
 }

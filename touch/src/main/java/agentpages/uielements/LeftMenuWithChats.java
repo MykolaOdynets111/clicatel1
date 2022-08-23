@@ -151,14 +151,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private String loadingSpinner = ".//*[text()='Connecting...']";
 
-    @FindBy(xpath = "//div[@class='cl-select__control css-1s2u09g-control']")
-    private WebElement sortingButton;
-
-    @FindBy(xpath = "//div[contains(text(),'New Chats')]")
-    private WebElement newChats;
 
     private FilterMenu filterMenu;
 
+    private  ChatSortingMenu chatSortingMenu;
     private WebElement getTargetChat(String userName) {
         return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
                 .getUserName().equals(userName)).findFirst().orElseThrow(() -> new AssertionError(
@@ -447,14 +443,11 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), closedTabMenu, 5, "Click On Live Closed Tab on Menu");
     }
 
-    public void clickSortingButton(){
-        clickElem(this.getCurrentDriver(),sortingButton,2,"SortingButton");
+    public ChatSortingMenu cSortingButton(){
+        chatSortingMenu.clicksortingButton();
+        return chatSortingMenu;
     }
 
-    public void selectNewChats() {
-        clickElem(this.getCurrentDriver(), newChats, 2, "NewChats");
-        System.out.println("Select Elememt");
-    }
     public void clickStartChatButton() {
         clickElem(this.getCurrentDriver(), startChatButton, 5, "Click On Start Chat Button on Menu");
     }
