@@ -281,6 +281,13 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 "Closed chats doesn't have email button");
     }
 
+    @Then("^Verify that closed chats have Message Customer button$")
+    public void verifyMessageCustomerButtonForClosedChats() {
+        getSupervisorDeskPage().getSupervisorClosedChatsTable().openFirstClosedChat();
+        Assert.assertTrue(getSupervisorDeskPage().getSupervisorOpenedClosedChatsList().isClosedChatsHaveMessageCustomerButton(),
+                "Closed chat does not have Message Customer button");
+    }
+
     @Then("^WA chat show the name of the user$")
     public void verifyUserName() {
         Assert.assertEquals(getSupervisorDeskPage().getSupervisorClosedChatsTable().getUserName(), DotControlSteps.getClient(),
@@ -491,6 +498,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
     }
 
+<<<<<<< HEAD
     @Then("Verify that Chat is displayed first")
     public void verifyThatChatIsDisplayedFirst() {
         getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
@@ -498,3 +506,20 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
 }
 
+=======
+    @Then("Verify that Chats tab is displayed first")
+    public void verifyThatChatsTabIsDisplayedFirst() {
+        getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
+    }
+
+    @When("Verify {string} display default")
+    public void verifyDisplayDefault(String liveChats) {
+        getSupervisorDeskPage().getSupervisorLeftPanel().verifyChatgroup(liveChats);
+    }
+
+    @Then("Verify that live chats available are shown")
+    public void verifyThatLiveChatAvailableAreShown(){
+        getSupervisorDeskPage().getSupervisorLeftPanel().verifyLiveChatInfo();
+    }
+}
+>>>>>>> 34f8225b358e7efc08a2b6d5ef6bd79d15c2bbca

@@ -6,13 +6,13 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-@FindBy(css = ".cl-r-modal")
+@FindBy(css = ".cl-modal")
 public class SupervisorAvailableAsAgentDialog extends AbstractUIElement {
 
     @FindBy(css = ".cl-agent-view-modal-text>div")
     private List<WebElement> messages;
 
-    @FindBy(css = ".cl-r-button--primary")
+    @FindBy(css = ".cl-button--primary")
     private WebElement launchButton;
 
     public String getFullMessage() {

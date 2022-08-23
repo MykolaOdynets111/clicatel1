@@ -24,6 +24,12 @@ public class SupervisorLeftPanel extends AbstractUIElement {
     @FindBy(css = ".cl-chats-group-item__inner")
     private List<WebElement> liveChatsFilters;
 
+    @FindBy(css = ".cl-chats-group-item__name")
+    private  WebElement allChats;
+
+    @FindBy(xpath="//div[@class='chats-list live-chats-list']")
+    private  WebElement livechatsinfo;
+
     public String getFilterByDefaultName(){
         return getTextFromElem(this.getCurrentDriver(), defaultFilter,5,"Default filter").trim();
     }
@@ -55,4 +61,16 @@ public class SupervisorLeftPanel extends AbstractUIElement {
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    public void verifyChatgroup(String liveChats){
+        Assert.assertEquals(allChats.getText(),liveChats,"all chats text is not selected default");
+    }
+
+    public void verifyLiveChatInfo() {
+        Assert.assertTrue(livechatsinfo.isDisplayed(),"Live chat not displayed ");
+    }
+}
+>>>>>>> 34f8225b358e7efc08a2b6d5ef6bd79d15c2bbca

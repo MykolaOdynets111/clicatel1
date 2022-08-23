@@ -755,7 +755,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     @And("Agent click on 'start chat' button")
     public void AgentClickOnStartChartButton(String agent)
     {
-        getAgentHomePage(agent).getLeftMenuWithChats().ClickonStartChatButton();
+        getAgentHomePage(agent).getLeftMenuWithChats().clickStartChatButton();
     }
 
     @And("^Agent should select the chat that was ended 24hrs ago$")
@@ -795,4 +795,7 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void notVerifiedLabelIsDisplayed() {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
     }
+
+
 }
+
