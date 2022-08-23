@@ -25,10 +25,10 @@ public class TransferChatWindow extends AbstractUIElement {
     @FindBy(xpath = ".//div[contains(text(),'department')]/parent::div/following-sibling::div")
     private WebElement openDepartmentDropdownButton;
 
-    @FindBy(xpath = "//div[contains(@class, 'cl-select__option')]")
+    @FindBy(xpath = " //div[contains(@class, 'cl-select__department')or contains(@class,'cl-select__option')]")
     private WebElement availableAgentOrDepartment;
 
-    @FindBy(xpath = "//div[contains(@class, 'cl-select__option')]")
+    @FindBy(xpath = " //div[contains(@class, 'cl-select__department')or contains(@class,'cl-select__option')]")
     private List<WebElement> availableAgentsOrDepartmentsList;
 
     @FindBy(xpath = ".//div[@class='Select-control']")
@@ -131,6 +131,7 @@ public class TransferChatWindow extends AbstractUIElement {
             if(availableAgentsOrDepartmentsList.size() > 0) {
                 availableAgentsOrDepartmentsList.stream().filter(e -> e.getText().contains(departmentName)).findFirst().get().click();
                 return;
+
             } else {
                 if(isElementShown(this.getCurrentDriver(), refreshButton, 2)) {
                     clickElem(this.getCurrentDriver(), refreshButton, 1, "Refresh transfer pop-up");

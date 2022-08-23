@@ -6,6 +6,7 @@ Feature: Last agent switch
     When Login into portal as an admin of Standard Billing account
     And Turn off the Last Agent routing
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-110469")
   Scenario: verify if supervisor can switch the toggle on or off for the "Last agent"setting
     And I select Touch in left menu and Dashboard in submenu
     When Navigate to Preferences page
