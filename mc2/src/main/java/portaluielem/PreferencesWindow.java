@@ -30,7 +30,7 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css =".cl-select__menu-list .cl-select__option")
     private List<WebElement> departments;
 
-    @FindBy(css ="[for=last-agent-mode] div[class='cl-r-toggle-btn__label']")
+    @FindBy(xpath ="//label[input[@name='lastAgentMode']]")
     private WebElement liveChatRoatingCheckbox;
 
     @FindBy(css ="[name='agentInactivityTimeoutHours']")

@@ -3,15 +3,15 @@ package steps.portalsteps;
 import agentpages.uielements.ChatBody;
 import agentpages.uielements.LeftMenuWithChats;
 import apihelper.ApiHelper;
+import datamanager.Tenants;
 import datamanager.jacksonschemas.TenantChatPreferences;
+import dbmanager.DBConnector;
+import driverfactory.DriverFactory;
+import drivermanager.ConfigManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import datamanager.Tenants;
-import dbmanager.DBConnector;
-import driverfactory.DriverFactory;
-import drivermanager.ConfigManager;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
@@ -413,7 +413,7 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
 
     @And("^Admin filter by (.) year (.) month and (.*) days ago start date and today's end date$")
     public void agentFilterByMonthBeforeStartDateAndTodaySEndDate(int year, int month, int day) {
-        LocalDate startDate = LocalDate.now().minusYears(year).minusDays(month).minusDays(day);
+        LocalDate startDate = LocalDate.now().minusYears(year).minusMonths(month).minusDays(day);
         LocalDate endDate = LocalDate.now();
 
         getSupervisorDeskPage().getSupervisorDeskHeader()
@@ -421,6 +421,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
                 .selectEndDate(endDate)
                 .clickApplyFilterButton();
         getSupervisorDeskPage().waitForLoadingResultsDisappear(2, 6);
+    }
+
+    @And("^Admin checks back button is (.*) in calendar for (.*) filter 3 months ago in supervisor$")
+    public void backButtonDisability(String visibility, String filterType) {
+        getSupervisorDeskPage().checkBackButtonVisibilityThreeMonthsBack(filterType);
     }
 
     @Then("^Verify closed chats dates are fitted by filter$")

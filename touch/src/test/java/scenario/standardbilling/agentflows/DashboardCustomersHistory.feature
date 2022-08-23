@@ -156,3 +156,12 @@ Feature: Dashboard: Customer History
     And Admin click on Customers History on dashboard
     And Admin filter Customers History by Past day period
     Then All reports in graphs should be breakdown hourly
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118185")
+  Scenario: CD:: SMS:: Customers Overview :: Verify if Supervisor can see SMS channel in the Customer History tab in Dashboard
+    When I open portal
+    And Login into portal as an admin of Standard Billing account
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by SMS channel

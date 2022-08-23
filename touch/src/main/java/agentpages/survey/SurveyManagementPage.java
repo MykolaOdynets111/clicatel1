@@ -1,11 +1,11 @@
 package agentpages.survey;
 
+import agentpages.survey.uielements.SurveyForm;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import portalpages.PortalAbstractPage;
-import agentpages.survey.uielements.SurveyAbcForm;
-import agentpages.survey.uielements.SurveyWebChatForm;
 
 public class SurveyManagementPage extends PortalAbstractPage {
 
@@ -18,17 +18,13 @@ public class SurveyManagementPage extends PortalAbstractPage {
     @FindBy(css = ".svg-icon-whatsappwhite")
     private WebElement whatsappTab;
 
-    private SurveyWebChatForm surveyWebChatForm;
-    private SurveyAbcForm surveyAbcForm;
+    private String surveyFormMainElement = "//label[contains(@for, '%s')]//ancestor::div[@class='setting-group']";
 
-    public SurveyWebChatForm getSurveyWebChatForm(){
-        surveyWebChatForm.setCurrentDriver(this.getCurrentDriver());
-        return surveyWebChatForm;
-    }
-
-    public SurveyAbcForm getSurveyAbcForm() {
-        surveyAbcForm.setCurrentDriver(this.getCurrentDriver());
-        return surveyAbcForm;
+    public SurveyForm getSurveyForm(String channelId) {
+        //ToDo: Waiting for bug to be fixed
+        waitFor(3000);
+        return new SurveyForm(this.getCurrentDriver().findElement(By.xpath(String.format(surveyFormMainElement, channelId))))
+                .setCurrentDriver(this.getCurrentDriver());
     }
 
     public SurveyManagementPage(WebDriver driver) {
@@ -39,12 +35,8 @@ public class SurveyManagementPage extends PortalAbstractPage {
         return isElementShown(this.getCurrentDriver(), pageTitle, 40);
     }
 
-    public void switchToWhatsappTab(){
+    public void switchToWhatsappTab() {
         clickElem(this.getCurrentDriver(), whatsappTab, 1, "Whatsapp tab");
     }
 
-    public void waitSaveMessage(){
-        waitForElementToBeVisible(this.getCurrentDriver(), saveMessage, 5);
-        waitUntilElementNotDisplayed(this.getCurrentDriver(), saveMessage, 5);
-    }
 }

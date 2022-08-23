@@ -57,11 +57,15 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     @FindBy(css = ".cl-agent-view-launch-btn")
     private WebElement launchAgentButton;
 
-    @FindBy(xpath = ".//button[text()='Start Chat']")
-    private WebElement startChatButton;
+    @FindBy(xpath = "//button[@aria-label='Previous Month']")
+    private WebElement backButton;
 
-    @FindBy(xpath = ".//button[text()='Message Customer']")
-    private WebElement messageCustomerButton;
+    @FindBy(css = "[class='cl-form-control cl-form-control--input']")
+    private WebElement startDateInput;
+
+    @FindBy(xpath = "//input[contains(@class, 'cl-form-control cl-form-control--input cl-end-date')]")
+    private WebElement endDateInput;
+    private String backButtonString = "//button[@aria-label='Previous Month']";
 
     private String chatName = "//h2[@class='cl-chat-item-user-name' and text() ='%s']";
 
@@ -93,6 +97,30 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     }
     public SupervisorDeskPage(WebDriver driver) {
         super(driver);
+    }
+
+    public boolean checkBackButtonVisibilityThreeMonthsBack(String filterType) {
+        if (filterType.equalsIgnoreCase("start date")) {
+            clickElem(this.getCurrentDriver(), startDateInput, 5, "Start date element");
+        } else if (filterType.equalsIgnoreCase("end date")) {
+            clickElem(this.getCurrentDriver(), endDateInput, 5, "End date element");
+        }
+
+        //Clicking back button 3 times for back button invisibility check
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+        clickElem(this.getCurrentDriver(), backButton, 5, "Back button element");
+
+        try {
+            if (filterType.equalsIgnoreCase("start date")) {
+                waitForElementToBeInvisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            } else if (filterType.equalsIgnoreCase("end date")) {
+                waitForElementToBeVisibleByXpath(this.getCurrentDriver(), backButtonString, 5);
+            }
+            return true;
+        } catch (Exception e) {
+            throw new AssertionError("There is issue with Back button visibility for selected filter");
+        }
     }
 
     public AssignChatWindow getAssignChatWindow(){

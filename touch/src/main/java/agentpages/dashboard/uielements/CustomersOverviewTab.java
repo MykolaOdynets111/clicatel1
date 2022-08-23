@@ -23,7 +23,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = "[data-testid='tab-customers-overview-tabs-0']")
     private WebElement liveCustomersButton;
 
-    @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:first-child .cl-r-select__indicators")
+    @FindBy(css = ".tabs-dropdowns-wrapper .cl-form-group:first-child .cl-select__indicators")
     private WebElement channelFilterDropdown;
 
     @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:nth-child(2) .cl-r-select__indicators")

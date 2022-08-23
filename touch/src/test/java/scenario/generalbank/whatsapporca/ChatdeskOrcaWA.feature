@@ -13,7 +13,7 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Valid image for whatsapp integration are shown in left menu with chat
     And Agent should see whatsappHeader icon in active chat header
 
-  @orca_api
+ @orca_api
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118503")
   Scenario: ChatDesk: ORCA WhatsApp: Verify if //END message works for whatsapp chat
     Given I login as agent of General Bank Demo

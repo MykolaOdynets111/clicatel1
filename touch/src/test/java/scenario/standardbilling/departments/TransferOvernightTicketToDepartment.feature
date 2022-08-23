@@ -7,15 +7,14 @@ Feature: Departments
     And New departments with AutomationSecond name AutoDescriptionSecond description and second agent is created
     Given Agent select "Tickets" left menu option
     And Set agent support hours with day shift
-    Given User select Standard Billing tenant
-    And Click chat icon
+    Given Setup ORCA whatsapp integration for Standard Billing tenant
+    When Send connect to support message by ORCA
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-14876")
   Scenario: Departments: Verify if possible to transfer overnight ticket to department
-    And User enter connect to agent2 into widget input field
-    Then Agent has new ticket request
+    Then Agent has new ticket request from orca user
     Given I login as second agent of Standard Billing
-    When First Agent click on new conversation
+    When First Agent click on new conversation request from orca
     And Agent transfers chat to AutomationSecond department
     When Second agent select "Tickets" left menu option
-    Then Second agent has new ticket request
+    Then Second agent has new ticket request from orca user

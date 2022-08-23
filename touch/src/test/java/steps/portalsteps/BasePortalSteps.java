@@ -64,26 +64,26 @@ public class BasePortalSteps extends AbstractPortalSteps {
     private String confirmationURL;
     public static String tagname;
 
-    public static Map<String, String> getTenantInfoMap(){
-        return  tenantInfo;
+    public static Map<String, String> getTenantInfoMap() {
+        return tenantInfo;
     }
 
     @Given("^(.*) New (.*) agent is created$")
-    public void createNewAgent(String agentEmail, String tenantOrgName){
+    public void createNewAgent(String agentEmail, String tenantOrgName) {
         if (agentEmail.equalsIgnoreCase("brand")) {
-            AGENT_EMAIL = "aqa_"+System.currentTimeMillis()+"@aqa.com";
-        } else{
+            AGENT_EMAIL = "aqa_" + System.currentTimeMillis() + "@aqa.com";
+        } else {
             AGENT_EMAIL = generatePredefinedAgentEmail();
         }
         Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
         Tenants.setTenantUnderTestNames(tenantOrgName);
         AGENT_FIRST_NAME = faker.name().firstName();
-        AGENT_LAST_NAME =  faker.name().lastName();
-        AGENT_EMAIL =  Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
+        AGENT_LAST_NAME = faker.name().lastName();
+        AGENT_EMAIL = Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail();
 
-        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>(){{
+        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>() {{
             put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
-             put("mail", AGENT_EMAIL);
+            put("mail", AGENT_EMAIL);
         }});
 
 //        System.out.println("Adding the agent to the list = " +  AGENT_FIRST_NAME + " " + AGENT_LAST_NAME + " mail: " + AGENT_EMAIL);
@@ -96,9 +96,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
 
         Response resp = ApiHelperPlatform.sendNewAgentInvitation(tenantOrgName, AGENT_EMAIL, AGENT_FIRST_NAME, AGENT_LAST_NAME);
         // added wait for new agent to be successfully saved in touch DB before further actions with this agent
-        if(resp.statusCode()!=200){
-            Assert.fail("Sending new invitation was not successful \n"+
-            "Resp status code: " + resp.statusCode() + "\n" +
+        if (resp.statusCode() != 200) {
+            Assert.fail("Sending new invitation was not successful \n" +
+                    "Resp status code: " + resp.statusCode() + "\n" +
                     "Resp body: " + resp.getBody().asString());
         }
 
@@ -108,35 +108,35 @@ public class BasePortalSteps extends AbstractPortalSteps {
         ApiHelperPlatform.acceptInvitation(tenantOrgName, invitationID, AGENT_PASS);
     }
 
-    private String generatePredefinedAgentEmail(){
+    private String generatePredefinedAgentEmail() {
         String[] email = Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail().split("@");
         return email[0] + "+" + System.currentTimeMillis() + "@gmail.com";
     }
 
     @When("^Create new Agent$")
-    public void createNewAgent(){
+    public void createNewAgent() {
         AGENT_FIRST_NAME = faker.name().firstName();
-        AGENT_LAST_NAME =  faker.name().lastName();
+        AGENT_LAST_NAME = faker.name().lastName();
         AGENT_EMAIL = generatePredefinedAgentEmail();
 
         Agents.TOUCH_GO_SECOND_AGENT.setEnv(ConfigManager.getEnv());
         Agents.TOUCH_GO_SECOND_AGENT.setTenant(MC2Account.TOUCH_GO_NEW_ACCOUNT.getTenantOrgName());
         Agents.TOUCH_GO_SECOND_AGENT.setEmail(AGENT_EMAIL);
 
-        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>(){{
+        AbstractAgentSteps.getListOfCreatedAgents().add(new HashMap<String, String>() {{
             put("name", AGENT_FIRST_NAME + " " + AGENT_LAST_NAME);
             put("mail", AGENT_EMAIL);
         }});
 
         getPortalManagingUsersPage().getAddNewAgentWindow()
                 .createNewAgent(AGENT_FIRST_NAME, AGENT_LAST_NAME, AGENT_EMAIL);
-        getPortalManagingUsersPage().waitWhileProcessing(2,3);
-        getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2,3);
+        getPortalManagingUsersPage().waitWhileProcessing(2, 3);
+        getPortalManagingUsersPage().waitForNotificationAlertToBeProcessed(2, 3);
     }
 
-    private boolean checkThatEmailFromSenderArrives(String sender, int wait){
+    private boolean checkThatEmailFromSenderArrives(String sender, int wait) {
         boolean result = false;
-        if(ConfigManager.getEnv().equals("testing"))
+        if (ConfigManager.getEnv().equals("testing"))
             result = DBConnector.isAgentCreatedInDB(ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
         else {
             GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
@@ -144,10 +144,10 @@ public class BasePortalSteps extends AbstractPortalSteps {
                     .getConfirmationURL(sender, wait);
             result = !confirmationEmail.equalsIgnoreCase("") ||
                     !confirmationEmail.equalsIgnoreCase("none");
-            if(result){
+            if (result) {
                 try {
                     confirmationURL = confirmationEmail.split("\\[")[1].replace("]", "").trim();
-                }catch (ArrayIndexOutOfBoundsException e){
+                } catch (ArrayIndexOutOfBoundsException e) {
                     Assert.fail("Unexpected confirmationEmail \n" + confirmationEmail);
                 }
             }
@@ -156,20 +156,20 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     @Given("^There is no new emails in target email box$")
-    public void cleanUpEmailBox(){
+    public void cleanUpEmailBox() {
         GmailConnector.loginAndGetInboxFolder(Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail(), Agents.TOUCH_GO_SECOND_AGENT.getAgentPass());
         CheckEmail.clearEmailInbox();
     }
 
     @Then("^Confirmation Email arrives$")
-    public void verifyConfirmationEmail(){
+    public void verifyConfirmationEmail() {
         boolean result = false;
-        if (ConfigManager.getEnv().equals("testing")){
+        if (ConfigManager.getEnv().equals("testing")) {
             String invitationID = DBConnector.getInvitationIdForCreatedUserFromMC2DB(
                     ConfigManager.getEnv(), Agents.TOUCH_GO_SECOND_AGENT.getAgentEmail());
             confirmationURL = EndpointsPlatform.PORTAL_NEW_AGENT_ACTIVATION + invitationID;
-            if(!(invitationID==null)) result = true;
-        }else {
+            if (!(invitationID == null)) result = true;
+        } else {
             result = checkThatEmailFromSenderArrives("Clickatell <mc2-devs@clickatell.com>", 200);
         }
         Assert.assertTrue(result,
@@ -177,12 +177,12 @@ public class BasePortalSteps extends AbstractPortalSteps {
     }
 
     @Then("^Confirmation reset password Email arrives$")
-    public void verifyResetPassEmailArrives(){
+    public void verifyResetPassEmailArrives() {
         boolean result = false;
-        if (ConfigManager.getEnv().equals("testing")){
+        if (ConfigManager.getEnv().equals("testing")) {
             String resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
                     Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail());
-            if(resetPassID.equals("none")) {
+            if (resetPassID.equals("none")) {
                 getAdminPortalMainPage().waitFor(1500);
                 resetPassID = DBConnector.getResetPassId(ConfigManager.getEnv(),
                         Agents.TOUCH_GO_SECOND_AGENT.getOriginalEmail());
@@ -1638,7 +1638,7 @@ public class BasePortalSteps extends AbstractPortalSteps {
     public void changeBusinessDetails() {
         tenantInfo.put("companyName", "New company name "+faker.lorem().word());
         tenantInfo.put("companyCity", "San Francisco "+faker.lorem().word());
-        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndastry());
+        tenantInfo.put("companyIndustry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomIndustry());
         tenantInfo.put("companyCountry", getPortalTouchPreferencesPage().getBusinessProfileWindow().selectRandomCountry());
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName(tenantInfo.get("companyName"));
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setCompanyCity(tenantInfo.get("companyCity"));
@@ -1648,19 +1648,18 @@ public class BasePortalSteps extends AbstractPortalSteps {
     @And("^Refresh page and verify business details was changed for (.*)$")
     public void refreshPageAndVerifyItWasChanged(String tenantOrgName) {
         SoftAssert soft = new SoftAssert();
-        Response resp = ApiHelper.getTenantInfo(tenantOrgName);
         DriverFactory.getDriverForAgent("main").navigate().refresh();
-        String country = DBConnector.getCountryName(ConfigManager.getEnv(),resp.jsonPath().getList("tenantAddresses.country").get(0).toString());
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyName(),tenantInfo.get("companyName"), "Company name was not changed");
-        soft.assertEquals(resp.jsonPath().get("tenantOrgName"),tenantInfo.get("companyName"), "Company name was not changed on backend");
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCity(),tenantInfo.get("companyCity"), "Company city was not changed");
-        soft.assertEquals(resp.jsonPath().getList("tenantAddresses.city").get(0).toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyIndustry(),tenantInfo.get("companyIndustry"), "Company industry was not changed");
-        soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         soft.assertEquals(getPortalTouchPreferencesPage().getBusinessProfileWindow().getCompanyCountry(),tenantInfo.get("companyCountry"), "Company country was not changed");
-        soft.assertEquals(country,tenantInfo.get("companyCountry"), "Company country was not changed on backend");
         getPortalTouchPreferencesPage().getBusinessProfileWindow().setBusinessName("Automation Bot");
         getPortalTouchPreferencesPage().clickSaveButton();
+        Response resp = ApiHelper.getTenantConfig(tenantOrgName);
+        String country = resp.jsonPath().get("country").toString();
+        soft.assertEquals(resp.jsonPath().get("orgName"),tenantOrgName, "Company name was not changed on backend");
+        soft.assertEquals(resp.jsonPath().get("city").toString(),tenantInfo.get("companyCity"), "Company city was not changed on backend");
+        soft.assertEquals(resp.jsonPath().get("category"),tenantInfo.get("companyIndustry"), "Company industry was not changed on backend");
         getPortalTouchPreferencesPage().waitWhileProcessing(14, 20);
         soft.assertAll();
     }

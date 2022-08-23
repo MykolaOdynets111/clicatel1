@@ -34,8 +34,14 @@ public class ORCASteps implements WebWait {
     private static final ThreadLocal<String> clientId = new ThreadLocal<>();
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
 
+    public static ThreadLocal<String> channelId = new ThreadLocal<>();
+
     public static String getClientId() {
         return clientId.get();
+    }
+
+    public static String getChannelId() {
+        return channelId.get();
     }
 
     public static void cleanUPORCAData() {
@@ -44,6 +50,7 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
+        channelId.remove();
         System.out.println("Orca artifacts were removed");
     }
 
@@ -87,6 +94,7 @@ public class ORCASteps implements WebWait {
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
         String id = getIntegrationId(channel, "ORCA");
+        channelId.set(id);
         if (id == null) {
             apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
         } else {

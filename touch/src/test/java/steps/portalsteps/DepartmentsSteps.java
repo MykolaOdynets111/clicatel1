@@ -1,18 +1,20 @@
 package steps.portalsteps;
 
 import apihelper.ApiHelper;
+import datamanager.Agents;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import datamanager.Tenants;
 import io.restassured.response.Response;
+import org.checkerframework.checker.formatter.FormatUtil;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import portalpages.DepartmentsManagementPage;
 import portaluielem.CreateDepartmentForm;
 import steps.agentsteps.AbstractAgentSteps;
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,18 +34,20 @@ public class DepartmentsSteps extends AbstractPortalSteps {
                 "Departments was not created");
     }
 
-    @Then("^Create Department with (.*) name (.*) description and with (.*) Agents")
-    public void createDepartmentWithSeveralAgents(String name, String description, int agent){
-        List<String> agents = new ArrayList<String>();
-        agents.add(Tenants.getTenantUnderTestOrgName());
-        String secondAgentName = ApiHelper.getAgentInfo(Tenants.getTenantUnderTestOrgName(), "second agent").get("fullName");
-        agents.add(secondAgentName);
-        for (int i = agent-2; i > 0; i--){
-            agents.add(AbstractAgentSteps.getListOfCreatedAgents().get((i-1)).get("name"));
+    @Then("^Create Department with (.*) name (.*) description and with (.*) agents$")
+    public void createDepartmentWithSeveralAgents(String name, String description, int numberOfAgents) throws Exception {
+        List<String> agentsNames = new ArrayList<>();
+        List<Map> agents = ApiHelper.getAgentsInfo(Tenants.getTenantUnderTestOrgName());
+        if (agents.size()>=numberOfAgents){
+        for(int i=0; i<numberOfAgents; i++){
+            agentsNames.add(String.valueOf(agents.get(i).get("fullName")));
         }
-        getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agents).clickCreateButton();
+        getDepartmentsManagementPage().clickAddNewDepartmentButton().setNameField(name).setDescriptionForm(description).selectSeveralDepartmentAgentsCheckbox(agentsNames).clickCreateButton();
         Assert.assertTrue(getDepartmentsManagementPage().isCardPresent(name, 5),
-                "Departments was not created");
+                "Departments was not created");}
+        else {
+            throw new Exception("Currently, this tenant has " + agents.size()+ " total agents but required agents are: " +numberOfAgents+" ");
+        }
     }
 
     @And("^Edit department with (.*) name (.*) description")

@@ -13,24 +13,24 @@ public class DashboardSettingsPage extends PortalAbstractPage {
     }
 
     @FindAll({
-        @FindBy(css = "[selenium-id='tab-navigation-panel-business-profile']"), //toDo old locator
-        @FindBy(css = "[data-testid='tab-navigation-panel-business-profile']")
+            @FindBy(css = "[selenium-id='tab-navigation-panel-business-profile']"), //toDo old locator
+            @FindBy(css = "[data-testid='tab-navigation-panel-business-profile']")
     })
     private WebElement businessProfile;
 
     @FindAll({
-        @FindBy(css = "[selenium-id='tab-navigation-panel-chat-tags']"), //toDo old locator
-        @FindBy(css = "[data-testid='tab-navigation-panel-chat-tags']")})
+            @FindBy(css = "[selenium-id='tab-navigation-panel-chat-tags']"), //toDo old locator
+            @FindBy(css = "[data-testid='tab-navigation-panel-chat-tags']")})
     private WebElement chatTags;
 
     @FindAll({
-        @FindBy(css = "[selenium-id='tab-navigation-panel-auto-responders']"), //toDo old locator
-        @FindBy(css = "[data-testid='tab-navigation-panel-auto-responders']")})
+            @FindBy(css = "[selenium-id='tab-navigation-panel-auto-responders']"), //toDo old locator
+            @FindBy(css = "[data-testid='tab-navigation-panel-auto-responders']")})
     private WebElement autoResponders;
 
     @FindAll({
-        @FindBy(css = "[selenium-id='tab-navigation-panel-preferences']"), //toDo old locator
-        @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
+            @FindBy(css = "[selenium-id='tab-navigation-panel-preferences']"), //toDo old locator
+            @FindBy(css = "[data-testid='tab-navigation-panel-preferences']")
     })
     private WebElement preferences;
 
@@ -57,6 +57,7 @@ public class DashboardSettingsPage extends PortalAbstractPage {
             case "Surveys":
                 clickElem(this.getCurrentDriver(), surveysNavigation, 6, "Surveys");
         }
+        this.getCurrentDriver().navigate().refresh();
     }
 
     public boolean isBusinessProfileTabShown() {

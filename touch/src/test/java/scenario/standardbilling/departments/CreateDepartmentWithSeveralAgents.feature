@@ -3,9 +3,6 @@
 @newagent
 Feature: Departments
 
-  Background:
-    Given Brand New Standard Billing agent is created
-
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-119188")
   Scenario: Verify correct agents numbers in created department
     Given I open portal
@@ -13,7 +10,7 @@ Feature: Departments
     Given Admin select TOUCH in left menu and Dashboard in submenu
     Then Admin click on Departments Management button
     And Departments Management page should be shown
-    And Create Department with AutoDepartmentName name Auto Description description and with 3 Agents
+    And Create Department with AutoDepartmentName name Auto Description description and with 3 agents
     Then Verify that card with AutoDepartmentName name and Auto Description description has 3 total 3 offline and 0 active agents
     Given I login as second agent of Standard Billing
     And Agent refresh current page
