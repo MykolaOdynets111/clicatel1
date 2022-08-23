@@ -19,7 +19,7 @@ public class SupervisorDeskClosedChatRow extends AbstractWidget {
     @FindBy(css = "h6.user-details__name")
     private WebElement userName;
 
-    private String scrollAreaCss = "[data-testid='roster-scroll-container']";
+    private String scrollAreaCss = "[data-testid='chats-list-scroll-container']";
 
     protected SupervisorDeskClosedChatRow(WebElement element) {
         super(element);
