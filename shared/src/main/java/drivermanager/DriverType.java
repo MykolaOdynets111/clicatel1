@@ -55,7 +55,7 @@ public enum DriverType {
 
     public WebDriver getWebDriverObject(MutableCapabilities capabilities) {
             if (!ConfigManager.isRemote()) {
-                ChromeDriverManager.getInstance().driverVersion("102").setup();
+                ChromeDriverManager.getInstance().driverVersion("104").setup();
                 return new ChromeDriver((ChromeOptions) capabilities);
             }else{
                 ChromeDriverManager.getInstance().driverVersion("102.0.5005.63").setup();

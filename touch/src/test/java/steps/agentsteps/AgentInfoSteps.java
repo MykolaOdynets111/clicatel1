@@ -1,6 +1,7 @@
 package steps.agentsteps;
 
 
+import ch.qos.logback.core.CoreConstants;
 import datamanager.Tenants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -69,6 +70,9 @@ public class AgentInfoSteps extends AbstractAgentSteps{
 
     @And("^(.*) should see (.*) icon in active chat header$")
     public void agentShouldSeeAppleChatIconInHeader(String agent, String adapter) {
+      //  System.out.println("Hello in the code" );
+     //   System.out.println(getAgentHomePage(agent).getChatHeader());
+      //  System.out.println(adapter);
         Assert.assertTrue(getAgentHomePage(agent).getChatHeader().isValidChannelImg(adapter),
                 "Image in chat header for " + adapter + " adapter as not expected. \n");
     }

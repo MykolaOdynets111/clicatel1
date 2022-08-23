@@ -321,7 +321,7 @@ public interface WebActions extends WebWait {
                 ImageIO.write(buffered,"PNG",newFile);
             }
             BufferedImage expImage = ImageIO.read(image);
-            BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
+           BufferedImage expectedImage = imageToBufferedImage(expImage.getScaledInstance((int)Math.floor((expImage.getWidth()*dpr)),(int)Math.floor((expImage.getHeight()*dpr)),Image.SCALE_DEFAULT));
             result = Shutterbug.shootElement(driver, element, true).withName("Actual").equals(expectedImage, 0.07);
             if (!result) {
                 Shutterbug.shootElement(driver, element,true).equalsWithDiff(expectedImage, "src/test/resources/imagediferense/"+image.getName().substring(0,image.getName().length()-4));
