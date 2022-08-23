@@ -86,6 +86,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
 
+
     // == Constructors == //
 
     public SupervisorDeskPage() {
@@ -264,6 +265,10 @@ public class SupervisorDeskPage extends PortalAbstractPage {
 
     public boolean isSendEmailForOpenedClosedChatShown() {
         return isElementShown(this.getCurrentDriver(), openedClosedChatMessageUserButton, 5);
+    }
+
+    public boolean isMessageCustomerButtonForClosedChatShown() {
+        return isElementShown(this.getCurrentDriver(), messageCustomerButton, 5);
     }
 
     public void clickOnLaunchAgent() {

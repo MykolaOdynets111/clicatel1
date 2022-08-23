@@ -128,7 +128,6 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     @FindBy(xpath = "//button[@aria-label='Previous Month']")
     private WebElement backButton;
-
     @FindBy(css = "[class='cl-form-control cl-form-control--input']")
     private WebElement startDateInput;
 
@@ -152,8 +151,10 @@ public class LeftMenuWithChats extends AbstractUIElement {
 
     private String loadingSpinner = ".//*[text()='Connecting...']";
 
+
     private FilterMenu filterMenu;
 
+    private  ChatSortingMenu chatSortingMenu;
     private WebElement getTargetChat(String userName) {
         return newConversationRequests.stream().filter(e -> new ChatInLeftMenu(e).setCurrentDriver(this.getCurrentDriver())
                 .getUserName().equals(userName)).findFirst().orElseThrow(() -> new AssertionError(
@@ -442,7 +443,12 @@ public class LeftMenuWithChats extends AbstractUIElement {
         clickElem(this.getCurrentDriver(), closedTabMenu, 5, "Click On Live Closed Tab on Menu");
     }
 
-    public void ClickonStartChatButton() {
+    public ChatSortingMenu cSortingButton(){
+        chatSortingMenu.clicksortingButton();
+        return chatSortingMenu;
+    }
+
+    public void clickStartChatButton() {
         clickElem(this.getCurrentDriver(), startChatButton, 5, "Click On Start Chat Button on Menu");
     }
 }

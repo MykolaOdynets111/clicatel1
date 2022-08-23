@@ -104,3 +104,15 @@ Feature: Whatsapp ORCA :: Chatdesk
     Then Location field becomes empty
     And Agent search for Canada Location
     And Agent click on Canada Location
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-90109")
+  Scenario: CD :: Agent Desk :: Live Chat :: Location :: Verify if agent click on the small cross on search bar, the text entered in the search bar is deleted
+    Given I login as agent of General Bank Demo
+    Given Setup ORCA whatsapp integration for General Bank Demo tenant
+    When Send connect to agent message by ORCA
+    Then Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    Then Conversation area becomes active with connect to agent user's message
+    When Agent open chat location form
+    And Agent search for Paris Location
+    And Agent click on Paris Location

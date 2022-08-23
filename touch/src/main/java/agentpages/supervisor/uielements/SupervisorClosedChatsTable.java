@@ -18,7 +18,7 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
     @FindBy(css =".chats-list .cl-table-row")
     private List<WebElement> closedChats;
 
-    @FindBy(css = "[data-testid='roster-scroll-container']")
+    @FindBy(css = ".chats-list .iscroll-main iscroll-main-chats-list-scroll cl-scroll-wrap")
     private WebElement scrollArea;
 
     @FindBy(css = ".chats-list__loading-more")
