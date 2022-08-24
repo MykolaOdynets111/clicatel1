@@ -22,7 +22,7 @@ public class PageHeader extends AbstractUIElement {
     @FindBy(css = "[selenium-id=logout-button]")
     private WebElement logOutButton;
 
-    @FindBy(css = "[selenium-id=profile-settings-button]")
+    @FindBy(css = "[data-testid=profile-settings-button]")
     private WebElement profileSettingsButton;
 
     @FindBy(css = "[selenium-id=agent-fullname]")
@@ -95,6 +95,7 @@ public class PageHeader extends AbstractUIElement {
     }
 
     public void clickProfileSettingsButton(){
+        waitForElementToBeClickable(this.getCurrentDriver(), profileSettingsButton, 10);
         profileSettingsButton.click();
     }
 
