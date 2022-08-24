@@ -1,0 +1,7 @@
+
+dependencies {
+    api  group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+    api  group: 'org.testng', name: 'testng', version: '7.5'
+    api  group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+    api  group: 'com.paulhammant', name: 'ngwebdriver', version: '1.1.5'
+}

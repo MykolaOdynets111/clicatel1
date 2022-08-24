@@ -1,0 +1,86 @@
+plugins {
+    id("io.qameta.allure") version "2.8.1"
+}
+
+def allureVersion = "2.12.1"
+def suite = "all"
+def baseXmlPath = "/src/test/resources/xmls"
+
+
+allure {
+    configuration = 'implementation'
+    aspectjweaver = true
+    version = allureVersion
+    useTestNG {
+        version = allureVersion
+    }
+    resultsDir = file("${rootProject.buildDir}${File.separator}allure-results")
+    reportDir = file("${rootProject.buildDir}${File.separator}allure-report")
+}
+
+dependencies {
+    api project (':shared')
+    api  group: 'io.qameta.allure', name: 'allure-rest-assured', version: allureVersion
+    api  group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+
+}
+
+// =========== !! SERVICE TASKS !! ============== //
+
+tasks.withType(Test) {
+    systemProperties = System.getProperties()
+}
+
+task copyConfig(type: Copy) {
+    from "src/test/resources/allureconfigs/"
+    into "${rootProject.buildDir}${File.separator}allure-results"
+//    include "*.properties"
+}
+
+// ========= !! TASKS FOR SUITES !! ============== //
+
+task runAcceptanceTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/ui/acceptance.xml"
+    }
+}
+
+task runApiTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/api/api.xml"
+    }
+}
+
+task rundbTests(type:Test) {
+    useTestNG() {
+        ignoreFailures = true
+        suites baseXmlPath + "/dbtest.xml"
+    }
+}
+
+// =============== !! MAIN TASK !! ============== //
+
+task runTests(type:Test) {
+
+    suite = System.properties.getProperty("suite", "all")
+
+    if(suite == "all") {
+        runTests.dependsOn(runAcceptanceTests)
+    }
+
+    if(suite == "api") {
+        runTests.dependsOn(runApiTests)
+    }
+
+    if(suite == "db") {
+        runTests.dependsOn(rundbTests)
+    }
+
+    runTests.finalizedBy(copyConfig)
+}
+
+
+
+

@@ -1,0 +1,4 @@
+include:
+  - project: devops/deploy-pipelines
+    ref: master
+    file: '/chatdesk/mc2-touch-tests/.gitlab-ci.yml'
