@@ -32,3 +32,12 @@ Feature: Managing Chat desk Window
     And Agent click 'Save changes' button
     And Agent refreshes the page
     Then Chats per agent became:"6"
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-114756")
+  Scenario: CD :: Dashboard :: Settings :: Preferences :: Verify if supervisor can't input decimal number for maximum number of chat
+    Given I open portal
+    And Login into portal as an admin of Automation Bot account
+    When I select Touch in left menu and Dashboard in submenu
+    And Navigate to Preferences page
+    When Change chats per agent:"0.5"
+    Then Decimal number Error message is shown

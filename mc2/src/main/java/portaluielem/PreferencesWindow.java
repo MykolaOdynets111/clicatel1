@@ -9,11 +9,11 @@ import java.util.List;
 @FindBy(css = ".cl-preferences-page")
 public class PreferencesWindow extends BasePortalWindow {
 
-    @FindBy(css = "[data-testid='sessionsCapacity']")
+    @FindBy(css = "[name='maxChatsPerAgent']")
     private WebElement chatsAvailable;
 
-    @FindBy(xpath = ".//div[text() = 'You must specify a number']")
-    private WebElement chatsErrorMessage;
+    @FindBy(xpath = ".//div[text() = 'Decimal numbers (e.g., 3.5) are not allowed. Please enter a whole number']")
+    private WebElement chatsErrorMessageDecimalNumbers;
 
     @FindBy(css = "[for='agent-note'] .cl-r-toggle-btn__label")
     private WebElement toggleChatConclusion;
@@ -73,7 +73,7 @@ public class PreferencesWindow extends BasePortalWindow {
     }
 
     public boolean isErrorMessageShown(){
-       return isElementShown(this.getCurrentDriver(), chatsErrorMessage,5);
+       return isElementShown(this.getCurrentDriver(), chatsErrorMessageDecimalNumbers,5);
     }
 
 
