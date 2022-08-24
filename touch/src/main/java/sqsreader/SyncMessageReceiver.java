@@ -65,7 +65,7 @@ public class SyncMessageReceiver {
 
         // Close the connection. This closes the session automatically
         connection.close();
-        System.out.println( "Connection closed" );
+        System.out.println( "Connection closed " );
     }
 
 
