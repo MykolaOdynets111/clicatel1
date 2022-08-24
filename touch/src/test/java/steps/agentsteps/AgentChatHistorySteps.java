@@ -69,6 +69,12 @@ public class AgentChatHistorySteps extends AbstractAgentSteps implements JSHelpe
         Assert.assertEquals(locationInHistoryDetailes, AgentConversationSteps.locationURL.get(), "Location URLs aro different");
     }
 
+    @Then("^(.*) sees the particular message (.*) in History Details window$")
+    public void compareParticularMessageInHistoryDetailsWindows(String agent, String message){
+        String locationInHistoryDetails = getAgentHomePage(agent).getHistoryDetailsWindow().getText();
+        Assert.assertTrue(locationInHistoryDetails.contains(message), "Particular message is not there in history window");
+    }
+
     @Then("^(.*) sees correct messages in history details window$")
     public void verifyHistoryInOpenedWindow(String agent){
         SoftAssert soft = new SoftAssert();

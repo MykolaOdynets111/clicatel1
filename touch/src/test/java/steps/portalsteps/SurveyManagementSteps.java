@@ -69,6 +69,12 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().getSurveyForm(id).clickExpandButton(id);
     }
 
+    @When("^Admin clicks thank message toggle for survey form")
+    public void selectThankMessageToggle() {
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).clickThankMessageToggle();
+    }
+
     @When("^Switch to whatsapp survey configuration$")
     public void switchToWhatsapp() {
         getSurveyManagementPage().switchToWhatsappTab();
@@ -150,10 +156,10 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
     }
 
-    @When("^Customize your survey thank message$")
-    public void setSurveyThankMessage() {
+    @When("^Customize your survey thank message to (.*)$")
+    public void setSurveyThankMessage(String message) {
         String channelID = ORCASteps.getChannelId();
-        thankMessageUpdate.set("Thank you for taking the time to provide us with your feedback. " + faker.gameOfThrones().dragon());
+        thankMessageUpdate.set(message + faker.gameOfThrones().dragon());
         getSurveyManagementPage().getSurveyForm(channelID).setThankMessage(thankMessageUpdate.get());
     }
 

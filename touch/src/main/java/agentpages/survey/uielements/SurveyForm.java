@@ -42,6 +42,9 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(xpath = ".//button[text()='Save configuration']")
     private WebElement saveButtonElement;
 
+    @FindBy(xpath = ".//label[contains(@for, 'thanksMessageEnabled')]//div")
+    private WebElement toggleButtonThankMessage;
+
     @FindBy(xpath = ".//div[@class='setting-group__collapse-wrapper']//div")
     private WebElement collapseChannelForm;
 
@@ -116,11 +119,17 @@ public class SurveyForm extends AbstractWidget {
         return this;
     }
 
+    public SurveyForm clickThankMessageToggle() {
+        moveToElemAndClick(this.getCurrentDriver(), toggleButtonThankMessage);
+        return this;
+    }
+
     public void changeQuestion(String question) {
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
 
     public void setThankMessage(String message) {
+        thankMessageForm.clear();
         inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
     }
 
@@ -143,8 +152,14 @@ public class SurveyForm extends AbstractWidget {
     }
 
     public void clickSaveButton() {
-        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2) == true) {
+        if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2)) {
             clickElem(this.getCurrentDriver(), saveButtonElement, 2, "Save Survey Button");
+            if (isElementEnabled(this.getCurrentDriver(), saveButtonElement, 2)) {
+                waitFor(5000);
+            }
+            else{
+                System.out.println("Button is successfully clicked and value is correctly saved");
+            }
         } else {
             System.out.println("Value is already saved");
         }
