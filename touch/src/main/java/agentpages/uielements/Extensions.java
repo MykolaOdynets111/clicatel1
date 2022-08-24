@@ -15,7 +15,6 @@ public class Extensions extends AbstractUIElement {
 
     public void openC2pForm(){
         clickElem(this.getCurrentDriver(), allExtensionsTab, 2, "All Extensions Tab button");
-        moveToElement(this.getCurrentDriver(), paymentRequestItem);
-        clickElem(this.getCurrentDriver(), paymentRequestItem, 2, "Payment Request button");
+        executeJSclick(this.getCurrentDriver(), paymentRequestItem);
     }
 }

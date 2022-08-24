@@ -8,7 +8,9 @@ import datamanager.Tenants;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
+import drivermanager.ConfigManager;
 import interfaces.WebWait;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -27,19 +29,18 @@ import java.util.Optional;
 
 public class ORCASteps implements WebWait {
 
-    private static final ThreadLocal<OrcaEvent> orcaMessageCallBody = new ThreadLocal<>();
+    public static final ThreadLocal<OrcaEvent> orcaMessageCallBody = new ThreadLocal<>();
     private static final ThreadLocal<String> apiToken = new ThreadLocal<>();
     private static final ThreadLocal<String> clientId = new ThreadLocal<>();
     public static ThreadLocal<String> mediaFileName = new ThreadLocal<>();
-
-    public static ThreadLocal<String> channelId = new ThreadLocal<>();
+    private static final ThreadLocal<String> orcaChannelId = new ThreadLocal<>();
 
     public static String getClientId() {
         return clientId.get();
     }
 
     public static String getChannelId() {
-        return channelId.get();
+        return orcaChannelId.get();
     }
 
     public static void cleanUPORCAData() {
@@ -48,7 +49,7 @@ public class ORCASteps implements WebWait {
         orcaMessageCallBody.remove();
         apiToken.remove();
         clientId.remove();
-        channelId.remove();
+        orcaChannelId.remove();
         System.out.println("Orca artifacts were removed");
     }
 
@@ -58,7 +59,6 @@ public class ORCASteps implements WebWait {
         if (orcaMessageCallBody.get() == null){
             System.out.println("creating new OrcaEvent for message: " + message);
             createRequestMessage(apiToken.get(), message);
-            clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
             System.out.println("Message body is: " + orcaMessageCallBody.get().toString());
         }else{
             System.out.println("Updating new OrcaEvent for message: " + message);
@@ -80,7 +80,6 @@ public class ORCASteps implements WebWait {
     @When("^Send (.*) message by ORCA to (.*) department$")
     public void sendChatToSpecificDepartment(String message, String departmentName){
         createRequestMessage(apiToken.get(), message);
-        clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
         List<Department> departments = ApiHelper.getDepartments(Tenants.getTenantUnderTestOrgName());
         String departmentId = departments.stream().filter(e->e.getName().equalsIgnoreCase(departmentName)).findFirst().get().getId();
         orcaMessageCallBody.get().getContent().getExtraFields().setDepartment(departmentId);
@@ -88,19 +87,25 @@ public class ORCASteps implements WebWait {
         ApiORCA.sendMessageToAgent(orcaMessageCallBody.get());
     }
 
+    @Given("^(.*) generate closed ORCA whatsapp chat (.*) hours ago$")
+    public void generateClosedChat(String agent, int hours){
+        createRequestMessage(apiToken.get(), "message for closed chat");
+        ApiORCA.createClosedChat(agent,hours,orcaMessageCallBody.get(),orcaChannelId.get());
+    }
+
     @Given("^Setup ORCA (.*) integration for (.*) tenant$")
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
-        String id = getIntegrationId(channel, "ORCA");
-        channelId.set(id);
-        if (id == null) {
+
+        orcaChannelId.set(getIntegrationId(channel, "ORCA"));
+        if (orcaChannelId.get() == null) {
             apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
+            orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
-            apiToken.set(ApiORCA.updateIntegration(channel, Server.getServerURL(),id));
+            apiToken.set(ApiORCA.updateIntegration(channel, Server.getServerURL(),orcaChannelId.get()));
             System.out.println("apiToken was set with: " + apiToken.get());
         }
     }
-
 
     private String getIntegrationId(String channel, String transportType) {
         Response response = ApiORCA.getORCAIntegrationsList();
@@ -147,6 +152,14 @@ public class ORCASteps implements WebWait {
         Assert.assertTrue(isLocationCameToUser(locationName, wait),
                 String.format("Location '%s' didn't come to user",locationName ));;
     }
+
+    @Then("^Verify Orca returns (.*) HSM sent by Agent during (.*) seconds with parameters$")
+    public void verifyOrcaReturnedCorrectLocation(String templateId, int wait, Map<String, String> parameters) {
+        Assert.assertTrue(isHSMCameToUser(templateId, parameters, wait),
+                String.format("HSM '%s' didn't come to user",templateId ) +"\n" +
+                "Following ORCA events sent to user " +  OrcaServer.orcaEvents);
+    }
+
 
     @When("^User send (.*) attachment with orca$")
     public void sendAttachment(String fileName){
@@ -196,6 +209,24 @@ public class ORCASteps implements WebWait {
                 Optional.ofNullable(e.getContent().getEvent().getName()).equals(Optional.of(location)));
     }
 
+    private boolean isHSMCameToUser(String templateId, Map<String, String> parameters, int wait){
+        for (int i = 0; i < wait; i++) {
+            if (isCorrectHSMCameToUser(templateId,  parameters)) return true;
+            waitFor(1000);
+        }
+        return false;
+    }
+
+    private boolean isCorrectHSMCameToUser(String templateId, Map<String, String> parameters){
+        return OrcaServer.orcaEvents.stream().anyMatch(e->
+                Optional.ofNullable(e.getContent()).isPresent()
+                && Optional.ofNullable(e.getContent().getEvent()).isPresent()
+                && Optional.ofNullable(e.getContent().getEvent().getNestedEvent()).isPresent()
+                && Optional.ofNullable(e.getContent().getEvent().getNestedEvent().getTemplateId()).equals(Optional.of(templateId))
+                && Optional.ofNullable(e.getContent().getEvent().getNestedEvent().getParameters()).equals(Optional.of(parameters))
+        );
+    }
+
 
     private boolean isExpectedResponseArrives(String message) {
         if(Objects.isNull(OrcaServer.orcaMessages)) {
@@ -209,6 +240,7 @@ public class ORCASteps implements WebWait {
 
     private void createRequestMessage(String apiKey, String message) {
         orcaMessageCallBody.set(new OrcaEvent(apiKey, message));
+        clientId.set(orcaMessageCallBody.get().getUserInfo().getUserName());
     }
 
 }

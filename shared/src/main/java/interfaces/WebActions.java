@@ -1,18 +1,17 @@
 package interfaces;
 
+import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import com.assertthat.selenium_shutterbug.utils.web.Browser;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 
-import com.assertthat.selenium_shutterbug.utils.web.Browser;
-import java.io.File;
-import java.time.LocalDate;
-import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
-import com.assertthat.selenium_shutterbug.core.Shutterbug;
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface WebActions extends WebWait {
 

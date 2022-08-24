@@ -10,7 +10,6 @@ import datamanager.jacksonschemas.tenantaddress.TenantAddress;
 import datamanager.jacksonschemas.usersessioninfo.ClientProfile;
 import datamanager.jacksonschemas.usersessioninfo.UserSession;
 import drivermanager.ConfigManager;
-import interfaces.DateTimeHelper;
 import interfaces.VerificationHelper;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -22,8 +21,6 @@ import io.restassured.response.ResponseBody;
 import javaserver.Server;
 import mc2api.auth.PortalAuthToken;
 import org.testng.Assert;
-import datamanager.jacksonschemas.ClientProfileOld;
-
 
 import java.net.ConnectException;
 import java.time.LocalDateTime;
@@ -32,7 +29,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class ApiHelper implements DateTimeHelper, VerificationHelper {
+public class ApiHelper implements VerificationHelper {
 
     private static  List<HashMap> tenantsInfo=null;
     public static ThreadLocal<String> clientProfileId = new ThreadLocal<>();
@@ -74,10 +71,9 @@ public class ApiHelper implements DateTimeHelper, VerificationHelper {
             "resp status code:" + resp.statusCode() + "\n"+
             "resp body: " + resp.getBody().asString());
         }
-        Map<String, String> tenantInfo = tenants.stream().filter(e -> e.get("orgName").equals(tenantOrgName)).findFirst()
+        return tenants.stream().filter(e -> e.get("orgName").equals(tenantOrgName)).findFirst()
                 .orElseThrow(() -> new AssertionError(
                         "No Tenants with " + tenantOrgName + " tenantOrgName, env: " + ConfigManager.getEnv()));
-        return tenantInfo;
     }
 
     public static Response getTenantInfo(String tenantOrgName) {

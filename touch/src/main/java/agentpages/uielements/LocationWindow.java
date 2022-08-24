@@ -37,7 +37,7 @@ public class LocationWindow extends AbstractUIElement {
         return location;
     }
     public LocationWindow searchLocation(String locationName){
-        waitFor(1000);
+        //waitFor(1000);
         inputText(this.getCurrentDriver(), searchField, 2, "Location Search Field", locationName);
         return this;
     }

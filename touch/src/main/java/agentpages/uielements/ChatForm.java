@@ -63,6 +63,9 @@ public class ChatForm extends AbstractUIElement {
     @FindBy(css="svg[name='puzzle']")
     private WebElement c2pButton;
 
+    @FindBy(xpath = "//button[text()='Start Chat']")
+    private WebElement startChatButton;
+
     private String emojiMartCss = "section.emoji-mart";
 
     private AttachmentWindow attachmentWindow;
@@ -188,4 +191,9 @@ public class ChatForm extends AbstractUIElement {
     public void openExtensionsForm(){
         clickElem(this.getCurrentDriver(), c2pButton, 2, "c2p button");
     }
+
+    public void openHSMForm(){
+        clickElem(this.getCurrentDriver(), startChatButton, 2, "Start Chat button");
+    }
+
 }

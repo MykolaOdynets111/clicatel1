@@ -105,6 +105,7 @@ public class AgentHomePage extends AgentAbstractPage {
     private LocationWindow locationWindow;
     private C2pSendForm c2pSendForm;
     private Extensions extensions;
+    private HSMForm hsmForm;
 
     public AgentHomePage(String agent) {
         super(agent);
@@ -232,6 +233,10 @@ public class AgentHomePage extends AgentAbstractPage {
         return chatBody;
     }
 
+    public HSMForm getHSMForm() {
+        hsmForm.setCurrentDriver(this.getCurrentDriver());
+        return hsmForm;
+    }
 
     public boolean isAgentSuccessfullyLoggedIn() {
         if (isElementShown(this.getCurrentDriver(), conversationAreaContainer,50)) {
@@ -335,5 +340,10 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeInVisibleByCss(this.getCurrentDriver(), modalWindow, 6);
     }
 
-
+    public void waitForAgentPageToBeLoaded() throws TimeoutException{
+        try {
+            waitForElementToBeVisible(this.getCurrentDriver(), profile, 5);
+        } catch (TimeoutException e) {
+        }
+    }
 }

@@ -1,5 +1,5 @@
 @no_widget
-@off_rating_abc
+@off_rating_whatsapp
 Feature: WhatsApp ORCA :: Surveys
 
   Background:
@@ -39,3 +39,4 @@ Feature: WhatsApp ORCA :: Surveys
     Then Agent checks rating dropdown visibility for whatsapp survey form
     And Survey backend was updated for General Bank Demo and whatsapp chanel with following attribute
       | ratingScale     |     ONE_TO_FIVE   |
+

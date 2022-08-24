@@ -123,7 +123,7 @@ public class AbstractAgentSteps extends AbstractPortalSteps {
     }
 
     public static ProfileWindow getProfileWindow(String ordinalAgentNumber){
-            return getAgentHomePage(ordinalAgentNumber).getProfileWindow();
+        return getAgentHomePage(ordinalAgentNumber).getProfileWindow();
     }
 
     public static LeftMenuWithChats getLeftMenu(String agent) {

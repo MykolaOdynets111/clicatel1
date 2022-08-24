@@ -81,10 +81,11 @@ public class SupervisorDeskPage extends PortalAbstractPage {
     private SupervisorLeftPanel supervisorLeftPanel;
     private ChatHeader chatHeader;
     private Profile profile;
-    private SupervisorTicketChatView supervisorTicketChatView;
+    private SupervisorTicketClosedChatView supervisorTicketChatView;
     private MessageCustomerWindow messageCustomerWindow;
     private SupervisorDeskHeader supervisorDeskHeader;
     private SupervisorAvailableAsAgentDialog supervisorAvailableAsAgentDialog;
+
 
     // == Constructors == //
 
@@ -147,7 +148,7 @@ public class SupervisorDeskPage extends PortalAbstractPage {
         return profile;
     }
 
-    public SupervisorTicketChatView getSupervisorTicketChatView(){
+    public SupervisorTicketClosedChatView getSupervisorTicketClosedChatView(){
         supervisorTicketChatView.setCurrentDriver(this.getCurrentDriver());
         return supervisorTicketChatView;
     }

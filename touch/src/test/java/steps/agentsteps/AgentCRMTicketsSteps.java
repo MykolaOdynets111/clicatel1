@@ -5,6 +5,7 @@ import datamanager.jacksonschemas.CRMTicket;
 import dbmanager.DBConnector;
 import driverfactory.DriverFactory;
 import drivermanager.ConfigManager;
+import interfaces.DateTimeHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -99,13 +100,13 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
             formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         }
         LocalDateTime createdDate = LocalDateTime.parse(date, formatter1);
-        long expectedMili = convertLocalDateTimeToMillis(createdDate, zoneId);
+        long expectedMili = DateTimeHelper.convertLocalDateTimeToMillis(createdDate, zoneId);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         LocalDateTime dateTimeFromBackend =  LocalDateTime.parse(actualTicketInfoFromBackend.getCreatedDate(), formatter)
                 .atZone(ZoneId.of("UTC"))
                 .withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime();
-        long actualMili = convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
+        long actualMili = DateTimeHelper.convertLocalDateTimeToMillis(dateTimeFromBackend, zoneId);
         List<String> tags = ApiHelper.getTagsForCRMTicket(actualTicketInfoFromBackend.getConversationId());
         Collections.sort(tags);
         String crmTicketTags = String.join(", ", tags);
@@ -161,6 +162,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
 
     @Then("^(.*) is redirected to (.*) page$")
     public void verifyUserRedirectedEmptyChatdeskPage(String agent, String chatDeskPage) {
+        getAgentHomePage(agent).waitForAgentPageToBeLoaded();
         String pageUrl = DriverFactory.getDriverForAgent(agent).getCurrentUrl();
         SoftAssert softAssert = new SoftAssert();
         if(chatDeskPage.equalsIgnoreCase("empty chatdesk")) {
@@ -170,7 +172,7 @@ public class AgentCRMTicketsSteps extends AbstractAgentSteps {
             softAssert.assertTrue(pageUrl.contains("supervisor"),
                     "Agent is not redirected to supervisor page");
         } else if(chatDeskPage.equalsIgnoreCase("chatdesk")) {
-            softAssert.assertTrue(pageUrl.split("-")[1].equalsIgnoreCase("chatdesk.clickatelllabs.com/live"),
+            softAssert.assertTrue(pageUrl.contains("agent"),
                     "Supervisor is not redirected to chatdesk page");
         }
         softAssert.assertAll();

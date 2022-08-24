@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 
-public class TIEApiSteps implements DateTimeHelper {
+public class TIEApiSteps {
 
     Faker faker = new Faker();
 
@@ -1026,9 +1026,9 @@ public class TIEApiSteps implements DateTimeHelper {
                 respBody = ApiHelperTie.getModels().getBody();
                 createdModelName = respBody.jsonPath().getList("intent")
                             .stream().map(e -> (Map) e).map(e -> (String) e.get("name"))
-                            .filter(e -> convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
+                            .filter(e -> DateTimeHelper.convertLocalDateTimeToMillis(getModelDateTime(e), ZoneId.of("UTC"))
                                     >
-                                    convertLocalDateTimeToMillis(now.minusMinutes(3+incrementor), ZoneId.of("UTC")))
+                                    DateTimeHelper.convertLocalDateTimeToMillis(now.minusMinutes(3+incrementor), ZoneId.of("UTC")))
                             .findFirst().orElse("");
             }
         }

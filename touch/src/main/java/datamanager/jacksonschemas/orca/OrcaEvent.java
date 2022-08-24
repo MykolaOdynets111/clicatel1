@@ -52,10 +52,10 @@ public class OrcaEvent {
     public OrcaEvent(String routeId, String messageText){
         Faker faker = new Faker();
         String name = "AQA ORCA" +  faker.number().randomNumber(7, false);
-        this.setEventId(faker.letterify("AQA???"));
+        this.setEventId(faker.letterify("AQA???????"));
         this.setProviderId("touch");
         this.setRouteId(routeId);
-        this.setSourceId(faker.numerify("############"));
+        this.setSourceId(faker.numerify("78#########"));
         this.setSessionId(faker.letterify("1?????"));
         this.setContent(new Content(messageText, name));
         this.setUserInfo(new UserInfo(name));

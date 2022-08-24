@@ -212,7 +212,14 @@ public class Endpoints {
     // ====================  WS  ================= //
 
     public static String CREATE_TENANT_WS = URLs.getBaseWSInternalURL() + "tenants/";
+
     public static String CREATE_AGENT_WS = URLs.getBaseWSInternalURL() + "agents/%s";
+
     public static String TOUCH_AUTH = URLs.getBaseWSInternalURL() + "auth/fake-auth-token";
+
+    public static String NEW_USER = URLs.getBaseWSInternalURL() + "end-users";
+
+    public static String CLOSED_CHATS = URLs.getBaseWSInternalURL() + "chats/closed";
+
 }
 

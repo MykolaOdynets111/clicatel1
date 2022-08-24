@@ -1,8 +1,10 @@
 package apihelper;
 
+import com.github.javafaker.Faker;
 import datamanager.Tenants;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import driverfactory.URLs;
+import interfaces.DateTimeHelper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -10,7 +12,7 @@ import org.testng.Assert;
 
 import java.time.Instant;
 
-public class ApiORCA {
+public class ApiORCA extends ApiHelper{
 
      public static String createIntegration(String channel, String callBackUrl){
         Response resp = RestAssured.given().log().all()
@@ -67,5 +69,52 @@ public class ApiORCA {
                     resp.statusCode(), resp.getBody().asString(), messageBody));
         }
     }
+
+    public static String createNewUser(OrcaEvent orcaEvent, String channelId){
+        Response resp = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body("{\n" +
+                        "  \"tenantId\": \"" + Tenants.getTenantId() + "\",\n" +
+                        "  \"fullName\": \"" + orcaEvent.getUserInfo().getUserName() + "\",\n" +
+                        "  \"createdDate\": \"2022-08-10T11:47:16.272Z\",\n" +
+                        "  \"modifiedDate\": \"2022-08-10T11:47:16.272Z\",\n" +
+                        "  \"whatsapp\": {\n" +
+                        "    \"channelId\": \"" + channelId + "\",\n" +
+                        "    \"phoneNumber\": \"" + orcaEvent.getSourceId() + "\",\n" +
+                        "    \"userName\": \"" + orcaEvent.getUserInfo().getUserName() + "\"\n" +
+                        "  }\n" +
+                        "}")
+                .post(Endpoints.NEW_USER);
+        if(!(resp.statusCode()==200)) {
+            Assert.fail(String.format("New user was not created\nStatus code %s\n Body: %s",
+                    resp.statusCode(), resp.getBody().asString()));
+        }
+        return resp.getBody().jsonPath().get("id");
+    }
+
+    public static void createClosedChat(String agent, int time, OrcaEvent orcaEvent, String channelId){
+        Response resp = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body("{\n" +
+                        "  \"chatId\": \"" + new Faker().numerify("aqaChatId###########") +"\",\n" +
+                        "  \"tenantId\": \"" + Tenants.getTenantId() + "\",\n" +
+                        "  \"mc2AccountId\": \"" + Tenants.getMC2Id() + "\",\n" +
+                        "  \"channel\": {\n" +
+                        "    \"id\": \"" + channelId + "\",\n" +
+                        "    \"type\": \"WHATSAPP\"\n" +
+                        "  },\n" +
+                        "  \"transportType\": \"ORCA\",\n" +
+                        "  \"endUserId\": \"" + createNewUser(orcaEvent, channelId) + "\",\n" +
+                        "  \"assignedToAgentId\": \"" + ApiHelper.getAgentId(Tenants.getTenantUnderTestOrgName(), agent) + "\",\n" +
+                        "  \"initialMessage\": \"" + orcaEvent.getContent().getEvent().getText() + "\",\n" +
+                        "  \"createdTime\": \"" + DateTimeHelper.getDateTimeWithHoursShift(time) + "\"\n" +
+                        "}")
+                .post(Endpoints.CLOSED_CHATS);
+        if(!(resp.statusCode()==200)) {
+            Assert.fail(String.format("Closed chat was not created\nStatus code %s\n Body: %s",
+                    resp.statusCode(), resp.getBody().asString()));
+        };
+    }
+
 
 }

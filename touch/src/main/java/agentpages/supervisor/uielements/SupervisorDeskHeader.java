@@ -1,12 +1,9 @@
 package agentpages.supervisor.uielements;
 
 import abstractclasses.AbstractUIElement;
-import agentpages.dashboard.uielements.CustomersOverviewTab;
-import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import javax.xml.xpath.XPath;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,17 +13,6 @@ public class SupervisorDeskHeader extends AbstractUIElement {
     @FindBy(id = "nameOrPhone")
     private WebElement searchInput;
 
-    @FindBy(xpath = ".//div[@class='cl-select__control css-1s2u09g-control']")
-    private List<WebElement> tempDropDown;
-
-
-
-    @FindBy(xpath ="[//button[@type='submit']")
-    private WebElement sendButton;
-
-    @FindBy(id="react-select-3-placeholder")
-    private WebElement templateDropDown;
-
     @FindBy(css = "[type='submit']")
     private WebElement applyFiltersButton;
 
@@ -35,9 +21,6 @@ public class SupervisorDeskHeader extends AbstractUIElement {
 
     @FindBy(xpath = "//input[@name='waPhone']")
     private WebElement contactNub;
-
-    @FindBy(xpath = "//input[@name='parameters.0']")
-    private WebElement varibleInsertinWhatsapp;
 
     @FindBy(id = "channel")
     private WebElement channelsDropdown;
@@ -80,30 +63,6 @@ public class SupervisorDeskHeader extends AbstractUIElement {
                 .findFirst().orElseThrow(() ->
                         new AssertionError(chanelName + " chanel is not found")).click();
     return this;
-    }
-
-    public SupervisorDeskHeader selectTemplate(String templateName){
-        clickElem(this.getCurrentDriver(), templateDropDown, 1, "Template Dropdown");
-        tempDropDown.stream().filter(e -> e.getText().equalsIgnoreCase(templateName))
-                .findFirst().orElseThrow(() ->
-                        new AssertionError(templateName + " Template is not found")).click();
-        return this;
-    }
-    public SupervisorDeskHeader InsertContactNumber(String contactNumber)
-    {
-        inputText(this.getCurrentDriver(), contactNub, 5, "Contact Number", contactNumber);
-        return this;
-    }
-
-    public SupervisorDeskHeader insertVaribleForWhatsapp(String variable)
-    {
-        inputText(this.getCurrentDriver(), varibleInsertinWhatsapp, 5, "Varible Numbver Insert", variable);
-        return this;
-    }
-
-    @Step(value = "Click Create button")
-    public void clickSendButton(){
-        clickElem(this.getCurrentDriver(), sendButton, 10, "Send button");
     }
 
     public SupervisorDeskHeader selectSentiment(String sentimentName){

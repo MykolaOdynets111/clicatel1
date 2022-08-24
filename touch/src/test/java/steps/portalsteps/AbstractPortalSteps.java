@@ -1,18 +1,16 @@
 package steps.portalsteps;
 
+import agentpages.dashboard.DashboardPage;
 import agentpages.dashboard.DashboardSettingsPage;
 import agentpages.supervisor.SupervisorDeskPage;
-import agentpages.dashboard.DashboardPage;
 import agentpages.survey.SurveyManagementPage;
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
 import datamanager.Tenants;
 import driverfactory.DriverFactory;
-import interfaces.DateTimeHelper;
 import interfaces.JSHelper;
 import interfaces.VerificationHelper;
 import interfaces.WebWait;
-import io.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 import portalpages.*;
 import portaluielem.LeftMenu;
@@ -21,7 +19,7 @@ import steps.dotcontrol.DotControlSteps;
 
 import java.util.Map;
 
-public class AbstractPortalSteps implements JSHelper, DateTimeHelper, VerificationHelper, WebWait {
+public class AbstractPortalSteps implements JSHelper, VerificationHelper, WebWait {
 
     private static ThreadLocal<PortalLoginPage> currentPortalLoginPage = new ThreadLocal<>();
 

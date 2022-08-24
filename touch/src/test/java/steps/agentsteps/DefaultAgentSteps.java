@@ -24,6 +24,7 @@ import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import socialaccounts.FacebookUsers;
 import socialaccounts.TwitterUsers;
+import steps.ORCASteps;
 import steps.dotcontrol.DotControlSteps;
 
 import java.time.LocalDateTime;
@@ -89,31 +90,29 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
                 feature + " feature is not expected");
     }
 
-    @And("agent click Whatsapp message icon button on the top bar")
-    public void clickWhatsappIcon()
-    {
-        getDashboardPage().getForwardMessageIcon().clickOnWhatsapp();
+    @And("^(.*) click Whatsapp message icon button on the top bar$")
+    public void clickWhatsappIcon(String agent) {
+        getPageHeader(agent).clickOnWhatsapp();
     }
 
-    @And("^Agent select \"(.*)\" in Chanel Template")
-    public void selectChanelFilter(String name){
-        getSupervisorDeskPage().getSupervisorDeskHeader().selectTemplate(name);
-        getSupervisorDeskPage().waitForLoadingResultsDisappear(2,6);
+    @And("^(.*) select \"(.*)\" in Chanel Template$")
+    public void selectChanelFilter(String agent, String name) {
+        getAgentHomePage(agent).getHSMForm().selectTemplate(name);
     }
 
-    @And("^insert the Variable type \"(.*)\" for template")
-    public void insertVarible(String variable)
-    {
-        getSupervisorDeskPage().getSupervisorDeskHeader().insertVaribleForWhatsapp(variable);
+    @And("^(.*) insert the Variable type \"(.*)\" for template$")
+    public void insertVarible(String agent, String variable) {
+        getAgentHomePage(agent).getHSMForm().insertVariableForWhatsapp(variable);
     }
-    @And("click \"send\" chat button$")
-    public void clickSendButton()
-    {
-        getSupervisorDeskPage().getSupervisorDeskHeader().clickSendButton();
+
+    @And("(.*) click send button in HSM form$")
+    public void clickSendHSMButton(String agent) {
+        getAgentHomePage(agent).getHSMForm().clickSendButton();
     }
-    @And("agent fill the customer contact number {int}")
-    public void sendWhatsApp(String contactNumber) {
-        getSupervisorDeskPage().getSupervisorDeskHeader().InsertContactNumber(contactNumber);
+
+    @And("^(.*) fill the customer contact number$")
+    public void sendWhatsApp(String agent) {
+        getAgentHomePage(agent).getHSMForm().setWAPhoneNumber(ORCASteps.orcaMessageCallBody.get().getSourceId());
     }
 
     @Then("^(.*) has (?:new|old) (.*) (?:request|shown)(?: from (.*) user|)$")
@@ -752,17 +751,6 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void agentTypesACustomerNameOnTheSearchField(String agent, String userName) {
         getAgentHomePage(agent).getLeftMenuWithChats().inputUserNameIntoSearch(userName);
     }
-    @And("Agent click on 'start chat' button")
-    public void AgentClickOnStartChartButton(String agent)
-    {
-        getAgentHomePage(agent).getLeftMenuWithChats().ClickonStartChatButton();
-    }
-
-    @And("^Agent should select the chat that was ended 24hrs ago$")
-    public void agentShouldSelect24hrsClosedChats() {
-        Assert.assertTrue(getDashboardPage().getLiveChatsByChannel().is24HrsDisplayed(),
-                "WhatsApp 24 HRS closed chart is not displayed in Live Chats By Channel");
-    }
 
     @And("^(.*) get \"Cannot close chat\" notification modal open$")
     public void notifyCannotCloseChat(String agent) {
@@ -795,4 +783,5 @@ public class DefaultAgentSteps extends AbstractAgentSteps {
     public void notVerifiedLabelIsDisplayed() {
         Assert.assertTrue(getAgentHomeForMainAgent().getProfile().isNotVerifiedLabelDisplayed(), "NotVerified label is not displayed");
     }
+
 }
