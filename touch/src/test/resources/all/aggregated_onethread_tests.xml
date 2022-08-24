@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="One Thread Suite (chatdesk)" parallel="tests" thread-count="5" >
+    <test name="User to Agent conversation (General Bank Demo tenant)">
+        <classes>
+            <class name="runner.generalbank.RunGenBankAgentTest" />
+            <class name="runner.generalbank.RunPortalTest" />
+            <class name="runner.generalbank.RunAbcTest" />
+        </classes>
+    </test>
+    <test name="User to Agent conversation (Automation tenant) ">
+        <classes>
+            <class name="runner.automation.RunChatdeskTest" />
+        </classes>
+    </test>
+    <test name="User to Agent conversation (Automation Bot tenant)">
+        <classes>
+            <class name="runner.automationbot.RunChatdeskTest" />
+        </classes>
+    </test>
+    <test name="TIE training new intent test and config tests">
+        <classes>
+            <class name="runner.automationcomon.RunAllTests" />
+        </classes>
+    </test>
+    <test name="Chatdesk and portal tests (Standard Billing tenant) ">
+        <classes>
+            <class name="runner.standardbilling.RunChatdeskTest" />
+            <class name="runner.standardbilling.RunDepartmentsTest" />
+            <class name="runner.standardbilling.RunSurveyTest" />
+            <class name="runner.standardbilling.RunSchedulerSchemasTest" />
+            <class name="runner.standardbilling.RunEndStopTest" />
+        </classes>
+    </test>
+    <test name="Attachments tests">
+        <classes>
+            <class name="runner.attachments.RunMediaSupportTest" />
+        </classes>
+    </test>
+    <test name="Default Tenant Preferences">
+        <classes>
+            <class name="runner.touchgo.RunDefaultTenantPreferences" />
+        </classes>
+    </test>
+</suite>

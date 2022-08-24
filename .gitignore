@@ -1,0 +1,16 @@
+build/
+out/
+target/
+.idea/
+*.impl
+.gradle/
+**/.gradle/
+../touch-rest-api-tests/
+../Web_touch_automation/
+../touch-rest-api-tests/target/
+../touch-rest-api-tests/touch-rest-api-tests.iml
+debug.log
+tests.log
+*.iml
+mc2/src/test/resources/*.properties
+/touch/src/test/resources/mediasupport/renamed/*
