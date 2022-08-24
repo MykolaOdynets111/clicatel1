@@ -43,7 +43,8 @@ public class ApiHelper implements VerificationHelper {
         String tenantId = ApiHelper.getTenantInfoMap(tenantOrgName).get("id");
         return RestAssured.given()
                 .header("Authorization", TouchAuthToken.getAccessTokenForTouchUser(tenantOrgName, "main"))
-                .get(String.format(Endpoints.TENANT_CONFIG, tenantId));
+                .log().all()
+                .get(String.format(Endpoints.INTERNAL_TENANT_CONFIG, tenantId));
     }
 
     public static Map<String, String> getAllTenantsInfoMap(String theValue) {
@@ -402,6 +403,15 @@ public class ApiHelper implements VerificationHelper {
                         "No Agents with " + user.getAgentEmail() + " email, env: " + ConfigManager.getEnv()));
         return agentInfoMap;
     }
+    public static List<Map> getAgentsInfo(String tenantOrgName) {
+        Response resp = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .get(String.format(Endpoints.AGENT_INFO_ME, Tenants.getTenantId()));
+        Assert.assertEquals(resp.getStatusCode(), 200 ,String.format("Agent is not return status code is : %s and Body is: %s", resp.getStatusCode(), resp.getBody().asString()));
+        List<Map> agents = resp.getBody().jsonPath().getList("");
+        return agents;
+    }
+
 
     public static String getAgentId(String tenantOrgName, String agent){
         return getAgentInfo(tenantOrgName, agent).get("id");

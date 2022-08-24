@@ -5,13 +5,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @FindBy(css = ".chat-view")
-public class SupervisorTicketChatView extends AbstractUIElement {
+public class SupervisorTicketClosedChatView extends AbstractUIElement {
 
-    @FindBy(css = ".bottom-action-bar--send-notification button")
+    @FindBy(xpath = ".//button[text()='Message Customer']")
     private WebElement messageCustomerButton;
 
     public void clickOnMessageCustomerButton(){
         clickElem(this.getCurrentDriver(), messageCustomerButton, 3, "Message Customer");
+    }
+
+    public boolean isMessageCustomerButtonPresent(){
+        return isElementShown(this.getCurrentDriver(), messageCustomerButton, 3);
     }
 
 }

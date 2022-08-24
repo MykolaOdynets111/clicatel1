@@ -49,7 +49,7 @@ public class DashboardPage extends PortalAbstractPage {
     })
     private WebElement customersOverviewTabButton;
 
-    @FindBy(css = "[data-testid='tab-dashboard-tabs-1']")
+    @FindBy(css = "[data-testid='tab-navigation-panel-agents-performance']")
     private WebElement agentsPerformanceTabButton;
 
     private final String spinner = "//div[@class='spinner']";

@@ -8,7 +8,9 @@ import datamanager.Tenants;
 import datamanager.jacksonschemas.departments.Department;
 import datamanager.jacksonschemas.orca.OrcaEvent;
 import datamanager.jacksonschemas.orca.event.Event;
+import drivermanager.ConfigManager;
 import interfaces.WebWait;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -35,6 +37,10 @@ public class ORCASteps implements WebWait {
 
     public static String getClientId() {
         return clientId.get();
+    }
+
+    public static String getChannelId() {
+        return orcaChannelId.get();
     }
 
     public static void cleanUPORCAData() {
@@ -90,9 +96,11 @@ public class ORCASteps implements WebWait {
     @Given("^Setup ORCA (.*) integration for (.*) tenant$")
     public void createOrUpdateOrcaIntegration(String channel, String tenantName) {
         Tenants.setTenantUnderTestOrgName(tenantName);
+
         orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         if (orcaChannelId.get() == null) {
             apiToken.set(ApiORCA.createIntegration(channel, Server.getServerURL()));
+            orcaChannelId.set(getIntegrationId(channel, "ORCA"));
         } else {
             apiToken.set(ApiORCA.updateIntegration(channel, Server.getServerURL(),orcaChannelId.get()));
             System.out.println("apiToken was set with: " + apiToken.get());

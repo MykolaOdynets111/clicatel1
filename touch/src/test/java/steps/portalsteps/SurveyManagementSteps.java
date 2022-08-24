@@ -2,21 +2,17 @@ package steps.portalsteps;
 
 import apihelper.ApiHelper;
 import com.github.javafaker.Faker;
+import datamanager.SurveyManagement;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import datamanager.SurveyManagement;
-import datamanager.Tenants;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-import agentpages.survey.uielements.SurveyWebChatForm;
+import steps.ORCASteps;
 
 import java.util.List;
 import java.util.Map;
 
 public class SurveyManagementSteps extends AbstractPortalSteps {
-
-    private SurveyWebChatForm surveyWebChatForm;
     private static ThreadLocal<String> questionUpdate = new ThreadLocal<>();
     private static ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
     Faker faker = new Faker();
@@ -24,7 +20,7 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Update survey management chanel (.*) settings by ip for (.*)")
     public void updateSurveyManagementSettings(String chanel, String tenantOrgName, Map<String, String> map) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         for (String key : map.keySet()) {
             configuration.updateSomeValueByMethodName(key, map.get(key));
@@ -42,25 +38,35 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Selects (.*) survey type")
     public void selectSurvey(String type) {
-        surveyWebChatForm = getSurveyManagementPage().getSurveyWebChatForm();
+        String id = ORCASteps.getChannelId();
+
         if (type.equalsIgnoreCase("CSAT")) {
-            surveyWebChatForm.getSurveysInner().clickCSATRadioButton();
+            getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();
         } else if (type.equalsIgnoreCase("NPS")) {
-            surveyWebChatForm.getSurveysInner().clickNPSRadioButton();
+            getSurveyManagementPage().getSurveyForm(id).clickNPSRadioButton();
         }
     }
 
     @Then("^Admin selects (.*) survey type for (.*) survey form")
     public void selectSurvey(String type, String surveyForm) {
-        if (surveyForm.equalsIgnoreCase("abc")) {
-            if (type.equalsIgnoreCase("CSAT")) {
-                getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().clickCSATRadioButton();
-            } else if (type.equalsIgnoreCase("NPS")) {
-                getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().clickNPSRadioButton();
-            }
-        } else {
-            this.selectSurvey(type);
+        String id = ORCASteps.getChannelId();
+        if (type.equalsIgnoreCase("CSAT")) {
+            getSurveyManagementPage().getSurveyForm(id).clickCSATRadioButton();
+        } else if (type.equalsIgnoreCase("NPS")) {
+            getSurveyManagementPage().getSurveyForm(id).clickNPSRadioButton();
         }
+    }
+
+    @When("^Admin clicks on channel toggle button for survey form")
+    public void selectToggleButton() {
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).clickToggleButton();
+    }
+
+    @When("^Admin clicks on channel expand button for survey form")
+    public void selectExpandButton() {
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).clickExpandButton(id);
     }
 
     @When("^Switch to whatsapp survey configuration$")
@@ -70,94 +76,112 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^CSAT scale has correct limit variants (.*) in dropdown and (.*) set as type$")
     public void verifyCSATNumbers(List<String> expRangeOfNumbers, String type) {
+        String id = ORCASteps.getChannelId();
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(surveyWebChatForm.getSurveysInner().getVariationOfRatingCSATScale(),
+        soft.assertEquals(getSurveyManagementPage().getSurveyForm(id).getVariationOfRatingCSATScale(),
                 expRangeOfNumbers, "CSAT range of numbers in dropdown is not as expected");
-        soft.assertTrue(surveyWebChatForm.isRateHasCorrectIcons(type), "No " + type + " type of Icons are displayed in Survey Preview");
+        soft.assertTrue(getSurveyManagementPage().getSurveyForm(id).isRateHasCorrectIcons(type), "No " + type + " type of Icons are displayed in Survey Preview");
         soft.assertAll();
     }
 
     @When("^Agent select (.*) as number limit from dropdown$")
     public void selectLimitOption(String limitNumber) {
-        surveyWebChatForm.getSurveysInner().selectDropdownOption(limitNumber);
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).selectDropdownOption(limitNumber);
     }
 
     @When("^Agent select (.*) as number limit from dropdown for (.*) survey form$")
     public void selectLimitOption(String limitNumber, String surveyForm) {
+        String id = ORCASteps.getChannelId();
         if (surveyForm.equalsIgnoreCase("abc")) {
-            getSurveyManagementPage().getSurveyAbcForm().getSurveysInner().selectDropdownOption(limitNumber);
+            getSurveyManagementPage().getSurveyForm(id).selectDropdownOption(limitNumber);
+        } else if (surveyForm.equalsIgnoreCase("whatsapp")) {
+            getSurveyManagementPage().getSurveyForm(id).selectDropdownOption(limitNumber);
         } else {
             this.selectLimitOption(limitNumber);
         }
     }
 
-    @When("^Agent click save survey configuration button$")
-    public void clickSaveButton() {
-        surveyWebChatForm.clickSaveButton();
-//        getSurveyManagementPage().waitSaveMessage();
+    @When("^Agent checks rating dropdown visibility for (.*) survey form$")
+    public void checkDropdownDisability(String surveyForm) {
+        String id = ORCASteps.getChannelId();
+        if (getSurveyManagementPage().getSurveyForm(id).checkRatingDropdownVisibility()) {
+            System.out.println("Numbers dropdown is not visible");
+        } else {
+            Assert.fail("Numbers dropdown is visible");
+        }
     }
 
     @When("^Agent click save survey configuration button for (.*) survey form$")
     public void clickSaveButton(String surveyForm) {
-        if (surveyForm.equalsIgnoreCase("abc")) {
-            getSurveyManagementPage().getSurveyAbcForm().clickSaveButton();
-        } else {
-            this.clickSaveButton();
-        }
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).clickSaveButton();
     }
 
     @When("^Agent switch \"Allow customer to leave a note\" in survey management$")
     public void enableComments() {
-        surveyWebChatForm.getSurveysInner().clickCommentSwitcher();
+        String channelID = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(channelID).clickCommentSwitcher();
     }
 
     @Then("^Agent sees comment field in Survey management form$")
     public void isCommenfFormShown() {
-        Assert.assertTrue(surveyWebChatForm.isCommentFieldShown(), "Comment Form is not shown");
+        String channelID = ORCASteps.getChannelId();
+        Assert.assertTrue(getSurveyManagementPage().getSurveyForm(channelID).isCommentFieldShown(), "Comment Form is not shown");
     }
 
 
     @Then("^Agent see survey range (.*) in rating scale$")
     public void verifyCorectNumbersDisplayed(String numbers) {
-        Assert.assertEquals(surveyWebChatForm.getSizeOfRateInputNumbers(), numbers, "Quantity of numbers is not the same");
+        String id = ORCASteps.getChannelId();
+        Assert.assertEquals(getSurveyManagementPage().getSurveyForm(id).getSizeOfRateInputNumbers(), numbers, "Quantity of numbers is not the same");
     }
 
     @When("^Agent select (.*) as and icon for rating range$")
     public void selectRangeIcon(String iconName) {
-        surveyWebChatForm.getSurveysInner().selectRateIcon(iconName);
+        String channelID = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(channelID).selectRateIcon(iconName);
     }
 
     @When("^Customize your survey \"(.*)\" question$")
     public void setSurveyQuestion(String question) {
+        String channelID = ORCASteps.getChannelId();
         questionUpdate.set(question + " " + faker.rockBand().name());
-        surveyWebChatForm.getSurveysInner().changeQuestion(questionUpdate.get());
+        getSurveyManagementPage().getSurveyForm(channelID).changeQuestion(questionUpdate.get());
     }
 
     @When("^Customize your survey thank message$")
     public void setSurveyThankMessage() {
+        String channelID = ORCASteps.getChannelId();
         thankMessageUpdate.set("Thank you for taking the time to provide us with your feedback. " + faker.gameOfThrones().dragon());
-        surveyWebChatForm.getSurveysInner().setThankMessage(thankMessageUpdate.get());
+        getSurveyManagementPage().getSurveyForm(channelID).setThankMessage(thankMessageUpdate.get());
     }
 
     @Then("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
     public void verifyThankQuestionIsUpdated(String tenantOrgName, String chanel) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
-        SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-        Assert.assertEquals(configuration.getRatingThanksMessage(), thankMessageUpdate.get(), "Thank survey message is not the same as was set");
+        String channelID = ORCASteps.getChannelId();
+        List<String> surveyPreviewMessages;
+        surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(surveyPreviewMessages.contains(thankMessageUpdate.get()));
     }
 
     @Then("^Survey backend was updated for (.*) and (.*) chanel with following attribute$")
     public void verifyThatSurveyBackendWasUpdated(String tenantOrgName, String chanel, Map<String, String> map) {
-        String channelID = ApiHelper.getChannelID(tenantOrgName, chanel);
+        String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
         String attributeToCheck = map.keySet().stream().findFirst().get();
         Assert.assertEquals(configuration.getSomeValueByMethodName(attributeToCheck), map.get(attributeToCheck), attributeToCheck + " is not updated on backend");
-
     }
 
     @Then("^Preview question is updated successfully$")
     public void verifyQuestionPreview() {
-        Assert.assertEquals(surveyWebChatForm.getPreviewQuestion(), questionUpdate.get(), "Preview question is not the same as was set");
+        String channelID = ORCASteps.getChannelId();
+        List<String> surveyPreviewMessages;
+        surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(surveyPreviewMessages.contains(questionUpdate.get()),
+                "Survey question title is not displayed in survey preview");
     }
 
     @Then("^Preview question is updated successfully for (.*) and (.*) chanel")
@@ -169,17 +193,19 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
 
     @Then("^Star and Smile Buttons are Disabled$")
     public void starAndSmileButtonsAreDisabled() {
+        String channelID = ORCASteps.getChannelId();
         SoftAssert soft = new SoftAssert();
-        soft.assertTrue(surveyWebChatForm.getSurveysInner().isSmileButtonDisabled(), "Smile button should not be enabled");
-        soft.assertTrue(surveyWebChatForm.getSurveysInner().isStarButtonDisabled(), "Star button should not be enabled");
+        soft.assertTrue(getSurveyManagementPage().getSurveyForm(channelID).isSmileButtonDisabled(), "Smile button should not be enabled");
+        soft.assertTrue(getSurveyManagementPage().getSurveyForm(channelID).isStarButtonDisabled(), "Star button should not be enabled");
         soft.assertAll();
     }
 
     @Then("^Survey Preview should be displayed with correct data for (.*) channel$")
-    public void surveyPreviewShouldBeDisplayedWithCorrectDataForAbcChannel(String chanel) {
-        String channelID = ApiHelper.getChannelID(Tenants.getTenantUnderTestOrgName(), chanel);
+    public void surveyPreviewShouldBeDisplayedWithCorrectDataForChannel(String channel) {
+        String channelID = ORCASteps.getChannelId();
         SurveyManagement configuration = ApiHelper.getSurveyManagementAttributes(channelID);
-        List<String> surveyPreviewMessages = getSurveyManagementPage().getSurveyAbcForm().getAllMessagesInSurveyPreview();
+        List<String> surveyPreviewMessages;
+        surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(surveyPreviewMessages.contains(configuration.getRatingThanksMessage()),
                 "Rating thanks message is not displayed in survey preview");

@@ -80,7 +80,7 @@ public class Endpoints {
 
     public static String INTERNAL_LAST_CLIENT_SESSION = URLs.getBaseInternalApiUrl() + "sessions/tenant/%s/client/%s/last";
 
-    public static String INTERNAL_TENANT_CONFIG = URLs.getBaseInternalApiUrl() + "tenants/%s/config ";
+    public static String INTERNAL_TENANT_CONFIG = URLs.getBaseWSInternalURL() + "tenants/%s";
 
     public static String INTERNAL_FEATURE_STATE = URLs.getBaseInternalApiUrl() + "features/tenants/%s/%s/%s";
 

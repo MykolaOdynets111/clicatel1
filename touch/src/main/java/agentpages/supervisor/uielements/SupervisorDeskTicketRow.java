@@ -42,8 +42,8 @@ public class SupervisorDeskTicketRow extends AbstractWidget {
     @FindBy(css = ".cl-user-details-cell__top-section svg")
     private WebElement channelIcon;
 
-    private String scrollAreaCss = "[data-testid='roster-scroll-container']";
-   // private String chatConsoleInboxRowNameCss = ".cl-user-name";
+    private String scrollAreaCss = "[data-testid='chatslist-scroll-container'] [class='iScrollVerticalScrollbar iScrollLoneScrollbar']";
+    // private String chatConsoleInboxRowNameCss = ".cl-user-name";
 
     public SupervisorDeskTicketRow(WebElement element) {
         super(element);

@@ -340,5 +340,10 @@ public class AgentHomePage extends AgentAbstractPage {
         waitForElementToBeInVisibleByCss(this.getCurrentDriver(), modalWindow, 6);
     }
 
-
+    public void waitForAgentPageToBeLoaded() throws TimeoutException{
+        try {
+            waitForElementToBeVisible(this.getCurrentDriver(), profile, 5);
+        } catch (TimeoutException e) {
+        }
+    }
 }

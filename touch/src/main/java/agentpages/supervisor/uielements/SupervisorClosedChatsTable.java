@@ -15,10 +15,10 @@ public class SupervisorClosedChatsTable extends AbstractUIElement {
     @FindBy (xpath = "//span[text()='Chat Ended']/ancestor::span/following-sibling::span/span[contains(@class, 'sorting-box__arrow--top')]")
     private  WebElement ascendingArrowOfChatEndedColumn;
 
-    @FindBy(css =".chats-list.cl-table-row")
+    @FindBy(css =".chats-list .cl-table-row")
     private List<WebElement> closedChats;
 
-    @FindBy(css = "[data-testid='roster-scroll-container']")
+    @FindBy(css = ".chats-list .iscroll-main iscroll-main-chats-list-scroll cl-scroll-wrap")
     private WebElement scrollArea;
 
     @FindBy(css = ".chats-list__loading-more")
