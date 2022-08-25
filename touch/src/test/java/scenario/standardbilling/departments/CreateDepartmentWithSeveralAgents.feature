@@ -3,7 +3,7 @@
 @newagent
 Feature: Departments
 
-  @TestCaseId("https://jira.clickatell.com/browse/TPORT-119188")
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-85767")
   Scenario: Verify correct agents numbers in created department
     Given I open portal
     And Login into portal as an admin of Standard Billing account

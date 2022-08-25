@@ -33,16 +33,35 @@ Feature: Dashboard: Customer History
     And I select Touch in left menu and Dashboard in submenu
     And Admin click on Customers Overview dashboard tab
     And Admin click on Customers History on dashboard
-    And Admin filter Customers History by Webchat channel and Past day period
-    Then Admin see all graphs filtered by Web Chat channel and Past day period
-    And Admin filter Customers History by Facebook channel and Past week period
-    Then Admin see all graphs filtered by Facebook channel and Past week period
-    And Admin filter Customers History by Twitter channel and Past 2 weeks period
-    Then Admin see all graphs filtered by Twitter channel and Past 2 weeks period
+    And Admin filter Customers History by WhatsApp channel and Past day period
+    Then Admin see all graphs filtered by WhatsApp channel and Past day period
+    And Admin filter Customers History by WhatsApp channel and Past 2 weeks period
+    Then Admin see all graphs filtered by WhatsApp channel and Past 2 weeks period
     And Admin filter Customers History by WhatsApp channel and Past 3 weeks period
     Then Admin see all graphs filtered by WhatsApp channel and Past 3 weeks period
+    And Admin filter Customers History by WhatsApp channel and Past 4 weeks period
+    Then Admin see all graphs filtered by WhatsApp channel and Past 4 weeks period
+    And Admin filter Customers History by Apple Business Chat channel and Past week period
+    Then Admin see all graphs filtered by Apple Business Chat channel and Past week period
+    And Admin filter Customers History by Apple Business Chat channel and Past 2 weeks period
+    Then Admin see all graphs filtered by Apple Business Chat channel and Past 2 weeks period
+    And Admin filter Customers History by Apple Business Chat channel and Past 3 weeks period
+    Then Admin see all graphs filtered by Apple Business Chat channel and Past 3 weeks period
     And Admin filter Customers History by Apple Business Chat channel and Past 4 weeks period
     Then Admin see all graphs filtered by Apple Business Chat channel and Past 4 weeks period
+    And Admin filter Customers History by SMS channel and Past week period
+    Then Admin see all graphs filtered by SMS channel and Past week period
+    And Admin filter Customers History by SMS channel and Past 2 weeks period
+    Then Admin see all graphs filtered by SMS channel and Past 2 weeks period
+    And Admin filter Customers History by SMS channel and Past 3 weeks period
+    Then Admin see all graphs filtered by SMS channel and Past 3 weeks period
+    And Admin filter Customers History by SMS channel and Past 4 weeks period
+    Then Admin see all graphs filtered by SMS channel and Past 4 weeks period
+
+#    Then Admin see all graphs filtered by SMS channel and Past week period
+#    Then Admin see all graphs filtered by Apple Business Chat channel and Past 2 weeks period
+#    Then Admin see all graphs filtered by WhatsApp channel and Past 3 weeks period
+#    Then Admin see all graphs filtered by Apple Business Chat channel and Past 4 weeks period
 
   @no_chatdesk @TestCaseId("https://jira.clickatell.com/browse/TPORT-3760")
   Scenario: Customer History:: Past sentiment graph:: Verify if past sentiment graph is empty if no data is available

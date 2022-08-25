@@ -40,4 +40,4 @@ Feature: Managing Chat desk Window
     When I select Touch in left menu and Dashboard in submenu
     And Navigate to Preferences page
     When Change chats per agent:"0.5"
-    Then Decimal number Error message is shown
+    Then Decimal numbers (e.g., 3.5) are not allowed. Please enter a whole number Error message is shown

@@ -2,6 +2,7 @@ package portaluielem;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class PreferencesWindow extends BasePortalWindow {
     @FindBy(css = "[name='maxChatsPerAgent']")
     private WebElement chatsAvailable;
 
-    @FindBy(xpath = ".//div[text() = 'Decimal numbers (e.g., 3.5) are not allowed. Please enter a whole number']")
+    @FindBy(css = ".cl-form-group__error-text")
     private WebElement chatsErrorMessageDecimalNumbers;
 
     @FindBy(css = "[for='agent-note'] .cl-r-toggle-btn__label")
@@ -72,8 +73,8 @@ public class PreferencesWindow extends BasePortalWindow {
         return chatsAvailable.getAttribute("value");
     }
 
-    public boolean isErrorMessageShown(){
-       return isElementShown(this.getCurrentDriver(), chatsErrorMessageDecimalNumbers,5);
+    public void isErrorMessageShown(String errorMessage){
+        Assert.assertEquals(chatsErrorMessageDecimalNumbers.getText(),errorMessage);
     }
 
 

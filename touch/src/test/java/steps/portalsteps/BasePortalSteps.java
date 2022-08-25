@@ -846,10 +846,9 @@ public class BasePortalSteps extends AbstractPortalSteps {
             Assert.assertEquals(getPortalTouchPreferencesPage().getPreferencesWindow().getChatsAvailable(), result,"Chats per agent is not as expected");
     }
 
-    @When("^Decimal number Error message is shown$")
-    public void decimalErrorIsShownInWindow(){
-        Assert.assertTrue(getPortalTouchPreferencesPage().getPreferencesWindow().isErrorMessageShown(),
-                "Error message is not shown");
+    @When("^(.*) Error message is shown$")
+    public void decimalErrorIsShownInWindow(String errorMessage){
+        getPortalTouchPreferencesPage().getPreferencesWindow().isErrorMessageShown(errorMessage);
     }
 
     @When("^Click off/on Chat Conclusion$")

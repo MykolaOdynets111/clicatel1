@@ -15,7 +15,8 @@ public class CustomersHistory extends AbstractUIElement {
 
     private final String graphByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
     private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
-    private final String filteredByInfoXpath = "//h3[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+    private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+
 
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
