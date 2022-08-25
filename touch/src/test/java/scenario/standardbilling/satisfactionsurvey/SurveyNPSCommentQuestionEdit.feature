@@ -1,6 +1,6 @@
 @no_widget
-@no_chatdesk
-@off_survey_management
+@start_orca_server
+@orca_api
 Feature: Satisfaction Survey
 
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-19236")

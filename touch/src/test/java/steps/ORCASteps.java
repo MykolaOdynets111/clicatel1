@@ -232,7 +232,7 @@ public class ORCASteps implements WebWait {
         if(Objects.isNull(OrcaServer.orcaMessages)) {
             return false;
         }
-        return OrcaServer.orcaMessages.contains(message);
+        return OrcaServer.orcaMessages.toString().contains(message);
 
 
 

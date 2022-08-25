@@ -1,4 +1,6 @@
 @no_widget
+@start_orca_server
+@orca_api
 Feature: Whatsapp ORCA :: ChatDesk
 
   @orca_api
@@ -10,5 +12,5 @@ Feature: Whatsapp ORCA :: ChatDesk
     Then Agent has new conversation request from orca user
     When Agent click on new conversation request from orca
     Then Conversation area becomes active with connect to agent user's message
-    When User send Lviv location message to agent by ORCA
-    When Agent sees Lviv Location from User
+    When Agent sends Lviv Location to User
+    Then Agent sees Lviv Location from User

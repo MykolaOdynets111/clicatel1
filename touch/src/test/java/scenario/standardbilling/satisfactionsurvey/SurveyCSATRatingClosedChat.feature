@@ -71,3 +71,37 @@ Feature: Satisfaction Survey
       | channelType |
       | whatsapp    |
       | abc         |
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121014")
+  Scenario Outline: CD:: Survey:: Dashboard:: Verify If the client enables NPS Survey, there will be no update in the agent scores in the CSAT in agent performance tab
+    Given I login as agent of Standard Billing
+    And Setup ORCA <channelType> integration for Standard Billing tenant
+    When Send connect to agent message by ORCA
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
+      | ratingEnabled | true        |
+      | surveyType    | NPS        |
+      | ratingScale   | ZERO_TO_TEN |
+      | ratingIcon    | NUMBER      |
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Whatsapp channel
+    Then Admin is able to see the average CSAT survey response converted to 0-10
+    And I select Touch in left menu and Agent Desk in submenu
+    And Agent has new conversation request from orca user
+    When Agent click on new conversation request from orca
+    And Conversation area becomes active with connect to agent user's message
+    And Wait for 5 second
+    And Agent closes chat
+    And Send 10 message by ORCA
+    And Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by Whatsapp channel
+    Then Admin is able to see the new average CSAT survey response converted to 0-10
+    And Admin is able to see the same average CSAT rating for NPS response
+    Examples:
+      | channelType |
+      | whatsapp    |
+      | abc         |

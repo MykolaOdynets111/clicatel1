@@ -1,6 +1,7 @@
 package steps.portalsteps;
 
 import agentpages.AgentHomePage;
+import agentpages.dashboard.uielements.CustomerSatisfactionSection;
 import agentpages.dashboard.uielements.LiveAgentRowDashboard;
 import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
 import apihelper.ApiCustomerHistoryHelper;
@@ -282,9 +283,27 @@ public class DashboardSteps extends AbstractPortalSteps {
     @Then("^Admin is able to see the average CSAT survey response converted to (\\d+)-(\\d+)$")
     public void adminIsAbleToSeeTheAverageCSATSurveyResponseConvertedTo(int from, int to) {
         double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
-                .getCustomerSatisfactionScore();
+                .getCustomerSatisfactionScoreOld();
         Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
         Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
+    }
+
+    //Use this step to fetch after CSAT ratings to compare before and after CSAT rating
+    @Then("^Admin is able to see the new average CSAT survey response converted to (\\d+)-(\\d+)$")
+    public void adminIsAbleToSeeTheNewAverageCSATSurveyResponseConvertedTo(int from, int to) {
+        double actualCustomerSatisfactionScore = getDashboardPage().getCustomerSatisfactionSection()
+                .getCustomerSatisfactionScoreNew();
+        Assert.assertTrue(actualCustomerSatisfactionScore >= from, "Customer Satisfaction Score is less then " + from);
+        Assert.assertTrue(actualCustomerSatisfactionScore <= to, "Customer Satisfaction Score is more then " + to);
+    }
+
+    //Use this step to compare before and after CSAT rating
+    @Then("^Admin is able to see the same average CSAT rating for NPS response$")
+    public void adminIsAbleToSameCSATRating() {
+        double actualCustomerSatisfactionScoreOld = CustomerSatisfactionSection.satisfactionScoreOld;
+        double actualCustomerSatisfactionScoreNew = CustomerSatisfactionSection.satisfactionScoreNew;
+
+        Assert.assertTrue(actualCustomerSatisfactionScoreOld == actualCustomerSatisfactionScoreNew, "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
     }
 
     @Then("^Admin see the Net Promoter Score as negative$")
