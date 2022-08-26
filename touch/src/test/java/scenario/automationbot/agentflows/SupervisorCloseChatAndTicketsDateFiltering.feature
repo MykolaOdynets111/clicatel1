@@ -25,6 +25,7 @@ Feature: Supervisor desk
     And Agent click on the arrow of Ticket End Date
     Then Verify first closed ticket date are fitted by filter
 
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-118536")
   @TestCaseId("https://jira.clickatell.com/browse/TPORT-118540")
   Scenario: Closed Chat :: Verify that the closed chats of only last 90 days are visible to supervisor
     Given I open portal
