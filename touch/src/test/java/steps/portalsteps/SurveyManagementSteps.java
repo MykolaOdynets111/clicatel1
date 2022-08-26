@@ -15,6 +15,9 @@ import java.util.Map;
 public class SurveyManagementSteps extends AbstractPortalSteps {
     private static ThreadLocal<String> questionUpdate = new ThreadLocal<>();
     private static ThreadLocal<String> thankMessageUpdate = new ThreadLocal<>();
+
+    private static ThreadLocal<String> notesMessageUpdate = new ThreadLocal<>();
+
     Faker faker = new Faker();
     public static ThreadLocal<SurveyManagement> surveyConfiguration = new ThreadLocal<>();
 
@@ -73,6 +76,32 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
     public void selectThankMessageToggle() {
         String id = ORCASteps.getChannelId();
         getSurveyManagementPage().getSurveyForm(id).clickThankMessageToggle();
+        boolean flag = getSurveyManagementPage().getSurveyForm(id).checkThankFormStatus();
+        if(flag){
+            System.out.println("Thank form is disabled for channel with id: " + id);
+        }
+        else{
+            Assert.fail("Thank form is still enabled for channel with id: " + id);
+        }
+    }
+
+    @When("^Agent switch \"Allow customer to give thank message\" in survey management$")
+    public void enableThankMessage() {
+        String channelID = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(channelID).clickThankMessageSwitcher();
+    }
+
+    @When("^Admin clicks notes toggle for survey form")
+    public void selectNotesToggle() {
+        String id = ORCASteps.getChannelId();
+        getSurveyManagementPage().getSurveyForm(id).clickNotesToggle();
+        boolean flag = getSurveyManagementPage().getSurveyForm(id).checkNotesFormStatus();
+        if(flag){
+            System.out.println("Notes form is disabled for channel with id: " + id);
+        }
+        else{
+            Assert.fail("Notes form is still enabled for channel with id: " + id);
+        }
     }
 
     @When("^Switch to whatsapp survey configuration$")
@@ -163,6 +192,13 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         getSurveyManagementPage().getSurveyForm(channelID).setThankMessage(thankMessageUpdate.get());
     }
 
+    @When("^Customize your survey notes message to (.*)$")
+    public void setSurveyNotesMessage(String message) {
+        String channelID = ORCASteps.getChannelId();
+        notesMessageUpdate.set(message + faker.gameOfThrones().dragon());
+        getSurveyManagementPage().getSurveyForm(channelID).setNotesMessage(notesMessageUpdate.get());
+    }
+
     @Then("^Thank Survey thank message was updated on backend for (.*) and (.*) chanel$")
     public void verifyThankQuestionIsUpdated(String tenantOrgName, String chanel) {
         String channelID = ORCASteps.getChannelId();
@@ -170,6 +206,15 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(surveyPreviewMessages.contains(thankMessageUpdate.get()));
+    }
+
+    @Then("^Survey notes was updated on backend for (.*) and (.*) chanel$")
+    public void verifyNotesMessageIsUpdated(String tenantOrgName, String chanel) {
+        String channelID = ORCASteps.getChannelId();
+        List<String> surveyPreviewMessages;
+        surveyPreviewMessages = getSurveyManagementPage().getSurveyForm(channelID).getAllMessagesInSurveyPreview();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(surveyPreviewMessages.contains(notesMessageUpdate.get()));
     }
 
     @Then("^Survey backend was updated for (.*) and (.*) chanel with following attribute$")

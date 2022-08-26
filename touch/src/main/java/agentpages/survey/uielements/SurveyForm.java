@@ -45,6 +45,9 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(xpath = ".//label[contains(@for, 'thanksMessageEnabled')]//div")
     private WebElement toggleButtonThankMessage;
 
+    @FindBy(xpath = ".//label[contains(@for, 'commentEnabled')]//div")
+    private WebElement toggleButtonNotes;
+
     @FindBy(xpath = ".//div[@class='setting-group__collapse-wrapper']//div")
     private WebElement collapseChannelForm;
 
@@ -56,6 +59,9 @@ public class SurveyForm extends AbstractWidget {
 
     @FindBy(name = "ratingThanksMessage")
     private WebElement thankMessageForm;
+
+    @FindBy(name = "customerNoteTitle")
+    private WebElement notesForm;
 
     @FindBy(css = ".number-block")
     private WebElement numberButton;
@@ -74,6 +80,9 @@ public class SurveyForm extends AbstractWidget {
 
     @FindBy(xpath = ".//div[@class='surveys-inner']/div[contains(@class, 'form-content')]")
     private WebElement noteFormEnabled;
+
+    @FindBy(xpath = ".//div[@class='surveys-inner']/div[contains(@class, 'form-content')][2]")
+    private WebElement thankFormEnabled;
 
     @FindBy(xpath = ".//textarea[@name='customerNoteTitle']")
     private WebElement commentFieldHeader;
@@ -124,6 +133,11 @@ public class SurveyForm extends AbstractWidget {
         return this;
     }
 
+    public SurveyForm clickNotesToggle() {
+        moveToElemAndClick(this.getCurrentDriver(), toggleButtonNotes);
+        return this;
+    }
+
     public void changeQuestion(String question) {
         inputText(this.getCurrentDriver(), questionInput, 1, "Question Input", question);
     }
@@ -131,6 +145,11 @@ public class SurveyForm extends AbstractWidget {
     public void setThankMessage(String message) {
         thankMessageForm.clear();
         inputText(this.getCurrentDriver(), thankMessageForm, 1, "Question Input", message);
+    }
+
+    public void setNotesMessage(String message) {
+        notesForm.clear();
+        inputText(this.getCurrentDriver(), notesForm, 1, "Notes form Input", message);
     }
 
     public SurveyForm clickCSATRadioButton() {
@@ -199,6 +218,32 @@ public class SurveyForm extends AbstractWidget {
             clickElem(this.getCurrentDriver(), commentSwitcher, 2, "Comment switcher");
         } else {
             System.out.println("Comment switcher toggle is already clicked");
+        }
+    }
+
+    public void clickThankMessageSwitcher() {
+        if (thankFormEnabled.getAttribute("class").contains("disabled")) {
+            clickElem(this.getCurrentDriver(), thankMessageForm, 2, "Thank message form switcher");
+        } else {
+            System.out.println("Thank Message toggle is already clicked");
+        }
+    }
+
+    public boolean checkThankFormStatus() {
+        boolean flag;
+        if (thankFormEnabled.getAttribute("class").contains("disabled")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkNotesFormStatus() {
+        boolean flag;
+        if (noteFormEnabled.getAttribute("class").contains("disabled")) {
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -21,11 +21,10 @@ Feature: Satisfaction Survey
     And Navigate to Surveys page
     Then Survey Management page should be shown
     When Admin selects NPS survey type for <channelType> survey form
+    And Agent switch "Allow customer to give thank message" in survey management
     And Customize your survey thank message to Thank you for taking the time to provide us with your feedback.
     And Agent click save survey configuration button for <channelType> survey form
     Then Thank Survey thank message was updated on backend for Standard Billing and <channelType> chanel
-    When Admin clicks thank message toggle for survey form
-    And Agent click save survey configuration button for <channelType> survey form
     And Wait for 5 second
     Then I select Touch in left menu and Agent Desk in submenu
     And Wait for 5 second
