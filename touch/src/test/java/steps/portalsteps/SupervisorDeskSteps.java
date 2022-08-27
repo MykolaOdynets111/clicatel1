@@ -159,6 +159,11 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         }
         Assert.assertTrue(result, "Agent " + agentName + " is not set up as 'Current agent'");
     }
+    @Then("^(.*) is the current agent of (.*) ticket$")
+    public void verifyCurrentAgentOfTicket(String agentName, String userName) {
+        Assert.assertEquals(getSupervisorDeskPage().getCurrentAgentOfTheChat(userName),agentName,
+                "The current agent of the ticket is not as expected");
+    }
 
     @Then("^Ticket from (.*) is present on (.*) filter page$")
     public void verifyUnassignedType(String channel, String status) {
