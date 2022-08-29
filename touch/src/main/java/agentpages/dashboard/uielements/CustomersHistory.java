@@ -62,6 +62,7 @@ public class CustomersHistory extends AbstractUIElement {
                     String.format(filteredByInfoXpath, graphName));
             waitForFirstElementToBeVisible(getCurrentDriver(), filteredByInfInH3, 3);
             List<String> foundFilters = filteredByInfInH3.stream().map(WebElement::getText).collect(Collectors.toList());
+            System.out.println("Graph is working fine for: " + graphName + " , " + Arrays.stream(filters).findFirst());
             return foundFilters.containsAll(Arrays.asList(filters));
         } catch (TimeoutException | NoSuchElementException e2) {
             return false;
