@@ -57,10 +57,10 @@ public class SurveyForm extends AbstractWidget {
     @FindBy(name = "surveyQuestionTitle")
     private WebElement questionInput;
 
-    @FindBy(name = "ratingThanksMessage")
+    @FindBy(xpath = ".//label[contains(@for, 'thanksMessageEnabled')]")
     private WebElement thankMessageForm;
 
-    @FindBy(name = "customerNoteTitle")
+    @FindBy(xpath = ".//label[contains(@for, 'commentEnabled')]")
     private WebElement notesForm;
 
     @FindBy(css = ".number-block")
@@ -227,6 +227,11 @@ public class SurveyForm extends AbstractWidget {
         } else {
             System.out.println("Thank Message toggle is already clicked");
         }
+    }
+
+    public String getSurveyPreviewTitle(){
+        return getTextFromElem(this.getCurrentDriver(), surveyPreviewTitle, 4,
+                "Survey preview header");
     }
 
     public boolean checkThankFormStatus() {

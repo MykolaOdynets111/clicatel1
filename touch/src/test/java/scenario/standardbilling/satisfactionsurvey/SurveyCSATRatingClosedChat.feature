@@ -105,3 +105,73 @@ Feature: Satisfaction Survey
       | channelType |
       | whatsapp    |
       | abc         |
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-85704")
+  Scenario Outline: Dashboard: Verify if admin can open Customers History with CSAT customer survey
+    Given I login as agent of Standard Billing
+    And Setup ORCA <channelType> integration for Standard Billing tenant
+    And I select Touch in left menu and Dashboard in submenu
+    And Navigate to Surveys page
+    And Wait for 5 second
+    When Agent switch "Allow customer to give thank message" in survey management
+    And Agent switch "Allow customer to leave a note" in survey management
+    And Agent click save survey configuration button for <channelType> survey form
+    When Send connect to agent message by ORCA
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
+      | ratingEnabled | true        |
+      | surveyType    | CSAT        |
+      | ratingScale   | ONE_TO_FIVE |
+      | ratingIcon    | NUMBER      |
+    Then I select Touch in left menu and Agent Desk in submenu
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Agent closes chat
+    And Send 5 message by ORCA
+    And Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | Apple Business Chat   | Past day  |
+    Then Admin is able to see Customer Satisfaction,Chats by Channel,Past Sentiment graphs
+    Examples:
+      | channelType |
+      | abc         |
+
+  @TestCaseId("https://jira.clickatell.com/browse/TPORT-121002")
+  Scenario Outline: CD:: Survey:: CSAT:: Dashboard:: Verify if customer satisfaction odometer for CSAT score is presented as 0% to 100% scale
+    Given I login as agent of Standard Billing
+    And Setup ORCA <channelType> integration for Standard Billing tenant
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | Apple Business Chat   | Past day  |
+    Then Admin is able to see the average CSAT survey response converted to 0-100
+    And Navigate to Surveys page
+    And Wait for 5 second
+    When Agent switch "Allow customer to give thank message" in survey management
+    And Agent switch "Allow customer to leave a note" in survey management
+    And Agent click save survey configuration button for <channelType> survey form
+    When Send connect to agent message by ORCA
+    And Update survey management chanel <channelType> settings by ip for Standard Billing
+      | ratingEnabled | true        |
+      | surveyType    | CSAT        |
+      | ratingScale   | ONE_TO_FIVE |
+      | ratingIcon    | NUMBER      |
+    Then I select Touch in left menu and Agent Desk in submenu
+    And Agent has new conversation request from orca user
+    And Agent click on new conversation request from orca
+    And Agent closes chat
+    And Send 5 message by ORCA
+    And Agent switches to opened Portal page
+    And I select Touch in left menu and Dashboard in submenu
+    And Admin click on Customers Overview dashboard tab
+    And Admin click on Customers History on dashboard
+    And Admin filter Customers History by channel and period
+      | Apple Business Chat   | Past day  |
+    Then Admin is able to see the new average CSAT survey response converted to 0-100
+    And Admin is able to see the different average CSAT rating for CSAT response
+    Examples:
+      | channelType |
+      | abc         |

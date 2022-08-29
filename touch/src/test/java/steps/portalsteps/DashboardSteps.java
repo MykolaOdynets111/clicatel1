@@ -50,16 +50,18 @@ public class DashboardSteps extends AbstractPortalSteps {
     }
 
     @Then("^Admin is able to see (.*) graphs$")
-    public void adminIsAbleToSeeNPSLiveChatsByChannelPastSentimentGraphs(List<String> graphs) {
+    public void adminIsAbleToSeeNPSLiveChatsByChannelPastSentimentGraphs(String graphs) {
         SoftAssert softAssert = new SoftAssert();
-        for (String graph : graphs) {
-            if (graph.equalsIgnoreCase("Net Promoter Score")) {
+        String[] myArray = graphs.split(",");
+
+        for (String graph : myArray) {
+            if (graph.trim().equalsIgnoreCase("Net Promoter Score")) {
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScoreBarsDisplayed(),
                         String.format("Promoter Score Bars is not displayed for section %s", graph));
                 softAssert.assertTrue(getDashboardPage().getNetPromoterScoreSection().isPromoterScorePieDisplayed(),
                         String.format("Promoter Score Pie is not displayed for section %s", graph));
             }
-            if (graph.equalsIgnoreCase("Customer Satisfaction")) {
+            if (graph.trim().equalsIgnoreCase("Customer Satisfaction")) {
                 softAssert.assertTrue(getDashboardPage().getCustomerSatisfactionSection()
                                 .isCustomerSatisfactionScoreDisplayed(),
                         String.format("Customer Satisfaction Score is not displayed for section %s", graph));
@@ -307,6 +309,18 @@ public class DashboardSteps extends AbstractPortalSteps {
         double actualCustomerSatisfactionScoreNew = CustomerSatisfactionSection.satisfactionScoreNew;
 
         Assert.assertTrue(actualCustomerSatisfactionScoreOld == actualCustomerSatisfactionScoreNew, "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
+        System.out.println("The condition is correct and it is showing the correct ratings: Old rating: " + actualCustomerSatisfactionScoreOld + " New Rating: " + actualCustomerSatisfactionScoreNew);
+
+    }
+
+    //Use this step to compare before and after CSAT rating
+    @Then("^Admin is able to see the different average CSAT rating for CSAT response$")
+    public void adminIsAbleToDifferentCSATRating() {
+        double actualCustomerSatisfactionScoreOld = CustomerSatisfactionSection.satisfactionScoreOld;
+        double actualCustomerSatisfactionScoreNew = CustomerSatisfactionSection.satisfactionScoreNew;
+
+        Assert.assertTrue(actualCustomerSatisfactionScoreOld <= actualCustomerSatisfactionScoreNew, "Customer Satisfaction Score are different: actual: " + actualCustomerSatisfactionScoreOld + " expected: " + actualCustomerSatisfactionScoreNew);
+        System.out.println("The condition is correct and it is showing the correct ratings: Old rating: " + actualCustomerSatisfactionScoreOld + " New Rating: " + actualCustomerSatisfactionScoreNew);
     }
 
     @Then("^Admin see the Net Promoter Score as negative$")

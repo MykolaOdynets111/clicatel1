@@ -104,6 +104,16 @@ public class SurveyManagementSteps extends AbstractPortalSteps {
         }
     }
 
+    @Then("^Then on the right side the preview card heading shows as (.*)$")
+    public void verifyPreviewHeader(String expectedPreviewHeader){
+        String id = ORCASteps.getChannelId();
+        String actualPreviewHeader = getSurveyManagementPage().getSurveyForm(id).getSurveyPreviewTitle();
+        SoftAssert soft = new SoftAssert();
+        soft.assertTrue(actualPreviewHeader.contains(expectedPreviewHeader),
+                "Survey Preview header is not correct: "+ actualPreviewHeader);
+        soft.assertAll();
+    }
+
     @When("^Switch to whatsapp survey configuration$")
     public void switchToWhatsapp() {
         getSurveyManagementPage().switchToWhatsappTab();
