@@ -26,7 +26,7 @@ public class CustomersOverviewTab extends AbstractUIElement {
     @FindBy(css = ".tabs-dropdowns-wrapper .cl-form-group:first-child .cl-select__indicators")
     private WebElement channelFilterDropdown;
 
-    @FindBy(css = ".tabs-dropdowns-wrapper .cl-r-form-group:nth-child(2) .cl-r-select__indicators")
+    @FindBy(css = ".tabs-dropdowns-wrapper .cl-form-group:nth-child(2) .cl-select-container")
     private WebElement periodFilterDropdown;
 
     @FindBy(xpath = ".//div[contains(@id, 'react-select')]")
