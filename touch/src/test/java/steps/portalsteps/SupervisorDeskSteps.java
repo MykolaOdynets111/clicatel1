@@ -16,8 +16,12 @@ import org.testng.asserts.SoftAssert;
 import steps.agentsteps.AgentConversationSteps;
 import steps.dotcontrol.DotControlSteps;
 
+import java.sql.SQLOutput;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -137,6 +141,16 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
         ;
         Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(), agentName,
                 "Agent should not be assigned");
+    }
+
+    @Then("Supervisor Desk Live chat header display {string} Agent name")
+    public void VerifyAgentNameDisplayed(String agentName){
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getAgentName(),agentName,"Agent name not displayed");
+    }
+
+    @And("Supervisor Desk Live chat header display date")
+    public void VerifyChatDateDisplayed(){
+        Assert.assertEquals(getSupervisorDeskPage().getChatHeader().getChatDateText(),LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")),"Date not displayed");
     }
 
     @Then("^Supervisor Desk Live chat Profile is displayed$")
@@ -499,11 +513,6 @@ public class SupervisorDeskSteps extends AbstractPortalSteps {
     @And("^Agent click on the arrow of Ticket End Date$")
     public void agentClickOnTheArrowOfTicketEndDate() {
         getSupervisorDeskPage().getSupervisorTicketsTable().clickAscendingArrowOfEndDateColumn();
-    }
-
-    @Then("Verify that Chat is displayed first")
-    public void verifyThatChatIsDisplayedFirst() {
-        getSupervisorDeskPage().getSupervisorLeftPanel().getChatElement();
     }
 
     @Then("Verify that Chats tab is displayed first")

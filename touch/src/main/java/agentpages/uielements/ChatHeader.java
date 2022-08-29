@@ -60,7 +60,7 @@ public class ChatHeader extends AbstractUIElement {
     @FindBy(xpath = ".//span[@class= 'cl-r-chat-header-time'][1]")
     private WebElement timeStamp;
 
-    @FindBy(css = ".cl-r-chat-header-time")
+    @FindBy(css = ".cl-chat-header-time")
     private WebElement dateTime;
 
     @FindBy(css = "[selenium-id=header-cancel-transfer]")
@@ -161,6 +161,8 @@ public class ChatHeader extends AbstractUIElement {
     public String getChatHeaderText(){
         return chatHeaderTitle.getText();
     }
+
+    public  String getChatDateText(){return dateTime.getText();}
 
     public void clickFlagChatButton(){
         clickElem(this.getCurrentDriver(), flagChatButton, 2,"Flag chat");
