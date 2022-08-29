@@ -7,6 +7,7 @@ import agentpages.dashboard.uielements.LiveAgentsCustomerRow;
 import apihelper.ApiCustomerHistoryHelper;
 import apihelper.ApiHelper;
 import apihelper.ApiHelperTie;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -71,13 +72,22 @@ public class DashboardSteps extends AbstractPortalSteps {
         softAssert.assertAll();
     }
 
-    @And("^Admin filter Customers History by (.*) channel and (.*) period$")
-    public void adminFilterCustomersHistoryByWebchatAndPastDay(String channel, String period) {
-        this.channel.set(channel);
-        this.period.set(period);
-        getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel);
-        getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period);
-    }
+    @And("^Admin filter Customers History by channel and period$")
+    public void adminFilterCustomersHistoryByWebchatAndPastDay(DataTable datatable ) {
+        List<List<String>> data=datatable.cells();
+        for (List<String> a: data ){
+//            System.out.println(a);
+            this.channel.set(a.get(0));
+            this.period.set(a.get(1));
+            getDashboardPage().getCustomersOverviewTab().selectChannelForReport(channel.get());
+            getDashboardPage().getCustomersOverviewTab().selectPeriodForReport(period.get());
+            SoftAssert softAssert = new SoftAssert();
+            softAssert.assertTrue(getDashboardPage().getCustomersHistory().isGraphFilteredBy(channel.get(), period.get()),
+                    String.format("Graph is not filtered by %s channel and %s period", channel, period));
+            softAssert.assertAll();
+        }
+  }
+
 
     @And("^Admin filter Customers History by (?!.*period and)(.*) channel$")
     public void adminFilterCustomersHistoryByChannel(String channel) {
@@ -94,15 +104,8 @@ public class DashboardSteps extends AbstractPortalSteps {
     @Then("^Admin see all graphs filtered by (.*) channel and (.*) period$")
     public void adminSeeAllGraphsFilteredByWebchatChannelAndPastDayPeriod(String channel, String period) {
         SoftAssert softAssert = new SoftAssert();
-        for (String graph : getDashboardPage().getCustomersHistory().getAllGraphs()) {
-            //this if's will be removed when https://jira.clickatell.com/browse/TPORT-69991 done
-            if (graph.contains("Customer Satisfaction"))
-                graph = "Customer Satisfaction";
-            if (graph.contains("Net Promoter Score"))
-                graph = "Net Promoter Score";
-            softAssert.assertTrue(getDashboardPage().getCustomersHistory().isGraphFilteredBy(graph, channel, period),
-                    String.format("Graph %s is not filtered by %s channel and %s period", graph, channel, period));
-        }
+        softAssert.assertTrue(getDashboardPage().getCustomersHistory().isGraphFilteredBy(channel, period),
+                String.format("Graph is not filtered by %s channel and %s period", channel, period));
         softAssert.assertAll();
     }
 

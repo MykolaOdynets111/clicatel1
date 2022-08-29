@@ -15,7 +15,8 @@ public class CustomersHistory extends AbstractUIElement {
 
     private final String graphByNameXpath = "//h3[text()='%s']/../following-sibling::div[contains(@class,'chart-container')]";
     private final String noDataByGraphNameXpath = graphByNameXpath + "//div[contains(@class,'no-data-overlay')]";
-    private final String filteredByInfoXpath = "//h3[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+    private final String filteredByInfoXpath = "//span[text()='%s']/../span[contains(@class, 'cl-default-text-muted')]";
+
 
     @FindBy(css = "h3")
     private List<WebElement> graphHeaders;
@@ -61,6 +62,7 @@ public class CustomersHistory extends AbstractUIElement {
                     String.format(filteredByInfoXpath, graphName));
             waitForFirstElementToBeVisible(getCurrentDriver(), filteredByInfInH3, 3);
             List<String> foundFilters = filteredByInfInH3.stream().map(WebElement::getText).collect(Collectors.toList());
+            System.out.println("Graph is working fine for: " + graphName + " , " + Arrays.stream(filters).findFirst());
             return foundFilters.containsAll(Arrays.asList(filters));
         } catch (TimeoutException | NoSuchElementException e2) {
             return false;
