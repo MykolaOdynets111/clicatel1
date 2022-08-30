@@ -16,9 +16,9 @@ Feature: Supervisor desk
     When Click 'Assign manually' button
     Then 'Assign chat' window is opened
     When I assign chat on second agent
-    And admin refreshes the page
+    And Admin refreshes the page
     And Agent search chat orca on Supervisor desk
     Then GBD Second is the current agent of orca ticket
     And I login as second agent of General Bank Demo
-    And second agent select "Tickets" left menu option
-    Then second agent has new conversation request from orca user
+    And Second agent select "Tickets" left menu option
+    Then Second agent has new conversation request from orca user
